@@ -18,6 +18,8 @@ import java.util.ArrayList;
 public class Model
     extends BaseElement
 {
+    String id;
+    
     List classes;
 
     Set classNames;
@@ -33,6 +35,11 @@ public class Model
         classNames = new HashSet();
 
         classMap = new HashMap();
+    }
+    
+    public String getId()
+    {
+        return id;
     }
 
     public List getClasses()

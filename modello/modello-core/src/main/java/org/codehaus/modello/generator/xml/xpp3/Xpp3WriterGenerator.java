@@ -23,10 +23,10 @@ import java.util.List;
  *
  * @version $Id$
  */
-public class Xpp3MarshallerGenerator
+public class Xpp3WriterGenerator
     extends AbstractGenerator
 {
-    public Xpp3MarshallerGenerator( String model, String outputDirectory )
+    public Xpp3WriterGenerator( String model, String outputDirectory )
     {
         super( model, outputDirectory );
     }
