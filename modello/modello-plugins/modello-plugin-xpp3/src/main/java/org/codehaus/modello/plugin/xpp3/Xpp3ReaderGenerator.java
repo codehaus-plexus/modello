@@ -688,8 +688,9 @@ public class Xpp3ReaderGenerator
         {
             sc.add( objectName + "." + setterName + "( (new Short( " + parserGetter + " ) ).shortValue() );" );
         }
-        else if ( "String".equals( type ) )
+        else if ( "String".equals( type ) || "Boolean".equals( type ) || "Date".equals( type ) )
         {
+            // TODO: other Primitive types
             sc.add( objectName + "." + setterName + "( " + parserGetter + " );" );
         }
         else if ( "DOM".equals( type ) )
@@ -700,7 +701,6 @@ public class Xpp3ReaderGenerator
         {
             throw new IllegalArgumentException( "Unknown type: " + type );
         }
-        // TODO: date, Boolean?
     }
 
     private void writeParserInitialization( JSourceCode sc )
