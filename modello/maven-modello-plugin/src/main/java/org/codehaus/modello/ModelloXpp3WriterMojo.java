@@ -62,6 +62,7 @@ package org.codehaus.mojo.modello;
  * required="required"
  * validator=""
  * expression="#packageWithVersion"
+ * default="false"
  * description="True if the generated package names should include the version."
  *
  * @parameter name="modelloCore"
