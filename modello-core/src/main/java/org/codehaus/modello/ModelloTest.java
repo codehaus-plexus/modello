@@ -56,6 +56,6 @@ public class ModelloTest
 */
     public String getTestPath( String name )
     {
-        return new File( super.getTestFile( name ) ).getAbsolutePath();
+        return new File( super.getTestPath( name ) ).getAbsolutePath();
     }
 }

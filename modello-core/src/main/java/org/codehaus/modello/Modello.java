@@ -1,6 +1,7 @@
 package org.codehaus.modello;
 
 import java.io.Reader;
+import java.io.Writer;
 import java.util.Properties;
 
 import org.codehaus.modello.core.ModelloCore;
@@ -39,6 +40,14 @@ public class Modello
         Model model = core.loadModel( modelReader );
 
         core.generate( model, outputType, parameters );
+    }
+
+    public void translate( Reader reader, Writer writer, String outputType, Properties parameters )
+        throws ModelloException, ModelValidationException
+    {
+        Model model = core.translate( reader, outputType, parameters );
+
+        core.saveModel( model, writer );
     }
 /*
     private Logger logger;

@@ -1,5 +1,3 @@
-package org.codehaus.modello.generator.java;
-
 import java.util.*;
 import org.apache.maven.model.*;
 import org.codehaus.modello.generator.*;
