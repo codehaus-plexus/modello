@@ -9,12 +9,22 @@ public class CodeSegment
 {
     private String code;
 
+    public CodeSegment()
+    {
+        super( false );
+    }
+
     public String getCode()
     {
         return code;
     }
 
-    public void validate()
+    public void setCode( String code )
+    {
+        this.code = code;
+    }
+
+    public void validateElement()
     {
     }
 }

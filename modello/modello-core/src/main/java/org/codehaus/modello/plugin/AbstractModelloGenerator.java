@@ -1,27 +1,36 @@
-package org.codehaus.modello.generator;
+package org.codehaus.modello.plugin;
+
+/*
+ * LICENSE
+ */
 
 import java.io.File;
+import java.util.Iterator;
 import java.util.Properties;
 
-import org.codehaus.modello.AbstractLogEnabled;
+import org.codehaus.modello.BaseElement;
 import org.codehaus.modello.Model;
+import org.codehaus.modello.ModelClass;
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.ModelloRuntimeException;
+import org.codehaus.modello.Version;
+import org.codehaus.modello.generator.java.javasource.JClass;
+import org.codehaus.plexus.logging.AbstractLogEnabled;
 
 /**
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
  * @version $Id$
  */
-public abstract class AbstractGeneratorPlugin
+public abstract class AbstractModelloGenerator
     extends AbstractLogEnabled
-    implements GeneratorPlugin
+    implements ModelloGenerator
 {
     private Model model;
 
     private File outputDirectory;
 
-    private Version modelVersion;
+    private Version generatedVersion;
 
     private boolean packageWithVersion;
 
@@ -34,7 +43,7 @@ public abstract class AbstractGeneratorPlugin
 
         String version = (String) parameters.get( ModelloParameterConstants.VERSION );
 
-        modelVersion = new Version( version, "model" );
+        generatedVersion = new Version( version );
 
         packageWithVersion = Boolean.valueOf( (String) parameters.get( ModelloParameterConstants.PACKAGE_WITH_VERSION ) ).booleanValue();
     }
@@ -44,9 +53,9 @@ public abstract class AbstractGeneratorPlugin
         return model;
     }
 
-    protected Version getModelVersion()
+    protected Version getGeneratedVersion()
     {
-        return modelVersion;
+        return generatedVersion;
     }
 
     protected boolean isPackageWithVersion()
@@ -59,97 +68,10 @@ public abstract class AbstractGeneratorPlugin
         return outputDirectory;
     }
 
-    protected boolean outputElement( String elementVersion, String elementName )
+    protected boolean outputElement( BaseElement element )
         throws ModelloRuntimeException
     {
-        if ( elementVersion == null )
-        {
-            System.err.println( elementName + " has a null version!" );
-
-            return false;
-        }
-
-        Version v = new Version( elementVersion, elementName );
-
-        // 4.0.0 - 3.0.0
-        // 4.0.0 - 3.0.0+
-
-        if ( v.major == modelVersion.major )
-        {
-            return true;
-        }
-        else if ( ( v.major < modelVersion.major ) && v.modifier != null && v.modifier.equals( "+" ) )
-        {
-            return true;
-        }
-
-        return false;
-    }
-
-    public static class Version
-    {
-        short major;
-
-        short minor;
-
-        short micro;
-
-        String majorString;
-
-        String minorString;
-
-        String microString;
-
-        String modifier;
-
-        public Version( String version, String elementName )
-        {
-            if ( version == null )
-            {
-                throw new ModelloRuntimeException( "Syntax error in the version field: Missing. Element name: " + elementName );
-            }
-
-            version = version.trim();
-
-            if ( version.length() < 5 )
-            {
-                throw new ModelloRuntimeException( "Syntax error in the <version> field: The field must be at least 5 characters long. Was: '" + version + "'. Element name: " + elementName );
-            }
-
-            majorString = version.substring( 0, 1 );
-
-            minorString = version.substring( 2, 3 );
-
-            microString = version.substring( 4, 5 );
-
-            try
-            {
-                major = Short.parseShort( majorString );
-
-                minor = Short.parseShort( minorString );
-
-                micro = Short.parseShort( microString );
-            }
-            catch ( NumberFormatException e )
-            {
-                throw new ModelloRuntimeException( elementName + " version is invalid!" );
-            }
-
-            if ( version.length() >= 6 )
-            {
-                modifier = version.substring( 5 );
-            }
-        }
-
-        public String toString()
-        {
-            return "v" + majorString + minorString + microString;
-        }
-
-        public String toString( String prefix)
-        {
-            return prefix + majorString + minorString + microString;
-        }
+        return generatedVersion.inside( element.getElementVersion() );
     }
 
     protected boolean isClassInModel( String fieldType, Model model )
@@ -238,6 +160,40 @@ public abstract class AbstractGeneratorPlugin
             .append( str.substring( 1 ) )
             .toString();
     }
+
+    protected String getBasePackageName()
+    {
+        StringBuffer sb = new StringBuffer();
+
+        sb.append( model.getPackageName() );
+
+        if ( isPackageWithVersion() )
+        {
+            sb.append( "." );
+
+            sb.append( getModel().getElementVersion().toString() );
+        }
+
+        return sb.toString();
+    }
+
+    protected void addModelImports( JClass jClass )
+        throws ModelloException
+    {
+        for ( Iterator i = getModel().getClasses().iterator(); i.hasNext(); )
+        {
+            ModelClass modelClass = (ModelClass) i.next();
+
+            if ( outputElement( modelClass ) )
+            {
+                jClass.addImport( getBasePackageName() + "." + modelClass.getName() );
+            }
+        }
+    }
+
+    // ----------------------------------------------------------------------
+    // Text utils
+    // ----------------------------------------------------------------------
 
     protected boolean isEmpty( String string )
     {

@@ -4,26 +4,13 @@ package org.codehaus.modello.converters;
  * LICENSE
  */
 
-import com.thoughtworks.xstream.converters.Converter;
-import com.thoughtworks.xstream.converters.MarshallingContext;
-import com.thoughtworks.xstream.converters.UnmarshallingContext;
-import com.thoughtworks.xstream.io.HierarchicalStreamReader;
-import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
-
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-
-import org.codehaus.modello.ModelField;
-import org.codehaus.modello.ModelloRuntimeException;
-
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
 public class ModelFieldConverter
-    implements Converter
-{
+//    implements Converter
+{/*
     private Converter defaultConverter;
 
     private Map fields = new HashMap();
@@ -54,7 +41,8 @@ public class ModelFieldConverter
             throw new ModelloRuntimeException( "This converter can only convert ModelField's." );
         }
 
-        ModelField field = (ModelField) object;
+        throw new ModelloRuntimeException( "NOT IMPLEMENTED" );
+//        ModelField field = (ModelField) object;
 
 //        XmlMetaData metaData = field.getMetaData( XmlMetaData.ID );
 
@@ -92,4 +80,5 @@ public class ModelFieldConverter
 
         return obj;
     }
+*/
 }

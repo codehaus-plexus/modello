@@ -1,6 +1,7 @@
 package org.codehaus.modello;
 
-import java.io.File;
+import java.io.FileReader;
+import java.util.Properties;
 
 /*
  * LICENSE
@@ -14,13 +15,15 @@ public class ModelloCli
 {
     private static String modelFile;
 
-    private static String mode;
+    private static String outputType;
 
-    private static String outputDirectory;
+    private static Properties parameters;
 
-    private static String modelVersion;
+//    private static String outputDirectory;
 
-    private static boolean packageWithVersion;
+//    private static String modelVersion;
+
+//    private static boolean packageWithVersion;
 
     public static void main( String[] args )
         throws Exception
@@ -29,9 +32,10 @@ public class ModelloCli
 
         parseArgumentsFromCommandLine( args );
 
-        modello.initialize();
+//        modello.initialize();
 
-        modello.work( new File( modelFile ), mode, new File( outputDirectory ), modelVersion, packageWithVersion );
+        modello.generate( new FileReader( modelFile ), outputType, parameters );
+//        modello.work( new File( modelFile ), mode, new File( outputDirectory ), modelVersion, packageWithVersion );
     }
 
     public static void parseArgumentsFromCommandLine( String[] args )
@@ -39,19 +43,27 @@ public class ModelloCli
     {
         if ( args.length != 5 )
         {
-            System.err.println( "Usage: modello <model> <mode> <output directory> <modelVersion> <packageWithVersion>" );
+            System.err.println( "Usage: modello <model> <outputType> <output directory> <modelVersion> <packageWithVersion>" );
 
             System.exit( 1 );
         }
 
         modelFile = args[0];
 
-        mode = args[1];
+        outputType = args[1];
 
-        outputDirectory = args[2];
+        parameters = new Properties();
 
-        modelVersion = args[3];
+        String outputDirectory = args[2];
 
-        packageWithVersion = Boolean.valueOf( args[4] ).booleanValue();
+        String modelVersion = args[3];
+
+        String packageWithVersion = args[4];
+
+        parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, outputDirectory );
+
+        parameters.setProperty( ModelloParameterConstants.VERSION, modelVersion );
+
+        parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, packageWithVersion );
     }
 }

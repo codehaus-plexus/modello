@@ -16,16 +16,17 @@ public class Model
 {
     private String id;
 
-    private List classes = new ArrayList();
-
-    private transient Map classMap = new HashMap();
-
     private String packageName;
 
     private String root;
 
+    private List classes = new ArrayList();
+
+    private transient Map classMap = new HashMap();
+
     public Model()
     {
+        super( true );
     }
 
     public String getId()
@@ -33,9 +34,9 @@ public class Model
         return id;
     }
 
-    public List getClasses()
+    public void setId( String id )
     {
-        return classes;
+        this.id = id;
     }
 
     public String getRoot()
@@ -43,9 +44,24 @@ public class Model
         return root;
     }
 
+    public void setRoot( String root )
+    {
+        this.root = root;
+    }
+
     public String getPackageName()
     {
         return packageName;
+    }
+
+    public void setPackageName( String packageName )
+    {
+        this.packageName = packageName;
+    }
+
+    public List getClasses()
+    {
+        return classes;
     }
 
     public ModelClass getClass( String type )
@@ -72,7 +88,7 @@ public class Model
         }
     }
 
-    public void validate()
+    public void validateElement()
     {
     }
 }

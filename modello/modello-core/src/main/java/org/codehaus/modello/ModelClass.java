@@ -1,7 +1,6 @@
 package org.codehaus.modello;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -21,33 +20,41 @@ public class ModelClass
 
     private List associations;
 
-    private transient Map fieldMap = new HashMap();
-
-    private transient Map associationMap = new HashMap();
-
     private List codeSegments;
 
     private transient Model model;
 
+    private transient Map fieldMap = new HashMap();
+
+    private transient Map associationMap = new HashMap();
+
+    private transient Map codeSegmentMap = new HashMap();
+
     public ModelClass()
     {
+        super( true );
     }
 
     public ModelClass( Model model, String name )
     {
-        super( name );
+        super( true, name );
 
         this.model = model;
-    }
-
-    public Model getModel()
-    {
-        return model;
     }
 
     public String getSuperClass()
     {
         return superClass;
+    }
+
+    public void setSuperClass( String superClass )
+    {
+        this.superClass = superClass;
+    }
+
+    public Model getModel()
+    {
+        return model;
     }
 
     /**
@@ -150,10 +157,17 @@ public class ModelClass
     {
         if ( codeSegments == null )
         {
-            return Collections.EMPTY_LIST;
+            codeSegments = new ArrayList();
         }
 
         return codeSegments;
+    }
+
+    public void addCodeSegment( CodeSegment codeSegment )
+    {
+        getCodeSegments().add( codeSegment );
+
+        codeSegmentMap.put( codeSegment.getName(), codeSegment );
     }
 
     public boolean hasSuperClass()
@@ -208,7 +222,7 @@ public class ModelClass
         }
     }
 
-    public void validate()
+    public void validateElement()
     {
     }
 }

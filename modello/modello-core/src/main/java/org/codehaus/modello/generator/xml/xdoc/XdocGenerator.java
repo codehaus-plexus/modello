@@ -11,16 +11,16 @@ import org.codehaus.modello.ModelClass;
 import org.codehaus.modello.ModelField;
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.ModelloRuntimeException;
-import org.codehaus.modello.generator.AbstractGeneratorPlugin;
 import org.codehaus.modello.generator.xml.DefaultXMLWriter;
 import org.codehaus.modello.generator.xml.XMLWriter;
+import org.codehaus.modello.plugin.AbstractModelloGenerator;
 
 /**
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
  * @version $Id$
  */
 public class XdocGenerator
-    extends AbstractGeneratorPlugin
+    extends AbstractModelloGenerator
 {
 /*
     public XdocGenerator( Model model, File outputDirectory, String modelVersion, boolean packageWithVersion )
@@ -107,7 +107,7 @@ public class XdocGenerator
         {
             ModelClass modelClass = (ModelClass) i.next();
 
-            if ( outputElement( modelClass.getVersion(), modelClass.getName() ) )
+            if ( outputElement( modelClass ) )
             {
                 w.startElement( "section" );
 
@@ -137,7 +137,7 @@ public class XdocGenerator
                 {
                     ModelField field = (ModelField) j.next();
 
-                    if ( outputElement( field.getVersion(), modelClass.getName() + "." + field.getName() ) )
+                    if ( outputElement( field ) )
                     {
                         w.startElement( "tr" );
 
@@ -215,7 +215,7 @@ public class XdocGenerator
 
         sb.append( "<a href=\"#" + modelClass.getName() + "\">&lt;" + uncapitalise( modelClass.getName() ) );
 
-        if ( modelClass.getFields().size() > 0 && outputElement( modelClass.getVersion(), modelClass.getName() ) )
+        if ( modelClass.getFields().size() > 0 && outputElement( modelClass ) )
         {
             sb.append( "&gt;</a>\n" );
 
@@ -223,7 +223,7 @@ public class XdocGenerator
             {
                 ModelField field = (ModelField) iter.next();
 
-                if ( outputElement( field.getVersion(), field.getName() ) )
+                if ( outputElement( field ) )
                 {
 
                     ModelClass fieldModelClass = objectModel.getClass( capitalise( field.getName() ) );

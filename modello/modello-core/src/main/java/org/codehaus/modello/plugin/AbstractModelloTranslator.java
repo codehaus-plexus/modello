@@ -1,4 +1,4 @@
-package org.codehaus.modello.metadata;
+package org.codehaus.modello.plugin;
 
 /*
  * LICENSE
@@ -8,6 +8,7 @@ package org.codehaus.modello.metadata;
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
-public interface MetaData
+public abstract class AbstractModelloTranslator
+    implements ModelloTranslator
 {
 }

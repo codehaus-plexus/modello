@@ -22,11 +22,12 @@ public class ModelField
 
     public ModelField()
     {
+        super( true );
     }
 
     public ModelField( ModelClass modelClass, String name )
     {
-        super( name );
+        super( true, name );
 
         this.modelClass = modelClass;
     }
@@ -36,9 +37,19 @@ public class ModelField
         return type;
     }
 
+    public void setType( String type )
+    {
+        this.type = type;
+    }
+
     public String getDefaultValue()
     {
         return defaultValue;
+    }
+
+    public void setDefaultValue( String defaultValue )
+    {
+        this.defaultValue = defaultValue;
     }
 
     public String getSpecification()
@@ -46,14 +57,29 @@ public class ModelField
         return specification;
     }
 
+    public void setSpecifiaction( String specification )
+    {
+        this.specification = specification;
+    }
+
     public String getTypeValidator()
     {
         return typeValidator;
     }
 
+    public void setTypeValidator( String typeValidator )
+    {
+        this.typeValidator = typeValidator;
+    }
+
     public boolean isRequired()
     {
         return required;
+    }
+
+    public void setRequired( boolean required )
+    {
+        this.required = required;
     }
 
     public ModelClass getModelClass()
@@ -66,7 +92,7 @@ public class ModelField
         this.modelClass = modelClass;
     }
 
-    public void validate()
+    public void validateElement()
         throws ModelValidationException
     {
         validateFieldNotEmpty( "Field", "name", getName() );

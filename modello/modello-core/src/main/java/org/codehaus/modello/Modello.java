@@ -1,12 +1,10 @@
 package org.codehaus.modello;
 
-import java.io.File;
+import java.io.Reader;
 import java.util.Properties;
 
-import org.codehaus.modello.generator.AbstractGeneratorPlugin;
-import org.codehaus.modello.generator.GeneratorPlugin;
-import org.codehaus.modello.generator.GeneratorPluginManager;
-import org.codehaus.modello.metadata.MetaDataPluginManager;
+import org.codehaus.modello.core.ModelloCore;
+import org.codehaus.plexus.embed.Embedder;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
@@ -14,8 +12,35 @@ import org.codehaus.modello.metadata.MetaDataPluginManager;
  * @version $Id$
  */
 public class Modello
-    extends AbstractLogEnabled
+//    extends AbstractLogEnabled
 {
+    Embedder embedder = new Embedder();
+
+    ModelloCore core;
+
+    public Modello()
+        throws ModelloException
+    {
+        try
+        {
+            embedder.start();
+
+            core = (ModelloCore) embedder.lookup( ModelloCore.ROLE );
+        }
+        catch( Exception ex )
+        {
+            throw new ModelloException( "Error while starting plexus." );
+        }
+    }
+
+    public void generate( Reader modelReader, String outputType, Properties parameters )
+        throws ModelloException, ModelValidationException
+    {
+        Model model = core.loadModel( modelReader );
+
+        core.generate( model, outputType, parameters );
+    }
+/*
     private Logger logger;
 
     private GeneratorPluginManager generatorPluginManager;
@@ -138,6 +163,7 @@ public class Modello
 
             generator.generate( model, parameters );
         }
+*/
 /*
         else if ( mode.equals( "java" ) )
         {
@@ -179,6 +205,7 @@ public class Modello
             generator.generate();
         }
 */
+/*
         else
         {
             throw new ModelloRuntimeException( "Unknown mode: '" + mode + "'." );
@@ -194,4 +221,5 @@ public class Modello
             ((LogEnabled) object).setLogger( logger );
         }
     }
+*/
 }

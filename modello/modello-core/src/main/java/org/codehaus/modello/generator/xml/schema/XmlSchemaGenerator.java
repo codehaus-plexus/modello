@@ -10,9 +10,9 @@ import org.codehaus.modello.Model;
 import org.codehaus.modello.ModelClass;
 import org.codehaus.modello.ModelField;
 import org.codehaus.modello.ModelloException;
-import org.codehaus.modello.generator.AbstractGeneratorPlugin;
 import org.codehaus.modello.generator.xml.DefaultXMLWriter;
 import org.codehaus.modello.generator.xml.XMLWriter;
+import org.codehaus.modello.plugin.AbstractModelloGenerator;
 
 // This spits out the classes but I must also spit out xs:elements for the
 // fields themselves for the xsd to be correct.
@@ -22,7 +22,7 @@ import org.codehaus.modello.generator.xml.XMLWriter;
  * @version $Id$
  */
 public class XmlSchemaGenerator
-    extends AbstractGeneratorPlugin
+    extends AbstractModelloGenerator
 {
     private boolean annotate;
 
@@ -69,7 +69,7 @@ public class XmlSchemaGenerator
         {
             ModelClass modelClass = (ModelClass) i.next();
 
-            if ( outputElement( modelClass.getVersion(), modelClass.getName() ) )
+            if ( outputElement( modelClass ) )
             {
                 w.startElement( "xs:element" );
 
@@ -85,7 +85,7 @@ public class XmlSchemaGenerator
                 {
                     ModelField field = (ModelField) j.next();
 
-                    if ( outputElement( field.getVersion(), modelClass.getName() + "." + field.getName() ) )
+                    if ( outputElement( field ) )
                     {
                         w.startElement( "xs:element" );
 
@@ -119,9 +119,8 @@ public class XmlSchemaGenerator
                 {
                     ModelField field = (ModelField) j.next();
 
-                    if ( outputElement( field.getVersion(), modelClass.getName() + "." + field.getName() ) )
+                    if ( outputElement( field ) )
                     {
-
                         // We only need to output elements that are primitive and all we
                         // are dealing with right now is Strings. We'll deal with primitives
                         // more thoroughly. We can borrow the code from castor.
