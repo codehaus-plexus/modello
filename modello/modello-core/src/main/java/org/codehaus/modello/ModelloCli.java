@@ -55,12 +55,11 @@ public class ModelloCli
 
 //        modello.initialize();
 
-        // TODO: should not need to do this - put the CDATA into the model file itself
         String fileString = FileUtils.fileRead(modelFile);
 
-        fileString = StringUtils.replace( fileString, "<description>", "<description><![CDATA[" );
+        fileString = StringUtils.replace( fileString, "<description>", "<description>" );
 
-        fileString = StringUtils.replace( fileString, "</description>", "]]></description>" );
+        fileString = StringUtils.replace( fileString, "</description>", "</description>" );
 
         modello.generate( new StringReader( fileString ), outputType, parameters );
 //        modello.work( new File( modelFile ), mode, new File( outputDirectory ), modelVersion, packageWithVersion );
