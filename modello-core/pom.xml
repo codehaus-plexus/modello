@@ -35,18 +35,4 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
-  <build>
-    <plugins>
-      <plugin>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>1.0-SNAPSHOT</version>
-        <configuration>
-          <excludes>
-            <exclude implementation="java.lang.String">**/ModelloGeneratorTest*</exclude>
-            <exclude implementation="java.lang.String">**/ModelloTest*</exclude>
-          </excludes>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
 </project>
