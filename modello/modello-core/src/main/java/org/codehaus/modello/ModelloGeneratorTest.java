@@ -62,7 +62,7 @@ public abstract class ModelloGeneratorTest
 
         FileUtils.deleteDirectory( getTestPath( "target/" + getName() ) );
 
-        mavenRepoLocal = new File( System.getProperty( "user.home" ), ".maven/repository" );
+        mavenRepoLocal = new File( System.getProperty( "maven.repo.local" ) );
 
         addDependency( "junit", "junit", "3.8.1" );
 
