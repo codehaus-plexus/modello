@@ -51,7 +51,7 @@ import org.codehaus.modello.plugin.ldap.metadata.LdapFieldMetadata;
 public class LdapSchemaModelloGenerator
     extends AbstractModelloGenerator
 {
-    public final static String FILENAME_PARAMETER = "filename";
+    public final static String FILENAME_PARAMETER = "schemaFilename";
 
     // ----------------------------------------------------------------------
     //
