@@ -48,13 +48,13 @@ public class LdapSchemaGeneratorTest
     public void testBasicSchemaGeneration()
         throws Exception
     {
-        ModelloCore modello = getModelloCore();
+        ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
 
         // ----------------------------------------------------------------------
         // Set up
         // ----------------------------------------------------------------------
 
-        Model model = loadModel( "src/test/models/simple.mdo" );
+        Model model = modello.loadModel( new FileReader( getTestPath( "src/test/models/simple.mdo" ) ) );
 
         File generatedSources = getTestFile( "target/ldap-schema" );
 
