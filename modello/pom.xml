@@ -32,13 +32,11 @@
     <url>http://www.codehaus.org/</url>
   </organization>
   <distributionManagement>
-<!--
     <repository>
-      <id>codehaus</id>
+      <id>repo1</id>
       <name>Maven Central Repository at Codehaus</name>
-      <url>scp://beaver.codehaus.org//home/projects/modello/dist/</url>
+      <url>scp://beaver.codehaus.org//home/projects/maven/repository/ibiblio-v2/</url>
     </repository>
--->
     <repository>
       <id>repo1</id>
       <url>scp://repo1.maven.org/home/projects/maven/repository/ibiblio-v2/</url>
