@@ -244,7 +244,7 @@ public class Xpp3WriterGenerator
 
             sc.add( "// Writing class in field" );
 
-            sc.add( className + " " + fieldName + " = " + modelClassName + ".get" + className + "();" );
+            sc.add( type + " " + fieldName + " = " + modelClassName + ".get" + className + "();" );
 
             sc.add( "if ( " + fieldName + " != null )" );
 
