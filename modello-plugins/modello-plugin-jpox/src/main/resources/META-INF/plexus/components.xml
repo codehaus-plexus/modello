@@ -1,0 +1,22 @@
+<component-set>
+  <components>
+
+    <component>
+      <role>org.codehaus.modello.plugin.ModelloGenerator</role>
+      <role-hint>jpox</role-hint>
+      <implementation>org.codehaus.modello.plugin.jpox.JpoxModelloGenerator</implementation>
+      <requirements>
+        <requirement>
+          <role>org.codehaus.plexus.velocity.VelocityComponent</role>
+        </requirement>
+      </requirements>
+    </component>
+<!--
+    <component>
+      <role>org.codehaus.modello.metadata.MetadataPlugin</role>
+      <role-hint>jpox</role-hint>
+      <implementation>org.codehaus.modello.plugin.jpox.metadata.JpoxMetadataPlugin</implementation>
+    </component>
+-->
+  </components>
+</component-set>
