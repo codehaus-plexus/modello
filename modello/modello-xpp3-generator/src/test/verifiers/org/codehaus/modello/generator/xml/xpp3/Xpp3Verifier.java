@@ -30,6 +30,16 @@ public class Xpp3Verifier
         "    <sourceDirectory>src/main/java</sourceDirectory>\n" +
         "    <unitTestSourceDirectory>src/test/java</unitTestSourceDirectory>\n" +
         "    <unitTest />\n" +
+        "    <sourceModifications>\n" +
+        "      <sourceModification>\n" +
+        "        <className>excludeEclipsePlugin</className>\n" +
+        "        <directory>foo</directory>\n" +
+        "        <filtering>false</filtering>\n" +
+        "        <excludes>\n" +
+        "          <exclude>de/abstrakt/tools/codegeneration/eclipse/*.java</exclude>\n" +
+        "        </excludes>\n" +
+        "      </sourceModification>\n" +
+        "    </sourceModifications>\n" +
         "  </builder>\n" +
         "  <mailingLists>\n" +
         "    <mailingList>\n" +
@@ -89,6 +99,16 @@ public class Xpp3Verifier
 
         build.setUnitTestSourceDirectory( "src/test/java" );
 
+        SourceModification sourceModification = new SourceModification();
+
+        sourceModification.setClassName( "excludeEclipsePlugin" );
+
+        sourceModification.setDirectory( "foo" );
+
+        sourceModification.addExclude( "de/abstrakt/tools/codegeneration/eclipse/*.java" );
+
+        build.addSourceModification( sourceModification );
+
         expected.setBuild( build );
 
         MavenXpp3Writer writer = new MavenXpp3Writer();
@@ -98,10 +118,10 @@ public class Xpp3Verifier
         writer.write( buffer, expected );
 
         String actualXml = buffer.toString();
-/*
+// /*
         System.out.println( expectedXml );
         System.err.println( actualXml );
-*/
+/* */
         assertEquals( expectedXml, actualXml );
 
         MavenXpp3Reader reader = new MavenXpp3Reader();
