@@ -30,7 +30,7 @@ public class Modello
         }
         catch( Exception ex )
         {
-            throw new ModelloException( "Error while starting plexus." );
+            throw new ModelloException( "Error while starting plexus.", ex );
         }
     }
 

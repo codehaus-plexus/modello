@@ -7,6 +7,7 @@ package org.codehaus.modello.metadata;
 import java.util.Map;
 
 import org.codehaus.modello.Model;
+import org.codehaus.modello.ModelAssociation;
 import org.codehaus.modello.ModelClass;
 import org.codehaus.modello.ModelField;
 import org.codehaus.modello.ModelloException;
@@ -19,21 +20,27 @@ public interface MetadataPlugin
 {
     String ROLE = MetadataPlugin.class.getName();
 
-    Metadata getModelMetadata( Model model, Map data )
+    ModelMetadata getModelMetadata( Model model, Map data )
         throws ModelloException;
 
-    Metadata getClassMetadata( ModelClass clazz, Map data )
+    ClassMetadata getClassMetadata( ModelClass clazz, Map data )
         throws ModelloException;
 
-    Metadata getFieldMetadata( ModelField field, Map data )
+    FieldMetadata getFieldMetadata( ModelField field, Map data )
         throws ModelloException;
 
-    Map getModelMap( Model model, Metadata metadata )
+    AssociationMetadata getAssociationMetadata( ModelAssociation association, Map data )
         throws ModelloException;
 
-    Map getClassMap( ModelClass clazz, Metadata metadata )
+    Map getModelMap( Model model, ModelMetadata metadata )
         throws ModelloException;
 
-    Map getFieldMap( ModelField field, Metadata metadata )
+    Map getClassMap( ModelClass clazz, ClassMetadata metadata )
+        throws ModelloException;
+
+    Map getFieldMap( ModelField field, FieldMetadata metadata )
+        throws ModelloException;
+
+    Map getAssociationMap( ModelAssociation association, AssociationMetadata metadata )
         throws ModelloException;
 }

@@ -1,5 +1,7 @@
 package org.codehaus.modello;
 
+import org.codehaus.modello.metadata.FieldMetadata;
+
 /**
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
  *
@@ -20,6 +22,8 @@ public class ModelField
 
     transient private ModelClass modelClass;
 
+    transient private boolean primitive;
+
     public ModelField()
     {
         super( true );
@@ -31,6 +35,10 @@ public class ModelField
 
         this.modelClass = modelClass;
     }
+
+    // ----------------------------------------------------------------------
+    // Property accessors
+    // ----------------------------------------------------------------------
 
     public String getType()
     {
@@ -82,9 +90,26 @@ public class ModelField
         this.required = required;
     }
 
+    // ----------------------------------------------------------------------
+    // Misc
+    // ----------------------------------------------------------------------
+
     public ModelClass getModelClass()
     {
         return modelClass;
+    }
+
+    /**
+     * @return Returns true if this field is a java primitive.
+     */
+    public boolean isPrimitive()
+    {
+        return primitive;
+    }
+
+    public FieldMetadata getMetadata( String key )
+    {
+        return (FieldMetadata) getMetadata( FieldMetadata.class, key );
     }
 
     public void initialize( ModelClass modelClass )
@@ -99,7 +124,7 @@ public class ModelField
 
         validateFieldNotEmpty( "Field " + getName(), "type", type );
 
-        String[] validTypes = new String[]{
+        String[] primitiveTypes = new String[]{
             "boolean",
             "char",
             "short",
@@ -110,12 +135,14 @@ public class ModelField
             "String"
         };
 
-        for ( int i = 0; i < validTypes.length; i++ )
+        for ( int i = 0; i < primitiveTypes.length; i++ )
         {
-            String validType = validTypes[i];
+            String validType = primitiveTypes[i];
 
             if ( type.equals( validType ) )
             {
+                primitive = true;
+
                 return;
             }
         }
