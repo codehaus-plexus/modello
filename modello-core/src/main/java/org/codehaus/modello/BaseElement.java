@@ -17,8 +17,6 @@ public class BaseElement
 
     String comment;
 
-    boolean required;
-
     public String getName()
     {
         return name;
@@ -37,10 +35,5 @@ public class BaseElement
     public String getComment()
     {
         return comment;
-    }
-
-    public boolean isRequired()
-    {
-        return required;
     }
 }
