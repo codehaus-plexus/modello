@@ -55,7 +55,16 @@ public class JavaMetadataPlugin
 
     public ClassMetadata getClassMetadata( ModelClass clazz, Map data )
     {
-        return new JavaClassMetadata();
+        JavaClassMetadata metadata = new JavaClassMetadata();
+
+        String abstractMode = (String) data.get( "java.abstract" );
+
+        if ( abstractMode != null )
+        {
+            metadata.setAbstract( Boolean.valueOf( abstractMode ).booleanValue() );
+        }
+
+        return metadata;
     }
 
     public FieldMetadata getFieldMetadata( ModelField field, Map data )

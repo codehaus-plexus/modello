@@ -135,6 +135,8 @@ public class JavaModelloGenerator
         {
             ModelClass modelClass = (ModelClass) i.next();
 
+            JavaClassMetadata javaClassMetadata = (JavaClassMetadata) modelClass.getMetadata( JavaClassMetadata.ID );
+
             String packageName = null;
 
             if ( isPackageWithVersion() )
@@ -166,6 +168,11 @@ public class JavaModelloGenerator
             addModelImports( jClass );
 
             jClass.setPackageName( packageName );
+            
+            if ( javaClassMetadata.isAbstract() )
+            {
+                jClass.getModifiers().setAbstract( true );
+            }
 
             if ( modelClass.getSuperClass() != null )
             {

@@ -32,4 +32,16 @@ public class JavaClassMetadata
     implements ClassMetadata
 {
     public final static String ID = JavaClassMetadata.class.getName();
+
+    private boolean abstractMode = false;
+
+    public void setAbstract( boolean abstractMode )
+    {
+        this.abstractMode = abstractMode;
+    }
+
+    public boolean isAbstract()
+    {
+        return abstractMode;
+    }
 }
