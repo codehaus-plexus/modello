@@ -40,7 +40,7 @@ public class XmlModelloPluginTest
 
         assertEquals( "Model", clazz.getName() );
 
-        assertEquals( 2, clazz.getFields().size() );
+        assertEquals( 3, clazz.getFields().size() );
 
         ModelField extend = clazz.getField( "extend" );
 
@@ -64,5 +64,15 @@ public class XmlModelloPluginTest
         {
             // expected
         }
+
+        ModelField builder = clazz.getField( "builder" );
+
+        assertTrue( builder.hasMetaData( XmlMetaData.ID ) );
+
+        xml = (XmlMetaData) builder.getMetaData( XmlMetaData.ID );
+
+        assertNotNull( xml );
+
+        assertEquals( "build", xml.getTagName() );
     }
 }
