@@ -239,10 +239,15 @@ public class Xpp3ReaderGenerator
         }
         else
         {
+            if ( ! rootElement )
+            {
+                writeCatchAll( sc );
+            }
+
             sc.unindent();
 
             sc.add( "}" );
-
+sc.add("//END READING");
             if ( rootElement )
             {
                 sc.add( "eventType = parser.next();" );
