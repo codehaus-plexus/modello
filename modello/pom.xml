@@ -15,9 +15,17 @@
   <package>org.codehaus.modello</package>
   <logo>/images/maven.gif</logo>
 
+  <distributionManagement>
+    <repository>
+      <id>codehaus</id>
+      <name>Maven Central Repository at Codehaus</name>
+      <url>scp://beaver.codehaus.org//home/projects/modello/dist/</url>
+    </repository>
+  </distributionManagement>
+    
   <repository>
-    <connection>scm:cvs:pserver:modello@cvs.modello.codehaus.org:/scm/modello:modello/modello-core</connection>
-    <developerConnection>scm:cvs:ext:${maven.username}@cvs.modello.codehaus.org:/home/projects/modello/scm:modello/modello-core</developerConnection>
+    <connection>scm:cvs:pserver:modello@cvs.modello.codehaus.org:/scm/modello:modello</connection>
+    <developerConnection>scm:cvs:ext:${maven.username}@cvs.modello.codehaus.org:/home/projects/modello/scm:modello</developerConnection>
     <url>http://cvs.modello.codehaus.org/modello/${pom.artifactId}</url>
   </repository>
 

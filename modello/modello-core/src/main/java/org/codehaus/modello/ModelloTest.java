@@ -66,9 +66,4 @@ public class ModelloTest
 
         return modello.loadModel( new StringReader( fileString ) );
     }
-
-    public String getTestPath( String name )
-    {
-        return new File( super.getTestFile( name ) ).getAbsolutePath();
-    }
 }
