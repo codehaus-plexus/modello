@@ -14,13 +14,22 @@ public class ${model.name}PrevaylerStore
 {
     private String databaseDirectory;
 
-    private static class Store
+    private Store store = new Store();
+
+    static class Store
         implements Serializable
     {
 #foreach ( $class in $model.allClasses )
 #if ( $class.getMetadata( $id ).isStorable() )
         private Map ${class.name}Map = new HashMap();
+
+        void add${class.name}( ${class.name} o ) { ${class.name}Map.put(); }
+
+        void update${class.name}( ${class.name} o ) { ${class.name}Map.put() }
+
+        void delete${class.name}( ${class.name} o ) { ${class.name}Map.remove() }
 #end
+
 #end
     }
 
@@ -51,7 +60,7 @@ public class ${model.name}PrevaylerStore
         }
     }
 
-    public class Remove${class.name}
+    public class Delete${class.name}
         implements Transaction
     {
         private ${class.name} o;
@@ -65,7 +74,7 @@ public class ${model.name}PrevaylerStore
         {
             Store system = (Store) prevalentSystem;
 
-            system.remove${class.name}( o );
+            system.delete${class.name}( o );
         }
     }
 #end
@@ -97,19 +106,28 @@ public class ${model.name}PrevaylerStore
 
 #foreach ( $class in $model.allClasses )
 #if ( $class.getMetadata( $id ).isStorable() )
-    public void add${class.name}( $class.name entity )
+    public void add${class.name}( $class.name o )
         throws StoreException
     {
+        store.add${class.name}( o );
     }
 
-    public void delete( String id )
+    public void update${class.name}( String id, $class.name o )
         throws StoreException
     {
+        store.update${class.name}( o );
     }
 
-    public void update( String id, $class.name entity )
+    public void delete${class.name}( String id )
         throws StoreException
     {
+        store.add${class.name}( id );
+    }
+
+    public ${class.name} get${class.name}( String id )
+        throws StoreException
+    {
+        return store.get${class.name}( id );
     }
 #end
 
