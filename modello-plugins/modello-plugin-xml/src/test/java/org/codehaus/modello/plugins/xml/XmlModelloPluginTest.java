@@ -22,9 +22,6 @@ package org.codehaus.modello.plugins.xml;
  * SOFTWARE.
  */
 
-import java.io.FileReader;
-import java.util.List;
-
 import org.codehaus.modello.ModelloRuntimeException;
 import org.codehaus.modello.ModelloTest;
 import org.codehaus.modello.core.ModelloCore;
@@ -33,6 +30,9 @@ import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.Version;
+
+import java.io.FileReader;
+import java.util.List;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l </a>
@@ -100,5 +100,7 @@ public class XmlModelloPluginTest
         assertNotNull( xml );
 
         assertEquals( "build", xml.getTagName() );
+
+        assertTrue( xml.isTrim() );
     }
 }
