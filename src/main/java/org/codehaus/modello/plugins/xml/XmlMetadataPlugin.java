@@ -68,6 +68,13 @@ public class XmlMetadataPlugin
 
         metadata.setAttribute( Boolean.valueOf( attribute ).booleanValue() );
 
+        String trim = (String) data.get( "xml.trim" );
+
+        if ( trim != null )
+        {
+            metadata.setTrim( Boolean.valueOf( trim ).booleanValue() );
+        }
+
         String tagName = (String) data.get( "xml.tagName" );
 
         metadata.setTagName( tagName );
