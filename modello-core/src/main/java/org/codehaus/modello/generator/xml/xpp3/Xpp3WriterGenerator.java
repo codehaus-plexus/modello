@@ -17,10 +17,7 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- *
- *
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
- *
  * @version $Id$
  */
 public class Xpp3WriterGenerator
@@ -94,7 +91,10 @@ public class Xpp3WriterGenerator
         {
             ModelClass modelClass = (ModelClass) i.next();
 
-            jClass.addImport( objectModel.getPackageName() + "." + modelClass.getName() );
+            if ( outputElement( modelClass.getVersion(), modelClass.getName() ) )
+            {
+                jClass.addImport( objectModel.getPackageName() + "." + modelClass.getName() );
+            }
         }
 
         String root = objectModel.getRoot();
@@ -140,85 +140,91 @@ public class Xpp3WriterGenerator
 
     private void writeClassParsing( ModelClass modelClass, JSourceCode sc, Model objectModel )
     {
-        List allFields = objectModel.getAllFields( modelClass );
-
-        int size = allFields.size();
-
-        for ( int i = 0; i < size; i++ )
+        if ( outputElement( modelClass.getVersion(), modelClass.getName() ) )
         {
-            ModelField field = (ModelField) allFields.get( i );
+            List allFields = objectModel.getAllFields( modelClass );
 
-            writeFieldMarshalling( modelClass, field, sc, objectModel );
+            int size = allFields.size();
+
+            for ( int i = 0; i < size; i++ )
+            {
+                ModelField field = (ModelField) allFields.get( i );
+
+                writeFieldMarshalling( modelClass, field, sc, objectModel );
+            }
         }
     }
 
     private void writeFieldMarshalling( ModelClass modelClass, ModelField field, JSourceCode sc, Model objectModel )
     {
-        String type;
-
-        String fieldName;
-
-        String className;
-
-        String modelClassName;
-
-        if ( field.getDelegateTo() != null )
+        if ( outputElement( field.getVersion(), modelClass.getName() + "." + field.getName() ) )
         {
-        }
-        else
-        {
-            type = field.getType();
+            String type;
 
-            fieldName = field.getName();
+            String fieldName;
 
-            className = capitalise( field.getName() );
+            String className;
 
-            modelClassName = uncapitalise( modelClass.getName() );
+            String modelClassName;
 
-            if ( isClassInModel( type, objectModel ) )
+            if ( field.getDelegateTo() != null )
             {
-                sc.add( "serializer.startTag( NAMESPACE, " + "\"" + fieldName + "\" );" );
-
-                sc.add( className + " " + fieldName + " = " + modelClassName + ".get" + className + "();" );
-
-                sc.add( "if ( " + fieldName + " != null )" );
-
-                sc.add( "{" );
-
-                sc.indent();
-
-                writeClassParsing( objectModel.getClass( type ), sc, objectModel );
-
-                sc.unindent();
-
-                sc.add( "}" );
-
-                sc.add( "serializer.endTag( NAMESPACE, " + "\"" + fieldName + "\" );" );
-
-            }
-            else if ( isCollection( type ) )
-            {
-                writeCollectionMarshalling( modelClassName, fieldName, sc, objectModel );
-            }
-            else if ( isMap( type ) )
-            {
-                // These are properties for now.
-                writePropertiesMarshalling( modelClassName, fieldName, sc, objectModel );
             }
             else
             {
-                sc.add( "if ( " + modelClassName + ".get" + className + "() != null )" );
+                type = field.getType();
 
-                sc.add( "{" );
+                fieldName = field.getName();
 
-                sc.indent();
+                className = capitalise( field.getName() );
 
-                sc.add( "serializer.startTag( NAMESPACE, " + "\"" + fieldName + "\" ).text( " +
-                        modelClassName + ".get" + className + "() ).endTag( NAMESPACE, " + "\"" + fieldName + "\" );" );
+                modelClassName = uncapitalise( modelClass.getName() );
 
-                sc.unindent();
+                if ( isClassInModel( type, objectModel ) )
+                {
+                    sc.add( "serializer.startTag( NAMESPACE, " + "\"" + fieldName + "\" );" );
 
-                sc.add( "}" );
+                    sc.add( className + " " + fieldName + " = " + modelClassName + ".get" + className + "();" );
+
+                    sc.add( "if ( " + fieldName + " != null )" );
+
+                    sc.add( "{" );
+
+                    sc.indent();
+
+                    writeClassParsing( objectModel.getClass( type ), sc, objectModel );
+
+                    sc.unindent();
+
+                    sc.add( "}" );
+
+                    sc.add( "serializer.endTag( NAMESPACE, " + "\"" + fieldName + "\" );" );
+
+                }
+                else if ( isCollection( type ) )
+                {
+                    writeCollectionMarshalling( modelClassName, fieldName, sc, objectModel );
+                }
+                else if ( isMap( type ) )
+                {
+                    // These are properties for now.
+                    writePropertiesMarshalling( modelClassName, fieldName, sc, objectModel );
+                }
+                else
+                {
+                    sc.add( "if ( " + modelClassName + ".get" + className + "() != null )" );
+
+                    sc.add( "{" );
+
+                    sc.indent();
+
+                    sc.add( "serializer.startTag( NAMESPACE, " + "\"" + fieldName + "\" ).text( " +
+                            modelClassName + ".get" + className + "() ).endTag( NAMESPACE, " + "\"" + fieldName + "\" );" );
+
+                    sc.unindent();
+
+                    sc.add( "}" );
+                }
             }
         }
     }
