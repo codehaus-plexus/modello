@@ -37,7 +37,7 @@ import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
 
 /**
- * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
+ * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse </a>
  * @version $Id$
  */
 public class JavaMetadataPlugin
@@ -80,9 +80,16 @@ public class JavaMetadataPlugin
 
         String getter = (String) data.get( "java.getter" );
 
-        if ( adder != null )
+        if ( getter != null )
         {
-            metadata.setGetter( Boolean.valueOf( getter ).booleanValue() );
+            Boolean isGetter = Boolean.valueOf( getter );
+            metadata.setGetter( isGetter.booleanValue() );
+        }
+
+        String fieldType = field.getType();
+        if ( fieldType != null && fieldType.endsWith( "oolean" ) )
+        {
+            metadata.setBooleanGetter( true );
         }
 
         String setter = (String) data.get( "java.setter" );
