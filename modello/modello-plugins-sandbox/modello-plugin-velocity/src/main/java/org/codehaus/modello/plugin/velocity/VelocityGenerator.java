@@ -89,7 +89,7 @@ public class VelocityGenerator
 
             Writer writer = new FileWriter( "foo.txt" );
 
-            velocity.getEngine().mergeTemplate( "/modello/templates/ojb.vm", context, writer );
+            velocity.getEngine().mergeTemplate( "/modello/templates/prevayler/prevayler.vm", context, writer );
 
             writer.flush();
 
