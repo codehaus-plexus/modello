@@ -15,8 +15,6 @@ public class ModelAssociation
     // Configuration
     // ----------------------------------------------------------------------
 
-    private String name;
-
     private String to;
 
     private String fromRole;
@@ -44,21 +42,22 @@ public class ModelAssociation
 
     private ModelClass toClass;
 
-    /**
-     * @return Returns the name.
-     */
-    public String getName()
+    // ----------------------------------------------------------------------
+    //
+    // ----------------------------------------------------------------------
+
+    public ModelAssociation()
     {
-        return name;
+        super( true );
     }
 
     /**
-     * @return Returns the to.
-     *//*
-    public String getTo()
+     * @param to The to to set.
+     */
+    public void setTo( String to )
     {
-        return to;
-    }*/
+        this.to = to;
+    }
 
     /**
      * @return Returns the fromRole.
@@ -66,6 +65,14 @@ public class ModelAssociation
     public String getFromRole()
     {
         return fromRole;
+    }
+
+    /**
+     * @param fromRole The fromRole to set.
+     */
+    public void setFromRole( String fromRole )
+    {
+        this.fromRole = fromRole;
     }
 
     /**
@@ -77,11 +84,27 @@ public class ModelAssociation
     }
 
     /**
+     * @param toRole The toRole to set.
+     */
+    public void setToRole( String toRole )
+    {
+        this.toRole = toRole;
+    }
+
+    /**
      * @return Returns the fromMultiplicity.
      */
     public String getFromMultiplicity()
     {
         return fromMultiplicity;
+    }
+
+    /**
+     * @param fromMultiplicity The fromMultiplicity to set.
+     */
+    public void setFromMultiplicity( String fromMultiplicity )
+    {
+        this.fromMultiplicity = fromMultiplicity;
     }
 
     /**
@@ -93,11 +116,39 @@ public class ModelAssociation
     }
 
     /**
+     * @param toMultiplicity The toMultiplicity to set.
+     */
+    public void setToMultiplicity( String toMultiplicity )
+    {
+        this.toMultiplicity = toMultiplicity;
+    }
+
+    /**
      * @return Returns the associationClass.
      */
     public String getAssociationClass()
     {
         return associationClass;
+    }
+
+    /**
+     * @param associationClass The associationClass to set.
+     */
+    public void setAssociationClass( String associationClass )
+    {
+        this.associationClass = associationClass;
+    }
+
+    // ----------------------------------------------------------------------
+    //
+    // ----------------------------------------------------------------------
+
+    /**
+     * @return Returns the fromClass.
+     */
+    public ModelClass getFromClass()
+    {
+        return fromClass;
     }
 
     /**
@@ -108,20 +159,16 @@ public class ModelAssociation
         return toClass;
     }
 
-    /**
-     * @return Returns the fromClass.
-     */
-    public ModelClass getFromClass()
-    {
-        return fromClass;
-    }
+    // ----------------------------------------------------------------------
+    //
+    // ----------------------------------------------------------------------
 
     public void initialize( ModelClass modelClass )
     {
         this.fromClass = modelClass;
     }
 
-    public void validate()
+    public void validateElement()
         throws ModelValidationException
     {
         validateFieldNotEmpty( "Association", "name", getName() );
@@ -140,7 +187,7 @@ public class ModelAssociation
 
         if ( isEmpty( fromRole ) )
         {
-            fromRole = name;
+            fromRole = getName();
         }
 
         if ( isEmpty( fromMultiplicity ) )

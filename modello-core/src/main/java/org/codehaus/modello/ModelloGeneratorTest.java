@@ -38,6 +38,8 @@ public abstract class ModelloGeneratorTest
     public final void setUp()
         throws Exception
     {
+        super.setUp();
+
         FileUtils.deleteDirectory( getTestPath( "target/" + getName() ) );
 
         mavenRepoLocal = new File( System.getProperty( "user.home" ), ".maven/repository" );
@@ -79,7 +81,7 @@ public abstract class ModelloGeneratorTest
         }
 
         String[] sourceDirectories = new String[]{
-            getTestFile( "src/test/verifiers" ).getAbsolutePath(),
+            getTestPath( "src/test/verifiers" ),
             generatedSources.getAbsolutePath()
         };
 
@@ -102,11 +104,12 @@ public abstract class ModelloGeneratorTest
     {
         IsolatedClassLoader classLoader = new IsolatedClassLoader();
 
-        classLoader.addURL( getTestFile( "target/" + testName + "/classes" ).toURL() );
+        // TODO: flip back to getTestFile() when plexus has File getTestFile()
+        classLoader.addURL( new File( getTestPath( "target/" + testName + "/classes" ) ).toURL() );
 
-        classLoader.addURL( getTestFile( "target/classes" ).toURL() );
+        classLoader.addURL( new File( getTestPath( "target/classes" ) ).toURL() );
 
-        classLoader.addURL( getTestFile( "target/test-classes" ).toURL() );
+        classLoader.addURL( new File( getTestPath( "target/test-classes" ) ).toURL() );
 
         for ( int i = 0; i < dependencies.size(); i++ )
         {

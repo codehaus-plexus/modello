@@ -1,20 +1,36 @@
-package org.codehaus.modello.generator.java;
+package org.codehaus.modello.plugin.java;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Iterator;
+import java.util.Properties;
+
+import org.codehaus.modello.CodeSegment;
+import org.codehaus.modello.Model;
+import org.codehaus.modello.ModelAssociation;
+import org.codehaus.modello.ModelClass;
+import org.codehaus.modello.ModelField;
+import org.codehaus.modello.ModelloException;
+import org.codehaus.modello.ModelloRuntimeException;
+import org.codehaus.modello.generator.java.javasource.JClass;
+import org.codehaus.modello.generator.java.javasource.JField;
+import org.codehaus.modello.generator.java.javasource.JMethod;
+import org.codehaus.modello.generator.java.javasource.JParameter;
+import org.codehaus.modello.generator.java.javasource.JSourceWriter;
+import org.codehaus.modello.generator.java.javasource.JType;
+import org.codehaus.modello.plugin.AbstractModelloGenerator;
 
 /**
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
  * @version $Id$
  */
-public class JavaGenerator
-//    extends AbstractGeneratorPlugin
-{/*
+public class JavaModelloGenerator
+    extends AbstractModelloGenerator
+{
     public void generate( Model model, Properties parameters )
         throws ModelloException
     {
-        if ( true )
-        {
-            throw new ModelloRuntimeException( "Not used anymore." );
-        }
-
         initialize( model, parameters );
 
         try
@@ -32,7 +48,7 @@ public class JavaGenerator
     {
         Model objectModel = getModel();
 
-        String packageName = getBasePackageName( objectModel );
+        String packageName = getBasePackageName();
 
         String directory = packageName.replace( '.', '/' );
 
@@ -40,7 +56,7 @@ public class JavaGenerator
         {
             ModelClass modelClass = (ModelClass) i.next();
 
-            if ( outputElement( modelClass.getVersion(), modelClass.getName() ) )
+            if ( outputElement( modelClass ) )
             {
                 File f = new File( new File( getOutputDirectory(), directory ), modelClass.getName() + ".java" );
 
@@ -68,7 +84,7 @@ public class JavaGenerator
                 {
                     ModelField modelField = (ModelField) j.next();
 
-                    if ( outputElement( modelField.getVersion(), modelClass.getName() + "." + modelField.getName() ) )
+                    if ( outputElement( modelField ) )
                     {
                         createField( jClass, modelField );
                     }
@@ -78,7 +94,7 @@ public class JavaGenerator
                 {
                     ModelAssociation modelAssociation = (ModelAssociation) j.next();
 
-                    if ( outputElement( modelAssociation.getVersion(), modelClass.getName() + "." + modelAssociation.getName() ) )
+                    if ( outputElement( modelAssociation ) )
                     {
                         createAssociation( jClass, modelAssociation );
                     }
@@ -90,7 +106,7 @@ public class JavaGenerator
                     {
                         CodeSegment codeSegment = (CodeSegment) iterator.next();
 
-                        if ( outputElement( codeSegment.getVersion(), "" ) )
+                        if ( outputElement( codeSegment ) )
                         {
                             jClass.addSourceCode( codeSegment.getCode() );
                         }
@@ -105,7 +121,7 @@ public class JavaGenerator
             }
         }
     }
-
+/*
     protected String getBasePackageName( Model model )
     {
         StringBuffer sb = new StringBuffer();
@@ -121,7 +137,8 @@ public class JavaGenerator
 
         return sb.toString();
     }
-
+*/
+/*
     protected void addModelImports( JClass jClass )
         throws ModelloException
     {
@@ -135,7 +152,7 @@ public class JavaGenerator
             }
         }
     }
-
+*/
     private JField createField( ModelField modelField, ModelClass modelClass )
     {
         JType type;
@@ -271,7 +288,7 @@ public class JavaGenerator
 /*
         if ( isCollection( modelAssociation.getName() ) )
         {
-*//*
+*/
             String fieldName = modelAssociation.getFromRole();
 
             String parameterName = singular( fieldName );
@@ -321,5 +338,5 @@ public class JavaGenerator
             jClass.addMethod( adder );
         }
 */
-//    }
+    }
 }

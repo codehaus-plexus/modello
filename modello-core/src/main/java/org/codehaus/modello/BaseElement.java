@@ -3,7 +3,7 @@ package org.codehaus.modello;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.codehaus.modello.metadata.MetaData;
+import org.codehaus.modello.metadata.Metadata;
 
 /**
  * This is the base class for all elements of the model.
@@ -24,17 +24,24 @@ public abstract class BaseElement
 
     private String comment;
 
-    private transient Map metaData = new HashMap();
+    private transient Map metadata = new HashMap();
 
-    public abstract void validate()
+    private transient VersionRange elementVersion;
+
+    private boolean nameRequired;
+
+    public abstract void validateElement()
         throws ModelValidationException;
 
-    public BaseElement()
+    public BaseElement( boolean nameRequired )
     {
+        this.nameRequired = nameRequired;
     }
 
-    public BaseElement( String name )
+    public BaseElement( boolean nameRequired, String name )
     {
+        this.nameRequired = nameRequired;
+
         this.name = name;
     }
 
@@ -43,14 +50,29 @@ public abstract class BaseElement
         return name;
     }
 
+    public void setName( String name )
+    {
+        this.name = name;
+    }
+
     public String getDescription()
     {
         return description;
     }
 
+    public void setDescription( String description )
+    {
+        this.description = description;
+    }
+
     public String getVersion()
     {
         return version;
+    }
+
+    public void setVersion( String version )
+    {
+        this.version = version;
     }
 
     public String getComment()
@@ -63,26 +85,31 @@ public abstract class BaseElement
         this.comment = comment;
     }
 
-    public boolean hasMetaData( String key )
+    public boolean hasMetadata( String key )
     {
-        return metaData.containsKey( key );
+        return metadata.containsKey( key );
     }
 
-    public void addMetaData( MetaData metaData )
+    public void addMetadata( Metadata metadata )
     {
-        this.metaData.put( metaData.getClass().getName(), metaData );
+        this.metadata.put( metadata.getClass().getName(), metadata );
     }
 
-    public MetaData getMetaData( String key )
+    public Metadata getMetadata( String key )
     {
-        MetaData metaData = (MetaData) this.metaData.get( key );
+        Metadata metadata = (Metadata) this.metadata.get( key );
 
-        if ( metaData == null )
+        if ( metadata == null )
         {
             throw new ModelloRuntimeException( "No such metadata: " + key );
         }
 
-        return metaData;
+        return metadata;
+    }
+
+    public VersionRange getElementVersion()
+    {
+        return elementVersion;
     }
 
     // ----------------------------------------------------------------------
@@ -101,6 +128,24 @@ public abstract class BaseElement
         {
             throw new ModelValidationException( "Empty value '" + fieldName + "' from " + objectName + "." );
         }
+    }
+
+    public final void validate()
+        throws ModelValidationException
+    {
+        if ( nameRequired )
+        {
+            validateFieldNotEmpty( "Element.name", "name", name );
+        }
+
+        if ( isEmpty( version ) )
+        {
+            version = "0.0.0+";
+        }
+
+        elementVersion = new VersionRange( version );
+
+        validateElement();
     }
 
     protected boolean isEmpty( String string )

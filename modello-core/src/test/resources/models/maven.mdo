@@ -119,7 +119,7 @@
             usually specified as CDATA to enable the use of HTML tags
             within the description.  This description is used to
             generate the
-            <a href="plugins/site/index.html">front page</a>
+            &gt;a href="plugins/site/index.html"&lt;front page&gt;/a&lt;
             of the project's web site.
           </description>
           <type>String</type>
@@ -216,7 +216,7 @@
           <description>
             This element describes all of the developers associated with a
             project.  Each developer is described by a
-            <code>developer</code> element, which is then described by
+            &gt;code&lt;developer&gt;/code&lt element, which is then described by
             additional elements (described below).  The auto-generated site
             documentation references this information.
           </description>
@@ -229,7 +229,7 @@
           <description>
             This element describes all of the contributors associated with a
             project who are not developers.  Each contributor is described by a
-            <code>contributor</code> element, which is then describe by additional
+            &gt;code&lt;contributor&gt;/code& element, which is then describe by additional
             elements (described below).  The auto-generated site documentation
             references this information.
           </description>
@@ -242,7 +242,7 @@
           <description>
             This element describes all of the dependencies associated with a
             project.  Each dependency is described by a
-            <code>dependency</code> element, which is then described by
+            &gt;code&lt;dependency&gt;/code&lt; element, which is then described by
             additional elements (described below).
           </description>
           <type>java.util.List</type>
@@ -254,7 +254,7 @@
           <version>3.0.0+</version>
           <description>
             This element describes all of the licenses for this project.  Each license is described by a
-            <code>license</code> element, which is then describe by additional
+            &gt;code&lt;license&gt;/code&lt; element, which is then describe by additional
             elements (described below).  The auto-generated site documentation
             references this information.  Projects should only list the license(s) that
             applies to the project and not the licenses that apply to dependencies.
@@ -290,7 +290,7 @@
             This element includes the specification of reports to be
             included in a Maven-generated site.  These reports will be run
             when a user executes
-            <code>maven site</code>.  All of the
+            &gt;code&lt;maven site&gt;/code&lt;.  All of the
             reports will be included in the navigation bar for browsing in
             the order they are specified.
           </description>
@@ -421,7 +421,7 @@
       <description>
         This element describes each of the branches of the
         project. Each branch is described by a
-        <code>tag</code>
+        &gt;code&lt;tag&gt;/code&lt;
         element
       </description>
       <fields>
@@ -450,7 +450,7 @@
             for this project can be sent. This is intended for use by tools
             which do unattended builds, for example those providing for
             continuous integration. Currently this is used by the
-            <a href="build-file.html#maven:gump-descriptor">maven:gump-descriptor</a>
+            &gt;a href="build-file.html#maven:gump-descriptor"&lt;maven:gump-descriptor&gt;/a&lt;
             target.
           </description>
           <type>String</type>
@@ -489,8 +489,8 @@
             sources of the project.  The generated build system will
             compile the Aspects in this directory when the project is
             built if Aspects have been enabled (see the
-            <a
-              href="plugins/aspectj/goals.html">Aspectj goals</a> document).
+            &gt;a
+              href="plugins/aspectj/goals.html"&lt;Aspectj goals&gt;/a&lt; document).
             The path given is relative to the project descriptor.
           </description>
           <type>String</type>
@@ -503,7 +503,7 @@
           <description>
             This element describes all of the sourceModifications associated with a
             project.  Each source modification is described by a
-            <code>sourceModification</code> element, which is then described by
+            &gt;code&lt;sourceModification&gt;/code&lt; element, which is then described by
             additional elements (described below).  These modifications are used
             to exclude or include various source depending on the environment
             the build is running in.
@@ -528,7 +528,7 @@
             This element describes all of the resources associated with a project or unit tests.
             Each resource is described by a resource element, which is then described by additional
             elements (described
-            <a href="#resource">below</a>). These resources are used to
+            &gt;a href="#resource"&lt;below&gt;/a&lt;). These resources are used to
             complete the jar file or to run unit test.
           </description>
           <type>java.util.List</type>
@@ -620,7 +620,7 @@
           <description>
             The roles the contributor plays in the project.  Each role is
             describe by a
-            <code>role</code> element, the body of which is a
+            &gt;code&lt;role&gt;/code&lt; element, the body of which is a
             role name.
           </description>
           <type>java.util.List</type>
@@ -656,7 +656,7 @@
           <required>true</required>
           <description>
             The project group that produced the dependency, e.g.
-            <code>geronimo</code>.
+            &gt;code&lt;geronimo&gt;/code&lt;.
           </description>
           <type>String</type>
         </field>
@@ -666,7 +666,7 @@
           <required>true</required>
           <description>
             The unique id for an artifact produced by the project group, e.g.
-            <code>germonimo-jms</code>
+            &gt;code&lt;germonimo-jms&gt;/code&lt;.
           </description>
           <type>String</type>
         </field>
@@ -676,7 +676,7 @@
           <required>true</required>
           <description>
             The version of the dependency., e.g.
-            <code>3.2.1</code>
+            &gt;code&lt;3.2.1&gt;/code&lt;
           </description>
           <type>String</type>
         </field>
@@ -707,8 +707,8 @@
           <version>3.0.0+</version>
           <description>
             Other known recognised dependency types are:
-            <code>ejb</code> and
-            <code>plugin</code>.
+            &gt;code&lt;ejb&gt;/code&lt; and
+            &gt;code&lt;plugin&gt;/code&lt;.
           </description>
           <type>String</type>
           <defaultValue>jar</defaultValue>
@@ -719,11 +719,11 @@
           <version>3.0.0+</version>
           <description>
             Properties about the dependency. Various plugins allow you to
-            <code>mark</code> dependencies with properties. For example the
-            <a href="plugins/war/index.html">war</a> plugin looks for a
-            <code>war.bundle</code> property, and if found will include the dependency
+            &gt;code&lt;mark&gt;/code&lt; dependencies with properties. For example the
+            &gt;a href="plugins/war/index.html"&lt;war&gt;/a&lt; plugin looks for a
+            &gt;code&lt;war.bundle&gt;/code&lt; property, and if found will include the dependency
             in
-            <code>WEB-INF/lib</code>. For example syntax, check the war plugin docs.
+            &gt;code&lt;WEB-INF/lib&gt;/code&lt;. For example syntax, check the war plugin docs.
           </description>
           <type>java.util.Properties</type>
           <defaultValue>new Properties()</defaultValue>
@@ -820,12 +820,12 @@
           <version>3.0.0</version>
           <description>
               The primary method by which this project may be distributed.
-            <dl>
-              <dt>repo</dt>
-              <dd>may be downloaded from the Maven repository</dd>
-              <dt>manual</dt>
-              <dd>user must manually download and install the dependency.</dd>
-            </dl>
+            &gt;dl
+              &gt;dt&lt;repo&gt;/dt&lt;
+              &gt;dd&lt;may be downloaded from the Maven repository&gt;/dd&lt;
+              &gt;dt&lt;manual&gt;/dt&lt;
+              &gt;dd&lt;user must manually download and install the dependency.&gt;/dd&lt;
+            &gt;/dl&lt;
           </description>
           <type>String</type>
         </field>
@@ -843,7 +843,7 @@
       <description>
         This element describes all of the mailing lists associated with
         a project.  Each mailing list is described by a
-        <code>mailingList</code> element, which is then described by
+        &gt;code&lt;mailingList&gt;/code&lt; element, which is then described by
         additional elements (described below).  The auto-generated site
         documentation references this information.
       </description>
@@ -860,7 +860,7 @@
           <description>
             The email address or link that can be used to subscribe to the mailing list.
             If this is an email address, a
-            <code>mailto:</code> link will automatically be created when
+            &gt;code&lt;mailto:&gt;/code&lt; link will automatically be created when
             the documentation is created.
           </description>
           <type>String</type>
@@ -871,7 +871,7 @@
           <description>
             The email address or link that can be used to unsubscribe to
             the mailing list.  If this is an email address, a
-            <code>mailto:</code> link will automatically be created
+            &gt;code&lt;mailto:&gt;/code&lt; link will automatically be created
             when the documentation is created.
           </description>
           <type>String</type>
@@ -913,9 +913,9 @@
             The URL to the organization's logo image.  This can be an URL relative
             to the base directory of the generated web site,
             (e.g.,
-            <code>/images/org-logo.png</code>) or an absolute URL
+            &gt;code&lt;/images/org-logo.png&gt;/code&lt;) or an absolute URL
             (e.g.,
-            <code>http://my.corp/logo.png</code>).  This value is used
+            &gt;code&lt;http://my.corp/logo.png&gt;/code&lt;).  This value is used
             when generating the project documentation.
           </description>
           <type>String</type>
@@ -1029,8 +1029,8 @@
             The source configuration management system URL
             that describes the repository and how to connect to the
             repository.  This is used by Maven when
-            <a
-              href="plugins/dist/index.html">building versions</a>
+            &gt;a
+              href="plugins/dist/index.html"&lt;building versions&gt;/a&lt;
             from specific ID.
           </description>
           <type>String</type>
@@ -1063,8 +1063,8 @@
             The source configuration management system URL
             that describes the repository and how to connect to the
             repository.  This is used by Maven when
-            <a
-              href="plugins/dist/index.html">building versions</a>
+            &gt;a
+              href="plugins/dist/index.html"&lt;building versions&gt;/a&lt;
             from specific ID.
           </description>
           <type>String</type>
@@ -1106,9 +1106,9 @@
           <description>
             Describe the resource target path. For example, if you want that resource
             appear into a specific package (
-            <code>org.apache.maven.messages</code>), you must specify this
+            &gt;code&lt;org.apache.maven.messages&gt;/code&lt;), you must specify this
             element with this value :
-            <code>org/apache/maven/messages</code>
+            &gt;code&lt;org/apache/maven/messages&gt;/code&lt;
           </description>
           <type>String</type>
         </field>
@@ -1131,10 +1131,10 @@
           <version>3.0.0+</version>
           <description>
             If the class with this name can
-            <strong>not</strong> be
+            &gt;strong&lt;not&gt;/strong&lt; be
             loaded, then the includes and excludes specified below
             will be applied to the contents of the
-            <a href="#sourceDirectory">sourceDirectory</a>
+            &gt;a href="#sourceDirectory"&lt;sourceDirectory&gt;/a&lt;
           </description>
           <type>String</type>
         </field>
@@ -1164,7 +1164,7 @@
       <description>
         This element describes each of the previous versions of the
         project. Each version is described by a
-        <code>version</code>
+        &gt;code&lt;version&gt;/code&lt;
         element
       </description>
       <fields>
@@ -1173,10 +1173,10 @@
           <version>3.0.0</version>
           <description>
             The external version number under which this release was distributed. Examples include:
-            <code>1.0</code>,
-            <code>1.1-alpha1</code>,
-            <code>1.2-beta</code>,
-            <code>1.3.2</code> etc.
+            &gt;code&lt;1.0&gt;/code&lt;,
+            &gt;code&lt;1.1-alpha1&gt;/code&lt;,
+            &gt;code&lt;1.2-beta&gt;/code&lt;,
+            &gt;code&lt;1.3.2&gt;/code&lt; etc.
           </description>
           <type>String</type>
         </field>
@@ -1195,9 +1195,9 @@
           <description>
             A unique identifier for a version.  This ID is
             used to specify the version that
-            <a href="plugins/dist/index.html">
-              <code>maven:dist</code>
-            </a> builds.
+            &gt;a href="plugins/dist/index.html"&lt;
+              &gt;code&lt;maven:dist&gt;/code&lt;
+            &gt;/a&lt; builds.
           </description>
           <type>String</type>
         </field>

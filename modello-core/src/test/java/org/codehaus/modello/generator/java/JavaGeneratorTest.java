@@ -5,9 +5,13 @@ package org.codehaus.modello.generator.java;
  */
 
 import java.io.File;
+import java.io.FileReader;
+import java.util.Properties;
 
-import org.codehaus.modello.Modello;
+import org.codehaus.modello.Model;
 import org.codehaus.modello.ModelloGeneratorTest;
+import org.codehaus.modello.ModelloParameterConstants;
+import org.codehaus.modello.core.ModelloCore;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -26,17 +30,29 @@ public class JavaGeneratorTest
     public void testJavaGenerator()
         throws Throwable
     {
-        File generatedSources = getTestFile( "target/java/source" );
+        File generatedSources = new File( getTestPath( "target/java/source" ) );
 
-        File classes = getTestFile( "target/java/classes" );
+        File classes = new File( getTestPath( "target/java/classes" ) );
 
         generatedSources.mkdirs();
 
         classes.mkdirs();
 
-        Modello modello = getModello();
+        ModelloCore modello = getModelloCore();
 
-        modello.work( getTestFile( modelFile ), "java", generatedSources, "4.0.0", false );
+//        modello.work( getTestFile( modelFile ), "java", generatedSources, "4.0.0", false );
+
+        Properties parameters = new Properties();
+
+        parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, generatedSources.getAbsolutePath() );
+
+        parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString( false ) );
+
+        parameters.setProperty( ModelloParameterConstants.VERSION, "4.0.0" );
+
+        Model model = modello.loadModel( new FileReader( getTestPath( modelFile ) ) );
+
+        modello.generate( model, "java", parameters );
 
         compile( generatedSources, classes );
 

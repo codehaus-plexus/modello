@@ -4,31 +4,8 @@ package org.codehaus.modello;
  * LICENSE
  */
 
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.alias.ClassMapper;
-import com.thoughtworks.xstream.converters.Converter;
-import com.thoughtworks.xstream.converters.reflection.PureJavaReflectionProvider;
-import com.thoughtworks.xstream.converters.reflection.ReflectionProvider;
-import com.thoughtworks.xstream.core.DefaultClassMapper;
-import com.thoughtworks.xstream.io.HierarchicalStreamDriver;
-import com.thoughtworks.xstream.io.xml.XppDomDriver;
-import com.thoughtworks.xstream.io.xml.XppDomReader;
-import com.thoughtworks.xstream.io.xml.xppdom.Xpp3Dom;
-import com.thoughtworks.xstream.io.xml.xppdom.Xpp3DomBuilder;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.StringReader;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.Map;
-
 import org.codehaus.modello.converters.ModelFieldConverter;
-import org.codehaus.modello.generator.GeneratorPluginManager;
-import org.codehaus.modello.metadata.MetaData;
-import org.codehaus.modello.metadata.MetaDataPlugin;
-import org.codehaus.modello.metadata.MetaDataPluginManager;
+import org.codehaus.plexus.logging.AbstractLogEnabled;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -37,16 +14,16 @@ import org.codehaus.modello.metadata.MetaDataPluginManager;
 public class ModelBuilder
     extends AbstractLogEnabled
 {
-    private XStream xstream;
+//    private XStream xstream;
 
     private static ModelBuilder instance;
-
+/*
     private GeneratorPluginManager generatorPluginManager;
 
     private MetaDataPluginManager metaDataPluginManager;
-
+*/
     private ModelFieldConverter fieldConverter;
-
+/*
     public void setGeneratorPluginManager( GeneratorPluginManager generatorPluginManager )
     {
         this.generatorPluginManager = generatorPluginManager;
@@ -56,10 +33,10 @@ public class ModelBuilder
     {
         this.metaDataPluginManager = metaDataPluginManager;
     }
-
+*/
     public void initialize()
         throws ModelloException
-    {
+    {/*
         if ( generatorPluginManager == null )
         {
             throw new ModelloException( "Missing requirement: generator plugin manager." );
@@ -93,8 +70,9 @@ public class ModelBuilder
         fieldConverter = new ModelFieldConverter( defaultConverter );
 
         xstream.registerConverter( fieldConverter );
+        */
     }
-
+/*
     public XStream getXStream()
     {
         return xstream;
@@ -268,4 +246,5 @@ public class ModelBuilder
 
         return buf.toString();
     }
+*/
 }
