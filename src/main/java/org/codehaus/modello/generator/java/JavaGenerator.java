@@ -79,9 +79,6 @@ public class JavaGenerator
                             "Field name can't be null jField: element " + count + " in the definition of the class " + modelClass.getName() );
                     }
 
-                    // If we are delegating then we don't need a field and we want the setter and getter
-                    // to point to the delegate.
-
                     if ( modelField.getDelegateTo() != null )
                     {
                         JField delegate = createField( modelClass.getField( modelField.getDelegateTo() ), modelClass, count );
@@ -227,7 +224,16 @@ public class JavaGenerator
         }
     }
 
-    // Delegate
+    // --------------------------------------------------------------------------------------------
+    // Delegates
+    //
+    // These are for use in the model when one element is being superceded by another but
+    // you want to provide some backward compatibility. So for example in your xml you may
+    // have an element named "pomVersion" which is being replaced with "modelVersion". So
+    // you still want to accept "pomVersion" but we just delegate to our new "modelVersion"
+    // element. So we can accept the new while supporting the old but internally within
+    // the model we are using our new "modelVersion" element for everything.
+    // --------------------------------------------------------------------------------------------
 
     private JMethod createDelegateGetter( ModelField field, JField delegate )
     {
