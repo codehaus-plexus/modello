@@ -15,6 +15,8 @@ import java.util.ArrayList;
 public class StashClassMetadata
     implements ClassMetadata
 {
+    public static String ID = StashClassMetadata.class.getName();
+
     private boolean storable;
 
     public void setStorable( boolean storable )

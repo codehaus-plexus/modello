@@ -72,6 +72,8 @@ public class VelocityGenerator
         {
             Context context = new VelocityContext();
 
+            context.put( "id", StashClassMetadata.ID );
+
             context.put( "model", model );
 
             Writer writer = new FileWriter( "foo.txt" );
