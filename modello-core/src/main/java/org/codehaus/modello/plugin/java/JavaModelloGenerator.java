@@ -33,6 +33,7 @@ import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.ModelloRuntimeException;
 import org.codehaus.modello.generator.java.javasource.JClass;
 import org.codehaus.modello.generator.java.javasource.JField;
+import org.codehaus.modello.generator.java.javasource.JInterface;
 import org.codehaus.modello.generator.java.javasource.JMethod;
 import org.codehaus.modello.generator.java.javasource.JParameter;
 import org.codehaus.modello.generator.java.javasource.JSourceWriter;
@@ -43,6 +44,7 @@ import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelDefault;
 import org.codehaus.modello.model.ModelField;
+import org.codehaus.modello.model.ModelInterface;
 import org.codehaus.modello.plugin.AbstractModelloGenerator;
 
 /**
@@ -72,13 +74,79 @@ public class JavaModelloGenerator
     {
         Model objectModel = getModel();
 
-        String packageName = getBasePackageName();
+        for ( Iterator i = objectModel.getInterfaces( getGeneratedVersion() ).iterator(); i.hasNext(); )
+        {
+            ModelInterface modelInterface = (ModelInterface) i.next();
 
-        String directory = packageName.replace( '.', '/' );
+            String packageName = null;
+
+            if ( isPackageWithVersion() )
+            {
+                packageName = modelInterface.getPackageName( true, getGeneratedVersion() );
+            }
+            else
+            {
+                packageName = modelInterface.getPackageName( false, null );
+            }
+
+            String directory = packageName.replace( '.', '/' );
+
+            File f = new File( new File( getOutputDirectory(), directory ), modelInterface.getName() + ".java" );
+
+            if ( !f.getParentFile().exists() )
+            {
+                f.getParentFile().mkdirs();
+            }
+
+            FileWriter writer = new FileWriter( f );
+
+            JSourceWriter sourceWriter = new JSourceWriter( writer );
+
+            JInterface jInterface = new JInterface( modelInterface.getName() );
+
+            jInterface.addImport( "java.util.*" );
+
+            jInterface.setPackageName( packageName );
+
+            if ( modelInterface.getSuperInterface() != null )
+            {
+                jInterface.addInterface( modelInterface.getSuperInterface() );
+            }
+
+            if ( modelInterface.getCodeSegments( getGeneratedVersion() ) != null )
+            {
+                for ( Iterator iterator = modelInterface.getCodeSegments( getGeneratedVersion() ).iterator(); iterator.hasNext(); )
+                {
+                    CodeSegment codeSegment = (CodeSegment) iterator.next();
+
+                    //TODO : add this method to jInterface or remove codeSegments and add method tag
+                    //jInterface.addSourceCode( codeSegment.getCode() );
+                }
+            }
+
+            jInterface.print( sourceWriter );
+
+            writer.flush();
+
+            writer.close();
+        }
 
         for ( Iterator i = objectModel.getClasses( getGeneratedVersion() ).iterator(); i.hasNext(); )
         {
             ModelClass modelClass = (ModelClass) i.next();
+
+            String packageName = null;
+
+            if ( isPackageWithVersion() )
+            {
+                packageName = modelClass.getPackageName( true, getGeneratedVersion() );
+            }
+            else
+            {
+                packageName = modelClass.getPackageName( false, null );
+            }
+
+            String directory = packageName.replace( '.', '/' );
 
             File f = new File( new File( getOutputDirectory(), directory ), modelClass.getName() + ".java" );
 
@@ -95,11 +163,23 @@ public class JavaModelloGenerator
 
             jClass.addImport( "java.util.*" );
 
+            addModelImports( jClass );
+
             jClass.setPackageName( packageName );
 
             if ( modelClass.getSuperClass() != null )
             {
                 jClass.setSuperClass( modelClass.getSuperClass() );
+            }
+
+            if ( modelClass.getInterfaces().size() > 0 )
+            {
+                for( Iterator j = modelClass.getInterfaces().iterator(); j.hasNext(); )
+                {
+                    ModelInterface modelInterface = (ModelInterface) j.next();
+
+                    jClass.addInterface( modelInterface.getName() );
+                }
             }
 
             jClass.addInterface( Serializable.class.getName() );
