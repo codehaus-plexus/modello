@@ -10,7 +10,7 @@ import java.util.List;
  * @version $Id$
  */
 public class ModelClass
-    extends Base
+    extends BaseElement
 {
     String superClass;
 
