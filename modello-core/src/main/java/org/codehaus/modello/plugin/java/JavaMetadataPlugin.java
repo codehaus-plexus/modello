@@ -62,21 +62,21 @@ public class JavaMetadataPlugin
     {
         JavaFieldMetadata metadata = new JavaFieldMetadata();
 
-        String adder = (String) data.get( "adder" );
+        String adder = (String) data.get( "java.adder" );
 
         if ( adder != null )
         {
             metadata.setAdder( Boolean.valueOf( adder ).booleanValue() );
         }
 
-        String getter = (String) data.get( "getter" );
+        String getter = (String) data.get( "java.getter" );
 
         if ( adder != null )
         {
             metadata.setGetter( Boolean.valueOf( getter ).booleanValue() );
         }
 
-        String setter = (String) data.get( "setter" );
+        String setter = (String) data.get( "java.setter" );
 
         if ( adder != null )
         {
