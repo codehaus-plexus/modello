@@ -19,6 +19,8 @@ public class ModelField
 
     String typeValidator;
 
+    String delegateTo;
+
     public String getType()
     {
         return type;
@@ -37,5 +39,10 @@ public class ModelField
     public String getTypeValidator()
     {
         return typeValidator;
+    }
+
+    public String getDelegateTo()
+    {
+        return delegateTo;
     }
 }
