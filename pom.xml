@@ -1,10 +1,9 @@
-<model>
+<project>
   <modelVersion>4.0.0</modelVersion>
   <groupId>modello</groupId>
   <artifactId>modello</artifactId>
-  <packaging>jar</packaging>
-  <name>Modello Parent</name>
   <version>1.0</version>
+  <name>Modello Parent</name>
   <ciManagement>
     <notifiers>
       <notifier>
@@ -19,15 +18,12 @@
       <groupId>plexus</groupId>
       <artifactId>plexus-utils</artifactId>
       <version>1.0-alpha-1-SNAPSHOT</version>
-      <type>jar</type>
-      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>3.8.1</version>
-      <type>jar</type>
-      <scope>compile</scope>
+      <scope>test</scope>
     </dependency>
   </dependencies>
   <scm>
@@ -46,4 +42,12 @@
       <url>scp://beaver.codehaus.org//home/projects/modello/dist/</url>
     </repository>
   </distributionManagement>
-</model>
+  <modules>
+    <module>modello-core</module>
+    <module>modello-plugin-velocity</module>
+    <module>modello-plugin-xdoc</module>
+    <module>modello-plugin-xml</module>
+    <module>modello-plugin-xpp3</module>
+    <module>modello-plugins</module>
+  </modules>
+</project>
