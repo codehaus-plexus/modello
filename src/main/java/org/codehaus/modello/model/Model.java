@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.codehaus.modello.ModelloRuntimeException;
+import org.codehaus.modello.plugin.model.ModelClassMetadata;
 
 /**
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
@@ -40,8 +41,6 @@ public class Model
     extends BaseElement
 {
     private String id;
-
-    private String root;
 
     private List classes = new ArrayList();
 
@@ -70,14 +69,45 @@ public class Model
         this.id = id;
     }
 
-    public String getRoot()
+    public String getRoot( Version version )
     {
-        return root;
-    }
+        List classes = getClasses( version );
 
-    public void setRoot( String root )
-    {
-        this.root = root;
+        String className = null;
+
+        for (Iterator i = classes.iterator(); i.hasNext(); )
+        {
+            ModelClass currentClass = (ModelClass) i.next();
+
+            ModelClassMetadata metadata = null;
+
+            try
+            {
+                metadata = (ModelClassMetadata) currentClass.getMetadata( ModelClassMetadata.ID );
+            }
+            catch( Exception e )
+            {
+            }
+
+            if ( metadata != null && metadata.isRootElement() )
+            {
+                if ( className == null )
+                {
+                    className = currentClass.getName();
+                }
+                else
+                {
+                    throw new ModelloRuntimeException( "There are more than one class as root elememt for this version " + version + "." );
+                }
+            }
+        }
+
+        if ( className == null )
+        {
+            throw new ModelloRuntimeException( "There aren't root elememt for version " + version + "." );
+        }
+
+        return className;
     }
 
     public String getPackageName()

@@ -211,7 +211,7 @@ public class XdocGenerator
     {
         StringBuffer sb = new StringBuffer();
 
-        sb.append( getModelClassDescriptor( objectModel, objectModel.getClass( objectModel.getRoot(), getGeneratedVersion() ), 0 ) );
+        sb.append( getModelClassDescriptor( objectModel, objectModel.getClass( objectModel.getRoot( getGeneratedVersion() ), getGeneratedVersion() ), 0 ) );
 
         return sb.toString();
     }

@@ -1,7 +1,6 @@
 <model>
   <id>simple</id>
   <name>Simple Modello Test Model</name>
-  <root>Boy</root>
   <defaults>
     <default>
       <key>package</key>
@@ -9,7 +8,7 @@
     </default>
   </defaults>
   <classes>
-    <class>
+    <class rootElement="true">
       <name>Boy</name>
       <version>1.0.0</version>
       <fields>
@@ -20,8 +19,9 @@
         </field>
         <field toto="tutu">
           <name>girlfriends</name>
+          <version>1.0.0</version>
           <association>
-            <type>Boy</type>
+            <type>Girl</type>
             <multiplicity>*</multiplicity>
           </association>
         </field>

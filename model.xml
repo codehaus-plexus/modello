@@ -22,9 +22,8 @@ NOT USED: moved to src/test/resources/models
   <name>Maven</name>
   <description>Maven's model for Java project.</description>
   <packageName>org.apache.maven.model</packageName>
-  <root>Model</root>
   <classes>
-    <class>
+    <class rootElement="true">
       <name>Model</name>
       <version>3.0.0+</version>
       <fields>
