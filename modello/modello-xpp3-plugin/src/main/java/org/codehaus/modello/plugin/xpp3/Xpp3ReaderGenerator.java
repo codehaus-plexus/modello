@@ -128,7 +128,7 @@ public class Xpp3ReaderGenerator
 
         JSourceCode sc = unmarshall.getSourceCode();
 
-        sc.add( "XmlPullParser parser = MXParser();" );
+        sc.add( "XmlPullParser parser = new MXParser();" );
 
         sc.add( "parser.setInput( reader );" );
 

@@ -112,7 +112,7 @@ public class Xpp3WriterGenerator
 
         jClass.addImport( "java.util.Iterator" );
 
-        jClass.addField( new JField( new JClass( "org.xmlpull.v1.XmlSerializer" ), "serializer" ) );
+        jClass.addField( new JField( new JClass( "org.codehaus.plexus.util.xml.pull.XmlSerializer" ), "serializer" ) );
 
         jClass.addField( new JField( new JClass( "String" ), "NAMESPACE" ) );
 
@@ -134,7 +134,7 @@ public class Xpp3WriterGenerator
 
         JSourceCode sc = marshall.getSourceCode();
 
-        sc.add( "serializer = new XmlSerializer();" );
+        sc.add( "serializer = new MXSerializer();" );
 
         sc.add( "serializer.setProperty( \"http://xmlpull.org/v1/doc/properties.html#serializer-indentation\", \"  \" );" );
 
