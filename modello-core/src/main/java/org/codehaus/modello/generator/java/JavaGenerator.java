@@ -80,27 +80,15 @@ public class JavaGenerator
                                 throw new IllegalStateException( "Field name can't be null jField: element " + count + " in the definition of the class " + modelClass.getName() );
                             }
 
-                            if ( modelField.getDelegateTo() != null )
-                            {
-                                JField delegate = createField( modelClass.getField( modelField.getDelegateTo() ), modelClass, count );
+                            JField field = createField( modelField, modelClass, count );
 
-                                jClass.addMethod( createDelegateGetter( modelField, delegate ) );
+                            jClass.addField( field );
 
-                                jClass.addMethod( createDelegateSetter( modelField, delegate ) );
-                            }
-                            else
-                            {
-                                JField field = createField( modelField, modelClass, count );
+                            jClass.addMethod( createGetter( field ) );
 
-                                jClass.addField( field );
+                            jClass.addMethod( createSetter( field ) );
 
-                                jClass.addMethod( createGetter( field ) );
-
-                                jClass.addMethod( createSetter( field ) );
-
-                                createAdder( field, jClass, objectModel );
-                            }
-
+                            createAdder( field, jClass, objectModel );
                         }
                     }
 

@@ -19,8 +19,6 @@ public class ModelField
 
     String typeValidator;
 
-    String delegateTo;
-
     boolean required;
 
     public String getType()
@@ -41,11 +39,6 @@ public class ModelField
     public String getTypeValidator()
     {
         return typeValidator;
-    }
-
-    public String getDelegateTo()
-    {
-        return delegateTo;
     }
 
     public boolean isRequired()

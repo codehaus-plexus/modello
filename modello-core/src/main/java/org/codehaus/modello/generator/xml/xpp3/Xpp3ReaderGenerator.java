@@ -152,7 +152,7 @@ public class Xpp3ReaderGenerator
             int size = allFields.size();
 
             boolean firstStatement = true;
-            
+
             for ( int i = 0; i < size; i++ )
             {
                 ModelField field = (ModelField) allFields.get( i );
@@ -188,31 +188,11 @@ public class Xpp3ReaderGenerator
     private void writeFieldParsing( ModelClass modelClass, ModelField field, JSourceCode sc, String statement, Model objectModel )
         throws Exception
     {
-        String className;
+        String className = capitalise( field.getName() );
 
-        ModelField toField;
+        String type = field.getType();
 
-        if ( field.getDelegateTo() != null )
-        {
-            className = capitalise( field.getDelegateTo() );
-
-            toField = modelClass.getField( field.getDelegateTo() );
-
-            if ( toField == null )
-            {
-                throw new Exception( "No such field " + field.getDelegateTo() );
-            }
-        }
-        else
-        {
-            toField = field;
-
-            className = capitalise( toField.getName() );
-        }
-
-        String type = toField.getType();
-
-        String name = toField.getName();
+        String name = field.getName();
 
         String modelClassName = uncapitalise( modelClass.getName() );
 
@@ -228,7 +208,7 @@ public class Xpp3ReaderGenerator
 
             sc.add( modelClassName + ".set" + className + "( " + name + " );" );
 
-            writeClassParsing( objectModel.getClass( toField.getType() ), sc, objectModel, true );
+            writeClassParsing( objectModel.getClass( field.getType() ), sc, objectModel, true );
         }
         else if ( isCollection( type ) )
         {
