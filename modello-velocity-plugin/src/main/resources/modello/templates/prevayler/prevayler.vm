@@ -8,7 +8,6 @@ import org.prevayler.convenience.*;
  * Generated Prevayler storage mechanism for $model.name
  * @author Mr Modello
  */
-
 public class ${model.name}PrevaylerStore
     implements Initializable, Startable
 {
