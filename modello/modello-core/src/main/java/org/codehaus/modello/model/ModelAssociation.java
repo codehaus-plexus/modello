@@ -22,6 +22,8 @@ package org.codehaus.modello.model;
  * SOFTWARE.
  */
 
+import org.codehaus.modello.metadata.AssociationMetadata;
+
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
@@ -101,6 +103,11 @@ public class ModelAssociation
         return toClass;
     }
 
+    public AssociationMetadata getAssociationMetadata( String key )
+    {
+        return (AssociationMetadata) getMetadata( AssociationMetadata.class, key );
+    }
+    
     // ----------------------------------------------------------------------
     //
     // ----------------------------------------------------------------------
