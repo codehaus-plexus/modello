@@ -23,12 +23,12 @@ public class XmlMetaDataPlugin
 {
     public MetaData getModelMetaData( Model model, Map data )
     {
-        return null;
+        return new XmlMetaData();
     }
 
     public MetaData getClassMetaData( ModelClass clazz, Map data )
     {
-        return null;
+        return new XmlMetaData();
     }
 
     public MetaData getFieldMetaData( ModelField field, Map data )
@@ -41,7 +41,14 @@ public class XmlMetaDataPlugin
 
         metaData.setAttribute( Boolean.valueOf( attribute ).booleanValue() );
 
-        metaData.setTagName( tagName );
+        if ( tagName != null )
+        {
+            metaData.setTagName( tagName );
+        }
+        else
+        {
+            metaData.setTagName( field.getName() );
+        }
 
         return metaData;
     }
