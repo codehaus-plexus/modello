@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>modello</groupId>
+  <artifactId>modello-parent</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <name>Modello Parent</name>
+  <organization>
+    <name>Codehaus</name>
+    <url>http://www.codehaus.org/</url>
+    <logo>/images/codehaus-logo.gif</logo>
+  </organization>
+  <inceptionYear>2001</inceptionYear>
+  <package>org.codehaus.modello</package>
+  <logo>/images/maven.gif</logo>
+
+  <repository>
+    <connection>scm:cvs:pserver:modello@cvs.modello.codehaus.org:/scm/modello:modello/modello-core</connection>
+    <developerConnection>scm:cvs:ext:${maven.username}@cvs.modello.codehaus.org:/home/projects/modello/scm:modello/modello-core</developerConnection>
+    <url>http://cvs.modello.codehaus.org/modello/${pom.artifactId}</url>
+  </repository>
+
+  <dependencies>
+    <dependency>
+      <groupId>xpp3</groupId>
+      <artifactId>xpp3</artifactId>
+      <version>1.1.3.3</version>
+    </dependency>
+    <dependency>
+      <groupId>xstream</groupId>
+      <artifactId>xstream</artifactId>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+    </dependency>
+  </dependencies>
+</project>
