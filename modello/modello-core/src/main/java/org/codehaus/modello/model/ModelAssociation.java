@@ -44,7 +44,7 @@ public class ModelAssociation
     private String to;
 
     private String multiplicity;
-    
+
     private ModelClass toClass;
 
     // ----------------------------------------------------------------------
@@ -107,7 +107,7 @@ public class ModelAssociation
     {
         return (AssociationMetadata) getMetadata( AssociationMetadata.class, key );
     }
-    
+
     // ----------------------------------------------------------------------
     //
     // ----------------------------------------------------------------------
@@ -127,7 +127,7 @@ public class ModelAssociation
         if ( !to.equals( "String" ) )
         {
             toClass = getModelClass().getModel().getClass( to, getVersionRange() );
-    
+
             if ( toClass == null )
             {
                 throw new ModelValidationException( "Association '" + getName() + "': Could not find to class." );
@@ -160,16 +160,29 @@ public class ModelAssociation
         }
         else
         {
-            if ( ! ONE_MULTIPLICITY.equals( multiplicity ) )
+            if ( !ONE_MULTIPLICITY.equals( multiplicity ) )
             {
-                if ( ! ModelDefault.SET.equalsIgnoreCase( getType() ) &&
-                    ! ModelDefault.LIST.equalsIgnoreCase( getType() ) &&
-                    ! ModelDefault.MAP.equalsIgnoreCase( getType() ) &&
-                    ! ModelDefault.PROPERTIES.equalsIgnoreCase( getType() ) )
+                if ( getType().equalsIgnoreCase( "Set" )  )
+                {
+                    setType( ModelDefault.SET );
+                }
+                if ( getType().equalsIgnoreCase( "List" ) )
+                {
+                    setType( ModelDefault.LIST );
+                }
+                if ( getType().equalsIgnoreCase( "Map" )  )
+                {
+                    setType( ModelDefault.MAP );
+                }
+                if ( getType().equalsIgnoreCase( "Properties" ) )
+                {
+                    setType( ModelDefault.PROPERTIES );
+                }
+                else
                 {
                     throw new ModelValidationException( "The type of element '" + getName() + "' must be List, Map, Properties or Set." );
                 }
-                
+
                 if ( isEmpty ( getDefaultValue() ) )
                 {
                     ModelDefault modelDefault = getModelClass().getModel().getDefault( getType() );
