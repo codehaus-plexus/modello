@@ -13,4 +13,8 @@ public class CodeSegment
     {
         return code;
     }
+
+    public void validate()
+    {
+    }
 }

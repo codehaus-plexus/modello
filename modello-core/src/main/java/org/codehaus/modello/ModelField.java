@@ -48,59 +48,57 @@ public class ModelField
     {
         return required;
     }
-/*
-    public boolean hasMetaData( String key )
-    {
-        return metaDataObjects.containsKey( key );
-    }
-
-    public Object getMetaData( String key )
-    {
-        Object obj = metaDataObjects.get( key );
-
-        if ( obj == null )
-        {
-            throw new ModelloRuntimeException( "No such meta data: '" + key + "'." );
-        }
-
-        return obj;
-    }
-
-    public void addMetaDataObject( String key, Object value )
-    {
-        if ( metaDataObjects.containsKey( key ) )
-        {
-            throw new ModelloRuntimeException( "There is already a meta data object with the specified key: '" + key + "'." );
-        }
-
-        metaDataObjects.put( key, value );
-    }
-*/
-    public void initialize( ModelClass modelClass )
-    {
-        this.modelClass = modelClass;
-/*
-        if ( metaData == null )
-        {
-            return;
-        }
-        Map metaDataClasses = modelClass.getModel().getMetaDataClasses();
-
-        for ( Iterator it = metaData.iterator(); it.hasNext(); )
-        {
-            Object object = it.next();
-
-            Class clazz = object.getClass();
-
-            String key = (String) metaDataClasses.get( clazz.getName() );
-
-            metaDataObjects.put( key, object );
-        }
-*/
-    }
 
     public ModelClass getModelClass()
     {
         return modelClass;
+    }
+
+    public void initialize( ModelClass modelClass )
+    {
+        this.modelClass = modelClass;
+    }
+
+    public void validate()
+        throws ModelValidationException
+    {
+        validateFieldNotEmpty( "Field", "name", getName() );
+
+        validateFieldNotEmpty( "Field " + getName(), "type", type );
+/*
+        if ( getName().endsWith( "ies" ) || getName().endsWith( "es" )  )
+        {
+            throw new ModelValidationException( "Field '" + getName() + "': A field name cannot be plural. Use <association> for associations." );
+        }
+*/
+        String[] validTypes = new String[]{
+            "boolean",
+            "char",
+            "short",
+            "int",
+            "long",
+            "float",
+            "double",
+            "String"
+        };
+
+        for ( int i = 0; i < validTypes.length; i++ )
+        {
+            String validType = validTypes[i];
+
+            if ( type.equals( validType ) )
+            {
+                return;
+            }
+        }
+
+        ModelClass modelClass = getModelClass().getModel().getClass( type );
+
+        if ( modelClass != null )
+        {
+            return;
+        }
+
+        throw new ModelValidationException( "Field '" + getName() + "': Illegal type: '" + type + "'." );
     }
 }

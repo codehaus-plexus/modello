@@ -29,56 +29,6 @@ public abstract class AbstractGeneratorPlugin
 
     private boolean packageWithVersion;
 
-//    private Model objectModel;
-/*
-    protected AbstractGenerator( Model model, File outputDirectory, String modelVersion, boolean packageWithVersion )
-    {
-        this.model = model;
-
-        this.outputDirectory = outputDirectory;
-
-        this.modelVersion = new Version( modelVersion, "model" );
-
-        this.packageWithVersion = packageWithVersion;
-    }
-
-    protected Model getModel()
-    {
-        return model;
-    }
-*/
-/*
-    protected Model getModel()
-        throws ModelloException
-    {
-        if ( objectModel != null )
-        {
-            return objectModel;
-        }
-
-        GeneratorPluginManager generatorPluginManager = new GeneratorPluginManager();
-
-        MetaDataPluginManager metaDataPluginManager = new MetaDataPluginManager();
-
-        ModelBuilder modelBuilder = new ModelBuilder();
-
-        generatorPluginManager.setLogger( new ConsoleLogger() );
-
-        metaDataPluginManager.setLogger( new ConsoleLogger() );
-
-        modelBuilder.setLogger( new ConsoleLogger() );
-
-        generatorPluginManager.initialize();
-
-        metaDataPluginManager.initialize();
-
-        modelBuilder.initialize();
-
-        objectModel = modelBuilder.getModel( model );
-
-        return objectModel;
-    }
-*/
     protected void initialize( Model model, Properties parameters )
         throws ModelloException
     {
@@ -112,9 +62,6 @@ public abstract class AbstractGeneratorPlugin
     {
         return outputDirectory;
     }
-
-//    public abstract void generate()
-//        throws Exception;
 
     protected boolean outputElement( String elementVersion, String elementName )
         throws ModelloRuntimeException
@@ -294,5 +241,10 @@ public abstract class AbstractGeneratorPlugin
             .append( Character.toLowerCase( str.charAt( 0 ) ) )
             .append( str.substring( 1 ) )
             .toString();
+    }
+
+    protected boolean isEmpty( String string )
+    {
+        return string == null || string.trim().length() == 0;
     }
 }

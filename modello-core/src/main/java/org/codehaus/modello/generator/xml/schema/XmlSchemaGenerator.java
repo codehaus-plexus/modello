@@ -25,12 +25,7 @@ public class XmlSchemaGenerator
     extends AbstractGeneratorPlugin
 {
     private boolean annotate;
-/*
-    public XmlSchemaGenerator( Model model, File outputDirectory, String modelVersion, boolean packageWithVersion )
-    {
-        super( model, outputDirectory, modelVersion, packageWithVersion );
-    }
-*/
+
     public void generate( Model model, Properties parameters )
         throws ModelloException
     {
@@ -159,6 +154,8 @@ public class XmlSchemaGenerator
 
                             w.startElement( "xs:element" );
 
+                            throw new RuntimeException( "FIXME" );
+/*
                             w.addAttribute( "ref", singular( field.getName() ) );
 
                             if ( annotate )
@@ -173,6 +170,7 @@ public class XmlSchemaGenerator
                             w.endElement();
 
                             w.endElement();
+*/
                         }
                     }
                 }

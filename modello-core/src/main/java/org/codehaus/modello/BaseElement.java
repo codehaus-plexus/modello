@@ -22,6 +22,9 @@ public abstract class BaseElement
 
     private transient Map metaData = new HashMap();
 
+    public abstract void validate()
+        throws ModelValidationException;
+
     public String getName()
     {
         return name;
@@ -62,5 +65,28 @@ public abstract class BaseElement
         }
 
         return metaData;
+    }
+
+    // ----------------------------------------------------------------------
+    // Validation utils
+    // ----------------------------------------------------------------------
+
+    protected void validateFieldNotEmpty( String objectName, String fieldName, String value )
+        throws ModelValidationException
+    {
+        if ( value == null )
+        {
+            throw new ModelValidationException( "Missing value '" + fieldName + "' from " + objectName + "." );
+        }
+
+        if ( isEmpty( value ) )
+        {
+            throw new ModelValidationException( "Empty value '" + fieldName + "' from " + objectName + "." );
+        }
+    }
+
+    protected boolean isEmpty( String string )
+    {
+        return string == null || string.trim().length() == 0;
     }
 }

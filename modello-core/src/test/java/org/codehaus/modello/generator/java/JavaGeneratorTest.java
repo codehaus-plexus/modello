@@ -7,16 +7,16 @@ package org.codehaus.modello.generator.java;
 import java.io.File;
 
 import org.codehaus.modello.Modello;
-import org.codehaus.modello.ModelloTest;
+import org.codehaus.modello.ModelloGeneratorTest;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
 public class JavaGeneratorTest
-    extends ModelloTest
+    extends ModelloGeneratorTest
 {
-    private String modelFile = "model.xml";
+    private String modelFile = "src/test/resources/models/maven.mdo";
 
     public JavaGeneratorTest()
     {
