@@ -1,0 +1,42 @@
+<model>
+  <id>simple</id>
+  <name>Simple Modello Test Model</name>
+  <defaults>
+    <default>
+      <key>package</key>
+      <value>foo.bar</value>
+    </default>
+  </defaults>
+  <classes>
+    <class rootElement="true">
+      <name>Boy</name>
+      <version>1.0.0</version>
+      <fields>
+        <field ldap.oid="1.2.3.4">
+          <name>name</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+        <field ldap.oid="2.3.4.5">
+          <name>girlfriends</name>
+          <version>1.0.0</version>
+          <association>
+            <type>Girl</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+      </fields>
+    </class>
+    <class>
+      <name>Girl</name>
+      <version>1.0.0</version>
+      <fields>
+        <field ldap.oid="3.4.5.6">
+          <name>age</name>
+          <version>1.0.0+</version>
+          <type>int</type>
+        </field>
+      </fields>
+    </class>
+  </classes>
+</model>

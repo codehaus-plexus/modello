@@ -1,0 +1,12 @@
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>modello</groupId>
+    <artifactId>modello-plugins</artifactId>
+    <version>1.0-alpha-1-SNAPSHOT</version>
+  </parent>
+  <groupId>modello</groupId>
+  <artifactId>modello-plugin-ldap</artifactId>
+  <version>1.0-alpha-1-SNAPSHOT</version>
+  <name>Modello LDAP Plugin</name>
+</project>
