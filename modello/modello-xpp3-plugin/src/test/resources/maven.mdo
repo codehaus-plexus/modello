@@ -204,6 +204,15 @@
           <type>String</type>
           <comment>This naming is inconsistent and distribution should occur from a repository structure.</comment>
         </field>
+        <field>
+          <name>components</name>
+          <version>4.0.0</version>
+          <association>
+            <type>Component</type>
+            <multiplicity>*</multiplicity>
+            <parentElement>false</parentElement>
+          </association>
+        </field>
 
         <field>
           <name>repositories</name>
@@ -1078,10 +1087,10 @@
           <description>
               The primary method by which this project may be distributed.
             &lt;dl&gt;
-              &lt;dt&gt;repo&lt;/dt&gt;
-              &lt;dd&gt;may be downloaded from the Maven repository&lt;/dd&gt;
-              &lt;dt&gt;manual&lt;/dt&gt;
-              &lt;dd&gt;user must manually download and install the dependency.&lt;/dd&gt;
+            &lt;dt&gt;repo&lt;/dt&gt;
+            &lt;dd&gt;may be downloaded from the Maven repository&lt;/dd&gt;
+            &lt;dt&gt;manual&lt;/dt&gt;
+            &lt;dd&gt;user must manually download and install the dependency.&lt;/dd&gt;
             &lt;/dl&gt;
           </description>
           <type>String</type>
@@ -1508,7 +1517,7 @@
             A unique identifier for a version.  This ID is
             used to specify the version that
             &lt;a href="plugins/dist/index.html"&gt;
-              &lt;code&gt;maven:dist&lt;/code&gt;
+            &lt;code&gt;maven:dist&lt;/code&gt;
             &lt;/a&gt; builds.
           </description>
           <type>String</type>
@@ -1669,6 +1678,17 @@
           <type>boolean</type>
           <defaultValue>true</defaultValue>
           <!-- @todo systemProperty tag (maven.online value) should be supported by modello -->
+        </field>
+      </fields>
+    </class>
+    <class>
+      <name>Component</name>
+      <version>4.0.0</version>
+      <fields>
+        <field>
+          <name>name</name>
+          <version>4.0.0</version>
+          <type>String</type>
         </field>
       </fields>
     </class>

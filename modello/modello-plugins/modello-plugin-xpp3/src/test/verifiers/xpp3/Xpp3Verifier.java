@@ -22,12 +22,20 @@ package org.codehaus.modello.generator.xml.xpp3;
  * SOFTWARE.
  */
 
-import org.apache.maven.model.*;
-import org.apache.maven.model.io.xpp3.*;
-import org.codehaus.modello.generator.*;
-import org.codehaus.modello.verifier.*;
-import java.io.*;
-import java.util.*;
+import org.apache.maven.model.Build;
+import org.apache.maven.model.Component;
+import org.apache.maven.model.MailingList;
+import org.apache.maven.model.Model;
+import org.apache.maven.model.Scm;
+import org.apache.maven.model.SourceModification;
+import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
+import org.apache.maven.model.io.xpp3.MavenXpp3Writer;
+import org.codehaus.modello.verifier.Verifier;
+import org.codehaus.plexus.util.FileUtils;
+
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.util.List;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -36,42 +44,6 @@ import java.util.*;
 public class Xpp3Verifier
     extends Verifier
 {
-    private String expectedXml =
-        "<model extender=\"/foo/bar\" modelVersion=\"4.0.0\">\n" +
-        "  <type>jar</type>\n" +
-        "  <name>Maven</name>\n" +
-        "  <mailingLists>\n" +
-        "    <mailingList>\n" +
-        "      <name>Mailing list</name>\n" +
-        "      <subscribe>Super Subscribe</subscribe>\n" +
-        "      <unsubscribe>Duper Unsubscribe</unsubscribe>\n" +
-        "      <archive>?ber Archive</archive>\n" +
-        "    </mailingList>\n" +
-        "  </mailingLists>\n" +
-        "  <scm>\n" +
-        "    <connection>connection</connection>\n" +
-        "    <developerConnection>developerConnection</developerConnection>\n" +
-        "    <url>url</url>\n" +
-        "  </scm>\n" +
-        "  <builder>\n" +
-        "    <sourceDirectory>src/main/java</sourceDirectory>\n" +
-        "    <unitTestSourceDirectory>src/test/java</unitTestSourceDirectory>\n" +
-        "    <sourceModifications>\n" +
-        "      <sourceModification>\n" +
-        "        <className>excludeEclipsePlugin</className>\n" +
-        "        <directory>foo</directory>\n" +
-        "        <filtering>false</filtering>\n" +
-        "        <excludes>\n" +
-        "          <exclude>de/abstrakt/tools/codegeneration/eclipse/*.java</exclude>\n" +
-        "        </excludes>\n" +
-        "      </sourceModification>\n" +
-        "    </sourceModifications>\n" +
-        "    <unitTest />\n" +
-        "  </builder>\n" +
-//        "  <contributors />\n" +
-//        "  <developers />\n" +
-        "</model>";
-
     /**
      * TODO: Add a association thats not under the root element
      */
@@ -86,6 +58,8 @@ public class Xpp3Verifier
     public void verifyWriter()
         throws Exception
     {
+        String expectedXml = FileUtils.fileRead( getTestFile( "src/test/verifiers/xpp3/expected.xml" ) );
+
         // ----------------------------------------------------------------------
         // Build the model thats going to be written.
         // ----------------------------------------------------------------------
@@ -144,6 +118,18 @@ public class Xpp3Verifier
 
         expected.setBuild( build );
 
+        Component component = new Component();
+
+        component.setName( "component1" );
+
+        expected.addComponent( component );
+
+        component = new Component();
+
+        component.setName( "component2" );
+
+        expected.addComponent( component );
+
         // ----------------------------------------------------------------------
         // Write out the model
         // ----------------------------------------------------------------------
@@ -194,9 +180,7 @@ public class Xpp3Verifier
         // Test that the entities is properly resolved
         // ----------------------------------------------------------------------
 
-        String xml = "<project>\n" +
-                     "  <groupId>Laugst&oslash;l</groupId>\n" +
-                     "</project>";
+        String xml = "<project>\n" + "  <groupId>Laugst&oslash;l</groupId>\n" + "</project>";
 
         Model expected = new Model();
 
@@ -323,7 +307,8 @@ public class Xpp3Verifier
 
             assertEquals( "/model/scm/connection", expected.getConnection(), actual.getConnection() );
 
-            assertEquals( "/model/scm/developerConnection", expected.getDeveloperConnection(), actual.getDeveloperConnection() );
+            assertEquals( "/model/scm/developerConnection", expected.getDeveloperConnection(),
+                          actual.getDeveloperConnection() );
 
             assertEquals( "/model/scm/url", expected.getUrl(), actual.getUrl() );
         }
@@ -345,7 +330,8 @@ public class Xpp3Verifier
 
             assertEquals( "/model/builder/sourceDirectory", expected.getSourceDirectory(), actual.getSourceDirectory() );
 
-            assertEquals( "/model/builder/unitTestSourceDirectory", expected.getUnitTestSourceDirectory(), actual.getUnitTestSourceDirectory() );
+            assertEquals( "/model/builder/unitTestSourceDirectory", expected.getUnitTestSourceDirectory(),
+                          actual.getUnitTestSourceDirectory() );
         }
     }
 }

@@ -27,7 +27,6 @@ import org.codehaus.modello.metadata.AssociationMetadata;
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
- *
  * @version $Id$
  */
 public class ModelAssociation
@@ -45,11 +44,23 @@ public class ModelAssociation
 
     private String multiplicity;
 
+    private boolean parentElement = true;
+
     private ModelClass toClass;
 
     // ----------------------------------------------------------------------
     //
     // ----------------------------------------------------------------------
+
+    public boolean isParentElement()
+    {
+        return parentElement;
+    }
+
+    public void setParentElement( boolean parentElement )
+    {
+        this.parentElement = parentElement;
+    }
 
     /**
      * @param to The to to set.
@@ -107,7 +118,7 @@ public class ModelAssociation
     {
         return (AssociationMetadata) getMetadata( AssociationMetadata.class, key );
     }
-
+    
     // ----------------------------------------------------------------------
     //
     // ----------------------------------------------------------------------
@@ -144,10 +155,10 @@ public class ModelAssociation
             multiplicity = "*";
         }
 
-        if ( ! ONE_MULTIPLICITY.equals( multiplicity ) &&
-            ! MANY_MULTIPLICITY.equals( multiplicity ) )
+        if ( !ONE_MULTIPLICITY.equals( multiplicity ) && !MANY_MULTIPLICITY.equals( multiplicity ) )
         {
-            throw new ModelValidationException( "Association multiplicity '" + getName() + "' is incorrect: Autorized values are 1, * or n." );
+            throw new ModelValidationException(
+                "Association multiplicity '" + getName() + "' is incorrect: Autorized values are 1, * or n." );
         }
 
         if ( isEmpty( getType() ) )
@@ -162,7 +173,7 @@ public class ModelAssociation
         {
             if ( !ONE_MULTIPLICITY.equals( multiplicity ) )
             {
-                if ( getType().equalsIgnoreCase( "Set" )  )
+                if ( getType().equalsIgnoreCase( "Set" ) )
                 {
                     setType( ModelDefault.SET );
                 }
@@ -170,7 +181,7 @@ public class ModelAssociation
                 {
                     setType( ModelDefault.LIST );
                 }
-                if ( getType().equalsIgnoreCase( "Map" )  )
+                if ( getType().equalsIgnoreCase( "Map" ) )
                 {
                     setType( ModelDefault.MAP );
                 }
@@ -180,10 +191,11 @@ public class ModelAssociation
                 }
                 else
                 {
-                    throw new ModelValidationException( "The type of element '" + getName() + "' must be List, Map, Properties or Set." );
+                    throw new ModelValidationException(
+                        "The type of element '" + getName() + "' must be List, Map, Properties or Set." );
                 }
 
-                if ( isEmpty ( getDefaultValue() ) )
+                if ( isEmpty( getDefaultValue() ) )
                 {
                     ModelDefault modelDefault = getModelClass().getModel().getDefault( getType() );
 
