@@ -22,11 +22,6 @@ package org.codehaus.modello.generator.xml.xpp3;
  * SOFTWARE.
  */
 
-import java.io.File;
-import java.io.FileReader;
-import java.util.List;
-import java.util.Properties;
-
 import org.codehaus.modello.FileUtils;
 import org.codehaus.modello.ModelloGeneratorTest;
 import org.codehaus.modello.ModelloParameterConstants;
@@ -37,10 +32,14 @@ import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.Version;
 import org.codehaus.modello.plugins.xml.XmlFieldMetadata;
 
+import java.io.File;
+import java.io.FileReader;
+import java.util.List;
+import java.util.Properties;
+
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
- *
  * @version $Id$
  */
 public class Xpp3GeneratorTest
@@ -60,7 +59,7 @@ public class Xpp3GeneratorTest
 
         List classesList = model.getClasses( new Version( "4.0.0" ) );
 
-        assertEquals( 26, classesList.size() );
+        assertEquals( 27, classesList.size() );
 
         ModelClass clazz = (ModelClass) classesList.get( 0 );
 
