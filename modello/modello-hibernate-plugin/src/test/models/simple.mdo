@@ -8,6 +8,11 @@
       <name>Boy</name>
       <version>1.0.0</version>
       <fields>
+        <field id="true" generator="native">
+          <name>id</name>
+          <version>1.0.0</version>
+          <type>int</type>
+        </field>
         <field>
           <name>name</name>
           <version>1.0.0</version>
@@ -29,7 +34,7 @@
       <name>Girl</name>
       <version>1.0.0</version>
       <fields>
-        <field>
+        <field id="true" generator="native">
           <name>age</name>
           <version>1.0.0+</version>
           <type>int</type>
@@ -40,12 +45,12 @@
       <name>Name</name>
       <version>1.0.0</version>
       <fields>
-        <field>
+        <field id="true" generator="native">
           <name>firstName</name>
           <version>1.0.0</version>
           <type>String</type>
         </field>
-        <field>
+        <field length="10">
           <name>lastName</name>
           <version>1.0.0</version>
           <type>String</type>
