@@ -4,16 +4,16 @@ package org.codehaus.modello.plugins.xml;
  * LICENSE
  */
 
-import org.codehaus.modello.metadata.MetaData;
+import org.codehaus.modello.metadata.Metadata;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
-public class XmlMetaData
-    implements MetaData
+public class XmlMetadata
+    implements Metadata
 {
-    public final static String ID = XmlMetaData.class.getName();
+    public final static String ID = XmlMetadata.class.getName();
 
     private boolean attribute;
 

@@ -4,33 +4,40 @@ package org.codehaus.modello.plugins.xml;
  * LICENSE
  */
 
+import java.io.FileReader;
 import java.util.List;
 
 import org.codehaus.modello.Model;
 import org.codehaus.modello.ModelClass;
 import org.codehaus.modello.ModelField;
-import org.codehaus.modello.Modello;
 import org.codehaus.modello.ModelloRuntimeException;
-import org.codehaus.modello.ModelloGeneratorTest;
+import org.codehaus.modello.ModelloTest;
+import org.codehaus.modello.core.ModelloCore;
+import org.codehaus.modello.metadata.MetadataPlugin;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l </a>
  * @version $Id$
  */
 public class XmlModelloPluginTest
-    extends ModelloGeneratorTest
+    extends ModelloTest
 {
-    public XmlModelloPluginTest()
+    public void testConfiguration()
+        throws Exception
     {
-        super( "xml" );
+        Object object = lookup( MetadataPlugin.ROLE, "xml" );
+
+        assertNotNull( object );
+
+        assertTrue( object instanceof XmlMetadataPlugin );
     }
 
     public void testXmlPlugin()
         throws Exception
     {
-        Modello modello = getModello();
+        ModelloCore modello = getModelloCore();
 
-        Model model = modello.getModel( getTestFile( "src/test/resources/model.mdo" ) );
+        Model model = modello.loadModel( new FileReader( getTestPath( "src/test/resources/model.mdo" ) ) );
 
         List classes = model.getClasses();
 
@@ -44,9 +51,9 @@ public class XmlModelloPluginTest
 
         ModelField extend = clazz.getField( "extend" );
 
-        assertTrue( extend.hasMetaData( XmlMetaData.ID ) );
+        assertTrue( extend.hasMetadata( XmlMetadata.ID ) );
 
-        XmlMetaData xml = (XmlMetaData) extend.getMetaData( XmlMetaData.ID );
+        XmlMetadata xml = (XmlMetadata) extend.getMetadata( XmlMetadata.ID );
 
         assertNotNull( xml );
 
@@ -56,7 +63,7 @@ public class XmlModelloPluginTest
 
         try
         {
-            parent.getMetaData( "foo" );
+            parent.getMetadata( "foo" );
 
             fail( "Expected ModelloException" );
         }
@@ -67,9 +74,9 @@ public class XmlModelloPluginTest
 
         ModelField builder = clazz.getField( "builder" );
 
-        assertTrue( builder.hasMetaData( XmlMetaData.ID ) );
+        assertTrue( builder.hasMetadata( XmlMetadata.ID ) );
 
-        xml = (XmlMetaData) builder.getMetaData( XmlMetaData.ID );
+        xml = (XmlMetadata) builder.getMetadata( XmlMetadata.ID );
 
         assertNotNull( xml );
 
