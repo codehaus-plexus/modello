@@ -1,24 +1,31 @@
-package org.codehaus.modello;
-
-import java.util.List;
+package org.codehaus.modello.core.io;
 
 /*
  * LICENSE
  */
 
+import java.io.FileReader;
+import java.util.List;
+
+import org.codehaus.modello.Model;
+import org.codehaus.modello.ModelAssociation;
+import org.codehaus.modello.ModelClass;
+import org.codehaus.modello.ModelField;
+import org.codehaus.modello.ModelloTest;
+
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
-public class ModelBuilderTest
+public class ModelReaderTest
     extends ModelloTest
 {
-    public void testSimpleProject()
+    public void testBasic()
         throws Exception
     {
-        ModelBuilder builder = getModelBuilder();
+        ModelReader reader = new ModelReader();
 
-        Model model = builder.getModel( getTestFile( "src/test/resources/models/simple.mdo" ) );
+        Model model = reader.loadModel( new FileReader( getTestPath( "src/test/resources/models/simple.mdo" ) ) );
 
         assertNotNull( model );
 
@@ -46,9 +53,11 @@ public class ModelBuilderTest
     public void testAssociationDefaultValues()
         throws Exception
     {
-        ModelBuilder builder = getModelBuilder();
+//        ModelBuilder builder = getModelBuilder();
 
-        Model model = builder.getModel( getTestFile( "src/test/resources/models/association.mdo" ) );
+//        Model model = builder.getModel( getTestFile( "src/test/resources/models/association.mdo" ) );
+
+        Model model = getModelloCore().loadModel( new FileReader( getTestPath( "src/test/resources/models/association.mdo" ) ) );
 
         ModelAssociation association = model.getClass( "Foo" ).getAssociation( "bars" );
 

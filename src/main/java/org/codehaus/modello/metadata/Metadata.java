@@ -1,4 +1,4 @@
-package org.codehaus.modello.plugin;
+package org.codehaus.modello.metadata;
 
 /*
  * LICENSE
@@ -8,7 +8,6 @@ package org.codehaus.modello.plugin;
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
-public interface TestPlugin
+public interface Metadata
 {
-    String ping();
 }

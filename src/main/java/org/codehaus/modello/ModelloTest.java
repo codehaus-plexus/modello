@@ -6,14 +6,15 @@ package org.codehaus.modello;
 
 import java.io.File;
 
-import junit.framework.TestCase;
+import org.codehaus.modello.core.ModelloCore;
+import org.codehaus.plexus.PlexusTestCase;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
 public class ModelloTest
-    extends TestCase
+    extends PlexusTestCase
 {
     private Modello modello;
 
@@ -26,9 +27,11 @@ public class ModelloTest
         basedir = System.getProperty( "basedir", new File( "" ).getAbsolutePath() );
     }
 
-    protected Modello getModello()
-        throws ModelloException
+    protected ModelloCore getModelloCore()
+        throws Exception
     {
+        return (ModelloCore) lookup( ModelloCore.ROLE );
+/*
         if ( modello == null )
         {
             modello = new Modello();
@@ -37,21 +40,22 @@ public class ModelloTest
         }
 
         return modello;
+*/
     }
-
-    protected ModelBuilder getModelBuilder()
+/*
+    public ModelBuilder getModelBuilder()
         throws ModelloException
     {
         return getModello().getModelBuilder();
     }
 
-    protected File getTestFile( String name )
+    public File getTestFile( String name )
     {
         return new File( basedir, name );
     }
-
-    protected String getTestPath( String name )
+*/
+    public String getTestPath( String name )
     {
-        return getTestFile( name ).getAbsolutePath();
+        return new File( super.getTestFile( name ) ).getAbsolutePath();
     }
 }
