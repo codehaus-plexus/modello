@@ -213,7 +213,7 @@
           </association>
         </field>
 
-        <field>
+        <field xml.associationTagName="repo">
           <name>repositories</name>
           <version>4.0.0</version>
           <description>The lists of the remote repositories</description>

@@ -7,6 +7,11 @@
   <component>
     <name>component2</name>
   </component>
+  <repositories>
+    <repo>
+      <id>foo</id>
+    </repo>
+  </repositories>
   <mailingLists>
     <mailingList>
       <name>Mailing list</name>
