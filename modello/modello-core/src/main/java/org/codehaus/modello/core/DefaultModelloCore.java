@@ -29,12 +29,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 
-import org.codehaus.modello.CodeSegment;
-import org.codehaus.modello.Model;
-import org.codehaus.modello.ModelAssociation;
-import org.codehaus.modello.ModelClass;
-import org.codehaus.modello.ModelField;
-import org.codehaus.modello.ModelValidationException;
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.ModelloRuntimeException;
 import org.codehaus.modello.core.io.ModelReader;
@@ -43,10 +37,18 @@ import org.codehaus.modello.metadata.ClassMetadata;
 import org.codehaus.modello.metadata.FieldMetadata;
 import org.codehaus.modello.metadata.MetadataPlugin;
 import org.codehaus.modello.metadata.ModelMetadata;
+import org.codehaus.modello.model.CodeSegment;
+import org.codehaus.modello.model.Model;
+import org.codehaus.modello.model.ModelAssociation;
+import org.codehaus.modello.model.ModelClass;
+import org.codehaus.modello.model.ModelField;
+import org.codehaus.modello.model.ModelValidationException;
 import org.codehaus.modello.plugin.ModelloGenerator;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
+ * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
+ *
  * @version $Id$
  */
 public class DefaultModelloCore
@@ -62,6 +64,10 @@ public class DefaultModelloCore
      */
     private GeneratorPluginManager generatorPluginManager;
 
+public MetadataPluginManager getMetadataPluginManager()
+{
+    return metadataPluginManager;
+}
     public Model loadModel( Reader reader )
         throws ModelloException, ModelValidationException
     {
@@ -80,6 +86,7 @@ public class DefaultModelloCore
         for( Iterator plugins = metadataPluginManager.getPlugins(); plugins.hasNext(); )
         {
             MetadataPlugin plugin = (MetadataPlugin) plugins.next();
+System.out.println( "Plugin : " + plugin.getClass().getName() );
 
             Map attributes = Collections.EMPTY_MAP;
 
@@ -95,7 +102,7 @@ public class DefaultModelloCore
             model.addMetadata( metadata );
         }
 
-        for( Iterator classes = model.getClasses().iterator(); classes.hasNext(); )
+        for( Iterator classes = model.getAllClasses().iterator(); classes.hasNext(); )
         {
             ModelClass clazz = (ModelClass) classes.next();
 
@@ -117,49 +124,66 @@ public class DefaultModelloCore
                 clazz.addMetadata( metadata );
             }
 
-            for( Iterator fields = clazz.getFields().iterator(); fields.hasNext(); )
+            for( Iterator fields = clazz.getAllFields().iterator(); fields.hasNext(); )
             {
-                ModelField field = (ModelField) fields.next();
+                Object field = fields.next();
 
-                attributes = modelReader.getAttributesForField( field );
-
-                attributes = Collections.unmodifiableMap( attributes );
-
-                for( Iterator plugins = metadataPluginManager.getPlugins(); plugins.hasNext(); )
+                if ( field instanceof ModelAssociation )
                 {
-                    MetadataPlugin plugin = (MetadataPlugin) plugins.next();
+                    ModelAssociation modelAssociation = (ModelAssociation) field;
 
-                    FieldMetadata metadata = plugin.getFieldMetadata( field, attributes );
+                    Map fieldAttributes = modelReader.getAttributesForField( modelAssociation );
 
-                    if ( metadata == null )
+                    fieldAttributes = Collections.unmodifiableMap( fieldAttributes );
+
+                    Map associationAttributes = modelReader.getAttributesForAssociation( modelAssociation );
+
+                    associationAttributes = Collections.unmodifiableMap( associationAttributes );
+
+                    for( Iterator plugins = metadataPluginManager.getPlugins(); plugins.hasNext(); )
                     {
-                        throw new ModelloException( "A meta data plugin must not return null." );
-                    }
+                        MetadataPlugin plugin = (MetadataPlugin) plugins.next();
 
-                    field.addMetadata( metadata );
+                        FieldMetadata fieldMetadata = plugin.getFieldMetadata( modelAssociation, fieldAttributes );
+
+                        if ( fieldMetadata == null )
+                        {
+                            throw new ModelloException( "A meta data plugin must not return null." );
+                        }
+
+                        modelAssociation.addMetadata( fieldMetadata );
+
+                        AssociationMetadata associationMetadata = plugin.getAssociationMetadata( modelAssociation, associationAttributes );
+
+                        if ( associationMetadata == null )
+                        {
+                            throw new ModelloException( "A meta data plugin must not return null." );
+                        }
+
+                        modelAssociation.addMetadata( associationMetadata );
+                    }
                 }
-            }
-
-            for( Iterator associations = clazz.getAssociations().iterator(); associations.hasNext(); )
-            {
-                ModelAssociation association = (ModelAssociation) associations.next();
-
-                attributes = modelReader.getAttributesForAssociation( association );
-
-                attributes = Collections.unmodifiableMap( attributes );
-
-                for( Iterator plugins = metadataPluginManager.getPlugins(); plugins.hasNext(); )
+                else
                 {
-                    MetadataPlugin plugin = (MetadataPlugin) plugins.next();
+                    ModelField modelField = (ModelField) field;
 
-                    AssociationMetadata metadata = plugin.getAssociationMetadata( association, attributes );
+                    attributes = modelReader.getAttributesForField( modelField );
 
-                    if ( metadata == null )
+                    attributes = Collections.unmodifiableMap( attributes );
+
+                    for( Iterator plugins = metadataPluginManager.getPlugins(); plugins.hasNext(); )
                     {
-                        throw new ModelloException( "A meta data plugin must not return null." );
-                    }
+                        MetadataPlugin plugin = (MetadataPlugin) plugins.next();
 
-                    association.addMetadata( metadata );
+                        FieldMetadata metadata = plugin.getFieldMetadata( modelField, attributes );
+
+                        if ( metadata == null )
+                        {
+                            throw new ModelloException( "A meta data plugin must not return null." );
+                        }
+
+                        modelField.addMetadata( metadata );
+                    }
                 }
             }
         }
@@ -170,32 +194,36 @@ public class DefaultModelloCore
 
         model.validate();
 
-        for( Iterator classes = model.getClasses().iterator(); classes.hasNext(); )
+        for( Iterator classes = model.getAllClasses().iterator(); classes.hasNext(); )
         {
             ModelClass modelClass = (ModelClass) classes.next();
 
             modelClass.validate();
         }
 
-        for( Iterator classes = model.getClasses().iterator(); classes.hasNext(); )
+        for( Iterator classes = model.getAllClasses().iterator(); classes.hasNext(); )
         {
             ModelClass modelClass = (ModelClass) classes.next();
 
-            for( Iterator fields = modelClass.getFields().iterator(); fields.hasNext(); )
+            for( Iterator fields = modelClass.getAllFields().iterator(); fields.hasNext(); )
             {
-                ModelField modelField = (ModelField) fields.next();
+                Object field = fields.next();
 
-                modelField.validate();
+                if ( field instanceof ModelAssociation )
+                {
+                    ModelAssociation modelAssociation = (ModelAssociation) field;
+
+                    modelAssociation.validate();
+                }
+                else
+                {
+                    ModelField modelField = (ModelField) field;
+
+                    modelField.validate();
+                }
             }
 
-            for( Iterator associations = modelClass.getAssociations().iterator(); associations.hasNext(); )
-            {
-                ModelAssociation modelAssociation = (ModelAssociation) associations.next();
-
-                modelAssociation.validate();
-            }
-
-            for( Iterator codeSegments = modelClass.getCodeSegments().iterator(); codeSegments.hasNext(); )
+            for( Iterator codeSegments = modelClass.getAllCodeSegments().iterator(); codeSegments.hasNext(); )
             {
                 CodeSegment codeSegment = (CodeSegment) codeSegments.next();
 

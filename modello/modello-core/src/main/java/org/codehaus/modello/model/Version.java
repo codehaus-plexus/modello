@@ -1,4 +1,4 @@
-package org.codehaus.modello;
+package org.codehaus.modello.model;
 
 /*
  * Copyright (c) 2004, Jason van Zyl
@@ -22,14 +22,20 @@ package org.codehaus.modello;
  * SOFTWARE.
  */
 
+import org.codehaus.modello.ModelloRuntimeException;
+import org.codehaus.plexus.util.StringUtils;
+
 /**
  * A version string is on the form <major>.<minor>.<micro>.
  * 
- * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l </a>
+ * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
+ * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
  * @version $Id$
  */
 public class Version
 {
+    public static final Version INFINITE = new Version( "32767.32767.32767" );
+
     private short major;
 
     private short minor;
@@ -43,18 +49,29 @@ public class Version
             throw new ModelloRuntimeException( "Syntax error in the version field: Missing. " );
         }
 
-        if ( version.length() < 5 )
+        String[] splittedVersion = StringUtils.split( version.trim(), "." );
+
+        if ( splittedVersion.length > 3 )
         {
-            throw new ModelloRuntimeException( "Syntax error in the <version> field: The field must be at least 5 characters long. Was: '" + version + "'." );
+            throw new ModelloRuntimeException( "Syntax error in the <version> field: The field must be at more 3 parts long (major, minor and micro). Was: '" + version + "'." );
         }
 
-        version = version.trim();
+        String majorString = splittedVersion[0];
 
-        String majorString = version.substring( 0, 1 );
+        String minorString = "0";
 
-        String minorString = version.substring( 2, 3 );
+        String microString = "0";
 
-        String microString = version.substring( 4, 5 );
+        if ( splittedVersion.length > 1 )
+        {
+            minorString = splittedVersion[1];
+
+            if ( splittedVersion.length > 2 )
+            {
+                microString = splittedVersion[2];
+
+            }
+        }
 
         try
         {
@@ -129,13 +146,95 @@ public class Version
         return false;
     }
 
+    /**
+     * Returns true if <code>this</code> is greater or equals that <code>other</code>.
+     * 
+     * @param version
+     * @return
+     */
+    public boolean greaterOrEqualsThan( Version other )
+    {
+        if ( this.major != other.major )
+        {
+            return major >= other.major;
+        }
+
+        if ( this.minor != other.minor )
+        {
+            return this.minor >= other.minor;
+        }
+
+        if ( this.micro != other.micro )
+        {
+            return this.micro >= other.micro;
+        }
+
+        return false;
+    }
+
+    /**
+     * Returns true if <code>this</code> is lesser that <code>other</code>.
+     * 
+     * @param version
+     * @return
+     */
+    public boolean lesserThan( Version other )
+    {
+        if ( this.major != other.major )
+        {
+            return major < other.major;
+        }
+
+        if ( this.minor != other.minor )
+        {
+            return this.minor < other.minor;
+        }
+
+        if ( this.micro != other.micro )
+        {
+            return this.micro < other.micro;
+        }
+
+        return false;
+    }
+
+    /**
+     * Returns true if <code>this</code> is lesser or equals that <code>other</code>.
+     * 
+     * @param version
+     * @return
+     */
+    public boolean lesserOrEqualsThan( Version other )
+    {
+        if ( this.major != other.major )
+        {
+            return major <= other.major;
+        }
+
+        if ( this.minor != other.minor )
+        {
+            return this.minor <= other.minor;
+        }
+
+        if ( this.micro != other.micro )
+        {
+            return this.micro <= other.micro;
+        }
+
+        return false;
+    }
+
     public boolean inside( VersionRange range )
     {
         if ( range.getFromVersion().equals( this ) )
         {
             return true;
         }
-        else if ( ( this.greaterThan( range.getFromVersion() ) ) && range.isToInfinite() )
+        else if ( ( this.greaterThan( range.getFromVersion() ) ) && ( this.lesserThan( range.getToVersion() ) ) )
+        {
+            return true;
+        }
+        else if ( this.equals( range.getFromVersion() ) || this.equals( range.getToVersion() ) )
         {
             return true;
         }
@@ -154,6 +253,6 @@ public class Version
 
     public String toString( String prefix )
     {
-        return prefix + major + minor + micro;
+        return prefix + major + "_" + minor + "_" + micro;
     }
 }

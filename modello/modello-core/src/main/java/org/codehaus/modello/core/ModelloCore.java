@@ -26,9 +26,9 @@ import java.io.Reader;
 import java.io.Writer;
 import java.util.Properties;
 
-import org.codehaus.modello.Model;
-import org.codehaus.modello.ModelValidationException;
 import org.codehaus.modello.ModelloException;
+import org.codehaus.modello.model.Model;
+import org.codehaus.modello.model.ModelValidationException;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -37,6 +37,7 @@ import org.codehaus.modello.ModelloException;
 public interface ModelloCore
 {
     String ROLE = ModelloCore.class.getName();
+MetadataPluginManager getMetadataPluginManager();
 
     Model loadModel( Reader reader )
         throws ModelloException, ModelValidationException;

@@ -1,4 +1,4 @@
-package org.codehaus.modello;
+package org.codehaus.modello.model;
 
 /*
  * Copyright (c) 2004, Jason van Zyl
@@ -22,53 +22,40 @@ package org.codehaus.modello;
  * SOFTWARE.
  */
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
 /**
- * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
+ * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
  *
  * @version $Id$
  */
-public class Model
+public class ModelInterface
     extends BaseElement
 {
-    private String id;
+    private String superInterface;
 
     private String packageName;
 
-    private String root;
+    private Model model;
 
-    private List classes = new ArrayList();
-
-    private transient Map classMap = new HashMap();
-
-    public Model()
+    public ModelInterface()
     {
         super( true );
     }
 
-    public String getId()
+    public ModelInterface( Model model, String name )
     {
-        return id;
+        super( true, name );
+
+        this.model = model;
     }
 
-    public void setId( String id )
+    public void setSuperInterface( String superInterface )
     {
-        this.id = id;
+        this.superInterface = superInterface;
     }
 
-    public String getRoot()
+    public String getSuperInterface()
     {
-        return root;
-    }
-
-    public void setRoot( String root )
-    {
-        this.root = root;
+        return superInterface;
     }
 
     public String getPackageName()
@@ -81,41 +68,18 @@ public class Model
         this.packageName = packageName;
     }
 
-    public List getClasses()
+    public void initialize( Model model )
     {
-        return classes;
-    }
+        this.model = model;
 
-    public ModelClass getClass( String type )
-    {
-        return (ModelClass) classMap.get( type );
-    }
-
-    public void addClass( ModelClass modelClass )
-    {
-        if ( classMap.containsKey( modelClass.getName() ) )
+        if ( packageName == null )
         {
-            throw new ModelloRuntimeException( "Duplicate class: " + modelClass.getName() + "." );
-        }
-
-        getClasses().add( modelClass );
-
-        classMap.put( modelClass.getName(), modelClass );
-    }
-
-    public void initialize()
-    {
-        for ( Iterator i = classes.iterator(); i.hasNext(); )
-        {
-            ModelClass modelClass = (ModelClass) i.next();
-
-            classMap.put( modelClass.getName(), modelClass );
-
-            modelClass.initialize( this );
+            packageName = model.getPackageName();
         }
     }
 
     public void validateElement()
+        throws ModelValidationException
     {
     }
 }

@@ -1,4 +1,4 @@
-package org.codehaus.modello.plugin;
+package org.codehaus.modello.model;
 
 /*
  * Copyright (c) 2004, Jason van Zyl
@@ -22,21 +22,23 @@ package org.codehaus.modello.plugin;
  * SOFTWARE.
  */
 
-import java.io.Reader;
-import java.util.Properties;
-
-import org.codehaus.modello.ModelloException;
-import org.codehaus.modello.model.Model;
+import org.codehaus.modello.metadata.FieldMetadata;
 
 /**
- * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
+ * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
+ *
  * @version $Id$
  */
-public interface ModelloTranslator
+public class VersionUtil
 {
-    Model translate( Reader reader, Properties parameters )
-        throws ModelloException;
+    public static boolean isInConflict( VersionRange version1, VersionRange version2 )
+    {
+        if ( version1.getToVersion().lesserThan( version2.getFromVersion() )
+            || version2.getToVersion().lesserThan( version1.getFromVersion() ) )
+        {
+            return false;
+        }
 
-    void translate( Model model, Properties parameters )
-        throws ModelloException;
+        return true;
+    }
 }

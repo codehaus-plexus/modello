@@ -25,11 +25,11 @@ package org.codehaus.modello.metadata;
 import java.util.Collections;
 import java.util.Map;
 
-import org.codehaus.modello.Model;
-import org.codehaus.modello.ModelAssociation;
-import org.codehaus.modello.ModelClass;
-import org.codehaus.modello.ModelField;
 import org.codehaus.modello.ModelloException;
+import org.codehaus.modello.model.Model;
+import org.codehaus.modello.model.ModelAssociation;
+import org.codehaus.modello.model.ModelClass;
+import org.codehaus.modello.model.ModelField;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 
 /**
