@@ -320,8 +320,6 @@ public class JavaModelloGenerator
 
         setter.addParameter( new JParameter( field.getType(), field.getName() ) );
 
-        setter.addException( new JClass( "Exception" ) );
-
         JSourceCode sc = setter.getSourceCode();
 
         if ( modelField instanceof ModelAssociation
@@ -329,6 +327,9 @@ public class JavaModelloGenerator
             && ModelAssociation.ONE_MULTIPLICITY.equals( ( (ModelAssociation) modelField ).getMultiplicity() ) )
         {
             ModelAssociation modelAssociation = (ModelAssociation) modelField;
+
+            setter.addException( new JClass( "Exception" ) );
+
             sc.add( "if ( this." + field.getName() + " != null )" );
 
             sc.add( "{" );
@@ -517,8 +518,6 @@ public class JavaModelloGenerator
 
             adder.addParameter( new JParameter( new JClass( modelAssociation.getTo() ), "value" ) );
 
-            adder.addException( new JClass( "Exception" ) );
-
             adder.getSourceCode().add( "this." + fieldName + ".put( key, value );" );
 
             jClass.addMethod( adder );
@@ -529,12 +528,12 @@ public class JavaModelloGenerator
 
             adder.addParameter( new JParameter( addType, parameterName ) );
 
-            adder.addException( new JClass( "Exception" ) );
-
             adder.getSourceCode().add( "this." + fieldName + ".add( " + parameterName + " );" );
 
             if ( bidirectionalAssociation )
             {
+                adder.addException( new JClass( "Exception" ) );
+
                 adder.getSourceCode().add( parameterName + ".create" + modelAssociation.getModelClass().getName() + "Association( this );" );
             }
 
@@ -544,10 +543,10 @@ public class JavaModelloGenerator
 
             remover.addParameter( new JParameter( addType, parameterName ) );
 
-            remover.addException( new JClass( "Exception" ) );
-
             if ( bidirectionalAssociation )
             {
+                remover.addException( new JClass( "Exception" ) );
+
                 remover.getSourceCode().add( parameterName + ".break" + modelAssociation.getModelClass().getName() + "Association( this );" );
             }
 
