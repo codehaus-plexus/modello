@@ -28,12 +28,25 @@ public class JavaGenerator
         super( model, outputDirectory, modelVersion );
     }
 
+    protected String getBasePackageName( Model model )
+    {
+        StringBuffer sb = new StringBuffer();
+
+        sb.append( model.getPackageName() );
+
+        sb.append( "." );
+        
+        sb.append( getModelVersion().toString() );
+
+        return sb.toString();
+    }
+
     public void generate()
         throws Exception
     {
         Model objectModel = getModel();
 
-        String packageName = objectModel.getPackageName();
+        String packageName = getBasePackageName( objectModel );
 
         String directory = packageName.replace( '.', '/' );
 
@@ -221,44 +234,5 @@ public class JavaGenerator
 
             jClass.addMethod( adder );
         }
-    }
-
-    // --------------------------------------------------------------------------------------------
-    // Delegates
-    //
-    // These are for use in the model when one element is being superceded by another but
-    // you want to provide some backward compatibility. So for example in your xml you may
-    // have an element named "pomVersion" which is being replaced with "modelVersion". So
-    // you still want to accept "pomVersion" but we just delegate to our new "modelVersion"
-    // element. So we can accept the new while supporting the old but internally within
-    // the model we are using our new "modelVersion" element for everything.
-    // --------------------------------------------------------------------------------------------
-
-    private JMethod createDelegateGetter( ModelField field, JField delegate )
-    {
-        String propertyName = capitalise( field.getName() );
-
-        String delegatePropertyName = capitalise( delegate.getName() );
-
-        JMethod getter = new JMethod( delegate.getType(), "get" + propertyName );
-
-        getter.getSourceCode().add( "return get" + delegatePropertyName + "();" );
-
-        return getter;
-    }
-
-    private JMethod createDelegateSetter( ModelField field, JField delegate )
-    {
-        String propertyName = capitalise( field.getName() );
-
-        String delegatePropertyName = capitalise( delegate.getName() );
-
-        JMethod setter = new JMethod( null, "set" + propertyName );
-
-        setter.addParameter( new JParameter( delegate.getType(), field.getName() ) );
-
-        setter.getSourceCode().add( "set" + delegatePropertyName + "( " + field.getName() + " );" );
-
-        return setter;
     }
 }
