@@ -1,13 +1,12 @@
-<model>
+<project>
+  <modelVersion>4.0.0</modelVersion>
   <parent>
     <artifactId>modello</artifactId>
     <groupId>modello</groupId>
     <version>1.0</version>
   </parent>
-  <modelVersion>4.0.0</modelVersion>
   <groupId>modello</groupId>
   <artifactId>modello-velocity-plugin</artifactId>
-  <packaging>jar</packaging>
   <name>Modello Velocity Plugin</name>
   <version>1.0-alpha-1-SNAPSHOT</version>
   <dependencies>
@@ -15,22 +14,16 @@
       <groupId>modello</groupId>
       <artifactId>modello-core</artifactId>
       <version>1.0-SNAPSHOT</version>
-      <type>jar</type>
-      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>modello</groupId>
       <artifactId>modello-xml-plugin</artifactId>
       <version>1.0-SNAPSHOT</version>
-      <type>jar</type>
-      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>plexus</groupId>
       <artifactId>plexus-velocity</artifactId>
       <version>1.0</version>
-      <type>jar</type>
-      <scope>compile</scope>
     </dependency>
   </dependencies>
-</model>
+</project>
