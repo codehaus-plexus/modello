@@ -204,7 +204,7 @@ public class XdocGenerator
                     {
                         sb.append( "    " );
                     }
-                    sb.append( "<a href=\"#" + field.getName() + "\">&lt;" +
+                    sb.append( "<a href=\"#" + modelClass.getName() + "\">&lt;" +
                                uncapitalise( field.getName() ) + "/&gt;</a>\n" );
                 }
             }
