@@ -73,85 +73,33 @@ public class JavaGenerator
                 {
                     ModelField modelField = (ModelField) j.next();
 
-                    String fieldName = modelField.getName();
-
-                    String fieldType = modelField.getType();
-
-                    if ( fieldName == null )
+                    if ( modelField.getName() == null )
                     {
                         throw new IllegalStateException(
                             "Field name can't be null jField: element " + count + " in the definition of the class " + modelClass.getName() );
                     }
-
-                    if ( fieldType == null )
-                    {
-                        throw new IllegalStateException(
-                            "Field type can't be null: jField element " + count + " in the definition of the class " + modelClass.getName() );
-
-                    }
-
-                    JType jType;
 
                     // If we are delegating then we don't need a field and we want the setter and getter
                     // to point to the delegate.
 
                     if ( modelField.getDelegateTo() != null )
                     {
+                    }
+                    else
+                    {
+                        JField field = createField( modelField, modelClass, count );
 
-                        if ( fieldType.equals( "boolean" ) )
-                        {
-                            jType = JType.Boolean;
-                        }
-                        else
-                        {
-                            jType = new JClass( fieldType );
-                        }
+                        jClass.addField( field );
 
-                        // Field
+                        jClass.addMethod( createFieldGetter( field ) );
 
-                        JField jField = new JField( jType, fieldName );
-
-                        if ( modelField.getDefaultValue() != null )
-                        {
-                            if ( modelField.getType().equals( "String" ) )
-                            {
-                                jField.setInitString( "\"" + modelField.getDefaultValue() + "\"" );
-                            }
-                            else
-                            {
-                                jField.setInitString( modelField.getDefaultValue() );
-                            }
-                        }
-
-                        jClass.addField( jField );
-
-                        // Properties
-
-                        String propertyName = capitalise( fieldName );
-
-                        // Getter
-
-                        JMethod getter = new JMethod( jType, "get" + propertyName );
-
-                        getter.getSourceCode().add( "return this." + fieldName + ";" );
-
-                        jClass.addMethod( getter );
-
-                        // Setter
-
-                        JMethod setter = new JMethod( null, "set" + propertyName );
-
-                        setter.addParameter( new JParameter( jType, fieldName ) );
-
-                        setter.getSourceCode().add( "this." + fieldName + " = " + fieldName + ";" );
-
-                        jClass.addMethod( setter );
+                        jClass.addMethod( createFieldSetter( field ) );
 
                         // Add method
 
-                        if ( isCollection( fieldType ) )
+                        if ( isCollection( field.getType().getName() ) )
                         {
-                            String parameterName = singular( fieldName );
+                            String parameterName = singular( field.getName() );
 
                             String className = capitalise( parameterName );
 
@@ -170,14 +118,14 @@ public class JavaGenerator
 
                             adder.addParameter( new JParameter( addType, parameterName ) );
 
-                            adder.getSourceCode().add( fieldName + ".add( " + parameterName + " );" );
+                            adder.getSourceCode().add( field.getName() + ".add( " + parameterName + " );" );
 
                             jClass.addMethod( adder );
                         }
 
-                        if ( fieldType.equals( "java.util.Properties" ) )
+                        if ( field.getType().getName().equals( "java.util.Properties" ) )
                         {
-                            String parameterName = singular( fieldName );
+                            String parameterName = singular( field.getName() );
 
                             String className = capitalise( parameterName );
 
@@ -189,13 +137,13 @@ public class JavaGenerator
 
                             adder.addParameter( new JParameter( addType, "value" ) );
 
-                            adder.getSourceCode().add( fieldName + ".setProperty( name, value );" );
+                            adder.getSourceCode().add( field.getName() + ".setProperty( name, value );" );
 
                             jClass.addMethod( adder );
                         }
-
-                        count++;
                     }
+
+                    count++;
 
                     if ( modelClass.getCode() != null )
                     {
@@ -204,12 +152,71 @@ public class JavaGenerator
                 }
             }
 
-
             jClass.print( sourceWriter );
 
             writer.flush();
 
             writer.close();
         }
+    }
+
+    private JMethod createFieldGetter( JField field )
+    {
+        String propertyName = capitalise( field.getName() );
+
+        JMethod getter = new JMethod( field.getType(), "get" + propertyName );
+
+        getter.getSourceCode().add( "return this." + field.getName() + ";" );
+
+        return getter;
+    }
+
+    private JMethod createFieldSetter( JField field )
+    {
+        String propertyName = capitalise( field.getName() );
+
+        JMethod setter = new JMethod( null, "set" + propertyName );
+
+        setter.addParameter( new JParameter( field.getType(), field.getName() ) );
+
+        setter.getSourceCode().add( "this." + field.getName() + " = " + field.getName() + ";" );
+
+        return setter;
+    }
+
+    private JField createField( ModelField modelField, ModelClass modelClass, int entry )
+    {
+        if ( modelField.getType() == null )
+        {
+            throw new IllegalStateException(
+                "Field type can't be null: jField element " + entry + " in the definition of the class " + modelClass.getName() );
+        }
+
+        JType type;
+
+        if ( modelField.getType().equals( "boolean" ) )
+        {
+            type = JType.Boolean;
+        }
+        else
+        {
+            type = new JClass( modelField.getType() );
+        }
+
+        JField field = new JField( type, modelField.getName() );
+
+        if ( modelField.getDefaultValue() != null )
+        {
+            if ( modelField.getType().equals( "String" ) )
+            {
+                field.setInitString( "\"" + modelField.getDefaultValue() + "\"" );
+            }
+            else
+            {
+                field.setInitString( modelField.getDefaultValue() );
+            }
+        }
+
+        return field;
     }
 }

@@ -2,6 +2,9 @@ package org.codehaus.modello;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Iterator;
 
 /**
  *
@@ -17,7 +20,24 @@ public class ModelClass
 
     List fields;
 
+    Map fieldMap;
+
     String code;
+
+    public ModelClass()
+    {
+        fieldMap = new HashMap();
+    }
+
+    public void initialize()
+    {
+        for ( Iterator i = fields.iterator(); i.hasNext(); )
+        {
+            ModelField modelField = (ModelField) i.next();
+
+            fieldMap.put( modelField.getName(), modelField );
+        }
+    }
 
     public String getSuperClass()
     {
