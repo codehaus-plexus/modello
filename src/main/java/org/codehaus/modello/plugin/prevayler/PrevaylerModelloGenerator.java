@@ -22,35 +22,23 @@ package org.codehaus.modello.plugin.prevayler;
  * SOFTWARE.
  */
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.Writer;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.Properties;
 
 import org.apache.velocity.VelocityContext;
-import org.apache.velocity.Template;
-import org.apache.velocity.exception.ParseErrorException;
-import org.apache.velocity.exception.ResourceNotFoundException;
 import org.apache.velocity.context.Context;
 
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.model.Model;
-import org.codehaus.modello.plugin.AbstractModelloGenerator;
+import org.codehaus.modello.plugin.store.AbstractVelocityModelloGenerator;
 import org.codehaus.modello.plugin.store.metadata.StoreClassMetadata;
-import org.codehaus.plexus.velocity.VelocityComponent;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
 public class PrevaylerModelloGenerator
-    extends AbstractModelloGenerator
+    extends AbstractVelocityModelloGenerator
 {
-    /** @requirement */
-    private VelocityComponent velocity;
-
     public void generate( Model model, Properties properties )
         throws ModelloException
     {
@@ -68,7 +56,7 @@ public class PrevaylerModelloGenerator
 
         context.put( "storeMetadataId", StoreClassMetadata.ID );
 
-//        context.put( "ojbMetadataId", HibernateClassMetadata.ID );
+//        context.put( "ojbMetadataId", PrevaylerClassMetadata.ID );
 
         context.put( "model", model );
 
@@ -76,98 +64,12 @@ public class PrevaylerModelloGenerator
         // Generate the code
         // ----------------------------------------------------------------------
 
-        String packageName = model.getPackageName( false, getGeneratedVersion() );
-
-        File packageFile = new File( getOutputDirectory(), packageName.replace( '.', File.separatorChar ) );
-
-        File file = new File( packageFile, model.getName() + "PrevaylerStore.java" );
-
-        if ( !file.getParentFile().exists() )
-        {
-            if ( !file.getParentFile().mkdirs() )
-            {
-                throw new ModelloException( "Error while creating parent directories for '" + file.getAbsolutePath() + "'." );
-            }
-        }
-
         String template = "/org/codehaus/modello/plugin/prevayler/templates/PrevaylerStore.vm";
 
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        String packageName = model.getPackageName( isPackageWithVersion(), super.getGeneratedVersion() );
 
-        Class realmClassLoader = classLoader.getClass();
+        String className = model.getName() + "PrevaylerStore";
 
-        try
-        {
-            Method getRealm = realmClassLoader.getDeclaredMethod( "getRealm", new Class[] {} );
-
-            getRealm.setAccessible( true );
-
-            Object classRealm = getRealm.invoke( classLoader, new Object[] {} );
-
-            Method display = classRealm.getClass().getMethod( "display", new Class[] {} );
-
-            display.invoke( classRealm, new Object[] {} );
-        }
-        catch ( NoSuchMethodException e )
-        {
-            throw new RuntimeException( e.toString(), e );
-        }
-        catch ( IllegalAccessException e )
-        {
-            throw new RuntimeException( e.toString(), e );
-        }
-        catch ( InvocationTargetException e )
-        {
-            throw new RuntimeException( e.toString(), e );
-        }
-
-        writeTemplate( template, file, context );
-    }
-
-    // ----------------------------------------------------------------------
-    //
-    // ----------------------------------------------------------------------
-
-    private void writeTemplate( String templateName, File file, Context context )
-        throws ModelloException
-    {
-        Template template = null;
-
-        try
-        {
-            template = velocity.getEngine().getTemplate( templateName );
-        }
-        catch ( Exception e )
-        {
-            ClassLoader old = Thread.currentThread().getContextClassLoader();
-
-            try
-            {
-                Thread.currentThread().setContextClassLoader( this.getClass().getClassLoader() );
-
-                template = velocity.getEngine().getTemplate( templateName );
-            }
-            catch ( Exception e1 )
-            {
-                throw new ModelloException( "Could not find the template '" + templateName + "'." );
-            }
-            finally
-            {
-                Thread.currentThread().setContextClassLoader( old );
-            }
-        }
-
-        try
-        {
-            Writer writer = new FileWriter( file );
-
-            template.merge( context, writer );
-
-            writer.close();
-        }
-        catch ( Exception e )
-        {
-            throw new ModelloException( "Error while generating code.", e );
-        }
+        writeClass( template, getOutputDirectory(), packageName, className, context );
     }
 }
