@@ -9,7 +9,7 @@ package org.codehaus.modello;
  * @version $Id$
  */
 public class ModelField
-    extends Base
+    extends BaseElement
 {
     String type;
 
