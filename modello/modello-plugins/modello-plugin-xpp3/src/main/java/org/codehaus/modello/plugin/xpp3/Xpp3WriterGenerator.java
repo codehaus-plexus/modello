@@ -327,6 +327,14 @@ public class Xpp3WriterGenerator
 
                         XmlAssociationMetadata xmlAssociationMetadata = (XmlAssociationMetadata)association.getAssociationMetadata( XmlAssociationMetadata.ID );
 
+                        sc.add( getValueChecker( type, value, field ) );
+
+                        sc.add( "{" );
+
+                        sc.indent();
+
+                        sc.add( "serializer.startTag( NAMESPACE, " + "\"" + fieldTagName + "\" );" );
+
                         sc.add( "for ( Iterator iter = " + value + ".keySet().iterator(); iter.hasNext(); )" );
 
                         sc.add( "{" );
@@ -348,6 +356,12 @@ public class Xpp3WriterGenerator
                         {
                             sc.add( "serializer.startTag( NAMESPACE, \"\" + key + \"\" ).text( value ).endTag( NAMESPACE, \"\" + key + \"\" );" );
                         }
+
+                        sc.unindent();
+
+                        sc.add( "}" );
+
+                        sc.add( "serializer.endTag( NAMESPACE, " + "\"" + fieldTagName + "\" );" );
 
                         sc.unindent();
 
