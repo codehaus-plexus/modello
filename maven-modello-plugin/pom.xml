@@ -1,10 +1,13 @@
 <project>
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <artifactId>mojo</artifactId>
-    <groupId>org.apache.maven.plugins</groupId>
-    <version>1.0-SNAPSHOT</version>
+    <artifactId>modello</artifactId>
+    <groupId>modello</groupId>
+    <version>1.0</version>
   </parent>
+  <!-- TODO: remove -->
+  <groupId>org.apache.maven.plugins</groupId>
+  <!-- TODO: change to modell-maven-plugin -->
   <artifactId>maven-modello-plugin</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
@@ -16,6 +19,11 @@
       <version>2.0-SNAPSHOT</version>
     </dependency>
     <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-plugin</artifactId>
+      <version>2.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
       <groupId>modello</groupId>
       <artifactId>modello-core</artifactId>
       <version>1.0-SNAPSHOT</version>
@@ -24,21 +32,25 @@
       <groupId>modello</groupId>
       <artifactId>modello-xpp3-plugin</artifactId>
       <version>1.0-SNAPSHOT</version>
+      <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>modello</groupId>
       <artifactId>modello-xdoc-plugin</artifactId>
       <version>1.0-SNAPSHOT</version>
+      <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>modello</groupId>
       <artifactId>modello-plugin-prevayler</artifactId>
       <version>1.0-alpha-1-SNAPSHOT</version>
+      <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>modello</groupId>
       <artifactId>modello-plugin-jpox</artifactId>
       <version>1.0-alpha-1-SNAPSHOT</version>
+      <scope>runtime</scope>
     </dependency>
   </dependencies>
 </project>
