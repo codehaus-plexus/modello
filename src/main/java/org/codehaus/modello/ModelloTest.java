@@ -5,6 +5,7 @@ package org.codehaus.modello;
  */
 
 import java.io.File;
+import java.io.FileReader;
 
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.plexus.PlexusTestCase;
@@ -31,29 +32,16 @@ public class ModelloTest
         throws Exception
     {
         return (ModelloCore) lookup( ModelloCore.ROLE );
-/*
-        if ( modello == null )
-        {
-            modello = new Modello();
-    
-            modello.initialize();
-        }
-
-        return modello;
-*/
-    }
-/*
-    public ModelBuilder getModelBuilder()
-        throws ModelloException
-    {
-        return getModello().getModelBuilder();
     }
 
-    public File getTestFile( String name )
+    protected Model loadModel( String name )
+        throws Exception
     {
-        return new File( basedir, name );
+        ModelloCore modello = getModelloCore();
+
+        return modello.loadModel( new FileReader( getTestPath( name ) ) );
     }
-*/
+
     public String getTestPath( String name )
     {
         return new File( super.getTestFile( name ) ).getAbsolutePath();

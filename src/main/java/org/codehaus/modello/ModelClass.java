@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.codehaus.modello.metadata.ClassMetadata;
+
 /**
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
  *
@@ -197,6 +199,11 @@ public class ModelClass
         }
 
         return association;
+    }
+
+    public ClassMetadata getMetaData( String key )
+    {
+        return (ClassMetadata) getMetadata( ClassMetadata.class, key );
     }
 
     public void initialize( Model model )
