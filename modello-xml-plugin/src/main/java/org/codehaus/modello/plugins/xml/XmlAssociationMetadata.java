@@ -34,7 +34,11 @@ public class XmlAssociationMetadata
 {
     public final static String ID = XmlAssociationMetadata.class.getName();
 
-    private String mapStyle = "explode";
+    public static final String EXPLODE_MODE = "explode";
+
+    public static final String INLINE_MODE = "inline";
+
+    private String mapStyle = EXPLODE_MODE;
 
     /**
      * @return Returns the map style.
@@ -49,6 +53,13 @@ public class XmlAssociationMetadata
      */
     public void setMapStyle( String mapStyle )
     {
-        this.mapStyle = mapStyle;
+        if ( mapStyle == null )
+        {
+            this.mapStyle = EXPLODE_MODE;
+        }
+        else
+        {
+            this.mapStyle = mapStyle;
+        }
     }
 }
