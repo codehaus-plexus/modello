@@ -139,6 +139,7 @@ public class ModelField
 
         validateFieldNotEmpty( "field '" + getName() + "'", "type", type );
 
+        // TODO: these definitions are duplicated throughout. Defined centrally, and loop through in the various uses
         String[] primitiveTypes = new String[] {
             "boolean",
             "char",
@@ -149,7 +150,9 @@ public class ModelField
             "double",
             "String",
             "Boolean",
-            "Date", };
+            "Date",
+            "DOM"
+        };
 
         for ( int i = 0; i < primitiveTypes.length; i++ )
         {

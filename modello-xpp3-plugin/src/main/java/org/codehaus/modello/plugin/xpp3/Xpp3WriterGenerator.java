@@ -421,8 +421,16 @@ public class Xpp3WriterGenerator
 
                 sc.indent();
 
-                sc.add( "serializer.startTag( NAMESPACE, " + "\"" + fieldTagName + "\" ).text( " +
-                        getValue( field.getType(), value ) + " ).endTag( NAMESPACE, " + "\"" + fieldTagName + "\" );" );
+                if ( "DOM".equals( field.getType() ) )
+                {
+                    sc.add( "serializer.text( " + value + ".toString() );" );
+                }
+                else
+                {
+                    sc.add( "serializer.startTag( NAMESPACE, " + "\"" + fieldTagName + "\" ).text( " +
+                            getValue( field.getType(), value ) + " ).endTag( NAMESPACE, " + "\"" +
+                            fieldTagName + "\" );" );
+                }
 
                 sc.unindent();
 
@@ -472,6 +480,10 @@ public class Xpp3WriterGenerator
             ModelDefault.PROPERTIES.equals( type ) )
         {
             return "if ( " + value + " != null && " + value + ".size() > 0 )";
+        }
+        else if ( "String".equals( type ) && field.getDefaultValue() != null )
+        {
+            return "if ( " + value + " != null && !" + value + ".equals( \"" + field.getDefaultValue() + "\" ) )";
         }
         else
         {
