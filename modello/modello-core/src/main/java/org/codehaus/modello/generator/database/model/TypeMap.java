@@ -2,7 +2,7 @@ package org.codehaus.modello.generator.database.model;
 
 
 /*
- * Copyright (c) 2004, Jason van Zyl
+ * Copyright (c) 2004, Codehaus.org
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -27,8 +27,6 @@ import java.sql.Types;
 import java.util.Hashtable;
 
 // I don't know if the peer system deals
-// with the recommended mappings.
-//
 
 /**
  * A class that maps SQL type names to their JDBC type ID found in

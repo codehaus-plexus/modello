@@ -1,7 +1,7 @@
 package org.codehaus.modello.core;
 
 /*
- * Copyright (c) 2004, Jason van Zyl
+ * Copyright (c) 2004, Codehaus.org
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -37,7 +37,8 @@ import org.codehaus.modello.model.ModelValidationException;
 public interface ModelloCore
 {
     String ROLE = ModelloCore.class.getName();
-MetadataPluginManager getMetadataPluginManager();
+
+    MetadataPluginManager getMetadataPluginManager();
 
     Model loadModel( Reader reader )
         throws ModelloException, ModelValidationException;
