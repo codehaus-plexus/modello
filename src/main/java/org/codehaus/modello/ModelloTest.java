@@ -23,11 +23,13 @@ package org.codehaus.modello;
  */
 
 import java.io.File;
-import java.io.FileReader;
+import java.io.StringReader;
 
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
 import org.codehaus.plexus.PlexusTestCase;
+import org.codehaus.plexus.util.FileUtils;
+import org.codehaus.plexus.util.StringUtils;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -56,7 +58,13 @@ public class ModelloTest
     {
         ModelloCore modello = getModelloCore();
 
-        return modello.loadModel( new FileReader( getTestPath( name ) ) );
+        String fileString = FileUtils.fileRead( getTestPath( name ) );
+
+        fileString = StringUtils.replace( fileString, "<description>", "<description><![CDATA[" );
+
+        fileString = StringUtils.replace( fileString, "</description>", "]]></description>" );
+
+        return modello.loadModel( new StringReader( fileString ) );
     }
 
     public String getTestPath( String name )
