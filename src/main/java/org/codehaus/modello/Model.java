@@ -9,8 +9,6 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- *
- *
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
  *
  * @version $Id$
@@ -29,8 +27,6 @@ public class Model
     private String packageName;
 
     private String root;
-
-//    private Map metaDataClasses;
 
     public Model()
     {
@@ -64,22 +60,6 @@ public class Model
         return (ModelClass) classMap.get( type );
     }
 
-    public void initialize()
-    {
-//        this.metaDataClasses = metaDataClasses;
-
-        for ( Iterator i = classes.iterator(); i.hasNext(); )
-        {
-            ModelClass modelClass = (ModelClass) i.next();
-
-            classNames.add( modelClass.getName() );
-
-            classMap.put( modelClass.getName(), modelClass );
-
-            modelClass.initialize( this );
-        }
-    }
-
     public String getPackageName()
     {
         return packageName;
@@ -104,10 +84,22 @@ public class Model
 
         return allFields;
     }
-/*
-    public Map getMetaDataClasses()
+
+    public void initialize()
     {
-        return metaDataClasses;
+        for ( Iterator i = classes.iterator(); i.hasNext(); )
+        {
+            ModelClass modelClass = (ModelClass) i.next();
+
+            classNames.add( modelClass.getName() );
+
+            classMap.put( modelClass.getName(), modelClass );
+
+            modelClass.initialize( this );
+        }
     }
-*/
+
+    public void validate()
+    {
+    }
 }

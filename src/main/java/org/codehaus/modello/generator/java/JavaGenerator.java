@@ -8,9 +8,11 @@ import java.util.Properties;
 
 import org.codehaus.modello.CodeSegment;
 import org.codehaus.modello.Model;
+import org.codehaus.modello.ModelAssociation;
 import org.codehaus.modello.ModelClass;
 import org.codehaus.modello.ModelField;
 import org.codehaus.modello.ModelloException;
+import org.codehaus.modello.ModelloRuntimeException;
 import org.codehaus.modello.generator.AbstractGeneratorPlugin;
 import org.codehaus.modello.generator.java.javasource.JClass;
 import org.codehaus.modello.generator.java.javasource.JField;
@@ -88,20 +90,19 @@ public class JavaGenerator
 
                         if ( outputElement( modelField.getVersion(), modelClass.getName() + "." + modelField.getName() ) )
                         {
-                            if ( modelField.getName() == null )
-                            {
-                                throw new IllegalStateException( "Field name can't be null jField: element " + count + " in the definition of the class " + modelClass.getName() );
-                            }
+                            createField( jClass, modelField );
+                        }
+                    }
 
-                            JField field = createField( modelField, modelClass, count );
+                    System.err.println(modelClass.getName() + ":" + modelClass.getAssociations().size() );
 
-                            jClass.addField( field );
+                    for ( Iterator j = modelClass.getAssociations().iterator(); j.hasNext(); )
+                    {
+                        ModelAssociation modelAssociation = (ModelAssociation) j.next();
 
-                            jClass.addMethod( createGetter( field ) );
-
-                            jClass.addMethod( createSetter( field ) );
-
-                            createAdder( field, jClass, objectModel );
+                        if ( outputElement( modelAssociation.getVersion(), modelClass.getName() + "." + modelAssociation.getName() ) )
+                        {
+                            createAssociation( jClass, modelAssociation );
                         }
                     }
 
@@ -159,13 +160,8 @@ public class JavaGenerator
         }
     }
 
-    private JField createField( ModelField modelField, ModelClass modelClass, int entry )
+    private JField createField( ModelField modelField, ModelClass modelClass )
     {
-        if ( modelField.getType() == null )
-        {
-            throw new IllegalStateException( "Field type can't be null: jField element " + entry + " in the definition of the class " + modelClass.getName() );
-        }
-
         JType type;
 
         if ( modelField.getType().equals( "boolean" ) )
@@ -222,6 +218,17 @@ public class JavaGenerator
         return field;
     }
 
+    private void createField( JClass jClass, ModelField modelField )
+    {
+        JField field = createField( modelField, modelField.getModelClass() );
+
+        jClass.addField( field );
+
+        jClass.addMethod( createGetter( field ) );
+
+        jClass.addMethod( createSetter( field ) );
+    }
+
     private JMethod createGetter( JField field )
     {
         String propertyName = capitalise( field.getName() );
@@ -249,17 +256,53 @@ public class JavaGenerator
         return setter;
     }
 
-    private void createAdder( JField field, JClass jClass, Model objectModel )
+    private void createAssociation( JClass jClass, ModelAssociation modelAssociation )
     {
-        if ( isCollection( field.getType().getName() ) )
+        if ( !modelAssociation.getFromMultiplicity().equals( "1" ) )
         {
-            String parameterName = singular( field.getName() );
+            throw new ModelloRuntimeException( "The java generator can only generate associations with a 1->* multiplicity. " + 
+                "Found: " + modelAssociation.getFromMultiplicity() + "->" + modelAssociation.getToMultiplicity() );
+        }
 
-            String className = capitalise( parameterName );
+        if ( !modelAssociation.getToMultiplicity().equals( "*" ) )
+        {
+            throw new ModelloRuntimeException( "The java generator can only generate associations with a 1->* multiplicity. " + 
+                "Found: " + modelAssociation.getFromMultiplicity() + "->" + modelAssociation.getToMultiplicity() );
+        }
+
+        JType type = new JClass( "java.util.List" );
+
+        JField jField = new JField( type, modelAssociation.getFromRole() );
+
+        if ( !isEmpty( modelAssociation.getComment() ) )
+        {
+            jField.setComment( modelAssociation.getComment() );
+        }
+
+        jClass.addField( jField );
+
+        jClass.addMethod( createGetter( jField ) );
+
+        jClass.addMethod( createSetter( jField ) );
+
+        createAdder( jClass, modelAssociation );
+    }
+
+    private void createAdder( JClass jClass, ModelAssociation modelAssociation )
+    {
+/*
+        if ( isCollection( modelAssociation.getName() ) )
+        {
+*/
+            String fieldName = modelAssociation.getFromRole();
+
+            String parameterName = singular( fieldName );
+
+            String className = capitalise( modelAssociation.getToClass().getName() );
 
             JType addType;
 
-            if ( objectModel.getClassNames().contains( className ) )
+            if ( modelAssociation.getFromClass().getModel().getClass( className ) != null )
             {
                 addType = new JClass( className );
             }
@@ -272,9 +315,10 @@ public class JavaGenerator
 
             adder.addParameter( new JParameter( addType, parameterName ) );
 
-            adder.getSourceCode().add( field.getName() + ".add( " + parameterName + " );" );
+            adder.getSourceCode().add( fieldName + ".add( " + parameterName + " );" );
 
             jClass.addMethod( adder );
+/*
         }
         else if ( field.getType().getName().equals( "java.util.Properties" ) )
         {
@@ -294,5 +338,6 @@ public class JavaGenerator
 
             jClass.addMethod( adder );
         }
+*/
     }
 }

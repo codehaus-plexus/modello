@@ -46,7 +46,7 @@ public class Modello
     }
 
     public void initialize()
-        throws Exception
+        throws ModelloException
     {
         generatorPluginManager.initialize();
 
@@ -59,9 +59,14 @@ public class Modello
         modelBuilder.initialize();
     }
 
+    public ModelBuilder getModelBuilder()
+    {
+        return modelBuilder;
+    }
+
     public Model work( File modelFile, String mode, File outputDirectory, 
                        String modelVersion, boolean packageWithVersion )
-        throws ModelloException
+        throws ModelloException, ModelValidationException
     {
         try
         {
@@ -76,7 +81,7 @@ public class Modello
     }
 
     public Model getModel( File modelFile )
-        throws ModelloException
+        throws ModelloException, ModelValidationException
     {
         if ( modelFile == null )
         {
