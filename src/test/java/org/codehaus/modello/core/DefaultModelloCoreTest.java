@@ -22,22 +22,22 @@ package org.codehaus.modello.core;
  * SOFTWARE.
  */
 
-import java.io.FileReader;
-
 import org.codehaus.modello.ModelloRuntimeException;
-import org.codehaus.modello.ModelloTest;
+import org.codehaus.plexus.PlexusTestCase;
+
+import java.io.FileReader;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
 public class DefaultModelloCoreTest
-    extends ModelloTest
+    extends PlexusTestCase
 {
     public void testModelWithDuplicateClasses()
         throws Exception
     {
-        ModelloCore modello = getModelloCore();
+        ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
 
         try
         {
@@ -54,7 +54,7 @@ public class DefaultModelloCoreTest
     public void testModelWithDuplicateFields()
         throws Exception
     {
-        ModelloCore modello = getModelloCore();
+        ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
 
         try
         {
@@ -71,7 +71,7 @@ public class DefaultModelloCoreTest
     public void testModelWithDuplicateAssociations()
         throws Exception
     {
-        ModelloCore modello = getModelloCore();
+        ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
 
         try
         {
