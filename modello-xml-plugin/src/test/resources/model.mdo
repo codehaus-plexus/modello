@@ -23,14 +23,18 @@
           <name>parent</name>
           <version>4.0.0</version>
           <description>Specified which project to extend.</description>
-          <type>Parent</type>
+          <association>
+            <type>Parent</type>
+          </association>
           <comment></comment>
         </field>
         <field tagName="build">
           <name>builder</name>
           <version>4.0.0</version>
           <description>Specified the build part.</description>
-          <type>Parent</type>
+          <association>
+            <type>Parent</type>
+          </association>
           <comment></comment>
         </field>
       </fields>
