@@ -132,6 +132,7 @@ public class Xpp3ReaderGenerator
     }
 
     private void writeClassParsing( ModelClass modelClass, JSourceCode sc, Model objectModel, boolean withLoop )
+        throws Exception
     {
         if ( withLoop )
         {
@@ -174,56 +175,70 @@ public class Xpp3ReaderGenerator
         }
     }
 
-    private void writeFieldParsing( ModelClass modelClass, ModelField field, JSourceCode sc, String statement, Model objectModel )
+    private void writeFieldParsing( ModelClass modelClass, ModelField fromField, JSourceCode sc, String statement, Model objectModel )
+        throws Exception
     {
-        if ( field.getDelegateTo() != null )
+        String className;
+
+        ModelField toField;
+
+        if ( fromField.getDelegateTo() != null )
         {
+            className = capitalise( fromField.getDelegateTo() );
+
+            toField = modelClass.getField( fromField.getDelegateTo() );
+
+            if( toField == null )
+                throw new Exception( "No such field " + fromField.getDelegateTo() );
         }
         else
         {
-            String type = field.getType();
+            toField = fromField;
 
-            String name = field.getName();
-
-            String className = capitalise( field.getName() );
-
-            String modelClassName = uncapitalise( modelClass.getName() );
-
-            sc.add( statement + " ( parser.getName().equals( \"" + field.getName() + "\" ) )" );
-
-            sc.add( "{" );
-
-            sc.indent();
-
-            if ( isClassInModel( type, objectModel ) )
-            {
-                sc.add( type + " " + name + " = new " + type + "();" );
-
-                sc.add( modelClassName + ".set" + className + "( " + name + " );" );
-
-                writeClassParsing( objectModel.getClass( field.getType() ), sc, objectModel, true );
-            }
-            else if ( isCollection( type ) )
-            {
-                writeCollectionParsing( modelClassName, name, sc, objectModel );
-            }
-            else if ( isMap( type ) )
-            {
-                // These are properties for now.
-                writePropertiesParsing( modelClassName, name, sc, objectModel );
-            }
-            else
-            {
-                sc.add( modelClassName + ".set" + className + "( parser.nextText() );" );
-            }
-
-            sc.unindent();
-
-            sc.add( "}" );
+            className = capitalise( toField.getName() );
         }
+
+        String type = toField.getType();
+
+        String name = toField.getName();
+
+        String modelClassName = uncapitalise( modelClass.getName() );
+
+        sc.add( statement + " ( parser.getName().equals( \"" + fromField.getName() + "\" ) )" );
+
+        sc.add( "{" );
+
+        sc.indent();
+
+        if ( isClassInModel( type, objectModel ) )
+        {
+            sc.add( type + " " + name + " = new " + type + "();" );
+
+            sc.add( modelClassName + ".set" + className + "( " + name + " );" );
+
+            writeClassParsing( objectModel.getClass( toField.getType() ), sc, objectModel, true );
+        }
+        else if ( isCollection( type ) )
+        {
+            writeCollectionParsing( modelClassName, name, sc, objectModel );
+        }
+        else if ( isMap( type ) )
+        {
+            // These are properties for now.
+            writePropertiesParsing( modelClassName, name, sc, objectModel );
+        }
+        else
+        {
+            sc.add( modelClassName + ".set" + className + "( parser.nextText() );" );
+        }
+
+        sc.unindent();
+
+        sc.add( "}" );
     }
 
     private void writeCollectionParsing( String modelClassName, String fieldName, JSourceCode sc, Model objectModel )
+        throws Exception
     {
         // We have a collection but we need to know what is in the collection.
         String collectionClass = capitalise( singular( fieldName ) );
