@@ -64,9 +64,9 @@ public class XmlMetadataPlugin
     {
         XmlFieldMetadata metadata = new XmlFieldMetadata();
 
-        String attribute = (String) data.get( "attribute" );
+        String attribute = (String) data.get( "xml.attribute" );
 
-        String tagName = (String) data.get( "tagName" );
+        String tagName = (String) data.get( "xml.tagName" );
 
         metadata.setAttribute( Boolean.valueOf( attribute ).booleanValue() );
 
@@ -79,7 +79,7 @@ public class XmlMetadataPlugin
     {
         XmlAssociationMetadata metadata = new XmlAssociationMetadata();
 
-        String mapStyle = (String) data.get( "mapStyle" );
+        String mapStyle = (String) data.get( "xml.mapStyle" );
 
         metadata.setMapStyle( mapStyle );
 
