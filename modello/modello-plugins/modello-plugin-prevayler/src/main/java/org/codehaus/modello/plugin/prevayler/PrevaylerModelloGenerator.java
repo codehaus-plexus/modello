@@ -22,18 +22,23 @@ package org.codehaus.modello.plugin.prevayler;
  * SOFTWARE.
  */
 
-import java.util.Properties;
 import java.io.File;
-import java.io.Writer;
 import java.io.FileWriter;
+import java.io.Writer;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Properties;
 
-import org.apache.velocity.context.Context;
 import org.apache.velocity.VelocityContext;
+import org.apache.velocity.Template;
+import org.apache.velocity.exception.ParseErrorException;
+import org.apache.velocity.exception.ResourceNotFoundException;
+import org.apache.velocity.context.Context;
 
+import org.codehaus.modello.ModelloException;
+import org.codehaus.modello.model.Model;
 import org.codehaus.modello.plugin.AbstractModelloGenerator;
 import org.codehaus.modello.plugin.store.metadata.StoreClassMetadata;
-import org.codehaus.modello.model.Model;
-import org.codehaus.modello.ModelloException;
 import org.codehaus.plexus.velocity.VelocityComponent;
 
 /**
@@ -71,9 +76,9 @@ public class PrevaylerModelloGenerator
         // Generate the code
         // ----------------------------------------------------------------------
 
-        File packageFile = new File( getOutputDirectory(),
-                                     model.getPackageName( false, getGeneratedVersion() ).replace( '.',
-                                                                                                   File.separatorChar ) );
+        String packageName = model.getPackageName( false, getGeneratedVersion() );
+
+        File packageFile = new File( getOutputDirectory(), packageName.replace( '.', File.separatorChar ) );
 
         File file = new File( packageFile, model.getName() + "PrevaylerStore.java" );
 
@@ -87,6 +92,35 @@ public class PrevaylerModelloGenerator
 
         String template = "/org/codehaus/modello/plugin/prevayler/templates/PrevaylerStore.vm";
 
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+
+        Class realmClassLoader = classLoader.getClass();
+
+        try
+        {
+            Method getRealm = realmClassLoader.getDeclaredMethod( "getRealm", new Class[] {} );
+
+            getRealm.setAccessible( true );
+
+            Object classRealm = getRealm.invoke( classLoader, new Object[] {} );
+
+            Method display = classRealm.getClass().getMethod( "display", new Class[] {} );
+
+            display.invoke( classRealm, new Object[] {} );
+        }
+        catch ( NoSuchMethodException e )
+        {
+            throw new RuntimeException( e.toString(), e );
+        }
+        catch ( IllegalAccessException e )
+        {
+            throw new RuntimeException( e.toString(), e );
+        }
+        catch ( InvocationTargetException e )
+        {
+            throw new RuntimeException( e.toString(), e );
+        }
+
         writeTemplate( template, file, context );
     }
 
@@ -94,16 +128,40 @@ public class PrevaylerModelloGenerator
     //
     // ----------------------------------------------------------------------
 
-    private void writeTemplate( String template, File file, Context context )
+    private void writeTemplate( String templateName, File file, Context context )
         throws ModelloException
     {
+        Template template = null;
+
+        try
+        {
+            template = velocity.getEngine().getTemplate( templateName );
+        }
+        catch ( Exception e )
+        {
+            ClassLoader old = Thread.currentThread().getContextClassLoader();
+
+            try
+            {
+                Thread.currentThread().setContextClassLoader( this.getClass().getClassLoader() );
+
+                template = velocity.getEngine().getTemplate( templateName );
+            }
+            catch ( Exception e1 )
+            {
+                throw new ModelloException( "Could not find the template '" + templateName + "'." );
+            }
+            finally
+            {
+                Thread.currentThread().setContextClassLoader( old );
+            }
+        }
+
         try
         {
             Writer writer = new FileWriter( file );
 
-            velocity.getEngine().mergeTemplate( template, context, writer );
-
-            writer.flush();
+            template.merge( context, writer );
 
             writer.close();
         }
