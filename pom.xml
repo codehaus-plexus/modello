@@ -22,7 +22,11 @@
       <url>scp://beaver.codehaus.org//home/projects/modello/dist/</url>
     </repository>
   </distributionManagement>
-    
+
+  <ciManagement>
+    <nagEmailAddress>dev@modello.codehaus.org</nagEmailAddress>
+  </ciManagement>
+        
   <scm>
     <connection>scm:cvs:pserver:anoncvs@cvs.modello.codehaus.org:/scm/modello:modello</connection>
     <developerConnection>scm:cvs:ext:${maven.username}@cvs.modello.codehaus.org:/home/projects/modello/scm:modello</developerConnection>
