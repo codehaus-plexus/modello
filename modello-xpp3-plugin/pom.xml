@@ -20,5 +20,11 @@
       <artifactId>modello-xml-plugin</artifactId>
       <version>1.0-SNAPSHOT</version>
     </dependency>
+    <!-- for tests -->
+    <dependency>
+      <groupId>xpp3</groupId>
+      <artifactId>xpp3</artifactId>
+      <version>1.1.3.3</version>
+    </dependency>
   </dependencies>
 </project>
