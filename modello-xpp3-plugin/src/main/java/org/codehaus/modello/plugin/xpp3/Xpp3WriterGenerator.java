@@ -1,15 +1,33 @@
 package org.codehaus.modello.plugin.xpp3;
 
+/*
+ * Copyright (c) 2004, Jason van Zyl
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+ * of the Software, and to permit persons to whom the Software is furnished to do
+ * so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
 
-import org.codehaus.modello.Model;
-import org.codehaus.modello.ModelAssociation;
-import org.codehaus.modello.ModelClass;
-import org.codehaus.modello.ModelField;
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.ModelloRuntimeException;
 import org.codehaus.modello.generator.java.javasource.JClass;
@@ -18,21 +36,23 @@ import org.codehaus.modello.generator.java.javasource.JMethod;
 import org.codehaus.modello.generator.java.javasource.JParameter;
 import org.codehaus.modello.generator.java.javasource.JSourceCode;
 import org.codehaus.modello.generator.java.javasource.JSourceWriter;
+import org.codehaus.modello.model.Model;
+import org.codehaus.modello.model.ModelAssociation;
+import org.codehaus.modello.model.ModelClass;
+import org.codehaus.modello.model.ModelDefault;
+import org.codehaus.modello.model.ModelField;
+import org.codehaus.modello.plugins.xml.XmlAssociationMetadata;
 import org.codehaus.modello.plugins.xml.XmlFieldMetadata;
 
 /**
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
+ * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
+ *
  * @version $Id$
  */
 public class Xpp3WriterGenerator
     extends AbstractXpp3Generator
-{/*
-    public Xpp3WriterGenerator( Model model, File outputDirectory, String modelVersion, boolean packageWithVersion )
-        throws ModelloRuntimeException
-    {
-        super( model, outputDirectory, modelVersion, packageWithVersion );
-    }
-*/
+{
     public void generate( Model model, Properties parameters )
         throws ModelloException
     {
@@ -76,13 +96,13 @@ public class Xpp3WriterGenerator
 
         jClass.addImport( "org.xmlpull.v1.XmlPullParser" );
 
-        //jClass.addImport( "org.xmlpull.v1.XmlPullParserException" );
-
         jClass.addImport( "org.xmlpull.v1.XmlPullParserFactory" );
 
         jClass.addImport( "org.xmlpull.v1.XmlSerializer" );
 
         jClass.addImport( "java.io.Writer" );
+
+        jClass.addImport( "java.util.Iterator" );
 
         jClass.addField( new JField( new JClass( "org.xmlpull.v1.XmlSerializer" ), "serializer" ) );
 
@@ -135,7 +155,7 @@ public class Xpp3WriterGenerator
 
         sc.add( "serializer.startTag( NAMESPACE, \"" + rootElement + "\" );" );
 
-        writeClassMarshalling( (ModelClass) objectModel.getClasses().get( 0 ), sc );
+        writeClassMarshalling( (ModelClass) objectModel.getClasses( getGeneratedVersion() ).get( 0 ), sc );
 
         sc.add( "serializer.endTag( NAMESPACE, \"" + rootElement + "\" );" );
 
@@ -151,43 +171,40 @@ public class Xpp3WriterGenerator
     private void writeClassMarshalling( ModelClass modelClass, JSourceCode sc )
         throws ModelloRuntimeException
     {
-        if ( outputElement( modelClass ) )
+        writeClassMarshalling( modelClass, null, sc );
+    }
+
+    private void writeClassMarshalling( ModelClass modelClass, String objectName, JSourceCode sc )
+        throws ModelloRuntimeException
+    {
+        List fields = modelClass.getAllFields( getGeneratedVersion(), true );
+
+        int fieldCount = fields.size();
+
+        for ( int i = 0; i < fieldCount; i++ )
         {
-            List fields = modelClass.getAllFields();
+            ModelField field = (ModelField) fields.get( i );
 
-            int fieldCount = fields.size();
-
-            for ( int i = 0; i < fieldCount; i++ )
+            if ( field instanceof ModelAssociation &&
+                ModelAssociation.MANY_MULTIPLICITY.equals( ( (ModelAssociation) field ).getMultiplicity() ) )
             {
-                ModelField field = (ModelField) fields.get( i );
-
-                writeFieldMarshalling( modelClass, field, sc );
+                writeAssociationMarshalling( modelClass, (ModelAssociation) field, objectName, sc );
             }
-
-            List associations = modelClass.getAllAssociations();
-
-            int associationCount = associations.size();
-
-            for ( int i = 0; i < associationCount; i++ )
+            else
             {
-                ModelAssociation association = (ModelAssociation) associations.get( i );
-
-                writeAssociationMarshalling( modelClass, association, sc );
+                writeFieldMarshalling( modelClass, field, objectName, sc );
             }
         }
     }
 
-    private void writeFieldMarshalling( ModelClass modelClass, ModelField field, JSourceCode sc )
+    private void writeFieldMarshalling( ModelClass modelClass, ModelField field, String objectName, JSourceCode sc )
         throws ModelloRuntimeException
     {
         XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata)field.getMetadata( XmlFieldMetadata.ID );
 
         boolean attribute = xmlFieldMetadata.isAttribute();
 
-        if ( !outputElement( field ) )
-        {
-            return;
-        }
+        String tagName = xmlFieldMetadata.getTagName();
 
         String type = field.getType();
 
@@ -197,7 +214,10 @@ public class Xpp3WriterGenerator
 
         String modelClassName = uncapitalise( modelClass.getName() );
 
-        String tagName = xmlFieldMetadata.getTagName();
+        if ( objectName != null )
+        {
+            modelClassName = objectName;
+        }
 
         if ( tagName == null )
         {
@@ -223,7 +243,7 @@ public class Xpp3WriterGenerator
 
             sc.add( "serializer.startTag( NAMESPACE, " + "\"" + tagName + "\" );" );
 
-            writeClassMarshalling( modelClass.getModel().getClass( type ), sc );
+            writeClassMarshalling( modelClass.getModel().getClass( type, getGeneratedVersion() ), fieldName, sc );
 
             sc.add( "serializer.endTag( NAMESPACE, " + "\"" + tagName + "\" );" );
 
@@ -231,32 +251,14 @@ public class Xpp3WriterGenerator
 
             sc.add( "}" );
         }
-/*
-        else if ( isCollection( type ) )
-        {
-            if ( attribute )
-            {
-                throw new ModelloRuntimeException( "A Collection cannot be a serialized as a attribute." );
-            }
-
-            writeCollectionMarshalling( modelClassName, fieldName, tagName, sc, objectModel );
-        }
-        else if ( isMap( type ) )
-        {
-            if ( attribute )
-            {
-                throw new ModelloRuntimeException( "A Map cannot be a serialized as a attribute." );
-            }
-
-            // These are properties for now.
-            writePropertiesMarshalling( modelClassName, fieldName, tagName, sc, objectModel );
-        }
-*/
         else
         {
             sc.add( "// Writing primitive in field" );
 
-            sc.add( "if ( " + modelClassName + ".get" + className + "() != null )" );
+            String textValue = getValue( field.getType(), modelClassName + ".get" + className + "()" );
+
+            // Write "if ( value != ...)"
+            sc.add( getValueChecker( field.getType(), modelClassName + ".get" + className + "()", field ) );
 
             sc.add( "{" );
 
@@ -265,12 +267,12 @@ public class Xpp3WriterGenerator
             if ( attribute )
             {
                 sc.add( "serializer.attribute( NAMESPACE, \"" + tagName + "\", " +
-                        modelClassName + ".get" + className + "() );" );
+                        textValue + " );" );
             }
             else
             {
                 sc.add( "serializer.startTag( NAMESPACE, " + "\"" + tagName + "\" ).text( " +
-                        modelClassName + ".get" + className + "() ).endTag( NAMESPACE, " + "\"" + tagName + "\" );" );
+                        textValue + " ).endTag( NAMESPACE, " + "\"" + tagName + "\" );" );
             }
 
             sc.unindent();
@@ -279,30 +281,38 @@ public class Xpp3WriterGenerator
         }
     }
 
-    private void writeAssociationMarshalling( ModelClass modelClass, ModelAssociation association, JSourceCode sc )
+    private void writeAssociationMarshalling( ModelClass modelClass, ModelAssociation association, String objectName, JSourceCode sc )
+        throws ModelloRuntimeException
     {
-        if ( !outputElement( association ) )
-        {
-            return;
-        }
+        XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata)association.getMetadata( XmlFieldMetadata.ID );
 
-        // We have a collection but we need to know what is in the collection.
+        XmlAssociationMetadata xmlAssociationMetadata = (XmlAssociationMetadata)association.getAssociationMetadata( XmlAssociationMetadata.ID );
 
-//        String modelClassName = uncapitalise( association.getFromClass().getName() );
+        boolean attribute = xmlFieldMetadata.isAttribute();
+
+        String tagName = xmlFieldMetadata.getTagName();
+        
         String modelClassName = uncapitalise( modelClass.getName() );
 
-        String fieldName = association.getFromRole();
-
-        // TODO: Read from metadata
-        String tagName = association.getFromRole();
+        String fieldName = association.getName();
 
         String getterName = capitalise( fieldName );
 
-        String collectionClass = singular( getterName );
+        String type = association.getTo();
 
-        String singular = singular( fieldName );
+        String singularFieldName = singular( fieldName );
 
-        if ( isClassInModel( collectionClass, association.getFromClass().getModel() ) )
+        if ( objectName != null )
+        {
+            modelClassName = objectName;
+        }
+
+        if ( tagName == null )
+        {
+            tagName = fieldName;
+        }
+
+        if ( isClassInModel( type, association.getModelClass().getModel() ) )
         {
             String size = modelClassName + ".get" + getterName + "().size()";
 
@@ -324,12 +334,12 @@ public class Xpp3WriterGenerator
 
             sc.indent();
 
-            sc.add( collectionClass + " " + singular +
-                    " = (" + collectionClass + ") " + modelClassName + ".get" + getterName + "().get( " + index + " );" );
+            sc.add( type + " " + singularFieldName +
+                    " = (" + type + ") " + modelClassName + ".get" + getterName + "().get( " + index + " );" );
 
             sc.add( "serializer.startTag( NAMESPACE, " + "\"" + singular( tagName ) + "\" );" );
 
-            writeClassMarshalling( association.getFromClass().getModel().getClass( collectionClass ), sc );
+            writeClassMarshalling( association.getModelClass().getModel().getClass( type, getGeneratedVersion() ), singularFieldName, sc );
 
             sc.add( "serializer.endTag( NAMESPACE, " + "\"" + singular( tagName ) + "\" );" );
 
@@ -359,19 +369,51 @@ public class Xpp3WriterGenerator
 
             String index = getIndex();
 
-            sc.add( "for ( int " + index + "= 0; " + index + " < " + size + "; " + index + "++ )" );
+            if ( ModelDefault.MAP.equals( association.getType() )
+                || ModelDefault.PROPERTIES.equals( association.getType() ) )
+            {
+                sc.add( "for( Iterator iter = " + modelClassName + ".get" + getterName + "().keySet().iterator(); iter.hasNext(); )" );
 
-            sc.add( "{" );
+                sc.add( "{" );
 
-            sc.indent();
+                sc.indent();
 
-            sc.add( "String s = (String) " + modelClassName + ".get" + getterName + "().get( " + index + " );" );
+                sc.add( "String key = (String) iter.next();" );
 
-            sc.add( "serializer.startTag( NAMESPACE, " + "\"" + singular( tagName ) + "\" ).text( s ).endTag( NAMESPACE, " + "\"" + singular( tagName ) + "\" );" );
+                sc.add( "String value = (String) " + modelClassName + ".get" + getterName + "().get( key );" );
 
-            sc.unindent();
+                if ( "inline".equals( xmlAssociationMetadata.getMapStyle() ) )
+                {
+                    sc.add( "serializer.startTag( NAMESPACE, \"\" + key + \"\" ).text( value ).endTag( NAMESPACE, \"\" + key + \"\" );" );
+                }
+                else
+                {
+                    sc.add( "serializer.startTag( NAMESPACE, \"" + singular( fieldName ) + "\" );" );
+                    sc.add( "serializer.startTag( NAMESPACE, \"key\" ).text( key ).endTag( NAMESPACE, \"key\" );" );
+                    sc.add( "serializer.startTag( NAMESPACE, \"value\" ).text( value ).endTag( NAMESPACE, \"value\" );" );
+                    sc.add( "serializer.endTag( NAMESPACE, \"" + singular( fieldName ) + "\" );" );
+                }
 
-            sc.add( "}" );
+                sc.unindent();
+
+                sc.add( "}" );
+            }
+            else
+            {
+                sc.add( "for ( int " + index + "= 0; " + index + " < " + size + "; " + index + "++ )" );
+
+                sc.add( "{" );
+
+                sc.indent();
+
+                sc.add( "String s = (String) " + modelClassName + ".get" + getterName + "().get( " + index + " );" );
+
+                sc.add( "serializer.startTag( NAMESPACE, " + "\"" + singular( tagName ) + "\" ).text( s ).endTag( NAMESPACE, " + "\"" + singular( tagName ) + "\" );" );
+
+                sc.unindent();
+
+                sc.add( "}" );
+            }
 
             sc.add( "serializer.endTag( NAMESPACE, " + "\"" + tagName + "\" );" );
 
@@ -389,8 +431,37 @@ public class Xpp3WriterGenerator
 
         return "i" + Integer.toString( index );
     }
-
-    private void writePropertiesMarshalling( String modelClassName, String fieldName, String tagName, JSourceCode sc, Model objectModel )
+    
+    private String getValue( String type, String initialValue )
     {
+        String textValue = initialValue;
+
+        if ( ! "String".equals( type ) )
+        {
+            textValue = "String.valueOf( " + textValue + " )";
+        }
+
+        return textValue;
+    }
+
+    private String getValueChecker( String type, String value, ModelField field )
+    {
+        if ( "boolean".equals( type )
+            || "double".equals( type )
+            || "float".equals( type )
+            || "int".equals( type )
+            || "long".equals( type )
+            || "short".equals( type ) )
+        {
+            return "if ( " + value + " != " + field.getDefaultValue() + " )";
+        }
+        else if ( "char".equals( type ) )
+        {
+            return "if ( " + value + " != '" + field.getDefaultValue() + "' )";
+        }
+        else
+        {
+            return "if ( " + value + " != null )";
+        }
     }
 }

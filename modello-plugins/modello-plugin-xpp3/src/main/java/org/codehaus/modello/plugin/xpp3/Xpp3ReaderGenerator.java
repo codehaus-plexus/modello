@@ -1,15 +1,33 @@
 package org.codehaus.modello.plugin.xpp3;
 
+/*
+ * Copyright (c) 2004, Jason van Zyl
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+ * of the Software, and to permit persons to whom the Software is furnished to do
+ * so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
 
-import org.codehaus.modello.Model;
-import org.codehaus.modello.ModelAssociation;
-import org.codehaus.modello.ModelClass;
-import org.codehaus.modello.ModelField;
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.ModelloRuntimeException;
 import org.codehaus.modello.generator.java.javasource.JClass;
@@ -17,10 +35,16 @@ import org.codehaus.modello.generator.java.javasource.JMethod;
 import org.codehaus.modello.generator.java.javasource.JParameter;
 import org.codehaus.modello.generator.java.javasource.JSourceCode;
 import org.codehaus.modello.generator.java.javasource.JSourceWriter;
+import org.codehaus.modello.model.Model;
+import org.codehaus.modello.model.ModelAssociation;
+import org.codehaus.modello.model.ModelClass;
+import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.plugins.xml.XmlFieldMetadata;
 
 /**
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
+ * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
+ *
  * @version $Id$
  */
 public class Xpp3ReaderGenerator
@@ -75,14 +99,18 @@ public class Xpp3ReaderGenerator
 
         jClass.addImport( "java.io.Reader" );
 
+        jClass.addImport( "java.util.ArrayList" );
+
+        jClass.addImport( "java.util.List" );
+
         addModelImports( jClass );
 
         // Write the parse method which will do the unmarshalling.
-        String root = objectModel.getRoot();
+        ModelClass root = objectModel.getClass( objectModel.getRoot(), getGeneratedVersion() );
 
-        String rootElement = uncapitalise( root );
+        String rootElement = uncapitalise( root.getName() );
 
-        JMethod unmarshall = new JMethod( new JClass( root ), "read" );
+        JMethod unmarshall = new JMethod( new JClass( root.getName() ), "read" );
 
         unmarshall.addParameter( new JParameter( new JClass( "Reader" ), "reader" ) );
 
@@ -90,7 +118,7 @@ public class Xpp3ReaderGenerator
 
         JSourceCode sc = unmarshall.getSourceCode();
 
-        sc.add( root + " " + rootElement + " = new " + root + "();" );
+        sc.add( root.getName() + " " + rootElement + " = new " + root.getName() + "();" );
 
         sc.add( "XmlPullParserFactory factory = XmlPullParserFactory.newInstance();" );
 
@@ -106,19 +134,7 @@ public class Xpp3ReaderGenerator
 
         sc.indent();
 
-        sc.add( "if ( eventType == XmlPullParser.START_TAG )" );
-
-        sc.add( "{" );
-
-        sc.indent();
-
-        writeClassParsing( (ModelClass) objectModel.getClasses().get( 0 ), sc, objectModel, false );
-
-        sc.unindent();
-
-        sc.add( "}" );
-
-        sc.add( "eventType = parser.next();" );
+        writeClassParsing( root, sc, false );
 
         sc.unindent();
 
@@ -135,12 +151,22 @@ public class Xpp3ReaderGenerator
         writer.close();
     }
 
-    private void writeClassParsing( ModelClass modelClass, JSourceCode sc, Model objectModel, boolean withLoop )
+    private void writeClassParsing( ModelClass modelClass, JSourceCode sc, boolean withLoop )
         throws IOException
     {
-        if ( !outputElement( modelClass ) )
+        writeClassParsing( modelClass, null, sc, withLoop );
+    }
+
+    private void writeClassParsing( ModelClass modelClass, String objectName, JSourceCode sc, boolean withLoop )
+        throws IOException
+    {
+        String modelClassName = modelClass.getName();
+
+        String objName = objectName;
+
+        if ( objName == null )
         {
-            return;
+            objName = uncapitalise( modelClassName );
         }
 
         if ( withLoop )
@@ -150,292 +176,270 @@ public class Xpp3ReaderGenerator
             sc.add( "{" );
 
             sc.indent();
+
+            sc.add( modelClassName + " " + uncapitalise( modelClassName ) + " = new " + modelClassName + "();" );
+            
+            objName = uncapitalise( modelClassName );
+        }
+        else
+        {
+            sc.add( "if ( eventType == XmlPullParser.START_TAG )" );
+
+            sc.add( "{" );
+
+            sc.indent();
         }
 
-        String statement;
+        writeAttributes( modelClass, objName, sc );
 
-        List fields = modelClass.getAllFields();
+        sc.add( "// Reading tags" );
 
-        int fieldCount = fields.size();
+        writeFields( modelClass, objName, sc );
+
+        if ( withLoop )
+        {
+            writeCatchAll( sc );
+
+            sc.add( objectName + ".add( " + uncapitalise( modelClassName ) + " );" );
+
+            sc.unindent();
+
+            sc.add( "}" );
+
+        }
+        else
+        {
+            sc.unindent();
+
+            sc.add( "}" );
+
+            sc.add( "eventType = parser.next();" );
+        }
+    }
+
+    private void writeAttributes( ModelClass modelClass, String objectName, JSourceCode sc )
+        throws IOException
+    {
+        List fields = modelClass.getAllFields( getGeneratedVersion(), true );
 
         boolean firstStatement = true;
 
-        for ( int i = 0; i < fieldCount; i++ )
+        for ( int i = 0; i < fields.size(); i++ )
         {
             ModelField field = (ModelField) fields.get( i );
 
             XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata)field.getMetadata( XmlFieldMetadata.ID );
 
-            if ( !xmlFieldMetadata.isAttribute() )
+            String tagName = xmlFieldMetadata.getTagName();
+
+            if ( tagName == null )
+            {
+                tagName = field.getName();
+            }
+
+            if ( !xmlFieldMetadata.isAttribute() || ( field instanceof ModelAssociation ) )
             {
                 continue;
             }
 
-            if ( outputElement( field ) )
+            if ( firstStatement )
             {
-                if ( firstStatement )
-                {
-                    sc.add( "// Reading attributes" );
+                sc.add( "// Reading attributes" );
 
-                    sc.add( "if ( parser.getName().equals( \"" + uncapitalise( modelClass.getName() ) + "\") )" );
+                sc.add( "if ( parser.getName().equals( \"" + uncapitalise( modelClass.getName() ) + "\") )" );
 
-                    sc.add( "{" );
+                sc.add( "{" );
 
-                    sc.indent();
+                sc.indent();
 
-                    statement = "if";
-
-                    firstStatement = false;
-                }
-                else
-                {
-                    statement = "else if";
-                }
-
-                writeFieldParsing( modelClass, field, sc, statement, objectModel, true );
+                firstStatement = false;
             }
-        }
 
-        if ( !firstStatement )
+            sc.add( objectName + ".set" + capitalise( field.getName() ) + "( parser.getAttributeValue( \"\", \"" + tagName + "\" ) );" );
+        }
+        
+        if ( ! firstStatement )
         {
             sc.unindent();
 
             sc.add( "}" );
         }
+    }
 
-        firstStatement = true;
+    private void writeFields( ModelClass modelClass, String objectName, JSourceCode sc )
+        throws IOException
+    {
+        List fields = modelClass.getAllFields( getGeneratedVersion(), true );
 
-        for ( int i = 0; i < fieldCount; i++ )
+        String statement = "if";
+
+        for ( int i = 0; i < fields.size(); i++ )
         {
             ModelField field = (ModelField) fields.get( i );
 
             XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata)field.getMetadata( XmlFieldMetadata.ID );
+
+            String tagName = xmlFieldMetadata.getTagName();
+
+            if ( tagName == null )
+            {
+                tagName = field.getName();
+            }
 
             if ( xmlFieldMetadata.isAttribute() )
             {
                 continue;
             }
 
-            if ( outputElement( field ) )
+            sc.add( statement + " ( parser.getName().equals( \"" + tagName + "\" ) )" );
+
+            sc.add( "{" );
+
+            sc.indent();
+
+            if ( field instanceof ModelAssociation &&
+                ModelAssociation.MANY_MULTIPLICITY.equals( ( (ModelAssociation) field ).getMultiplicity() ) )
             {
-                if ( firstStatement )
-                {
-                    statement = "if";
+                sc.add( "parser.nextTag();" );
 
-                    firstStatement = false;
-                }
-                else
-                {
-                    statement = "else if";
-                }
-
-                writeFieldParsing( modelClass, field, sc, statement, objectModel, false );
+                writeAssociation( modelClass, (ModelAssociation) field, objectName, sc );
             }
-        }
-
-        List associations = modelClass.getAllAssociations();
-
-        int associationCount = associations.size();
-
-        for ( int i = 0; i < associationCount; i++ )
-        {
-            ModelAssociation association = (ModelAssociation) associations.get( i );
-
-            if ( outputElement( association ) )
+            else
             {
-                if ( firstStatement )
-                {
-                    statement = "if";
-
-                    firstStatement = false;
-                }
-                else
-                {
-                    statement = "else if";
-                }
-
-                writeAssociationParsing( modelClass, association, sc, statement, objectModel );
-            }
-        }
-
-        if ( withLoop )
-        {
-            // TODO: replace with !firstStatement
-            if ( !firstStatement )
-            {
-                writeCatchAll( sc );
+                writeField( modelClass, field, objectName, sc );
             }
 
             sc.unindent();
 
             sc.add( "}" );
+
+            statement = "else if";
         }
     }
 
-    private void writeAssociationParsing( ModelClass modelClass, ModelAssociation association, JSourceCode sc, String statement, Model objectModel )
+    private void writeField( ModelClass modelClass, ModelField field, String objectName, JSourceCode sc )
         throws IOException
     {
-        XmlFieldMetadata xmlFieldMetadata = new XmlFieldMetadata();
-
-        writeFieldParsing( modelClass, association.getFromRole(), "java.util.List", sc, statement, objectModel, xmlFieldMetadata, false, true );
-    }
-
-    private void writeFieldParsing( ModelClass modelClass, ModelField field, JSourceCode sc, String statement, Model objectModel, boolean attribute )
-        throws IOException
-    {
+        String type = field.getType();
+        
         XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata)field.getMetadata( XmlFieldMetadata.ID );
-
-        writeFieldParsing( modelClass, field.getName(), field.getType(), sc, statement, objectModel, xmlFieldMetadata, attribute, false );
-    }
-
-    private void writeFieldParsing( ModelClass modelClass, String name, String type, JSourceCode sc, String statement, Model objectModel, XmlFieldMetadata xmlFieldMetadata, boolean attribute, boolean association )
-        throws IOException
-    {
-        String className = capitalise( name );
-
-        String modelClassName = uncapitalise( modelClass.getName() );
 
         String tagName = xmlFieldMetadata.getTagName();
 
         if ( tagName == null )
         {
-            tagName = name;
+            tagName = field.getName();
         }
 
-        if ( attribute )
+        if ( isClassInModel( type, modelClass.getModel() ) )
         {
-            if ( !type.equals( "String" ) )
-            {
-                throw new ModelloRuntimeException( "A xml attribute field must be a java.lang.String. Field name: " + name );
-            }
+            ModelClass fieldClass = modelClass.getModel().getClass( type, getGeneratedVersion() );
 
-            sc.add( modelClassName + ".set" + className + "( parser.getAttributeValue( \"\", \"" + tagName + "\" ) );" );
+            sc.add( type + " " + field.getName() + " = new " + type + "();" );
 
-            return;
+            writeClassParsing( fieldClass, field.getName(), sc, false );
+
+            sc.add( objectName + ".set" + type + "( " + field.getName() + ");" );
         }
         else
         {
-            sc.add( statement + " ( parser.getName().equals( \"" + tagName + "\" ) )" );
+            writePrimitiveField( field, objectName, sc );
         }
-
-        sc.add( "{" );
-
-        sc.indent();
-
-        if ( isClassInModel( type, objectModel ) )
-        {
-            if ( attribute )
-            {
-                throw new ModelloRuntimeException( "A class cannot be a serialized as a attribute." );
-            }
-
-            sc.add( type + " " + name + " = new " + type + "();" );
-
-            sc.add( modelClassName + ".set" + className + "( " + name + " );" );
-
-            writeClassParsing( objectModel.getClass( type ), sc, objectModel, true );
-        }
-        else if ( association )
-        {
-            if ( attribute )
-            {
-                throw new ModelloRuntimeException( "A class cannot be a serialized as a attribute." );
-            }
-
-            writeCollectionParsing( modelClassName, name, tagName, sc, objectModel );
-        }
-/*
-        else if ( isMap( type ) )
-        {
-            if ( attribute )
-            {
-                throw new ModelloRuntimeException( "A class cannot be a serialized as a attribute." );
-            }
-
-            // These are properties for now.
-            writePropertiesParsing( modelClassName, name, sc, objectModel );
-        }
-*/
-        else
-        {
-            sc.add( modelClassName + ".set" + className + "( parser.nextText() );" );
-        }
-
-        sc.unindent();
-
-        sc.add( "}" );
     }
 
-    private void writeCollectionParsing( String modelClassName, String fieldName, String tagName, JSourceCode sc, Model objectModel )
+    private void writeAssociation( ModelClass modelClass, ModelAssociation field, String objectName, JSourceCode sc )
         throws IOException
     {
-        // We have a collection but we need to know what is in the collection.
-        String collectionClass = capitalise( singular( fieldName ) );
+        String type = field.getTo();
 
-        sc.add( "while ( parser.nextTag() == XmlPullParser.START_TAG )" );
+        String singularName = singular( field.getName() );
+
+        XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata)field.getMetadata( XmlFieldMetadata.ID );
+
+        String tagName = xmlFieldMetadata.getTagName();
+
+        if ( tagName == null )
+        {
+            tagName = singularName;
+        }
+
+        sc.add( "if ( parser.getName().equals( \"" + singularName + "\" ) )" );
 
         sc.add( "{" );
 
         sc.indent();
 
-        if ( tagName != null )
+        if ( isClassInModel( type, modelClass.getModel() ) )
         {
-            sc.add( "if ( parser.getName().equals( \"" + singular( tagName ) + "\" ) )" );
+            ModelClass fieldClass = modelClass.getModel().getClass( type, getGeneratedVersion() );
+
+            sc.add( "List " + field.getName() + " = new ArrayList();" );
+
+            writeClassParsing( fieldClass, field.getName(), sc, true );
+
+            sc.add( objectName + ".set" + capitalise( field.getName() ) + "( " + field.getName() + ");" );
         }
         else
         {
-            sc.add( "if ( parser.getName().equals( \"" + singular( fieldName ) + "\" ) )" );
-        }
-
-        sc.add( "{" );
-
-        sc.indent();
-
-        if ( isClassInModel( collectionClass, objectModel ) )
-        {
-            sc.add( collectionClass + " " + singular( fieldName ) + " = new " + collectionClass + "();" );
-
-            sc.add( modelClassName + ".add" + collectionClass + "( " + singular( fieldName ) + " );" );
-
-            writeClassParsing( objectModel.getClass( collectionClass ), sc, objectModel, true );
-        }
-        else
-        {
-            sc.add( modelClassName + ".add" + collectionClass + "( parser.nextText() );" );
+            if ( "Map".equals( field.getType() ) || "Properties".equals( field.getType() ) )
+            {
+//TODO A FAIRE DANS writePrimitives
+                sc.add( "//MAP" ) ;
+            }
+            else if ( "List".equals( field.getType() ) || "Set".equals( field.getType() ) )
+            {
+                sc.add( "//LIST of STRING" ) ;
+            }
+            else
+            {
+                writePrimitiveField( field, field.getName(), sc );
+            }
         }
 
         sc.unindent();
 
         sc.add( "}" );
-
-        writeCatchAll( sc );
-
-        sc.unindent();
-
-        sc.add( "}" );
-
     }
 
-    private void writePropertiesParsing( String modelClassName, String fieldName, JSourceCode sc, Model objectModel )
+    private void writePrimitiveField( ModelField field, String objectName, JSourceCode sc )
     {
-        // We have a collection but we need to know what is in the collection.
-        String collectionClass = capitalise( singular( fieldName ) );
+        String type = field.getType();
+        
+        String setterName = "set" + capitalise( field.getName() );
 
-        sc.add( "while ( parser.nextTag() == XmlPullParser.START_TAG )" );
-
-        sc.add( "{" );
-
-        sc.indent();
-
-        sc.add( "String key = parser.getName();" );
-
-        sc.add( "String value = parser.nextText();" );
-
-        sc.add( modelClassName + ".add" + collectionClass + "( key, value );" );
-
-        sc.unindent();
-
-        sc.add( "}" );
+        if ( "boolean".equals( type ) )
+        {
+            sc.add( objectName + "." + setterName + "( (new Boolean( parser.nextText() ) ).booleanValue() );" );
+        }
+        if ( "char".equals( type ) )
+        {
+            sc.add( objectName + "." + setterName + "( (new Character( parser.nextText() ) ).charValue() );" );
+        }
+        if ( "double".equals( type ) )
+        {
+            sc.add( objectName + "." + setterName + "( (new Double( parser.nextText() ) ).doubleValue() );" );
+        }
+        if ( "float".equals( type ) )
+        {
+            sc.add( objectName + "." + setterName + "( (new Float( parser.nextText() ) ).floatValue() );" );
+        }
+        if ( "int".equals( type ) )
+        {
+            sc.add( objectName + "." + setterName + "( (new Integer( parser.nextText() ) ).intValue() );" );
+        }
+        if ( "long".equals( type ) )
+        {
+            sc.add( objectName + "." + setterName + "( (new Long( parser.nextText() ) ).longValue() );" );
+        }
+        if ( "short".equals( type ) )
+        {
+            sc.add( objectName + "." + setterName + "( (new Short( parser.nextText() ) ).shortValue() );" );
+        }
+        else if ( "String".equals( type ) )
+        {
+            sc.add( objectName + "." + setterName + "( parser.nextText() );" );
+            sc.add("System.out.println( \"Set  + " + objectName + "." + setterName + "=\" + " + objectName + ".get" + capitalise( field.getName() ) + "());");
+        }
     }
 
     private void writeCatchAll( JSourceCode sc )
