@@ -107,7 +107,7 @@ public class Xpp3WriterGenerator
 
         marshall.addParameter( new JParameter( new JClass( "Writer" ), "writer" ) );
 
-        marshall.addParameter( new JParameter( new JClass( root ), "model" ) );
+        marshall.addParameter( new JParameter( new JClass( root ), rootElement ) );
 
         marshall.addException( new JClass( "Exception" ) );
 
