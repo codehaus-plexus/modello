@@ -372,10 +372,6 @@ public class ModelReader
             {
                 modelAssociation.setTo( parser.nextText() );
             }
-            else if ( parser.getName().equals( "parentElement" ) )
-            {
-                modelAssociation.setParentElement( Boolean.valueOf( parser.nextText() ).booleanValue() );
-            }
             else if ( parser.getName().equals( "multiplicity" ) )
             {
                 modelAssociation.setMultiplicity( parser.nextText() );

@@ -204,13 +204,12 @@
           <type>String</type>
           <comment>This naming is inconsistent and distribution should occur from a repository structure.</comment>
         </field>
-        <field>
+        <field xml.listStyle="flat">
           <name>components</name>
           <version>4.0.0</version>
           <association>
             <type>Component</type>
             <multiplicity>*</multiplicity>
-            <parentElement>false</parentElement>
           </association>
         </field>
 

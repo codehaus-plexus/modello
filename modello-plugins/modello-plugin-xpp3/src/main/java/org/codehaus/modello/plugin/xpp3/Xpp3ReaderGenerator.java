@@ -52,6 +52,7 @@ import java.util.Properties;
 public class Xpp3ReaderGenerator
     extends AbstractXpp3Generator
 {
+
     public void generate( Model model, Properties parameters )
         throws ModelloException
     {
@@ -306,6 +307,8 @@ public class Xpp3ReaderGenerator
                 tagName = field.getName();
             }
 
+            boolean wrappedList = XmlFieldMetadata.LIST_STYLE_WRAPPED.equals( fieldMetadata.getListStyle() );
+
             String capFieldName = capitalise( field.getName() );
 
             String singularName = singular( field.getName() );
@@ -342,7 +345,7 @@ public class Xpp3ReaderGenerator
 
                     if ( ModelDefault.LIST.equals( type ) || ModelDefault.SET.equals( type ) )
                     {
-                        if ( association.isParentElement() )
+                        if ( wrappedList )
                         {
                             sc.add( statement + " ( parser.getName().equals( \"" + tagName + "\" ) )" );
 
@@ -402,7 +405,7 @@ public class Xpp3ReaderGenerator
                             writePrimitiveField( association, association.getTo(), associationName, "add", sc );
                         }
 
-                        if ( association.isParentElement() )
+                        if ( wrappedList )
                         {
                             sc.unindent();
 
