@@ -185,6 +185,13 @@ public class Xpp3WriterGenerator
 
         String modelClassName = uncapitalise( modelClass.getName() );
 
+        String tagName = xmlMetaData.getTagName();
+
+        if ( tagName == null )
+        {
+            tagName = fieldName;
+        }
+
         if ( isClassInModel( type, objectModel ) )
         {
             if ( attribute )
@@ -200,11 +207,11 @@ public class Xpp3WriterGenerator
 
             sc.indent();
 
-            sc.add( "serializer.startTag( NAMESPACE, " + "\"" + fieldName + "\" );" );
+            sc.add( "serializer.startTag( NAMESPACE, " + "\"" + tagName + "\" );" );
 
             writeClassParsing( objectModel.getClass( type ), sc, objectModel );
 
-            sc.add( "serializer.endTag( NAMESPACE, " + "\"" + fieldName + "\" );" );
+            sc.add( "serializer.endTag( NAMESPACE, " + "\"" + tagName + "\" );" );
 
             sc.unindent();
 
@@ -217,7 +224,7 @@ public class Xpp3WriterGenerator
                 throw new ModelloRuntimeException( "A Collection cannot be a serialized as a attribute." );
             }
 
-            writeCollectionMarshalling( modelClassName, fieldName, sc, objectModel );
+            writeCollectionMarshalling( modelClassName, fieldName, tagName, sc, objectModel );
         }
         else if ( isMap( type ) )
         {
@@ -227,7 +234,7 @@ public class Xpp3WriterGenerator
             }
 
             // These are properties for now.
-            writePropertiesMarshalling( modelClassName, fieldName, sc, objectModel );
+            writePropertiesMarshalling( modelClassName, fieldName, tagName, sc, objectModel );
         }
         else
         {
@@ -239,13 +246,13 @@ public class Xpp3WriterGenerator
 
             if ( attribute )
             {
-                sc.add( "serializer.attribute( NAMESPACE, \"" + fieldName + "\", " +
+                sc.add( "serializer.attribute( NAMESPACE, \"" + tagName + "\", " +
                         modelClassName + ".get" + className + "() );" );
             }
             else
             {
-                sc.add( "serializer.startTag( NAMESPACE, " + "\"" + fieldName + "\" ).text( " +
-                        modelClassName + ".get" + className + "() ).endTag( NAMESPACE, " + "\"" + fieldName + "\" );" );
+                sc.add( "serializer.startTag( NAMESPACE, " + "\"" + tagName + "\" ).text( " +
+                        modelClassName + ".get" + className + "() ).endTag( NAMESPACE, " + "\"" + tagName + "\" );" );
             }
 
             sc.unindent();
@@ -254,7 +261,7 @@ public class Xpp3WriterGenerator
         }
     }
 
-    private void writeCollectionMarshalling( String modelClassName, String fieldName, JSourceCode sc, Model objectModel )
+    private void writeCollectionMarshalling( String modelClassName, String fieldName, String tagName, JSourceCode sc, Model objectModel )
     {
         sc.add( "\n" );
 
@@ -278,7 +285,7 @@ public class Xpp3WriterGenerator
 
             sc.indent();
 
-            sc.add( "serializer.startTag( NAMESPACE, " + "\"" + fieldName + "\" );" );
+            sc.add( "serializer.startTag( NAMESPACE, " + "\"" + tagName + "\" );" );
 
             sc.add( "for ( int " + index + " = 0; " + index + " < " + size + "; " + index + "++ )" );
 
@@ -289,17 +296,17 @@ public class Xpp3WriterGenerator
             sc.add( collectionClass + " " + singular +
                     " = (" + collectionClass + ") " + modelClassName + ".get" + getterName + "().get( " + index + " );" );
 
-            sc.add( "serializer.startTag( NAMESPACE, " + "\"" + singular + "\" );" );
+            sc.add( "serializer.startTag( NAMESPACE, " + "\"" + singular( tagName ) + "\" );" );
 
             writeClassParsing( objectModel.getClass( singular( collectionClass ) ), sc, objectModel );
 
-            sc.add( "serializer.endTag( NAMESPACE, " + "\"" + singular + "\" );" );
+            sc.add( "serializer.endTag( NAMESPACE, " + "\"" + singular( tagName ) + "\" );" );
 
             sc.unindent();
 
             sc.add( "}" );
 
-            sc.add( "serializer.endTag( NAMESPACE, " + "\"" + fieldName + "\" );" );
+            sc.add( "serializer.endTag( NAMESPACE, " + "\"" + tagName + "\" );" );
 
             sc.unindent();
 
@@ -313,7 +320,7 @@ public class Xpp3WriterGenerator
 
             sc.indent();
 
-            sc.add( "serializer.startTag( NAMESPACE, " + "\"" + fieldName + "\" );" );
+            sc.add( "serializer.startTag( NAMESPACE, " + "\"" + tagName + "\" );" );
 
             String size = modelClassName + ".get" + getterName + "().size()";
 
@@ -327,13 +334,13 @@ public class Xpp3WriterGenerator
 
             sc.add( "String s = (String) " + modelClassName + ".get" + getterName + "().get( " + index + " );" );
 
-            sc.add( "serializer.startTag( NAMESPACE, " + "\"" + singular + "\" ).text( s ).endTag( NAMESPACE, " + "\"" + singular + "\" );" );
+            sc.add( "serializer.startTag( NAMESPACE, " + "\"" + singular( tagName ) + "\" ).text( s ).endTag( NAMESPACE, " + "\"" + singular( tagName ) + "\" );" );
 
             sc.unindent();
 
             sc.add( "}" );
 
-            sc.add( "serializer.endTag( NAMESPACE, " + "\"" + fieldName + "\" );" );
+            sc.add( "serializer.endTag( NAMESPACE, " + "\"" + tagName + "\" );" );
 
             sc.unindent();
 
@@ -349,7 +356,7 @@ public class Xpp3WriterGenerator
         return "i" + Integer.toString( index );
     }
 
-    private void writePropertiesMarshalling( String modelClassName, String fieldName, JSourceCode sc, Model objectModel )
+    private void writePropertiesMarshalling( String modelClassName, String fieldName, String tagName, JSourceCode sc, Model objectModel )
     {
     }
 }

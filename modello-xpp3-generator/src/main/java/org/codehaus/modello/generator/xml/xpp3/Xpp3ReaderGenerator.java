@@ -241,6 +241,8 @@ public class Xpp3ReaderGenerator
     private void writeFieldParsing( ModelClass modelClass, ModelField field, JSourceCode sc, String statement, Model objectModel, boolean attribute )
         throws IOException
     {
+        XmlMetaData xmlMetaData = (XmlMetaData)field.getMetaData( XmlMetaData.ID );
+
         String className = capitalise( field.getName() );
 
         String type = field.getType();
@@ -249,6 +251,13 @@ public class Xpp3ReaderGenerator
 
         String modelClassName = uncapitalise( modelClass.getName() );
 
+        String tagName = xmlMetaData.getTagName();
+
+        if ( tagName == null )
+        {
+            tagName = name;
+        }
+
         if ( attribute )
         {
             if ( !type.equals( "String" ) )
@@ -256,14 +265,14 @@ public class Xpp3ReaderGenerator
                 throw new ModelloRuntimeException( "A xml attribute field must be a java.lang.String. Field name: " + name );
             }
 
-            sc.add( modelClassName + ".set" + className + "( parser.getAttributeValue( \"\", \"" + name + "\" ) );" );
-            sc.add( "System.out.println( parser.getAttributeValue( null, \"" + name + "\" ) );" );
+            sc.add( modelClassName + ".set" + className + "( parser.getAttributeValue( \"\", \"" + tagName + "\" ) );" );
+            sc.add( "System.out.println( parser.getAttributeValue( null, \"" + tagName + "\" ) );" );
 
             return;
         }
         else
         {
-            sc.add( statement + " ( parser.getName().equals( \"" + field.getName() + "\" ) )" );
+            sc.add( statement + " ( parser.getName().equals( \"" + tagName + "\" ) )" );
         }
 
         sc.add( "{" );
@@ -290,7 +299,7 @@ public class Xpp3ReaderGenerator
                 throw new ModelloRuntimeException( "A class cannot be a serialized as a attribute." );
             }
 
-            writeCollectionParsing( modelClassName, name, sc, objectModel );
+            writeCollectionParsing( modelClassName, name, tagName, sc, objectModel );
         }
         else if ( isMap( type ) )
         {
@@ -312,7 +321,7 @@ public class Xpp3ReaderGenerator
         sc.add( "}" );
     }
 
-    private void writeCollectionParsing( String modelClassName, String fieldName, JSourceCode sc, Model objectModel )
+    private void writeCollectionParsing( String modelClassName, String fieldName, String tagName, JSourceCode sc, Model objectModel )
         throws IOException
     {
         // We have a collection but we need to know what is in the collection.
@@ -324,7 +333,14 @@ public class Xpp3ReaderGenerator
 
         sc.indent();
 
-        sc.add( "if ( parser.getName().equals( \"" + singular( fieldName ) + "\" ) )" );
+        if ( tagName != null )
+        {
+            sc.add( "if ( parser.getName().equals( \"" + singular( tagName ) + "\" ) )" );
+        }
+        else
+        {
+            sc.add( "if ( parser.getName().equals( \"" + singular( fieldName ) + "\" ) )" );
+        }
 
         sc.add( "{" );
 

@@ -33,6 +33,13 @@
           <type>Parent</type>
           <comment></comment>
         </field>
+        <field tagName="build">
+          <name>builder</name>
+          <version>4.0.0</version>
+          <description>Specified the build part.</description>
+          <type>Parent</type>
+          <comment></comment>
+        </field>
       </fields>
     </class>
   </classes>
