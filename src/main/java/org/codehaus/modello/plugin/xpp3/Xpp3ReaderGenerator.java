@@ -38,7 +38,9 @@ import org.codehaus.modello.generator.java.javasource.JSourceWriter;
 import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
+import org.codehaus.modello.model.ModelDefault;
 import org.codehaus.modello.model.ModelField;
+import org.codehaus.modello.plugins.xml.XmlAssociationMetadata;
 import org.codehaus.modello.plugins.xml.XmlFieldMetadata;
 
 /**
@@ -134,7 +136,7 @@ public class Xpp3ReaderGenerator
 
         sc.indent();
 
-        writeClassParsing( root, sc, false );
+        writeClassParsing( root, sc, false, true );
 
         sc.unindent();
 
@@ -151,13 +153,13 @@ public class Xpp3ReaderGenerator
         writer.close();
     }
 
-    private void writeClassParsing( ModelClass modelClass, JSourceCode sc, boolean withLoop )
+    private void writeClassParsing( ModelClass modelClass, JSourceCode sc, boolean withLoop, boolean rootElement )
         throws IOException
     {
-        writeClassParsing( modelClass, null, sc, withLoop );
+        writeClassParsing( modelClass, null, sc, withLoop, rootElement );
     }
 
-    private void writeClassParsing( ModelClass modelClass, String objectName, JSourceCode sc, boolean withLoop )
+    private void writeClassParsing( ModelClass modelClass, String objectName, JSourceCode sc, boolean withLoop, boolean rootElement )
         throws IOException
     {
         String modelClassName = modelClass.getName();
@@ -177,13 +179,32 @@ public class Xpp3ReaderGenerator
 
             sc.indent();
 
+            sc.add( "if ( parser.getName().equals( \"" + uncapitalise( modelClassName ) + "\" ) )" );
+
+            sc.add( "{" );
+
+            sc.indent();
+
             sc.add( modelClassName + " " + uncapitalise( modelClassName ) + " = new " + modelClassName + "();" );
             
+            sc.add( "while ( parser.nextTag() == XmlPullParser.START_TAG )" );
+
+            sc.add( "{" );
+
+            sc.indent();
+
             objName = uncapitalise( modelClassName );
         }
         else
         {
-            sc.add( "if ( eventType == XmlPullParser.START_TAG )" );
+            if ( rootElement)
+            {
+                sc.add( "if ( eventType == XmlPullParser.START_TAG )" );
+            }
+            else
+            {
+                sc.add( "while ( parser.nextTag() == XmlPullParser.START_TAG )" );
+            }
 
             sc.add( "{" );
 
@@ -200,12 +221,21 @@ public class Xpp3ReaderGenerator
         {
             writeCatchAll( sc );
 
+            sc.unindent();
+
+            sc.add( "}" );
+
             sc.add( objectName + ".add( " + uncapitalise( modelClassName ) + " );" );
 
             sc.unindent();
 
             sc.add( "}" );
 
+            writeCatchAll( sc );
+
+            sc.unindent();
+
+            sc.add( "}" );
         }
         else
         {
@@ -213,7 +243,10 @@ public class Xpp3ReaderGenerator
 
             sc.add( "}" );
 
-            sc.add( "eventType = parser.next();" );
+            if ( rootElement )
+            {
+                sc.add( "eventType = parser.next();" );
+            }
         }
     }
 
@@ -300,8 +333,6 @@ public class Xpp3ReaderGenerator
             if ( field instanceof ModelAssociation &&
                 ModelAssociation.MANY_MULTIPLICITY.equals( ( (ModelAssociation) field ).getMultiplicity() ) )
             {
-                sc.add( "parser.nextTag();" );
-
                 writeAssociation( modelClass, (ModelAssociation) field, objectName, sc );
             }
             else
@@ -337,7 +368,7 @@ public class Xpp3ReaderGenerator
 
             sc.add( type + " " + field.getName() + " = new " + type + "();" );
 
-            writeClassParsing( fieldClass, field.getName(), sc, false );
+            writeClassParsing( fieldClass, field.getName(), sc, false, false );
 
             sc.add( objectName + ".set" + type + "( " + field.getName() + ");" );
         }
@@ -356,6 +387,8 @@ public class Xpp3ReaderGenerator
 
         XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata)field.getMetadata( XmlFieldMetadata.ID );
 
+        XmlAssociationMetadata xmlAssociationMetadata = (XmlAssociationMetadata)field.getAssociationMetadata( XmlAssociationMetadata.ID );
+
         String tagName = xmlFieldMetadata.getTagName();
 
         if ( tagName == null )
@@ -363,42 +396,154 @@ public class Xpp3ReaderGenerator
             tagName = singularName;
         }
 
-        sc.add( "if ( parser.getName().equals( \"" + singularName + "\" ) )" );
-
-        sc.add( "{" );
-
-        sc.indent();
-
         if ( isClassInModel( type, modelClass.getModel() ) )
         {
             ModelClass fieldClass = modelClass.getModel().getClass( type, getGeneratedVersion() );
 
             sc.add( "List " + field.getName() + " = new ArrayList();" );
 
-            writeClassParsing( fieldClass, field.getName(), sc, true );
+            writeClassParsing( fieldClass, field.getName(), sc, true, false );
 
             sc.add( objectName + ".set" + capitalise( field.getName() ) + "( " + field.getName() + ");" );
         }
         else
         {
-            if ( "Map".equals( field.getType() ) || "Properties".equals( field.getType() ) )
+            if ( ModelDefault.MAP.equals( field.getType() )
+                || ModelDefault.PROPERTIES.equals( field.getType() ) )
             {
-//TODO A FAIRE DANS writePrimitives
-                sc.add( "//MAP" ) ;
+                sc.add( "//" + field.getType() ) ;
+
+                if ( XmlAssociationMetadata.EXPLODE_MODE.equals( xmlAssociationMetadata.getMapStyle() ) )
+                {
+                    sc.add( "while ( parser.nextTag() == XmlPullParser.START_TAG )" );
+
+                    sc.add( "{" );
+
+                    sc.indent();
+
+                    sc.add( "if ( parser.getName().equals( \"" + singularName + "\" ) )" );
+
+                    sc.add( "{" );
+
+                    sc.indent();
+
+                    sc.add( "String key = null;" );
+
+                    sc.add( "String value = null;");
+
+                    sc.add( "//" + xmlAssociationMetadata.getMapStyle() + " mode." );
+
+                    sc.add( "while ( parser.nextTag() == XmlPullParser.START_TAG )" );
+
+                    sc.add( "{" );
+
+                    sc.indent();
+
+                    sc.add( "if ( parser.getName().equals( \"key\" ) )" );
+
+                    sc.add( "{" );
+
+                    sc.indent();
+
+                    sc.add( "key = parser.nextText();" );
+
+                    sc.unindent();
+
+                    sc.add( "}" );
+
+                    sc.add( "else if ( parser.getName().equals( \"value\" ) )" );
+
+                    sc.add( "{" );
+
+                    sc.indent();
+
+                    sc.add( "value = parser.nextText();" );
+
+                    sc.unindent();
+
+                    sc.add( "}" );
+
+                    writeCatchAll( sc );
+
+                    sc.unindent();
+
+                    sc.add( "}" );
+
+                    sc.add( objectName + ".add" + capitalise( singularName ) + "( key, value );");
+                }
+                else
+                {
+                    sc.add( "while ( parser.nextTag() == XmlPullParser.START_TAG )" );
+
+                    sc.add( "{" );
+
+                    sc.indent();
+
+                    sc.add( "String key = parser.getName();" );
+
+                    sc.add( "String value = parser.nextText();" );
+
+                    sc.add( objectName + ".add" + capitalise( singularName ) + "( key, value );");
+
+                    sc.unindent();
+
+                    sc.add( "}" );
+                }
+
+                sc.unindent();
+
+                sc.add( "}" );
+
+                sc.add( "parser.next();" );
+
+                sc.unindent();
+
+                sc.add( "}" );
             }
-            else if ( "List".equals( field.getType() ) || "Set".equals( field.getType() ) )
+            else if ( ModelDefault.LIST.equals( field.getType() )
+                || ModelDefault.SET.equals( field.getType() ) )
             {
                 sc.add( "//LIST of STRING" ) ;
+
+                    sc.add( "while ( parser.nextTag() == XmlPullParser.START_TAG )" );
+
+                    sc.add( "{" );
+
+                    sc.indent();
+
+                    sc.add( "if ( parser.getName().equals( \"" + singularName + "\" ) )" );
+
+                    sc.add( "{" );
+
+                    sc.indent();
+
+                    sc.add( objectName + ".add" + capitalise( singularName ) + "( parser.nextText() );");
+
+                    sc.unindent();
+
+                    sc.add( "}" );
+
+                    writeCatchAll( sc );
+
+                    sc.unindent();
+
+                    sc.add( "}" );
             }
             else
             {
+                sc.add( "if ( parser.getName().equals( \"" + singularName + "\" ) )" );
+
+                sc.add( "{" );
+
+                sc.indent();
+
                 writePrimitiveField( field, field.getName(), sc );
+
+                sc.unindent();
+
+                sc.add( "}" );
             }
         }
-
-        sc.unindent();
-
-        sc.add( "}" );
     }
 
     private void writePrimitiveField( ModelField field, String objectName, JSourceCode sc )
@@ -438,14 +583,11 @@ public class Xpp3ReaderGenerator
         else if ( "String".equals( type ) )
         {
             sc.add( objectName + "." + setterName + "( parser.nextText() );" );
-            sc.add("System.out.println( \"Set  + " + objectName + "." + setterName + "=\" + " + objectName + ".get" + capitalise( field.getName() ) + "());");
         }
     }
 
     private void writeCatchAll( JSourceCode sc )
     {
-        // Add the catchall
-
         sc.add( "else" );
 
         sc.add( "{" );
