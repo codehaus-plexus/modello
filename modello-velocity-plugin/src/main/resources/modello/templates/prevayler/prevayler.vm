@@ -1,0 +1,117 @@
+package ${package};
+
+import org.codehaus.stash.ObjectDatabase;
+import org.codehaus.stash.ObjectStore;
+
+/**
+ * Generated Prevayler storage mechanism for $model.name
+ * @author Mr Modello
+ */
+
+public class ${model.name}PrevaylerStore
+    extends ${extends}
+    implements Initializable, Startable
+{
+    private String databaseDirectory;
+
+    private static class Store
+        implements Serializable
+    {
+#foreach ( $class in $model.allClasses )
+#if ( $class.getMetadata( $id ).isStorable() )
+        private Map ${class.name}Map = new HashMap();
+#end
+#end
+    }
+
+    // ----------------------------------------------------------------------
+    // Transactions
+    // ----------------------------------------------------------------------
+
+#foreach ( $class in $model.allClasses )
+#if ( $class.getMetadata( $id ).isStorable() )
+    public class Add${class.name}
+        implements TransactionWithQuery
+    {
+        private final ${class.name} o;
+
+        public Add${class.name}( ${class.name} o )
+        {
+            this.o = o;
+        }
+
+        public Object executeAndQuery(Object prevalentSystem, Date executionTime)
+            throws Exception
+        {
+            Store system = (Store) prevalentSystem;
+
+            system.add${class.name}( o );
+
+            return o;
+        }
+    }
+
+    public class Remove${class.name}
+        implements Transaction
+    {
+        private ${class.name} o;
+
+        public Remove${class.name}( ${class.name} o )
+        {
+            this.o = o;
+        }
+
+        public void executeOn(Object prevalentSystem, Date executionTime)
+        {
+            Store system = (Store) prevalentSystem;
+
+            system.remove${class.name}( o );
+        }
+    }
+#end
+
+#end
+
+    // ----------------------------------------------------------------------
+    // Component Lifecycle
+    // ----------------------------------------------------------------------
+
+    public void initialize()
+        throws Exception
+    {
+    }
+
+    public void start()
+        throws ${model.name}StoreException
+    {
+    }
+
+    public void stop()
+        throws ${model.name}StoreException
+    {
+    }
+
+    // ----------------------------------------------------------------------
+    // Storage methods
+    // ----------------------------------------------------------------------
+
+#foreach ( $class in $model.allClasses )
+#if ( $class.getMetadata( $id ).isStorable() )
+    public void add${class.name}( $class.name entity )
+        throws StoreException
+    {
+    }
+
+    public void delete( String id )
+        throws StoreException
+    {
+    }
+
+    public void update( String id, $class.name entity )
+        throws StoreException
+    {
+    }
+#end
+
+#end
+}
