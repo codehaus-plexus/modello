@@ -74,6 +74,10 @@ public class JavaModelloGenerator
     {
         Model objectModel = getModel();
 
+        // ----------------------------------------------------------------------
+        // Generate the interfaces.
+        // ----------------------------------------------------------------------
+
         for ( Iterator i = objectModel.getInterfaces( getGeneratedVersion() ).iterator(); i.hasNext(); )
         {
             ModelInterface modelInterface = (ModelInterface) i.next();
@@ -131,6 +135,10 @@ public class JavaModelloGenerator
 
             writer.close();
         }
+
+        // ----------------------------------------------------------------------
+        // Generate the classes.
+        // ----------------------------------------------------------------------
 
         for ( Iterator i = objectModel.getClasses( getGeneratedVersion() ).iterator(); i.hasNext(); )
         {
@@ -344,9 +352,23 @@ public class JavaModelloGenerator
 
             sc.add( "}" );
 
+            sc.add( "" );
+
             sc.add( "this." + field.getName() + " = " + field.getName() + ";" );
 
+            sc.add( "" );
+
+            sc.add( "if ( " + field.getName() + " != null )" );
+
+            sc.add( "{" );
+
+            sc.indent();
+
             sc.add( "this." + field.getName() + ".create" + modelAssociation.getModelClass().getName() + "Association( this );" );
+
+            sc.unindent();
+
+            sc.add( "}" );
         }
         else
         {
@@ -371,13 +393,37 @@ public class JavaModelloGenerator
                 jField.setComment( modelAssociation.getComment() );
             }
 
-            jField.setInitString( modelAssociation.getDefaultValue() );
+            // TODO: if the association field isn't lazy initialized set the default
+//            jField.setInitString( modelAssociation.getDefaultValue() );
 
             jClass.addField( jField );
 
             if ( javaFieldMetadata.isGetter() )
             {
-                jClass.addMethod( createGetter( jField, modelAssociation ) );
+                // TODO: If the association field isn't lazy initialized create a normal getter
+                String propertyName = capitalise( jField.getName() );
+
+                JMethod getter = new JMethod( jField.getType(), "get" + propertyName );
+
+                JSourceCode sc = getter.getSourceCode();
+
+                sc.add( "if ( this." + jField.getName() + " == null )" );
+
+                sc.add( "{" );
+
+                sc.indent();
+
+                sc.add( "this." + jField.getName() + " = " + modelAssociation.getDefaultValue() + ";" );
+
+                sc.unindent();
+
+                sc.add( "}" );
+
+                sc.add( "" );
+
+                sc.add( "return this." + jField.getName() + ";" );
+
+                jClass.addMethod( getter );
             }
 
             if ( javaFieldMetadata.isSetter() )
@@ -387,7 +433,7 @@ public class JavaModelloGenerator
 
             if ( javaFieldMetadata.isAdder() )
             {
-                createAdder( jClass, modelAssociation );
+                createAdder( modelAssociation, jClass );
             }
         }
         else
@@ -419,11 +465,17 @@ public class JavaModelloGenerator
 
                 sc.add( "}" );
 
+                sc.add( "" );
+
                 sc.add( "this." + modelAssociation.getName() + " = " + uncapitalise( modelAssociation.getTo() ) + ";" );
             }
             else
             {
-                sc.add( "if ( this." + modelAssociation.getName() + ".contains(" + uncapitalise( modelAssociation.getTo() ) + ") )" );
+                sc.add( "Collection " + modelAssociation.getName() + " = get" + capitalise( modelAssociation.getName() ) + "();" );
+
+                sc.add( "" );
+
+                sc.add( "if ( " + modelAssociation.getName() + ".contains(" + uncapitalise( modelAssociation.getTo() ) + ") )" );
 
                 sc.add( "{" );
 
@@ -435,7 +487,9 @@ public class JavaModelloGenerator
 
                 sc.add( "}" );
 
-                sc.add( "this." + modelAssociation.getName() + ".add( " + uncapitalise( modelAssociation.getTo() ) + " );" );
+                sc.add( "" );
+
+                sc.add( modelAssociation.getName() + ".add( " + uncapitalise( modelAssociation.getTo() ) + " );" );
             }
 
             jClass.addMethod( createMethod );
@@ -462,6 +516,8 @@ public class JavaModelloGenerator
 
                 sc.add( "}" );
 
+                sc.add( "" );
+
                 sc.add( "this." + modelAssociation.getName() + " = null;" );
             }
             else
@@ -478,14 +534,16 @@ public class JavaModelloGenerator
 
                 sc.add( "}" );
 
-                sc.add( "this." + modelAssociation.getName() + ".remove( " + uncapitalise( modelAssociation.getTo() ) + " );" );
+                sc.add( "" );
+
+                sc.add( "get" + capitalise( modelAssociation.getName() ) + "().remove( " + uncapitalise( modelAssociation.getTo() ) + " );" );
             }
 
             jClass.addMethod( breakMethod );
         }
     }
 
-    private void createAdder( JClass jClass, ModelAssociation modelAssociation )
+    private void createAdder( ModelAssociation modelAssociation, JClass jClass )
     {
         String fieldName = modelAssociation.getName();
 
@@ -504,8 +562,8 @@ public class JavaModelloGenerator
             addType = new JClass( "String" );
         }
 
-        if ( modelAssociation.getType().equals( ModelDefault.PROPERTIES )
-            || modelAssociation.getType().equals( ModelDefault.MAP ) )
+        if ( modelAssociation.getType().equals( ModelDefault.PROPERTIES ) ||
+             modelAssociation.getType().equals( ModelDefault.MAP ) )
         {
             JMethod adder = new JMethod( null, "add" + capitalise( singular( fieldName ) ) );
 
@@ -520,7 +578,7 @@ public class JavaModelloGenerator
 
             adder.addParameter( new JParameter( new JClass( modelAssociation.getTo() ), "value" ) );
 
-            adder.getSourceCode().add( "this." + fieldName + ".put( key, value );" );
+            adder.getSourceCode().add( "get" + capitalise( fieldName ) + "().put( key, value );" );
 
             jClass.addMethod( adder );
         }
@@ -530,7 +588,7 @@ public class JavaModelloGenerator
 
             adder.addParameter( new JParameter( addType, parameterName ) );
 
-            adder.getSourceCode().add( "this." + fieldName + ".add( " + parameterName + " );" );
+            adder.getSourceCode().add( "get" + capitalise( fieldName ) + "().add( " + parameterName + " );" );
 
             if ( bidirectionalAssociation )
             {
@@ -552,7 +610,7 @@ public class JavaModelloGenerator
                 remover.getSourceCode().add( parameterName + ".break" + modelAssociation.getModelClass().getName() + "Association( this );" );
             }
 
-            remover.getSourceCode().add( "this." + fieldName + ".remove( " + parameterName + " );" );
+            remover.getSourceCode().add( "get" + capitalise( fieldName ) + "().remove( " + parameterName + " );" );
 
             jClass.addMethod( remover );
         }
@@ -562,28 +620,34 @@ public class JavaModelloGenerator
     {
         Model model = association.getModelClass().getModel();
 
-        if ( isClassInModel( association.getTo(), model ) )
+        if ( !isClassInModel( association.getTo(), model ) )
         {
-            ModelClass toClass = association.getToClass();
+            return false;
+        }
 
-            for ( Iterator j = toClass.getFields( getGeneratedVersion() ).iterator(); j.hasNext(); )
+        ModelClass toClass = association.getToClass();
+
+        for ( Iterator j = toClass.getFields( getGeneratedVersion() ).iterator(); j.hasNext(); )
+        {
+            ModelField modelField = (ModelField) j.next();
+
+            if ( !( modelField instanceof ModelAssociation ) )
             {
-                ModelField modelField = (ModelField) j.next();
+                continue;
+            }
 
-                if ( modelField instanceof ModelAssociation )
-                {
-                    ModelAssociation modelAssociation = (ModelAssociation) modelField;
+            ModelAssociation modelAssociation = (ModelAssociation) modelField;
 
-                    if ( isClassInModel( modelAssociation.getTo(), model ) )
-                    {
-                        ModelClass totoClass = modelAssociation.getToClass();
+            if ( !isClassInModel( modelAssociation.getTo(), model ) )
+            {
+                continue;
+            }
 
-                        if ( association.getModelClass().equals( totoClass ) )
-                        {
-                            return true;
-                        }
-                    }
-                }
+            ModelClass totoClass = modelAssociation.getToClass();
+
+            if ( association.getModelClass().equals( totoClass ) )
+            {
+                return true;
             }
         }
 
