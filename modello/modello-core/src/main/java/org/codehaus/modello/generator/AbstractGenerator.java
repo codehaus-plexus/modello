@@ -16,6 +16,8 @@ import java.io.StringReader;
 import java.io.IOException;
 import java.io.FileInputStream;
 
+// Possibly a general package extension for things like reader/writer
+
 /**
  *
  *

@@ -35,11 +35,11 @@ public class Xpp3UnmarshallerGenerator
     {
         Model objectModel = getModel();
 
-        String packageName = objectModel.getPackageName();
+        String packageName = objectModel.getPackageName() + ".io.xpp3";
 
         String directory = packageName.replace( '.', '/' );
 
-        String unmarshallerName = objectModel.getName() + "Xpp3Unmarshaller";
+        String unmarshallerName = objectModel.getName() + "Xpp3Reader";
 
         File f = new File( new File( getOutputDirectory(), directory ), unmarshallerName + ".java" );
 
@@ -70,12 +70,12 @@ public class Xpp3UnmarshallerGenerator
         {
             ModelClass modelClass = (ModelClass) i.next();
 
-            jClass.addImport( packageName + "." + modelClass.getName() );
+            jClass.addImport( objectModel.getPackageName() + "." + modelClass.getName() );
         }
 
         // Write the parse method which will do the unmarshalling.
 
-        JMethod unmarshall = new JMethod( new JClass( "Model" ), "unmarshall" );
+        JMethod unmarshall = new JMethod( new JClass( "Model" ), "read" );
 
         unmarshall.addParameter( new JParameter( new JClass( "Reader" ), "reader" ) );
 

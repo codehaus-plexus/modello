@@ -37,11 +37,11 @@ public class Xpp3MarshallerGenerator
     {
         Model objectModel = getModel();
 
-        String packageName = objectModel.getPackageName();
+        String packageName = objectModel.getPackageName() + ".io.xpp3";
 
         String directory = packageName.replace( '.', '/' );
 
-        String marshallerName = objectModel.getName() + "Xpp3Marshaller";
+        String marshallerName = objectModel.getName() + "Xpp3Writer";
 
         File f = new File( new File( getOutputDirectory(), directory ), marshallerName + ".java" );
 
@@ -60,7 +60,7 @@ public class Xpp3MarshallerGenerator
 
         jClass.addImport( "org.xmlpull.v1.XmlPullParser" );
 
-        jClass.addImport( "org.xmlpull.v1.XmlPullParserException" );
+        //jClass.addImport( "org.xmlpull.v1.XmlPullParserException" );
 
         jClass.addImport( "org.xmlpull.v1.XmlPullParserFactory" );
 
@@ -71,6 +71,10 @@ public class Xpp3MarshallerGenerator
         jClass.addField( new JField( new JClass( "org.xmlpull.v1.XmlSerializer" ), "serializer" ) );
 
         jClass.addField( new JField( new JClass( "String" ), "NAMESPACE" ) );
+
+        /*
+
+        There doesn't seem to be a way to add exceptions to constructors, we'll have to tweak javasource.
 
         JConstructor constructor = new JConstructor( jClass );
 
@@ -83,6 +87,7 @@ public class Xpp3MarshallerGenerator
         constructor.getSourceCode().add( "serializer.setProperty( \"http://xmlpull.org/v1/doc/properties.html#serializer-line-separator\", \"\\n\" );" );
 
         jClass.addConstructor( constructor );
+        */
 
         // Add imports for classes within the model we need to marshall.
 
@@ -90,28 +95,40 @@ public class Xpp3MarshallerGenerator
         {
             ModelClass modelClass = (ModelClass) i.next();
 
-            jClass.addImport( packageName + "." + modelClass.getName() );
+            jClass.addImport( objectModel.getPackageName() + "." + modelClass.getName() );
         }
+
+        String root = objectModel.getRoot();
+
+        String rootElement = uncapitalise( root );
 
         // Write the parse method which will do the unmarshalling.
 
-        JMethod marshall = new JMethod( null, "marshall" );
+        JMethod marshall = new JMethod( null, "write" );
 
         marshall.addParameter( new JParameter( new JClass( "Writer" ), "writer" ) );
 
-        marshall.addParameter( new JParameter( new JClass( "Model" ), "model" ) );
+        marshall.addParameter( new JParameter( new JClass( root ), "model" ) );
 
         marshall.addException( new JClass( "Exception" ) );
 
         JSourceCode sc = marshall.getSourceCode();
 
+        sc.add( "XmlPullParserFactory factory = XmlPullParserFactory.newInstance( System.getProperty( XmlPullParserFactory.PROPERTY_NAME ), null );" );
+
+        sc.add( "serializer = factory.newSerializer();" );
+
+        sc.add( "serializer.setProperty( \"http://xmlpull.org/v1/doc/properties.html#serializer-indentation\", \"  \" );" );
+
+        sc.add( "serializer.setProperty( \"http://xmlpull.org/v1/doc/properties.html#serializer-line-separator\", \"\\n\" );" );
+
         sc.add( "serializer.setOutput( writer );" );
 
-        sc.add( "serializer.startTag( NAMESPACE, \"model\" );" );
+        sc.add( "serializer.startTag( NAMESPACE, \"" + rootElement + "\" );" );
 
         writeClassParsing( (ModelClass) objectModel.getClasses().get( 0 ), sc, objectModel );
 
-        sc.add( "serializer.endTag( NAMESPACE, \"model\" );" );
+        sc.add( "serializer.endTag( NAMESPACE, \"" + rootElement + "\" );" );
 
         jClass.addMethod( marshall );
 
@@ -152,7 +169,17 @@ public class Xpp3MarshallerGenerator
 
             sc.add( className + " " + fieldName + " = " + modelClassName + ".get" + className + "();" );
 
+            sc.add( "if ( " + fieldName + " != null )" );
+
+            sc.add( "{" );
+
+            sc.indent();
+
             writeClassParsing( objectModel.getClass( type ), sc, objectModel );
+
+            sc.unindent();
+
+            sc.add( "}" );
 
             sc.add( "serializer.endTag( NAMESPACE, " + "\"" + fieldName + "\" );" );
 
@@ -169,11 +196,16 @@ public class Xpp3MarshallerGenerator
         else
         {
             sc.add( "if ( " + modelClassName + ".get" + className + "() != null )" );
+
             sc.add( "{" );
+
             sc.indent();
+
             sc.add( "serializer.startTag( NAMESPACE, " + "\"" +fieldName + "\" ).text( " +
                     modelClassName + ".get" + className + "() ).endTag( NAMESPACE, " + "\"" + fieldName + "\" );" );
+
             sc.unindent();
+
             sc.add( "}" );
         }
     }
