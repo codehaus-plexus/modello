@@ -18,4 +18,7 @@ public interface ModelloTranslator
 {
     Model translate( Reader reader, Properties parameters )
         throws ModelloException;
+
+    void translate( Model model, Properties parameters )
+        throws ModelloException;
 }
