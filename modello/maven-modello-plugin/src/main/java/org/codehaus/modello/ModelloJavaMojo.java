@@ -32,7 +32,7 @@ package org.codehaus.mojo.modello;
  *  type="java.lang.String"
  *  required="true"
  *  validator=""
- *  expression="#project.build.sourceDirectory"
+ *  expression="#basedir/target/generated-sources"
  *  description=""
  * @parameter
  *  name="model"
