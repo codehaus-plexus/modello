@@ -305,7 +305,9 @@ public class JavaModelloGenerator
     {
         String propertyName = capitalise( field.getName() );
 
-        JMethod getter = new JMethod( field.getType(), "get" + propertyName );
+        String prefix = modelField.getType().equals( "boolean" ) ? "is" : "get";
+
+        JMethod getter = new JMethod( field.getType(), prefix + propertyName );
 
         getter.getSourceCode().add( "return this." + field.getName() + ";" );
 
