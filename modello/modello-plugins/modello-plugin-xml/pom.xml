@@ -5,6 +5,6 @@
     <groupId>org.codehaus.modello</groupId>
     <version>1.0-alpha-1</version>
   </parent>
-  <artifactId>modello-xml-plugin</artifactId>
+  <artifactId>modello-plugin-xml</artifactId>
   <name>Modello XML Plugin</name>
 </project>
