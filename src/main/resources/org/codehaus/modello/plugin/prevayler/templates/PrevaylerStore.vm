@@ -1,11 +1,18 @@
 package ${package};
 
+import java.io.Serializable;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
+import org.codehaus.plexus.personality.plexus.lifecycle.phase.Startable;
+
 import org.prevayler.*;
-import org.prevayler.implementation.*;
-import org.prevayler.convenience.*;
 
 /**
- * Generated Prevayler storage mechanism for $model.name
+ * Generated Prevayler storage mechanism for ${model.name}.
+ *
  * @author Mr Modello
  */
 public class ${model.name}PrevaylerStore
@@ -17,18 +24,20 @@ public class ${model.name}PrevaylerStore
 
     private Store store;
 
-    static class Store
+    private static class Store
         implements Serializable
     {
 #foreach ( $class in $model.allClasses )
 #if ( $class.getMetadata( $storeMetadataId ).isStorable() )
         private Map ${class.name}Map = new HashMap();
 
-        void add${class.name}( ${class.name} o ) { ${class.name}Map.put( o.getId(), o ); }
+        void add${class.name}( Object id, ${class.name} o ) { ${class.name}Map.put( id, o ); }
 
-        void update${class.name}( ${class.name} o ) { ${class.name}Map.put( o. getId(), o ) }
+        void update${class.name}( Object id, ${class.name} o ) { ${class.name}Map.put( id, o ); }
 
-        void delete${class.name}( ${class.name} o ) { ${class.name}Map.remove( o.getId() ) }
+        void delete${class.name}( Object id ) { ${class.name}Map.remove( id ); }
+
+        ${class.name} get${class.name}( Object id ) { return (${class.name}) ${class.name}Map.get( id ); }
 #end
 
 #end
@@ -40,13 +49,17 @@ public class ${model.name}PrevaylerStore
     // ${class.name} Transactions
     // ----------------------------------------------------------------------
 
-    public class Add${class.name}
+    private static class Add${class.name}
         implements TransactionWithQuery
     {
+        private final Object id;
+
         private final ${class.name} o;
 
-        public Add${class.name}( ${class.name} o )
+        public Add${class.name}( Object id, ${class.name} o )
         {
+            this.id = id;
+
             this.o = o;
         }
 
@@ -55,19 +68,23 @@ public class ${model.name}PrevaylerStore
         {
             Store system = (Store) prevalentSystem;
 
-            system.add${class.name}( o );
+            system.add${class.name}( id, o );
 
             return o;
         }
     }
 
-    public class Update${class.name}
+    private static class Update${class.name}
         implements TransactionWithQuery
     {
+        private final Object id;
+
         private final ${class.name} o;
 
-        public Update${class.name}( ${class.name} o )
+        public Update${class.name}( Object id, ${class.name} o )
         {
+            this.id = id;
+
             this.o = o;
         }
 
@@ -76,33 +93,32 @@ public class ${model.name}PrevaylerStore
         {
             Store system = (Store) prevalentSystem;
 
-            system.update${class.name}( o );
+            system.update${class.name}( id, o );
 
             return o;
         }
     }
 
-    public class Delete${class.name}
+    private static class Delete${class.name}
         implements Transaction
     {
-        private ${class.name} o;
+        private final Object id;
 
-        public Remove${class.name}( ${class.name} o )
+        public Delete${class.name}( Object id )
         {
-            this.o = o;
+            this.id = id;
         }
 
-        public void executeOn(Object prevalentSystem, Date executionTime)
+        public void executeOn( Object prevalentSystem, Date executionTime )
         {
             Store system = (Store) prevalentSystem;
 
-            system.delete${class.name}( o );
+            system.delete${class.name}( id );
         }
     }
 #end
 
 #end
-
     // ----------------------------------------------------------------------
     // Component Lifecycle
     // ----------------------------------------------------------------------
@@ -112,17 +128,19 @@ public class ${model.name}PrevaylerStore
     {
         prevayler = PrevaylerFactory.createPrevayler( new Store(), databaseDirectory );
 
-        store = (Store) prevayler.prevaylentSystem();
+        store = (Store) prevayler.prevalentSystem();
     }
 
     public void start()
-        throws ${model.name}StoreException
+##        throws ${model.name}StoreException
     {
     }
 
     public void stop()
-        throws ${model.name}StoreException
+        throws Exception
+##        throws ${model.name}StoreException
     {
+        prevayler.close();
     }
 
 #foreach ( $class in $model.allClasses )
@@ -131,26 +149,26 @@ public class ${model.name}PrevaylerStore
     // ${class.name} CRUD
     // ----------------------------------------------------------------------
 
-    public ${class.name} add${class.name}( $class.name o )
-        throws StoreException
+    public ${class.name} add${class.name}( Object id, $class.name o )
+        throws Exception
     {
-        return prevayler.execute( new Add${class.name}( o ) );
+        return (${class.name}) prevayler.execute( new Add${class.name}( id, o ) );
     }
 
-    public ${class.name} update${class.name}( String id, $class.name o )
-        throws StoreException
+    public ${class.name} update${class.name}( Object id, $class.name o )
+        throws Exception
     {
-        return prevayler.execute( new Update${class.name}( o ) );
+        return (${class.name}) prevayler.execute( new Update${class.name}( id, o ) );
     }
 
-    public void delete${class.name}( String id )
-        throws StoreException
+    public void delete${class.name}( Object id )
+        throws Exception
     {
         prevayler.execute( new Delete${class.name}( id ) );
     }
 
-    public ${class.name} get${class.name}( String id )
-        throws StoreException
+    public ${class.name} get${class.name}( Object id )
+        throws Exception
     {
         return store.get${class.name}( id );
     }
