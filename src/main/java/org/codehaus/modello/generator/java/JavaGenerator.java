@@ -23,18 +23,9 @@ import java.util.Iterator;
 public class JavaGenerator
     extends AbstractGenerator
 {
-    private boolean version;
-
-    public JavaGenerator( String model, String outputDirectory, String modelVersion )
+    public JavaGenerator( String model, String outputDirectory, String modelVersion, boolean packageWithVersion )
     {
-        this( model, outputDirectory, modelVersion, false );
-    }
-
-    public JavaGenerator( String model, String outputDirectory, String modelVersion, boolean version )
-    {
-        super( model, outputDirectory, modelVersion );
-
-        this.version = version;
+        super( model, outputDirectory, modelVersion, packageWithVersion );
     }
 
     protected String getBasePackageName( Model model )
@@ -43,7 +34,7 @@ public class JavaGenerator
 
         sb.append( model.getPackageName() );
 
-        if ( version )
+        if ( isPackageWithVersion() )
         {
             sb.append( "." );
 

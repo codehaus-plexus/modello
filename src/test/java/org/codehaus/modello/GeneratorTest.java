@@ -27,7 +27,7 @@ public class GeneratorTest
     public void testJavaGenerator()
         throws Exception
     {
-        JavaGenerator generator = new JavaGenerator( model, new File( outputDirectory, "java" ).getPath(), "4.0.0" );
+        JavaGenerator generator = new JavaGenerator( model, new File( outputDirectory, "java" ).getPath(), "4.0.0", false );
 
         generator.generate();
     }
@@ -35,7 +35,7 @@ public class GeneratorTest
     public void testXmlSchemaGenerator()
         throws Exception
     {
-        XmlSchemaGenerator generator = new XmlSchemaGenerator( model, new File( outputDirectory, "xsd" ).getPath(), "4.0.0" );
+        XmlSchemaGenerator generator = new XmlSchemaGenerator( model, new File( outputDirectory, "xsd" ).getPath(), "4.0.0", false );
 
         generator.generate();
     }
@@ -43,7 +43,7 @@ public class GeneratorTest
     public void testXdocGenerator()
         throws Exception
     {
-        XdocGenerator generator = new XdocGenerator( model, new File( outputDirectory, "xdoc" ).getPath(), "4.0.0" );
+        XdocGenerator generator = new XdocGenerator( model, new File( outputDirectory, "xdoc" ).getPath(), "4.0.0", false );
 
         generator.generate();
     }
@@ -51,7 +51,7 @@ public class GeneratorTest
     public void testXpp3UnmarshallerGenerator()
         throws Exception
     {
-        Xpp3ReaderGenerator generator = new Xpp3ReaderGenerator( model, new File( outputDirectory, "xpp3" ).getPath(), "4.0.0" );
+        Xpp3ReaderGenerator generator = new Xpp3ReaderGenerator( model, new File( outputDirectory, "xpp3" ).getPath(), "4.0.0", false );
 
         generator.generate();
     }
@@ -59,7 +59,7 @@ public class GeneratorTest
     public void testXpp3MarshallerGenerator()
         throws Exception
     {
-        Xpp3WriterGenerator generator = new Xpp3WriterGenerator( model, new File( outputDirectory, "xpp3" ).getPath(), "4.0.0" );
+        Xpp3WriterGenerator generator = new Xpp3WriterGenerator( model, new File( outputDirectory, "xpp3" ).getPath(), "4.0.0", false );
 
         generator.generate();
     }

@@ -141,14 +141,14 @@ public class JType
      **/
     public boolean isPrimitive()
     {
-        return ( ( this == this.Boolean ) ||
-            ( this == this.Byte ) ||
-            ( this == this.Char ) ||
-            ( this == this.Double ) ||
-            ( this == this.Float ) ||
-            ( this == this.Int ) ||
-            ( this == this.Long ) ||
-            ( this == this.Short ) );
+        return ( ( this == Boolean ) ||
+            ( this == Byte ) ||
+            ( this == Char ) ||
+            ( this == Double ) ||
+            ( this == Float ) ||
+            ( this == Int ) ||
+            ( this == Long ) ||
+            ( this == Short ) );
     } //-- isPrimitive
 
     /**

@@ -1,5 +1,9 @@
 package org.codehaus.modello.generator.xml.xpp3;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.util.List;
+
 import org.codehaus.modello.Model;
 import org.codehaus.modello.ModelClass;
 import org.codehaus.modello.ModelField;
@@ -10,11 +14,6 @@ import org.codehaus.modello.generator.java.javasource.JParameter;
 import org.codehaus.modello.generator.java.javasource.JSourceCode;
 import org.codehaus.modello.generator.java.javasource.JSourceWriter;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.util.Iterator;
-import java.util.List;
-
 /**
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
  * @version $Id$
@@ -22,14 +21,9 @@ import java.util.List;
 public class Xpp3ReaderGenerator
     extends JavaGenerator
 {
-    public Xpp3ReaderGenerator( String model, String outputDirectory, String modelVersion, boolean version )
+    public Xpp3ReaderGenerator( String model, String outputDirectory, String modelVersion, boolean packageWithVersion )
     {
-        super( model, outputDirectory, modelVersion, version );
-    }
-
-    public Xpp3ReaderGenerator( String model, String outputDirectory, String modelVersion )
-    {
-        super( model, outputDirectory, modelVersion );
+        super( model, outputDirectory, modelVersion, packageWithVersion );
     }
 
     public void generate()
