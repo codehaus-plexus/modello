@@ -1,0 +1,9 @@
+<component-set>
+  <components>
+    <component>
+      <role>org.codehaus.modello.plugin.ModelloGenerator</role>
+      <role-hint>hibernate</role-hint>
+      <implementation>org.codehaus.modello.plugins.hibernate.HibernateModelloGenerator</implementation>
+    </component>
+  </components>
+</component-set>
