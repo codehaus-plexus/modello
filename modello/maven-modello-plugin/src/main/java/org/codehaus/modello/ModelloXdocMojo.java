@@ -27,6 +27,14 @@ package org.codehaus.modello;
  *
  * @description Creates XPP3 writer from the model.
  *
+ * @parameter
+ * name="basedir"
+ * type="java.lang.String"
+ * required="true"
+ * validator=""
+ * expression="#basedir"
+ * description=""
+ *
  * @parameter name="outputDirectory"
  * type="java.lang.String"
  * required="true"
