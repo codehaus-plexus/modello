@@ -13,6 +13,10 @@ public class BaseElement
 
     String description;
 
+    String version;
+
+    String comment;
+
     public String getName()
     {
         return name;
@@ -21,5 +25,15 @@ public class BaseElement
     public String getDescription()
     {
         return description;
+    }
+
+    public String getVersion()
+    {
+        return version;
+    }
+
+    public String getComment()
+    {
+        return comment;
     }
 }
