@@ -61,8 +61,6 @@ public class LdapSchemaModelloGenerator
 
     private Map attributeTypes = new HashMap();
 
-    private static final String FIELD_METADATA_OID = "ldap.iod";
-
     // ----------------------------------------------------------------------
     // AbstractModelloGenerator Implementation
     // ----------------------------------------------------------------------
@@ -181,21 +179,21 @@ public class LdapSchemaModelloGenerator
 
             printer.println( "attributetype (" );
             printer.println( "    " + attributeType.getOid() );
-            printer.println( "    NAME '" + attributeType.getName() + "'." );
+            printer.println( "    NAME '" + attributeType.getName() + "'" );
 
             if ( !StringUtils.isEmpty( attributeType.getDescription() ) )
             {
-                printer.println( "    DESC '" + attributeType.getDescription() + "'." );
+                printer.println( "    DESC '" + attributeType.getDescription() + "'" );
             }
 
             if ( !StringUtils.isEmpty( attributeType.getEquality() ) )
             {
-                printer.println( "    EQUALITY '" + attributeType.getEquality() + "'." );
+                printer.println( "    EQUALITY '" + attributeType.getEquality() + "'" );
             }
 
             if ( !StringUtils.isEmpty( attributeType.getSubString() ) )
             {
-                printer.println( "    SUBSTR '" + attributeType.getSubString() + "'." );
+                printer.println( "    SUBSTR '" + attributeType.getSubString() + "'" );
             }
 
             if ( attributeType.getLength() == 0 )
@@ -238,7 +236,7 @@ public class LdapSchemaModelloGenerator
 
             printAttributeList( printer, "MUST", objectClass.getRequiredAttributes() );
 
-            printAttributeList( printer, "MAY", objectClass.getRequiredAttributes() );
+            printAttributeList( printer, "MAY", objectClass.getNotRequiredAttributes() );
 
             printer.println( ")" );
             printer.println( "" );
@@ -340,9 +338,9 @@ public class LdapSchemaModelloGenerator
             {
                 AttributeType attributeType = (AttributeType) it2.next();
 
-                printer.print( "    " + attributeType.getName() );
+                printer.print( "        " + attributeType.getName() );
 
-                if ( i != attributes.size() - 2 )
+                if ( i != attributes.size() - 1 )
                 {
                     printer.println( " $" );
                 }
