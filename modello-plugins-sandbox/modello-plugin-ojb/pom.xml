@@ -1,29 +1,23 @@
-<model>
-  <parent>
-    <artifactId>modello-plugins</artifactId>
-    <groupId>modello</groupId>
-    <version>1.0-alpha-1-SNAPSHOT</version>
-  </parent>
+<project>
   <modelVersion>4.0.0</modelVersion>
-  <groupId>modello</groupId>
+  <parent>
+    <groupId>org.codehaus.modello</groupId>
+    <artifactId>modello-plugins-sandbox</artifactId>
+    <version>1.0-alpha-2-SNAPSHOT</version>
+  </parent>
   <artifactId>modello-plugin-ojb</artifactId>
-  <packaging>jar</packaging>
+  <version>1.0-alpha-2-SNAPSHOT</version>
   <name>Modello OJB Plugin</name>
-  <version>1.0-alpha-1-SNAPSHOT</version>
   <dependencies>
     <dependency>
       <groupId>plexus</groupId>
       <artifactId>plexus-velocity</artifactId>
       <version>1.0</version>
-      <type>jar</type>
-      <scope>compile</scope>
     </dependency>
     <dependency>
-      <groupId>modello</groupId>
+      <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-plugin-store</artifactId>
-      <version>1.0-alpha-1-SNAPSHOT</version>
-      <type>jar</type>
-      <scope>compile</scope>
+      <version>1.0-alpha-2-SNAPSHOT</version>
     </dependency>
   </dependencies>
-</model>
+</project>
