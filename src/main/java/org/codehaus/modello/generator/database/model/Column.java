@@ -1,7 +1,7 @@
 package org.codehaus.modello.generator.database.model;
 
 /*
- * Copyright (c) 2004, Jason van Zyl
+ * Copyright (c) 2004, Codehaus.org
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -21,7 +21,6 @@ package org.codehaus.modello.generator.database.model;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
 
 public class Column
 {
