@@ -90,110 +90,117 @@ public class JavaGenerator
 
                     }
 
-                    org.codehaus.modello.generator.java.javasource.JType jType;
+                    JType jType;
 
-                    if ( fieldType.equals( "boolean" ) )
+                    // If we are delegating then we don't need a field and we want the setter and getter
+                    // to point to the delegate.
+
+                    if ( modelField.getDelegateTo() != null )
                     {
-                        jType = JType.Boolean;
-                    }
-                    else
-                    {
-                        jType = new JClass( fieldType );
-                    }
 
-                    // Field
-
-                    JField jField = new JField( jType, fieldName );
-
-                    if ( modelField.getDefaultValue() != null )
-                    {
-                        if ( modelField.getType().equals( "String" ) )
+                        if ( fieldType.equals( "boolean" ) )
                         {
-                            jField.setInitString( "\"" + modelField.getDefaultValue() + "\"" );
+                            jType = JType.Boolean;
                         }
                         else
                         {
-                            jField.setInitString( modelField.getDefaultValue() );
+                            jType = new JClass( fieldType );
                         }
-                    }
 
-                    jClass.addField( jField );
+                        // Field
 
-                    // Properties
+                        JField jField = new JField( jType, fieldName );
 
-                    String propertyName = capitalise( fieldName );
-
-                    // Getter
-
-                    JMethod getter = new JMethod( jType, "get" + propertyName );
-
-                    getter.getSourceCode().add( "return this." + fieldName + ";" );
-
-                    jClass.addMethod( getter );
-
-                    // Setter
-
-                    JMethod setter = new JMethod( null, "set" + propertyName );
-
-                    setter.addParameter( new JParameter( jType, fieldName ) );
-
-                    setter.getSourceCode().add( "this." + fieldName + " = " + fieldName + ";" );
-
-                    jClass.addMethod( setter );
-
-                    // Add method
-
-                    if ( isCollection( fieldType ) )
-                    {
-                        String parameterName = singular( fieldName );
-
-                        String className = capitalise( parameterName );
-
-                        JType addType;
-
-                        if ( objectModel.getClassNames().contains( className ) )
+                        if ( modelField.getDefaultValue() != null )
                         {
-                            addType = new org.codehaus.modello.generator.java.javasource.JClass( className );
+                            if ( modelField.getType().equals( "String" ) )
+                            {
+                                jField.setInitString( "\"" + modelField.getDefaultValue() + "\"" );
+                            }
+                            else
+                            {
+                                jField.setInitString( modelField.getDefaultValue() );
+                            }
                         }
-                        else
+
+                        jClass.addField( jField );
+
+                        // Properties
+
+                        String propertyName = capitalise( fieldName );
+
+                        // Getter
+
+                        JMethod getter = new JMethod( jType, "get" + propertyName );
+
+                        getter.getSourceCode().add( "return this." + fieldName + ";" );
+
+                        jClass.addMethod( getter );
+
+                        // Setter
+
+                        JMethod setter = new JMethod( null, "set" + propertyName );
+
+                        setter.addParameter( new JParameter( jType, fieldName ) );
+
+                        setter.getSourceCode().add( "this." + fieldName + " = " + fieldName + ";" );
+
+                        jClass.addMethod( setter );
+
+                        // Add method
+
+                        if ( isCollection( fieldType ) )
                         {
-                            addType = new org.codehaus.modello.generator.java.javasource.JClass( "String" );
+                            String parameterName = singular( fieldName );
+
+                            String className = capitalise( parameterName );
+
+                            JType addType;
+
+                            if ( objectModel.getClassNames().contains( className ) )
+                            {
+                                addType = new JClass( className );
+                            }
+                            else
+                            {
+                                addType = new JClass( "String" );
+                            }
+
+                            JMethod adder = new JMethod( null, "add" + className );
+
+                            adder.addParameter( new JParameter( addType, parameterName ) );
+
+                            adder.getSourceCode().add( fieldName + ".add( " + parameterName + " );" );
+
+                            jClass.addMethod( adder );
                         }
 
-                        JMethod adder = new JMethod( null, "add" + className );
+                        if ( fieldType.equals( "java.util.Properties" ) )
+                        {
+                            String parameterName = singular( fieldName );
 
-                        adder.addParameter( new JParameter( addType, parameterName ) );
+                            String className = capitalise( parameterName );
 
-                        adder.getSourceCode().add( fieldName + ".add( " + parameterName + " );" );
+                            JType addType = new JClass( "String" );
 
-                        jClass.addMethod( adder );
+                            JMethod adder = new JMethod( null, "add" + className );
+
+                            adder.addParameter( new JParameter( addType, "name" ) );
+
+                            adder.addParameter( new JParameter( addType, "value" ) );
+
+                            adder.getSourceCode().add( fieldName + ".setProperty( name, value );" );
+
+                            jClass.addMethod( adder );
+                        }
+
+                        count++;
                     }
 
-                    if ( fieldType.equals( "java.util.Properties" ) )
+                    if ( modelClass.getCode() != null )
                     {
-                        String parameterName = singular( fieldName );
-
-                        String className = capitalise( parameterName );
-
-                        JType addType = new JClass( "String" );
-
-                        JMethod adder = new JMethod( null, "add" + className );
-
-                        adder.addParameter( new JParameter( addType, "name" ) );
-
-                        adder.addParameter( new JParameter( addType, "value" ) );
-
-                        adder.getSourceCode().add( fieldName + ".setProperty( name, value );" );
-
-                        jClass.addMethod( adder );
+                        jClass.setSourceCode( modelClass.getCode() );
                     }
-
-                    count++;
-                }
-
-                if ( modelClass.getCode() != null )
-                {
-                    jClass.setSourceCode( modelClass.getCode() );
                 }
             }
 
