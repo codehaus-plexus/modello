@@ -41,8 +41,6 @@ public class Model
 {
     private String id;
 
-    private String packageName;
-
     private String root;
 
     private List classes = new ArrayList();
@@ -84,12 +82,15 @@ public class Model
 
     public String getPackageName()
     {
-        return packageName;
-    }
-
-    public void setPackageName( String packageName )
-    {
-        this.packageName = packageName;
+        try
+        {
+            return getDefault( ModelDefault.PACKAGE ).getValue();
+        }
+        catch( ModelValidationException mve )
+        {
+        }
+        
+        return "";
     }
 
     public List getAllClasses()

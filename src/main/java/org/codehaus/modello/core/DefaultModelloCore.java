@@ -41,6 +41,7 @@ import org.codehaus.modello.model.CodeSegment;
 import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
+import org.codehaus.modello.model.ModelDefault;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.ModelValidationException;
 import org.codehaus.modello.plugin.ModelloGenerator;
@@ -193,6 +194,13 @@ System.out.println( "Plugin : " + plugin.getClass().getName() );
         // ----------------------------------------------------------------------
 
         model.validate();
+
+        for( Iterator defaults = model.getDefaults().iterator(); defaults.hasNext(); )
+        {
+            ModelDefault modelDefault = (ModelDefault) defaults.next();
+
+            modelDefault.validateElement();
+        }
 
         for( Iterator classes = model.getAllClasses().iterator(); classes.hasNext(); )
         {
