@@ -502,7 +502,14 @@ public class Xpp3ReaderGenerator
 
                             sc.indent();
 
-                            sc.add( "value = parser.nextText();" );
+                            sc.add( "value = parser.nextText()" );
+
+                            if ( fieldMetadata.isTrim() )
+                            {
+                                sc.add( ".trim()" );
+                            }
+
+                            sc.add( ";" );
 
                             sc.unindent();
 
@@ -548,7 +555,14 @@ public class Xpp3ReaderGenerator
 
                             sc.add( "String key = parser.getName();" );
 
-                            sc.add( "String value = parser.nextText();" );
+                            sc.add( "String value = parser.nextText()" );
+
+                            if ( fieldMetadata.isTrim() )
+                            {
+                                sc.add( ".trim()" );
+                            }
+
+                            sc.add( ";" );
 
                             sc.add( uncapClassName + ".add" + capitalise( singularName ) + "( key, value );" );
 
@@ -637,6 +651,11 @@ public class Xpp3ReaderGenerator
         else
         {
             parserGetter = "parser.nextText()";
+
+            if ( fieldMetaData.isTrim() )
+            {
+                parserGetter += ".trim()";
+            }
         }
 
         if ( "boolean".equals( type ) )
