@@ -236,6 +236,10 @@ public class HibernateModelloGenerator
                 w.addAttribute( "length", length );
             }
         }
+        else if("Boolean".equals(type))
+        {
+            w.addAttribute( "type", "boolean" );
+        }
         else
         {
             w.addAttribute( "type", type );
