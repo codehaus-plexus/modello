@@ -382,7 +382,7 @@ public class Xpp3WriterGenerator
 
                 sc.add( "String value = (String) " + modelClassName + ".get" + getterName + "().get( key );" );
 
-                if ( "inline".equals( xmlAssociationMetadata.getMapStyle() ) )
+                if ( XmlAssociationMetadata.INLINE_MODE.equals( xmlAssociationMetadata.getMapStyle() ) )
                 {
                     sc.add( "serializer.startTag( NAMESPACE, \"\" + key + \"\" ).text( value ).endTag( NAMESPACE, \"\" + key + \"\" );" );
                 }
