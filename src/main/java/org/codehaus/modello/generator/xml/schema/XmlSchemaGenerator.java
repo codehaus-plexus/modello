@@ -99,52 +99,58 @@ public class XmlSchemaGenerator
             {
                 ModelField field = (ModelField) j.next();
 
-                // We only need to output elements that are primitive and all we
-                // are dealing with right now is Strings. We'll deal with primitives
-                // more thoroughly. We can borrow the code from castor.
-                if ( field.getType().equals( "String" ) )
+                if ( field.getDelegateTo() != null )
                 {
-                    w.startElement( "xs:element" );
-
-                    w.addAttribute( "name", field.getName() );
-
-                    w.addAttribute( "type", "xs:string" );
-
-                    if ( annotate )
-                    {
-                        annotation( w, field.getDescription() );
-                    }
-
-                    w.endElement();
                 }
-                else if ( isCollection( field.getType() ) )
+                else
                 {
-                    writer.write( "\n" );
-
-                    w.startElement( "xs:element" );
-
-                    w.addAttribute( "name", field.getName() );
-
-                    w.startElement( "xs:complexType" );
-
-                    w.startElement( "xs:sequence" );
-
-                    w.startElement( "xs:element" );
-
-                    w.addAttribute( "ref", singular( field.getName() ) );
-
-                    if ( annotate )
+                    // We only need to output elements that are primitive and all we
+                    // are dealing with right now is Strings. We'll deal with primitives
+                    // more thoroughly. We can borrow the code from castor.
+                    if ( field.getType().equals( "String" ) )
                     {
-                        annotation( w, field.getDescription() );
+                        w.startElement( "xs:element" );
+
+                        w.addAttribute( "name", field.getName() );
+
+                        w.addAttribute( "type", "xs:string" );
+
+                        if ( annotate )
+                        {
+                            annotation( w, field.getDescription() );
+                        }
+
+                        w.endElement();
                     }
+                    else if ( isCollection( field.getType() ) )
+                    {
+                        writer.write( "\n" );
 
-                    w.endElement();
+                        w.startElement( "xs:element" );
 
-                    w.endElement();
+                        w.addAttribute( "name", field.getName() );
 
-                    w.endElement();
+                        w.startElement( "xs:complexType" );
 
-                    w.endElement();
+                        w.startElement( "xs:sequence" );
+
+                        w.startElement( "xs:element" );
+
+                        w.addAttribute( "ref", singular( field.getName() ) );
+
+                        if ( annotate )
+                        {
+                            annotation( w, field.getDescription() );
+                        }
+
+                        w.endElement();
+
+                        w.endElement();
+
+                        w.endElement();
+
+                        w.endElement();
+                    }
                 }
             }
 

@@ -173,45 +173,51 @@ public class Xpp3UnmarshallerGenerator
 
     private void writeFieldParsing( ModelClass modelClass, ModelField field, JSourceCode sc, String statement, Model objectModel )
     {
-        String type = field.getType();
-
-        String name = field.getName();
-
-        String className = capitalise( field.getName() );
-
-        String modelClassName = uncapitalise( modelClass.getName() );
-
-        sc.add( statement + " ( parser.getName().equals( \"" + field.getName() + "\" ) )" );
-
-        sc.add( "{" );
-
-        sc.indent();
-
-        if ( isClassInModel( type, objectModel ) )
+        if ( field.getDelegateTo() != null )
         {
-            sc.add( type + " " + name + " = new " + type + "();" );
-
-            sc.add( modelClassName + ".set" + className + "( " + name + " );" );
-
-            writeClassParsing( objectModel.getClass( field.getType() ), sc, objectModel, true );
-        }
-        else if ( isCollection( type ) )
-        {
-            writeCollectionParsing( modelClassName, name, sc, objectModel );
-        }
-        else if ( isMap( type ) )
-        {
-            // These are properties for now.
-            writePropertiesParsing( modelClassName, name, sc, objectModel );
         }
         else
         {
-            sc.add( modelClassName + ".set" + className + "( parser.nextText() );" );
+            String type = field.getType();
+
+            String name = field.getName();
+
+            String className = capitalise( field.getName() );
+
+            String modelClassName = uncapitalise( modelClass.getName() );
+
+            sc.add( statement + " ( parser.getName().equals( \"" + field.getName() + "\" ) )" );
+
+            sc.add( "{" );
+
+            sc.indent();
+
+            if ( isClassInModel( type, objectModel ) )
+            {
+                sc.add( type + " " + name + " = new " + type + "();" );
+
+                sc.add( modelClassName + ".set" + className + "( " + name + " );" );
+
+                writeClassParsing( objectModel.getClass( field.getType() ), sc, objectModel, true );
+            }
+            else if ( isCollection( type ) )
+            {
+                writeCollectionParsing( modelClassName, name, sc, objectModel );
+            }
+            else if ( isMap( type ) )
+            {
+                // These are properties for now.
+                writePropertiesParsing( modelClassName, name, sc, objectModel );
+            }
+            else
+            {
+                sc.add( modelClassName + ".set" + className + "( parser.nextText() );" );
+            }
+
+            sc.unindent();
+
+            sc.add( "}" );
         }
-
-        sc.unindent();
-
-        sc.add( "}" );
     }
 
     private void writeCollectionParsing( String modelClassName, String fieldName, JSourceCode sc, Model objectModel )

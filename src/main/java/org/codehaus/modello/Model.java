@@ -64,6 +64,8 @@ public class Model
             classNames.add( modelClass.getName() );
 
             classMap.put( modelClass.getName(), modelClass );
+
+            modelClass.initialize();
         }
     }
 
