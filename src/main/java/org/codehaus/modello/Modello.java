@@ -9,26 +9,58 @@ import org.codehaus.modello.generator.xml.xpp3.Xpp3WriterGenerator;
 import java.io.File;
 
 /**
- *
- *
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
+ * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  *
  * @version $Id$
  */
 public class Modello
 {
-    public Modello( String[] args )
+    private String model;
+
+    private String mode;
+
+    private String outputDirectory;
+
+    public Modello( )
+    {
+    }
+
+    public void parseArgumentsFromCommandLine( String[] args )
         throws Exception
     {
-        String model = args[0];
+        if( args.length != 3 )
+        {
+            System.err.println( "Usage: modello <model> <mode> <output directory> " );
+            System.exit( 1 );
+        }
 
-        String mode = args[1];
+        setModel( args[0] );
+        setMode( args[1] );
+        setOutputDirectory( args[2] );
+    }
 
-        String outputDirectory = args[2];
+    public void work( )
+        throws Exception
+    {
+        if( model == null || model.trim().length() == 0)
+            throw new Exception( "Missing model." );
+
+        if( mode == null || mode.trim().length() == 0 )
+            throw new Exception( "Missing mode." );
+
+        if( outputDirectory == null || outputDirectory.trim().length() == 0 )
+            throw new Exception( "Missing output directory." );
+
+        if( !new File( model ).isFile() )
+            throw new Exception( "The model must be a file." );
+
+        if( !new File( outputDirectory ).isDirectory() )
+            throw new Exception( "The output directory must be a directory." );
 
         if ( mode.equals( "java" ) )
         {
-        javaGenerator( model, outputDirectory );
+            javaGenerator( model, outputDirectory );
         }
         else if ( mode.equals( "xsd" ) )
         {
@@ -49,13 +81,18 @@ public class Modello
     public static void main( String[] args )
         throws Exception
     {
-        Modello modello = new Modello( args );
+        Modello modello = new Modello();
+
+        modello.parseArgumentsFromCommandLine( args );
+        modello.work();
     }
 
     public void javaGenerator( String model, String outputDirectory )
         throws Exception
     {
         JavaGenerator generator = new JavaGenerator( model, new File( outputDirectory ).getPath() );
+
+        System.out.println( "Generating java in " + outputDirectory + " from " + model );
 
         generator.generate();
     }
@@ -65,6 +102,8 @@ public class Modello
     {
         XmlSchemaGenerator generator = new XmlSchemaGenerator( model, new File( outputDirectory ).getPath() );
 
+        System.out.println( "Generating xml schema in " + outputDirectory + " from " + model );
+
         generator.generate();
     }
 
@@ -72,6 +111,8 @@ public class Modello
         throws Exception
     {
         XdocGenerator generator = new XdocGenerator( model, new File( outputDirectory ).getPath() );
+
+        System.out.println( "Generating xdoc in " + outputDirectory + " from " + model );
 
         generator.generate();
     }
@@ -81,6 +122,8 @@ public class Modello
     {
         Xpp3ReaderGenerator generator = new Xpp3ReaderGenerator( model, new File( outputDirectory ).getPath() );
 
+        System.out.println( "Generating xpp3 unmarshaller in " + outputDirectory + " from " + model );
+
         generator.generate();
     }
 
@@ -89,6 +132,32 @@ public class Modello
     {
         Xpp3WriterGenerator generator = new Xpp3WriterGenerator( model, new File( outputDirectory ).getPath() );
 
+        System.out.println( "Generating xpp3 marshaller in " + outputDirectory + " from " + model );
+
         generator.generate();
+    }
+
+    /**
+     * @param mode The mode to set.
+     */
+    public void setMode( String mode )
+    {
+        this.mode = mode;
+    }
+
+    /**
+     * @param model The model to set.
+     */
+    public void setModel( String model )
+    {
+        this.model = model;
+    }
+
+    /**
+     * @param outputDirectory The outputDirectory to set.
+     */
+    public void setOutputDirectory( String outputDirectory )
+    {
+        this.outputDirectory = outputDirectory;
     }
 }
