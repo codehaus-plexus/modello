@@ -59,13 +59,13 @@ public abstract class AbstractModelloGenerator
     {
         this.model = model;
 
-        outputDirectory = new File( getParameter( ModelloParameterConstants.OUTPUT_DIRECTORY, parameters ) );
+        outputDirectory = new File( getParameter( parameters, ModelloParameterConstants.OUTPUT_DIRECTORY ) );
 
-        String version = getParameter( ModelloParameterConstants.VERSION, parameters );
+        String version = getParameter( parameters, ModelloParameterConstants.VERSION );
 
         generatedVersion = new Version( version );
 
-        packageWithVersion = Boolean.valueOf( getParameter( ModelloParameterConstants.PACKAGE_WITH_VERSION, parameters ) ).booleanValue();
+        packageWithVersion = Boolean.valueOf( getParameter( parameters, ModelloParameterConstants.PACKAGE_WITH_VERSION ) ).booleanValue();
     }
 
     protected Model getModel()
@@ -94,7 +94,7 @@ public abstract class AbstractModelloGenerator
         {
             return model.getClass( fieldType, generatedVersion ) != null;
         }
-        catch( Exception e )
+        catch ( Exception e )
         {
         }
 
@@ -192,8 +192,8 @@ public abstract class AbstractModelloGenerator
 
             if ( baseElem != null && baseElem instanceof ModelInterface )
             {
-                if ( modelInterface.equals( (ModelInterface) baseElem )
-                    || modelInterface.getPackageName( isPackageWithVersion(), getGeneratedVersion() ).equals( ( (ModelInterface) baseElem).getPackageName( isPackageWithVersion(), getGeneratedVersion() ) ) )
+                if ( modelInterface.equals( (ModelInterface) baseElem ) || 
+                     modelInterface.getPackageName( isPackageWithVersion(), getGeneratedVersion() ).equals( ( (ModelInterface) baseElem ).getPackageName( isPackageWithVersion(), getGeneratedVersion() ) ) )
                 {
                     continue;
                 }
@@ -215,8 +215,9 @@ public abstract class AbstractModelloGenerator
 
             if ( baseElem != null && baseElem instanceof ModelClass )
             {
-                if ( modelClass.equals( (ModelClass) baseElem )
-                    || modelClass.getPackageName( isPackageWithVersion(), getGeneratedVersion() ).equals( ( (ModelClass) baseElem).getPackageName( isPackageWithVersion(), getGeneratedVersion() ) ) )
+                if ( modelClass.equals( (ModelClass) baseElem ) || 
+                     modelClass.getPackageName( isPackageWithVersion(), getGeneratedVersion() ).equals(
+                         ( (ModelClass) baseElem ).getPackageName( isPackageWithVersion(), getGeneratedVersion() ) ) )
                 {
                     continue;
                 }
@@ -242,13 +243,37 @@ public abstract class AbstractModelloGenerator
         return string == null || string.trim().length() == 0;
     }
 
-    private String getParameter( String name, Properties parameters )
+    // ----------------------------------------------------------------------
+    // Parameter utils
+    // ----------------------------------------------------------------------
+
+    /**
+     * @deprecated @{link Use getParameter( Properties, String )} instead
+     */
+    protected String getParameter( String name, Properties parameters )
+    {
+        return getParameter( parameters, name );
+    }
+
+    protected String getParameter( Properties parameters, String name )
     {
         String value = parameters.getProperty( name );
 
         if ( value == null )
         {
             throw new ModelloRuntimeException( "Missing parameter '" + name + "'." );
+        }
+
+        return value;
+    }
+
+    protected String getParameter( Properties parameters, String name, String defaultValue )
+    {
+        String value = parameters.getProperty( name );
+
+        if ( value == null )
+        {
+            return defaultValue;
         }
 
         return value;
