@@ -505,29 +505,29 @@ public class Xpp3ReaderGenerator
             {
                 sc.add( "//LIST of STRING" ) ;
 
-                    sc.add( "while ( parser.nextTag() == XmlPullParser.START_TAG )" );
+                sc.add( "while ( parser.nextTag() == XmlPullParser.START_TAG )" );
 
-                    sc.add( "{" );
+                sc.add( "{" );
 
-                    sc.indent();
+                sc.indent();
 
-                    sc.add( "if ( parser.getName().equals( \"" + singularName + "\" ) )" );
+                sc.add( "if ( parser.getName().equals( \"" + singularName + "\" ) )" );
 
-                    sc.add( "{" );
+                sc.add( "{" );
 
-                    sc.indent();
+                sc.indent();
 
-                    sc.add( objectName + ".add" + capitalise( singularName ) + "( parser.nextText() );");
+                sc.add( objectName + ".add" + capitalise( singularName ) + "( parser.nextText() );");
 
-                    sc.unindent();
+                sc.unindent();
 
-                    sc.add( "}" );
+                sc.add( "}" );
 
-                    writeCatchAll( sc );
+                writeCatchAll( sc );
 
-                    sc.unindent();
+                sc.unindent();
 
-                    sc.add( "}" );
+                sc.add( "}" );
             }
             else
             {
