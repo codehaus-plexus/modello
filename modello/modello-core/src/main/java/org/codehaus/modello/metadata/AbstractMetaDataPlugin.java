@@ -20,21 +20,6 @@ public abstract class AbstractMetaDataPlugin
     extends AbstractLogEnabled
     implements MetaDataPlugin
 {
-    public MetaData getModelMetaData( Model model )
-    {
-        return null;
-    }
-
-    public MetaData getClassMetaData( ModelClass clazz )
-    {
-        return null;
-    }
-
-    public MetaData getFieldMetaData( ModelField field )
-    {
-        return null;
-    }
-
     public Map getModelMap( Model model, MetaData metaData )
         throws ModelloException
     {
