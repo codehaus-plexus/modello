@@ -1,0 +1,37 @@
+<model>
+  <id>maven</id>
+  <name>Maven</name>
+  <description>Maven's model for Java project.</description>
+  <packageName>org.apache.maven.model</packageName>
+  <root>Model</root>
+  <classes>
+    <class>
+      <name>Model</name>
+      <version>3.0.0+</version>
+      <fields>
+        <field>
+          <name>extend</name>
+          <version>3.0.0+</version>
+          <description>
+            The location of the parent project, if one exists. Values from the parent project will be
+            the default for this project if they are left unspecified. 
+            The path may be absolute, or relative to the current project.xml file.
+          </description>
+          <type>String</type>
+          <metaData>
+            <xml>
+              <attribute>true</attribute>
+            </xml>
+          </metaData>
+        </field>
+        <field>
+          <name>parent</name>
+          <version>4.0.0</version>
+          <description>Specified which project to extend.</description>
+          <type>Parent</type>
+          <comment></comment>
+        </field>
+      </fields>
+    </class>
+  </classes>
+</model>
