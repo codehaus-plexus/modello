@@ -33,6 +33,7 @@ import org.codehaus.modello.generator.java.javasource.JClass;
 import org.codehaus.modello.model.BaseElement;
 import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelClass;
+import org.codehaus.modello.model.ModelInterface;
 import org.codehaus.modello.model.Version;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 
@@ -181,7 +182,7 @@ public abstract class AbstractModelloGenerator
             .toString();
     }
 
-    protected String getBasePackageName()
+/*    protected String getBasePackageName()
     {
         StringBuffer sb = new StringBuffer();
 
@@ -196,15 +197,36 @@ public abstract class AbstractModelloGenerator
 
         return sb.toString();
     }
-
+*/
     protected void addModelImports( JClass jClass )
         throws ModelloException
     {
+        for ( Iterator i = getModel().getInterfaces( getGeneratedVersion() ).iterator(); i.hasNext(); )
+        {
+            ModelInterface modelInterface = (ModelInterface) i.next();
+
+            if ( isPackageWithVersion() )
+            {
+                jClass.addImport( modelInterface.getPackageName( true, getGeneratedVersion() ) + "." + modelInterface.getName() );
+            }
+            else
+            {
+                jClass.addImport( modelInterface.getPackageName( false, null ) + "." + modelInterface.getName() );
+            }
+        }
+
         for ( Iterator i = getModel().getClasses( getGeneratedVersion() ).iterator(); i.hasNext(); )
         {
             ModelClass modelClass = (ModelClass) i.next();
 
-            jClass.addImport( getBasePackageName() + "." + modelClass.getName() );
+            if ( isPackageWithVersion() )
+            {
+                jClass.addImport( modelClass.getPackageName( true, getGeneratedVersion() ) + "." + modelClass.getName() );
+            }
+            else
+            {
+                jClass.addImport( modelClass.getPackageName( false, null ) + "." + modelClass.getName() );
+            }
         }
     }
 

@@ -53,7 +53,7 @@ public class ModelReaderTest
 
         assertEquals( "Simple Modello Test Model", model.getName() );
 
-        assertEquals( "foo.bar", model.getPackageName() );
+        assertEquals( "foo.bar", model.getPackageName( false, null ) );
 
         assertEquals( "Boy", model.getRoot(  new Version( "1.0.0" ) ) );
 

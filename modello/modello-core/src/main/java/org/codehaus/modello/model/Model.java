@@ -110,17 +110,24 @@ public class Model
         return className;
     }
 
-    public String getPackageName()
+    public String getPackageName( boolean withVersion, Version version )
     {
+        String packageName = null;
         try
         {
-            return getDefault( ModelDefault.PACKAGE ).getValue();
+            packageName = getDefault( ModelDefault.PACKAGE ).getValue();
         }
         catch( ModelValidationException mve )
         {
+            packageName = ModelDefault.PACKAGE_VALUE;
         }
-        
-        return "";
+
+        if ( withVersion )
+        {
+            packageName += "." + version.toString();
+        }
+
+        return packageName;
     }
 
     public List getAllClasses()

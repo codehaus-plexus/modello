@@ -72,7 +72,7 @@ public class Xpp3ReaderGenerator
     {
         Model objectModel = getModel();
 
-        String packageName = getBasePackageName() + ".io.xpp3";
+        String packageName = objectModel.getPackageName( false, null ) + ".io.xpp3";
 
         String directory = packageName.replace( '.', '/' );
 
