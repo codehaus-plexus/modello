@@ -16,11 +16,11 @@
 
 package org.codehaus.modello.generator.database.sql;
 
-import org.codehaus.modello.generator.database.model.Column;
-import org.codehaus.modello.generator.database.model.Table;
-
 import java.io.IOException;
 import java.util.List;
+
+import org.codehaus.modello.generator.database.model.Column;
+import org.codehaus.modello.generator.database.model.Table;
 
 /**
  * An SQL Builder for MySQL
