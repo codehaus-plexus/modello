@@ -1,6 +1,7 @@
 package org.codehaus.modello;
 
 import java.util.List;
+import java.util.ArrayList;
 
 /**
  *
@@ -31,5 +32,10 @@ public class ModelClass
     public String getCode()
     {
         return code;
+    }
+
+    public boolean hasSuperClass()
+    {
+        return ( superClass != null );
     }
 }
