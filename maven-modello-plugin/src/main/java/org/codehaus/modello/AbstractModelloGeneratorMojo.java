@@ -22,6 +22,7 @@ package org.codehaus.modello;
  * SOFTWARE.
  */
 
+import java.io.File;
 import java.io.FileReader;
 import java.util.Properties;
 
@@ -54,6 +55,8 @@ public abstract class AbstractModelloGeneratorMojo
         //
         // ----------------------------------------------------------------------
 
+        String basedir = (String) request.getParameter( "basedir" );
+
         String outputDirectory = (String) request.getParameter( "outputDirectory" );
 
         String model = (String) request.getParameter( "model" );
@@ -78,7 +81,7 @@ public abstract class AbstractModelloGeneratorMojo
 
         parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, packageWithVersion );
 
-        modello.generate( modello.loadModel( new FileReader( model ) ), getGeneratorType(), parameters );
+        modello.generate( modello.loadModel( new FileReader( new File( basedir, model ) ) ), getGeneratorType(), parameters );
         
         if(producesCompilableResult())
         {

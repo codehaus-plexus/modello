@@ -29,6 +29,14 @@ package org.codehaus.modello;
  *
  * @description Creates a JDO store from the Modello model.
  *
+ * @parameter
+ * name="basedir"
+ * type="java.lang.String"
+ * required="true"
+ * validator=""
+ * expression="#basedir"
+ * description=""
+ *
  * @parameter name="project"
  * type=""
  * required="true"

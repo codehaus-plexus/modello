@@ -30,6 +30,14 @@ package org.codehaus.modello;
  * @description Creates a JDO mapping from the Modello model.
  *
  * @parameter
+ * name="basedir"
+ * type="java.lang.String"
+ * required="true"
+ * validator=""
+ * expression="#basedir"
+ * description=""
+ *
+ * @parameter
  * name="outputDirectory"
  * type="java.lang.String"
  * required="true"
