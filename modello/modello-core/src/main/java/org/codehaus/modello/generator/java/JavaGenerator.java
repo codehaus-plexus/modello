@@ -73,7 +73,7 @@ public class JavaGenerator
                     {
                         ModelField modelField = (ModelField) j.next();
 
-                        if ( outputElement( modelField.getVersion(), modelField.getName() ) )
+                        if ( outputElement( modelField.getVersion(), modelClass.getName() + "." + modelField.getName() ) )
                         {
                             if ( modelField.getName() == null )
                             {
@@ -101,15 +101,16 @@ public class JavaGenerator
                                 createAdder( field, jClass, objectModel );
                             }
 
-                            if ( modelClass.getCodeSegments() != null )
-                            {
-                                for ( Iterator iterator = modelClass.getCodeSegments().iterator(); iterator.hasNext(); )
-                                {
-                                    CodeSegment codeSegment = (CodeSegment) iterator.next();
+                        }
+                    }
 
-                                    jClass.addSourceCode( codeSegment.getCode() );
-                                }
-                            }
+                    if ( modelClass.getCodeSegments() != null )
+                    {
+                        for ( Iterator iterator = modelClass.getCodeSegments().iterator(); iterator.hasNext(); )
+                        {
+                            CodeSegment codeSegment = (CodeSegment) iterator.next();
+
+                            jClass.addSourceCode( codeSegment.getCode() );
                         }
                     }
 
