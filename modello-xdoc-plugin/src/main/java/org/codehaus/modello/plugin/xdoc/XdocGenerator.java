@@ -48,12 +48,6 @@ import org.codehaus.modello.plugin.AbstractModelloGenerator;
 public class XdocGenerator
     extends AbstractModelloGenerator
 {
-/*
-    public XdocGenerator( Model model, File outputDirectory, String modelVersion, boolean packageWithVersion )
-    {
-        super( model, outputDirectory, modelVersion, packageWithVersion );
-    }
-*/
     public void generate(Model model, Properties parameters )
         throws ModelloException
     {
@@ -74,7 +68,14 @@ public class XdocGenerator
     {
         Model objectModel = getModel();
 
-        File f = new File( getOutputDirectory(), objectModel.getId() + ".xml" );
+        String directory = getOutputDirectory().getAbsolutePath();
+
+        if ( isPackageWithVersion() )
+        {
+            directory += "/" + getGeneratedVersion();
+        }
+
+        File f = new File( directory, objectModel.getId() + ".xml" );
 
         if ( !f.getParentFile().exists() )
         {
