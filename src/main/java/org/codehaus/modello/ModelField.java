@@ -18,7 +18,18 @@ public class ModelField
 
     private boolean required;
 
-    private ModelClass modelClass;
+    transient private ModelClass modelClass;
+
+    public ModelField()
+    {
+    }
+
+    public ModelField( ModelClass modelClass, String name )
+    {
+        super( name );
+
+        this.modelClass = modelClass;
+    }
 
     public String getType()
     {
