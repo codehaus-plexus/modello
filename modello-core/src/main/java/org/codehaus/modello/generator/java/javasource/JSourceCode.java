@@ -48,6 +48,8 @@ package org.codehaus.modello.generator.java.javasource;
 
 import java.util.Vector;
 
+import org.codehaus.modello.ModelloRuntimeException;
+
 /**
  * A class for holding in-memory Java source code.
  *
@@ -206,6 +208,10 @@ public class JSourceCode
      **/
     public void unindent()
     {
+        if ( currentIndent == 0 )
+        {
+            throw new ModelloRuntimeException( "Cannot unindent: current indent is 0." );
+        }
         currentIndent -= indentSize;
     } //-- unindent
 

@@ -126,11 +126,16 @@ public class ModelAssociation
     {
         validateFieldNotEmpty( "Association", "name", getName() );
 
-        toClass = fromClass.getModel().getClass( to );
+        validateFieldNotEmpty( "Association '" + getName() + "'", "to", to );
 
-        if ( toClass == null )
+        if ( !to.equals( "String" ) )
         {
-            throw new ModelValidationException( "Association '" + getName() + "': Could not find to class." );
+            toClass = fromClass.getModel().getClass( to );
+    
+            if ( toClass == null )
+            {
+                throw new ModelValidationException( "Association '" + getName() + "': Could not find to class." );
+            }
         }
 
         if ( isEmpty( fromRole ) )
