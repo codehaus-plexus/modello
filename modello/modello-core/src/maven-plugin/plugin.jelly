@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<project
+  xmlns:ant="jelly:ant"
+  xmlns:core="jelly:core">
+
+  <goal name="modello:java">
+    <core:useBean var="modello" class="org.codehaus.modello.Modello" model="${modello.model}"
+        mode="java" outputDirectory="${modello.output.java}"/>
+    <core:invoke on="${modello}" method="work"/>
+  </goal>
+
+  <goal name="modello:xpp3">
+    <core:useBean var="modello" class="org.codehaus.modello.Modello" model="${modello.model}"
+        mode="xpp3" outputDirectory="${modello.output.xpp3}"/>
+    <core:invoke on="${modello}" method="work"/>
+  </goal>
+
+  <goal name="modello:xdoc">
+    <core:useBean var="modello" class="org.codehaus.modello.Modello" model="${modello.model}"
+        mode="xdoc" outputDirectory="${modello.output.xdoc}"/>
+    <core:invoke on="${modello}" method="work"/>
+  </goal>
+
+  <goal name="modello:xsd">
+    <core:useBean var="modello" class="org.codehaus.modello.Modello" model="${modello.model}"
+        mode="xsd" outputDirectory="${modello.output.xsd}"/>
+    <core:invoke on="${modello}" method="work"/>
+  </goal>
+</project>
