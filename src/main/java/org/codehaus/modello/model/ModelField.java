@@ -137,9 +137,9 @@ public class ModelField
     public void validateElement()
         throws ModelValidationException
     {
-        validateFieldNotEmpty( "Field", "name", getName() );
+        validateFieldNotEmpty( "field", "name", getName() );
 
-        validateFieldNotEmpty( "Field " + getName(), "type", type );
+        validateFieldNotEmpty( "field '" + getName() + "'", "type", type );
 
         String[] primitiveTypes = new String[]{
             "boolean",
@@ -149,7 +149,8 @@ public class ModelField
             "long",
             "float",
             "double",
-            "String"
+            "String",
+            "Date",
         };
 
         for ( int i = 0; i < primitiveTypes.length; i++ )
