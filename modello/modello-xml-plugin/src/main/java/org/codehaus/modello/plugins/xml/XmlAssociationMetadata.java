@@ -38,7 +38,7 @@ public class XmlAssociationMetadata
 
     public static final String INLINE_MODE = "inline";
 
-    private String mapStyle = EXPLODE_MODE;
+    private String mapStyle = INLINE_MODE;
 
     /**
      * @return Returns the map style.
@@ -55,7 +55,7 @@ public class XmlAssociationMetadata
     {
         if ( mapStyle == null )
         {
-            this.mapStyle = EXPLODE_MODE;
+            this.mapStyle = INLINE_MODE;
         }
         else
         {
