@@ -3,7 +3,7 @@
 
     <component>
       <role>org.codehaus.modello.plugin.ModelloGenerator</role>
-      <role-hint>prevalyer</role-hint>
+      <role-hint>prevayler</role-hint>
       <implementation>org.codehaus.modello.plugin.prevayler.PrevaylerModelloGenerator</implementation>
       <requirements>
         <requirement>
