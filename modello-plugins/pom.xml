@@ -7,7 +7,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>modello</groupId>
   <artifactId>modello-plugins</artifactId>
-  <packaging>jar</packaging>
+  <packaging>pom</packaging>
   <name>Modello Plugin Parent</name>
   <version>1.0-alpha-1-SNAPSHOT</version>
   <dependencies>
