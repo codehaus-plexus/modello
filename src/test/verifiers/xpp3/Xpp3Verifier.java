@@ -45,7 +45,7 @@ public class Xpp3Verifier
         "      <name>Mailing list</name>\n" +
         "      <subscribe>Super Subscribe</subscribe>\n" +
         "      <unsubscribe>Duper Unsubscribe</unsubscribe>\n" +
-        "      <archive>Über Archive</archive>\n" +
+        "      <archive>?ber Archive</archive>\n" +
         "    </mailingList>\n" +
         "  </mailingLists>\n" +
         "  <scm>\n" +
@@ -74,10 +74,22 @@ public class Xpp3Verifier
 
     /**
      * TODO: Add a association thats not under the root element
-     */ 
+     */
     public void verify()
         throws Exception
     {
+        verifyWriter();
+
+        verifyReader();
+    }
+
+    public void verifyWriter()
+        throws Exception
+    {
+        // ----------------------------------------------------------------------
+        // Build the model thats going to be written.
+        // ----------------------------------------------------------------------
+
         Model expected = new Model();
 
         expected.setExtend( "/foo/bar" );
@@ -94,7 +106,7 @@ public class Xpp3Verifier
 
         mailingList.setUnsubscribe( "Duper Unsubscribe" );
 
-        mailingList.setArchive( "Über Archive" );
+        mailingList.setArchive( "?ber Archive" );
 
         expected.addMailingList( mailingList );
 
@@ -132,6 +144,10 @@ public class Xpp3Verifier
 
         expected.setBuild( build );
 
+        // ----------------------------------------------------------------------
+        // Write out the model
+        // ----------------------------------------------------------------------
+
         MavenXpp3Writer writer = new MavenXpp3Writer();
 
         StringWriter buffer = new StringWriter();
@@ -139,10 +155,11 @@ public class Xpp3Verifier
         writer.write( buffer, expected );
 
         String actualXml = buffer.toString();
-// /*
-        System.out.println( expectedXml );
-        System.err.println( actualXml );
-/* */
+
+//        System.out.println( expectedXml );
+//
+//        System.err.println( actualXml );
+
         assertEquals( expectedXml, actualXml );
 
         MavenXpp3Reader reader = new MavenXpp3Reader();
@@ -153,6 +170,48 @@ public class Xpp3Verifier
 
         assertModel( expected, actual );
     }
+
+    public void verifyReader()
+        throws Exception
+    {
+        MavenXpp3Reader reader = new MavenXpp3Reader();
+
+        // ----------------------------------------------------------------------
+        // Test the "add default entities" flag
+        // ----------------------------------------------------------------------
+
+        assertTrue( reader.getAddDefaultEntities() );
+
+        reader.setAddDefaultEntities( false );
+
+        assertFalse( reader.getAddDefaultEntities() );
+
+        reader.setAddDefaultEntities( true );
+
+        assertTrue( reader.getAddDefaultEntities() );
+
+        // ----------------------------------------------------------------------
+        // Test that the entities is properly resolved
+        // ----------------------------------------------------------------------
+
+        String xml = "<project>\n" +
+                     "  <groupId>Laugst&oslash;l</groupId>\n" +
+                     "</project>";
+
+        Model expected = new Model();
+
+        String groupId = "Laugst\u00f8l";
+
+        expected.setGroupId( groupId );
+
+        Model actual = reader.read( new StringReader( xml ) );
+
+        assertModel( expected, actual );
+    }
+
+    // ----------------------------------------------------------------------
+    // Assertions
+    // ----------------------------------------------------------------------
 
     public void assertModel( Model expected, Model actual )
     {
@@ -250,29 +309,43 @@ public class Xpp3Verifier
 
     public void assertScm( Scm expected, Object actualObject )
     {
-        assertNotNull( "/model/scm", actualObject );
+        if ( expected == null )
+        {
+            assertNull( "/model/scm", actualObject );
+        }
+        else
+        {
+            assertNotNull( "/model/scm", actualObject );
 
-        assertInstanceOf( "/model/scm", Scm.class, actualObject.getClass() );
+            assertInstanceOf( "/model/scm", Scm.class, actualObject.getClass() );
 
-        Scm actual = (Scm) actualObject;
+            Scm actual = (Scm) actualObject;
 
-        assertEquals( "/model/scm/connection", expected.getConnection(), actual.getConnection() );
+            assertEquals( "/model/scm/connection", expected.getConnection(), actual.getConnection() );
 
-        assertEquals( "/model/scm/developerConnection", expected.getDeveloperConnection(), actual.getDeveloperConnection() );
+            assertEquals( "/model/scm/developerConnection", expected.getDeveloperConnection(), actual.getDeveloperConnection() );
 
-        assertEquals( "/model/scm/url", expected.getUrl(), actual.getUrl() );
+            assertEquals( "/model/scm/url", expected.getUrl(), actual.getUrl() );
+        }
     }
 
     public void assertBuild( Build expected, Object actualObject )
     {
-        assertNotNull( "/model/builder", actualObject );
+        if ( expected == null )
+        {
+            assertNull( "/model/builder", actualObject );
+        }
+        else
+        {
+            assertNotNull( "/model/builder", actualObject );
 
-        assertInstanceOf( "/model/builder", Build.class, actualObject.getClass() );
+            assertInstanceOf( "/model/builder", Build.class, actualObject.getClass() );
 
-        Build actual = (Build) actualObject;
+            Build actual = (Build) actualObject;
 
-        assertEquals( "/model/builder/sourceDirectory", expected.getSourceDirectory(), actual.getSourceDirectory() );
+            assertEquals( "/model/builder/sourceDirectory", expected.getSourceDirectory(), actual.getSourceDirectory() );
 
-        assertEquals( "/model/builder/unitTestSourceDirectory", expected.getUnitTestSourceDirectory(), actual.getUnitTestSourceDirectory() );
+            assertEquals( "/model/builder/unitTestSourceDirectory", expected.getUnitTestSourceDirectory(), actual.getUnitTestSourceDirectory() );
+        }
     }
 }
