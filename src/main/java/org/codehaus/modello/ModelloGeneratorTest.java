@@ -81,7 +81,7 @@ public abstract class ModelloGeneratorTest
         }
 
         String[] sourceDirectories = new String[]{
-            getTestPath( "src/test/verifiers" ),
+            getTestPath( "src/test/verifiers/" + getName() ),
             generatedSources.getAbsolutePath()
         };
 
@@ -105,7 +105,7 @@ public abstract class ModelloGeneratorTest
         IsolatedClassLoader classLoader = new IsolatedClassLoader();
 
         // TODO: flip back to getTestFile() when plexus has File getTestFile()
-        classLoader.addURL( new File( getTestPath( "target/" + testName + "/classes" ) ).toURL() );
+        classLoader.addURL( new File( getTestPath( "target/" + getName() + "/classes" ) ).toURL() );
 
         classLoader.addURL( new File( getTestPath( "target/classes" ) ).toURL() );
 
