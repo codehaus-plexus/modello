@@ -74,13 +74,9 @@ public class XdocGenerator
         
         w.addAttribute( "name", "Descriptor with links" );
 
-        w.startElement( "p" );
+        w.startElement( "source" );
 
-        w.startElement( "pre" );
-        
         w.writeText( "\n" + getDescriptorWithLink( objectModel ) );
-        
-        w.endElement();
         
         w.endElement();
         
@@ -185,11 +181,12 @@ public class XdocGenerator
             sb.append( "  " );
         }
         
-        sb.append( "&lt;" + uncapitalise( modelClass.getName() ) );
+        sb.append( "<a href=\"#" + modelClass.getName() + "\">&lt;" +
+                   uncapitalise( modelClass.getName() ) );
         
         if ( modelClass.getFields().size() > 0 )
         {
-            sb.append( "&gt;\n" );
+            sb.append( "&gt;</a>\n" );
             
             for ( Iterator iter = modelClass.getFields().iterator(); iter.hasNext(); )
             {
@@ -207,7 +204,8 @@ public class XdocGenerator
                     {
                         sb.append( "    " );
                     }
-                    sb.append( "&lt;" + uncapitalise( field.getName() ) + "/&gt;\n" );
+                    sb.append( "<a href=\"#" + field.getName() + "\">&lt;" +
+                               uncapitalise( field.getName() ) + "/&gt;</a>\n" );
                 }
             }
             
@@ -216,11 +214,12 @@ public class XdocGenerator
                 sb.append( "    " );
             }
             
-            sb.append( "&lt;/" + uncapitalise( modelClass.getName() ) + "&gt;\n" );
+            sb.append( "<a href=\"#" + modelClass.getName() + "\">&lt;" +
+                       uncapitalise( modelClass.getName() ) + "&gt;</a>\n" );
         }
         else
         {
-            sb.append( "/&gt;\n" );
+            sb.append( "/&gt;</a>\n" );
         }
         
         return sb.toString();
