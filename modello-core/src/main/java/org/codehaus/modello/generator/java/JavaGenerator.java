@@ -4,13 +4,14 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.Properties;
 
 import org.codehaus.modello.CodeSegment;
 import org.codehaus.modello.Model;
 import org.codehaus.modello.ModelClass;
 import org.codehaus.modello.ModelField;
 import org.codehaus.modello.ModelloException;
-import org.codehaus.modello.generator.AbstractGenerator;
+import org.codehaus.modello.generator.AbstractGeneratorPlugin;
 import org.codehaus.modello.generator.java.javasource.JClass;
 import org.codehaus.modello.generator.java.javasource.JField;
 import org.codehaus.modello.generator.java.javasource.JMethod;
@@ -23,46 +24,13 @@ import org.codehaus.modello.generator.java.javasource.JType;
  * @version $Id$
  */
 public class JavaGenerator
-    extends AbstractGenerator
+    extends AbstractGeneratorPlugin
 {
-    public JavaGenerator( Model model, File outputDirectory, String modelVersion, boolean packageWithVersion )
-    {
-        super( model, outputDirectory, modelVersion, packageWithVersion );
-    }
-
-    protected String getBasePackageName( Model model )
-    {
-        StringBuffer sb = new StringBuffer();
-
-        sb.append( model.getPackageName() );
-
-        if ( isPackageWithVersion() )
-        {
-            sb.append( "." );
-
-            sb.append( getModelVersion().toString() );
-        }
-
-        return sb.toString();
-    }
-
-    protected void addModelImports( JClass jClass )
+    public void generate( Model model, Properties parameters )
         throws ModelloException
     {
-        for ( Iterator i = getModel().getClasses().iterator(); i.hasNext(); )
-        {
-            ModelClass modelClass = (ModelClass) i.next();
+        initialize( model, parameters );
 
-            if ( outputElement( modelClass.getVersion(), modelClass.getName() ) )
-            {
-                jClass.addImport( getBasePackageName( getModel() ) + "." + modelClass.getName() );
-            }
-        }
-    }
-
-    public void generate()
-        throws ModelloException
-    {
         try
         {
             generateJava();
@@ -161,6 +129,35 @@ public class JavaGenerator
             }
         }
     }
+    protected String getBasePackageName( Model model )
+    {
+        StringBuffer sb = new StringBuffer();
+
+        sb.append( model.getPackageName() );
+
+        if ( isPackageWithVersion() )
+        {
+            sb.append( "." );
+
+            sb.append( getModelVersion().toString() );
+        }
+
+        return sb.toString();
+    }
+
+    protected void addModelImports( JClass jClass )
+        throws ModelloException
+    {
+        for ( Iterator i = getModel().getClasses().iterator(); i.hasNext(); )
+        {
+            ModelClass modelClass = (ModelClass) i.next();
+
+            if ( outputElement( modelClass.getVersion(), modelClass.getName() ) )
+            {
+                jClass.addImport( getBasePackageName( getModel() ) + "." + modelClass.getName() );
+            }
+        }
+    }
 
     private JField createField( ModelField modelField, ModelClass modelClass, int entry )
     {
@@ -245,6 +242,9 @@ public class JavaGenerator
         setter.addParameter( new JParameter( field.getType(), field.getName() ) );
 
         setter.getSourceCode().add( "this." + field.getName() + " = " + field.getName() + ";" );
+
+        // Useful debugging code when debugging other generators.
+        //setter.getSourceCode().add( "System.out.println( \"" + field.getName() + " = \" + " + field.getName() + " );" );
 
         return setter;
     }

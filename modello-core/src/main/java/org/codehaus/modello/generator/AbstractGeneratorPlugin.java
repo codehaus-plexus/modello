@@ -1,10 +1,12 @@
 package org.codehaus.modello.generator;
 
-import com.thoughtworks.xstream.XStream;
-
 import java.io.File;
+import java.util.Properties;
 
+import org.codehaus.modello.AbstractLogEnabled;
 import org.codehaus.modello.Model;
+import org.codehaus.modello.ModelloException;
+import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.ModelloRuntimeException;
 
 // Possibly a general package extension for things like reader/writer
@@ -13,10 +15,12 @@ import org.codehaus.modello.ModelloRuntimeException;
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
  * @version $Id$
  */
-public abstract class AbstractGenerator
-{
+public abstract class AbstractGeneratorPlugin
+    extends AbstractLogEnabled
+    implements GeneratorPlugin
+{/*
     private XStream xstream;
-
+*/
     private Model model;
 
     private File outputDirectory;
@@ -25,8 +29,8 @@ public abstract class AbstractGenerator
 
     private boolean packageWithVersion;
 
-    private Model objectModel;
-
+//    private Model objectModel;
+/*
     protected AbstractGenerator( Model model, File outputDirectory, String modelVersion, boolean packageWithVersion )
     {
         this.model = model;
@@ -42,6 +46,7 @@ public abstract class AbstractGenerator
     {
         return model;
     }
+*/
 /*
     protected Model getModel()
         throws ModelloException
@@ -74,6 +79,25 @@ public abstract class AbstractGenerator
         return objectModel;
     }
 */
+    protected void initialize( Model model, Properties parameters )
+        throws ModelloException
+    {
+        this.model = model;
+
+        outputDirectory = new File( (String) parameters.get( ModelloParameterConstants.OUTPUT_DIRECTORY ) );
+
+        String version = (String) parameters.get( ModelloParameterConstants.VERSION );
+
+        modelVersion = new Version( version, "model" );
+
+        packageWithVersion = Boolean.valueOf( (String) parameters.get( ModelloParameterConstants.PACKAGE_WITH_VERSION ) ).booleanValue();
+    }
+
+    protected Model getModel()
+    {
+        return model;
+    }
+
     protected Version getModelVersion()
     {
         return modelVersion;
@@ -89,8 +113,8 @@ public abstract class AbstractGenerator
         return outputDirectory;
     }
 
-    public abstract void generate()
-        throws Exception;
+//    public abstract void generate()
+//        throws Exception;
 
     protected boolean outputElement( String elementVersion, String elementName )
         throws ModelloRuntimeException
