@@ -22,30 +22,30 @@ package org.codehaus.modello.plugin.jpox;
  * SOFTWARE.
  */
 
-import java.util.Properties;
 import java.io.File;
-import java.io.Writer;
 import java.io.FileWriter;
+import java.io.Writer;
+import java.util.Properties;
+import java.util.Iterator;
+import java.util.List;
 
-import org.apache.velocity.context.Context;
 import org.apache.velocity.VelocityContext;
+import org.apache.velocity.context.Context;
 
-import org.codehaus.modello.plugin.AbstractModelloGenerator;
-import org.codehaus.modello.plugin.store.metadata.StoreClassMetadata;
-import org.codehaus.modello.model.Model;
 import org.codehaus.modello.ModelloException;
+import org.codehaus.modello.model.Model;
+import org.codehaus.modello.model.ModelClass;
+import org.codehaus.modello.plugin.store.AbstractVelocityModelloGenerator;
+import org.codehaus.modello.plugin.store.metadata.StoreClassMetadata;
 import org.codehaus.plexus.velocity.VelocityComponent;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
-public class JpoxModelloGenerator
-    extends AbstractModelloGenerator
+public class JPoxModelloGenerator
+    extends AbstractVelocityModelloGenerator
 {
-    /** @requirement */
-    private VelocityComponent velocity;
-
     public void generate( Model model, Properties properties )
         throws ModelloException
     {
@@ -63,51 +63,28 @@ public class JpoxModelloGenerator
 
         context.put( "storeMetadataId", StoreClassMetadata.ID );
 
-//        context.put( "ojbMetadataId", HibernateClassMetadata.ID );
+//        context.put( "ojbMetadataId", JpoxClassMetadata.ID );
 
         context.put( "model", model );
 
         // ----------------------------------------------------------------------
-        // Generate the code
+        // Generate the JDO files
         // ----------------------------------------------------------------------
 
-        File dir = getOutputDirectory();
+        writeTemplate( "/org/codehaus/modello/plugin/jpox/templates/jpox.jdo.vm",
+                       new File( getOutputDirectory(), "jpox.jdo" ),
+                       context );
 
-        File file = new File( dir, "jpox.xml" );
+        // ----------------------------------------------------------------------
+        // Generate the JPoxStore
+        // ----------------------------------------------------------------------
 
-        if ( !file.getParentFile().exists() )
-        {
-            if ( !file.getParentFile().mkdirs() )
-            {
-                throw new ModelloException( "Error while creating parent directories for '" + file.getAbsolutePath() + "'." );
-            }
-        }
+        String packageName = model.getPackageName( isPackageWithVersion(), super.getGeneratedVersion() );
 
-        String template = "/org/codehaus/modello/plugin/jpox/templates/jpox.xml.vm";
+        String className = model.getName() + "JPoxStore";
 
-        writeTemplate( template, file, context );
-    }
-
-    // ----------------------------------------------------------------------
-    //
-    // ----------------------------------------------------------------------
-
-    private void writeTemplate( String template, File file, Context context )
-        throws ModelloException
-    {
-        try
-        {
-            Writer writer = new FileWriter( file );
-
-            velocity.getEngine().mergeTemplate( template, context, writer );
-
-            writer.flush();
-
-            writer.close();
-        }
-        catch ( Exception e )
-        {
-            throw new ModelloException( "Error while generating code.", e );
-        }
+        writeClass( "/org/codehaus/modello/plugin/jpox/templates/JPoxStore.java.vm",
+                    getOutputDirectory(), packageName, className,
+                    context );
     }
 }
