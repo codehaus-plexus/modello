@@ -55,6 +55,7 @@ public class ModelloCli
 
 //        modello.initialize();
 
+        // TODO: should not need to do this - put the CDATA into the model file itself
         String fileString = FileUtils.fileRead(modelFile);
 
         fileString = StringUtils.replace( fileString, "<description>", "<description><![CDATA[" );
