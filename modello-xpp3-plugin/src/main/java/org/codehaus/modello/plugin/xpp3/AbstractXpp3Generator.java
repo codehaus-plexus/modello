@@ -37,13 +37,6 @@ public abstract class AbstractXpp3Generator
     {
         String name = getModel().getName();
 
-        if ( isPackageWithVersion() )
-        {
-            return name + getGeneratedVersion().toString( "V" ) + suffix;
-        }
-        else
-        {
-            return name + suffix;
-        }
+        return name + suffix;
     }
 }

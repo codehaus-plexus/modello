@@ -64,7 +64,7 @@ public class Xpp3WriterGenerator
         }
         catch( IOException ex )
         {
-            throw new ModelloException( "Exception while generating XDoc.", ex );
+            throw new ModelloException( "Exception while generating XPP3 Writer.", ex );
         }
     }
 
@@ -73,7 +73,18 @@ public class Xpp3WriterGenerator
     {
         Model objectModel = getModel();
 
-        String packageName = objectModel.getPackageName( false, null ) + ".io.xpp3";
+        String packageName;
+
+        if ( isPackageWithVersion() )
+        {
+            packageName = objectModel.getPackageName( true, getGeneratedVersion() );
+        }
+        else
+        {
+            packageName = objectModel.getPackageName( false, null );
+        }
+
+        packageName += ".io.xpp3";
 
         String directory = packageName.replace( '.', '/' );
 
