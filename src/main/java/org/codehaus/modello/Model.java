@@ -26,6 +26,8 @@ public class Model
 
     String packageName;
 
+    String root;
+
     public Model()
     {
         classNames = new HashSet();
@@ -41,6 +43,11 @@ public class Model
     public Set getClassNames()
     {
         return classNames;
+    }
+
+    public String getRoot()
+    {
+        return root;
     }
 
     public ModelClass getClass( String type )
