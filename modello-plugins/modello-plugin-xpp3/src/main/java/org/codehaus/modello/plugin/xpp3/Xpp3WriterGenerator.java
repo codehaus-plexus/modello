@@ -127,7 +127,7 @@ public class Xpp3WriterGenerator
 
         addModelImports( jClass );
 
-        String root = objectModel.getRoot();
+        String root = objectModel.getRoot( getGeneratedVersion() );
 
         String rootElement = uncapitalise( root );
 

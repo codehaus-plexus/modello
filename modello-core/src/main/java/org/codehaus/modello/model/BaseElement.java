@@ -136,7 +136,7 @@ public abstract class BaseElement
 
         if ( metadata == null )
         {
-            throw new ModelloRuntimeException( "No such metadata: " + key );
+            throw new ModelloRuntimeException( "No such metadata: " + key + " for element : " + getName() );
         }
 
         if ( !type.isAssignableFrom( metadata.getClass() ) )

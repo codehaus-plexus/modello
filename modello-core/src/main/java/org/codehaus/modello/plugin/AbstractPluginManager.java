@@ -54,7 +54,12 @@ public abstract class AbstractPluginManager
         }
     }
 
-    public Iterator getPlugins()
+    public Map getPlugins()
+    {
+        return plugins;
+    }
+
+    public Iterator getPluginsIterator()
     {
         return plugins.values().iterator();
     }

@@ -2,7 +2,6 @@
   <id>maven</id>
   <name>Maven</name>
   <description>Maven's model for Java project.</description>
-  <root>Model</root>
   <defaults>
     <default>
       <key>package</key>
@@ -10,7 +9,7 @@
     </default>
   </defaults>
   <classes>
-    <class>
+    <class rootElement="true">
       <name>Model</name>
       <version>3.0.0+</version>
       <fields>

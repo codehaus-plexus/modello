@@ -121,10 +121,6 @@ public class ModelReader
                 {
                     model.setId( parser.nextText() );
                 }
-                else if ( parser.getName().equals( "root" ) )
-                {
-                    model.setRoot( parser.nextText() );
-                }
                 else if ( parser.getName().equals( "defaults" ) )
                 {
                     parseDefaults( model, parser );
@@ -226,6 +222,8 @@ public class ModelReader
             {
                 ModelClass modelClass = new ModelClass();
 
+                Map attributes = getAttributes( parser );
+
                 while ( parser.nextTag() == XmlPullParser.START_TAG )
                 {
                     if ( parseBaseElement( modelClass, parser ) )
@@ -259,6 +257,7 @@ public class ModelReader
                 }
 
                 model.addClass( modelClass );
+                classAttributes.put( modelClass.getName(), attributes );
             }
             else
             {

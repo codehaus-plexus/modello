@@ -1,4 +1,4 @@
-package org.codehaus.modello.core;
+package org.codehaus.modello.plugin.model;
 
 /*
  * Copyright (c) 2004, Jason van Zyl
@@ -22,24 +22,14 @@ package org.codehaus.modello.core;
  * SOFTWARE.
  */
 
-import java.util.Iterator;
-import java.util.Map;
-
-import org.codehaus.modello.plugin.ModelloGenerator;
+import org.codehaus.modello.metadata.AssociationMetadata;
 
 /**
- * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
+ * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
  * @version $Id$
  */
-public interface GeneratorPluginManager
+public class ModelAssociationMetadata
+    implements AssociationMetadata
 {
-    String ROLE = GeneratorPluginManager.class.getName();
-
-    Map getPlugins();
-
-    Iterator getPluginsIterator();
-
-    ModelloGenerator getGeneratorPlugin( String generatorId );
-
-    boolean hasGeneratorPlugin( String generatorId );
+    public final static String ID = ModelAssociationMetadata.class.getName();
 }
