@@ -73,6 +73,8 @@ public class XdocGenerator
         w.startElement( "section" );
         
         w.addAttribute( "name", "Descriptor with links" );
+        
+        w.startElement( "p" );        
 
         w.startElement( "source" );
 
@@ -155,6 +157,8 @@ public class XdocGenerator
         }
 
         w.endElement();
+        
+        w.endElement();
 
         w.endElement();
 
@@ -202,7 +206,7 @@ public class XdocGenerator
                 {
                     for (int i = 0; i < depth+1; i++ )
                     {
-                        sb.append( "    " );
+                        sb.append( "  " );
                     }
                     sb.append( "<a href=\"#" + modelClass.getName() + "\">&lt;" +
                                uncapitalise( field.getName() ) + "/&gt;</a>\n" );
@@ -211,7 +215,7 @@ public class XdocGenerator
             
             for (int i = 0; i < depth; i++ )
             {
-                sb.append( "    " );
+                sb.append( "  " );
             }
             
             sb.append( "<a href=\"#" + modelClass.getName() + "\">&lt;" +
