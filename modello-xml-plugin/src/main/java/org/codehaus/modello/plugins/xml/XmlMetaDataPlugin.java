@@ -37,11 +37,6 @@ public class XmlMetaDataPlugin
 
         String attribute = (String) data.get( "attribute" );
 
-        if ( attribute == null )
-        {
-            return null;
-        }
-
         metaData.setAttribute( Boolean.valueOf( attribute ).booleanValue() );
 
         return metaData;
