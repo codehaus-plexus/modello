@@ -46,11 +46,6 @@
     </unitTest>
   </build>
 
-  <reports>
-    <report>maven-jxr-plugin</report>
-    <report>maven-javadoc-plugin</report>
-    <report>maven-changes-plugin</report>
-    <report>maven-changelog-plugin</report>
-  </reports>
+  <reports/>
 
 </project>
