@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <project>
-  <modelVersion>4.0.0</modelVersion>
   <groupId>modello</groupId>
   <artifactId>modello-parent</artifactId>
   <version>1.0-SNAPSHOT</version>
-  <name>Modello Parent</name>
+  <name>Modello</name>
   <organization>
     <name>Codehaus</name>
     <url>http://www.codehaus.org/</url>
@@ -16,9 +15,9 @@
   <logo>/images/maven.gif</logo>
 
   <repository>
-    <connection>scm:cvs:pserver:modello@cvs.modello.codehaus.org:/scm/modello:modello/modello-core</connection>
-    <developerConnection>scm:cvs:ext:${maven.username}@cvs.modello.codehaus.org:/home/projects/modello/scm:modello/modello-core</developerConnection>
-    <url>http://cvs.modello.codehaus.org/modello/${pom.artifactId}</url>
+    <connection>scm:cvs:pserver:anoncvs@cvs.apache.org:/home/cvspublic:maven-components/maven-core</connection>
+    <developerConnection>scm:cvs:ext:${maven.username}@cvs.apache.org:/home/cvs:maven-components/maven-core</developerConnection>
+    <url>http://cvs.apache.org/viewcvs.cgi/maven/</url>
   </repository>
 
   <dependencies>
@@ -38,4 +37,5 @@
       <version>3.8.1</version>
     </dependency>
   </dependencies>
+
 </project>
