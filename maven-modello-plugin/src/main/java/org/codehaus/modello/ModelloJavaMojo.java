@@ -24,6 +24,7 @@ package org.codehaus.mojo.modello;
 
 /**
  * @goal java
+ *
  * @phase generate-sources
  *
  * @description Creates java beans from the Modello model.
@@ -36,7 +37,12 @@ package org.codehaus.mojo.modello;
  * expression="#basedir/target/generated-sources"
  * description=""
  *
- * @parameter name="project" type="" required="true" validator="" expression="#project" description="The current project"
+ * @parameter name="project"
+ * type=""
+ * required="true"
+ * validator=""
+ * expression="#project"
+ * description="The current project"
  *
  * @parameter name="model"
  * type="java.lang.String"

@@ -24,6 +24,7 @@ package org.codehaus.mojo.modello;
 
 /**
  * @goal xpp3-reader
+ *
  * @phase generate-sources
  *
  * @description Creates XPP3 reader from the model.
@@ -35,7 +36,11 @@ package org.codehaus.mojo.modello;
  * expression="#basedir/target/generated-sources"
  * description=""
  *
- * @parameter name="project" type="" required="true" validator="" expression="#project" description="The current project"
+ * @parameter name="project"
+ * type="" required="true"
+ * validator=""
+ * expression="#project"
+ * description="The current project"
  *
  * @parameter name="model"
  * type="java.lang.String"
@@ -64,7 +69,7 @@ package org.codehaus.mojo.modello;
  * validator=""
  * expression="#component.org.codehaus.modello.core.ModelloCore"
  * description="Modello component"
- * 
+ *
  * @author <a href="mailto:brett@apache.org">Brett Porter</a>
  * @version $Id$
  */
