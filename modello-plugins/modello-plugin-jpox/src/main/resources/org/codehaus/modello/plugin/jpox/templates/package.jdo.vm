@@ -12,21 +12,22 @@
   <!--
     <extension vendor-name="jpox" key="key-auto-increment" value="true"/>
   -->
-#foreach ( $field in $class.allFields )
-#if( $field.getMetadata( $storeFieldMetadataId ).storable )
-#set ( $persistenceModifier = 'persistence-modifier="persistent"' )
-#set ( $defaultFetchGroup = 'default-fetch-group="true"' )
+#foreach( $field in $class.allFields )
+#set( $fieldMetadata = $field.getMetadata( $storeFieldMetadataId ) )
+#if( $fieldMetadata.storable )
+#set( $persistenceModifier = 'persistence-modifier="persistent"' )
+#set( $defaultFetchGroup = 'default-fetch-group="true"' )
 #else
-#set ( $persistenceModifier = 'persistence-modifier="none"' )
-#set ( $defaultFetchGroup = "" )
+#set( $persistenceModifier = 'persistence-modifier="none"' )
+#set( $defaultFetchGroup = "" )
 #end
 #if( $field.name == "id" )
-#set ( $primaryKey = "primary-key='true'" )
+#set( $primaryKey = "primary-key='true'" )
 #else
-#set ( $primaryKey = "primary-key='false'" )
+#set( $primaryKey = "primary-key='false'" )
 #end
 #if( $field.required )
-#set ( $nullValue = "null-value='exception'" )
+#set( $nullValue = "null-value='exception'" )
 #else
 #set ( $nullValue = "null-value='none'" )
 #end
@@ -64,6 +65,9 @@
       $nullValue
       $persistenceModifier
       $defaultFetchGroup>
+#if( $fieldMetadata.maxSize > 0)
+      <extension vendor-name="jpox" key="length" value="max $fieldMetadata.maxSize"/>
+#end
     </field>
 #end
 #end## for each field
