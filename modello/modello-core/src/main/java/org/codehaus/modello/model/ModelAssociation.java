@@ -44,23 +44,11 @@ public class ModelAssociation
 
     private String multiplicity;
 
-    private boolean parentElement = true;
-
     private ModelClass toClass;
 
     // ----------------------------------------------------------------------
     //
     // ----------------------------------------------------------------------
-
-    public boolean isParentElement()
-    {
-        return parentElement;
-    }
-
-    public void setParentElement( boolean parentElement )
-    {
-        this.parentElement = parentElement;
-    }
 
     /**
      * @param to The to to set.

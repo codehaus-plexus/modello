@@ -244,6 +244,8 @@ public class Xpp3WriterGenerator
                 fieldTagName = field.getName();
             }
 
+            boolean wrappedList = XmlFieldMetadata.LIST_STYLE_WRAPPED.equals( fieldMetadata.getListStyle() );
+
             String type = field.getType();
 
             String value = uncapClassName + "." + getPrefix( type ) + capitalise( field.getName() ) + "()";
@@ -288,7 +290,7 @@ public class Xpp3WriterGenerator
 
                         sc.indent();
 
-                        if ( association.isParentElement() )
+                        if ( wrappedList )
                         {
                             sc.add( "serializer.startTag( NAMESPACE, " + "\"" + fieldTagName + "\" );" );
                         }
@@ -322,7 +324,7 @@ public class Xpp3WriterGenerator
 
                         sc.add( "}" );
 
-                        if ( association.isParentElement() )
+                        if ( wrappedList )
                         {
                             sc.add( "serializer.endTag( NAMESPACE, " + "\"" + fieldTagName + "\" );" );
                         }
@@ -344,7 +346,7 @@ public class Xpp3WriterGenerator
 
                         sc.indent();
 
-                        if ( association.isParentElement() )
+                        if ( wrappedList )
                         {
                             sc.add( "serializer.startTag( NAMESPACE, " + "\"" + fieldTagName + "\" );" );
                         }
@@ -378,7 +380,7 @@ public class Xpp3WriterGenerator
 
                         sc.add( "}" );
 
-                        if ( association.isParentElement() )
+                        if ( wrappedList )
                         {
                             sc.add( "serializer.endTag( NAMESPACE, " + "\"" + fieldTagName + "\" );" );
                         }

@@ -22,9 +22,6 @@ package org.codehaus.modello.plugins.xml;
  * SOFTWARE.
  */
 
-import java.util.Collections;
-import java.util.Map;
-
 import org.codehaus.modello.metadata.AbstractMetadataPlugin;
 import org.codehaus.modello.metadata.AssociationMetadata;
 import org.codehaus.modello.metadata.ClassMetadata;
@@ -35,6 +32,9 @@ import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
+
+import java.util.Collections;
+import java.util.Map;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -66,11 +66,15 @@ public class XmlMetadataPlugin
 
         String attribute = (String) data.get( "xml.attribute" );
 
-        String tagName = (String) data.get( "xml.tagName" );
-
         metadata.setAttribute( Boolean.valueOf( attribute ).booleanValue() );
 
+        String tagName = (String) data.get( "xml.tagName" );
+
         metadata.setTagName( tagName );
+
+        String listStyle = (String) data.get( "xml.listStyle" );
+
+        metadata.setListStyle( listStyle );
 
         return metadata;
     }

@@ -33,9 +33,33 @@ public class XmlFieldMetadata
 {
     public final static String ID = XmlFieldMetadata.class.getName();
 
+    public static final String LIST_STYLE_FLAT = "flat";
+
+    public static final String LIST_STYLE_WRAPPED = "wrapped";
+
     private boolean attribute;
 
     private String tagName;
+
+    private String listStyle = LIST_STYLE_WRAPPED;
+
+    public String getListStyle()
+    {
+        return listStyle;
+    }
+
+    public void setListStyle( String listStyle )
+    {
+        if ( LIST_STYLE_FLAT.equals( listStyle ) || LIST_STYLE_WRAPPED.equals( listStyle ) )
+        {
+            this.listStyle = listStyle;
+        }
+        else
+        {
+            // default
+            this.listStyle = LIST_STYLE_WRAPPED;
+        }
+    }
 
     /**
      * @return Returns the attribute.
