@@ -30,7 +30,7 @@ public class Model
 
     private String root;
 
-    private Map metaDataClasses;
+//    private Map metaDataClasses;
 
     public Model()
     {
@@ -38,7 +38,7 @@ public class Model
 
         classMap = new HashMap();
     }
-    
+
     public String getId()
     {
         return id;
@@ -64,9 +64,9 @@ public class Model
         return (ModelClass) classMap.get( type );
     }
 
-    public void initialize( Map metaDataClasses )
+    public void initialize()
     {
-        this.metaDataClasses = metaDataClasses;
+//        this.metaDataClasses = metaDataClasses;
 
         for ( Iterator i = classes.iterator(); i.hasNext(); )
         {
@@ -104,9 +104,10 @@ public class Model
 
         return allFields;
     }
-
+/*
     public Map getMetaDataClasses()
     {
         return metaDataClasses;
     }
+*/
 }

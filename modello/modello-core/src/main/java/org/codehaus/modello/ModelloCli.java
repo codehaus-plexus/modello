@@ -1,5 +1,7 @@
 package org.codehaus.modello;
 
+import java.io.File;
+
 /*
  * LICENSE
  */
@@ -29,7 +31,7 @@ public class ModelloCli
 
         modello.initialize();
 
-        modello.work( modelFile, mode, outputDirectory, modelVersion, packageWithVersion );
+        modello.work( modelFile, mode, new File( outputDirectory ), modelVersion, packageWithVersion );
     }
 
     public static void parseArgumentsFromCommandLine( String[] args )

@@ -20,14 +20,26 @@ import org.codehaus.modello.generator.xml.xpp3.Xpp3WriterGenerator;
 public class GeneratorTest
     extends TestCase
 {
-    String outputDirectory = "target/output";
+    private String outputDirectory = "target/output";
 
-    String model = "model.xml";
+    private String modelFile = "model.xml";
+
+    private Model model;
+
+    public void setUp()
+        throws Exception
+    {
+        Modello modello = new Modello();
+
+        modello.initialize();
+
+        model = modello.getModel( modelFile );
+    }
 
     public void testJavaGenerator()
         throws Exception
     {
-        JavaGenerator generator = new JavaGenerator( model, new File( outputDirectory, "java" ).getPath(), "4.0.0", false );
+        JavaGenerator generator = new JavaGenerator( model, new File( outputDirectory, "java" ), "4.0.0", false );
 
         generator.generate();
     }
@@ -35,7 +47,7 @@ public class GeneratorTest
     public void testXmlSchemaGenerator()
         throws Exception
     {
-        XmlSchemaGenerator generator = new XmlSchemaGenerator( model, new File( outputDirectory, "xsd" ).getPath(), "4.0.0", false );
+        XmlSchemaGenerator generator = new XmlSchemaGenerator( model, new File( outputDirectory, "xsd" ), "4.0.0", false );
 
         generator.generate();
     }
@@ -43,7 +55,7 @@ public class GeneratorTest
     public void testXdocGenerator()
         throws Exception
     {
-        XdocGenerator generator = new XdocGenerator( model, new File( outputDirectory, "xdoc" ).getPath(), "4.0.0", false );
+        XdocGenerator generator = new XdocGenerator( model, new File( outputDirectory, "xdoc" ), "4.0.0", false );
 
         generator.generate();
     }
@@ -51,7 +63,7 @@ public class GeneratorTest
     public void testXpp3UnmarshallerGenerator()
         throws Exception
     {
-        Xpp3ReaderGenerator generator = new Xpp3ReaderGenerator( model, new File( outputDirectory, "xpp3" ).getPath(), "4.0.0", false );
+        Xpp3ReaderGenerator generator = new Xpp3ReaderGenerator( model, new File( outputDirectory, "xpp3" ), "4.0.0", false );
 
         generator.generate();
     }
@@ -59,7 +71,7 @@ public class GeneratorTest
     public void testXpp3MarshallerGenerator()
         throws Exception
     {
-        Xpp3WriterGenerator generator = new Xpp3WriterGenerator( model, new File( outputDirectory, "xpp3" ).getPath(), "4.0.0", false );
+        Xpp3WriterGenerator generator = new Xpp3WriterGenerator( model, new File( outputDirectory, "xpp3" ), "4.0.0", false );
 
         generator.generate();
     }

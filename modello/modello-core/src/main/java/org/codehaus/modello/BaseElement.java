@@ -1,21 +1,26 @@
 package org.codehaus.modello;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.codehaus.modello.metadata.MetaData;
+
 /**
- *
- *
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
  *
  * @version $Id$
  */
-public class BaseElement
+public abstract class BaseElement
 {
-    String name;
+    private String name;
 
-    String description;
+    private String description;
 
-    String version;
+    private String version;
 
-    String comment;
+    private String comment;
+
+    private transient Map metaData = new HashMap();
 
     public String getName()
     {
@@ -35,5 +40,27 @@ public class BaseElement
     public String getComment()
     {
         return comment;
+    }
+
+    public boolean hasMetaData( String key )
+    {
+        return metaData.containsKey( key );
+    }
+
+    public void addMetaData( MetaData metaData )
+    {
+        this.metaData.put( metaData.getClass().getName(), metaData );
+    }
+
+    public MetaData getMetaData( String key )
+    {
+        MetaData metaData = (MetaData) this.metaData.get( key );
+
+        if ( metaData == null )
+        {
+            throw new ModelloRuntimeException( "No such metadata: " + key );
+        }
+
+        return metaData;
     }
 }

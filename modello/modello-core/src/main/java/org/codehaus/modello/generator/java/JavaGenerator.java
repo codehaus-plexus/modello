@@ -25,7 +25,7 @@ import org.codehaus.modello.generator.java.javasource.JType;
 public class JavaGenerator
     extends AbstractGenerator
 {
-    public JavaGenerator( String model, String outputDirectory, String modelVersion, boolean packageWithVersion )
+    public JavaGenerator( Model model, File outputDirectory, String modelVersion, boolean packageWithVersion )
     {
         super( model, outputDirectory, modelVersion, packageWithVersion );
     }
@@ -69,7 +69,7 @@ public class JavaGenerator
         }
         catch( IOException ex )
         {
-            throw new ModelloException( "Exception while generating XDoc.", ex );
+            throw new ModelloException( "Exception while generating Java.", ex );
         }
     }
 
