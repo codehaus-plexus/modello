@@ -4,7 +4,7 @@
     <component>
       <role>org.codehaus.modello.plugin.ModelloGenerator</role>
       <role-hint>jpox</role-hint>
-      <implementation>org.codehaus.modello.plugin.jpox.JpoxModelloGenerator</implementation>
+      <implementation>org.codehaus.modello.plugin.jpox.JPoxModelloGenerator</implementation>
       <requirements>
         <requirement>
           <role>org.codehaus.plexus.velocity.VelocityComponent</role>

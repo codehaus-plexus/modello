@@ -23,6 +23,7 @@ package org.codehaus.modello.plugin.jpox;
  */
 
 import java.io.FileReader;
+import java.io.File;
 import java.util.Properties;
 
 import org.codehaus.modello.ModelloGeneratorTest;
@@ -34,10 +35,10 @@ import org.codehaus.modello.model.Model;
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
-public class JpoxModelloGeneratorTest
+public class JPoxModelloGeneratorTest
     extends ModelloGeneratorTest
 {
-    public JpoxModelloGeneratorTest()
+    public JPoxModelloGeneratorTest()
     {
         super( "jpox" );
     }
@@ -49,14 +50,39 @@ public class JpoxModelloGeneratorTest
 
         Model model = core.loadModel( new FileReader( getTestPath( "src/test/resources/mergere-tissue.mdo" ) ) );
 
+        // ----------------------------------------------------------------------
+        // Generate the code
+        // ----------------------------------------------------------------------
+
         Properties parameters = new Properties();
 
         parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, getGeneratedSources().getAbsolutePath() );
 
-        parameters.setProperty( ModelloParameterConstants.VERSION, "4.0.0" );
+        parameters.setProperty( ModelloParameterConstants.VERSION, "1.0.0" );
 
-        parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString( false ) );
+        parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.FALSE.toString() );
 
         core.generate( model, "jpox", parameters );
+
+        // ----------------------------------------------------------------------
+        // Assert
+        // ----------------------------------------------------------------------
+
+        assertGeneratedFileExists( "org/mergere/tissue/TissueJPoxStore.java" );
+
+        assertGeneratedFileExists( "jpox.jdo" );
+    }
+
+    // ----------------------------------------------------------------------
+    //
+    // ----------------------------------------------------------------------
+
+    private void assertGeneratedFileExists( String filename )
+    {
+        File file = new File( getGeneratedSources(), filename );
+
+        assertTrue( "Missing generated file: " + file.getAbsolutePath(), file.canRead() );
+
+        assertTrue( "The generated file is empty.", file.length() > 0 );
     }
 }

@@ -1,0 +1,220 @@
+package ${package};
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+
+import javax.jdo.Extent;
+import javax.jdo.PersistenceManager;
+import javax.jdo.PersistenceManagerFactory;
+import javax.jdo.Transaction;
+
+/**
+ * Generated JPox storage mechanism for ${model.name}.
+ *
+ * @author Mr Modello
+ */
+public class ${model.name}JPoxStore
+{
+    private PersistenceManagerFactory pmf;
+
+    public ${model.name}JPoxStore( PersistenceManagerFactory pmf )
+    {
+        this.pmf = pmf;
+    }
+
+    // ----------------------------------------------------------------------
+    // Utility Methods
+    // ----------------------------------------------------------------------
+
+    public Transaction beginTransaction()
+        throws Exception
+    {
+        PersistenceManager pm = pmf.getPersistenceManager();
+
+        Transaction tx = pm.currentTransaction();
+
+        tx.begin();
+
+        return tx;
+    }
+
+    public void commitTransaction( Transaction tx )
+    {
+        try
+        {
+            tx.commit();
+        }
+        finally
+        {
+            if ( tx.isActive() )
+            {
+                tx.rollback();
+            }
+
+            tx.getPersistenceManager().close();
+        }
+    }
+
+#foreach ( $class in $model.allClasses )
+#if ( $class.getMetadata( $storeMetadataId ).isStorable() )
+    // ----------------------------------------------------------------------
+    // ${class.name} CRUD
+    // ----------------------------------------------------------------------
+
+    public void add${class.name}( $class.name o )
+        throws Exception
+    {
+        PersistenceManager pm = pmf.getPersistenceManager();
+
+        Transaction tx = pm.currentTransaction();
+
+        try
+        {
+            tx.begin();
+
+            pm.makePersistent( o );
+
+            tx.commit();
+        }
+        finally
+        {
+            if ( tx.isActive() )
+            {
+                tx.rollback();
+            }
+
+            pm.close();
+        }
+    }
+#*
+    public void update${class.name}( $class.name newObject )
+        throws Exception
+    {
+        PersistenceManager pm = pmf.getPersistenceManager();
+
+        Transaction tx = pm.currentTransaction();
+
+        try
+        {
+            tx.begin();
+
+            ;
+
+            tx.commit();
+        }
+        finally
+        {
+            if ( tx.isActive() )
+            {
+                tx.rollback();
+            }
+
+            pm.close();
+        }
+    }
+*#
+    public void delete${class.name}( Object id )
+        throws Exception
+    {
+        PersistenceManager pm = pmf.getPersistenceManager();
+
+        Transaction tx = pm.currentTransaction();
+
+        try
+        {
+            tx.begin();
+
+            Object object = pm.getObjectById( id, true );
+
+            pm.deletePersistent( object );
+
+            tx.commit();
+        }
+        finally
+        {
+            if ( tx.isActive() )
+            {
+                tx.rollback();
+            }
+
+            pm.close();
+        }
+    }
+
+    public ${class.name} get${class.name}( Object id )
+        throws Exception
+    {
+        PersistenceManager pm = pmf.getPersistenceManager();
+
+        Transaction tx = pm.currentTransaction();
+
+        try
+        {
+            tx.begin();
+
+            ${class.name} object = (${class.name}) pm.getObjectById( ${class.name}.class, true );
+
+            pm.makeTransient( object );
+
+            tx.commit();
+
+            return object;
+        }
+        finally
+        {
+            if ( tx.isActive() )
+            {
+                tx.rollback();
+            }
+
+            pm.close();
+        }
+    }
+
+    public Collection get${class.name}Collection()
+        throws Exception
+    {
+        Collection collection;
+
+        PersistenceManager pm = pmf.getPersistenceManager();
+
+        Transaction tx = pm.currentTransaction();
+
+        try
+        {
+            tx.begin();
+
+            Extent extent = pm.getExtent( ${package}.${class.name}.class, true );
+
+            Iterator it = extent.iterator();
+
+            collection = new ArrayList();
+
+            while( it.hasNext() )
+            {
+                Object o = it.next();
+
+                ## Make transient?
+
+                collection.add( o );
+            }
+
+            tx.commit();
+
+            return collection;
+        }
+        finally
+        {
+            if ( tx.isActive() )
+            {
+                tx.rollback();
+            }
+
+            pm.close();
+        }
+    }
+#end
+
+#end
+}
