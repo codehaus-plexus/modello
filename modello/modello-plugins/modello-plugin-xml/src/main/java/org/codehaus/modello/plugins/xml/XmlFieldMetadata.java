@@ -41,6 +41,8 @@ public class XmlFieldMetadata
 
     private String tagName;
 
+    private String associationTagName;
+
     private String listStyle = LIST_STYLE_WRAPPED;
 
     public String getListStyle()
@@ -59,6 +61,16 @@ public class XmlFieldMetadata
             // default
             this.listStyle = LIST_STYLE_WRAPPED;
         }
+    }
+
+    public String getAssociationTagName()
+    {
+        return associationTagName;
+    }
+
+    public void setAssociationTagName( String associationTagName )
+    {
+        this.associationTagName = associationTagName;
     }
 
     /**
