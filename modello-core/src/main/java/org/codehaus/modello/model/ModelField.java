@@ -116,6 +116,22 @@ public class ModelField
     public void initialize( ModelClass modelClass )
     {
         this.modelClass = modelClass;
+
+        if ( defaultValue == null )
+        {
+            if ( "boolean".equals( type ) )
+            {
+                defaultValue = "false";
+            }
+            if ( "float".equals( type ) || "double".equals( type ) )
+            {
+                defaultValue = "0.0";
+            }
+            if ( "int".equals( type ) || "char".equals( type ) || "short".equals( type ) )
+            {
+                defaultValue = "0";
+            }
+        }
     }
 
     public void validateElement()
