@@ -25,8 +25,6 @@ package org.codehaus.mojo.modello;
 /**
  * @goal xdoc
  *
- * @phase generate-sources
- *
  * @description Creates XPP3 writer from the model.
  *
  * @parameter name="outputDirectory"
