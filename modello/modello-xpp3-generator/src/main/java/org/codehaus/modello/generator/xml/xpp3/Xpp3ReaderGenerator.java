@@ -296,7 +296,6 @@ public class Xpp3ReaderGenerator
         String modelClassName = uncapitalise( modelClass.getName() );
 
         String tagName = xmlMetaData.getTagName();
-
         if ( tagName == null )
         {
             tagName = name;
@@ -378,14 +377,7 @@ public class Xpp3ReaderGenerator
 
         sc.indent();
 
-        if ( tagName != null )
-        {
-            sc.add( "if ( parser.getName().equals( \"" + singular( tagName ) + "\" ) )" );
-        }
-        else
-        {
-            sc.add( "if ( parser.getName().equals( \"" + singular( fieldName ) + "\" ) )" );
-        }
+        sc.add( "if ( parser.getName().equals( \"" + singular( tagName ) + "\" ) )" );
 
         sc.add( "{" );
 
