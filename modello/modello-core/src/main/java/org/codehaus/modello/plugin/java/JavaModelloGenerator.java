@@ -347,8 +347,7 @@ public class JavaModelloGenerator
 
             sc.indent();
 
-            sc.add( "this." + field.getName() + ".break" + modelAssociation.getModelClass().getName()
-                + "Association( this );" );
+            sc.add( "this." + field.getName() + ".break" + modelAssociation.getModelClass().getName() + "Association( this );" );
 
             sc.unindent();
 
@@ -366,8 +365,7 @@ public class JavaModelloGenerator
 
             sc.indent();
 
-            sc.add( "this." + field.getName() + ".create" + modelAssociation.getModelClass().getName()
-                + "Association( this );" );
+            sc.add( "this." + field.getName() + ".create" + modelAssociation.getModelClass().getName() + "Association( this );" );
 
             sc.unindent();
 
@@ -477,20 +475,17 @@ public class JavaModelloGenerator
             }
             else
             {
-                sc.add( "Collection " + modelAssociation.getName() + " = get" + capitalise( modelAssociation.getName() )
-                    + "();" );
+                sc.add( "Collection " + modelAssociation.getName() + " = get" + capitalise( modelAssociation.getName() ) + "();" );
 
                 sc.add( "" );
 
-                sc.add( "if ( " + modelAssociation.getName() + ".contains(" + uncapitalise( modelAssociation.getTo() )
-                    + ") )" );
+                sc.add( "if ( get" + capitalise( modelAssociation.getName() ) + "().contains(" + uncapitalise( modelAssociation.getTo() ) + ") )" );
 
                 sc.add( "{" );
 
                 sc.indent();
 
-                sc.add( "throw new Exception( \"" + uncapitalise( modelAssociation.getTo() )
-                    + " is already assigned.\" );" );
+                sc.add( "throw new Exception( \"" + uncapitalise( modelAssociation.getTo() ) + " is already assigned.\" );" );
 
                 sc.unindent();
 
@@ -514,15 +509,13 @@ public class JavaModelloGenerator
 
             if ( ModelAssociation.ONE_MULTIPLICITY.equals( modelAssociation.getMultiplicity() ) )
             {
-                sc.add( "if ( this." + modelAssociation.getName() + " != " + uncapitalise( modelAssociation.getTo() )
-                    + " )" );
+                sc.add( "if ( this." + modelAssociation.getName() + " != " + uncapitalise( modelAssociation.getTo() ) + " )" );
 
                 sc.add( "{" );
 
                 sc.indent();
 
-                sc.add( "throw new Exception( \"" + uncapitalise( modelAssociation.getTo() )
-                    + " isn't associated.\" );" );
+                sc.add( "throw new Exception( \"" + uncapitalise( modelAssociation.getTo() ) + " isn't associated.\" );" );
 
                 sc.unindent();
 
@@ -534,15 +527,13 @@ public class JavaModelloGenerator
             }
             else
             {
-                sc.add( "if ( ! this." + modelAssociation.getName() + ".contains( "
-                    + uncapitalise( modelAssociation.getTo() ) + " ) )" );
+                sc.add( "if ( ! get" + capitalise( modelAssociation.getName() ) + "().contains( " + uncapitalise( modelAssociation.getTo() ) + " ) )" );
 
                 sc.add( "{" );
 
                 sc.indent();
 
-                sc.add( "throw new Exception( \"" + uncapitalise( modelAssociation.getTo() )
-                    + " isn't associated.\" );" );
+                sc.add( "throw new Exception( \"" + uncapitalise( modelAssociation.getTo() ) + " isn't associated.\" );" );
 
                 sc.unindent();
 
@@ -550,8 +541,7 @@ public class JavaModelloGenerator
 
                 sc.add( "" );
 
-                sc.add( "get" + capitalise( modelAssociation.getName() ) + "().remove( "
-                    + uncapitalise( modelAssociation.getTo() ) + " );" );
+                sc.add( "get" + capitalise( modelAssociation.getName() ) + "().remove( " + uncapitalise( modelAssociation.getTo() ) + " );" );
             }
 
             jClass.addMethod( breakMethod );
@@ -609,8 +599,7 @@ public class JavaModelloGenerator
             {
                 adder.addException( new JClass( "Exception" ) );
 
-                adder.getSourceCode().add( parameterName + ".create" + modelAssociation.getModelClass().getName()
-                    + "Association( this );" );
+                adder.getSourceCode().add( parameterName + ".create" + modelAssociation.getModelClass().getName() + "Association( this );" );
             }
 
             jClass.addMethod( adder );
@@ -623,8 +612,7 @@ public class JavaModelloGenerator
             {
                 remover.addException( new JClass( "Exception" ) );
 
-                remover.getSourceCode().add( parameterName + ".break" + modelAssociation.getModelClass().getName()
-                    + "Association( this );" );
+                remover.getSourceCode().add( parameterName + ".break" + modelAssociation.getModelClass().getName() + "Association( this );" );
             }
 
             remover.getSourceCode().add( "get" + capitalise( fieldName ) + "().remove( " + parameterName + " );" );
