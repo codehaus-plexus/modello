@@ -92,7 +92,7 @@ public class Modello
         }
         else if ( mode.equals( "xsd" ) )
         {
-            XmlSchemaGenerator generator = new XmlSchemaGenerator( model, new File( outputDirectory ).getPath(), modelVersion );
+            XmlSchemaGenerator generator = new XmlSchemaGenerator( model, new File( outputDirectory ).getPath(), modelVersion, false );
 
             System.out.println( "Generating xml schema in " + outputDirectory + " from " + model );
 
@@ -100,7 +100,7 @@ public class Modello
         }
         else if ( mode.equals( "xdoc" ) )
         {
-            XdocGenerator generator = new XdocGenerator( model, new File( outputDirectory ).getPath(), modelVersion );
+            XdocGenerator generator = new XdocGenerator( model, new File( outputDirectory ).getPath(), modelVersion, false );
 
             System.out.println( "Generating xdoc in " + outputDirectory + " from " + model );
 

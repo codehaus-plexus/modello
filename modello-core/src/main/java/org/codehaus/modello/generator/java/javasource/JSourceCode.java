@@ -232,7 +232,7 @@ public class JSourceCode
      **/
     private void addCodeStatement( JCodeStatement jcs )
     {
-        short indent = (short) ( jcs.getIndent() + currentIndent - jcs.DEFAULT_INDENTSIZE );
+        short indent = (short) ( jcs.getIndent() + currentIndent - JCodeStatement.DEFAULT_INDENTSIZE );
         source.addElement( new JCodeStatement( jcs.getStatement(), indent ) );
     } //-- addCodeStatement(JCodeStatement)
 
