@@ -37,8 +37,6 @@ public class ModelloTest
 {
     private Modello modello;
 
-    private ModelBuilder builder;
-
     private String basedir;
 
     public ModelloTest()
