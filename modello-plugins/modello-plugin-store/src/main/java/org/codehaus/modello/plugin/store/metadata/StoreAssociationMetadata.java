@@ -31,4 +31,17 @@ import org.codehaus.modello.metadata.AssociationMetadata;
 public class StoreAssociationMetadata
     implements AssociationMetadata
 {
+    public static final String ID = StoreAssociationMetadata.class.getName();
+
+    private boolean storable;
+
+    public void setStorable( boolean storable )
+    {
+        this.storable = storable;
+    }
+
+    public boolean isStorable()
+    {
+        return storable;
+    }
 }

@@ -53,28 +53,62 @@ public class StoreMetadataPlugin
 
     public ClassMetadata getClassMetadata( ModelClass clazz, Map data )
     {
-        StoreClassMetadata classMetadata = new StoreClassMetadata();
+        StoreClassMetadata metadata = new StoreClassMetadata();
 
         String storable = (String) data.get( "stash.storable" );
 
         if ( storable != null && storable.equals( "true" ) )
         {
-            classMetadata.setStorable( true );
+            metadata.setStorable( true );
         }
 
-        return classMetadata;
+        return metadata;
     }
 
     public FieldMetadata getFieldMetadata( ModelField field, Map data )
     {
         StoreFieldMetadata metadata = new StoreFieldMetadata();
 
+        // ----------------------------------------------------------------------
+        // Fields are per default storable as the fields can't be persisted
+        // unless the class itself is storable.
+        // ----------------------------------------------------------------------
+
+        String storable = (String) data.get( "stash.storable" );
+
+        if ( storable != null && storable.equals( "false" ) )
+        {
+            metadata.setStorable( false );
+        }
+        else
+        {
+            metadata.setStorable( true );
+        }
+
         return metadata;
     }
 
     public AssociationMetadata getAssociationMetadata( ModelAssociation association, Map data )
     {
-        return new StoreAssociationMetadata();
+        StoreAssociationMetadata metadata = new StoreAssociationMetadata();
+
+        // ----------------------------------------------------------------------
+        // Associations are per default storable as the fields can't be persisted
+        // unless the class itself is storable.
+        // ----------------------------------------------------------------------
+
+        String storable = (String) data.get( "stash.storable" );
+
+        if ( storable != null && !storable.equals( "false" ) )
+        {
+            metadata.setStorable( false );
+        }
+        else
+        {
+            metadata.setStorable( true );
+        }
+
+        return metadata;
     }
 
     // ----------------------------------------------------------------------
