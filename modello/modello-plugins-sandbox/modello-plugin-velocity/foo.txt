@@ -14,12 +14,35 @@ public class TissuePrevaylerStore
 {
     private String databaseDirectory;
 
-    private static class Store
+    private Store store = new Store();
+
+    static class Store
         implements Serializable
     {
         private Map IssueMap = new HashMap();
+
+        void addIssue( Issue o ) { IssueMap.put(); }
+
+        void updateIssue( Issue o ) { IssueMap.put() }
+
+        void deleteIssue( Issue o ) { IssueMap.remove() }
+
         private Map ProjectMap = new HashMap();
+
+        void addProject( Project o ) { ProjectMap.put(); }
+
+        void updateProject( Project o ) { ProjectMap.put() }
+
+        void deleteProject( Project o ) { ProjectMap.remove() }
+
         private Map UserMap = new HashMap();
+
+        void addUser( User o ) { UserMap.put(); }
+
+        void updateUser( User o ) { UserMap.put() }
+
+        void deleteUser( User o ) { UserMap.remove() }
+
     }
 
     // ----------------------------------------------------------------------
@@ -29,120 +52,117 @@ public class TissuePrevaylerStore
     public class AddIssue
         implements TransactionWithQuery
     {
-        private final Task task;
+        private final Issue o;
 
-        public AddTask(String description, int priority)
+        public AddIssue( Issue o )
         {
-            this.task = new Task(description, priority);
+            this.o = o;
         }
 
         public Object executeAndQuery(Object prevalentSystem, Date executionTime)
-          throws Exception
+            throws Exception
         {
+            Store system = (Store) prevalentSystem;
 
-            TaskList system = (TaskList) prevalentSystem;
+            system.addIssue( o );
 
-            system.addTask(task);
-
-            return task;
+            return o;
         }
     }
 
-    public class RemoveIssue
+    public class DeleteIssue
         implements Transaction
     {
-        private Task task;
+        private Issue o;
 
-        public RemoveTask(Task task)
+        public RemoveIssue( Issue o )
         {
-            this.task = task;
+            this.o = o;
         }
 
         public void executeOn(Object prevalentSystem, Date executionTime)
         {
-            TaskList system = (TaskList) prevalentSystem;
+            Store system = (Store) prevalentSystem;
 
-            system.removeTask(task);
+            system.deleteIssue( o );
         }
     }
 
     public class AddProject
         implements TransactionWithQuery
     {
-        private final Task task;
+        private final Project o;
 
-        public AddTask(String description, int priority)
+        public AddProject( Project o )
         {
-            this.task = new Task(description, priority);
+            this.o = o;
         }
 
         public Object executeAndQuery(Object prevalentSystem, Date executionTime)
-          throws Exception
+            throws Exception
         {
+            Store system = (Store) prevalentSystem;
 
-            TaskList system = (TaskList) prevalentSystem;
+            system.addProject( o );
 
-            system.addTask(task);
-
-            return task;
+            return o;
         }
     }
 
-    public class RemoveProject
+    public class DeleteProject
         implements Transaction
     {
-        private Task task;
+        private Project o;
 
-        public RemoveTask(Task task)
+        public RemoveProject( Project o )
         {
-            this.task = task;
+            this.o = o;
         }
 
         public void executeOn(Object prevalentSystem, Date executionTime)
         {
-            TaskList system = (TaskList) prevalentSystem;
+            Store system = (Store) prevalentSystem;
 
-            system.removeTask(task);
+            system.deleteProject( o );
         }
     }
 
     public class AddUser
         implements TransactionWithQuery
     {
-        private final Task task;
+        private final User o;
 
-        public AddTask(String description, int priority)
+        public AddUser( User o )
         {
-            this.task = new Task(description, priority);
+            this.o = o;
         }
 
         public Object executeAndQuery(Object prevalentSystem, Date executionTime)
-          throws Exception
+            throws Exception
         {
+            Store system = (Store) prevalentSystem;
 
-            TaskList system = (TaskList) prevalentSystem;
+            system.addUser( o );
 
-            system.addTask(task);
-
-            return task;
+            return o;
         }
     }
 
-    public class RemoveUser
+    public class DeleteUser
         implements Transaction
     {
-        private Task task;
+        private User o;
 
-        public RemoveTask(Task task)
+        public RemoveUser( User o )
         {
-            this.task = task;
+            this.o = o;
         }
 
         public void executeOn(Object prevalentSystem, Date executionTime)
         {
-            TaskList system = (TaskList) prevalentSystem;
+            Store system = (Store) prevalentSystem;
 
-            system.removeTask(task);
+            system.deleteUser( o );
         }
     }
 
@@ -170,49 +190,76 @@ public class TissuePrevaylerStore
     // Storage methods
     // ----------------------------------------------------------------------
 
-    public void addIssue( Issue entity )
+    public void addIssue( Issue o )
         throws StoreException
     {
+        store.addIssue( o );
     }
 
-    public void delete( String id )
+    public void updateIssue( String id, Issue o )
         throws StoreException
     {
+        store.updateIssue( o );
     }
 
-    public void update( String id, Issue entity )
+    public void deleteIssue( String id )
         throws StoreException
     {
+        store.addIssue( id );
     }
 
-    public void addProject( Project entity )
+    public void getIssue( String id )
         throws StoreException
     {
+        store.getIssue( id );
     }
 
-    public void delete( String id )
+    public void addProject( Project o )
         throws StoreException
     {
+        store.addProject( o );
     }
 
-    public void update( String id, Project entity )
+    public void updateProject( String id, Project o )
         throws StoreException
     {
+        store.updateProject( o );
     }
 
-    public void addUser( User entity )
+    public void deleteProject( String id )
         throws StoreException
     {
+        store.addProject( id );
     }
 
-    public void delete( String id )
+    public void getProject( String id )
         throws StoreException
     {
+        store.getProject( id );
     }
 
-    public void update( String id, User entity )
+    public void addUser( User o )
         throws StoreException
     {
+        store.addUser( o );
+    }
+
+    public void updateUser( String id, User o )
+        throws StoreException
+    {
+        store.updateUser( o );
+    }
+
+    public void deleteUser( String id )
+        throws StoreException
+    {
+        store.addUser( id );
+    }
+
+    public void getUser( String id )
+        throws StoreException
+    {
+        store.getUser( id );
     }
 
 }
