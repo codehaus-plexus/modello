@@ -1,0 +1,8 @@
+<plugin-set>
+  <plugins>
+    <plugin>
+      <id>xpp3</id>
+      <implementation>org.codehaus.modello.generator.xml.xpp3.Xpp3Generator</implementation>
+    </plugin>
+  </plugins>
+</plugin-set>
