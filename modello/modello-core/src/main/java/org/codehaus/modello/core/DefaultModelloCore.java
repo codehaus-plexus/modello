@@ -103,7 +103,7 @@ public class DefaultModelloCore
             {
                 ModelField field = (ModelField) fields.next();
 
-                attributes = modelReader.getAttributesForField( field.getName() );
+                attributes = modelReader.getAttributesForField( field );
 
                 attributes = Collections.unmodifiableMap( attributes );
 
@@ -126,7 +126,7 @@ public class DefaultModelloCore
             {
                 ModelAssociation association = (ModelAssociation) associations.next();
 
-                attributes = modelReader.getAttributesForAssociation( association.getName() );
+                attributes = modelReader.getAttributesForAssociation( association );
 
                 attributes = Collections.unmodifiableMap( attributes );
 

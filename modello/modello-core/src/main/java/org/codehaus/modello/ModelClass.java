@@ -102,6 +102,11 @@ public class ModelClass
 
     public void addField( ModelField field )
     {
+        if ( fieldMap.containsKey( field.getName() ) )
+        {
+            throw new ModelloRuntimeException( "Duplicate field in " + getName() + ": " + field.getName() + "." );
+        }
+
         getFields().add( field );
 
         fieldMap.put( field.getName(), field );
@@ -150,6 +155,11 @@ public class ModelClass
 
     public void addAssociation( ModelAssociation association )
     {
+        if ( associationMap.containsKey( association.getName() ) )
+        {
+            throw new ModelloRuntimeException( "Duplicate association in " + getName() + ": " + association.getName() + "." );
+        }
+
         getAssociations().add( association );
 
         associationMap.put( association.getName(), association );
@@ -230,6 +240,7 @@ public class ModelClass
     }
 
     public void validateElement()
+        throws ModelValidationException
     {
     }
 }
