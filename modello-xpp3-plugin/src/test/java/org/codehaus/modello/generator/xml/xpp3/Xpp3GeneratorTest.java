@@ -100,12 +100,6 @@ public class Xpp3GeneratorTest
 
         classes.mkdirs();
 
-        addDependency( "modello", "modello-core", "1.0-SNAPSHOT" );
-
-        addDependency( "modello", "modello-xml-plugin", "1.0-SNAPSHOT" );
-
-        addDependency( "xpp3", "xpp3", "1.1.3.3" );
-
         Properties parameters = new Properties();
 
         parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, generatedSources.getAbsolutePath() );
@@ -114,15 +108,13 @@ public class Xpp3GeneratorTest
 
         parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString( false ) );
 
-//        modello.work2( model , "java", generatedSources, "4.0.0", false );
-
         modello.generate( model, "java", parameters );
-
-//        modello.work2( model, "xpp3", generatedSources, "4.0.0", false );
 
         modello.generate( model, "xpp3-writer", parameters );
 
         modello.generate( model, "xpp3-reader", parameters );
+
+        addDependency( "modello", "modello-core", "1.0-SNAPSHOT" );
 
         compile( generatedSources, classes );
 
