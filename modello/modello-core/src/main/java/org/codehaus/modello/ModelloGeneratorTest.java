@@ -5,6 +5,7 @@ package org.codehaus.modello;
  */
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.ArrayList;
@@ -97,7 +98,7 @@ public abstract class ModelloGeneratorTest
     }
 
     protected void verify( String className, String testName )
-        throws Exception
+        throws Throwable
     {
         IsolatedClassLoader classLoader = new IsolatedClassLoader();
 
@@ -128,6 +129,13 @@ public abstract class ModelloGeneratorTest
 
         Method verify = clazz.getMethod( "verify", new Class[0] );
 
-        verify.invoke( clazz.newInstance(), new Object[0] );
+        try
+        {
+            verify.invoke( clazz.newInstance(), new Object[0] );
+        }
+        catch( InvocationTargetException ex )
+        {
+            throw ex.getCause();
+        }
     }
 }

@@ -1,5 +1,6 @@
 package org.codehaus.modello;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -45,6 +46,14 @@ public class ModelClass
         return superClass;
     }
 
+    /**
+     * Returns the list of all fields in this class. 
+     * 
+     * It does not include the fields of super classes.
+     * 
+     * @return Returns the list of all fields in this class. It does not include the 
+     *         fields of super classes.
+     */
     public List getFields()
     {
         if ( fields == null )
@@ -55,11 +64,65 @@ public class ModelClass
         return fields;
     }
 
+    /**
+     * Returns all the associations in this class and all super classes.
+     * 
+     * @return Returns all the associations in this class and all super classes.
+     */
+    public List getAllFields()
+    {
+        List fields = new ArrayList( getFields() );
+
+        ModelClass c = this;
+
+        while ( c.getSuperClass() != null )
+        {
+            ModelClass parent = model.getClass( c.getSuperClass() );
+
+            fields.addAll( parent.getFields() );
+
+            c = parent;
+        }
+
+        return fields;
+    }
+
+    /**
+     * Returns the list of all associations in this class. 
+     * 
+     * It does not include the associations of super classes.
+     * 
+     * @return Returns the list of all associations in this class. It does not include the 
+     *         associations of super classes.
+     */
     public List getAssociations()
     {
         if ( associations == null )
         {
             return Collections.EMPTY_LIST;
+        }
+
+        return associations;
+    }
+
+    /**
+     * Returns all the associations in this class and all super classes.
+     * 
+     * @return Returns all the associations in this class and all super classes.
+     */
+    public List getAllAssociations()
+    {
+        List associations = new ArrayList( getAssociations() );
+
+        ModelClass c = this;
+
+        while ( c.getSuperClass() != null )
+        {
+            ModelClass parent = model.getClass( c.getSuperClass() );
+
+            associations.addAll( parent.getAssociations() );
+
+            c = parent;
         }
 
         return associations;

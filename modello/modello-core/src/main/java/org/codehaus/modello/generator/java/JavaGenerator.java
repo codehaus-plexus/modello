@@ -80,46 +80,37 @@ public class JavaGenerator
                     jClass.setSuperClass( modelClass.getSuperClass() );
                 }
 
-                if ( modelClass.getFields() != null )
+                for ( Iterator j = modelClass.getAllFields().iterator(); j.hasNext(); )
                 {
-                    int count = 1;
+                    ModelField modelField = (ModelField) j.next();
 
-                    for ( Iterator j = modelClass.getFields().iterator(); j.hasNext(); )
+                    if ( outputElement( modelField.getVersion(), modelClass.getName() + "." + modelField.getName() ) )
                     {
-                        ModelField modelField = (ModelField) j.next();
+                        createField( jClass, modelField );
+                    }
+                }
 
-                        if ( outputElement( modelField.getVersion(), modelClass.getName() + "." + modelField.getName() ) )
+                for ( Iterator j = modelClass.getAllAssociations().iterator(); j.hasNext(); )
+                {
+                    ModelAssociation modelAssociation = (ModelAssociation) j.next();
+
+                    if ( outputElement( modelAssociation.getVersion(), modelClass.getName() + "." + modelAssociation.getName() ) )
+                    {
+                        createAssociation( jClass, modelAssociation );
+                    }
+                }
+
+                if ( modelClass.getCodeSegments() != null )
+                {
+                    for ( Iterator iterator = modelClass.getCodeSegments().iterator(); iterator.hasNext(); )
+                    {
+                        CodeSegment codeSegment = (CodeSegment) iterator.next();
+
+                        if ( outputElement( codeSegment.getVersion(), "" ) )
                         {
-                            createField( jClass, modelField );
+                            jClass.addSourceCode( codeSegment.getCode() );
                         }
                     }
-
-                    System.err.println(modelClass.getName() + ":" + modelClass.getAssociations().size() );
-
-                    for ( Iterator j = modelClass.getAssociations().iterator(); j.hasNext(); )
-                    {
-                        ModelAssociation modelAssociation = (ModelAssociation) j.next();
-
-                        if ( outputElement( modelAssociation.getVersion(), modelClass.getName() + "." + modelAssociation.getName() ) )
-                        {
-                            createAssociation( jClass, modelAssociation );
-                        }
-                    }
-
-                    if ( modelClass.getCodeSegments() != null )
-                    {
-                        for ( Iterator iterator = modelClass.getCodeSegments().iterator(); iterator.hasNext(); )
-                        {
-                            CodeSegment codeSegment = (CodeSegment) iterator.next();
-
-                            if ( outputElement( codeSegment.getVersion(), "" ) )
-                            {
-                                jClass.addSourceCode( codeSegment.getCode() );
-                            }
-                        }
-                    }
-
-                    count++;
                 }
 
                 jClass.print( sourceWriter );
@@ -279,6 +270,8 @@ public class JavaGenerator
             jField.setComment( modelAssociation.getComment() );
         }
 
+        jField.setInitString( "new java.util.ArrayList()" );
+
         jClass.addField( jField );
 
         jClass.addMethod( createGetter( jField ) );
@@ -298,17 +291,21 @@ public class JavaGenerator
 
             String parameterName = singular( fieldName );
 
-            String className = capitalise( modelAssociation.getToClass().getName() );
+            String className;
 
             JType addType;
 
-            if ( modelAssociation.getFromClass().getModel().getClass( className ) != null )
+            if ( modelAssociation.getToClass() != null )
             {
-                addType = new JClass( className );
+                addType = new JClass( modelAssociation.getToClass().getName() );
+
+                className = modelAssociation.getToClass().getName();
             }
             else
             {
                 addType = new JClass( "String" );
+
+                className = capitalise( singular( modelAssociation.getFromRole() ) );
             }
 
             JMethod adder = new JMethod( null, "add" + className );

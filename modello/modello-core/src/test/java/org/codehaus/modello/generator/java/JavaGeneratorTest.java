@@ -24,7 +24,7 @@ public class JavaGeneratorTest
     }
 
     public void testJavaGenerator()
-        throws Exception
+        throws Throwable
     {
         File generatedSources = getTestFile( "target/java/source" );
 

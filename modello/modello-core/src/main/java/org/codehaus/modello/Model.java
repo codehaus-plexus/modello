@@ -1,6 +1,5 @@
 package org.codehaus.modello;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -63,26 +62,6 @@ public class Model
     public String getPackageName()
     {
         return packageName;
-    }
-
-    public List getAllFields( ModelClass modelClass )
-    {
-        List allFields = new ArrayList();
-
-        allFields.addAll( modelClass.getFields() );
-
-        ModelClass c = modelClass;
-
-        while ( c.getSuperClass() != null )
-        {
-            ModelClass parent = (ModelClass) classMap.get( c.getSuperClass() );
-
-            allFields.addAll( parent.getFields() );
-
-            c = parent;
-        }
-
-        return allFields;
     }
 
     public void initialize()

@@ -8,6 +8,11 @@ import junit.framework.TestCase;
 public abstract class Verifier
     extends TestCase
 {
+    public void assertInstanceOf( String message, Class expected, Class actual )
+    {
+        assertTrue( message, actual.toString().equals( expected.toString() ) );
+    }
+
     public static void assertField( String className, String fieldName, Object expected, Object actual )
     {
         Method expectedMethod;
