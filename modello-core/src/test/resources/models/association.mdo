@@ -1,8 +1,13 @@
 <model>
   <id>association-test</id>
   <name>AssociationTest</name>
-  <packageName>org.codehaus.modello.association</packageName>
   <root>AssociationTest</root>
+  <defaults>
+    <default>
+      <key>package</key>
+      <value>org.codehaus.modello.association</value>
+    </default>
+  </defaults>
   <classes>
     <class>
       <name>Boy</name>

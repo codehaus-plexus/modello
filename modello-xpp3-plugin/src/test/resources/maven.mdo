@@ -20,8 +20,13 @@
   <id>maven</id>
   <name>Maven</name>
   <description>Maven's model for Java project.</description>
-  <packageName>org.apache.maven.model</packageName>
   <root>Model</root>
+  <defaults>
+    <default>
+      <key>package</key>
+      <value>org.apache.maven.model</value>
+    </default>
+  </defaults>
   <classes>
     <class>
       <name>Model</name>

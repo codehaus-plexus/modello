@@ -1,8 +1,13 @@
 <model>
   <id>simple</id>
   <name>Simple Modello Test Model</name>
-  <packageName>foo.bar</packageName>
   <root>Boy</root>
+  <defaults>
+    <default>
+      <key>package</key>
+      <value>foo.bar</value>
+    </default>
+  </defaults>
   <classes>
     <class>
       <name>Boy</name>

@@ -33,6 +33,10 @@ public class ModelDefault
 
     public static final String CHECK_DEPRECATION_VALUE = "false";
 
+    public static final String PACKAGE = "package";
+
+    public static final String PACKAGE_VALUE = "model";
+
     public static final String LIST = "List";
 
     public static final String LIST_VALUE = "new java.util.ArrayList()";
@@ -65,6 +69,11 @@ public class ModelDefault
         if ( CHECK_DEPRECATION.equalsIgnoreCase( key ) )
         {
             modelDefault.setValue( CHECK_DEPRECATION_VALUE );
+        }
+
+        if ( PACKAGE.equalsIgnoreCase( key ) )
+        {
+            modelDefault.setValue( PACKAGE_VALUE );
         }
 
         if ( LIST.equalsIgnoreCase( key ) )
@@ -138,7 +147,8 @@ public class ModelDefault
             ! LIST.equalsIgnoreCase( key ) &&
             ! MAP.equalsIgnoreCase( key ) &&
             ! PROPERTIES.equalsIgnoreCase( key ) &&
-            ! CHECK_DEPRECATION.equalsIgnoreCase( key ) )
+            ! CHECK_DEPRECATION.equalsIgnoreCase( key ) &&
+            ! PACKAGE.equalsIgnoreCase( key ) )
         {
             throw new ModelValidationException( "The type of default element must be List, Map, Properties, Set or checkDeprecation." );
         }

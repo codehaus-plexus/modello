@@ -121,10 +121,6 @@ public class ModelReader
                 {
                     model.setId( parser.nextText() );
                 }
-                else if ( parser.getName().equals( "packageName" ) )
-                {
-                    model.setPackageName( parser.nextText() );
-                }
                 else if ( parser.getName().equals( "root" ) )
                 {
                     model.setRoot( parser.nextText() );
