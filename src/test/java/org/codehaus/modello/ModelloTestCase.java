@@ -20,12 +20,7 @@ public class ModelloTestCase
     public void setUp()
         throws Exception
     {
-        basedir = System.getProperty( "basedir" );
-
-        if ( basedir == null )
-        {
-            basedir = new File( "" ).getAbsolutePath();
-        }
+        basedir = System.getProperty( "basedir", new File( "" ).getAbsolutePath() );
     }
 
     protected String getBasedir()
@@ -33,7 +28,12 @@ public class ModelloTestCase
         return basedir;
     }
 
-    protected String getTestFile( String fileName )
+    protected File getTestFile( String fileName )
+    {
+        return new File( getBasedir(), fileName);
+    }
+
+    protected String getTestPath( String fileName )
     {
         return new File( getBasedir(), fileName).getAbsolutePath();
     }
