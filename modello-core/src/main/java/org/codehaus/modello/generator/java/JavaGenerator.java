@@ -3,6 +3,7 @@ package org.codehaus.modello.generator.java;
 import org.codehaus.modello.Model;
 import org.codehaus.modello.ModelClass;
 import org.codehaus.modello.ModelField;
+import org.codehaus.modello.CodeSegment;
 import org.codehaus.modello.generator.AbstractGenerator;
 import org.codehaus.modello.generator.java.javasource.JField;
 import org.codehaus.modello.generator.java.javasource.JMethod;
@@ -16,18 +17,15 @@ import java.io.FileWriter;
 import java.util.Iterator;
 
 /**
- *
- *
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
- *
  * @version $Id$
  */
 public class JavaGenerator
     extends AbstractGenerator
 {
-    public JavaGenerator( String model, String outputDirectory )
+    public JavaGenerator( String model, String outputDirectory, String modelVersion )
     {
-        super( model, outputDirectory );
+        super( model, outputDirectory, modelVersion );
     }
 
     public void generate()
@@ -43,77 +41,87 @@ public class JavaGenerator
         {
             ModelClass modelClass = (ModelClass) i.next();
 
-            File f = new File( new File( getOutputDirectory(), directory ), modelClass.getName() + ".java" );
-
-            if ( !f.getParentFile().exists() )
+            if ( outputElement( modelClass.getVersion(), modelClass.getName() ) )
             {
-                f.getParentFile().mkdirs();
-            }
+                File f = new File( new File( getOutputDirectory(), directory ), modelClass.getName() + ".java" );
 
-            FileWriter writer = new FileWriter( f );
-
-            JSourceWriter sourceWriter = new JSourceWriter( writer );
-
-            JClass jClass = new JClass( modelClass.getName() );
-
-            jClass.addImport( "java.util.*" );
-
-            jClass.setPackageName( packageName );
-
-            if ( modelClass.getSuperClass() != null )
-            {
-                jClass.setSuperClass( modelClass.getSuperClass() );
-            }
-
-            if ( modelClass.getFields() != null )
-            {
-                int count = 1;
-
-                for ( Iterator j = modelClass.getFields().iterator(); j.hasNext(); )
+                if ( !f.getParentFile().exists() )
                 {
-                    ModelField modelField = (ModelField) j.next();
+                    f.getParentFile().mkdirs();
+                }
 
-                    if ( modelField.getName() == null )
+                FileWriter writer = new FileWriter( f );
+
+                JSourceWriter sourceWriter = new JSourceWriter( writer );
+
+                JClass jClass = new JClass( modelClass.getName() );
+
+                jClass.addImport( "java.util.*" );
+
+                jClass.setPackageName( packageName );
+
+                if ( modelClass.getSuperClass() != null )
+                {
+                    jClass.setSuperClass( modelClass.getSuperClass() );
+                }
+
+                if ( modelClass.getFields() != null )
+                {
+                    int count = 1;
+
+                    for ( Iterator j = modelClass.getFields().iterator(); j.hasNext(); )
                     {
-                        throw new IllegalStateException(
-                            "Field name can't be null jField: element " + count + " in the definition of the class " + modelClass.getName() );
-                    }
+                        ModelField modelField = (ModelField) j.next();
 
-                    if ( modelField.getDelegateTo() != null )
-                    {
-                        JField delegate = createField( modelClass.getField( modelField.getDelegateTo() ), modelClass, count );
+                        if ( outputElement( modelField.getVersion(), modelField.getName() ) )
+                        {
+                            if ( modelField.getName() == null )
+                            {
+                                throw new IllegalStateException( "Field name can't be null jField: element " + count + " in the definition of the class " + modelClass.getName() );
+                            }
 
-                        jClass.addMethod( createDelegateGetter( modelField, delegate ) );
+                            if ( modelField.getDelegateTo() != null )
+                            {
+                                JField delegate = createField( modelClass.getField( modelField.getDelegateTo() ), modelClass, count );
 
-                        jClass.addMethod( createDelegateSetter( modelField, delegate ) );
-                    }
-                    else
-                    {
-                        JField field = createField( modelField, modelClass, count );
+                                jClass.addMethod( createDelegateGetter( modelField, delegate ) );
 
-                        jClass.addField( field );
+                                jClass.addMethod( createDelegateSetter( modelField, delegate ) );
+                            }
+                            else
+                            {
+                                JField field = createField( modelField, modelClass, count );
 
-                        jClass.addMethod( createGetter( field ) );
+                                jClass.addField( field );
 
-                        jClass.addMethod( createSetter( field ) );
+                                jClass.addMethod( createGetter( field ) );
 
-                        createAdder( field, jClass, objectModel );
+                                jClass.addMethod( createSetter( field ) );
+
+                                createAdder( field, jClass, objectModel );
+                            }
+
+                            if ( modelClass.getCodeSegments() != null )
+                            {
+                                for ( Iterator iterator = modelClass.getCodeSegments().iterator(); iterator.hasNext(); )
+                                {
+                                    CodeSegment codeSegment = (CodeSegment) iterator.next();
+
+                                    jClass.addSourceCode( codeSegment.getCode() );
+                                }
+                            }
+                        }
                     }
 
                     count++;
-
-                    if ( modelClass.getCode() != null )
-                    {
-                        jClass.setSourceCode( modelClass.getCode() );
-                    }
                 }
+
+                jClass.print( sourceWriter );
+
+                writer.flush();
+
+                writer.close();
             }
-
-            jClass.print( sourceWriter );
-
-            writer.flush();
-
-            writer.close();
         }
     }
 
@@ -121,8 +129,7 @@ public class JavaGenerator
     {
         if ( modelField.getType() == null )
         {
-            throw new IllegalStateException(
-                "Field type can't be null: jField element " + entry + " in the definition of the class " + modelClass.getName() );
+            throw new IllegalStateException( "Field type can't be null: jField element " + entry + " in the definition of the class " + modelClass.getName() );
         }
 
         JType type;

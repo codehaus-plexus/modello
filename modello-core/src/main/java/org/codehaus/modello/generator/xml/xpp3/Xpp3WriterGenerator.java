@@ -26,9 +26,9 @@ import java.util.List;
 public class Xpp3WriterGenerator
     extends AbstractGenerator
 {
-    public Xpp3WriterGenerator( String model, String outputDirectory )
+    public Xpp3WriterGenerator( String model, String outputDirectory, String modelVersion )
     {
-        super( model, outputDirectory );
+        super( model, outputDirectory, modelVersion );
     }
 
     public void generate()

@@ -16,13 +16,13 @@ import java.util.Iterator;
 public class ModelClass
     extends BaseElement
 {
-    String superClass;
+    private String superClass;
 
-    List fields;
+    private List fields;
 
-    Map fieldMap;
+    private Map fieldMap;
 
-    String code;
+    private List codeSegments;
 
     public ModelClass()
     {
@@ -49,9 +49,9 @@ public class ModelClass
         return fields;
     }
 
-    public String getCode()
+    public List getCodeSegments()
     {
-        return code;
+        return codeSegments;
     }
 
     public boolean hasSuperClass()

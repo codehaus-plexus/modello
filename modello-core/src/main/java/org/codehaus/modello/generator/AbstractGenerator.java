@@ -8,21 +8,19 @@ import com.thoughtworks.xstream.xml.xpp3.Xpp3Dom;
 import com.thoughtworks.xstream.xml.xpp3.Xpp3DomBuilder;
 import com.thoughtworks.xstream.xml.xpp3.Xpp3DomXMLReader;
 import com.thoughtworks.xstream.xml.xpp3.Xpp3DomXMLReaderDriver;
+import org.codehaus.modello.CodeSegment;
 import org.codehaus.modello.Model;
 import org.codehaus.modello.ModelClass;
 import org.codehaus.modello.ModelField;
 
-import java.io.StringReader;
-import java.io.IOException;
 import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.StringReader;
 
 // Possibly a general package extension for things like reader/writer
 
 /**
- *
- *
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
- *
  * @version $Id$
  */
 public abstract class AbstractGenerator
@@ -33,11 +31,15 @@ public abstract class AbstractGenerator
 
     private String outputDirectory;
 
-    protected AbstractGenerator( String model, String outputDirectory )
+    private Version modelVersion;
+
+    protected AbstractGenerator( String model, String outputDirectory, String modelVersion )
     {
         this.model = model;
 
         this.outputDirectory = outputDirectory;
+
+        this.modelVersion = new Version( modelVersion, "model" );
 
         xstream = new XStream( new JavaReflectionObjectFactory(), new DefaultClassMapper( new DefaultNameMapper() ), new Xpp3DomXMLReaderDriver() );
 
@@ -46,6 +48,8 @@ public abstract class AbstractGenerator
         xstream.alias( "class", ModelClass.class );
 
         xstream.alias( "field", ModelField.class );
+
+        xstream.alias( "codeSegment", CodeSegment.class );
     }
 
     protected Model getModel()
@@ -74,6 +78,73 @@ public abstract class AbstractGenerator
     public abstract void generate()
         throws Exception;
 
+    protected boolean outputElement( String elementVersion, String elementName )
+    {
+        if ( elementVersion == null )
+        {
+            System.err.println( elementName + " has a null version!" );
+
+            return false;
+        }
+
+        Version v = new Version( elementVersion, elementName );
+
+        // 4.0.0 - 3.0.0
+        // 4.0.0 - 3.0.0+
+
+        if ( v.major == modelVersion.major )
+        {
+            return true;
+        }
+        else if ( ( v.major < modelVersion.major ) && v.modifier != null && v.modifier.equals( "+" ) )
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    class Version
+    {
+        short major;
+
+        short minor;
+
+        short micro;
+
+        String modifier;
+
+        Version( String version, String elementName )
+        {
+            String a = version.substring( 0, 1 );
+
+            String b = version.substring( 2, 3 );
+
+            String c = version.substring( 4, 5 );
+
+            if ( version != null && version.trim().length() > 0 )
+            {
+                try
+                {
+                    major = Short.parseShort( a );
+
+                    minor = Short.parseShort( b );
+
+                    micro = Short.parseShort( c );
+                }
+                catch ( NumberFormatException e )
+                {
+                    System.err.println( elementName + " version is invalid!" );
+                }
+
+                if ( version.length() >= 6 )
+                {
+                    modifier = version.substring( 5 );
+                }
+            }
+        }
+    }
+
     protected boolean isClassInModel( String fieldType, Model model )
     {
         return model.getClassNames().contains( fieldType );
@@ -81,11 +152,11 @@ public abstract class AbstractGenerator
 
     protected boolean isMap( String fieldType )
     {
-        if ( fieldType == null)
+        if ( fieldType == null )
         {
             return false;
         }
-        
+
         if ( fieldType.equals( "java.util.Map" ) )
         {
             return true;
@@ -100,11 +171,11 @@ public abstract class AbstractGenerator
 
     protected boolean isCollection( String fieldType )
     {
-        if ( fieldType == null)
+        if ( fieldType == null )
         {
             return false;
         }
-        
+
         if ( fieldType.equals( "java.util.List" ) )
         {
             return true;
@@ -119,11 +190,11 @@ public abstract class AbstractGenerator
 
     protected String capitalise( String str )
     {
-        if ( str == null || str.length() == 0)
+        if ( str == null || str.length() == 0 )
         {
             return str;
         }
-        
+
         return new StringBuffer( str.length() )
             .append( Character.toTitleCase( str.charAt( 0 ) ) )
             .append( str.substring( 1 ) )
@@ -196,11 +267,11 @@ public abstract class AbstractGenerator
 
     public static String uncapitalise( String str )
     {
-        if ( str == null || str.length() == 0)
+        if ( str == null || str.length() == 0 )
         {
             return str;
         }
-        
+
         return new StringBuffer( str.length() )
             .append( Character.toLowerCase( str.charAt( 0 ) ) )
             .append( str.substring( 1 ) )
