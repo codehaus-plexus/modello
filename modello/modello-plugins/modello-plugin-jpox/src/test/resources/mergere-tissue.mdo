@@ -111,6 +111,7 @@
      -->
     <class stash.storable="true">
       <name>User</name>
+      <packageName>org.mergere.user</packageName>
       <version>1.0.0</version>
       <fields>
         <field>
@@ -133,6 +134,18 @@
           </association>
         </field>
       </fields>
+    </class>
+    <class>
+      <name>AdminUser</name>
+      <packageName>org.mergere.user.admin</packageName>
+      <version>1.0.0</version>
+      <superClass>User</superClass>
+    </class>
+    <class>
+      <name>NormalUser</name>
+      <packageName>org.mergere.user</packageName>
+      <version>1.0.0</version>
+      <superClass>User</superClass>
     </class>
   </classes>
 </model>
