@@ -316,7 +316,6 @@
         </field>
 -->
       </fields>
-<!--
       <associations>
         <association>
           <name>sourceModifications</name>
@@ -324,7 +323,6 @@
           <to>SourceModification</to>
         </association>
       </associations>
--->
     </class>
     <class>
       <name>CiManagement</name>
@@ -572,22 +570,18 @@
     <class>
       <name>PatternSet</name>
       <version>3.0.0+</version>
-      <fields>
-<!--
-        <field>
+      <associations>
+        <association>
           <name>includes</name>
           <version>3.0.0+</version>
-          <type>java.util.List</type>
-          <defaultValue>new ArrayList()</defaultValue>
-        </field>
-        <field>
+          <to>String</to>
+        </association>
+        <association>
           <name>excludes</name>
           <version>3.0.0+</version>
-          <type>java.util.List</type>
-          <defaultValue>new ArrayList()</defaultValue>
-        </field>
--->
-      </fields>
+          <to>String</to>
+        </association>
+      </associations>
     </class>
     <class>
       <name>Parent</name>
@@ -696,16 +690,13 @@
       <name>UnitTest</name>
       <version>3.0.0+</version>
       <superClass>PatternSet</superClass>
-      <fields>
-<!--
-        <field>
+      <associations>
+        <association>
           <name>resources</name>
           <version>3.0.0+</version>
-          <type>java.util.List</type>
-          <defaultValue>new ArrayList()</defaultValue>
-        </field>
--->
-      </fields>
+          <to>Resource</to>
+        </association>
+      </associations>
     </class>
     <class>
       <name>Version</name>

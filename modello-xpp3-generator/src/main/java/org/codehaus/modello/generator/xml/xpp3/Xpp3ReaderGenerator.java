@@ -138,134 +138,137 @@ public class Xpp3ReaderGenerator
     private void writeClassParsing( ModelClass modelClass, JSourceCode sc, Model objectModel, boolean withLoop )
         throws IOException
     {
-        if ( outputElement( modelClass.getVersion(), modelClass.getName() ) )
+        if ( !outputElement( modelClass.getVersion(), modelClass.getName() ) )
         {
-            if ( withLoop )
+            return;
+        }
+
+        if ( withLoop )
+        {
+            sc.add( "while ( parser.nextTag() == XmlPullParser.START_TAG )" );
+
+            sc.add( "{" );
+
+            sc.indent();
+        }
+
+        String statement;
+
+        List fields = modelClass.getAllFields();
+
+        int fieldCount = fields.size();
+
+        boolean firstStatement = true;
+
+        for ( int i = 0; i < fieldCount; i++ )
+        {
+            ModelField field = (ModelField) fields.get( i );
+
+            XmlMetaData xmlMetaData = (XmlMetaData)field.getMetaData( XmlMetaData.ID );
+
+            if ( !xmlMetaData.isAttribute() )
             {
-                sc.add( "while ( parser.nextTag() == XmlPullParser.START_TAG )" );
-
-                sc.add( "{" );
-
-                sc.indent();
+                continue;
             }
 
-            String statement;
-
-            List fields = objectModel.getAllFields( modelClass );
-
-            int fieldCount = fields.size();
-
-            boolean firstStatement = true;
-
-            if ( fieldCount > 0 )
+            if ( outputElement( field.getVersion(), modelClass.getName() + "." + field.getName() ) )
             {
-                sc.add( "if ( parser.getName().equals( \"" + uncapitalise( modelClass.getName() ) + "\") )" );
-
-                sc.add( "{" );
-
-                sc.indent();
-
-                for ( int i = 0; i < fieldCount; i++ )
+                if ( firstStatement )
                 {
-                    ModelField field = (ModelField) fields.get( i );
+                    sc.add( "// Reading attributes" );
 
-                    XmlMetaData xmlMetaData = (XmlMetaData)field.getMetaData( XmlMetaData.ID );
+                    sc.add( "if ( parser.getName().equals( \"" + uncapitalise( modelClass.getName() ) + "\") )" );
 
-                    if ( !xmlMetaData.isAttribute() )
-                    {
-                        continue;
-                    }
+                    sc.add( "{" );
 
-                    if ( outputElement( field.getVersion(), modelClass.getName() + "." + field.getName() ) )
-                    {
-                        if ( firstStatement )
-                        {
-                            statement = "if";
+                    sc.indent();
 
-                            firstStatement = false;
-                        }
-                        else
-                        {
-                            statement = "else if";
-                        }
+                    statement = "if";
 
-                        writeFieldParsing( modelClass, field, sc, statement, objectModel, true );
-                    }
+                    firstStatement = false;
+                }
+                else
+                {
+                    statement = "else if";
                 }
 
-                sc.unindent();
+                writeFieldParsing( modelClass, field, sc, statement, objectModel, true );
+            }
+        }
 
-                sc.add( "}" );
+        if ( !firstStatement )
+        {
+            sc.unindent();
+
+            sc.add( "}" );
+        }
+
+        firstStatement = true;
+
+        for ( int i = 0; i < fieldCount; i++ )
+        {
+            ModelField field = (ModelField) fields.get( i );
+
+            XmlMetaData xmlMetaData = (XmlMetaData)field.getMetaData( XmlMetaData.ID );
+
+            if ( xmlMetaData.isAttribute() )
+            {
+                continue;
             }
 
-            firstStatement = true;
-
-            for ( int i = 0; i < fieldCount; i++ )
+            if ( outputElement( field.getVersion(), modelClass.getName() + "." + field.getName() ) )
             {
-                ModelField field = (ModelField) fields.get( i );
-
-                XmlMetaData xmlMetaData = (XmlMetaData)field.getMetaData( XmlMetaData.ID );
-
-                if ( xmlMetaData.isAttribute() )
+                if ( firstStatement )
                 {
-                    continue;
+                    statement = "if";
+
+                    firstStatement = false;
+                }
+                else
+                {
+                    statement = "else if";
                 }
 
-                if ( outputElement( field.getVersion(), modelClass.getName() + "." + field.getName() ) )
+                writeFieldParsing( modelClass, field, sc, statement, objectModel, false );
+            }
+        }
+
+        List associations = modelClass.getAllAssociations();
+
+        int associationCount = associations.size();
+
+        for ( int i = 0; i < associationCount; i++ )
+        {
+            ModelAssociation association = (ModelAssociation) associations.get( i );
+
+            if ( outputElement( association.getVersion(), modelClass.getName() + "." + association.getName() ) )
+            {
+                if ( firstStatement )
                 {
-                    if ( firstStatement )
-                    {
-                        statement = "if";
+                    statement = "if";
 
-                        firstStatement = false;
-                    }
-                    else
-                    {
-                        statement = "else if";
-                    }
-
-                    writeFieldParsing( modelClass, field, sc, statement, objectModel, false );
+                    firstStatement = false;
                 }
+                else
+                {
+                    statement = "else if";
+                }
+
+                writeAssociationParsing( modelClass, association, sc, statement, objectModel );
+            }
+        }
+
+        if ( withLoop )
+        {
+            // TODO: replace with !firstStatement
+            if ( !firstStatement )
+            {
+                writeCatchAll( sc );
             }
 
-            firstStatement = true;
+            sc.unindent();
 
-            List associations = modelClass.getAssociations();
-
-            int associationCount = associations.size();
-
-            for ( int i = 0; i < associationCount; i++ )
-            {
-                ModelAssociation association = (ModelAssociation) associations.get( i );
-
-                if ( outputElement( association.getVersion(), modelClass.getName() + "." + association.getName() ) )
-                {
-                    if ( firstStatement )
-                    {
-                        statement = "if";
-
-                        firstStatement = false;
-                    }
-                    else
-                    {
-                        statement = "else if";
-                    }
-
-                    writeAssociationParsing( modelClass, association, sc, statement, objectModel );
-                }
-            }
-
-            if ( withLoop )
-            {
-                if ( fieldCount > 0 || associationCount > 0 )
-                {
-                    writeCatchAll( sc );
-                }
-
-                sc.unindent();
-
-                sc.add( "}" );
-            }
+            sc.add( "}" );
         }
     }
 

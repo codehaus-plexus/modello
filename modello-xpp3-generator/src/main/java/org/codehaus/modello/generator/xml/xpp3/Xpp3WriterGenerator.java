@@ -153,7 +153,7 @@ public class Xpp3WriterGenerator
     {
         if ( outputElement( modelClass.getVersion(), modelClass.getName() ) )
         {
-            List fields = modelClass.getFields();
+            List fields = modelClass.getAllFields();
 
             int fieldCount = fields.size();
 
@@ -164,7 +164,7 @@ public class Xpp3WriterGenerator
                 writeFieldMarshalling( modelClass, field, sc );
             }
 
-            List associations = modelClass.getAssociations();
+            List associations = modelClass.getAllAssociations();
 
             int associationCount = associations.size();
 
@@ -172,7 +172,7 @@ public class Xpp3WriterGenerator
             {
                 ModelAssociation association = (ModelAssociation) associations.get( i );
 
-                writeAssociationMarshalling( association, sc );
+                writeAssociationMarshalling( modelClass, association, sc );
             }
         }
     }
@@ -210,6 +210,8 @@ public class Xpp3WriterGenerator
             {
                 throw new ModelloRuntimeException( "A class cannot be a serialized as a attribute." );
             }
+
+            sc.add( "// Writing class in field" );
 
             sc.add( className + " " + fieldName + " = " + modelClassName + ".get" + className + "();" );
 
@@ -252,6 +254,8 @@ public class Xpp3WriterGenerator
 */
         else
         {
+            sc.add( "// Writing primitive in field" );
+
             sc.add( "if ( " + modelClassName + ".get" + className + "() != null )" );
 
             sc.add( "{" );
@@ -275,7 +279,7 @@ public class Xpp3WriterGenerator
         }
     }
 
-    private void writeAssociationMarshalling( ModelAssociation association, JSourceCode sc )
+    private void writeAssociationMarshalling( ModelClass modelClass, ModelAssociation association, JSourceCode sc )
     {
         if ( !outputElement( association.getVersion(), association.getFromClass().getName() + "." + association.getName() ) )
         {
@@ -284,7 +288,8 @@ public class Xpp3WriterGenerator
 
         // We have a collection but we need to know what is in the collection.
 
-        String modelClassName = uncapitalise( association.getFromClass().getName() );
+//        String modelClassName = uncapitalise( association.getFromClass().getName() );
+        String modelClassName = uncapitalise( modelClass.getName() );
 
         String fieldName = association.getFromRole();
 
@@ -302,6 +307,8 @@ public class Xpp3WriterGenerator
             String size = modelClassName + ".get" + getterName + "().size()";
 
             String index = getIndex();
+
+            sc.add( "// Writing class association" );
 
             sc.add( "if ( " + modelClassName + ".get" + getterName + "() != null && " + modelClassName + ".get" + getterName + "().size() > 0 )" );
 
@@ -322,7 +329,7 @@ public class Xpp3WriterGenerator
 
             sc.add( "serializer.startTag( NAMESPACE, " + "\"" + singular( tagName ) + "\" );" );
 
-            writeClassMarshalling( association.getFromClass().getModel().getClass( singular( collectionClass ) ), sc );
+            writeClassMarshalling( association.getFromClass().getModel().getClass( collectionClass ), sc );
 
             sc.add( "serializer.endTag( NAMESPACE, " + "\"" + singular( tagName ) + "\" );" );
 
@@ -338,6 +345,8 @@ public class Xpp3WriterGenerator
         }
         else
         {
+            sc.add( "// Writing other association" );
+
             sc.add( "if ( " + modelClassName + ".get" + getterName + "() != null && " + modelClassName + ".get" + getterName + "().size() > 0 )" );
 
             sc.add( "{" );
@@ -377,6 +386,7 @@ public class Xpp3WriterGenerator
     private String getIndex()
     {
         index++;
+
         return "i" + Integer.toString( index );
     }
 
