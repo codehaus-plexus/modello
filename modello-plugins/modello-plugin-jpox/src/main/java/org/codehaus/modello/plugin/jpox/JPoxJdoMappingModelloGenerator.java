@@ -27,23 +27,19 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.util.Iterator;
-import java.util.Properties;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.List;
 import java.util.ArrayList;
-
-import org.apache.velocity.VelocityContext;
-import org.apache.velocity.context.Context;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
-import org.codehaus.modello.plugin.store.AbstractVelocityModelloGenerator;
-import org.codehaus.modello.plugin.store.metadata.StoreClassMetadata;
+import org.codehaus.modello.plugin.AbstractModelloGenerator;
 import org.codehaus.modello.plugin.store.metadata.StoreFieldMetadata;
 import org.codehaus.plexus.util.xml.PrettyPrintXMLWriter;
 import org.codehaus.plexus.util.xml.XMLWriter;
@@ -52,8 +48,8 @@ import org.codehaus.plexus.util.xml.XMLWriter;
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
-public class JPoxModelloGenerator
-    extends AbstractVelocityModelloGenerator
+public class JPoxJdoMappingModelloGenerator
+    extends AbstractModelloGenerator
 {
     public void generate( Model model, Properties properties )
         throws ModelloException
@@ -61,47 +57,29 @@ public class JPoxModelloGenerator
         initialize( model, properties );
 
         // ----------------------------------------------------------------------
-        // Initialize the Velocity context
-        // ----------------------------------------------------------------------
-
-        Context context = new VelocityContext();
-
-        context.put( "version", getGeneratedVersion() );
-
-        context.put( "package", model.getPackageName( false, getGeneratedVersion() ) );
-
-        context.put( "storeClassMetadataId", StoreClassMetadata.ID );
-
-        context.put( "storeFieldMetadataId", StoreFieldMetadata.ID );
-
-//        context.put( "ojbMetadataId", JpoxClassMetadata.ID );
-
-        context.put( "model", model );
-
-        // ----------------------------------------------------------------------
         // Generate the JDO files
         // ----------------------------------------------------------------------
 
         try
         {
-            generatePackageJdo( new File( getOutputDirectory(), "package.jdo" ), model );
+            File packageJdo = new File( getOutputDirectory(), "META-INF/package.jdo" );
+
+            File parent = packageJdo.getParentFile();
+
+            if ( !parent.exists() )
+            {
+                if( !parent.mkdirs() )
+                {
+                    throw new ModelloException( "Error while creating parent directories for the file '" + packageJdo.getAbsolutePath() + "'." );
+                }
+            }
+
+            generatePackageJdo( packageJdo, model );
         }
         catch ( IOException e )
         {
             throw new ModelloException( "Error while writing package.jdo.", e );
         }
-
-        // ----------------------------------------------------------------------
-        // Generate the JPoxStore
-        // ----------------------------------------------------------------------
-
-        String packageName = model.getPackageName( isPackageWithVersion(), super.getGeneratedVersion() );
-
-        String className = model.getName() + "JPoxStore";
-
-        writeClass( "/org/codehaus/modello/plugin/jpox/templates/JPoxStore.java.vm",
-                    getOutputDirectory(), packageName, className,
-                    context );
     }
 
     // ----------------------------------------------------------------------
@@ -202,7 +180,7 @@ public class JPoxModelloGenerator
                 writer.addAttribute( "persistence-capable-superclass", superPackageName + "." + superClass.getName() );
             }
         }
-        
+
         for ( Iterator it = modelClass.getFields( getGeneratedVersion() ).iterator(); it.hasNext(); )
         {
             ModelField modelField = (ModelField) it.next();
