@@ -35,29 +35,29 @@ package org.codehaus.mojo.modello;
  * description=""
  *
  * @parameter name="model"
- * type="java.lang.String"
- * required="required"
+ * type="java.io.File"
+ * required="true"
  * validator=""
  * expression="#model"
  * description="The modello model file."
  *
  * @parameter name="version"
  * type="java.lang.String"
- * required="required"
+ * required="true"
  * validator=""
  * expression="#version"
  * description="The modello model version to use."
  *
  * @parameter name="packageWithVersion"
  * type="java.lang.Boolean"
- * required="required"
+ * required="true"
  * validator=""
  * expression="false"
  * description="True if the generated package names should include the version."
  *
  * @parameter name="modelloCore"
  * type=""
- * required="required"
+ * required="true"
  * validator=""
  * expression="#component.org.codehaus.modello.core.ModelloCore"
  * description="Modello component"
@@ -72,7 +72,7 @@ public class ModelloXdocMojo
     {
         return "xdoc";
     }
-    
+
     protected boolean producesCompilableResult()
     {
         return false;

@@ -38,7 +38,7 @@ package org.codehaus.mojo.modello;
  * description=""
  *
  * @parameter name="model"
- * type="java.lang.String"
+ * type="java.io.File"
  * required="true"
  * validator=""
  * expression="#model"
