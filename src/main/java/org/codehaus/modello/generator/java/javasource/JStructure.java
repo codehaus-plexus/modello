@@ -45,16 +45,6 @@
 
 package org.codehaus.modello.generator.java.javasource;
 
-import org.codehaus.modello.generator.java.javasource.JComment;
-import org.codehaus.modello.generator.java.javasource.JDocComment;
-import org.codehaus.modello.generator.java.javasource.JDocDescriptor;
-import org.codehaus.modello.generator.java.javasource.JField;
-import org.codehaus.modello.generator.java.javasource.JInterface;
-import org.codehaus.modello.generator.java.javasource.JMember;
-import org.codehaus.modello.generator.java.javasource.JModifiers;
-import org.codehaus.modello.generator.java.javasource.JNaming;
-import org.codehaus.modello.generator.java.javasource.JSourceWriter;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.util.Enumeration;
@@ -579,7 +569,7 @@ abstract class JStructure extends JType
     public void print( String destDir, String lineSeparator )
     {
 
-        String name = getLocalName();
+//        String name = getLocalName();
 
         //-- open output file
         String filename = getFilename( destDir );

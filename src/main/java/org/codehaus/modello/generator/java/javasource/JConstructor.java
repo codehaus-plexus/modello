@@ -45,7 +45,6 @@
 
 package org.codehaus.modello.generator.java.javasource;
 
-import org.codehaus.modello.generator.java.javasource.JClass;
 
 
 /**
