@@ -59,7 +59,7 @@ public abstract class AbstractGenerator
 
         Model objectModel = (Model) xstream.fromXML( new Xpp3DomXMLReader( dom ) );
 
-        objectModel.registerClassNames();
+        objectModel.initialize();
 
         return objectModel;
     }
@@ -71,6 +71,11 @@ public abstract class AbstractGenerator
 
     public abstract void generate()
         throws Exception;
+
+    protected boolean isClassInModel( String fieldType, Model model )
+    {
+        return model.getClassNames().contains( fieldType );
+    }
 
     protected boolean isMap( String fieldType )
     {
