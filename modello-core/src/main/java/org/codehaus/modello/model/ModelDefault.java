@@ -37,19 +37,19 @@ public class ModelDefault
 
     public static final String PACKAGE_VALUE = "model";
 
-    public static final String LIST = "List";
+    public static final String LIST = "java.util.List";
 
     public static final String LIST_VALUE = "new java.util.ArrayList()";
 
-    public static final String MAP = "Map";
+    public static final String MAP = "java.util.Map";
 
     public static final String MAP_VALUE = "new java.util.HashMap()";
 
-    public static final String PROPERTIES = "Properties";
+    public static final String PROPERTIES = "java.util.Properties";
 
     public static final String PROPERTIES_VALUE = "new java.util.Properties()";
 
-    public static final String SET = "Set";
+    public static final String SET = "java.util.Set";
 
     public static final String SET_VALUE = "new java.util.HashSet()";
 
@@ -131,7 +131,7 @@ public class ModelDefault
         {
             throw new ModelValidationException( "You must define the key of default element." );
         }
-        
+
         if ( isEmpty( value ) )
         {
             throw new ModelValidationException( "You must define the value of default element." );
