@@ -8,11 +8,15 @@ import java.util.Collections;
 import java.util.Map;
 
 import org.codehaus.modello.Model;
+import org.codehaus.modello.ModelAssociation;
 import org.codehaus.modello.ModelClass;
 import org.codehaus.modello.ModelField;
 import org.codehaus.modello.metadata.AbstractMetadataPlugin;
-import org.codehaus.modello.metadata.Metadata;
+import org.codehaus.modello.metadata.AssociationMetadata;
+import org.codehaus.modello.metadata.ClassMetadata;
+import org.codehaus.modello.metadata.FieldMetadata;
 import org.codehaus.modello.metadata.MetadataPlugin;
+import org.codehaus.modello.metadata.ModelMetadata;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -26,19 +30,19 @@ public class XmlMetadataPlugin
     // Map to Metadata
     // ----------------------------------------------------------------------
 
-    public Metadata getModelMetadata( Model model, Map data )
+    public ModelMetadata getModelMetadata( Model model, Map data )
     {
-        return new XmlMetadata();
+        return new XmlModelMetadata();
     }
 
-    public Metadata getClassMetadata( ModelClass clazz, Map data )
+    public ClassMetadata getClassMetadata( ModelClass clazz, Map data )
     {
-        return new XmlMetadata();
+        return new XmlClassMetadata();
     }
 
-    public Metadata getFieldMetadata( ModelField field, Map data )
+    public FieldMetadata getFieldMetadata( ModelField field, Map data )
     {
-        XmlMetadata metadata = new XmlMetadata();
+        XmlFieldMetadata metadata = new XmlFieldMetadata();
 
         String attribute = (String) data.get( "attribute" );
 
@@ -51,21 +55,16 @@ public class XmlMetadataPlugin
         return metadata;
     }
 
+    public AssociationMetadata getAssociationMetadata( ModelAssociation association, Map data )
+    {
+        return new XmlAssociationMetadata();
+    }
+
     // ----------------------------------------------------------------------
     // Metadata to Map
     // ----------------------------------------------------------------------
 
-    public Map getModelMap( Model model, Metadata metadata )
-    {
-        return Collections.EMPTY_MAP;
-    }
-
-    public Map getClassMap( ModelClass clazz, Metadata metadata )
-    {
-        return Collections.EMPTY_MAP;
-    }
-
-    public Map getFieldMap( ModelField field, Metadata metadata )
+    public Map getFieldMap( ModelField field, FieldMetadata metadata )
     {
         return Collections.EMPTY_MAP;
     }
