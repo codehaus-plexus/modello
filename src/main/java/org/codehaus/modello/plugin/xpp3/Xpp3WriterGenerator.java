@@ -25,6 +25,7 @@ package org.codehaus.modello.plugin.xpp3;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
@@ -119,23 +120,6 @@ public class Xpp3WriterGenerator
 
         jClass.addField( new JField( new JClass( "String" ), "NAMESPACE" ) );
 
-        /*
-
-        There doesn't seem to be a way to add exceptions to constructors, we'll have to tweak javasource.
-
-        JConstructor constructor = new JConstructor( jClass );
-
-        constructor.getSourceCode().add( "XmlPullParserFactory factory = XmlPullParserFactory.newInstance( System.getProperty( XmlPullParserFactory.PROPERTY_NAME ), null );" );
-
-        constructor.getSourceCode().add( "serializer = factory.newSerializer();" );
-
-        constructor.getSourceCode().add( "serializer.setProperty( \"http://xmlpull.org/v1/doc/properties.html#serializer-indentation\", \"  \" );" );
-
-        constructor.getSourceCode().add( "serializer.setProperty( \"http://xmlpull.org/v1/doc/properties.html#serializer-line-separator\", \"\\n\" );" );
-
-        jClass.addConstructor( constructor );
-        */
-
         addModelImports( jClass );
 
         String root = objectModel.getRoot( getGeneratedVersion() );
@@ -164,13 +148,11 @@ public class Xpp3WriterGenerator
 
         sc.add( "serializer.setOutput( writer );" );
 
-        sc.add( "serializer.startTag( NAMESPACE, \"" + rootElement + "\" );" );
-
-        writeClassMarshalling( (ModelClass) objectModel.getClasses( getGeneratedVersion() ).get( 0 ), sc );
-
-        sc.add( "serializer.endTag( NAMESPACE, \"" + rootElement + "\" );" );
+        sc.add( "write" + root + "( " + rootElement + ", \"" + rootElement + "\", serializer );" );
 
         jClass.addMethod( marshall );
+
+        writeAllClasses( objectModel, jClass );
 
         jClass.print( sourceWriter );
 
@@ -179,270 +161,232 @@ public class Xpp3WriterGenerator
         writer.close();
     }
 
-    private void writeClassMarshalling( ModelClass modelClass, JSourceCode sc )
-        throws ModelloRuntimeException
+    private void writeAllClasses( Model objectModel, JClass jClass )
     {
-        writeClassMarshalling( modelClass, null, sc );
-    }
+        ModelClass root = objectModel.getClass( objectModel.getRoot( getGeneratedVersion() ), getGeneratedVersion() );
 
-    private void writeClassMarshalling( ModelClass modelClass, String objectName, JSourceCode sc )
-        throws ModelloRuntimeException
-    {
-        List fields = modelClass.getAllFields( getGeneratedVersion(), true );
-
-        int fieldCount = fields.size();
-
-        for ( int i = 0; i < fieldCount; i++ )
+        for ( Iterator i = objectModel.getClasses( getGeneratedVersion() ).iterator(); i.hasNext(); )
         {
-            ModelField field = (ModelField) fields.get( i );
+            ModelClass clazz = (ModelClass) i.next();
 
-            if ( field instanceof ModelAssociation &&
-                ModelAssociation.MANY_MULTIPLICITY.equals( ( (ModelAssociation) field ).getMultiplicity() ) )
-            {
-                writeAssociationMarshalling( modelClass, (ModelAssociation) field, objectName, sc );
-            }
-            else
-            {
-                writeFieldMarshalling( modelClass, field, objectName, sc );
-            }
+            writeClass( clazz, jClass );
         }
     }
 
-    private void writeFieldMarshalling( ModelClass modelClass, ModelField field, String objectName, JSourceCode sc )
-        throws ModelloRuntimeException
+    private void writeClass( ModelClass modelClass, JClass jClass)
     {
-        XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata)field.getMetadata( XmlFieldMetadata.ID );
+        String className = modelClass.getName();
 
-        boolean attribute = xmlFieldMetadata.isAttribute();
+        String uncapClassName = uncapitalise( className );
 
-        String tagName = xmlFieldMetadata.getTagName();
+        JMethod unmarshall = new JMethod( null, "write" + className );
 
-        String type = field.getType();
+        unmarshall.addParameter( new JParameter( new JClass( className ), uncapClassName ) );
 
-        String fieldName = field.getName();
+        unmarshall.addParameter( new JParameter( new JClass( "String" ), "tagName" ) );
 
-        String className = capitalise( field.getName() );
+        unmarshall.addParameter( new JParameter( new JClass( "XmlSerializer" ), "serializer" ) );
 
-        String modelClassName = uncapitalise( modelClass.getName() );
+        unmarshall.addException( new JClass( "Exception" ) );
 
-        if ( objectName != null )
+        unmarshall.getModifiers().makePrivate();
+
+        JSourceCode sc = unmarshall.getSourceCode();
+
+        sc.add( "if ( " + uncapClassName + " != null )" );
+
+        sc.add( "{" );
+
+        sc.indent();
+
+        sc.add( "serializer.startTag( NAMESPACE, tagName );" );
+
+        // XML attributes
+        for (Iterator i = modelClass.getAllFields( getGeneratedVersion(), true ).iterator(); i.hasNext(); )
         {
-            modelClassName = objectName;
-        }
+            ModelField field = (ModelField) i.next();
 
-        if ( tagName == null )
-        {
-            tagName = fieldName;
-        }
+            XmlFieldMetadata fieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
 
-        if ( isClassInModel( type, modelClass.getModel() ) )
-        {
-            if ( attribute )
+            String fieldTagName = fieldMetadata.getTagName();
+
+            if ( fieldTagName == null )
             {
-                throw new ModelloRuntimeException( "A class cannot be a serialized as a attribute." );
+                fieldTagName = field.getName();
             }
 
-            sc.add( "// Writing class in field" );
+            String type = field.getType();
 
-            sc.add( type + " " + fieldName + " = " + modelClassName + ".get" + className + "();" );
+            String value = uncapClassName + ".get" + capitalise( field.getName() ) + "()";
 
-            sc.add( "if ( " + fieldName + " != null )" );
-
-            sc.add( "{" );
-
-            sc.indent();
-
-            sc.add( "serializer.startTag( NAMESPACE, " + "\"" + tagName + "\" );" );
-
-            writeClassMarshalling( modelClass.getModel().getClass( type, getGeneratedVersion() ), fieldName, sc );
-
-            sc.add( "serializer.endTag( NAMESPACE, " + "\"" + tagName + "\" );" );
-
-            sc.unindent();
-
-            sc.add( "}" );
-        }
-        else
-        {
-            sc.add( "// Writing primitive in field" );
-
-            String textValue = getValue( field.getType(), modelClassName + ".get" + className + "()" );
-
-            // Write "if ( value != ...)"
-            sc.add( getValueChecker( field.getType(), modelClassName + ".get" + className + "()", field ) );
-
-            sc.add( "{" );
-
-            sc.indent();
-
-            if ( attribute )
+            if ( fieldMetadata.isAttribute() )
             {
-                sc.add( "serializer.attribute( NAMESPACE, \"" + tagName + "\", " +
-                        textValue + " );" );
-            }
-            else
-            {
-                sc.add( "serializer.startTag( NAMESPACE, " + "\"" + tagName + "\" ).text( " +
-                        textValue + " ).endTag( NAMESPACE, " + "\"" + tagName + "\" );" );
-            }
-
-            sc.unindent();
-
-            sc.add( "}" );
-        }
-    }
-
-    private void writeAssociationMarshalling( ModelClass modelClass, ModelAssociation association, String objectName, JSourceCode sc )
-        throws ModelloRuntimeException
-    {
-        XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata)association.getMetadata( XmlFieldMetadata.ID );
-
-        XmlAssociationMetadata xmlAssociationMetadata = (XmlAssociationMetadata)association.getAssociationMetadata( XmlAssociationMetadata.ID );
-
-        boolean attribute = xmlFieldMetadata.isAttribute();
-
-        String tagName = xmlFieldMetadata.getTagName();
-        
-        String modelClassName = uncapitalise( modelClass.getName() );
-
-        String fieldName = association.getName();
-
-        String getterName = capitalise( fieldName );
-
-        String type = association.getTo();
-
-        String singularFieldName = singular( fieldName );
-
-        if ( objectName != null )
-        {
-            modelClassName = objectName;
-        }
-
-        if ( tagName == null )
-        {
-            tagName = fieldName;
-        }
-
-        if ( isClassInModel( type, association.getModelClass().getModel() ) )
-        {
-            String size = modelClassName + ".get" + getterName + "().size()";
-
-            String index = getIndex();
-
-            sc.add( "// Writing class association" );
-
-            sc.add( "if ( " + modelClassName + ".get" + getterName + "() != null && " + modelClassName + ".get" + getterName + "().size() > 0 )" );
-
-            sc.add( "{" );
-
-            sc.indent();
-
-            sc.add( "serializer.startTag( NAMESPACE, " + "\"" + tagName + "\" );" );
-
-            sc.add( "for ( int " + index + " = 0; " + index + " < " + size + "; " + index + "++ )" );
-
-            sc.add( "{" );
-
-            sc.indent();
-
-            sc.add( type + " " + singularFieldName +
-                    " = (" + type + ") " + modelClassName + ".get" + getterName + "().get( " + index + " );" );
-
-            sc.add( "serializer.startTag( NAMESPACE, " + "\"" + singular( tagName ) + "\" );" );
-
-            writeClassMarshalling( association.getModelClass().getModel().getClass( type, getGeneratedVersion() ), singularFieldName, sc );
-
-            sc.add( "serializer.endTag( NAMESPACE, " + "\"" + singular( tagName ) + "\" );" );
-
-            sc.unindent();
-
-            sc.add( "}" );
-
-            sc.add( "serializer.endTag( NAMESPACE, " + "\"" + tagName + "\" );" );
-
-            sc.unindent();
-
-            sc.add( "}" );
-        }
-        else
-        {
-            sc.add( "// Writing other association" );
-
-            sc.add( "if ( " + modelClassName + ".get" + getterName + "() != null && " + modelClassName + ".get" + getterName + "().size() > 0 )" );
-
-            sc.add( "{" );
-
-            sc.indent();
-
-            sc.add( "serializer.startTag( NAMESPACE, " + "\"" + tagName + "\" );" );
-
-            String size = modelClassName + ".get" + getterName + "().size()";
-
-            String index = getIndex();
-
-            if ( ModelDefault.MAP.equals( association.getType() )
-                || ModelDefault.PROPERTIES.equals( association.getType() ) )
-            {
-                sc.add( "for( Iterator iter = " + modelClassName + ".get" + getterName + "().keySet().iterator(); iter.hasNext(); )" );
+                sc.add( getValueChecker( type, value, field ) );
 
                 sc.add( "{" );
 
                 sc.indent();
 
-                sc.add( "String key = (String) iter.next();" );
+                sc.add( "serializer.attribute( NAMESPACE, \"" + fieldTagName + "\", " +
+                    getValue( field.getType(), value ) + " );" );
 
-                sc.add( "String value = (String) " + modelClassName + ".get" + getterName + "().get( key );" );
+                sc.unindent();
 
-                if ( XmlAssociationMetadata.INLINE_MODE.equals( xmlAssociationMetadata.getMapStyle() ) )
+                sc.add( "}" );
+            }
+        }
+        
+        // XML tags
+        for ( Iterator fieldIterator = modelClass.getAllFields( getGeneratedVersion(), true ).iterator(); fieldIterator.hasNext(); )
+        {
+            ModelField field = (ModelField) fieldIterator.next();
+
+            XmlFieldMetadata fieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
+
+            String fieldTagName = fieldMetadata.getTagName();
+
+            if ( fieldTagName == null )
+            {
+                fieldTagName = field.getName();
+            }
+
+            String type = field.getType();
+
+            String value = uncapClassName + ".get" + capitalise( field.getName() ) + "()";
+
+            if ( fieldMetadata.isAttribute() )
+            {
+                continue;
+            }
+
+            if ( field instanceof ModelAssociation )
+            {
+                ModelAssociation association = (ModelAssociation) field;
+
+                String associationName = association.getName();
+
+                if ( ModelAssociation.ONE_MULTIPLICITY.equals( association.getMultiplicity() ) )
                 {
-                    sc.add( "serializer.startTag( NAMESPACE, \"\" + key + \"\" ).text( value ).endTag( NAMESPACE, \"\" + key + \"\" );" );
+                    sc.add( getValueChecker( type, value, association ) );
+
+                    sc.add( "{" );
+
+                    sc.indent();
+
+                    sc.add( "write" + association.getTo() + "( " + value + ", \"" + fieldTagName + "\", serializer );" );
+
+                    sc.unindent();
+
+                    sc.add( "}" );
                 }
                 else
                 {
-                    sc.add( "serializer.startTag( NAMESPACE, \"" + singular( fieldName ) + "\" );" );
-                    sc.add( "serializer.startTag( NAMESPACE, \"key\" ).text( key ).endTag( NAMESPACE, \"key\" );" );
-                    sc.add( "serializer.startTag( NAMESPACE, \"value\" ).text( value ).endTag( NAMESPACE, \"value\" );" );
-                    sc.add( "serializer.endTag( NAMESPACE, \"" + singular( fieldName ) + "\" );" );
+                    //MANY_MULTIPLICITY
+
+                    type = association.getType();
+                    String toType = association.getTo();
+
+                    if ( ModelDefault.LIST.equals( type )
+                        || ModelDefault.SET.equals( type ) )
+                    {
+                        sc.add( getValueChecker( type, value, association ) );
+
+                        sc.add( "{" );
+
+                        sc.indent();
+
+                        sc.add( "serializer.startTag( NAMESPACE, " + "\"" + fieldTagName + "\" );" );
+
+                        sc.add( "for ( Iterator iter = " + value + ".iterator(); iter.hasNext(); )" );
+
+                        sc.add( "{" );
+
+                        sc.indent();
+
+                        if ( isClassInModel( association.getTo(), modelClass.getModel() ) )
+                        {
+                            sc.add( toType + " " + uncapitalise( toType ) + " = (" + toType + ") iter.next();" );
+
+                            sc.add( "write" + toType + "( " + uncapitalise( toType ) + ", \"" + singular( fieldTagName ) + "\", serializer );" );
+                        }
+                        else
+                        {
+                            sc.add( toType + " " + singular( uncapitalise( field.getName() ) ) + " = (" + toType + ") iter.next();" );
+
+                            sc.add( "serializer.startTag( NAMESPACE, " + "\"" + singular( fieldTagName ) + "\" ).text( " +
+                                    singular( uncapitalise( field.getName() ) ) + " ).endTag( NAMESPACE, " + "\"" + singular( fieldTagName ) + "\" );" );
+                        }
+
+                        sc.unindent();
+
+                        sc.add( "}" );
+
+                        sc.add( "serializer.endTag( NAMESPACE, " + "\"" + fieldTagName + "\" );" );
+
+                        sc.unindent();
+
+                        sc.add( "}" );
+                    }
+                    else
+                    {
+                        //Map or Properties
+
+                        XmlAssociationMetadata xmlAssociationMetadata = (XmlAssociationMetadata)association.getAssociationMetadata( XmlAssociationMetadata.ID );
+
+                        sc.add( "for ( Iterator iter = " + value + ".keySet().iterator(); iter.hasNext(); )" );
+
+                        sc.add( "{" );
+
+                        sc.indent();
+
+                        sc.add( "String key = (String) iter.next();" );
+
+                        sc.add( "String value = (String) " + value + ".get( key );" );
+
+                        if ( XmlAssociationMetadata.EXPLODE_MODE.equals( xmlAssociationMetadata.getMapStyle() ) )
+                        {
+                            sc.add( "serializer.startTag( NAMESPACE, \"" + singular( associationName ) + "\" );" );
+                            sc.add( "serializer.startTag( NAMESPACE, \"key\" ).text( key ).endTag( NAMESPACE, \"key\" );" );
+                            sc.add( "serializer.startTag( NAMESPACE, \"value\" ).text( value ).endTag( NAMESPACE, \"value\" );" );
+                            sc.add( "serializer.endTag( NAMESPACE, \"" + singular( associationName ) + "\" );" );
+                        }
+                        else
+                        {
+                            sc.add( "serializer.startTag( NAMESPACE, \"\" + key + \"\" ).text( value ).endTag( NAMESPACE, \"\" + key + \"\" );" );
+                        }
+
+                        sc.unindent();
+
+                        sc.add( "}" );
+                    }
                 }
-
-                sc.unindent();
-
-                sc.add( "}" );
             }
             else
             {
-                sc.add( "for ( int " + index + "= 0; " + index + " < " + size + "; " + index + "++ )" );
+                sc.add( getValueChecker( type, value, field ) );
 
                 sc.add( "{" );
 
                 sc.indent();
 
-                sc.add( "String s = (String) " + modelClassName + ".get" + getterName + "().get( " + index + " );" );
-
-                sc.add( "serializer.startTag( NAMESPACE, " + "\"" + singular( tagName ) + "\" ).text( s ).endTag( NAMESPACE, " + "\"" + singular( tagName ) + "\" );" );
+                sc.add( "serializer.startTag( NAMESPACE, " + "\"" + fieldTagName + "\" ).text( " +
+                        getValue( field.getType(), value ) + " ).endTag( NAMESPACE, " + "\"" + fieldTagName + "\" );" );
 
                 sc.unindent();
 
                 sc.add( "}" );
             }
-
-            sc.add( "serializer.endTag( NAMESPACE, " + "\"" + tagName + "\" );" );
-
-            sc.unindent();
-
-            sc.add( "}" );
         }
+
+        sc.add( "serializer.endTag( NAMESPACE, tagName );" );
+
+        sc.unindent();
+
+        sc.add( "}" );
+
+        jClass.addMethod( unmarshall );
     }
 
-    int index;
-
-    private String getIndex()
-    {
-        index++;
-
-        return "i" + Integer.toString( index );
-    }
-    
     private String getValue( String type, String initialValue )
     {
         String textValue = initialValue;
@@ -469,6 +413,13 @@ public class Xpp3WriterGenerator
         else if ( "char".equals( type ) )
         {
             return "if ( " + value + " != '" + field.getDefaultValue() + "' )";
+        }
+        else if ( ModelDefault.LIST.equals( type )
+            || ModelDefault.SET.equals( type )
+            || ModelDefault.MAP.equals( type )
+            || ModelDefault.PROPERTIES.equals( type ) )
+        {
+            return "if ( " + value + " != null && " + value + ".size() > 0 )";
         }
         else
         {
