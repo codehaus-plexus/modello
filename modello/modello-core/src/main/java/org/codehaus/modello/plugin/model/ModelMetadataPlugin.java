@@ -22,9 +22,6 @@ package org.codehaus.modello.plugin.model;
  * SOFTWARE.
  */
 
-import java.util.Collections;
-import java.util.Map;
-
 import org.codehaus.modello.metadata.AbstractMetadataPlugin;
 import org.codehaus.modello.metadata.AssociationMetadata;
 import org.codehaus.modello.metadata.ClassMetadata;
@@ -35,6 +32,8 @@ import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
+
+import java.util.Map;
 
 /**
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
@@ -60,6 +59,10 @@ public class ModelMetadataPlugin
         String rootElement = (String) data.get( "rootElement" );
 
         metadata.setRootElement( Boolean.valueOf( rootElement ).booleanValue() );
+
+        String tagName = (String) data.get( "xml.tagName" );
+
+        metadata.setTagName( tagName );
 
         return metadata;
     }

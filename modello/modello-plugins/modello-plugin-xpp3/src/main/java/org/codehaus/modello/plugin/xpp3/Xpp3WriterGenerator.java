@@ -35,6 +35,7 @@ import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelDefault;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.plugin.java.JavaFieldMetadata;
+import org.codehaus.modello.plugin.model.ModelClassMetadata;
 import org.codehaus.modello.plugins.xml.XmlAssociationMetadata;
 import org.codehaus.modello.plugins.xml.XmlFieldMetadata;
 
@@ -52,7 +53,8 @@ import java.util.Properties;
 public class Xpp3WriterGenerator
     extends AbstractXpp3Generator
 {
-    public void generate( Model model, Properties parameters ) throws ModelloException
+    public void generate( Model model, Properties parameters )
+        throws ModelloException
     {
         initialize( model, parameters );
 
@@ -66,7 +68,8 @@ public class Xpp3WriterGenerator
         }
     }
 
-    private void generateXpp3Writer( Model model ) throws ModelloException, IOException
+    private void generateXpp3Writer( Model model )
+        throws ModelloException, IOException
     {
         Model objectModel = getModel();
 
@@ -116,7 +119,19 @@ public class Xpp3WriterGenerator
 
         String root = objectModel.getRoot( getGeneratedVersion() );
 
-        String rootElement = uncapitalise( root );
+        ModelClass rootClass = objectModel.getClass( root, getGeneratedVersion() );
+
+        ModelClassMetadata metadata = (ModelClassMetadata) rootClass.getMetadata( ModelClassMetadata.ID );
+
+        String rootElement;
+        if ( metadata == null || metadata.getTagName() == null )
+        {
+            rootElement = uncapitalise( root );
+        }
+        else
+        {
+            rootElement = metadata.getTagName();
+        }
 
         // Write the parse method which will do the unmarshalling.
 
@@ -132,9 +147,11 @@ public class Xpp3WriterGenerator
 
         sc.add( "serializer = new MXSerializer();" );
 
-        sc.add( "serializer.setProperty( \"http://xmlpull.org/v1/doc/properties.html#serializer-indentation\", \"  \" );" );
+        sc.add(
+            "serializer.setProperty( \"http://xmlpull.org/v1/doc/properties.html#serializer-indentation\", \"  \" );" );
 
-        sc.add( "serializer.setProperty( \"http://xmlpull.org/v1/doc/properties.html#serializer-line-separator\", \"\\n\" );" );
+        sc.add(
+            "serializer.setProperty( \"http://xmlpull.org/v1/doc/properties.html#serializer-line-separator\", \"\\n\" );" );
 
         sc.add( "serializer.setOutput( writer );" );
 
@@ -153,8 +170,6 @@ public class Xpp3WriterGenerator
 
     private void writeAllClasses( Model objectModel, JClass jClass )
     {
-        ModelClass root = objectModel.getClass( objectModel.getRoot( getGeneratedVersion() ), getGeneratedVersion() );
-
         for ( Iterator i = objectModel.getClasses( getGeneratedVersion() ).iterator(); i.hasNext(); )
         {
             ModelClass clazz = (ModelClass) i.next();
@@ -209,7 +224,8 @@ public class Xpp3WriterGenerator
 
             String type = field.getType();
 
-            String value = uncapClassName + "." + getPrefix( javaFieldMetadata ) + capitalise( field.getName() ) + "()";
+            String value = uncapClassName + "." + getPrefix( javaFieldMetadata ) + capitalise( field.getName() ) +
+                "()";
 
             if ( fieldMetadata.isAttribute() )
             {
@@ -219,8 +235,8 @@ public class Xpp3WriterGenerator
 
                 sc.indent();
 
-                sc.add( "serializer.attribute( NAMESPACE, \"" + fieldTagName + "\", "
-                    + getValue( field.getType(), value ) + " );" );
+                sc.add( "serializer.attribute( NAMESPACE, \"" + fieldTagName + "\", " +
+                        getValue( field.getType(), value ) + " );" );
 
                 sc.unindent();
 
@@ -229,7 +245,8 @@ public class Xpp3WriterGenerator
         }
 
         // XML tags
-        for ( Iterator fieldIterator = modelClass.getAllFields( getGeneratedVersion(), true ).iterator(); fieldIterator.hasNext(); )
+        for ( Iterator fieldIterator = modelClass.getAllFields( getGeneratedVersion(), true ).iterator();
+              fieldIterator.hasNext(); )
         {
             ModelField field = (ModelField) fieldIterator.next();
 
@@ -254,7 +271,8 @@ public class Xpp3WriterGenerator
 
             String type = field.getType();
 
-            String value = uncapClassName + "." + getPrefix( javaFieldMetadata ) + capitalise( field.getName() ) + "()";
+            String value = uncapClassName + "." + getPrefix( javaFieldMetadata ) + capitalise( field.getName() ) +
+                "()";
 
             if ( fieldMetadata.isAttribute() )
             {
@@ -311,17 +329,17 @@ public class Xpp3WriterGenerator
                         {
                             sc.add( toType + " " + uncapitalise( toType ) + " = (" + toType + ") iter.next();" );
 
-                            sc.add( "write" + toType + "( " + uncapitalise( toType ) + ", \"" + singularTagName
-                                + "\", serializer );" );
+                            sc.add( "write" + toType + "( " + uncapitalise( toType ) + ", \"" + singularTagName +
+                                    "\", serializer );" );
                         }
                         else
                         {
-                            sc.add( toType + " " + singular( uncapitalise( field.getName() ) ) + " = (" + toType
-                                + ") iter.next();" );
+                            sc.add( toType + " " + singular( uncapitalise( field.getName() ) ) + " = (" + toType +
+                                    ") iter.next();" );
 
-                            sc.add( "serializer.startTag( NAMESPACE, " + "\"" + singularTagName + "\" ).text( "
-                                + singular( uncapitalise( field.getName() ) ) + " ).endTag( NAMESPACE, " + "\""
-                                + singularTagName + "\" );" );
+                            sc.add( "serializer.startTag( NAMESPACE, " + "\"" + singularTagName + "\" ).text( " +
+                                    singular( uncapitalise( field.getName() ) ) + " ).endTag( NAMESPACE, " + "\"" +
+                                    singularTagName + "\" );" );
                         }
 
                         sc.unindent();
@@ -341,7 +359,8 @@ public class Xpp3WriterGenerator
                     {
                         //Map or Properties
 
-                        XmlAssociationMetadata xmlAssociationMetadata = (XmlAssociationMetadata) association.getAssociationMetadata( XmlAssociationMetadata.ID );
+                        XmlAssociationMetadata xmlAssociationMetadata = (XmlAssociationMetadata) association.getAssociationMetadata(
+                            XmlAssociationMetadata.ID );
 
                         sc.add( getValueChecker( type, value, field ) );
 
@@ -367,13 +386,16 @@ public class Xpp3WriterGenerator
                         if ( XmlAssociationMetadata.EXPLODE_MODE.equals( xmlAssociationMetadata.getMapStyle() ) )
                         {
                             sc.add( "serializer.startTag( NAMESPACE, \"" + singular( associationName ) + "\" );" );
-                            sc.add( "serializer.startTag( NAMESPACE, \"key\" ).text( key ).endTag( NAMESPACE, \"key\" );" );
-                            sc.add( "serializer.startTag( NAMESPACE, \"value\" ).text( value ).endTag( NAMESPACE, \"value\" );" );
+                            sc.add(
+                                "serializer.startTag( NAMESPACE, \"key\" ).text( key ).endTag( NAMESPACE, \"key\" );" );
+                            sc.add(
+                                "serializer.startTag( NAMESPACE, \"value\" ).text( value ).endTag( NAMESPACE, \"value\" );" );
                             sc.add( "serializer.endTag( NAMESPACE, \"" + singular( associationName ) + "\" );" );
                         }
                         else
                         {
-                            sc.add( "serializer.startTag( NAMESPACE, \"\" + key + \"\" ).text( value ).endTag( NAMESPACE, \"\" + key + \"\" );" );
+                            sc.add(
+                                "serializer.startTag( NAMESPACE, \"\" + key + \"\" ).text( value ).endTag( NAMESPACE, \"\" + key + \"\" );" );
                         }
 
                         sc.unindent();
@@ -399,8 +421,8 @@ public class Xpp3WriterGenerator
 
                 sc.indent();
 
-                sc.add( "serializer.startTag( NAMESPACE, " + "\"" + fieldTagName + "\" ).text( "
-                    + getValue( field.getType(), value ) + " ).endTag( NAMESPACE, " + "\"" + fieldTagName + "\" );" );
+                sc.add( "serializer.startTag( NAMESPACE, " + "\"" + fieldTagName + "\" ).text( " +
+                        getValue( field.getType(), value ) + " ).endTag( NAMESPACE, " + "\"" + fieldTagName + "\" );" );
 
                 sc.unindent();
 
@@ -436,8 +458,8 @@ public class Xpp3WriterGenerator
 
     private String getValueChecker( String type, String value, ModelField field )
     {
-        if ( "boolean".equals( type ) || "double".equals( type ) || "float".equals( type ) || "int".equals( type )
-            || "long".equals( type ) || "short".equals( type ) )
+        if ( "boolean".equals( type ) || "double".equals( type ) || "float".equals( type ) || "int".equals( type ) ||
+            "long".equals( type ) || "short".equals( type ) )
         {
             return "if ( " + value + " != " + field.getDefaultValue() + " )";
         }
@@ -445,8 +467,9 @@ public class Xpp3WriterGenerator
         {
             return "if ( " + value + " != '" + field.getDefaultValue() + "' )";
         }
-        else if ( ModelDefault.LIST.equals( type ) || ModelDefault.SET.equals( type ) || ModelDefault.MAP.equals( type )
-            || ModelDefault.PROPERTIES.equals( type ) )
+        else if ( ModelDefault.LIST.equals( type ) || ModelDefault.SET.equals( type ) ||
+            ModelDefault.MAP.equals( type ) ||
+            ModelDefault.PROPERTIES.equals( type ) )
         {
             return "if ( " + value + " != null && " + value + ".size() > 0 )";
         }
