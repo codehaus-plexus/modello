@@ -70,6 +70,11 @@ public abstract class AbstractGenerator
         return objectModel;
     }
 
+    protected Version getModelVersion()
+    {
+        return modelVersion;
+    }
+
     public String getOutputDirectory()
     {
         return outputDirectory;
@@ -104,7 +109,7 @@ public abstract class AbstractGenerator
         return false;
     }
 
-    class Version
+    public class Version
     {
         short major;
 
@@ -112,25 +117,31 @@ public abstract class AbstractGenerator
 
         short micro;
 
+        String majorString;
+
+        String minorString;
+
+        String microString;
+
         String modifier;
 
         Version( String version, String elementName )
         {
-            String a = version.substring( 0, 1 );
+            majorString = version.substring( 0, 1 );
 
-            String b = version.substring( 2, 3 );
+            minorString = version.substring( 2, 3 );
 
-            String c = version.substring( 4, 5 );
+            microString = version.substring( 4, 5 );
 
             if ( version != null && version.trim().length() > 0 )
             {
                 try
                 {
-                    major = Short.parseShort( a );
+                    major = Short.parseShort( majorString );
 
-                    minor = Short.parseShort( b );
+                    minor = Short.parseShort( minorString );
 
-                    micro = Short.parseShort( c );
+                    micro = Short.parseShort( microString );
                 }
                 catch ( NumberFormatException e )
                 {
@@ -142,6 +153,11 @@ public abstract class AbstractGenerator
                     modifier = version.substring( 5 );
                 }
             }
+        }
+
+        public String toString()
+        {
+            return "v" + majorString + minorString + microString;
         }
     }
 

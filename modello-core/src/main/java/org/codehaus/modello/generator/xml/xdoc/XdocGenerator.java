@@ -179,6 +179,9 @@ public class XdocGenerator
         return sb.toString();
     }
 
+    // @todo I'm not going to test this right now but I have reworked the source handling in
+    // the new xdoc plugin to handle the escaping of XML that that we don't have to do it in
+    // source code.
     private String getModelClassDescriptor( Model objectModel, ModelClass modelClass, int depth )
     {
         StringBuffer sb = new StringBuffer();
@@ -188,8 +191,7 @@ public class XdocGenerator
             sb.append( "  " );
         }
 
-        sb.append( "<a href=\"#" + modelClass.getName() + "\">&lt;" +
-                   uncapitalise( modelClass.getName() ) );
+        sb.append( "<a href=\"#" + modelClass.getName() + "\">&lt;" + uncapitalise( modelClass.getName() ) );
 
         if ( modelClass.getFields().size() > 0 && outputElement( modelClass.getVersion(), modelClass.getName() ) )
         {
