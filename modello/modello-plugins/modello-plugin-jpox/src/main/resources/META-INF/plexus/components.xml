@@ -3,20 +3,20 @@
 
     <component>
       <role>org.codehaus.modello.plugin.ModelloGenerator</role>
-      <role-hint>jpox</role-hint>
-      <implementation>org.codehaus.modello.plugin.jpox.JPoxModelloGenerator</implementation>
+      <role-hint>jpox-store</role-hint>
+      <implementation>org.codehaus.modello.plugin.jpox.JPoxStoreModelloGenerator</implementation>
       <requirements>
         <requirement>
           <role>org.codehaus.plexus.velocity.VelocityComponent</role>
         </requirement>
       </requirements>
     </component>
-<!--
+
     <component>
-      <role>org.codehaus.modello.metadata.MetadataPlugin</role>
-      <role-hint>jpox</role-hint>
-      <implementation>org.codehaus.modello.plugin.jpox.metadata.JpoxMetadataPlugin</implementation>
+      <role>org.codehaus.modello.plugin.ModelloGenerator</role>
+      <role-hint>jpox-jdo-mapping</role-hint>
+      <implementation>org.codehaus.modello.plugin.jpox.JPoxJdoMappingModelloGenerator</implementation>
     </component>
--->
+
   </components>
 </component-set>

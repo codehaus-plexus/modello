@@ -22,67 +22,55 @@ package org.codehaus.modello.plugin.jpox;
  * SOFTWARE.
  */
 
-import java.io.FileReader;
-import java.io.File;
 import java.util.Properties;
 
-import org.codehaus.modello.ModelloGeneratorTest;
-import org.codehaus.modello.ModelloParameterConstants;
-import org.codehaus.modello.core.ModelloCore;
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.context.Context;
+
+import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.model.Model;
+import org.codehaus.modello.plugin.store.AbstractVelocityModelloGenerator;
+import org.codehaus.modello.plugin.store.metadata.StoreClassMetadata;
+import org.codehaus.modello.plugin.store.metadata.StoreFieldMetadata;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
-public class JPoxModelloGeneratorTest
-    extends ModelloGeneratorTest
+public class JPoxStoreModelloGenerator
+    extends AbstractVelocityModelloGenerator
 {
-    public JPoxModelloGeneratorTest()
+    public void generate( Model model, Properties properties )
+        throws ModelloException
     {
-        super( "jpox" );
-    }
-
-    public void testSimpleInvocation()
-        throws Exception
-    {
-        ModelloCore core = (ModelloCore) lookup( ModelloCore.ROLE );
-
-        Model model = core.loadModel( new FileReader( getTestPath( "src/test/resources/mergere-tissue.mdo" ) ) );
+        initialize( model, properties );
 
         // ----------------------------------------------------------------------
-        // Generate the code
+        // Initialize the Velocity context
         // ----------------------------------------------------------------------
 
-        Properties parameters = new Properties();
+        Context context = new VelocityContext();
 
-        parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, getGeneratedSources().getAbsolutePath() );
+        context.put( "version", getGeneratedVersion() );
 
-        parameters.setProperty( ModelloParameterConstants.VERSION, "1.0.0" );
+        context.put( "package", model.getPackageName( false, getGeneratedVersion() ) );
 
-        parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.FALSE.toString() );
+        context.put( "storeClassMetadataId", StoreClassMetadata.ID );
 
-        core.generate( model, "jpox", parameters );
+        context.put( "storeFieldMetadataId", StoreFieldMetadata.ID );
+
+        context.put( "model", model );
 
         // ----------------------------------------------------------------------
-        // Assert
+        // Generate the JPoxStore
         // ----------------------------------------------------------------------
 
-        assertGeneratedFileExists( "org/mergere/tissue/TissueJPoxStore.java" );
+        String packageName = model.getPackageName( isPackageWithVersion(), super.getGeneratedVersion() );
 
-        assertGeneratedFileExists( "package.jdo" );
-    }
+        String className = model.getName() + "JPoxStore";
 
-    // ----------------------------------------------------------------------
-    //
-    // ----------------------------------------------------------------------
-
-    private void assertGeneratedFileExists( String filename )
-    {
-        File file = new File( getGeneratedSources(), filename );
-
-        assertTrue( "Missing generated file: " + file.getAbsolutePath(), file.canRead() );
-
-        assertTrue( "The generated file is empty.", file.length() > 0 );
+        writeClass( "/org/codehaus/modello/plugin/jpox/templates/JPoxStore.java.vm",
+                    getOutputDirectory(), packageName, className,
+                    context );
     }
 }
