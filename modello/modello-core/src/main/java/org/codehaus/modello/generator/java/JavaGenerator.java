@@ -84,6 +84,11 @@ public class JavaGenerator
 
                     if ( modelField.getDelegateTo() != null )
                     {
+                        JField delegate = createField( modelClass.getField( modelField.getDelegateTo() ), modelClass, count );
+
+                        jClass.addMethod( createDelegateGetter( modelField, delegate ) );
+
+                        jClass.addMethod( createDelegateSetter( modelField, delegate ) );
                     }
                     else
                     {
@@ -91,9 +96,9 @@ public class JavaGenerator
 
                         jClass.addField( field );
 
-                        jClass.addMethod( createFieldGetter( field ) );
+                        jClass.addMethod( createGetter( field ) );
 
-                        jClass.addMethod( createFieldSetter( field ) );
+                        jClass.addMethod( createSetter( field ) );
 
                         createAdder( field, jClass, objectModel );
                     }
@@ -151,7 +156,7 @@ public class JavaGenerator
         return field;
     }
 
-    private JMethod createFieldGetter( JField field )
+    private JMethod createGetter( JField field )
     {
         String propertyName = capitalise( field.getName() );
 
@@ -162,7 +167,7 @@ public class JavaGenerator
         return getter;
     }
 
-    private JMethod createFieldSetter( JField field )
+    private JMethod createSetter( JField field )
     {
         String propertyName = capitalise( field.getName() );
 
@@ -220,5 +225,35 @@ public class JavaGenerator
 
             jClass.addMethod( adder );
         }
+    }
+
+    // Delegate
+
+    private JMethod createDelegateGetter( ModelField field, JField delegate )
+    {
+        String propertyName = capitalise( field.getName() );
+
+        String delegatePropertyName = capitalise( delegate.getName() );
+
+        JMethod getter = new JMethod( delegate.getType(), "get" + propertyName );
+
+        getter.getSourceCode().add( "return get" + delegatePropertyName + "();" );
+
+        return getter;
+    }
+
+    private JMethod createDelegateSetter( ModelField field, JField delegate )
+    {
+        String propertyName = capitalise( field.getName() );
+
+        String delegatePropertyName = capitalise( delegate.getName() );
+
+        JMethod setter = new JMethod( null, "set" + propertyName );
+
+        setter.addParameter( new JParameter( delegate.getType(), field.getName() ) );
+
+        setter.getSourceCode().add( "set" + delegatePropertyName + "( " + field.getName() + " );" );
+
+        return setter;
     }
 }

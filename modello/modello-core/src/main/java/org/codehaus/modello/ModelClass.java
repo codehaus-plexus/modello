@@ -58,4 +58,9 @@ public class ModelClass
     {
         return ( superClass != null );
     }
+
+    public ModelField getField( String fieldName )
+    {
+        return (ModelField) fieldMap.get( fieldName );
+    }
 }
