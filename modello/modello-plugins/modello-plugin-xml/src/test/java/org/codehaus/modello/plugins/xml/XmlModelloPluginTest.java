@@ -7,13 +7,14 @@ package org.codehaus.modello.plugins.xml;
 import java.io.FileReader;
 import java.util.List;
 
-import org.codehaus.modello.Model;
-import org.codehaus.modello.ModelClass;
-import org.codehaus.modello.ModelField;
 import org.codehaus.modello.ModelloRuntimeException;
 import org.codehaus.modello.ModelloTest;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.metadata.MetadataPlugin;
+import org.codehaus.modello.model.Model;
+import org.codehaus.modello.model.ModelClass;
+import org.codehaus.modello.model.ModelField;
+import org.codehaus.modello.model.Version;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l </a>
@@ -39,7 +40,7 @@ public class XmlModelloPluginTest
 
         Model model = modello.loadModel( new FileReader( getTestPath( "src/test/resources/model.mdo" ) ) );
 
-        List classes = model.getClasses();
+        List classes = model.getClasses( new Version( "4.0.0" ) );
 
         assertEquals( 2, classes.size() );
 
@@ -47,9 +48,9 @@ public class XmlModelloPluginTest
 
         assertEquals( "Model", clazz.getName() );
 
-        assertEquals( 3, clazz.getFields().size() );
+        assertEquals( 3, clazz.getFields( new Version( "4.0.0" ) ).size() );
 
-        ModelField extend = clazz.getField( "extend" );
+        ModelField extend = clazz.getField( "extend", new Version( "4.0.0" ) );
 
         assertTrue( extend.hasMetadata( XmlFieldMetadata.ID ) );
 
@@ -59,7 +60,7 @@ public class XmlModelloPluginTest
 
         assertTrue( xml.isAttribute() );
 
-        ModelField parent = clazz.getField( "parent" );
+        ModelField parent = clazz.getField( "parent", new Version( "4.0.0" ) );
 
         try
         {
@@ -72,7 +73,7 @@ public class XmlModelloPluginTest
             // expected
         }
 
-        ModelField builder = clazz.getField( "builder" );
+        ModelField builder = clazz.getField( "builder", new Version( "4.0.0" ) );
 
         assertTrue( builder.hasMetadata( XmlFieldMetadata.ID ) );
 
