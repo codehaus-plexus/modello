@@ -22,12 +22,6 @@ package org.codehaus.modello.plugin.xpp3;
  * SOFTWARE.
  */
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.Iterator;
-import java.util.Properties;
-
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.generator.java.javasource.JClass;
 import org.codehaus.modello.generator.java.javasource.JField;
@@ -44,10 +38,15 @@ import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.plugins.xml.XmlAssociationMetadata;
 import org.codehaus.modello.plugins.xml.XmlFieldMetadata;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Iterator;
+import java.util.Properties;
+
 /**
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
- *
  * @version $Id$
  */
 public class Xpp3ReaderGenerator
@@ -62,7 +61,7 @@ public class Xpp3ReaderGenerator
         {
             generateXpp3Reader();
         }
-        catch( IOException ex )
+        catch ( IOException ex )
         {
             throw new ModelloException( "Exception while generating XPP3 Reader.", ex );
         }
@@ -123,12 +122,9 @@ public class Xpp3ReaderGenerator
         JField addDefaultEntities = new JField( JType.Boolean, "addDefaultEntities" );
 
         addDefaultEntities.setComment( "If set the parser till be loaded with all single characters from the XHTML specification.\n" +
-                                       "The entities used:\n" +
-                                       "<ul>\n" +
-                                       "<li>http://www.w3.org/TR/xhtml1/DTD/xhtml-lat1.ent</li>\n" +
+                                       "The entities used:\n" + "<ul>\n" + "<li>http://www.w3.org/TR/xhtml1/DTD/xhtml-lat1.ent</li>\n" +
                                        "<li>http://www.w3.org/TR/xhtml1/DTD/xhtml-special.ent</li>\n" +
-                                       "<li>http://www.w3.org/TR/xhtml1/DTD/xhtml-symbol.ent</li>\n" +
-                                       "</ul>\n" );
+                                       "<li>http://www.w3.org/TR/xhtml1/DTD/xhtml-symbol.ent</li>\n" + "</ul>\n" );
 
         addDefaultEntities.setInitString( "true" );
 
@@ -139,7 +135,7 @@ public class Xpp3ReaderGenerator
 
         addDefaultEntitiesSetter.addParameter( new JParameter( JType.Boolean, "addDefaultEntities" ) );
 
-        addDefaultEntitiesSetter.setSourceCode( "this.addDefaultEntities = addDefaultEntities;");
+        addDefaultEntitiesSetter.setSourceCode( "this.addDefaultEntities = addDefaultEntities;" );
 
         addDefaultEntitiesSetter.setComment( "Sets the state of the \"add default entities\" flag." );
 
@@ -269,11 +265,11 @@ public class Xpp3ReaderGenerator
 
         sc.add( "if ( parser.getName().equals( tagName ) )" );
 
-        sc.add( "{" ) ;
+        sc.add( "{" );
 
         sc.indent();
 
-        for (Iterator i = modelClass.getAllFields( getGeneratedVersion(), true ).iterator(); i.hasNext(); )
+        for ( Iterator i = modelClass.getAllFields( getGeneratedVersion(), true ).iterator(); i.hasNext(); )
         {
             ModelField field = (ModelField) i.next();
 
@@ -293,7 +289,7 @@ public class Xpp3ReaderGenerator
 
         //Write other fields
 
-        for (Iterator i = modelClass.getAllFields( getGeneratedVersion(), true ).iterator(); i.hasNext(); )
+        for ( Iterator i = modelClass.getAllFields( getGeneratedVersion(), true ).iterator(); i.hasNext(); )
         {
             ModelField field = (ModelField) i.next();
 
@@ -305,7 +301,7 @@ public class Xpp3ReaderGenerator
             {
                 continue;
             }
-            if (tagName == null)
+            if ( tagName == null )
             {
                 tagName = field.getName();
             }
@@ -316,12 +312,6 @@ public class Xpp3ReaderGenerator
 
             String singularTagName = singular( field.getName() );
 
-            sc.add( statement + " ( parser.getName().equals( \"" + tagName + "\" ) )" );
-
-            sc.add( "{" );
-
-            sc.indent();
-
             if ( field instanceof ModelAssociation )
             {
                 ModelAssociation association = (ModelAssociation) field;
@@ -330,7 +320,19 @@ public class Xpp3ReaderGenerator
 
                 if ( ModelAssociation.ONE_MULTIPLICITY.equals( association.getMultiplicity() ) )
                 {
-                    sc.add( uncapClassName + ".set" + capFieldName + "( parse" + association.getTo() + "( \"" + tagName + "\", parser ) );" );
+                    sc.add( statement + " ( parser.getName().equals( \"" + tagName + "\" ) )" );
+
+                    sc.add( "{" );
+
+                    sc.indent();
+
+                    sc.add( uncapClassName + ".set" + capFieldName + "( parse" + association.getTo() + "( \"" +
+                            tagName +
+                            "\", parser ) );" );
+
+                    sc.unindent();
+
+                    sc.add( "}" );
                 }
                 else
                 {
@@ -338,59 +340,114 @@ public class Xpp3ReaderGenerator
 
                     String type = association.getType();
 
-                    if ( ModelDefault.LIST.equals( type )
-                        || ModelDefault.SET.equals( type ) )
+                    if ( ModelDefault.LIST.equals( type ) || ModelDefault.SET.equals( type ) )
                     {
-                        sc.add( type + " " + associationName + " = " + association.getDefaultValue() + ";" );
+                        if ( association.isParentElement() )
+                        {
+                            sc.add( statement + " ( parser.getName().equals( \"" + tagName + "\" ) )" );
 
-                        sc.add( "while ( parser.nextTag() == XmlPullParser.START_TAG )" );
+                            sc.add( "{" );
 
-                        sc.add( "{" );
+                            sc.indent();
 
-                        sc.indent();
+                            sc.add( type + " " + associationName + " = " + association.getDefaultValue() + ";" );
 
-                        sc.add( "if ( parser.getName().equals( \"" + singularTagName + "\" ) )" );
+                            sc.add( uncapClassName + ".set" + capFieldName + "( " + associationName + " );" );
 
-                        sc.add( "{" );
+                            sc.add( "while ( parser.nextTag() == XmlPullParser.START_TAG )" );
 
-                        sc.indent();
+                            sc.add( "{" );
+
+                            sc.indent();
+
+                            sc.add( "if ( parser.getName().equals( \"" + singularTagName + "\" ) )" );
+
+                            sc.add( "{" );
+
+                            sc.indent();
+                        }
+                        else
+                        {
+                            sc.add( statement + " ( parser.getName().equals( \"" + singularTagName + "\" ) )" );
+
+                            sc.add( "{" );
+
+                            sc.indent();
+
+                            sc.add(
+                                type + " " + associationName + " = " + uncapClassName + ".get" + capFieldName + "();" );
+
+                            sc.add( "if ( " + associationName + " == null )" );
+
+                            sc.add( "{" );
+
+                            sc.indent();
+
+                            sc.add( associationName + " = " + association.getDefaultValue() + ";" );
+
+                            sc.add( uncapClassName + ".set" + capFieldName + "( " + associationName + " );" );
+
+                            sc.unindent();
+
+                            sc.add( "}" );
+                        }
 
                         if ( isClassInModel( association.getTo(), modelClass.getModel() ) )
                         {
-                            sc.add( associationName + ".add( parse" + association.getTo() + "( \"" + tagName + "\", parser ) );" );
+                            sc.add( associationName + ".add( parse" + association.getTo() + "( \"" + tagName +
+                                    "\", parser ) );" );
                         }
                         else
                         {
                             writePrimitiveField( association, association.getTo(), associationName, "add", sc );
                         }
 
-                        sc.unindent();
+                        if ( association.isParentElement() )
+                        {
+                            sc.unindent();
 
-                        sc.add( "}" );
+                            sc.add( "}" );
 
-                        sc.add( "else" );
+                            sc.add( "else" );
 
-                        sc.add( "{" );
+                            sc.add( "{" );
 
-                        sc.indent();
+                            sc.indent();
 
-                        sc.add( "parser.nextText();" );
+                            sc.add( "parser.nextText();" );
 
-                        sc.unindent();
+                            sc.unindent();
 
-                        sc.add( "}" );
+                            sc.add( "}" );
 
-                        sc.unindent();
+                            sc.unindent();
 
-                        sc.add( "}" );
+                            sc.add( "}" );
 
-                        sc.add( uncapClassName + ".set" + capFieldName + "( " + associationName + " );" );
+                            sc.unindent();
+
+                            sc.add( "}" );
+                        }
+                        else
+                        {
+
+                            sc.unindent();
+
+                            sc.add( "}" );
+                        }
                     }
                     else
                     {
                         //Map or Properties
 
-                        XmlAssociationMetadata xmlAssociationMetadata = (XmlAssociationMetadata)association.getAssociationMetadata( XmlAssociationMetadata.ID );
+                        sc.add( statement + " ( parser.getName().equals( \"" + tagName + "\" ) )" );
+
+                        sc.add( "{" );
+
+                        sc.indent();
+
+                        XmlAssociationMetadata xmlAssociationMetadata = (XmlAssociationMetadata) association.getAssociationMetadata(
+                            XmlAssociationMetadata.ID );
 
                         if ( XmlAssociationMetadata.EXPLODE_MODE.equals( xmlAssociationMetadata.getMapStyle() ) )
                         {
@@ -408,7 +465,7 @@ public class Xpp3ReaderGenerator
 
                             sc.add( "String key = null;" );
 
-                            sc.add( "String value = null;");
+                            sc.add( "String value = null;" );
 
                             sc.add( "//" + xmlAssociationMetadata.getMapStyle() + " mode." );
 
@@ -458,7 +515,7 @@ public class Xpp3ReaderGenerator
 
                             sc.add( "}" );
 
-                            sc.add( uncapClassName + ".add" + capitalise( singularName ) + "( key, value );");
+                            sc.add( uncapClassName + ".add" + capitalise( singularName ) + "( key, value );" );
 
                             sc.unindent();
 
@@ -484,29 +541,38 @@ public class Xpp3ReaderGenerator
 
                             sc.add( "String value = parser.nextText();" );
 
-                            sc.add( uncapClassName + ".add" + capitalise( singularName ) + "( key, value );");
+                            sc.add( uncapClassName + ".add" + capitalise( singularName ) + "( key, value );" );
 
                             sc.unindent();
 
                             sc.add( "}" );
                         }
 
+                        sc.unindent();
+
+                        sc.add( "}" );
                     }
                 }
             }
             else
             {
+                sc.add( statement + " ( parser.getName().equals( \"" + tagName + "\" ) )" );
+
+                sc.add( "{" );
+
+                sc.indent();
+
                 //ModelField
                 writePrimitiveField( field, field.getType(), uncapClassName, "set" + capitalise( field.getName() ), sc );
+
+                sc.unindent();
+
+                sc.add( "}" );
             }
-
-            sc.unindent();
-
-            sc.add( "}" );
 
             statement = "else if";
         }
-        if ( ! rootElement )
+        if ( !rootElement )
         {
             if ( modelClass.getFields( getGeneratedVersion() ).size() > 0 )
             {
@@ -541,7 +607,8 @@ public class Xpp3ReaderGenerator
         jClass.addMethod( unmarshall );
     }
 
-    private void writePrimitiveField( ModelField field, String type, String objectName, String setterName, JSourceCode sc )
+    private void writePrimitiveField( ModelField field, String type, String objectName, String setterName,
+                                      JSourceCode sc )
     {
         XmlFieldMetadata fieldMetaData = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
 

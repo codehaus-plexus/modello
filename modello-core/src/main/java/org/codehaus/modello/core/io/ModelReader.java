@@ -44,7 +44,6 @@ import java.util.Map;
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
- *
  * @version $Id$
  */
 public class ModelReader
@@ -74,7 +73,8 @@ public class ModelReader
 
     public Map getAttributesForAssociation( ModelAssociation modelAssociation )
     {
-        return (Map) associationAttributes.get( modelAssociation.getModelClass().getName() + ":" + modelAssociation.getName() );
+        return (Map) associationAttributes.get(
+            modelAssociation.getModelClass().getName() + ":" + modelAssociation.getName() );
     }
 
     public Model loadModel( Reader reader )
@@ -83,20 +83,20 @@ public class ModelReader
         try
         {
             Model model = new Model();
-    
+
             XmlPullParser parser = new MXParser();
-    
+
             parser.setInput( reader );
 
             parseModel( model, parser );
 
             return model;
         }
-        catch( IOException ex )
+        catch ( IOException ex )
         {
             throw new ModelloException( "Error parsing the model.", ex );
         }
-        catch( XmlPullParserException ex )
+        catch ( XmlPullParserException ex )
         {
             throw new ModelloException( "Error parsing the model.", ex );
         }
@@ -164,7 +164,7 @@ public class ModelReader
                     }
                 }
 
-                model.addDefault( modelDefault);
+                model.addDefault( modelDefault );
             }
             else
             {
@@ -232,7 +232,7 @@ public class ModelReader
                     }
                     else if ( parser.getName().equals( "interface" ) )
                     {
-                        
+
                         modelClass.addInterface( parser.nextText() );
                     }
                     else if ( parser.getName().equals( "superClass" ) )
@@ -280,7 +280,8 @@ public class ModelReader
 
                 Map fAttributes = getAttributes( parser );
 
-                Map aAttributes = new HashMap();;
+                Map aAttributes = new HashMap();
+                ;
 
                 while ( parser.nextTag() == XmlPullParser.START_TAG )
                 {
@@ -332,7 +333,8 @@ public class ModelReader
                     if ( modelAssociation.getName() != null )
                     {
                         fieldAttributes.put( modelClass.getName() + ":" + modelAssociation.getName(), fAttributes );
-                        associationAttributes.put( modelClass.getName() + ":" + modelAssociation.getName(), aAttributes );
+                        associationAttributes.put( modelClass.getName() + ":" + modelAssociation.getName(),
+                                                   aAttributes );
                     }
 
                     modelClass.addField( modelAssociation );
@@ -369,6 +371,10 @@ public class ModelReader
             else if ( parser.getName().equals( "type" ) )
             {
                 modelAssociation.setTo( parser.nextText() );
+            }
+            else if ( parser.getName().equals( "parentElement" ) )
+            {
+                modelAssociation.setParentElement( Boolean.valueOf( parser.nextText() ).booleanValue() );
             }
             else if ( parser.getName().equals( "multiplicity" ) )
             {
@@ -480,7 +486,7 @@ public class ModelReader
     {
         Map attributes = new HashMap();
 
-        for( int i = 0; i < parser.getAttributeCount(); i++ )
+        for ( int i = 0; i < parser.getAttributeCount(); i++ )
         {
             String name = parser.getAttributeName( i );
 
