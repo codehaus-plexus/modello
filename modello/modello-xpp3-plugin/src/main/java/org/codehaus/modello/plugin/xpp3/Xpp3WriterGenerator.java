@@ -106,11 +106,7 @@ public class Xpp3WriterGenerator
 
         jClass.setPackageName( packageName );
 
-        jClass.addImport( "org.xmlpull.v1.XmlPullParser" );
-
-        jClass.addImport( "org.xmlpull.v1.XmlPullParserFactory" );
-
-        jClass.addImport( "org.xmlpull.v1.XmlSerializer" );
+        jClass.addImport( "org.codehaus.plexus.util.xml.pull.*" );
 
         jClass.addImport( "java.io.Writer" );
 
@@ -138,9 +134,7 @@ public class Xpp3WriterGenerator
 
         JSourceCode sc = marshall.getSourceCode();
 
-        sc.add( "XmlPullParserFactory factory = XmlPullParserFactory.newInstance( System.getProperty( XmlPullParserFactory.PROPERTY_NAME ), null );" );
-
-        sc.add( "serializer = factory.newSerializer();" );
+        sc.add( "serializer = new XmlSerializer();" );
 
         sc.add( "serializer.setProperty( \"http://xmlpull.org/v1/doc/properties.html#serializer-indentation\", \"  \" );" );
 
@@ -235,7 +229,7 @@ public class Xpp3WriterGenerator
                 sc.add( "}" );
             }
         }
-        
+
         // XML tags
         for ( Iterator fieldIterator = modelClass.getAllFields( getGeneratedVersion(), true ).iterator(); fieldIterator.hasNext(); )
         {

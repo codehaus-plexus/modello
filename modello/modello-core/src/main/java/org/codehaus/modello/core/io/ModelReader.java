@@ -22,11 +22,6 @@ package org.codehaus.modello.core.io;
  * SOFTWARE.
  */
 
-import java.io.IOException;
-import java.io.Reader;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.model.BaseElement;
 import org.codehaus.modello.model.CodeSegment;
@@ -37,10 +32,14 @@ import org.codehaus.modello.model.ModelDefault;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.ModelInterface;
 import org.codehaus.modello.model.VersionRange;
+import org.codehaus.plexus.util.xml.pull.MXParser;
+import org.codehaus.plexus.util.xml.pull.XmlPullParser;
+import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-import org.xmlpull.v1.XmlPullParserFactory;
+import java.io.IOException;
+import java.io.Reader;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -85,9 +84,7 @@ public class ModelReader
         {
             Model model = new Model();
     
-            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
-    
-            XmlPullParser parser = factory.newPullParser();
+            XmlPullParser parser = new MXParser();
     
             parser.setInput( reader );
 

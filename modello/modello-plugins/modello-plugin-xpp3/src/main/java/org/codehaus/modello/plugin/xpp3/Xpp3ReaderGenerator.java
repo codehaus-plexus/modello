@@ -105,11 +105,7 @@ public class Xpp3ReaderGenerator
 
         jClass.setPackageName( packageName );
 
-        jClass.addImport( "org.xmlpull.v1.XmlPullParser" );
-
-        jClass.addImport( "org.xmlpull.v1.XmlPullParserException" );
-
-        jClass.addImport( "org.xmlpull.v1.XmlPullParserFactory" );
+        jClass.addImport( "org.codehaus.plexus.util.xml.pull.*" );
 
         jClass.addImport( "java.io.Reader" );
 
@@ -132,9 +128,7 @@ public class Xpp3ReaderGenerator
 
         JSourceCode sc = unmarshall.getSourceCode();
 
-        sc.add( "XmlPullParserFactory factory = XmlPullParserFactory.newInstance();" );
-
-        sc.add( "XmlPullParser parser = factory.newPullParser();" );
+        sc.add( "XmlPullParser parser = MXParser();" );
 
         sc.add( "parser.setInput( reader );" );
 
