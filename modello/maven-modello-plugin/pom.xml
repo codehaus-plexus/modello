@@ -1,14 +1,15 @@
 <project>
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <artifactId>modello</artifactId>
     <groupId>org.codehaus.modello</groupId>
-    <version>1.0-alpha-1</version>
+    <artifactId>modello</artifactId>
+    <version>1.0-alpha-2-SNAPSHOT</version>
   </parent>
   <!-- TODO: remove -->
   <groupId>org.apache.maven.plugins</groupId>
   <!-- TODO: change to modello-maven-plugin -->
   <artifactId>maven-modello-plugin</artifactId>
+  <version>1.0-alpha-2-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
   <name>Maven Modello Plugin</name>
   <dependencies>
@@ -25,30 +26,30 @@
     <dependency>
       <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-core</artifactId>
-      <version>1.0-alpha-1</version>
+      <version>1.0-alpha-2-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-xpp3-plugin</artifactId>
-      <version>1.0-alpha-1</version>
+      <version>1.0-alpha-2-SNAPSHOT</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-xdoc-plugin</artifactId>
-      <version>1.0-alpha-1</version>
+      <version>1.0-alpha-2-SNAPSHOT</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-plugin-prevayler</artifactId>
-      <version>1.0-alpha-1</version>
+      <version>1.0-alpha-2-SNAPSHOT</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-plugin-jpox</artifactId>
-      <version>1.0-alpha-1</version>
+      <version>1.0-alpha-2-SNAPSHOT</version>
       <scope>runtime</scope>
     </dependency>
   </dependencies>

@@ -1,10 +1,10 @@
 <project>
-  <parent>
-    <artifactId>modello</artifactId>
-    <groupId>org.codehaus.modello</groupId>
-    <version>1.0-alpha-1</version>
-  </parent>
   <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.codehaus.modello</groupId>
+    <artifactId>modello</artifactId>
+    <version>1.0-alpha-2-SNAPSHOT</version>
+  </parent>
   <artifactId>modello-core</artifactId>
   <name>Modello Core</name>
   <dependencies>
@@ -16,7 +16,7 @@
     <dependency>
       <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-test</artifactId>
-      <version>1.0-alpha-1</version>
+      <version>1.0-alpha-2-SNAPSHOT</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

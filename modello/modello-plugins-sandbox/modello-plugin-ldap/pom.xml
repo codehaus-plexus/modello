@@ -1,13 +1,11 @@
-<model>
-  <parent>
-    <artifactId>modello-plugins</artifactId>
-    <groupId>modello</groupId>
-    <version>1.0-alpha-1-SNAPSHOT</version>
-  </parent>
+<project>
   <modelVersion>4.0.0</modelVersion>
-  <groupId>modello</groupId>
+  <parent>
+    <groupId>org.codehaus.modello</groupId>
+    <artifactId>modello-plugins-sandbox</artifactId>
+    <version>1.0-alpha-2-SNAPSHOT</version>
+  </parent>
   <artifactId>modello-plugin-ldap</artifactId>
-  <packaging>jar</packaging>
+  <version>1.0-alpha-2-SNAPSHOT</version>
   <name>Modello LDAP Plugin</name>
-  <version>1.0-alpha-1-SNAPSHOT</version>
-</model>
+</project>

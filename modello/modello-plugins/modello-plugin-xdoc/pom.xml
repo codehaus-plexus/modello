@@ -1,17 +1,17 @@
 <project>
-  <parent>
-    <artifactId>modello-plugins</artifactId>
-    <groupId>org.codehaus.modello</groupId>
-    <version>1.0-alpha-1</version>
-  </parent>
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>modello-xdoc-plugin</artifactId>
+  <parent>
+    <groupId>org.codehaus.modello</groupId>
+    <artifactId>modello-plugins</artifactId>
+    <version>1.0-alpha-2-SNAPSHOT</version>
+  </parent>
+  <artifactId>modello-plugin-xdoc</artifactId>
   <name>Modello XDOC Plugin</name>
   <dependencies>
     <dependency>
       <groupId>org.codehaus.modello</groupId>
-      <artifactId>modello-xml-plugin</artifactId>
-      <version>1.0-alpha-1</version>
+      <artifactId>modello-plugin-xml</artifactId>
+      <version>1.0-alpha-2-SNAPSHOT</version>
     </dependency>
   </dependencies>
 </project>
