@@ -1,0 +1,19 @@
+<model>
+  <id>maven</id>
+  <name>Maven</name>
+  <packageName>org.codehaus.mojo.modello.javatest</packageName>
+  <root>Model</root>
+  <classes>
+    <class>
+      <name>Model</name>
+      <version>1.0.0</version>
+      <fields>
+        <field>
+          <name>extend</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+      </fields>
+    </class>
+  </classes>
+</model>
