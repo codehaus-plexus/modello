@@ -72,7 +72,7 @@
       <name>Project</name>
       <version>1.0.0</version>
       <fields>
-        <field>
+        <field stash.maxSize="10">
           <name>id</name>
           <version>1.0.0</version>
           <type>String</type>
