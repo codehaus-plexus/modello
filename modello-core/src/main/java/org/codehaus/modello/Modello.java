@@ -3,8 +3,8 @@ package org.codehaus.modello;
 import org.codehaus.modello.generator.java.JavaGenerator;
 import org.codehaus.modello.generator.xml.schema.XmlSchemaGenerator;
 import org.codehaus.modello.generator.xml.xdoc.XdocGenerator;
-import org.codehaus.modello.generator.xml.xpp3.Xpp3UnmarshallerGenerator;
-import org.codehaus.modello.generator.xml.xpp3.Xpp3MarshallerGenerator;
+import org.codehaus.modello.generator.xml.xpp3.Xpp3ReaderGenerator;
+import org.codehaus.modello.generator.xml.xpp3.Xpp3WriterGenerator;
 
 import java.io.File;
 
@@ -79,7 +79,7 @@ public class Modello
     public void xpp3UnmarshallerGenerator( String model, String outputDirectory )
         throws Exception
     {
-        Xpp3UnmarshallerGenerator generator = new Xpp3UnmarshallerGenerator( model, new File( outputDirectory ).getPath() );
+        Xpp3ReaderGenerator generator = new Xpp3ReaderGenerator( model, new File( outputDirectory ).getPath() );
 
         generator.generate();
     }
@@ -87,7 +87,7 @@ public class Modello
     public void xpp3MarshallerGenerator( String model, String outputDirectory )
         throws Exception
     {
-        Xpp3MarshallerGenerator generator = new Xpp3MarshallerGenerator( model, new File( outputDirectory ).getPath() );
+        Xpp3WriterGenerator generator = new Xpp3WriterGenerator( model, new File( outputDirectory ).getPath() );
 
         generator.generate();
     }
