@@ -81,6 +81,11 @@ public abstract class AbstractGenerator
 
     protected boolean isMap( String fieldType )
     {
+        if ( fieldType == null)
+        {
+            return false;
+        }
+        
         if ( fieldType.equals( "java.util.Map" ) )
         {
             return true;
@@ -95,6 +100,11 @@ public abstract class AbstractGenerator
 
     protected boolean isCollection( String fieldType )
     {
+        if ( fieldType == null)
+        {
+            return false;
+        }
+        
         if ( fieldType.equals( "java.util.List" ) )
         {
             return true;
@@ -109,6 +119,11 @@ public abstract class AbstractGenerator
 
     protected String capitalise( String str )
     {
+        if ( str == null || str.length() == 0)
+        {
+            return str;
+        }
+        
         return new StringBuffer( str.length() )
             .append( Character.toTitleCase( str.charAt( 0 ) ) )
             .append( str.substring( 1 ) )
@@ -181,6 +196,11 @@ public abstract class AbstractGenerator
 
     public static String uncapitalise( String str )
     {
+        if ( str == null || str.length() == 0)
+        {
+            return str;
+        }
+        
         return new StringBuffer( str.length() )
             .append( Character.toLowerCase( str.charAt( 0 ) ) )
             .append( str.substring( 1 ) )
