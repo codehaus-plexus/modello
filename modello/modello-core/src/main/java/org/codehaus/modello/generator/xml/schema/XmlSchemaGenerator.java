@@ -15,10 +15,7 @@ import java.util.Iterator;
 // fields themselves for the xsd to be correct.
 
 /**
- *
- *
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
- *
  * @version $Id$
  */
 public class XmlSchemaGenerator
@@ -59,66 +56,32 @@ public class XmlSchemaGenerator
         {
             ModelClass modelClass = (ModelClass) i.next();
 
-            w.startElement( "xs:element" );
-
-            w.addAttribute( "name", uncapitalise( modelClass.getName() ) );
-
-            annotation( w, modelClass.getDescription() );
-
-            w.startElement( "xs:complexType" );
-
-            w.startElement( "xs:sequence" );
-
-            for ( Iterator j = modelClass.getFields().iterator(); j.hasNext(); )
+            if ( outputElement( modelClass.getVersion(), modelClass.getName() ) )
             {
-                ModelField field = (ModelField) j.next();
-
                 w.startElement( "xs:element" );
 
-                w.addAttribute( "ref", field.getName() );
+                w.addAttribute( "name", uncapitalise( modelClass.getName() ) );
 
-                if ( ! field.isRequired() )
+                annotation( w, modelClass.getDescription() );
+
+                w.startElement( "xs:complexType" );
+
+                w.startElement( "xs:sequence" );
+
+                for ( Iterator j = modelClass.getFields().iterator(); j.hasNext(); )
                 {
-                    w.addAttribute( "minOccurs", "0" );
-                }
+                    ModelField field = (ModelField) j.next();
 
-                if ( annotate )
-                {
-                    annotation( w, field.getDescription() );
-                }
-
-                w.endElement();
-            }
-
-            w.endElement();
-
-            w.endElement();
-
-            w.endElement();
-
-            // Now write the fields separately
-
-            writer.write( "\n" );
-
-            for ( Iterator j = modelClass.getFields().iterator(); j.hasNext(); )
-            {
-                ModelField field = (ModelField) j.next();
-
-                if ( field.getDelegateTo() != null )
-                {
-                }
-                else
-                {
-                    // We only need to output elements that are primitive and all we
-                    // are dealing with right now is Strings. We'll deal with primitives
-                    // more thoroughly. We can borrow the code from castor.
-                    if ( field.getType().equals( "String" ) )
+                    if ( outputElement( field.getVersion(), modelClass.getName() + "." + field.getName() ) )
                     {
                         w.startElement( "xs:element" );
 
-                        w.addAttribute( "name", field.getName() );
+                        w.addAttribute( "ref", field.getName() );
 
-                        w.addAttribute( "type", "xs:string" );
+                        if ( !field.isRequired() )
+                        {
+                            w.addAttribute( "minOccurs", "0" );
+                        }
 
                         if ( annotate )
                         {
@@ -127,34 +90,72 @@ public class XmlSchemaGenerator
 
                         w.endElement();
                     }
-                    else if ( isCollection( field.getType() ) )
+                }
+
+                w.endElement();
+
+                w.endElement();
+
+                w.endElement();
+
+                // Now write the fields separately
+
+                writer.write( "\n" );
+
+                for ( Iterator j = modelClass.getFields().iterator(); j.hasNext(); )
+                {
+                    ModelField field = (ModelField) j.next();
+
+                    if ( outputElement( field.getVersion(), modelClass.getName() + "." + field.getName() ) )
                     {
-                        writer.write( "\n" );
 
-                        w.startElement( "xs:element" );
-
-                        w.addAttribute( "name", field.getName() );
-
-                        w.startElement( "xs:complexType" );
-
-                        w.startElement( "xs:sequence" );
-
-                        w.startElement( "xs:element" );
-
-                        w.addAttribute( "ref", singular( field.getName() ) );
-
-                        if ( annotate )
+                        // We only need to output elements that are primitive and all we
+                        // are dealing with right now is Strings. We'll deal with primitives
+                        // more thoroughly. We can borrow the code from castor.
+                        if ( field.getType().equals( "String" ) )
                         {
-                            annotation( w, field.getDescription() );
+                            w.startElement( "xs:element" );
+
+                            w.addAttribute( "name", field.getName() );
+
+                            w.addAttribute( "type", "xs:string" );
+
+                            if ( annotate )
+                            {
+                                annotation( w, field.getDescription() );
+                            }
+
+                            w.endElement();
                         }
+                        else if ( isCollection( field.getType() ) )
+                        {
+                            writer.write( "\n" );
 
-                        w.endElement();
+                            w.startElement( "xs:element" );
 
-                        w.endElement();
+                            w.addAttribute( "name", field.getName() );
 
-                        w.endElement();
+                            w.startElement( "xs:complexType" );
 
-                        w.endElement();
+                            w.startElement( "xs:sequence" );
+
+                            w.startElement( "xs:element" );
+
+                            w.addAttribute( "ref", singular( field.getName() ) );
+
+                            if ( annotate )
+                            {
+                                annotation( w, field.getDescription() );
+                            }
+
+                            w.endElement();
+
+                            w.endElement();
+
+                            w.endElement();
+
+                            w.endElement();
+                        }
                     }
                 }
             }
