@@ -26,6 +26,7 @@ import java.io.File;
 import java.io.FileReader;
 
 import org.codehaus.modello.core.ModelloCore;
+import org.codehaus.modello.model.Model;
 import org.codehaus.plexus.PlexusTestCase;
 
 /**

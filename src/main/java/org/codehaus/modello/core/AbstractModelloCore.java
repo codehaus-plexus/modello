@@ -29,9 +29,9 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
 
-import org.codehaus.modello.Model;
-import org.codehaus.modello.ModelValidationException;
 import org.codehaus.modello.ModelloException;
+import org.codehaus.modello.model.Model;
+import org.codehaus.modello.model.ModelValidationException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 
 /**

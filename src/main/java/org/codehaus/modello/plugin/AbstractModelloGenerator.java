@@ -26,14 +26,14 @@ import java.io.File;
 import java.util.Iterator;
 import java.util.Properties;
 
-import org.codehaus.modello.BaseElement;
-import org.codehaus.modello.Model;
-import org.codehaus.modello.ModelClass;
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.ModelloRuntimeException;
-import org.codehaus.modello.Version;
 import org.codehaus.modello.generator.java.javasource.JClass;
+import org.codehaus.modello.model.BaseElement;
+import org.codehaus.modello.model.Model;
+import org.codehaus.modello.model.ModelClass;
+import org.codehaus.modello.model.Version;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 
 /**
@@ -86,15 +86,17 @@ public abstract class AbstractModelloGenerator
         return outputDirectory;
     }
 
-    protected boolean outputElement( BaseElement element )
-        throws ModelloRuntimeException
-    {
-        return generatedVersion.inside( element.getElementVersion() );
-    }
-
     protected boolean isClassInModel( String fieldType, Model model )
     {
-        return model.getClass( fieldType ) != null;
+        try
+        {
+            return model.getClass( fieldType, generatedVersion ) != null;
+        }
+        catch( Exception e )
+        {
+        }
+
+        return false;
     }
 
     protected boolean isMap( String fieldType )
@@ -198,14 +200,11 @@ public abstract class AbstractModelloGenerator
     protected void addModelImports( JClass jClass )
         throws ModelloException
     {
-        for ( Iterator i = getModel().getClasses().iterator(); i.hasNext(); )
+        for ( Iterator i = getModel().getClasses( getGeneratedVersion() ).iterator(); i.hasNext(); )
         {
             ModelClass modelClass = (ModelClass) i.next();
 
-            if ( outputElement( modelClass ) )
-            {
-                jClass.addImport( getBasePackageName() + "." + modelClass.getName() );
-            }
+            jClass.addImport( getBasePackageName() + "." + modelClass.getName() );
         }
     }
 

@@ -1,4 +1,4 @@
-package org.codehaus.modello;
+package org.codehaus.modello.model;
 
 /*
  * Copyright (c) 2004, Jason van Zyl
@@ -25,6 +25,7 @@ package org.codehaus.modello;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.codehaus.modello.ModelloRuntimeException;
 import org.codehaus.modello.metadata.Metadata;
 
 /**
@@ -34,6 +35,8 @@ import org.codehaus.modello.metadata.Metadata;
  * 
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
+ * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
+ *
  * @version $Id$
  */
 public abstract class BaseElement
@@ -42,13 +45,13 @@ public abstract class BaseElement
 
     private String description;
 
-    private String version;
-
     private String comment;
 
-    private transient Map metadata = new HashMap();
+    private VersionRange versionRange = new VersionRange( "0.0.0+" );;
 
-    private transient VersionRange elementVersion;
+    private Version deprecatedVersion;
+
+    private transient Map metadata = new HashMap();
 
     private boolean nameRequired;
 
@@ -87,14 +90,24 @@ public abstract class BaseElement
         this.description = description;
     }
 
-    public String getVersion()
+    public VersionRange getVersionRange()
     {
-        return version;
+        return versionRange;
     }
 
-    public void setVersion( String version )
+    public void setVersionRange( VersionRange versionRange )
     {
-        this.version = version;
+        this.versionRange = versionRange;
+    }
+
+    public void setDeprecatedVersion( Version deprecatedVersion )
+    {
+        this.deprecatedVersion = deprecatedVersion;
+    }
+
+    public Version getDeprecatedVersion()
+    {
+        return deprecatedVersion;
     }
 
     public String getComment()
@@ -134,11 +147,6 @@ public abstract class BaseElement
         return metadata;
     }
 
-    public VersionRange getElementVersion()
-    {
-        return elementVersion;
-    }
-
     // ----------------------------------------------------------------------
     // Validation utils
     // ----------------------------------------------------------------------
@@ -164,13 +172,6 @@ public abstract class BaseElement
         {
             validateFieldNotEmpty( "Element.name", "name", name );
         }
-
-        if ( isEmpty( version ) )
-        {
-            version = "0.0.0+";
-        }
-
-        elementVersion = new VersionRange( version );
 
         validateElement();
     }

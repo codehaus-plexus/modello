@@ -1,4 +1,4 @@
-package org.codehaus.modello;
+package org.codehaus.modello.model;
 
 /*
  * Copyright (c) 2004, Jason van Zyl
@@ -22,25 +22,43 @@ package org.codehaus.modello;
  * SOFTWARE.
  */
 
+import org.codehaus.modello.ModelloRuntimeException;
+
+/**
+ * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
+ * @version $Id$
+ */
 public class VersionRange
 {
+    private static final String VERSION_SEPARATOR = "/";
     private Version fromVersion;
 
-    private char modifier;
+    private Version toVersion;
 
-    public VersionRange( String fromVersion )
+    private String versionRange;
+
+    public VersionRange( String versionRange )
     {
-        this.fromVersion = new Version( fromVersion );
-
-        if ( fromVersion.length() >= 6 )
+        if ( versionRange.endsWith( "+" ) )
         {
-            modifier = fromVersion.charAt( 5 );
-
-            if ( modifier != '+' )
-            {
-                throw new ModelloRuntimeException( "Invalid modifier. Must be '+', was '" + modifier + "'." );
-            }
+            fromVersion = new Version( versionRange.substring( 0, versionRange.length() - 1 ) );
+            toVersion = Version.INFINITE;
         }
+        else if ( versionRange.indexOf( VERSION_SEPARATOR ) > 0 && ! versionRange.endsWith( VERSION_SEPARATOR ) )
+        {
+            int pos = versionRange.indexOf( VERSION_SEPARATOR );
+
+            fromVersion = new Version( versionRange.substring( 0, pos ) );
+
+            toVersion = new Version( versionRange.substring( pos + 1 ) );
+        }
+        else
+        {
+            fromVersion = new Version( versionRange );
+            toVersion = new Version( versionRange );
+        }
+
+        this.versionRange = versionRange;
     }
 
     public Version getFromVersion()
@@ -48,8 +66,18 @@ public class VersionRange
         return fromVersion;
     }
 
+    public Version getToVersion()
+    {
+        return toVersion;
+    }
+
     public boolean isToInfinite()
     {
-        return modifier == '+';
+        return toVersion == Version.INFINITE;
+    }
+
+    public String toString()
+    {
+        return versionRange;
     }
 }
