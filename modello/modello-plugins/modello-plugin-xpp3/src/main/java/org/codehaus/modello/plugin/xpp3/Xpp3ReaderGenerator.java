@@ -411,6 +411,16 @@ public class Xpp3ReaderGenerator
                             sc.add( "}" );
 
                             sc.add( uncapClassName + ".add" + capitalise( singularName ) + "( key, value );");
+
+                            sc.unindent();
+
+                            sc.add( "}" );
+
+                            sc.add( "parser.next();" );
+
+                            sc.unindent();
+
+                            sc.add( "}" );
                         }
                         else
                         {
@@ -433,15 +443,6 @@ public class Xpp3ReaderGenerator
                             sc.add( "}" );
                         }
 
-                        sc.unindent();
-
-                        sc.add( "}" );
-
-                        sc.add( "parser.next();" );
-
-                        sc.unindent();
-
-                        sc.add( "}" );
                     }
                 }
             }
