@@ -35,6 +35,8 @@ public class StoreFieldMetadata
 
     private boolean storable;
 
+    private int maxSize;
+
     public void setStorable( boolean storable )
     {
         this.storable = storable;
@@ -44,4 +46,14 @@ public class StoreFieldMetadata
     {
         return storable;
     }
- }
+
+    public int getMaxSize()
+    {
+        return maxSize;
+    }
+
+    public void setMaxSize( int maxSize )
+    {
+        this.maxSize = maxSize;
+    }
+}
