@@ -10,9 +10,4 @@
   <groupId>modello</groupId>
   <artifactId>modello-core</artifactId>
   <version>1.0-SNAPSHOT</version>
-  <build>
-    <nagEmailAddress>dev@maven.apache.org</nagEmailAddress>
-    <sourceDirectory>src/java</sourceDirectory>
-    <unitTestSourceDirectory>src/test</unitTestSourceDirectory>
-  </build>
 </project>
