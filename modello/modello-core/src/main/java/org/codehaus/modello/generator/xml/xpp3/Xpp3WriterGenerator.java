@@ -3,7 +3,7 @@ package org.codehaus.modello.generator.xml.xpp3;
 import org.codehaus.modello.Model;
 import org.codehaus.modello.ModelClass;
 import org.codehaus.modello.ModelField;
-import org.codehaus.modello.generator.AbstractGenerator;
+import org.codehaus.modello.generator.java.JavaGenerator;
 import org.codehaus.modello.generator.java.javasource.JClass;
 import org.codehaus.modello.generator.java.javasource.JField;
 import org.codehaus.modello.generator.java.javasource.JMethod;
@@ -21,7 +21,7 @@ import java.util.List;
  * @version $Id$
  */
 public class Xpp3WriterGenerator
-    extends AbstractGenerator
+    extends JavaGenerator
 {
     public Xpp3WriterGenerator( String model, String outputDirectory, String modelVersion )
     {
@@ -33,7 +33,7 @@ public class Xpp3WriterGenerator
     {
         Model objectModel = getModel();
 
-        String packageName = objectModel.getPackageName() + ".io.xpp3";
+        String packageName = getBasePackageName( objectModel ) + ".io.xpp3";
 
         String directory = packageName.replace( '.', '/' );
 

@@ -310,6 +310,7 @@
           </description>
           <type>Organization</type>
         </field>
+        
       </fields>
       <!-- We need this because we can't use package as a field name. -->
       <codeSegments>
