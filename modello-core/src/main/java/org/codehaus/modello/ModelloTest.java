@@ -60,9 +60,9 @@ public class ModelloTest
 
         String fileString = FileUtils.fileRead( getTestPath( name ) );
 
-        fileString = StringUtils.replace( fileString, "<description>", "<description><![CDATA[" );
+        fileString = StringUtils.replace( fileString, "<description>", "<description>" );
 
-        fileString = StringUtils.replace( fileString, "</description>", "]]></description>" );
+        fileString = StringUtils.replace( fileString, "</description>", "</description>" );
 
         return modello.loadModel( new StringReader( fileString ) );
     }
