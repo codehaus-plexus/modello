@@ -3,6 +3,7 @@ package org.codehaus.modello.plugin.java;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.Properties;
 
@@ -79,6 +80,8 @@ public class JavaModelloGenerator
                 {
                     jClass.setSuperClass( modelClass.getSuperClass() );
                 }
+
+                jClass.addInterface( Serializable.class.getName() );
 
                 for ( Iterator j = modelClass.getAllFields().iterator(); j.hasNext(); )
                 {
@@ -314,7 +317,7 @@ public class JavaModelloGenerator
 
             adder.addParameter( new JParameter( addType, parameterName ) );
 
-            adder.getSourceCode().add( fieldName + ".add( " + parameterName + " );" );
+            adder.getSourceCode().add( "this." + fieldName + ".add( " + parameterName + " );" );
 
             jClass.addMethod( adder );
 /*

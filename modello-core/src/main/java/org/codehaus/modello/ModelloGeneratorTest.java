@@ -30,6 +30,8 @@ public abstract class ModelloGeneratorTest
 
     private File mavenRepoLocal;
 
+    private IsolatedClassLoader classLoader = new IsolatedClassLoader();
+
     protected ModelloGeneratorTest( String name )
     {
         this.name = name;
@@ -45,15 +47,20 @@ public abstract class ModelloGeneratorTest
         mavenRepoLocal = new File( System.getProperty( "user.home" ), ".maven/repository" );
 
         addDependency( "junit", "junit", "3.8.1" );
+
+        Thread.currentThread().setContextClassLoader( classLoader );
     }
 
     public void addDependency( String groupId, String artifactId, String version )
+        throws Exception
     {
         File dependency = new File( mavenRepoLocal, groupId + "/jars/" + artifactId + "-" + version + ".jar" );
 
         assertTrue( "Cant find dependency: " + dependency, dependency.isFile() );
 
         dependencies.add( dependency );
+
+        addClassPathFile( dependency );
     }
 
     public String getName()
@@ -89,6 +96,18 @@ public abstract class ModelloGeneratorTest
 
         List messages = compiler.compile( classPathElements, sourceDirectories, destinationDirectory.getAbsolutePath() );
 
+        if ( false )
+        {
+            URL[] urls = classLoader.getURLs();
+
+            for ( int i = 0; i < urls.length; i++ )
+            {
+                URL url = urls[i];
+
+                System.out.println( url );
+            }
+        }
+
         for ( Iterator it = messages.iterator(); it.hasNext(); )
         {
             CompilerError message = (CompilerError) it.next();
@@ -102,31 +121,12 @@ public abstract class ModelloGeneratorTest
     protected void verify( String className, String testName )
         throws Throwable
     {
-        IsolatedClassLoader classLoader = new IsolatedClassLoader();
-
         // TODO: flip back to getTestFile() when plexus has File getTestFile()
-        classLoader.addURL( new File( getTestPath( "target/" + getName() + "/classes" ) ).toURL() );
+        addClassPathFile( new File( getTestPath( "target/" + getName() + "/classes" ) ) );
 
-        classLoader.addURL( new File( getTestPath( "target/classes" ) ).toURL() );
+        addClassPathFile( new File( getTestPath( "target/classes" ) ) );
 
-        classLoader.addURL( new File( getTestPath( "target/test-classes" ) ).toURL() );
-
-        for ( int i = 0; i < dependencies.size(); i++ )
-        {
-            classLoader.addURL( ((File) dependencies.get( i ) ).toURL() );
-        }
-
-        if ( false )
-        {
-            URL[] urls = classLoader.getURLs();
-
-            for ( int i = 0; i < urls.length; i++ )
-            {
-                URL url = urls[i];
-
-                System.out.println( url );
-            }
-        }
+        addClassPathFile( new File( getTestPath( "target/test-classes" ) ) );
 
         Class clazz = classLoader.loadClass( className );
 
@@ -140,5 +140,19 @@ public abstract class ModelloGeneratorTest
         {
             throw ex.getCause();
         }
+    }
+
+    protected ClassLoader getTestClassLoader()
+        throws Exception
+    {
+        return classLoader;
+    }
+
+    protected void addClassPathFile( File file )
+        throws Exception
+    {
+        assertTrue( "File doesn't exists: " + file.getAbsolutePath(), file.exists() );
+
+        classLoader.addURL( file.toURL() );
     }
 }
