@@ -382,6 +382,7 @@
       <fields>
         <field>
           <name>nagEmailAddress</name>
+          <version>3.0.0</version>
           <description>
             An address to which notifications regarding the status of builds
             for this project can be sent. This is intended for use by tools
@@ -476,26 +477,31 @@
       <fields>
         <field>
           <name>name</name>
+          <version>3.0.0+</version>
           <description>The full name of the contributor.</description>
           <type>String</type>
         </field>
         <field>
           <name>email</name>
+          <version>3.0.0+</version>
           <description>The email address of the contributor.</description>
           <type>String</type>
         </field>
         <field>
           <name>url</name>
+          <version>3.0.0+</version>
           <description>The URL for the homepage of the contributor.</description>
           <type>String</type>
         </field>
         <field>
           <name>organization</name>
+          <version>3.0.0+</version>
           <description>The organization to which the contributor belongs.</description>
           <type>String</type>
         </field>
         <field>
           <name>roles</name>
+          <version>3.0.0+</version>
           <description>
             The roles the contributor plays in the project.  Each role is
             describe by a
@@ -507,6 +513,7 @@
         </field>
         <field>
           <name>timezone</name>
+          <version>3.0.0+</version>
           <description>
             The timezone the contributor is in. This is a number in the range -14 to 14.
           </description>
@@ -623,6 +630,7 @@
       <fields>
         <field>
           <name>id</name>
+          <version>3.0.0+</version>
           <description>The username of the developer.</description>
           <type>String</type>
         </field>
@@ -652,16 +660,19 @@
       <fields>
         <field>
           <name>name</name>
+          <version>3.0.0+</version>
           <description>The full legal name of the license.</description>
           <type>String</type>
         </field>
         <field>
           <name>url</name>
+          <version>3.0.0+</version>
           <description>The official url for the license text.</description>
           <type>String</type>
         </field>
         <field>
           <name>distribution</name>
+          <version>3.0.0+</version>
           <description>
               The primary method by which this project may be distributed.
             <dl>
@@ -675,6 +686,7 @@
         </field>
         <field>
           <name>comments</name>
+          <version>3.0.0+</version>
           <description>the description</description>
           <type>String</type>
         </field>
@@ -693,11 +705,13 @@
       <fields>
         <field>
           <name>name</name>
+          <version>3.0.0+</version>
           <description>The name of the mailing list.</description>
           <type>String</type>
         </field>
         <field>
           <name>subscribe</name>
+          <version>3.0.0+</version>
           <description>
             The email address or link that can be used to subscribe to the mailing list.
             If this is an email address, a
@@ -708,6 +722,7 @@
         </field>
         <field>
           <name>unsubscribe</name>
+          <version>3.0.0+</version>
           <description>
             The email address or link that can be used to unsubscribe to
             the mailing list.  If this is an email address, a
@@ -718,6 +733,7 @@
         </field>
         <field>
           <name>archive</name>
+          <version>3.0.0+</version>
           <description>The link to a URL where you can browse the archive.</description>
           <type>String</type>
         </field>
@@ -735,16 +751,19 @@
       <fields>
         <field>
           <name>name</name>
+          <version>3.0.0+</version>
           <description>The full name of the organization.</description>
           <type>String</type>
         </field>
         <field>
           <name>url</name>
+          <version>3.0.0+</version>
           <description>The URL to the organization's home page.</description>
           <type>String</type>
         </field>
         <field>
           <name>logo</name>
+          <version>3.0.0+</version>
           <description>
             The URL to the organization's logo image.  This can be an URL relative
             to the base directory of the generated web site,
@@ -764,11 +783,13 @@
       <fields>
         <field>
           <name>title</name>
+          <version>3.0.0+</version>
           <description>the description</description>
           <type>String</type>
         </field>
         <field>
           <name>packages</name>
+          <version>3.0.0+</version>
           <description>the description</description>
           <type>String</type>
         </field>
@@ -780,12 +801,14 @@
       <fields>
         <field>
           <name>includes</name>
+          <version>3.0.0+</version>
           <description>the description</description>
           <type>java.util.List</type>
           <defaultValue>new ArrayList()</defaultValue>
         </field>
         <field>
           <name>excludes</name>
+          <version>3.0.0+</version>
           <description>the description</description>
           <type>java.util.List</type>
           <defaultValue>new ArrayList()</defaultValue>
@@ -891,6 +914,7 @@
       <fields>
         <field>
           <name>directory</name>
+          <version>3.0.0+</version>
           <description>
             Describe the directory where the resource is stored.
             The path may be absolute, or relative to the project.xml file.
@@ -899,6 +923,7 @@
         </field>
         <field>
           <name>targetPath</name>
+          <version>3.0.0+</version>
           <description>
             Describe the resource target path. For example, if you want that resource
             appear into a specific package (
@@ -910,6 +935,7 @@
         </field>
         <field>
           <name>filtering</name>
+          <version>3.0.0+</version>
           <description>Describe if resources are filtered or not.</description>
           <type>String</type>
           <defaultValue>false</defaultValue>
@@ -923,6 +949,7 @@
       <fields>
         <field>
           <name>className</name>
+          <version>3.0.0+</version>
           <description>
             If the class with this name can
             <strong>not</strong> be
@@ -934,6 +961,7 @@
         </field>
         <field>
           <name>property</name>
+          <version>3.0.0+</version>
           <description>the description</description>
           <type>String</type>
         </field>
@@ -946,6 +974,7 @@
       <fields>
         <field>
           <name>resources</name>
+          <version>3.0.0+</version>
           <description>the description</description>
           <type>java.util.List</type>
           <defaultValue>new ArrayList()</defaultValue>
@@ -964,6 +993,7 @@
       <fields>
         <field>
           <name>name</name>
+          <version>3.0.0</version>
           <description>
             The external version number under which this release was distributed. Examples include:
             <code>1.0</code>,
@@ -975,6 +1005,7 @@
         </field>
         <field>
           <name>tag</name>
+          <version>3.0.0</version>
           <description>
             The name given in the version control system (e.g. cvs) used by the project for the source
             code associated with this version of the project.
@@ -983,6 +1014,7 @@
         </field>
         <field>
           <name>id</name>
+          <version>3.0.0</version>          
           <description>
             A unique identifier for a version.  This ID is
             used to specify the version that
