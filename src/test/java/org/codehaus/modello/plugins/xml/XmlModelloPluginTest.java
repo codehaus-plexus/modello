@@ -23,13 +23,13 @@ package org.codehaus.modello.plugins.xml;
  */
 
 import org.codehaus.modello.ModelloRuntimeException;
-import org.codehaus.modello.ModelloTest;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.metadata.MetadataPlugin;
 import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.Version;
+import org.codehaus.plexus.PlexusTestCase;
 
 import java.io.FileReader;
 import java.util.List;
@@ -39,7 +39,7 @@ import java.util.List;
  * @version $Id$
  */
 public class XmlModelloPluginTest
-    extends ModelloTest
+    extends PlexusTestCase
 {
     public void testConfiguration()
         throws Exception
@@ -54,7 +54,7 @@ public class XmlModelloPluginTest
     public void testXmlPlugin()
         throws Exception
     {
-        ModelloCore modello = getModelloCore();
+        ModelloCore modello = (ModelloCore) container.lookup( ModelloCore.ROLE );
 
         Model model = modello.loadModel( new FileReader( getTestPath( "src/test/resources/model.mdo" ) ) );
 

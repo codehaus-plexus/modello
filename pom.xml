@@ -1,19 +1,10 @@
 <project>
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <artifactId>modello</artifactId>
-    <groupId>modello</groupId>
-    <version>1.0</version>
+    <artifactId>modello-plugins</artifactId>
+    <groupId>org.codehaus.modello</groupId>
+    <version>1.0-alpha-1</version>
   </parent>
-  <groupId>modello</groupId>
   <artifactId>modello-xml-plugin</artifactId>
-  <version>1.0-SNAPSHOT</version>
   <name>Modello XML Plugin</name>
-  <dependencies>
-    <dependency>
-      <groupId>modello</groupId>
-      <artifactId>modello-core</artifactId>
-      <version>1.0-SNAPSHOT</version>
-    </dependency>
-  </dependencies>
 </project>
