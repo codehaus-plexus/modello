@@ -13,7 +13,7 @@
       <name>Model</name>
       <version>3.0.0+</version>
       <fields>
-        <field attribute="true">
+        <field xml.attribute="true">
           <name>extend</name>
           <version>3.0.0+</version>
           <description>
@@ -32,7 +32,7 @@
           </association>
           <comment></comment>
         </field>
-        <field tagName="build">
+        <field xml.tagName="build">
           <name>builder</name>
           <version>4.0.0</version>
           <description>Specified the build part.</description>

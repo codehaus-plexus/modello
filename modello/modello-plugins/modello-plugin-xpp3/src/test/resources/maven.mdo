@@ -31,7 +31,7 @@
       <name>Model</name>
       <version>3.0.0+</version>
       <fields>
-        <field attribute="true" tagName="extender">
+        <field xml.attribute="true" xml.tagName="extender">
           <name>extend</name>
           <version>3.0.0+</version>
           <description>
@@ -49,14 +49,14 @@
             <type>Parent</type>
           </association>
         </field>
-        <field attribute="true">
+        <field xml.attribute="true">
           <name>modelVersion</name>
           <version>4.0.0</version>
           <required>true</required>
           <description>The version of this model you are using.</description>
           <type>String</type>
         </field>
-        <field attribute="true">
+        <field xml.attribute="true">
           <name>pomVersion</name>
           <version>3.0.0</version>
           <required>true</required>
@@ -367,7 +367,7 @@
           </association>
           <comment>This element needs to be renamed as it conflicts with the existing notion of repositories in Maven.</comment>
         </field>
-        <field tagName="builder">
+        <field xml.tagName="builder">
           <name>build</name>
           <version>3.0.0+</version>
           <required>true</required>
