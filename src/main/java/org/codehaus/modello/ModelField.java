@@ -21,6 +21,8 @@ public class ModelField
 
     String delegateTo;
 
+    boolean required;
+
     public String getType()
     {
         return type;
@@ -44,5 +46,10 @@ public class ModelField
     public String getDelegateTo()
     {
         return delegateTo;
+    }
+
+    public boolean isRequired()
+    {
+        return required;
     }
 }
