@@ -1,15 +1,17 @@
 package org.codehaus.modello.generator.xml.schema;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Iterator;
+
 import org.codehaus.modello.Model;
 import org.codehaus.modello.ModelClass;
 import org.codehaus.modello.ModelField;
+import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.generator.AbstractGenerator;
 import org.codehaus.modello.generator.xml.DefaultXMLWriter;
 import org.codehaus.modello.generator.xml.XMLWriter;
-
-import java.io.File;
-import java.io.FileWriter;
-import java.util.Iterator;
 
 // This spits out the classes but I must also spit out xs:elements for the
 // fields themselves for the xsd to be correct.
@@ -29,7 +31,20 @@ public class XmlSchemaGenerator
     }
 
     public void generate()
-        throws Exception
+        throws ModelloException
+    {
+        try
+        {
+            generateXmlSchema();
+        }
+        catch( IOException ex )
+        {
+            throw new ModelloException( "Exception while generating XML schema.", ex );
+        }
+    }
+
+    private void generateXmlSchema()
+        throws IOException, ModelloException
     {
         Model objectModel = getModel();
 

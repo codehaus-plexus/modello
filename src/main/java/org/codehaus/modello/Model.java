@@ -18,17 +18,19 @@ import java.util.ArrayList;
 public class Model
     extends BaseElement
 {
-    String id;
-    
-    List classes;
+    private String id;
 
-    Set classNames;
+    private List classes;
 
-    Map classMap;
+    private Set classNames;
 
-    String packageName;
+    private Map classMap;
 
-    String root;
+    private String packageName;
+
+    private String root;
+
+    private Map metaDataClasses;
 
     public Model()
     {
@@ -62,8 +64,10 @@ public class Model
         return (ModelClass) classMap.get( type );
     }
 
-    public void initialize()
+    public void initialize( Map metaDataClasses )
     {
+        this.metaDataClasses = metaDataClasses;
+
         for ( Iterator i = classes.iterator(); i.hasNext(); )
         {
             ModelClass modelClass = (ModelClass) i.next();
@@ -72,7 +76,7 @@ public class Model
 
             classMap.put( modelClass.getName(), modelClass );
 
-            modelClass.initialize();
+            modelClass.initialize( this );
         }
     }
 
@@ -99,5 +103,10 @@ public class Model
         }
 
         return allFields;
+    }
+
+    public Map getMetaDataClasses()
+    {
+        return metaDataClasses;
     }
 }
