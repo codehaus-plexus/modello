@@ -30,9 +30,9 @@ import org.codehaus.modello.metadata.Metadata;
 
 /**
  * This is the base class for all elements of the model.
- * 
+ *
  * The name attribute is immutable because it's used as the key.
- * 
+ *
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
@@ -47,7 +47,7 @@ public abstract class BaseElement
 
     private String comment;
 
-    private VersionRange versionRange = new VersionRange( "0.0.0+" );;
+    private VersionRange versionRange = new VersionRange( "0.0.0+" );
 
     private Version deprecatedVersion;
 
@@ -136,12 +136,12 @@ public abstract class BaseElement
 
         if ( metadata == null )
         {
-            throw new ModelloRuntimeException( "No such metadata: " + key + " for element : " + getName() );
+            throw new ModelloRuntimeException( "No such metadata: '" + key + "' for element: '" + getName() + "'." );
         }
 
         if ( !type.isAssignableFrom( metadata.getClass() ) )
         {
-            throw new ModelloRuntimeException( "The metadata is not of the expected type. Key: " + key + ", expected type: " + type.getName() );
+            throw new ModelloRuntimeException( "The metadata is not of the expected type. Key: '" + key + "', expected type: '" + type.getName() + "'." );
         }
 
         return metadata;
