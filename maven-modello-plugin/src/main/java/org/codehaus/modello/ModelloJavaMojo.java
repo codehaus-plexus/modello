@@ -27,7 +27,8 @@ package org.codehaus.mojo.modello;
  *
  * @description Creates java beans from the Modello model.
  *
- * @parameter name="outputDirectory"
+ * @parameter
+ * name="outputDirectory"
  * type="java.lang.String"
  * required="true"
  * validator=""
@@ -41,21 +42,25 @@ package org.codehaus.mojo.modello;
  * expression="#model"
  * description="The modello model file."
  *
- * @parameter name="version"
+ * @parameter
+ * name="version"
  * type="java.lang.String"
  * required="true"
  * validator=""
  * expression="#version"
  * description="The modello model version to use."
  *
- * @parameter name="packageWithVersion"
+ * @parameter
+ * name="packageWithVersion"
  * type="java.lang.Boolean"
  * required="true"
  * validator=""
  * expression="#packageWithVersion"
+ * default="false"
  * description="True if the generated package names should include the version."
  *
- * @parameter name="modelloCore"
+ * @parameter
+ * name="modelloCore"
  * type=""
  * required="true"
  * validator=""
