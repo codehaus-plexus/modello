@@ -1,5 +1,9 @@
 package org.codehaus.modello.generator.xml.xpp3;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.util.List;
+
 import org.codehaus.modello.Model;
 import org.codehaus.modello.ModelClass;
 import org.codehaus.modello.ModelField;
@@ -10,11 +14,6 @@ import org.codehaus.modello.generator.java.javasource.JMethod;
 import org.codehaus.modello.generator.java.javasource.JParameter;
 import org.codehaus.modello.generator.java.javasource.JSourceCode;
 import org.codehaus.modello.generator.java.javasource.JSourceWriter;
-
-import java.io.File;
-import java.io.FileWriter;
-import java.util.Iterator;
-import java.util.List;
 
 /**
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
@@ -28,11 +27,6 @@ public class Xpp3WriterGenerator
         super( model, outputDirectory, modelVersion, version );
     }
 
-    public Xpp3WriterGenerator( String model, String outputDirectory, String modelVersion )
-    {
-        super( model, outputDirectory, modelVersion );
-    }
-
     public void generate()
         throws Exception
     {
@@ -42,7 +36,12 @@ public class Xpp3WriterGenerator
 
         String directory = packageName.replace( '.', '/' );
 
-        String marshallerName = objectModel.getName() + "Xpp3Writer";
+        String marshallerName;
+
+        if ( isPackageWithVersion() )
+            marshallerName = objectModel.getName() + getModelVersion().toString() + "Xpp3Writer";
+        else
+            marshallerName = objectModel.getName() + "Xpp3Writer";
 
         File f = new File( new File( getOutputDirectory(), directory ), marshallerName + ".java" );
 

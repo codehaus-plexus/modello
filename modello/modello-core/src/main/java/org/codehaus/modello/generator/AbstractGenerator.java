@@ -33,13 +33,17 @@ public abstract class AbstractGenerator
 
     private Version modelVersion;
 
-    protected AbstractGenerator( String model, String outputDirectory, String modelVersion )
+    private boolean packageWithVersion;
+
+    protected AbstractGenerator( String model, String outputDirectory, String modelVersion, boolean packageWithVersion )
     {
         this.model = model;
 
         this.outputDirectory = outputDirectory;
 
         this.modelVersion = new Version( modelVersion, "model" );
+
+        this.packageWithVersion = packageWithVersion;
 
         xstream = new XStream( new JavaReflectionObjectFactory(), new DefaultClassMapper( new DefaultNameMapper() ), new Xpp3DomXMLReaderDriver() );
 
@@ -73,6 +77,11 @@ public abstract class AbstractGenerator
     protected Version getModelVersion()
     {
         return modelVersion;
+    }
+
+    protected boolean isPackageWithVersion()
+    {
+        return packageWithVersion;
     }
 
     public String getOutputDirectory()
