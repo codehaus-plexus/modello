@@ -23,6 +23,11 @@ import java.util.List;
 public class Xpp3WriterGenerator
     extends JavaGenerator
 {
+    public Xpp3WriterGenerator( String model, String outputDirectory, String modelVersion, boolean version )
+    {
+        super( model, outputDirectory, modelVersion, version );
+    }
+
     public Xpp3WriterGenerator( String model, String outputDirectory, String modelVersion )
     {
         super( model, outputDirectory, modelVersion );
@@ -85,17 +90,7 @@ public class Xpp3WriterGenerator
         jClass.addConstructor( constructor );
         */
 
-        // Add imports for classes within the model we need to marshall.
-
-        for ( Iterator i = objectModel.getClasses().iterator(); i.hasNext(); )
-        {
-            ModelClass modelClass = (ModelClass) i.next();
-
-            if ( outputElement( modelClass.getVersion(), modelClass.getName() ) )
-            {
-                jClass.addImport( getBasePackageName( objectModel ) + "." + modelClass.getName() );
-            }
-        }
+        addModelImports( jClass );
 
         String root = objectModel.getRoot();
 

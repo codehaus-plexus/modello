@@ -22,6 +22,11 @@ import java.util.List;
 public class Xpp3ReaderGenerator
     extends JavaGenerator
 {
+    public Xpp3ReaderGenerator( String model, String outputDirectory, String modelVersion, boolean version )
+    {
+        super( model, outputDirectory, modelVersion, version );
+    }
+
     public Xpp3ReaderGenerator( String model, String outputDirectory, String modelVersion )
     {
         super( model, outputDirectory, modelVersion );
@@ -61,17 +66,7 @@ public class Xpp3ReaderGenerator
 
         jClass.addImport( "java.io.Reader" );
 
-        // Add imports for classes within the model we need to unmarshall.
-
-        for ( Iterator i = objectModel.getClasses().iterator(); i.hasNext(); )
-        {
-            ModelClass modelClass = (ModelClass) i.next();
-
-            if ( outputElement( modelClass.getVersion(), modelClass.getName() ) )
-            {
-                jClass.addImport( getBasePackageName( objectModel ) + "." + modelClass.getName() );
-            }
-        }
+        addModelImports( jClass );
 
         // Write the parse method which will do the unmarshalling.
         String root = objectModel.getRoot();
