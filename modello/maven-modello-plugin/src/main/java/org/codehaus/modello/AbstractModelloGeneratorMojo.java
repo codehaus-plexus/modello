@@ -41,6 +41,11 @@ public abstract class AbstractModelloGeneratorMojo
     extends AbstractPlugin
 {
     protected abstract String getGeneratorType();
+    
+    protected boolean producesCompilableResult()
+    {
+        return true;
+    }
 
     public void execute( PluginExecutionRequest request, PluginExecutionResponse response )
         throws Exception
@@ -56,8 +61,6 @@ public abstract class AbstractModelloGeneratorMojo
         String version = (String) request.getParameter( "version" );
 
         String packageWithVersion = (String) request.getParameter( "packageWithVersion" );
-
-        MavenProject project = (MavenProject) request.getParameter( "project" );
 
         ModelloCore modello = (ModelloCore) request.getParameter( "modelloCore" );
 
@@ -76,10 +79,16 @@ public abstract class AbstractModelloGeneratorMojo
         parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, packageWithVersion );
 
         modello.generate( modello.loadModel( new FileReader( model ) ), getGeneratorType(), parameters );
-
-        if ( project != null )
+        
+        if(producesCompilableResult())
         {
-            project.addCompileSourceRoot( outputDirectory );
+            MavenProject project = (MavenProject) request.getParameter( "project" );
+
+            if ( project != null )
+            {
+                project.addCompileSourceRoot( outputDirectory );
+            }
+            
         }
     }
 }
