@@ -7,7 +7,7 @@ package org.codehaus.modello;
  *
  * @version $Id$
  */
-public class Base
+public class BaseElement
 {
     String name;
 

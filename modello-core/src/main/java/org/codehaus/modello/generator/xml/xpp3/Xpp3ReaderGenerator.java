@@ -22,10 +22,10 @@ import java.util.List;
  *
  * @version $Id$
  */
-public class Xpp3UnmarshallerGenerator
+public class Xpp3ReaderGenerator
     extends AbstractGenerator
 {
-    public Xpp3UnmarshallerGenerator( String model, String outputDirectory )
+    public Xpp3ReaderGenerator( String model, String outputDirectory )
     {
         super( model, outputDirectory );
     }
