@@ -70,7 +70,7 @@ public abstract class ModelloGeneratorTest
 
         addDependency( "junit", "junit", "3.8.1" );
 
-        addDependency( "xpp3", "xpp3", "1.1.3.3" );
+        addDependency( "plexus", "plexus-utils", "1.0-alpha-1-SNAPSHOT" );
     }
 
     public void addDependency( String groupId, String artifactId, String version )
