@@ -93,7 +93,7 @@ public class Xpp3WriterGenerator
 
             if ( outputElement( modelClass.getVersion(), modelClass.getName() ) )
             {
-                jClass.addImport( objectModel.getPackageName() + "." + modelClass.getName() );
+                jClass.addImport( getBasePackageName( objectModel ) + "." + modelClass.getName() );
             }
         }
 
