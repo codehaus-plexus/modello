@@ -30,7 +30,6 @@ import java.util.Iterator;
 import java.util.Properties;
 
 import org.codehaus.modello.ModelloException;
-import org.codehaus.modello.ModelloRuntimeException;
 import org.codehaus.modello.generator.java.javasource.JClass;
 import org.codehaus.modello.generator.java.javasource.JField;
 import org.codehaus.modello.generator.java.javasource.JInterface;
@@ -118,9 +117,10 @@ public class JavaModelloGenerator
             {
                 for ( Iterator iterator = modelInterface.getCodeSegments( getGeneratedVersion() ).iterator(); iterator.hasNext(); )
                 {
-                    CodeSegment codeSegment = (CodeSegment) iterator.next();
-
                     //TODO : add this method to jInterface or remove codeSegments and add method tag
+
+                    // CodeSegment codeSegment = (CodeSegment) iterator.next();
+
                     //jInterface.addSourceCode( codeSegment.getCode() );
                 }
             }
@@ -169,7 +169,7 @@ public class JavaModelloGenerator
             addModelImports( jClass, modelClass );
 
             jClass.setPackageName( packageName );
-            
+
             if ( javaClassMetadata.isAbstract() )
             {
                 jClass.getModifiers().setAbstract( true );
@@ -224,7 +224,7 @@ public class JavaModelloGenerator
         }
     }
 
-    private JField createField( ModelField modelField, ModelClass modelClass )
+    private JField createField( ModelField modelField )
     {
         JType type;
 
@@ -286,7 +286,7 @@ public class JavaModelloGenerator
     {
         JavaFieldMetadata javaFieldMetadata = (JavaFieldMetadata) modelField.getMetadata( JavaFieldMetadata.ID );
 
-        JField field = createField( modelField, modelField.getModelClass() );
+        JField field = createField( modelField );
 
         jClass.addField( field );
 
@@ -357,7 +357,6 @@ public class JavaModelloGenerator
     }
 
     private void createAssociation( JClass jClass, ModelAssociation modelAssociation )
-        throws ModelloException
     {
         JavaFieldMetadata javaFieldMetadata = (JavaFieldMetadata)modelAssociation.getMetadata( JavaFieldMetadata.ID );
 
@@ -494,21 +493,15 @@ public class JavaModelloGenerator
 
         boolean bidirectionalAssociation = isBidirectionalAssociation( modelAssociation );
 
-        String className;
-
         JType addType;
 
         if ( modelAssociation.getToClass() != null )
         {
             addType = new JClass( modelAssociation.getToClass().getName() );
-
-            className = modelAssociation.getToClass().getName();
         }
         else
         {
             addType = new JClass( "String" );
-
-            className = capitalise( singular( fieldName ) );
         }
 
         if ( modelAssociation.getType().equals( ModelDefault.PROPERTIES )
@@ -516,7 +509,14 @@ public class JavaModelloGenerator
         {
             JMethod adder = new JMethod( null, "add" + capitalise( singular( fieldName ) ) );
 
-            adder.addParameter( new JParameter( new JClass( "String" ), "key" ) );
+            if ( modelAssociation.getType().equals( ModelDefault.MAP ) )
+            {
+                adder.addParameter( new JParameter( new JClass( "Object" ), "key" ) );
+            }
+            else
+            {
+                adder.addParameter( new JParameter( new JClass( "String" ), "key" ) );
+            }
 
             adder.addParameter( new JParameter( new JClass( modelAssociation.getTo() ), "value" ) );
 
@@ -560,8 +560,6 @@ public class JavaModelloGenerator
 
     private boolean isBidirectionalAssociation( ModelAssociation association )
     {
-        String to = association.getTo();
-
         Model model = association.getModelClass().getModel();
 
         if ( isClassInModel( association.getTo(), model ) )

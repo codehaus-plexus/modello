@@ -32,5 +32,53 @@
         </field>
       </fields>
     </class>
+
+    <!--
+    |
+    | List, Set, Map and Properties association tests.
+    |
+    |-->
+    <class>
+      <name>ListSetMapProperties</name>
+      <version>4.0.0</version>
+      <fields>
+        <field>
+          <name>list</name>
+          <version>4.0.0</version>
+          <type>List</type>
+          <association>
+            <type>Person</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+        <field>
+          <name>set</name>
+          <version>4.0.0</version>
+          <type>Set</type>
+          <association>
+            <type>Person</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+        <field>
+          <name>map</name>
+          <version>4.0.0</version>
+          <type>Map</type>
+          <association>
+            <type>Person</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+        <field>
+          <name>properties</name>
+          <version>4.0.0</version>
+          <type>Properties</type>
+          <association>
+            <type>Person</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+      </fields>
+    </class>
   </classes>
 </model>

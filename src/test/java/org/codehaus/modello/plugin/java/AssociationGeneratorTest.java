@@ -55,13 +55,15 @@ public class AssociationGeneratorTest
     {
         generatedSources = new File( getTestPath( "target/" + getName() + "/sources" ) );
 
-        classes = new File( getTestPath( "target/" + getName() + "/classes" ) );
-
         FileUtils.deleteDirectory( generatedSources );
 
-        generatedSources.mkdirs();
+        assertTrue( generatedSources.mkdirs() );
 
-        classes.mkdirs();
+        classes = new File( getTestPath( "target/" + getName() + "/classes" ) );
+
+        FileUtils.deleteDirectory( classes );
+
+        assertTrue( classes.mkdirs() );
 
         ModelloCore modello = getModelloCore();
 
