@@ -4,7 +4,6 @@ package org.codehaus.modello.plugins.xml;
  * LICENSE
  */
 
-import java.io.File;
 import java.util.List;
 
 import org.codehaus.modello.Model;
@@ -12,28 +11,26 @@ import org.codehaus.modello.ModelClass;
 import org.codehaus.modello.ModelField;
 import org.codehaus.modello.Modello;
 import org.codehaus.modello.ModelloRuntimeException;
-import org.codehaus.modello.ModelloTestCase;
+import org.codehaus.modello.ModelloTest;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l </a>
  * @version $Id$
  */
 public class XmlModelloPluginTest
-    extends ModelloTestCase
+    extends ModelloTest
 {
+    public XmlModelloPluginTest()
+    {
+        super( "xml" );
+    }
+
     public void testXmlPlugin()
         throws Exception
     {
-        Modello modello = new Modello();
+        Modello modello = getModello();
 
-        modello.initialize();
-
-        File output = getTestFile( "target/output" );
-
-        output.mkdirs();
-
-//      Model model = modello.work( getTestPath( "src/test/resources/model.mdo" ), "xml", output.getAbsolutePath(), "1.0.0", true );
-        Model model = modello.getModel( getTestPath( "src/test/resources/model.mdo" ) );
+        Model model = modello.getModel( getTestFile( "src/test/resources/model.mdo" ) );
 
         List classes = model.getClasses();
 
@@ -61,7 +58,7 @@ public class XmlModelloPluginTest
         {
             parent.getMetaData( "foo" );
 
-            fail( "Expected ModelloRuntimeException." );
+            fail( "Expected ModelloException" );
         }
         catch( ModelloRuntimeException ex )
         {
