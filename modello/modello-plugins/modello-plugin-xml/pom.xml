@@ -1,0 +1,28 @@
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>modello</groupId>
+    <artifactId>modello</artifactId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+  <groupId>modello</groupId>
+  <artifactId>modello-xml</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <dependencies>
+    <dependency>
+      <groupId>modello</groupId>
+      <artifactId>modello-core</artifactId>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>
+  </dependencies>
+  <build>
+    <nagEmailAddress>dev@maven.apache.org</nagEmailAddress>
+    <sourceDirectory>src/main/java</sourceDirectory>
+    <unitTestSourceDirectory>src/test/java</unitTestSourceDirectory>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+      </resource>
+    </resources>
+  </build>
+</project>
