@@ -16,6 +16,7 @@ import com.thoughtworks.xstream.io.xml.XppDomReader;
 import com.thoughtworks.xstream.io.xml.xppdom.Xpp3Dom;
 import com.thoughtworks.xstream.io.xml.xppdom.Xpp3DomBuilder;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.StringReader;
@@ -92,7 +93,7 @@ public class ModelBuilder
         xstream.registerConverter( fieldConverter );
     }
 
-    public Model getModel( String modelFile )
+    public Model getModel( File modelFile )
         throws ModelloException
     {
         String modelContents = fileRead( modelFile );
@@ -116,7 +117,7 @@ public class ModelBuilder
 
         objectModel.initialize();
 
-        for( Iterator plugins = metaDataPluginManager.getMetaDataPlugins(); plugins.hasNext(); )
+        for( Iterator plugins = metaDataPluginManager.getPlugins(); plugins.hasNext(); )
         {
             MetaDataPlugin plugin = (MetaDataPlugin) plugins.next();
 
@@ -136,7 +137,7 @@ public class ModelBuilder
 
             Map classData = Collections.EMPTY_MAP;
 
-            for( Iterator plugins = metaDataPluginManager.getMetaDataPlugins(); plugins.hasNext(); )
+            for( Iterator plugins = metaDataPluginManager.getPlugins(); plugins.hasNext(); )
             {
                 MetaDataPlugin plugin = (MetaDataPlugin) plugins.next();
 
@@ -154,16 +155,13 @@ public class ModelBuilder
 
                 Map fieldData = fieldConverter.getMetaDataForField( field.getName() );
 
-                for( Iterator plugins = metaDataPluginManager.getMetaDataPlugins(); plugins.hasNext(); )
+                for( Iterator plugins = metaDataPluginManager.getPlugins(); plugins.hasNext(); )
                 {
                     MetaDataPlugin plugin = (MetaDataPlugin) plugins.next();
 
                     MetaData metaData = plugin.getFieldMetaData( field, fieldData );
 
-                    if ( metaData != null )
-                    {
-                        field.addMetaData( metaData );
-                    }
+                    field.addMetaData( metaData );
                 }
             }
         }
@@ -171,7 +169,7 @@ public class ModelBuilder
         return objectModel;
     }
 
-    protected String fileRead( String fileName )
+    protected String fileRead( File fileName )
         throws ModelloException
     {
         try

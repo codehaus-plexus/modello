@@ -1,15 +1,11 @@
 package org.codehaus.modello;
 
 import java.io.File;
+import java.util.Properties;
 
-import org.codehaus.modello.generator.AbstractGenerator;
+import org.codehaus.modello.generator.AbstractGeneratorPlugin;
 import org.codehaus.modello.generator.GeneratorPlugin;
 import org.codehaus.modello.generator.GeneratorPluginManager;
-import org.codehaus.modello.generator.java.JavaGenerator;
-import org.codehaus.modello.generator.xml.schema.XmlSchemaGenerator;
-import org.codehaus.modello.generator.xml.xdoc.XdocGenerator;
-import org.codehaus.modello.generator.xml.xpp3.Xpp3ReaderGenerator;
-import org.codehaus.modello.generator.xml.xpp3.Xpp3WriterGenerator;
 import org.codehaus.modello.metadata.MetaDataPluginManager;
 
 /**
@@ -38,13 +34,15 @@ public class Modello
 
         modelBuilder = new ModelBuilder();
 
-        initializeLogger( new ConsoleLogger(), this );
+        Logger logger = new ConsoleLogger();
 
-        initializeLogger( new ConsoleLogger(), generatorPluginManager );
+        initializeLogger( logger, this );
 
-        initializeLogger( new ConsoleLogger(), metaDataPluginManager );
+        initializeLogger( logger, generatorPluginManager );
 
-        initializeLogger( new ConsoleLogger(), modelBuilder );
+        initializeLogger( logger, metaDataPluginManager );
+
+        initializeLogger( logger, modelBuilder );
     }
 
     public void initialize()
@@ -61,7 +59,7 @@ public class Modello
         modelBuilder.initialize();
     }
 
-    public Model work( String modelFile, String mode, File outputDirectory, 
+    public Model work( File modelFile, String mode, File outputDirectory, 
                        String modelVersion, boolean packageWithVersion )
         throws ModelloException
     {
@@ -77,15 +75,15 @@ public class Modello
         }
     }
 
-    public Model getModel( String modelFile )
+    public Model getModel( File modelFile )
         throws ModelloException
     {
-        if ( modelFile == null || modelFile.trim().length() == 0 )
+        if ( modelFile == null )
         {
-            throw new ModelloException( "Missing model." );
+            throw new ModelloException( "Missing model file." );
         }
 
-        if ( !new File( modelFile ).isFile() )
+        if ( !modelFile.isFile() )
         {
             throw new ModelloException( "The model must be a file." );
         }
@@ -114,19 +112,28 @@ public class Modello
 
         try
         {
-            new AbstractGenerator.Version( modelVersion, "Model version parameter" );
+            new AbstractGeneratorPlugin.Version( modelVersion, "Model version parameter" );
         }
         catch( ModelloRuntimeException ex )
         {
             throw new ModelloException( "Error in the model version parameter.", ex );
         }
 
-        if ( generatorPluginManager.hasGeneratorPlugin( mode ) )
+        Properties parameters = new Properties();
+
+        parameters.put( ModelloParameterConstants.OUTPUT_DIRECTORY, outputDirectory.getAbsolutePath() );
+
+        parameters.put( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString( packageWithVersion ) );
+
+        parameters.put( ModelloParameterConstants.VERSION, modelVersion );
+
+        if ( generatorPluginManager.hasPlugin( mode ) )
         {
             GeneratorPlugin generator = generatorPluginManager.getGeneratorPlugin( mode );
 
-            generator.generate( model );
+            generator.generate( model, parameters );
         }
+/*
         else if ( mode.equals( "java" ) )
         {
             JavaGenerator generator = new JavaGenerator( model, outputDirectory, modelVersion, packageWithVersion );
@@ -151,6 +158,7 @@ public class Modello
 
             generator.generate();
         }
+/*
         else if ( mode.equals( "xpp3" ) )
         {
             JavaGenerator generator = new Xpp3ReaderGenerator( model, outputDirectory, modelVersion, packageWithVersion );
@@ -165,6 +173,7 @@ public class Modello
 
             generator.generate();
         }
+*/
         else
         {
             throw new ModelloRuntimeException( "Unknown mode: '" + mode + "'." );
