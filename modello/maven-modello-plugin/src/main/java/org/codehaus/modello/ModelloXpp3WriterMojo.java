@@ -24,6 +24,7 @@ package org.codehaus.mojo.modello;
 
 /**
  * @goal xpp3-writer
+ *
  * @phase generate-sources
  *
  * @description Creates XPP3 writer from the model.
@@ -35,7 +36,12 @@ package org.codehaus.mojo.modello;
  * expression="#basedir/target/generated-sources"
  * description=""
  *
- * @parameter name="project" type="" required="true" validator="" expression="#project" description="The current project"
+ * @parameter name="project"
+ * type=""
+ * required="true"
+ * validator=""
+ * expression="#project"
+ * description="The current project"
  *
  * @parameter name="model"
  * type="java.lang.String"
