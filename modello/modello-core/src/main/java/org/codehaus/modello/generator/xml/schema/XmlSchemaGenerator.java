@@ -77,6 +77,11 @@ public class XmlSchemaGenerator
 
                 w.addAttribute( "ref", field.getName() );
 
+                if ( ! field.isRequired() )
+                {
+                    w.addAttribute( "minOccurs", "0" );
+                }
+
                 if ( annotate )
                 {
                     annotation( w, field.getDescription() );
