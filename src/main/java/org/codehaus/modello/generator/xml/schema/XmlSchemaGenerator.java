@@ -36,7 +36,7 @@ public class XmlSchemaGenerator
     {
         Model objectModel = getModel();
 
-        File f = new File( getOutputDirectory(), objectModel.getName() + ".xsd" );
+        File f = new File( getOutputDirectory(), objectModel.getId() + ".xsd" );
 
         if ( !f.getParentFile().exists() )
         {

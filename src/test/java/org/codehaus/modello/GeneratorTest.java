@@ -19,10 +19,12 @@ public class GeneratorTest
 {
     String outputDirectory = "target/output";
 
+    String model = "maven.mdo";
+
     public void testJavaGenerator()
         throws Exception
     {
-        JavaGenerator generator = new JavaGenerator( "model.xml", new File( outputDirectory, "java" ).getPath() );
+        JavaGenerator generator = new JavaGenerator( model, new File( outputDirectory, "java" ).getPath() );
 
         generator.generate();
     }
@@ -30,7 +32,7 @@ public class GeneratorTest
     public void testXmlSchemaGenerator()
         throws Exception
     {
-        XmlSchemaGenerator generator = new XmlSchemaGenerator( "model.xml", new File( outputDirectory, "xsd" ).getPath() );
+        XmlSchemaGenerator generator = new XmlSchemaGenerator( model, new File( outputDirectory, "xsd" ).getPath() );
 
         generator.generate();
     }
@@ -38,7 +40,7 @@ public class GeneratorTest
     public void testXdocGenerator()
         throws Exception
     {
-        XdocGenerator generator = new XdocGenerator( "model.xml", new File( outputDirectory, "xdoc" ).getPath() );
+        XdocGenerator generator = new XdocGenerator( model, new File( outputDirectory, "xdoc" ).getPath() );
 
         generator.generate();
     }

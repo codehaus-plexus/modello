@@ -17,6 +17,8 @@ public class ModelField
 
     String defaultValue;
 
+    String typeValidator;
+
     public String getType()
     {
         return type;
@@ -30,5 +32,10 @@ public class ModelField
     public String getSpecification()
     {
         return specification;
+    }
+
+    public String getTypeValidator()
+    {
+        return typeValidator;
     }
 }
