@@ -25,6 +25,7 @@ package org.codehaus.modello.plugin.xpp3;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
@@ -131,31 +132,17 @@ public class Xpp3ReaderGenerator
 
         JSourceCode sc = unmarshall.getSourceCode();
 
-        sc.add( root.getName() + " " + rootElement + " = new " + root.getName() + "();" );
-
         sc.add( "XmlPullParserFactory factory = XmlPullParserFactory.newInstance();" );
 
         sc.add( "XmlPullParser parser = factory.newPullParser();" );
 
         sc.add( "parser.setInput( reader );" );
 
-        sc.add( "int eventType = parser.getEventType();" );
-
-        sc.add( "while ( eventType != XmlPullParser.END_DOCUMENT )" );
-
-        sc.add( "{" );
-
-        sc.indent();
-
-        writeClassParsing( root, sc, false, true );
-
-        sc.unindent();
-
-        sc.add( "}" );
-
-        sc.add( "return " + rootElement + ";" );
+        sc.add( "return parse" + root.getName() + "( \"" + rootElement + "\", parser );" );
 
         jClass.addMethod( unmarshall );
+
+        writeAllClassesParser( objectModel, jClass );
 
         jClass.print( sourceWriter );
 
@@ -164,456 +151,271 @@ public class Xpp3ReaderGenerator
         writer.close();
     }
 
-    private void writeClassParsing( ModelClass modelClass, JSourceCode sc, boolean withLoop, boolean rootElement )
-        throws IOException
+    private void writeAllClassesParser( Model objectModel, JClass jClass )
     {
-        writeClassParsing( modelClass, null, sc, withLoop, rootElement );
-    }
-
-    private void writeClassParsing( ModelClass modelClass, String objectName, JSourceCode sc, boolean withLoop, boolean rootElement )
-        throws IOException
-    {
-        String modelClassName = modelClass.getName();
-
-        String objName = objectName;
-
-        if ( objName == null )
+        ModelClass root = objectModel.getClass( objectModel.getRoot( getGeneratedVersion() ), getGeneratedVersion() );
+        for ( Iterator i = objectModel.getClasses( getGeneratedVersion() ).iterator(); i.hasNext(); )
         {
-            objName = uncapitalise( modelClassName );
-        }
-
-        if ( withLoop )
-        {
-            sc.add( "while ( parser.nextTag() == XmlPullParser.START_TAG )" );
-
-            sc.add( "{" );
-
-            sc.indent();
-
-            sc.add( "if ( parser.getName().equals( \"" + uncapitalise( modelClassName ) + "\" ) )" );
-
-            sc.add( "{" );
-
-            sc.indent();
-
-            sc.add( modelClassName + " " + uncapitalise( modelClassName ) + " = new " + modelClassName + "();" );
-            
-            sc.add( "while ( parser.nextTag() == XmlPullParser.START_TAG )" );
-
-            sc.add( "{" );
-
-            sc.indent();
-
-            objName = uncapitalise( modelClassName );
-        }
-        else
-        {
-            if ( rootElement)
+            ModelClass clazz = (ModelClass) i.next();
+            if ( root.getName().equals( clazz.getName() ) )
             {
-                sc.add( "if ( eventType == XmlPullParser.START_TAG )" );
+                writeClassParser( clazz, jClass, true );
             }
             else
             {
-                sc.add( "while ( parser.nextTag() == XmlPullParser.START_TAG )" );
-            }
-
-            sc.add( "{" );
-
-            sc.indent();
-        }
-
-        writeAttributes( modelClass, objName, sc );
-
-        sc.add( "// Reading tags" );
-
-        writeFields( modelClass, objName, sc );
-
-        if ( withLoop )
-        {
-            writeCatchAll( sc );
-
-            sc.unindent();
-
-            sc.add( "}" );
-
-            sc.add( objectName + ".add( " + uncapitalise( modelClassName ) + " );" );
-
-            sc.unindent();
-
-            sc.add( "}" );
-
-            writeCatchAll( sc );
-
-            sc.unindent();
-
-            sc.add( "}" );
-        }
-        else
-        {
-            if ( ! rootElement )
-            {
-                writeCatchAll( sc );
-            }
-
-            sc.unindent();
-
-            sc.add( "}" );
-sc.add("//END READING");
-            if ( rootElement )
-            {
-                sc.add( "eventType = parser.next();" );
+                writeClassParser( clazz, jClass, false );
             }
         }
     }
 
-    private void writeAttributes( ModelClass modelClass, String objectName, JSourceCode sc )
-        throws IOException
+    private void writeClassParser( ModelClass modelClass, JClass jClass, boolean rootElement )
     {
-        List fields = modelClass.getAllFields( getGeneratedVersion(), true );
-
-        boolean firstStatement = true;
-
-        for ( int i = 0; i < fields.size(); i++ )
-        {
-            ModelField field = (ModelField) fields.get( i );
-
-            XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata)field.getMetadata( XmlFieldMetadata.ID );
-
-            String tagName = xmlFieldMetadata.getTagName();
-
-            if ( tagName == null )
-            {
-                tagName = field.getName();
-            }
-
-            if ( !xmlFieldMetadata.isAttribute() || ( field instanceof ModelAssociation ) )
-            {
-                continue;
-            }
-
-            if ( firstStatement )
-            {
-                sc.add( "// Reading attributes" );
-
-                sc.add( "if ( parser.getName().equals( \"" + uncapitalise( modelClass.getName() ) + "\") )" );
-
-                sc.add( "{" );
-
-                sc.indent();
-
-                firstStatement = false;
-            }
-
-            sc.add( objectName + ".set" + capitalise( field.getName() ) + "( parser.getAttributeValue( \"\", \"" + tagName + "\" ) );" );
-        }
-        
-        if ( ! firstStatement )
-        {
-            sc.unindent();
-
-            sc.add( "}" );
-        }
-    }
-
-    private void writeFields( ModelClass modelClass, String objectName, JSourceCode sc )
-        throws IOException
-    {
-        List fields = modelClass.getAllFields( getGeneratedVersion(), true );
-
+        String className = modelClass.getName();
+        String capClassName = capitalise( className );
+        String uncapClassName = uncapitalise( className );
         String statement = "if";
-
-        for ( int i = 0; i < fields.size(); i++ )
+        JMethod unmarshall = new JMethod( new JClass( className ), "parse" + capClassName );
+        unmarshall.addParameter( new JParameter( new JClass( "String" ), "tagName" ) );
+        unmarshall.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
+        unmarshall.addException( new JClass( "Exception" ) );
+        unmarshall.getModifiers().makePrivate();
+        JSourceCode sc = unmarshall.getSourceCode();
+        sc.add( className + " " + uncapClassName + " = new " + className + "();" );
+        if ( rootElement )
         {
-            ModelField field = (ModelField) fields.get( i );
-
-            XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata)field.getMetadata( XmlFieldMetadata.ID );
-
-            String tagName = xmlFieldMetadata.getTagName();
-
-            if ( tagName == null )
+            sc.add( "int eventType = parser.getEventType();" );
+            sc.add( "while ( eventType != XmlPullParser.END_DOCUMENT )" );
+            sc.add( "{" );
+            sc.indent();
+            sc.add( "if ( eventType == XmlPullParser.START_TAG )" );
+        }
+        else
+        {
+            sc.add( "while ( parser.nextTag() == XmlPullParser.START_TAG )" );
+        }
+        sc.add( "{" );
+        sc.indent();
+        //Write xml attribute
+        sc.add( "if ( parser.getName().equals( tagName ) )" );
+        sc.add( "{" ) ;
+        sc.indent();
+        for (Iterator i = modelClass.getAllFields( getGeneratedVersion(), true ).iterator(); i.hasNext(); )
+        {
+            ModelField field = (ModelField) i.next();
+            XmlFieldMetadata fieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
+            if ( fieldMetadata.isAttribute() )
             {
-                tagName = field.getName();
+                writePrimitiveField( field, field.getType(), uncapClassName, "set" + capitalise( field.getName() ), sc );
+                continue;
             }
-
-            if ( xmlFieldMetadata.isAttribute() )
+        }
+        sc.unindent();
+        sc.add( "}" );
+        //Write other fields
+        for (Iterator i = modelClass.getAllFields( getGeneratedVersion(), true ).iterator(); i.hasNext(); )
+        {
+            ModelField field = (ModelField) i.next();
+            XmlFieldMetadata fieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
+            String tagName = fieldMetadata.getTagName();
+            if ( fieldMetadata.isAttribute() )
             {
                 continue;
             }
-
-            sc.add( statement + " ( parser.getName().equals( \"" + tagName + "\" ) )" );
-
-            sc.add( "{" );
-
-            sc.indent();
-
-            if ( field instanceof ModelAssociation &&
-                ModelAssociation.MANY_MULTIPLICITY.equals( ( (ModelAssociation) field ).getMultiplicity() ) )
+            if (tagName == null)
             {
-                writeAssociation( modelClass, (ModelAssociation) field, objectName, sc );
+                tagName = field.getName();
+            }
+            String capFieldName = capitalise( field.getName() );
+            String uncapFieldName = uncapitalise( field.getName() );
+            String singularName = singular( field.getName() );
+            String singularTagName = singular( field.getName() );
+            sc.add( statement + " ( parser.getName().equals( \"" + tagName + "\" ) )" );
+            sc.add( "{" );
+            sc.indent();
+            if ( field instanceof ModelAssociation )
+            {
+                ModelAssociation association = (ModelAssociation) field;
+                String associationName = association.getName();
+                if ( ModelAssociation.ONE_MULTIPLICITY.equals( association.getMultiplicity() ) )
+                {
+                    sc.add( uncapClassName + ".set" + capFieldName + "( parse" + capFieldName + "( \"" + tagName + "\", parser ) );" );
+                }
+                else
+                {
+                    //MANY_MULTIPLICITY
+                    String type = association.getType();
+                    if ( ModelDefault.LIST.equals( type )
+                        || ModelDefault.SET.equals( type ) )
+                    {
+                        sc.add( type + " " + associationName + " = " + association.getDefaultValue() + ";" );
+                        sc.add( "while ( parser.nextTag() == XmlPullParser.START_TAG )" );
+                        sc.add( "{" );
+                        sc.indent();
+                        sc.add( "if ( parser.getName().equals( \"" + singularTagName + "\" ) )" );
+                        sc.add( "{" );
+                        sc.indent();
+                        if ( isClassInModel( association.getTo(), modelClass.getModel() ) )
+                        {
+                            sc.add( associationName + ".add( parse" + association.getTo() + "( \"" + tagName + "\", parser ) );" );
+                        }
+                        else
+                        {
+                            writePrimitiveField( association, association.getTo(), associationName, "add", sc );
+                        }
+                        sc.unindent();
+                        sc.add( "}" );
+                        sc.add( "else" );
+                        sc.add( "{" );
+                        sc.indent();
+                        sc.add( "parser.nextText();" );
+                        sc.unindent();
+                        sc.add( "}" );
+                        sc.unindent();
+                        sc.add( "}" );
+                        sc.add( uncapClassName + ".set" + capFieldName + "( " + associationName + " );" );
+                    }
+                    else
+                    {
+                        //Map or Properties
+                        XmlAssociationMetadata xmlAssociationMetadata = (XmlAssociationMetadata)association.getAssociationMetadata( XmlAssociationMetadata.ID );
+                        if ( XmlAssociationMetadata.EXPLODE_MODE.equals( xmlAssociationMetadata.getMapStyle() ) )
+                        {
+                            sc.add( "while ( parser.nextTag() == XmlPullParser.START_TAG )" );
+                            sc.add( "{" );
+                            sc.indent();
+                            sc.add( "if ( parser.getName().equals( \"" + singularTagName + "\" ) )" );
+                            sc.add( "{" );
+                            sc.indent();
+                            sc.add( "String key = null;" );
+                            sc.add( "String value = null;");
+                            sc.add( "//" + xmlAssociationMetadata.getMapStyle() + " mode." );
+                            sc.add( "while ( parser.nextTag() == XmlPullParser.START_TAG )" );
+                            sc.add( "{" );
+                            sc.indent();
+                            sc.add( "if ( parser.getName().equals( \"key\" ) )" );
+                            sc.add( "{" );
+                            sc.indent();
+                            sc.add( "key = parser.nextText();" );
+                            sc.unindent();
+                            sc.add( "}" );
+                            sc.add( "else if ( parser.getName().equals( \"value\" ) )" );
+                            sc.add( "{" );
+                            sc.indent();
+                            sc.add( "value = parser.nextText();" );
+                            sc.unindent();
+                            sc.add( "}" );
+                            sc.add( "else" );
+                            sc.add( "{" );
+                            sc.indent();
+                            sc.add( "parser.nextText();" );
+                            sc.unindent();
+                            sc.add( "}" );
+                            sc.unindent();
+                            sc.add( "}" );
+                            sc.add( uncapClassName + ".add" + capitalise( singularName ) + "( key, value );");
+                        }
+                        else
+                        {
+                            //INLINE Mode
+                            sc.add( "while ( parser.nextTag() == XmlPullParser.START_TAG )" );
+                            sc.add( "{" );
+                            sc.indent();
+                            sc.add( "String key = parser.getName();" );
+                            sc.add( "String value = parser.nextText();" );
+                            sc.add( uncapClassName + ".add" + capitalise( singularName ) + "( key, value );");
+                            sc.unindent();
+                            sc.add( "}" );
+                        }
+                        sc.unindent();
+                        sc.add( "}" );
+                        sc.add( "parser.next();" );
+                        sc.unindent();
+                        sc.add( "}" );
+                    }
+                }
             }
             else
             {
-                writeField( modelClass, field, objectName, sc );
+                //ModelField
+                writePrimitiveField( field, field.getType(), uncapClassName, "set" + capitalise( field.getName() ), sc );
             }
-
             sc.unindent();
-
             sc.add( "}" );
-
             statement = "else if";
         }
+        if ( ! rootElement )
+        {
+            if ( modelClass.getFields( getGeneratedVersion() ).size() > 0 )
+            {
+                sc.add( "else" );
+                sc.add( "{" );
+                sc.indent();
+                sc.add( "parser.nextText();" );
+                sc.unindent();
+                sc.add( "}" );
+            }
+        }
+        else
+        {
+            sc.unindent();
+            sc.add( "}" );
+            sc.add( "eventType = parser.next();" );
+        }
+        sc.unindent();
+        sc.add( "}" );
+        sc.add( "return " + uncapClassName + ";" );
+        jClass.addMethod( unmarshall );
     }
 
-    private void writeField( ModelClass modelClass, ModelField field, String objectName, JSourceCode sc )
-        throws IOException
+    private void writePrimitiveField( ModelField field, String type, String objectName, String setterName, JSourceCode sc )
     {
-        String type = field.getType();
-        
-        XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata)field.getMetadata( XmlFieldMetadata.ID );
-
-        String tagName = xmlFieldMetadata.getTagName();
+        XmlFieldMetadata fieldMetaData = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
+        String tagName = fieldMetaData.getTagName();
+        String parserGetter;
 
         if ( tagName == null )
         {
             tagName = field.getName();
         }
-
-        if ( isClassInModel( type, modelClass.getModel() ) )
+        if ( fieldMetaData.isAttribute() )
         {
-            ModelClass fieldClass = modelClass.getModel().getClass( type, getGeneratedVersion() );
-
-            sc.add( type + " " + field.getName() + " = new " + type + "();" );
-
-            writeClassParsing( fieldClass, field.getName(), sc, false, false );
-
-            sc.add( objectName + ".set" + capitalise( field.getName() ) + "( " + field.getName() + ");" );
+            parserGetter = "parser.getAttributeValue( \"\", \"" + tagName + "\" )";
         }
         else
         {
-            writePrimitiveField( field, objectName, sc );
+            parserGetter = "parser.nextText()";
         }
-    }
-
-    private void writeAssociation( ModelClass modelClass, ModelAssociation field, String objectName, JSourceCode sc )
-        throws IOException
-    {
-        String type = field.getTo();
-
-        String singularName = singular( field.getName() );
-
-        XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata)field.getMetadata( XmlFieldMetadata.ID );
-
-        XmlAssociationMetadata xmlAssociationMetadata = (XmlAssociationMetadata)field.getAssociationMetadata( XmlAssociationMetadata.ID );
-
-        String tagName = xmlFieldMetadata.getTagName();
-
-        if ( tagName == null )
-        {
-            tagName = singularName;
-        }
-
-        if ( isClassInModel( type, modelClass.getModel() ) )
-        {
-            ModelClass fieldClass = modelClass.getModel().getClass( type, getGeneratedVersion() );
-
-            sc.add( "List " + field.getName() + " = new ArrayList();" );
-
-            writeClassParsing( fieldClass, field.getName(), sc, true, false );
-
-            sc.add( objectName + ".set" + capitalise( field.getName() ) + "( " + field.getName() + ");" );
-        }
-        else
-        {
-            if ( ModelDefault.MAP.equals( field.getType() )
-                || ModelDefault.PROPERTIES.equals( field.getType() ) )
-            {
-                sc.add( "//" + field.getType() ) ;
-
-                if ( XmlAssociationMetadata.EXPLODE_MODE.equals( xmlAssociationMetadata.getMapStyle() ) )
-                {
-                    sc.add( "while ( parser.nextTag() == XmlPullParser.START_TAG )" );
-
-                    sc.add( "{" );
-
-                    sc.indent();
-
-                    sc.add( "if ( parser.getName().equals( \"" + singularName + "\" ) )" );
-
-                    sc.add( "{" );
-
-                    sc.indent();
-
-                    sc.add( "String key = null;" );
-
-                    sc.add( "String value = null;");
-
-                    sc.add( "//" + xmlAssociationMetadata.getMapStyle() + " mode." );
-
-                    sc.add( "while ( parser.nextTag() == XmlPullParser.START_TAG )" );
-
-                    sc.add( "{" );
-
-                    sc.indent();
-
-                    sc.add( "if ( parser.getName().equals( \"key\" ) )" );
-
-                    sc.add( "{" );
-
-                    sc.indent();
-
-                    sc.add( "key = parser.nextText();" );
-
-                    sc.unindent();
-
-                    sc.add( "}" );
-
-                    sc.add( "else if ( parser.getName().equals( \"value\" ) )" );
-
-                    sc.add( "{" );
-
-                    sc.indent();
-
-                    sc.add( "value = parser.nextText();" );
-
-                    sc.unindent();
-
-                    sc.add( "}" );
-
-                    writeCatchAll( sc );
-
-                    sc.unindent();
-
-                    sc.add( "}" );
-
-                    sc.add( objectName + ".add" + capitalise( singularName ) + "( key, value );");
-                }
-                else
-                {
-                    sc.add( "while ( parser.nextTag() == XmlPullParser.START_TAG )" );
-
-                    sc.add( "{" );
-
-                    sc.indent();
-
-                    sc.add( "String key = parser.getName();" );
-
-                    sc.add( "String value = parser.nextText();" );
-
-                    sc.add( objectName + ".add" + capitalise( singularName ) + "( key, value );");
-
-                    sc.unindent();
-
-                    sc.add( "}" );
-                }
-
-                sc.unindent();
-
-                sc.add( "}" );
-
-                sc.add( "parser.next();" );
-
-                sc.unindent();
-
-                sc.add( "}" );
-            }
-            else if ( ModelDefault.LIST.equals( field.getType() )
-                || ModelDefault.SET.equals( field.getType() ) )
-            {
-                sc.add( "//LIST of STRING" ) ;
-
-                sc.add( "while ( parser.nextTag() == XmlPullParser.START_TAG )" );
-
-                sc.add( "{" );
-
-                sc.indent();
-
-                sc.add( "if ( parser.getName().equals( \"" + singularName + "\" ) )" );
-
-                sc.add( "{" );
-
-                sc.indent();
-
-                sc.add( objectName + ".add" + capitalise( singularName ) + "( parser.nextText() );");
-
-                sc.unindent();
-
-                sc.add( "}" );
-
-                writeCatchAll( sc );
-
-                sc.unindent();
-
-                sc.add( "}" );
-            }
-            else
-            {
-                sc.add( "if ( parser.getName().equals( \"" + singularName + "\" ) )" );
-
-                sc.add( "{" );
-
-                sc.indent();
-
-                writePrimitiveField( field, field.getName(), sc );
-
-                sc.unindent();
-
-                sc.add( "}" );
-            }
-        }
-    }
-
-    private void writePrimitiveField( ModelField field, String objectName, JSourceCode sc )
-    {
-        String type = field.getType();
-        
-        String setterName = "set" + capitalise( field.getName() );
-
         if ( "boolean".equals( type ) )
         {
-            sc.add( objectName + "." + setterName + "( (new Boolean( parser.nextText() ) ).booleanValue() );" );
+            sc.add( objectName + "." + setterName + "( (new Boolean( " + parserGetter + " ) ).booleanValue() );" );
         }
         if ( "char".equals( type ) )
         {
-            sc.add( objectName + "." + setterName + "( (new Character( parser.nextText() ) ).charValue() );" );
+            sc.add( objectName + "." + setterName + "( (new Character( " + parserGetter + " ) ).charValue() );" );
         }
         if ( "double".equals( type ) )
         {
-            sc.add( objectName + "." + setterName + "( (new Double( parser.nextText() ) ).doubleValue() );" );
+            sc.add( objectName + "." + setterName + "( (new Double( " + parserGetter + " ) ).doubleValue() );" );
         }
         if ( "float".equals( type ) )
         {
-            sc.add( objectName + "." + setterName + "( (new Float( parser.nextText() ) ).floatValue() );" );
+            sc.add( objectName + "." + setterName + "( (new Float( " + parserGetter + " ) ).floatValue() );" );
         }
         if ( "int".equals( type ) )
         {
-            sc.add( objectName + "." + setterName + "( (new Integer( parser.nextText() ) ).intValue() );" );
+            sc.add( objectName + "." + setterName + "( (new Integer( " + parserGetter + " ) ).intValue() );" );
         }
         if ( "long".equals( type ) )
         {
-            sc.add( objectName + "." + setterName + "( (new Long( parser.nextText() ) ).longValue() );" );
+            sc.add( objectName + "." + setterName + "( (new Long( " + parserGetter + " ) ).longValue() );" );
         }
         if ( "short".equals( type ) )
         {
-            sc.add( objectName + "." + setterName + "( (new Short( parser.nextText() ) ).shortValue() );" );
+            sc.add( objectName + "." + setterName + "( (new Short( " + parserGetter + " ) ).shortValue() );" );
         }
         else if ( "String".equals( type ) )
         {
-            sc.add( objectName + "." + setterName + "( parser.nextText() );" );
+            sc.add( objectName + "." + setterName + "( " + parserGetter + " );" );
         }
-    }
-
-    private void writeCatchAll( JSourceCode sc )
-    {
-        sc.add( "else" );
-
-        sc.add( "{" );
-
-        sc.indent();
-
-        sc.add( "parser.nextText();" );
-
-        sc.unindent();
-
-        sc.add( "}" );
     }
 }
