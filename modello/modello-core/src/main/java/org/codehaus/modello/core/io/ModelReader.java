@@ -33,6 +33,8 @@ public class ModelReader
 
     private Map fieldAttributes = new HashMap();
 
+    private Map associationAttributes = new HashMap();
+
     public Map getAttributesForModel( String name )
     {
         return (Map) fieldAttributes.get( name );
@@ -46,6 +48,11 @@ public class ModelReader
     public Map getAttributesForField( String name )
     {
         return (Map) fieldAttributes.get( name );
+    }
+
+    public Map getAttributesForAssociation( String name )
+    {
+        return (Map) associationAttributes.get( name );
     }
 
     public Model loadModel( Reader reader )
@@ -223,6 +230,8 @@ public class ModelReader
             {
                 ModelAssociation modelAssociation = new ModelAssociation();
 
+                Map attributes = getAttributes( parser );
+
                 while ( parser.nextTag() == XmlPullParser.START_TAG )
                 {
                     if ( parseBaseElement( modelAssociation, parser ) )
@@ -252,6 +261,11 @@ public class ModelReader
                     {
                         parser.nextText();
                     }
+                }
+
+                if ( modelAssociation.getName() != null )
+                {
+                    associationAttributes.put( modelAssociation.getName(), attributes );
                 }
 
                 modelClass.addAssociation( modelAssociation );

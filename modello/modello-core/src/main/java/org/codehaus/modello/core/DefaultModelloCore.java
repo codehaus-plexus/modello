@@ -20,6 +20,7 @@ import org.codehaus.modello.ModelValidationException;
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.ModelloRuntimeException;
 import org.codehaus.modello.core.io.ModelReader;
+import org.codehaus.modello.metadata.AssociationMetadata;
 import org.codehaus.modello.metadata.ClassMetadata;
 import org.codehaus.modello.metadata.FieldMetadata;
 import org.codehaus.modello.metadata.MetadataPlugin;
@@ -118,6 +119,29 @@ public class DefaultModelloCore
                     }
 
                     field.addMetadata( metadata );
+                }
+            }
+
+            for( Iterator associations = clazz.getAssociations().iterator(); associations.hasNext(); )
+            {
+                ModelAssociation association = (ModelAssociation) associations.next();
+
+                attributes = modelReader.getAttributesForAssociation( association.getName() );
+
+                attributes = Collections.unmodifiableMap( attributes );
+
+                for( Iterator plugins = metadataPluginManager.getPlugins(); plugins.hasNext(); )
+                {
+                    MetadataPlugin plugin = (MetadataPlugin) plugins.next();
+
+                    AssociationMetadata metadata = plugin.getAssociationMetadata( association, attributes );
+
+                    if ( metadata == null )
+                    {
+                        throw new ModelloException( "A meta data plugin must not return null." );
+                    }
+
+                    association.addMetadata( metadata );
                 }
             }
         }

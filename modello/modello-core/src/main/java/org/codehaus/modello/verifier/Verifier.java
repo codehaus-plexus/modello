@@ -1,5 +1,6 @@
 package org.codehaus.modello.verifier;
 
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -110,5 +111,19 @@ public abstract class Verifier
     private static String getSetterMethodName( String fieldName )
     {
         return "get" + Character.toUpperCase( fieldName.charAt( 0 ) ) + fieldName.substring( 1 );
+    }
+
+    protected File getTestFile( String name )
+    {
+        String basedir = System.getProperty( "basedir", new File( "" ).getAbsolutePath() );
+
+        return new File( basedir, name );
+    }
+
+    protected String getTestPath( String name )
+    {
+        String basedir = System.getProperty( "basedir", new File( "" ).getAbsolutePath() );
+
+        return new File( basedir, name ).getAbsolutePath();
     }
 }
