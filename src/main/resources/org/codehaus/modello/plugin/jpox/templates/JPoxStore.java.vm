@@ -30,18 +30,38 @@ public class ${model.name}JPoxStore
     //
     // ----------------------------------------------------------------------
 
-    private static class ThreadState
+    public static class ThreadState
     {
         private PersistenceManager pm;
 
         private Transaction tx;
 
         private int depth;
+
+        public PersistenceManager getPersistenceManager()
+        {
+            return pm;
+        }
+
+        public Transaction getTransaction()
+        {
+            return tx;
+        }
+
+        public int getDepth()
+        {
+            return depth;
+        }
     }
 
     // ----------------------------------------------------------------------
     // Transaction Management Methods
     // ----------------------------------------------------------------------
+
+    public ThreadState getThreadState()
+    {
+        return (ThreadState) threadState.get();
+    }
 
     public PersistenceManager begin()
         throws Exception
