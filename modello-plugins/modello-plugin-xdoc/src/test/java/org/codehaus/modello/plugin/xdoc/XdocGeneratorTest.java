@@ -56,9 +56,9 @@ public class XdocGeneratorTest
     public void testJavaGenerator()
         throws Throwable
     {
-        ModelloCore modello = getModelloCore();
+        ModelloCore modello = (ModelloCore) container.lookup( ModelloCore.ROLE );
 
-        Model model = loadModel( "src/test/resources/maven.mdo" );
+        Model model = modello.loadModel( new FileReader( getTestPath( "src/test/resources/maven.mdo" ) ) );
 
         List classesList = model.getClasses( new Version( "4.0.0" ) );
 

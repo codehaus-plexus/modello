@@ -1,36 +1,17 @@
-<model>
+<project>
   <parent>
-    <artifactId>modello</artifactId>
-    <groupId>modello</groupId>
-    <version>1.0</version>
+    <artifactId>modello-plugins</artifactId>
+    <groupId>org.codehaus.modello</groupId>
+    <version>1.0-alpha-1</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <groupId>modello</groupId>
   <artifactId>modello-xpp3-plugin</artifactId>
-  <packaging>jar</packaging>
   <name>Modello XPP3 Plugin</name>
-  <version>1.0-SNAPSHOT</version>
   <dependencies>
     <dependency>
-      <groupId>modello</groupId>
-      <artifactId>modello-core</artifactId>
-      <version>1.0-SNAPSHOT</version>
-      <type>jar</type>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>modello</groupId>
+      <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-xml-plugin</artifactId>
-      <version>1.0-SNAPSHOT</version>
-      <type>jar</type>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>plexus</groupId>
-      <artifactId>plexus-container-default</artifactId>
-      <version>1.0-alpha-2-SNAPSHOT</version>
-      <type>jar</type>
-      <scope>compile</scope>
+      <version>1.0-alpha-1</version>
     </dependency>
   </dependencies>
-</model>
+</project>

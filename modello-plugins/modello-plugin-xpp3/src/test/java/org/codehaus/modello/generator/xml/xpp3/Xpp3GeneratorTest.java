@@ -53,7 +53,7 @@ public class Xpp3GeneratorTest
     public void testXpp3Generator()
         throws Throwable
     {
-        ModelloCore modello = getModelloCore();
+        ModelloCore modello = (ModelloCore) container.lookup( ModelloCore.ROLE );
 
         Model model = modello.loadModel( new FileReader( getTestPath( "src/test/resources/maven.mdo" ) ) );
 
@@ -113,7 +113,7 @@ public class Xpp3GeneratorTest
 
         modello.generate( model, "xpp3-reader", parameters );
 
-        addDependency( "modello", "modello-core", "1.0-SNAPSHOT" );
+        addDependency( "org.codehaus.modello", "modello-core", "1.0-alpha-1" );
 
         compile( generatedSources, classes );
 
