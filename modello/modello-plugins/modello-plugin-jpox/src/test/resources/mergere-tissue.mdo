@@ -19,7 +19,8 @@
           <version>1.0.0</version>
           <type>String</type>
         </field>
-        <field>
+        <!-- This field should get persistence-modifier="none" -->
+        <field stash.storable="false">
           <name>summary</name>
           <version>1.0.0</version>
           <type>String</type>
@@ -50,8 +51,23 @@
             <type>Project</type>
           </association>
         </field>
+        <field>
+          <name>configuration</name>
+          <version>1.0.0</version>
+          <type>Map</type>
+          <association>
+            <type>String</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
       </fields>
     </class>
+
+    <!--
+     |
+     |
+     |
+    -->
     <class stash.storable="true">
       <name>Project</name>
       <version>1.0.0</version>
@@ -59,33 +75,35 @@
         <field>
           <name>id</name>
           <version>1.0.0</version>
-          <description><![CDATA[
-          ]]></description>
           <type>String</type>
         </field>
         <field>
           <name>name</name>
           <version>1.0.0</version>
-          <description><![CDATA[
-          ]]></description>
           <type>String</type>
         </field>
         <field>
           <name>url</name>
           <version>1.0.0</version>
-          <description><![CDATA[
-          ]]></description>
           <type>String</type>
         </field>
         <field>
           <name>lead</name>
           <version>1.0.0</version>
-          <description><![CDATA[
-          ]]></description>
           <type>String</type>
+        </field>
+        <field>
+          <name>issues</name>
+          <version>1.0.0</version>
+          <type>List</type>
+          <association>
+            <type>Issue</type>
+            <multiplicity>*</multiplicity>
+          </association>
         </field>
       </fields>
     </class>
+
     <!--
      |
      |
@@ -98,19 +116,23 @@
         <field>
           <name>id</name>
           <version>1.0.0</version>
-          <description><![CDATA[
-          ]]></description>
           <type>String</type>
         </field>
         <field>
           <name>name</name>
           <version>1.0.0</version>
-          <description><![CDATA[
-          ]]></description>
           <type>String</type>
+        </field>
+        <field>
+          <name>issues</name>
+          <version>1.0.0</version>
+          <type>Set</type>
+          <association>
+            <type>Issue</type>
+            <multiplicity>*</multiplicity>
+          </association>
         </field>
       </fields>
     </class>
   </classes>
 </model>
-

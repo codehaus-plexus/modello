@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import javax.jdo.Extent;
+import javax.jdo.Query;
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.Transaction;
@@ -47,22 +48,17 @@ public class ${model.name}JPoxStore
         }
         finally
         {
-            if ( tx.isActive() )
-            {
-                tx.rollback();
-            }
-
-            tx.getPersistenceManager().close();
+            close( tx );
         }
     }
 
 #foreach ( $class in $model.allClasses )
-#if ( $class.getMetadata( $storeMetadataId ).isStorable() )
+#if ( $class.getMetadata( $storeClassMetadataId ).isStorable() )
     // ----------------------------------------------------------------------
     // ${class.name} CRUD
     // ----------------------------------------------------------------------
 
-    public void add${class.name}( $class.name o )
+    public Object add${class.name}( $class.name o )
         throws Exception
     {
         PersistenceManager pm = pmf.getPersistenceManager();
@@ -75,20 +71,19 @@ public class ${model.name}JPoxStore
 
             pm.makePersistent( o );
 
+            Object id = pm.getObjectId( o );
+
             tx.commit();
+
+            return id;
         }
         finally
         {
-            if ( tx.isActive() )
-            {
-                tx.rollback();
-            }
-
-            pm.close();
+            close( tx );
         }
     }
-#*
-    public void update${class.name}( $class.name newObject )
+
+    public void delete${class.name}( String id )
         throws Exception
     {
         PersistenceManager pm = pmf.getPersistenceManager();
@@ -99,22 +94,30 @@ public class ${model.name}JPoxStore
         {
             tx.begin();
 
-            ;
+            Query query = pm.newQuery( ${class.name}.class );
+
+            query.setIgnoreCache( true );
+
+            query.setFilter( "this.id == \"" + id + "\"" );
+
+            Collection result = (Collection) query.execute();
+
+            if ( result.isEmpty() )
+            {
+                throw new RuntimeException( "Not such object of type \"${class.name}\" with id: \"" + id + "\"." );
+            }
+
+            pm.deletePersistentAll( result );
 
             tx.commit();
         }
         finally
         {
-            if ( tx.isActive() )
-            {
-                tx.rollback();
-            }
-
-            pm.close();
+            close( tx );
         }
     }
-*#
-    public void delete${class.name}( Object id )
+
+    public ${class.name} get${class.name}( String id )
         throws Exception
     {
         PersistenceManager pm = pmf.getPersistenceManager();
@@ -125,35 +128,20 @@ public class ${model.name}JPoxStore
         {
             tx.begin();
 
-            Object object = pm.getObjectById( id, true );
+            Query query = pm.newQuery( ${class.name}.class );
 
-            pm.deletePersistent( object );
+            query.setIgnoreCache( true );
 
-            tx.commit();
-        }
-        finally
-        {
-            if ( tx.isActive() )
+            query.setFilter( "this.id == \"" + id + "\"" );
+
+            Collection result = (Collection) query.execute();
+
+            if ( result.isEmpty() )
             {
-                tx.rollback();
+                throw new RuntimeException( "Not such object of type \"${class.name}\" with id: \"" + id + "\"." );
             }
 
-            pm.close();
-        }
-    }
-
-    public ${class.name} get${class.name}( Object id )
-        throws Exception
-    {
-        PersistenceManager pm = pmf.getPersistenceManager();
-
-        Transaction tx = pm.currentTransaction();
-
-        try
-        {
-            tx.begin();
-
-            ${class.name} object = (${class.name}) pm.getObjectById( ${class.name}.class, true );
+            ${class.name} object = (${class.name}) result.iterator().next();
 
             pm.makeTransient( object );
 
@@ -163,20 +151,13 @@ public class ${model.name}JPoxStore
         }
         finally
         {
-            if ( tx.isActive() )
-            {
-                tx.rollback();
-            }
-
-            pm.close();
+            close( tx );
         }
     }
 
-    public Collection get${class.name}Collection()
+    public ${class.name} get${class.name}ByJdoId( Object id )
         throws Exception
     {
-        Collection collection;
-
         PersistenceManager pm = pmf.getPersistenceManager();
 
         Transaction tx = pm.currentTransaction();
@@ -185,9 +166,40 @@ public class ${model.name}JPoxStore
         {
             tx.begin();
 
-            Extent extent = pm.getExtent( ${package}.${class.name}.class, true );
+            ${class.name} object = (${class.name}) pm.getObjectById( id, true );
+
+            pm.makeTransient( object );
+
+            tx.commit();
+
+            return object;
+        }
+        finally
+        {
+            close( tx );
+        }
+    }
+
+    public Collection get${class.name}Collection()
+        throws Exception
+    {
+        PersistenceManager pm = pmf.getPersistenceManager();
+
+        Transaction tx = pm.currentTransaction();
+
+        Collection collection;
+
+        try
+        {
+            tx.begin();
+#*
+            Extent extent = pm.getExtent( ${class.name}.class, true );
 
             Iterator it = extent.iterator();
+*#
+            Query query = pm.newQuery( ${class.name}.class );
+
+            Iterator it = ((Collection) query.execute() ).iterator();
 
             collection = new ArrayList();
 
@@ -195,7 +207,11 @@ public class ${model.name}JPoxStore
             {
                 Object o = it.next();
 
-                ## Make transient?
+##              Make transient?
+
+                pm.refresh( o );
+
+                pm.makeTransient( o );
 
                 collection.add( o );
             }
@@ -206,15 +222,28 @@ public class ${model.name}JPoxStore
         }
         finally
         {
-            if ( tx.isActive() )
-            {
-                tx.rollback();
-            }
-
-            pm.close();
+            close( tx );
         }
     }
 #end
 
 #end
+
+    // ----------------------------------------------------------------------
+    // Utility Methods
+    // ----------------------------------------------------------------------
+
+    private void close( Transaction tx )
+    {
+        PersistenceManager pm = tx.getPersistenceManager();
+
+        if( tx.isActive() )
+        {
+            tx.rollback();
+        }
+
+        pm.evictAll();
+
+        pm.close();
+    }
 }

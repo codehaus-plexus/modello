@@ -70,7 +70,7 @@ public class JPoxModelloGeneratorTest
 
         assertGeneratedFileExists( "org/mergere/tissue/TissueJPoxStore.java" );
 
-        assertGeneratedFileExists( "jpox.jdo" );
+        assertGeneratedFileExists( "package.jdo" );
     }
 
     // ----------------------------------------------------------------------
