@@ -9,4 +9,6 @@ public interface XMLWriter
     void writeText( String text );
 
     void endElement();
+    
+    void addCData( String cdata );
 }
