@@ -71,6 +71,11 @@ public class Model
 
     public void addClass( ModelClass modelClass )
     {
+        if ( classMap.containsKey( modelClass.getName() ) )
+        {
+            throw new ModelloRuntimeException( "Duplicate class: " + modelClass.getName() + "." );
+        }
+
         getClasses().add( modelClass );
 
         classMap.put( modelClass.getName(), modelClass );

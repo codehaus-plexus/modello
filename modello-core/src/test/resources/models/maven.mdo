@@ -1000,6 +1000,7 @@
         </field>
       </fields>
     </class>
+<!--
     <class>
       <name>Repository</name>
       <version>3.0.0</version>
@@ -1034,6 +1035,7 @@
         </field>
       </fields>
     </class>
+-->
     <class>
       <name>Scm</name>
       <version>4.0.0</version>
