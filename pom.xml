@@ -48,6 +48,7 @@
     </repository>
   </distributionManagement>
   <modules>
+    <module>maven-modello-plugin</module>
     <module>modello-core</module>
     <module>modello-plugin-velocity</module>
     <module>modello-plugin-xdoc</module>
