@@ -44,5 +44,11 @@
       <role-hint>model</role-hint>
       <implementation>org.codehaus.modello.plugin.model.ModelMetadataPlugin</implementation>
     </component>
+
+    <component>
+      <role>org.codehaus.modello.metadata.MetadataPlugin</role>
+      <role-hint>java</role-hint>
+      <implementation>org.codehaus.modello.plugin.java.JavaMetadataPlugin</implementation>
+    </component>
   </components>
 </component-set>
