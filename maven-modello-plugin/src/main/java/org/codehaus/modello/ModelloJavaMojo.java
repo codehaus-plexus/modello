@@ -23,48 +23,40 @@ package org.codehaus.mojo.modello;
  */
 
 /**
- * @goal java
- *
- * @description Creates java beans from the Modello model.
- *
- * @parameter
- *  name="outputDirectory"
- *  type="java.lang.String"
- *  required="true"
- *  validator=""
- *  expression="#basedir/target/generated-sources"
- *  description=""
- * @parameter
- *  name="model"
- *  type="java.lang.String"
- *  required="required"
- *  validator=""
- *  expression="#model"
- *  description="The modello model file."
- * @parameter
- *  name="version"
- *  type="java.lang.String"
- *  required="required"
- *  validator=""
- *  expression="#version"
- *  description="The modello model version to use."
- * @parameter
- *  name="packageWithVersion"
- *  type="java.lang.Boolean"
- *  required="required"
- *  validator=""
- *  expression="false"
- *  description="True if the generated package names should include the version."
- * @parameter
- *  name="modelloCore"
- *  type=""
- *  required="required"
- *  validator=""
- *  expression="#component.org.codehaus.modello.core.ModelloCore"
- *  description="Modello component"
- *
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
+ * @goal java
+ * @description Creates java beans from the Modello model.
+ * @parameter name="outputDirectory"
+ * type="java.lang.String"
+ * required="true"
+ * validator=""
+ * expression="#basedir/target/generated-sources"
+ * description=""
+ * @parameter name="model"
+ * type="java.lang.String"
+ * required="required"
+ * validator=""
+ * expression="#model"
+ * description="The modello model file."
+ * @parameter name="version"
+ * type="java.lang.String"
+ * required="required"
+ * validator=""
+ * expression="#version"
+ * description="The modello model version to use."
+ * @parameter name="packageWithVersion"
+ * type="java.lang.Boolean"
+ * required="required"
+ * validator=""
+ * expression="false"
+ * description="True if the generated package names should include the version."
+ * @parameter name="modelloCore"
+ * type=""
+ * required="required"
+ * validator=""
+ * expression="#component.org.codehaus.modello.core.ModelloCore"
+ * description="Modello component"
  */
 public class ModelloJavaMojo
     extends AbstractModelloGeneratorMojo

@@ -22,56 +22,63 @@ package org.codehaus.mojo.modello;
  * SOFTWARE.
  */
 
-import java.io.FileReader;
-import java.util.Properties;
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
-import org.apache.maven.plugin.AbstractPlugin;
 import org.apache.maven.plugin.PluginExecutionRequest;
 import org.apache.maven.plugin.PluginExecutionResponse;
 
-import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
+import org.codehaus.plexus.PlexusTestCase;
+import org.codehaus.plexus.util.FileUtils;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
-public abstract class AbstractModelloGeneratorMojo
-    extends AbstractPlugin
+public class ModelloJavaMojoTest
+    extends PlexusTestCase
 {
-    protected abstract String getGeneratorType();
-
-    public void execute( PluginExecutionRequest request, PluginExecutionResponse response )
+    public void testModelloJavaMojo()
         throws Exception
     {
-        // ----------------------------------------------------------------------
-        //
-        // ----------------------------------------------------------------------
+        ModelloCore modelloCore = (ModelloCore) lookup( ModelloCore.ROLE );
 
-        String outputDirectory = (String) request.getParameter( "outputDirectory" );
+        ModelloJavaMojo mojo = new ModelloJavaMojo();
 
-        String model = (String) request.getParameter( "model" );
+        File outputDirectory = getTestFile( "target/java-test" );
 
-        String version = (String) request.getParameter( "version" );
-
-        String packageWithVersion = (String) request.getParameter( "packageWithVersion" );
-
-        ModelloCore modello = (ModelloCore) request.getParameter( "modelloCore" );
+        FileUtils.deleteDirectory( outputDirectory );
 
         // ----------------------------------------------------------------------
-        //
+        // Call the mojo
         // ----------------------------------------------------------------------
 
-        // Just pass a Map in here, no need to make properties up again.
+        Map parameters = new HashMap();
 
-        Properties parameters = new Properties();
+        parameters.put( "outputDirectory", outputDirectory.getAbsolutePath() );
 
-        parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, outputDirectory );
+        parameters.put( "model", getTestPath( "src/test/resources/java-model.mdo" ) );
 
-        parameters.setProperty( ModelloParameterConstants.VERSION, version );
+        parameters.put( "version", "1.0.0" );
 
-        parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, packageWithVersion );
+        parameters.put( "packageWithVersion", "true" );
 
-        modello.generate( modello.loadModel( new FileReader( model ) ), getGeneratorType(), parameters );
+        parameters.put( "modelloCore", modelloCore );
+
+        PluginExecutionRequest request = new PluginExecutionRequest( parameters );
+
+        PluginExecutionResponse response = new PluginExecutionResponse();
+
+        mojo.execute( request, response );
+
+        // ----------------------------------------------------------------------
+        // Assert
+        // ----------------------------------------------------------------------
+
+        File javaFile = new File( outputDirectory, "org/codehaus/mojo/modello/javatest/v1_0_0/Model.java" );
+
+        assertTrue( "The generated java file doesn't exist: '" + javaFile.getAbsolutePath() + "'.", javaFile.exists() );
     }
 }
