@@ -184,8 +184,6 @@ public class Xpp3WriterGenerator
 
             if ( isClassInModel( type, objectModel ) )
             {
-                sc.add( "serializer.startTag( NAMESPACE, " + "\"" + fieldName + "\" );" );
-
                 sc.add( className + " " + fieldName + " = " + modelClassName + ".get" + className + "();" );
 
                 sc.add( "if ( " + fieldName + " != null )" );
@@ -194,14 +192,15 @@ public class Xpp3WriterGenerator
 
                 sc.indent();
 
+                sc.add( "serializer.startTag( NAMESPACE, " + "\"" + fieldName + "\" );" );
+
                 writeClassParsing( objectModel.getClass( type ), sc, objectModel );
+
+                sc.add( "serializer.endTag( NAMESPACE, " + "\"" + fieldName + "\" );" );
 
                 sc.unindent();
 
                 sc.add( "}" );
-
-                sc.add( "serializer.endTag( NAMESPACE, " + "\"" + fieldName + "\" );" );
-
             }
             else if ( isCollection( type ) )
             {
@@ -244,13 +243,19 @@ public class Xpp3WriterGenerator
 
         if ( isClassInModel( collectionClass, objectModel ) )
         {
-            sc.add( "serializer.startTag( NAMESPACE, " + "\"" + fieldName + "\" );" );
-
             String size = modelClassName + ".get" + getterName + "().size()";
 
             String index = getIndex();
 
-            sc.add( "for ( int " + index + "= 0; " + index + " < " + size + "; " + index + "++ )" );
+            sc.add( "if ( " + modelClassName + ".get" + getterName + "() != null )" );
+
+            sc.add( "{" );
+
+            sc.indent();
+
+            sc.add( "serializer.startTag( NAMESPACE, " + "\"" + fieldName + "\" );" );
+
+            sc.add( "for ( int " + index + " = 0; " + index + " < " + size + "; " + index + "++ )" );
 
             sc.add( "{" );
 
@@ -270,9 +275,19 @@ public class Xpp3WriterGenerator
             sc.add( "}" );
 
             sc.add( "serializer.endTag( NAMESPACE, " + "\"" + fieldName + "\" );" );
+
+            sc.unindent();
+
+            sc.add( "}" );
         }
         else
         {
+            sc.add( "if ( " + modelClassName + ".get" + getterName + "() != null )" );
+
+            sc.add( "{" );
+
+            sc.indent();
+
             sc.add( "serializer.startTag( NAMESPACE, " + "\"" + fieldName + "\" );" );
 
             String size = modelClassName + ".get" + getterName + "().size()";
@@ -294,6 +309,10 @@ public class Xpp3WriterGenerator
             sc.add( "}" );
 
             sc.add( "serializer.endTag( NAMESPACE, " + "\"" + fieldName + "\" );" );
+
+            sc.unindent();
+
+            sc.add( "}" );
         }
     }
 
