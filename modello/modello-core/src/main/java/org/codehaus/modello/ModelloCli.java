@@ -61,7 +61,7 @@ public class ModelloCli
     {
         if ( args.length != 5 )
         {
-            System.err.println( "Usage: modello <model> <outputType> <output directory> <modelVersion> <packageWithVersion>" );
+            usage();
 
             System.exit( 1 );
         }
@@ -74,14 +74,50 @@ public class ModelloCli
 
         String outputDirectory = args[2];
 
-        String modelVersion = args[3];
+        if ( StringUtils.isEmpty( outputDirectory ) )
+        {
+            System.err.println( "Missing required parameter: output directory" );
 
-        String packageWithVersion = args[4];
+            usage();
+
+            System.exit( 1 );
+        }
 
         parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, outputDirectory );
 
+        String modelVersion = args[ 3 ];
+
+        if ( StringUtils.isEmpty( modelVersion ) )
+        {
+            System.err.println( "Missing required parameter: model version" );
+
+            usage();
+
+            System.exit( 1 );
+        }
+
         parameters.setProperty( ModelloParameterConstants.VERSION, modelVersion );
 
+        String packageWithVersion = args[ 4 ];
+
+        if ( StringUtils.isEmpty( packageWithVersion ) )
+        {
+            System.err.println( "Missing required parameter: package with version" );
+
+            usage();
+
+            System.exit( 1 );
+        }
+
         parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, packageWithVersion );
+    }
+
+    // ----------------------------------------------------------------------
+    //
+    // ----------------------------------------------------------------------
+
+    private static void usage()
+    {
+        System.err.println( "Usage: modello <model> <outputType> <output directory> <modelVersion> <packageWithVersion>" );
     }
 }

@@ -27,7 +27,7 @@ import org.codehaus.plexus.util.StringUtils;
 
 /**
  * A version string is on the form <major>.<minor>.<micro>.
- * 
+ *
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
  * @version $Id$
@@ -83,7 +83,7 @@ public class Version
         }
         catch ( NumberFormatException e )
         {
-            throw new ModelloRuntimeException( "Version is invalid: " + version );
+            throw new ModelloRuntimeException( "Invalid version string: '" + version + "'." );
         }
     }
 
@@ -122,9 +122,8 @@ public class Version
 
     /**
      * Returns true if <code>this</code> is greater that <code>other</code>.
-     * 
-     * @param version
-     * @return
+     *
+     * @param other
      */
     public boolean greaterThan( Version other )
     {
@@ -148,9 +147,8 @@ public class Version
 
     /**
      * Returns true if <code>this</code> is greater or equals that <code>other</code>.
-     * 
-     * @param version
-     * @return
+     *
+     * @param other
      */
     public boolean greaterOrEqualsThan( Version other )
     {
@@ -174,9 +172,8 @@ public class Version
 
     /**
      * Returns true if <code>this</code> is lesser that <code>other</code>.
-     * 
-     * @param version
-     * @return
+     *
+     * @param other
      */
     public boolean lesserThan( Version other )
     {
@@ -200,9 +197,8 @@ public class Version
 
     /**
      * Returns true if <code>this</code> is lesser or equals that <code>other</code>.
-     * 
-     * @param version
-     * @return
+     *
+     * @param other
      */
     public boolean lesserOrEqualsThan( Version other )
     {
