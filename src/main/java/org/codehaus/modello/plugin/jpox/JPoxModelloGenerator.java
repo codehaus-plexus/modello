@@ -37,6 +37,7 @@ import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.plugin.store.AbstractVelocityModelloGenerator;
 import org.codehaus.modello.plugin.store.metadata.StoreClassMetadata;
+import org.codehaus.modello.plugin.store.metadata.StoreFieldMetadata;
 import org.codehaus.plexus.velocity.VelocityComponent;
 
 /**
@@ -61,7 +62,9 @@ public class JPoxModelloGenerator
 
         context.put( "package", model.getPackageName( false, getGeneratedVersion() ) );
 
-        context.put( "storeMetadataId", StoreClassMetadata.ID );
+        context.put( "storeClassMetadataId", StoreClassMetadata.ID );
+
+        context.put( "storeFieldMetadataId", StoreFieldMetadata.ID );
 
 //        context.put( "ojbMetadataId", JpoxClassMetadata.ID );
 
@@ -71,8 +74,8 @@ public class JPoxModelloGenerator
         // Generate the JDO files
         // ----------------------------------------------------------------------
 
-        writeTemplate( "/org/codehaus/modello/plugin/jpox/templates/jpox.jdo.vm",
-                       new File( getOutputDirectory(), "jpox.jdo" ),
+        writeTemplate( "/org/codehaus/modello/plugin/jpox/templates/package.jdo.vm",
+                       new File( getOutputDirectory(), "package.jdo" ),
                        context );
 
         // ----------------------------------------------------------------------
