@@ -943,24 +943,20 @@
     <class>
       <name>PatternSet</name>
       <version>3.0.0+</version>
-      <fields>
-<!--
-        <field>
+      <associations>
+        <association>
           <name>includes</name>
           <version>3.0.0+</version>
+          <to>String</to>
           <description>the description</description>
-          <type>java.util.List</type>
-          <defaultValue>new ArrayList()</defaultValue>
-        </field>
-        <field>
+        </association>
+        <association>
           <name>excludes</name>
           <version>3.0.0+</version>
+          <to>String</to>
           <description>the description</description>
-          <type>java.util.List</type>
-          <defaultValue>new ArrayList()</defaultValue>
-        </field>
--->
-      </fields>
+        </association>
+      </associations>
       <codeSegments>
         <codeSegment>
           <version>3.0.0+</version>
@@ -1154,17 +1150,13 @@
       <name>UnitTest</name>
       <version>3.0.0+</version>
       <superClass>PatternSet</superClass>
-      <fields>
-<!--
-        <field>
+      <associations>
+        <association>
           <name>resources</name>
           <version>3.0.0+</version>
-          <description>the description</description>
-          <type>java.util.List</type>
-          <defaultValue>new ArrayList()</defaultValue>
-        </field>
--->
-      </fields>
+          <to>Resource</to>
+        </association>
+      </associations>
     </class>
     <class>
       <name>Version</name>

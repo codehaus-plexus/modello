@@ -17,11 +17,7 @@ public class ModelField
     private String typeValidator;
 
     private boolean required;
-/*
-    private List metaData;
 
-    private transient Map metaDataObjects = new HashMap();
-*/
     private ModelClass modelClass;
 
     public String getType()
@@ -65,12 +61,7 @@ public class ModelField
         validateFieldNotEmpty( "Field", "name", getName() );
 
         validateFieldNotEmpty( "Field " + getName(), "type", type );
-/*
-        if ( getName().endsWith( "ies" ) || getName().endsWith( "es" )  )
-        {
-            throw new ModelValidationException( "Field '" + getName() + "': A field name cannot be plural. Use <association> for associations." );
-        }
-*/
+
         String[] validTypes = new String[]{
             "boolean",
             "char",

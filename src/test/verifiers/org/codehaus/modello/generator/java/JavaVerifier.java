@@ -48,6 +48,12 @@ public class JavaVerifier
 
         Model model = new Model();
 
+        List lists = model.getMailingLists();
+
+        assertNotNull( lists );
+
+        assertTrue( lists instanceof ArrayList );
+
         model.setMailingLists( expected );
 
         List actual = model.getMailingLists();
