@@ -4,13 +4,14 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.Properties;
 
 import org.codehaus.modello.Model;
 import org.codehaus.modello.ModelClass;
 import org.codehaus.modello.ModelField;
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.ModelloRuntimeException;
-import org.codehaus.modello.generator.AbstractGenerator;
+import org.codehaus.modello.generator.AbstractGeneratorPlugin;
 import org.codehaus.modello.generator.xml.DefaultXMLWriter;
 import org.codehaus.modello.generator.xml.XMLWriter;
 
@@ -19,16 +20,19 @@ import org.codehaus.modello.generator.xml.XMLWriter;
  * @version $Id$
  */
 public class XdocGenerator
-    extends AbstractGenerator
+    extends AbstractGeneratorPlugin
 {
+/*
     public XdocGenerator( Model model, File outputDirectory, String modelVersion, boolean packageWithVersion )
     {
         super( model, outputDirectory, modelVersion, packageWithVersion );
     }
-
-    public void generate()
+*/
+    public void generate(Model model, Properties parameters )
         throws ModelloException
     {
+        initialize( model, parameters );
+
         try
         {
             generateXdoc();

@@ -1,21 +1,11 @@
 package org.codehaus.modello.generator.java;
 
 import org.apache.maven.model.*;
-
-import org.codehaus.modello.Verifier;
+import org.codehaus.modello.generator.*;
 
 public class JavaVerifier
+    extends AbstractVerifier
 {
-    private void assertEquals( Object expected, Object actual)
-    {
-        if ( expected.equals( actual ) )
-        {
-            return;
-        }
-
-        throw new RuntimeException( "Assertion error: expected '" + expected.toString() + "', actual: '" + actual + "'." );
-    }
-
     public void verify()
     {
         Model model = new Model();
@@ -34,10 +24,10 @@ public class JavaVerifier
 
         scm.setUrl( url );
 
-        assertEquals( connection, scm.getConnection() );
+        assertEquals( "Connection", connection, scm.getConnection() );
 
-        assertEquals( developerConnection, scm.getDeveloperConnection() );
+        assertEquals( "DeveloperConnection", developerConnection, scm.getDeveloperConnection() );
 
-        assertEquals( url, scm.getUrl() );
+        assertEquals( "Url", url, scm.getUrl() );
     }
 }

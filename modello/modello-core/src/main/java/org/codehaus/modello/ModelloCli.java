@@ -31,7 +31,7 @@ public class ModelloCli
 
         modello.initialize();
 
-        modello.work( modelFile, mode, new File( outputDirectory ), modelVersion, packageWithVersion );
+        modello.work( new File( modelFile ), mode, new File( outputDirectory ), modelVersion, packageWithVersion );
     }
 
     public static void parseArgumentsFromCommandLine( String[] args )

@@ -4,35 +4,21 @@ package org.codehaus.modello.metadata;
  * LICENSE
  */
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Properties;
-
-import org.codehaus.modello.AbstractLogEnabled;
-import org.codehaus.modello.LogEnabled;
-import org.codehaus.modello.ModelloException;
+import org.codehaus.modello.plugin.AbstractPluginManager;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
 public class MetaDataPluginManager
-    extends AbstractLogEnabled
+    extends AbstractPluginManager
 {
-    public final static String PROPERTY_IMPLEMENTATION = "modello.plugin.metadata.implementation";
-
-    public final static String PROPERTY_ID = "modello.plugin.metadata.id";
-
-    private Map metaDataPlugins = new HashMap();
-
     public MetaDataPluginManager()
     {
+        super( MetaDataPlugin.class );
     }
 
+    /*
     public void initialize()
         throws ModelloException
     {
@@ -132,6 +118,7 @@ public class MetaDataPluginManager
             ((LogEnabled) metadata).setLogger( getLogger() );
         }
 
-        metaDataPlugins.put( id, metadata );
+        plugins.put( id, metadata );
     }
+*/
 }

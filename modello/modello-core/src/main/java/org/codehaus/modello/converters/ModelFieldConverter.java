@@ -54,8 +54,6 @@ public class ModelFieldConverter
 
     public Object unmarshal( HierarchicalStreamReader reader, UnmarshallingContext context )
     {
-//        XppDomReader xmlReader = (XppDomReader) reader;
-
         Object obj = defaultConverter.unmarshal(reader, context);
 
         if ( !context.getRequiredType().getName().equals( ModelField.class.getName() ) )

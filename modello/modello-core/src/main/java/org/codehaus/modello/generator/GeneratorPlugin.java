@@ -4,8 +4,10 @@ package org.codehaus.modello.generator;
  * LICENSE
  */
 
+import java.util.Properties;
+
 import org.codehaus.modello.Model;
-import org.codehaus.modello.ModelloRuntimeException;
+import org.codehaus.modello.ModelloException;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -13,11 +15,6 @@ import org.codehaus.modello.ModelloRuntimeException;
  */
 public interface GeneratorPlugin
 {
-/*
-    Class initializeXStream( XStream xstream )
-        throws ModelloRuntimeException;
-*/
-
-    void generate( Model model )
-        throws ModelloRuntimeException;
+    void generate( Model model, Properties parameters )
+        throws ModelloException;
 }
