@@ -45,7 +45,7 @@
 package org.codehaus.modello.generator.java.javasource;
 
 /*
- * Copyright (c) 2004, Jason van Zyl
+ * Copyright (c) 2004, Codehaus.org
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
