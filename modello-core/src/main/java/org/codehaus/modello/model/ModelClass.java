@@ -136,6 +136,35 @@ public class ModelClass
         return fields;
     }
 
+    public List getAllFields( Version version, boolean withInheritedField )
+    {
+        ArrayList allFieldsList = new ArrayList();
+
+        ArrayList fieldList = new ArrayList();
+
+        for (Iterator i = getAllFields( withInheritedField ).iterator(); i.hasNext(); )
+        {
+            ModelField currentField = (ModelField) i.next();
+
+            if ( version.inside( currentField.getVersionRange() ) )
+            {
+                allFieldsList.add( currentField );
+            }
+        }
+
+        for (Iterator i = allFieldsList.iterator(); i.hasNext(); )
+        {
+            ModelField currentField = (ModelField) i.next();
+
+            if ( version.inside( currentField.getVersionRange() ) )
+            {
+                fieldList.add( currentField );
+            }
+        }
+
+        return fieldList;
+    }
+
     /**
      * Returns the list of all fields in this class for a specific version. 
      * 
