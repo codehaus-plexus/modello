@@ -1,4 +1,5 @@
 <model>
+  <id>maven</id>
   <name>Maven</name>
   <description>the description</description>
   <packageName>org.apache.maven.model</packageName>
