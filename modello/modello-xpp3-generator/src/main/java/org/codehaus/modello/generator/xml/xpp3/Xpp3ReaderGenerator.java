@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Properties;
 
 import org.codehaus.modello.Model;
+import org.codehaus.modello.ModelAssociation;
 import org.codehaus.modello.ModelClass;
 import org.codehaus.modello.ModelField;
 import org.codehaus.modello.ModelloException;
@@ -150,23 +151,23 @@ public class Xpp3ReaderGenerator
 
             String statement;
 
-            List allFields = objectModel.getAllFields( modelClass );
+            List fields = objectModel.getAllFields( modelClass );
 
-            int size = allFields.size();
+            int fieldCount = fields.size();
 
             boolean firstStatement = true;
 
-            if ( size > 0 )
+            if ( fieldCount > 0 )
             {
-                sc.add( "if ( parser.getName() == \"" + uncapitalise( modelClass.getName() ) + "\")" );
+                sc.add( "if ( parser.getName().equals( \"" + uncapitalise( modelClass.getName() ) + "\") )" );
 
                 sc.add( "{" );
 
                 sc.indent();
 
-                for ( int i = 0; i < size; i++ )
+                for ( int i = 0; i < fieldCount; i++ )
                 {
-                    ModelField field = (ModelField) allFields.get( i );
+                    ModelField field = (ModelField) fields.get( i );
 
                     XmlMetaData xmlMetaData = (XmlMetaData)field.getMetaData( XmlMetaData.ID );
 
@@ -199,9 +200,9 @@ public class Xpp3ReaderGenerator
 
             firstStatement = true;
 
-            for ( int i = 0; i < size; i++ )
+            for ( int i = 0; i < fieldCount; i++ )
             {
-                ModelField field = (ModelField) allFields.get( i );
+                ModelField field = (ModelField) fields.get( i );
 
                 XmlMetaData xmlMetaData = (XmlMetaData)field.getMetaData( XmlMetaData.ID );
 
@@ -227,9 +228,39 @@ public class Xpp3ReaderGenerator
                 }
             }
 
+            firstStatement = true;
+
+            List associations = modelClass.getAssociations();
+
+            int associationCount = associations.size();
+
+            for ( int i = 0; i < associationCount; i++ )
+            {
+                ModelAssociation association = (ModelAssociation) associations.get( i );
+
+                if ( outputElement( association.getVersion(), modelClass.getName() + "." + association.getName() ) )
+                {
+                    if ( firstStatement )
+                    {
+                        statement = "if";
+
+                        firstStatement = false;
+                    }
+                    else
+                    {
+                        statement = "else if";
+                    }
+
+                    writeAssociationParsing( modelClass, association, sc, statement, objectModel );
+                }
+            }
+
             if ( withLoop )
             {
-                writeCatchAll( sc );
+                if ( fieldCount > 0 || associationCount > 0 )
+                {
+                    writeCatchAll( sc );
+                }
 
                 sc.unindent();
 
@@ -238,16 +269,26 @@ public class Xpp3ReaderGenerator
         }
     }
 
+    private void writeAssociationParsing( ModelClass modelClass, ModelAssociation association, JSourceCode sc, String statement, Model objectModel )
+        throws IOException
+    {
+        XmlMetaData xmlMetaData = new XmlMetaData();
+
+        writeFieldParsing( modelClass, association.getFromRole(), "java.util.List", sc, statement, objectModel, xmlMetaData, false, true );
+    }
+
     private void writeFieldParsing( ModelClass modelClass, ModelField field, JSourceCode sc, String statement, Model objectModel, boolean attribute )
         throws IOException
     {
         XmlMetaData xmlMetaData = (XmlMetaData)field.getMetaData( XmlMetaData.ID );
 
-        String className = capitalise( field.getName() );
+        writeFieldParsing( modelClass, field.getName(), field.getType(), sc, statement, objectModel, xmlMetaData, attribute, false );
+    }
 
-        String type = field.getType();
-
-        String name = field.getName();
+    private void writeFieldParsing( ModelClass modelClass, String name, String type, JSourceCode sc, String statement, Model objectModel, XmlMetaData xmlMetaData, boolean attribute, boolean association )
+        throws IOException
+    {
+        String className = capitalise( name );
 
         String modelClassName = uncapitalise( modelClass.getName() );
 
@@ -266,7 +307,6 @@ public class Xpp3ReaderGenerator
             }
 
             sc.add( modelClassName + ".set" + className + "( parser.getAttributeValue( \"\", \"" + tagName + "\" ) );" );
-            sc.add( "System.out.println( parser.getAttributeValue( null, \"" + tagName + "\" ) );" );
 
             return;
         }
@@ -290,9 +330,9 @@ public class Xpp3ReaderGenerator
 
             sc.add( modelClassName + ".set" + className + "( " + name + " );" );
 
-            writeClassParsing( objectModel.getClass( field.getType() ), sc, objectModel, true );
+            writeClassParsing( objectModel.getClass( type ), sc, objectModel, true );
         }
-        else if ( isCollection( type ) )
+        else if ( association )
         {
             if ( attribute )
             {
@@ -301,6 +341,7 @@ public class Xpp3ReaderGenerator
 
             writeCollectionParsing( modelClassName, name, tagName, sc, objectModel );
         }
+/*
         else if ( isMap( type ) )
         {
             if ( attribute )
@@ -311,6 +352,7 @@ public class Xpp3ReaderGenerator
             // These are properties for now.
             writePropertiesParsing( modelClassName, name, sc, objectModel );
         }
+*/
         else
         {
             sc.add( modelClassName + ".set" + className + "( parser.nextText() );" );

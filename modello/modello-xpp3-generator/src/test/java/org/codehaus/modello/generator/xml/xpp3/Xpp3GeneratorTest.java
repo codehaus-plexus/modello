@@ -12,7 +12,7 @@ import org.codehaus.modello.Model;
 import org.codehaus.modello.ModelClass;
 import org.codehaus.modello.ModelField;
 import org.codehaus.modello.Modello;
-import org.codehaus.modello.ModelloTest;
+import org.codehaus.modello.ModelloGeneratorTest;
 import org.codehaus.modello.plugins.xml.XmlMetaData;
 
 /**
@@ -20,7 +20,7 @@ import org.codehaus.modello.plugins.xml.XmlMetaData;
  * @version $Id$
  */
 public class Xpp3GeneratorTest
-    extends ModelloTest
+    extends ModelloGeneratorTest
 {
     public Xpp3GeneratorTest()
     {
@@ -28,7 +28,7 @@ public class Xpp3GeneratorTest
     }
 
     public void testXpp3Generator()
-        throws Exception
+        throws Throwable
     {
         Modello modello = getModello();
 
@@ -63,8 +63,6 @@ public class Xpp3GeneratorTest
         assertNotNull( xml );
 
         assertEquals( "builder", xml.getTagName() );
-
-        File modelFile = getTestFile( "src/test/resources/model.xml" );
 
         File generatedSources = getTestFile( "target/xpp3/sources" );
 

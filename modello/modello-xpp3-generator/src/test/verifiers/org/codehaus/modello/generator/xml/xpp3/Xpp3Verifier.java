@@ -7,6 +7,7 @@ package org.codehaus.modello.generator.xml.xpp3;
 import org.apache.maven.model.*;
 import org.apache.maven.model.io.xpp3.*;
 import org.codehaus.modello.generator.*;
+import org.codehaus.modello.verifier.*;
 import java.io.*;
 import java.util.*;
 
@@ -15,8 +16,36 @@ import java.util.*;
  * @version $Id$
  */
 public class Xpp3Verifier
-    extends AbstractVerifier
+    extends Verifier
 {
+    private String expectedXml =
+        "<model extender=\"/foo/bar\" modelVersion=\"4.0.0\">\n" +
+        "  <type>jar</type>\n" +
+        "  <scm>\n" +
+        "    <connection>connection</connection>\n" +
+        "    <developerConnection>developerConnection</developerConnection>\n" +
+        "    <url>url</url>\n" +
+        "  </scm>\n" +
+        "  <builder>\n" +
+        "    <sourceDirectory>src/main/java</sourceDirectory>\n" +
+        "    <unitTestSourceDirectory>src/test/java</unitTestSourceDirectory>\n" +
+        "    <unitTest />\n" +
+        "  </builder>\n" +
+        "  <mailingLists>\n" +
+        "    <mailingList>\n" +
+        "      <name>Mailing list</name>\n" +
+        "      <subscribe>Super Subscribe</subscribe>\n" +
+        "      <unsubscribe>Duper Unsubscribe</unsubscribe>\n" +
+        "      <archive>Über Archive</archive>\n" +
+        "    </mailingList>\n" +
+        "  </mailingLists>\n" +
+//        "  <contributors />\n" +
+//        "  <developers />\n" +
+        "</model>";
+
+    /**
+     * TODO: Add a association thats not under the root element
+     */ 
     public void verify()
         throws Exception
     {
@@ -25,6 +54,18 @@ public class Xpp3Verifier
         expected.setExtend( "/foo/bar" );
 
         expected.setModelVersion( "4.0.0" );
+
+        MailingList mailingList = new MailingList();
+
+        mailingList.setName( "Mailing list" );
+
+        mailingList.setSubscribe( "Super Subscribe" );
+
+        mailingList.setUnsubscribe( "Duper Unsubscribe" );
+
+        mailingList.setArchive( "Über Archive" );
+
+        expected.addMailingList( mailingList );
 
         Scm scm = new Scm();
 
@@ -52,17 +93,20 @@ public class Xpp3Verifier
 
         MavenXpp3Writer writer = new MavenXpp3Writer();
 
-        StringWriter string = new StringWriter();
+        StringWriter buffer = new StringWriter();
 
-        writer.write( string, expected );
+        writer.write( buffer, expected );
+
+        String actualXml = buffer.toString();
+/*
+        System.out.println( expectedXml );
+        System.err.println( actualXml );
+*/
+        assertEquals( expectedXml, actualXml );
 
         MavenXpp3Reader reader = new MavenXpp3Reader();
 
-        String xml = string.toString();
-
-        System.err.println( xml );
-
-        Model actual = reader.read( new StringReader( xml ) );
+        Model actual = reader.read( new StringReader( actualXml ) );
 
         assertNotNull( "Actual", actual );
 
