@@ -39,22 +39,29 @@ package org.codehaus.mojo.modello;
  *  type="java.lang.String"
  *  required="required"
  *  validator=""
- *  expression="#modello.model"
+ *  expression="#model"
  *  description="The modello model file."
  * @parameter
- *  name="modelVersion"
+ *  name="version"
  *  type="java.lang.String"
  *  required="required"
  *  validator=""
- *  expression="#modello.modelVersion"
+ *  expression="#version"
  *  description="The modello model version to use."
  * @parameter
  *  name="packageWithVersion"
  *  type="java.lang.Boolean"
  *  required="required"
  *  validator=""
- *  expression="#modello.packageWithVersion"
+ *  expression="false"
  *  description="True if the generated package names should include the version."
+ * @parameter
+ *  name="modelloCore"
+ *  type=""
+ *  required="required"
+ *  validator=""
+ *  expression="#component.org.codehaus.modello.core.ModelloCore"
+ *  description="Modello component"
  *
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
