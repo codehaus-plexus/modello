@@ -182,7 +182,7 @@ public class XdocGenerator
         
         for (int i = 0; i < depth; i++ )
         {
-            sb.append( "    " );
+            sb.append( "  " );
         }
         
         sb.append( "&lt;" + uncapitalise( modelClass.getName() ) );
