@@ -1,14 +1,15 @@
 package org.codehaus.modello;
 
+import java.io.File;
+
 import junit.framework.TestCase;
+
 import org.codehaus.modello.generator.java.JavaGenerator;
 import org.codehaus.modello.generator.xml.schema.XmlSchemaGenerator;
 import org.codehaus.modello.generator.xml.xdoc.XdocGenerator;
-import org.codehaus.modello.generator.xml.xstream.XStreamGenerator;
 import org.codehaus.modello.generator.xml.xpp3.Xpp3ReaderGenerator;
 import org.codehaus.modello.generator.xml.xpp3.Xpp3WriterGenerator;
-
-import java.io.File;
+import org.codehaus.modello.generator.xml.xstream.XStreamGenerator;
 
 /**
  *
@@ -56,7 +57,7 @@ public class GeneratorTest
         generator.generate();
     }
 
-    public void testXpp3Generator()
+    public void testXpp3UnmarshallerGenerator()
         throws Exception
     {
         Xpp3ReaderGenerator generator = new Xpp3ReaderGenerator( model, new File( outputDirectory, "xpp3" ).getPath() );
@@ -71,5 +72,4 @@ public class GeneratorTest
 
         generator.generate();
     }
-
 }
