@@ -211,7 +211,7 @@ public class Xpp3WriterGenerator
 
             String type = field.getType();
 
-            String value = uncapClassName + ".get" + capitalise( field.getName() ) + "()";
+            String value = uncapClassName + "." + getPrefix( type ) + capitalise( field.getName() ) + "()";
 
             if ( fieldMetadata.isAttribute() )
             {
@@ -246,7 +246,7 @@ public class Xpp3WriterGenerator
 
             String type = field.getType();
 
-            String value = uncapClassName + ".get" + capitalise( field.getName() ) + "()";
+            String value = uncapClassName + "." + getPrefix( type ) + capitalise( field.getName() ) + "()";
 
             if ( fieldMetadata.isAttribute() )
             {
@@ -379,6 +379,11 @@ public class Xpp3WriterGenerator
         sc.add( "}" );
 
         jClass.addMethod( unmarshall );
+    }
+
+    private String getPrefix( String type )
+    {
+        return "boolean".equals( type ) ? "is" : "get";
     }
 
     private String getValue( String type, String initialValue )
