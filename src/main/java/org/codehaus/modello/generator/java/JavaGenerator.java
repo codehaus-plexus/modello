@@ -95,52 +95,7 @@ public class JavaGenerator
 
                         jClass.addMethod( createFieldSetter( field ) );
 
-                        // Add method
-
-                        if ( isCollection( field.getType().getName() ) )
-                        {
-                            String parameterName = singular( field.getName() );
-
-                            String className = capitalise( parameterName );
-
-                            JType addType;
-
-                            if ( objectModel.getClassNames().contains( className ) )
-                            {
-                                addType = new JClass( className );
-                            }
-                            else
-                            {
-                                addType = new JClass( "String" );
-                            }
-
-                            JMethod adder = new JMethod( null, "add" + className );
-
-                            adder.addParameter( new JParameter( addType, parameterName ) );
-
-                            adder.getSourceCode().add( field.getName() + ".add( " + parameterName + " );" );
-
-                            jClass.addMethod( adder );
-                        }
-
-                        if ( field.getType().getName().equals( "java.util.Properties" ) )
-                        {
-                            String parameterName = singular( field.getName() );
-
-                            String className = capitalise( parameterName );
-
-                            JType addType = new JClass( "String" );
-
-                            JMethod adder = new JMethod( null, "add" + className );
-
-                            adder.addParameter( new JParameter( addType, "name" ) );
-
-                            adder.addParameter( new JParameter( addType, "value" ) );
-
-                            adder.getSourceCode().add( field.getName() + ".setProperty( name, value );" );
-
-                            jClass.addMethod( adder );
-                        }
+                        createAdder( field, jClass, objectModel );
                     }
 
                     count++;
@@ -158,30 +113,6 @@ public class JavaGenerator
 
             writer.close();
         }
-    }
-
-    private JMethod createFieldGetter( JField field )
-    {
-        String propertyName = capitalise( field.getName() );
-
-        JMethod getter = new JMethod( field.getType(), "get" + propertyName );
-
-        getter.getSourceCode().add( "return this." + field.getName() + ";" );
-
-        return getter;
-    }
-
-    private JMethod createFieldSetter( JField field )
-    {
-        String propertyName = capitalise( field.getName() );
-
-        JMethod setter = new JMethod( null, "set" + propertyName );
-
-        setter.addParameter( new JParameter( field.getType(), field.getName() ) );
-
-        setter.getSourceCode().add( "this." + field.getName() + " = " + field.getName() + ";" );
-
-        return setter;
     }
 
     private JField createField( ModelField modelField, ModelClass modelClass, int entry )
@@ -218,5 +149,76 @@ public class JavaGenerator
         }
 
         return field;
+    }
+
+    private JMethod createFieldGetter( JField field )
+    {
+        String propertyName = capitalise( field.getName() );
+
+        JMethod getter = new JMethod( field.getType(), "get" + propertyName );
+
+        getter.getSourceCode().add( "return this." + field.getName() + ";" );
+
+        return getter;
+    }
+
+    private JMethod createFieldSetter( JField field )
+    {
+        String propertyName = capitalise( field.getName() );
+
+        JMethod setter = new JMethod( null, "set" + propertyName );
+
+        setter.addParameter( new JParameter( field.getType(), field.getName() ) );
+
+        setter.getSourceCode().add( "this." + field.getName() + " = " + field.getName() + ";" );
+
+        return setter;
+    }
+
+    private void createAdder( JField field, JClass jClass, Model objectModel )
+    {
+        if ( isCollection( field.getType().getName() ) )
+        {
+            String parameterName = singular( field.getName() );
+
+            String className = capitalise( parameterName );
+
+            JType addType;
+
+            if ( objectModel.getClassNames().contains( className ) )
+            {
+                addType = new JClass( className );
+            }
+            else
+            {
+                addType = new JClass( "String" );
+            }
+
+            JMethod adder = new JMethod( null, "add" + className );
+
+            adder.addParameter( new JParameter( addType, parameterName ) );
+
+            adder.getSourceCode().add( field.getName() + ".add( " + parameterName + " );" );
+
+            jClass.addMethod( adder );
+        }
+        else if ( field.getType().getName().equals( "java.util.Properties" ) )
+        {
+            String parameterName = singular( field.getName() );
+
+            String className = capitalise( parameterName );
+
+            JType addType = new JClass( "String" );
+
+            JMethod adder = new JMethod( null, "add" + className );
+
+            adder.addParameter( new JParameter( addType, "name" ) );
+
+            adder.addParameter( new JParameter( addType, "value" ) );
+
+            adder.getSourceCode().add( field.getName() + ".setProperty( name, value );" );
+
+            jClass.addMethod( adder );
+        }
     }
 }
