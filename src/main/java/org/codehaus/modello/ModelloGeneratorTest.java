@@ -46,8 +46,6 @@ public abstract class ModelloGeneratorTest
 
     private String name;
 
-    private File mavenRepoLocal;
-
     private List urls = new ArrayList();
 
     protected ModelloGeneratorTest( String name )
@@ -61,24 +59,20 @@ public abstract class ModelloGeneratorTest
         super.setUp();
 
         FileUtils.deleteDirectory( getTestPath( "target/" + getName() ) );
-
-        String repo = System.getProperty( "maven.repo.local" );
-
-        assertNotNull( "Missing system property: maven.repo.local", repo );
-
-        mavenRepoLocal = new File( repo );
-
-        addDependency( "junit", "junit", "3.8.1" );
-
-        addDependency( "plexus", "plexus-utils", "1.0-alpha-1-SNAPSHOT" );
     }
 
     public void addDependency( String groupId, String artifactId, String version )
         throws Exception
     {
+        String repo = System.getProperty( "maven.repo.local" );
+
+        assertNotNull( "Missing system property: maven.repo.local", repo );
+
+        File mavenRepoLocal = new File( repo );
+
         File dependency = new File( mavenRepoLocal, groupId + "/jars/" + artifactId + "-" + version + ".jar" );
 
-        assertTrue( "Cant find dependency: " + dependency, dependency.isFile() );
+        assertTrue( "Cant find dependency: " + dependency.getAbsolutePath(), dependency.isFile() );
 
         dependencies.add( dependency );
 
@@ -98,6 +92,10 @@ public abstract class ModelloGeneratorTest
     protected void compile( File generatedSources, File destinationDirectory )
         throws Exception
     {
+        addDependency( "junit", "junit", "3.8.1" );
+
+        addDependency( "plexus", "plexus-utils", "1.0-alpha-1-SNAPSHOT" );
+
         String[] classPathElements = new String[dependencies.size() + 2];
 
         classPathElements[0] = getTestPath( "target/classes" );
