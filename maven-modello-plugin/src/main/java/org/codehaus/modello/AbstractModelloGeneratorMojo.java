@@ -28,6 +28,7 @@ import java.util.Properties;
 import org.apache.maven.plugin.AbstractPlugin;
 import org.apache.maven.plugin.PluginExecutionRequest;
 import org.apache.maven.plugin.PluginExecutionResponse;
+import org.apache.maven.project.MavenProject;
 
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
@@ -56,6 +57,8 @@ public abstract class AbstractModelloGeneratorMojo
 
         String packageWithVersion = (String) request.getParameter( "packageWithVersion" );
 
+        MavenProject project = (MavenProject) request.getParameter( "project" );
+
         ModelloCore modello = (ModelloCore) request.getParameter( "modelloCore" );
 
         // ----------------------------------------------------------------------
@@ -73,5 +76,10 @@ public abstract class AbstractModelloGeneratorMojo
         parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, packageWithVersion );
 
         modello.generate( modello.loadModel( new FileReader( model ) ), getGeneratorType(), parameters );
+
+        if ( project != null )
+        {
+            project.addCompileSourceRoot( outputDirectory );
+        }
     }
 }
