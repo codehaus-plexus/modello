@@ -75,6 +75,13 @@ public class DefaultXMLWriter
         }
         readyForNewLine = true;
     }
+    
+    public void addCData( String cdata )
+    {
+        tagIsEmpty = false;
+        finishTag();
+        write( "<![CDATA[" + cdata + "]]>" );
+    }
 
     private void write( String str )
     {
