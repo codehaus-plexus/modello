@@ -22,6 +22,8 @@ package org.codehaus.modello.generator.xml.xpp3;
  * SOFTWARE.
  */
 
+import junit.framework.Assert;
+
 import org.apache.maven.model.Build;
 import org.apache.maven.model.Component;
 import org.apache.maven.model.MailingList;
@@ -151,13 +153,13 @@ public class Xpp3Verifier
 //
 //        System.err.println( actualXml );
 
-        assertEquals( expectedXml, actualXml );
+        Assert.assertEquals( expectedXml, actualXml );
 
         MavenXpp3Reader reader = new MavenXpp3Reader();
 
         Model actual = reader.read( new StringReader( actualXml ) );
 
-        assertNotNull( "Actual", actual );
+        Assert.assertNotNull( "Actual", actual );
 
         assertModel( expected, actual );
     }
@@ -171,15 +173,15 @@ public class Xpp3Verifier
         // Test the "add default entities" flag
         // ----------------------------------------------------------------------
 
-        assertTrue( reader.getAddDefaultEntities() );
+        Assert.assertTrue( reader.getAddDefaultEntities() );
 
         reader.setAddDefaultEntities( false );
 
-        assertFalse( reader.getAddDefaultEntities() );
+        Assert.assertFalse( reader.getAddDefaultEntities() );
 
         reader.setAddDefaultEntities( true );
 
-        assertTrue( reader.getAddDefaultEntities() );
+        Assert.assertTrue( reader.getAddDefaultEntities() );
 
         // ----------------------------------------------------------------------
         // Test that the entities is properly resolved
@@ -204,37 +206,37 @@ public class Xpp3Verifier
 
     public void assertModel( Model expected, Model actual )
     {
-        assertNotNull( "Actual model", actual );
+        Assert.assertNotNull( "Actual model", actual );
 
-        assertEquals( "/model/extend", expected.getExtend(), actual.getExtend() );
+        Assert.assertEquals( "/model/extend", expected.getExtend(), actual.getExtend() );
 
 //        assertParent( expected.getParent(), actual.getParent() );
 
-        assertEquals( "/model/modelVersion", expected.getModelVersion(), actual.getModelVersion() );
+        Assert.assertEquals( "/model/modelVersion", expected.getModelVersion(), actual.getModelVersion() );
 
-        assertEquals( "/model/groupId", expected.getGroupId(), actual.getGroupId() );
+        Assert.assertEquals( "/model/groupId", expected.getGroupId(), actual.getGroupId() );
 
-        assertEquals( "/model/artifactId", expected.getArtifactId(), actual.getArtifactId() );
+        Assert.assertEquals( "/model/artifactId", expected.getArtifactId(), actual.getArtifactId() );
 
-        assertEquals( "/model/type", expected.getType(), actual.getType() );
+        Assert.assertEquals( "/model/type", expected.getType(), actual.getType() );
 
-        assertEquals( "/model/name", expected.getName(), actual.getName() );
+        Assert.assertEquals( "/model/name", expected.getName(), actual.getName() );
 
-        assertEquals( "/model/version", expected.getVersion(), actual.getVersion() );
+        Assert.assertEquals( "/model/version", expected.getVersion(), actual.getVersion() );
 
-        assertEquals( "/model/shortDescription", expected.getShortDescription(), actual.getShortDescription() );
+        Assert.assertEquals( "/model/shortDescription", expected.getShortDescription(), actual.getShortDescription() );
 
-        assertEquals( "/model/description", expected.getDescription(), actual.getDescription() );
+        Assert.assertEquals( "/model/description", expected.getDescription(), actual.getDescription() );
 
-        assertEquals( "/model/url", expected.getUrl(), actual.getUrl() );
+        Assert.assertEquals( "/model/url", expected.getUrl(), actual.getUrl() );
 
-        assertEquals( "/model/logo", expected.getLogo(), actual.getLogo() );
+        Assert.assertEquals( "/model/logo", expected.getLogo(), actual.getLogo() );
 
 //        assertIssueManagement();
 
 //        assertCiManagement();
 
-        assertEquals( "/model/inceptionYear", expected.getInceptionYear(), actual.getInceptionYear() );
+        Assert.assertEquals( "/model/inceptionYear", expected.getInceptionYear(), actual.getInceptionYear() );
 
 //        assertEquals( "/model/siteAddress", expected.getSiteAddress(), actual.getSiteAddress() );
 
@@ -269,9 +271,9 @@ public class Xpp3Verifier
 
     public void assertMailingLists( List expected, List actual )
     {
-        assertNotNull( "/model/mailingLists", actual );
+        Assert.assertNotNull( "/model/mailingLists", actual );
 
-        assertEquals( "/model/mailingLists.size", expected.size(), actual.size() );
+        Assert.assertEquals( "/model/mailingLists.size", expected.size(), actual.size() );
 
         for ( int i = 0; i < expected.size(); i++ )
         {
@@ -281,41 +283,41 @@ public class Xpp3Verifier
 
     public void assertMailingList( int i, MailingList expected, Object actualObject )
     {
-        assertNotNull( "/model/mailingLists[" + i + "]", actualObject );
+        Assert.assertNotNull( "/model/mailingLists[" + i + "]", actualObject );
 
-        assertInstanceOf( "/model/mailingLists", MailingList.class, actualObject.getClass() );
+        Assert.assertEquals( "/model/mailingLists", MailingList.class, actualObject.getClass() );
 
         MailingList actual = (MailingList) actualObject;
 
-        assertEquals( "/model/mailingLists[" + i + "]/name", expected.getName(), actual.getName() );
+        Assert.assertEquals( "/model/mailingLists[" + i + "]/name", expected.getName(), actual.getName() );
 
-        assertEquals( "/model/mailingLists[" + i + "]/subscribe", expected.getSubscribe(), actual.getSubscribe() );
+        Assert.assertEquals( "/model/mailingLists[" + i + "]/subscribe", expected.getSubscribe(), actual.getSubscribe() );
 
-        assertEquals( "/model/mailingLists[" + i + "]/unsubscribe", expected.getUnsubscribe(), actual.getUnsubscribe() );
+        Assert.assertEquals( "/model/mailingLists[" + i + "]/unsubscribe", expected.getUnsubscribe(), actual.getUnsubscribe() );
 
-        assertEquals( "/model/mailingLists[" + i + "]/archive", expected.getArchive(), actual.getArchive() );
+        Assert.assertEquals( "/model/mailingLists[" + i + "]/archive", expected.getArchive(), actual.getArchive() );
     }
 
     public void assertScm( Scm expected, Object actualObject )
     {
         if ( expected == null )
         {
-            assertNull( "/model/scm", actualObject );
+            Assert.assertNull( "/model/scm", actualObject );
         }
         else
         {
-            assertNotNull( "/model/scm", actualObject );
+            Assert.assertNotNull( "/model/scm", actualObject );
 
-            assertInstanceOf( "/model/scm", Scm.class, actualObject.getClass() );
+            Assert.assertEquals( "/model/scm", Scm.class, actualObject.getClass() );
 
             Scm actual = (Scm) actualObject;
 
-            assertEquals( "/model/scm/connection", expected.getConnection(), actual.getConnection() );
+            Assert.assertEquals( "/model/scm/connection", expected.getConnection(), actual.getConnection() );
 
-            assertEquals( "/model/scm/developerConnection", expected.getDeveloperConnection(),
+            Assert.assertEquals( "/model/scm/developerConnection", expected.getDeveloperConnection(),
                           actual.getDeveloperConnection() );
 
-            assertEquals( "/model/scm/url", expected.getUrl(), actual.getUrl() );
+            Assert.assertEquals( "/model/scm/url", expected.getUrl(), actual.getUrl() );
         }
     }
 
@@ -323,19 +325,19 @@ public class Xpp3Verifier
     {
         if ( expected == null )
         {
-            assertNull( "/model/builder", actualObject );
+            Assert.assertNull( "/model/builder", actualObject );
         }
         else
         {
-            assertNotNull( "/model/builder", actualObject );
+            Assert.assertNotNull( "/model/builder", actualObject );
 
-            assertInstanceOf( "/model/builder", Build.class, actualObject.getClass() );
+            Assert.assertEquals( "/model/builder", Build.class, actualObject.getClass() );
 
             Build actual = (Build) actualObject;
 
-            assertEquals( "/model/builder/sourceDirectory", expected.getSourceDirectory(), actual.getSourceDirectory() );
+            Assert.assertEquals( "/model/builder/sourceDirectory", expected.getSourceDirectory(), actual.getSourceDirectory() );
 
-            assertEquals( "/model/builder/unitTestSourceDirectory", expected.getUnitTestSourceDirectory(),
+            Assert.assertEquals( "/model/builder/unitTestSourceDirectory", expected.getUnitTestSourceDirectory(),
                           actual.getUnitTestSourceDirectory() );
         }
     }
