@@ -144,13 +144,13 @@ public class ModelDefault
         throws ModelValidationException
     {
         if ( ! SET.equalsIgnoreCase( key ) &&
-            ! LIST.equalsIgnoreCase( key ) &&
-            ! MAP.equalsIgnoreCase( key ) &&
-            ! PROPERTIES.equalsIgnoreCase( key ) &&
-            ! CHECK_DEPRECATION.equalsIgnoreCase( key ) &&
-            ! PACKAGE.equalsIgnoreCase( key ) )
+             ! LIST.equalsIgnoreCase( key ) &&
+             ! MAP.equalsIgnoreCase( key ) &&
+             ! PROPERTIES.equalsIgnoreCase( key ) &&
+             ! CHECK_DEPRECATION.equalsIgnoreCase( key ) &&
+             ! PACKAGE.equalsIgnoreCase( key ) )
         {
-            throw new ModelValidationException( "The type of default element must be List, Map, Properties, Set or checkDeprecation." );
+            throw new ModelValidationException( "The key of default element must be 'Set', 'List', 'Map', 'Properties', 'checkDeprecation' or 'package', was '" + key + "'." );
         }
     }
 
