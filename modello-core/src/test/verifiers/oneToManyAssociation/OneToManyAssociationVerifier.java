@@ -1,9 +1,12 @@
-import java.util.*;
-import org.codehaus.modello.association.package1.Person;
 import org.codehaus.modello.association.package1.ListSetMapProperties;
+import org.codehaus.modello.association.package1.Person;
 import org.codehaus.modello.association.package2.Location;
-import org.codehaus.modello.generator.*;
-import org.codehaus.modello.verifier.*;
+import org.codehaus.modello.verifier.Verifier;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import junit.framework.Assert;
 
 public class OneToManyAssociationVerifier
     extends Verifier
@@ -21,7 +24,7 @@ public class OneToManyAssociationVerifier
 
         person.setLocation( location );
 
-        assertEquals( "Location.persons[0]", person, location.getPersons().get( 0 ) );
+        Assert.assertEquals( "Location.persons[0]", person, location.getPersons().get( 0 ) );
 
         testList();
 
@@ -45,13 +48,13 @@ public class OneToManyAssociationVerifier
 
         List list = foo.getList();
 
-        assertEquals( "list.size", 1, list.size() );
+        Assert.assertEquals( "list.size", 1, list.size() );
 
-        assertEquals( "list[0]", person1, list.get( 0 ) );
+        Assert.assertEquals( "list[0]", person1, list.get( 0 ) );
 
         foo.removeList( person1 );
 
-        assertEquals( "list.size", 0, list.size() );
+        Assert.assertEquals( "list.size", 0, list.size() );
 
         list = new ArrayList();
 
@@ -61,11 +64,11 @@ public class OneToManyAssociationVerifier
 
         foo.setList( list );
 
-        assertEquals( "list.size", 2, list.size() );
+        Assert.assertEquals( "list.size", 2, list.size() );
 
-        assertEquals( "list[0]", person1, list.get( 0 ) );
+        Assert.assertEquals( "list[0]", person1, list.get( 0 ) );
 
-        assertEquals( "list[1]", person2, list.get( 1 ) );
+        Assert.assertEquals( "list[1]", person2, list.get( 1 ) );
     }
 
     private void testMap()
@@ -82,15 +85,15 @@ public class OneToManyAssociationVerifier
 
         foo.addMap( i1, person1 );
 
-        assertEquals( "map.size", 1, foo.getMap().size() );
+        Assert.assertEquals( "map.size", 1, foo.getMap().size() );
 
         foo.addMap( i1, person1 );
 
-        assertEquals( "map.size", 1, foo.getMap().size() );
+        Assert.assertEquals( "map.size", 1, foo.getMap().size() );
 
         foo.addMap( i2, person2 );
 
-        assertEquals( "map.size", 2, foo.getMap().size() );
+        Assert.assertEquals( "map.size", 2, foo.getMap().size() );
     }
 
     private void testProperty()
@@ -107,24 +110,20 @@ public class OneToManyAssociationVerifier
 
         foo.addProperty( i1, person1 );
 
-        assertEquals( "properties.size", 1, foo.getProperties().size() );
+        Assert.assertEquals( "properties.size", 1, foo.getProperties().size() );
 
         foo.addProperty( i1, person1 );
 
-        assertEquals( "properties.size", 1, foo.getProperties().size() );
+        Assert.assertEquals( "properties.size", 1, foo.getProperties().size() );
 
         foo.addProperty( i2, person2 );
 
-        assertEquals( "properties.size", 2, foo.getProperties().size() );
+        Assert.assertEquals( "properties.size", 2, foo.getProperties().size() );
     }
 
     private void testSet()
     {
         ListSetMapProperties foo = new ListSetMapProperties();
-
-        String i1 = "1";
-
-        String i2 = "2";
 
         Person person1 = new Person();
 
@@ -132,14 +131,14 @@ public class OneToManyAssociationVerifier
 
         foo.addSet( person1 );
 
-        assertEquals( "set.size", 1, foo.getSet().size() );
+        Assert.assertEquals( "set.size", 1, foo.getSet().size() );
 
         foo.addSet( person1 );
 
-        assertEquals( "set.size", 1, foo.getSet().size() );
+        Assert.assertEquals( "set.size", 1, foo.getSet().size() );
 
         foo.addSet( person2 );
 
-        assertEquals( "set.size", 2, foo.getSet().size() );
+        Assert.assertEquals( "set.size", 2, foo.getSet().size() );
     }
 }

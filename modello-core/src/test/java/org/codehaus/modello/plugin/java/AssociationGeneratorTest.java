@@ -65,7 +65,7 @@ public class AssociationGeneratorTest
 
         assertTrue( classes.mkdirs() );
 
-        ModelloCore modello = getModelloCore();
+        ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
 
         Properties parameters = new Properties();
 
@@ -75,7 +75,7 @@ public class AssociationGeneratorTest
 
         parameters.setProperty( ModelloParameterConstants.VERSION, "4.0.0" );
 
-        Model model = loadModel( modelFile );
+        Model model = modello.loadModel( new FileReader( getTestPath( modelFile ) ) );
 
         modello.generate( model, "java", parameters );
 

@@ -674,11 +674,11 @@ abstract class JStructure extends JType
             jsw.writeln( " //- Imported classes and packages -/" );
             jsw.writeln( "//---------------------------------/" );
             jsw.writeln();
-            Enumeration enum = imports.elements();
-            while ( enum.hasMoreElements() )
+            Enumeration e = imports.elements();
+            while ( e.hasMoreElements() )
             {
                 jsw.write( "import " );
-                jsw.write( enum.nextElement() );
+                jsw.write( e.nextElement() );
                 jsw.writeln( ';' );
             }
             jsw.writeln();

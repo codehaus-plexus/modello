@@ -22,16 +22,17 @@ package org.codehaus.modello.core.io;
  * SOFTWARE.
  */
 
-import java.io.FileReader;
-import java.util.List;
-
-import org.codehaus.modello.ModelloTest;
+import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.Version;
 import org.codehaus.modello.model.VersionRange;
+import org.codehaus.plexus.PlexusTestCase;
+
+import java.io.FileReader;
+import java.util.List;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -40,12 +41,14 @@ import org.codehaus.modello.model.VersionRange;
  * @version $Id$
  */
 public class ModelReaderTest
-    extends ModelloTest
+    extends PlexusTestCase
 {
     public void testBasic()
         throws Exception
     {
-        Model model = loadModel( "src/test/resources/models/simple.mdo" );
+        ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
+
+        Model model = modello.loadModel( new FileReader( getTestPath( "src/test/resources/models/simple.mdo" ) ) );
 
         assertNotNull( model );
 
@@ -75,7 +78,9 @@ public class ModelReaderTest
     public void testAssociationDefaultValues()
         throws Exception
     {
-        Model model = loadModel( "src/test/resources/models/association.mdo" );
+        ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
+
+        Model model = modello.loadModel( new FileReader( getTestPath( "src/test/resources/models/association.mdo" ) ) );
 
         ModelField field = model.getClass( "Foo", new VersionRange( "1.0.0" ) ).getField( "bars", new VersionRange( "1.0.0" ) );
 

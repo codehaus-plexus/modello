@@ -20,10 +20,15 @@
  * SOFTWARE.
  */
 
-import java.util.*;
-import org.apache.maven.model.v4_0_0.*;
-import org.codehaus.modello.generator.*;
-import org.codehaus.modello.verifier.*;
+import org.apache.maven.model.v4_0_0.MailingList;
+import org.apache.maven.model.v4_0_0.Model;
+import org.apache.maven.model.v4_0_0.Scm;
+import org.codehaus.modello.verifier.Verifier;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import junit.framework.Assert;
 
 public class PackageVersionVerifier
     extends Verifier
@@ -52,14 +57,14 @@ public class PackageVersionVerifier
         catch( Exception e)
         {
             e.printStackTrace();
-            fail( e.getMessage() );
+            Assert.fail( e.getMessage() );
         }
 
-        assertEquals( "Scm.connection", connection, scm.getConnection() );
+        Assert.assertEquals( "Scm.connection", connection, scm.getConnection() );
 
-        assertEquals( "Scm.developerConnection", developerConnection, scm.getDeveloperConnection() );
+        Assert.assertEquals( "Scm.developerConnection", developerConnection, scm.getDeveloperConnection() );
 
-        assertEquals( "Scm.url", url, scm.getUrl() );
+        Assert.assertEquals( "Scm.url", url, scm.getUrl() );
 
         testMailingLists();
     }
@@ -78,9 +83,9 @@ public class PackageVersionVerifier
 
         List lists = model.getMailingLists();
 
-        assertNotNull( lists );
+        Assert.assertNotNull( lists );
 
-        assertTrue( lists instanceof ArrayList );
+        Assert.assertTrue( lists instanceof ArrayList );
 
         try
         {
@@ -89,12 +94,12 @@ public class PackageVersionVerifier
         catch( Exception e)
         {
             e.printStackTrace();
-            fail( e.getMessage() );
+            Assert.fail( e.getMessage() );
         }
 
         List actual = model.getMailingLists();
 
-        assertEquals( "/model/mailinglists.size", expected.size(), actual.size() );
+        Assert.assertEquals( "/model/mailinglists.size", expected.size(), actual.size() );
 
         for( int i = 0; i < expected.size(); i++ )
         {
@@ -115,7 +120,7 @@ public class PackageVersionVerifier
 
         List actual = model.getMailingLists();
 
-        assertEquals( "/model/mailinglists.size", 3, actual.size() );
+        Assert.assertEquals( "/model/mailinglists.size", 3, actual.size() );
 
         for( int i = 0; i < 3; i++ )
         {
@@ -140,7 +145,7 @@ public class PackageVersionVerifier
         catch( Exception e)
         {
             e.printStackTrace();
-            fail( e.getMessage() );
+            Assert.fail( e.getMessage() );
         }
 
         return mailingList;
@@ -148,12 +153,12 @@ public class PackageVersionVerifier
 
     private void assertMailingList( MailingList expected, MailingList actual )
     {
-        assertEquals( "Mailing list", expected.getName(), actual.getName() );
+        Assert.assertEquals( "Mailing list", expected.getName(), actual.getName() );
 
-        assertEquals( "Subscribe", expected.getSubscribe(), actual.getSubscribe() );
+        Assert.assertEquals( "Subscribe", expected.getSubscribe(), actual.getSubscribe() );
 
-        assertEquals( "Unsubscribe", expected.getUnsubscribe(), actual.getUnsubscribe() );
+        Assert.assertEquals( "Unsubscribe", expected.getUnsubscribe(), actual.getUnsubscribe() );
 
-        assertEquals( "Archive", expected.getArchive(), actual.getArchive() );
+        Assert.assertEquals( "Archive", expected.getArchive(), actual.getArchive() );
     }
 }

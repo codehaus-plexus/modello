@@ -22,17 +22,16 @@ package org.codehaus.modello.plugin.ldap;
  * SOFTWARE.
  */
 
-import java.io.File;
+import org.codehaus.modello.ModelloGeneratorTest;
+import org.codehaus.modello.ModelloParameterConstants;
+import org.codehaus.modello.core.ModelloCore;
+import org.codehaus.modello.model.Model;
+
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Properties;
-
-import org.codehaus.modello.ModelloGeneratorTest;
-import org.codehaus.modello.FileUtils;
-import org.codehaus.modello.ModelloParameterConstants;
-import org.codehaus.modello.model.Model;
-import org.codehaus.modello.core.ModelloCore;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -49,9 +48,10 @@ public class ObjStateFactoryModelloGeneratorTest
     public void testBasicSchemaGeneration()
         throws Exception
     {
-        ModelloCore modello = getModelloCore();
+        ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
 
-        Model model = loadModel( "src/test/models/simple.mdo" );
+        Model model = modello.loadModel( new FileReader( getTestPath( "src/test/models/simple.mdo" ) ) );
+
 
         // ----------------------------------------------------------------------
         // Execute
