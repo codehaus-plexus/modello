@@ -25,16 +25,16 @@ public class JavaGenerator
 {
     private boolean version;
 
+    public JavaGenerator( String model, String outputDirectory, String modelVersion )
+    {
+        this( model, outputDirectory, modelVersion, false );
+    }
+
     public JavaGenerator( String model, String outputDirectory, String modelVersion, boolean version )
     {
         super( model, outputDirectory, modelVersion );
 
         this.version = version;
-    }
-
-    public JavaGenerator( String model, String outputDirectory, String modelVersion )
-    {
-        this( model, outputDirectory, modelVersion, false );
     }
 
     protected String getBasePackageName( Model model )
@@ -51,6 +51,20 @@ public class JavaGenerator
         }
 
         return sb.toString();
+    }
+
+    protected void addModelImports( JClass jClass )
+        throws Exception
+    {
+        for ( Iterator i = getModel().getClasses().iterator(); i.hasNext(); )
+        {
+            ModelClass modelClass = (ModelClass) i.next();
+
+            if ( outputElement( modelClass.getVersion(), modelClass.getName() ) )
+            {
+                jClass.addImport( getBasePackageName( getModel() ) + "." + modelClass.getName() );
+            }
+        }
     }
 
     public void generate()
