@@ -386,7 +386,7 @@ sc.add("//END READING");
 
             writeClassParsing( fieldClass, field.getName(), sc, false, false );
 
-            sc.add( objectName + ".set" + type + "( " + field.getName() + ");" );
+            sc.add( objectName + ".set" + capitalise( field.getName() ) + "( " + field.getName() + ");" );
         }
         else
         {
