@@ -16,7 +16,7 @@ import org.codehaus.modello.ModelField;
 import org.codehaus.modello.ModelloGeneratorTest;
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
-import org.codehaus.modello.plugins.xml.XmlMetadata;
+import org.codehaus.modello.plugins.xml.XmlFieldMetadata;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -47,9 +47,9 @@ public class Xpp3GeneratorTest
 
         ModelField extend = clazz.getField( "extend" );
 
-        assertTrue( extend.hasMetadata( XmlMetadata.ID ) );
+        assertTrue( extend.hasMetadata( XmlFieldMetadata.ID ) );
 
-        XmlMetadata xml = (XmlMetadata) extend.getMetadata( XmlMetadata.ID );
+        XmlFieldMetadata xml = (XmlFieldMetadata) extend.getMetadata( XmlFieldMetadata.ID );
 
         assertNotNull( xml );
 
@@ -59,9 +59,9 @@ public class Xpp3GeneratorTest
 
         ModelField build = clazz.getField( "build" );
 
-        assertTrue( build.hasMetadata( XmlMetadata.ID ) );
+        assertTrue( build.hasMetadata( XmlFieldMetadata.ID ) );
 
-        xml = (XmlMetadata) build.getMetadata( XmlMetadata.ID );
+        xml = (XmlFieldMetadata) build.getMetadata( XmlFieldMetadata.ID );
 
         assertNotNull( xml );
 
