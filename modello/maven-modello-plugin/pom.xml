@@ -15,12 +15,12 @@
   <dependencies>
     <dependency>
       <groupId>maven</groupId>
-      <artifactId>maven-model</artifactId>
+      <artifactId>maven-core</artifactId>
       <version>2.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>maven</groupId>
-      <artifactId>maven-artifact</artifactId>
+      <artifactId>maven-model</artifactId>
       <version>2.0-SNAPSHOT</version>
     </dependency>
     <dependency>
@@ -32,11 +32,6 @@
       <groupId>modello</groupId>
       <artifactId>modello-xpp3-plugin</artifactId>
       <version>1.0-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
     </dependency>
   </dependencies>
 </project>
