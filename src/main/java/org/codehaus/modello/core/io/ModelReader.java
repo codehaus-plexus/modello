@@ -198,6 +198,10 @@ public class ModelReader
                     {
                         modelInterface.setPackageName( parser.nextText() );
                     }
+                    else if ( parser.getName().equals( "codeSegments" ) )
+                    {
+                        parseCodeSegment( modelInterface, parser );
+                    }
                     else
                     {
                         parser.nextText();
@@ -407,6 +411,39 @@ public class ModelReader
                 }
 
                 modelClass.addCodeSegment( codeSegment );
+            }
+            else
+            {
+                parser.next();
+            }
+        }
+    }
+
+    private void parseCodeSegment( ModelInterface modelInterface, XmlPullParser parser )
+        throws XmlPullParserException, IOException
+    {
+        while ( parser.nextTag() == XmlPullParser.START_TAG )
+        {
+            if ( parser.getName().equals( "codeSegment" ) )
+            {
+                CodeSegment codeSegment = new CodeSegment();
+
+                while ( parser.nextTag() == XmlPullParser.START_TAG )
+                {
+                    if ( parseBaseElement( codeSegment, parser ) )
+                    {
+                    }
+                    else if ( parser.getName().equals( "code" ) )
+                    {
+                        codeSegment.setCode( parser.nextText() );
+                    }
+                    else
+                    {
+                        parser.nextText();
+                    }
+                }
+
+                modelInterface.addCodeSegment( codeSegment );
             }
             else
             {

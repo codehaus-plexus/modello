@@ -108,9 +108,32 @@ public class ModelClass
         getInterfaces().add( modelInterface );
     }
 
-    public String getPackageName()
+    public String getPackageName( boolean withVersion, Version version )
     {
-        return packageName;
+        String p;
+
+        if ( packageName != null )
+        {
+            p = packageName;
+        }
+        else
+        {
+            try
+            {
+                p = model.getDefault( ModelDefault.PACKAGE ).getValue();
+            }
+            catch( Exception e )
+            {
+                p = ModelDefault.PACKAGE_VALUE;
+            }
+        }
+
+        if ( withVersion )
+        {
+            p += "." + version.toString();
+        }
+
+        return p;
     }
 
     public void setPackageName( String packageName )
@@ -333,7 +356,7 @@ public class ModelClass
 
         if ( packageName == null )
         {
-            packageName = model.getPackageName();
+            packageName = model.getPackageName( false, null );
         }
 
         for ( Iterator it = getAllFields().iterator(); it.hasNext(); )
