@@ -9,6 +9,7 @@ import org.codehaus.modello.generator.java.javasource.JMethod;
 import org.codehaus.modello.generator.java.javasource.JType;
 import org.codehaus.modello.generator.java.javasource.JClass;
 import org.codehaus.modello.generator.java.javasource.JSourceWriter;
+import org.codehaus.modello.generator.java.javasource.JParameter;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -51,9 +52,9 @@ public class JavaGenerator
 
             FileWriter writer = new FileWriter( f );
 
-            JSourceWriter sourceWriter = new org.codehaus.modello.generator.java.javasource.JSourceWriter( writer );
+            JSourceWriter sourceWriter = new JSourceWriter( writer );
 
-            JClass jClass = new org.codehaus.modello.generator.java.javasource.JClass( modelClass.getName() );
+            JClass jClass = new JClass( modelClass.getName() );
 
             jClass.addImport( "java.util.*" );
 
@@ -93,16 +94,16 @@ public class JavaGenerator
 
                     if ( fieldType.equals( "boolean" ) )
                     {
-                        jType = org.codehaus.modello.generator.java.javasource.JType.Boolean;
+                        jType = JType.Boolean;
                     }
                     else
                     {
-                        jType = new org.codehaus.modello.generator.java.javasource.JClass( fieldType );
+                        jType = new JClass( fieldType );
                     }
 
                     // Field
 
-                    JField jField = new org.codehaus.modello.generator.java.javasource.JField( jType, fieldName );
+                    JField jField = new JField( jType, fieldName );
 
                     if ( modelField.getDefaultValue() != null )
                     {
@@ -124,7 +125,7 @@ public class JavaGenerator
 
                     // Getter
 
-                    JMethod getter = new org.codehaus.modello.generator.java.javasource.JMethod( jType, "get" + propertyName );
+                    JMethod getter = new JMethod( jType, "get" + propertyName );
 
                     getter.getSourceCode().add( "return this." + fieldName + ";" );
 
@@ -132,9 +133,9 @@ public class JavaGenerator
 
                     // Setter
 
-                    JMethod setter = new org.codehaus.modello.generator.java.javasource.JMethod( null, "set" + propertyName );
+                    JMethod setter = new JMethod( null, "set" + propertyName );
 
-                    setter.addParameter( new org.codehaus.modello.generator.java.javasource.JParameter( jType, fieldName ) );
+                    setter.addParameter( new JParameter( jType, fieldName ) );
 
                     setter.getSourceCode().add( "this." + fieldName + " = " + fieldName + ";" );
 
@@ -159,9 +160,9 @@ public class JavaGenerator
                             addType = new org.codehaus.modello.generator.java.javasource.JClass( "String" );
                         }
 
-                        JMethod adder = new org.codehaus.modello.generator.java.javasource.JMethod( null, "add" + className );
+                        JMethod adder = new JMethod( null, "add" + className );
 
-                        adder.addParameter( new org.codehaus.modello.generator.java.javasource.JParameter( addType, parameterName ) );
+                        adder.addParameter( new JParameter( addType, parameterName ) );
 
                         adder.getSourceCode().add( fieldName + ".add( " + parameterName + " );" );
 
@@ -174,13 +175,13 @@ public class JavaGenerator
 
                         String className = capitalise( parameterName );
 
-                        JType addType = new org.codehaus.modello.generator.java.javasource.JClass( "String" );
+                        JType addType = new JClass( "String" );
 
-                        JMethod adder = new org.codehaus.modello.generator.java.javasource.JMethod( null, "add" + className );
+                        JMethod adder = new JMethod( null, "add" + className );
 
-                        adder.addParameter( new org.codehaus.modello.generator.java.javasource.JParameter( addType, "name" ) );
+                        adder.addParameter( new JParameter( addType, "name" ) );
 
-                        adder.addParameter( new org.codehaus.modello.generator.java.javasource.JParameter( addType, "value" ) );
+                        adder.addParameter( new JParameter( addType, "value" ) );
 
                         adder.getSourceCode().add( fieldName + ".setProperty( name, value );" );
 
