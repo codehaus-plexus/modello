@@ -30,9 +30,10 @@ public class Modello
     public void parseArgumentsFromCommandLine( String[] args )
         throws Exception
     {
-        if ( args.length != 3 )
+        if ( args.length != 4 )
         {
             System.err.println( "Usage: modello <model> <mode> <output directory> " );
+            
             System.exit( 1 );
         }
 
