@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Properties;
 
 import org.codehaus.modello.Model;
+import org.codehaus.modello.ModelAssociation;
 import org.codehaus.modello.ModelClass;
 import org.codehaus.modello.ModelField;
 import org.codehaus.modello.ModelloException;
@@ -134,7 +135,7 @@ public class Xpp3WriterGenerator
 
         sc.add( "serializer.startTag( NAMESPACE, \"" + rootElement + "\" );" );
 
-        writeClassParsing( (ModelClass) objectModel.getClasses().get( 0 ), sc, objectModel );
+        writeClassMarshalling( (ModelClass) objectModel.getClasses().get( 0 ), sc );
 
         sc.add( "serializer.endTag( NAMESPACE, \"" + rootElement + "\" );" );
 
@@ -147,25 +148,36 @@ public class Xpp3WriterGenerator
         writer.close();
     }
 
-    private void writeClassParsing( ModelClass modelClass, JSourceCode sc, Model objectModel )
+    private void writeClassMarshalling( ModelClass modelClass, JSourceCode sc )
         throws ModelloRuntimeException
     {
         if ( outputElement( modelClass.getVersion(), modelClass.getName() ) )
         {
-            List allFields = objectModel.getAllFields( modelClass );
+            List fields = modelClass.getFields();
 
-            int size = allFields.size();
+            int fieldCount = fields.size();
 
-            for ( int i = 0; i < size; i++ )
+            for ( int i = 0; i < fieldCount; i++ )
             {
-                ModelField field = (ModelField) allFields.get( i );
+                ModelField field = (ModelField) fields.get( i );
 
-                writeFieldMarshalling( modelClass, field, sc, objectModel );
+                writeFieldMarshalling( modelClass, field, sc );
+            }
+
+            List associations = modelClass.getAssociations();
+
+            int associationCount = associations.size();
+
+            for ( int i = 0; i < associationCount; i++ )
+            {
+                ModelAssociation association = (ModelAssociation) associations.get( i );
+
+                writeAssociationMarshalling( association, sc );
             }
         }
     }
 
-    private void writeFieldMarshalling( ModelClass modelClass, ModelField field, JSourceCode sc, Model objectModel )
+    private void writeFieldMarshalling( ModelClass modelClass, ModelField field, JSourceCode sc )
         throws ModelloRuntimeException
     {
         XmlMetaData xmlMetaData = (XmlMetaData)field.getMetaData( XmlMetaData.ID );
@@ -192,7 +204,7 @@ public class Xpp3WriterGenerator
             tagName = fieldName;
         }
 
-        if ( isClassInModel( type, objectModel ) )
+        if ( isClassInModel( type, modelClass.getModel() ) )
         {
             if ( attribute )
             {
@@ -209,7 +221,7 @@ public class Xpp3WriterGenerator
 
             sc.add( "serializer.startTag( NAMESPACE, " + "\"" + tagName + "\" );" );
 
-            writeClassParsing( objectModel.getClass( type ), sc, objectModel );
+            writeClassMarshalling( modelClass.getModel().getClass( type ), sc );
 
             sc.add( "serializer.endTag( NAMESPACE, " + "\"" + tagName + "\" );" );
 
@@ -217,6 +229,7 @@ public class Xpp3WriterGenerator
 
             sc.add( "}" );
         }
+/*
         else if ( isCollection( type ) )
         {
             if ( attribute )
@@ -236,6 +249,7 @@ public class Xpp3WriterGenerator
             // These are properties for now.
             writePropertiesMarshalling( modelClassName, fieldName, tagName, sc, objectModel );
         }
+*/
         else
         {
             sc.add( "if ( " + modelClassName + ".get" + className + "() != null )" );
@@ -261,11 +275,21 @@ public class Xpp3WriterGenerator
         }
     }
 
-    private void writeCollectionMarshalling( String modelClassName, String fieldName, String tagName, JSourceCode sc, Model objectModel )
+    private void writeAssociationMarshalling( ModelAssociation association, JSourceCode sc )
     {
-        sc.add( "\n" );
+        if ( !outputElement( association.getVersion(), association.getFromClass().getName() + "." + association.getName() ) )
+        {
+            return;
+        }
 
         // We have a collection but we need to know what is in the collection.
+
+        String modelClassName = uncapitalise( association.getFromClass().getName() );
+
+        String fieldName = association.getFromRole();
+
+        // TODO: Read from metadata
+        String tagName = association.getFromRole();
 
         String getterName = capitalise( fieldName );
 
@@ -273,13 +297,13 @@ public class Xpp3WriterGenerator
 
         String singular = singular( fieldName );
 
-        if ( isClassInModel( collectionClass, objectModel ) )
+        if ( isClassInModel( collectionClass, association.getFromClass().getModel() ) )
         {
             String size = modelClassName + ".get" + getterName + "().size()";
 
             String index = getIndex();
 
-            sc.add( "if ( " + modelClassName + ".get" + getterName + "() != null )" );
+            sc.add( "if ( " + modelClassName + ".get" + getterName + "() != null && " + modelClassName + ".get" + getterName + "().size() > 0 )" );
 
             sc.add( "{" );
 
@@ -298,7 +322,7 @@ public class Xpp3WriterGenerator
 
             sc.add( "serializer.startTag( NAMESPACE, " + "\"" + singular( tagName ) + "\" );" );
 
-            writeClassParsing( objectModel.getClass( singular( collectionClass ) ), sc, objectModel );
+            writeClassMarshalling( association.getFromClass().getModel().getClass( singular( collectionClass ) ), sc );
 
             sc.add( "serializer.endTag( NAMESPACE, " + "\"" + singular( tagName ) + "\" );" );
 
@@ -314,7 +338,7 @@ public class Xpp3WriterGenerator
         }
         else
         {
-            sc.add( "if ( " + modelClassName + ".get" + getterName + "() != null )" );
+            sc.add( "if ( " + modelClassName + ".get" + getterName + "() != null && " + modelClassName + ".get" + getterName + "().size() > 0 )" );
 
             sc.add( "{" );
 
