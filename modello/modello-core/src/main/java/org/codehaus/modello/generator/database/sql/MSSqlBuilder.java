@@ -16,12 +16,11 @@
 
 package org.codehaus.modello.generator.database.sql;
 
-import org.codehaus.modello.generator.database.model.Column;
-import org.codehaus.modello.generator.database.model.ForeignKey;
-import org.codehaus.modello.generator.database.model.Table;
-
 import java.io.IOException;
 import java.util.Iterator;
+
+import org.codehaus.modello.generator.database.model.Column;
+import org.codehaus.modello.generator.database.model.Table;
 
 /**
  * An SQL Builder for MS SQL
@@ -47,7 +46,7 @@ public class MSSqlBuilder extends SqlBuilder
         int counter = 1;
         for ( Iterator iter = table.getForeignKeys().iterator(); iter.hasNext(); )
         {
-            ForeignKey key = (ForeignKey) iter.next();
+//            ForeignKey key = (ForeignKey) iter.next();
 
             String constraintName = tableName + "_FK_" + counter;
             println( "IF EXISTS (SELECT 1 FROM sysobjects WHERE type ='RI' AND name='"

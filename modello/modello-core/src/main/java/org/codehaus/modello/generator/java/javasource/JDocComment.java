@@ -46,8 +46,6 @@
 
 package org.codehaus.modello.generator.java.javasource;
 
-import org.codehaus.modello.generator.java.javasource.JComment;
-
 import java.util.Enumeration;
 import java.util.Vector;
 

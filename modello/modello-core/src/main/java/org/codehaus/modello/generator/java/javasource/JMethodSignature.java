@@ -46,10 +46,6 @@
 package org.codehaus.modello.generator.java.javasource;
 
 
-import org.codehaus.modello.generator.java.javasource.JClass;
-import org.codehaus.modello.generator.java.javasource.JDocComment;
-import org.codehaus.modello.generator.java.javasource.JDocDescriptor;
-
 import java.util.Vector;
 
 /**

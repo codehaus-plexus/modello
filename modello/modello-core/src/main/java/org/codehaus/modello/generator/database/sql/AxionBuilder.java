@@ -16,10 +16,10 @@
 
 package org.codehaus.modello.generator.database.sql;
 
+import java.io.IOException;
+
 import org.codehaus.modello.generator.database.model.Column;
 import org.codehaus.modello.generator.database.model.Table;
-
-import java.io.IOException;
 
 /**
  * An SQL Builder for the <a href="http://axion.tigris.org/">Axion</a> JDBC database.

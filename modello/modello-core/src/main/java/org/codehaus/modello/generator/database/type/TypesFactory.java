@@ -52,7 +52,7 @@ public class TypesFactory
             while ( set.next() )
             {
                 String sqlName = set.getString( "TYPE_NAME" );
-                int typeCode = set.getInt( "DATA_TYPE" );
+//                int typeCode = set.getInt( "DATA_TYPE" );
                 long precision = set.getLong( "PRECISION" );
                 short minScale = set.getShort( "MINIMUM_SCALE" );
                 short maxScale = set.getShort( "MAXIMUM_SCALE" );
@@ -96,7 +96,7 @@ public class TypesFactory
                 String sqlName = set.getString( "TYPE_NAME" );
                 int typeCode = set.getInt( "DATA_TYPE" );
                 long precision = set.getLong( "PRECISION" );
-                short scale = set.getShort( "MAXIMUM_SCALE" );
+//                short scale = set.getShort( "MAXIMUM_SCALE" );
                 boolean autoIncrement = set.getBoolean( "AUTO_INCREMENT" );
 
                 String name = TypeMap.getName( typeCode );

@@ -52,11 +52,11 @@
 
 package org.codehaus.modello.generator.java.javasource;
 
-import java.util.Enumeration;
-import java.util.Vector;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Vector;
 
 /**
  * A representation of the Java Source code for a Java Class. This is
@@ -258,7 +258,7 @@ public class JClass extends JStructure
         //-- keep method list sorted for esthetics when printing
         //-- START SORT :-)
         boolean added = false;
-        short modifierVal = 0;
+//        short modifierVal = 0;
         JModifiers modifiers = jMethod.getModifiers();
 
         if ( modifiers.isAbstract() )

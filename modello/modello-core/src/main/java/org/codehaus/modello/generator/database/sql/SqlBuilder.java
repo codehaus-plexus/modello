@@ -15,6 +15,11 @@
  */
 package org.codehaus.modello.generator.database.sql;
 
+import java.io.IOException;
+import java.io.Writer;
+import java.util.Iterator;
+import java.util.List;
+
 import org.codehaus.modello.generator.database.model.Column;
 import org.codehaus.modello.generator.database.model.Database;
 import org.codehaus.modello.generator.database.model.ForeignKey;
@@ -23,12 +28,6 @@ import org.codehaus.modello.generator.database.model.IndexColumn;
 import org.codehaus.modello.generator.database.model.Reference;
 import org.codehaus.modello.generator.database.model.Table;
 import org.codehaus.modello.generator.database.model.TypeMap;
-
-import java.io.IOException;
-import java.io.Writer;
-import java.sql.SQLException;
-import java.util.Iterator;
-import java.util.List;
 
 /**
  * This class is a collection of Strategy methods for creating the DDL required to create and drop
