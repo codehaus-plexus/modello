@@ -65,10 +65,11 @@ public class DefaultModelloCore
      */
     private GeneratorPluginManager generatorPluginManager;
 
-public MetadataPluginManager getMetadataPluginManager()
-{
-    return metadataPluginManager;
-}
+    public MetadataPluginManager getMetadataPluginManager()
+    {
+        return metadataPluginManager;
+    }
+
     public Model loadModel( Reader reader )
         throws ModelloException, ModelValidationException
     {
@@ -84,10 +85,9 @@ public MetadataPluginManager getMetadataPluginManager()
         // Handle Metadata
         // ----------------------------------------------------------------------
 
-        for( Iterator plugins = metadataPluginManager.getPlugins(); plugins.hasNext(); )
+        for( Iterator plugins = metadataPluginManager.getPluginsIterator(); plugins.hasNext(); )
         {
             MetadataPlugin plugin = (MetadataPlugin) plugins.next();
-System.out.println( "Plugin : " + plugin.getClass().getName() );
 
             Map attributes = Collections.EMPTY_MAP;
 
@@ -107,11 +107,11 @@ System.out.println( "Plugin : " + plugin.getClass().getName() );
         {
             ModelClass clazz = (ModelClass) classes.next();
 
-            Map attributes = Collections.unmodifiableMap( Collections.EMPTY_MAP );
+            Map attributes = Collections.unmodifiableMap( modelReader.getAttributesForClass( clazz ) );
 
             attributes = Collections.unmodifiableMap( attributes );
 
-            for( Iterator plugins = metadataPluginManager.getPlugins(); plugins.hasNext(); )
+            for( Iterator plugins = metadataPluginManager.getPluginsIterator(); plugins.hasNext(); )
             {
                 MetadataPlugin plugin = (MetadataPlugin) plugins.next();
 
@@ -141,7 +141,7 @@ System.out.println( "Plugin : " + plugin.getClass().getName() );
 
                     associationAttributes = Collections.unmodifiableMap( associationAttributes );
 
-                    for( Iterator plugins = metadataPluginManager.getPlugins(); plugins.hasNext(); )
+                    for( Iterator plugins = metadataPluginManager.getPluginsIterator(); plugins.hasNext(); )
                     {
                         MetadataPlugin plugin = (MetadataPlugin) plugins.next();
 
@@ -172,7 +172,7 @@ System.out.println( "Plugin : " + plugin.getClass().getName() );
 
                     attributes = Collections.unmodifiableMap( attributes );
 
-                    for( Iterator plugins = metadataPluginManager.getPlugins(); plugins.hasNext(); )
+                    for( Iterator plugins = metadataPluginManager.getPluginsIterator(); plugins.hasNext(); )
                     {
                         MetadataPlugin plugin = (MetadataPlugin) plugins.next();
 

@@ -322,7 +322,7 @@ public class ModelClass
         return ( superClass != null );
     }
 
-    public ClassMetadata getMetaData( String key )
+    public ClassMetadata getMetadata( String key )
     {
         return (ClassMetadata) getMetadata( ClassMetadata.class, key );
     }

@@ -23,6 +23,7 @@ package org.codehaus.modello.core;
  */
 
 import java.util.Iterator;
+import java.util.Map;
 
 import org.codehaus.modello.metadata.MetadataPlugin;
 
@@ -34,7 +35,9 @@ public interface MetadataPluginManager
 {
     String ROLE = MetadataPluginManager.class.getName();
 
-    Iterator getPlugins();
+    Map getPlugins();
+
+    Iterator getPluginsIterator();
 
     MetadataPlugin getMetadataPlugin( String metadataId );
 

@@ -45,9 +45,7 @@ public class ModelReaderTest
     public void testBasic()
         throws Exception
     {
-        ModelReader reader = new ModelReader();
-
-        Model model = reader.loadModel( new FileReader( getTestPath( "src/test/resources/models/simple.mdo" ) ) );
+        Model model = getModelloCore().loadModel( new FileReader( getTestPath( "src/test/resources/models/simple.mdo" ) ) );
 
         assertNotNull( model );
 
@@ -57,7 +55,7 @@ public class ModelReaderTest
 
         assertEquals( "foo.bar", model.getPackageName() );
 
-        assertEquals( "Boy", model.getRoot() );
+        assertEquals( "Boy", model.getRoot(  new Version( "1.0.0" ) ) );
 
         List classes = model.getAllClasses();
 

@@ -1,4 +1,4 @@
-package org.codehaus.modello.core;
+package org.codehaus.modello.plugin.model;
 
 /*
  * Copyright (c) 2004, Jason van Zyl
@@ -22,24 +22,26 @@ package org.codehaus.modello.core;
  * SOFTWARE.
  */
 
-import java.util.Iterator;
-import java.util.Map;
-
-import org.codehaus.modello.plugin.ModelloGenerator;
+import org.codehaus.modello.metadata.ClassMetadata;
 
 /**
- * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
+ * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
  * @version $Id$
  */
-public interface GeneratorPluginManager
+public class ModelClassMetadata
+    implements ClassMetadata
 {
-    String ROLE = GeneratorPluginManager.class.getName();
+    public final static String ID = ModelClassMetadata.class.getName();
 
-    Map getPlugins();
+    private boolean rootElement = false;
 
-    Iterator getPluginsIterator();
+    public boolean isRootElement()
+    {
+        return rootElement;
+    }
 
-    ModelloGenerator getGeneratorPlugin( String generatorId );
-
-    boolean hasGeneratorPlugin( String generatorId );
+    public void setRootElement( boolean rootElement )
+    {
+        this.rootElement = rootElement;
+    }
 }

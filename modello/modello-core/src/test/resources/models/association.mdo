@@ -1,7 +1,6 @@
 <model>
   <id>association-test</id>
   <name>AssociationTest</name>
-  <root>AssociationTest</root>
   <defaults>
     <default>
       <key>package</key>
@@ -9,7 +8,7 @@
     </default>
   </defaults>
   <classes>
-    <class>
+    <class rootElement="true">
       <name>Boy</name>
       <version>1.0.0</version>
       <fields>
