@@ -22,7 +22,7 @@ public class GeneratorTest
 {
     String outputDirectory = "target/output";
 
-    String model = "maven.mdo";
+    String model = "model.xml";
 
     public void testJavaGenerator()
         throws Exception
