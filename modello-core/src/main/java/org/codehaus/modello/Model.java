@@ -13,7 +13,7 @@ import java.util.Set;
  * @version $Id$
  */
 public class Model
-    extends Base
+    extends BaseElement
 {
     List classes;
 
