@@ -1,4 +1,4 @@
-package org.codehaus.modello.generator.xml.xdoc;
+package org.codehaus.modello.plugin.xdoc;
 
 /*
  * Copyright (c) 2004, Jason van Zyl
@@ -33,12 +33,16 @@ import org.codehaus.modello.ModelloRuntimeException;
 import org.codehaus.modello.generator.xml.DefaultXMLWriter;
 import org.codehaus.modello.generator.xml.XMLWriter;
 import org.codehaus.modello.model.Model;
+import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
+import org.codehaus.modello.model.ModelDefault;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.plugin.AbstractModelloGenerator;
 
 /**
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
+ * @author <a href="mailto:emmanuel@venisse.net">Emmanuel Venisse</a>
+ *
  * @version $Id$
  */
 public class XdocGenerator
@@ -161,14 +165,14 @@ public class XdocGenerator
 
                 w.startElement( "td" );
 
-                if ( objectModel.getClass( capitalise( field.getName() ), getGeneratedVersion() ) != null )
-                {
+                //if ( objectModel.getClass( capitalise( field.getName() ), getGeneratedVersion() ) != null )
+                //{
                     w.writeText( field.getName() );
-                }
-                else
-                {
-                    w.writeText( field.getName() );
-                }
+                //}
+                //else
+                //{
+                //    w.writeText( field.getName() );
+                //}
 
                 w.endElement();
 
@@ -239,11 +243,36 @@ public class XdocGenerator
             {
                 ModelField field = (ModelField) iter.next();
 
-                ModelClass fieldModelClass = objectModel.getClass( capitalise( field.getName() ), getGeneratedVersion() );
+                ModelClass fieldModelClass = null;
 
-                if ( fieldModelClass != null )
+                if ( field instanceof ModelAssociation && isClassInModel( ( (ModelAssociation) field).getTo(), objectModel ) )
                 {
-                    sb.append( getModelClassDescriptor( objectModel, fieldModelClass, depth + 1 ) );
+                    ModelAssociation association = (ModelAssociation) field;
+
+                    if ( ModelAssociation.MANY_MULTIPLICITY.equals( association.getMultiplicity() ) )
+                    {
+                        for ( int i = 0; i < depth+1; i++ )
+                        {
+                            sb.append( "  " );
+                        }
+
+                        sb.append( "<a href=\"#" + association.getName() + "\">&lt;" + uncapitalise( association.getName() ) + "&gt;</a>\n" );
+                    }
+
+                    fieldModelClass = objectModel.getClass( ( (ModelAssociation) field).getTo(), getGeneratedVersion() );
+
+                    sb.append( getModelClassDescriptor( objectModel, fieldModelClass, depth + 2 ) );
+
+                    if ( ModelAssociation.MANY_MULTIPLICITY.equals( association.getMultiplicity() ) )
+                    {
+                        for ( int i = 0; i < depth+1; i++ )
+                        {
+                            sb.append( "  " );
+                        }
+
+                        sb.append( "<a href=\"#" + association.getName() + "\">&lt;/" + uncapitalise( association.getName() ) + "&gt;</a>\n" );
+                    }
+
                 }
                 else
                 {
