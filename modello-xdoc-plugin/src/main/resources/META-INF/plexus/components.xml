@@ -1,0 +1,9 @@
+<component-set>
+  <components>
+    <component>
+      <role>org.codehaus.modello.plugin.ModelloGenerator</role>
+      <role-hint>xdoc</role-hint>
+      <implementation>org.codehaus.modello.generator.xml.xdoc.XdocGenerator</implementation>
+    </component>
+  </components>
+</component-set>
