@@ -95,6 +95,11 @@ public class ModelBuilder
         xstream.registerConverter( fieldConverter );
     }
 
+    public XStream getXStream()
+    {
+        return xstream;
+    }
+
     public Model getModel( File modelFile )
         throws ModelloException, ModelValidationException
     {
@@ -127,10 +132,12 @@ public class ModelBuilder
 
             MetaData metaData = plugin.getModelMetaData( objectModel, classData );
 
-            if ( metaData != null )
+            if ( metaData == null )
             {
-                objectModel.addMetaData( metaData );
+                throw new ModelloException( "A meta data plugin must not return null." );
             }
+
+            objectModel.addMetaData( metaData );
         }
 
         for( Iterator classes = objectModel.getClasses().iterator(); classes.hasNext(); )
@@ -145,10 +152,12 @@ public class ModelBuilder
 
                 MetaData metaData = plugin.getClassMetaData( clazz, classData );
 
-                if ( metaData != null )
+                if ( metaData == null )
                 {
-                    clazz.addMetaData( metaData );
+                    throw new ModelloException( "A meta data plugin must not return null." );
                 }
+
+                clazz.addMetaData( metaData );
             }
 
             for( Iterator fields = clazz.getFields().iterator(); fields.hasNext(); )
@@ -162,6 +171,11 @@ public class ModelBuilder
                     MetaDataPlugin plugin = (MetaDataPlugin) plugins.next();
 
                     MetaData metaData = plugin.getFieldMetaData( field, fieldData );
+
+                    if ( metaData == null )
+                    {
+                        throw new ModelloException( "A meta data plugin must not return null." );
+                    }
 
                     field.addMetaData( metaData );
                 }

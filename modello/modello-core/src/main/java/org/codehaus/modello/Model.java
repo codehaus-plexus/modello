@@ -1,11 +1,10 @@
 package org.codehaus.modello;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
@@ -17,11 +16,9 @@ public class Model
 {
     private String id;
 
-    private List classes;
+    private List classes = new ArrayList();
 
-    private Set classNames;
-
-    private Map classMap;
+    private transient Map classMap = new HashMap();
 
     private String packageName;
 
@@ -29,9 +26,6 @@ public class Model
 
     public Model()
     {
-        classNames = new HashSet();
-
-        classMap = new HashMap();
     }
 
     public String getId()
@@ -44,19 +38,9 @@ public class Model
         return classes;
     }
 
-    public Set getClassNames()
-    {
-        return classNames;
-    }
-
     public String getRoot()
     {
         return root;
-    }
-
-    public ModelClass getClass( String type )
-    {
-        return (ModelClass) classMap.get( type );
     }
 
     public String getPackageName()
@@ -64,13 +48,23 @@ public class Model
         return packageName;
     }
 
+    public ModelClass getClass( String type )
+    {
+        return (ModelClass) classMap.get( type );
+    }
+
+    public void addClass( ModelClass modelClass )
+    {
+        getClasses().add( modelClass );
+
+        classMap.put( modelClass.getName(), modelClass );
+    }
+
     public void initialize()
     {
         for ( Iterator i = classes.iterator(); i.hasNext(); )
         {
             ModelClass modelClass = (ModelClass) i.next();
-
-            classNames.add( modelClass.getName() );
 
             classMap.put( modelClass.getName(), modelClass );
 

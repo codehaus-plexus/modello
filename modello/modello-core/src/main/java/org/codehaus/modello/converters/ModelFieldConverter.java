@@ -49,7 +49,16 @@ public class ModelFieldConverter
 
     public void marshal( Object object, HierarchicalStreamWriter writer, MarshallingContext context )
     {
-        throw new ModelloRuntimeException( "Not implemented" );
+        if ( !(object instanceof ModelField ) )
+        {
+            throw new ModelloRuntimeException( "This converter can only convert ModelField's." );
+        }
+
+        ModelField field = (ModelField) object;
+
+//        XmlMetaData metaData = field.getMetaData( XmlMetaData.ID );
+
+//        writer.addAttribute( );
     }
 
     public Object unmarshal( HierarchicalStreamReader reader, UnmarshallingContext context )
