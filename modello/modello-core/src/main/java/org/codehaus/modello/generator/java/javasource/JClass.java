@@ -54,6 +54,9 @@ package org.codehaus.modello.generator.java.javasource;
 
 import java.util.Enumeration;
 import java.util.Vector;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * A representation of the Java Source code for a Java Class. This is
@@ -775,19 +778,21 @@ public class JClass extends JStructure
         }
 
         jsw.unindent();
-        if ( sourceCode != null )
+
+        for ( Iterator iterator = sourceCodeEntries.iterator(); iterator.hasNext(); )
         {
-            jsw.write( sourceCode );
+            jsw.write( (String) iterator.next() );
         }
+
         jsw.writeln( '}' );
         jsw.flush();
     } //-- printSource
 
-    private String sourceCode;
+    private List sourceCodeEntries = new ArrayList();
 
-    public void setSourceCode( String sourceCode )
+    public void addSourceCode( String sourceCode )
     {
-        this.sourceCode = sourceCode;
+        sourceCodeEntries.add( sourceCode );
     }
 
     /**
