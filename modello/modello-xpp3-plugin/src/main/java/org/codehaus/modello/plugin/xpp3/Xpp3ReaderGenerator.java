@@ -105,6 +105,8 @@ public class Xpp3ReaderGenerator
 
         jClass.setPackageName( packageName );
 
+        jClass.addImport( "org.codehaus.plexus.util.xml.*" );
+
         jClass.addImport( "org.codehaus.plexus.util.xml.pull.*" );
 
         jClass.addImport( "java.io.Reader" );
@@ -690,6 +692,15 @@ public class Xpp3ReaderGenerator
         {
             sc.add( objectName + "." + setterName + "( " + parserGetter + " );" );
         }
+        else if ( "DOM".equals( type ) )
+        {
+            sc.add( objectName + "." + setterName + "( Xpp3DomBuilder.build( parser ) );" );
+        }
+        else
+        {
+            throw new IllegalArgumentException( "Unknown type: " + type );
+        }
+        // TODO: date, Boolean?
     }
 
     private void writeParserInitialization( JSourceCode sc )

@@ -22,13 +22,6 @@ package org.codehaus.modello.plugin.java;
  * SOFTWARE.
  */
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.Iterator;
-import java.util.Properties;
-
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.generator.java.javasource.JClass;
 import org.codehaus.modello.generator.java.javasource.JField;
@@ -46,6 +39,13 @@ import org.codehaus.modello.model.ModelDefault;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.ModelInterface;
 import org.codehaus.modello.plugin.AbstractModelloGenerator;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.Iterator;
+import java.util.Properties;
 
 /**
  * @author <a href="mailto:jason@modello.org">Jason van Zyl </a>
@@ -267,6 +267,12 @@ public class JavaModelloGenerator
         else if ( modelField.getType().equals( "long" ) )
         {
             type = JType.Long;
+        }
+        else if ( modelField.getType().equals( "DOM" ) )
+        {
+            // TODO: maybe DOM is not how to specify it in the model, but just Object and markup Xpp3Dom for the Xpp3Reader?
+            //   not usre how we'll treat it for the other sources, eg sql.
+            type = new JClass( "Object" );
         }
         else
         {
