@@ -26,13 +26,13 @@ import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import org.codehaus.plexus.compiler.Compiler;
 import org.codehaus.plexus.compiler.CompilerError;
-import org.codehaus.plexus.compiler.javac.IsolatedClassLoader;
 import org.codehaus.plexus.compiler.javac.JavacCompiler;
 
 /**
@@ -48,7 +48,7 @@ public abstract class ModelloGeneratorTest
 
     private File mavenRepoLocal;
 
-    private IsolatedClassLoader classLoader = new IsolatedClassLoader();
+    private List urls = new ArrayList();
 
     protected ModelloGeneratorTest( String name )
     {
@@ -120,18 +120,6 @@ public abstract class ModelloGeneratorTest
 
         List messages = compiler.compile( classPathElements, sourceDirectories, destinationDirectory.getAbsolutePath() );
 
-        if ( false )
-        {
-            URL[] urls = classLoader.getURLs();
-
-            for ( int i = 0; i < urls.length; i++ )
-            {
-                URL url = urls[i];
-
-                System.out.println( url );
-            }
-        }
-
         for ( Iterator it = messages.iterator(); it.hasNext(); )
         {
             CompilerError message = (CompilerError) it.next();
@@ -152,9 +140,16 @@ public abstract class ModelloGeneratorTest
 
         addClassPathFile( new File( getTestPath( "target/test-classes" ) ) );
 
+        URLClassLoader classLoader = URLClassLoader.newInstance( (URL[]) urls.toArray( new URL[ urls.size() ] ), Thread.currentThread().getContextClassLoader() );
+
         Class clazz = classLoader.loadClass( className );
 
         Method verify = clazz.getMethod( "verify", new Class[0] );
+
+        if ( true )
+        {
+            printClasspath( classLoader );
+        }
 
         try
         {
@@ -166,17 +161,23 @@ public abstract class ModelloGeneratorTest
         }
     }
 
-    protected ClassLoader getTestClassLoader()
-        throws Exception
-    {
-        return classLoader;
-    }
-
     protected void addClassPathFile( File file )
         throws Exception
     {
         assertTrue( "File doesn't exists: " + file.getAbsolutePath(), file.exists() );
 
-        classLoader.addURL( file.toURL() );
+        urls.add( file.toURL() );
+    }
+
+    protected void printClasspath( URLClassLoader classLoader )
+    {
+        URL[] urls = classLoader.getURLs();
+
+        for ( int i = 0; i < urls.length; i++ )
+        {
+            URL url = urls[i];
+
+            System.out.println( url );
+        }
     }
 }
