@@ -22,11 +22,8 @@ package org.codehaus.modello;
  * SOFTWARE.
  */
 
-import java.io.StringReader;
+import java.io.FileReader;
 import java.util.Properties;
-
-import org.codehaus.plexus.util.FileUtils;
-import org.codehaus.plexus.util.StringUtils;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -55,13 +52,7 @@ public class ModelloCli
 
 //        modello.initialize();
 
-        String fileString = FileUtils.fileRead(modelFile);
-
-        fileString = StringUtils.replace( fileString, "<description>", "<description>" );
-
-        fileString = StringUtils.replace( fileString, "</description>", "</description>" );
-
-        modello.generate( new StringReader( fileString ), outputType, parameters );
+        modello.generate( new FileReader( modelFile ), outputType, parameters );
 //        modello.work( new File( modelFile ), mode, new File( outputDirectory ), modelVersion, packageWithVersion );
     }
 
