@@ -276,13 +276,21 @@ public class JavaModelloGenerator
 
     private void createField( JClass jClass, ModelField modelField )
     {
+        JavaFieldMetadata javaFieldMetadata = (JavaFieldMetadata) modelField.getMetadata( JavaFieldMetadata.ID );
+
         JField field = createField( modelField, modelField.getModelClass() );
 
         jClass.addField( field );
 
-        jClass.addMethod( createGetter( field ) );
+        if ( javaFieldMetadata.isGetter() )
+        {
+            jClass.addMethod( createGetter( field ) );
+        }
 
-        jClass.addMethod( createSetter( field ) );
+        if ( javaFieldMetadata.isSetter() )
+        {
+            jClass.addMethod( createSetter( field ) );
+        }
     }
 
     private JMethod createGetter( JField field )
@@ -312,6 +320,8 @@ public class JavaModelloGenerator
     private void createAssociation( JClass jClass, ModelAssociation modelAssociation )
         throws ModelloException
     {
+        JavaFieldMetadata javaFieldMetadata = (JavaFieldMetadata)modelAssociation.getMetadata( JavaFieldMetadata.ID );
+
         if ( ModelAssociation.MANY_MULTIPLICITY.equals( modelAssociation.getMultiplicity() ) )
         {
             JType type = new JClass( modelAssociation.getType() );
@@ -327,11 +337,20 @@ public class JavaModelloGenerator
 
             jClass.addField( jField );
 
-            jClass.addMethod( createGetter( jField ) );
+            if ( javaFieldMetadata.isGetter() )
+            {
+                jClass.addMethod( createGetter( jField ) );
+            }
 
-            jClass.addMethod( createSetter( jField ) );
+            if ( javaFieldMetadata.isSetter() )
+            {
+                jClass.addMethod( createSetter( jField ) );
+            }
 
-            createAdder( jClass, modelAssociation );
+            if ( javaFieldMetadata.isAdder() )
+            {
+                createAdder( jClass, modelAssociation );
+            }
         }
         else
         {
