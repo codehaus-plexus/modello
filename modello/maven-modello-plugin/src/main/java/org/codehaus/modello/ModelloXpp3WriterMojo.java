@@ -23,48 +23,40 @@ package org.codehaus.mojo.modello;
  */
 
 /**
- * @goal xpp3-writer
- *
- * @description Creates XPP3 writer from the model.
- *
- * @parameter
- *  name="outputDirectory"
- *  type="java.lang.String"
- *  required="true"
- *  validator=""
- *  expression="#basedir/target/generated-sources"
- *  description=""
- * @parameter
- *  name="model"
- *  type="java.lang.String"
- *  required="required"
- *  validator=""
- *  expression="#model"
- *  description="The modello model file."
- * @parameter
- *  name="version"
- *  type="java.lang.String"
- *  required="required"
- *  validator=""
- *  expression="#version"
- *  description="The modello model version to use."
- * @parameter
- *  name="packageWithVersion"
- *  type="java.lang.Boolean"
- *  required="required"
- *  validator=""
- *  expression="false"
- *  description="True if the generated package names should include the version."
- * @parameter
- *  name="modelloCore"
- *  type=""
- *  required="required"
- *  validator=""
- *  expression="#component.org.codehaus.modello.core.ModelloCore"
- *  description="Modello component"
- *
  * @author <a href="mailto:brett@apache.org">Brett Porter</a>
  * @version $Id$
+ * @goal xpp3-writer
+ * @description Creates XPP3 writer from the model.
+ * @parameter name="outputDirectory"
+ * type="java.lang.String"
+ * required="true"
+ * validator=""
+ * expression="#basedir/target/generated-sources"
+ * description=""
+ * @parameter name="model"
+ * type="java.lang.String"
+ * required="required"
+ * validator=""
+ * expression="#model"
+ * description="The modello model file."
+ * @parameter name="version"
+ * type="java.lang.String"
+ * required="required"
+ * validator=""
+ * expression="#version"
+ * description="The modello model version to use."
+ * @parameter name="packageWithVersion"
+ * type="java.lang.Boolean"
+ * required="required"
+ * validator=""
+ * expression="false"
+ * description="True if the generated package names should include the version."
+ * @parameter name="modelloCore"
+ * type=""
+ * required="required"
+ * validator=""
+ * expression="#component.org.codehaus.modello.core.ModelloCore"
+ * description="Modello component"
  */
 public class ModelloXpp3WriterMojo
     extends AbstractModelloGeneratorMojo
