@@ -1,3 +1,25 @@
+/*
+ * Copyright (c) 2004, Codehaus.org
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+ * of the Software, and to permit persons to whom the Software is furnished to do
+ * so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 import java.util.*;
 import org.apache.maven.model.*;
 import org.codehaus.modello.generator.*;
@@ -19,11 +41,19 @@ public class JavaVerifier
 
         String url = "url";
 
-        scm.setConnection( connection );
+        try
+        {
+            scm.setConnection( connection );
 
-        scm.setDeveloperConnection( developerConnection );
+            scm.setDeveloperConnection( developerConnection );
 
-        scm.setUrl( url );
+            scm.setUrl( url );
+        }
+        catch( Exception e)
+        {
+            e.printStackTrace();
+            fail( e.getMessage() );
+        }
 
         assertEquals( "Scm.connection", connection, scm.getConnection() );
 
@@ -52,7 +82,15 @@ public class JavaVerifier
 
         assertTrue( lists instanceof ArrayList );
 
-        model.setMailingLists( expected );
+        try
+        {
+            model.setMailingLists( expected );
+        }
+        catch( Exception e)
+        {
+            e.printStackTrace();
+            fail( e.getMessage() );
+        }
 
         List actual = model.getMailingLists();
 
@@ -89,13 +127,21 @@ public class JavaVerifier
     {
         MailingList mailingList = new MailingList();
 
-        mailingList.setName( "Mailing list #" + i );
+        try
+        {
+            mailingList.setName( "Mailing list #" + i );
 
-        mailingList.setSubscribe( "Subscribe #" + i );
+            mailingList.setSubscribe( "Subscribe #" + i );
 
-        mailingList.setUnsubscribe( "Unsubscribe #" + i );
+            mailingList.setUnsubscribe( "Unsubscribe #" + i );
 
-        mailingList.setArchive( "Archive #" + i );
+            mailingList.setArchive( "Archive #" + i );
+        }
+        catch( Exception e)
+        {
+            e.printStackTrace();
+            fail( e.getMessage() );
+        }
 
         return mailingList;
     }

@@ -180,4 +180,22 @@ public abstract class BaseElement
     {
         return string == null || string.trim().length() == 0;
     }
+
+    public boolean equals( BaseElement baseElem )
+    {
+        if ( baseElem == null )
+        {
+            return false;
+        }
+
+        if ( name.equals( baseElem.getName() )
+            && versionRange.toString().equals( baseElem.getVersionRange().toString() ) )
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 }
