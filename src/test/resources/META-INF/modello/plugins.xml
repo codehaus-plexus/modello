@@ -1,8 +1,0 @@
-<plugin-set>
-  <plugins>
-    <plugin>
-      <id>test</id>
-      <implementation>org.codehaus.modello.plugin.FooTestPlugin</implementation>
-    </plugin>
-  </plugins>
-</plugin-set>
