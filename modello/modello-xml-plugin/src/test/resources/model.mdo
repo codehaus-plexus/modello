@@ -9,7 +9,7 @@
       <name>Model</name>
       <version>3.0.0+</version>
       <fields>
-        <field>
+        <field attribute="true">
           <name>extend</name>
           <version>3.0.0+</version>
           <description>
@@ -18,11 +18,13 @@
             The path may be absolute, or relative to the current project.xml file.
           </description>
           <type>String</type>
+<!--
           <metaData>
             <xml>
               <attribute>true</attribute>
             </xml>
           </metaData>
+-->
         </field>
         <field>
           <name>parent</name>

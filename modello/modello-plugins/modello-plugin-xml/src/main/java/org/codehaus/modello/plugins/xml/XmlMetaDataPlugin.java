@@ -4,34 +4,53 @@ package org.codehaus.modello.plugins.xml;
  * LICENSE
  */
 
-import com.thoughtworks.xstream.XStream;
+import java.util.Map;
 
-import java.util.Iterator;
-
-import org.codehaus.modello.AbstractLogEnabled;
 import org.codehaus.modello.Model;
 import org.codehaus.modello.ModelClass;
 import org.codehaus.modello.ModelField;
-import org.codehaus.modello.ModelloRuntimeException;
-import org.codehaus.modello.ModelloPlugin;
+import org.codehaus.modello.metadata.AbstractMetaDataPlugin;
+import org.codehaus.modello.metadata.MetaData;
+import org.codehaus.modello.metadata.MetaDataPlugin;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
-public class XmlModelloPlugin
-    extends AbstractLogEnabled
-    implements ModelloPlugin
+public class XmlMetaDataPlugin
+    extends AbstractMetaDataPlugin
+    implements MetaDataPlugin
 {
-    public String getId()
+    public MetaData getModelMetaData( Model model, Map data )
     {
-        return "xml";
+        return null;
     }
 
+    public MetaData getClassMetaData( ModelClass clazz, Map data )
+    {
+        return null;
+    }
+
+    public MetaData getFieldMetaData( ModelField field, Map data )
+    {
+        XmlMetaData metaData = new XmlMetaData();
+
+        String attribute = (String) data.get( "attribute" );
+
+        if ( attribute == null )
+        {
+            return null;
+        }
+
+        metaData.setAttribute( Boolean.valueOf( attribute ).booleanValue() );
+
+        return metaData;
+    }
+/*
     public Class initializeXStream( XStream xstream )
         throws ModelloRuntimeException
     {
-        xstream.alias( "xml", XmlMetaData.class );
+        xstream.alias( ID, XmlMetaData.class );
 
         return XmlMetaData.class;
     }
@@ -65,11 +84,17 @@ public class XmlModelloPlugin
     {
         getLogger().info( "Processing field: " + modelField.getName() );
 
-        XmlMetaData meta = (XmlMetaData) modelField.getMetaData( "xml" );
+        if ( !modelField.hasMetaData( ID ) )
+        {
+            return;
+        }
+
+        XmlMetaData meta = (XmlMetaData) modelField.getMetaData( ID );
 
         if ( meta != null )
         {
             getLogger().info( "attribute: " + meta.isAttribute() );
         }
     }
+*/
 }
