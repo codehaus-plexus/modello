@@ -11,14 +11,14 @@ import org.codehaus.modello.ModelClass;
 import org.codehaus.modello.ModelField;
 import org.codehaus.modello.Modello;
 import org.codehaus.modello.ModelloRuntimeException;
-import org.codehaus.modello.ModelloTest;
+import org.codehaus.modello.ModelloGeneratorTest;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l </a>
  * @version $Id$
  */
 public class XmlModelloPluginTest
-    extends ModelloTest
+    extends ModelloGeneratorTest
 {
     public XmlModelloPluginTest()
     {
@@ -34,7 +34,7 @@ public class XmlModelloPluginTest
 
         List classes = model.getClasses();
 
-        assertEquals( 1, classes.size() );
+        assertEquals( 2, classes.size() );
 
         ModelClass clazz = (ModelClass) classes.get( 0 );
 
