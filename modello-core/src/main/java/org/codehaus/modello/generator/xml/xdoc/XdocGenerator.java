@@ -1,15 +1,18 @@
 package org.codehaus.modello.generator.xml.xdoc;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Iterator;
+
 import org.codehaus.modello.Model;
 import org.codehaus.modello.ModelClass;
 import org.codehaus.modello.ModelField;
+import org.codehaus.modello.ModelloException;
+import org.codehaus.modello.ModelloRuntimeException;
 import org.codehaus.modello.generator.AbstractGenerator;
 import org.codehaus.modello.generator.xml.DefaultXMLWriter;
 import org.codehaus.modello.generator.xml.XMLWriter;
-
-import java.io.File;
-import java.io.FileWriter;
-import java.util.Iterator;
 
 /**
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
@@ -24,7 +27,20 @@ public class XdocGenerator
     }
 
     public void generate()
-        throws Exception
+        throws ModelloException
+    {
+        try
+        {
+            generateXdoc();
+        }
+        catch( IOException ex )
+        {
+            throw new ModelloException( "Exception while generating XDoc.", ex );
+        }
+    }
+
+    private void generateXdoc()
+        throws ModelloException, IOException
     {
         Model objectModel = getModel();
 
@@ -171,6 +187,7 @@ public class XdocGenerator
     }
 
     private String getDescriptorWithLink( Model objectModel )
+        throws ModelloRuntimeException
     {
         StringBuffer sb = new StringBuffer();
 
@@ -183,6 +200,7 @@ public class XdocGenerator
     // the new xdoc plugin to handle the escaping of XML that that we don't have to do it in
     // source code.
     private String getModelClassDescriptor( Model objectModel, ModelClass modelClass, int depth )
+        throws ModelloRuntimeException
     {
         StringBuffer sb = new StringBuffer();
 

@@ -1,21 +1,13 @@
 package org.codehaus.modello.generator;
 
 import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.alias.DefaultClassMapper;
-import com.thoughtworks.xstream.alias.DefaultNameMapper;
-import com.thoughtworks.xstream.objecttree.reflection.JavaReflectionObjectFactory;
-import com.thoughtworks.xstream.xml.xpp3.Xpp3Dom;
-import com.thoughtworks.xstream.xml.xpp3.Xpp3DomBuilder;
-import com.thoughtworks.xstream.xml.xpp3.Xpp3DomXMLReader;
-import com.thoughtworks.xstream.xml.xpp3.Xpp3DomXMLReaderDriver;
-import org.codehaus.modello.CodeSegment;
-import org.codehaus.modello.Model;
-import org.codehaus.modello.ModelClass;
-import org.codehaus.modello.ModelField;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.StringReader;
+import org.codehaus.modello.ConsoleLogger;
+import org.codehaus.modello.Model;
+import org.codehaus.modello.ModelBuilder;
+import org.codehaus.modello.ModelloException;
+import org.codehaus.modello.ModelloRuntimeException;
+import org.codehaus.modello.PluginManager;
 
 // Possibly a general package extension for things like reader/writer
 
@@ -35,6 +27,8 @@ public abstract class AbstractGenerator
 
     private boolean packageWithVersion;
 
+    private Model objectModel;
+
     protected AbstractGenerator( String model, String outputDirectory, String modelVersion, boolean packageWithVersion )
     {
         this.model = model;
@@ -44,32 +38,29 @@ public abstract class AbstractGenerator
         this.modelVersion = new Version( modelVersion, "model" );
 
         this.packageWithVersion = packageWithVersion;
-
-        xstream = new XStream( new JavaReflectionObjectFactory(), new DefaultClassMapper( new DefaultNameMapper() ), new Xpp3DomXMLReaderDriver() );
-
-        xstream.alias( "model", Model.class );
-
-        xstream.alias( "class", ModelClass.class );
-
-        xstream.alias( "field", ModelField.class );
-
-        xstream.alias( "codeSegment", CodeSegment.class );
     }
 
     protected Model getModel()
-        throws Exception
+        throws ModelloException
     {
-        String modelContents = fileRead( model );
+        if ( objectModel != null )
+        {
+            return objectModel;
+        }
 
-        modelContents = replace( modelContents, "<description>", "<description><![CDATA[" );
+        PluginManager pluginManager = new PluginManager();
 
-        modelContents = replace( modelContents, "</description>", "]]></description>" );
+        ModelBuilder modelBuilder = new ModelBuilder();
 
-        Xpp3Dom dom = Xpp3DomBuilder.build( new StringReader( modelContents ) );
+        pluginManager.setLogger( new ConsoleLogger() );
 
-        Model objectModel = (Model) xstream.fromXML( new Xpp3DomXMLReader( dom ) );
+        modelBuilder.setLogger( new ConsoleLogger() );
 
-        objectModel.initialize();
+        pluginManager.initialize();
+
+        modelBuilder.initialize( pluginManager );
+
+        objectModel = modelBuilder.getModel( model );
 
         return objectModel;
     }
@@ -93,6 +84,7 @@ public abstract class AbstractGenerator
         throws Exception;
 
     protected boolean outputElement( String elementVersion, String elementName )
+        throws ModelloRuntimeException
     {
         if ( elementVersion == null )
         {
@@ -118,7 +110,7 @@ public abstract class AbstractGenerator
         return false;
     }
 
-    public class Version
+    public static class Version
     {
         short major;
 
@@ -134,39 +126,53 @@ public abstract class AbstractGenerator
 
         String modifier;
 
-        Version( String version, String elementName )
+        public Version( String version, String elementName )
         {
+            if ( version == null )
+            {
+                throw new ModelloRuntimeException( "Syntax error in the version field: Missing. Element name: " + elementName );
+            }
+
+            version = version.trim();
+
+            if ( version.length() < 5 )
+            {
+                throw new ModelloRuntimeException( "Syntax error in the <version> field: The field must be at least 5 characters long. Was: '" + version + "'. Element name: " + elementName );
+            }
+
             majorString = version.substring( 0, 1 );
 
             minorString = version.substring( 2, 3 );
 
             microString = version.substring( 4, 5 );
 
-            if ( version != null && version.trim().length() > 0 )
+            try
             {
-                try
-                {
-                    major = Short.parseShort( majorString );
+                major = Short.parseShort( majorString );
 
-                    minor = Short.parseShort( minorString );
+                minor = Short.parseShort( minorString );
 
-                    micro = Short.parseShort( microString );
-                }
-                catch ( NumberFormatException e )
-                {
-                    System.err.println( elementName + " version is invalid!" );
-                }
+                micro = Short.parseShort( microString );
+            }
+            catch ( NumberFormatException e )
+            {
+                throw new ModelloRuntimeException( elementName + " version is invalid!" );
+            }
 
-                if ( version.length() >= 6 )
-                {
-                    modifier = version.substring( 5 );
-                }
+            if ( version.length() >= 6 )
+            {
+                modifier = version.substring( 5 );
             }
         }
 
         public String toString()
         {
             return "v" + majorString + minorString + microString;
+        }
+
+        public String toString( String prefix)
+        {
+            return prefix + majorString + minorString + microString;
         }
     }
 
@@ -242,52 +248,6 @@ public abstract class AbstractGenerator
         }
 
         return name;
-    }
-
-    protected String fileRead( String fileName ) throws IOException
-    {
-        StringBuffer buf = new StringBuffer();
-
-        FileInputStream in = new FileInputStream( fileName );
-
-        int count;
-        byte[] b = new byte[512];
-        while ( ( count = in.read( b ) ) > 0 )  // blocking read
-        {
-            buf.append( new String( b, 0, count ) );
-        }
-
-        in.close();
-
-        return buf.toString();
-    }
-
-    public static String replace( String text, String repl, String with )
-    {
-        return replace( text, repl, with, -1 );
-    }
-
-    public static String replace( String text, String repl, String with, int max )
-    {
-        if ( text == null || repl == null || with == null || repl.length() == 0 )
-        {
-            return text;
-        }
-
-        StringBuffer buf = new StringBuffer( text.length() );
-        int start = 0, end = 0;
-        while ( ( end = text.indexOf( repl, start ) ) != -1 )
-        {
-            buf.append( text.substring( start, end ) ).append( with );
-            start = end + repl.length();
-
-            if ( --max == 0 )
-            {
-                break;
-            }
-        }
-        buf.append( text.substring( start ) );
-        return buf.toString();
     }
 
     public static String uncapitalise( String str )

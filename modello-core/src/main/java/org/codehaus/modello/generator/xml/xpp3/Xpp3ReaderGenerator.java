@@ -2,12 +2,14 @@ package org.codehaus.modello.generator.xml.xpp3;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.List;
 
 import org.codehaus.modello.Model;
 import org.codehaus.modello.ModelClass;
 import org.codehaus.modello.ModelField;
-import org.codehaus.modello.generator.java.JavaGenerator;
+import org.codehaus.modello.ModelloException;
+import org.codehaus.modello.ModelloRuntimeException;
 import org.codehaus.modello.generator.java.javasource.JClass;
 import org.codehaus.modello.generator.java.javasource.JMethod;
 import org.codehaus.modello.generator.java.javasource.JParameter;
@@ -19,15 +21,29 @@ import org.codehaus.modello.generator.java.javasource.JSourceWriter;
  * @version $Id$
  */
 public class Xpp3ReaderGenerator
-    extends JavaGenerator
+    extends AbstractXpp3Generator
 {
     public Xpp3ReaderGenerator( String model, String outputDirectory, String modelVersion, boolean packageWithVersion )
+        throws ModelloRuntimeException
     {
         super( model, outputDirectory, modelVersion, packageWithVersion );
     }
 
     public void generate()
-        throws Exception
+        throws ModelloException
+    {
+        try
+        {
+            generateXpp3Reader();
+        }
+        catch( IOException ex )
+        {
+            throw new ModelloException( "Exception while generating XDoc.", ex );
+        }
+    }
+
+    private void generateXpp3Reader()
+        throws ModelloException, IOException
     {
         Model objectModel = getModel();
 
@@ -35,7 +51,7 @@ public class Xpp3ReaderGenerator
 
         String directory = packageName.replace( '.', '/' );
 
-        String unmarshallerName = objectModel.getName() + "Xpp3Reader";
+        String unmarshallerName = getFileName( "Xpp3Reader" );
 
         File f = new File( new File( getOutputDirectory(), directory ), unmarshallerName + ".java" );
 
@@ -121,7 +137,7 @@ public class Xpp3ReaderGenerator
     }
 
     private void writeClassParsing( ModelClass modelClass, JSourceCode sc, Model objectModel, boolean withLoop )
-        throws Exception
+        throws IOException
     {
         if ( outputElement( modelClass.getVersion(), modelClass.getName() ) )
         {
@@ -175,7 +191,7 @@ public class Xpp3ReaderGenerator
     }
 
     private void writeFieldParsing( ModelClass modelClass, ModelField field, JSourceCode sc, String statement, Model objectModel )
-        throws Exception
+        throws IOException
     {
         String className = capitalise( field.getName() );
 
@@ -219,7 +235,7 @@ public class Xpp3ReaderGenerator
     }
 
     private void writeCollectionParsing( String modelClassName, String fieldName, JSourceCode sc, Model objectModel )
-        throws Exception
+        throws IOException
     {
         // We have a collection but we need to know what is in the collection.
         String collectionClass = capitalise( singular( fieldName ) );
@@ -282,7 +298,6 @@ public class Xpp3ReaderGenerator
 
         sc.add( "}" );
     }
-
 
     private void writeCatchAll( JSourceCode sc )
     {
