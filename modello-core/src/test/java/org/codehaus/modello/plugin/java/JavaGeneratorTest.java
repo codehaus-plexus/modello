@@ -73,7 +73,7 @@ public class JavaGeneratorTest
 
         parameters.setProperty( ModelloParameterConstants.VERSION, "4.0.0" );
 
-        Model model = modello.loadModel( new FileReader( getTestPath( modelFile ) ) );
+        Model model = loadModel( modelFile );
 
         modello.generate( model, "java", parameters );
 
