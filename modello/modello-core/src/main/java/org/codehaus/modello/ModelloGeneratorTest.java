@@ -62,7 +62,11 @@ public abstract class ModelloGeneratorTest
 
         FileUtils.deleteDirectory( getTestPath( "target/" + getName() ) );
 
-        mavenRepoLocal = new File( System.getProperty( "maven.repo.local" ) );
+        String repo = System.getProperty( "maven.repo.local" );
+
+        assertNotNull( "Missing system property: maven.repo.local", repo );
+
+        mavenRepoLocal = new File( repo );
 
         addDependency( "junit", "junit", "3.8.1" );
 
@@ -140,7 +144,7 @@ public abstract class ModelloGeneratorTest
 
         Method verify = clazz.getMethod( "verify", new Class[0] );
 
-        if ( true )
+        if ( false )
         {
             printClasspath( classLoader );
         }
