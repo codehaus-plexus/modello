@@ -120,7 +120,7 @@ public class Xpp3WriterGenerator
 
         jClass.addField( new JField( new JClass( "String" ), "NAMESPACE" ) );
 
-        addModelImports( jClass );
+        addModelImports( jClass, null );
 
         String root = objectModel.getRoot( getGeneratedVersion() );
 

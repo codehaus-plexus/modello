@@ -36,14 +36,14 @@ import org.codehaus.modello.model.Model;
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
-public class JavaGeneratorTest
+public class AssociationGeneratorTest
     extends ModelloGeneratorTest
 {
-    private String modelFile = "src/test/resources/models/maven.mdo";
+    private String modelFile = "src/test/resources/models/oneToManyAssociation.mdo";
 
-    public JavaGeneratorTest()
+    public AssociationGeneratorTest()
     {
-        super( "java" );
+        super( "oneToManyAssociation" );
     }
 
     private File generatedSources;
@@ -79,6 +79,6 @@ public class JavaGeneratorTest
 
         compile( generatedSources, classes );
 
-        verify( "JavaVerifier", "java" );
+        verify( "OneToManyAssociationVerifier", "java" );
     }
 }

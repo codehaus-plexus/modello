@@ -39,6 +39,7 @@ import org.codehaus.plexus.logging.AbstractLogEnabled;
 
 /**
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
+ * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
  * @version $Id$
  */
 public abstract class AbstractModelloGenerator
@@ -182,28 +183,21 @@ public abstract class AbstractModelloGenerator
             .toString();
     }
 
-/*    protected String getBasePackageName()
-    {
-        StringBuffer sb = new StringBuffer();
-
-        sb.append( model.getPackageName() );
-
-        if ( isPackageWithVersion() )
-        {
-            sb.append( "." );
-
-            sb.append( getGeneratedVersion().toString() );
-        }
-
-        return sb.toString();
-    }
-*/
-    protected void addModelImports( JClass jClass )
+    protected void addModelImports( JClass jClass, BaseElement baseElem )
         throws ModelloException
     {
         for ( Iterator i = getModel().getInterfaces( getGeneratedVersion() ).iterator(); i.hasNext(); )
         {
             ModelInterface modelInterface = (ModelInterface) i.next();
+
+            if ( baseElem != null && baseElem instanceof ModelInterface )
+            {
+                if ( modelInterface.equals( (ModelInterface) baseElem )
+                    || modelInterface.getPackageName( isPackageWithVersion(), getGeneratedVersion() ).equals( ( (ModelInterface) baseElem).getPackageName( isPackageWithVersion(), getGeneratedVersion() ) ) )
+                {
+                    continue;
+                }
+            }
 
             if ( isPackageWithVersion() )
             {
@@ -218,6 +212,15 @@ public abstract class AbstractModelloGenerator
         for ( Iterator i = getModel().getClasses( getGeneratedVersion() ).iterator(); i.hasNext(); )
         {
             ModelClass modelClass = (ModelClass) i.next();
+
+            if ( baseElem != null && baseElem instanceof ModelClass )
+            {
+                if ( modelClass.equals( (ModelClass) baseElem )
+                    || modelClass.getPackageName( isPackageWithVersion(), getGeneratedVersion() ).equals( ( (ModelClass) baseElem).getPackageName( isPackageWithVersion(), getGeneratedVersion() ) ) )
+                {
+                    continue;
+                }
+            }
 
             if ( isPackageWithVersion() )
             {

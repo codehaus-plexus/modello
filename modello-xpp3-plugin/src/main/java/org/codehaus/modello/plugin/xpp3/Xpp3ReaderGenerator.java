@@ -117,7 +117,7 @@ public class Xpp3ReaderGenerator
 
         jClass.addImport( "java.util.List" );
 
-        addModelImports( jClass );
+        addModelImports( jClass, null );
 
         // Write the parse method which will do the unmarshalling.
         ModelClass root = objectModel.getClass( objectModel.getRoot( getGeneratedVersion() ), getGeneratedVersion() );

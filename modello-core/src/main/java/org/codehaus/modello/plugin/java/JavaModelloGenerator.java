@@ -36,6 +36,7 @@ import org.codehaus.modello.generator.java.javasource.JField;
 import org.codehaus.modello.generator.java.javasource.JInterface;
 import org.codehaus.modello.generator.java.javasource.JMethod;
 import org.codehaus.modello.generator.java.javasource.JParameter;
+import org.codehaus.modello.generator.java.javasource.JSourceCode;
 import org.codehaus.modello.generator.java.javasource.JSourceWriter;
 import org.codehaus.modello.generator.java.javasource.JType;
 import org.codehaus.modello.model.CodeSegment;
@@ -165,7 +166,7 @@ public class JavaModelloGenerator
 
             jClass.addImport( "java.util.*" );
 
-            addModelImports( jClass );
+            addModelImports( jClass, modelClass );
 
             jClass.setPackageName( packageName );
             
@@ -291,16 +292,16 @@ public class JavaModelloGenerator
 
         if ( javaFieldMetadata.isGetter() )
         {
-            jClass.addMethod( createGetter( field ) );
+            jClass.addMethod( createGetter( field, modelField ) );
         }
 
         if ( javaFieldMetadata.isSetter() )
         {
-            jClass.addMethod( createSetter( field ) );
+            jClass.addMethod( createSetter( field, modelField ) );
         }
     }
 
-    private JMethod createGetter( JField field )
+    private JMethod createGetter( JField field, ModelField modelField )
     {
         String propertyName = capitalise( field.getName() );
 
@@ -311,7 +312,7 @@ public class JavaModelloGenerator
         return getter;
     }
 
-    private JMethod createSetter( JField field )
+    private JMethod createSetter( JField field, ModelField modelField )
     {
         String propertyName = capitalise( field.getName() );
 
@@ -319,7 +320,35 @@ public class JavaModelloGenerator
 
         setter.addParameter( new JParameter( field.getType(), field.getName() ) );
 
-        setter.getSourceCode().add( "this." + field.getName() + " = " + field.getName() + ";" );
+        setter.addException( new JClass( "Exception" ) );
+
+        JSourceCode sc = setter.getSourceCode();
+
+        if ( modelField instanceof ModelAssociation
+            && isBidirectionalAssociation( (ModelAssociation) modelField )
+            && ModelAssociation.ONE_MULTIPLICITY.equals( ( (ModelAssociation) modelField ).getMultiplicity() ) )
+        {
+            ModelAssociation modelAssociation = (ModelAssociation) modelField;
+            sc.add( "if ( this." + field.getName() + " != null )" );
+
+            sc.add( "{" );
+
+            sc.indent();
+
+            sc.add( "this." + field.getName() + ".break" + modelAssociation.getModelClass().getName() + "Association( this );" );
+
+            sc.unindent();
+
+            sc.add( "}" );
+
+            sc.add( "this." + field.getName() + " = " + field.getName() + ";" );
+
+            sc.add( "this." + field.getName() + ".create" + modelAssociation.getModelClass().getName() + "Association( this );" );
+        }
+        else
+        {
+            sc.add( "this." + field.getName() + " = " + field.getName() + ";" );
+        }
 
         return setter;
     }
@@ -346,12 +375,12 @@ public class JavaModelloGenerator
 
             if ( javaFieldMetadata.isGetter() )
             {
-                jClass.addMethod( createGetter( jField ) );
+                jClass.addMethod( createGetter( jField, modelAssociation ) );
             }
 
             if ( javaFieldMetadata.isSetter() )
             {
-                jClass.addMethod( createSetter( jField ) );
+                jClass.addMethod( createSetter( jField, modelAssociation ) );
             }
 
             if ( javaFieldMetadata.isAdder() )
@@ -363,6 +392,95 @@ public class JavaModelloGenerator
         {
             createField( jClass, modelAssociation );
         }
+
+        if ( isBidirectionalAssociation( modelAssociation ) )
+        {
+            JMethod createMethod = new JMethod( null, "create" + modelAssociation.getTo() + "Association" );
+
+            createMethod.addParameter( new JParameter( new JClass( modelAssociation.getTo() ), uncapitalise( modelAssociation.getTo() ) ) );
+
+            createMethod.addException( new JClass( "Exception" ) );
+
+            JSourceCode sc = createMethod.getSourceCode();
+
+            if ( ModelAssociation.ONE_MULTIPLICITY.equals( modelAssociation.getMultiplicity() ) )
+            {
+                sc.add( "if ( this." + modelAssociation.getName() + " != null )" );
+
+                sc.add( "{" );
+
+                sc.indent();
+
+                sc.add( "break" + modelAssociation.getTo() + "Association( this." + modelAssociation.getName() + " );" );
+
+                sc.unindent();
+
+                sc.add( "}" );
+
+                sc.add( "this." + modelAssociation.getName() + " = " + uncapitalise( modelAssociation.getTo() ) + ";" );
+            }
+            else
+            {
+                sc.add( "if ( this." + modelAssociation.getName() + ".contains(" + uncapitalise( modelAssociation.getTo() ) + ") )" );
+
+                sc.add( "{" );
+
+                sc.indent();
+
+                sc.add( "throw new Exception( \"" + uncapitalise( modelAssociation.getTo() ) + " is already assigned.\" );" );
+
+                sc.unindent();
+
+                sc.add( "}" );
+
+                sc.add( "this." + modelAssociation.getName() + ".add( " + uncapitalise( modelAssociation.getTo() ) + " );" );
+            }
+
+            jClass.addMethod( createMethod );
+
+            JMethod breakMethod = new JMethod( null, "break" + modelAssociation.getTo() + "Association" );
+
+            breakMethod.addParameter( new JParameter( new JClass( modelAssociation.getTo() ), uncapitalise( modelAssociation.getTo() ) ) );
+
+            breakMethod.addException( new JClass( "Exception" ) );
+
+            sc = breakMethod.getSourceCode();
+
+            if ( ModelAssociation.ONE_MULTIPLICITY.equals( modelAssociation.getMultiplicity() ) )
+            {
+                sc.add( "if ( this." + modelAssociation.getName() + " != " + uncapitalise( modelAssociation.getTo() ) + " )" );
+
+                sc.add( "{" );
+
+                sc.indent();
+
+                sc.add( "throw new Exception( \"" + uncapitalise( modelAssociation.getTo() ) + " isn't associated.\" );" );
+
+                sc.unindent();
+
+                sc.add( "}" );
+
+                sc.add( "this." + modelAssociation.getName() + " = null;" );
+            }
+            else
+            {
+                sc.add( "if ( ! this." + modelAssociation.getName() + ".contains( " + uncapitalise( modelAssociation.getTo() ) + " ) )" );
+
+                sc.add( "{" );
+
+                sc.indent();
+
+                sc.add( "throw new Exception( \"" + uncapitalise( modelAssociation.getTo() ) + " isn't associated.\" );" );
+
+                sc.unindent();
+
+                sc.add( "}" );
+
+                sc.add( "this." + modelAssociation.getName() + ".remove( " + uncapitalise( modelAssociation.getTo() ) + " );" );
+            }
+
+            jClass.addMethod( breakMethod );
+        }
     }
 
     private void createAdder( JClass jClass, ModelAssociation modelAssociation )
@@ -370,6 +488,8 @@ public class JavaModelloGenerator
         String fieldName = modelAssociation.getName();
 
         String parameterName = uncapitalise( modelAssociation.getTo() );
+
+        boolean bidirectionalAssociation = isBidirectionalAssociation( modelAssociation );
 
         String className;
 
@@ -397,6 +517,8 @@ public class JavaModelloGenerator
 
             adder.addParameter( new JParameter( new JClass( modelAssociation.getTo() ), "value" ) );
 
+            adder.addException( new JClass( "Exception" ) );
+
             adder.getSourceCode().add( "this." + fieldName + ".put( key, value );" );
 
             jClass.addMethod( adder );
@@ -407,9 +529,65 @@ public class JavaModelloGenerator
 
             adder.addParameter( new JParameter( addType, parameterName ) );
 
+            adder.addException( new JClass( "Exception" ) );
+
             adder.getSourceCode().add( "this." + fieldName + ".add( " + parameterName + " );" );
 
+            if ( bidirectionalAssociation )
+            {
+                adder.getSourceCode().add( parameterName + ".create" + modelAssociation.getModelClass().getName() + "Association( this );" );
+            }
+
             jClass.addMethod( adder );
+
+            JMethod remover = new JMethod( null, "remove" + singular( capitalise( fieldName ) ) );
+
+            remover.addParameter( new JParameter( addType, parameterName ) );
+
+            remover.addException( new JClass( "Exception" ) );
+
+            if ( bidirectionalAssociation )
+            {
+                remover.getSourceCode().add( parameterName + ".break" + modelAssociation.getModelClass().getName() + "Association( this );" );
+            }
+
+            remover.getSourceCode().add( "this." + fieldName + ".remove( " + parameterName + " );" );
+
+            jClass.addMethod( remover );
         }
+    }
+
+    private boolean isBidirectionalAssociation( ModelAssociation association )
+    {
+        String to = association.getTo();
+
+        Model model = association.getModelClass().getModel();
+
+        if ( isClassInModel( association.getTo(), model ) )
+        {
+            ModelClass toClass = association.getToClass();
+
+            for ( Iterator j = toClass.getFields( getGeneratedVersion() ).iterator(); j.hasNext(); )
+            {
+                ModelField modelField = (ModelField) j.next();
+
+                if ( modelField instanceof ModelAssociation )
+                {
+                    ModelAssociation modelAssociation = (ModelAssociation) modelField;
+
+                    if ( isClassInModel( modelAssociation.getTo(), model ) )
+                    {
+                        ModelClass totoClass = modelAssociation.getToClass();
+
+                        if ( association.getModelClass().equals( totoClass ) )
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 }
