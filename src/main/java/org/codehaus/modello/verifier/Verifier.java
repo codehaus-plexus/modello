@@ -118,21 +118,34 @@ public abstract class Verifier
 
     private static Method getMethod( Class clazz, String fieldName )
     {
-        String methodName =  "get" + Character.toUpperCase( fieldName.charAt( 0 ) ) + fieldName.substring( 1 );
+        String methodSuffix = Character.toUpperCase( fieldName.charAt( 0 ) ) + fieldName.substring( 1 );
 
         try
         {
-            return clazz.getMethod( methodName, new Class[ 0 ] );
+            Method method = clazz.getMethod( "get" + methodSuffix, new Class[ 0 ] );
+            if ( method.getReturnType() != Boolean.class )
+            {
+                return method;
+            }
         }
         catch( NoSuchMethodException ex )
         {
-            throw new VerifierException( "The expected class doesn't have a field named '" + fieldName + "'." );
+            // continue on
         }
-    }
 
-    private static String getSetterMethodName( String fieldName )
-    {
-        return "get" + Character.toUpperCase( fieldName.charAt( 0 ) ) + fieldName.substring( 1 );
+        try
+        {
+            Method method = clazz.getMethod( "is" + methodSuffix, new Class[ 0 ] );
+            if ( method.getReturnType() == Boolean.class )
+            {
+                return method;
+            }
+        }
+        catch( NoSuchMethodException ex )
+        {
+            // continue on
+        }
+        throw new VerifierException( "The expected class doesn't have a field named '" + fieldName + "'." );
     }
 
     protected File getTestFile( String name )
