@@ -43,6 +43,7 @@ import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelDefault;
 import org.codehaus.modello.model.ModelField;
+import org.codehaus.modello.model.Version;
 import org.codehaus.modello.plugins.xml.XmlAssociationMetadata;
 import org.codehaus.modello.plugins.xml.XmlFieldMetadata;
 import org.codehaus.plexus.velocity.VelocityComponent;
@@ -66,11 +67,21 @@ public class VelocityGenerator
 
         // Take the template from the properties
         // Put the model in the context
-        // Generate        
+        // Generate
+
+        ModelClass c;
+
+
+
+        Version version = new Version( "1.0.0 " );
 
         try
         {
             Context context = new VelocityContext();
+
+            context.put( "version", version );
+
+            context.put( "package", model.getPackageName( false, version ) );
 
             context.put( "id", StashClassMetadata.ID );
 
@@ -78,7 +89,7 @@ public class VelocityGenerator
 
             Writer writer = new FileWriter( "foo.txt" );
 
-            velocity.getEngine().mergeTemplate( "/modello/templates/stash.vm", context, writer );
+            velocity.getEngine().mergeTemplate( "/modello/templates/ojb.vm", context, writer );
 
             writer.flush();
 
