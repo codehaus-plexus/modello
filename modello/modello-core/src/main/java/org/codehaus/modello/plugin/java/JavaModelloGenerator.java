@@ -285,7 +285,7 @@ public class JavaModelloGenerator
         if ( modelAssociation.getType().equals( ModelDefault.PROPERTIES )
             || modelAssociation.getType().equals( ModelDefault.MAP ) )
         {
-            JMethod adder = new JMethod( null, "add" + capitalise( modelAssociation.getTo() ) );
+            JMethod adder = new JMethod( null, "add" + capitalise( singular( fieldName ) ) );
 
             adder.addParameter( new JParameter( new JClass( "String" ), "key" ) );
 
