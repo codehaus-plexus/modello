@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.ArrayList;
 
 /**
  *
@@ -62,5 +63,25 @@ public class Model
     public String getPackageName()
     {
         return packageName;
+    }
+
+    public List getAllFields( ModelClass modelClass )
+    {
+        List allFields = new ArrayList();
+
+        allFields.addAll( modelClass.getFields() );
+
+        ModelClass c = modelClass;
+
+        while ( c.getSuperClass() != null )
+        {
+            ModelClass parent = (ModelClass) classMap.get( c.getSuperClass() );
+
+            allFields.addAll( parent.getFields() );
+
+            c = parent;
+        }
+
+        return allFields;
     }
 }

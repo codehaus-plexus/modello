@@ -13,6 +13,7 @@ import org.codehaus.modello.generator.java.javasource.JSourceWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  *
@@ -74,9 +75,11 @@ public class Xpp3UnmarshallerGenerator
 
         // Write the parse method which will do the unmarshalling.
 
-        JMethod unmarshall = new JMethod( new JClass( "Object" ), "unmarshall" );
+        JMethod unmarshall = new JMethod( new JClass( "Model" ), "unmarshall" );
 
         unmarshall.addParameter( new JParameter( new JClass( "Reader" ), "reader" ) );
+
+        unmarshall.addException( new JClass( "Exception" ) );
 
         JSourceCode sc = unmarshall.getSourceCode();
 
@@ -102,7 +105,7 @@ public class Xpp3UnmarshallerGenerator
 
         sc.indent();
 
-        writeClassParsing( (ModelClass) objectModel.getClasses().get( 0 ), sc, objectModel );
+        writeClassParsing( (ModelClass) objectModel.getClasses().get( 0 ), sc, objectModel, false );
 
         sc.unindent();
 
@@ -114,6 +117,8 @@ public class Xpp3UnmarshallerGenerator
 
         sc.add( "}" );
 
+        sc.add( "return model;" );
+
         jClass.addMethod( unmarshall );
 
         jClass.print( sourceWriter );
@@ -123,21 +128,26 @@ public class Xpp3UnmarshallerGenerator
         writer.close();
     }
 
-    private void writeClassParsing( ModelClass modelClass, JSourceCode sc, Model objectModel )
+    private void writeClassParsing( ModelClass modelClass, JSourceCode sc, Model objectModel, boolean withLoop )
     {
-        int size = modelClass.getFields().size();
+        if ( withLoop )
+        {
+            sc.add( "while ( parser.nextTag() == XmlPullParser.START_TAG )" );
+
+            sc.add( "{" );
+
+            sc.indent();
+        }
 
         String statement;
 
-        sc.add( "while ( parser.nextTag() == XmlPullParser.START_TAG )" );
+        List allFields = objectModel.getAllFields( modelClass );
 
-        sc.add( "{" );
-
-        sc.indent();
+        int size = allFields.size();
 
         for ( int i = 0; i < size; i++ )
         {
-            ModelField field = (ModelField) modelClass.getFields().get( i );
+            ModelField field = (ModelField) allFields.get( i );
 
             if ( i == 0 )
             {
@@ -151,11 +161,14 @@ public class Xpp3UnmarshallerGenerator
             writeFieldParsing( modelClass, field, sc, statement, objectModel );
         }
 
-        writeCatchAll( sc );
+        if ( withLoop )
+        {
+            writeCatchAll( sc );
 
-        sc.unindent();
+            sc.unindent();
 
-        sc.add( "}" );
+            sc.add( "}" );
+        }
     }
 
     private void writeFieldParsing( ModelClass modelClass, ModelField field, JSourceCode sc, String statement, Model objectModel )
@@ -180,11 +193,16 @@ public class Xpp3UnmarshallerGenerator
 
             sc.add( modelClassName + ".set" + className + "( " + name + " );" );
 
-            writeClassParsing( objectModel.getClass( field.getType() ), sc, objectModel );
+            writeClassParsing( objectModel.getClass( field.getType() ), sc, objectModel, true );
         }
         else if ( isCollection( type ) )
         {
             writeCollectionParsing( modelClassName, name, sc, objectModel );
+        }
+        else if ( isMap( type ) )
+        {
+            // These are properties for now.
+            writePropertiesParsing( modelClassName, name, sc, objectModel );
         }
         else
         {
@@ -201,19 +219,29 @@ public class Xpp3UnmarshallerGenerator
         // We have a collection but we need to know what is in the collection.
         String collectionClass = capitalise( singular( fieldName ) );
 
+        sc.add( "while ( parser.nextTag() == XmlPullParser.START_TAG )" );
+
+        sc.add( "{" );
+
+        sc.indent();
+
         sc.add( "if ( parser.getName().equals( \"" + singular( fieldName ) + "\" ) )" );
 
         sc.add( "{" );
 
         sc.indent();
 
-        sc.add( collectionClass + " " + singular( fieldName ) + " = new " + collectionClass + "();" );
-
-        sc.add( modelClassName + ".add" + collectionClass + "( " + singular( fieldName ) + " );" );
-
         if ( isClassInModel( collectionClass, objectModel ) )
         {
-            writeClassParsing( objectModel.getClass( collectionClass ), sc, objectModel );
+            sc.add( collectionClass + " " + singular( fieldName ) + " = new " + collectionClass + "();" );
+
+            sc.add( modelClassName + ".add" + collectionClass + "( " + singular( fieldName ) + " );" );
+
+            writeClassParsing( objectModel.getClass( collectionClass ), sc, objectModel, true );
+        }
+        else
+        {
+            sc.add( modelClassName + ".add" + collectionClass + "( parser.nextText() );" );
         }
 
         sc.unindent();
@@ -221,7 +249,35 @@ public class Xpp3UnmarshallerGenerator
         sc.add( "}" );
 
         writeCatchAll( sc );
+
+        sc.unindent();
+
+        sc.add( "}" );
+
     }
+
+    private void writePropertiesParsing( String modelClassName, String fieldName, JSourceCode sc, Model objectModel )
+    {
+        // We have a collection but we need to know what is in the collection.
+        String collectionClass = capitalise( singular( fieldName ) );
+
+        sc.add( "while ( parser.nextTag() == XmlPullParser.START_TAG )" );
+
+        sc.add( "{" );
+
+        sc.indent();
+
+        sc.add( "String key = parser.getName();" );
+
+        sc.add( "String value = parser.nextText();" );
+
+        sc.add( modelClassName + ".add" + collectionClass + "( key, value );" );
+
+        sc.unindent();
+
+        sc.add( "}" );
+    }
+
 
     private void writeCatchAll( JSourceCode sc )
     {
