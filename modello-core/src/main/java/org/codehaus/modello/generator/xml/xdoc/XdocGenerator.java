@@ -104,7 +104,14 @@ public class XdocGenerator
 
                 w.startElement( "td" );
 
-                w.writeText( field.getName() );
+                if ( objectModel.getClassNames().contains( capitalise( field.getName() ) ) )
+                {
+                    w.writeText( field.getName() );
+                }
+                else
+                {
+                    w.writeText( field.getName() );
+                }
 
                 w.endElement();
 
