@@ -9,8 +9,6 @@ import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.ModelloRuntimeException;
 
-// Possibly a general package extension for things like reader/writer
-
 /**
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
  * @version $Id$
@@ -18,9 +16,7 @@ import org.codehaus.modello.ModelloRuntimeException;
 public abstract class AbstractGeneratorPlugin
     extends AbstractLogEnabled
     implements GeneratorPlugin
-{/*
-    private XStream xstream;
-*/
+{
     private Model model;
 
     private File outputDirectory;
@@ -158,7 +154,7 @@ public abstract class AbstractGeneratorPlugin
 
     protected boolean isClassInModel( String fieldType, Model model )
     {
-        return model.getClassNames().contains( fieldType );
+        return model.getClass( fieldType ) != null;
     }
 
     protected boolean isMap( String fieldType )

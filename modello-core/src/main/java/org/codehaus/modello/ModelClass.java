@@ -21,19 +21,23 @@ public class ModelClass
 
     private List associations;
 
-    private Map fieldMap;
+    private transient Map fieldMap = new HashMap();
 
-    private Map associationMap;
+    private transient Map associationMap = new HashMap();
 
     private List codeSegments;
 
-    private Model model;
+    private transient Model model;
 
     public ModelClass()
     {
-        fieldMap = new HashMap();
+    }
 
-        associationMap = new HashMap();
+    public ModelClass( Model model, String name )
+    {
+        super( name );
+
+        this.model = model;
     }
 
     public Model getModel()
@@ -58,7 +62,7 @@ public class ModelClass
     {
         if ( fields == null )
         {
-            return Collections.EMPTY_LIST;
+            fields = new ArrayList();
         }
 
         return fields;
@@ -87,6 +91,13 @@ public class ModelClass
         return fields;
     }
 
+    public void addField( ModelField field )
+    {
+        getFields().add( field );
+
+        fieldMap.put( field.getName(), field );
+    }
+
     /**
      * Returns the list of all associations in this class. 
      * 
@@ -99,7 +110,7 @@ public class ModelClass
     {
         if ( associations == null )
         {
-            return Collections.EMPTY_LIST;
+            associations = new ArrayList();
         }
 
         return associations;
@@ -126,6 +137,13 @@ public class ModelClass
         }
 
         return associations;
+    }
+
+    public void addAssociation( ModelAssociation association )
+    {
+        getAssociations().add( association );
+
+        associationMap.put( association.getName(), association );
     }
 
     public List getCodeSegments()

@@ -6,8 +6,12 @@ import java.util.Map;
 import org.codehaus.modello.metadata.MetaData;
 
 /**
+ * This is the base class for all elements of the model.
+ * 
+ * The name attribute is immutable because it's used as the key.
+ * 
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
- *
+ * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
 public abstract class BaseElement
@@ -24,6 +28,15 @@ public abstract class BaseElement
 
     public abstract void validate()
         throws ModelValidationException;
+
+    public BaseElement()
+    {
+    }
+
+    public BaseElement( String name )
+    {
+        this.name = name;
+    }
 
     public String getName()
     {
@@ -43,6 +56,11 @@ public abstract class BaseElement
     public String getComment()
     {
         return comment;
+    }
+
+    public void setComment( String comment )
+    {
+        this.comment = comment;
     }
 
     public boolean hasMetaData( String key )
