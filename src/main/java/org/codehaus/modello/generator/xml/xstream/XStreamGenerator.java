@@ -53,7 +53,7 @@ public class XStreamGenerator
 
         jClass.addImport( "com.thoughtworks.xstream.XStream" );
 
-        jClass.setSuperClass( "com.thoughtworks.xstream.XStream");
+        jClass.setSuperClass( "com.thoughtworks.xstream.XStream" );
 
         JConstructor jConstructor = new JConstructor( jClass );
 

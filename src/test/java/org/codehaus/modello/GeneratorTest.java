@@ -5,6 +5,8 @@ import org.codehaus.modello.generator.java.JavaGenerator;
 import org.codehaus.modello.generator.xml.schema.XmlSchemaGenerator;
 import org.codehaus.modello.generator.xml.xdoc.XdocGenerator;
 import org.codehaus.modello.generator.xml.xstream.XStreamGenerator;
+import org.codehaus.modello.generator.xml.xpp3.Xpp3UnmarshallerGenerator;
+import org.codehaus.modello.generator.xml.xpp3.Xpp3MarshallerGenerator;
 
 import java.io.File;
 
@@ -53,4 +55,21 @@ public class GeneratorTest
 
         generator.generate();
     }
+
+    public void testXpp3Generator()
+        throws Exception
+    {
+        Xpp3UnmarshallerGenerator generator = new Xpp3UnmarshallerGenerator( model, new File( outputDirectory, "xpp3" ).getPath() );
+
+        generator.generate();
+    }
+
+    public void testXpp3MarshallerGenerator()
+        throws Exception
+    {
+        Xpp3MarshallerGenerator generator = new Xpp3MarshallerGenerator( model, new File( outputDirectory, "xpp3" ).getPath() );
+
+        generator.generate();
+    }
+
 }
