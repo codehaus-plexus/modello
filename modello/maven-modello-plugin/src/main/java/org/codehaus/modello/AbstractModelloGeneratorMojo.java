@@ -22,39 +22,56 @@ package org.codehaus.mojo.modello;
  * SOFTWARE.
  */
 
-import java.io.FileReader;
-import java.util.Properties;
-
 import org.apache.maven.plugin.PluginExecutionRequest;
 import org.apache.maven.plugin.PluginExecutionResponse;
-
-import org.codehaus.modello.Modello;
+import org.apache.maven.plugin.AbstractPlugin;
 import org.codehaus.modello.ModelloParameterConstants;
+import org.codehaus.modello.core.ModelloCore;
+import org.codehaus.modello.model.Model;
+
+import java.io.FileReader;
+import java.util.Properties;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
 public abstract class AbstractModelloGeneratorMojo
-    extends AbstractModelloMojo
+    extends AbstractPlugin
 {
     protected abstract String getGeneratorType();
 
     public void execute( PluginExecutionRequest request, PluginExecutionResponse response )
         throws Exception
     {
-        Modello modello = new Modello();
+        // ----------------------------------------------------------------------
+        //
+        // ----------------------------------------------------------------------
+
+        String outputDirectory = (String) request.getParameter( "outputDirectory" );
+
+        String model = (String) request.getParameter( "model" );
+
+        String version = (String) request.getParameter( "version" );
+
+        String packageWithVersion = (String) request.getParameter( "packageWithVersion" );
+
+        ModelloCore modello = (ModelloCore) request.getParameter( "modelloCore" );
+
+        // ----------------------------------------------------------------------
+        //
+        // ----------------------------------------------------------------------
+
+        // Just pass a Map in here, no need to make properties up again.
 
         Properties parameters = new Properties();
 
-        parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, getOutputDirectory( request ) );
+        parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, outputDirectory );
 
-        parameters.setProperty( ModelloParameterConstants.VERSION, getModelVersion( request ) );
+        parameters.setProperty( ModelloParameterConstants.VERSION, version );
 
-        parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, getPackageWithVersion( request ) );
+        parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, packageWithVersion );
 
-        modello.generate( new FileReader( getModelFile( request) ),
-                          getGeneratorType(), 
-                          parameters );
+        modello.generate( modello.loadModel( new FileReader( model ) ), getGeneratorType(),  parameters );
     }
 }
