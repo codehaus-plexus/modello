@@ -95,13 +95,18 @@ public abstract class BaseElement
         this.metadata.put( metadata.getClass().getName(), metadata );
     }
 
-    public Metadata getMetadata( String key )
+    protected Metadata getMetadata( Class type, String key )
     {
         Metadata metadata = (Metadata) this.metadata.get( key );
 
         if ( metadata == null )
         {
             throw new ModelloRuntimeException( "No such metadata: " + key );
+        }
+
+        if ( !type.isAssignableFrom( metadata.getClass() ) )
+        {
+            throw new ModelloRuntimeException( "The metadata is not of the expected type. Key: " + key + ", expected type: " + type.getName() );
         }
 
         return metadata;

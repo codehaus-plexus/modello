@@ -20,8 +20,10 @@ import org.codehaus.modello.ModelValidationException;
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.ModelloRuntimeException;
 import org.codehaus.modello.core.io.ModelReader;
-import org.codehaus.modello.metadata.Metadata;
+import org.codehaus.modello.metadata.ClassMetadata;
+import org.codehaus.modello.metadata.FieldMetadata;
 import org.codehaus.modello.metadata.MetadataPlugin;
+import org.codehaus.modello.metadata.ModelMetadata;
 import org.codehaus.modello.plugin.ModelloGenerator;
 
 /**
@@ -52,6 +54,10 @@ public class DefaultModelloCore
 
         model.initialize();
 
+        // ----------------------------------------------------------------------
+        // Handle Metadata
+        // ----------------------------------------------------------------------
+
         for( Iterator plugins = metadataPluginManager.getPlugins(); plugins.hasNext(); )
         {
             MetadataPlugin plugin = (MetadataPlugin) plugins.next();
@@ -60,7 +66,7 @@ public class DefaultModelloCore
 
             attributes = Collections.unmodifiableMap( attributes );
 
-            Metadata metadata = plugin.getModelMetadata( model, attributes );
+            ModelMetadata metadata = plugin.getModelMetadata( model, attributes );
 
             if ( metadata == null )
             {
@@ -82,7 +88,7 @@ public class DefaultModelloCore
             {
                 MetadataPlugin plugin = (MetadataPlugin) plugins.next();
 
-                Metadata metadata = plugin.getClassMetadata( clazz, attributes );
+                ClassMetadata metadata = plugin.getClassMetadata( clazz, attributes );
 
                 if ( metadata == null )
                 {
@@ -104,7 +110,7 @@ public class DefaultModelloCore
                 {
                     MetadataPlugin plugin = (MetadataPlugin) plugins.next();
 
-                    Metadata metadata = plugin.getFieldMetadata( field, attributes );
+                    FieldMetadata metadata = plugin.getFieldMetadata( field, attributes );
 
                     if ( metadata == null )
                     {
@@ -116,6 +122,10 @@ public class DefaultModelloCore
             }
         }
 
+        // ----------------------------------------------------------------------
+        // Validate the entire model
+        // ----------------------------------------------------------------------
+
         model.validate();
 
         for( Iterator classes = model.getClasses().iterator(); classes.hasNext(); )
@@ -123,6 +133,11 @@ public class DefaultModelloCore
             ModelClass modelClass = (ModelClass) classes.next();
 
             modelClass.validate();
+        }
+
+        for( Iterator classes = model.getClasses().iterator(); classes.hasNext(); )
+        {
+            ModelClass modelClass = (ModelClass) classes.next();
 
             for( Iterator fields = modelClass.getFields().iterator(); fields.hasNext(); )
             {
