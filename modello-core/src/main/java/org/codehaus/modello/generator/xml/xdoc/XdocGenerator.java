@@ -31,7 +31,7 @@ public class XdocGenerator
     {
         Model objectModel = getModel();
 
-        File f = new File( getOutputDirectory(), objectModel.getName() + ".xml" );
+        File f = new File( getOutputDirectory(), objectModel.getId() + ".xml" );
 
         if ( !f.getParentFile().exists() )
         {
@@ -79,6 +79,22 @@ public class XdocGenerator
             w.startElement( "p" );
 
             w.startElement( "table" );
+
+            w.startElement( "tr" );
+
+            w.startElement( "th" );
+
+            w.writeText( "Element" );
+
+            w.endElement();
+
+            w.startElement( "th" );
+
+            w.writeText( "Description" );
+
+            w.endElement();
+
+            w.endElement();
 
             for ( Iterator j = modelClass.getFields().iterator(); j.hasNext(); )
             {
