@@ -171,4 +171,12 @@ public abstract class AbstractGenerator
         buf.append( text.substring( start ) );
         return buf.toString();
     }
+
+    public static String uncapitalise( String str )
+    {
+        return new StringBuffer( str.length() )
+            .append( Character.toLowerCase( str.charAt( 0 ) ) )
+            .append( str.substring( 1 ) )
+            .toString();
+    }
 }

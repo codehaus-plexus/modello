@@ -95,7 +95,7 @@ public class JConstructor
 
      **/
 
-    protected JConstructor( JClass declaringClass )
+    public JConstructor( JClass declaringClass )
     {
 
 

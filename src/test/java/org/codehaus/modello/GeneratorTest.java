@@ -4,6 +4,7 @@ import junit.framework.TestCase;
 import org.codehaus.modello.generator.java.JavaGenerator;
 import org.codehaus.modello.generator.xml.schema.XmlSchemaGenerator;
 import org.codehaus.modello.generator.xml.xdoc.XdocGenerator;
+import org.codehaus.modello.generator.xml.xstream.XStreamGenerator;
 
 import java.io.File;
 
@@ -45,4 +46,11 @@ public class GeneratorTest
         generator.generate();
     }
 
+    public void testXStreamGenerator()
+        throws Exception
+    {
+        XStreamGenerator generator = new XStreamGenerator( model, new File( outputDirectory, "xstream" ).getPath() );
+
+        generator.generate();
+    }
 }
