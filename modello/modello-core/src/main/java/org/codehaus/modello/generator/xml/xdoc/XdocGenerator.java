@@ -67,6 +67,26 @@ public class XdocGenerator
         // Body
 
         w.startElement( "body" );
+        
+        // Descriptor with links
+        
+        w.startElement( "section" );
+        
+        w.addAttribute( "name", "Descriptor with links" );
+
+        w.startElement( "p" );
+
+        w.startElement( "pre" );
+        
+        w.writeText( "\n" + getDescriptorWithLink( objectModel ) );
+        
+        w.endElement();
+        
+        w.endElement();
+        
+        w.endElement();
+        
+        // Element descriptors
 
         for ( Iterator i = objectModel.getClasses().iterator(); i.hasNext(); )
         {
@@ -146,4 +166,64 @@ public class XdocGenerator
 
         writer.close();
     }
+    
+    private String getDescriptorWithLink( Model objectModel )
+    {
+        StringBuffer sb = new StringBuffer();
+        
+        sb.append( getModelClassDescriptor( objectModel, objectModel.getClass( objectModel.getRoot() ), 0 ) );
+        
+        return sb.toString();
+    }
+    
+    private String getModelClassDescriptor(  Model objectModel, ModelClass modelClass, int depth )
+    {
+        StringBuffer sb = new StringBuffer();
+        
+        for (int i = 0; i < depth; i++ )
+        {
+            sb.append( "    " );
+        }
+        
+        sb.append( "&lt;" + uncapitalise( modelClass.getName() ) );
+        
+        if ( modelClass.getFields().size() > 0 )
+        {
+            sb.append( "&gt;\n" );
+            
+            for ( Iterator iter = modelClass.getFields().iterator(); iter.hasNext(); )
+            {
+                ModelField field = (ModelField) iter.next();
+                
+                ModelClass fieldModelClass = objectModel.getClass( capitalise( field.getName() ) );
+                
+                if ( fieldModelClass != null )
+                {
+                    sb.append( getModelClassDescriptor( objectModel, fieldModelClass, depth + 1 ) );
+                }
+                else
+                {
+                    for (int i = 0; i < depth+1; i++ )
+                    {
+                        sb.append( "    " );
+                    }
+                    sb.append( "&lt;" + uncapitalise( field.getName() ) + "/&gt;\n" );
+                }
+            }
+            
+            for (int i = 0; i < depth; i++ )
+            {
+                sb.append( "    " );
+            }
+            
+            sb.append( "&lt;/" + uncapitalise( modelClass.getName() ) + "&gt;\n" );
+        }
+        else
+        {
+            sb.append( "/&gt;\n" );
+        }
+        
+        return sb.toString();
+    }
+    
 }
