@@ -1,4 +1,4 @@
-package org.codehaus.mojo.modello;
+package org.codehaus.modello;
 
 /*
  * Copyright (c) 2004, Codehaus.org
