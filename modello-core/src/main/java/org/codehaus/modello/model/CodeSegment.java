@@ -1,4 +1,4 @@
-package org.codehaus.modello;
+package org.codehaus.modello.model;
 
 /*
  * Copyright (c) 2004, Jason van Zyl
@@ -23,14 +23,30 @@ package org.codehaus.modello;
  */
 
 /**
- * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
+ * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
  * @version $Id$
  */
-public class ModelValidationException
-    extends Exception
+public class CodeSegment
+    extends BaseElement
 {
-    public ModelValidationException( String msg )
+    private String code;
+
+    public CodeSegment()
     {
-        super( msg );
+        super( false );
+    }
+
+    public String getCode()
+    {
+        return code;
+    }
+
+    public void setCode( String code )
+    {
+        this.code = code;
+    }
+
+    public void validateElement()
+    {
     }
 }

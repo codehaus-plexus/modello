@@ -4,14 +4,20 @@
   <classes>
     <class>
       <name>MyClass</name>
-      <associations>
-        <association>
+      <fields>
+        <field>
           <name>MyAssociation</name>
-        </association>
-        <association>
+          <association>
+            <type>String</type>
+          </association>
+        </field>
+        <field>
           <name>MyAssociation</name>
-        </association>
-      </associations>
+          <association>
+            <type>String</type>
+          </association>
+        </field>
+      </fields>
     </class>
   </classes>
 </model>

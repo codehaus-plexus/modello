@@ -13,16 +13,15 @@
           <version>1.0.0</version>
           <type>String</type>
         </field>
-      </fields>
-      <associations>
-        <association>
+        <field>
           <name>girlfriends</name>
-          <to>Girl</to>
-          <fromRole>girlfriends</fromRole>
-          <toRole>boyfriend</toRole>
-          <toMultiplicity>*</toMultiplicity>
-        </association>
-      </associations>
+          <version>1.0.0</version>
+          <association>
+            <type>Girl</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+      </fields>
     </class>
     <class>
       <name>Girl</name>
@@ -33,20 +32,28 @@
           <version>1.0.0</version>
           <type>String</type>
         </field>
+        <field>
+          <name>boyfriend</name>
+          <version>1.0.0</version>
+          <association>
+            <type>Girl</type>
+          </association>
+        </field>
       </fields>
     </class>
     <class>
       <name>Foo</name>
       <version>1.0.0</version>
-      <associations>
-        <!-- This association is used to test the default values. Don't touch -->
-        <association>
+      <fields>
+        <field>
           <name>bars</name>
-          <to>Bar</to>
-          <toRole>foo</toRole>
-          <toMultiplicity>*</toMultiplicity>
-        </association>
-      </associations>
+          <version>1.0.0</version>
+          <association>
+            <type>Bar</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+      </fields>
     </class>
     <class>
       <name>Bar</name>

@@ -1,20 +1,42 @@
 package org.codehaus.modello.core.io;
 
 /*
- * LICENSE
+ * Copyright (c) 2004, Jason van Zyl
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+ * of the Software, and to permit persons to whom the Software is furnished to do
+ * so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 import java.io.FileReader;
 import java.util.List;
 
-import org.codehaus.modello.Model;
-import org.codehaus.modello.ModelAssociation;
-import org.codehaus.modello.ModelClass;
-import org.codehaus.modello.ModelField;
 import org.codehaus.modello.ModelloTest;
+import org.codehaus.modello.model.Model;
+import org.codehaus.modello.model.ModelAssociation;
+import org.codehaus.modello.model.ModelClass;
+import org.codehaus.modello.model.ModelField;
+import org.codehaus.modello.model.Version;
+import org.codehaus.modello.model.VersionRange;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
+ * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
+ *
  * @version $Id$
  */
 public class ModelReaderTest
@@ -37,43 +59,47 @@ public class ModelReaderTest
 
         assertEquals( "Boy", model.getRoot() );
 
-        List classes = model.getClasses();
+        List classes = model.getAllClasses();
 
         assertNotNull( classes );
 
         assertEquals( 2, classes.size() );
 
+        assertEquals( 2, model.getClasses( new Version( "1.0.0" ) ).size() );
+
         assertBoy( classes.get( 0 ) );
 
-        assertBoy( model.getClass( "Boy" ) );
+        assertBoy( model.getClass( "Boy", new VersionRange( "1.0.0" ) ) );
 
-        assertGirl( model.getClass( "Girl" ) );
+        assertGirl( model.getClass( "Girl", new VersionRange( "1.0.0" ) ) );
     }
 
     public void testAssociationDefaultValues()
         throws Exception
     {
-//        ModelBuilder builder = getModelBuilder();
-
-//        Model model = builder.getModel( getTestFile( "src/test/resources/models/association.mdo" ) );
-
         Model model = getModelloCore().loadModel( new FileReader( getTestPath( "src/test/resources/models/association.mdo" ) ) );
 
-        ModelAssociation association = model.getClass( "Foo" ).getAssociation( "bars" );
+        ModelField field = model.getClass( "Foo", new VersionRange( "1.0.0" ) ).getField( "bars", new VersionRange( "1.0.0" ) );
+
+        assertTrue( field instanceof ModelAssociation );
+
+        ModelAssociation association = (ModelAssociation) field;
 
         assertEquals( "bars", association.getName() );
 
-        assertEquals( "Foo", association.getFromClass().getName() );
+        assertEquals( "Foo", association.getModelClass().getName() );
+
+        assertEquals( "Bar", association.getTo() );
 
         assertEquals( "Bar", association.getToClass().getName() );
 
-        assertEquals( "bars", association.getFromRole() );
+//        assertEquals( "bars", association.getFromRole() );
 
-        assertEquals( "foo", association.getToRole() );
+//        assertEquals( "foo", association.getToRole() );
 
-        assertEquals( "1", association.getFromMultiplicity() );
+//        assertEquals( "1", association.getFromMultiplicity() );
 
-        assertEquals( "*", association.getToMultiplicity() );
+//        assertEquals( "*", association.getToMultiplicity() );
     }
 
     private void assertBoy( Object boyObject )
@@ -86,15 +112,15 @@ public class ModelReaderTest
 
         assertEquals( "Boy", boy.getName() );
 
-        assertEquals( "1.0.0", boy.getVersion() );
+        assertEquals( "1.0.0", boy.getVersionRange().toString() );
 
-        List fields = boy.getFields();
+        List fields = boy.getFields( new Version( "1.0.0" ) );
 
-        assertEquals( 1, fields.size() );
+        assertEquals( 2, fields.size() );
 
         assertBoyName( fields.get( 0 ) );
 
-        assertBoyName( boy.getField( "name" ) );
+        assertBoyName( boy.getField( "name", new VersionRange( "1.0.0" ) ) );
     }
 
     private void assertBoyName( Object nameObject )
@@ -105,7 +131,7 @@ public class ModelReaderTest
 
         assertEquals( "name", name.getName() );
 
-        assertEquals( "1.0.0", name.getVersion() );
+        assertEquals( "1.0.0", name.getVersionRange().toString() );
 
         assertEquals( "String", name.getType() );
     }
@@ -120,15 +146,15 @@ public class ModelReaderTest
 
         assertEquals( "Girl", girl.getName() );
 
-        assertEquals( "1.0.0", girl.getVersion() );
+        assertEquals( "1.0.0", girl.getVersionRange().toString() );
 
-        List fields = girl.getFields();
+        List fields = girl.getFields( new Version( "1.0.0" ) );
 
         assertEquals( 1, fields.size() );
 
         assertGirlAge( fields.get( 0 ) );
 
-        assertGirlAge( girl.getField( "age" ) );
+        assertGirlAge( girl.getField( "age", new VersionRange( "1.0.0" ) ) );
     }
 
     private void assertGirlAge( Object ageObject )
@@ -139,7 +165,7 @@ public class ModelReaderTest
 
         assertEquals( "age", age.getName() );
 
-        assertEquals( "1.0.0+", age.getVersion() );
+        assertEquals( "1.0.0+", age.getVersionRange().toString() );
 
         assertEquals( "int", age.getType() );
     }
@@ -152,20 +178,20 @@ public class ModelReaderTest
 
         assertEquals( "girlfriends", association.getName() );
 
-        assertEquals( "Boy", association.getFromClass().getName() );
+        assertEquals( "Boy", association.getModelClass().getName() );
 
-        assertBoy( association.getFromClass() );
+        assertBoy( association.getModelClass() );
 
         assertEquals( "Girl", association.getToClass().getName() );
 
         assertGirl( association.getToClass() );
 
-        assertEquals( "girlfriends", association.getFromRole() );
+//        assertEquals( "girlfriends", association.getFromRole() );
 
-        assertEquals( "boyfriend", association.getToRole() );
+//        assertEquals( "boyfriend", association.getToRole() );
 
-        assertEquals( "1", association.getFromMultiplicity() );
+//        assertEquals( "1", association.getFromMultiplicity() );
 
-        assertEquals( "*", association.getToMultiplicity() );
+//        assertEquals( "*", association.getToMultiplicity() );
     }
 }

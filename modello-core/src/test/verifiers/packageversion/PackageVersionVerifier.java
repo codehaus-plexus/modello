@@ -1,5 +1,5 @@
 import java.util.*;
-import org.apache.maven.model.v400.*;
+import org.apache.maven.model.v4_0_0.*;
 import org.codehaus.modello.generator.*;
 import org.codehaus.modello.verifier.*;
 

@@ -1,4 +1,4 @@
-package org.codehaus.modello;
+package org.codehaus.modello.model;
 
 /*
  * Copyright (c) 2004, Jason van Zyl
@@ -26,6 +26,7 @@ import org.codehaus.modello.metadata.FieldMetadata;
 
 /**
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
+ * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
  *
  * @version $Id$
  */
@@ -34,8 +35,6 @@ public class ModelField
 {
     private String type;
 
-    private String specification;
-
     private String defaultValue;
 
     private String typeValidator;
@@ -43,8 +42,6 @@ public class ModelField
     private boolean required;
 
     transient private ModelClass modelClass;
-
-    transient private boolean primitive;
 
     public ModelField()
     {
@@ -82,16 +79,6 @@ public class ModelField
         this.defaultValue = defaultValue;
     }
 
-    public String getSpecification()
-    {
-        return specification;
-    }
-
-    public void setSpecifiaction( String specification )
-    {
-        this.specification = specification;
-    }
-
     public String getTypeValidator()
     {
         return typeValidator;
@@ -119,14 +106,6 @@ public class ModelField
     public ModelClass getModelClass()
     {
         return modelClass;
-    }
-
-    /**
-     * @return Returns true if this field is a java primitive.
-     */
-    public boolean isPrimitive()
-    {
-        return primitive;
     }
 
     public FieldMetadata getMetadata( String key )
@@ -163,17 +142,8 @@ public class ModelField
 
             if ( type.equals( validType ) )
             {
-                primitive = true;
-
                 return;
             }
-        }
-
-        ModelClass modelClass = getModelClass().getModel().getClass( type );
-
-        if ( modelClass != null )
-        {
-            return;
         }
 
         throw new ModelValidationException( "Field '" + getName() + "': Illegal type: '" + type + "'." );

@@ -29,11 +29,6 @@ import java.io.Serializable;
 import java.util.Iterator;
 import java.util.Properties;
 
-import org.codehaus.modello.CodeSegment;
-import org.codehaus.modello.Model;
-import org.codehaus.modello.ModelAssociation;
-import org.codehaus.modello.ModelClass;
-import org.codehaus.modello.ModelField;
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.ModelloRuntimeException;
 import org.codehaus.modello.generator.java.javasource.JClass;
@@ -42,6 +37,12 @@ import org.codehaus.modello.generator.java.javasource.JMethod;
 import org.codehaus.modello.generator.java.javasource.JParameter;
 import org.codehaus.modello.generator.java.javasource.JSourceWriter;
 import org.codehaus.modello.generator.java.javasource.JType;
+import org.codehaus.modello.model.CodeSegment;
+import org.codehaus.modello.model.Model;
+import org.codehaus.modello.model.ModelAssociation;
+import org.codehaus.modello.model.ModelClass;
+import org.codehaus.modello.model.ModelDefault;
+import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.plugin.AbstractModelloGenerator;
 
 /**
@@ -75,109 +76,66 @@ public class JavaModelloGenerator
 
         String directory = packageName.replace( '.', '/' );
 
-        for ( Iterator i = objectModel.getClasses().iterator(); i.hasNext(); )
+        for ( Iterator i = objectModel.getClasses( getGeneratedVersion() ).iterator(); i.hasNext(); )
         {
             ModelClass modelClass = (ModelClass) i.next();
 
-            if ( outputElement( modelClass ) )
+            File f = new File( new File( getOutputDirectory(), directory ), modelClass.getName() + ".java" );
+
+            if ( !f.getParentFile().exists() )
             {
-                File f = new File( new File( getOutputDirectory(), directory ), modelClass.getName() + ".java" );
-
-                if ( !f.getParentFile().exists() )
-                {
-                    f.getParentFile().mkdirs();
-                }
-
-                FileWriter writer = new FileWriter( f );
-
-                JSourceWriter sourceWriter = new JSourceWriter( writer );
-
-                JClass jClass = new JClass( modelClass.getName() );
-
-                jClass.addImport( "java.util.*" );
-
-                jClass.setPackageName( packageName );
-
-                if ( modelClass.getSuperClass() != null )
-                {
-                    jClass.setSuperClass( modelClass.getSuperClass() );
-                }
-
-                jClass.addInterface( Serializable.class.getName() );
-
-                for ( Iterator j = modelClass.getAllFields().iterator(); j.hasNext(); )
-                {
-                    ModelField modelField = (ModelField) j.next();
-
-                    if ( outputElement( modelField ) )
-                    {
-                        createField( jClass, modelField );
-                    }
-                }
-
-                for ( Iterator j = modelClass.getAllAssociations().iterator(); j.hasNext(); )
-                {
-                    ModelAssociation modelAssociation = (ModelAssociation) j.next();
-
-                    if ( outputElement( modelAssociation ) )
-                    {
-                        createAssociation( jClass, modelAssociation );
-                    }
-                }
-
-                if ( modelClass.getCodeSegments() != null )
-                {
-                    for ( Iterator iterator = modelClass.getCodeSegments().iterator(); iterator.hasNext(); )
-                    {
-                        CodeSegment codeSegment = (CodeSegment) iterator.next();
-
-                        if ( outputElement( codeSegment ) )
-                        {
-                            jClass.addSourceCode( codeSegment.getCode() );
-                        }
-                    }
-                }
-
-                jClass.print( sourceWriter );
-
-                writer.flush();
-
-                writer.close();
+                f.getParentFile().mkdirs();
             }
-        }
-    }
-/*
-    protected String getBasePackageName( Model model )
-    {
-        StringBuffer sb = new StringBuffer();
 
-        sb.append( model.getPackageName() );
+            FileWriter writer = new FileWriter( f );
 
-        if ( isPackageWithVersion() )
-        {
-            sb.append( "." );
+            JSourceWriter sourceWriter = new JSourceWriter( writer );
 
-            sb.append( getModelVersion().toString() );
-        }
+            JClass jClass = new JClass( modelClass.getName() );
 
-        return sb.toString();
-    }
-*/
-/*
-    protected void addModelImports( JClass jClass )
-        throws ModelloException
-    {
-        for ( Iterator i = getModel().getClasses().iterator(); i.hasNext(); )
-        {
-            ModelClass modelClass = (ModelClass) i.next();
+            jClass.addImport( "java.util.*" );
 
-            if ( outputElement( modelClass.getVersion(), modelClass.getName() ) )
+            jClass.setPackageName( packageName );
+
+            if ( modelClass.getSuperClass() != null )
             {
-                jClass.addImport( getBasePackageName( getModel() ) + "." + modelClass.getName() );
+                jClass.setSuperClass( modelClass.getSuperClass() );
             }
+
+            jClass.addInterface( Serializable.class.getName() );
+
+            for ( Iterator j = modelClass.getFields( getGeneratedVersion() ).iterator(); j.hasNext(); )
+            {
+                ModelField modelField = (ModelField) j.next();
+
+                if ( modelField instanceof ModelAssociation )
+                {
+                    createAssociation( jClass, (ModelAssociation) modelField );
+                }
+                else
+                {
+                    createField( jClass, modelField );
+                }
+            }
+
+            if ( modelClass.getCodeSegments( getGeneratedVersion() ) != null )
+            {
+                for ( Iterator iterator = modelClass.getCodeSegments( getGeneratedVersion() ).iterator(); iterator.hasNext(); )
+                {
+                    CodeSegment codeSegment = (CodeSegment) iterator.next();
+
+                    jClass.addSourceCode( codeSegment.getCode() );
+                }
+            }
+
+            jClass.print( sourceWriter );
+
+            writer.flush();
+
+            writer.close();
         }
     }
-*/
+
     private JField createField( ModelField modelField, ModelClass modelClass )
     {
         JType type;
@@ -268,100 +226,84 @@ public class JavaModelloGenerator
 
         setter.getSourceCode().add( "this." + field.getName() + " = " + field.getName() + ";" );
 
-        // Useful debugging code when debugging other generators.
-        //setter.getSourceCode().add( "System.out.println( \"" + field.getName() + " = \" + " + field.getName() + " );" );
-
         return setter;
     }
 
     private void createAssociation( JClass jClass, ModelAssociation modelAssociation )
+        throws ModelloException
     {
-        if ( !modelAssociation.getFromMultiplicity().equals( "1" ) )
+        if ( ModelAssociation.MANY_MULTIPLICITY.equals( modelAssociation.getMultiplicity() ) )
         {
-            throw new ModelloRuntimeException( "The java generator can only generate associations with a 1->* multiplicity. " + 
-                "Found: " + modelAssociation.getFromMultiplicity() + "->" + modelAssociation.getToMultiplicity() );
-        }
+            JType type = new JClass( modelAssociation.getType() );
 
-        if ( !modelAssociation.getToMultiplicity().equals( "*" ) )
+            JField jField = new JField( type, modelAssociation.getName() );
+
+            if ( !isEmpty( modelAssociation.getComment() ) )
+            {
+                jField.setComment( modelAssociation.getComment() );
+            }
+
+            jField.setInitString( modelAssociation.getDefaultValue() );
+
+            jClass.addField( jField );
+
+            jClass.addMethod( createGetter( jField ) );
+
+            jClass.addMethod( createSetter( jField ) );
+
+            createAdder( jClass, modelAssociation );
+        }
+        else
         {
-            throw new ModelloRuntimeException( "The java generator can only generate associations with a 1->* multiplicity. " + 
-                "Found: " + modelAssociation.getFromMultiplicity() + "->" + modelAssociation.getToMultiplicity() );
+            createField( jClass, modelAssociation );
         }
-
-        JType type = new JClass( "java.util.List" );
-
-        JField jField = new JField( type, modelAssociation.getFromRole() );
-
-        if ( !isEmpty( modelAssociation.getComment() ) )
-        {
-            jField.setComment( modelAssociation.getComment() );
-        }
-
-        jField.setInitString( "new java.util.ArrayList()" );
-
-        jClass.addField( jField );
-
-        jClass.addMethod( createGetter( jField ) );
-
-        jClass.addMethod( createSetter( jField ) );
-
-        createAdder( jClass, modelAssociation );
     }
 
     private void createAdder( JClass jClass, ModelAssociation modelAssociation )
     {
-/*
-        if ( isCollection( modelAssociation.getName() ) )
+        String fieldName = modelAssociation.getName();
+
+        String parameterName = uncapitalise( modelAssociation.getTo() );
+
+        String className;
+
+        JType addType;
+
+        if ( modelAssociation.getToClass() != null )
         {
-*/
-            String fieldName = modelAssociation.getFromRole();
+            addType = new JClass( modelAssociation.getToClass().getName() );
 
-            String parameterName = singular( fieldName );
+            className = modelAssociation.getToClass().getName();
+        }
+        else
+        {
+            addType = new JClass( "String" );
 
-            String className;
+            className = capitalise( singular( fieldName ) );
+        }
 
-            JType addType;
+        if ( modelAssociation.getType().equals( ModelDefault.PROPERTIES )
+            || modelAssociation.getType().equals( ModelDefault.MAP ) )
+        {
+            JMethod adder = new JMethod( null, "add" + capitalise( modelAssociation.getTo() ) );
 
-            if ( modelAssociation.getToClass() != null )
-            {
-                addType = new JClass( modelAssociation.getToClass().getName() );
+            adder.addParameter( new JParameter( new JClass( "String" ), "key" ) );
 
-                className = modelAssociation.getToClass().getName();
-            }
-            else
-            {
-                addType = new JClass( "String" );
+            adder.addParameter( new JParameter( new JClass( modelAssociation.getTo() ), "value" ) );
 
-                className = capitalise( singular( modelAssociation.getFromRole() ) );
-            }
+            adder.getSourceCode().add( "this." + fieldName + ".put( key, value );" );
 
-            JMethod adder = new JMethod( null, "add" + className );
+            jClass.addMethod( adder );
+        }
+        else
+        {
+            JMethod adder = new JMethod( null, "add" + singular( capitalise( fieldName ) ) );
 
             adder.addParameter( new JParameter( addType, parameterName ) );
 
             adder.getSourceCode().add( "this." + fieldName + ".add( " + parameterName + " );" );
 
             jClass.addMethod( adder );
-/*
         }
-        else if ( field.getType().getName().equals( "java.util.Properties" ) )
-        {
-            String parameterName = singular( field.getName() );
-
-            String className = capitalise( parameterName );
-
-            JType addType = new JClass( "String" );
-
-            JMethod adder = new JMethod( null, "add" + className );
-
-            adder.addParameter( new JParameter( addType, "name" ) );
-
-            adder.addParameter( new JParameter( addType, "value" ) );
-
-            adder.getSourceCode().add( field.getName() + ".setProperty( name, value );" );
-
-            jClass.addMethod( adder );
-        }
-*/
     }
 }

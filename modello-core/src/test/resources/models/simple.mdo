@@ -13,17 +13,14 @@
           <version>1.0.0</version>
           <type>String</type>
         </field>
-      </fields>
-      <associations>
-        <association>
+        <field toto="tutu">
           <name>girlfriends</name>
-          <to>Girl</to>
-          <fromRole>girlfriends</fromRole>
-          <toRole>boyfriend</toRole>
-          <fromMultiplicity>1</fromMultiplicity>
-          <toMultiplicity>*</toMultiplicity>
-        </association>
-      </associations>
+          <association>
+            <type>Boy</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+      </fields>
     </class>
     <class>
       <name>Girl</name>
@@ -38,5 +35,3 @@
     </class>
   </classes>
 </model>
-<!--
--->

@@ -27,13 +27,16 @@ import java.io.Reader;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.codehaus.modello.BaseElement;
-import org.codehaus.modello.CodeSegment;
-import org.codehaus.modello.Model;
-import org.codehaus.modello.ModelAssociation;
-import org.codehaus.modello.ModelClass;
-import org.codehaus.modello.ModelField;
 import org.codehaus.modello.ModelloException;
+import org.codehaus.modello.model.BaseElement;
+import org.codehaus.modello.model.CodeSegment;
+import org.codehaus.modello.model.Model;
+import org.codehaus.modello.model.ModelAssociation;
+import org.codehaus.modello.model.ModelClass;
+import org.codehaus.modello.model.ModelDefault;
+import org.codehaus.modello.model.ModelField;
+import org.codehaus.modello.model.ModelInterface;
+import org.codehaus.modello.model.VersionRange;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -41,6 +44,8 @@ import org.xmlpull.v1.XmlPullParserFactory;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
+ * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
+ *
  * @version $Id$
  */
 public class ModelReader
@@ -70,7 +75,7 @@ public class ModelReader
 
     public Map getAttributesForAssociation( ModelAssociation modelAssociation )
     {
-        return (Map) associationAttributes.get( modelAssociation.getFromClass().getName() + ":" + modelAssociation.getName() );
+        return (Map) associationAttributes.get( modelAssociation.getModelClass().getName() + ":" + modelAssociation.getName() );
     }
 
     public Model loadModel( Reader reader )
@@ -124,6 +129,14 @@ public class ModelReader
                 {
                     model.setRoot( parser.nextText() );
                 }
+                else if ( parser.getName().equals( "defaults" ) )
+                {
+                    parseDefaults( model, parser );
+                }
+                else if ( parser.getName().equals( "interfaces" ) )
+                {
+                    parseInterfaces( model, parser );
+                }
                 else if ( parser.getName().equals( "classes" ) )
                 {
                     parseClasses( model, parser );
@@ -134,6 +147,77 @@ public class ModelReader
                 }
             }
             eventType = parser.next();
+        }
+    }
+
+    private void parseDefaults( Model model, XmlPullParser parser )
+        throws XmlPullParserException, IOException
+    {
+        while ( parser.nextTag() == XmlPullParser.START_TAG )
+        {
+            if ( parser.getName().equals( "default" ) )
+            {
+                ModelDefault modelDefault = new ModelDefault();
+
+                while ( parser.nextTag() == XmlPullParser.START_TAG )
+                {
+                    if ( parser.getName().equals( "key" ) )
+                    {
+                        modelDefault.setKey( parser.nextText() );
+                    }
+                    else if ( parser.getName().equals( "value" ) )
+                    {
+                        modelDefault.setValue( parser.nextText() );
+                    }
+                    else
+                    {
+                        parser.nextText();
+                    }
+                }
+
+                model.addDefault( modelDefault);
+            }
+            else
+            {
+                parser.next();
+            }
+        }
+    }
+
+    private void parseInterfaces( Model model, XmlPullParser parser )
+        throws XmlPullParserException, IOException
+    {
+        while ( parser.nextTag() == XmlPullParser.START_TAG )
+        {
+            if ( parser.getName().equals( "interface" ) )
+            {
+                ModelInterface modelInterface = new ModelInterface();
+
+                while ( parser.nextTag() == XmlPullParser.START_TAG )
+                {
+                    if ( parseBaseElement( modelInterface, parser ) )
+                    {
+                    }
+                    else if ( parser.getName().equals( "superInterface" ) )
+                    {
+                        modelInterface.setSuperInterface( parser.nextText() );
+                    }
+                    else if ( parser.getName().equals( "packageName" ) )
+                    {
+                        modelInterface.setPackageName( parser.nextText() );
+                    }
+                    else
+                    {
+                        parser.nextText();
+                    }
+                }
+
+                model.addInterface( modelInterface );
+            }
+            else
+            {
+                parser.next();
+            }
         }
     }
 
@@ -151,17 +235,22 @@ public class ModelReader
                     if ( parseBaseElement( modelClass, parser ) )
                     {
                     }
+                    else if ( parser.getName().equals( "interface" ) )
+                    {
+                        
+                        modelClass.addInterface( parser.nextText() );
+                    }
                     else if ( parser.getName().equals( "superClass" ) )
                     {
                         modelClass.setSuperClass( parser.nextText() );
                     }
+                    else if ( parser.getName().equals( "packageName" ) )
+                    {
+                        modelClass.setPackageName( parser.nextText() );
+                    }
                     else if ( parser.getName().equals( "fields" ) )
                     {
                         parseFields( modelClass, parser );
-                    }
-                    else if ( parser.getName().equals( "associations" ) )
-                    {
-                        parseAssociations( modelClass, parser );
                     }
                     else if ( parser.getName().equals( "codeSegments" ) )
                     {
@@ -191,7 +280,11 @@ public class ModelReader
             {
                 ModelField modelField = new ModelField();
 
-                Map attributes = getAttributes( parser );
+                ModelAssociation modelAssociation = null;
+
+                Map fAttributes = getAttributes( parser );
+
+                Map aAttributes = new HashMap();;
 
                 while ( parser.nextTag() == XmlPullParser.START_TAG )
                 {
@@ -199,13 +292,14 @@ public class ModelReader
                     if ( parseBaseElement( modelField, parser ) )
                     {
                     }
+                    else if ( parser.getName().equals( "association" ) )
+                    {
+                        aAttributes = getAttributes( parser );
+                        modelAssociation = parseAssociation( parser );
+                    }
                     else if ( parser.getName().equals( "type" ) )
                     {
                         modelField.setType( parser.nextText() );
-                    }
-                    else if ( parser.getName().equals( "specification" ) )
-                    {
-                        modelField.setSpecifiaction( parser.nextText() );
                     }
                     else if ( parser.getName().equals( "defaultValue" ) )
                     {
@@ -225,12 +319,37 @@ public class ModelReader
                     }
                 }
 
-                if ( modelField.getName() != null )
+                if ( modelAssociation != null )
                 {
-                    fieldAttributes.put( modelClass.getName() + ":" + modelField.getName(), attributes );
-                }
+                    modelAssociation.setName( modelField.getName() );
 
-                modelClass.addField( modelField );
+                    modelAssociation.setVersionRange( modelField.getVersionRange() );
+
+                    modelAssociation.setDescription( modelField.getDescription() );
+
+                    modelAssociation.setComment( modelField.getComment() );
+
+                    modelAssociation.setType( modelField.getType() );
+
+                    modelAssociation.setDefaultValue( modelField.getDefaultValue() );
+
+                    if ( modelAssociation.getName() != null )
+                    {
+                        fieldAttributes.put( modelClass.getName() + ":" + modelAssociation.getName(), fAttributes );
+                        associationAttributes.put( modelClass.getName() + ":" + modelAssociation.getName(), aAttributes );
+                    }
+
+                    modelClass.addField( modelAssociation );
+                }
+                else
+                {
+                    if ( modelField.getName() != null )
+                    {
+                        fieldAttributes.put( modelClass.getName() + ":" + modelField.getName(), fAttributes );
+                    }
+
+                    modelClass.addField( modelField );
+                }
             }
             else
             {
@@ -239,60 +358,33 @@ public class ModelReader
         }
     }
 
-    private void parseAssociations( ModelClass modelClass, XmlPullParser parser )
+    private ModelAssociation parseAssociation( XmlPullParser parser )
         throws XmlPullParserException, IOException
     {
+        ModelAssociation modelAssociation = new ModelAssociation();
+
+        Map attributes = getAttributes( parser );
+
         while ( parser.nextTag() == XmlPullParser.START_TAG )
         {
-            if ( parser.getName().equals( "association" ) )
+            if ( parseBaseElement( modelAssociation, parser ) )
             {
-                ModelAssociation modelAssociation = new ModelAssociation();
-
-                Map attributes = getAttributes( parser );
-
-                while ( parser.nextTag() == XmlPullParser.START_TAG )
-                {
-                    if ( parseBaseElement( modelAssociation, parser ) )
-                    {
-                    }
-                    else if ( parser.getName().equals( "to" ) )
-                    {
-                        modelAssociation.setTo( parser.nextText() );
-                    }
-                    else if ( parser.getName().equals( "fromRole" ) )
-                    {
-                        modelAssociation.setFromRole( parser.nextText() );
-                    }
-                    else if ( parser.getName().equals( "toRole" ) )
-                    {
-                        modelAssociation.setToRole( parser.nextText() );
-                    }
-                    else if ( parser.getName().equals( "fromMultiplicity" ) )
-                    {
-                        modelAssociation.setFromMultiplicity( parser.nextText() );
-                    }
-                    else if ( parser.getName().equals( "toMultiplicity" ) )
-                    {
-                        modelAssociation.setToMultiplicity( parser.nextText() );
-                    }
-                    else
-                    {
-                        parser.nextText();
-                    }
-                }
-
-                if ( modelAssociation.getName() != null )
-                {
-                    associationAttributes.put( modelClass.getName() + ":" + modelAssociation.getName(), attributes );
-                }
-
-                modelClass.addAssociation( modelAssociation );
+            }
+            else if ( parser.getName().equals( "type" ) )
+            {
+                modelAssociation.setTo( parser.nextText() );
+            }
+            else if ( parser.getName().equals( "multiplicity" ) )
+            {
+                modelAssociation.setMultiplicity( parser.nextText() );
             }
             else
             {
-                parser.next();
+                parser.nextText();
             }
         }
+
+        return modelAssociation;
     }
 
     private void parseCodeSegment( ModelClass modelClass, XmlPullParser parser )
@@ -341,7 +433,7 @@ public class ModelReader
         }
         else if ( parser.getName().equals( "version" ) )
         {
-            element.setVersion( parser.nextText() );
+            element.setVersionRange( new VersionRange( parser.nextText() ) );
         }
         else if ( parser.getName().equals( "comment" ) )
         {
