@@ -1,20 +1,44 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-
-<project>
+<model>
   <modelVersion>4.0.0</modelVersion>
   <groupId>modello</groupId>
   <artifactId>modello</artifactId>
-  <version>1.0</version>
+  <packaging>jar</packaging>
   <name>Modello Parent</name>
+  <version>1.0</version>
+  <ciManagement>
+    <notifiers>
+      <notifier>
+        <type>email</type>
+        <address>dev@modello.codehaus.org</address>
+      </notifier>
+    </notifiers>
+  </ciManagement>
+  <inceptionYear>2001</inceptionYear>
+  <dependencies>
+    <dependency>
+      <groupId>plexus</groupId>
+      <artifactId>plexus-utils</artifactId>
+      <version>1.0-alpha-1-SNAPSHOT</version>
+      <type>jar</type>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <type>jar</type>
+      <scope>compile</scope>
+    </dependency>
+  </dependencies>
+  <scm>
+    <connection>scm:cvs:pserver:anoncvs@cvs.modello.codehaus.org:/scm/modello:modello</connection>
+    <developerConnection>scm:cvs:ext:${maven.username}@cvs.modello.codehaus.org:/home/projects/modello/scm:modello</developerConnection>
+    <url>http://cvs.modello.codehaus.org/modello/${pom.artifactId}</url>
+  </scm>
   <organization>
     <name>Codehaus</name>
     <url>http://www.codehaus.org/</url>
-    <logo>/images/codehaus-logo.gif</logo>
   </organization>
-  <inceptionYear>2001</inceptionYear>
-  <package>org.codehaus.modello</package>
-  <logo>/images/maven.gif</logo>
-
   <distributionManagement>
     <repository>
       <id>codehaus</id>
@@ -22,27 +46,4 @@
       <url>scp://beaver.codehaus.org//home/projects/modello/dist/</url>
     </repository>
   </distributionManagement>
-
-  <ciManagement>
-    <nagEmailAddress>dev@modello.codehaus.org</nagEmailAddress>
-  </ciManagement>
-        
-  <scm>
-    <connection>scm:cvs:pserver:anoncvs@cvs.modello.codehaus.org:/scm/modello:modello</connection>
-    <developerConnection>scm:cvs:ext:${maven.username}@cvs.modello.codehaus.org:/home/projects/modello/scm:modello</developerConnection>
-    <url>http://cvs.modello.codehaus.org/modello/${pom.artifactId}</url>
-  </scm>
-
-  <dependencies>
-    <dependency>
-      <groupId>plexus</groupId>
-      <artifactId>plexus-utils</artifactId>
-      <version>1.0-alpha-1-SNAPSHOT</version>
-    </dependency>  
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-    </dependency>
-  </dependencies>
-</project>
+</model>
