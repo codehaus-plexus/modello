@@ -27,7 +27,7 @@
       <name>Model</name>
       <version>3.0.0+</version>
       <fields>
-        <field attribute="true">
+        <field attribute="true" tagName="extender">
           <name>extend</name>
           <version>3.0.0+</version>
           <description>
@@ -293,7 +293,7 @@
           <type>Repository</type>
           <comment>This element needs to be renamed as it conflicts with the existing notion of repositories in Maven.</comment>
         </field>
-        <field>
+        <field tagName="builder">
           <name>build</name>
           <version>3.0.0+</version>
           <required>true</required>

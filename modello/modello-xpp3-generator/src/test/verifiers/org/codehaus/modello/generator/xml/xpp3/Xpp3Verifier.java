@@ -42,6 +42,14 @@ public class Xpp3Verifier
 
         expected.setScm( scm );
 
+        Build build = new Build();
+
+        build.setSourceDirectory( "src/main/java" );
+
+        build.setUnitTestSourceDirectory( "src/test/java" );
+
+        expected.setBuild( build );
+
         MavenXpp3Writer writer = new MavenXpp3Writer();
 
         StringWriter string = new StringWriter();
@@ -123,6 +131,7 @@ public class Xpp3Verifier
 
         assertOrganization( expected.getOrganization(), actual.getOrganization() );
 */
+        assertBuild( expected.getBuild(), actual.getBuild() );
     }
 
     public void assertMailingLists( List expected, List actual )
@@ -167,5 +176,18 @@ public class Xpp3Verifier
         assertEquals( "/model/scm/developerConnection", expected.getDeveloperConnection(), actual.getDeveloperConnection() );
 
         assertEquals( "/model/scm/url", expected.getUrl(), actual.getUrl() );
+    }
+
+    public void assertBuild( Build expected, Object actualObject )
+    {
+        assertNotNull( "/model/builder", actualObject );
+
+        assertInstanceOf( "/model/builder", Build.class, actualObject.getClass() );
+
+        Build actual = (Build) actualObject;
+
+        assertEquals( "/model/builder/sourceDirectory", expected.getSourceDirectory(), actual.getSourceDirectory() );
+
+        assertEquals( "/model/builder/unitTestSourceDirectory", expected.getUnitTestSourceDirectory(), actual.getUnitTestSourceDirectory() );
     }
 }

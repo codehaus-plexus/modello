@@ -17,6 +17,8 @@ public class XmlMetaData
 
     private boolean attribute;
 
+    private String tagName;
+
     /**
      * @return Returns the attribute.
      */
@@ -31,5 +33,21 @@ public class XmlMetaData
     public void setAttribute( boolean attribute )
     {
         this.attribute = attribute;
+    }
+
+    /**
+     * @return Returns the tag name or the attribute name if it's an attribute.
+     */
+    public String getTagName()
+    {
+        return tagName;
+    }
+
+    /**
+     * @param tagName The tag or attribute name to set.
+     */
+    public void setTagName( String tagName )
+    {
+        this.tagName = tagName;
     }
 }
