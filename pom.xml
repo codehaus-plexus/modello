@@ -30,7 +30,7 @@
     <dependency>
       <groupId>xstream</groupId>
       <artifactId>xstream</artifactId>
-      <version>1.0-SNAPSHOT</version>
+      <version>SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
