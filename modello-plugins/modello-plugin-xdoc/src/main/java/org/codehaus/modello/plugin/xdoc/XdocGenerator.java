@@ -22,22 +22,21 @@ package org.codehaus.modello.plugin.xdoc;
  * SOFTWARE.
  */
 
+import org.codehaus.modello.ModelloException;
+import org.codehaus.modello.ModelloRuntimeException;
+import org.codehaus.modello.model.Model;
+import org.codehaus.modello.model.ModelAssociation;
+import org.codehaus.modello.model.ModelClass;
+import org.codehaus.modello.model.ModelField;
+import org.codehaus.modello.plugin.AbstractModelloGenerator;
+import org.codehaus.plexus.util.xml.XMLWriter;
+import org.codehaus.plexus.util.xml.PrettyPrintXMLWriter;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.Properties;
-
-import org.codehaus.modello.ModelloException;
-import org.codehaus.modello.ModelloRuntimeException;
-import org.codehaus.modello.generator.xml.DefaultXMLWriter;
-import org.codehaus.modello.generator.xml.XMLWriter;
-import org.codehaus.modello.model.Model;
-import org.codehaus.modello.model.ModelAssociation;
-import org.codehaus.modello.model.ModelClass;
-import org.codehaus.modello.model.ModelDefault;
-import org.codehaus.modello.model.ModelField;
-import org.codehaus.modello.plugin.AbstractModelloGenerator;
 
 /**
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
@@ -84,7 +83,7 @@ public class XdocGenerator
 
         FileWriter writer = new FileWriter( f );
 
-        XMLWriter w = new DefaultXMLWriter( writer );
+        XMLWriter w = new PrettyPrintXMLWriter( writer );
 
         writer.write( "<?xml version=\"1.0\"?>\n" );
 
