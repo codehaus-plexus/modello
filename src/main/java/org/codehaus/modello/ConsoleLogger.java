@@ -59,5 +59,7 @@ public class ConsoleLogger
         {
             throwable.printStackTrace( System.out );
         }
+
+        System.out.flush();
     }
 }

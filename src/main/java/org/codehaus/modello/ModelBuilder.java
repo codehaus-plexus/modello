@@ -5,20 +5,29 @@ package org.codehaus.modello;
  */
 
 import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.alias.DefaultClassMapper;
-import com.thoughtworks.xstream.alias.DefaultNameMapper;
-import com.thoughtworks.xstream.objecttree.reflection.JavaReflectionObjectFactory;
-import com.thoughtworks.xstream.xml.xpp3.Xpp3Dom;
-import com.thoughtworks.xstream.xml.xpp3.Xpp3DomBuilder;
-import com.thoughtworks.xstream.xml.xpp3.Xpp3DomXMLReader;
-import com.thoughtworks.xstream.xml.xpp3.Xpp3DomXMLReaderDriver;
+import com.thoughtworks.xstream.alias.ClassMapper;
+import com.thoughtworks.xstream.converters.Converter;
+import com.thoughtworks.xstream.converters.reflection.PureJavaReflectionProvider;
+import com.thoughtworks.xstream.converters.reflection.ReflectionProvider;
+import com.thoughtworks.xstream.core.DefaultClassMapper;
+import com.thoughtworks.xstream.io.HierarchicalStreamDriver;
+import com.thoughtworks.xstream.io.xml.XppDomDriver;
+import com.thoughtworks.xstream.io.xml.XppDomReader;
+import com.thoughtworks.xstream.io.xml.xppdom.Xpp3Dom;
+import com.thoughtworks.xstream.io.xml.xppdom.Xpp3DomBuilder;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
+
+import org.codehaus.modello.converters.ModelFieldConverter;
+import org.codehaus.modello.generator.GeneratorPluginManager;
+import org.codehaus.modello.metadata.MetaData;
+import org.codehaus.modello.metadata.MetaDataPlugin;
+import org.codehaus.modello.metadata.MetaDataPluginManager;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -31,11 +40,42 @@ public class ModelBuilder
 
     private static ModelBuilder instance;
 
-    private Map metaDataClasses;
+    private GeneratorPluginManager generatorPluginManager;
 
-    public void initialize( PluginManager pluginManager )
+    private MetaDataPluginManager metaDataPluginManager;
+
+    private ModelFieldConverter fieldConverter;
+
+    public void setGeneratorPluginManager( GeneratorPluginManager generatorPluginManager )
     {
-        xstream = new XStream( new JavaReflectionObjectFactory(), new DefaultClassMapper( new DefaultNameMapper() ), new Xpp3DomXMLReaderDriver() );
+        this.generatorPluginManager = generatorPluginManager;
+    }
+
+    public void setMetaDataPluginManager( MetaDataPluginManager metaDataPluginManager )
+    {
+        this.metaDataPluginManager = metaDataPluginManager;
+    }
+
+    public void initialize()
+    {
+        ReflectionProvider reflectionProvider = new PureJavaReflectionProvider();
+
+        ClassMapper classMapper = new DefaultClassMapper();
+
+        HierarchicalStreamDriver xmlReaderDriver = new XppDomDriver();
+/*
+        metaDataClasses = new HashMap();
+
+        for ( Iterator it = generatorPluginManager.getGenerators(); it.hasNext(); )
+        {
+            ModelloPlugin plugin = (ModelloPlugin) it.next();
+
+            Class clazz = plugin.initializeXStream( xstream );
+
+            metaDataClasses.put( clazz.getName(), plugin.getId() );
+        }
+*/
+        xstream = new XStream( reflectionProvider, classMapper, xmlReaderDriver );
 
         xstream.alias( "model", Model.class );
 
@@ -45,16 +85,11 @@ public class ModelBuilder
 
         xstream.alias( "codeSegment", CodeSegment.class );
 
-        metaDataClasses = new HashMap();
+        Converter defaultConverter = xstream.getConverterLookup().defaultConverter();
 
-        for ( Iterator it = pluginManager.getPlugins(); it.hasNext(); )
-        {
-            ModelloPlugin plugin = (ModelloPlugin) it.next();
+        fieldConverter = new ModelFieldConverter( defaultConverter );
 
-            Class clazz = plugin.initializeXStream( xstream );
-
-            metaDataClasses.put( clazz.getName(), plugin.getId() );
-        }
+        xstream.registerConverter( fieldConverter );
     }
 
     public Model getModel( String modelFile )
@@ -77,9 +112,61 @@ public class ModelBuilder
             throw new ModelloException( "Exception while unmarshalling the model.", ex );
         }
 
-        Model objectModel = (Model) xstream.fromXML( new Xpp3DomXMLReader( dom ) );
+        Model objectModel = (Model) xstream.unmarshal( new XppDomReader( dom ) );
 
-        objectModel.initialize( metaDataClasses );
+        objectModel.initialize();
+
+        for( Iterator plugins = metaDataPluginManager.getMetaDataPlugins(); plugins.hasNext(); )
+        {
+            MetaDataPlugin plugin = (MetaDataPlugin) plugins.next();
+
+            Map classData = Collections.EMPTY_MAP;
+
+            MetaData metaData = plugin.getModelMetaData( objectModel, classData );
+
+            if ( metaData != null )
+            {
+                objectModel.addMetaData( metaData );
+            }
+        }
+
+        for( Iterator classes = objectModel.getClasses().iterator(); classes.hasNext(); )
+        {
+            ModelClass clazz = (ModelClass) classes.next();
+
+            Map classData = Collections.EMPTY_MAP;
+
+            for( Iterator plugins = metaDataPluginManager.getMetaDataPlugins(); plugins.hasNext(); )
+            {
+                MetaDataPlugin plugin = (MetaDataPlugin) plugins.next();
+
+                MetaData metaData = plugin.getClassMetaData( clazz, classData );
+
+                if ( metaData != null )
+                {
+                    clazz.addMetaData( metaData );
+                }
+            }
+
+            for( Iterator fields = clazz.getFields().iterator(); fields.hasNext(); )
+            {
+                ModelField field = (ModelField) fields.next();
+
+                Map fieldData = fieldConverter.getMetaDataForField( field.getName() );
+
+                for( Iterator plugins = metaDataPluginManager.getMetaDataPlugins(); plugins.hasNext(); )
+                {
+                    MetaDataPlugin plugin = (MetaDataPlugin) plugins.next();
+
+                    MetaData metaData = plugin.getFieldMetaData( field, fieldData );
+
+                    if ( metaData != null )
+                    {
+                        field.addMetaData( metaData );
+                    }
+                }
+            }
+        }
 
         return objectModel;
     }

@@ -21,7 +21,7 @@ import org.codehaus.modello.generator.xml.XMLWriter;
 public class XdocGenerator
     extends AbstractGenerator
 {
-    public XdocGenerator( String model, String outputDirectory, String modelVersion, boolean packageWithVersion )
+    public XdocGenerator( Model model, File outputDirectory, String modelVersion, boolean packageWithVersion )
     {
         super( model, outputDirectory, modelVersion, packageWithVersion );
     }

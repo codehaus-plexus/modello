@@ -1,10 +1,5 @@
 package org.codehaus.modello;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
 /**
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
  *
@@ -22,11 +17,11 @@ public class ModelField
     private String typeValidator;
 
     private boolean required;
-
+/*
     private List metaData;
 
     private transient Map metaDataObjects = new HashMap();
-
+*/
     private ModelClass modelClass;
 
     public String getType()
@@ -53,37 +48,55 @@ public class ModelField
     {
         return required;
     }
-
+/*
     public boolean hasMetaData( String key )
     {
         return metaDataObjects.containsKey( key );
     }
 
     public Object getMetaData( String key )
-        throws ModelloRuntimeException
     {
-        return metaDataObjects.get( key );
+        Object obj = metaDataObjects.get( key );
+
+        if ( obj == null )
+        {
+            throw new ModelloRuntimeException( "No such meta data: '" + key + "'." );
+        }
+
+        return obj;
     }
 
+    public void addMetaDataObject( String key, Object value )
+    {
+        if ( metaDataObjects.containsKey( key ) )
+        {
+            throw new ModelloRuntimeException( "There is already a meta data object with the specified key: '" + key + "'." );
+        }
+
+        metaDataObjects.put( key, value );
+    }
+*/
     public void initialize( ModelClass modelClass )
     {
         this.modelClass = modelClass;
-
-        if ( metaData != null )
+/*
+        if ( metaData == null )
         {
-            Map metaDataClasses = modelClass.getModel().getMetaDataClasses();
-
-            for ( Iterator it = metaData.iterator(); it.hasNext(); )
-            {
-                Object object = it.next();
-    
-                Class clazz = object.getClass();
-    
-                String key = (String) metaDataClasses.get( clazz.getName() );
-    
-                metaDataObjects.put( key, object );
-            }
+            return;
         }
+        Map metaDataClasses = modelClass.getModel().getMetaDataClasses();
+
+        for ( Iterator it = metaData.iterator(); it.hasNext(); )
+        {
+            Object object = it.next();
+
+            Class clazz = object.getClass();
+
+            String key = (String) metaDataClasses.get( clazz.getName() );
+
+            metaDataObjects.put( key, object );
+        }
+*/
     }
 
     public ModelClass getModelClass()

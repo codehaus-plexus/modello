@@ -2,12 +2,10 @@ package org.codehaus.modello.generator;
 
 import com.thoughtworks.xstream.XStream;
 
-import org.codehaus.modello.ConsoleLogger;
+import java.io.File;
+
 import org.codehaus.modello.Model;
-import org.codehaus.modello.ModelBuilder;
-import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.ModelloRuntimeException;
-import org.codehaus.modello.PluginManager;
 
 // Possibly a general package extension for things like reader/writer
 
@@ -19,9 +17,9 @@ public abstract class AbstractGenerator
 {
     private XStream xstream;
 
-    private String model;
+    private Model model;
 
-    private String outputDirectory;
+    private File outputDirectory;
 
     private Version modelVersion;
 
@@ -29,7 +27,7 @@ public abstract class AbstractGenerator
 
     private Model objectModel;
 
-    protected AbstractGenerator( String model, String outputDirectory, String modelVersion, boolean packageWithVersion )
+    protected AbstractGenerator( Model model, File outputDirectory, String modelVersion, boolean packageWithVersion )
     {
         this.model = model;
 
@@ -41,6 +39,11 @@ public abstract class AbstractGenerator
     }
 
     protected Model getModel()
+    {
+        return model;
+    }
+/*
+    protected Model getModel()
         throws ModelloException
     {
         if ( objectModel != null )
@@ -48,23 +51,29 @@ public abstract class AbstractGenerator
             return objectModel;
         }
 
-        PluginManager pluginManager = new PluginManager();
+        GeneratorPluginManager generatorPluginManager = new GeneratorPluginManager();
+
+        MetaDataPluginManager metaDataPluginManager = new MetaDataPluginManager();
 
         ModelBuilder modelBuilder = new ModelBuilder();
 
-        pluginManager.setLogger( new ConsoleLogger() );
+        generatorPluginManager.setLogger( new ConsoleLogger() );
+
+        metaDataPluginManager.setLogger( new ConsoleLogger() );
 
         modelBuilder.setLogger( new ConsoleLogger() );
 
-        pluginManager.initialize();
+        generatorPluginManager.initialize();
 
-        modelBuilder.initialize( pluginManager );
+        metaDataPluginManager.initialize();
+
+        modelBuilder.initialize();
 
         objectModel = modelBuilder.getModel( model );
 
         return objectModel;
     }
-
+*/
     protected Version getModelVersion()
     {
         return modelVersion;
@@ -75,7 +84,7 @@ public abstract class AbstractGenerator
         return packageWithVersion;
     }
 
-    public String getOutputDirectory()
+    public File getOutputDirectory()
     {
         return outputDirectory;
     }
