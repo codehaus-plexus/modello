@@ -108,7 +108,7 @@ public class Xpp3ReaderGenerator
         addModelImports( jClass );
 
         // Write the parse method which will do the unmarshalling.
-        ModelClass root = objectModel.getClass( objectModel.getRoot(), getGeneratedVersion() );
+        ModelClass root = objectModel.getClass( objectModel.getRoot( getGeneratedVersion() ), getGeneratedVersion() );
 
         String rootElement = uncapitalise( root.getName() );
 
