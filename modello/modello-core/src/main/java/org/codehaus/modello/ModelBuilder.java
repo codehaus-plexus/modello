@@ -58,24 +58,24 @@ public class ModelBuilder
     }
 
     public void initialize()
+        throws ModelloException
     {
+        if ( generatorPluginManager == null )
+        {
+            throw new ModelloException( "Missing requirement: generator plugin manager." );
+        }
+
+        if ( metaDataPluginManager == null )
+        {
+            throw new ModelloException( "Missing requirement: meta data plugin manager." );
+        }
+
         ReflectionProvider reflectionProvider = new PureJavaReflectionProvider();
 
         ClassMapper classMapper = new DefaultClassMapper();
 
         HierarchicalStreamDriver xmlReaderDriver = new XppDomDriver();
-/*
-        metaDataClasses = new HashMap();
 
-        for ( Iterator it = generatorPluginManager.getGenerators(); it.hasNext(); )
-        {
-            ModelloPlugin plugin = (ModelloPlugin) it.next();
-
-            Class clazz = plugin.initializeXStream( xstream );
-
-            metaDataClasses.put( clazz.getName(), plugin.getId() );
-        }
-*/
         xstream = new XStream( reflectionProvider, classMapper, xmlReaderDriver );
 
         xstream.alias( "model", Model.class );
@@ -83,6 +83,8 @@ public class ModelBuilder
         xstream.alias( "class", ModelClass.class );
 
         xstream.alias( "field", ModelField.class );
+
+        xstream.alias( "association", ModelAssociation.class );
 
         xstream.alias( "codeSegment", CodeSegment.class );
 
@@ -94,7 +96,7 @@ public class ModelBuilder
     }
 
     public Model getModel( File modelFile )
-        throws ModelloException
+        throws ModelloException, ModelValidationException
     {
         String modelContents = fileRead( modelFile );
     
@@ -163,6 +165,29 @@ public class ModelBuilder
 
                     field.addMetaData( metaData );
                 }
+            }
+        }
+
+        objectModel.validate();
+
+        for( Iterator classes = objectModel.getClasses().iterator(); classes.hasNext(); )
+        {
+            ModelClass modelClass = (ModelClass) classes.next();
+
+            modelClass.validate();
+
+            for( Iterator fields = modelClass.getFields().iterator(); fields.hasNext(); )
+            {
+                ModelField modelField = (ModelField) fields.next();
+
+                modelField.validate();
+            }
+
+            for( Iterator associations = modelClass.getAssociations().iterator(); associations.hasNext(); )
+            {
+                ModelAssociation modelAssociation = (ModelAssociation) associations.next();
+
+                modelAssociation.validate();
             }
         }
 
