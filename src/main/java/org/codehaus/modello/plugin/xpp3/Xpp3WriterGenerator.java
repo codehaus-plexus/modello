@@ -18,7 +18,7 @@ import org.codehaus.modello.generator.java.javasource.JMethod;
 import org.codehaus.modello.generator.java.javasource.JParameter;
 import org.codehaus.modello.generator.java.javasource.JSourceCode;
 import org.codehaus.modello.generator.java.javasource.JSourceWriter;
-import org.codehaus.modello.plugins.xml.XmlMetadata;
+import org.codehaus.modello.plugins.xml.XmlFieldMetadata;
 
 /**
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
@@ -180,9 +180,9 @@ public class Xpp3WriterGenerator
     private void writeFieldMarshalling( ModelClass modelClass, ModelField field, JSourceCode sc )
         throws ModelloRuntimeException
     {
-        XmlMetadata xmlMetadata = (XmlMetadata)field.getMetadata( XmlMetadata.ID );
+        XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata)field.getMetadata( XmlFieldMetadata.ID );
 
-        boolean attribute = xmlMetadata.isAttribute();
+        boolean attribute = xmlFieldMetadata.isAttribute();
 
         if ( !outputElement( field ) )
         {
@@ -197,7 +197,7 @@ public class Xpp3WriterGenerator
 
         String modelClassName = uncapitalise( modelClass.getName() );
 
-        String tagName = xmlMetadata.getTagName();
+        String tagName = xmlFieldMetadata.getTagName();
 
         if ( tagName == null )
         {

@@ -17,7 +17,7 @@ import org.codehaus.modello.generator.java.javasource.JMethod;
 import org.codehaus.modello.generator.java.javasource.JParameter;
 import org.codehaus.modello.generator.java.javasource.JSourceCode;
 import org.codehaus.modello.generator.java.javasource.JSourceWriter;
-import org.codehaus.modello.plugins.xml.XmlMetadata;
+import org.codehaus.modello.plugins.xml.XmlFieldMetadata;
 
 /**
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
@@ -164,9 +164,9 @@ public class Xpp3ReaderGenerator
         {
             ModelField field = (ModelField) fields.get( i );
 
-            XmlMetadata xmlMetadata = (XmlMetadata)field.getMetadata( XmlMetadata.ID );
+            XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata)field.getMetadata( XmlFieldMetadata.ID );
 
-            if ( !xmlMetadata.isAttribute() )
+            if ( !xmlFieldMetadata.isAttribute() )
             {
                 continue;
             }
@@ -209,9 +209,9 @@ public class Xpp3ReaderGenerator
         {
             ModelField field = (ModelField) fields.get( i );
 
-            XmlMetadata xmlMetadata = (XmlMetadata)field.getMetadata( XmlMetadata.ID );
+            XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata)field.getMetadata( XmlFieldMetadata.ID );
 
-            if ( xmlMetadata.isAttribute() )
+            if ( xmlFieldMetadata.isAttribute() )
             {
                 continue;
             }
@@ -275,27 +275,27 @@ public class Xpp3ReaderGenerator
     private void writeAssociationParsing( ModelClass modelClass, ModelAssociation association, JSourceCode sc, String statement, Model objectModel )
         throws IOException
     {
-        XmlMetadata xmlMetadata = new XmlMetadata();
+        XmlFieldMetadata xmlFieldMetadata = new XmlFieldMetadata();
 
-        writeFieldParsing( modelClass, association.getFromRole(), "java.util.List", sc, statement, objectModel, xmlMetadata, false, true );
+        writeFieldParsing( modelClass, association.getFromRole(), "java.util.List", sc, statement, objectModel, xmlFieldMetadata, false, true );
     }
 
     private void writeFieldParsing( ModelClass modelClass, ModelField field, JSourceCode sc, String statement, Model objectModel, boolean attribute )
         throws IOException
     {
-        XmlMetadata xmlMetadata = (XmlMetadata)field.getMetadata( XmlMetadata.ID );
+        XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata)field.getMetadata( XmlFieldMetadata.ID );
 
-        writeFieldParsing( modelClass, field.getName(), field.getType(), sc, statement, objectModel, xmlMetadata, attribute, false );
+        writeFieldParsing( modelClass, field.getName(), field.getType(), sc, statement, objectModel, xmlFieldMetadata, attribute, false );
     }
 
-    private void writeFieldParsing( ModelClass modelClass, String name, String type, JSourceCode sc, String statement, Model objectModel, XmlMetadata xmlMetadata, boolean attribute, boolean association )
+    private void writeFieldParsing( ModelClass modelClass, String name, String type, JSourceCode sc, String statement, Model objectModel, XmlFieldMetadata xmlFieldMetadata, boolean attribute, boolean association )
         throws IOException
     {
         String className = capitalise( name );
 
         String modelClassName = uncapitalise( modelClass.getName() );
 
-        String tagName = xmlMetadata.getTagName();
+        String tagName = xmlFieldMetadata.getTagName();
 
         if ( tagName == null )
         {
