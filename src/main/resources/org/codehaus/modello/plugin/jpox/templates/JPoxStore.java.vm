@@ -261,22 +261,23 @@ public class ${model.name}JPoxStore
         }
     }
 
-    public Collection get${class.name}Collection( boolean makeTransient, String ordering )
+    public Collection get${class.name}Collection( boolean makeTransient, String filter, String ordering )
         throws Exception
     {
         try
         {
             PersistenceManager pm = begin();
-#*
-            Extent extent = pm.getExtent( ${class.name}.class, true );
 
-            Iterator it = extent.iterator();
-*#
             Query query = pm.newQuery( ${class.name}.class );
 
             if ( ordering != null )
             {
                 query.setOrdering( ordering );
+            }
+
+            if ( filter != null )
+            {
+                query.setFilter( filter );
             }
 
             Collection result = ((Collection) query.execute() );
@@ -290,8 +291,6 @@ public class ${model.name}JPoxStore
                 for ( Iterator it = result.iterator(); it.hasNext(); )
                 {
                     Object object = it.next();
-
-##                  Make transient?
 
                     pm.refresh( object );
 
