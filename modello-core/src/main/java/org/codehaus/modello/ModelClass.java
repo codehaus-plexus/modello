@@ -64,7 +64,14 @@ public class ModelClass
 
     public ModelField getField( String fieldName )
     {
-        return (ModelField) fieldMap.get( fieldName );
+        ModelField field = (ModelField) fieldMap.get( fieldName );
+
+        if ( field == null )
+        {
+            throw new ModelloRuntimeException( "No such field: '" + fieldName + "'." );
+        }
+
+        return field;
     }
 
     public Model getModel()

@@ -24,7 +24,7 @@ import org.codehaus.modello.generator.java.javasource.JSourceWriter;
 public class Xpp3WriterGenerator
     extends AbstractXpp3Generator
 {
-    public Xpp3WriterGenerator( String model, String outputDirectory, String modelVersion, boolean packageWithVersion )
+    public Xpp3WriterGenerator( Model model, File outputDirectory, String modelVersion, boolean packageWithVersion )
         throws ModelloRuntimeException
     {
         super( model, outputDirectory, modelVersion, packageWithVersion );

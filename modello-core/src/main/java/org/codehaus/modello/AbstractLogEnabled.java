@@ -9,6 +9,7 @@ package org.codehaus.modello;
  * @version $Id$
  */
 public abstract class AbstractLogEnabled
+    implements LogEnabled
 {
     private Logger logger;
 

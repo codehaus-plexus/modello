@@ -4,6 +4,9 @@ package org.codehaus.modello.generator.xml.xpp3;
  * LICENSE
  */
 
+import java.io.File;
+
+import org.codehaus.modello.Model;
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.generator.java.JavaGenerator;
 
@@ -14,7 +17,7 @@ import org.codehaus.modello.generator.java.JavaGenerator;
 public abstract class AbstractXpp3Generator
     extends JavaGenerator
 {
-    public AbstractXpp3Generator( String model, String outputDirectory, String modelVersion, boolean version )
+    public AbstractXpp3Generator( Model model, File outputDirectory, String modelVersion, boolean version )
     {
         super( model, outputDirectory, modelVersion, version );
     }
