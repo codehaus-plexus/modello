@@ -12,10 +12,7 @@ import java.io.FileWriter;
 import java.util.Iterator;
 
 /**
- *
- *
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
- *
  * @version $Id$
  */
 public class XdocGenerator
@@ -71,17 +68,17 @@ public class XdocGenerator
         // Descriptor with links
         
         w.startElement( "section" );
-        
+
         w.addAttribute( "name", "Descriptor with links" );
-        
-        w.startElement( "p" );        
+
+        w.startElement( "p" );
 
         w.startElement( "source" );
 
         w.writeText( "\n" + getDescriptorWithLink( objectModel ) );
-        
+
         w.endElement();
-        
+
         w.endElement();
         
         // Element descriptors
@@ -90,74 +87,80 @@ public class XdocGenerator
         {
             ModelClass modelClass = (ModelClass) i.next();
 
-            w.startElement( "section" );
-
-            w.addAttribute( "name", modelClass.getName() );
-
-            w.startElement( "p" );
-
-            w.startElement( "table" );
-
-            w.startElement( "tr" );
-
-            w.startElement( "th" );
-
-            w.writeText( "Element" );
-
-            w.endElement();
-
-            w.startElement( "th" );
-
-            w.writeText( "Description" );
-
-            w.endElement();
-
-            w.endElement();
-
-            for ( Iterator j = modelClass.getFields().iterator(); j.hasNext(); )
+            if ( outputElement( modelClass.getVersion(), modelClass.getName() ) )
             {
-                ModelField field = (ModelField) j.next();
+                w.startElement( "section" );
+
+                w.addAttribute( "name", modelClass.getName() );
+
+                w.startElement( "p" );
+
+                w.startElement( "table" );
 
                 w.startElement( "tr" );
 
-                w.startElement( "td" );
+                w.startElement( "th" );
 
-                if ( objectModel.getClassNames().contains( capitalise( field.getName() ) ) )
-                {
-                    w.writeText( field.getName() );
-                }
-                else
-                {
-                    w.writeText( field.getName() );
-                }
+                w.writeText( "Element" );
 
                 w.endElement();
 
-                w.startElement( "td" );
+                w.startElement( "th" );
 
-                if ( field.getDescription() != null )
+                w.writeText( "Description" );
+
+                w.endElement();
+
+                w.endElement();
+
+                for ( Iterator j = modelClass.getFields().iterator(); j.hasNext(); )
                 {
-                    w.writeText( field.getDescription() );
+                    ModelField field = (ModelField) j.next();
+
+                    if ( outputElement( field.getVersion(), modelClass.getName() + "." + field.getName() ) )
+                    {
+                        w.startElement( "tr" );
+
+                        w.startElement( "td" );
+
+                        if ( objectModel.getClassNames().contains( capitalise( field.getName() ) ) )
+                        {
+                            w.writeText( field.getName() );
+                        }
+                        else
+                        {
+                            w.writeText( field.getName() );
+                        }
+
+                        w.endElement();
+
+                        w.startElement( "td" );
+
+                        if ( field.getDescription() != null )
+                        {
+                            w.writeText( field.getDescription() );
+                        }
+                        else
+                        {
+                            w.writeText( "No description." );
+                        }
+
+                        w.endElement();
+
+                        w.endElement();
+                    }
                 }
-                else
-                {
-                    w.writeText( "No description." );
-                }
+
+                w.endElement();
 
                 w.endElement();
 
                 w.endElement();
             }
-
-            w.endElement();
-
-            w.endElement();
-
-            w.endElement();
         }
 
         w.endElement();
-        
+
         w.endElement();
 
         w.endElement();
@@ -166,67 +169,70 @@ public class XdocGenerator
 
         writer.close();
     }
-    
+
     private String getDescriptorWithLink( Model objectModel )
     {
         StringBuffer sb = new StringBuffer();
-        
+
         sb.append( getModelClassDescriptor( objectModel, objectModel.getClass( objectModel.getRoot() ), 0 ) );
-        
+
         return sb.toString();
     }
-    
-    private String getModelClassDescriptor(  Model objectModel, ModelClass modelClass, int depth )
+
+    private String getModelClassDescriptor( Model objectModel, ModelClass modelClass, int depth )
     {
         StringBuffer sb = new StringBuffer();
-        
-        for (int i = 0; i < depth; i++ )
+
+        for ( int i = 0; i < depth; i++ )
         {
             sb.append( "  " );
         }
-        
+
         sb.append( "<a href=\"#" + modelClass.getName() + "\">&lt;" +
                    uncapitalise( modelClass.getName() ) );
-        
-        if ( modelClass.getFields().size() > 0 )
+
+        if ( modelClass.getFields().size() > 0 && outputElement( modelClass.getVersion(), modelClass.getName() ) )
         {
             sb.append( "&gt;</a>\n" );
-            
+
             for ( Iterator iter = modelClass.getFields().iterator(); iter.hasNext(); )
             {
                 ModelField field = (ModelField) iter.next();
-                
-                ModelClass fieldModelClass = objectModel.getClass( capitalise( field.getName() ) );
-                
-                if ( fieldModelClass != null )
+
+                if ( outputElement( field.getVersion(), field.getName() ) )
                 {
-                    sb.append( getModelClassDescriptor( objectModel, fieldModelClass, depth + 1 ) );
-                }
-                else
-                {
-                    for (int i = 0; i < depth+1; i++ )
+
+                    ModelClass fieldModelClass = objectModel.getClass( capitalise( field.getName() ) );
+
+                    if ( fieldModelClass != null )
                     {
-                        sb.append( "  " );
+                        sb.append( getModelClassDescriptor( objectModel, fieldModelClass, depth + 1 ) );
                     }
-                    sb.append( "<a href=\"#" + modelClass.getName() + "\">&lt;" +
-                               uncapitalise( field.getName() ) + "/&gt;</a>\n" );
+                    else
+                    {
+                        for ( int i = 0; i < depth + 1; i++ )
+                        {
+                            sb.append( "  " );
+                        }
+
+
+                        sb.append( "<a href=\"#" + modelClass.getName() + "\">&lt;" + uncapitalise( field.getName() ) + "/&gt;</a>\n" );
+                    }
                 }
             }
-            
-            for (int i = 0; i < depth; i++ )
+
+            for ( int i = 0; i < depth; i++ )
             {
                 sb.append( "  " );
             }
-            
-            sb.append( "<a href=\"#" + modelClass.getName() + "\">&lt;" +
-                       uncapitalise( modelClass.getName() ) + "&gt;</a>\n" );
+
+            sb.append( "<a href=\"#" + modelClass.getName() + "\">&lt;" + uncapitalise( modelClass.getName() ) + "&gt;</a>\n" );
         }
         else
         {
             sb.append( "/&gt;</a>\n" );
         }
-        
+
         return sb.toString();
     }
-    
 }
