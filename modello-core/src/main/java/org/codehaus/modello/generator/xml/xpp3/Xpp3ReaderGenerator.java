@@ -74,8 +74,11 @@ public class Xpp3ReaderGenerator
         }
 
         // Write the parse method which will do the unmarshalling.
+        String root = objectModel.getRoot();
 
-        JMethod unmarshall = new JMethod( new JClass( "Model" ), "read" );
+        String rootElement = uncapitalise( root );
+
+        JMethod unmarshall = new JMethod( new JClass( root ), "read" );
 
         unmarshall.addParameter( new JParameter( new JClass( "Reader" ), "reader" ) );
 
@@ -83,7 +86,7 @@ public class Xpp3ReaderGenerator
 
         JSourceCode sc = unmarshall.getSourceCode();
 
-        sc.add( "Model model = new Model();" );
+        sc.add( root + " " + rootElement + " = new " + root + "();" );
 
         sc.add( "XmlPullParserFactory factory = XmlPullParserFactory.newInstance();" );
 
@@ -117,7 +120,7 @@ public class Xpp3ReaderGenerator
 
         sc.add( "}" );
 
-        sc.add( "return model;" );
+        sc.add( "return " + rootElement + ";" );
 
         jClass.addMethod( unmarshall );
 
