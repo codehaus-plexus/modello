@@ -25,7 +25,7 @@ package org.codehaus.modello.plugin.java;
 import org.codehaus.modello.metadata.FieldMetadata;
 
 /**
- * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
+ * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse </a>
  * @version $Id$
  */
 public class JavaFieldMetadata
@@ -36,6 +36,8 @@ public class JavaFieldMetadata
     private boolean adder = true;
 
     private boolean getter = true;
+
+    private boolean booleanGetter = false;
 
     private boolean setter = true;
 
@@ -57,6 +59,16 @@ public class JavaFieldMetadata
     public void setGetter( boolean getter )
     {
         this.getter = getter;
+    }
+
+    public boolean isBooleanGetter()
+    {
+        return booleanGetter;
+    }
+
+    public void setBooleanGetter( boolean booleanGetter )
+    {
+        this.booleanGetter = booleanGetter;
     }
 
     public boolean isSetter()

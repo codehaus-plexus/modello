@@ -25,9 +25,8 @@ package org.codehaus.modello.model;
 import org.codehaus.modello.metadata.FieldMetadata;
 
 /**
- * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
- * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
- *
+ * @author <a href="mailto:jason@modello.org">Jason van Zyl </a>
+ * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse </a>
  * @version $Id$
  */
 public class ModelField
@@ -134,14 +133,13 @@ public class ModelField
         }
     }
 
-    public void validateElement()
-        throws ModelValidationException
+    public void validateElement() throws ModelValidationException
     {
         validateFieldNotEmpty( "field", "name", getName() );
 
         validateFieldNotEmpty( "field '" + getName() + "'", "type", type );
 
-        String[] primitiveTypes = new String[]{
+        String[] primitiveTypes = new String[] {
             "boolean",
             "char",
             "short",
@@ -150,8 +148,8 @@ public class ModelField
             "float",
             "double",
             "String",
-            "Date",
-        };
+            "Boolean",
+            "Date", };
 
         for ( int i = 0; i < primitiveTypes.length; i++ )
         {
