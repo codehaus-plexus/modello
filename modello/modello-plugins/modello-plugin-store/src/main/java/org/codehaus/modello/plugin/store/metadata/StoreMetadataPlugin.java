@@ -31,6 +31,8 @@ import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
+import org.codehaus.modello.StringUtils;
+import org.codehaus.modello.ModelloException;
 
 import java.util.Collections;
 import java.util.Map;
@@ -66,6 +68,7 @@ public class StoreMetadataPlugin
     }
 
     public FieldMetadata getFieldMetadata( ModelField field, Map data )
+        throws ModelloException
     {
         StoreFieldMetadata metadata = new StoreFieldMetadata();
 
@@ -83,6 +86,29 @@ public class StoreMetadataPlugin
         else
         {
             metadata.setStorable( true );
+        }
+
+        String maxSize = (String) data.get( "stash.maxSize" );
+
+        if ( !StringUtils.isEmpty( maxSize ) )
+        {
+            if ( !field.getType().equals( "String" ) )
+            {
+                throw new ModelloException( "When specifying max size on a field the type must be String. " +
+                                            "Class: '" + field.getModelClass().getName() + "', " +
+                                            "field : '" + field.getName() + "'." );
+            }
+
+            try
+            {
+                metadata.setMaxSize( Integer.parseInt( maxSize ) );
+            }
+            catch ( NumberFormatException e )
+            {
+                throw new ModelloException( "Max size on a field the type must be String. " +
+                                            "Class: '" + field.getModelClass().getName() + "', " +
+                                            "field : '" + field.getName() + "'." );
+            }
         }
 
         return metadata;
