@@ -96,10 +96,6 @@ public class XdocGeneratorTest
 
         generatedSources.mkdirs();
 
-        addDependency( "modello", "modello-core", "1.0-SNAPSHOT" );
-
-        addDependency( "modello", "modello-xml-plugin", "1.0-SNAPSHOT" );
-
         Properties parameters = new Properties();
 
         parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, generatedSources.getAbsolutePath() );
@@ -109,6 +105,8 @@ public class XdocGeneratorTest
         parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString( false ) );
 
         modello.generate( model, "xdoc", parameters );
+
+        //addDependency( "modello", "modello-core", "1.0-SNAPSHOT" );
 
         //verify( "org.codehaus.modello.generator.xml.cdoc.XdocVerifier", "xdoc" );
     }
