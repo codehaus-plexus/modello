@@ -2,12 +2,14 @@ package org.codehaus.modello.generator.xml.xpp3;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.List;
 
 import org.codehaus.modello.Model;
 import org.codehaus.modello.ModelClass;
 import org.codehaus.modello.ModelField;
-import org.codehaus.modello.generator.java.JavaGenerator;
+import org.codehaus.modello.ModelloException;
+import org.codehaus.modello.ModelloRuntimeException;
 import org.codehaus.modello.generator.java.javasource.JClass;
 import org.codehaus.modello.generator.java.javasource.JField;
 import org.codehaus.modello.generator.java.javasource.JMethod;
@@ -20,15 +22,29 @@ import org.codehaus.modello.generator.java.javasource.JSourceWriter;
  * @version $Id$
  */
 public class Xpp3WriterGenerator
-    extends JavaGenerator
+    extends AbstractXpp3Generator
 {
-    public Xpp3WriterGenerator( String model, String outputDirectory, String modelVersion, boolean version )
+    public Xpp3WriterGenerator( String model, String outputDirectory, String modelVersion, boolean packageWithVersion )
+        throws ModelloRuntimeException
     {
-        super( model, outputDirectory, modelVersion, version );
+        super( model, outputDirectory, modelVersion, packageWithVersion );
     }
 
     public void generate()
-        throws Exception
+        throws ModelloException
+    {
+        try
+        {
+            generateXpp3Writer();
+        }
+        catch( IOException ex )
+        {
+            throw new ModelloException( "Exception while generating XDoc.", ex );
+        }
+    }
+
+    private void generateXpp3Writer()
+        throws ModelloException, IOException
     {
         Model objectModel = getModel();
 
@@ -36,12 +52,7 @@ public class Xpp3WriterGenerator
 
         String directory = packageName.replace( '.', '/' );
 
-        String marshallerName;
-
-        if ( isPackageWithVersion() )
-            marshallerName = objectModel.getName() + getModelVersion().toString() + "Xpp3Writer";
-        else
-            marshallerName = objectModel.getName() + "Xpp3Writer";
+        String marshallerName = getFileName( "Xpp3Writer" );
 
         File f = new File( new File( getOutputDirectory(), directory ), marshallerName + ".java" );
 
@@ -133,6 +144,7 @@ public class Xpp3WriterGenerator
     }
 
     private void writeClassParsing( ModelClass modelClass, JSourceCode sc, Model objectModel )
+        throws ModelloRuntimeException
     {
         if ( outputElement( modelClass.getVersion(), modelClass.getName() ) )
         {
@@ -150,6 +162,7 @@ public class Xpp3WriterGenerator
     }
 
     private void writeFieldMarshalling( ModelClass modelClass, ModelField field, JSourceCode sc, Model objectModel )
+        throws ModelloRuntimeException
     {
         if ( outputElement( field.getVersion(), modelClass.getName() + "." + field.getName() ) )
         {

@@ -1,5 +1,7 @@
 package org.codehaus.modello;
 
+import java.io.File;
+
 import org.codehaus.modello.generator.AbstractGenerator;
 import org.codehaus.modello.generator.java.JavaGenerator;
 import org.codehaus.modello.generator.xml.schema.XmlSchemaGenerator;
@@ -7,128 +9,144 @@ import org.codehaus.modello.generator.xml.xdoc.XdocGenerator;
 import org.codehaus.modello.generator.xml.xpp3.Xpp3ReaderGenerator;
 import org.codehaus.modello.generator.xml.xpp3.Xpp3WriterGenerator;
 
-import java.io.File;
-
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
 public class Modello
+    extends AbstractLogEnabled
 {
-    private String model;
+    private Logger logger;
 
-    private String mode;
+    private PluginManager pluginManager;
 
-    private String outputDirectory;
-
-    private String modelVersion;
-
-    private boolean packageWithVersion;
+    private ModelBuilder modelBuilder;
 
     public Modello()
     {
+        logger = new ConsoleLogger();
+
+        pluginManager = new PluginManager();
+
+        modelBuilder = new ModelBuilder();
+
+        setLogger( logger );
+
+        pluginManager.setLogger( logger );
+
+        modelBuilder.setLogger( logger );
     }
 
-    public void parseArgumentsFromCommandLine( String[] args )
+    public void initialize()
         throws Exception
     {
-        if ( args.length != 5 )
-        {
-            System.err.println( "Usage: modello <model> <mode> <output directory> " );
+        pluginManager.initialize();
 
-            System.exit( 1 );
+        modelBuilder.initialize( pluginManager );
+    }
+
+    public void work( String modelFile, String mode, String outputDirectory, 
+                      String modelVersion, boolean packageWithVersion )
+        throws ModelloException
+    {
+        try
+        {
+            work2( modelFile, mode, outputDirectory, modelVersion, packageWithVersion );
         }
-
-        model = args[0];
-
-        mode = args[1];
-
-        outputDirectory = args[2];
-
-        modelVersion = args[3];
-
-        if ( args[4].equals( "true" ) )
+        catch( ModelloRuntimeException ex )
         {
-            packageWithVersion = true;
+            throw new ModelloException( "Exception while generating.", ex );
         }
     }
 
-    public void work()
-        throws Exception
+    public void work2( String modelFile, String mode, String outputDirectory, 
+                      String modelVersion, boolean packageWithVersion )
+        throws ModelloException
     {
-        if ( model == null || model.trim().length() == 0 )
+        if ( modelFile == null || modelFile.trim().length() == 0 )
         {
-            throw new Exception( "Missing model." );
+            throw new ModelloException( "Missing model." );
         }
 
         if ( mode == null || mode.trim().length() == 0 )
         {
-            throw new Exception( "Missing mode." );
+            throw new ModelloException( "Missing mode." );
+        }
+
+        if ( !new File( modelFile ).isFile() )
+        {
+            throw new ModelloException( "The model must be a file." );
         }
 
         if ( outputDirectory == null || outputDirectory.trim().length() == 0 )
         {
-            throw new Exception( "Missing output directory." );
-        }
-
-        if ( !new File( model ).isFile() )
-        {
-            throw new Exception( "The model must be a file." );
+            throw new ModelloException( "Missing output directory." );
         }
 
         if ( !new File( outputDirectory ).isDirectory() )
         {
-            throw new Exception( "The output directory must be a directory." );
+            throw new ModelloException( "The output directory must be a directory." );
         }
 
-        if ( mode.equals( "java" ) )
+        try
         {
-            JavaGenerator g = new JavaGenerator( model, new File( outputDirectory ).getPath(), modelVersion, packageWithVersion );
+            new AbstractGenerator.Version( modelVersion, "Model version parameter" );
+        }
+        catch( ModelloRuntimeException ex )
+        {
+            throw new ModelloException( "Error in the model version parameter.", ex );
+        }
 
-            System.out.println( "Generating java in " + outputDirectory + " from " + model );
+        if ( pluginManager.hasPlugin( mode ) )
+        {
+            ModelloPlugin plugin = pluginManager.getPlugin( mode );
 
-            g.generate();
+            Model model = modelBuilder.getModel( modelFile );
+
+            plugin.generate( model );
+        }
+        else if ( mode.equals( "java" ) )
+        {
+            JavaGenerator generator = new JavaGenerator( modelFile, new File( outputDirectory ).getPath(), modelVersion, packageWithVersion );
+
+            System.out.println( "Generating java in " + outputDirectory + " from " + modelFile );
+
+            generator.generate();
         }
         else if ( mode.equals( "xsd" ) )
         {
-            XmlSchemaGenerator generator = new XmlSchemaGenerator( model, new File( outputDirectory ).getPath(), modelVersion, false );
+            XmlSchemaGenerator generator = new XmlSchemaGenerator( modelFile, new File( outputDirectory ).getPath(), modelVersion, false );
 
-            System.out.println( "Generating xml schema in " + outputDirectory + " from " + model );
+            System.out.println( "Generating xml schema in " + outputDirectory + " from " + modelFile );
 
             generator.generate();
         }
         else if ( mode.equals( "xdoc" ) )
         {
-            XdocGenerator generator = new XdocGenerator( model, new File( outputDirectory ).getPath(), modelVersion, false );
+            XdocGenerator generator = new XdocGenerator( modelFile, new File( outputDirectory ).getPath(), modelVersion, false );
 
-            System.out.println( "Generating xdoc in " + outputDirectory + " from " + model );
+            System.out.println( "Generating xdoc in " + outputDirectory + " from " + modelFile );
 
             generator.generate();
         }
         else if ( mode.equals( "xpp3" ) )
         {
-            JavaGenerator generator = new Xpp3ReaderGenerator( model, new File( outputDirectory ).getPath(), modelVersion, packageWithVersion );
+            JavaGenerator generator = new Xpp3ReaderGenerator( modelFile, new File( outputDirectory ).getPath(), modelVersion, packageWithVersion );
 
-            System.out.println( "Generating xpp3 unmarshaller in " + outputDirectory + " from " + model );
+            System.out.println( "Generating xpp3 unmarshaller in " + outputDirectory + " from " + modelFile );
 
             generator.generate();
 
-            generator = new Xpp3WriterGenerator( model, new File( outputDirectory ).getPath(), modelVersion, packageWithVersion );
+            generator = new Xpp3WriterGenerator( modelFile, new File( outputDirectory ).getPath(), modelVersion, packageWithVersion );
 
-            System.out.println( "Generating xpp3 marshaller in " + outputDirectory + " from " + model );
+            System.out.println( "Generating xpp3 marshaller in " + outputDirectory + " from " + modelFile );
 
             generator.generate();
         }
-    }
-
-    public static void main( String[] args )
-        throws Exception
-    {
-        Modello modello = new Modello();
-
-        modello.parseArgumentsFromCommandLine( args );
-
-        modello.work();
+        else
+        {
+            throw new ModelloRuntimeException( "Unknown mode: '" + mode + "'." );
+        }
     }
 }

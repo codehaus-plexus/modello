@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *
- *
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
  *
  * @version $Id$
@@ -23,16 +21,22 @@ public class ModelClass
 
     private List codeSegments;
 
+    private Model model;
+
     public ModelClass()
     {
         fieldMap = new HashMap();
     }
 
-    public void initialize()
+    public void initialize( Model model )
     {
+        this.model = model;
+
         for ( Iterator i = fields.iterator(); i.hasNext(); )
         {
             ModelField modelField = (ModelField) i.next();
+
+            modelField.initialize( this );
 
             fieldMap.put( modelField.getName(), modelField );
         }
@@ -61,5 +65,10 @@ public class ModelClass
     public ModelField getField( String fieldName )
     {
         return (ModelField) fieldMap.get( fieldName );
+    }
+
+    public Model getModel()
+    {
+        return model;
     }
 }

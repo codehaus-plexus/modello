@@ -1,20 +1,22 @@
 package org.codehaus.modello.generator.java;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Iterator;
+
+import org.codehaus.modello.CodeSegment;
 import org.codehaus.modello.Model;
 import org.codehaus.modello.ModelClass;
 import org.codehaus.modello.ModelField;
-import org.codehaus.modello.CodeSegment;
+import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.generator.AbstractGenerator;
+import org.codehaus.modello.generator.java.javasource.JClass;
 import org.codehaus.modello.generator.java.javasource.JField;
 import org.codehaus.modello.generator.java.javasource.JMethod;
-import org.codehaus.modello.generator.java.javasource.JType;
-import org.codehaus.modello.generator.java.javasource.JClass;
-import org.codehaus.modello.generator.java.javasource.JSourceWriter;
 import org.codehaus.modello.generator.java.javasource.JParameter;
-
-import java.io.File;
-import java.io.FileWriter;
-import java.util.Iterator;
+import org.codehaus.modello.generator.java.javasource.JSourceWriter;
+import org.codehaus.modello.generator.java.javasource.JType;
 
 /**
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
@@ -45,7 +47,7 @@ public class JavaGenerator
     }
 
     protected void addModelImports( JClass jClass )
-        throws Exception
+        throws ModelloException
     {
         for ( Iterator i = getModel().getClasses().iterator(); i.hasNext(); )
         {
@@ -59,7 +61,20 @@ public class JavaGenerator
     }
 
     public void generate()
-        throws Exception
+        throws ModelloException
+    {
+        try
+        {
+            generateJava();
+        }
+        catch( IOException ex )
+        {
+            throw new ModelloException( "Exception while generating XDoc.", ex );
+        }
+    }
+
+    private void generateJava()
+        throws ModelloException, IOException
     {
         Model objectModel = getModel();
 
@@ -159,6 +174,34 @@ public class JavaGenerator
         if ( modelField.getType().equals( "boolean" ) )
         {
             type = JType.Boolean;
+        }
+        else if ( modelField.getType().equals( "byte" ) )
+        {
+            type = JType.Byte;
+        }
+        else if ( modelField.getType().equals( "char" ) )
+        {
+            type = JType.Char;
+        }
+        else if ( modelField.getType().equals( "double" ) )
+        {
+            type = JType.Double;
+        }
+        else if ( modelField.getType().equals( "float" ) )
+        {
+            type = JType.Float;
+        }
+        else if ( modelField.getType().equals( "int" ) )
+        {
+            type = JType.Int;
+        }
+        else if ( modelField.getType().equals( "short" ) )
+        {
+            type = JType.Short;
+        }
+        else if ( modelField.getType().equals( "long" ) )
+        {
+            type = JType.Long;
         }
         else
         {
