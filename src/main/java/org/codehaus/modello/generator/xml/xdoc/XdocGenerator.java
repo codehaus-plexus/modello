@@ -21,9 +21,9 @@ import java.util.Iterator;
 public class XdocGenerator
     extends AbstractGenerator
 {
-    public XdocGenerator( String model, String outputDirectory )
+    public XdocGenerator( String model, String outputDirectory, String modelVersion )
     {
-        super( model, outputDirectory );
+        super( model, outputDirectory, modelVersion );
     }
 
     public void generate()

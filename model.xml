@@ -19,16 +19,17 @@
 <model>
   <id>maven</id>
   <name>Maven</name>
-  <version>4.0.0</version>
   <description>Maven's model for Java project.</description>
   <packageName>org.apache.maven.model</packageName>
   <root>Model</root>
   <classes>
     <class>
       <name>Model</name>
+      <version>4.0.0</version>
       <fields>
         <field>
           <name>extend</name>
+          <version>3.0.0+</version>
           <description>
             The location of the parent project, if one exists. Values from the parent project will be
             the default for this project if they are left unspecified. 
@@ -110,7 +111,8 @@
             A detailed description of the project.  This element is
             usually specified as CDATA to enable the use of HTML tags
             within the description.  This description is used to
-            generate the <a href="plugins/site/index.html">front page</a>
+            generate the
+            <a href="plugins/site/index.html">front page</a>
             of the project's web site.
           </description>
           <type>String</type>
@@ -258,7 +260,8 @@
           <description>
             This element includes the specification of reports to be
             included in a Maven-generated site.  These reports will be run
-            when a user executes <code>maven site</code>.  All of the
+            when a user executes
+            <code>maven site</code>.  All of the
             reports will be included in the navigation bar for browsing in
             the order they are specified.
           </description>
@@ -297,59 +300,67 @@
         </field>
       </fields>
       <!-- We need this because we can't use package as a field name. -->
-      <code>
-        private String packageName;
+      <codeSegments>
+        <codeSegment>
+          <code>
+            private String packageName;
 
-        public void setPackage(String packageName)
-        {
-            this.packageName = packageName;
-        }
-
-        public String getPackage()
-        {
-            return packageName;
-        }
-
-        public String getId()
-        {
-            StringBuffer id = new StringBuffer();
-            id.append( getGroupId() );
-            id.append( ":" );
-            id.append( getArtifactId() );
-            id.append( ":" );
-            id.append( getType() );
-            return id.toString();
-        }
-
-        public void setId( String id )
-        {
-            int i = id.indexOf( "+" );
-            int j = id.indexOf( ":" );
-
-            if ( i > 0 )
+            public void setPackage(String packageName)
             {
-                setGroupId( id.substring( 0, i ) );
-                setArtifactId( id.replace( '+', '-' ) );
+                this.packageName = packageName;
             }
-            else if ( j > 0 )
+
+            public String getPackage()
             {
-                setGroupId( id.substring( 0, j ) );
-                setArtifactId( id.substring( j + 1 ) );
+                return packageName;
             }
-            else
+
+            public String getId()
             {
-                setGroupId( id );
-                setArtifactId( id );
+                StringBuffer id = new StringBuffer();
+                id.append( getGroupId() );
+                id.append( ":" );
+                id.append( getArtifactId() );
+                id.append( ":" );
+                id.append( getType() );
+                return id.toString();
             }
-        }
-      </code>
+          </code>
+        </codeSegment>
+        <codeSegment>
+          <code>
+            public void setId( String id )
+            {
+                int i = id.indexOf( "+" );
+                int j = id.indexOf( ":" );
+
+                if ( i > 0 )
+                {
+                    setGroupId( id.substring( 0, i ) );
+                    setArtifactId( id.replace( '+', '-' ) );
+                }
+                else if ( j > 0 )
+                {
+                    setGroupId( id.substring( 0, j ) );
+                    setArtifactId( id.substring( j + 1 ) );
+                }
+                else
+                {
+                    setGroupId( id );
+                    setArtifactId( id );
+                }
+            }
+          </code>
+        </codeSegment>
+      </codeSegments>
     </class>
     <class>
       <name>Branch</name>
       <version>3.0.0</version>
       <description>
         This element describes each of the branches of the
-        project. Each branch is described by a <code>tag</code>
+        project. Each branch is described by a
+        <code>tag</code>
         element
       </description>
       <fields>
@@ -414,8 +425,9 @@
             This element specifies a directory containing Aspect
             sources of the project.  The generated build system will
             compile the Aspects in this directory when the project is
-            built if Aspects have been enabled (see the <a
-            href="plugins/aspectj/goals.html">Aspectj goals</a> document).
+            built if Aspects have been enabled (see the
+            <a
+              href="plugins/aspectj/goals.html">Aspectj goals</a> document).
             The path given is relative to the project descriptor.
           </description>
           <type>String</type>
@@ -449,7 +461,8 @@
           <description>
             This element describes all of the resources associated with a project or unit tests.
             Each resource is described by a resource element, which is then described by additional
-            elements (described <a href="#resource">below</a>). These resources are used to
+            elements (described
+            <a href="#resource">below</a>). These resources are used to
             complete the jar file or to run unit test.
           </description>
           <type>java.util.List</type>
@@ -485,7 +498,8 @@
           <name>roles</name>
           <description>
             The roles the contributor plays in the project.  Each role is
-            describe by a <code>role</code> element, the body of which is a
+            describe by a
+            <code>role</code> element, the body of which is a
             role name.
           </description>
           <type>java.util.List</type>
@@ -504,10 +518,6 @@
       <name>Dependency</name>
       <version>3.0.0+</version>
       <fields>
-        <!--
-
-        Need to put versions on code segments ...
-
         <field>
           <name>id</name>
           <version>3.0.0</version>
@@ -517,13 +527,13 @@
           </description>
           <type>String</type>
         </field>
-        -->
         <field>
           <name>groupId</name>
           <version>4.0.0</version>
           <required>true</required>
           <description>
-            The project group that produced the dependency, e.g. <code>geronimo</code>.
+            The project group that produced the dependency, e.g.
+            <code>geronimo</code>.
           </description>
           <type>String</type>
         </field>
@@ -542,13 +552,14 @@
           <version>3.0.0+</version>
           <required>true</required>
           <description>
-            The version of the dependency., e.g. <code>3.2.1</code>
+            The version of the dependency., e.g.
+            <code>3.2.1</code>
           </description>
           <type>String</type>
         </field>
         <field>
           <name>url</name>
-          <version>3.0.+</version>
+          <version>3.0.0+</version>
           <description>
             This url will be provided to the user if the jar file cannot be downloaded
             from the central repository.
@@ -572,8 +583,9 @@
           <name>type</name>
           <version>3.0.0+</version>
           <description>
-            Other known and recognised dependency types are:
-            <code>ejb</code> and <code>plugin</code>.
+            Other known recognised dependency types are:
+            <code>ejb</code> and
+            <code>plugin</code>.
           </description>
           <type>String</type>
           <defaultValue>jar</defaultValue>
@@ -586,18 +598,23 @@
             <code>mark</code> dependencies with properties. For example the
             <a href="plugins/war/index.html">war</a> plugin looks for a
             <code>war.bundle</code> property, and if found will include the dependency
-            in <code>WEB-INF/lib</code>. For example syntax, check the war plugin docs.
+            in
+            <code>WEB-INF/lib</code>. For example syntax, check the war plugin docs.
           </description>
           <type>java.util.Properties</type>
           <defaultValue>new Properties()</defaultValue>
         </field>
       </fields>
-      <code>
-        public String getId()
-        {
-            return groupId + ":" + artifactId;
-        }
-      </code>
+      <codeSegments>
+        <codeSegment>
+          <code>
+            public String getId()
+            {
+                return groupId + ":" + artifactId;
+            }
+          </code>
+        </codeSegment>
+      </codeSegments>
     </class>
     <class>
       <superClass>Contributor</superClass>
@@ -647,12 +664,12 @@
           <name>distribution</name>
           <description>
               The primary method by which this project may be distributed.
-              <dl>
-                <dt>repo</dt>
-                <dd>may be downloaded from the Maven repository</dd>
-                <dt>manual</dt>
-                <dd>user must manually download and install the dependency.</dd>
-              </dl>
+            <dl>
+              <dt>repo</dt>
+              <dd>may be downloaded from the Maven repository</dd>
+              <dt>manual</dt>
+              <dd>user must manually download and install the dependency.</dd>
+            </dl>
           </description>
           <type>String</type>
         </field>
@@ -683,7 +700,8 @@
           <name>subscribe</name>
           <description>
             The email address or link that can be used to subscribe to the mailing list.
-            If this is an email address, a <code>mailto:</code> link will automatically be created when
+            If this is an email address, a
+            <code>mailto:</code> link will automatically be created when
             the documentation is created.
           </description>
           <type>String</type>
@@ -730,8 +748,10 @@
           <description>
             The URL to the organization's logo image.  This can be an URL relative
             to the base directory of the generated web site,
-            (e.g., <code>/images/org-logo.png</code>) or an absolute URL
-            (e.g., <code>http://my.corp/logo.png</code>).  This value is used
+            (e.g.,
+            <code>/images/org-logo.png</code>) or an absolute URL
+            (e.g.,
+            <code>http://my.corp/logo.png</code>).  This value is used
             when generating the project documentation.
           </description>
           <type>String</type>
@@ -778,17 +798,20 @@
       <fields>
         <field>
           <name>artifactId</name>
+          <version>4.0.0</version>
           <description>The artifact id of the project to extend.</description>
           <type>String</type>
         </field>
         <field>
           <name>groupId</name>
+          <version>4.0.0</version>
           <description>The group id of the project to extend.</description>
           <type>String</type>
         </field>
         <field>
           <name>version</name>
-          <description>The version of the project to extend.</description>
+          <version>4.0.0</version>
+          <description>The versi>on of the project to extend.</description>
           <type>String</type>
         </field>
       </fields>
@@ -799,17 +822,20 @@
       <fields>
         <field>
           <name>connection</name>
+          <version>3.0.0</version>
           <description>
             The source configuration management system URL
             that describes the repository and how to connect to the
-            repository.  This is used by Maven when <a
-            href="plugins/dist/index.html">building versions</a>
+            repository.  This is used by Maven when
+            <a
+              href="plugins/dist/index.html">building versions</a>
             from specific ID.
           </description>
           <type>String</type>
         </field>
         <field>
           <name>developerConnection</name>
+          <version>3.0.0</version>
           <description>
             Just like connection, but for developers, i.e. this scm connection
             will not be read only.
@@ -818,6 +844,7 @@
         </field>
         <field>
           <name>url</name>
+          <version>3.0.0</version>
           <description>The URL to the project's browsable CVS repository.</description>
           <type>String</type>
         </field>
@@ -829,17 +856,20 @@
       <fields>
         <field>
           <name>connection</name>
+          <version>4.0.0</version>
           <description>
             The source configuration management system URL
             that describes the repository and how to connect to the
-            repository.  This is used by Maven when <a
-            href="plugins/dist/index.html">building versions</a>
+            repository.  This is used by Maven when
+            <a
+              href="plugins/dist/index.html">building versions</a>
             from specific ID.
           </description>
           <type>String</type>
         </field>
         <field>
           <name>developerConnection</name>
+          <version>4.0.0</version>
           <description>
             Just like connection, but for developers, i.e. this scm connection
             will not be read only.
@@ -848,6 +878,7 @@
         </field>
         <field>
           <name>url</name>
+          <version>4.0.0</version>
           <description>The URL to the project's browsable CVS repository.</description>
           <type>String</type>
         </field>
@@ -870,8 +901,10 @@
           <name>targetPath</name>
           <description>
             Describe the resource target path. For example, if you want that resource
-            appear into a specific package (<code>org.apache.maven.messages</code>), you must specify this
-            element with this value : <code>org/apache/maven/messages</code>
+            appear into a specific package (
+            <code>org.apache.maven.messages</code>), you must specify this
+            element with this value :
+            <code>org/apache/maven/messages</code>
           </description>
           <type>String</type>
         </field>
@@ -891,7 +924,8 @@
         <field>
           <name>className</name>
           <description>
-            If the class with this name can <strong>not</strong> be
+            If the class with this name can
+            <strong>not</strong> be
             loaded, then the includes and excludes specified below
             will be applied to the contents of the
             <a href="#sourceDirectory">sourceDirectory</a>
@@ -923,7 +957,8 @@
       <version>3.0.0</version>
       <description>
         This element describes each of the previous versions of the
-        project. Each version is described by a <code>version</code>
+        project. Each version is described by a
+        <code>version</code>
         element
       </description>
       <fields>
@@ -931,7 +966,10 @@
           <name>name</name>
           <description>
             The external version number under which this release was distributed. Examples include:
-            <code>1.0</code>, <code>1.1-alpha1</code>, <code>1.2-beta</code>, <code>1.3.2</code> etc.
+            <code>1.0</code>,
+            <code>1.1-alpha1</code>,
+            <code>1.2-beta</code>,
+            <code>1.3.2</code> etc.
           </description>
           <type>String</type>
         </field>
@@ -947,7 +985,10 @@
           <name>id</name>
           <description>
             A unique identifier for a version.  This ID is
-            used to specify the version that <a href="plugins/dist/index.html"><code>maven:dist</code></a> builds.
+            used to specify the version that
+            <a href="plugins/dist/index.html">
+              <code>maven:dist</code>
+            </a> builds.
           </description>
           <type>String</type>
         </field>

@@ -26,9 +26,9 @@ public class XmlSchemaGenerator
 {
     private boolean annotate;
 
-    public XmlSchemaGenerator( String model, String outputDirectory )
+    public XmlSchemaGenerator( String model, String outputDirectory, String modelVersion )
     {
-        super( model, outputDirectory );
+        super( model, outputDirectory, modelVersion );
     }
 
     public void generate()
