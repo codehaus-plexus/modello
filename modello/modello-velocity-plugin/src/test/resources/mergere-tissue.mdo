@@ -1,6 +1,6 @@
 <model>
-  <id>maven</id>
-  <name>Maven</name>
+  <id>tissue</id>
+  <name>Tissue</name>
   <description>Tissue's entity model.></description>
   <defaults>
     <default>
@@ -52,7 +52,7 @@
         </field>
       </fields>
     </class>
-    <class>
+    <class stash.storable="true">
       <name>Project</name>
       <version>1.0.0</version>
       <fields>
@@ -91,7 +91,7 @@
      |
      |
      -->
-    <class>
+    <class stash.storable="true">
       <name>User</name>
       <version>1.0.0</version>
       <fields>
