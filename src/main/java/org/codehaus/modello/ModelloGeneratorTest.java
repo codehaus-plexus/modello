@@ -66,12 +66,6 @@ public abstract class ModelloGeneratorTest
 
         addDependency( "junit", "junit", "3.8.1" );
 
-        addDependency( "plexus", "plexus", "0.16" );
-
-        addDependency( "classworlds", "classworlds", "1.1-SNAPSHOT" );
-
-        addDependency( "xstream", "xstream", "SNAPSHOT" );
-
         addDependency( "xpp3", "xpp3", "1.1.3.3" );
     }
 
