@@ -244,6 +244,12 @@ public class Xpp3WriterGenerator
                 fieldTagName = field.getName();
             }
 
+            String singularTagName = fieldMetadata.getAssociationTagName();
+            if ( singularTagName == null )
+            {
+                singularTagName = singular( fieldTagName );
+            }
+
             boolean wrappedList = XmlFieldMetadata.LIST_STYLE_WRAPPED.equals( fieldMetadata.getListStyle() );
 
             String type = field.getType();
@@ -305,19 +311,20 @@ public class Xpp3WriterGenerator
                         {
                             sc.add( toType + " " + uncapitalise( toType ) + " = (" + toType + ") iter.next();" );
 
-                            sc.add( "write" + toType + "( " + uncapitalise( toType ) + ", \"" +
-                                    singular( fieldTagName ) +
-                                    "\", serializer );" );
+                            sc.add( "write" + toType + "( " + uncapitalise( toType ) + ", \"" + singularTagName + "\", serializer );" );
                         }
                         else
                         {
                             sc.add( toType + " " + singular( uncapitalise( field.getName() ) ) + " = (" + toType +
                                     ") iter.next();" );
 
-                            sc.add( "serializer.startTag( NAMESPACE, " + "\"" + singular( fieldTagName ) +
-                                    "\" ).text( " +
-                                    singular( uncapitalise( field.getName() ) ) + " ).endTag( NAMESPACE, " + "\"" + singular(
-                                        fieldTagName ) + "\" );" );
+                            sc.add(
+                                "serializer.startTag( NAMESPACE, " + "\"" + singularTagName + "\" ).text( " +
+                                singular( uncapitalise( field.getName() ) ) +
+                                " ).endTag( NAMESPACE, " +
+                                "\"" +
+                                singularTagName +
+                                "\" );" );
                         }
 
                         sc.unindent();

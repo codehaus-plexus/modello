@@ -72,6 +72,10 @@ public class XmlMetadataPlugin
 
         metadata.setTagName( tagName );
 
+        String associationTagName = (String) data.get( "xml.associationTagName" );
+
+        metadata.setAssociationTagName( associationTagName );
+
         String listStyle = (String) data.get( "xml.listStyle" );
 
         metadata.setListStyle( listStyle );

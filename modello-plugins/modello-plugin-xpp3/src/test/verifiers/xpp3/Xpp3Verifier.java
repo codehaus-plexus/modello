@@ -26,6 +26,7 @@ import org.apache.maven.model.Build;
 import org.apache.maven.model.Component;
 import org.apache.maven.model.MailingList;
 import org.apache.maven.model.Model;
+import org.apache.maven.model.Repository;
 import org.apache.maven.model.Scm;
 import org.apache.maven.model.SourceModification;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
@@ -129,6 +130,10 @@ public class Xpp3Verifier
         component.setName( "component2" );
 
         expected.addComponent( component );
+
+        Repository repository = new Repository();
+        repository.setId( "foo" );
+        expected.addRepository( repository );
 
         // ----------------------------------------------------------------------
         // Write out the model

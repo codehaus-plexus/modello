@@ -296,15 +296,23 @@ public class Xpp3ReaderGenerator
 
             XmlFieldMetadata fieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
 
-            String tagName = fieldMetadata.getTagName();
-
             if ( fieldMetadata.isAttribute() )
             {
                 continue;
             }
+
+            String tagName = fieldMetadata.getTagName();
+
             if ( tagName == null )
             {
                 tagName = field.getName();
+            }
+
+            String singularTagName = fieldMetadata.getAssociationTagName();
+
+            if ( singularTagName == null )
+            {
+                singularTagName = singular( tagName );
             }
 
             boolean wrappedList = XmlFieldMetadata.LIST_STYLE_WRAPPED.equals( fieldMetadata.getListStyle() );
@@ -312,8 +320,6 @@ public class Xpp3ReaderGenerator
             String capFieldName = capitalise( field.getName() );
 
             String singularName = singular( field.getName() );
-
-            String singularTagName = singular( field.getName() );
 
             if ( field instanceof ModelAssociation )
             {
@@ -397,7 +403,7 @@ public class Xpp3ReaderGenerator
 
                         if ( isClassInModel( association.getTo(), modelClass.getModel() ) )
                         {
-                            sc.add( associationName + ".add( parse" + association.getTo() + "( \"" + tagName +
+                            sc.add( associationName + ".add( parse" + association.getTo() + "( \"" + singularTagName +
                                     "\", parser ) );" );
                         }
                         else
