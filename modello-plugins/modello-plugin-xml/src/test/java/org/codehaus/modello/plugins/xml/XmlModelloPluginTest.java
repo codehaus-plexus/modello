@@ -51,9 +51,9 @@ public class XmlModelloPluginTest
 
         ModelField extend = clazz.getField( "extend" );
 
-        assertTrue( extend.hasMetadata( XmlMetadata.ID ) );
+        assertTrue( extend.hasMetadata( XmlFieldMetadata.ID ) );
 
-        XmlMetadata xml = (XmlMetadata) extend.getMetadata( XmlMetadata.ID );
+        XmlFieldMetadata xml = (XmlFieldMetadata) extend.getMetadata( XmlFieldMetadata.ID );
 
         assertNotNull( xml );
 
@@ -74,9 +74,9 @@ public class XmlModelloPluginTest
 
         ModelField builder = clazz.getField( "builder" );
 
-        assertTrue( builder.hasMetadata( XmlMetadata.ID ) );
+        assertTrue( builder.hasMetadata( XmlFieldMetadata.ID ) );
 
-        xml = (XmlMetadata) builder.getMetadata( XmlMetadata.ID );
+        xml = (XmlFieldMetadata) builder.getMetadata( XmlFieldMetadata.ID );
 
         assertNotNull( xml );
 
