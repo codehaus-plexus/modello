@@ -1,6 +1,7 @@
 package ${package};
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -38,6 +39,8 @@ public class ${model.name}PrevaylerStore
         void delete${class.name}( Object id ) { ${class.name}Map.remove( id ); }
 
         ${class.name} get${class.name}( Object id ) { return (${class.name}) ${class.name}Map.get( id ); }
+
+        Collection get${class.name}Collection() { return ${class.name}Map.values(); }
 #end
 
 #end
@@ -171,6 +174,12 @@ public class ${model.name}PrevaylerStore
         throws Exception
     {
         return store.get${class.name}( id );
+    }
+
+    public Collection get${class.name}Collection()
+        throws Exception
+    {
+        return store.get${class.name}Collection();
     }
 #end
 
