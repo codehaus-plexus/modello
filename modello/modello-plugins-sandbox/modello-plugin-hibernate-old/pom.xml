@@ -32,11 +32,6 @@
       <version>7.4.1-jdbc3</version>
     </dependency>
     <dependency>
-      <artifactId>hibernate</artifactId>
-      <groupId>hibernate</groupId>
-      <version>2.0.3</version>
-    </dependency>
-    <dependency>
       <artifactId>commons-lang</artifactId>
       <groupId>commons-lang</groupId>
       <version>1.0.1</version>
