@@ -35,24 +35,24 @@ public class ModelReader
 
     private Map associationAttributes = new HashMap();
 
-    public Map getAttributesForModel( String name )
+    public Map getAttributesForModel( Model model )
     {
-        return (Map) fieldAttributes.get( name );
+        return (Map) fieldAttributes.get( model.getName() );
     }
 
-    public Map getAttributesForClass( String name )
+    public Map getAttributesForClass( ModelClass modelClass )
     {
-        return (Map) classAttributes.get( name );
+        return (Map) classAttributes.get( modelClass.getName() );
     }
 
-    public Map getAttributesForField( String name )
+    public Map getAttributesForField( ModelField modelField )
     {
-        return (Map) fieldAttributes.get( name );
+        return (Map) fieldAttributes.get( modelField.getModelClass().getName() + ":" + modelField.getName() );
     }
 
-    public Map getAttributesForAssociation( String name )
+    public Map getAttributesForAssociation( ModelAssociation modelAssociation )
     {
-        return (Map) associationAttributes.get( name );
+        return (Map) associationAttributes.get( modelAssociation.getFromClass().getName() + ":" + modelAssociation.getName() );
     }
 
     public Model loadModel( Reader reader )
@@ -209,7 +209,7 @@ public class ModelReader
 
                 if ( modelField.getName() != null )
                 {
-                    fieldAttributes.put( modelField.getName(), attributes );
+                    fieldAttributes.put( modelClass.getName() + ":" + modelField.getName(), attributes );
                 }
 
                 modelClass.addField( modelField );
@@ -265,7 +265,7 @@ public class ModelReader
 
                 if ( modelAssociation.getName() != null )
                 {
-                    associationAttributes.put( modelAssociation.getName(), attributes );
+                    associationAttributes.put( modelClass.getName() + ":" + modelAssociation.getName(), attributes );
                 }
 
                 modelClass.addAssociation( modelAssociation );
