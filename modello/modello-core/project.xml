@@ -8,8 +8,8 @@
   <name>Modello</name>
   <currentVersion>1.0-SNAPSHOT</currentVersion>
   <organization>
-    <name>Apache Software Foundation</name>
-    <url>http://www.apache.org/</url>
+    <name>Codehaus</name>
+    <url>http://www.codehaus.org/</url>
     <logo>/images/apache-maven-project.png</logo>
   </organization>
   <inceptionYear>2001</inceptionYear>
