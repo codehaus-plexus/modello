@@ -58,7 +58,14 @@ public abstract class ModelloGeneratorTest
     {
         super.setUp();
 
-        FileUtils.deleteDirectory( getTestPath( "target/" + getName() ) );
+        FileUtils.deleteDirectory( getGeneratedSources() );
+
+        assertTrue( getGeneratedSources().mkdirs() );
+    }
+
+    protected File getGeneratedSources()
+    {
+        return getTestFile( "target/" + getName() );
     }
 
     public void addDependency( String groupId, String artifactId, String version )
@@ -129,12 +136,11 @@ public abstract class ModelloGeneratorTest
     protected void verify( String className, String testName )
         throws Throwable
     {
-        // TODO: flip back to getTestFile() when plexus has File getTestFile()
-        addClassPathFile( new File( getTestPath( "target/" + getName() + "/classes" ) ) );
+        addClassPathFile( getTestFile( "target/" + getName() + "/classes" ) );
 
-        addClassPathFile( new File( getTestPath( "target/classes" ) ) );
+        addClassPathFile( getTestFile( "target/classes" ) );
 
-        addClassPathFile( new File( getTestPath( "target/test-classes" ) ) );
+        addClassPathFile( getTestFile( "target/test-classes" ) );
 
         URLClassLoader classLoader = URLClassLoader.newInstance( (URL[]) urls.toArray( new URL[ urls.size() ] ), Thread.currentThread().getContextClassLoader() );
 
