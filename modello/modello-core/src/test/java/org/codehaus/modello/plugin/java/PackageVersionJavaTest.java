@@ -1,4 +1,4 @@
-package org.codehaus.modello.generator.java;
+package org.codehaus.modello.plugin.java;
 
 /*
  * LICENSE
@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.Properties;
 
+import org.codehaus.modello.FileUtils;
 import org.codehaus.modello.Model;
 import org.codehaus.modello.ModelloGeneratorTest;
 import org.codehaus.modello.ModelloParameterConstants;
@@ -17,22 +18,28 @@ import org.codehaus.modello.core.ModelloCore;
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
-public class JavaGeneratorTest
+public class PackageVersionJavaTest
     extends ModelloGeneratorTest
 {
     private String modelFile = "src/test/resources/models/maven.mdo";
 
-    public JavaGeneratorTest()
+    public PackageVersionJavaTest()
     {
-        super( "java" );
+        super( "packageversion" );
     }
 
-    public void testJavaGenerator()
+    private File generatedSources;
+
+    private File classes;
+
+    public void testThatTheCorrectVersionIsInThePackageName()
         throws Throwable
     {
-        File generatedSources = new File( getTestPath( "target/java/source" ) );
+        generatedSources = new File( getTestPath( "target/" + getName() + "/sources" ) );
 
-        File classes = new File( getTestPath( "target/java/classes" ) );
+        classes = new File( getTestPath( "target/" + getName() + "/classes" ) );
+
+        FileUtils.deleteDirectory( generatedSources );
 
         generatedSources.mkdirs();
 
@@ -40,13 +47,11 @@ public class JavaGeneratorTest
 
         ModelloCore modello = getModelloCore();
 
-//        modello.work( getTestFile( modelFile ), "java", generatedSources, "4.0.0", false );
-
         Properties parameters = new Properties();
 
         parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, generatedSources.getAbsolutePath() );
 
-        parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString( false ) );
+        parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString( true ) );
 
         parameters.setProperty( ModelloParameterConstants.VERSION, "4.0.0" );
 
@@ -56,6 +61,6 @@ public class JavaGeneratorTest
 
         compile( generatedSources, classes );
 
-        verify( "org.codehaus.modello.generator.java.JavaVerifier", "java" );
+        verify( "PackageVersionVerifier", "java" );
     }
 }

@@ -39,13 +39,13 @@ public abstract class AbstractModelloGenerator
     {
         this.model = model;
 
-        outputDirectory = new File( (String) parameters.get( ModelloParameterConstants.OUTPUT_DIRECTORY ) );
+        outputDirectory = new File( getParameter( ModelloParameterConstants.OUTPUT_DIRECTORY, parameters ) );
 
-        String version = (String) parameters.get( ModelloParameterConstants.VERSION );
+        String version = getParameter( ModelloParameterConstants.VERSION, parameters );
 
         generatedVersion = new Version( version );
 
-        packageWithVersion = Boolean.valueOf( (String) parameters.get( ModelloParameterConstants.PACKAGE_WITH_VERSION ) ).booleanValue();
+        packageWithVersion = Boolean.valueOf( getParameter( ModelloParameterConstants.PACKAGE_WITH_VERSION, parameters ) ).booleanValue();
     }
 
     protected Model getModel()
@@ -171,7 +171,7 @@ public abstract class AbstractModelloGenerator
         {
             sb.append( "." );
 
-            sb.append( getModel().getElementVersion().toString() );
+            sb.append( getGeneratedVersion().toString() );
         }
 
         return sb.toString();
@@ -198,5 +198,17 @@ public abstract class AbstractModelloGenerator
     protected boolean isEmpty( String string )
     {
         return string == null || string.trim().length() == 0;
+    }
+
+    private String getParameter( String name, Properties parameters )
+    {
+        String value = parameters.getProperty( name );
+
+        if ( value == null )
+        {
+            throw new ModelloRuntimeException( "Missing parameter '" + name + "'." );
+        }
+
+        return value;
     }
 }
