@@ -16,10 +16,7 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- *
- *
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
- *
  * @version $Id$
  */
 public class Xpp3ReaderGenerator
@@ -70,7 +67,10 @@ public class Xpp3ReaderGenerator
         {
             ModelClass modelClass = (ModelClass) i.next();
 
-            jClass.addImport( objectModel.getPackageName() + "." + modelClass.getName() );
+            if ( outputElement( modelClass.getVersion(), modelClass.getName() ) )
+            {
+                jClass.addImport( objectModel.getPackageName() + "." + modelClass.getName() );
+            }
         }
 
         // Write the parse method which will do the unmarshalling.
@@ -134,66 +134,78 @@ public class Xpp3ReaderGenerator
     private void writeClassParsing( ModelClass modelClass, JSourceCode sc, Model objectModel, boolean withLoop )
         throws Exception
     {
-        if ( withLoop )
+        if ( outputElement( modelClass.getVersion(), modelClass.getName() ) )
         {
-            sc.add( "while ( parser.nextTag() == XmlPullParser.START_TAG )" );
-
-            sc.add( "{" );
-
-            sc.indent();
-        }
-
-        String statement;
-
-        List allFields = objectModel.getAllFields( modelClass );
-
-        int size = allFields.size();
-
-        for ( int i = 0; i < size; i++ )
-        {
-            ModelField field = (ModelField) allFields.get( i );
-
-            if ( i == 0 )
+            if ( withLoop )
             {
-                statement = "if";
-            }
-            else
-            {
-                statement = "else if";
+                sc.add( "while ( parser.nextTag() == XmlPullParser.START_TAG )" );
+
+                sc.add( "{" );
+
+                sc.indent();
             }
 
-            writeFieldParsing( modelClass, field, sc, statement, objectModel );
-        }
+            String statement;
 
-        if ( withLoop )
-        {
-            writeCatchAll( sc );
+            List allFields = objectModel.getAllFields( modelClass );
 
-            sc.unindent();
+            int size = allFields.size();
 
-            sc.add( "}" );
+            boolean firstStatement = true;
+            
+            for ( int i = 0; i < size; i++ )
+            {
+                ModelField field = (ModelField) allFields.get( i );
+
+                if ( outputElement( field.getVersion(), modelClass.getName() + "." + field.getName() ) )
+                {
+                    if ( firstStatement )
+                    {
+                        statement = "if";
+
+                        firstStatement = false;
+                    }
+                    else
+                    {
+                        statement = "else if";
+                    }
+
+                    writeFieldParsing( modelClass, field, sc, statement, objectModel );
+                }
+            }
+
+            if ( withLoop )
+            {
+                writeCatchAll( sc );
+
+                sc.unindent();
+
+                sc.add( "}" );
+            }
         }
     }
 
-    private void writeFieldParsing( ModelClass modelClass, ModelField fromField, JSourceCode sc, String statement, Model objectModel )
+    private void writeFieldParsing( ModelClass modelClass, ModelField field, JSourceCode sc, String statement, Model objectModel )
         throws Exception
     {
         String className;
 
         ModelField toField;
 
-        if ( fromField.getDelegateTo() != null )
+        if ( field.getDelegateTo() != null )
         {
-            className = capitalise( fromField.getDelegateTo() );
+            className = capitalise( field.getDelegateTo() );
 
-            toField = modelClass.getField( fromField.getDelegateTo() );
+            toField = modelClass.getField( field.getDelegateTo() );
 
-            if( toField == null )
-                throw new Exception( "No such field " + fromField.getDelegateTo() );
+            if ( toField == null )
+            {
+                throw new Exception( "No such field " + field.getDelegateTo() );
+            }
         }
         else
         {
-            toField = fromField;
+            toField = field;
 
             className = capitalise( toField.getName() );
         }
@@ -204,7 +216,7 @@ public class Xpp3ReaderGenerator
 
         String modelClassName = uncapitalise( modelClass.getName() );
 
-        sc.add( statement + " ( parser.getName().equals( \"" + fromField.getName() + "\" ) )" );
+        sc.add( statement + " ( parser.getName().equals( \"" + field.getName() + "\" ) )" );
 
         sc.add( "{" );
 

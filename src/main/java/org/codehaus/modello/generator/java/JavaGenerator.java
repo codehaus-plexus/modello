@@ -110,7 +110,10 @@ public class JavaGenerator
                         {
                             CodeSegment codeSegment = (CodeSegment) iterator.next();
 
-                            jClass.addSourceCode( codeSegment.getCode() );
+                            if ( outputElement( codeSegment.getVersion(), "" ) )
+                            {
+                                jClass.addSourceCode( codeSegment.getCode() );
+                            }
                         }
                     }
 
