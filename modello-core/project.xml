@@ -10,7 +10,7 @@
   <organization>
     <name>Codehaus</name>
     <url>http://www.codehaus.org/</url>
-    <logo>/images/apache-maven-project.png</logo>
+    <logo>/images/codehaus-logo.gif</logo>
   </organization>
   <inceptionYear>2001</inceptionYear>
   <package>org.codehaus.modello</package>
