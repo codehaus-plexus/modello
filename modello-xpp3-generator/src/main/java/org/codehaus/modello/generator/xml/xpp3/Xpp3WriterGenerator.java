@@ -199,11 +199,6 @@ public class Xpp3WriterGenerator
 
         String tagName = xmlMetaData.getTagName();
 
-        if ( tagName == null )
-        {
-            tagName = fieldName;
-        }
-
         if ( isClassInModel( type, modelClass.getModel() ) )
         {
             if ( attribute )
