@@ -106,7 +106,7 @@ public class ModelAssociation
     {
         return (AssociationMetadata) getMetadata( AssociationMetadata.class, key );
     }
-    
+
     // ----------------------------------------------------------------------
     //
     // ----------------------------------------------------------------------
@@ -165,15 +165,15 @@ public class ModelAssociation
                 {
                     setType( ModelDefault.SET );
                 }
-                if ( getType().equalsIgnoreCase( "List" ) )
+                else if ( getType().equalsIgnoreCase( "List" ) )
                 {
                     setType( ModelDefault.LIST );
                 }
-                if ( getType().equalsIgnoreCase( "Map" ) )
+                else if ( getType().equalsIgnoreCase( "Map" ) )
                 {
                     setType( ModelDefault.MAP );
                 }
-                if ( getType().equalsIgnoreCase( "Properties" ) )
+                else if ( getType().equalsIgnoreCase( "Properties" ) )
                 {
                     setType( ModelDefault.PROPERTIES );
                 }
