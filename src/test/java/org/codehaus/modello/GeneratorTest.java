@@ -9,7 +9,6 @@ import org.codehaus.modello.generator.xml.schema.XmlSchemaGenerator;
 import org.codehaus.modello.generator.xml.xdoc.XdocGenerator;
 import org.codehaus.modello.generator.xml.xpp3.Xpp3ReaderGenerator;
 import org.codehaus.modello.generator.xml.xpp3.Xpp3WriterGenerator;
-import org.codehaus.modello.generator.xml.xstream.XStreamGenerator;
 
 /**
  *
@@ -45,14 +44,6 @@ public class GeneratorTest
         throws Exception
     {
         XdocGenerator generator = new XdocGenerator( model, new File( outputDirectory, "xdoc" ).getPath() );
-
-        generator.generate();
-    }
-
-    public void testXStreamGenerator()
-        throws Exception
-    {
-        XStreamGenerator generator = new XStreamGenerator( model, new File( outputDirectory, "xstream" ).getPath() );
 
         generator.generate();
     }
