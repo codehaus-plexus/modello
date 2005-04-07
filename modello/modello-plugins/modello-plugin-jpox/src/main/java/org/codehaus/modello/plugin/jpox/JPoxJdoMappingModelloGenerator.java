@@ -168,17 +168,9 @@ public class JPoxJdoMappingModelloGenerator
         {
             ModelClass superClass = modelClass.getModel().getClass( modelClass.getSuperClass(), getGeneratedVersion() );
 
-            String packageName = modelClass.getPackageName( isPackageWithVersion(), getGeneratedVersion() );
             String superPackageName = superClass.getPackageName( isPackageWithVersion(), getGeneratedVersion() );
 
-            if ( packageName.equals( superPackageName ) )
-            {
-                writer.addAttribute( "persistence-capable-superclass", superClass.getName() );
-            }
-            else
-            {
-                writer.addAttribute( "persistence-capable-superclass", superPackageName + "." + superClass.getName() );
-            }
+            writer.addAttribute( "persistence-capable-superclass", superPackageName + "." + superClass.getName() );
         }
 
         for ( Iterator it = modelClass.getFields( getGeneratedVersion() ).iterator(); it.hasNext(); )
