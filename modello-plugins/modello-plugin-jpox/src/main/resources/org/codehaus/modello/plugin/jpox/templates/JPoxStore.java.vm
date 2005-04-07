@@ -58,7 +58,7 @@ public class ${model.name}JPoxStore
     // Transaction Management Methods
     // ----------------------------------------------------------------------
 
-    public ThreadState getThread State()
+    public ThreadState getThreadState()
     {
         return (ThreadState) threadState.get();
     }
