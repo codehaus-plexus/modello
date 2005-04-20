@@ -11,8 +11,8 @@
   <dependencies>
     <dependency>
       <groupId>org.codehaus.modello</groupId>
-      <artifactId>modello-xml-plugin</artifactId>
-      <version>1.0-alpha-2-SNAPSHOT</version>
+      <artifactId>modello-plugin-xml</artifactId>
+      <version>1.0-alpha-2</version>
     </dependency>
     <dependency>
       <groupId>plexus</groupId>
