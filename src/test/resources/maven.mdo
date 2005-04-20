@@ -23,7 +23,7 @@
   <defaults>
     <default>
       <key>package</key>
-      <value>org.apache.maven.model</value>
+      <value>org.codehaus.modello.test.model</value>
     </default>
   </defaults>
   <classes>

@@ -168,7 +168,8 @@ public class Xpp3ReaderGenerator
 
         unmarshall.addParameter( new JParameter( new JClass( "Reader" ), "reader" ) );
 
-        unmarshall.addException( new JClass( "Exception" ) );
+        unmarshall.addException( new JClass( "java.io.IOException" ) );
+        unmarshall.addException( new JClass( "org.codehaus.plexus.util.xml.pull.XmlPullParserException" ) );
 
         JSourceCode sc = unmarshall.getSourceCode();
 
@@ -238,7 +239,8 @@ public class Xpp3ReaderGenerator
 
         unmarshall.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
 
-        unmarshall.addException( new JClass( "Exception" ) );
+        unmarshall.addException( new JClass( "java.io.IOException" ) );
+        unmarshall.addException( new JClass( "org.codehaus.plexus.util.xml.pull.XmlPullParserException" ) );
 
         unmarshall.getModifiers().makePrivate();
 

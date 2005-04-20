@@ -143,7 +143,7 @@ public class Xpp3WriterGenerator
 
         marshall.addParameter( new JParameter( new JClass( root ), rootElement ) );
 
-        marshall.addException( new JClass( "Exception" ) );
+        marshall.addException( new JClass( "java.io.IOException" ) );
 
         JSourceCode sc = marshall.getSourceCode();
 
@@ -186,19 +186,19 @@ public class Xpp3WriterGenerator
 
         String uncapClassName = uncapitalise( className );
 
-        JMethod unmarshall = new JMethod( null, "write" + className );
+        JMethod marshall = new JMethod( null, "write" + className );
 
-        unmarshall.addParameter( new JParameter( new JClass( className ), uncapClassName ) );
+        marshall.addParameter( new JParameter( new JClass( className ), uncapClassName ) );
 
-        unmarshall.addParameter( new JParameter( new JClass( "String" ), "tagName" ) );
+        marshall.addParameter( new JParameter( new JClass( "String" ), "tagName" ) );
 
-        unmarshall.addParameter( new JParameter( new JClass( "XmlSerializer" ), "serializer" ) );
+        marshall.addParameter( new JParameter( new JClass( "XmlSerializer" ), "serializer" ) );
 
-        unmarshall.addException( new JClass( "Exception" ) );
+        marshall.addException( new JClass( "java.io.IOException" ) );
 
-        unmarshall.getModifiers().makePrivate();
+        marshall.getModifiers().makePrivate();
 
-        JSourceCode sc = unmarshall.getSourceCode();
+        JSourceCode sc = marshall.getSourceCode();
 
         sc.add( "if ( " + uncapClassName + " != null )" );
 
@@ -446,7 +446,7 @@ public class Xpp3WriterGenerator
 
         sc.add( "}" );
 
-        jClass.addMethod( unmarshall );
+        jClass.addMethod( marshall );
     }
 
     private String getPrefix( JavaFieldMetadata javaFieldMetadata )
