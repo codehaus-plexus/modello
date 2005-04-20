@@ -108,7 +108,6 @@ public class PackageVersionVerifier
     }
 
     public void testModelAddMailingList()
-        throws Exception
     {
         Model model = new Model();
 

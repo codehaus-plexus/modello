@@ -12,7 +12,6 @@ public class OneToManyAssociationVerifier
     extends Verifier
 {
     public void verify()
-        throws Exception
     {
         // ----------------------------------------------------------------------
         //
@@ -36,7 +35,6 @@ public class OneToManyAssociationVerifier
     }
 
     private void testList()
-        throws Exception
     {
         ListSetMapProperties foo = new ListSetMapProperties();
 

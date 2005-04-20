@@ -108,7 +108,6 @@ public class JavaVerifier
     }
 
     public void testModelAddMailingList()
-        throws Exception
     {
         Model model = new Model();
 

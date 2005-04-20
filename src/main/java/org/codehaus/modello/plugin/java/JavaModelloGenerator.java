@@ -345,7 +345,8 @@ public class JavaModelloGenerator
         {
             ModelAssociation modelAssociation = (ModelAssociation) modelField;
 
-            setter.addException( new JClass( "Exception" ) );
+            // TODO: remove after tested
+//            setter.addException( new JClass( "Exception" ) );
 
             sc.add( "if ( this." + field.getName() + " != null )" );
 
@@ -457,7 +458,8 @@ public class JavaModelloGenerator
             createMethod.addParameter( new JParameter( new JClass( modelAssociation.getTo() ),
                                                        uncapitalise( modelAssociation.getTo() ) ) );
 
-            createMethod.addException( new JClass( "Exception" ) );
+            // TODO: remove after tested
+//            createMethod.addException( new JClass( "Exception" ) );
 
             JSourceCode sc = createMethod.getSourceCode();
 
@@ -491,7 +493,7 @@ public class JavaModelloGenerator
 
                 sc.indent();
 
-                sc.add( "throw new Exception( \"" + uncapitalise( modelAssociation.getTo() ) + " is already assigned.\" );" );
+                sc.add( "throw new IllegalStateException( \"" + uncapitalise( modelAssociation.getTo() ) + " is already assigned.\" );" );
 
                 sc.unindent();
 
@@ -509,7 +511,8 @@ public class JavaModelloGenerator
             breakMethod.addParameter( new JParameter( new JClass( modelAssociation.getTo() ),
                                                       uncapitalise( modelAssociation.getTo() ) ) );
 
-            breakMethod.addException( new JClass( "Exception" ) );
+            // TODO: remove after tested
+//            breakMethod.addException( new JClass( "Exception" ) );
 
             sc = breakMethod.getSourceCode();
 
@@ -521,7 +524,7 @@ public class JavaModelloGenerator
 
                 sc.indent();
 
-                sc.add( "throw new Exception( \"" + uncapitalise( modelAssociation.getTo() ) + " isn't associated.\" );" );
+                sc.add( "throw new IllegalStateException( \"" + uncapitalise( modelAssociation.getTo() ) + " isn't associated.\" );" );
 
                 sc.unindent();
 
@@ -539,7 +542,7 @@ public class JavaModelloGenerator
 
                 sc.indent();
 
-                sc.add( "throw new Exception( \"" + uncapitalise( modelAssociation.getTo() ) + " isn't associated.\" );" );
+                sc.add( "throw new IllegalStateException( \"" + uncapitalise( modelAssociation.getTo() ) + " isn't associated.\" );" );
 
                 sc.unindent();
 
@@ -603,7 +606,8 @@ public class JavaModelloGenerator
 
             if ( bidirectionalAssociation )
             {
-                adder.addException( new JClass( "Exception" ) );
+                // TODO: remove after tested
+//                adder.addException( new JClass( "Exception" ) );
 
                 adder.getSourceCode().add( parameterName + ".create" + modelAssociation.getModelClass().getName() + "Association( this );" );
             }
@@ -616,7 +620,8 @@ public class JavaModelloGenerator
 
             if ( bidirectionalAssociation )
             {
-                remover.addException( new JClass( "Exception" ) );
+                // TODO: remove after tested
+//                remover.addException( new JClass( "Exception" ) );
 
                 remover.getSourceCode().add( parameterName + ".break" + modelAssociation.getModelClass().getName() + "Association( this );" );
             }
