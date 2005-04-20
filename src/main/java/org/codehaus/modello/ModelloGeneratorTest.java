@@ -114,7 +114,8 @@ public abstract class ModelloGeneratorTest
 
         addDependency( "plexus", "plexus-utils", "1.0-alpha-2" );
 
-        addDependency( "org.codehaus.modello", "modello-test", "1.0-alpha-1" );
+        // TODO: can read my own POM to set this!
+        addDependency( "org.codehaus.modello", "modello-test", "1.0-alpha-2-SNAPSHOT" );
 
         String[] classPathElements = new String[dependencies.size() + 2];
 
