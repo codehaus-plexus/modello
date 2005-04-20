@@ -121,7 +121,8 @@ public class ObjStateFactoryModelloGenerator
 
         method.addParameter( new JParameter( new JClass( "Attributes" ), "attributes" ) );
 
-        method.addException( new JClass( "Exception" ) );
+        // TODO: remove after tested
+//        method.addException( new JClass( "Exception" ) );
 
         JSourceCode sc = method.getSourceCode();
 

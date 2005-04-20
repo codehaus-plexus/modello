@@ -24,18 +24,20 @@ package org.codehaus.modello.generator.xml.xpp3;
 
 import junit.framework.Assert;
 
-import org.apache.maven.model.Build;
-import org.apache.maven.model.Component;
-import org.apache.maven.model.MailingList;
-import org.apache.maven.model.Model;
-import org.apache.maven.model.Repository;
-import org.apache.maven.model.Scm;
-import org.apache.maven.model.SourceModification;
-import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
-import org.apache.maven.model.io.xpp3.MavenXpp3Writer;
+import org.codehaus.modello.test.model.Build;
+import org.codehaus.modello.test.model.Component;
+import org.codehaus.modello.test.model.MailingList;
+import org.codehaus.modello.test.model.Model;
+import org.codehaus.modello.test.model.Repository;
+import org.codehaus.modello.test.model.Scm;
+import org.codehaus.modello.test.model.SourceModification;
+import org.codehaus.modello.test.model.io.xpp3.MavenXpp3Reader;
+import org.codehaus.modello.test.model.io.xpp3.MavenXpp3Writer;
 import org.codehaus.modello.verifier.Verifier;
 import org.codehaus.plexus.util.FileUtils;
+import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
+import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.List;
@@ -51,7 +53,7 @@ public class Xpp3Verifier
      * TODO: Add a association thats not under the root element
      */
     public void verify()
-        throws Exception
+        throws IOException, XmlPullParserException
     {
         verifyWriter();
 
@@ -59,7 +61,7 @@ public class Xpp3Verifier
     }
 
     public void verifyWriter()
-        throws Exception
+        throws IOException, XmlPullParserException
     {
         String expectedXml = FileUtils.fileRead( getTestFile( "src/test/verifiers/xpp3/expected.xml" ) );
 
@@ -165,7 +167,7 @@ public class Xpp3Verifier
     }
 
     public void verifyReader()
-        throws Exception
+        throws IOException, XmlPullParserException
     {
         MavenXpp3Reader reader = new MavenXpp3Reader();
 
