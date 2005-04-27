@@ -10,6 +10,13 @@ import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.JDOUserException;
 import javax.jdo.Transaction;
 
+// Model class imports
+#foreach ( $class in $model.allClasses )
+#if ( $class.getMetadata( $storeClassMetadataId ).isStorable() && ${class.packageName} != ${package} )
+import ${class.packageName}.${class.name};
+#end
+#end
+
 /**
  * Generated JPox storage mechanism for ${model.name}.
  *
