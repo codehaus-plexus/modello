@@ -23,16 +23,15 @@ package org.codehaus.modello;
  */
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Properties;
 
 import org.apache.maven.plugin.AbstractPlugin;
-import org.apache.maven.plugin.PluginExecutionRequest;
-import org.apache.maven.plugin.PluginExecutionResponse;
+import org.apache.maven.plugin.PluginExecutionException;
 import org.apache.maven.project.MavenProject;
-
-import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
+import org.codehaus.modello.model.ModelValidationException;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -41,6 +40,20 @@ import org.codehaus.modello.core.ModelloCore;
 public abstract class AbstractModelloGeneratorMojo
     extends AbstractPlugin
 {
+    private String basedir;
+
+    private String outputDirectory;
+
+    private String model;
+
+    private String version;
+
+    private Boolean packageWithVersion;
+
+    private ModelloCore modelloCore;
+
+    private MavenProject project;
+    
     protected abstract String getGeneratorType();
     
     protected boolean producesCompilableResult()
@@ -48,25 +61,13 @@ public abstract class AbstractModelloGeneratorMojo
         return true;
     }
 
-    public void execute( PluginExecutionRequest request, PluginExecutionResponse response )
-        throws Exception
+    public void execute() throws PluginExecutionException
     {
         // ----------------------------------------------------------------------
         //
         // ----------------------------------------------------------------------
 
-        String basedir = (String) request.getParameter( "basedir" );
-
-        String outputDirectory = (String) request.getParameter( "outputDirectory" );
-
-        String model = (String) request.getParameter( "model" );
-
-        String version = (String) request.getParameter( "version" );
-
-        String packageWithVersion = (String) request.getParameter( "packageWithVersion" );
-
-        ModelloCore modello = (ModelloCore) request.getParameter( "modelloCore" );
-
+        
         // ----------------------------------------------------------------------
         //
         // ----------------------------------------------------------------------
@@ -79,19 +80,98 @@ public abstract class AbstractModelloGeneratorMojo
 
         parameters.setProperty( ModelloParameterConstants.VERSION, version );
 
-        parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, packageWithVersion );
+        parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, packageWithVersion.toString() );
 
-        modello.generate( modello.loadModel( new FileReader( new File( basedir, model ) ) ), getGeneratorType(), parameters );
-        
-        if(producesCompilableResult())
+        try
         {
-            MavenProject project = (MavenProject) request.getParameter( "project" );
-
-            if ( project != null )
+            modelloCore.generate( modelloCore.loadModel( new FileReader( new File( basedir, model ) ) ), getGeneratorType(), parameters );
+            
+            if(producesCompilableResult() && project != null )
             {
                 project.addCompileSourceRoot( outputDirectory );
             }
-            
         }
+        catch (FileNotFoundException e)
+        {
+            throw new PluginExecutionException("Couldn't find file.", e);
+        }
+        catch (ModelloException e)
+        {
+            throw new PluginExecutionException("Error generating.", e);
+        }
+        catch (ModelValidationException e)
+        {
+            throw new PluginExecutionException("Error generating.", e);
+        }
+    }
+
+    public String getBasedir()
+    {
+        return basedir;
+    }
+
+    public void setBasedir(String basedir)
+    {
+        this.basedir = basedir;
+    }
+
+    public String getModel()
+    {
+        return model;
+    }
+
+    public void setModel(String model)
+    {
+        this.model = model;
+    }
+
+    public ModelloCore getModelloCore()
+    {
+        return modelloCore;
+    }
+
+    public void setModelloCore(ModelloCore modelloCore)
+    {
+        this.modelloCore = modelloCore;
+    }
+
+    public String getOutputDirectory()
+    {
+        return outputDirectory;
+    }
+
+    public void setOutputDirectory(String outputDirectory)
+    {
+        this.outputDirectory = outputDirectory;
+    }
+
+    public Boolean getPackageWithVersion()
+    {
+        return packageWithVersion;
+    }
+
+    public void setPackageWithVersion(Boolean packageWithVersion)
+    {
+        this.packageWithVersion = packageWithVersion;
+    }
+
+    public MavenProject getProject()
+    {
+        return project;
+    }
+
+    public void setProject(MavenProject project)
+    {
+        this.project = project;
+    }
+
+    public String getVersion()
+    {
+        return version;
+    }
+
+    public void setVersion(String version)
+    {
+        this.version = version;
     }
 }
