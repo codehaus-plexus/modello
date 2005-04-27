@@ -39,7 +39,7 @@
     </repository>
   </distributionManagement>
   <modules>
-    <module>maven-modello-plugin</module>
+    <module>modello-maven-plugin</module>
     <module>modello-core</module>
     <module>modello-test</module>
     <module>modello-plugins</module>
