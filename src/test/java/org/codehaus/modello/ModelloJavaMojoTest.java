@@ -23,11 +23,6 @@ package org.codehaus.modello;
  */
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.apache.maven.plugin.PluginExecutionRequest;
-import org.apache.maven.plugin.PluginExecutionResponse;
 
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.plexus.PlexusTestCase;
@@ -55,23 +50,17 @@ public class ModelloJavaMojoTest
         // Call the mojo
         // ----------------------------------------------------------------------
 
-        Map parameters = new HashMap();
+        mojo.setOutputDirectory( outputDirectory.getAbsolutePath() );
 
-        parameters.put( "outputDirectory", outputDirectory.getAbsolutePath() );
+        mojo.setModel( getTestPath( "src/test/resources/java-model.mdo" ) );
 
-        parameters.put( "model", getTestPath( "src/test/resources/java-model.mdo" ) );
+        mojo.setVersion("1.0.0" );
 
-        parameters.put( "version", "1.0.0" );
+        mojo.setPackageWithVersion( Boolean.TRUE );
 
-        parameters.put( "packageWithVersion", "true" );
+        mojo.setModelloCore( modelloCore );
 
-        parameters.put( "modelloCore", modelloCore );
-
-        PluginExecutionRequest request = new PluginExecutionRequest( parameters );
-
-        PluginExecutionResponse response = new PluginExecutionResponse();
-
-        mojo.execute( request, response );
+        mojo.execute();
 
         // ----------------------------------------------------------------------
         // Assert
