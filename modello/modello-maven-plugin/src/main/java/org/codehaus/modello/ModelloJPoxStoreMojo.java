@@ -76,12 +76,11 @@ package org.codehaus.modello;
  * default="false"
  * description="True if the generated package names should include the version."
  *
- * @parameter
- * name="modelloCore"
- * type=""
+ * @parameter name="modelloCore"
+ * type=org.codehaus.modello.core.ModelloCore""
  * required="true"
  * validator=""
- * expression="#component.org.codehaus.modello.core.ModelloCore"
+ * expression="${component.org.codehaus.modello.core.ModelloCore}"
  * description="Modello component"
  *
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>

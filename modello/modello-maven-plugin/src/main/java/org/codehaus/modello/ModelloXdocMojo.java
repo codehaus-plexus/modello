@@ -64,10 +64,10 @@ package org.codehaus.modello;
  * description="True if the generated package names should include the version."
  *
  * @parameter name="modelloCore"
- * type=""
+ * type=org.codehaus.modello.core.ModelloCore""
  * required="true"
  * validator=""
- * expression="#component.org.codehaus.modello.core.ModelloCore"
+ * expression="${component.org.codehaus.modello.core.ModelloCore}"
  * description="Modello component"
  *
  * @author <a href="mailto:brett@apache.org">Brett Porter</a>
