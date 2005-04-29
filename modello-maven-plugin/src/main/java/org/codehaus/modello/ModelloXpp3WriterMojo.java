@@ -65,14 +65,6 @@ package org.codehaus.modello;
  * expression="#version"
  * description="The modello model version to use."
  *
- * @parameter name="packageWithVersion"
- * type="java.lang.Boolean"
- * required="true"
- * validator=""
- * expression="#packageWithVersion"
- * default="false"
- * description="True if the generated package names should include the version."
- *
  * @parameter name="modelloCore"
  * type=org.codehaus.modello.core.ModelloCore""
  * required="true"
