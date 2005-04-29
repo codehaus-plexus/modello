@@ -27,8 +27,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Properties;
 
-import org.apache.maven.plugin.AbstractPlugin;
-import org.apache.maven.plugin.PluginExecutionException;
+import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.ModelValidationException;
@@ -38,7 +38,7 @@ import org.codehaus.modello.model.ModelValidationException;
  * @version $Id$
  */
 public abstract class AbstractModelloGeneratorMojo
-    extends AbstractPlugin
+    extends AbstractMojo
 {
     private String basedir;
 
@@ -48,7 +48,13 @@ public abstract class AbstractModelloGeneratorMojo
 
     private String version;
 
-    private Boolean packageWithVersion;
+    /** 
+     *  True if the generated package names should include the version.
+     *  @parameter expression="${packageWithVersion}" 
+     *  @required
+     *  @todo make this a Boolean
+     */
+    private Boolean packageWithVersion = Boolean.FALSE;
 
     private ModelloCore modelloCore;
 
@@ -61,7 +67,7 @@ public abstract class AbstractModelloGeneratorMojo
         return true;
     }
 
-    public void execute() throws PluginExecutionException
+    public void execute() throws MojoExecutionException
     {
         // ----------------------------------------------------------------------
         //
@@ -93,15 +99,15 @@ public abstract class AbstractModelloGeneratorMojo
         }
         catch (FileNotFoundException e)
         {
-            throw new PluginExecutionException("Couldn't find file.", e);
+            throw new MojoExecutionException("Couldn't find file.", e);
         }
         catch (ModelloException e)
         {
-            throw new PluginExecutionException("Error generating.", e);
+            throw new MojoExecutionException("Error generating.", e);
         }
         catch (ModelValidationException e)
         {
-            throw new PluginExecutionException("Error generating.", e);
+            throw new MojoExecutionException("Error generating.", e);
         }
     }
 
