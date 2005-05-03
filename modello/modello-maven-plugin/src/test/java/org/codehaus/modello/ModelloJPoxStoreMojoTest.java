@@ -55,7 +55,7 @@ public class ModelloJPoxStoreMojoTest
         // Call the mojo
         // ----------------------------------------------------------------------
 
-        mojo.setOutputDirectory( outputDirectory.getAbsolutePath() );
+        mojo.setOutputDirectory( outputDirectory );
 
         mojo.setModel( getTestPath( "src/test/resources/jpox-model.mdo" ) );
 
@@ -64,7 +64,7 @@ public class ModelloJPoxStoreMojoTest
         mojo.setPackageWithVersion( Boolean.FALSE );
 
         mojo.setModelloCore( modelloCore );
-        
+
         mojo.execute();
 
         // ----------------------------------------------------------------------

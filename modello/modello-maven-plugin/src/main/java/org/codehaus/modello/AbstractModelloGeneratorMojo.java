@@ -30,7 +30,9 @@ import java.util.Properties;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
+
 import org.codehaus.modello.core.ModelloCore;
+import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelValidationException;
 
 /**
@@ -40,49 +42,85 @@ import org.codehaus.modello.model.ModelValidationException;
 public abstract class AbstractModelloGeneratorMojo
     extends AbstractMojo
 {
+    // ----------------------------------------------------------------------
+    // Parameters
+    // ----------------------------------------------------------------------
+
+    /**
+     * @parameter expression="${basedir}"
+     *
+     * @required
+     */
     private String basedir;
 
-    private String outputDirectory;
+    /**
+     * @parameter expression="${basedir/target/generated-sources}"
+     *
+     * @required
+     */
+    private File outputDirectory;
 
+    /**
+     * @parameter expression="${model}"
+     *
+     * @required
+     */
     private String model;
 
+    /**
+     * @parameter expression="${version}"
+     *
+     * @required
+     */
     private String version;
 
-    /** 
-     *  True if the generated package names should include the version.
-     *  @parameter expression="${packageWithVersion}" 
-     *  @required
-     *  @todo make this a Boolean
+    /**
+     * True if the generated package names should include the version.
+     *
+     * @parameter expression="${packageWithVersion}"
+     *
+     * @required
+     * @todo make this a Boolean
      */
     private Boolean packageWithVersion = Boolean.FALSE;
 
+    /**
+     * @parameter expression="${component.org.codehaus.modello.core.ModelloCore}"
+     *
+     * @required
+     */
     private ModelloCore modelloCore;
 
+    /**
+     * @parameter expression="${project}"
+     *
+     * @required
+     */
     private MavenProject project;
-    
+
+    // ----------------------------------------------------------------------
+    //
+    // ----------------------------------------------------------------------
+
     protected abstract String getGeneratorType();
-    
+
+    // ----------------------------------------------------------------------
+    //
+    // ----------------------------------------------------------------------
+
     protected boolean producesCompilableResult()
     {
         return true;
     }
 
-    public void execute() throws MojoExecutionException
+    public void execute()
+        throws MojoExecutionException
     {
-        // ----------------------------------------------------------------------
-        //
-        // ----------------------------------------------------------------------
-
-        
-        // ----------------------------------------------------------------------
-        //
-        // ----------------------------------------------------------------------
-
-        // Just pass a Map in here, no need to make properties up again.
-
         Properties parameters = new Properties();
 
-        parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, outputDirectory );
+        getLog().info( "outputDirectory: " );
+
+        parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, outputDirectory.getAbsolutePath() );
 
         parameters.setProperty( ModelloParameterConstants.VERSION, version );
 
@@ -90,35 +128,53 @@ public abstract class AbstractModelloGeneratorMojo
 
         try
         {
-            modelloCore.generate( modelloCore.loadModel( new FileReader( new File( basedir, model ) ) ), getGeneratorType(), parameters );
-            
-            if(producesCompilableResult() && project != null )
+            FileReader fileReader = new FileReader( new File( basedir, model ) );
+
+            Model model = modelloCore.loadModel( fileReader );
+
+            modelloCore.generate( model, getGeneratorType(), parameters );
+
+            if ( producesCompilableResult() && project != null )
             {
-                project.addCompileSourceRoot( outputDirectory );
+                project.addCompileSourceRoot( outputDirectory.getAbsolutePath() );
             }
         }
-        catch (FileNotFoundException e)
+        catch ( FileNotFoundException e )
         {
-            throw new MojoExecutionException("Couldn't find file.", e);
+            throw new MojoExecutionException( "Couldn't find file.", e );
         }
-        catch (ModelloException e)
+        catch ( ModelloException e )
         {
-            throw new MojoExecutionException("Error generating.", e);
+            throw new MojoExecutionException( "Error generating.", e );
         }
-        catch (ModelValidationException e)
+        catch ( ModelValidationException e )
         {
-            throw new MojoExecutionException("Error generating.", e);
+            throw new MojoExecutionException( "Error generating.", e );
         }
     }
+
+    // ----------------------------------------------------------------------
+    // Accessors
+    // ----------------------------------------------------------------------
 
     public String getBasedir()
     {
         return basedir;
     }
 
-    public void setBasedir(String basedir)
+    public void setBasedir( String basedir )
     {
         this.basedir = basedir;
+    }
+
+    public File getOutputDirectory()
+    {
+        return outputDirectory;
+    }
+
+    public void setOutputDirectory( File outputDirectory )
+    {
+        this.outputDirectory = outputDirectory;
     }
 
     public String getModel()
@@ -126,49 +182,9 @@ public abstract class AbstractModelloGeneratorMojo
         return model;
     }
 
-    public void setModel(String model)
+    public void setModel( String model )
     {
         this.model = model;
-    }
-
-    public ModelloCore getModelloCore()
-    {
-        return modelloCore;
-    }
-
-    public void setModelloCore(ModelloCore modelloCore)
-    {
-        this.modelloCore = modelloCore;
-    }
-
-    public String getOutputDirectory()
-    {
-        return outputDirectory;
-    }
-
-    public void setOutputDirectory(String outputDirectory)
-    {
-        this.outputDirectory = outputDirectory;
-    }
-
-    public Boolean getPackageWithVersion()
-    {
-        return packageWithVersion;
-    }
-
-    public void setPackageWithVersion(Boolean packageWithVersion)
-    {
-        this.packageWithVersion = packageWithVersion;
-    }
-
-    public MavenProject getProject()
-    {
-        return project;
-    }
-
-    public void setProject(MavenProject project)
-    {
-        this.project = project;
     }
 
     public String getVersion()
@@ -176,8 +192,38 @@ public abstract class AbstractModelloGeneratorMojo
         return version;
     }
 
-    public void setVersion(String version)
+    public void setVersion( String version )
     {
         this.version = version;
+    }
+
+    public Boolean getPackageWithVersion()
+    {
+        return packageWithVersion;
+    }
+
+    public void setPackageWithVersion( Boolean packageWithVersion )
+    {
+        this.packageWithVersion = packageWithVersion;
+    }
+
+    public ModelloCore getModelloCore()
+    {
+        return modelloCore;
+    }
+
+    public void setModelloCore( ModelloCore modelloCore )
+    {
+        this.modelloCore = modelloCore;
+    }
+
+    public MavenProject getProject()
+    {
+        return project;
+    }
+
+    public void setProject( MavenProject project )
+    {
+        this.project = project;
     }
 }

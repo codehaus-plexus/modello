@@ -50,7 +50,7 @@ public class ModelloPrevaylerMojoTest
         // Call the mojo
         // ----------------------------------------------------------------------
 
-        mojo.setOutputDirectory( outputDirectory.getAbsolutePath() );
+        mojo.setOutputDirectory( outputDirectory );
 
         mojo.setModel( getTestPath( "src/test/resources/prevayler-model.mdo" ) );
 
@@ -59,7 +59,7 @@ public class ModelloPrevaylerMojoTest
         mojo.setPackageWithVersion( Boolean.FALSE );
 
         mojo.setModelloCore( modelloCore );
-        
+
         mojo.execute();
 
         // ----------------------------------------------------------------------
