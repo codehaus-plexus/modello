@@ -50,7 +50,7 @@ public class ModelloJavaMojoTest
         // Call the mojo
         // ----------------------------------------------------------------------
 
-        mojo.setOutputDirectory( outputDirectory.getAbsolutePath() );
+        mojo.setOutputDirectory( outputDirectory );
 
         mojo.setModel( getTestPath( "src/test/resources/java-model.mdo" ) );
 

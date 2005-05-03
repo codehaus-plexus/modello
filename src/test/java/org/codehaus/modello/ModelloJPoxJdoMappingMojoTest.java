@@ -55,7 +55,7 @@ public class ModelloJPoxJdoMappingMojoTest
         // Call the mojo
         // ----------------------------------------------------------------------
 
-        mojo.setOutputDirectory( outputDirectory.getAbsolutePath() );
+        mojo.setOutputDirectory( outputDirectory );
 
         mojo.setModel( getTestPath( "src/test/resources/jpox-model.mdo" ) );
 
@@ -64,7 +64,7 @@ public class ModelloJPoxJdoMappingMojoTest
         mojo.setPackageWithVersion( Boolean.FALSE );
 
         mojo.setModelloCore( modelloCore );
-        
+
         mojo.execute();
 
         // ----------------------------------------------------------------------
@@ -73,6 +73,6 @@ public class ModelloJPoxJdoMappingMojoTest
 
         File configuration = new File( outputDirectory, "META-INF/package.jdo" );
 
-        assertTrue( "Could not read the jpox configuration.", configuration.canRead() );
+        assertTrue( "Could not read the jpox configuration '" + configuration.getAbsolutePath() + "'.", configuration.canRead() );
     }
 }
