@@ -29,49 +29,6 @@ package org.codehaus.modello;
  *
  * @description Creates XPP3 writer from the model.
  *
- * @parameter
- * name="basedir"
- * type="java.lang.String"
- * required="true"
- * validator=""
- * expression="#basedir"
- * description=""
- *
- * @parameter name="outputDirectory"
- * type="java.lang.String"
- * required="true"
- * validator=""
- * expression="#basedir/target/generated-sources"
- * description=""
- *
- * @parameter name="project"
- * type=""
- * required="true"
- * validator=""
- * expression="#project"
- * description="The current project"
- *
- * @parameter name="model"
- * type="java.io.File"
- * required="true"
- * validator=""
- * expression="#model"
- * description="The modello model file."
- *
- * @parameter name="version"
- * type="java.lang.String"
- * required="true"
- * validator=""
- * expression="#version"
- * description="The modello model version to use."
- *
- * @parameter name="modelloCore"
- * type=org.codehaus.modello.core.ModelloCore""
- * required="true"
- * validator=""
- * expression="${component.org.codehaus.modello.core.ModelloCore}"
- * description="Modello component"
- *
  * @author <a href="mailto:brett@apache.org">Brett Porter</a>
  * @version $Id$
  */
