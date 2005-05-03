@@ -54,7 +54,7 @@ public abstract class AbstractModelloGeneratorMojo
     private String basedir;
 
     /**
-     * @parameter expression="${basedir/target/generated-sources}"
+     * @parameter expression="${basedir}/target/generated-sources"
      *
      * @required
      */
@@ -80,7 +80,6 @@ public abstract class AbstractModelloGeneratorMojo
      * @parameter expression="${packageWithVersion}"
      *
      * @required
-     * @todo make this a Boolean
      */
     private Boolean packageWithVersion = Boolean.FALSE;
 
