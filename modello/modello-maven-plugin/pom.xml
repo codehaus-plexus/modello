@@ -5,8 +5,7 @@
     <artifactId>modello</artifactId>
     <version>1.0-alpha-2-SNAPSHOT</version>
   </parent>
-  <groupId>org.apache.maven.plugins</groupId>
-  <artifactId>maven-modello-plugin</artifactId>
+  <artifactId>modello-maven-plugin</artifactId>
   <version>1.0-alpha-2-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
   <name>Modello Maven Plugin</name>
