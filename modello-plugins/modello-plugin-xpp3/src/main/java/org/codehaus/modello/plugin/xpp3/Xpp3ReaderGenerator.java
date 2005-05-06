@@ -37,6 +37,7 @@ import org.codehaus.modello.model.ModelDefault;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.plugins.xml.XmlAssociationMetadata;
 import org.codehaus.modello.plugins.xml.XmlFieldMetadata;
+import org.codehaus.modello.plugins.xml.XmlClassMetadata;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -162,8 +163,6 @@ public class Xpp3ReaderGenerator
 
         ModelClass root = objectModel.getClass( objectModel.getRoot( getGeneratedVersion() ), getGeneratedVersion() );
 
-        String rootElement = uncapitalise( root.getName() );
-
         JMethod unmarshall = new JMethod( new JClass( root.getName() ), "read" );
 
         unmarshall.addParameter( new JParameter( new JClass( "Reader" ), "reader" ) );
@@ -183,7 +182,7 @@ public class Xpp3ReaderGenerator
 
         sc.add( "" );
 
-        sc.add( "return parse" + root.getName() + "( \"" + rootElement + "\", parser );" );
+        sc.add( "return parse" + root.getName() + "( \"" + getTagName( root ) + "\", parser );" );
 
         jClass.addMethod( unmarshall );
 
@@ -202,6 +201,20 @@ public class Xpp3ReaderGenerator
         writer.flush();
 
         writer.close();
+    }
+
+    private String getTagName( ModelClass root )
+    {
+        XmlClassMetadata metadata = (XmlClassMetadata) root.getMetadata( XmlClassMetadata.ID );
+
+        String tagName = metadata.getTagName();
+
+        if ( tagName != null )
+        {
+            return tagName;
+        }
+
+        return uncapitalise( root.getName() );
     }
 
     private void writeAllClassesParser( Model objectModel, JClass jClass )

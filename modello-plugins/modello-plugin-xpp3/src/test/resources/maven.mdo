@@ -27,7 +27,7 @@
     </default>
   </defaults>
   <classes>
-    <class rootElement="true">
+    <class rootElement="true" xml.tagName="MavenModel">
       <name>Model</name>
       <version>3.0.0+</version>
       <fields>
@@ -36,7 +36,7 @@
           <version>3.0.0+</version>
           <description>
             The location of the parent project, if one exists. Values from the parent project will be
-            the default for this project if they are left unspecified. 
+            the default for this project if they are left unspecified.
             The path may be absolute, or relative to the current project.xml file.
           </description>
           <type>String</type>
@@ -879,7 +879,7 @@
             {
                 return getGroupId();
             }
-        
+
             public String getArtifact()
             {
                 // If the jar name has been explicty set then use that. This
@@ -888,26 +888,26 @@
                 {
                     return getJar();
                 }
-        
+
                 return getArtifactId() + "-" + getVersion() + "." + getExtension();
             }
-        
+
             public String getExtension()
             {
                 if ("ejb".equals(getType()) || "plugin".equals(getType()) || "aspect".equals(getType())) return "jar";
                 return getType();
             }
-        
+
             public boolean isAddedToClasspath()
             {
                 return ("jar".equals(getType()) || "ejb".equals(getType()));
             }
-        
+
             public boolean isPlugin()
             {
                 return ("plugin".equals(getType()));
             }
-        
+
             public String getProperty( String property )
             {
                 return getProperties().getProperty( property );
@@ -919,12 +919,12 @@
                 {
                     return false;
                 }
-            
+
                 if ( getClass() != o.getClass() )
                 {
                     return false;
                 }
-            
+
                 if ( getId() != null )
                 {
                     return getId().equals( ( (Dependency) o ).getId() );
@@ -934,7 +934,7 @@
                     return ( (Dependency) o ).getId() == null;
                 }
             }
-            
+
             public int hashCode()
             {
                 if ( getId() != null )
