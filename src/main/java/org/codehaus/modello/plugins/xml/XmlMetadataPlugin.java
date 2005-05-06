@@ -32,6 +32,7 @@ import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
+import org.codehaus.plexus.util.StringUtils;
 
 import java.util.Collections;
 import java.util.Map;
@@ -57,7 +58,11 @@ public class XmlMetadataPlugin
 
     public ClassMetadata getClassMetadata( ModelClass clazz, Map data )
     {
-        return new XmlClassMetadata();
+        XmlClassMetadata metadata = new XmlClassMetadata();
+
+        metadata.setTagName( getTagName( data ) );
+
+        return metadata;
     }
 
     public FieldMetadata getFieldMetadata( ModelField field, Map data )
@@ -75,9 +80,7 @@ public class XmlMetadataPlugin
             metadata.setTrim( Boolean.valueOf( trim ).booleanValue() );
         }
 
-        String tagName = (String) data.get( "xml.tagName" );
-
-        metadata.setTagName( tagName );
+        metadata.setTagName( getTagName( data ) );
 
         String associationTagName = (String) data.get( "xml.associationTagName" );
 
@@ -108,5 +111,19 @@ public class XmlMetadataPlugin
     public Map getFieldMap( ModelField field, FieldMetadata metadata )
     {
         return Collections.EMPTY_MAP;
+    }
+
+    // ----------------------------------------------------------------------
+    //
+    // ----------------------------------------------------------------------
+
+    private String getTagName( Map data )
+    {
+        return nullIfEmpty( data.get( "xml.tagName" ) );
+    }
+
+    private String nullIfEmpty( Object str )
+    {
+        return StringUtils.isEmpty( (String) str ) ? null : (String) str;
     }
 }
