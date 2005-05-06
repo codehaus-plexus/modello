@@ -1,4 +1,4 @@
-<model extender="/foo/bar" modelVersion="4.0.0">
+<mavenModel extender="/foo/bar" modelVersion="4.0.0">
   <name>Maven</name>
   <component>
     <name>component1</name>
@@ -38,4 +38,4 @@
     </sourceModifications>
     <unitTest />
   </builder>
-</model>
+</mavenModel>
