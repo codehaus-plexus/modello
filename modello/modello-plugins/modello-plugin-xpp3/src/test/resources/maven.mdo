@@ -27,7 +27,7 @@
     </default>
   </defaults>
   <classes>
-    <class rootElement="true" xml.tagName="MavenModel">
+    <class rootElement="true" xml.tagName="mavenModel">
       <name>Model</name>
       <version>3.0.0+</version>
       <fields>
