@@ -1,4 +1,4 @@
-package org.codehaus.modello;
+package org.codehaus.modello.maven;
 
 /*
  * Copyright (c) 2004, Codehaus.org
@@ -25,6 +25,7 @@ package org.codehaus.modello;
 import java.io.File;
 
 import org.codehaus.modello.core.ModelloCore;
+import org.codehaus.modello.maven.ModelloJPoxJdoMappingMojo;
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.util.FileUtils;
 
@@ -32,19 +33,24 @@ import org.codehaus.plexus.util.FileUtils;
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
-public class ModelloJavaMojoTest
+public class ModelloJPoxJdoMappingMojoTest
     extends PlexusTestCase
 {
-    public void testModelloJavaMojo()
+    public void testModelloJPoxMojo()
         throws Exception
     {
         ModelloCore modelloCore = (ModelloCore) lookup( ModelloCore.ROLE );
 
-        ModelloJavaMojo mojo = new ModelloJavaMojo();
+        ModelloJPoxJdoMappingMojo mojo = new ModelloJPoxJdoMappingMojo();
 
-        File outputDirectory = getTestFile( "target/java-test" );
+        File outputDirectory = getTestFile( "target/jpox-jdo-mapping-test" );
 
-        FileUtils.deleteDirectory( outputDirectory );
+        if ( outputDirectory.exists() )
+        {
+            FileUtils.deleteDirectory( outputDirectory );
+        }
+
+        assertTrue( outputDirectory.mkdirs() );
 
         // ----------------------------------------------------------------------
         // Call the mojo
@@ -52,11 +58,11 @@ public class ModelloJavaMojoTest
 
         mojo.setOutputDirectory( outputDirectory );
 
-        mojo.setModel( getTestPath( "src/test/resources/java-model.mdo" ) );
+        mojo.setModel( getTestPath( "src/test/resources/jpox-model.mdo" ) );
 
         mojo.setVersion("1.0.0" );
 
-        mojo.setPackageWithVersion( Boolean.TRUE );
+        mojo.setPackageWithVersion( Boolean.FALSE );
 
         mojo.setModelloCore( modelloCore );
 
@@ -66,8 +72,8 @@ public class ModelloJavaMojoTest
         // Assert
         // ----------------------------------------------------------------------
 
-        File javaFile = new File( outputDirectory, "org/codehaus/mojo/modello/javatest/v1_0_0/Model.java" );
+        File configuration = new File( outputDirectory, "META-INF/package.jdo" );
 
-        assertTrue( "The generated java file doesn't exist: '" + javaFile.getAbsolutePath() + "'.", javaFile.exists() );
+        assertTrue( "Could not read the jpox configuration '" + configuration.getAbsolutePath() + "'.", configuration.canRead() );
     }
 }
