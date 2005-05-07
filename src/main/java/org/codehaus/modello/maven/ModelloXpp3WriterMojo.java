@@ -1,4 +1,6 @@
-package org.codehaus.modello;
+package org.codehaus.modello.maven;
+
+import org.codehaus.modello.maven.AbstractModelloGeneratorMojo;
 
 /*
  * Copyright (c) 2004, Codehaus.org
@@ -23,20 +25,20 @@ package org.codehaus.modello;
  */
 
 /**
- * @goal jpox-store
+ * @goal xpp3-writer
  *
  * @phase generate-sources
  *
- * @description Creates a JDO store from the Modello model.
+ * @description Creates XPP3 writer from the model.
  *
- * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
+ * @author <a href="mailto:brett@apache.org">Brett Porter</a>
  * @version $Id$
  */
-public class ModelloJPoxStoreMojo
+public class ModelloXpp3WriterMojo
     extends AbstractModelloGeneratorMojo
 {
     protected String getGeneratorType()
     {
-        return "jpox-store";
+        return "xpp3-writer";
     }
 }

@@ -1,4 +1,6 @@
-package org.codehaus.modello;
+package org.codehaus.modello.maven;
+
+import org.codehaus.modello.maven.AbstractModelloGeneratorMojo;
 
 /*
  * Copyright (c) 2004, Codehaus.org
@@ -23,20 +25,20 @@ package org.codehaus.modello;
  */
 
 /**
- * @goal java
+ * @goal jpox-store
  *
  * @phase generate-sources
  *
- * @description Creates java beans from the Modello model.
+ * @description Creates a JDO store from the Modello model.
  *
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
-public class ModelloJavaMojo
+public class ModelloJPoxStoreMojo
     extends AbstractModelloGeneratorMojo
 {
     protected String getGeneratorType()
     {
-        return "java";
+        return "jpox-store";
     }
 }

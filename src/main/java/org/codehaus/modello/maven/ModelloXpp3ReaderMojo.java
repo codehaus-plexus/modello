@@ -1,4 +1,6 @@
-package org.codehaus.modello;
+package org.codehaus.modello.maven;
+
+import org.codehaus.modello.maven.AbstractModelloGeneratorMojo;
 
 /*
  * Copyright (c) 2004, Codehaus.org
@@ -23,23 +25,20 @@ package org.codehaus.modello;
  */
 
 /**
- * @goal xdoc
+ * @goal xpp3-reader
  *
- * @description Creates XPP3 writer from the model.
+ * @phase generate-sources
+ *
+ * @description Creates XPP3 reader from the model.
  *
  * @author <a href="mailto:brett@apache.org">Brett Porter</a>
  * @version $Id$
  */
-public class ModelloXdocMojo
+public class ModelloXpp3ReaderMojo
     extends AbstractModelloGeneratorMojo
 {
     protected String getGeneratorType()
     {
-        return "xdoc";
-    }
-
-    protected boolean producesCompilableResult()
-    {
-        return false;
+        return "xpp3-reader";
     }
 }

@@ -1,4 +1,4 @@
-package org.codehaus.modello;
+package org.codehaus.modello.maven;
 
 /*
  * Copyright (c) 2004, Codehaus.org
@@ -25,6 +25,7 @@ package org.codehaus.modello;
 import java.io.File;
 
 import org.codehaus.modello.core.ModelloCore;
+import org.codehaus.modello.maven.ModelloJPoxStoreMojo;
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.util.FileUtils;
 
@@ -32,19 +33,24 @@ import org.codehaus.plexus.util.FileUtils;
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
-public class ModelloPrevaylerMojoTest
+public class ModelloJPoxStoreMojoTest
     extends PlexusTestCase
 {
-    public void testModelloPrevaylerMojo()
+    public void testModelloJPoxMojo()
         throws Exception
     {
         ModelloCore modelloCore = (ModelloCore) lookup( ModelloCore.ROLE );
 
-        ModelloPrevaylerMojo mojo = new ModelloPrevaylerMojo();
+        ModelloJPoxStoreMojo mojo = new ModelloJPoxStoreMojo();
 
-        File outputDirectory = getTestFile( "target/prevayler-test" );
+        File outputDirectory = getTestFile( "target/jpox-store" );
 
-        FileUtils.deleteDirectory( outputDirectory );
+        if ( outputDirectory.exists() )
+        {
+            FileUtils.deleteDirectory( outputDirectory );
+        }
+
+        assertTrue( outputDirectory.mkdirs() );
 
         // ----------------------------------------------------------------------
         // Call the mojo
@@ -52,7 +58,7 @@ public class ModelloPrevaylerMojoTest
 
         mojo.setOutputDirectory( outputDirectory );
 
-        mojo.setModel( getTestPath( "src/test/resources/prevayler-model.mdo" ) );
+        mojo.setModel( getTestPath( "src/test/resources/jpox-model.mdo" ) );
 
         mojo.setVersion("1.0.0" );
 
@@ -66,8 +72,8 @@ public class ModelloPrevaylerMojoTest
         // Assert
         // ----------------------------------------------------------------------
 
-        File store = new File( outputDirectory, "org/codehaus/mojo/modello/test/prevayler/PrevaylerTestPrevaylerStore.java" );
+        File store = new File( outputDirectory, "org/codehaus/mojo/modello/test/jpox/JPoxTestJPoxStore.java" );
 
-        assertTrue( "Coun't not read the prevayler store.", store.canRead() );
+        assertTrue( "Could not read the jpox store.", store.canRead() );
     }
 }

@@ -1,4 +1,6 @@
-package org.codehaus.modello;
+package org.codehaus.modello.maven;
+
+import org.codehaus.modello.maven.AbstractModelloGeneratorMojo;
 
 /*
  * Copyright (c) 2004, Codehaus.org
@@ -23,20 +25,23 @@ package org.codehaus.modello;
  */
 
 /**
- * @goal prevayler
+ * @goal xdoc
  *
- * @phase generate-sources
+ * @description Creates XPP3 writer from the model.
  *
- * @description Creates a Prevayler store from the Modello model.
- *
- * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
+ * @author <a href="mailto:brett@apache.org">Brett Porter</a>
  * @version $Id$
  */
-public class ModelloPrevaylerMojo
+public class ModelloXdocMojo
     extends AbstractModelloGeneratorMojo
 {
     protected String getGeneratorType()
     {
-        return "prevayler";
+        return "xdoc";
+    }
+
+    protected boolean producesCompilableResult()
+    {
+        return false;
     }
 }
