@@ -1,4 +1,4 @@
-package org.codehaus.modello;
+package org.codehaus.modello.maven;
 
 /*
  * Copyright (c) 2004, Codehaus.org
@@ -34,6 +34,8 @@ import org.apache.maven.project.MavenProject;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelValidationException;
+import org.codehaus.modello.ModelloParameterConstants;
+import org.codehaus.modello.ModelloException;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>

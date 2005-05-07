@@ -1,4 +1,6 @@
-package org.codehaus.modello;
+package org.codehaus.modello.maven;
+
+import org.codehaus.modello.maven.AbstractModelloGeneratorMojo;
 
 /*
  * Copyright (c) 2004, Codehaus.org
@@ -23,20 +25,20 @@ package org.codehaus.modello;
  */
 
 /**
- * @goal xpp3-reader
+ * @goal jpox-jdo-mapping
  *
- * @phase generate-sources
+ * @phase generate-resources
  *
- * @description Creates XPP3 reader from the model.
+ * @description Creates a JDO mapping from the Modello model.
  *
- * @author <a href="mailto:brett@apache.org">Brett Porter</a>
+ * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
-public class ModelloXpp3ReaderMojo
+public class ModelloJPoxJdoMappingMojo
     extends AbstractModelloGeneratorMojo
 {
     protected String getGeneratorType()
     {
-        return "xpp3-reader";
+        return "jpox-jdo-mapping";
     }
 }

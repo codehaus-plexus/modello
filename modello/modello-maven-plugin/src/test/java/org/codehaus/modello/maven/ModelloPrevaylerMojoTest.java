@@ -1,4 +1,4 @@
-package org.codehaus.modello;
+package org.codehaus.modello.maven;
 
 /*
  * Copyright (c) 2004, Codehaus.org
@@ -25,6 +25,7 @@ package org.codehaus.modello;
 import java.io.File;
 
 import org.codehaus.modello.core.ModelloCore;
+import org.codehaus.modello.maven.ModelloPrevaylerMojo;
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.util.FileUtils;
 
@@ -32,24 +33,19 @@ import org.codehaus.plexus.util.FileUtils;
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
-public class ModelloJPoxJdoMappingMojoTest
+public class ModelloPrevaylerMojoTest
     extends PlexusTestCase
 {
-    public void testModelloJPoxMojo()
+    public void testModelloPrevaylerMojo()
         throws Exception
     {
         ModelloCore modelloCore = (ModelloCore) lookup( ModelloCore.ROLE );
 
-        ModelloJPoxJdoMappingMojo mojo = new ModelloJPoxJdoMappingMojo();
+        ModelloPrevaylerMojo mojo = new ModelloPrevaylerMojo();
 
-        File outputDirectory = getTestFile( "target/jpox-jdo-mapping-test" );
+        File outputDirectory = getTestFile( "target/prevayler-test" );
 
-        if ( outputDirectory.exists() )
-        {
-            FileUtils.deleteDirectory( outputDirectory );
-        }
-
-        assertTrue( outputDirectory.mkdirs() );
+        FileUtils.deleteDirectory( outputDirectory );
 
         // ----------------------------------------------------------------------
         // Call the mojo
@@ -57,7 +53,7 @@ public class ModelloJPoxJdoMappingMojoTest
 
         mojo.setOutputDirectory( outputDirectory );
 
-        mojo.setModel( getTestPath( "src/test/resources/jpox-model.mdo" ) );
+        mojo.setModel( getTestPath( "src/test/resources/prevayler-model.mdo" ) );
 
         mojo.setVersion("1.0.0" );
 
@@ -71,8 +67,8 @@ public class ModelloJPoxJdoMappingMojoTest
         // Assert
         // ----------------------------------------------------------------------
 
-        File configuration = new File( outputDirectory, "META-INF/package.jdo" );
+        File store = new File( outputDirectory, "org/codehaus/mojo/modello/test/prevayler/PrevaylerTestPrevaylerStore.java" );
 
-        assertTrue( "Could not read the jpox configuration '" + configuration.getAbsolutePath() + "'.", configuration.canRead() );
+        assertTrue( "Coun't not read the prevayler store.", store.canRead() );
     }
 }

@@ -1,4 +1,4 @@
-package org.codehaus.modello;
+package org.codehaus.modello.maven;
 
 /*
  * Copyright (c) 2004, Codehaus.org
@@ -25,6 +25,7 @@ package org.codehaus.modello;
 import java.io.File;
 
 import org.codehaus.modello.core.ModelloCore;
+import org.codehaus.modello.maven.ModelloJavaMojo;
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.util.FileUtils;
 
@@ -32,24 +33,19 @@ import org.codehaus.plexus.util.FileUtils;
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
-public class ModelloJPoxStoreMojoTest
+public class ModelloJavaMojoTest
     extends PlexusTestCase
 {
-    public void testModelloJPoxMojo()
+    public void testModelloJavaMojo()
         throws Exception
     {
         ModelloCore modelloCore = (ModelloCore) lookup( ModelloCore.ROLE );
 
-        ModelloJPoxStoreMojo mojo = new ModelloJPoxStoreMojo();
+        ModelloJavaMojo mojo = new ModelloJavaMojo();
 
-        File outputDirectory = getTestFile( "target/jpox-store" );
+        File outputDirectory = getTestFile( "target/java-test" );
 
-        if ( outputDirectory.exists() )
-        {
-            FileUtils.deleteDirectory( outputDirectory );
-        }
-
-        assertTrue( outputDirectory.mkdirs() );
+        FileUtils.deleteDirectory( outputDirectory );
 
         // ----------------------------------------------------------------------
         // Call the mojo
@@ -57,11 +53,11 @@ public class ModelloJPoxStoreMojoTest
 
         mojo.setOutputDirectory( outputDirectory );
 
-        mojo.setModel( getTestPath( "src/test/resources/jpox-model.mdo" ) );
+        mojo.setModel( getTestPath( "src/test/resources/java-model.mdo" ) );
 
         mojo.setVersion("1.0.0" );
 
-        mojo.setPackageWithVersion( Boolean.FALSE );
+        mojo.setPackageWithVersion( Boolean.TRUE );
 
         mojo.setModelloCore( modelloCore );
 
@@ -71,8 +67,8 @@ public class ModelloJPoxStoreMojoTest
         // Assert
         // ----------------------------------------------------------------------
 
-        File store = new File( outputDirectory, "org/codehaus/mojo/modello/test/jpox/JPoxTestJPoxStore.java" );
+        File javaFile = new File( outputDirectory, "org/codehaus/mojo/modello/javatest/v1_0_0/Model.java" );
 
-        assertTrue( "Could not read the jpox store.", store.canRead() );
+        assertTrue( "The generated java file doesn't exist: '" + javaFile.getAbsolutePath() + "'.", javaFile.exists() );
     }
 }
