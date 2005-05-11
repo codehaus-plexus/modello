@@ -95,7 +95,7 @@ public class XdocGenerator
 
         w.startElement( "title" );
 
-        w.writeText( objectModel.getDescription() );
+        w.writeText( objectModel.getName() );
 
         w.endElement();
 
@@ -109,9 +109,13 @@ public class XdocGenerator
         
         w.startElement( "section" );
 
-        w.addAttribute( "name", objectModel.getDescription() );
+        w.addAttribute( "name", objectModel.getName() );
 
         w.startElement( "p" );
+
+        w.writeMarkup( objectModel.getDescription() );
+
+        w.endElement();
 
         w.startElement( "source" );
 
@@ -127,8 +131,6 @@ public class XdocGenerator
         // Element descriptors
         // Traverse from root so "abstract" models aren't included
         writeElementDescriptor( w, objectModel, root, new HashSet() );
-
-        w.endElement();
 
         w.endElement();
 
@@ -159,7 +161,7 @@ public class XdocGenerator
 
         w.startElement( "a" );
 
-        w.addAttribute( "name", modelClass.getName() );
+        w.addAttribute( "name", "class_" + modelClass.getName() );
 
         w.endElement();
 
@@ -269,7 +271,7 @@ public class XdocGenerator
         {
             tagName = metadata.getTagName();
         }
-        sb.append( "&lt;<a href=\"#" + modelClass.getName() + "\">" + tagName );
+        sb.append( "&lt;<a href=\"#class_" + modelClass.getName() + "\">" + tagName );
 
         if ( modelClass.getFields( getGeneratedVersion() ).size() > 0 )
         {
