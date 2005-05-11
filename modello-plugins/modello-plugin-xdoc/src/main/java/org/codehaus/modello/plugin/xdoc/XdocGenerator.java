@@ -29,25 +29,27 @@ import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.plugin.AbstractModelloGenerator;
-import org.codehaus.plexus.util.xml.XMLWriter;
+import org.codehaus.modello.plugin.model.ModelClassMetadata;
 import org.codehaus.plexus.util.xml.PrettyPrintXMLWriter;
+import org.codehaus.plexus.util.xml.XMLWriter;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.Properties;
+import java.util.Set;
+import java.util.HashSet;
 
 /**
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
  * @author <a href="mailto:emmanuel@venisse.net">Emmanuel Venisse</a>
- *
  * @version $Id$
  */
 public class XdocGenerator
     extends AbstractModelloGenerator
 {
-    public void generate(Model model, Properties parameters )
+    public void generate( Model model, Properties parameters )
         throws ModelloException
     {
         initialize( model, parameters );
@@ -56,14 +58,14 @@ public class XdocGenerator
         {
             generateXdoc();
         }
-        catch( IOException ex )
+        catch ( IOException ex )
         {
             throw new ModelloException( "Exception while generating XDoc.", ex );
         }
     }
 
     private void generateXdoc()
-        throws ModelloException, IOException
+        throws IOException
     {
         Model objectModel = getModel();
 
@@ -91,17 +93,9 @@ public class XdocGenerator
 
         w.startElement( "properties" );
 
-        w.startElement( "author" );
-
-        w.addAttribute( "email", "dev@modello.codehaus.org" );
-
-        w.writeText( "Maven Development Team" );
-
-        w.endElement();
-
         w.startElement( "title" );
 
-        w.writeText( "Maven Model Documentation" );
+        w.writeText( objectModel.getDescription() );
 
         w.endElement();
 
@@ -115,89 +109,26 @@ public class XdocGenerator
         
         w.startElement( "section" );
 
-        w.addAttribute( "name", "Descriptor with links" );
+        w.addAttribute( "name", objectModel.getDescription() );
 
         w.startElement( "p" );
 
         w.startElement( "source" );
 
-        w.writeText( "\n" + getDescriptorWithLink( objectModel ) );
+        StringBuffer sb = new StringBuffer();
+
+        ModelClass root = objectModel.getClass( objectModel.getRoot( getGeneratedVersion() ), getGeneratedVersion() );
+        sb.append( getModelClassDescriptor( objectModel, root, 0 ) );
+
+        w.writeMarkup( "\n" + sb.toString() );
 
         w.endElement();
 
-        w.endElement();
-        
         // Element descriptors
+        // Traverse from root so "abstract" models aren't included
+        writeElementDescriptor( w, objectModel, root, new HashSet() );
 
-        for ( Iterator i = objectModel.getClasses( getGeneratedVersion() ).iterator(); i.hasNext(); )
-        {
-            ModelClass modelClass = (ModelClass) i.next();
-
-            w.startElement( "section" );
-
-            w.addAttribute( "name", modelClass.getName() );
-
-            w.startElement( "p" );
-
-            w.startElement( "table" );
-
-            w.startElement( "tr" );
-
-            w.startElement( "th" );
-
-            w.writeText( "Element" );
-
-            w.endElement();
-
-            w.startElement( "th" );
-
-            w.writeText( "Description" );
-
-            w.endElement();
-
-            w.endElement();
-
-            for ( Iterator j = modelClass.getFields( getGeneratedVersion() ).iterator(); j.hasNext(); )
-            {
-                ModelField field = (ModelField) j.next();
-
-                w.startElement( "tr" );
-
-                w.startElement( "td" );
-
-                //if ( objectModel.getClass( capitalise( field.getName() ), getGeneratedVersion() ) != null )
-                //{
-                    w.writeText( field.getName() );
-                //}
-                //else
-                //{
-                //    w.writeText( field.getName() );
-                //}
-
-                w.endElement();
-
-                w.startElement( "td" );
-
-                if ( field.getDescription() != null )
-                {
-                    w.writeText( field.getDescription() );
-                }
-                else
-                {
-                    w.writeText( "No description." );
-                }
-
-                w.endElement();
-
-                w.endElement();
-            }
-
-            w.endElement();
-
-            w.endElement();
-
-            w.endElement();
-        }
+        w.endElement();
 
         w.endElement();
 
@@ -210,19 +141,113 @@ public class XdocGenerator
         writer.close();
     }
 
-    private String getDescriptorWithLink( Model objectModel )
-        throws ModelloRuntimeException
+    private void writeElementDescriptor( XMLWriter w, Model objectModel, ModelClass modelClass, Set written )
     {
-        StringBuffer sb = new StringBuffer();
+        written.add( modelClass );
 
-        sb.append( getModelClassDescriptor( objectModel, objectModel.getClass( objectModel.getRoot( getGeneratedVersion() ), getGeneratedVersion() ), 0 ) );
+        ModelClassMetadata metadata = (ModelClassMetadata) modelClass.getMetadata( ModelClassMetadata.ID );
 
-        return sb.toString();
+        String tagName;
+        if ( metadata == null || metadata.getTagName() == null )
+        {
+            tagName = uncapitalise( modelClass.getName() );
+        }
+        else
+        {
+            tagName = metadata.getTagName();
+        }
+
+        w.startElement( "a" );
+
+        w.addAttribute( "name", modelClass.getName() );
+
+        w.endElement();
+
+        w.startElement( "subsection" );
+
+        w.addAttribute( "name", tagName );
+
+        if ( modelClass.getDescription() != null )
+        {
+            w.startElement( "p" );
+
+            w.writeMarkup( modelClass.getDescription() );
+
+            w.endElement();
+        }
+
+        w.startElement( "table" );
+
+        w.startElement( "tr" );
+
+        w.startElement( "th" );
+
+        w.writeText( "Element" );
+
+        w.endElement();
+
+        w.startElement( "th" );
+
+        w.writeText( "Description" );
+
+        w.endElement();
+
+        w.endElement();
+
+        for ( Iterator j = modelClass.getFields( getGeneratedVersion() ).iterator(); j.hasNext(); )
+        {
+            ModelField field = (ModelField) j.next();
+
+            w.startElement( "tr" );
+
+            w.startElement( "td" );
+
+            w.startElement( "code" );
+
+            w.writeText( field.getName() );
+
+            w.endElement();
+
+            w.endElement();
+
+            w.startElement( "td" );
+
+            if ( field.getDescription() != null )
+            {
+                w.writeMarkup( field.getDescription() );
+            }
+            else
+            {
+                w.writeText( "No description." );
+            }
+
+            w.endElement();
+
+            w.endElement();
+        }
+
+        w.endElement();
+
+        w.endElement();
+
+        for ( Iterator iter = modelClass.getFields( getGeneratedVersion() ).iterator(); iter.hasNext(); )
+        {
+            ModelField field = (ModelField) iter.next();
+
+            if ( field instanceof ModelAssociation &&
+                isClassInModel( ( (ModelAssociation) field ).getTo(), objectModel ) )
+            {
+                ModelAssociation association = (ModelAssociation) field;
+                ModelClass fieldModelClass = objectModel.getClass( association.getTo(), getGeneratedVersion() );
+
+                if ( !written.contains( fieldModelClass ) )
+                {
+                    writeElementDescriptor( w, objectModel, fieldModelClass, written );
+                }
+            }
+        }
     }
 
-    // @todo I'm not going to test this right now but I have reworked the source handling in
-    // the new xdoc plugin to handle the escaping of XML that that we don't have to do it in
-    // source code.
     private String getModelClassDescriptor( Model objectModel, ModelClass modelClass, int depth )
         throws ModelloRuntimeException
     {
@@ -233,11 +258,22 @@ public class XdocGenerator
             sb.append( "  " );
         }
 
-        sb.append( "<a href=\"#" + modelClass.getName() + "\">&lt;" + uncapitalise( modelClass.getName() ) );
+        ModelClassMetadata metadata = (ModelClassMetadata) modelClass.getMetadata( ModelClassMetadata.ID );
+
+        String tagName;
+        if ( metadata == null || metadata.getTagName() == null )
+        {
+            tagName = uncapitalise( modelClass.getName() );
+        }
+        else
+        {
+            tagName = metadata.getTagName();
+        }
+        sb.append( "&lt;<a href=\"#" + modelClass.getName() + "\">" + tagName );
 
         if ( modelClass.getFields( getGeneratedVersion() ).size() > 0 )
         {
-            sb.append( "&gt;</a>\n" );
+            sb.append( "</a>&gt;\n" );
 
             for ( Iterator iter = modelClass.getFields( getGeneratedVersion() ).iterator(); iter.hasNext(); )
             {
@@ -245,32 +281,37 @@ public class XdocGenerator
 
                 ModelClass fieldModelClass = null;
 
-                if ( field instanceof ModelAssociation && isClassInModel( ( (ModelAssociation) field).getTo(), objectModel ) )
+                if ( field instanceof ModelAssociation &&
+                    isClassInModel( ( (ModelAssociation) field ).getTo(), objectModel ) )
                 {
                     ModelAssociation association = (ModelAssociation) field;
 
                     if ( ModelAssociation.MANY_MULTIPLICITY.equals( association.getMultiplicity() ) )
                     {
-                        for ( int i = 0; i < depth+1; i++ )
+                        depth++;
+
+                        for ( int i = 0; i < depth; i++ )
                         {
                             sb.append( "  " );
                         }
 
-                        sb.append( "<a href=\"#" + association.getName() + "\">&lt;" + uncapitalise( association.getName() ) + "&gt;</a>\n" );
+                        sb.append( "&lt;" + uncapitalise( association.getName() ) + "&gt;\n" );
                     }
 
-                    fieldModelClass = objectModel.getClass( ( (ModelAssociation) field).getTo(), getGeneratedVersion() );
+                    fieldModelClass = objectModel.getClass( association.getTo(), getGeneratedVersion() );
 
-                    sb.append( getModelClassDescriptor( objectModel, fieldModelClass, depth + 2 ) );
+                    sb.append( getModelClassDescriptor( objectModel, fieldModelClass, depth + 1 ) );
 
                     if ( ModelAssociation.MANY_MULTIPLICITY.equals( association.getMultiplicity() ) )
                     {
-                        for ( int i = 0; i < depth+1; i++ )
+                        for ( int i = 0; i < depth; i++ )
                         {
                             sb.append( "  " );
                         }
 
-                        sb.append( "<a href=\"#" + association.getName() + "\">&lt;/" + uncapitalise( association.getName() ) + "&gt;</a>\n" );
+                        sb.append( "&lt;/" + uncapitalise( association.getName() ) + "&gt;\n" );
+
+                        depth--;
                     }
 
                 }
@@ -281,7 +322,7 @@ public class XdocGenerator
                         sb.append( "  " );
                     }
 
-                    sb.append( "<a href=\"#" + modelClass.getName() + "\">&lt;" + uncapitalise( field.getName() ) + "/&gt;</a>\n" );
+                    sb.append( "&lt;" + uncapitalise( field.getName() ) + "/&gt;\n" );
                 }
             }
 
@@ -290,11 +331,11 @@ public class XdocGenerator
                 sb.append( "  " );
             }
 
-            sb.append( "<a href=\"#" + modelClass.getName() + "\">&lt;" + uncapitalise( modelClass.getName() ) + "&gt;</a>\n" );
+            sb.append( "&lt;/" + tagName + "&gt;\n" );
         }
         else
         {
-            sb.append( "/&gt;</a>\n" );
+            sb.append( "</a>/&gt;\n" );
         }
 
         return sb.toString();
