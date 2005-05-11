@@ -60,7 +60,7 @@ public class Xpp3WriterGenerator
 
         try
         {
-            generateXpp3Writer( model );
+            generateXpp3Writer();
         }
         catch ( IOException ex )
         {
@@ -68,7 +68,7 @@ public class Xpp3WriterGenerator
         }
     }
 
-    private void generateXpp3Writer( Model model )
+    private void generateXpp3Writer()
         throws ModelloException, IOException
     {
         Model objectModel = getModel();
