@@ -1,7 +1,5 @@
 package org.codehaus.modello.maven;
 
-import org.codehaus.modello.maven.AbstractModelloGeneratorMojo;
-
 /*
  * Copyright (c) 2004, Codehaus.org
  *
@@ -24,6 +22,10 @@ import org.codehaus.modello.maven.AbstractModelloGeneratorMojo;
  * SOFTWARE.
  */
 
+import org.codehaus.modello.maven.AbstractModelloGeneratorMojo;
+
+import java.io.File;
+
 /**
  * @goal xdoc
  *
@@ -35,6 +37,13 @@ import org.codehaus.modello.maven.AbstractModelloGeneratorMojo;
 public class ModelloXdocMojo
     extends AbstractModelloGeneratorMojo
 {
+    /**
+     * @parameter expression="${basedir}/target/generated-site/xdoc"
+     *
+     * @required
+     */
+    private File outputDirectory;
+
     protected String getGeneratorType()
     {
         return "xdoc";
@@ -43,5 +52,15 @@ public class ModelloXdocMojo
     protected boolean producesCompilableResult()
     {
         return false;
+    }
+
+    public File getOutputDirectory()
+    {
+        return outputDirectory;
+    }
+
+    public void setOutputDirectory( File outputDirectory )
+    {
+        this.outputDirectory = outputDirectory;
     }
 }
