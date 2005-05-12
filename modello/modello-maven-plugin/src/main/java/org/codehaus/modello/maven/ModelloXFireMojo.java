@@ -35,8 +35,25 @@ package org.codehaus.modello.maven;
 public class ModelloXFireMojo
     extends AbstractModelloGeneratorMojo
 {
+    /**
+     * @parameter expression="${basedir}/target/generated-sources"
+     *
+     * @required
+     */
+    private File outputDirectory;
+
     protected String getGeneratorType()
     {
         return "xfire";
+    }
+
+    public File getOutputDirectory()
+    {
+        return outputDirectory;
+    }
+
+    public void setOutputDirectory( File outputDirectory )
+    {
+        this.outputDirectory = outputDirectory;
     }
 }

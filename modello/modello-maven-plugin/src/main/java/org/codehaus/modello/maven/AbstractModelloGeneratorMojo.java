@@ -56,13 +56,6 @@ public abstract class AbstractModelloGeneratorMojo
     private String basedir;
 
     /**
-     * @parameter expression="${basedir}/target/generated-sources"
-     *
-     * @required
-     */
-    private File outputDirectory;
-
-    /**
      * @parameter expression="${model}"
      *
      * @required
@@ -119,9 +112,11 @@ public abstract class AbstractModelloGeneratorMojo
     {
         Properties parameters = new Properties();
 
-        getLog().info( "outputDirectory: " );
+        String outputDirectory = getOutputDirectory().getAbsolutePath();
 
-        parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, outputDirectory.getAbsolutePath() );
+        getLog().info( "outputDirectory: " + outputDirectory );
+
+        parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, outputDirectory );
 
         parameters.setProperty( ModelloParameterConstants.VERSION, version );
 
@@ -133,11 +128,12 @@ public abstract class AbstractModelloGeneratorMojo
 
             Model model = modelloCore.loadModel( fileReader );
 
+            // TODO: dynamicall resolve/load the generator type
             modelloCore.generate( model, getGeneratorType(), parameters );
 
             if ( producesCompilableResult() && project != null )
             {
-                project.addCompileSourceRoot( outputDirectory.getAbsolutePath() );
+                project.addCompileSourceRoot( outputDirectory );
             }
         }
         catch ( FileNotFoundException e )
@@ -166,16 +162,6 @@ public abstract class AbstractModelloGeneratorMojo
     public void setBasedir( String basedir )
     {
         this.basedir = basedir;
-    }
-
-    public File getOutputDirectory()
-    {
-        return outputDirectory;
-    }
-
-    public void setOutputDirectory( File outputDirectory )
-    {
-        this.outputDirectory = outputDirectory;
     }
 
     public String getModel()
@@ -227,4 +213,6 @@ public abstract class AbstractModelloGeneratorMojo
     {
         this.project = project;
     }
+
+    public abstract File getOutputDirectory();
 }
