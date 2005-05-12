@@ -2,6 +2,8 @@ package org.codehaus.modello.maven;
 
 import org.codehaus.modello.maven.AbstractModelloGeneratorMojo;
 
+import java.io.File;
+
 /*
  * Copyright (c) 2004, Codehaus.org
  *
@@ -37,8 +39,25 @@ import org.codehaus.modello.maven.AbstractModelloGeneratorMojo;
 public class ModelloJPoxStoreMojo
     extends AbstractModelloGeneratorMojo
 {
+    /**
+     * @parameter expression="${basedir}/target/generated-sources"
+     *
+     * @required
+     */
+    private File outputDirectory;
+
     protected String getGeneratorType()
     {
         return "jpox-store";
+    }
+
+    public File getOutputDirectory()
+    {
+        return outputDirectory;
+    }
+
+    public void setOutputDirectory( File outputDirectory )
+    {
+        this.outputDirectory = outputDirectory;
     }
 }
