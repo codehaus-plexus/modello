@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.codehaus.modello</groupId>
     <artifactId>modello</artifactId>
-    <version>1.0-alpha-2-SNAPSHOT</version>
+    <version>1.0-alpha-2</version>
   </parent>
   <artifactId>modello-plugins</artifactId>
   <packaging>pom</packaging>
@@ -12,12 +12,12 @@
     <dependency>
       <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-core</artifactId>
-      <version>1.0-alpha-2-SNAPSHOT</version>
+      <version>1.0-alpha-2</version>
     </dependency>
     <dependency>
       <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-test</artifactId>
-      <version>1.0-alpha-2-SNAPSHOT</version>
+      <version>1.0-alpha-2</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -25,7 +25,6 @@
     <module>modello-plugin-jpox</module>
     <module>modello-plugin-prevayler</module>
     <module>modello-plugin-store</module>
-    <module>modello-plugin-velocity</module>
     <module>modello-plugin-xdoc</module>
     <module>modello-plugin-xml</module>
     <module>modello-plugin-xpp3</module>

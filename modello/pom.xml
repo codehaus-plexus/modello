@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.codehaus.modello</groupId>
   <artifactId>modello</artifactId>
-  <version>1.0-alpha-2-SNAPSHOT</version>
+  <version>1.0-alpha-2</version>
   <packaging>pom</packaging>
   <name>Modello Parent</name>
   <inceptionYear>2001</inceptionYear>
