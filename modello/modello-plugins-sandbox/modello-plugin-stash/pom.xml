@@ -3,10 +3,10 @@
   <parent>
     <groupId>org.codehaus.modello</groupId>
     <artifactId>modello-plugins-sandbox</artifactId>
-    <version>1.0-alpha-2-SNAPSHOT</version>
+    <version>1.0-alpha-3-SNAPSHOT</version>
   </parent>
   <artifactId>modello-plugin-stash</artifactId>
-  <version>1.0-alpha-2-SNAPSHOT</version>
+  <version>1.0-alpha-3-SNAPSHOT</version>
   <name>Modello Stash Plugin</name>
   <dependencies>
     <dependency>
@@ -17,7 +17,7 @@
     <dependency>
       <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-plugin-store</artifactId>
-      <version>1.0-alpha-2-SNAPSHOT</version>
+      <version>1.0-alpha-3-SNAPSHOT</version>
     </dependency>
   </dependencies>
 </project>

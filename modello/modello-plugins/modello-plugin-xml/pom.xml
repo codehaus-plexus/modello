@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.codehaus.modello</groupId>
     <artifactId>modello-plugins</artifactId>
-    <version>1.0-alpha-2-SNAPSHOT</version>
+    <version>1.0-alpha-3-SNAPSHOT</version>
   </parent>
   <artifactId>modello-plugin-xml</artifactId>
   <name>Modello XML Plugin</name>
