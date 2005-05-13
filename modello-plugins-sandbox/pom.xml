@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.codehaus.modello</groupId>
     <artifactId>modello</artifactId>
-    <version>1.0-alpha-2-SNAPSHOT</version>
+    <version>1.0-alpha-3-SNAPSHOT</version>
   </parent>
   <artifactId>modello-plugins-sandbox</artifactId>
   <packaging>pom</packaging>
@@ -12,12 +12,12 @@
     <dependency>
       <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-core</artifactId>
-      <version>1.0-alpha-2-SNAPSHOT</version>
+      <version>1.0-alpha-3-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-test</artifactId>
-      <version>1.0-alpha-2-SNAPSHOT</version>
+      <version>1.0-alpha-3-SNAPSHOT</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

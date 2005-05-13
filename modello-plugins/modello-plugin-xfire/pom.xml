@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.codehaus.modello</groupId>
     <artifactId>modello-plugins</artifactId>
-    <version>1.0-alpha-2-SNAPSHOT</version>
+    <version>1.0-alpha-3-SNAPSHOT</version>
   </parent>
   <artifactId>modello-plugin-xfire</artifactId>
   <name>Modello XFire Plugin</name>
@@ -11,7 +11,7 @@
     <dependency>
       <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-plugin-xml</artifactId>
-      <version>1.0-alpha-2-SNAPSHOT</version>
+      <version>1.0-alpha-3-SNAPSHOT</version>
     </dependency>
     
     <!-- XFire dependencies -->
