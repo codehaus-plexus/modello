@@ -33,12 +33,6 @@
     </dependency>
     <dependency>
       <groupId>org.codehaus.modello</groupId>
-      <artifactId>modello-plugin-xfire</artifactId>
-      <version>1.0-alpha-2-SNAPSHOT</version>
-      <scope>runtime</scope>
-    </dependency>
-   <dependency>
-      <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-plugin-xdoc</artifactId>
       <version>1.0-alpha-2-SNAPSHOT</version>
       <scope>runtime</scope>

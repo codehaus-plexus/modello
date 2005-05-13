@@ -25,9 +25,9 @@
     <module>modello-plugin-jpox</module>
     <module>modello-plugin-prevayler</module>
     <module>modello-plugin-store</module>
+    <module>modello-plugin-velocity</module>
     <module>modello-plugin-xdoc</module>
     <module>modello-plugin-xml</module>
     <module>modello-plugin-xpp3</module>
-    <module>modello-plugin-xfire</module>
   </modules>
 </project>
