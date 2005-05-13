@@ -43,6 +43,5 @@
     <module>modello-core</module>
     <module>modello-test</module>
     <module>modello-plugins</module>
-    <module>modello-plugins-sandbox</module>
   </modules>
 </project>
