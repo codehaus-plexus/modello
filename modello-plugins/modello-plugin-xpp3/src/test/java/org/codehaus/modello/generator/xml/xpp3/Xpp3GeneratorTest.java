@@ -114,7 +114,7 @@ public class Xpp3GeneratorTest
         modello.generate( model, "xpp3-reader", parameters );
 
         // TODO: read my own pom, get dep from there
-        addDependency( "org.codehaus.modello", "modello-core", "1.0-alpha-2" );
+        addDependency( "org.codehaus.modello", "modello-core", "1.0-alpha-3-SNAPSHOT" );
 
         compile( generatedSources, classes );
 
