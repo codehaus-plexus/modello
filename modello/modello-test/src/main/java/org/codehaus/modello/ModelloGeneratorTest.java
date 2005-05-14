@@ -201,4 +201,13 @@ public abstract class ModelloGeneratorTest
             System.out.println( url );
         }
     }
+
+    protected void assertGeneratedFileExists( String filename )
+    {
+        File file = new File( getGeneratedSources(), filename );
+
+        assertTrue( "Missing generated file: " + file.getAbsolutePath(), file.canRead() );
+
+        assertTrue( "The generated file is empty.", file.length() > 0 );
+    }
 }
