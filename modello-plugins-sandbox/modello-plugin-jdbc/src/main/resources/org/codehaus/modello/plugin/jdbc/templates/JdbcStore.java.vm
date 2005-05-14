@@ -1,3 +1,15 @@
+#macro( setter $field )
+#set( $caps = $field.name.substring(0,1) )
+#set( $caps = $caps.toUpperCase() )
+#set( $rest = $field.name.substring(1) )
+#if( $field.type == "String" )
+        object.set${caps}${rest}(rs.getString( "$field.name" ) );
+#elseif( $field.type == "int" )
+        object.set${caps}${rest}(rs.getInt( "$field.name" ) );
+#else
+        // Ignoring field: $field.name
+#end
+#end
 package ${package};
 
 import java.util.ArrayList;
@@ -32,7 +44,7 @@ public class ${model.name}JdbcStore
     //
     // ----------------------------------------------------------------------
 
-#foreach ( $class in $model.allClasses )
+#foreach ( $class in $classes )
 #if ( $class.getMetadata( $storeClassMetadataId ).isStorable() )
     public final static String ${class.name}_field_names;
 
@@ -41,21 +53,54 @@ public class ${model.name}JdbcStore
 
 #end
     static {
-#foreach ( $class in $model.allClasses )
+#foreach ( $class in $classes )
+#set( $fields = $classFields.get( $class.name ) )
 #if ( $class.getMetadata( $storeClassMetadataId ).isStorable() )
-    ${class.name}_field_names =
-#foreach ( $field in $class.fields )
-        "$field.name, "
+    ${class.name}_field_names = makeFields( new String[] {
+#foreach ( $field in $classFields.get( $class.name ) )
+        "$field.name",
 #end
-        "1";
+        "" } );
+    System.out.println( "${class.name}_field_names: " + ${class.name}_field_names );
 
-    ${class.name}_field_markers =
-#foreach ( $field in $class.fields )
-        "?, "
-#end
-        "1";
+    ${class.name}_field_markers = makeMarkers( $fields.size() );
 #end
 #end
+    }
+
+    private static String makeFields( String[] fields )
+    {
+        if ( fields.length == 1 )
+        {
+            return "";
+        }
+
+        StringBuffer str = new StringBuffer( fields[ 0 ] );
+
+        for( int i = 1; i < fields.length - 1; i++ )
+        {
+            str.append( ", " );
+            str.append( fields[ i ] );
+        }
+
+        return str.toString();
+    }
+
+    private static String makeMarkers( int count )
+    {
+        if ( count == 0 )
+        {
+            return "";
+        }
+
+        String markers = "?";
+
+        for ( int i = 1; i < count; i++ )
+        {
+            markers += ", ?";
+        }
+
+        return markers;
     }
 
     // ----------------------------------------------------------------------
@@ -182,7 +227,8 @@ public class ${model.name}JdbcStore
     // ----------------------------------------------------------------------
     // ResultSet to Object methods
     // ----------------------------------------------------------------------
-#foreach ( $class in $model.allClasses )
+#foreach ( $class in $classes )
+#set( $fields = $classFields.get( $class.name ) )
 
 #if ( $class.getMetadata( $storeClassMetadataId ).isStorable() )
     public static ${class.name} resultSetTo${class.name}( ResultSet rs )
@@ -190,11 +236,19 @@ public class ${model.name}JdbcStore
     {
         ${class.name} object = new ${class.name}();
 
+#foreach( $field in $fields )
+#if ( !$field.isAssociation )
+#setter( $field )
+#else
+        // association: $field.name
+#end
+#end
+
         return object;
     }
 #end
 #end
-#foreach ( $class in $model.allClasses )
+#foreach ( $class in $classes )
 #if ( $class.getMetadata( $storeClassMetadataId ).isStorable() )
     // ----------------------------------------------------------------------
     // ${class.name} CRUD
@@ -209,7 +263,7 @@ public class ${model.name}JdbcStore
         {
             Connection con = begin();
 
-            stmt = con.prepareStatement( "insert into ${class.name} values( " + ${class.name}_field_markers + " )" );
+            stmt = con.prepareStatement( "INSERT INTO ${class.name} VALUES( " + ${class.name}_field_markers + " )" );
 
             stmt.executeUpdate();
 
@@ -232,7 +286,7 @@ public class ${model.name}JdbcStore
         {
             Connection con = begin();
 
-            stmt = con.prepareStatement( "delete from " );
+            stmt = con.prepareStatement( "DELETE FROM ${class.name} where id=?" );
 
             stmt.setString( 1, id );
 
@@ -259,7 +313,7 @@ public class ${model.name}JdbcStore
         {
             Connection con = begin();
 
-            stmt = con.prepareStatement( "delete from " );
+            stmt = con.prepareStatement( "select " );
 
             stmt.setString( 1, id );
 

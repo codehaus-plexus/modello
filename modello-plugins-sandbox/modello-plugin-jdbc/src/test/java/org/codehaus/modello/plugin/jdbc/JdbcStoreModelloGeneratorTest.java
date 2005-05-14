@@ -70,8 +70,6 @@ public class JdbcStoreModelloGeneratorTest
         // Assert
         // ----------------------------------------------------------------------
 
-        System.err.println( "getGeneratedSources(): " + getGeneratedSources().getAbsolutePath() );
-
         assertGeneratedFileExists( "org/mergere/tissue/TissueJdbcStore.java" );
     }
 

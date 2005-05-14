@@ -23,12 +23,18 @@ package org.codehaus.modello.plugin.jdbc;
  */
 
 import java.util.Properties;
+import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Iterator;
 
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.context.Context;
 
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.model.Model;
+import org.codehaus.modello.model.Version;
+import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.plugin.store.AbstractVelocityModelloGenerator;
 import org.codehaus.modello.plugin.store.metadata.StoreClassMetadata;
 import org.codehaus.modello.plugin.store.metadata.StoreFieldMetadata;
@@ -45,6 +51,21 @@ public class JdbcStoreModelloGenerator
     {
         initialize( model, properties );
 
+        Version version = getGeneratedVersion();
+
+        List classes = model.getClasses( version );
+
+        Map classFields = new HashMap();
+
+        for ( Iterator it = classes.iterator(); it.hasNext(); )
+        {
+            ModelClass modelClass = (ModelClass) it.next();
+
+            List fields = modelClass.getFields( version );
+
+            classFields.put( modelClass.getName(), fields );
+        }
+
         // ----------------------------------------------------------------------
         // Initialize the Velocity context
         // ----------------------------------------------------------------------
@@ -53,13 +74,17 @@ public class JdbcStoreModelloGenerator
 
         context.put( "version", getGeneratedVersion() );
 
-        context.put( "package", model.getPackageName( false, getGeneratedVersion() ) );
+        context.put( "package", model.getPackageName( false, version ) );
 
         context.put( "storeClassMetadataId", StoreClassMetadata.ID );
 
         context.put( "storeFieldMetadataId", StoreFieldMetadata.ID );
 
         context.put( "model", model );
+
+        context.put( "classes", classes );
+
+        context.put( "classFields", classFields );
 
         // ----------------------------------------------------------------------
         // Generate the JdbcStore
