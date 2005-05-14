@@ -49,23 +49,17 @@ public class JPoxStoreModelloGenerator
         // Initialize the Velocity context
         // ----------------------------------------------------------------------
 
-        Context context = new VelocityContext();
-
-        context.put( "version", getGeneratedVersion() );
-
-        context.put( "package", model.getPackageName( false, getGeneratedVersion() ) );
+        Context context = makeStubVelocityContext( model, getGeneratedVersion() );
 
         context.put( "storeClassMetadataId", StoreClassMetadata.ID );
 
         context.put( "storeFieldMetadataId", StoreFieldMetadata.ID );
 
-        context.put( "model", model );
-
         // ----------------------------------------------------------------------
         // Generate the JPoxStore
         // ----------------------------------------------------------------------
 
-        String packageName = model.getPackageName( isPackageWithVersion(), super.getGeneratedVersion() );
+        String packageName = model.getPackageName( isPackageWithVersion(), getGeneratedVersion() );
 
         String className = model.getName() + "JPoxStore";
 
