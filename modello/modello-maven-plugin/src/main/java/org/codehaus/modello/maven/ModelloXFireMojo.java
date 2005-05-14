@@ -1,5 +1,7 @@
 package org.codehaus.modello.maven;
 
+import java.io.File;
+
 /*
  * Copyright (c) 2004, Codehaus.org
  *
