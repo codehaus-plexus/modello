@@ -70,17 +70,4 @@ public class JPoxStoreModelloGeneratorTest
 
         assertGeneratedFileExists( "org/mergere/tissue/TissueJPoxStore.java" );
     }
-
-    // ----------------------------------------------------------------------
-    //
-    // ----------------------------------------------------------------------
-
-    private void assertGeneratedFileExists( String filename )
-    {
-        File file = new File( getGeneratedSources(), filename );
-
-        assertTrue( "Missing generated file: " + file.getAbsolutePath(), file.canRead() );
-
-        assertTrue( "The generated file is empty.", file.length() > 0 );
-    }
 }

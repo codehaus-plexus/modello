@@ -11,7 +11,7 @@ import javax.jdo.JDOUserException;
 import javax.jdo.Transaction;
 
 // Model class imports
-#foreach ( $class in $model.allClasses )
+#foreach ( $class in $classes )
 #if ( $class.getMetadata( $storeClassMetadataId ).isStorable() && ${class.packageName} != ${package} )
 import ${class.packageName}.${class.name};
 #end
@@ -162,7 +162,7 @@ public class ${model.name}JPoxStore
         }
     }
 
-#foreach ( $class in $model.allClasses )
+#foreach ( $class in $classes )
 #if ( $class.getMetadata( $storeClassMetadataId ).isStorable() )
     // ----------------------------------------------------------------------
     // ${class.name} CRUD
