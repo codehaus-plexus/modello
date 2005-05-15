@@ -1,0 +1,8 @@
+<plugin-set>
+  <plugins>
+    <plugin>
+      <id>xfire</id>
+      <implementation>org.codehaus.modello.plugin.xfire.XFireMetaDataPlugin</implementation>
+    </plugin>
+  </plugins>
+</plugin-set>
