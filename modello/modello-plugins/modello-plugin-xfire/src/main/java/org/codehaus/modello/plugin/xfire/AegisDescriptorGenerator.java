@@ -37,7 +37,6 @@ import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.Version;
 import org.codehaus.modello.plugin.AbstractModelloGenerator;
-import org.codehaus.modello.plugins.xml.XmlFieldMetadata;
 import org.codehaus.plexus.util.xml.PrettyPrintXMLWriter;
 import org.codehaus.plexus.util.xml.XMLWriter;
 import org.codehaus.xfire.aegis.type.basic.XMLTypeInfo;
@@ -110,8 +109,13 @@ public class AegisDescriptorGenerator
         {
             ModelField field = (ModelField) j.next();
 
-            XmlFieldMetadata fieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
+            XFireFieldMetadata fieldMetadata = (XFireFieldMetadata) field.getMetadata( XFireFieldMetadata.ID );
 
+            if (fieldMetadata.isIgnore())
+            {
+                break;
+            }
+            
             if ( fieldMetadata.isAttribute() )
             {
                 w.startElement( "attribute" );

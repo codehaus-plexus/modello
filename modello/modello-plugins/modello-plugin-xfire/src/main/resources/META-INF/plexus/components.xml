@@ -5,5 +5,10 @@
       <role-hint>xfire</role-hint>
       <implementation>org.codehaus.modello.plugin.xfire.AegisDescriptorGenerator</implementation>
     </component>
+    <component>
+      <role>org.codehaus.modello.metadata.MetadataPlugin</role>
+      <role-hint>xfire</role-hint>
+      <implementation>org.codehaus.modello.plugin.xfire.XFireMetadataPlugin</implementation>
+    </component>
   </components>
 </component-set>
