@@ -1,21 +1,5 @@
 package org.codehaus.modello.plugin.store;
 
-import java.io.File;
-import java.io.Writer;
-import java.io.FileWriter;
-
-import org.apache.velocity.context.Context;
-import org.apache.velocity.Template;
-import org.apache.velocity.VelocityContext;
-
-import org.codehaus.modello.plugin.AbstractModelloGenerator;
-import org.codehaus.modello.plugin.store.tool.JavaTool;
-import org.codehaus.modello.ModelloException;
-import org.codehaus.modello.model.Version;
-import org.codehaus.modello.model.ModelClass;
-import org.codehaus.modello.model.Model;
-import org.codehaus.plexus.velocity.VelocityComponent;
-
 /*
  * Copyright (c) 2005, Codehaus.org
  *
@@ -37,6 +21,28 @@ import org.codehaus.plexus.velocity.VelocityComponent;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+
+import java.io.File;
+import java.io.Writer;
+import java.io.FileWriter;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.velocity.context.Context;
+import org.apache.velocity.Template;
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.exception.ResourceNotFoundException;
+import org.apache.velocity.exception.ParseErrorException;
+
+import org.codehaus.modello.plugin.AbstractModelloGenerator;
+import org.codehaus.modello.plugin.store.tool.JavaTool;
+import org.codehaus.modello.ModelloException;
+import org.codehaus.modello.model.Version;
+import org.codehaus.modello.model.ModelClass;
+import org.codehaus.modello.model.Model;
+import org.codehaus.plexus.velocity.VelocityComponent;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -101,26 +107,41 @@ public abstract class AbstractVelocityModelloGenerator
 
         try
         {
-            template = velocity.getEngine().getTemplate( templateName );
+            template = getTemplate( templateName );
+
+            if ( template == null )
+            {
+                ClassLoader old = Thread.currentThread().getContextClassLoader();
+
+                try
+                {
+                    Thread.currentThread().setContextClassLoader( this.getClass().getClassLoader() );
+
+                    template = getTemplate( templateName );
+
+                    if ( template == null )
+                    {
+                        throw new ModelloException( "Could not find the template '" + templateName + "'." );
+                    }
+                }
+                finally
+                {
+                    Thread.currentThread().setContextClassLoader( old );
+                }
+            }
+        }
+        catch ( ParseErrorException e )
+        {
+            throw new ModelloException( "Could not parse the template '" + templateName + "'.", e );
         }
         catch ( Exception e )
         {
-            ClassLoader old = Thread.currentThread().getContextClassLoader();
+            if ( e instanceof ModelloException )
+            {
+                throw (ModelloException) e;
+            }
 
-            try
-            {
-                Thread.currentThread().setContextClassLoader( this.getClass().getClassLoader() );
-
-                template = velocity.getEngine().getTemplate( templateName );
-            }
-            catch ( Exception e1 )
-            {
-                throw new ModelloException( "Could not find the template '" + templateName + "'." );
-            }
-            finally
-            {
-                Thread.currentThread().setContextClassLoader( old );
-            }
+            throw new ModelloException( "Error while loading template '" + templateName + "'.", e );
         }
 
         if ( !file.getParentFile().exists() )
@@ -142,6 +163,23 @@ public abstract class AbstractVelocityModelloGenerator
         catch ( Exception e )
         {
             throw new ModelloException( "Error while generating code.", e );
+        }
+    }
+
+    // ----------------------------------------------------------------------
+    //
+    // ----------------------------------------------------------------------
+
+    private Template getTemplate( String name )
+        throws ParseErrorException, Exception
+    {
+        try
+        {
+            return velocity.getEngine().getTemplate( name );
+        }
+        catch ( ResourceNotFoundException e )
+        {
+            return null;
         }
     }
 }
