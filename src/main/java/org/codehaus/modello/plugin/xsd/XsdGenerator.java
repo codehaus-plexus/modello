@@ -40,6 +40,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
+import java.util.ArrayList;
 
 /**
  * @author <a href="mailto:brett@codehaus.org">Brett Porter</a>
@@ -134,7 +135,22 @@ public class XsdGenerator
 
         w.startElement( "xs:all" );
 
-        for ( Iterator j = modelClass.getFields( getGeneratedVersion() ).iterator(); j.hasNext(); )
+        List fields = new ArrayList();
+        while ( modelClass != null )
+        {
+            fields.addAll( modelClass.getFields( getGeneratedVersion() ) );
+            String superClass = modelClass.getSuperClass();
+            if ( superClass != null )
+            {
+                modelClass = objectModel.getClass( superClass, getGeneratedVersion() );
+            }
+            else
+            {
+                modelClass = null;
+            }
+        }
+
+        for ( Iterator j = fields.iterator(); j.hasNext(); )
         {
             ModelField field = (ModelField) j.next();
 
@@ -170,7 +186,7 @@ public class XsdGenerator
 
         w.endElement();
 
-        for ( Iterator iter = modelClass.getFields( getGeneratedVersion() ).iterator(); iter.hasNext(); )
+        for ( Iterator iter = fields.iterator(); iter.hasNext(); )
         {
             ModelField field = (ModelField) iter.next();
 
