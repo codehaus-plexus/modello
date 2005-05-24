@@ -197,7 +197,7 @@ public class XsdGenerator
                     {
                         writeListElement( w, field, writtenFields );
                     }
-                    else if ( Properties.class.getName().equals( field.getType() ) )
+                    else if ( Properties.class.getName().equals( field.getType() ) || "DOM".equals( field.getType() ) )
                     {
                         writePropertiesElement( w, field, writtenFields );
                     }
