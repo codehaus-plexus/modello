@@ -1,0 +1,11 @@
+this is the model $model
+
+#foreach ( $class in $model.allClasses )
+$class
+
+>>>> $class.getMetadata( "stash.storable" )
+
+#if ( $class.getMetadata( "stash.storable" ) )
+$class.name has metadata!
+#end
+#end
