@@ -36,7 +36,13 @@
       <version>1.0-alpha-3-SNAPSHOT</version>
       <scope>runtime</scope>
     </dependency>
-   <dependency>
+    <dependency>
+      <groupId>org.codehaus.modello</groupId>
+      <artifactId>modello-plugin-xsd</artifactId>
+      <version>1.0-alpha-3-SNAPSHOT</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
       <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-plugin-xdoc</artifactId>
       <version>1.0-alpha-3-SNAPSHOT</version>
