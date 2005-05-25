@@ -40,6 +40,8 @@ import java.util.Iterator;
 import java.util.Properties;
 import java.util.Set;
 import java.util.HashSet;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
@@ -196,7 +198,9 @@ public class XdocGenerator
 
         w.endElement();
 
-        for ( Iterator j = modelClass.getFields( getGeneratedVersion() ).iterator(); j.hasNext(); )
+        List fields = getFieldsForClass( objectModel, modelClass );
+
+        for ( Iterator j = fields.iterator(); j.hasNext(); )
         {
             ModelField field = (ModelField) j.next();
 
@@ -232,7 +236,7 @@ public class XdocGenerator
 
         w.endElement();
 
-        for ( Iterator iter = modelClass.getFields( getGeneratedVersion() ).iterator(); iter.hasNext(); )
+        for ( Iterator iter = fields.iterator(); iter.hasNext(); )
         {
             ModelField field = (ModelField) iter.next();
 
@@ -248,6 +252,25 @@ public class XdocGenerator
                 }
             }
         }
+    }
+
+    private List getFieldsForClass( Model objectModel, ModelClass modelClass )
+    {
+        List fields = new ArrayList();
+        while ( modelClass != null )
+        {
+            fields.addAll( modelClass.getFields( getGeneratedVersion() ) );
+            String superClass = modelClass.getSuperClass();
+            if ( superClass != null )
+            {
+                modelClass = objectModel.getClass( superClass, getGeneratedVersion() );
+            }
+            else
+            {
+                modelClass = null;
+            }
+        }
+        return fields;
     }
 
     private String getModelClassDescriptor( Model objectModel, ModelClass modelClass, int depth )
@@ -273,11 +296,12 @@ public class XdocGenerator
         }
         sb.append( "&lt;<a href=\"#class_" + modelClass.getName() + "\">" + tagName );
 
-        if ( modelClass.getFields( getGeneratedVersion() ).size() > 0 )
+        List fields = getFieldsForClass( objectModel, modelClass );
+        if ( fields.size() > 0 )
         {
             sb.append( "</a>&gt;\n" );
 
-            for ( Iterator iter = modelClass.getFields( getGeneratedVersion() ).iterator(); iter.hasNext(); )
+            for ( Iterator iter = fields.iterator(); iter.hasNext(); )
             {
                 ModelField field = (ModelField) iter.next();
 
