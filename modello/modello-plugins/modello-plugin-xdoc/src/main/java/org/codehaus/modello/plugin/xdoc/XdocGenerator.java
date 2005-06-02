@@ -30,6 +30,7 @@ import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.plugin.AbstractModelloGenerator;
 import org.codehaus.modello.plugin.model.ModelClassMetadata;
+import org.codehaus.modello.plugins.xml.XmlFieldMetadata;
 import org.codehaus.plexus.util.xml.PrettyPrintXMLWriter;
 import org.codehaus.plexus.util.xml.XMLWriter;
 
@@ -124,7 +125,7 @@ public class XdocGenerator
         StringBuffer sb = new StringBuffer();
 
         ModelClass root = objectModel.getClass( objectModel.getRoot( getGeneratedVersion() ), getGeneratedVersion() );
-        sb.append( getModelClassDescriptor( objectModel, root, 0 ) );
+        sb.append( getModelClassDescriptor( objectModel, root, null, 0 ) );
 
         w.writeMarkup( "\n" + sb.toString() );
 
@@ -132,7 +133,7 @@ public class XdocGenerator
 
         // Element descriptors
         // Traverse from root so "abstract" models aren't included
-        writeElementDescriptor( w, objectModel, root, new HashSet() );
+        writeElementDescriptor( w, objectModel, root, null, new HashSet() );
 
         w.endElement();
 
@@ -145,7 +146,7 @@ public class XdocGenerator
         writer.close();
     }
 
-    private void writeElementDescriptor( XMLWriter w, Model objectModel, ModelClass modelClass, Set written )
+    private void writeElementDescriptor( XMLWriter w, Model objectModel, ModelClass modelClass, ModelField field, Set written )
     {
         written.add( modelClass );
 
@@ -159,6 +160,15 @@ public class XdocGenerator
         else
         {
             tagName = metadata.getTagName();
+        }
+
+        if ( field != null )
+        {
+            XmlFieldMetadata fieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
+            if ( fieldMetadata != null && fieldMetadata.getTagName() != null )
+            {
+                tagName = fieldMetadata.getTagName();
+            }
         }
 
         w.startElement( "a" );
@@ -202,7 +212,7 @@ public class XdocGenerator
 
         for ( Iterator j = fields.iterator(); j.hasNext(); )
         {
-            ModelField field = (ModelField) j.next();
+            ModelField f = (ModelField) j.next();
 
             w.startElement( "tr" );
 
@@ -210,7 +220,7 @@ public class XdocGenerator
 
             w.startElement( "code" );
 
-            w.writeText( field.getName() );
+            w.writeText( f.getName() );
 
             w.endElement();
 
@@ -218,9 +228,9 @@ public class XdocGenerator
 
             w.startElement( "td" );
 
-            if ( field.getDescription() != null )
+            if ( f.getDescription() != null )
             {
-                w.writeMarkup( field.getDescription() );
+                w.writeMarkup( f.getDescription() );
             }
             else
             {
@@ -238,17 +248,17 @@ public class XdocGenerator
 
         for ( Iterator iter = fields.iterator(); iter.hasNext(); )
         {
-            ModelField field = (ModelField) iter.next();
+            ModelField f = (ModelField) iter.next();
 
-            if ( field instanceof ModelAssociation &&
-                isClassInModel( ( (ModelAssociation) field ).getTo(), objectModel ) )
+            if ( f instanceof ModelAssociation &&
+                isClassInModel( ( (ModelAssociation) f ).getTo(), objectModel ) )
             {
-                ModelAssociation association = (ModelAssociation) field;
+                ModelAssociation association = (ModelAssociation) f;
                 ModelClass fieldModelClass = objectModel.getClass( association.getTo(), getGeneratedVersion() );
 
                 if ( !written.contains( fieldModelClass ) )
                 {
-                    writeElementDescriptor( w, objectModel, fieldModelClass, written );
+                    writeElementDescriptor( w, objectModel, fieldModelClass, f, written );
                 }
             }
         }
@@ -273,7 +283,7 @@ public class XdocGenerator
         return fields;
     }
 
-    private String getModelClassDescriptor( Model objectModel, ModelClass modelClass, int depth )
+    private String getModelClassDescriptor( Model objectModel, ModelClass modelClass, ModelField field, int depth )
         throws ModelloRuntimeException
     {
         StringBuffer sb = new StringBuffer();
@@ -294,6 +304,16 @@ public class XdocGenerator
         {
             tagName = metadata.getTagName();
         }
+
+        if ( field != null )
+        {
+            XmlFieldMetadata fieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
+            if ( fieldMetadata != null && fieldMetadata.getTagName() != null )
+            {
+                tagName = fieldMetadata.getTagName();
+            }
+        }
+
         sb.append( "&lt;<a href=\"#class_" + modelClass.getName() + "\">" + tagName );
 
         List fields = getFieldsForClass( objectModel, modelClass );
@@ -303,14 +323,14 @@ public class XdocGenerator
 
             for ( Iterator iter = fields.iterator(); iter.hasNext(); )
             {
-                ModelField field = (ModelField) iter.next();
+                ModelField f = (ModelField) iter.next();
 
                 ModelClass fieldModelClass = null;
 
-                if ( field instanceof ModelAssociation &&
-                    isClassInModel( ( (ModelAssociation) field ).getTo(), objectModel ) )
+                if ( f instanceof ModelAssociation &&
+                    isClassInModel( ( (ModelAssociation) f ).getTo(), objectModel ) )
                 {
-                    ModelAssociation association = (ModelAssociation) field;
+                    ModelAssociation association = (ModelAssociation) f;
 
                     if ( ModelAssociation.MANY_MULTIPLICITY.equals( association.getMultiplicity() ) )
                     {
@@ -326,7 +346,7 @@ public class XdocGenerator
 
                     fieldModelClass = objectModel.getClass( association.getTo(), getGeneratedVersion() );
 
-                    sb.append( getModelClassDescriptor( objectModel, fieldModelClass, depth + 1 ) );
+                    sb.append( getModelClassDescriptor( objectModel, fieldModelClass, f, depth + 1 ) );
 
                     if ( ModelAssociation.MANY_MULTIPLICITY.equals( association.getMultiplicity() ) )
                     {
@@ -348,7 +368,7 @@ public class XdocGenerator
                         sb.append( "  " );
                     }
 
-                    sb.append( "&lt;" + uncapitalise( field.getName() ) + "/&gt;\n" );
+                    sb.append( "&lt;" + uncapitalise( f.getName() ) + "/&gt;\n" );
                 }
             }
 
