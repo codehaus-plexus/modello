@@ -75,7 +75,7 @@ public abstract class ModelloGeneratorTest
         MavenSettingsBuilder builder = (MavenSettingsBuilder) container.lookup( MavenSettingsBuilder.ROLE );
         ArtifactRepositoryLayout repositoryLayout = (ArtifactRepositoryLayout) container.lookup(
             ArtifactRepositoryLayout.ROLE, "default" );
-        String url = "file://" + builder.buildSettings().getActiveProfile().getLocalRepository();
+        String url = "file://" + builder.buildSettings().getLocalRepository();
         repository = new ArtifactRepository( "local", url, repositoryLayout );
     }
 
