@@ -35,12 +35,12 @@ import org.codehaus.plexus.util.xml.XMLWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
-import java.util.ArrayList;
 
 /**
  * @author <a href="mailto:brett@codehaus.org">Brett Porter</a>
@@ -99,10 +99,19 @@ public class XsdGenerator
 
         ModelClass root = objectModel.getClass( objectModel.getRoot( getGeneratedVersion() ), getGeneratedVersion() );
 
+        w.startElement( "xs:element" );
+        String tagName = getTagName( root );
+        w.addAttribute( "name", tagName );
+        w.addAttribute( "type", root.getName() );
+
+        writeClassDocumentation( w, root );
+
+        w.endElement();
+
         // Element descriptors
         // Traverse from root so "abstract" models aren't included
         int initialCapacity = objectModel.getClasses( getGeneratedVersion() ).size();
-        writeElementDescriptor( w, objectModel, root, new HashSet( initialCapacity ), new HashSet() );
+        writeComplexTypeDescriptor( w, objectModel, root, new HashSet( initialCapacity ) );
 
         w.endElement();
 
@@ -111,27 +120,50 @@ public class XsdGenerator
         writer.close();
     }
 
-    private void writeElementDescriptor( XMLWriter w, Model objectModel, ModelClass modelClass, Set written,
-                                         Set writtenFields )
+    private static void writeClassDocumentation( XMLWriter w, ModelClass modelClass )
+    {
+        writeDocumentation( w, modelClass.getVersionRange().toString(), modelClass.getDescription() );
+    }
+
+    private static void writeFieldDocumentation( XMLWriter w, ModelField field )
+    {
+        writeDocumentation( w, field.getVersionRange().toString(), field.getDescription() );
+    }
+
+    private static void writeDocumentation( XMLWriter w, String version, String description )
+    {
+        if ( version != null || description != null )
+        {
+            w.startElement( "xs:annotation" );
+
+            if ( version != null )
+            {
+                w.startElement( "xs:documentation" );
+                w.addAttribute( "source", "version" );
+                w.writeText( version );
+                w.endElement();
+            }
+
+            if ( description != null )
+            {
+                w.startElement( "xs:documentation" );
+                w.addAttribute( "source", "description" );
+                w.writeText( description );
+                w.endElement();
+            }
+
+            w.endElement();
+        }
+    }
+
+    private void writeComplexTypeDescriptor( XMLWriter w, Model objectModel, ModelClass modelClass, Set written )
     {
         written.add( modelClass );
 
-        ModelClassMetadata metadata = (ModelClassMetadata) modelClass.getMetadata( ModelClassMetadata.ID );
-
-        String tagName;
-        if ( metadata == null || metadata.getTagName() == null )
-        {
-            tagName = uncapitalise( modelClass.getName() );
-        }
-        else
-        {
-            tagName = metadata.getTagName();
-        }
-
-        w.startElement( "xs:element" );
-        w.addAttribute( "name", tagName );
-
         w.startElement( "xs:complexType" );
+        w.addAttribute( "name", modelClass.getName() );
+
+        writeClassDocumentation( w, modelClass );
 
         w.startElement( "xs:all" );
 
@@ -150,32 +182,68 @@ public class XsdGenerator
             }
         }
 
+        Set toWrite = new HashSet();
         for ( Iterator j = fields.iterator(); j.hasNext(); )
         {
             ModelField field = (ModelField) j.next();
 
             w.startElement( "xs:element" );
+            w.addAttribute( "name", field.getName() );
+
+            // Usually, would only do this if the field is not "required", but due to inheritence, it may be present,
+            // even if not here, so we need to let it slide
+            w.addAttribute( "minOccurs", "0" );
 
             String xsdType = getXsdType( field.getType() );
             if ( xsdType != null )
             {
-                writtenFields.add( getFieldKey( field ) );
-                w.addAttribute( "name", field.getName() );
                 w.addAttribute( "type", xsdType );
 
                 if ( field.getDefaultValue() != null )
                 {
                     w.addAttribute( "default", field.getDefaultValue() );
                 }
+                writeFieldDocumentation( w, field );
             }
             else
             {
-                w.addAttribute( "name", field.getName() );
-            }
+                if ( field instanceof ModelAssociation &&
+                    isClassInModel( ( (ModelAssociation) field ).getTo(), objectModel ) )
+                {
+                    ModelAssociation association = (ModelAssociation) field;
+                    ModelClass fieldModelClass = objectModel.getClass( association.getTo(), getGeneratedVersion() );
 
-            // Usually, would only do this if the field is not "required", but due to inheritence, it may be present,
-            // even if not here, so we need to let it slide
-            w.addAttribute( "minOccurs", "0" );
+                    toWrite.add( fieldModelClass );
+                    if ( "*".equals( association.getMultiplicity() ) )
+                    {
+                        writeFieldDocumentation( w, field );
+                        writeListElement( w, field, fieldModelClass.getName() );
+                    }
+                    else
+                    {
+                        w.addAttribute( "type", fieldModelClass.getName() );
+                        writeFieldDocumentation( w, field );
+                    }
+                }
+                else
+                {
+                    if ( List.class.getName().equals( field.getType() ) )
+                    {
+                        writeFieldDocumentation( w, field );
+                        writeListElement( w, field, getXsdType( "String" ) );
+                    }
+                    else if ( Properties.class.getName().equals( field.getType() ) || "DOM".equals( field.getType() ) )
+                    {
+                        writeFieldDocumentation( w, field );
+                        writePropertiesElement( w );
+                    }
+                    else
+                    {
+                        throw new IllegalStateException(
+                            "Non-association field of a non-primitive type '" + field.getType() + "' for '" + field.getName() + "'" );
+                    }
+                }
+            }
 
             w.endElement();
         }
@@ -184,76 +252,34 @@ public class XsdGenerator
 
         w.endElement();
 
-        w.endElement();
-
-        for ( Iterator iter = fields.iterator(); iter.hasNext(); )
+        for ( Iterator iter = toWrite.iterator(); iter.hasNext(); )
         {
-            ModelField field = (ModelField) iter.next();
-
-            if ( !writtenFields.contains( getFieldKey( field ) ) )
+            ModelClass fieldModelClass = (ModelClass) iter.next();
+            if ( !written.contains( fieldModelClass ) )
             {
-                if ( field instanceof ModelAssociation &&
-                    isClassInModel( ( (ModelAssociation) field ).getTo(), objectModel ) )
-                {
-                    ModelAssociation association = (ModelAssociation) field;
-                    ModelClass fieldModelClass = objectModel.getClass( association.getTo(), getGeneratedVersion() );
-
-                    if ( !written.contains( fieldModelClass ) )
-                    {
-                        writeElementDescriptor( w, objectModel, fieldModelClass, written, writtenFields );
-                    }
-                    if ( "*".equals( association.getMultiplicity() ) )
-                    {
-                        writeListElement( w, field, writtenFields );
-                    }
-                }
-                else
-                {
-                    if ( List.class.getName().equals( field.getType() ) )
-                    {
-                        writeListElement( w, field, writtenFields );
-                    }
-                    else if ( Properties.class.getName().equals( field.getType() ) || "DOM".equals( field.getType() ) )
-                    {
-                        writePropertiesElement( w, field, writtenFields );
-                    }
-                    else
-                    {
-                        writeSingleElement( field, w, writtenFields );
-                    }
-                }
+                writeComplexTypeDescriptor( w, objectModel, fieldModelClass, written );
             }
         }
     }
 
-    private static String getFieldKey( ModelField field )
+    private static String getTagName( ModelClass modelClass )
     {
-        return field.getName() + " " + field.getType();
-    }
+        ModelClassMetadata metadata = (ModelClassMetadata) modelClass.getMetadata( ModelClassMetadata.ID );
 
-    private void writeSingleElement( ModelField field, XMLWriter w, Set writtenFields )
-    {
-        String xsdType = getXsdType( field.getType() );
-
-        if ( xsdType == null )
+        String tagName;
+        if ( metadata == null || metadata.getTagName() == null )
         {
-            throw new IllegalArgumentException( "Unknown type: " + field.getType() );
+            tagName = uncapitalise( modelClass.getName() );
         }
-
-        w.startElement( "xs:element" );
-        w.addAttribute( "name", field.getName() );
-        w.addAttribute( "type", xsdType );
-        w.endElement();
-
-        writtenFields.add( getFieldKey( field ) );
+        else
+        {
+            tagName = metadata.getTagName();
+        }
+        return tagName;
     }
 
-    private void writePropertiesElement( XMLWriter w, ModelField field, Set writtenFields )
+    private void writePropertiesElement( XMLWriter w )
     {
-        w.startElement( "xs:element" );
-        w.addAttribute( "name", field.getName() );
-        writtenFields.add( getFieldKey( field ) );
-
         w.startElement( "xs:complexType" );
 
         w.startElement( "xs:sequence" );
@@ -268,16 +294,10 @@ public class XsdGenerator
         w.endElement();
 
         w.endElement();
-
-        w.endElement();
     }
 
-    private void writeListElement( XMLWriter w, ModelField field, Set writtenFields )
+    private void writeListElement( XMLWriter w, ModelField field, String type )
     {
-        w.startElement( "xs:element" );
-        w.addAttribute( "name", field.getName() );
-        writtenFields.add( getFieldKey( field ) );
-
         w.startElement( "xs:complexType" );
 
         w.startElement( "xs:sequence" );
@@ -286,8 +306,7 @@ public class XsdGenerator
         w.addAttribute( "name", singular( field.getName() ) );
         w.addAttribute( "minOccurs", "0" );
         w.addAttribute( "maxOccurs", "unbounded" );
-
-        w.endElement();
+        w.addAttribute( "type", type );
 
         w.endElement();
 
