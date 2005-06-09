@@ -321,6 +321,10 @@ public class XsdGenerator
         {
             return "xs:string";
         }
+        else if ( "int".equals( type ) )
+        {
+            return "xs:int";
+        }
         else if ( "boolean".equals( type ) )
         {
             return "xs:boolean";
