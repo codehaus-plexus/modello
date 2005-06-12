@@ -31,6 +31,7 @@ import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
+import org.codehaus.plexus.util.StringUtils;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -40,6 +41,10 @@ public abstract class AbstractMetadataPlugin
     extends AbstractLogEnabled
     implements MetadataPlugin
 {
+    // ----------------------------------------------------------------------
+    // MetadataPlugin Implementation
+    // ----------------------------------------------------------------------
+
     public Map getModelMap( Model model, ModelMetadata metadata )
         throws ModelloException
     {
@@ -62,5 +67,21 @@ public abstract class AbstractMetadataPlugin
         throws ModelloException
     {
         return Collections.EMPTY_MAP;
+    }
+
+    // ----------------------------------------------------------------------
+    //
+    // ----------------------------------------------------------------------
+
+    protected boolean getBoolean( Map data, String key, boolean defaultValue )
+    {
+        String value = (String) data.get( key );
+
+        if ( StringUtils.isEmpty( value ) )
+        {
+            return defaultValue;
+        }
+
+        return Boolean.valueOf( value ).booleanValue();
     }
 }

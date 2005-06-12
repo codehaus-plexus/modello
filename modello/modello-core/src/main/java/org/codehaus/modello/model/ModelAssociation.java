@@ -135,18 +135,19 @@ public class ModelAssociation
 
         if ( isEmpty( multiplicity ) )
         {
-            multiplicity = "1";
+            multiplicity = ONE_MULTIPLICITY;
         }
 
-        if ( "n".equals( multiplicity ) )
+        if ( multiplicity.equals( "n" ) || multiplicity.equals( "*" ) )
         {
-            multiplicity = "*";
+            multiplicity = MANY_MULTIPLICITY;
         }
 
-        if ( !ONE_MULTIPLICITY.equals( multiplicity ) && !MANY_MULTIPLICITY.equals( multiplicity ) )
+        if ( !multiplicity.equals( ONE_MULTIPLICITY ) &&
+             !multiplicity.equals( MANY_MULTIPLICITY ) )
         {
-            throw new ModelValidationException(
-                "Association multiplicity '" + getName() + "' is incorrect: Autorized values are 1, * or n." );
+            throw new ModelValidationException( "Association multiplicity '" + getName() + "' is incorrect: " +
+                                                "Possible values are '1', '*' or 'n'." );
         }
 
         if ( isEmpty( getType() ) )

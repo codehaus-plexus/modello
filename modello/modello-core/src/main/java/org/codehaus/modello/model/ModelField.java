@@ -42,6 +42,21 @@ public class ModelField
 
     transient private ModelClass modelClass;
 
+    private final static String[] PRIMITIVE_TYPES = new String[]{
+        "boolean",
+        "char",
+        "short",
+        "int",
+        "long",
+        "float",
+        "double",
+        "String",
+        "Boolean",
+        "Date",
+        "DOM"
+    };
+
+
     public ModelField()
     {
         super( true );
@@ -140,30 +155,34 @@ public class ModelField
         validateFieldNotEmpty( "field '" + getName() + "'", "type", type );
 
         // TODO: these definitions are duplicated throughout. Defined centrally, and loop through in the various uses
-        String[] primitiveTypes = new String[] {
-            "boolean",
-            "char",
-            "short",
-            "int",
-            "long",
-            "float",
-            "double",
-            "String",
-            "Boolean",
-            "Date",
-            "DOM"
-        };
 
-        for ( int i = 0; i < primitiveTypes.length; i++ )
+        if ( ! isPrimitive() )
         {
-            String validType = primitiveTypes[i];
+            throw new ModelValidationException( "Field '" + getName() + "': Illegal type: '" + type + "'." );
+        }
+    }
+
+    public boolean isPrimitive()
+    {
+        for ( int i = 0; i < PRIMITIVE_TYPES.length; i++ )
+        {
+            String validType = PRIMITIVE_TYPES[ i ];
 
             if ( type.equals( validType ) )
             {
-                return;
+                return true;
             }
         }
 
-        throw new ModelValidationException( "Field '" + getName() + "': Illegal type: '" + type + "'." );
+        return false;
+    }
+
+    // ----------------------------------------------------------------------
+    // Object Overrides
+    // ----------------------------------------------------------------------
+
+    public String toString()
+    {
+        return "[Field: name=" + getName() + ", type: " + type + ", version: " + getVersionRange() + "]";
     }
 }

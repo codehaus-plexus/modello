@@ -22,6 +22,13 @@ package org.codehaus.modello.plugin.java;
  * SOFTWARE.
  */
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.Iterator;
+import java.util.Properties;
+
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.generator.java.javasource.JClass;
 import org.codehaus.modello.generator.java.javasource.JField;
@@ -39,13 +46,6 @@ import org.codehaus.modello.model.ModelDefault;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.ModelInterface;
 import org.codehaus.modello.plugin.AbstractModelloGenerator;
-
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.Iterator;
-import java.util.Properties;
 
 /**
  * @author <a href="mailto:jason@modello.org">Jason van Zyl </a>
@@ -81,7 +81,7 @@ public class JavaModelloGenerator
         {
             ModelInterface modelInterface = (ModelInterface) i.next();
 
-            String packageName = null;
+            String packageName;
 
             if ( isPackageWithVersion() )
             {
@@ -146,7 +146,7 @@ public class JavaModelloGenerator
 
             JavaClassMetadata javaClassMetadata = (JavaClassMetadata) modelClass.getMetadata( JavaClassMetadata.ID );
 
-            String packageName = null;
+            String packageName;
 
             if ( isPackageWithVersion() )
             {
@@ -340,8 +340,9 @@ public class JavaModelloGenerator
 
         JSourceCode sc = setter.getSourceCode();
 
-        if ( modelField instanceof ModelAssociation && isBidirectionalAssociation( (ModelAssociation) modelField )
-            && ModelAssociation.ONE_MULTIPLICITY.equals( ((ModelAssociation) modelField).getMultiplicity() ) )
+        if ( modelField instanceof ModelAssociation &&
+             isBidirectionalAssociation( (ModelAssociation) modelField ) &&
+             ModelAssociation.ONE_MULTIPLICITY.equals( ((ModelAssociation) modelField).getMultiplicity() ) )
         {
             ModelAssociation modelAssociation = (ModelAssociation) modelField;
 

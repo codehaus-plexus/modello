@@ -22,7 +22,7 @@ package org.codehaus.modello.model;
  * SOFTWARE.
  */
 
-import org.codehaus.modello.ModelloRuntimeException;
+
 
 /**
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
@@ -31,17 +31,17 @@ import org.codehaus.modello.ModelloRuntimeException;
 public class VersionRange
 {
     private static final String VERSION_SEPARATOR = "/";
+
     private Version fromVersion;
 
     private Version toVersion;
-
-    private String versionRange;
 
     public VersionRange( String versionRange )
     {
         if ( versionRange.endsWith( "+" ) )
         {
             fromVersion = new Version( versionRange.substring( 0, versionRange.length() - 1 ) );
+
             toVersion = Version.INFINITE;
         }
         else if ( versionRange.indexOf( VERSION_SEPARATOR ) > 0 && ! versionRange.endsWith( VERSION_SEPARATOR ) )
@@ -55,10 +55,9 @@ public class VersionRange
         else
         {
             fromVersion = new Version( versionRange );
+
             toVersion = new Version( versionRange );
         }
-
-        this.versionRange = versionRange;
     }
 
     public Version getFromVersion()
@@ -76,8 +75,42 @@ public class VersionRange
         return toVersion == Version.INFINITE;
     }
 
+    // ----------------------------------------------------------------------
+    // Object overrides
+    // ----------------------------------------------------------------------
+
+    public int hashCode()
+    {
+        return fromVersion.hashCode() +
+               toVersion.hashCode();
+    }
+
+    public boolean equals( Object obj )
+    {
+        if ( !( obj instanceof VersionRange ) )
+        {
+            return false;
+        }
+
+        VersionRange other = (VersionRange) obj;
+
+        return fromVersion.equals( other.fromVersion ) &&
+               toVersion.equals( other.toVersion );
+    }
+
     public String toString()
     {
-        return versionRange;
+        if ( fromVersion.equals( toVersion ) )
+        {
+            return fromVersion.toString( "", "." );
+        }
+        else if ( toVersion.equals( Version.INFINITE ) )
+        {
+            return fromVersion.toString( "", "." ) + "+";
+        }
+        else
+        {
+            return "[" + fromVersion.toString( "", "." ) + " => " + toVersion.toString( "", "." ) + "]";
+        }
     }
 }

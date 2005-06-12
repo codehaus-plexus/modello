@@ -61,6 +61,8 @@ public abstract class BaseElement
     public BaseElement( boolean nameRequired )
     {
         this.nameRequired = nameRequired;
+
+        this.name = null;
     }
 
     public BaseElement( boolean nameRequired, String name )
@@ -181,15 +183,27 @@ public abstract class BaseElement
         return string == null || string.trim().length() == 0;
     }
 
-    public boolean equals( BaseElement baseElem )
+    // ----------------------------------------------------------------------
+    //
+    // ----------------------------------------------------------------------
+
+    public boolean equals( Object other )
     {
-        if ( baseElem == null )
+        if ( other == null || !( other instanceof BaseElement ) )
         {
             return false;
         }
 
-        if ( name.equals( baseElem.getName() )
-            && versionRange.toString().equals( baseElem.getVersionRange().toString() ) )
+        // If we don't know how to identify this object it's not equal to any other object
+        if ( !nameRequired )
+        {
+            return false;
+        }
+
+        BaseElement baseElem = (BaseElement) other;
+
+        if ( name.equals( baseElem.getName() ) &&
+             versionRange.equals( baseElem.getVersionRange() ) )
         {
             return true;
         }
@@ -197,5 +211,16 @@ public abstract class BaseElement
         {
             return false;
         }
+    }
+
+    public int hashCode()
+    {
+        if ( !nameRequired )
+        {
+            return System.identityHashCode( this );
+        }
+
+        return name.hashCode() +
+               versionRange.toString().hashCode();
     }
 }
