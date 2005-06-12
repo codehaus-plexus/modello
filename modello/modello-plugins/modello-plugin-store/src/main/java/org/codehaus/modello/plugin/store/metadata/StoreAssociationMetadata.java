@@ -35,6 +35,8 @@ public class StoreAssociationMetadata
 
     private boolean storable;
 
+    private Boolean part;
+
     public void setStorable( boolean storable )
     {
         this.storable = storable;
@@ -43,5 +45,15 @@ public class StoreAssociationMetadata
     public boolean isStorable()
     {
         return storable;
+    }
+
+    public Boolean isPart()
+    {
+        return part;
+    }
+
+    public void setPart( Boolean part )
+    {
+        this.part = part;
     }
 }

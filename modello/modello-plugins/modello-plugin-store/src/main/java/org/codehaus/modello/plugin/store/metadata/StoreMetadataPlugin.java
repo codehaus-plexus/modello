@@ -44,6 +44,8 @@ import java.util.Map;
 public class StoreMetadataPlugin
     extends AbstractMetadataPlugin
 {
+    public final static String PART = "stash.part";
+
     // ----------------------------------------------------------------------
     // Map to Metadata
     // ----------------------------------------------------------------------
@@ -54,6 +56,7 @@ public class StoreMetadataPlugin
     }
 
     public ClassMetadata getClassMetadata( ModelClass clazz, Map data )
+        throws ModelloException
     {
         StoreClassMetadata metadata = new StoreClassMetadata();
 
@@ -61,6 +64,14 @@ public class StoreMetadataPlugin
 
         if ( storable != null && storable.equals( "true" ) )
         {
+//            JavaClassMetadata jcm = (JavaClassMetadata) clazz.getMetadata( JavaClassMetadata.ID );
+//
+//            if ( jcm.isAbstract() )
+//            {
+//                throw new ModelloException( "A storable class can't be abstract. " +
+//                                            "Class name '" + clazz.getName() + "'." );
+//            }
+//
             metadata.setStorable( true );
         }
 
@@ -77,16 +88,7 @@ public class StoreMetadataPlugin
         // unless the class itself is storable.
         // ----------------------------------------------------------------------
 
-        String storable = (String) data.get( "stash.storable" );
-
-        if ( storable != null && storable.equals( "false" ) )
-        {
-            metadata.setStorable( false );
-        }
-        else
-        {
-            metadata.setStorable( true );
-        }
+        metadata.setStorable( getBoolean( data, "stash.storable", true ) );
 
         String maxSize = (String) data.get( "stash.maxSize" );
 
@@ -123,15 +125,11 @@ public class StoreMetadataPlugin
         // unless the class itself is storable.
         // ----------------------------------------------------------------------
 
-        String storable = (String) data.get( "stash.storable" );
+        metadata.setStorable( getBoolean( data, "stash.storable", true ) );
 
-        if ( storable != null && !storable.equals( "false" ) )
+        if ( data.containsKey( PART ) )
         {
-            metadata.setStorable( false );
-        }
-        else
-        {
-            metadata.setStorable( true );
+            metadata.setPart( new Boolean( (String) data.get( PART ) ) );
         }
 
         return metadata;
