@@ -93,34 +93,69 @@ public abstract class AbstractModelloGeneratorMojo
     private MavenProject project;
 
     // ----------------------------------------------------------------------
-    //
+    // Overridables
     // ----------------------------------------------------------------------
 
     protected abstract String getGeneratorType();
 
-    // ----------------------------------------------------------------------
-    //
-    // ----------------------------------------------------------------------
+    public abstract File getOutputDirectory();
 
     protected boolean producesCompilableResult()
     {
         return true;
     }
 
+    /**
+     * Creates a Properties objects.
+     *
+     * The abstract mojo will override the output directory, the version and the
+     * package with version flag.
+     */
+    protected Properties createParameters()
+    {
+        return new Properties();
+    }
+
+    /**
+     * Override this method to customize the values in the properties set.
+     *
+     * This method will be called after the parameters have been populated with the
+     * parameters in the abstract mojo.
+     *
+     * @param parameters
+     */
+    protected void customizeParameters( Properties parameters )
+    {
+    }
+
+    // ----------------------------------------------------------------------
+    //
+    // ----------------------------------------------------------------------
+
     public void execute()
         throws MojoExecutionException
     {
-        Properties parameters = new Properties();
-
         String outputDirectory = getOutputDirectory().getAbsolutePath();
 
         getLog().info( "outputDirectory: " + outputDirectory );
+
+        // ----------------------------------------------------------------------
+        // Initialize the parameters
+        // ----------------------------------------------------------------------
+
+        Properties parameters = createParameters();
 
         parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, outputDirectory );
 
         parameters.setProperty( ModelloParameterConstants.VERSION, version );
 
         parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, packageWithVersion.toString() );
+
+        customizeParameters( parameters );
+
+        // ----------------------------------------------------------------------
+        //
+        // ----------------------------------------------------------------------
 
         try
         {
@@ -213,6 +248,4 @@ public abstract class AbstractModelloGeneratorMojo
     {
         this.project = project;
     }
-
-    public abstract File getOutputDirectory();
 }
