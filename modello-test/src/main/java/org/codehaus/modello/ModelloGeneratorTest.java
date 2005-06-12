@@ -26,6 +26,7 @@ import org.apache.maven.artifact.DefaultArtifact;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.repository.layout.ArtifactRepositoryLayout;
 import org.apache.maven.settings.MavenSettingsBuilder;
+
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.compiler.Compiler;
 import org.codehaus.plexus.compiler.CompilerConfiguration;
@@ -73,9 +74,12 @@ public abstract class ModelloGeneratorTest
         assertTrue( getGeneratedSources().mkdirs() );
 
         MavenSettingsBuilder builder = (MavenSettingsBuilder) container.lookup( MavenSettingsBuilder.ROLE );
+
         ArtifactRepositoryLayout repositoryLayout = (ArtifactRepositoryLayout) container.lookup(
             ArtifactRepositoryLayout.ROLE, "default" );
+
         String url = "file://" + builder.buildSettings().getLocalRepository();
+
         repository = new ArtifactRepository( "local", url, repositoryLayout );
     }
 
@@ -88,6 +92,7 @@ public abstract class ModelloGeneratorTest
         throws Exception
     {
         DefaultArtifact artifact = new DefaultArtifact( groupId, artifactId, version, "jar" );
+
         File dependencyFile = new File( repository.getBasedir(), repository.pathOf( artifact ) );
 
         assertTrue( "Cant find dependency: " + dependencyFile.getAbsolutePath(), dependencyFile.isFile() );
@@ -128,8 +133,10 @@ public abstract class ModelloGeneratorTest
             classPathElements[i + 2] = ( (File) dependencies.get( i ) ).getAbsolutePath();
         }
 
-        String[] sourceDirectories = new String[]{getTestPath( "src/test/verifiers/" + getName() ),
-                                                  generatedSources.getAbsolutePath()};
+        String[] sourceDirectories = new String[]{
+            getTestPath( "src/test/verifiers/" + getName() ),
+            generatedSources.getAbsolutePath()
+        };
 
         Compiler compiler = new JavacCompiler();
 
@@ -144,8 +151,9 @@ public abstract class ModelloGeneratorTest
         {
             CompilerError message = (CompilerError) it.next();
 
-            System.out.println( message.getFile() + "[" + message.getStartLine() + "," + message.getStartColumn() +
-                                "]: " + message.getMessage() );
+            System.out.println( message.getFile() +
+                                "[" + message.getStartLine() + "," + message.getStartColumn() + "]: " +
+                                message.getMessage() );
         }
 
         assertEquals( "There was compilation errors.", 0, messages.size() );
