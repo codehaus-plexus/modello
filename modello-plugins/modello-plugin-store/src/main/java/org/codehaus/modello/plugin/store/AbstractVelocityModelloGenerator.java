@@ -77,7 +77,7 @@ public abstract class AbstractVelocityModelloGenerator
 
         context.put( "version", version );
 
-        context.put( "package", model.getPackageName( false, version ) );
+        context.put( "package", model.getDefaultPackageName( false, version ) );
 
         context.put( "model", model );
 
@@ -103,7 +103,7 @@ public abstract class AbstractVelocityModelloGenerator
     protected void writeTemplate( String templateName, File file, Context context )
         throws ModelloException
     {
-        Template template = null;
+        Template template;
 
         try
         {
