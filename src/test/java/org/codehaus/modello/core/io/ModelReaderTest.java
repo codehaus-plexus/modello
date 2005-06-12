@@ -22,6 +22,9 @@ package org.codehaus.modello.core.io;
  * SOFTWARE.
  */
 
+import java.io.FileReader;
+import java.util.List;
+
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelAssociation;
@@ -30,9 +33,6 @@ import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.Version;
 import org.codehaus.modello.model.VersionRange;
 import org.codehaus.plexus.PlexusTestCase;
-
-import java.io.FileReader;
-import java.util.List;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -56,9 +56,9 @@ public class ModelReaderTest
 
         assertEquals( "Simple Modello Test Model", model.getName() );
 
-        assertEquals( "foo.bar", model.getPackageName( false, null ) );
+        assertEquals( "foo.bar", model.getDefaultPackageName( false, null ) );
 
-        assertEquals( "Boy", model.getRoot(  new Version( "1.0.0" ) ) );
+        assertEquals( "Boy", model.getRoot( new Version( "1.0.0" ) ) );
 
         List classes = model.getAllClasses();
 

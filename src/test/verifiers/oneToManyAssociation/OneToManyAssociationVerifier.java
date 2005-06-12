@@ -21,9 +21,33 @@ public class OneToManyAssociationVerifier
 
         Location location = new Location();
 
-        person.setLocation( location );
+        location.getPersons().add( person );
+
+        Assert.assertNotNull( "Location.persons == null", location.getPersons() );
+
+        Assert.assertEquals( "Location.persons.length != 1", 1, location.getPersons().size() );
 
         Assert.assertEquals( "Location.persons[0]", person, location.getPersons().get( 0 ) );
+
+        // ----------------------------------------------------------------------
+        //
+        // ----------------------------------------------------------------------
+
+        person = new Person();
+
+        location = new Location();
+
+        person.setLocation( location );
+
+        Assert.assertNotNull( "Location.persons == null", location.getPersons() );
+
+        Assert.assertEquals( "Location.persons.length != 1", 1, location.getPersons().size() );
+
+        Assert.assertEquals( "Location.persons[0]", person, location.getPersons().get( 0 ) );
+
+        // ----------------------------------------------------------------------
+        //
+        // ----------------------------------------------------------------------
 
         testList();
 

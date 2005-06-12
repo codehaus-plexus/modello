@@ -41,14 +41,14 @@ public class AssociationGeneratorTest
 {
     private String modelFile = "src/test/resources/models/oneToManyAssociation.mdo";
 
+    private File generatedSources;
+
+    private File classes;
+
     public AssociationGeneratorTest()
     {
         super( "oneToManyAssociation" );
     }
-
-    private File generatedSources;
-
-    private File classes;
 
     public void testJavaGenerator()
         throws Throwable
