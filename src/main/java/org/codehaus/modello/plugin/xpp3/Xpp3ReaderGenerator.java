@@ -77,11 +77,11 @@ public class Xpp3ReaderGenerator
 
         if ( isPackageWithVersion() )
         {
-            packageName = objectModel.getPackageName( true, getGeneratedVersion() );
+            packageName = objectModel.getDefaultPackageName( true, getGeneratedVersion() );
         }
         else
         {
-            packageName = objectModel.getPackageName( false, null );
+            packageName = objectModel.getDefaultPackageName( false, null );
         }
 
         packageName += ".io.xpp3";
