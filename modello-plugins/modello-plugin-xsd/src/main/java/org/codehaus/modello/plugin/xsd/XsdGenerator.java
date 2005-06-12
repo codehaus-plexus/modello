@@ -287,7 +287,7 @@ public class XsdGenerator
         w.startElement( "xs:any" );
         w.addAttribute( "minOccurs", "0" );
         w.addAttribute( "maxOccurs", "unbounded" );
-        w.addAttribute( "processContents", "lax" );
+        w.addAttribute( "processContents", "skip" );
 
         w.endElement();
 
