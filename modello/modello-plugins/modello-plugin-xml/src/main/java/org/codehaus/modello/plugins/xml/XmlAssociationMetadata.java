@@ -23,7 +23,6 @@ package org.codehaus.modello.plugins.xml;
  */
 
 import org.codehaus.modello.metadata.AssociationMetadata;
-import org.codehaus.modello.model.ModelValidationException;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
