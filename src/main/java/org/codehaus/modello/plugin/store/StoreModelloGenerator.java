@@ -60,7 +60,7 @@ public class StoreModelloGenerator
 
         context.put( "version", getGeneratedVersion() );
 
-        context.put( "package", model.getPackageName( false, getGeneratedVersion() ) );
+        context.put( "package", model.getDefaultPackageName( false, getGeneratedVersion() ) );
 
         context.put( "metadataId", StoreClassMetadata.ID );
 
@@ -70,7 +70,7 @@ public class StoreModelloGenerator
         // Generate the code
         // ----------------------------------------------------------------------
 
-        String packageName = model.getPackageName( false, getGeneratedVersion() ).replace( '.', File.separatorChar );
+        String packageName = model.getDefaultPackageName( false, getGeneratedVersion() ).replace( '.', File.separatorChar );
 
         File packageFile = new File( getOutputDirectory(), packageName );
 
