@@ -22,6 +22,11 @@ package org.codehaus.modello.core.io;
  * SOFTWARE.
  */
 
+import java.io.IOException;
+import java.io.Reader;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.model.BaseElement;
 import org.codehaus.modello.model.CodeSegment;
@@ -36,11 +41,6 @@ import org.codehaus.plexus.util.xml.pull.MXParser;
 import org.codehaus.plexus.util.xml.pull.XmlPullParser;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
-import java.io.IOException;
-import java.io.Reader;
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
@@ -48,8 +48,6 @@ import java.util.Map;
  */
 public class ModelReader
 {
-    private Map modelAttributes = new HashMap();
-
     private Map classAttributes = new HashMap();
 
     private Map fieldAttributes = new HashMap();
@@ -232,7 +230,6 @@ public class ModelReader
                     }
                     else if ( parser.getName().equals( "interface" ) )
                     {
-
                         modelClass.addInterface( parser.nextText() );
                     }
                     else if ( parser.getName().equals( "superClass" ) )
@@ -281,17 +278,16 @@ public class ModelReader
                 Map fAttributes = getAttributes( parser );
 
                 Map aAttributes = new HashMap();
-                ;
 
                 while ( parser.nextTag() == XmlPullParser.START_TAG )
                 {
-
                     if ( parseBaseElement( modelField, parser ) )
                     {
                     }
                     else if ( parser.getName().equals( "association" ) )
                     {
                         aAttributes = getAttributes( parser );
+
                         modelAssociation = parseAssociation( parser );
                     }
                     else if ( parser.getName().equals( "type" ) )
@@ -316,23 +312,34 @@ public class ModelReader
                     }
                 }
 
+                if ( modelField.getName() != null )
+                {
+                    fieldAttributes.put( modelClass.getName() + ":" + modelField.getName(), fAttributes );
+                }
+
                 if ( modelAssociation != null )
                 {
+                    // Base element
                     modelAssociation.setName( modelField.getName() );
-
-                    modelAssociation.setVersionRange( modelField.getVersionRange() );
 
                     modelAssociation.setDescription( modelField.getDescription() );
 
+                    modelAssociation.setVersionRange( modelField.getVersionRange() );
+
                     modelAssociation.setComment( modelField.getComment() );
 
+                    // model field fields
                     modelAssociation.setType( modelField.getType() );
 
                     modelAssociation.setDefaultValue( modelField.getDefaultValue() );
 
+                    modelAssociation.setTypeValidator( modelField.getTypeValidator() );
+
+                    modelAssociation.setRequired( modelField.isRequired() );
+
+                    // TODO: What is this test for?
                     if ( modelAssociation.getName() != null )
                     {
-                        fieldAttributes.put( modelClass.getName() + ":" + modelAssociation.getName(), fAttributes );
                         associationAttributes.put( modelClass.getName() + ":" + modelAssociation.getName(),
                                                    aAttributes );
                     }
@@ -341,11 +348,6 @@ public class ModelReader
                 }
                 else
                 {
-                    if ( modelField.getName() != null )
-                    {
-                        fieldAttributes.put( modelClass.getName() + ":" + modelField.getName(), fAttributes );
-                    }
-
                     modelClass.addField( modelField );
                 }
             }
@@ -360,8 +362,6 @@ public class ModelReader
         throws XmlPullParserException, IOException
     {
         ModelAssociation modelAssociation = new ModelAssociation();
-
-        Map attributes = getAttributes( parser );
 
         while ( parser.nextTag() == XmlPullParser.START_TAG )
         {

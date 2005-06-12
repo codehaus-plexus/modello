@@ -135,7 +135,7 @@ public class ModelClass
 
         if ( withVersion )
         {
-            p += "." + version.toString();
+            p += "." + version.toString( "v", "_" );
         }
 
         return p;
@@ -361,7 +361,7 @@ public class ModelClass
 
         if ( packageName == null )
         {
-            packageName = model.getPackageName( false, null );
+            packageName = model.getDefaultPackageName( false, null );
         }
 
         for ( Iterator it = getAllFields().iterator(); it.hasNext(); )
@@ -400,5 +400,31 @@ public class ModelClass
                 throw new ModelValidationException( "You must define the deprecated version of '" + getName() + "' class." );
             }
         }
+    }
+
+    // ----------------------------------------------------------------------
+    // Object Overrides
+    // ----------------------------------------------------------------------
+
+    public boolean equals( Object o )
+    {
+        if ( ! super.equals( o ) )
+        {
+            return false;
+        }
+
+        if ( !( o instanceof ModelClass ) )
+        {
+            return false;
+        }
+
+        ModelClass other = (ModelClass) o;
+
+        if ( !other.packageName.equals( other.packageName ) )
+        {
+            return false;
+        }
+
+        return true;
     }
 }

@@ -22,7 +22,6 @@ package org.codehaus.modello.plugin.java;
  * SOFTWARE.
  */
 
-import java.util.Collections;
 import java.util.Map;
 
 import org.codehaus.modello.metadata.AbstractMetadataPlugin;

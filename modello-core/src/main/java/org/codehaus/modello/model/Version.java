@@ -102,24 +102,6 @@ public class Version
         return micro;
     }
 
-    // ----------------------------------------------------------------------
-    // Comparison methods
-    // ----------------------------------------------------------------------
-
-    public boolean equals( Object object )
-    {
-        if ( !(object instanceof Version ) )
-        {
-            return false;
-        }
-
-        Version other = (Version) object;
-
-        return this.major == other.major &&
-               this.minor == other.minor &&
-               this.micro == other.micro;
-    }
-
     /**
      * Returns true if <code>this</code> is greater that <code>other</code>.
      *
@@ -238,17 +220,37 @@ public class Version
         return false;
     }
 
+
     // ----------------------------------------------------------------------
-    //
+    // Object overrides
     // ----------------------------------------------------------------------
+
+    public boolean equals( Object object )
+    {
+        if ( !( object instanceof Version ) )
+        {
+            return false;
+        }
+
+        Version other = (Version) object;
+
+        return this.major == other.major &&
+               this.minor == other.minor &&
+               this.micro == other.micro;
+    }
+
+    public int hashCode()
+    {
+        return toString( "", null ).hashCode();
+    }
 
     public String toString()
     {
-        return toString( "v" );
+        return toString( "", "." );
     }
 
-    public String toString( String prefix )
+    public String toString( String prefix, String separator )
     {
-        return prefix + major + "_" + minor + "_" + micro;
+        return prefix + major + separator + minor + separator + micro;
     }
 }

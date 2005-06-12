@@ -90,7 +90,7 @@ public class ModelInterface
 
         if ( withVersion )
         {
-            p += "." + version.toString();
+            p += "." + version.toString( "v", "_" );
         }
 
         return p;
@@ -152,7 +152,7 @@ public class ModelInterface
 
         if ( packageName == null )
         {
-            packageName = model.getPackageName( false, null );
+            packageName = model.getDefaultPackageName( false, null );
         }
     }
 

@@ -110,24 +110,13 @@ public class Model
         return className;
     }
 
+    /**
+     * @deprecated This shouldn't be used, anything querying the model should read the
+     *             package of the class. Use getDefaultPackageName(..).
+     */
     public String getPackageName( boolean withVersion, Version version )
     {
-        String packageName = null;
-        try
-        {
-            packageName = getDefault( ModelDefault.PACKAGE ).getValue();
-        }
-        catch( ModelValidationException mve )
-        {
-            packageName = ModelDefault.PACKAGE_VALUE;
-        }
-
-        if ( withVersion )
-        {
-            packageName += "." + version.toString();
-        }
-
-        return packageName;
+        return getDefaultPackageName( withVersion, version );
     }
 
     public List getAllClasses()
@@ -160,7 +149,7 @@ public class Model
     public ModelClass getClass( String type, VersionRange versionRange )
     {
         ArrayList classList = (ArrayList) classMap.get( type );
-        
+
         if ( classList != null )
         {
             for (Iterator i = classList.iterator(); i.hasNext(); )
@@ -197,7 +186,7 @@ public class Model
         else
         {
             ArrayList classList = new ArrayList();
-        
+
             classMap.put( modelClass.getName(), classList );
         }
 
@@ -205,6 +194,10 @@ public class Model
 
         ( (ArrayList) classMap.get( modelClass.getName() ) ).add( modelClass );
     }
+
+    // ----------------------------------------------------------------------
+    // Defaults
+    // ----------------------------------------------------------------------
 
     public List getDefaults()
     {
@@ -236,6 +229,31 @@ public class Model
         defaultMap.put( modelDefault.getKey(), modelDefault );
     }
 
+    public String getDefaultPackageName( boolean withVersion, Version version )
+    {
+        String packageName = null;
+
+        try
+        {
+            packageName = getDefault( ModelDefault.PACKAGE ).getValue();
+        }
+        catch ( ModelValidationException mve )
+        {
+            packageName = ModelDefault.PACKAGE_VALUE;
+        }
+
+        if ( withVersion )
+        {
+            packageName += "." + version.toString( "v", "_" );
+        }
+
+        return packageName;
+    }
+
+    // ----------------------------------------------------------------------
+    //
+    // ----------------------------------------------------------------------
+
     public List getAllInterfaces()
     {
         return interfaces;
@@ -266,7 +284,7 @@ public class Model
     public ModelInterface getInterface( String type, VersionRange versionRange )
     {
         ArrayList interfaceList = (ArrayList) interfaceMap.get( type );
-        
+
         if ( interfaceList != null )
         {
             for (Iterator i = interfaceList.iterator(); i.hasNext(); )
@@ -303,7 +321,7 @@ public class Model
         else
         {
             ArrayList interfaceList = new ArrayList();
-        
+
             interfaceMap.put( modelInterface.getName(), interfaceList );
         }
 
