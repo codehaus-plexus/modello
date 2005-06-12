@@ -52,7 +52,7 @@ public class PrevaylerModelloGenerator
 
         context.put( "version", getGeneratedVersion() );
 
-        context.put( "package", model.getPackageName( false, getGeneratedVersion() ) );
+        context.put( "package", model.getDefaultPackageName( false, getGeneratedVersion() ) );
 
         context.put( "storeMetadataId", StoreClassMetadata.ID );
 
@@ -66,7 +66,7 @@ public class PrevaylerModelloGenerator
 
         String template = "/org/codehaus/modello/plugin/prevayler/templates/PrevaylerStore.vm";
 
-        String packageName = model.getPackageName( isPackageWithVersion(), super.getGeneratedVersion() );
+        String packageName = model.getDefaultPackageName( isPackageWithVersion(), super.getGeneratedVersion() );
 
         String className = model.getName() + "PrevaylerStore";
 
