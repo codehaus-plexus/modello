@@ -23,7 +23,6 @@ package org.codehaus.modello.plugin.jpox;
  */
 
 import java.io.FileReader;
-import java.io.File;
 import java.util.Properties;
 
 import org.codehaus.modello.ModelloGeneratorTest;

@@ -59,7 +59,7 @@ public class JPoxStoreModelloGenerator
         // Generate the JPoxStore
         // ----------------------------------------------------------------------
 
-        String packageName = model.getPackageName( isPackageWithVersion(), getGeneratedVersion() );
+        String packageName = model.getDefaultPackageName( isPackageWithVersion(), getGeneratedVersion() );
 
         String className = model.getName() + "JPoxStore";
 

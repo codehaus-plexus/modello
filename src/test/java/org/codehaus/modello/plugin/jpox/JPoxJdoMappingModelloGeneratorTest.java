@@ -30,6 +30,7 @@ import org.codehaus.modello.ModelloGeneratorTest;
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
+import org.codehaus.plexus.util.FileUtils;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -69,5 +70,7 @@ public class JPoxJdoMappingModelloGeneratorTest
         // ----------------------------------------------------------------------
 
         assertGeneratedFileExists( "META-INF/package.jdo" );
+
+        System.out.println( FileUtils.fileRead( new File( getGeneratedSources(), "META-INF/package.jdo" ) ) );
     }
 }
