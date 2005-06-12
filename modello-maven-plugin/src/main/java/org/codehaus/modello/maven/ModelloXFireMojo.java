@@ -1,9 +1,7 @@
 package org.codehaus.modello.maven;
 
-import java.io.File;
-
 /*
- * Copyright (c) 2004, Codehaus.org
+ * Copyright (c) 2004-2005, Codehaus.org
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -24,13 +22,15 @@ import java.io.File;
  * SOFTWARE.
  */
 
+import java.io.File;
+
 /**
  * @goal xfire
  *
  * @phase generate-sources
  *
  * @description Creates XFire Aegis type descriptors from the model.
- * 
+ *
  * @author <a href="mailto:dan@envoisolutions.com">Dan Diephouse</a>
  * @version $Id$
  */
