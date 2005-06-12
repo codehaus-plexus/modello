@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
+import javax.jdo.Extent;
 import javax.jdo.Query;
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
@@ -45,6 +46,11 @@ public class ${model.name}JPoxStore
 
         private int depth;
 
+#foreach ( $class in $classes )
+#if ( $class.getMetadata( $storeClassMetadataId ).isStorable() )
+        private Extent ${class.name}Extent;
+#end
+#end
         public PersistenceManager getPersistenceManager()
         {
             return pm;
@@ -85,6 +91,11 @@ public class ${model.name}JPoxStore
 
             state.tx.begin();
 
+#foreach ( $class in $classes )
+#if ( $class.getMetadata( $storeClassMetadataId ).isStorable() )
+            state.${class.name}Extent = state.pm.getExtent( ${class.name}.class, true );
+#end
+#end
             threadState.set( state );
 
             return state.pm;
@@ -208,7 +219,7 @@ public class ${model.name}JPoxStore
 
             if ( result.isEmpty() )
             {
-                throw new RuntimeException( "Not such object of type \"${class.name}\" with id: \"" + id + "\"." );
+                throw new RuntimeException( "No such object of type \"${class.name}\" with id: \"" + id + "\"." );
             }
 
             pm.deletePersistentAll( result );
@@ -223,7 +234,7 @@ public class ${model.name}JPoxStore
         }
     }
 
-    public ${class.name} get${class.name}( String id, boolean makeTransient )
+    public ${class.name} get${class.name}( String id, boolean detach )
         throws Exception
     {
         try
@@ -240,14 +251,14 @@ public class ${model.name}JPoxStore
 
             if ( result.isEmpty() )
             {
-                throw new RuntimeException( "Not such object of type \"${class.name}\" with id: \"" + id + "\"." );
+                throw new RuntimeException( "No such object of type \"${class.name}\" with id: \"" + id + "\"." );
             }
 
             ${class.name} object = (${class.name}) result.iterator().next();
 
-            if ( makeTransient )
+            if ( detach )
             {
-                pm.makeTransient( object );
+                object = (${class.name}) pm.detachCopy( object );
             }
 
             commit();
@@ -262,7 +273,7 @@ public class ${model.name}JPoxStore
         }
     }
 
-    public ${class.name} get${class.name}ByJdoId( Object id, boolean makeTransient )
+    public ${class.name} get${class.name}ByJdoId( Object id, boolean detach )
         throws Exception
     {
         try
@@ -271,9 +282,9 @@ public class ${model.name}JPoxStore
 
             ${class.name} object = (${class.name}) pm.getObjectById( id, true );
 
-            if ( makeTransient )
+            if ( detach )
             {
-                pm.makeTransient( object );
+                object = (${class.name}) pm.detachCopy( object );
             }
 
             commit();
@@ -288,14 +299,16 @@ public class ${model.name}JPoxStore
         }
     }
 
-    public Collection get${class.name}Collection( boolean makeTransient, String filter, String ordering )
+    public Collection get${class.name}Collection( boolean detach, String filter, String ordering )
         throws Exception
     {
         try
         {
             PersistenceManager pm = begin();
 
-            Query query = pm.newQuery( ${class.name}.class );
+            Extent extent = pm.getExtent( ${class.name}.class, true );
+
+            Query query = pm.newQuery( extent );
 
             if ( ordering != null )
             {
@@ -311,7 +324,11 @@ public class ${model.name}JPoxStore
 
             Collection collection;
 
-            if ( makeTransient )
+            // TODO: Why did was this done with a iterator and not makeTransientAll()? -- trygve
+            //       I would guess I had to do it this way to make sure JPOX fetched all fields
+            //       so this should probably go away now if detach works like expected.
+            //       Also; why refresh()?
+            if ( detach )
             {
                 collection = new ArrayList();
 
@@ -321,7 +338,7 @@ public class ${model.name}JPoxStore
 
                     pm.refresh( object );
 
-                    pm.makeTransient( object );
+                    object = pm.detachCopy( object );
 
                     collection.add( object );
                 }

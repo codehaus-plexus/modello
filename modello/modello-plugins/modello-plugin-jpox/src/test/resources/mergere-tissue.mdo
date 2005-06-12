@@ -28,13 +28,15 @@
         <field>
           <name>assignee</name>
           <version>1.0.0</version>
-          <association>
+          <!-- this should *not* set default-fetch-group=true -->
+          <association stash.part="false">
             <type>User</type>
           </association>
         </field>
         <field>
           <name>reporter</name>
           <version>1.0.0</version>
+          <!-- this should set default-fetch-group=true -->
           <association>
             <type>User</type>
           </association>
@@ -55,6 +57,17 @@
           <name>configuration</name>
           <version>1.0.0</version>
           <type>Map</type>
+          <!-- this should set default-fetch-group=true -->
+          <association stash.part="true">
+            <type>String</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+        <field>
+          <name>configuration2</name>
+          <version>1.0.0</version>
+          <type>Map</type>
+          <!-- this should not set default-fetch-group=true -->
           <association>
             <type>String</type>
             <multiplicity>*</multiplicity>
@@ -103,16 +116,24 @@
         </field>
       </fields>
     </class>
-
-    <!--
-     |
-     |
-     |
-     -->
+    <class java.abstract="true">
+      <name>AbstractUser</name>
+      <packageName>org.mergere.user</packageName>
+      <version>1.0.0</version>
+      <fields>
+        <field>
+          <name>abstractField</name>
+          <version>1.0.0</version>
+          <type>int</type>
+        </field>
+      </fields>
+    </class>
+    <!-- This class has a non-storable and abstract super class -->
     <class stash.storable="true">
       <name>User</name>
       <packageName>org.mergere.user</packageName>
       <version>1.0.0</version>
+      <superClass>AbstractUser</superClass>
       <fields>
         <field>
           <name>id</name>
@@ -128,6 +149,7 @@
           <name>issues</name>
           <version>1.0.0</version>
           <type>Set</type>
+          <!-- this should *not* set default-fetch-group=true -->
           <association>
             <type>Issue</type>
             <multiplicity>*</multiplicity>
@@ -141,11 +163,19 @@
       <version>1.0.0</version>
       <superClass>User</superClass>
     </class>
-    <class>
+    <!-- This class has a storable super class -->
+    <class stash.storable="true">
       <name>NormalUser</name>
       <packageName>org.mergere.user</packageName>
       <version>1.0.0</version>
       <superClass>User</superClass>
+      <fields>
+        <field>
+          <name>normalUserField</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+      </fields>
     </class>
   </classes>
 </model>
