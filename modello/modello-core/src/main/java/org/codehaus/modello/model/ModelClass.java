@@ -246,6 +246,20 @@ public class ModelClass
         return fields;
     }
 
+    public boolean hasField( String type, Version version )
+    {
+        try
+        {
+            getField( type, new VersionRange( version.getMajor() + "." + version.getMinor() + "." + version.getMicro() ) );
+
+            return true;
+        }
+        catch ( Exception e )
+        {
+            return false;
+        }
+    }
+
     public ModelField getField( String type, Version version )
     {
         return getField( type, new VersionRange( version.getMajor() + "." + version.getMinor() + "." + version.getMicro() ) );
