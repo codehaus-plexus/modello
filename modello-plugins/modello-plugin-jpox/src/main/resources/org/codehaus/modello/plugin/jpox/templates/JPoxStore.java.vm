@@ -202,6 +202,44 @@ public class ${model.name}JPoxStore
         }
     }
 
+#if ( $class.hasField( "id", $version ) )
+    public Object store${class.name}( $class.name o )
+        throws Exception
+    {
+        try
+        {
+            PersistenceManager pm = begin();
+
+            Object id;
+
+            // New instance so store it
+            if ( o.getId() == null )
+            {
+                pm.makePersistent( o );
+
+                id = pm.getObjectId( o );
+            }
+            // exists, so update it
+            else
+            {
+                pm.attachCopy( o, true );
+
+                id = o.getId();
+            }
+
+            commit();
+
+            return id;
+        }
+        catch( Exception ex )
+        {
+            rollback();
+
+            throw ex;
+        }
+    }
+#end
+
     public void delete${class.name}( String id )
         throws Exception
     {
