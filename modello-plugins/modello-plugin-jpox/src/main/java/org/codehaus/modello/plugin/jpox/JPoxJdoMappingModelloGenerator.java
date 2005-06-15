@@ -193,8 +193,6 @@ public class JPoxJdoMappingModelloGenerator
 
         writer.addAttribute( "name", modelClass.getName() );
 
-//        ModelClass persistenceCapableSuperclass = findPersistenceCapableSuperclass( modelClass );
-
         ModelClass persistenceCapableSuperclass = null;
 
         if ( modelClass.getSuperClass() != null )
@@ -242,8 +240,6 @@ public class JPoxJdoMappingModelloGenerator
 
                 applicationIdentityType = true;
 
-//                writer.addAttribute( "objectid-class", objectIdClass );
-
                 break;
             }
         }
@@ -270,41 +266,6 @@ public class JPoxJdoMappingModelloGenerator
             writer.endElement();
         }
 
-//        // ----------------------------------------------------------------------
-//        // Aggregate all the fields for all the super classes until we find a
-//        // persistence capable super class
-//        // ----------------------------------------------------------------------
-//
-//        List aggregatedFields = new ArrayList();
-//
-//        ModelClass c = modelClass;
-//
-//        System.err.println( "adding " + modelClass.getName() );
-//
-//        while( c != null )
-//        {
-//            aggregatedFields.addAll( c.getFields( getGeneratedVersion() ) );
-//
-//            String superClass = c.getSuperClass();
-//
-//            System.err.println( "adding " + superClass );
-//
-//            if ( superClass == null )
-//            {
-//                break;
-//            }
-//
-//            c = getModel().getClass( superClass, getGeneratedVersion() );
-//
-//            if ( persistenceCapableSuperclass != null &&
-//                 c.equals( persistenceCapableSuperclass ) )
-//            {
-//                break;
-//            }
-//        }
-//
-//        System.err.println( modelClass.getName() + " aggregated fields: " + aggregatedFields );
-
         // ----------------------------------------------------------------------
         // Write out all fields
         // ----------------------------------------------------------------------
@@ -318,39 +279,6 @@ public class JPoxJdoMappingModelloGenerator
 
         writer.endElement(); // class
     }
-
-//    /**
-//     * Find the first super class that's not abstract (and thus persistence capable).
-//     *
-//     * @param modelClass
-//     * @return
-//     */
-//    private ModelClass findPersistenceCapableSuperclass( ModelClass modelClass )
-//    {
-//        if ( modelClass.getSuperClass() == null )
-//        {
-//            return null;
-//        }
-//
-//        String superClass = modelClass.getSuperClass();
-//
-//        while( superClass != null )
-//        {
-//            ModelClass superModel = getModel().getClass( superClass,
-//                                                         getGeneratedVersion() );
-//
-//            JavaClassMetadata metadata = (JavaClassMetadata) superModel.getMetadata( JavaClassMetadata.ID );
-//
-//            if ( metadata != null && !metadata.isAbstract() )
-//            {
-//                return superModel;
-//            }
-//
-//            superClass = superModel.getSuperClass();
-//        }
-//
-//        return null;
-//    }
 
     private void writeModelField( XMLWriter writer, ModelField modelField )
     {
@@ -378,23 +306,6 @@ public class JPoxJdoMappingModelloGenerator
         {
             writer.addAttribute( "primary-key", "true" );
 
-//            String valueStrategy;
-//
-//            // TODO: Make this configurable with jpox metadata
-//            if ( modelField.getType().equals( "String" ) )
-//            {
-//                valueStrategy = "uuid-string";
-//            }
-//            else if ( modelField.getType().equals( "int" ) || modelField.equals( "long" ) )
-//            {
-//                valueStrategy = "sequence";
-//            }
-//            else
-//            {
-//                throw new ModelloException( "Could not determine a value-strategy setting for the identifier " +
-//                                            "field '" + modelField.getName() + "'." );
-//            }
-//
             writer.addAttribute( "value-strategy", "native" );
         }
 
@@ -420,24 +331,16 @@ public class JPoxJdoMappingModelloGenerator
 
         boolean collection = association.getMultiplicity().equals( ModelAssociation.MANY_MULTIPLICITY );
 
-        // ----------------------------------------------------------------------
-        // The logic here is to default to not "default fetch group" if it is a
-        // collection but default to "default fetch group" if it's not
-        // ----------------------------------------------------------------------
-
-        if ( collection )
+        if ( am.isPart() != null )
         {
-            if ( am.isPart() != null && am.isPart().booleanValue() )
-            {
-                writer.addAttribute( "default-fetch-group", "true" );
-            }
+            writer.addAttribute( "default-fetch-group", am.isPart().toString() );
         }
-        else
+
+        boolean dependent = true;
+
+        if ( am.isPart() != null )
         {
-            if ( am.isPart() == null || am.isPart().booleanValue() )
-            {
-                writer.addAttribute( "default-fetch-group", "true" );
-            }
+            dependent = am.isPart().booleanValue();
         }
 
         if ( association.getType().equals( "java.util.List" ) ||
@@ -446,6 +349,11 @@ public class JPoxJdoMappingModelloGenerator
             writer.startElement( "collection" );
 
             writer.addAttribute( "element-type", association.getTo() );
+
+            if ( dependent )
+            {
+                writer.addAttribute( "dependent-element", "true" );
+            }
 
             writer.endElement();
         }
@@ -456,6 +364,13 @@ public class JPoxJdoMappingModelloGenerator
             writer.addAttribute( "key-type", "java.lang.Object" );
 
             writer.addAttribute( "value-type", association.getTo() );
+
+            writer.addAttribute( "dependent-key", "true" );
+
+            if ( dependent )
+            {
+                writer.addAttribute( "dependent-element", "true" );
+            }
 
             writer.endElement();
 
@@ -471,17 +386,28 @@ public class JPoxJdoMappingModelloGenerator
 
             writer.addAttribute( "key-type", "java.lang.String" );
 
-            writer.addAttribute( "embedded-key", "true" );
-
             writer.addAttribute( "value-type", "java.lang.String" );
 
+            writer.addAttribute( "embedded-key", "true" );
+
             writer.addAttribute( "embedded-value", "true" );
+
+            writer.addAttribute( "dependent-key", "true" );
+
+            writer.addAttribute( "dependent-value", "true" );
 
             writer.endElement();
 
             writer.startElement( "join" );
 
             writer.endElement();
+        }
+        else // One association
+        {
+            if ( dependent )
+            {
+                writer.addAttribute( "dependent", "true" );
+            }
         }
     }
 
