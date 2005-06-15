@@ -28,7 +28,7 @@
         <field>
           <name>assignee</name>
           <version>1.0.0</version>
-          <!-- this should *not* set default-fetch-group=true -->
+          <!-- this should set default-fetch-group=true -->
           <association stash.part="false">
             <type>User</type>
           </association>
@@ -36,7 +36,7 @@
         <field>
           <name>reporter</name>
           <version>1.0.0</version>
-          <!-- this should set default-fetch-group=true -->
+          <!-- this should not set default-fetch-group at all -->
           <association>
             <type>User</type>
           </association>
