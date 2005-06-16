@@ -22,33 +22,19 @@ package org.codehaus.modello.plugin.velocity;
  * SOFTWARE.
  */
 
-import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.io.Writer;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Properties;
 
-import org.codehaus.modello.ModelloException;
-import org.codehaus.modello.ModelloRuntimeException;
-import org.codehaus.modello.plugin.AbstractModelloGenerator;
-import org.codehaus.modello.generator.java.javasource.JClass;
-import org.codehaus.modello.generator.java.javasource.JMethod;
-import org.codehaus.modello.generator.java.javasource.JParameter;
-import org.codehaus.modello.generator.java.javasource.JSourceCode;
-import org.codehaus.modello.generator.java.javasource.JSourceWriter;
-import org.codehaus.modello.model.Model;
-import org.codehaus.modello.model.ModelAssociation;
-import org.codehaus.modello.model.ModelClass;
-import org.codehaus.modello.model.ModelDefault;
-import org.codehaus.modello.model.ModelField;
-import org.codehaus.modello.model.Version;
-import org.codehaus.modello.plugins.xml.XmlAssociationMetadata;
-import org.codehaus.modello.plugins.xml.XmlFieldMetadata;
-import org.codehaus.plexus.velocity.VelocityComponent;
-import org.apache.velocity.context.Context;
 import org.apache.velocity.VelocityContext;
+import org.apache.velocity.context.Context;
+
+import org.codehaus.modello.ModelloException;
+import org.codehaus.modello.model.Model;
+import org.codehaus.modello.model.ModelClass;
+import org.codehaus.modello.model.Version;
+import org.codehaus.modello.plugin.AbstractModelloGenerator;
+import org.codehaus.plexus.velocity.VelocityComponent;
 
 /**
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
@@ -71,8 +57,6 @@ public class VelocityGenerator
 
         ModelClass c;
 
-
-
         Version version = new Version( "1.0.0 " );
 
         try
@@ -81,7 +65,7 @@ public class VelocityGenerator
 
             context.put( "version", version );
 
-            context.put( "package", model.getPackageName( false, version ) );
+            context.put( "package", model.getDefaultPackageName( false, version ) );
 
             context.put( "id", StashClassMetadata.ID );
 
