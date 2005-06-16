@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import javax.jdo.Extent;
+import javax.jdo.FetchPlan;
 import javax.jdo.Query;
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
@@ -279,6 +280,10 @@ public class ${model.name}JPoxStore
         {
             PersistenceManager pm = begin();
 
+            pm.getFetchPlan().setGroup( FetchPlan.DEFAULT );
+
+            pm.getFetchPlan().addGroup( "${class.name}_detail" );
+
             Query query = pm.newQuery( ${class.name}.class );
 
             query.setIgnoreCache( true );
@@ -317,6 +322,10 @@ public class ${model.name}JPoxStore
         try
         {
             PersistenceManager pm = begin();
+
+            pm.getFetchPlan().setGroup( FetchPlan.DEFAULT );
+
+            pm.getFetchPlan().addGroup( "${class.name}_detail" );
 
             ${class.name} object = (${class.name}) pm.getObjectById( id, true );
 
