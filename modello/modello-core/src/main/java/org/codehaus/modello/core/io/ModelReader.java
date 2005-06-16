@@ -306,6 +306,10 @@ public class ModelReader
                     {
                         modelField.setRequired( Boolean.valueOf( parser.nextText() ).booleanValue() );
                     }
+                    else if ( parser.getName().equals( "identifier" ) )
+                    {
+                        modelField.setIdentifier( Boolean.valueOf( parser.nextText() ).booleanValue() );
+                    }
                     else
                     {
                         parser.nextText();
@@ -336,6 +340,8 @@ public class ModelReader
                     modelAssociation.setTypeValidator( modelField.getTypeValidator() );
 
                     modelAssociation.setRequired( modelField.isRequired() );
+
+                    modelAssociation.setIdentifier( modelField.isIdentifier() );
 
                     // TODO: What is this test for?
                     if ( modelAssociation.getName() != null )
