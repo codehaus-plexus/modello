@@ -26,6 +26,11 @@ import ${class.packageName}.${class.name};
  */
 public class ${model.name}JPoxStore
 {
+#foreach ( $class in $classes )
+#if ( $class.getMetadata( $storeClassMetadataId ).isStorable() )
+        public final static String ${class.name}_DETAIL_FETCH_GROUP = "${class.name}_detail";
+#end
+#end
     private static ThreadLocal threadState = new ThreadLocal();
 
     private PersistenceManagerFactory pmf;
@@ -47,11 +52,6 @@ public class ${model.name}JPoxStore
 
         private int depth;
 
-#foreach ( $class in $classes )
-#if ( $class.getMetadata( $storeClassMetadataId ).isStorable() )
-        private Extent ${class.name}Extent;
-#end
-#end
         public PersistenceManager getPersistenceManager()
         {
             return pm;
@@ -92,11 +92,6 @@ public class ${model.name}JPoxStore
 
             state.tx.begin();
 
-#foreach ( $class in $classes )
-#if ( $class.getMetadata( $storeClassMetadataId ).isStorable() )
-            state.${class.name}Extent = state.pm.getExtent( ${class.name}.class, true );
-#end
-#end
             threadState.set( state );
 
             return state.pm;

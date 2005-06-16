@@ -28,12 +28,12 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Collections;
 
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.model.Model;
@@ -41,8 +41,8 @@ import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.plugin.AbstractModelloGenerator;
-import org.codehaus.modello.plugin.store.metadata.StoreFieldMetadata;
 import org.codehaus.modello.plugin.store.metadata.StoreAssociationMetadata;
+import org.codehaus.modello.plugin.store.metadata.StoreFieldMetadata;
 import org.codehaus.plexus.util.xml.PrettyPrintXMLWriter;
 import org.codehaus.plexus.util.xml.XMLWriter;
 
@@ -295,6 +295,16 @@ public class JPoxJdoMappingModelloGenerator
                 continue;
             }
 
+            if ( field instanceof ModelAssociation )
+            {
+                StoreAssociationMetadata metaData = getAssociationMetadata( (ModelAssociation) field );
+
+                if ( metaData.isPart() != null && !metaData.isPart().booleanValue() )
+                {
+                    continue;
+                }
+            }
+
             detailedFields.add( field );
         }
 
@@ -463,5 +473,10 @@ public class JPoxJdoMappingModelloGenerator
         writer.addAttribute( "value", value );
 
         writer.endElement();
+    }
+
+    private StoreAssociationMetadata getAssociationMetadata( ModelAssociation association )
+    {
+        return (StoreAssociationMetadata) association.getAssociationMetadata( StoreAssociationMetadata.ID );
     }
 }
