@@ -74,7 +74,7 @@ public class JdbcStoreModelloGenerator
 
         context.put( "version", getGeneratedVersion() );
 
-        context.put( "package", model.getPackageName( false, version ) );
+        context.put( "package", model.getDefaultPackageName( false, version ) );
 
         context.put( "storeClassMetadataId", StoreClassMetadata.ID );
 
@@ -90,7 +90,7 @@ public class JdbcStoreModelloGenerator
         // Generate the JdbcStore
         // ----------------------------------------------------------------------
 
-        String packageName = model.getPackageName( isPackageWithVersion(), super.getGeneratedVersion() );
+        String packageName = model.getDefaultPackageName( isPackageWithVersion(), super.getGeneratedVersion() );
 
         String className = model.getName() + "JdbcStore";
 

@@ -23,7 +23,6 @@ package org.codehaus.modello.plugin.jdbc;
  */
 
 import java.io.FileReader;
-import java.io.File;
 import java.util.Properties;
 
 import org.codehaus.modello.ModelloGeneratorTest;
@@ -71,18 +70,5 @@ public class JdbcStoreModelloGeneratorTest
         // ----------------------------------------------------------------------
 
         assertGeneratedFileExists( "org/mergere/tissue/TissueJdbcStore.java" );
-    }
-
-    // ----------------------------------------------------------------------
-    //
-    // ----------------------------------------------------------------------
-
-    private void assertGeneratedFileExists( String filename )
-    {
-        File file = new File( getGeneratedSources(), filename );
-
-        assertTrue( "Missing generated file: " + file.getAbsolutePath(), file.canRead() );
-
-        assertTrue( "The generated file is empty.", file.length() > 0 );
     }
 }
