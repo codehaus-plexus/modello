@@ -71,6 +71,6 @@ public class JPoxJdoMappingModelloGeneratorTest
 
         assertGeneratedFileExists( "META-INF/package.jdo" );
 
-        System.out.println( FileUtils.fileRead( new File( getGeneratedSources(), "META-INF/package.jdo" ) ) );
+//        System.out.println( FileUtils.fileRead( new File( getGeneratedSources(), "META-INF/package.jdo" ) ) );
     }
 }

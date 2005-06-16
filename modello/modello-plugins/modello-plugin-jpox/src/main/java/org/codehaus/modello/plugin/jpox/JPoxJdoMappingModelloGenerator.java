@@ -33,6 +33,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Collections;
 
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.model.Model;
@@ -217,7 +218,7 @@ public class JPoxJdoMappingModelloGenerator
         // as a autoincrement variable
         // ----------------------------------------------------------------------
 
-        List fields = modelClass.getFields( getGeneratedVersion() );
+        List fields = Collections.unmodifiableList( modelClass.getFields( getGeneratedVersion() ) );
 
         boolean applicationIdentityType = false;
 
@@ -267,7 +268,7 @@ public class JPoxJdoMappingModelloGenerator
         }
 
         // ----------------------------------------------------------------------
-        // Write out all fields
+        // Write all fields
         // ----------------------------------------------------------------------
 
         for ( Iterator it = fields.iterator(); it.hasNext(); )
@@ -277,7 +278,49 @@ public class JPoxJdoMappingModelloGenerator
             writeModelField( writer,  modelField );
         }
 
+        // ----------------------------------------------------------------------
+        // Write out the "detailed" fetch group. This group will by default
+        // contain all fields in a object. The default fetch group will contain
+        // all the primitives in a class as by JDO defaults.
+        // ----------------------------------------------------------------------
+
+        List detailedFields = new ArrayList();
+
+        for ( Iterator it = fields.iterator(); it.hasNext(); )
+        {
+            ModelField field = (ModelField) it.next();
+
+            if ( field.isPrimitive() )
+            {
+                continue;
+            }
+
+            detailedFields.add( field );
+        }
+
+        writeFetchGroup( writer, modelClass.getName() + "_detail", detailedFields );
+
         writer.endElement(); // class
+    }
+
+    private void writeFetchGroup( XMLWriter writer, String fetchGroupName, List fields )
+    {
+        writer.startElement( "fetch-group");
+
+        writer.addAttribute( "name", fetchGroupName );
+
+        for ( Iterator it = fields.iterator(); it.hasNext(); )
+        {
+            ModelField field = (ModelField) it.next();
+
+            writer.startElement( "field" );
+
+            writer.addAttribute( "name", field.getName() );
+
+            writer.endElement();
+        }
+
+        writer.endElement(); // fetch-group
     }
 
     private void writeModelField( XMLWriter writer, ModelField modelField )
@@ -328,8 +371,6 @@ public class JPoxJdoMappingModelloGenerator
     {
         StoreAssociationMetadata am =
             (StoreAssociationMetadata) association.getAssociationMetadata( StoreAssociationMetadata.ID );
-
-        boolean collection = association.getMultiplicity().equals( ModelAssociation.MANY_MULTIPLICITY );
 
         if ( am.isPart() != null )
         {
