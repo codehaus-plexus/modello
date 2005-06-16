@@ -16,6 +16,7 @@
           <name>name</name>
           <version>1.0.0</version>
           <type>String</type>
+          <identifier>true</identifier>
         </field>
         <field toto="tutu">
           <name>girlfriends</name>

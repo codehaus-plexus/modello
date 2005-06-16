@@ -40,6 +40,8 @@ public class ModelField
 
     private boolean required;
 
+    private boolean identifier;
+
     transient private ModelClass modelClass;
 
     private final static String[] PRIMITIVE_TYPES = new String[]{
@@ -113,6 +115,16 @@ public class ModelField
         this.required = required;
     }
 
+    public boolean isIdentifier()
+    {
+        return identifier;
+    }
+
+    public void setIdentifier( boolean identifier )
+    {
+        this.identifier = identifier;
+    }
+
     // ----------------------------------------------------------------------
     // Misc
     // ----------------------------------------------------------------------
@@ -126,6 +138,33 @@ public class ModelField
     {
         return (FieldMetadata) getMetadata( FieldMetadata.class, key );
     }
+
+    public boolean isPrimitive()
+    {
+        String type = getType();
+
+        // TODO: This should not happen
+        if ( type == null )
+        {
+            return false;
+        }
+
+        for ( int i = 0; i < PRIMITIVE_TYPES.length; i++ )
+        {
+            String validType = PRIMITIVE_TYPES[ i ];
+
+            if ( type.equals( validType ) )
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    // ----------------------------------------------------------------------
+    // BaseElement overrides
+    // ----------------------------------------------------------------------
 
     public void initialize( ModelClass modelClass )
     {
@@ -148,7 +187,8 @@ public class ModelField
         }
     }
 
-    public void validateElement() throws ModelValidationException
+    public void validateElement()
+        throws ModelValidationException
     {
         validateFieldNotEmpty( "field", "name", getName() );
 
@@ -160,21 +200,6 @@ public class ModelField
         {
             throw new ModelValidationException( "Field '" + getName() + "': Illegal type: '" + type + "'." );
         }
-    }
-
-    public boolean isPrimitive()
-    {
-        for ( int i = 0; i < PRIMITIVE_TYPES.length; i++ )
-        {
-            String validType = PRIMITIVE_TYPES[ i ];
-
-            if ( type.equals( validType ) )
-            {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     // ----------------------------------------------------------------------

@@ -108,7 +108,7 @@ public class ModelAssociation
     }
 
     // ----------------------------------------------------------------------
-    //
+    // BaseElement overrides
     // ----------------------------------------------------------------------
 
     public void validateElement()
@@ -148,6 +148,11 @@ public class ModelAssociation
         {
             throw new ModelValidationException( "Association multiplicity '" + getName() + "' is incorrect: " +
                                                 "Possible values are '1', '*' or 'n'." );
+        }
+
+        if ( isIdentifier() && multiplicity == MANY_MULTIPLICITY )
+        {
+            throw new ModelValidationException( "A many association can't be a identifier." );
         }
 
         if ( isEmpty( getType() ) )
