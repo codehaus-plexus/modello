@@ -109,6 +109,8 @@ public class Xpp3ReaderGenerator
 
         jClass.addImport( "org.codehaus.plexus.util.xml.pull.*" );
 
+        jClass.addImport( "java.io.IOException" );
+
         jClass.addImport( "java.io.Reader" );
 
         jClass.addImport( "java.util.ArrayList" );
@@ -167,8 +169,8 @@ public class Xpp3ReaderGenerator
 
         unmarshall.addParameter( new JParameter( new JClass( "Reader" ), "reader" ) );
 
-        unmarshall.addException( new JClass( "java.io.IOException" ) );
-        unmarshall.addException( new JClass( "org.codehaus.plexus.util.xml.pull.XmlPullParserException" ) );
+        unmarshall.addException( new JClass( "IOException" ) );
+        unmarshall.addException( new JClass( "XmlPullParserException" ) );
 
         JSourceCode sc = unmarshall.getSourceCode();
 
@@ -191,6 +193,12 @@ public class Xpp3ReaderGenerator
         // ----------------------------------------------------------------------
 
         writeAllClassesParser( objectModel, jClass );
+
+        // ----------------------------------------------------------------------
+        // Write helpers
+        // ----------------------------------------------------------------------
+
+        writeHelpers( jClass );
 
         // ----------------------------------------------------------------------
         //
@@ -244,16 +252,14 @@ public class Xpp3ReaderGenerator
 
         String uncapClassName = uncapitalise( className );
 
-        String statement = "if";
-
         JMethod unmarshall = new JMethod( new JClass( className ), "parse" + capClassName );
 
         unmarshall.addParameter( new JParameter( new JClass( "String" ), "tagName" ) );
 
         unmarshall.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
 
-        unmarshall.addException( new JClass( "java.io.IOException" ) );
-        unmarshall.addException( new JClass( "org.codehaus.plexus.util.xml.pull.XmlPullParserException" ) );
+        unmarshall.addException( new JClass( "IOException" ) );
+        unmarshall.addException( new JClass( "XmlPullParserException" ) );
 
         unmarshall.getModifiers().makePrivate();
 
@@ -307,6 +313,8 @@ public class Xpp3ReaderGenerator
         sc.unindent();
 
         sc.add( "}" );
+
+        String statement = "else if";
 
         //Write other fields
 
@@ -634,6 +642,18 @@ public class Xpp3ReaderGenerator
         }
         else
         {
+            sc.add( "else" );
+
+            sc.add( "{" );
+
+            sc.indent();
+
+            sc.add( "throw new XmlPullParserException( \"Unrecognised tag: '\" + parser.getName() + \"'\", parser, null);" );
+
+            sc.unindent();
+
+            sc.add( "}" );
+
             sc.unindent();
 
             sc.add( "}" );
@@ -673,38 +693,45 @@ public class Xpp3ReaderGenerator
             parserGetter = "parser.nextText()";
         }
 
+/* TODO: this and a default
+        if ( fieldMetaData.isRequired() )
+        {
+            parserGetter = "getRequiredAttributeValue( " + parserGetter + ", \"" + tagName + "\", parser )";
+        }
+*/
+
         if ( fieldMetaData.isTrim() )
         {
-            parserGetter += ".trim()";
+            parserGetter = "getTrimmedValue( " + parserGetter + ")";
         }
 
         if ( "boolean".equals( type ) )
         {
-            sc.add( objectName + "." + setterName + "( (new Boolean( " + parserGetter + " ) ).booleanValue() );" );
+            sc.add( objectName + "." + setterName + "( getBooleanValue( " + parserGetter + " ) );" );
         }
         else if ( "char".equals( type ) )
         {
-            sc.add( objectName + "." + setterName + "( (new Character( " + parserGetter + " ) ).charValue() );" );
+            sc.add( objectName + "." + setterName + "( getCharacterValue( " + parserGetter + " ) );" );
         }
         else if ( "double".equals( type ) )
         {
-            sc.add( objectName + "." + setterName + "( (new Double( " + parserGetter + " ) ).doubleValue() );" );
+            sc.add( objectName + "." + setterName + "( getDoubleValue( " + parserGetter + " ) );" );
         }
         else if ( "float".equals( type ) )
         {
-            sc.add( objectName + "." + setterName + "( (new Float( " + parserGetter + " ) ).floatValue() );" );
+            sc.add( objectName + "." + setterName + "( getFloatValue( " + parserGetter + " ) );" );
         }
         else if ( "int".equals( type ) )
         {
-            sc.add( objectName + "." + setterName + "( (new Integer( " + parserGetter + " ) ).intValue() );" );
+            sc.add( objectName + "." + setterName + "( getIntegerValue( " + parserGetter + " ) );" );
         }
         else if ( "long".equals( type ) )
         {
-            sc.add( objectName + "." + setterName + "( (new Long( " + parserGetter + " ) ).longValue() );" );
+            sc.add( objectName + "." + setterName + "( getLongValue( " + parserGetter + " ) );" );
         }
         else if ( "short".equals( type ) )
         {
-            sc.add( objectName + "." + setterName + "( (new Short( " + parserGetter + " ) ).shortValue() );" );
+            sc.add( objectName + "." + setterName + "( getShortValue( " + parserGetter + " ) );" );
         }
         else if ( "String".equals( type ) || "Boolean".equals( type ) )
         {
@@ -713,9 +740,7 @@ public class Xpp3ReaderGenerator
         }
         else if ( "Date".equals( type ) )
         {
-            sc.add( "DateFormat dateParser = DateFormat.getDateTimeInstance( DateFormat.FULL, DateFormat.FULL );" );
-
-            sc.add( objectName + "." + setterName + "( dateParser.parse( " + parserGetter + ", new ParsePosition( 0 ) ) );" );
+            sc.add( objectName + "." + setterName + "( getDateValue( " + parserGetter + " ) );" );
         }
         else if ( "DOM".equals( type ) )
         {
@@ -1008,5 +1033,233 @@ public class Xpp3ReaderGenerator
         sc.unindent();
 
         sc.add( "}" );
+    }
+
+    private void writeHelpers( JClass jClass )
+    {
+        JMethod method = new JMethod( new JClass( "String" ), "getTrimmedValue" );
+
+        method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
+
+        JSourceCode sc = method.getSourceCode();
+
+        sc.add( "if ( s != null )" );
+
+        sc.add( "{" );
+
+        sc.indent();
+
+        sc.add( "s = s.trim();" );
+
+        sc.unindent();
+
+        sc.add( "}" );
+
+        sc.add( "return s;" );
+
+        jClass.addMethod( method );
+
+        method = new JMethod( new JClass( "String" ), "getRequiredAttributeValue" );
+        method.addException( new JClass( "XmlPullParserException" ) );
+
+        method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
+        method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
+        method.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
+
+        sc = method.getSourceCode();
+
+        sc.add( "if ( s == null )" );
+
+        sc.add( "{" );
+
+        sc.indent();
+
+        sc.add( "throw new XmlPullParserException( \"Missing required value for attribute '\" + attribute + \"'\", parser, null );" );
+
+        sc.unindent();
+
+        sc.add( "}" );
+
+        sc.add( "return s;" );
+
+        jClass.addMethod( method );
+
+        method = new JMethod( JType.Boolean, "getBooleanValue" );
+
+        method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
+
+        sc = method.getSourceCode();
+
+        sc.add( "if ( s != null )" );
+
+        sc.add( "{" );
+
+        sc.indent();
+
+        sc.add( "return Boolean.valueOf( s ).booleanValue();" );
+
+        sc.unindent();
+
+        sc.add( "}" );
+
+        sc.add( "return false;" );
+
+        jClass.addMethod( method );
+
+        method = new JMethod( JType.Char, "getCharacterValue" );
+
+        method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
+
+        sc = method.getSourceCode();
+
+        sc.add( "if ( s != null )" );
+
+        sc.add( "{" );
+
+        sc.indent();
+
+        sc.add( "return s.charAt( 0 );" );
+
+        sc.unindent();
+
+        sc.add( "}" );
+
+        sc.add( "return 0;" );
+
+        jClass.addMethod( method );
+
+        method = new JMethod( JType.Int, "getIntValue" );
+
+        method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
+
+        sc = method.getSourceCode();
+
+        sc.add( "if ( s != null )" );
+
+        sc.add( "{" );
+
+        sc.indent();
+
+        sc.add( "return Integer.valueOf( s ).intValue();" );
+
+        sc.unindent();
+
+        sc.add( "}" );
+
+        sc.add( "return 0;" );
+
+        jClass.addMethod( method );
+
+        method = new JMethod( JType.Short, "getShortValue" );
+
+        method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
+
+        sc = method.getSourceCode();
+
+        sc.add( "if ( s != null )" );
+
+        sc.add( "{" );
+
+        sc.indent();
+
+        sc.add( "return Short.valueOf( s ).shortValue();" );
+
+        sc.unindent();
+
+        sc.add( "}" );
+
+        sc.add( "return 0;" );
+
+        jClass.addMethod( method );
+
+        method = new JMethod( JType.Long, "getLongValue" );
+
+        method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
+
+        sc = method.getSourceCode();
+
+        sc.add( "if ( s != null )" );
+
+        sc.add( "{" );
+
+        sc.indent();
+
+        sc.add( "return Long.valueOf( s ).longValue();" );
+
+        sc.unindent();
+
+        sc.add( "}" );
+
+        sc.add( "return 0;" );
+
+        jClass.addMethod( method );
+
+        method = new JMethod( JType.Float, "getFloatValue" );
+
+        method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
+
+        sc = method.getSourceCode();
+
+        sc.add( "if ( s != null )" );
+
+        sc.add( "{" );
+
+        sc.indent();
+
+        sc.add( "return Float.valueOf( s ).floatValue();" );
+
+        sc.unindent();
+
+        sc.add( "}" );
+
+        sc.add( "return 0;" );
+
+        jClass.addMethod( method );
+
+        method = new JMethod( JType.Double, "getDoubleValue" );
+
+        method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
+
+        sc = method.getSourceCode();
+
+        sc.add( "if ( s != null )" );
+
+        sc.add( "{" );
+
+        sc.indent();
+
+        sc.add( "return Double.valueOf( s ).doubleValue();" );
+
+        sc.unindent();
+
+        sc.add( "}" );
+
+        sc.add( "return 0;" );
+
+        jClass.addMethod( method );
+
+        method = new JMethod( new JClass( "java.util.Date" ), "getDateValue" );
+
+        method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
+
+        sc = method.getSourceCode();
+
+        sc.add( "if ( s != null )" );
+
+        sc.add( "{" );
+
+        sc.indent();
+
+        sc.add( "DateFormat dateParser = DateFormat.getDateTimeInstance( DateFormat.FULL, DateFormat.FULL );" );
+
+        sc.add( "return dateParser.parse( s, new ParsePosition( 0 ) );" );
+
+        sc.unindent();
+
+        sc.add( "}" );
+
+        sc.add( "return null;" );
+
+        jClass.addMethod( method );
     }
 }
