@@ -31,7 +31,7 @@
       <version>1.0-SNAPSHOT</version>
     </dependency>
     <dependency>
-      <groupId>activation</groupId>
+      <groupId>jaf</groupId>
       <artifactId>activation</artifactId>
       <version>1.0.2</version>
     </dependency>
