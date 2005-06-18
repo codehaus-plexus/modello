@@ -189,7 +189,7 @@ public class Xpp3Verifier
         // Test that the entities is properly resolved
         // ----------------------------------------------------------------------
 
-        String xml = "<project>\n" + "  <groupId>Laugst&oslash;l</groupId>\n" + "</project>";
+        String xml = "<mavenModel>\n" + "  <groupId>Laugst&oslash;l</groupId>\n" + "</mavenModel>";
 
         Model expected = new Model();
 
