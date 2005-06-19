@@ -412,7 +412,7 @@ public class JPoxJdoMappingModelloGenerator
         {
             writer.startElement( "map" );
 
-            writer.addAttribute( "key-type", "java.lang.Object" );
+            writer.addAttribute( "key-type", am.getKeyType() );
 
             writer.addAttribute( "value-type", association.getTo() );
 
@@ -420,7 +420,7 @@ public class JPoxJdoMappingModelloGenerator
 
             if ( dependent )
             {
-                writer.addAttribute( "dependent-element", "true" );
+                writer.addAttribute( "dependent-value", "true" );
             }
 
             writer.endElement();

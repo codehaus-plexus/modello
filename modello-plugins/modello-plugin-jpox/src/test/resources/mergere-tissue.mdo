@@ -58,7 +58,9 @@
           <version>1.0.0</version>
           <type>Map</type>
           <!-- this should set default-fetch-group=true -->
-          <association stash.part="true">
+          <!-- The keyType will once in the future be properly validated and then this
+               should fail -->
+          <association stash.part="true" stash.keyType="Foo">
             <type>String</type>
             <multiplicity>*</multiplicity>
           </association>
@@ -68,7 +70,9 @@
           <version>1.0.0</version>
           <type>Map</type>
           <!-- this should not set default-fetch-group=true -->
-          <association>
+          <!-- The keyType will once in the future be properly validated and then this
+               should fail -->
+          <association stash.keyType="Bar">
             <type>String</type>
             <multiplicity>*</multiplicity>
           </association>
