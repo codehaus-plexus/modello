@@ -31,8 +31,8 @@ import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
-import org.codehaus.modello.StringUtils;
 import org.codehaus.modello.ModelloException;
+import org.codehaus.plexus.util.StringUtils;
 
 import java.util.Collections;
 import java.util.Map;
@@ -45,6 +45,8 @@ public class StoreMetadataPlugin
     extends AbstractMetadataPlugin
 {
     public final static String PART = "stash.part";
+
+    public final static String KEY_TYPE = "stash.keyType";
 
     // ----------------------------------------------------------------------
     // Map to Metadata
@@ -117,6 +119,7 @@ public class StoreMetadataPlugin
     }
 
     public AssociationMetadata getAssociationMetadata( ModelAssociation association, Map data )
+        throws ModelloException
     {
         StoreAssociationMetadata metadata = new StoreAssociationMetadata();
 
@@ -130,6 +133,22 @@ public class StoreMetadataPlugin
         if ( data.containsKey( PART ) )
         {
             metadata.setPart( new Boolean( (String) data.get( PART ) ) );
+        }
+
+        String keyType = (String) data.get( KEY_TYPE );
+
+        if ( association.getType() != null && association.getType().equals( "Map" ) )
+        {
+            if ( StringUtils.isEmpty( keyType ) )
+            {
+                throw new ModelloException( "When the association is a java.util.Map key type has to be specified." +
+                                            "Class: '" + association.getModelClass().getName() + "', " +
+                                            "field : '" + association.getName() + "'." );
+            }
+
+            // TODO: assert the key type
+
+            metadata.setKeyType( keyType );
         }
 
         return metadata;

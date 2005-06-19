@@ -37,6 +37,8 @@ public class StoreAssociationMetadata
 
     private Boolean part;
 
+    private String keyType;
+
     public void setStorable( boolean storable )
     {
         this.storable = storable;
@@ -55,5 +57,15 @@ public class StoreAssociationMetadata
     public void setPart( Boolean part )
     {
         this.part = part;
+    }
+
+    public String getKeyType()
+    {
+        return keyType;
+    }
+
+    public void setKeyType( String keyType )
+    {
+        this.keyType = keyType;
     }
 }
