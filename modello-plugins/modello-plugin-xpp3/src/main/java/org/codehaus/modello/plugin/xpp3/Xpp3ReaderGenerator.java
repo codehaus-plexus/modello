@@ -648,7 +648,14 @@ public class Xpp3ReaderGenerator
 
             sc.indent();
 
-            sc.add( "throw new XmlPullParserException( \"Unrecognised tag: '\" + parser.getName() + \"'\", parser, null);" );
+            if ( !rootElement )
+            {
+                sc.add( "throw new XmlPullParserException( \"Unrecognised tag: '\" + parser.getName() + \"'\", parser, null);" );
+            }
+            else
+            {
+                // TODO: we should really log a warning
+            }
 
             sc.unindent();
 
