@@ -40,7 +40,7 @@ public class ModelloJPoxStoreMojo
     extends AbstractModelloGeneratorMojo
 {
     /**
-     * @parameter expression="${basedir}/target/classes"
+     * @parameter expression="${basedir}/target/generated-sources"
      *
      * @required
      */
