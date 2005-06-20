@@ -1128,7 +1128,7 @@ public class Xpp3ReaderGenerator
 
         jClass.addMethod( method );
 
-        method = new JMethod( JType.Int, "getIntValue" );
+        method = new JMethod( JType.Int, "getIntegerValue" );
 
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
 
