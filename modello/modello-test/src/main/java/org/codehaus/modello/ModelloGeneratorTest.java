@@ -24,10 +24,11 @@ package org.codehaus.modello;
 
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.DefaultArtifact;
-import org.apache.maven.artifact.handler.DefaultArtifactHandler;
+//import org.apache.maven.artifact.handler.DefaultArtifactHandler;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.repository.layout.ArtifactRepositoryLayout;
-import org.apache.maven.settings.MavenSettingsBuilder;
+import org.apache.maven.settings.Settings;
+import org.apache.maven.settings.io.xpp3.SettingsXpp3Reader;
 
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.compiler.Compiler;
@@ -35,8 +36,13 @@ import org.codehaus.plexus.compiler.CompilerConfiguration;
 import org.codehaus.plexus.compiler.CompilerError;
 import org.codehaus.plexus.compiler.javac.JavacCompiler;
 import org.codehaus.plexus.util.FileUtils;
+import org.codehaus.plexus.util.IOUtil;
+import org.codehaus.plexus.util.StringUtils;
+import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
@@ -75,14 +81,40 @@ public abstract class ModelloGeneratorTest
 
         assertTrue( getGeneratedSources().mkdirs() );
 
-        MavenSettingsBuilder builder = (MavenSettingsBuilder) container.lookup( MavenSettingsBuilder.ROLE );
-
         ArtifactRepositoryLayout repositoryLayout = (ArtifactRepositoryLayout) container.lookup(
             ArtifactRepositoryLayout.ROLE, "default" );
 
-        String url = "file://" + builder.buildSettings().getLocalRepository();
+        String localRepo = findLocalRepository();
+        
+        String url = "file://" + localRepo;
 
         repository = new ArtifactRepository( "local", url, repositoryLayout );
+    }
+
+    private String findLocalRepository() throws IOException, XmlPullParserException
+    {
+        String settingsPath = System.getProperty( "org.apache.maven.user-settings" );
+        
+        if ( StringUtils.isEmpty( settingsPath ) )
+        {
+            settingsPath = System.getProperty( "user.home" ) + "/.m2/settings.xml";
+        }
+        
+        FileReader reader = null;
+        try
+        {
+            reader = new FileReader( settingsPath );
+            
+            SettingsXpp3Reader settingsReader = new SettingsXpp3Reader();
+            
+            Settings settings = settingsReader.read( reader );
+            
+            return settings.getActiveProfile().getLocalRepository();
+        }
+        finally
+        {
+            IOUtil.close( reader );
+        }
     }
 
     protected File getGeneratedSources()
@@ -93,7 +125,7 @@ public abstract class ModelloGeneratorTest
     public void addDependency( String groupId, String artifactId, String version )
         throws Exception
     {
-        DefaultArtifact artifact = new DefaultArtifact( groupId, artifactId, version, Artifact.SCOPE_COMPILE, "jar", null, new DefaultArtifactHandler( "jar" ) );
+        DefaultArtifact artifact = new DefaultArtifact( groupId, artifactId, version, Artifact.SCOPE_COMPILE, "jar", null );
 
         File dependencyFile = new File( repository.getBasedir(), repository.pathOf( artifact ) );
 
