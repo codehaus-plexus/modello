@@ -24,7 +24,7 @@
   </ciManagement>
   <scm>
     <connection>scm:cvs:pserver:anoncvs@cvs.modello.codehaus.org:/scm/modello:modello</connection>
-    <developerConnection>scm:cvs:ext:${maven.username}@cvs.modello.codehaus.org:/home/projects/modello/scm:modello</developerConnection>
+    <developerConnection>scm:svn:https://svn.codehaus.org:/home/projects/modello/scm/trunk/modello</developerConnection>
     <url>http://cvs.modello.codehaus.org/modello/${pom.artifactId}</url>
   </scm>
   <organization>
