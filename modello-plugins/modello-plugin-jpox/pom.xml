@@ -3,15 +3,16 @@
   <parent>
     <groupId>org.codehaus.modello</groupId>
     <artifactId>modello-plugins</artifactId>
-    <version>1.0-alpha-3-SNAPSHOT</version>
+    <version>1.0-alpha-3</version>
   </parent>
   <artifactId>modello-plugin-jpox</artifactId>
+  <version>1.0-alpha-3-SNAPSHOT</version>
   <name>Modello JPox Plugin</name>
   <dependencies>
     <dependency>
       <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-plugin-store</artifactId>
-      <version>1.0-alpha-3-SNAPSHOT</version>
+      <version>1.0-alpha-3</version>
     </dependency>
   </dependencies>
 </project>
