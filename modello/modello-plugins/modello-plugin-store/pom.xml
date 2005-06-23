@@ -3,15 +3,16 @@
   <parent>
     <groupId>org.codehaus.modello</groupId>
     <artifactId>modello-plugins</artifactId>
-    <version>1.0-alpha-3-SNAPSHOT</version>
+    <version>1.0-alpha-3</version>
   </parent>
   <artifactId>modello-plugin-store</artifactId>
+  <version>1.0-alpha-3-SNAPSHOT</version>
   <name>Modello Store Plugin</name>
   <dependencies>
     <dependency>
       <groupId>plexus</groupId>
       <artifactId>plexus-velocity</artifactId>
-      <version>1.1-SNAPSHOT</version>
+      <version>1.1</version>
     </dependency>
   </dependencies>
 </project>
