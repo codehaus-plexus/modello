@@ -8,7 +8,7 @@
     <version>1.0-alpha-3</version>
   </parent>
   <artifactId>modello-plugin-prevayler</artifactId>
-  <version>1.0-alpha-3</version>
+  <version>1.0-alpha-4-SNAPSHOT</version>
   <name>Modello Prevayler Plugin</name>
   <dependencies>
     <dependency>
