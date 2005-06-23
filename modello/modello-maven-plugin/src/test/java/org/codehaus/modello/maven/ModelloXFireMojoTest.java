@@ -37,11 +37,6 @@ public class ModelloXFireMojoTest
     extends PlexusTestCase
 {
     
-    public void testNOTHING()
-    {
-        System.out.println( "I'm gelding this test until we're ready to release with xfire plugin intact." );
-    }
-/*
     public void testModelloJavaMojo()
         throws Exception
     {
@@ -77,5 +72,5 @@ public class ModelloXFireMojoTest
 
         assertTrue( "The generated java file doesn't exist: '" + javaFile.getAbsolutePath() + "'.", javaFile.exists() );
     }
-*/
+
 }
