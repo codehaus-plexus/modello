@@ -9,7 +9,7 @@
   </parent>
   <groupId>org.codehaus.modello</groupId>
   <artifactId>modello-test</artifactId>
-  <version>1.0-alpha-3</version>
+  <version>1.0-alpha-4-SNAPSHOT</version>
   <name>Modello Test Package</name>
   <dependencies>
     <dependency>
