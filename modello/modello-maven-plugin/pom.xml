@@ -64,4 +64,11 @@
       <scope>runtime</scope>
     </dependency>
   </dependencies>
+  <distributionManagement>
+    <repository>
+      <id>repo1</id>
+      <name>Maven Central Repository at Codehaus</name>
+      <url>scp://beaver.codehaus.org/home/projects/maven/repository-staging/to-ibiblio/maven2/plugins</url>
+    </repository>
+  </distributionManagement>
 </project>
