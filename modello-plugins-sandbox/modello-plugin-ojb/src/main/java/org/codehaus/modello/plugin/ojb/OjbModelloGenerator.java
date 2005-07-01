@@ -43,7 +43,7 @@ import org.codehaus.plexus.velocity.VelocityComponent;
 public class OjbModelloGenerator
     extends AbstractModelloGenerator
 {
-    /** @requirement */
+    /** @plexus.requirement */
     private VelocityComponent velocity;
 
     public void generate( Model model, Properties properties )
@@ -59,7 +59,7 @@ public class OjbModelloGenerator
 
         context.put( "version", getGeneratedVersion() );
 
-        context.put( "package", model.getPackageName( false, getGeneratedVersion() ) );
+        context.put( "package", model.getDefaultPackageName( isPackageWithVersion(), getGeneratedVersion() ) );
 
         context.put( "storeMetadataId", StoreClassMetadata.ID );
 

@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.codehaus.modello</groupId>
     <artifactId>modello-plugins</artifactId>
-    <version>1.0-alpha-3</version>
+    <version>1.0-alpha-4-SNAPSHOT</version>
   </parent>
   <artifactId>modello-plugin-xsd</artifactId>
   <version>1.0-alpha-4-SNAPSHOT</version>
@@ -14,7 +14,6 @@
     <dependency>
       <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-plugin-xml</artifactId>
-      <version>1.0-alpha-3</version>
     </dependency>
   </dependencies>
 </project>

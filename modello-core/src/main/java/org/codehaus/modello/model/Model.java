@@ -143,7 +143,7 @@ public class Model
 
     public ModelClass getClass( String type, Version version )
     {
-        return getClass( type, new VersionRange( version.getMajor() + "." + version.getMinor() + "." + version.getMicro() ) );
+        return getClass( type, new VersionRange( version ) );
     }
 
     public ModelClass getClass( String type, VersionRange versionRange )
@@ -278,7 +278,7 @@ public class Model
 
     public ModelInterface getInterface( String type, Version version )
     {
-        return getInterface( type, new VersionRange( version.getMajor() + "." + version.getMinor() + "." + version.getMicro() ) );
+        return getInterface( type, new VersionRange( version ) );
     }
 
     public ModelInterface getInterface( String type, VersionRange versionRange )

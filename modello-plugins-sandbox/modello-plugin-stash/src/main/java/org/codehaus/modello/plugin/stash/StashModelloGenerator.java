@@ -47,7 +47,7 @@ import org.codehaus.plexus.velocity.VelocityComponent;
 public class StashModelloGenerator
     extends AbstractModelloGenerator
 {
-    /** @requirement */
+    /** @plexus.requirement */
     private VelocityComponent velocity;
 
     // ----------------------------------------------------------------------

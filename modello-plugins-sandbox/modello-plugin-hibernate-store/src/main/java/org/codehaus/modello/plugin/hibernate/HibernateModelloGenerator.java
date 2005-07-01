@@ -43,7 +43,7 @@ import org.codehaus.plexus.velocity.VelocityComponent;
 public class HibernateModelloGenerator
     extends AbstractModelloGenerator
 {
-    /** @requirement */
+    /** @plexus.requirement */
     private VelocityComponent velocity;
 
     public void generate( Model model, Properties properties )

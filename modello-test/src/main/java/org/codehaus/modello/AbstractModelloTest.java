@@ -1,4 +1,4 @@
-package org.codehaus.modello.plugin.prevayler;
+package org.codehaus.modello;
 
 /*
  * Copyright (c) 2005, Codehaus.org
@@ -22,41 +22,13 @@ package org.codehaus.modello.plugin.prevayler;
  * SOFTWARE.
  */
 
-import java.io.FileReader;
-import java.util.Properties;
-
-import org.codehaus.modello.AbstractModelloGeneratorTest;
-import org.codehaus.modello.ModelloParameterConstants;
-import org.codehaus.modello.core.ModelloCore;
-import org.codehaus.modello.model.Model;
+import org.codehaus.plexus.PlexusTestCase;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
-public class PrevaylerModelloGeneratorTest
-    extends AbstractModelloGeneratorTest
+public class AbstractModelloTest
+    extends PlexusTestCase
 {
-    public PrevaylerModelloGeneratorTest()
-    {
-        super( "prevayler" );
-    }
-
-    public void testSimpleInvocation()
-        throws Exception
-    {
-        ModelloCore core = (ModelloCore) lookup( ModelloCore.ROLE );
-
-        Model model = core.loadModel( new FileReader( getTestPath( "src/test/resources/mergere-tissue.mdo" ) ) );
-
-        Properties parameters = new Properties();
-
-        parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, getGeneratedSources().getAbsolutePath() );
-
-        parameters.setProperty( ModelloParameterConstants.VERSION, "4.0.0" );
-
-        parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.FALSE.toString() );
-
-        core.generate( model, "prevayler", parameters );
-    }
 }

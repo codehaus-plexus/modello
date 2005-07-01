@@ -198,7 +198,7 @@ public class ${model.name}JPoxStore
         }
     }
 
-#if ( $class.hasField( "id", $version ) )
+#if ( $class.getIdentifierFields( $version ).size() > 0 )
     public Object store${class.name}( $class.name o )
         throws Exception
     {
@@ -247,6 +247,7 @@ public class ${model.name}JPoxStore
 
             query.setIgnoreCache( true );
 
+            // TODO: Use all known identifier fields in this filter
             query.setFilter( "this.id == \"" + id + "\"" );
 
             Collection result = (Collection) query.execute();

@@ -27,8 +27,8 @@ import java.io.FileReader;
 import java.util.List;
 import java.util.Properties;
 
+import org.codehaus.modello.AbstractModelloGeneratorTest;
 import org.codehaus.modello.FileUtils;
-import org.codehaus.modello.ModelloGeneratorTest;
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
@@ -42,16 +42,12 @@ import org.codehaus.modello.plugins.xml.XmlFieldMetadata;
  * @version $Id$
  */
 public class XsdGeneratorTest
-    extends ModelloGeneratorTest
+    extends AbstractModelloGeneratorTest
 {
-    private String modelFile = "src/test/resources/maven.mdo";
-
     public XsdGeneratorTest()
     {
         super( "xsd" );
     }
-
-    private File generatedSources;
 
     public void testJavaGenerator()
         throws Throwable

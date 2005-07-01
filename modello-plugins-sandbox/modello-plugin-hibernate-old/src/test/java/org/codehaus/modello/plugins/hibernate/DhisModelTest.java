@@ -5,20 +5,21 @@ package org.codehaus.modello.plugins.hibernate;
  */
 
 import java.io.File;
+import java.io.FileReader;
 import java.util.Properties;
 
+import org.codehaus.modello.AbstractModelloGeneratorTest;
 import org.codehaus.modello.FileUtils;
-import org.codehaus.modello.Model;
-import org.codehaus.modello.ModelloGeneratorTest;
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
+import org.codehaus.modello.model.Model;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
 public class DhisModelTest
-    extends ModelloGeneratorTest
+    extends AbstractModelloGeneratorTest
 {
     public DhisModelTest()
     {
@@ -34,9 +35,9 @@ public class DhisModelTest
 
         parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, "false" );
 
-        Model model = loadModel( "src/test/models/dhis.mdo" );
+        ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
 
-        ModelloCore modello = getModelloCore();
+        Model model = modello.loadModel( new FileReader( getTestFile( "src/test/models/dhis.mdo" ) ) );
 
         File generatedSources = new File( getTestPath( "target/dhis/sources" ) );
 

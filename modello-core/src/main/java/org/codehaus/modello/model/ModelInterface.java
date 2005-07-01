@@ -113,7 +113,7 @@ public class ModelInterface
 
     public List getCodeSegments( Version version )
     {
-        return getCodeSegments( new VersionRange( version.getMajor() + "." + version.getMinor() + "." + version.getMicro() ) );
+        return getCodeSegments( new VersionRange( version ) );
     }
 
     public List getCodeSegments( VersionRange versionRange )

@@ -7,21 +7,20 @@ package org.codehaus.modello.plugins.hibernate;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Writer;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 
-import org.codehaus.modello.Model;
-import org.codehaus.modello.ModelAssociation;
-import org.codehaus.modello.ModelClass;
-import org.codehaus.modello.ModelField;
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.ModelloRuntimeException;
-import org.codehaus.modello.generator.xml.DefaultXMLWriter;
-import org.codehaus.modello.generator.xml.XMLWriter;
+import org.codehaus.modello.model.Model;
+import org.codehaus.modello.model.ModelAssociation;
+import org.codehaus.modello.model.ModelClass;
+import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.plugin.AbstractModelloGenerator;
+import org.codehaus.plexus.util.xml.PrettyPrintXMLWriter;
+import org.codehaus.plexus.util.xml.XMLWriter;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -59,7 +58,7 @@ public class HibernateModelloGenerator
 
         FileWriter writer = new FileWriter( f );
 
-        XMLWriter w = new DefaultXMLWriter( writer );
+        XMLWriter w = new PrettyPrintXMLWriter( writer );
 
         writer.write( "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n" );
         writer.write( "\n" );
@@ -70,11 +69,11 @@ public class HibernateModelloGenerator
 
         w.startElement( "hibernate-mapping" );
 
-        for ( Iterator it = model.getClasses().iterator(); it.hasNext(); )
+        for ( Iterator it = model.getClasses( getGeneratedVersion() ).iterator(); it.hasNext(); )
         {
             ModelClass modelClass = (ModelClass) it.next();
 
-            writeClass( writer, w, modelClass );
+            writeClass( w, modelClass );
         }
 
         w.endElement();
@@ -86,8 +85,7 @@ public class HibernateModelloGenerator
         writer.close();
     }
 
-    private void writeClass( Writer writer, XMLWriter w, ModelClass modelClass )
-        throws IOException
+    private void writeClass( XMLWriter w, ModelClass modelClass )
     {
         String fqcn = getFullyQualifiedClassName( modelClass );
 
@@ -108,26 +106,28 @@ public class HibernateModelloGenerator
 
         writeHibernateId( w, idField );
 
-        for ( Iterator it = modelClass.getFields().iterator(); it.hasNext(); )
+        for ( Iterator it = modelClass.getFields( getGeneratedVersion() ).iterator(); it.hasNext(); )
         {
             ModelField modelField = (ModelField) it.next();
 
-            metadata = (HibernateFieldMetadata)modelField.getMetadata( HibernateFieldMetadata.ID );
-
-            if ( metadata.isId() )
+            if ( modelField instanceof ModelAssociation )
             {
-                // the id fields are already mapped
-                continue;
+                ModelAssociation modelAssociation = (ModelAssociation) it.next();
+
+                writeAssociation( w, modelAssociation );
             }
+            else
+            {
+                metadata = (HibernateFieldMetadata)modelField.getMetadata( HibernateFieldMetadata.ID );
 
-            writeField( w, modelField );
-        }
+                if ( metadata.isId() )
+                {
+                    // the id fields are already mapped
+                    continue;
+                }
 
-        for ( Iterator it = modelClass.getAssociations().iterator(); it.hasNext(); )
-        {
-            ModelAssociation modelAssociation = (ModelAssociation) it.next();
-
-            writeAssociation( w, modelAssociation );
+                writeField( w, modelField );
+            }
         }
 
         w.endElement();
@@ -180,12 +180,6 @@ public class HibernateModelloGenerator
 
     private void writeAssociation( XMLWriter w, ModelAssociation modelAssociation )
     {
-        if ( !modelAssociation.getFromMultiplicity().equals( "1" ) ||
-             !modelAssociation.getToMultiplicity().equals( "*" ) )
-        {
-            throw new ModelloRuntimeException( "The hibernate generator can only map '1->*' relations." );
-        }
-
         writeHibernateOneToMany( w, modelAssociation );
     }
 
@@ -259,7 +253,7 @@ public class HibernateModelloGenerator
 
         w.addAttribute( "name", modelField.getName() );
 
-        ModelClass clazz = getModel().getClass( modelField.getType() );
+        ModelClass clazz = getModel().getClass( modelField.getType(), getGeneratedVersion() );
 
         if ( clazz == null )
         {
@@ -294,7 +288,7 @@ public class HibernateModelloGenerator
     {
         w.startElement( "list" );
 
-        w.addAttribute( "name", modelAssociation.getFromRole() );
+        w.addAttribute( "name", modelAssociation.getName() );
 
         w.startElement( "key" );
 
@@ -349,7 +343,7 @@ public class HibernateModelloGenerator
     {
         ModelField idField = null;
 
-        for ( Iterator it = modelClass.getFields().iterator(); it.hasNext(); )
+        for ( Iterator it = modelClass.getFields( getGeneratedVersion() ).iterator(); it.hasNext(); )
         {
             ModelField modelField = (ModelField) it.next();
 
@@ -383,9 +377,9 @@ public class HibernateModelloGenerator
 
     private String getFullyQualifiedClassName( ModelClass modelClass )
     {
-        if ( !isEmpty( modelClass.getModel().getPackageName() ) )
+        if ( !isEmpty( modelClass.getModel().getDefaultPackageName( isPackageWithVersion(), getGeneratedVersion() ) ) )
         {
-            return modelClass.getModel().getPackageName() + "." + modelClass.getName();
+            return modelClass.getModel().getDefaultPackageName( isPackageWithVersion(), getGeneratedVersion() ) + "." + modelClass.getName();
         }
         else
         {

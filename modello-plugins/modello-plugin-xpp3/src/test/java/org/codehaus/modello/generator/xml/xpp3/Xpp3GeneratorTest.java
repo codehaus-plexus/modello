@@ -23,7 +23,7 @@ package org.codehaus.modello.generator.xml.xpp3;
  */
 
 import org.codehaus.modello.FileUtils;
-import org.codehaus.modello.ModelloGeneratorTest;
+import org.codehaus.modello.AbstractModelloGeneratorTest;
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
@@ -43,7 +43,7 @@ import java.util.Properties;
  * @version $Id$
  */
 public class Xpp3GeneratorTest
-    extends ModelloGeneratorTest
+    extends AbstractModelloGeneratorTest
 {
     public Xpp3GeneratorTest()
     {
