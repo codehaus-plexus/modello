@@ -3,10 +3,10 @@
   <parent>
     <groupId>org.codehaus.modello</groupId>
     <artifactId>modello-plugins-sandbox</artifactId>
-    <version>1.0-alpha-3-SNAPSHOT</version>
+    <version>1.0-alpha-4-SNAPSHOT</version>
   </parent>
   <artifactId>modello-plugin-hibernate</artifactId>
-  <version>1.0-alpha-3-SNAPSHOT</version>
+  <version>1.0-alpha-4-SNAPSHOT</version>
   <name>Modello Hibernate Plugin</name>
   <dependencies>
     <dependency>

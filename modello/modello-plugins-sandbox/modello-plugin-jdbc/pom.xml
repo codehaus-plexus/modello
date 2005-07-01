@@ -3,16 +3,15 @@
   <parent>
     <groupId>org.codehaus.modello</groupId>
     <artifactId>modello-plugins-sandbox</artifactId>
-    <version>1.0-alpha-3-SNAPSHOT</version>
+    <version>1.0-alpha-4-SNAPSHOT</version>
   </parent>
   <artifactId>modello-plugin-jdbc</artifactId>
-  <version>1.0-alpha-3-SNAPSHOT</version>
+  <version>1.0-alpha-4-SNAPSHOT</version>
   <name>Modello JDBC Plugin</name>
   <dependencies>
     <dependency>
       <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-plugin-store</artifactId>
-      <version>1.0-alpha-3-SNAPSHOT</version>
     </dependency>
   </dependencies>
 </project>

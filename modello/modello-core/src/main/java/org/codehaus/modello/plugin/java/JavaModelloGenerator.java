@@ -49,13 +49,13 @@ import org.codehaus.modello.plugin.AbstractModelloGenerator;
 
 /**
  * @author <a href="mailto:jason@modello.org">Jason van Zyl </a>
- * @version $Id: JavaModelloGenerator.java,v 1.14 2005/02/28 16:47:44 trygvis
- *          Exp $
+ * @version $Id$
  */
 public class JavaModelloGenerator
     extends AbstractModelloGenerator
 {
-    public void generate( Model model, Properties parameters ) throws ModelloException
+    public void generate( Model model, Properties parameters )
+        throws ModelloException
     {
         initialize( model, parameters );
 
@@ -69,7 +69,8 @@ public class JavaModelloGenerator
         }
     }
 
-    private void generateJava() throws ModelloException, IOException
+    private void generateJava()
+        throws ModelloException, IOException
     {
         Model objectModel = getModel();
 

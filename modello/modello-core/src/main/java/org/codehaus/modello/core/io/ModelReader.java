@@ -343,7 +343,6 @@ public class ModelReader
 
                     modelAssociation.setIdentifier( modelField.isIdentifier() );
 
-                    // TODO: What is this test for?
                     if ( modelAssociation.getName() != null )
                     {
                         associationAttributes.put( modelClass.getName() + ":" + modelAssociation.getName(),

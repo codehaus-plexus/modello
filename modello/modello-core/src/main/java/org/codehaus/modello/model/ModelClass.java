@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.codehaus.modello.ModelloRuntimeException;
+import org.codehaus.modello.StringUtils;
 import org.codehaus.modello.metadata.ClassMetadata;
 
 /**
@@ -83,6 +84,10 @@ public class ModelClass
         return model;
     }
 
+    // ----------------------------------------------------------------------
+    // Interfaces
+    // ----------------------------------------------------------------------
+
     /**
      * Returns the list of all interfaces of this class.
      *
@@ -107,6 +112,10 @@ public class ModelClass
 
         getInterfaces().add( modelInterface );
     }
+
+    // ----------------------------------------------------------------------
+    // Package name
+    // ----------------------------------------------------------------------
 
     public String getPackageName()
     {
@@ -145,6 +154,10 @@ public class ModelClass
     {
         this.packageName = packageName;
     }
+
+    // ----------------------------------------------------------------------
+    // Field
+    // ----------------------------------------------------------------------
 
     /**
      * Returns the list of all fields in this class.
@@ -250,7 +263,7 @@ public class ModelClass
     {
         try
         {
-            getField( type, new VersionRange( version.getMajor() + "." + version.getMinor() + "." + version.getMicro() ) );
+            getField( type, new VersionRange( version ) );
 
             return true;
         }
@@ -262,7 +275,7 @@ public class ModelClass
 
     public ModelField getField( String type, Version version )
     {
-        return getField( type, new VersionRange( version.getMajor() + "." + version.getMinor() + "." + version.getMicro() ) );
+        return getField( type, new VersionRange( version ) );
     }
 
     public ModelField getField( String type, VersionRange versionRange )
@@ -314,6 +327,27 @@ public class ModelClass
         ( (ArrayList) fieldMap.get( modelField.getName() ) ).add( modelField );
     }
 
+    public List getIdentifierFields( Version version )
+    {
+        List identifierFields = new ArrayList();
+
+        for ( Iterator it = getFields( version ).iterator(); it.hasNext(); )
+        {
+            ModelField field = (ModelField) it.next();
+
+            if ( field.isIdentifier() )
+            {
+                identifierFields.add( field );
+            }
+        }
+
+        return identifierFields;
+    }
+
+    // ----------------------------------------------------------------------
+    // Code Segments
+    // ----------------------------------------------------------------------
+
     public List getAllCodeSegments()
     {
         if ( codeSegments == null )
@@ -326,7 +360,7 @@ public class ModelClass
 
     public List getCodeSegments( Version version )
     {
-        return getCodeSegments( new VersionRange( version.getMajor() + "." + version.getMinor() + "." + version.getMicro() ) );
+        return getCodeSegments( new VersionRange( version ) );
     }
 
     public List getCodeSegments( VersionRange versionRange )
@@ -358,6 +392,10 @@ public class ModelClass
 
         codeSegmentMap.put( codeSegment.getName(), codeSegment );
     }
+
+    // ----------------------------------------------------------------------
+    //
+    // ----------------------------------------------------------------------
 
     public boolean hasSuperClass()
     {
@@ -440,5 +478,17 @@ public class ModelClass
         }
 
         return true;
+    }
+
+    public int hashCode()
+    {
+        int hashCode = getName().hashCode();
+
+        if ( !StringUtils.isEmpty( packageName ) )
+        {
+            hashCode += 37 * packageName.hashCode();
+        }
+
+        return hashCode;
     }
 }

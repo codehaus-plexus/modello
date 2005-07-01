@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.codehaus.modello</groupId>
     <artifactId>modello</artifactId>
-    <version>1.0-alpha-3</version>
+    <version>1.0-alpha-4-SNAPSHOT</version>
   </parent>
   <artifactId>modello-maven-plugin</artifactId>
   <version>1.0-alpha-4-SNAPSHOT</version>
@@ -15,52 +15,49 @@
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-project</artifactId>
-      <version>2.0-alpha-2</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-plugin-api</artifactId>
-      <version>2.0-alpha-2</version>
     </dependency>
     <dependency>
       <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-core</artifactId>
-      <version>1.0-alpha-3</version>
     </dependency>
     <dependency>
       <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-plugin-xpp3</artifactId>
-      <version>1.0-alpha-3</version>
+      <version>1.0-alpha-4-SNAPSHOT</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-plugin-xfire</artifactId>
-      <version>1.0-alpha-3-SNAPSHOT</version>
+      <version>1.0-alpha-4-SNAPSHOT</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-plugin-xsd</artifactId>
-      <version>1.0-alpha-3</version>
+      <version>1.0-alpha-4-SNAPSHOT</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-plugin-xdoc</artifactId>
-      <version>1.0-alpha-3</version>
+      <version>1.0-alpha-4-SNAPSHOT</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-plugin-prevayler</artifactId>
-      <version>1.0-alpha-3</version>
+      <version>1.0-alpha-4-SNAPSHOT</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-plugin-jpox</artifactId>
-      <version>1.0-alpha-3</version>
+      <version>1.0-alpha-4-SNAPSHOT</version>
       <scope>runtime</scope>
     </dependency>
   </dependencies>

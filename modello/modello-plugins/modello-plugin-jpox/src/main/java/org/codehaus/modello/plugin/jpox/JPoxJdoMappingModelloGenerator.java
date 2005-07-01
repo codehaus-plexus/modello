@@ -220,32 +220,25 @@ public class JPoxJdoMappingModelloGenerator
 
         List fields = Collections.unmodifiableList( modelClass.getFields( getGeneratedVersion() ) );
 
-        boolean applicationIdentityType = false;
+        List identifierFields = modelClass.getIdentifierFields( getGeneratedVersion() );
 
-        for ( Iterator it = fields.iterator(); it.hasNext(); )
+        boolean applicationIdentityType = identifierFields.size() > 0;
+
+        for ( Iterator it = identifierFields.iterator(); it.hasNext(); )
         {
             ModelField modelField = (ModelField) it.next();
 
-            if ( modelField.getName().equals( "id" ) )
+            if ( !PRIMITVE_IDENTITY_MAP.containsKey( modelField.getType() ) )
             {
-                String type = modelField.getType();
-
-                String objectIdClass = (String) PRIMITVE_IDENTITY_MAP.get( type );
-
-                if ( objectIdClass == null )
-                {
-                    throw new ModelloException( "The JDO mapping generator does not support the specified " +
-                                                "field type '" + modelField.getType() + "'. " +
-                                                "Supported types: " + PRIMITVE_IDENTITY_MAP.keySet() );
-                }
-
-                applicationIdentityType = true;
-
-                break;
+                throw new ModelloException( "The JDO mapping generator does not support the specified " +
+                                            "field type '" + modelField.getType() + "'. " +
+                                            "Supported types: " + PRIMITVE_IDENTITY_MAP.keySet() );
             }
         }
 
         // TODO: for now, assume that any primary key will be set in the super class
+        // While it should be possible to have abstract super classes and have the
+        // key defined in the sub class this is not implemented yet.
 
         if ( persistenceCapableSuperclass == null )
         {
@@ -261,6 +254,10 @@ public class JPoxJdoMappingModelloGenerator
         else
         {
             writer.startElement( "inheritance" );
+
+            // TODO: The table strategy should be customizable
+            // http://www.jpox.org/docs/1_1/inheritance.html - in particular
+            // the strategy="subclass-table" and strategy="new-table" parts
 
             writer.addAttribute( "strategy", "new-table");
 
@@ -355,7 +352,9 @@ public class JPoxJdoMappingModelloGenerator
             writer.addAttribute( "null-value", "exception" );
         }
 
-        if ( modelField.getName().equals( "id" ) )
+        // TODO: The value-strategy attribute should be customizable.
+        // See http://www.jpox.org/docs/1_1/identity_generation.html
+        if ( modelField.isIdentifier() )
         {
             writer.addAttribute( "primary-key", "true" );
 

@@ -60,6 +60,13 @@ public class VersionRange
         }
     }
 
+    public VersionRange( Version version )
+    {
+        fromVersion = version;
+        
+        toVersion = version;
+    }
+
     public Version getFromVersion()
     {
         return fromVersion;

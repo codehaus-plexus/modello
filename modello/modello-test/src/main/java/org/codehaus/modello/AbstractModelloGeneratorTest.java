@@ -22,27 +22,7 @@ package org.codehaus.modello;
  * SOFTWARE.
  */
 
-import org.apache.maven.artifact.Artifact;
-import org.apache.maven.artifact.DefaultArtifact;
-//import org.apache.maven.artifact.handler.DefaultArtifactHandler;
-import org.apache.maven.artifact.repository.ArtifactRepository;
-import org.apache.maven.artifact.repository.layout.ArtifactRepositoryLayout;
-import org.apache.maven.settings.Settings;
-import org.apache.maven.settings.io.xpp3.SettingsXpp3Reader;
-
-import org.codehaus.plexus.PlexusTestCase;
-import org.codehaus.plexus.compiler.Compiler;
-import org.codehaus.plexus.compiler.CompilerConfiguration;
-import org.codehaus.plexus.compiler.CompilerError;
-import org.codehaus.plexus.compiler.javac.JavacCompiler;
-import org.codehaus.plexus.util.FileUtils;
-import org.codehaus.plexus.util.IOUtil;
-import org.codehaus.plexus.util.StringUtils;
-import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
-
 import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
@@ -52,12 +32,27 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.maven.artifact.Artifact;
+import org.apache.maven.artifact.factory.ArtifactFactory;
+import org.apache.maven.artifact.repository.ArtifactRepository;
+import org.apache.maven.artifact.repository.ArtifactRepositoryFactory;
+import org.apache.maven.artifact.repository.layout.ArtifactRepositoryLayout;
+import org.apache.maven.settings.MavenSettingsBuilder;
+import org.apache.maven.settings.Settings;
+
+import org.codehaus.plexus.PlexusTestCase;
+import org.codehaus.plexus.compiler.Compiler;
+import org.codehaus.plexus.compiler.CompilerConfiguration;
+import org.codehaus.plexus.compiler.CompilerError;
+import org.codehaus.plexus.compiler.javac.JavacCompiler;
+import org.codehaus.plexus.util.FileUtils;
+
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
-public abstract class ModelloGeneratorTest
-    extends PlexusTestCase
+public abstract class AbstractModelloGeneratorTest
+    extends AbstractModelloTest
 {
     private List dependencies = new ArrayList();
 
@@ -67,7 +62,15 @@ public abstract class ModelloGeneratorTest
 
     private ArtifactRepository repository;
 
-    protected ModelloGeneratorTest( String name )
+    private ArtifactFactory artifactFactory;
+
+    private ArtifactRepositoryFactory artifactRepositoryFactory;
+
+    private MavenSettingsBuilder settingsBuilder;
+
+    private ArtifactRepositoryLayout repositoryLayout;
+
+    protected AbstractModelloGeneratorTest( String name )
     {
         this.name = name;
     }
@@ -81,40 +84,25 @@ public abstract class ModelloGeneratorTest
 
         assertTrue( getGeneratedSources().mkdirs() );
 
-        ArtifactRepositoryLayout repositoryLayout = (ArtifactRepositoryLayout) container.lookup(
-            ArtifactRepositoryLayout.ROLE, "default" );
+        repositoryLayout = (ArtifactRepositoryLayout) container.lookup( ArtifactRepositoryLayout.ROLE, "default" );
 
-        String localRepo = findLocalRepository();
-        
+        settingsBuilder = (MavenSettingsBuilder) lookup( MavenSettingsBuilder.ROLE );
+
+        Settings settings = settingsBuilder.buildSettings();
+
+        String localRepo = settings.getLocalRepository();
+
+        artifactRepositoryFactory = (ArtifactRepositoryFactory) lookup( ArtifactRepositoryFactory.ROLE );
+
         String url = "file://" + localRepo;
 
-        repository = new ArtifactRepository( "local", url, repositoryLayout );
-    }
+        repository = artifactRepositoryFactory.createArtifactRepository( "local",
+                                                                         url,
+                                                                         repositoryLayout,
+                                                                         ArtifactRepository.SNAPSHOT_POLICY_ALWAYS,
+                                                                         ArtifactRepository.CHECKSUM_POLICY_WARN );
 
-    private String findLocalRepository() throws IOException, XmlPullParserException
-    {
-        String settingsPath = System.getProperty( "org.apache.maven.user-settings" );
-        
-        if ( StringUtils.isEmpty( settingsPath ) )
-        {
-            settingsPath = System.getProperty( "user.home" ) + "/.m2/settings.xml";
-        }
-        
-        FileReader reader = null;
-        try
-        {
-            reader = new FileReader( settingsPath );
-            
-            SettingsXpp3Reader settingsReader = new SettingsXpp3Reader();
-            
-            Settings settings = settingsReader.read( reader );
-            
-            return settings.getActiveProfile().getLocalRepository();
-        }
-        finally
-        {
-            IOUtil.close( reader );
-        }
+        artifactFactory = (ArtifactFactory) lookup( ArtifactFactory.ROLE );
     }
 
     protected File getGeneratedSources()
@@ -125,7 +113,11 @@ public abstract class ModelloGeneratorTest
     public void addDependency( String groupId, String artifactId, String version )
         throws Exception
     {
-        DefaultArtifact artifact = new DefaultArtifact( groupId, artifactId, version, Artifact.SCOPE_COMPILE, "jar", null );
+        Artifact artifact = artifactFactory.createArtifact( groupId,
+                                                            artifactId,
+                                                            version,
+                                                            Artifact.SCOPE_COMPILE,
+                                                            "jar" );
 
         File dependencyFile = new File( repository.getBasedir(), repository.pathOf( artifact ) );
 
@@ -154,7 +146,7 @@ public abstract class ModelloGeneratorTest
         addDependency( "plexus", "plexus-utils", "1.0-alpha-3" );
 
         // TODO: can read my own POM to set this!
-        addDependency( "org.codehaus.modello", "modello-test", "1.0-alpha-3-SNAPSHOT" );
+        addDependency( "org.codehaus.modello", "modello-test", "1.0-alpha-4-SNAPSHOT" );
 
         String[] classPathElements = new String[dependencies.size() + 2];
 
