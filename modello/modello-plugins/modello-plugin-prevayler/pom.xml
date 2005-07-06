@@ -14,8 +14,6 @@
     <dependency>
       <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-plugin-store</artifactId>
-        <version>1.0-alpha-4-SNAPSHOT</version>
-        
     </dependency>
   </dependencies>
 </project>
