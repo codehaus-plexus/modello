@@ -13,10 +13,14 @@
     <dependency>
       <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-core</artifactId>
+        <version>1.0-alpha-4-SNAPSHOT</version>
+        
     </dependency>
     <dependency>
       <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-test</artifactId>
+        <version>1.0-alpha-4-SNAPSHOT</version>
+        
     </dependency>
   </dependencies>
   <modules>
