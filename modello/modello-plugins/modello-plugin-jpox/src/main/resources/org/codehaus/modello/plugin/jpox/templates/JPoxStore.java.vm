@@ -218,7 +218,7 @@ public class ${model.name}JPoxStore
             // exists, so update it
             else
             {
-                pm.attachCopyAll( o, true );
+                pm.attachCopy( o, true );
 
                 id = o.getId();
             }
