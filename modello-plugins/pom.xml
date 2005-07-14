@@ -29,6 +29,5 @@
     <module>modello-plugin-xdoc</module>
     <module>modello-plugin-xsd</module>
     <module>modello-plugin-xpp3</module>
-    <!-- module>modello-plugin-xfire</module -->
   </modules>
 </project>
