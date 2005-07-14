@@ -398,7 +398,14 @@ public class JPoxJdoMappingModelloGenerator
         {
             writer.startElement( "collection" );
 
-            writer.addAttribute( "element-type", association.getTo() );
+            if ( association.getTo().equals( "String" ) )
+            {
+                writer.addAttribute( "element-type", "java.lang.String" );
+            }
+            else
+            {
+                writer.addAttribute( "element-type", association.getTo() );
+            }
 
             if ( dependent )
             {
@@ -406,6 +413,12 @@ public class JPoxJdoMappingModelloGenerator
             }
 
             writer.endElement();
+
+            /*
+            writer.startElement( "join" );
+
+            writer.endElement();
+            */
         }
         else if ( association.getType().equals( "java.util.Map" ) )
         {
