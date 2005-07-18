@@ -72,11 +72,11 @@ public abstract class AbstractModelloGeneratorMojo
     /**
      * True if the generated package names should include the version.
      *
-     * @parameter expression="${packageWithVersion}"
+     * @parameter expression="${packageWithVersion}" default-value="true"
      *
      * @required
      */
-    private Boolean packageWithVersion = Boolean.FALSE;
+    private boolean packageWithVersion;
 
     /**
      * @parameter expression="${component.org.codehaus.modello.core.ModelloCore}"
@@ -149,7 +149,7 @@ public abstract class AbstractModelloGeneratorMojo
 
         parameters.setProperty( ModelloParameterConstants.VERSION, version );
 
-        parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, packageWithVersion.toString() );
+        parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.valueOf( packageWithVersion ).toString() );
 
         customizeParameters( parameters );
 
@@ -219,12 +219,12 @@ public abstract class AbstractModelloGeneratorMojo
         this.version = version;
     }
 
-    public Boolean getPackageWithVersion()
+    public boolean getPackageWithVersion()
     {
         return packageWithVersion;
     }
 
-    public void setPackageWithVersion( Boolean packageWithVersion )
+    public void setPackageWithVersion( boolean packageWithVersion )
     {
         this.packageWithVersion = packageWithVersion;
     }

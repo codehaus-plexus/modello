@@ -57,7 +57,7 @@ public class ModelloJavaMojoTest
 
         mojo.setVersion("1.0.0" );
 
-        mojo.setPackageWithVersion( Boolean.TRUE );
+        mojo.setPackageWithVersion( true );
 
         mojo.setModelloCore( modelloCore );
 

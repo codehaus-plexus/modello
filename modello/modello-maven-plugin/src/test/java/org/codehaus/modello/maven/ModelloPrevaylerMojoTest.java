@@ -57,7 +57,7 @@ public class ModelloPrevaylerMojoTest
 
         mojo.setVersion("1.0.0" );
 
-        mojo.setPackageWithVersion( Boolean.FALSE );
+        mojo.setPackageWithVersion( false );
 
         mojo.setModelloCore( modelloCore );
 
