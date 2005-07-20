@@ -36,8 +36,8 @@ import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelDefault;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.plugins.xml.XmlAssociationMetadata;
-import org.codehaus.modello.plugins.xml.XmlFieldMetadata;
 import org.codehaus.modello.plugins.xml.XmlClassMetadata;
+import org.codehaus.modello.plugins.xml.XmlFieldMetadata;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -130,10 +130,11 @@ public class Xpp3ReaderGenerator
         // The Field
         JField addDefaultEntities = new JField( JType.Boolean, "addDefaultEntities" );
 
-        addDefaultEntities.setComment( "If set the parser till be loaded with all single characters from the XHTML specification.\n" +
-                                       "The entities used:\n" + "<ul>\n" + "<li>http://www.w3.org/TR/xhtml1/DTD/xhtml-lat1.ent</li>\n" +
-                                       "<li>http://www.w3.org/TR/xhtml1/DTD/xhtml-special.ent</li>\n" +
-                                       "<li>http://www.w3.org/TR/xhtml1/DTD/xhtml-symbol.ent</li>\n" + "</ul>\n" );
+        addDefaultEntities.setComment(
+            "If set the parser till be loaded with all single characters from the XHTML specification.\n" +
+                "The entities used:\n" + "<ul>\n" + "<li>http://www.w3.org/TR/xhtml1/DTD/xhtml-lat1.ent</li>\n" +
+                "<li>http://www.w3.org/TR/xhtml1/DTD/xhtml-special.ent</li>\n" +
+                "<li>http://www.w3.org/TR/xhtml1/DTD/xhtml-symbol.ent</li>\n" + "</ul>\n" );
 
         addDefaultEntities.setInitString( "true" );
 
@@ -271,6 +272,8 @@ public class Xpp3ReaderGenerator
         {
             sc.add( "int eventType = parser.getEventType();" );
 
+            sc.add( "boolean foundRoot = false;" );
+
             sc.add( "while ( eventType != XmlPullParser.END_DOCUMENT )" );
 
             sc.add( "{" );
@@ -304,10 +307,14 @@ public class Xpp3ReaderGenerator
 
             if ( fieldMetadata.isAttribute() )
             {
-                writePrimitiveField( field, field.getType(), uncapClassName, "set" + capitalise( field.getName() ), sc );
-
-                continue;
+                writePrimitiveField( field, field.getType(), uncapClassName, "set" + capitalise( field.getName() ),
+                                     sc );
             }
+        }
+
+        if ( rootElement )
+        {
+            sc.add( "foundRoot = true;" );
         }
 
         sc.unindent();
@@ -364,8 +371,7 @@ public class Xpp3ReaderGenerator
                     sc.indent();
 
                     sc.add( uncapClassName + ".set" + capFieldName + "( parse" + association.getTo() + "( \"" +
-                            tagName +
-                            "\", parser ) );" );
+                        tagName + "\", parser ) );" );
 
                     sc.unindent();
 
@@ -432,7 +438,7 @@ public class Xpp3ReaderGenerator
                         if ( isClassInModel( association.getTo(), modelClass.getModel() ) )
                         {
                             sc.add( associationName + ".add( parse" + association.getTo() + "( \"" + singularTagName +
-                                    "\", parser ) );" );
+                                "\", parser ) );" );
                         }
                         else
                         {
@@ -614,7 +620,8 @@ public class Xpp3ReaderGenerator
                 sc.indent();
 
                 //ModelField
-                writePrimitiveField( field, field.getType(), uncapClassName, "set" + capitalise( field.getName() ), sc );
+                writePrimitiveField( field, field.getType(), uncapClassName, "set" + capitalise( field.getName() ),
+                                     sc );
 
                 sc.unindent();
 
@@ -625,6 +632,7 @@ public class Xpp3ReaderGenerator
         }
         if ( !rootElement )
         {
+/*
             if ( modelClass.getFields( getGeneratedVersion() ).size() > 0 )
             {
                 sc.add( "else" );
@@ -639,6 +647,19 @@ public class Xpp3ReaderGenerator
 
                 sc.add( "}" );
             }
+*/
+            sc.add( "else" );
+
+            sc.add( "{" );
+
+            sc.indent();
+
+            sc.add(
+                "throw new XmlPullParserException( \"Unrecognised tag: '\" + parser.getName() + \"'\", parser, null);" );
+
+            sc.unindent();
+
+            sc.add( "}" );
         }
         else
         {
@@ -648,14 +669,18 @@ public class Xpp3ReaderGenerator
 
             sc.indent();
 
-            if ( !rootElement )
-            {
-                sc.add( "throw new XmlPullParserException( \"Unrecognised tag: '\" + parser.getName() + \"'\", parser, null);" );
-            }
-            else
-            {
-                // TODO: we should really log a warning
-            }
+            sc.add( "if ( foundRoot )" );
+
+            sc.add( "{" );
+
+            sc.indent();
+
+            sc.add(
+                "throw new XmlPullParserException( \"Unrecognised tag: '\" + parser.getName() + \"'\", parser, null);" );
+
+            sc.unindent();
+
+            sc.add( "}" );
 
             sc.unindent();
 
@@ -1081,7 +1106,8 @@ public class Xpp3ReaderGenerator
 
         sc.indent();
 
-        sc.add( "throw new XmlPullParserException( \"Missing required value for attribute '\" + attribute + \"'\", parser, null );" );
+        sc.add(
+            "throw new XmlPullParserException( \"Missing required value for attribute '\" + attribute + \"'\", parser, null );" );
 
         sc.unindent();
 
