@@ -32,12 +32,6 @@
     </dependency>
     <dependency>
       <groupId>org.codehaus.modello</groupId>
-      <artifactId>modello-plugin-xfire</artifactId>
-      <version>1.0-alpha-4-SNAPSHOT</version>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-plugin-xsd</artifactId>
       <version>1.0-alpha-4-SNAPSHOT</version>
       <scope>runtime</scope>
