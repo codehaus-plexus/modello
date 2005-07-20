@@ -72,7 +72,7 @@ public abstract class AbstractModelloGeneratorMojo
     /**
      * True if the generated package names should include the version.
      *
-     * @parameter expression="${packageWithVersion}" default-value="true"
+     * @parameter expression="${packageWithVersion}" default-value="false"
      *
      * @required
      */
