@@ -31,6 +31,8 @@ import java.io.File;
  *
  * @goal xsd
  *
+ * @phase generate-sources
+ *
  * @author <a href="mailto:brett@codehaus.org">Brett Porter</a>
  * @version $Id$
  */
