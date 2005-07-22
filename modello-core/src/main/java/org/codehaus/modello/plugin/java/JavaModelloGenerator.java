@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.Properties;
+import java.util.List;
 
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.generator.java.javasource.JClass;
@@ -54,6 +55,8 @@ import org.codehaus.modello.plugin.AbstractModelloGenerator;
 public class JavaModelloGenerator
     extends AbstractModelloGenerator
 {
+    private static final String EOL = System.getProperty( "line.separator" );
+
     public void generate( Model model, Properties parameters )
         throws ModelloException
     {
@@ -93,7 +96,9 @@ public class JavaModelloGenerator
                 packageName = modelInterface.getPackageName( false, null );
             }
 
-            String directory = packageName.replace( '.', '/' );
+            char fileSeparator = System.getProperty( "file.separator" ).charAt( 0 );
+
+            String directory = packageName.replace( '.', fileSeparator );
 
             File f = new File( new File( getOutputDirectory(), directory ), modelInterface.getName() + ".java" );
 
@@ -158,7 +163,9 @@ public class JavaModelloGenerator
                 packageName = modelClass.getPackageName( false, null );
             }
 
-            String directory = packageName.replace( '.', '/' );
+            char fileSeparator = System.getProperty( "file.separator" ).charAt( 0 );
+
+            String directory = packageName.replace( '.', fileSeparator );
 
             File f = new File( new File( getOutputDirectory(), directory ), modelClass.getName() + ".java" );
 
@@ -215,6 +222,30 @@ public class JavaModelloGenerator
                 }
             }
 
+            // ----------------------------------------------------------------------
+            // equals()
+            // ----------------------------------------------------------------------
+
+            List identifierFields = modelClass.getIdentifierFields( getGeneratedVersion() );
+
+            if ( identifierFields.size() != 0 )
+            {
+                JMethod equals = generateEquals( modelClass );
+
+                jClass.addMethod( equals );
+            }
+
+            // ----------------------------------------------------------------------
+            // Generate hashCode()
+            // ----------------------------------------------------------------------
+
+            if ( identifierFields.size() != 0 )
+            {
+                JMethod hashCode = generateHashCode( modelClass );
+
+                jClass.addMethod( hashCode );
+            }
+
             if ( modelClass.getCodeSegments( getGeneratedVersion() ) != null )
             {
                 for ( Iterator iterator = modelClass.getCodeSegments( getGeneratedVersion() ).iterator(); iterator.hasNext(); )
@@ -230,6 +261,159 @@ public class JavaModelloGenerator
             writer.flush();
 
             writer.close();
+        }
+    }
+
+    private JMethod generateEquals( ModelClass modelClass )
+    {
+        JMethod equals = new JMethod( JType.Boolean, "equals" );
+
+        equals.addParameter( new JParameter( new JClass( "Object" ), "other" ) );
+
+        JSourceCode sc = equals.getSourceCode();
+
+        sc.add( "if ( this == other)" );
+        sc.add( "{" );
+        sc.addIndented( "return true;" );
+        sc.add( "}" );
+        sc.add( "" );
+        sc.add( "if ( !(other instanceof " + modelClass.getName() + ") )");
+        sc.add( "{" );
+        sc.addIndented( "return false;" );
+        sc.add( "}" );
+        sc.add( "" );
+        sc.add( modelClass.getName() + " that = (" + modelClass.getName() + ") other;" );
+
+        int count = 0;
+
+        for (  Iterator j = modelClass.getIdentifierFields( getGeneratedVersion() ).iterator(); j.hasNext(); )
+        {
+            ModelField identifier = (ModelField) j.next();
+
+            if ( identifier.getType().equals( "boolean" ) ||
+                 identifier.getType().equals( "byte" ) ||
+                 identifier.getType().equals( "char" ) ||
+                 identifier.getType().equals( "double" ) ||
+                 identifier.getType().equals( "float" ) ||
+                 identifier.getType().equals( "int" ) ||
+                 identifier.getType().equals( "short" ) ||
+                 identifier.getType().equals( "long" ) )
+            {
+                if ( count == 0 )
+                {
+                    sc.add( "return this." + identifier.getName() + "== " +
+                            "that.get" + capitalise( identifier.getName() ) + "()" );
+                }
+                else
+                {
+                    sc.append( " &&" );
+                    sc.indent();
+                    sc.indent();
+                    sc.add( "this." + identifier.getName() + "== " +
+                            "that.get" + capitalise( identifier.getName() ) + "()" );
+                    sc.unindent();
+                    sc.unindent();
+                }
+                count++;
+            }
+            else
+            {
+                if ( count == 0 )
+                {
+                    sc.add( "return this." + identifier.getName() + ".equals( " +
+                            "that.get" + capitalise( identifier.getName() ) + "() )"  );
+                }
+                else
+                {
+                    sc.append( " &&" );
+                    sc.indent();
+                    sc.indent();
+                    sc.add( "this." + identifier.getName() + ".equals( " +
+                            "that.get" + capitalise( identifier.getName() ) + "() )"  );
+                    sc.unindent();
+                    sc.unindent();
+                }
+
+                count++;
+            }
+        }
+
+        sc.append( ";" );
+
+        return equals;
+    }
+
+    private JMethod generateHashCode( ModelClass modelClass )
+    {
+        JMethod hashCode = new JMethod( JType.Int, "hashCode" );
+
+        List identifierFields = modelClass.getIdentifierFields( getGeneratedVersion() );
+
+        JSourceCode sc = hashCode.getSourceCode();
+
+        // The double converter uses this
+        sc.add( "long tmp;" );
+
+        if ( identifierFields.size() == 0 )
+        {
+            sc.add( "return super.hashCode();");
+
+            return hashCode;
+        }
+
+        if ( identifierFields.size() == 1 )
+        {
+            ModelField identifier = (ModelField) identifierFields.get( 0 );
+
+            sc.add( "return " + createHashCodeForField( identifier ) + ";" );
+
+            return hashCode;
+        }
+
+        sc.add( "int result = 17;" );
+
+        for ( Iterator j = identifierFields.iterator(); j.hasNext(); )
+        {
+            ModelField identifier = (ModelField) j.next();
+
+            sc.add( "result = 37 * result + " + createHashCodeForField( identifier ) + ";" );
+        }
+
+        sc.add( "" );
+        sc.add( "return result;" );
+
+        return hashCode;
+    }
+
+    private String createHashCodeForField( ModelField identifier )
+    {
+        if ( identifier.getType().equals( "boolean" ) )
+        {
+            return "( " + identifier.getName() + " ? 0 : 1 );";
+        }
+        else if ( identifier.getType().equals( "byte" ) ||
+                  identifier.getType().equals( "char" ) ||
+                  identifier.getType().equals( "short" ) ||
+                  identifier.getType().equals( "int" ) )
+        {
+            return "(int) " + identifier.getName();
+        }
+        else if ( identifier.getType().equals( "float" ) )
+        {
+            return "Float.floatToIntBits( " + identifier.getName() + " )";
+        }
+        else if ( identifier.getType().equals( "long" ) )
+        {
+            return "(int) ( " + identifier.getName() + "^( " + identifier.getName() + " >>> 32 ) )";
+        }
+        else if ( identifier.getType().equals( "double" ) )
+        {
+            return "tmp = Double.doubleToLongBits( " + identifier.getName() + " );" + EOL +
+                   "(int) ( field ^ ( field >>> 32 ) )";
+        }
+        else
+        {
+            return identifier.getName() + ".hashCode()";
         }
     }
 
