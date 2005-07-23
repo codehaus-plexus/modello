@@ -320,7 +320,9 @@ public class JavaModelloGenerator
             {
                 if ( count == 0 )
                 {
-                    sc.add( "return this." + identifier.getName() + ".equals( " +
+                    sc.add( "return " +
+                            "this." + identifier.getName() + " != null && " +
+                            "this." + identifier.getName() + ".equals( " +
                             "that.get" + capitalise( identifier.getName() ) + "() )"  );
                 }
                 else
@@ -328,7 +330,8 @@ public class JavaModelloGenerator
                     sc.append( " &&" );
                     sc.indent();
                     sc.indent();
-                    sc.add( "this." + identifier.getName() + ".equals( " +
+                    sc.add( "this." + identifier.getName() + " != null && " +
+                            "this." + identifier.getName() + ".equals( " +
                             "that.get" + capitalise( identifier.getName() ) + "() )"  );
                     sc.unindent();
                     sc.unindent();
@@ -365,12 +368,59 @@ public class JavaModelloGenerator
         {
             ModelField identifier = (ModelField) identifierFields.get( 0 );
 
-            sc.add( "return " + createHashCodeForField( identifier ) + ";" );
+            if ( identifier.getType().equals( "byte" ) ||
+                 identifier.getType().equals( "char" ) ||
+                 identifier.getType().equals( "short" ) ||
+                 identifier.getType().equals( "int" ) ||
+                 identifier.getType().equals( "long" ) ||
+                 identifier.getType().equals( "double" ) ||
+                 identifier.getType().equals( "float" ) )
+            {
+                sc.add( "return " + createHashCodeForField( identifier ) + ";" );
 
-            return hashCode;
+                return hashCode;
+            }
+            else
+            {
+                sc.add( "if ( " + identifier.getName() + " == null )" );
+                sc.add( "{" );
+                sc.addIndented( "return super.hashCode();" );
+                sc.add( "}" );
+
+                sc.add( "return " + createHashCodeForField( identifier ) + ";" );
+
+                return hashCode;
+            }
+        }
+
+        boolean first = true;
+
+        for ( Iterator j = identifierFields.iterator(); j.hasNext(); )
+        {
+            ModelField identifier = (ModelField) j.next();
+
+            if ( identifier.isPrimitive() )
+            {
+                continue;
+            }
+
+            if ( first )
+            {
+                sc.add( "// If any of these fields are null, it doesn't have a ID yet and is to" );
+                sc.add( "// be considered unique in the entire object space to just return the" );
+                sc.add( "// hash code of the super object." );
+
+                first = false;
+            }
+
+            sc.add( "if ( " + identifier.getName() + " == null )" );
+            sc.add( "{" );
+            sc.addIndented( "return super.hashCode();" );
+            sc.add( "}" );
         }
 
         sc.add( "int result = 17;" );
+        sc.add( "" );
 
         for ( Iterator j = identifierFields.iterator(); j.hasNext(); )
         {
@@ -398,13 +448,13 @@ public class JavaModelloGenerator
         {
             return "(int) " + identifier.getName();
         }
-        else if ( identifier.getType().equals( "float" ) )
-        {
-            return "Float.floatToIntBits( " + identifier.getName() + " )";
-        }
         else if ( identifier.getType().equals( "long" ) )
         {
             return "(int) ( " + identifier.getName() + "^( " + identifier.getName() + " >>> 32 ) )";
+        }
+        else if ( identifier.getType().equals( "float" ) )
+        {
+            return "Float.floatToIntBits( " + identifier.getName() + " )";
         }
         else if ( identifier.getType().equals( "double" ) )
         {
