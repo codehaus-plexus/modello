@@ -6,6 +6,16 @@
   <packaging>pom</packaging>
   <name>Modello Parent</name>
   <inceptionYear>2001</inceptionYear>
+  <repositories>
+    <repository>
+      <id>snapshots</id>
+      <name>Snapshot repository</name>
+      <url>http://snapshots.maven.codehaus.org/maven2/</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+    </repository>
+  </repositories>
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -122,6 +132,11 @@
       <name>Maven Central Repository at Codehaus</name>
       <url>scp://beaver.codehaus.org/home/projects/maven/repository-staging/to-ibiblio/maven2</url>
     </repository>
+    <snapshotRepository>
+      <id>snapshots</id>
+      <name>Maven Snapshot Central Repository at Codehaus</name>
+      <url>scp://beaver.codehaus.org/home/projects/maven/repository-staging/snapshots/maven2</url>
+    </snapshotRepository>
   </distributionManagement>
   <modules>
     <module>modello-maven-plugin</module>
