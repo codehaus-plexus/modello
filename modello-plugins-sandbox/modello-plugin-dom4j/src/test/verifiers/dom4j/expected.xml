@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mavenModel extender="/foo/bar" modelVersion="4.0.0">
+  <name>Maven</name>
+  <component>
+    <name>component1</name>
+  </component>
+  <component>
+    <name>component2</name>
+  </component>
+  <repositories>
+    <repo>
+      <id>foo</id>
+    </repo>
+  </repositories>
+  <mailingLists>
+    <mailingList>
+      <name>Mailing list</name>
+      <subscribe>Super Subscribe</subscribe>
+      <unsubscribe>Duper Unsubscribe</unsubscribe>
+      <archive>?ber Archive</archive>
+    </mailingList>
+  </mailingLists>
+  <dependencies>
+    <dependency>
+      <groupId>com.evil</groupId>
+      <artifactId>spiffy-dodad</artifactId>
+      <version>1.0-SNAPSHOT</version>
+      <properties>
+        <property>
+          <key>shock</key>
+          <value>the monkey</value>
+        </property>
+        <property>
+          <key>self destruct</key>
+          <value>easily disabled</value>
+        </property>
+      </properties>
+    </dependency>
+  </dependencies>
+  <scm>
+    <connection>connection</connection>
+    <developerConnection>developerConnection</developerConnection>
+    <url>url</url>
+  </scm>
+  <builder>
+    <sourceDirectory>src/main/java</sourceDirectory>
+    <unitTestSourceDirectory>src/test/java</unitTestSourceDirectory>
+    <sourceModifications>
+      <sourceModification>
+        <className>excludeEclipsePlugin</className>
+        <directory>foo</directory>
+        <excludes>
+          <exclude>de/abstrakt/tools/codegeneration/eclipse/*.java</exclude>
+        </excludes>
+      </sourceModification>
+    </sourceModifications>
+    <unitTest/>
+  </builder>
+</mavenModel>
