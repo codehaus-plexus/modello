@@ -1,0 +1,18 @@
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.codehaus.modello</groupId>
+    <artifactId>modello</artifactId>
+    <version>1.0</version>
+  </parent>
+  <artifactId>modello-site</artifactId>
+  <version>1.0-alpha-4-SNAPSHOT</version>
+  <name>Codehaus Modello Site</name>
+  <distributionManagement>
+    <site>
+      <id>modello.website</id>
+      <name>Modello Website</name>
+      <url>scp://beaver.codehaus.org/home/projects/modello/public_html</url>
+    </site>
+  </distributionManagement>
+</project>
