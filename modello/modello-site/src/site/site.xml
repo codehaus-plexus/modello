@@ -16,6 +16,6 @@
     <item name="Front Page" href="index.html" />
     <item name="Data Model" href="data-model.html" />
   </menu>
+  ${reports}
   </body>
-
 </project>
