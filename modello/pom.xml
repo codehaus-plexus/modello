@@ -109,6 +109,10 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
+  <issueManagement>
+    <system>jira</system>
+    <url>http://jira.codehaus.org/browse/MODELLO</url>
+  </issueManagement>
   <ciManagement>
     <notifiers>
       <notifier>
@@ -118,9 +122,9 @@
     </notifiers>
   </ciManagement>
   <scm>
-    <connection>scm:cvs:pserver:anoncvs@cvs.modello.codehaus.org:/scm/modello:modello</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org:/home/projects/modello/scm/trunk/modello</developerConnection>
-    <url>http://cvs.modello.codehaus.org/modello/${pom.artifactId}</url>
+    <connection>scm:svn:https://svn.codehaus.org/modello/trunk/</connection>
+    <developerConnection>scm:svn:svn+ssh://svn.codehaus.org:/home/projects/modello/scm/trunk/modello</developerConnection>
+    <url>http://svn.modello.codehaus.org/trunk</url>
   </scm>
   <organization>
     <name>Codehaus</name>
@@ -138,6 +142,88 @@
       <url>scp://beaver.codehaus.org/home/projects/maven/repository-staging/snapshots/maven2</url>
     </snapshotRepository>
   </distributionManagement>
+  <mailingLists>
+    <mailingList>
+      <name>Modello Announce List</name>
+      <subscribe>mailto:announce-subscribe@modello.codehaus.org</subscribe>
+      <unsubscribe>mailto:announce-unsubscribe@modello.codehaus.org</unsubscribe>
+      <archive>http://archive.modello.codehaus.org/announce/</archive>
+    </mailingList>
+    <mailingList>
+      <name>Modello Developer List</name>
+      <subscribe>mailto:dev-subscribe@modello.codehaus.org</subscribe>
+      <unsubscribe>mailto:dev-unsubscribe@modello.codehaus.org</unsubscribe>
+      <archive>http://archive.modello.codehaus.org/dev/</archive>
+    </mailingList>
+    <mailingList>
+      <name>Modello User List</name>
+      <subscribe>mailto:user-subscribe@modello.codehaus.org</subscribe>
+      <unsubscribe>mailto:user-unsubscribe@modello.codehaus.org</unsubscribe>
+      <archive>http://archive.modello.codehaus.org/user/</archive>
+    </mailingList>
+    <mailingList>
+      <name>Modello Commits List</name>
+      <subscribe>mailto:scm-subscribe@modello.codehaus.org</subscribe>
+      <unsubscribe>mailto:scm-unsubscribe@modello.codehaus.org</unsubscribe>
+      <archive>http://archive.modello.codehaus.org/scm/</archive>
+    </mailingList>
+  </mailingLists>
+  <developers>
+    <developer>
+      <!-- <id>brett<id> -->
+      <name>Brett Porter</name>
+      <email>brett@codehaus.org</email>
+      <roles>
+        <role>Developer</role>
+      </roles>
+      <timezone>-11</timezone>
+    </developer>
+    <developer>
+      <!-- <id>jvanzyl<id> -->
+      <name>Jason van Zyl</name>
+      <email>jason@maven.org</email>
+      <roles>
+        <role>Developer</role>
+      </roles>
+      <timezone>-5</timezone>
+    </developer>
+    <developer>
+      <!-- <id>dandiep<id> -->
+      <name>Dan Diephouse</name>
+      <email>dan@envoisolutions.com</email>
+      <roles>
+        <role>Developer</role>
+      </roles>
+      <timezone>-5</timezone>
+    </developer>
+    <developer>
+      <!-- <id>evenisse<id> -->
+      <name>Emmanuel Evenisse</name>
+      <email>emmanuel@venisse.net</email>
+      <roles>
+        <role>Developer</role>
+      </roles>
+      <timezone>-5</timezone>
+    </developer>
+    <developer>
+      <!-- <id>jdcasey<id> -->
+      <name>John Casey</name>
+      <email>jdcasey@commonjava.org</email>
+      <roles>
+        <role>Developer</role>
+      </roles>
+      <timezone>-5</timezone>
+    </developer>
+    <developer>
+      <!-- <id>trygvis<id> -->
+      <name>Trygve Laugstol</name>
+      <email>trygvis@codehaus.org</email>
+      <roles>
+        <role>Developer</role>
+      </roles>
+      <timezone>-5</timezone>
+    </developer>
+  </developers>
   <modules>
     <module>modello-maven-plugin</module>
     <module>modello-core</module>
