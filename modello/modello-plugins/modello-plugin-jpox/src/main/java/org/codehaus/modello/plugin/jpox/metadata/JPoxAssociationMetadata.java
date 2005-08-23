@@ -35,7 +35,19 @@ public class JPoxAssociationMetadata
 {
     public static final String ID = JPoxAssociationMetadata.class.getName();
 
+    private boolean dependent;
+
     private boolean join;
+
+    public boolean isDependent()
+    {
+        return dependent;
+    }
+
+    public void setDependent( boolean dependent )
+    {
+        this.dependent = dependent;
+    }
 
     public boolean isJoin()
     {

@@ -46,6 +46,8 @@ import java.util.Map;
 public class JPoxMetadataPlugin
     extends AbstractMetadataPlugin
 {
+    public final static String DEPENDENT = "jpox.dependent";
+
     public final static String DETACHABLE = "jpox.detachable";
 
     public final static String FETCH_GROUP_NAMES = "jpox.fetchGroupNames";
@@ -101,6 +103,8 @@ public class JPoxMetadataPlugin
         throws ModelloException
     {
         JPoxAssociationMetadata metadata = new JPoxAssociationMetadata();
+
+        metadata.setDependent( getBoolean( data, DEPENDENT, true ) );
 
         metadata.setJoin( getBoolean( data, JOIN, true ) );
 
