@@ -510,7 +510,14 @@ public class JPoxJdoMappingModelloGenerator
 
             writer.addAttribute( "key-type", am.getKeyType() );
 
-            writer.addAttribute( "value-type", association.getTo() );
+            if ( association.getTo().equals( "String" ) )
+            {
+                writer.addAttribute( "value-type", "java.lang.String" );
+            }
+            else
+            {
+                writer.addAttribute( "value-type", association.getTo() );
+            }
 
             writer.addAttribute( "dependent-key", "true" );
 
