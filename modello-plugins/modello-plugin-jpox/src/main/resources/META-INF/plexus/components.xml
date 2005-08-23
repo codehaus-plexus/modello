@@ -18,5 +18,11 @@
       <implementation>org.codehaus.modello.plugin.jpox.JPoxJdoMappingModelloGenerator</implementation>
     </component>
 
+    <component>
+      <role>org.codehaus.modello.metadata.MetadataPlugin</role>
+      <role-hint>jpox</role-hint>
+      <implementation>org.codehaus.modello.plugin.jpox.metadata.JPoxMetadataPlugin</implementation>
+    </component>
+
   </components>
 </component-set>

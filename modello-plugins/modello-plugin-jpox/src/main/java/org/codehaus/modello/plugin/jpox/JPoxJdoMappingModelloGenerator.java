@@ -41,6 +41,9 @@ import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.plugin.AbstractModelloGenerator;
+import org.codehaus.modello.plugin.jpox.metadata.JPoxAssociationMetadata;
+import org.codehaus.modello.plugin.jpox.metadata.JPoxClassMetadata;
+import org.codehaus.modello.plugin.jpox.metadata.JPoxFieldMetadata;
 import org.codehaus.modello.plugin.store.metadata.StoreAssociationMetadata;
 import org.codehaus.modello.plugin.store.metadata.StoreFieldMetadata;
 import org.codehaus.plexus.util.xml.PrettyPrintXMLWriter;
@@ -53,24 +56,24 @@ import org.codehaus.plexus.util.xml.XMLWriter;
 public class JPoxJdoMappingModelloGenerator
     extends AbstractModelloGenerator
 {
-    private final static Map PRIMITVE_IDENTITY_MAP;
+    private final static Map PRIMITIVE_IDENTITY_MAP;
 
     static
     {
-        PRIMITVE_IDENTITY_MAP = new HashMap();
+        PRIMITIVE_IDENTITY_MAP = new HashMap();
 
         // TODO: These should be the fully qualified class names
-        PRIMITVE_IDENTITY_MAP.put( "short", "javax.jdo.identity.ShortIdentity" );
-        PRIMITVE_IDENTITY_MAP.put( "Short", "javax.jdo.identity.ShortIdentity" );
-        PRIMITVE_IDENTITY_MAP.put( "int", "javax.jdo.identity.IntIdentity" );
-        PRIMITVE_IDENTITY_MAP.put( "Integer", "javax.jdo.identity.IntIdentity" );
-        PRIMITVE_IDENTITY_MAP.put( "long", "javax.jdo.identity.LongIdentity" );
-        PRIMITVE_IDENTITY_MAP.put( "Long", "javax.jdo.identity.LongIdentity" );
-        PRIMITVE_IDENTITY_MAP.put( "String", "javax.jdo.identity.StringIdentity" );
-        PRIMITVE_IDENTITY_MAP.put( "char", "javax.jdo.identity.CharIdentity" );
-        PRIMITVE_IDENTITY_MAP.put( "Character", "javax.jdo.identity.CharIdentity" );
-        PRIMITVE_IDENTITY_MAP.put( "byte", "javax.jdo.identity.ByteIdentity" );
-        PRIMITVE_IDENTITY_MAP.put( "Byte", "javax.jdo.identity.ByteIdentity" );
+        PRIMITIVE_IDENTITY_MAP.put( "short", "javax.jdo.identity.ShortIdentity" );
+        PRIMITIVE_IDENTITY_MAP.put( "Short", "javax.jdo.identity.ShortIdentity" );
+        PRIMITIVE_IDENTITY_MAP.put( "int", "javax.jdo.identity.IntIdentity" );
+        PRIMITIVE_IDENTITY_MAP.put( "Integer", "javax.jdo.identity.IntIdentity" );
+        PRIMITIVE_IDENTITY_MAP.put( "long", "javax.jdo.identity.LongIdentity" );
+        PRIMITIVE_IDENTITY_MAP.put( "Long", "javax.jdo.identity.LongIdentity" );
+        PRIMITIVE_IDENTITY_MAP.put( "String", "javax.jdo.identity.StringIdentity" );
+        PRIMITIVE_IDENTITY_MAP.put( "char", "javax.jdo.identity.CharIdentity" );
+        PRIMITIVE_IDENTITY_MAP.put( "Character", "javax.jdo.identity.CharIdentity" );
+        PRIMITIVE_IDENTITY_MAP.put( "byte", "javax.jdo.identity.ByteIdentity" );
+        PRIMITIVE_IDENTITY_MAP.put( "Byte", "javax.jdo.identity.ByteIdentity" );
     }
 
     public void generate( Model model, Properties properties )
@@ -84,7 +87,16 @@ public class JPoxJdoMappingModelloGenerator
 
         try
         {
-            File packageJdo = new File( getOutputDirectory(), "META-INF/package.jdo" );
+            File packageJdo;
+
+            if ( isPackageWithVersion() )
+            {
+                packageJdo = new File( getOutputDirectory(), "META-INF/package-" + getGeneratedVersion() +".jdo" );
+            }
+            else
+            {
+                packageJdo = new File( getOutputDirectory(), "META-INF/package.jdo" );
+            }
 
             File parent = packageJdo.getParentFile();
 
@@ -124,7 +136,7 @@ public class JPoxJdoMappingModelloGenerator
         {
             ModelClass modelClass = (ModelClass) it.next();
 
-//            StoreClassMetadata metadata = (StoreClassMetadata) modelClass.getMetadata( StoreClassMetadata.ID );
+//            StoreClassMetadata storeMetadata = (StoreClassMetadata) modelClass.getMetadata( StoreClassMetadata.ID );
 //
 //            if ( !metadata.isStorable() )
 //            {
@@ -148,7 +160,7 @@ public class JPoxJdoMappingModelloGenerator
         printWriter.println( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" );
         printWriter.println();
         printWriter.println( "<!DOCTYPE jdo PUBLIC" );
-        printWriter.println( "  \"-//Sun Microsystems, Inc.//DTD Java Data Objects Metadata 2.0//EN\"" );
+        printWriter.println( "  \"-//Sun Microsystems, Inc.//DTD Java Data Objects storeMetadata 2.0//EN\"" );
         printWriter.println( "  \"http://java.sun.com/dtd/jdo_2_0.dtd\">" );
         printWriter.println();
 
@@ -190,6 +202,8 @@ public class JPoxJdoMappingModelloGenerator
     private void writeClass( XMLWriter writer, ModelClass modelClass )
         throws ModelloException
     {
+        JPoxClassMetadata jpoxMetadata = (JPoxClassMetadata) modelClass.getMetadata( JPoxClassMetadata.ID );
+
         writer.startElement( "class" );
 
         writer.addAttribute( "name", modelClass.getName() );
@@ -211,7 +225,7 @@ public class JPoxJdoMappingModelloGenerator
                                  superPackageName + "." + persistenceCapableSuperclass.getName() );
         }
 
-        writer.addAttribute( "detachable", "true" );
+        writer.addAttribute( "detachable", String.valueOf( jpoxMetadata.isDetachable() ) );
 
         // ----------------------------------------------------------------------
         // If this class has a primary key field mark make jpox manage the id
@@ -228,11 +242,11 @@ public class JPoxJdoMappingModelloGenerator
         {
             ModelField modelField = (ModelField) it.next();
 
-            if ( !PRIMITVE_IDENTITY_MAP.containsKey( modelField.getType() ) )
+            if ( !PRIMITIVE_IDENTITY_MAP.containsKey( modelField.getType() ) )
             {
                 throw new ModelloException( "The JDO mapping generator does not support the specified " +
                                             "field type '" + modelField.getType() + "'. " +
-                                            "Supported types: " + PRIMITVE_IDENTITY_MAP.keySet() );
+                                            "Supported types: " + PRIMITIVE_IDENTITY_MAP.keySet() );
             }
         }
 
@@ -262,6 +276,16 @@ public class JPoxJdoMappingModelloGenerator
             writer.addAttribute( "strategy", "new-table");
 
             writer.endElement();
+        }
+
+        for ( Iterator it = fields.iterator(); it.hasNext(); )
+        {
+            ModelField modelField = (ModelField) it.next();
+
+            if ( modelField.isIdentifier() )
+            {
+                writer.addAttribute( "objectid-class", (String) PRIMITIVE_IDENTITY_MAP.get( modelField.getType() ) );
+            }
         }
 
         // ----------------------------------------------------------------------
@@ -294,9 +318,9 @@ public class JPoxJdoMappingModelloGenerator
 
             if ( field instanceof ModelAssociation )
             {
-                StoreAssociationMetadata metaData = getAssociationMetadata( (ModelAssociation) field );
+                StoreAssociationMetadata storeMetadata = getAssociationMetadata( (ModelAssociation) field );
 
-                if ( metaData.isPart() != null && !metaData.isPart().booleanValue() )
+                if ( storeMetadata.isPart() != null && !storeMetadata.isPart().booleanValue() )
                 {
                     continue;
                 }
@@ -305,7 +329,54 @@ public class JPoxJdoMappingModelloGenerator
             detailedFields.add( field );
         }
 
+        // ----------------------------------------------------------------------
+        // Write all fetch groups
+        // ----------------------------------------------------------------------
+
+        // Write defaut detail fetch group
         writeFetchGroup( writer, modelClass.getName() + "_detail", detailedFields );
+
+        // Write user fetch groups
+        Map fetchsMap = new HashMap();
+
+        for ( Iterator it = fields.iterator();it.hasNext(); )
+        {
+            ModelField field = (ModelField) it.next();
+
+            JPoxFieldMetadata jpoxFieldMetadata = (JPoxFieldMetadata) field.getMetadata( JPoxFieldMetadata.ID );
+
+            List names = jpoxFieldMetadata.getFetchGroupNames();
+
+            if ( names != null )
+            {
+                for ( Iterator i = names.iterator(); i.hasNext(); )
+                {
+                    String fetchGroupName = (String) i.next();
+
+                    List fetchList = null;
+
+                    if ( fetchsMap.get( fetchGroupName ) == null )
+                    {
+                        fetchList = new ArrayList();
+                    }
+                    else
+                    {
+                        fetchList = (List) fetchsMap.get( fetchGroupName );
+                    }
+
+                    fetchList.add( field );
+
+                    fetchsMap.put( fetchGroupName, fetchList );
+                }
+            }
+        }
+
+        for ( Iterator it = fetchsMap.keySet().iterator(); it.hasNext(); )
+        {
+            String fetchName = (String) it.next();
+
+            writeFetchGroup( writer, fetchName, (List) fetchsMap.get( fetchName ) );
+        }
 
         writer.endElement(); // class
     }
@@ -334,15 +405,13 @@ public class JPoxJdoMappingModelloGenerator
     {
         writer.startElement( "field" );
 
-        StoreFieldMetadata metaData = (StoreFieldMetadata) modelField.getMetadata( StoreFieldMetadata.ID );
+        StoreFieldMetadata storeMetadata = (StoreFieldMetadata) modelField.getMetadata( StoreFieldMetadata.ID );
+
+        JPoxFieldMetadata jpoxMetadata = (JPoxFieldMetadata) modelField.getMetadata( JPoxFieldMetadata.ID );
 
         writer.addAttribute( "name", modelField.getName() );
 
-        if ( metaData.isStorable() )
-        {
-            writer.addAttribute( "persistence-modifier", "persistent" );
-        }
-        else
+        if ( !storeMetadata.isStorable() )
         {
             writer.addAttribute( "persistence-modifier", "none" );
         }
@@ -361,15 +430,24 @@ public class JPoxJdoMappingModelloGenerator
             writer.addAttribute( "value-strategy", "native" );
         }
 
+        if ( jpoxMetadata.getMappedBy() != null )
+        {
+            writer.addAttribute( "mapped-by", jpoxMetadata.getMappedBy() );
+        }
+
         if ( modelField instanceof ModelAssociation )
         {
             writeAssociation( writer, (ModelAssociation) modelField );
         }
         else
         {
-            if ( metaData.getMaxSize() > 0 )
+            if ( storeMetadata.getMaxSize() > 0 )
             {
-                writeExtension( writer, "jpox", "length", "max " + metaData.getMaxSize() );
+                writer.startElement( "column" );
+
+                writer.addAttribute( "length", String.valueOf( storeMetadata.getMaxSize() ) );
+
+                writer.endElement();
             }
         }
 
@@ -380,6 +458,8 @@ public class JPoxJdoMappingModelloGenerator
     {
         StoreAssociationMetadata am =
             (StoreAssociationMetadata) association.getAssociationMetadata( StoreAssociationMetadata.ID );
+
+        JPoxAssociationMetadata jpoxMetadata = (JPoxAssociationMetadata) association.getAssociationMetadata( JPoxAssociationMetadata.ID );
 
         if ( am.isPart() != null )
         {
@@ -414,11 +494,12 @@ public class JPoxJdoMappingModelloGenerator
 
             writer.endElement();
 
-            /*
-            writer.startElement( "join" );
+            if ( jpoxMetadata.isJoin() )
+            {
+                writer.startElement( "join" );
 
-            writer.endElement();
-            */
+                writer.endElement();
+            }
         }
         else if ( association.getType().equals( "java.util.Map" ) )
         {
@@ -437,9 +518,12 @@ public class JPoxJdoMappingModelloGenerator
 
             writer.endElement();
 
-            writer.startElement( "join" );
+            if ( jpoxMetadata.isJoin() )
+            {
+                writer.startElement( "join" );
 
-            writer.endElement();
+                writer.endElement();
+            }
         }
         else if ( association.getType().equals( "java.util.Properties" ) )
         {
@@ -461,9 +545,12 @@ public class JPoxJdoMappingModelloGenerator
 
             writer.endElement();
 
-            writer.startElement( "join" );
+            if ( jpoxMetadata.isJoin() )
+            {
+                writer.startElement( "join" );
 
-            writer.endElement();
+                writer.endElement();
+            }
         }
         else // One association
         {
