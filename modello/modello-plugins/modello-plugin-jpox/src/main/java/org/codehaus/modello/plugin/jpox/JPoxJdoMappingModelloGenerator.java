@@ -260,10 +260,6 @@ public class JPoxJdoMappingModelloGenerator
             {
                 writer.addAttribute( "identity-type", "application" );
             }
-            else
-            {
-                writer.addAttribute( "identity-type", "datastore" );
-            }
         }
         else
         {
