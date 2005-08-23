@@ -495,14 +495,14 @@ public class JPoxJdoMappingModelloGenerator
                 writer.addAttribute( "dependent-element", "true" );
             }
 
-            writer.endElement();
-
             if ( jpoxMetadata.isJoin() )
             {
                 writer.startElement( "join" );
 
                 writer.endElement();
             }
+
+            writer.endElement();
         }
         else if ( association.getType().equals( "java.util.Map" ) )
         {
@@ -519,14 +519,14 @@ public class JPoxJdoMappingModelloGenerator
                 writer.addAttribute( "dependent-value", "true" );
             }
 
-            writer.endElement();
-
             if ( jpoxMetadata.isJoin() )
             {
                 writer.startElement( "join" );
 
                 writer.endElement();
             }
+
+            writer.endElement();
         }
         else if ( association.getType().equals( "java.util.Properties" ) )
         {
@@ -546,18 +546,18 @@ public class JPoxJdoMappingModelloGenerator
 
             writer.addAttribute( "dependent-value", "true" );
 
-            writer.endElement();
-
             if ( jpoxMetadata.isJoin() )
             {
                 writer.startElement( "join" );
 
                 writer.endElement();
             }
+
+            writer.endElement();
         }
         else // One association
         {
-            if ( dependent )
+            if ( jpoxMetadata.isDependent() )
             {
                 writer.addAttribute( "dependent", "true" );
             }
