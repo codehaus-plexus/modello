@@ -160,7 +160,7 @@ public class JPoxJdoMappingModelloGenerator
         printWriter.println( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" );
         printWriter.println();
         printWriter.println( "<!DOCTYPE jdo PUBLIC" );
-        printWriter.println( "  \"-//Sun Microsystems, Inc.//DTD Java Data Objects storeMetadata 2.0//EN\"" );
+        printWriter.println( "  \"-//Sun Microsystems, Inc.//DTD Java Data Objects Metadata 2.0//EN\"" );
         printWriter.println( "  \"http://java.sun.com/dtd/jdo_2_0.dtd\">" );
         printWriter.println();
 
@@ -320,7 +320,7 @@ public class JPoxJdoMappingModelloGenerator
             {
                 StoreAssociationMetadata storeMetadata = getAssociationMetadata( (ModelAssociation) field );
 
-                if ( storeMetadata.isPart() != null && !storeMetadata.isPart().booleanValue() )
+                if ( storeMetadata.isPart() != null && storeMetadata.isPart().booleanValue() )
                 {
                     continue;
                 }
@@ -383,22 +383,25 @@ public class JPoxJdoMappingModelloGenerator
 
     private void writeFetchGroup( XMLWriter writer, String fetchGroupName, List fields )
     {
-        writer.startElement( "fetch-group");
-
-        writer.addAttribute( "name", fetchGroupName );
-
-        for ( Iterator it = fields.iterator(); it.hasNext(); )
+        if ( !fields.isEmpty() )
         {
-            ModelField field = (ModelField) it.next();
+            writer.startElement( "fetch-group");
 
-            writer.startElement( "field" );
+            writer.addAttribute( "name", fetchGroupName );
 
-            writer.addAttribute( "name", field.getName() );
+            for ( Iterator it = fields.iterator(); it.hasNext(); )
+            {
+                ModelField field = (ModelField) it.next();
 
-            writer.endElement();
+                writer.startElement( "field" );
+
+                writer.addAttribute( "name", field.getName() );
+
+                writer.endElement();
+            }
+
+            writer.endElement(); // fetch-group
         }
-
-        writer.endElement(); // fetch-group
     }
 
     private void writeModelField( XMLWriter writer, ModelField modelField )
