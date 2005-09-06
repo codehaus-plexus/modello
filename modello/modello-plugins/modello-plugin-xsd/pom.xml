@@ -1,15 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
 <project>
-  <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.codehaus.modello</groupId>
     <artifactId>modello-plugins</artifactId>
-    <version>1.0-alpha-4-SNAPSHOT</version>
+    <groupId>org.codehaus.modello</groupId>
+    <version>1.0-alpha-4</version>
   </parent>
+  <modelVersion>4.0.0</modelVersion>
   <artifactId>modello-plugin-xsd</artifactId>
-  <version>1.0-alpha-4-SNAPSHOT</version>
   <name>Modello XSD Plugin</name>
+  <version>1.0-alpha-4-SNAPSHOT</version>
   <dependencies>
     <dependency>
       <groupId>org.codehaus.modello</groupId>
