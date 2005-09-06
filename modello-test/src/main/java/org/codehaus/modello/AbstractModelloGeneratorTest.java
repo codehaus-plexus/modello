@@ -145,8 +145,9 @@ public abstract class AbstractModelloGeneratorTest
 
         addDependency( "plexus", "plexus-utils", "1.0-alpha-3" );
 
-        // TODO: can read my own POM to set this!
-        addDependency( "org.codehaus.modello", "modello-test", "1.0-alpha-4-SNAPSHOT" );
+        java.util.Properties properties = new java.util.Properties();
+        properties.load( getClass().getResourceAsStream( "/org/codehaus/modello/modello-test/pom.properties" ) );
+        addDependency( "org.codehaus.modello", "modello-test", properties.getProperty( "version" ) );
 
         String[] classPathElements = new String[dependencies.size() + 2];
 
