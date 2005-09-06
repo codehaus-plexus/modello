@@ -230,4 +230,18 @@
     <module>modello-test</module>
     <module>modello-plugins</module>
   </modules>
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-release-plugin</artifactId>
+          <configuration>
+            <!-- TODO: into SCM? -->
+            <tagBase>https://svn.codehaus.org/modello/tags</tagBase>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
 </project>
