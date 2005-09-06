@@ -93,9 +93,9 @@
     </developer>
   </developers>
   <scm>
-    <connection>scm:svn:https://svn.codehaus.org/modello/trunk/modello</connection>
-    <developerConnection>scm:svn:svn+ssh://svn.codehaus.org:/home/projects/modello/scm/trunk/modello/modello</developerConnection>
-    <url>http://svn.modello.codehaus.org/trunk/modello</url>
+    <connection>scm:svn:https://svn.codehaus.org/modello/trunk/modello/modello</connection>
+    <developerConnection>scm:svn:svn+ssh://svn.codehaus.org:/home/projects/modello/scm/trunk/modello/modello/modello</developerConnection>
+    <url>http://svn.modello.codehaus.org/trunk/modello/modello</url>
   </scm>
   <organization>
     <name>Codehaus</name>
