@@ -1,18 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
 <project>
-  <parent>
-    <artifactId>modello</artifactId>
-    <groupId>org.codehaus.modello</groupId>
-    <version>1.0-alpha-4</version>
-  </parent>
   <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.codehaus.modello</groupId>
+    <artifactId>modello</artifactId>
+    <version>1.0-alpha-4-SNAPSHOT</version>
+  </parent>
   <groupId>org.codehaus.modello</groupId>
   <artifactId>modello-test</artifactId>
-  <name>Modello Test Package</name>
   <version>1.0-alpha-4-SNAPSHOT</version>
+  <name>Modello Test Package</name>
   <dependencies>
     <dependency>
-      <groupId>org.apache.maven</groupId>
-      <artifactId>maven-settings</artifactId>
+      <groupId>plexus</groupId>
+      <artifactId>plexus-container-default</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>plexus</groupId>
+      <artifactId>plexus-compiler-api</artifactId>
+      <version>1.4</version>
     </dependency>
     <dependency>
       <groupId>plexus</groupId>
@@ -21,24 +28,19 @@
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
-      <artifactId>maven-artifact-manager</artifactId>
+      <artifactId>maven-settings</artifactId>
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-artifact</artifactId>
     </dependency>
     <dependency>
-      <groupId>plexus</groupId>
-      <artifactId>plexus-compiler-api</artifactId>
-      <version>1.4</version>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-artifact-manager</artifactId>
     </dependency>
     <dependency>
       <groupId>org.apache.maven.wagon</groupId>
       <artifactId>wagon-provider-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>plexus</groupId>
-      <artifactId>plexus-container-default</artifactId>
     </dependency>
   </dependencies>
 </project>
