@@ -54,9 +54,9 @@
     </dependency>
     <dependency>
       <groupId>org.codehaus.modello</groupId>
-      <artifactId>modello-test</artifactId>
+      <artifactId>modello-core</artifactId>
       <version>1.0-alpha-4-SNAPSHOT</version>
-      <scope>test</scope>
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>logkit</groupId>
@@ -72,9 +72,9 @@
     </dependency>
     <dependency>
       <groupId>org.codehaus.modello</groupId>
-      <artifactId>modello-core</artifactId>
+      <artifactId>modello-test</artifactId>
       <version>1.0-alpha-4-SNAPSHOT</version>
-      <scope>compile</scope>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>plexus</groupId>

@@ -5,12 +5,6 @@
   <version>1.0-alpha-4</version>
   <dependencies>
     <dependency>
-      <groupId>org.codehaus.modello</groupId>
-      <artifactId>modello-plugin-xml</artifactId>
-      <version>1.0-alpha-4-SNAPSHOT</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
       <groupId>org.apache.maven.wagon</groupId>
       <artifactId>wagon-provider-api</artifactId>
       <version>1.0-alpha-4</version>
@@ -41,16 +35,22 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>org.codehaus.modello</groupId>
+      <artifactId>modello-test</artifactId>
+      <version>1.0-alpha-4-SNAPSHOT</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>plexus</groupId>
       <artifactId>plexus-utils</artifactId>
       <version>1.0-alpha-3</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
-      <groupId>plexus</groupId>
-      <artifactId>plexus-compiler-javac</artifactId>
-      <version>1.4</version>
-      <scope>test</scope>
+      <groupId>org.codehaus.modello</groupId>
+      <artifactId>modello-plugin-xml</artifactId>
+      <version>1.0-alpha-4-SNAPSHOT</version>
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.codehaus.modello</groupId>
@@ -60,14 +60,14 @@
     </dependency>
     <dependency>
       <groupId>plexus</groupId>
-      <artifactId>plexus-compiler-api</artifactId>
+      <artifactId>plexus-compiler-javac</artifactId>
       <version>1.4</version>
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.codehaus.modello</groupId>
-      <artifactId>modello-test</artifactId>
-      <version>1.0-alpha-4-SNAPSHOT</version>
+      <groupId>plexus</groupId>
+      <artifactId>plexus-compiler-api</artifactId>
+      <version>1.4</version>
       <scope>test</scope>
     </dependency>
     <dependency>

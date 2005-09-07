@@ -23,13 +23,13 @@
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>3.8.1</version>
-      <scope>test</scope>
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>classworlds</groupId>
       <artifactId>classworlds</artifactId>
       <version>1.1-alpha-1</version>
-      <scope>test</scope>
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
@@ -44,22 +44,22 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>org.codehaus.modello</groupId>
+      <artifactId>modello-test</artifactId>
+      <version>1.0-alpha-4-SNAPSHOT</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>plexus</groupId>
       <artifactId>plexus-utils</artifactId>
       <version>1.0-alpha-3</version>
-      <scope>test</scope>
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>plexus</groupId>
       <artifactId>plexus-compiler-javac</artifactId>
       <version>1.4</version>
       <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.codehaus.modello</groupId>
-      <artifactId>modello-core</artifactId>
-      <version>1.0-alpha-4-SNAPSHOT</version>
-      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>plexus</groupId>
@@ -69,9 +69,9 @@
     </dependency>
     <dependency>
       <groupId>org.codehaus.modello</groupId>
-      <artifactId>modello-test</artifactId>
+      <artifactId>modello-core</artifactId>
       <version>1.0-alpha-4-SNAPSHOT</version>
-      <scope>test</scope>
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>plexus</groupId>

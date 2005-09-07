@@ -5,21 +5,9 @@
   <version>1.0-alpha-4</version>
   <dependencies>
     <dependency>
-      <groupId>org.codehaus.modello</groupId>
-      <artifactId>modello-plugin-prevayler</artifactId>
-      <version>1.0-alpha-4-SNAPSHOT</version>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>3.8.1</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.codehaus.modello</groupId>
-      <artifactId>modello-core</artifactId>
-      <version>1.0-alpha-4-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
@@ -35,9 +23,9 @@
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>org.codehaus.modello</groupId>
-      <artifactId>modello-plugin-xpp3</artifactId>
-      <version>1.0-alpha-4-SNAPSHOT</version>
+      <groupId>plexus</groupId>
+      <artifactId>plexus-velocity</artifactId>
+      <version>1.1</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
@@ -48,32 +36,20 @@
     </dependency>
     <dependency>
       <groupId>plexus</groupId>
-      <artifactId>plexus-velocity</artifactId>
-      <version>1.1</version>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.codehaus.modello</groupId>
-      <artifactId>modello-plugin-xdoc</artifactId>
-      <version>1.0-alpha-4-SNAPSHOT</version>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>plexus</groupId>
       <artifactId>plexus-utils</artifactId>
       <version>1.0-alpha-3</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
-      <groupId>logkit</groupId>
-      <artifactId>logkit</artifactId>
-      <version>1.0.1</version>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
       <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-plugin-xsd</artifactId>
       <version>1.0-alpha-4-SNAPSHOT</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>logkit</groupId>
+      <artifactId>logkit</artifactId>
+      <version>1.0.1</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
@@ -84,7 +60,7 @@
     </dependency>
     <dependency>
       <groupId>org.codehaus.modello</groupId>
-      <artifactId>modello-plugin-xml</artifactId>
+      <artifactId>modello-plugin-store</artifactId>
       <version>1.0-alpha-4-SNAPSHOT</version>
       <scope>runtime</scope>
     </dependency>
@@ -95,21 +71,33 @@
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>org.codehaus.modello</groupId>
-      <artifactId>modello-plugin-store</artifactId>
-      <version>1.0-alpha-4-SNAPSHOT</version>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
       <groupId>commons-logging</groupId>
       <artifactId>commons-logging</artifactId>
       <version>1.0.2</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
+      <groupId>org.codehaus.modello</groupId>
+      <artifactId>modello-plugin-prevayler</artifactId>
+      <version>1.0-alpha-4-SNAPSHOT</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.modello</groupId>
+      <artifactId>modello-plugin-xml</artifactId>
+      <version>1.0-alpha-4-SNAPSHOT</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
       <groupId>commons-collections</groupId>
       <artifactId>commons-collections</artifactId>
       <version>2.0</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.modello</groupId>
+      <artifactId>modello-plugin-xpp3</artifactId>
+      <version>1.0-alpha-4-SNAPSHOT</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
@@ -126,14 +114,26 @@
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
+      <artifactId>maven-project</artifactId>
+      <version>2.0-alpha-3</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.modello</groupId>
+      <artifactId>modello-plugin-xdoc</artifactId>
+      <version>1.0-alpha-4-SNAPSHOT</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
       <artifactId>maven-artifact</artifactId>
       <version>2.0-alpha-3</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
-      <groupId>org.apache.maven</groupId>
-      <artifactId>maven-project</artifactId>
-      <version>2.0-alpha-3</version>
+      <groupId>org.codehaus.modello</groupId>
+      <artifactId>modello-core</artifactId>
+      <version>1.0-alpha-4-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
   </dependencies>
