@@ -2,131 +2,18 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.codehaus.modello</groupId>
   <artifactId>modello</artifactId>
+  <version>1.0-alpha-4-SNAPSHOT</version>
+  <packaging>pom</packaging>
   <name>Modello Parent</name>
-  <version>1.0-alpha-4</version>
-  <issueManagement>
-    <system>jira</system>
-    <url>http://jira.codehaus.org/browse/MODELLO</url>
-  </issueManagement>
-  <ciManagement>
-    <notifiers>
-      <notifier>
-        <address>dev@modello.codehaus.org</address>
-      </notifier>
-    </notifiers>
-  </ciManagement>
   <inceptionYear>2001</inceptionYear>
-  <mailingLists>
-    <mailingList>
-      <name>Modello Announce List</name>
-      <subscribe>mailto:announce-subscribe@modello.codehaus.org</subscribe>
-      <unsubscribe>mailto:announce-unsubscribe@modello.codehaus.org</unsubscribe>
-      <archive>http://archive.modello.codehaus.org/announce/</archive>
-    </mailingList>
-    <mailingList>
-      <name>Modello Developer List</name>
-      <subscribe>mailto:dev-subscribe@modello.codehaus.org</subscribe>
-      <unsubscribe>mailto:dev-unsubscribe@modello.codehaus.org</unsubscribe>
-      <archive>http://archive.modello.codehaus.org/dev/</archive>
-    </mailingList>
-    <mailingList>
-      <name>Modello User List</name>
-      <subscribe>mailto:user-subscribe@modello.codehaus.org</subscribe>
-      <unsubscribe>mailto:user-unsubscribe@modello.codehaus.org</unsubscribe>
-      <archive>http://archive.modello.codehaus.org/user/</archive>
-    </mailingList>
-    <mailingList>
-      <name>Modello Commits List</name>
-      <subscribe>mailto:scm-subscribe@modello.codehaus.org</subscribe>
-      <unsubscribe>mailto:scm-unsubscribe@modello.codehaus.org</unsubscribe>
-      <archive>http://archive.modello.codehaus.org/scm/</archive>
-    </mailingList>
-  </mailingLists>
-  <developers>
-    <developer>
-      <name>Brett Porter</name>
-      <email>brett@codehaus.org</email>
-      <roles>
-        <role>Developer</role>
-      </roles>
-      <timezone>-11</timezone>
-    </developer>
-    <developer>
-      <name>Jason van Zyl</name>
-      <email>jason@maven.org</email>
-      <roles>
-        <role>Developer</role>
-      </roles>
-      <timezone>-5</timezone>
-    </developer>
-    <developer>
-      <name>Dan Diephouse</name>
-      <email>dan@envoisolutions.com</email>
-      <roles>
-        <role>Developer</role>
-      </roles>
-      <timezone>-5</timezone>
-    </developer>
-    <developer>
-      <name>Emmanuel Evenisse</name>
-      <email>emmanuel@venisse.net</email>
-      <roles>
-        <role>Developer</role>
-      </roles>
-      <timezone>-5</timezone>
-    </developer>
-    <developer>
-      <name>John Casey</name>
-      <email>jdcasey@commonjava.org</email>
-      <roles>
-        <role>Developer</role>
-      </roles>
-      <timezone>-5</timezone>
-    </developer>
-    <developer>
-      <name>Trygve Laugstol</name>
-      <email>trygvis@codehaus.org</email>
-      <roles>
-        <role>Developer</role>
-      </roles>
-      <timezone>-5</timezone>
-    </developer>
-  </developers>
-  <scm>
-    <connection>scm:svn:https://svn.codehaus.org/modello/trunk/modello</connection>
-    <developerConnection>scm:svn:svn+ssh://svn.codehaus.org:/home/projects/modello/scm/trunk/modello/modello</developerConnection>
-    <url>http://svn.modello.codehaus.org/trunk/modello</url>
-  </scm>
-  <organization>
-    <name>Codehaus</name>
-    <url>http://www.codehaus.org/</url>
-  </organization>
-  <build>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <artifactId>maven-release-plugin</artifactId>
-          <configuration>
-            <tagBase>https://svn.codehaus.org/modello/tags</tagBase>
-          </configuration>
-        </plugin>
-      </plugins>
-    </pluginManagement>
-  </build>
-  <modules>
-    <module>modello-maven-plugin</module>
-    <module>modello-core</module>
-    <module>modello-test</module>
-    <module>modello-plugins</module>
-  </modules>
   <repositories>
     <repository>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
       <id>snapshots</id>
       <name>Snapshot repository</name>
       <url>http://snapshots.maven.codehaus.org/maven2/</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
     </repository>
   </repositories>
   <dependencies>
@@ -139,27 +26,42 @@
   </dependencies>
   <dependencyManagement>
     <dependencies>
+      <!--
+       |
+       | Modello
+       |
+       |-->
       <dependency>
         <groupId>org.codehaus.modello</groupId>
         <artifactId>modello-core</artifactId>
-        <version>1.0-alpha-4</version>
+        <version>1.0-alpha-4-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.modello</groupId>
         <artifactId>modello-test</artifactId>
-        <version>1.0-alpha-4</version>
+        <version>1.0-alpha-4-SNAPSHOT</version>
         <scope>test</scope>
       </dependency>
+      <!--
+       |
+       | Modello Plugins
+       |
+       |-->
       <dependency>
         <groupId>org.codehaus.modello</groupId>
         <artifactId>modello-plugin-store</artifactId>
-        <version>1.0-alpha-4</version>
+        <version>1.0-alpha-4-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.modello</groupId>
         <artifactId>modello-plugin-xml</artifactId>
-        <version>1.0-alpha-4</version>
+        <version>1.0-alpha-4-SNAPSHOT</version>
       </dependency>
+      <!--
+       |
+       | Maven
+       |
+       |-->
       <dependency>
         <groupId>org.apache.maven</groupId>
         <artifactId>maven-settings</artifactId>
@@ -190,6 +92,11 @@
         <artifactId>wagon-provider-api</artifactId>
         <version>1.0-alpha-4</version>
       </dependency>
+      <!--
+       |
+       | Plexus
+       |
+       |-->
       <dependency>
         <groupId>plexus</groupId>
         <artifactId>plexus-container-default</artifactId>
@@ -202,6 +109,27 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
+  <issueManagement>
+    <system>jira</system>
+    <url>http://jira.codehaus.org/browse/MODELLO</url>
+  </issueManagement>
+  <ciManagement>
+    <notifiers>
+      <notifier>
+        <type>mail</type>
+        <address>dev@modello.codehaus.org</address>
+      </notifier>
+    </notifiers>
+  </ciManagement>
+  <scm>
+    <connection>scm:svn:https://svn.codehaus.org/modello/trunk/</connection>
+    <developerConnection>scm:svn:svn+ssh://svn.codehaus.org:/home/projects/modello/scm/trunk/modello</developerConnection>
+    <url>http://svn.modello.codehaus.org/trunk</url>
+  </scm>
+  <organization>
+    <name>Codehaus</name>
+    <url>http://www.codehaus.org/</url>
+  </organization>
   <distributionManagement>
     <repository>
       <id>repo1</id>
@@ -214,4 +142,106 @@
       <url>scp://beaver.codehaus.org/home/projects/maven/repository-staging/snapshots/maven2</url>
     </snapshotRepository>
   </distributionManagement>
+  <mailingLists>
+    <mailingList>
+      <name>Modello Announce List</name>
+      <subscribe>mailto:announce-subscribe@modello.codehaus.org</subscribe>
+      <unsubscribe>mailto:announce-unsubscribe@modello.codehaus.org</unsubscribe>
+      <archive>http://archive.modello.codehaus.org/announce/</archive>
+    </mailingList>
+    <mailingList>
+      <name>Modello Developer List</name>
+      <subscribe>mailto:dev-subscribe@modello.codehaus.org</subscribe>
+      <unsubscribe>mailto:dev-unsubscribe@modello.codehaus.org</unsubscribe>
+      <archive>http://archive.modello.codehaus.org/dev/</archive>
+    </mailingList>
+    <mailingList>
+      <name>Modello User List</name>
+      <subscribe>mailto:user-subscribe@modello.codehaus.org</subscribe>
+      <unsubscribe>mailto:user-unsubscribe@modello.codehaus.org</unsubscribe>
+      <archive>http://archive.modello.codehaus.org/user/</archive>
+    </mailingList>
+    <mailingList>
+      <name>Modello Commits List</name>
+      <subscribe>mailto:scm-subscribe@modello.codehaus.org</subscribe>
+      <unsubscribe>mailto:scm-unsubscribe@modello.codehaus.org</unsubscribe>
+      <archive>http://archive.modello.codehaus.org/scm/</archive>
+    </mailingList>
+  </mailingLists>
+  <developers>
+    <developer>
+      <!-- <id>brett<id> -->
+      <name>Brett Porter</name>
+      <email>brett@codehaus.org</email>
+      <roles>
+        <role>Developer</role>
+      </roles>
+      <timezone>-11</timezone>
+    </developer>
+    <developer>
+      <!-- <id>jvanzyl<id> -->
+      <name>Jason van Zyl</name>
+      <email>jason@maven.org</email>
+      <roles>
+        <role>Developer</role>
+      </roles>
+      <timezone>-5</timezone>
+    </developer>
+    <developer>
+      <!-- <id>dandiep<id> -->
+      <name>Dan Diephouse</name>
+      <email>dan@envoisolutions.com</email>
+      <roles>
+        <role>Developer</role>
+      </roles>
+      <timezone>-5</timezone>
+    </developer>
+    <developer>
+      <!-- <id>evenisse<id> -->
+      <name>Emmanuel Evenisse</name>
+      <email>emmanuel@venisse.net</email>
+      <roles>
+        <role>Developer</role>
+      </roles>
+      <timezone>-5</timezone>
+    </developer>
+    <developer>
+      <!-- <id>jdcasey<id> -->
+      <name>John Casey</name>
+      <email>jdcasey@commonjava.org</email>
+      <roles>
+        <role>Developer</role>
+      </roles>
+      <timezone>-5</timezone>
+    </developer>
+    <developer>
+      <!-- <id>trygvis<id> -->
+      <name>Trygve Laugstol</name>
+      <email>trygvis@codehaus.org</email>
+      <roles>
+        <role>Developer</role>
+      </roles>
+      <timezone>-5</timezone>
+    </developer>
+  </developers>
+  <modules>
+    <module>modello-maven-plugin</module>
+    <module>modello-core</module>
+    <module>modello-test</module>
+    <module>modello-plugins</module>
+  </modules>
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-release-plugin</artifactId>
+          <configuration>
+            <!-- TODO: into SCM? -->
+            <tagBase>https://svn.codehaus.org/modello/tags</tagBase>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
 </project>
