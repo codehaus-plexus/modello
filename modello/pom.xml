@@ -4,7 +4,7 @@
   <artifactId>modello</artifactId>
   <packaging>pom</packaging>
   <name>Modello Parent</name>
-  <version>1.0-alpha-4</version>
+  <version>1.0-alpha-5-SNAPSHOT</version>
   <issueManagement>
     <system>jira</system>
     <url>http://jira.codehaus.org/browse/MODELLO</url>
@@ -94,9 +94,9 @@
     </developer>
   </developers>
   <scm>
-    <connection>scm:svn:https://svn.codehaus.org/modello/tags/modello-1.0-alpha-4/modello</connection>
-    <developerConnection>scm:svn:svn+ssh://svn.codehaus.org/home/projects/modello/scm/tags/modello-1.0-alpha-4/modello</developerConnection>
-    <url>http://svn.modello.codehaus.org/tags/modello-1.0-alpha-4/modello</url>
+    <connection>scm:svn:https://svn.codehaus.org/modello/trunk/modello</connection>
+    <developerConnection>scm:svn:svn+ssh://svn.codehaus.org/home/projects/modello/scm/trunk/modello</developerConnection>
+    <url>http://svn.modello.codehaus.org/trunk/modello</url>
   </scm>
   <organization>
     <name>Codehaus</name>
