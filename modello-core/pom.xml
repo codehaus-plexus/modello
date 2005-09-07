@@ -2,16 +2,17 @@
   <parent>
     <artifactId>modello</artifactId>
     <groupId>org.codehaus.modello</groupId>
-    <version>1.0-alpha-4</version>
+    <version>1.0-alpha-5-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>modello-core</artifactId>
   <name>Modello Core</name>
-  <version>1.0-alpha-4</version>
+  <version>1.0-alpha-5-SNAPSHOT</version>
   <dependencies>
     <dependency>
       <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-test</artifactId>
+      <version>1.0-alpha-5-SNAPSHOT</version>
       <scope>test</scope>
     </dependency>
     <dependency>
