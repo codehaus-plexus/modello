@@ -4,6 +4,7 @@
   <artifactId>modello</artifactId>
   <name>Modello Parent</name>
   <version>1.0-alpha-5-SNAPSHOT</version>
+  <packaging>pom</packaging>
   <issueManagement>
     <system>jira</system>
     <url>http://jira.codehaus.org/browse/MODELLO</url>
