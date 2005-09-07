@@ -36,20 +36,14 @@
     </dependency>
     <dependency>
       <groupId>org.codehaus.modello</groupId>
-      <artifactId>modello-test</artifactId>
+      <artifactId>modello-plugin-xml</artifactId>
       <version>1.0-alpha-4-SNAPSHOT</version>
-      <scope>test</scope>
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>plexus</groupId>
       <artifactId>plexus-utils</artifactId>
       <version>1.0-alpha-3</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.codehaus.modello</groupId>
-      <artifactId>modello-plugin-xml</artifactId>
-      <version>1.0-alpha-4-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
@@ -80,6 +74,12 @@
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-artifact-manager</artifactId>
       <version>2.0-alpha-3</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.modello</groupId>
+      <artifactId>modello-test</artifactId>
+      <version>1.0-alpha-4-SNAPSHOT</version>
       <scope>test</scope>
     </dependency>
     <dependency>

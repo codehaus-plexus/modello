@@ -1,16 +1,10 @@
 <project>
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>modello-core</artifactId>
   <groupId>org.codehaus.modello</groupId>
+  <artifactId>modello-core</artifactId>
   <name>Modello Core</name>
   <version>1.0-alpha-4</version>
   <dependencies>
-    <dependency>
-      <groupId>org.codehaus.modello</groupId>
-      <artifactId>modello-test</artifactId>
-      <version>1.0-alpha-4-SNAPSHOT</version>
-      <scope>test</scope>
-    </dependency>
     <dependency>
       <groupId>org.apache.maven.wagon</groupId>
       <artifactId>wagon-provider-api</artifactId>
@@ -27,6 +21,12 @@
       <groupId>plexus</groupId>
       <artifactId>plexus-compiler-javac</artifactId>
       <version>1.4</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.modello</groupId>
+      <artifactId>modello-test</artifactId>
+      <version>1.0-alpha-4-SNAPSHOT</version>
       <scope>test</scope>
     </dependency>
     <dependency>

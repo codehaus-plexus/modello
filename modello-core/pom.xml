@@ -5,6 +5,7 @@
     <version>1.0-alpha-4</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
+  <groupId>org.codehaus.modello</groupId>
   <artifactId>modello-core</artifactId>
   <name>Modello Core</name>
   <version>1.0-alpha-4</version>

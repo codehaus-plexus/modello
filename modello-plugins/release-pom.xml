@@ -1,6 +1,7 @@
 <project>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>modello-plugins</artifactId>
+  <packaging>pom</packaging>
   <name>Modello Plugin Parent</name>
   <version>1.0-alpha-4</version>
   <modules>
@@ -23,13 +24,13 @@
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>3.8.1</version>
-      <scope>compile</scope>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>classworlds</groupId>
       <artifactId>classworlds</artifactId>
       <version>1.1-alpha-1</version>
-      <scope>compile</scope>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
@@ -44,26 +45,14 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.codehaus.modello</groupId>
-      <artifactId>modello-test</artifactId>
-      <version>1.0-alpha-4-SNAPSHOT</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>plexus</groupId>
       <artifactId>plexus-utils</artifactId>
       <version>1.0-alpha-3</version>
-      <scope>compile</scope>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>plexus</groupId>
       <artifactId>plexus-compiler-javac</artifactId>
-      <version>1.4</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>plexus</groupId>
-      <artifactId>plexus-compiler-api</artifactId>
       <version>1.4</version>
       <scope>test</scope>
     </dependency>
@@ -75,6 +64,12 @@
     </dependency>
     <dependency>
       <groupId>plexus</groupId>
+      <artifactId>plexus-compiler-api</artifactId>
+      <version>1.4</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>plexus</groupId>
       <artifactId>plexus-container-default</artifactId>
       <version>1.0-alpha-4</version>
       <scope>compile</scope>
@@ -83,6 +78,12 @@
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-artifact-manager</artifactId>
       <version>2.0-alpha-3</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.modello</groupId>
+      <artifactId>modello-test</artifactId>
+      <version>1.0-alpha-4-SNAPSHOT</version>
       <scope>test</scope>
     </dependency>
     <dependency>
