@@ -1,13 +1,26 @@
 <project>
-  <parent>
-    <artifactId>modello</artifactId>
-    <groupId>org.codehaus.modello</groupId>
-    <version>1.0-alpha-4</version>
-  </parent>
   <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.codehaus.modello</groupId>
+    <artifactId>modello</artifactId>
+    <version>1.0-alpha-4-SNAPSHOT</version>
+  </parent>
   <artifactId>modello-plugins</artifactId>
+  <version>1.0-alpha-4-SNAPSHOT</version>
+  <packaging>pom</packaging>
   <name>Modello Plugin Parent</name>
-  <version>1.0-alpha-4</version>
+  <dependencies>
+    <dependency>
+      <groupId>org.codehaus.modello</groupId>
+      <artifactId>modello-core</artifactId>
+      <version>1.0-alpha-4-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.modello</groupId>
+      <artifactId>modello-test</artifactId>
+      <version>1.0-alpha-4-SNAPSHOT</version>
+    </dependency>
+  </dependencies>
   <modules>
     <module>modello-plugin-xml</module>
     <module>modello-plugin-store</module>
@@ -17,16 +30,4 @@
     <module>modello-plugin-xsd</module>
     <module>modello-plugin-xpp3</module>
   </modules>
-  <dependencies>
-    <dependency>
-      <groupId>org.codehaus.modello</groupId>
-      <artifactId>modello-test</artifactId>
-      <version>1.0-alpha-4</version>
-    </dependency>
-    <dependency>
-      <groupId>org.codehaus.modello</groupId>
-      <artifactId>modello-core</artifactId>
-      <version>1.0-alpha-4</version>
-    </dependency>
-  </dependencies>
 </project>
