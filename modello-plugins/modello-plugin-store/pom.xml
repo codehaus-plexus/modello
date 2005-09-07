@@ -1,13 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
 <project>
-  <parent>
-    <artifactId>modello-plugins</artifactId>
-    <groupId>org.codehaus.modello</groupId>
-    <version>1.0-alpha-5-SNAPSHOT</version>
-  </parent>
   <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.codehaus.modello</groupId>
+    <artifactId>modello-plugins</artifactId>
+    <version>1.0-alpha-4-SNAPSHOT</version>
+  </parent>
   <artifactId>modello-plugin-store</artifactId>
+  <version>1.0-alpha-4-SNAPSHOT</version>
   <name>Modello Store Plugin</name>
-  <version>1.0-alpha-5-SNAPSHOT</version>
   <dependencies>
     <dependency>
       <groupId>plexus</groupId>

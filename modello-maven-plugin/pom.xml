@@ -1,13 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
 <project>
-  <parent>
-    <artifactId>modello</artifactId>
-    <groupId>org.codehaus.modello</groupId>
-    <version>1.0-alpha-5-SNAPSHOT</version>
-  </parent>
   <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.codehaus.modello</groupId>
+    <artifactId>modello</artifactId>
+    <version>1.0-alpha-4-SNAPSHOT</version>
+  </parent>
   <artifactId>modello-maven-plugin</artifactId>
+  <version>1.0-alpha-4-SNAPSHOT</version>
   <name>Modello Maven Plugin</name>
-  <version>1.0-alpha-5-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
   <dependencies>
     <dependency>
@@ -20,37 +22,36 @@
     </dependency>
     <dependency>
       <groupId>org.codehaus.modello</groupId>
-      <artifactId>modello-plugin-xdoc</artifactId>
-      <version>1.0-alpha-5-SNAPSHOT</version>
-      <scope>runtime</scope>
+      <artifactId>modello-core</artifactId>
     </dependency>
     <dependency>
       <groupId>org.codehaus.modello</groupId>
-      <artifactId>modello-plugin-prevayler</artifactId>
-      <version>1.0-alpha-5-SNAPSHOT</version>
+      <artifactId>modello-plugin-xpp3</artifactId>
+      <version>1.0-alpha-4-SNAPSHOT</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-plugin-xsd</artifactId>
-      <version>1.0-alpha-5-SNAPSHOT</version>
+      <version>1.0-alpha-4-SNAPSHOT</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.modello</groupId>
+      <artifactId>modello-plugin-xdoc</artifactId>
+      <version>1.0-alpha-4-SNAPSHOT</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.modello</groupId>
+      <artifactId>modello-plugin-prevayler</artifactId>
+      <version>1.0-alpha-4-SNAPSHOT</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-plugin-jpox</artifactId>
-      <version>1.0-alpha-5-SNAPSHOT</version>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.codehaus.modello</groupId>
-      <artifactId>modello-core</artifactId>
-      <version>1.0-alpha-5-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-      <groupId>org.codehaus.modello</groupId>
-      <artifactId>modello-plugin-xpp3</artifactId>
-      <version>1.0-alpha-5-SNAPSHOT</version>
+      <version>1.0-alpha-4-SNAPSHOT</version>
       <scope>runtime</scope>
     </dependency>
   </dependencies>
