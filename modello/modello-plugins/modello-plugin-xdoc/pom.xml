@@ -1,13 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
 <project>
-  <parent>
-    <artifactId>modello-plugins</artifactId>
-    <groupId>org.codehaus.modello</groupId>
-    <version>1.0-alpha-4</version>
-  </parent>
   <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.codehaus.modello</groupId>
+    <artifactId>modello-plugins</artifactId>
+    <version>1.0-alpha-4-SNAPSHOT</version>
+  </parent>
   <artifactId>modello-plugin-xdoc</artifactId>
+  <version>1.0-alpha-4-SNAPSHOT</version>
   <name>Modello XDOC Plugin</name>
-  <version>1.0-alpha-4</version>
   <dependencies>
     <dependency>
       <groupId>org.codehaus.modello</groupId>
