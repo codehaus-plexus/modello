@@ -8,6 +8,7 @@
   <artifactId>modello-maven-plugin</artifactId>
   <name>Modello Maven Plugin</name>
   <version>1.0-alpha-5-SNAPSHOT</version>
+  <packaging>maven-plugin</packaging>
   <dependencies>
     <dependency>
       <groupId>org.apache.maven</groupId>
