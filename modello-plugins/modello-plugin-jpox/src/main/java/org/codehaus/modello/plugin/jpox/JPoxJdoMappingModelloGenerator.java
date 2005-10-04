@@ -486,9 +486,13 @@ public class JPoxJdoMappingModelloGenerator
                 writer.addAttribute( "element-type", association.getTo() );
             }
 
-            if ( dependent )
+            if ( jpoxMetadata.isDependent() )
             {
                 writer.addAttribute( "dependent-element", "true" );
+            }
+            else
+            {
+                writer.addAttribute( "dependent-element", "false" );
             }
 
             writer.endElement();
@@ -517,9 +521,13 @@ public class JPoxJdoMappingModelloGenerator
 
             writer.addAttribute( "dependent-key", "true" );
 
-            if ( dependent )
+            if ( jpoxMetadata.isDependent() )
             {
                 writer.addAttribute( "dependent-value", "true" );
+            }
+            else
+            {
+                writer.addAttribute( "dependent-value", "false" );
             }
 
             writer.endElement();
