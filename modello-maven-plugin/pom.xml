@@ -58,12 +58,12 @@
     <repository>
       <id>repo1</id>
       <name>Maven Central Repository</name>
-      <url>scp://repo1.maven.org/home/projects/maven/repository-staging/to-ibiblio/maven2/plugins</url>
+      <url>scp://repo1.maven.org/home/projects/maven/repository-staging/to-ibiblio/maven2</url>
     </repository>
     <snapshotRepository>
       <id>central-plugins-snapshots</id>
       <name>Maven Snapshot Plugins Repository</name>
-      <url>scp://repo1.maven.org/home/projects/maven/repository-staging/snapshots/maven2/plugins</url>
+      <url>scp://repo1.maven.org/home/projects/maven/repository-staging/snapshots/maven2</url>
     </snapshotRepository>
   </distributionManagement>
 </project>
