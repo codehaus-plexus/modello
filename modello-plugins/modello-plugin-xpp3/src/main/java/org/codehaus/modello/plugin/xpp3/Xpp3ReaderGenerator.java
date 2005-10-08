@@ -739,31 +739,38 @@ public class Xpp3ReaderGenerator
 
         if ( "boolean".equals( type ) )
         {
-            sc.add( objectName + "." + setterName + "( getBooleanValue( " + parserGetter + " ) );" );
+            sc.add( objectName + "." + setterName + "( getBooleanValue( " + parserGetter + ", \"" + tagName +
+                "\", parser ) );" );
         }
         else if ( "char".equals( type ) )
         {
-            sc.add( objectName + "." + setterName + "( getCharacterValue( " + parserGetter + " ) );" );
+            sc.add( objectName + "." + setterName + "( getCharacterValue( " + parserGetter + ", \"" + tagName +
+                "\", parser ) );" );
         }
         else if ( "double".equals( type ) )
         {
-            sc.add( objectName + "." + setterName + "( getDoubleValue( " + parserGetter + " ) );" );
+            sc.add( objectName + "." + setterName + "( getDoubleValue( " + parserGetter + ", \"" + tagName +
+                "\", parser ) );" );
         }
         else if ( "float".equals( type ) )
         {
-            sc.add( objectName + "." + setterName + "( getFloatValue( " + parserGetter + " ) );" );
+            sc.add( objectName + "." + setterName + "( getFloatValue( " + parserGetter + ", \"" + tagName +
+                "\", parser ) );" );
         }
         else if ( "int".equals( type ) )
         {
-            sc.add( objectName + "." + setterName + "( getIntegerValue( " + parserGetter + " ) );" );
+            sc.add( objectName + "." + setterName + "( getIntegerValue( " + parserGetter + ", \"" + tagName +
+                "\", parser ) );" );
         }
         else if ( "long".equals( type ) )
         {
-            sc.add( objectName + "." + setterName + "( getLongValue( " + parserGetter + " ) );" );
+            sc.add( objectName + "." + setterName + "( getLongValue( " + parserGetter + ", \"" + tagName +
+                "\", parser ) );" );
         }
         else if ( "short".equals( type ) )
         {
-            sc.add( objectName + "." + setterName + "( getShortValue( " + parserGetter + " ) );" );
+            sc.add( objectName + "." + setterName + "( getShortValue( " + parserGetter + ", \"" + tagName +
+                "\", parser ) );" );
         }
         else if ( "String".equals( type ) || "Boolean".equals( type ) )
         {
@@ -772,7 +779,8 @@ public class Xpp3ReaderGenerator
         }
         else if ( "Date".equals( type ) )
         {
-            sc.add( objectName + "." + setterName + "( getDateValue( " + parserGetter + " ) );" );
+            sc.add( objectName + "." + setterName + "( getDateValue( " + parserGetter + ", \"" + tagName +
+                "\", parser ) );" );
         }
         else if ( "DOM".equals( type ) )
         {
@@ -1118,8 +1126,11 @@ public class Xpp3ReaderGenerator
         jClass.addMethod( method );
 
         method = new JMethod( JType.Boolean, "getBooleanValue" );
+        method.addException( new JClass( "XmlPullParserException" ) );
 
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
+        method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
+        method.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
 
         sc = method.getSourceCode();
 
@@ -1140,8 +1151,11 @@ public class Xpp3ReaderGenerator
         jClass.addMethod( method );
 
         method = new JMethod( JType.Char, "getCharacterValue" );
+        method.addException( new JClass( "XmlPullParserException" ) );
 
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
+        method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
+        method.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
 
         sc = method.getSourceCode();
 
@@ -1162,118 +1176,76 @@ public class Xpp3ReaderGenerator
         jClass.addMethod( method );
 
         method = new JMethod( JType.Int, "getIntegerValue" );
+        method.addException( new JClass( "XmlPullParserException" ) );
 
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
+        method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
+        method.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
 
         sc = method.getSourceCode();
 
-        sc.add( "if ( s != null )" );
-
-        sc.add( "{" );
-
-        sc.indent();
-
-        sc.add( "return Integer.valueOf( s ).intValue();" );
-
-        sc.unindent();
-
-        sc.add( "}" );
-
-        sc.add( "return 0;" );
+        convertNumericalType( sc, "Integer.valueOf( s ).intValue()", "an integer" );
 
         jClass.addMethod( method );
 
         method = new JMethod( JType.Short, "getShortValue" );
+        method.addException( new JClass( "XmlPullParserException" ) );
 
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
+        method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
+        method.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
 
         sc = method.getSourceCode();
 
-        sc.add( "if ( s != null )" );
-
-        sc.add( "{" );
-
-        sc.indent();
-
-        sc.add( "return Short.valueOf( s ).shortValue();" );
-
-        sc.unindent();
-
-        sc.add( "}" );
-
-        sc.add( "return 0;" );
+        convertNumericalType( sc, "Short.valueOf( s ).shortValue()", "a short integer" );
 
         jClass.addMethod( method );
 
         method = new JMethod( JType.Long, "getLongValue" );
+        method.addException( new JClass( "XmlPullParserException" ) );
 
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
+        method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
+        method.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
 
         sc = method.getSourceCode();
 
-        sc.add( "if ( s != null )" );
-
-        sc.add( "{" );
-
-        sc.indent();
-
-        sc.add( "return Long.valueOf( s ).longValue();" );
-
-        sc.unindent();
-
-        sc.add( "}" );
-
-        sc.add( "return 0;" );
+        convertNumericalType( sc, "Long.valueOf( s ).longValue()", "a long integer" );
 
         jClass.addMethod( method );
 
         method = new JMethod( JType.Float, "getFloatValue" );
+        method.addException( new JClass( "XmlPullParserException" ) );
 
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
+        method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
+        method.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
 
         sc = method.getSourceCode();
 
-        sc.add( "if ( s != null )" );
-
-        sc.add( "{" );
-
-        sc.indent();
-
-        sc.add( "return Float.valueOf( s ).floatValue();" );
-
-        sc.unindent();
-
-        sc.add( "}" );
-
-        sc.add( "return 0;" );
+        convertNumericalType( sc, "Float.valueOf( s ).floatValue()", "a floating point number" );
 
         jClass.addMethod( method );
 
         method = new JMethod( JType.Double, "getDoubleValue" );
+        method.addException( new JClass( "XmlPullParserException" ) );
 
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
+        method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
+        method.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
 
         sc = method.getSourceCode();
 
-        sc.add( "if ( s != null )" );
-
-        sc.add( "{" );
-
-        sc.indent();
-
-        sc.add( "return Double.valueOf( s ).doubleValue();" );
-
-        sc.unindent();
-
-        sc.add( "}" );
-
-        sc.add( "return 0;" );
+        convertNumericalType( sc, "Double.valueOf( s ).doubleValue()", "a floating point number" );
 
         jClass.addMethod( method );
 
         method = new JMethod( new JClass( "java.util.Date" ), "getDateValue" );
+        method.addException( new JClass( "XmlPullParserException" ) );
 
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
+        method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
+        method.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
 
         sc = method.getSourceCode();
 
@@ -1294,5 +1266,45 @@ public class Xpp3ReaderGenerator
         sc.add( "return null;" );
 
         jClass.addMethod( method );
+    }
+
+    private void convertNumericalType( JSourceCode sc, String expression, String typeDesc )
+    {
+        sc.add( "if ( s != null )" );
+
+        sc.add( "{" );
+
+        sc.indent();
+
+        sc.add( "try" );
+
+        sc.add( "{" );
+
+        sc.indent();
+
+        sc.add( "return " + expression + ";" );
+
+        sc.unindent();
+
+        sc.add( "}" );
+
+        sc.add( "catch ( NumberFormatException e )" );
+
+        sc.add( "{" );
+
+        sc.indent();
+
+        sc.add( "throw new XmlPullParserException( \"Unable to parse element '\" + attribute + \"', must be " +
+            typeDesc + "\", parser, null );" );
+
+        sc.unindent();
+
+        sc.add( "}" );
+
+        sc.unindent();
+
+        sc.add( "}" );
+
+        sc.add( "return 0;" );
     }
 }
