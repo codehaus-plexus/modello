@@ -356,6 +356,15 @@ public class Xpp3ReaderGenerator
 
             String singularName = singular( field.getName() );
 
+            String optionalCheck = "";
+            if ( field.getAlias() != null && field.getAlias().length() > 0 )
+            {
+                optionalCheck = "|| parser.getName().equals( \"" + field.getAlias() + "\" ) ";
+            }
+
+            String tagComparison = statement + " ( parser.getName().equals( \"" + tagName + "\" ) " +
+                optionalCheck + " )";
+
             if ( field instanceof ModelAssociation )
             {
                 ModelAssociation association = (ModelAssociation) field;
@@ -364,7 +373,7 @@ public class Xpp3ReaderGenerator
 
                 if ( ModelAssociation.ONE_MULTIPLICITY.equals( association.getMultiplicity() ) )
                 {
-                    sc.add( statement + " ( parser.getName().equals( \"" + tagName + "\" ) )" );
+                    sc.add( tagComparison );
 
                     sc.add( "{" );
 
@@ -387,7 +396,7 @@ public class Xpp3ReaderGenerator
                     {
                         if ( wrappedList )
                         {
-                            sc.add( statement + " ( parser.getName().equals( \"" + tagName + "\" ) )" );
+                            sc.add( tagComparison );
 
                             sc.add( "{" );
 
@@ -483,7 +492,7 @@ public class Xpp3ReaderGenerator
                     {
                         //Map or Properties
 
-                        sc.add( statement + " ( parser.getName().equals( \"" + tagName + "\" ) )" );
+                        sc.add( tagComparison );
 
                         sc.add( "{" );
 
@@ -613,7 +622,7 @@ public class Xpp3ReaderGenerator
             }
             else
             {
-                sc.add( statement + " ( parser.getName().equals( \"" + tagName + "\" ) )" );
+                sc.add( tagComparison );
 
                 sc.add( "{" );
 

@@ -17,7 +17,17 @@
     <dependency>
       <groupId>plexus</groupId>
       <artifactId>plexus-compiler-javac</artifactId>
-      <version>1.4</version>
+      <version>1.5</version>
+      <exclusions>
+        <exclusion>
+          <groupId>plexus</groupId>
+          <artifactId>plexus-utils</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>plexus</groupId>
+          <artifactId>plexus-container-default</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
@@ -26,7 +36,17 @@
     <dependency>
       <groupId>plexus</groupId>
       <artifactId>plexus-compiler-api</artifactId>
-      <version>1.4</version>
+      <version>1.5</version>
+      <exclusions>
+        <exclusion>
+          <groupId>plexus</groupId>
+          <artifactId>plexus-utils</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>plexus</groupId>
+          <artifactId>plexus-container-default</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>

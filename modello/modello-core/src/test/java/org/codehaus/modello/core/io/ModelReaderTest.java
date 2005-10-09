@@ -137,6 +137,8 @@ public class ModelReaderTest
         assertEquals( "1.0.0", name.getVersionRange().toString() );
 
         assertEquals( "String", name.getType() );
+
+        assertEquals( "moniker", name.getAlias() );
     }
 
     private void assertGirl( Object girlObject )

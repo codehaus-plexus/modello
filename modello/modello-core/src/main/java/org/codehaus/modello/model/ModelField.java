@@ -42,21 +42,12 @@ public class ModelField
 
     private boolean identifier;
 
-    transient private ModelClass modelClass;
+    private String alias;
 
-    private final static String[] PRIMITIVE_TYPES = new String[]{
-        "boolean",
-        "char",
-        "short",
-        "int",
-        "long",
-        "float",
-        "double",
-        "String",
-        "Boolean",
-        "Date",
-        "DOM"
-    };
+    private transient ModelClass modelClass;
+
+    private static final String[] PRIMITIVE_TYPES = new String[]{"boolean", "char", "short", "int", "long", "float",
+        "double", "String", "Boolean", "Date", "DOM"};
 
 
     public ModelField()
@@ -125,6 +116,15 @@ public class ModelField
         this.identifier = identifier;
     }
 
+    public String getAlias()
+    {
+        return alias;
+    }
+
+    public void setAlias( String alias )
+    {
+        this.alias = alias;
+    }
     // ----------------------------------------------------------------------
     // Misc
     // ----------------------------------------------------------------------
@@ -151,7 +151,7 @@ public class ModelField
 
         for ( int i = 0; i < PRIMITIVE_TYPES.length; i++ )
         {
-            String validType = PRIMITIVE_TYPES[ i ];
+            String validType = PRIMITIVE_TYPES[i];
 
             if ( type.equals( validType ) )
             {
@@ -208,6 +208,7 @@ public class ModelField
 
     public String toString()
     {
-        return "[Field: name=" + getName() + ", type: " + type + ", version: " + getVersionRange() + "]";
+        return "[Field: name=" + getName() + ", alias: " + alias + ", type: " + type + ", version: " +
+            getVersionRange() + "]";
     }
 }

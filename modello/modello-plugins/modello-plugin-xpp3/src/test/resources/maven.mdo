@@ -133,6 +133,7 @@
         </field>
         <field>
           <name>url</name>
+          <alias>website</alias>
           <version>3.0.0+</version>
           <description>The URL where the project can be found.</description>
           <type>String</type>
@@ -386,6 +387,7 @@
         </field>
         <field>
           <name>organization</name>
+          <alias>organisation</alias>
           <version>3.0.0+</version>
           <description>
             This element describes various attributes of the organziation to
