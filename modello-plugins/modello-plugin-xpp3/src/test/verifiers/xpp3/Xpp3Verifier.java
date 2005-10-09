@@ -28,6 +28,7 @@ import org.codehaus.modello.test.model.Build;
 import org.codehaus.modello.test.model.Component;
 import org.codehaus.modello.test.model.MailingList;
 import org.codehaus.modello.test.model.Model;
+import org.codehaus.modello.test.model.Organization;
 import org.codehaus.modello.test.model.Repository;
 import org.codehaus.modello.test.model.Scm;
 import org.codehaus.modello.test.model.SourceModification;
@@ -58,6 +59,8 @@ public class Xpp3Verifier
         verifyWriter();
 
         verifyReader();
+
+        verifyReaderAliases();
     }
 
     public void verifyWriter()
@@ -196,6 +199,29 @@ public class Xpp3Verifier
         String groupId = "Laugst\u00f8l";
 
         expected.setGroupId( groupId );
+
+        Model actual = reader.read( new StringReader( xml ) );
+
+        assertModel( expected, actual );
+    }
+
+    public void verifyReaderAliases()
+        throws IOException, XmlPullParserException
+    {
+        MavenXpp3Reader reader = new MavenXpp3Reader();
+
+        String xml = "<mavenModel>\n" + "  <website>http://maven.apache.org/website</website>\n"
+            + "  <organisation><name>my-org</name></organisation>\n" + "</mavenModel>";
+
+        Model expected = new Model();
+
+        expected.setUrl( "http://maven.apache.org/website" );
+
+        Organization org = new Organization();
+
+        org.setName( "my-org" );
+
+        expected.setOrganization( org );
 
         Model actual = reader.read( new StringReader( xml ) );
 

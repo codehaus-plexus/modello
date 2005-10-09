@@ -290,6 +290,10 @@ public class ModelReader
 
                         modelAssociation = parseAssociation( parser );
                     }
+                    else if ( parser.getName().equals( "alias" ) )
+                    {
+                        modelField.setAlias( parser.nextText() );
+                    }
                     else if ( parser.getName().equals( "type" ) )
                     {
                         modelField.setType( parser.nextText() );
@@ -334,6 +338,8 @@ public class ModelReader
 
                     // model field fields
                     modelAssociation.setType( modelField.getType() );
+
+                    modelAssociation.setAlias( modelField.getAlias() );
 
                     modelAssociation.setDefaultValue( modelField.getDefaultValue() );
 
