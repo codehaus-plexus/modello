@@ -22,6 +22,19 @@ package org.codehaus.modello;
  * SOFTWARE.
  */
 
+import org.apache.maven.artifact.Artifact;
+import org.apache.maven.artifact.factory.ArtifactFactory;
+import org.apache.maven.artifact.repository.ArtifactRepository;
+import org.apache.maven.artifact.repository.ArtifactRepositoryFactory;
+import org.apache.maven.artifact.repository.layout.ArtifactRepositoryLayout;
+import org.apache.maven.settings.MavenSettingsBuilder;
+import org.apache.maven.settings.Settings;
+import org.codehaus.plexus.compiler.Compiler;
+import org.codehaus.plexus.compiler.CompilerConfiguration;
+import org.codehaus.plexus.compiler.CompilerError;
+import org.codehaus.plexus.compiler.javac.JavacCompiler;
+import org.codehaus.plexus.util.FileUtils;
+
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -31,21 +44,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-
-import org.apache.maven.artifact.Artifact;
-import org.apache.maven.artifact.factory.ArtifactFactory;
-import org.apache.maven.artifact.repository.ArtifactRepository;
-import org.apache.maven.artifact.repository.ArtifactRepositoryFactory;
-import org.apache.maven.artifact.repository.layout.ArtifactRepositoryLayout;
-import org.apache.maven.settings.MavenSettingsBuilder;
-import org.apache.maven.settings.Settings;
-
-import org.codehaus.plexus.PlexusTestCase;
-import org.codehaus.plexus.compiler.Compiler;
-import org.codehaus.plexus.compiler.CompilerConfiguration;
-import org.codehaus.plexus.compiler.CompilerError;
-import org.codehaus.plexus.compiler.javac.JavacCompiler;
-import org.codehaus.plexus.util.FileUtils;
+import java.util.Properties;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -96,9 +95,7 @@ public abstract class AbstractModelloGeneratorTest
 
         String url = "file://" + localRepo;
 
-        repository = artifactRepositoryFactory.createArtifactRepository( "local",
-                                                                         url,
-                                                                         repositoryLayout,
+        repository = artifactRepositoryFactory.createArtifactRepository( "local", url, repositoryLayout,
                                                                          ArtifactRepository.SNAPSHOT_POLICY_ALWAYS,
                                                                          ArtifactRepository.CHECKSUM_POLICY_WARN );
 
@@ -113,10 +110,7 @@ public abstract class AbstractModelloGeneratorTest
     public void addDependency( String groupId, String artifactId, String version )
         throws Exception
     {
-        Artifact artifact = artifactFactory.createArtifact( groupId,
-                                                            artifactId,
-                                                            version,
-                                                            Artifact.SCOPE_COMPILE,
+        Artifact artifact = artifactFactory.createArtifact( groupId, artifactId, version, Artifact.SCOPE_COMPILE,
                                                             "jar" );
 
         File dependencyFile = new File( repository.getBasedir(), repository.pathOf( artifact ) );
@@ -145,8 +139,12 @@ public abstract class AbstractModelloGeneratorTest
 
         addDependency( "plexus", "plexus-utils", "1.0-alpha-3" );
 
-        java.util.Properties properties = new java.util.Properties();
-        properties.load( getClass().getResourceAsStream( "/META-INF/maven/org.codehaus.modello/modello-test/pom.properties" ) );
+        Properties properties = new Properties( System.getProperties() );
+        if ( properties.getProperty( "version" ) == null )
+        {
+            properties.load(
+                getClass().getResourceAsStream( "/META-INF/maven/org.codehaus.modello/modello-test/pom.properties" ) );
+        }
         addDependency( "org.codehaus.modello", "modello-test", properties.getProperty( "version" ) );
 
         String[] classPathElements = new String[dependencies.size() + 2];
@@ -160,10 +158,8 @@ public abstract class AbstractModelloGeneratorTest
             classPathElements[i + 2] = ( (File) dependencies.get( i ) ).getAbsolutePath();
         }
 
-        String[] sourceDirectories = new String[]{
-            getTestPath( "src/test/verifiers/" + getName() ),
-            generatedSources.getAbsolutePath()
-        };
+        String[] sourceDirectories = new String[]{getTestPath( "src/test/verifiers/" + getName() ),
+            generatedSources.getAbsolutePath()};
 
         Compiler compiler = new JavacCompiler();
 
@@ -178,9 +174,8 @@ public abstract class AbstractModelloGeneratorTest
         {
             CompilerError message = (CompilerError) it.next();
 
-            System.out.println( message.getFile() +
-                                "[" + message.getStartLine() + "," + message.getStartColumn() + "]: " +
-                                message.getMessage() );
+            System.out.println( message.getFile() + "[" + message.getStartLine() + "," + message.getStartColumn() +
+                "]: " + message.getMessage() );
         }
 
         assertEquals( "There was compilation errors.", 0, messages.size() );

@@ -61,6 +61,8 @@ public class Xpp3Verifier
         verifyReader();
 
         verifyReaderAliases();
+
+        verifyReaderDuplicates();
     }
 
     public void verifyWriter()
@@ -210,8 +212,8 @@ public class Xpp3Verifier
     {
         MavenXpp3Reader reader = new MavenXpp3Reader();
 
-        String xml = "<mavenModel>\n" + "  <website>http://maven.apache.org/website</website>\n"
-            + "  <organisation><name>my-org</name></organisation>\n" + "</mavenModel>";
+        String xml = "<mavenModel>\n" + "  <website>http://maven.apache.org/website</website>\n" +
+            "  <organisation><name>my-org</name></organisation>\n" + "</mavenModel>";
 
         Model expected = new Model();
 
@@ -226,6 +228,37 @@ public class Xpp3Verifier
         Model actual = reader.read( new StringReader( xml ) );
 
         assertModel( expected, actual );
+    }
+
+    public void verifyReaderDuplicates()
+        throws IOException, XmlPullParserException
+    {
+        MavenXpp3Reader reader = new MavenXpp3Reader();
+
+        String xml = "<mavenModel>\n" + "  <builder><sourceDirectory /><sourceDirectory /></builder>\n" + "</mavenModel>";
+
+        try
+        {
+            reader.read( new StringReader( xml ) );
+            Assert.fail( "Should have obtained a parse error for duplicate sourceDirectory" );
+        }
+        catch ( XmlPullParserException expected )
+        {
+            Assert.assertTrue( true );
+        }
+
+        xml = "<mavenModel>\n" + "  <builder><sourceDirectory /></builder>\n" +
+            "  <builder><sourceDirectory /></builder>\n" + "</mavenModel>";
+
+        try
+        {
+            reader.read( new StringReader( xml ) );
+            Assert.fail( "Should have obtained a parse error for duplicate build" );
+        }
+        catch ( XmlPullParserException expected )
+        {
+            Assert.assertTrue( true );
+        }
     }
 
     // ----------------------------------------------------------------------
