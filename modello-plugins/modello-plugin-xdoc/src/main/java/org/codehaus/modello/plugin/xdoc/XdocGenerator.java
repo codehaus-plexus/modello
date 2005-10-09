@@ -37,12 +37,12 @@ import org.codehaus.plexus.util.xml.XMLWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Properties;
 import java.util.Set;
-import java.util.HashSet;
-import java.util.List;
-import java.util.ArrayList;
 
 /**
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
@@ -107,9 +107,9 @@ public class XdocGenerator
         // Body
 
         w.startElement( "body" );
-        
+
         // Descriptor with links
-        
+
         w.startElement( "section" );
 
         w.addAttribute( "name", objectModel.getName() );
@@ -127,7 +127,7 @@ public class XdocGenerator
         ModelClass root = objectModel.getClass( objectModel.getRoot( getGeneratedVersion() ), getGeneratedVersion() );
         sb.append( getModelClassDescriptor( objectModel, root, null, 0 ) );
 
-        w.writeMarkup( "\n" + sb.toString() );
+        w.writeMarkup( "\n" + sb );
 
         w.endElement();
 
@@ -146,7 +146,8 @@ public class XdocGenerator
         writer.close();
     }
 
-    private void writeElementDescriptor( XMLWriter w, Model objectModel, ModelClass modelClass, ModelField field, Set written )
+    private void writeElementDescriptor( XMLWriter w, Model objectModel, ModelClass modelClass, ModelField field,
+                                         Set written )
     {
         written.add( modelClass );
 
@@ -155,7 +156,14 @@ public class XdocGenerator
         String tagName;
         if ( metadata == null || metadata.getTagName() == null )
         {
-            tagName = uncapitalise( modelClass.getName() );
+            if ( field == null )
+            {
+                tagName = uncapitalise( modelClass.getName() );
+            }
+            else
+            {
+                tagName = singular( field.getName() );
+            }
         }
         else
         {
@@ -173,7 +181,7 @@ public class XdocGenerator
 
         w.startElement( "a" );
 
-        w.addAttribute( "name", "class_" + modelClass.getName() );
+        w.addAttribute( "name", "class_" + tagName );
 
         w.endElement();
 
@@ -250,13 +258,12 @@ public class XdocGenerator
         {
             ModelField f = (ModelField) iter.next();
 
-            if ( f instanceof ModelAssociation &&
-                isClassInModel( ( (ModelAssociation) f ).getTo(), objectModel ) )
+            if ( f instanceof ModelAssociation && isClassInModel( ( (ModelAssociation) f ).getTo(), objectModel ) )
             {
                 ModelAssociation association = (ModelAssociation) f;
                 ModelClass fieldModelClass = objectModel.getClass( association.getTo(), getGeneratedVersion() );
 
-                if ( !written.contains( fieldModelClass ) )
+                if ( !written.contains( f.getName() ) )
                 {
                     writeElementDescriptor( w, objectModel, fieldModelClass, f, written );
                 }
@@ -298,7 +305,14 @@ public class XdocGenerator
         String tagName;
         if ( metadata == null || metadata.getTagName() == null )
         {
-            tagName = uncapitalise( modelClass.getName() );
+            if ( field == null )
+            {
+                tagName = uncapitalise( modelClass.getName() );
+            }
+            else
+            {
+                tagName = singular( field.getName() );
+            }
         }
         else
         {
@@ -314,7 +328,7 @@ public class XdocGenerator
             }
         }
 
-        sb.append( "&lt;<a href=\"#class_" + modelClass.getName() + "\">" + tagName );
+        sb.append( "&lt;<a href=\"#class_" ).append( tagName ).append( "\">" ).append( tagName );
 
         List fields = getFieldsForClass( objectModel, modelClass );
         if ( fields.size() > 0 )
@@ -325,10 +339,9 @@ public class XdocGenerator
             {
                 ModelField f = (ModelField) iter.next();
 
-                ModelClass fieldModelClass = null;
+                ModelClass fieldModelClass;
 
-                if ( f instanceof ModelAssociation &&
-                    isClassInModel( ( (ModelAssociation) f ).getTo(), objectModel ) )
+                if ( f instanceof ModelAssociation && isClassInModel( ( (ModelAssociation) f ).getTo(), objectModel ) )
                 {
                     ModelAssociation association = (ModelAssociation) f;
 
@@ -341,7 +354,7 @@ public class XdocGenerator
                             sb.append( "  " );
                         }
 
-                        sb.append( "&lt;" + uncapitalise( association.getName() ) + "&gt;\n" );
+                        sb.append( "&lt;" ).append( uncapitalise( association.getName() ) ).append( "&gt;\n" );
                     }
 
                     fieldModelClass = objectModel.getClass( association.getTo(), getGeneratedVersion() );
@@ -355,7 +368,7 @@ public class XdocGenerator
                             sb.append( "  " );
                         }
 
-                        sb.append( "&lt;/" + uncapitalise( association.getName() ) + "&gt;\n" );
+                        sb.append( "&lt;/" ).append( uncapitalise( association.getName() ) ).append( "&gt;\n" );
 
                         depth--;
                     }
@@ -368,7 +381,7 @@ public class XdocGenerator
                         sb.append( "  " );
                     }
 
-                    sb.append( "&lt;" + uncapitalise( f.getName() ) + "/&gt;\n" );
+                    sb.append( "&lt;" ).append( uncapitalise( f.getName() ) ).append( "/&gt;\n" );
                 }
             }
 
@@ -377,7 +390,7 @@ public class XdocGenerator
                 sb.append( "  " );
             }
 
-            sb.append( "&lt;/" + tagName + "&gt;\n" );
+            sb.append( "&lt;/" ).append( tagName ).append( "&gt;\n" );
         }
         else
         {
