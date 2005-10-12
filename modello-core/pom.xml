@@ -2,27 +2,27 @@
   <parent>
     <artifactId>modello</artifactId>
     <groupId>org.codehaus.modello</groupId>
-    <version>1.0-alpha-6-SNAPSHOT</version>
+    <version>1.0-alpha-6</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.codehaus.modello</groupId>
   <artifactId>modello-core</artifactId>
   <name>Modello Core</name>
-  <version>1.0-alpha-6-SNAPSHOT</version>
+  <version>1.0-alpha-6</version>
   <dependencies>
     <dependency>
       <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-test</artifactId>
-      <version>1.0-alpha-6-SNAPSHOT</version>
+      <version>1.0-alpha-6</version>
       <scope>test</scope>
       <exclusions>
         <exclusion>
-          <groupId>plexus</groupId>
           <artifactId>plexus-utils</artifactId>
+          <groupId>plexus</groupId>
         </exclusion>
         <exclusion>
-          <groupId>plexus</groupId>
           <artifactId>plexus-container-default</artifactId>
+          <groupId>plexus</groupId>
         </exclusion>
       </exclusions>
     </dependency>
