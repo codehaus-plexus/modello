@@ -10,7 +10,7 @@
   <version>1.0-alpha-7-SNAPSHOT</version>
   <dependencies>
     <dependency>
-      <groupId>plexus</groupId>
+      <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-velocity</artifactId>
     </dependency>
   </dependencies>

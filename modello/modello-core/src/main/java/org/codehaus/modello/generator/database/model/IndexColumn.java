@@ -25,8 +25,7 @@ package org.codehaus.modello.generator.database.model;
 public class IndexColumn
 {
     private String name;
-    private String size;
-
+    
     public IndexColumn()
     {
     }

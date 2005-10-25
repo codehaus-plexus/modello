@@ -37,8 +37,6 @@ public class Database
 {
     private String name;
 
-    private String idMethod;
-
     /**
      * Database version id
      */
@@ -73,7 +71,6 @@ public class Database
 
     public void setIdMethod( String idMethod )
     {
-        this.idMethod = idMethod;
     }
 
 

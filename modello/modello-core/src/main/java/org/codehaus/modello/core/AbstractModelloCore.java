@@ -22,17 +22,13 @@ package org.codehaus.modello.core;
  * SOFTWARE.
  */
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Reader;
-import java.io.Writer;
-
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelValidationException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
+
+import java.io.Reader;
+import java.io.Writer;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -56,40 +52,5 @@ public abstract class AbstractModelloCore
         throws ModelloException
     {
         saveModel( model, writer );
-    }
-
-    // ----------------------------------------------------------------------
-    // Util methods
-    // ----------------------------------------------------------------------
-
-    private Reader getReader( File file )
-        throws ModelloException
-    {
-        if ( !file.exists() )
-        {
-            throw new ModelloException( "The specified file doesn't exists: " + file.getAbsolutePath() );
-        }
-
-        try
-        {
-            return new FileReader( file );
-        }
-        catch( IOException ex )
-        {
-            throw new ModelloException( "Error opening the file: " + file.getAbsolutePath() );
-        }
-    }
-
-    private Writer getWriter( File file )
-        throws ModelloException
-    {
-        try
-        {
-            return new FileWriter( file );
-        }
-        catch( IOException ex )
-        {
-            throw new ModelloException( "Error opening the file: " + file.getAbsolutePath() );
-        }
     }
 }

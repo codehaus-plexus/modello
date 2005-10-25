@@ -123,11 +123,6 @@ abstract class JStructure extends JType
     private JDocComment jdc = null;
 
     /**
-     * The list of methods of this JClass
-     */
-    private Vector methods = null;
-
-    /**
      * The JModifiers for this JStructure, which allows us to
      * change the resulting qualifiers
      */
@@ -167,7 +162,6 @@ abstract class JStructure extends JType
         imports = new Vector();
         interfaces = new Vector();
         jdc = new JDocComment();
-        methods = new Vector();
         modifiers = new JModifiers();
         //-- initialize default Java doc
         jdc.addDescriptor( JDocDescriptor.createVersionDesc( version ) );
