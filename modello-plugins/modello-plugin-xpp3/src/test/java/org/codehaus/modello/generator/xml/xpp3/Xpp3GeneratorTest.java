@@ -113,8 +113,13 @@ public class Xpp3GeneratorTest
 
         modello.generate( model, "xpp3-reader", parameters );
 
-        // TODO: read my own pom, get dep from there
-        addDependency( "org.codehaus.modello", "modello-core", "1.0-alpha-4-SNAPSHOT" );
+        Properties properties = new Properties( System.getProperties() );
+        if ( properties.getProperty( "version" ) == null )
+        {
+            properties.load(
+                getClass().getResourceAsStream( "/META-INF/maven/org.codehaus.modello/modello-core/pom.properties" ) );
+        }
+        addDependency( "org.codehaus.modello", "modello-core", properties.getProperty( "version" ) );
 
         compile( generatedSources, classes );
 

@@ -174,29 +174,4 @@ public class ModelReaderTest
 
         assertEquals( "int", age.getType() );
     }
-
-    private void assertAssociation( Object associationObject )
-    {
-        assertTrue( associationObject instanceof ModelAssociation );
-
-        ModelAssociation association = (ModelAssociation) associationObject;
-
-        assertEquals( "girlfriends", association.getName() );
-
-        assertEquals( "Boy", association.getModelClass().getName() );
-
-        assertBoy( association.getModelClass() );
-
-        assertEquals( "Girl", association.getToClass().getName() );
-
-        assertGirl( association.getToClass() );
-
-//        assertEquals( "girlfriends", association.getFromRole() );
-
-//        assertEquals( "boyfriend", association.getToRole() );
-
-//        assertEquals( "1", association.getFromMultiplicity() );
-
-//        assertEquals( "*", association.getToMultiplicity() );
-    }
 }

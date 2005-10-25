@@ -95,9 +95,7 @@ public abstract class AbstractModelloGeneratorTest
 
         String url = "file://" + localRepo;
 
-        repository = artifactRepositoryFactory.createArtifactRepository( "local", url, repositoryLayout,
-                                                                         ArtifactRepository.SNAPSHOT_POLICY_ALWAYS,
-                                                                         ArtifactRepository.CHECKSUM_POLICY_WARN );
+        repository = artifactRepositoryFactory.createArtifactRepository( "local", url, repositoryLayout, null, null );
 
         artifactFactory = (ArtifactFactory) lookup( ArtifactFactory.ROLE );
     }

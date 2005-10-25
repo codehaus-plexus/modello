@@ -40,12 +40,6 @@ public abstract class AbstractPluginManager
 {
     private Map plugins;
 
-    private Class pluginClass;
-
-    // ----------------------------------------------------------------------
-    // Component Lifecycle
-    // ----------------------------------------------------------------------
-
     public void initialize()
     {
         if ( plugins == null )
