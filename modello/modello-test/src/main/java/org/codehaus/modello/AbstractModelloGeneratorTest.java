@@ -135,7 +135,7 @@ public abstract class AbstractModelloGeneratorTest
     {
         addDependency( "junit", "junit", "3.8.1" );
 
-        addDependency( "plexus", "plexus-utils", "1.0-alpha-3" );
+        addDependency( "org.codehaus.plexus", "plexus-utils", "1.0.4" );
 
         Properties properties = new Properties( System.getProperties() );
         if ( properties.getProperty( "version" ) == null )
