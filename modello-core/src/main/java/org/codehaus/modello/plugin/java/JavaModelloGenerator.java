@@ -177,6 +177,8 @@ public class JavaModelloGenerator
             JSourceWriter sourceWriter = new JSourceWriter( writer );
 
             JClass jClass = new JClass( modelClass.getName() );
+            
+            jClass.getJDocComment().setComment( modelClass.getDescription() );
 
             addModelImports( jClass, modelClass );
 
@@ -537,6 +539,7 @@ public class JavaModelloGenerator
 
         if ( javaFieldMetadata.isGetter() )
         {
+            
             jClass.addMethod( createGetter( field, modelField ) );
         }
 
@@ -556,6 +559,8 @@ public class JavaModelloGenerator
 
         JMethod getter = new JMethod( field.getType(), prefix + propertyName );
 
+        getter.getJDocComment().setComment( "Get " + modelField.getDescription() );
+        
         getter.getSourceCode().add( "return this." + field.getName() + ";" );
 
         return getter;
@@ -567,6 +572,8 @@ public class JavaModelloGenerator
 
         JMethod setter = new JMethod( null, "set" + propertyName );
 
+        setter.getJDocComment().setComment( "Set " + modelField.getDescription() );
+        
         setter.addParameter( new JParameter( field.getType(), field.getName() ) );
 
         JSourceCode sc = setter.getSourceCode();
