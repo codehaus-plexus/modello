@@ -167,6 +167,8 @@ public class Xpp3ReaderGenerator
         JMethod unmarshall = new JMethod( new JClass( root.getName() ), "read" );
 
         unmarshall.addParameter( new JParameter( new JClass( "Reader" ), "reader" ) );
+        
+        unmarshall.addParameter( new JParameter( JClass.Boolean, "strict" ) );
 
         unmarshall.addException( new JClass( "IOException" ) );
         unmarshall.addException( new JClass( "XmlPullParserException" ) );
@@ -183,7 +185,19 @@ public class Xpp3ReaderGenerator
 
         sc.add( "" );
 
-        sc.add( "return parse" + root.getName() + "( \"" + getTagName( root ) + "\", parser );" );
+        sc.add( "return parse" + root.getName() + "( \"" + getTagName( root ) + "\", parser, strict );" );
+
+        jClass.addMethod( unmarshall );
+
+        unmarshall = new JMethod( new JClass( root.getName() ), "read" );
+
+        unmarshall.addParameter( new JParameter( new JClass( "Reader" ), "reader" ) );
+
+        unmarshall.addException( new JClass( "IOException" ) );
+        unmarshall.addException( new JClass( "XmlPullParserException" ) );
+
+        sc = unmarshall.getSourceCode();
+        sc.add( "return read( reader, true );" );
 
         jClass.addMethod( unmarshall );
 
@@ -257,6 +271,8 @@ public class Xpp3ReaderGenerator
 
         unmarshall.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
 
+        unmarshall.addParameter( new JParameter( JClass.Boolean, "strict" ) );
+        
         unmarshall.addException( new JClass( "IOException" ) );
 
         unmarshall.addException( new JClass( "XmlPullParserException" ) );
@@ -383,7 +399,7 @@ public class Xpp3ReaderGenerator
                     addCodeToCheckIfParsed( sc, tagName );
 
                     sc.add( uncapClassName + ".set" + capFieldName + "( parse" + association.getTo() + "( \"" +
-                        tagName + "\", parser ) );" );
+                        tagName + "\", parser, strict ) );" );
 
                     sc.unindent();
 
@@ -452,7 +468,7 @@ public class Xpp3ReaderGenerator
                         if ( isClassInModel( association.getTo(), modelClass.getModel() ) )
                         {
                             sc.add( associationName + ".add( parse" + association.getTo() + "( \"" + singularTagName +
-                                "\", parser ) );" );
+                                "\", parser, strict ) );" );
                         }
                         else
                         {
@@ -673,8 +689,17 @@ public class Xpp3ReaderGenerator
 
             sc.indent();
 
-            sc.add(
-                "throw new XmlPullParserException( \"Unrecognised tag: '\" + parser.getName() + \"'\", parser, null);" );
+            sc.add( "if ( strict )" );
+            
+            sc.add( "{" );
+            
+            sc.indent();
+            
+            sc.add( "throw new XmlPullParserException( \"Unrecognised tag: '\" + parser.getName() + \"'\", parser, null);" );
+            
+            sc.unindent();
+            
+            sc.add( "}" );
 
             sc.unindent();
 
@@ -694,8 +719,18 @@ public class Xpp3ReaderGenerator
 
             sc.indent();
 
+            sc.add( "if ( strict )" );
+            
+            sc.add( "{" );
+            
+            sc.indent();
+            
             sc.add(
-                "throw new XmlPullParserException( \"Unrecognised tag: '\" + parser.getName() + \"'\", parser, null);" );
+            "throw new XmlPullParserException( \"Unrecognised tag: '\" + parser.getName() + \"'\", parser, null);" );
+            
+            sc.unindent();
+
+            sc.add( "}" );
 
             sc.unindent();
 
@@ -1143,6 +1178,7 @@ public class Xpp3ReaderGenerator
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
         method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
         method.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
+        method.addParameter( new JParameter( JClass.Boolean, "strict" ) );
 
         sc = method.getSourceCode();
 
@@ -1152,8 +1188,18 @@ public class Xpp3ReaderGenerator
 
         sc.indent();
 
+        sc.add( "if ( strict )" );
+        
+        sc.add( "{" );
+        
+        sc.indent();
+        
         sc.add(
-            "throw new XmlPullParserException( \"Missing required value for attribute '\" + attribute + \"'\", parser, null );" );
+        "throw new XmlPullParserException( \"Missing required value for attribute '\" + attribute + \"'\", parser, null );" );
+        
+        sc.unindent();
+        
+        sc.add( "}" );
 
         sc.unindent();
 
@@ -1219,6 +1265,7 @@ public class Xpp3ReaderGenerator
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
         method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
         method.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
+        method.addParameter( new JParameter( JClass.Boolean, "strict" ) );
 
         sc = method.getSourceCode();
 
@@ -1232,6 +1279,7 @@ public class Xpp3ReaderGenerator
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
         method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
         method.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
+        method.addParameter( new JParameter( JClass.Boolean, "strict" ) );
 
         sc = method.getSourceCode();
 
@@ -1245,6 +1293,7 @@ public class Xpp3ReaderGenerator
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
         method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
         method.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
+        method.addParameter( new JParameter( JClass.Boolean, "strict" ) );
 
         sc = method.getSourceCode();
 
@@ -1258,6 +1307,7 @@ public class Xpp3ReaderGenerator
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
         method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
         method.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
+        method.addParameter( new JParameter( JClass.Boolean, "strict" ) );
 
         sc = method.getSourceCode();
 
@@ -1271,6 +1321,7 @@ public class Xpp3ReaderGenerator
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
         method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
         method.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
+        method.addParameter( new JParameter( JClass.Boolean, "strict" ) );
 
         sc = method.getSourceCode();
 
@@ -1332,8 +1383,18 @@ public class Xpp3ReaderGenerator
 
         sc.indent();
 
+        sc.add( "if ( strict )" );
+        
+        sc.add( "{" );
+        
+        sc.indent();
+        
         sc.add( "throw new XmlPullParserException( \"Unable to parse element '\" + attribute + \"', must be " +
-            typeDesc + "\", parser, null );" );
+                typeDesc + "\", parser, null );" );
+        
+        sc.unindent();
+        
+        sc.add( "}" );
 
         sc.unindent();
 

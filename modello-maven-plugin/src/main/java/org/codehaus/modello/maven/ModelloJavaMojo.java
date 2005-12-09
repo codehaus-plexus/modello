@@ -1,9 +1,5 @@
 package org.codehaus.modello.maven;
 
-import org.codehaus.modello.maven.AbstractModelloGeneratorMojo;
-
-import java.io.File;
-
 /*
  * Copyright (c) 2004, Codehaus.org
  *
@@ -25,6 +21,10 @@ import java.io.File;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+
+import org.codehaus.modello.maven.AbstractModelloGeneratorMojo;
+
+import java.io.File;
 
 /**
  * @goal java

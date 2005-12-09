@@ -34,6 +34,8 @@ public class ModelloParameterConstants
 
     public final static String PACKAGE_WITH_VERSION = "modello.package.with.version";
 
+    public static final String STRICT_PARSER = "modello.strict.parser";
+
     private ModelloParameterConstants()
     {
     }

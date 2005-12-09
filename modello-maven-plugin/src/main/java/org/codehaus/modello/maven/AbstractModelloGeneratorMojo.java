@@ -148,7 +148,7 @@ public abstract class AbstractModelloGeneratorMojo
         parameters.setProperty( ModelloParameterConstants.VERSION, version );
 
         parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.valueOf( packageWithVersion ).toString() );
-
+        
         customizeParameters( parameters );
 
         // ----------------------------------------------------------------------
