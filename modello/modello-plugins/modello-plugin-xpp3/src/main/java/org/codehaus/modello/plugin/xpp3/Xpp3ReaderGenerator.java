@@ -799,7 +799,7 @@ public class Xpp3ReaderGenerator
 /* TODO: this and a default
         if ( fieldMetaData.isRequired() )
         {
-            parserGetter = "getRequiredAttributeValue( " + parserGetter + ", \"" + tagName + "\", parser )";
+            parserGetter = "getRequiredAttributeValue( " + parserGetter + ", \"" + tagName + "\", parser, strict )";
         }
 */
 
@@ -821,27 +821,27 @@ public class Xpp3ReaderGenerator
         else if ( "double".equals( type ) )
         {
             sc.add( objectName + "." + setterName + "( getDoubleValue( " + parserGetter + ", \"" + tagName +
-                "\", parser ) );" );
+                "\", parser, strict ) );" );
         }
         else if ( "float".equals( type ) )
         {
             sc.add( objectName + "." + setterName + "( getFloatValue( " + parserGetter + ", \"" + tagName +
-                "\", parser ) );" );
+                "\", parser, strict ) );" );
         }
         else if ( "int".equals( type ) )
         {
             sc.add( objectName + "." + setterName + "( getIntegerValue( " + parserGetter + ", \"" + tagName +
-                "\", parser ) );" );
+                "\", parser, strict ) );" );
         }
         else if ( "long".equals( type ) )
         {
             sc.add( objectName + "." + setterName + "( getLongValue( " + parserGetter + ", \"" + tagName +
-                "\", parser ) );" );
+                "\", parser, strict ) );" );
         }
         else if ( "short".equals( type ) )
         {
             sc.add( objectName + "." + setterName + "( getShortValue( " + parserGetter + ", \"" + tagName +
-                "\", parser ) );" );
+                "\", parser, strict ) );" );
         }
         else if ( "String".equals( type ) || "Boolean".equals( type ) )
         {
