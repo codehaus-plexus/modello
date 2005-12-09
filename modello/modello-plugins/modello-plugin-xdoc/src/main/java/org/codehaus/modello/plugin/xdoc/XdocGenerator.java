@@ -162,7 +162,15 @@ public class XdocGenerator
             }
             else
             {
-                tagName = singular( field.getName() );
+                tagName = field.getName();
+                if ( field instanceof ModelAssociation )
+                {
+                    ModelAssociation a = (ModelAssociation) field;
+                    if ( ModelAssociation.MANY_MULTIPLICITY.equals( a.getMultiplicity() ) )
+                    {
+                        tagName = singular( tagName );
+                    }
+                }                
             }
         }
         else
@@ -311,7 +319,15 @@ public class XdocGenerator
             }
             else
             {
-                tagName = singular( field.getName() );
+                tagName = field.getName();
+                if ( field instanceof ModelAssociation )
+                {
+                    ModelAssociation a = (ModelAssociation) field;
+                    if ( ModelAssociation.MANY_MULTIPLICITY.equals( a.getMultiplicity() ) )
+                    {
+                        tagName = singular( tagName );
+                    }
+                }                
             }
         }
         else
