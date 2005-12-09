@@ -105,17 +105,15 @@ public class Xpp3ReaderGenerator
 
         jClass.setPackageName( packageName );
 
-        jClass.addImport( "org.codehaus.plexus.util.xml.*" );
-
-        jClass.addImport( "org.codehaus.plexus.util.xml.pull.*" );
+        jClass.addImport( "org.codehaus.plexus.util.xml.pull.MXParser" );
+        
+        jClass.addImport( "org.codehaus.plexus.util.xml.pull.XmlPullParser" );
+        
+        jClass.addImport( "org.codehaus.plexus.util.xml.pull.XmlPullParserException" );
 
         jClass.addImport( "java.io.IOException" );
 
         jClass.addImport( "java.io.Reader" );
-
-        jClass.addImport( "java.util.ArrayList" );
-
-        jClass.addImport( "java.util.List" );
 
         jClass.addImport( "java.text.DateFormat" );
 
@@ -260,6 +258,7 @@ public class Xpp3ReaderGenerator
         unmarshall.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
 
         unmarshall.addException( new JClass( "IOException" ) );
+
         unmarshall.addException( new JClass( "XmlPullParserException" ) );
 
         unmarshall.getModifiers().makePrivate();
@@ -310,7 +309,7 @@ public class Xpp3ReaderGenerator
             if ( fieldMetadata.isAttribute() )
             {
                 writePrimitiveField( field, field.getType(), uncapClassName, "set" + capitalise( field.getName() ),
-                                     sc );
+                                     sc, jClass );
             }
         }
 
@@ -457,7 +456,7 @@ public class Xpp3ReaderGenerator
                         }
                         else
                         {
-                            writePrimitiveField( association, association.getTo(), associationName, "add", sc );
+                            writePrimitiveField( association, association.getTo(), associationName, "add", sc, jClass );
                         }
 
                         if ( wrappedList )
@@ -640,7 +639,7 @@ public class Xpp3ReaderGenerator
 
                 //ModelField
                 writePrimitiveField( field, field.getType(), uncapClassName, "set" + capitalise( field.getName() ),
-                                     sc );
+                                     sc, jClass );
 
                 sc.unindent();
 
@@ -740,7 +739,7 @@ public class Xpp3ReaderGenerator
     }
 
     private void writePrimitiveField( ModelField field, String type, String objectName, String setterName,
-                                      JSourceCode sc )
+                                      JSourceCode sc, JClass jClass )
     {
         XmlFieldMetadata fieldMetaData = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
 
@@ -821,6 +820,8 @@ public class Xpp3ReaderGenerator
         }
         else if ( "DOM".equals( type ) )
         {
+            jClass.addImport( "org.codehaus.plexus.util.xml.Xpp3DomBuilder" );
+            
             sc.add( objectName + "." + setterName + "( Xpp3DomBuilder.build( parser ) );" );
         }
         else

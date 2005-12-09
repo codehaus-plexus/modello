@@ -105,8 +105,6 @@ public class Xpp3WriterGenerator
 
         jClass.setPackageName( packageName );
 
-        jClass.addImport( "org.codehaus.plexus.util.xml.*" );
-
         jClass.addImport( "org.codehaus.plexus.util.xml.pull.*" );
 
         jClass.addImport( "java.io.Writer" );
@@ -425,6 +423,8 @@ public class Xpp3WriterGenerator
 
                 if ( "DOM".equals( field.getType() ) )
                 {
+                    jClass.addImport( "org.codehaus.plexus.util.xml.Xpp3Dom" );
+
                     sc.add( "((Xpp3Dom) " + value + ").writeToSerializer( NAMESPACE, serializer );" );
                 }
                 else
