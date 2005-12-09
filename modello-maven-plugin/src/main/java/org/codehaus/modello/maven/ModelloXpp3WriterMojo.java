@@ -40,7 +40,7 @@ public class ModelloXpp3WriterMojo
     extends AbstractModelloGeneratorMojo
 {
     /**
-     * @parameter expression="${basedir}/target/generated-sources"
+     * @parameter expression="${basedir}/target/generated-sources/modello"
      *
      * @required
      */

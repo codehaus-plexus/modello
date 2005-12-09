@@ -79,9 +79,7 @@ public abstract class AbstractModelloGeneratorMojo
     private boolean packageWithVersion;
 
     /**
-     * @parameter expression="${component.org.codehaus.modello.core.ModelloCore}"
-     *
-     * @required
+     * @component
      */
     private ModelloCore modelloCore;
 
