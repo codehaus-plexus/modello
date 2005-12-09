@@ -162,13 +162,6 @@ public final class JInterface extends JStructure
         }
 
         fields.put( name, jField );
-
-        // if member is of a type not imported by this class
-        // then add import
-        JType type = jField.getType();
-        while ( type.isArray() ) type = type.getComponentType();
-        if ( !type.isPrimitive() )
-            addImport( ( (JClass) type ).getName() );
     }
 
     /**
@@ -252,14 +245,6 @@ public final class JInterface extends JStructure
         //-- END SORT
         if ( !added ) methods.addElement( jMethodSig );
 
-        //-- check parameter packages to make sure we have them
-        //-- in our import list
-
-        String[] pkgNames = jMethodSig.getParameterClassNames();
-        for ( int i = 0; i < pkgNames.length; i++ )
-        {
-            addImport( pkgNames[i] );
-        }
         //-- check return type to make sure it's included in the
         //-- import list
         JType jType = jMethodSig.getReturnType();

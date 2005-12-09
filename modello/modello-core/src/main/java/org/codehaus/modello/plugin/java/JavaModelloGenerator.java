@@ -113,8 +113,6 @@ public class JavaModelloGenerator
 
             JInterface jInterface = new JInterface( modelInterface.getName() );
 
-            jInterface.addImport( "java.util.*" );
-
             jInterface.setPackageName( packageName );
 
             if ( modelInterface.getSuperInterface() != null )
@@ -179,8 +177,6 @@ public class JavaModelloGenerator
             JSourceWriter sourceWriter = new JSourceWriter( writer );
 
             JClass jClass = new JClass( modelClass.getName() );
-
-            jClass.addImport( "java.util.*" );
 
             addModelImports( jClass, modelClass );
 
@@ -719,6 +715,8 @@ public class JavaModelloGenerator
             }
             else
             {
+                jClass.addImport( "java.util.Collection" );
+
                 sc.add( "Collection " + modelAssociation.getName() + " = get" + capitalise( modelAssociation.getName() ) + "();" );
 
                 sc.add( "" );

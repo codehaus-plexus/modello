@@ -163,19 +163,6 @@ public class JMethod implements JMember
         throws IllegalArgumentException
     {
         _signature.addParameter( parameter );
-
-        //-- be considerate and add the class name to the
-        //-- each declaring class' list of imports
-        JType jType = parameter.getType();
-        while ( jType.isArray() ) jType = jType.getComponentType();
-        if ( !jType.isPrimitive() )
-        {
-            JClass jClass = (JClass) jType;
-            for ( int i = 0; i < _classes.size(); i++ )
-            {
-                ( (JClass) _classes.elementAt( i ) ).addImport( jClass.getName() );
-            }
-        }
     } //-- addParameter
 
     /**

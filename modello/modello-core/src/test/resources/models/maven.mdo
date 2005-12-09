@@ -1244,9 +1244,9 @@
           <version>3.0.0+</version>
           <!-- @todo: should these be built somewhere so they are only created once, and can be modified? -->
           <code>
-            public List getDefaultExcludes()
+            public java.util.List getDefaultExcludes()
             {
-                List defaultExcludes = new ArrayList();
+                java.util.List defaultExcludes = new java.util.ArrayList();
                 defaultExcludes.add( "**/*~" );
                 defaultExcludes.add( "**/#*#" );
                 defaultExcludes.add( "**/.#*" );

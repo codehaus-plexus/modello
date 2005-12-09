@@ -174,18 +174,6 @@ public class JConstructor
 
         params.put( parameter.getName(), parameter );
 
-
-
-        //-- be considerate and add the class name to the
-        //-- declaring class's list of imports
-        if ( declaringClass != null )
-        {
-            JType jType = parameter.getType();
-            if ( !jType.isPrimitive() )
-            {
-                declaringClass.addImport( jType.getName() );
-            }
-        }
     } //-- addParameter
 
 

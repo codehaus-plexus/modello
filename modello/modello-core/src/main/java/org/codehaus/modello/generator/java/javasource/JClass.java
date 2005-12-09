@@ -198,15 +198,6 @@ public class JClass extends JStructure
         }
         _fields.put( name, jField );
 
-        // if member is of a type not imported by this class
-        // then add import
-        JType type = jField.getType();
-        while ( type.isArray() ) type = type.getComponentType();
-        if ( !type.isPrimitive() )
-        {
-            addImport( ( type ).getName() );
-        }
-
     } //-- addField
 
     /**
@@ -312,33 +303,6 @@ public class JClass extends JStructure
         //-- END SORT
         if ( !added ) _methods.addElement( jMethod );
 
-        //-- check parameter packages to make sure we have them
-        //-- in our import list
-
-        String[] pkgNames = jMethod.getParameterClassNames();
-        for ( int i = 0; i < pkgNames.length; i++ )
-        {
-            addImport( pkgNames[i] );
-        }
-        //-- check return type to make sure it's included in the
-        //-- import list
-        JType jType = jMethod.getReturnType();
-        if ( jType != null )
-        {
-            while ( jType.isArray() )
-                jType = jType.getComponentType();
-            if ( importReturnType )
-            {
-                if ( !jType.isPrimitive() )
-                    addImport( ( (JClass) jType ).getName() );
-            }
-        }
-        //-- check exceptions
-        JClass[] exceptions = jMethod.getExceptions();
-        for ( int i = 0; i < exceptions.length; i++ )
-        {
-            addImport( exceptions[i].getName() );
-        }
     } //-- addMethod
 
     /**
