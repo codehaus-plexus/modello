@@ -105,6 +105,8 @@ public class Xpp3ReaderGenerator
 
         jClass.setPackageName( packageName );
 
+        jClass.addImport( "org.codehaus.plexus.util.IOUtil" );
+        
         jClass.addImport( "org.codehaus.plexus.util.xml.pull.MXParser" );
         
         jClass.addImport( "org.codehaus.plexus.util.xml.pull.XmlPullParser" );
@@ -115,10 +117,22 @@ public class Xpp3ReaderGenerator
 
         jClass.addImport( "java.io.Reader" );
 
+        jClass.addImport( "java.io.StringWriter" );
+        
+        jClass.addImport( "java.io.StringReader" );
+        
+        jClass.addImport( "java.io.ByteArrayInputStream" );
+        
+        jClass.addImport( "java.io.InputStreamReader" );
+        
         jClass.addImport( "java.text.DateFormat" );
 
         jClass.addImport( "java.text.ParsePosition" );
 
+        jClass.addImport( "java.util.regex.Matcher" );
+        
+        jClass.addImport( "java.util.regex.Pattern" );
+        
         addModelImports( jClass, null );
 
         // ----------------------------------------------------------------------
@@ -174,11 +188,37 @@ public class Xpp3ReaderGenerator
         unmarshall.addException( new JClass( "XmlPullParserException" ) );
 
         JSourceCode sc = unmarshall.getSourceCode();
-
+        
+        sc.add( "StringWriter bufferWriter = new StringWriter();" );
+        
+        sc.add( "IOUtil.copy( reader, bufferWriter );" );
+        
+        sc.add( "String content = bufferWriter.toString();" );
+        
+        sc.add( "Pattern pattern = Pattern.compile( \"^<[?]xml.+encoding=\\\"(.+)\\\"\" );" );
+        
+        sc.add( "Matcher matcher = pattern.matcher( content );" );
+        
+        sc.add( "" );
+        
         sc.add( "XmlPullParser parser = new MXParser();" );
 
-        sc.add( "parser.setInput( reader );" );
+        sc.add( "String encoding;" );
+        sc.add( "if ( matcher.find() )" );
+        sc.add( "{" );
+        sc.add( "" );
+        sc.add( "    encoding = matcher.group( 1 );" );
+        sc.add( "" );
+        sc.add( "}" );
+        sc.add( "else" );
+        sc.add( "{" );
+        sc.add( "    encoding = \"UTF-8\";" );
+        sc.add( "}" );
 
+        sc.add( "" );
+        sc.add( "    ByteArrayInputStream inStream = new ByteArrayInputStream( content.getBytes( encoding ) );" );
+        sc.add( "    Reader encodedReader = new InputStreamReader( inStream );" );
+        sc.add( "    parser.setInput( encodedReader );" );
         sc.add( "" );
 
         writeParserInitialization( sc );
