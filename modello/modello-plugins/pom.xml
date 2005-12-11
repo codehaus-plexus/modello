@@ -1,0 +1,38 @@
+<project>
+  <parent>
+    <artifactId>modello</artifactId>
+    <groupId>org.codehaus.modello</groupId>
+    <version>1.0-alpha-7</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>modello-plugins</artifactId>
+  <packaging>pom</packaging>
+  <name>Modello Plugin Parent</name>
+  <version>1.0-alpha-7</version>
+  <modules>
+    <module>modello-plugin-xml</module>
+    <module>modello-plugin-store</module>
+    <module>modello-plugin-jpox</module>
+    <module>modello-plugin-prevayler</module>
+    <module>modello-plugin-xdoc</module>
+    <module>modello-plugin-xsd</module>
+    <module>modello-plugin-xpp3</module>
+  </modules>
+  <dependencies>
+    <dependency>
+      <groupId>org.codehaus.modello</groupId>
+      <artifactId>modello-test</artifactId>
+      <version>1.0-alpha-7</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.modello</groupId>
+      <artifactId>modello-core</artifactId>
+      <version>1.0-alpha-7</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-container-default</artifactId>
+      <version>1.0-alpha-8</version>
+    </dependency>
+  </dependencies>
+</project>

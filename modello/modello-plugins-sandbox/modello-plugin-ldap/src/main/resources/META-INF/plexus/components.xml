@@ -1,0 +1,30 @@
+<component-set>
+  <components>
+    <!--
+     | LDAP Metadata Plugin
+     |-->
+    <component>
+      <role>org.codehaus.modello.metadata.MetadataPlugin</role>
+      <role-hint>ldap</role-hint>
+      <implementation>org.codehaus.modello.plugin.ldap.metadata.LdapMetadataPlugin</implementation>
+    </component>
+
+    <!--
+     | OpenLDAP Schema Generator Plugin
+     |-->
+    <component>
+      <role>org.codehaus.modello.plugin.ModelloGenerator</role>
+      <role-hint>ldap-schema</role-hint>
+      <implementation>org.codehaus.modello.plugin.ldap.LdapSchemaModelloGenerator</implementation>
+    </component>
+
+    <!--
+     |
+     |-->
+    <component>
+      <role>org.codehaus.modello.plugin.ModelloGenerator</role>
+      <role-hint>obj-state-factory</role-hint>
+      <implementation>org.codehaus.modello.plugin.ldap.ObjStateFactoryModelloGenerator</implementation>
+    </component>
+  </components>
+</component-set>
