@@ -253,6 +253,22 @@ public class JavaModelloGenerator
                     jClass.addSourceCode( codeSegment.getCode() );
                 }
             }
+            
+            StringBuffer encodingStuff = new StringBuffer();
+            
+            encodingStuff.append( "\n    private String modelEncoding = \"UTF-8\";" );
+            encodingStuff.append( "\n" );
+            encodingStuff.append( "\n    public void setModelEncoding( String modelEncoding )" );
+            encodingStuff.append( "\n    {" );
+            encodingStuff.append( "\n        this.modelEncoding = modelEncoding;" );
+            encodingStuff.append( "\n    }" );
+            encodingStuff.append( "\n" );
+            encodingStuff.append( "\n    public String getModelEncoding()" );
+            encodingStuff.append( "\n    {" );
+            encodingStuff.append( "\n        return modelEncoding;" );
+            encodingStuff.append( "\n    }" );
+            
+            jClass.addSourceCode( encodingStuff.toString() );
 
             jClass.print( sourceWriter );
 
