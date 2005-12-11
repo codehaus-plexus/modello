@@ -189,39 +189,21 @@ public class Xpp3ReaderGenerator
 
         JSourceCode sc = unmarshall.getSourceCode();
         
-        sc.add( "StringWriter bufferWriter = new StringWriter();" );
-        
-        sc.add( "IOUtil.copy( reader, bufferWriter );" );
-        
-        sc.add( "String content = bufferWriter.toString();" );
-        
-        sc.add( "Pattern pattern = Pattern.compile( \"^<[?]xml.+encoding=\\\"([^\\\"]+)\\\"\" );" );
-        
-        sc.add( "Matcher matcher = pattern.matcher( content );" );
-        
-        sc.add( "" );
-        
         sc.add( "XmlPullParser parser = new MXParser();" );
 
-        sc.add( "String encoding;" );
-        sc.add( "if ( matcher.find() )" );
-        sc.add( "{" );
         sc.add( "" );
-        sc.add( "    encoding = matcher.group( 1 );" );
-        sc.add( "" );
-        sc.add( "}" );
-        sc.add( "else" );
-        sc.add( "{" );
-        sc.add( "    encoding = \"UTF-8\";" );
-        sc.add( "}" );
-
-        sc.add( "" );
-        sc.add( "    ByteArrayInputStream inStream = new ByteArrayInputStream( content.getBytes( encoding ) );" );
-        sc.add( "    Reader encodedReader = new InputStreamReader( inStream );" );
-        sc.add( "    parser.setInput( encodedReader );" );
+        
+        sc.add( "parser.setInput( reader );" );
+        
         sc.add( "" );
 
         writeParserInitialization( sc );
+
+        sc.add( "" );
+        
+        sc.add( "parser.next();" );
+        
+        sc.add( "String encoding = parser.getInputEncoding();" );
 
         sc.add( "" );
 
