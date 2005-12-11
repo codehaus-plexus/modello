@@ -195,7 +195,7 @@ public class Xpp3ReaderGenerator
         
         sc.add( "String content = bufferWriter.toString();" );
         
-        sc.add( "Pattern pattern = Pattern.compile( \"^<[?]xml.+encoding=\\\"(.+)\\\"\" );" );
+        sc.add( "Pattern pattern = Pattern.compile( \"^<[?]xml.+encoding=\\\"([^\\\"]+)\\\"\" );" );
         
         sc.add( "Matcher matcher = pattern.matcher( content );" );
         
@@ -225,7 +225,7 @@ public class Xpp3ReaderGenerator
 
         sc.add( "" );
 
-        sc.add( "return parse" + root.getName() + "( \"" + getTagName( root ) + "\", parser, strict );" );
+        sc.add( "return parse" + root.getName() + "( \"" + getTagName( root ) + "\", parser, strict, encoding );" );
 
         jClass.addMethod( unmarshall );
 
@@ -313,6 +313,8 @@ public class Xpp3ReaderGenerator
 
         unmarshall.addParameter( new JParameter( JClass.Boolean, "strict" ) );
         
+        unmarshall.addParameter( new JParameter( new JClass( "String" ), "encoding" ) );
+
         unmarshall.addException( new JClass( "IOException" ) );
 
         unmarshall.addException( new JClass( "XmlPullParserException" ) );
@@ -322,6 +324,8 @@ public class Xpp3ReaderGenerator
         JSourceCode sc = unmarshall.getSourceCode();
 
         sc.add( className + " " + uncapClassName + " = new " + className + "();" );
+        
+        sc.add( uncapClassName + ".setModelEncoding( encoding );" );
 
         sc.add( "java.util.Set parsed = new java.util.HashSet();" );
 
@@ -439,7 +443,7 @@ public class Xpp3ReaderGenerator
                     addCodeToCheckIfParsed( sc, tagName );
 
                     sc.add( uncapClassName + ".set" + capFieldName + "( parse" + association.getTo() + "( \"" +
-                        tagName + "\", parser, strict ) );" );
+                        tagName + "\", parser, strict, encoding ) );" );
 
                     sc.unindent();
 
@@ -508,7 +512,7 @@ public class Xpp3ReaderGenerator
                         if ( isClassInModel( association.getTo(), modelClass.getModel() ) )
                         {
                             sc.add( associationName + ".add( parse" + association.getTo() + "( \"" + singularTagName +
-                                "\", parser, strict ) );" );
+                                "\", parser, strict, encoding ) );" );
                         }
                         else
                         {
@@ -839,7 +843,7 @@ public class Xpp3ReaderGenerator
 /* TODO: this and a default
         if ( fieldMetaData.isRequired() )
         {
-            parserGetter = "getRequiredAttributeValue( " + parserGetter + ", \"" + tagName + "\", parser, strict )";
+            parserGetter = "getRequiredAttributeValue( " + parserGetter + ", \"" + tagName + "\", parser, strict, encoding )";
         }
 */
 
