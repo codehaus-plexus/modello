@@ -113,6 +113,13 @@
         </plugin>
       </plugins>
     </pluginManagement>
+    <extensions>
+      <extension>
+        <groupId>org.apache.maven.wagon</groupId>
+        <artifactId>wagon-ssh-external</artifactId>
+        <version>RELEASE</version>
+      </extension>
+    </extensions>
   </build>
   <modules>
     <module>modello-maven-plugin</module>
@@ -212,12 +219,12 @@
     <repository>
       <id>repo1</id>
       <name>Maven Central Repository at Codehaus</name>
-      <url>scp://beaver.codehaus.org/home/projects/maven/repository-staging/to-ibiblio/maven2</url>
+      <url>scpexe://beaver.codehaus.org/home/projects/maven/repository-staging/to-ibiblio/maven2</url>
     </repository>
     <snapshotRepository>
       <id>snapshots</id>
       <name>Maven Snapshot Central Repository at Codehaus</name>
-      <url>scp://beaver.codehaus.org/home/projects/maven/repository-staging/snapshots/maven2</url>
+      <url>scpexe://beaver.codehaus.org/home/projects/maven/repository-staging/snapshots/maven2</url>
     </snapshotRepository>
   </distributionManagement>
 </project>
