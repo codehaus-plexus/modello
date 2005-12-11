@@ -1,11 +1,10 @@
 <project>
   <modelVersion>4.0.0</modelVersion>
-
   <groupId>org.codehaus.modello</groupId>
   <artifactId>modello</artifactId>
   <packaging>pom</packaging>
   <name>Modello Parent</name>
-  <version>1.0-alpha-7</version>
+  <version>1.0-alpha-8-SNAPSHOT</version>
   <issueManagement>
     <system>jira</system>
     <url>http://jira.codehaus.org/browse/MODELLO</url>
@@ -95,9 +94,9 @@
     </developer>
   </developers>
   <scm>
-    <connection>scm:svn:https://svn.codehaus.org/modello/tags/modello-1.0-alpha-7</connection>
-    <developerConnection>scm:svn:svn+ssh://svn.codehaus.org/home/projects/modello/scm/tags/modello-1.0-alpha-7</developerConnection>
-    <url>http://svn.modello.codehaus.org/tags/modello-1.0-alpha-7</url>
+    <connection>scm:svn:https://svn.codehaus.org/modello/trunk/modello</connection>
+    <developerConnection>scm:svn:svn+ssh://svn.codehaus.org/home/projects/modello/scm/trunk/modello</developerConnection>
+    <url>http://svn.modello.codehaus.org/trunk/modello</url>
   </scm>
   <organization>
     <name>Codehaus</name>
@@ -113,6 +112,48 @@
     </extensions>
     <pluginManagement>
       <plugins>
+        <plugin>
+          <artifactId>maven-release-plugin</artifactId>
+          <configuration>
+            <tagBase>https://svn.codehaus.org/modello/tags</tagBase>
+          </configuration>
+        </plugin>
+        <plugin>
+          <artifactId>maven-release-plugin</artifactId>
+          <configuration>
+            <tagBase>https://svn.codehaus.org/modello/tags</tagBase>
+          </configuration>
+        </plugin>
+        <plugin>
+          <artifactId>maven-release-plugin</artifactId>
+          <configuration>
+            <tagBase>https://svn.codehaus.org/modello/tags</tagBase>
+          </configuration>
+        </plugin>
+        <plugin>
+          <artifactId>maven-release-plugin</artifactId>
+          <configuration>
+            <tagBase>https://svn.codehaus.org/modello/tags</tagBase>
+          </configuration>
+        </plugin>
+        <plugin>
+          <artifactId>maven-release-plugin</artifactId>
+          <configuration>
+            <tagBase>https://svn.codehaus.org/modello/tags</tagBase>
+          </configuration>
+        </plugin>
+        <plugin>
+          <artifactId>maven-release-plugin</artifactId>
+          <configuration>
+            <tagBase>https://svn.codehaus.org/modello/tags</tagBase>
+          </configuration>
+        </plugin>
+        <plugin>
+          <artifactId>maven-release-plugin</artifactId>
+          <configuration>
+            <tagBase>https://svn.codehaus.org/modello/tags</tagBase>
+          </configuration>
+        </plugin>
         <plugin>
           <artifactId>maven-release-plugin</artifactId>
           <configuration>
