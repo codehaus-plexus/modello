@@ -105,6 +105,8 @@ public class Xpp3ReaderGenerator
 
         jClass.setPackageName( packageName );
 
+        jClass.addImport( "org.codehaus.plexus.util.IOUtil" );
+        
         jClass.addImport( "org.codehaus.plexus.util.xml.pull.MXParser" );
         
         jClass.addImport( "org.codehaus.plexus.util.xml.pull.XmlPullParser" );
@@ -115,10 +117,22 @@ public class Xpp3ReaderGenerator
 
         jClass.addImport( "java.io.Reader" );
 
+        jClass.addImport( "java.io.StringWriter" );
+        
+        jClass.addImport( "java.io.StringReader" );
+        
+        jClass.addImport( "java.io.ByteArrayInputStream" );
+        
+        jClass.addImport( "java.io.InputStreamReader" );
+        
         jClass.addImport( "java.text.DateFormat" );
 
         jClass.addImport( "java.text.ParsePosition" );
 
+        jClass.addImport( "java.util.regex.Matcher" );
+        
+        jClass.addImport( "java.util.regex.Pattern" );
+        
         addModelImports( jClass, null );
 
         // ----------------------------------------------------------------------
@@ -174,18 +188,26 @@ public class Xpp3ReaderGenerator
         unmarshall.addException( new JClass( "XmlPullParserException" ) );
 
         JSourceCode sc = unmarshall.getSourceCode();
-
+        
         sc.add( "XmlPullParser parser = new MXParser();" );
 
+        sc.add( "" );
+        
         sc.add( "parser.setInput( reader );" );
-
+        
         sc.add( "" );
 
         writeParserInitialization( sc );
 
         sc.add( "" );
+        
+        sc.add( "parser.next();" );
+        
+        sc.add( "String encoding = parser.getInputEncoding();" );
 
-        sc.add( "return parse" + root.getName() + "( \"" + getTagName( root ) + "\", parser, strict );" );
+        sc.add( "" );
+
+        sc.add( "return parse" + root.getName() + "( \"" + getTagName( root ) + "\", parser, strict, encoding );" );
 
         jClass.addMethod( unmarshall );
 
@@ -273,6 +295,8 @@ public class Xpp3ReaderGenerator
 
         unmarshall.addParameter( new JParameter( JClass.Boolean, "strict" ) );
         
+        unmarshall.addParameter( new JParameter( new JClass( "String" ), "encoding" ) );
+
         unmarshall.addException( new JClass( "IOException" ) );
 
         unmarshall.addException( new JClass( "XmlPullParserException" ) );
@@ -282,6 +306,8 @@ public class Xpp3ReaderGenerator
         JSourceCode sc = unmarshall.getSourceCode();
 
         sc.add( className + " " + uncapClassName + " = new " + className + "();" );
+        
+        sc.add( uncapClassName + ".setModelEncoding( encoding );" );
 
         sc.add( "java.util.Set parsed = new java.util.HashSet();" );
 
@@ -399,7 +425,7 @@ public class Xpp3ReaderGenerator
                     addCodeToCheckIfParsed( sc, tagName );
 
                     sc.add( uncapClassName + ".set" + capFieldName + "( parse" + association.getTo() + "( \"" +
-                        tagName + "\", parser, strict ) );" );
+                        tagName + "\", parser, strict, encoding ) );" );
 
                     sc.unindent();
 
@@ -468,7 +494,7 @@ public class Xpp3ReaderGenerator
                         if ( isClassInModel( association.getTo(), modelClass.getModel() ) )
                         {
                             sc.add( associationName + ".add( parse" + association.getTo() + "( \"" + singularTagName +
-                                "\", parser, strict ) );" );
+                                "\", parser, strict, encoding ) );" );
                         }
                         else
                         {
@@ -799,7 +825,7 @@ public class Xpp3ReaderGenerator
 /* TODO: this and a default
         if ( fieldMetaData.isRequired() )
         {
-            parserGetter = "getRequiredAttributeValue( " + parserGetter + ", \"" + tagName + "\", parser, strict )";
+            parserGetter = "getRequiredAttributeValue( " + parserGetter + ", \"" + tagName + "\", parser, strict, encoding )";
         }
 */
 

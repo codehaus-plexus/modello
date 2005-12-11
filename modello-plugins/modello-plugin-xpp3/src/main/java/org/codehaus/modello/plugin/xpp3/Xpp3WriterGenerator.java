@@ -154,13 +154,17 @@ public class Xpp3WriterGenerator
             "serializer.setProperty( \"http://xmlpull.org/v1/doc/properties.html#serializer-line-separator\", \"\\n\" );" );
 
         sc.add( "serializer.setOutput( writer );" );
+        
+        sc.add( "serializer.startDocument( " + rootElement + ".getModelEncoding(), null );" );
 
         sc.add( "write" + root + "( " + rootElement + ", \"" + rootElement + "\", serializer );" );
+        
+        sc.add( "serializer.endDocument();" );
 
         jClass.addMethod( marshall );
 
         writeAllClasses( objectModel, jClass );
-
+        
         jClass.print( sourceWriter );
 
         writer.flush();

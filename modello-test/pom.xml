@@ -2,22 +2,27 @@
   <parent>
     <artifactId>modello</artifactId>
     <groupId>org.codehaus.modello</groupId>
-    <version>1.0-alpha-7-SNAPSHOT</version>
+    <version>1.0-alpha-7</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.codehaus.modello</groupId>
   <artifactId>modello-test</artifactId>
   <name>Modello Test Package</name>
-  <version>1.0-alpha-7-SNAPSHOT</version>
+  <version>1.0-alpha-7</version>
   <dependencies>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-compiler-api</artifactId>
+      <version>1.5.1</version>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+    </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-settings</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.codehaus.plexus</groupId>
-      <artifactId>plexus-compiler-javac</artifactId>
-      <version>1.5.1</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
@@ -25,7 +30,7 @@
     </dependency>
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
-      <artifactId>plexus-compiler-api</artifactId>
+      <artifactId>plexus-compiler-javac</artifactId>
       <version>1.5.1</version>
     </dependency>
     <dependency>
@@ -39,11 +44,6 @@
     <dependency>
       <groupId>org.apache.maven.wagon</groupId>
       <artifactId>wagon-provider-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
     </dependency>
   </dependencies>
 </project>

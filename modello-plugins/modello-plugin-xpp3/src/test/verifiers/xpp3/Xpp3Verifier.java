@@ -39,6 +39,7 @@ import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
 import java.io.IOException;
+import java.io.FileReader;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.List;
@@ -63,6 +64,19 @@ public class Xpp3Verifier
         verifyReaderAliases();
 
         verifyReaderDuplicates();
+    }
+
+    public void verifyEncodedRead()
+        throws IOException, XmlPullParserException
+    {
+        String path = "src/test/verifiers/xpp3/expected-encoding.xml";
+        
+        FileReader reader = new FileReader( path );
+        MavenXpp3Reader modelReader = new MavenXpp3Reader();
+        
+        Model model = modelReader.read( reader );
+        
+        Assert.assertEquals( "Maven\u00A9", model.getName() );
     }
 
     public void verifyWriter()
