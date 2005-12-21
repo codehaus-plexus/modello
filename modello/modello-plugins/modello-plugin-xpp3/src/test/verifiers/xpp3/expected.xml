@@ -39,6 +39,6 @@
         </excludes>
       </sourceModification>
     </sourceModifications>
-    <unitTest/>
+    <unitTest />
   </builder>
 </mavenModel>
