@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<mavenModel extender="/foo/bar" modelVersion="4.0.0">
+<?xml version="1.0" encoding="UTF-8"?><mavenModel extender="/foo/bar" modelVersion="4.0.0">
   <name>Maven</name>
   <component>
     <name>component1</name>
