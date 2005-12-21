@@ -23,7 +23,6 @@ package org.codehaus.modello.generator.xml.xpp3;
  */
 
 import junit.framework.Assert;
-
 import org.codehaus.modello.test.model.Build;
 import org.codehaus.modello.test.model.Component;
 import org.codehaus.modello.test.model.MailingList;
@@ -38,8 +37,8 @@ import org.codehaus.modello.verifier.Verifier;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
-import java.io.IOException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.List;
@@ -70,12 +69,12 @@ public class Xpp3Verifier
         throws IOException, XmlPullParserException
     {
         String path = "src/test/verifiers/xpp3/expected-encoding.xml";
-        
+
         FileReader reader = new FileReader( path );
         MavenXpp3Reader modelReader = new MavenXpp3Reader();
-        
+
         Model model = modelReader.read( reader );
-        
+
         Assert.assertEquals( "Maven\u00A9", model.getName() );
     }
 
@@ -152,7 +151,17 @@ public class Xpp3Verifier
 
         component.setName( "component2" );
 
+        component.setComment( "comment2" );
+
         expected.addComponent( component );
+
+        Component c2 = new Component();
+
+        c2.setName( "sub" );
+
+        c2.setComment( "subcomment" );
+
+        component.getComponents().add( c2 );
 
         Repository repository = new Repository();
         repository.setId( "foo" );
@@ -174,7 +183,7 @@ public class Xpp3Verifier
 //
 //        System.err.println( actualXml );
 
-        Assert.assertEquals( expectedXml, actualXml );
+        Assert.assertEquals( expectedXml.trim(), actualXml.trim() );
 
         MavenXpp3Reader reader = new MavenXpp3Reader();
 
@@ -249,7 +258,8 @@ public class Xpp3Verifier
     {
         MavenXpp3Reader reader = new MavenXpp3Reader();
 
-        String xml = "<mavenModel>\n" + "  <builder><sourceDirectory /><sourceDirectory /></builder>\n" + "</mavenModel>";
+        String xml =
+            "<mavenModel>\n" + "  <builder><sourceDirectory /><sourceDirectory /></builder>\n" + "</mavenModel>";
 
         try
         {
@@ -366,9 +376,11 @@ public class Xpp3Verifier
 
         Assert.assertEquals( "/model/mailingLists[" + i + "]/name", expected.getName(), actual.getName() );
 
-        Assert.assertEquals( "/model/mailingLists[" + i + "]/subscribe", expected.getSubscribe(), actual.getSubscribe() );
+        Assert.assertEquals( "/model/mailingLists[" + i + "]/subscribe", expected.getSubscribe(),
+                             actual.getSubscribe() );
 
-        Assert.assertEquals( "/model/mailingLists[" + i + "]/unsubscribe", expected.getUnsubscribe(), actual.getUnsubscribe() );
+        Assert.assertEquals( "/model/mailingLists[" + i + "]/unsubscribe", expected.getUnsubscribe(),
+                             actual.getUnsubscribe() );
 
         Assert.assertEquals( "/model/mailingLists[" + i + "]/archive", expected.getArchive(), actual.getArchive() );
     }
@@ -390,7 +402,7 @@ public class Xpp3Verifier
             Assert.assertEquals( "/model/scm/connection", expected.getConnection(), actual.getConnection() );
 
             Assert.assertEquals( "/model/scm/developerConnection", expected.getDeveloperConnection(),
-                          actual.getDeveloperConnection() );
+                                 actual.getDeveloperConnection() );
 
             Assert.assertEquals( "/model/scm/url", expected.getUrl(), actual.getUrl() );
         }
@@ -410,10 +422,11 @@ public class Xpp3Verifier
 
             Build actual = (Build) actualObject;
 
-            Assert.assertEquals( "/model/builder/sourceDirectory", expected.getSourceDirectory(), actual.getSourceDirectory() );
+            Assert.assertEquals( "/model/builder/sourceDirectory", expected.getSourceDirectory(),
+                                 actual.getSourceDirectory() );
 
             Assert.assertEquals( "/model/builder/unitTestSourceDirectory", expected.getUnitTestSourceDirectory(),
-                          actual.getUnitTestSourceDirectory() );
+                                 actual.getUnitTestSourceDirectory() );
         }
     }
 }

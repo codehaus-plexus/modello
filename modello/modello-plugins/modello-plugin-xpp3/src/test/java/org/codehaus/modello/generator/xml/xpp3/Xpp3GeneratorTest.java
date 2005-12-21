@@ -22,8 +22,8 @@ package org.codehaus.modello.generator.xml.xpp3;
  * SOFTWARE.
  */
 
-import org.codehaus.modello.FileUtils;
 import org.codehaus.modello.AbstractModelloGeneratorTest;
+import org.codehaus.modello.FileUtils;
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;

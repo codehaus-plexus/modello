@@ -106,11 +106,11 @@ public class Xpp3ReaderGenerator
         jClass.setPackageName( packageName );
 
         jClass.addImport( "org.codehaus.plexus.util.IOUtil" );
-        
+
         jClass.addImport( "org.codehaus.plexus.util.xml.pull.MXParser" );
-        
+
         jClass.addImport( "org.codehaus.plexus.util.xml.pull.XmlPullParser" );
-        
+
         jClass.addImport( "org.codehaus.plexus.util.xml.pull.XmlPullParserException" );
 
         jClass.addImport( "java.io.IOException" );
@@ -118,21 +118,21 @@ public class Xpp3ReaderGenerator
         jClass.addImport( "java.io.Reader" );
 
         jClass.addImport( "java.io.StringWriter" );
-        
+
         jClass.addImport( "java.io.StringReader" );
-        
+
         jClass.addImport( "java.io.ByteArrayInputStream" );
-        
+
         jClass.addImport( "java.io.InputStreamReader" );
-        
+
         jClass.addImport( "java.text.DateFormat" );
 
         jClass.addImport( "java.text.ParsePosition" );
 
         jClass.addImport( "java.util.regex.Matcher" );
-        
+
         jClass.addImport( "java.util.regex.Pattern" );
-        
+
         addModelImports( jClass, null );
 
         // ----------------------------------------------------------------------
@@ -181,28 +181,28 @@ public class Xpp3ReaderGenerator
         JMethod unmarshall = new JMethod( new JClass( root.getName() ), "read" );
 
         unmarshall.addParameter( new JParameter( new JClass( "Reader" ), "reader" ) );
-        
+
         unmarshall.addParameter( new JParameter( JClass.Boolean, "strict" ) );
 
         unmarshall.addException( new JClass( "IOException" ) );
         unmarshall.addException( new JClass( "XmlPullParserException" ) );
 
         JSourceCode sc = unmarshall.getSourceCode();
-        
+
         sc.add( "XmlPullParser parser = new MXParser();" );
 
         sc.add( "" );
-        
+
         sc.add( "parser.setInput( reader );" );
-        
+
         sc.add( "" );
 
         writeParserInitialization( sc );
 
         sc.add( "" );
-        
+
         sc.add( "parser.next();" );
-        
+
         sc.add( "String encoding = parser.getInputEncoding();" );
 
         sc.add( "" );
@@ -294,7 +294,7 @@ public class Xpp3ReaderGenerator
         unmarshall.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
 
         unmarshall.addParameter( new JParameter( JClass.Boolean, "strict" ) );
-        
+
         unmarshall.addParameter( new JParameter( new JClass( "String" ), "encoding" ) );
 
         unmarshall.addException( new JClass( "IOException" ) );
@@ -306,8 +306,21 @@ public class Xpp3ReaderGenerator
         JSourceCode sc = unmarshall.getSourceCode();
 
         sc.add( className + " " + uncapClassName + " = new " + className + "();" );
-        
+
         sc.add( uncapClassName + ".setModelEncoding( encoding );" );
+
+        for ( Iterator i = modelClass.getAllFields( getGeneratedVersion(), true ).iterator(); i.hasNext(); )
+        {
+            ModelField field = (ModelField) i.next();
+
+            XmlFieldMetadata fieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
+
+            if ( fieldMetadata.isAttribute() )
+            {
+                writePrimitiveField( field, field.getType(), uncapClassName, "set" + capitalise( field.getName() ), sc,
+                                     jClass );
+            }
+        }
 
         sc.add( "java.util.Set parsed = new java.util.HashSet();" );
 
@@ -334,37 +347,24 @@ public class Xpp3ReaderGenerator
 
         sc.indent();
 
-        //Write xml attribute
-
-        sc.add( "if ( parser.getName().equals( tagName ) )" );
-
-        sc.add( "{" );
-
-        sc.indent();
-
-        for ( Iterator i = modelClass.getAllFields( getGeneratedVersion(), true ).iterator(); i.hasNext(); )
-        {
-            ModelField field = (ModelField) i.next();
-
-            XmlFieldMetadata fieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
-
-            if ( fieldMetadata.isAttribute() )
-            {
-                writePrimitiveField( field, field.getType(), uncapClassName, "set" + capitalise( field.getName() ),
-                                     sc, jClass );
-            }
-        }
+        String statement = "if";
 
         if ( rootElement )
         {
+            sc.add( "if ( parser.getName().equals( tagName ) )" );
+
+            sc.add( "{" );
+
+            sc.indent();
+
             sc.add( "foundRoot = true;" );
+
+            sc.unindent();
+
+            sc.add( "}" );
+
+            statement = "else if";
         }
-
-        sc.unindent();
-
-        sc.add( "}" );
-
-        String statement = "else if";
 
         //Write other fields
 
@@ -405,8 +405,8 @@ public class Xpp3ReaderGenerator
                 optionalCheck = "|| parser.getName().equals( \"" + field.getAlias() + "\" ) ";
             }
 
-            String tagComparison = statement + " ( parser.getName().equals( \"" + tagName + "\" ) " + optionalCheck +
-                " )";
+            String tagComparison =
+                statement + " ( parser.getName().equals( \"" + tagName + "\" ) " + optionalCheck + " )";
 
             if ( field instanceof ModelAssociation )
             {
@@ -547,8 +547,8 @@ public class Xpp3ReaderGenerator
 
                         addCodeToCheckIfParsed( sc, tagName );
 
-                        XmlAssociationMetadata xmlAssociationMetadata = (XmlAssociationMetadata) association.getAssociationMetadata(
-                            XmlAssociationMetadata.ID );
+                        XmlAssociationMetadata xmlAssociationMetadata =
+                            (XmlAssociationMetadata) association.getAssociationMetadata( XmlAssociationMetadata.ID );
 
                         if ( XmlAssociationMetadata.EXPLODE_MODE.equals( xmlAssociationMetadata.getMapStyle() ) )
                         {
@@ -680,8 +680,8 @@ public class Xpp3ReaderGenerator
                 addCodeToCheckIfParsed( sc, tagName );
 
                 //ModelField
-                writePrimitiveField( field, field.getType(), uncapClassName, "set" + capitalise( field.getName() ),
-                                     sc, jClass );
+                writePrimitiveField( field, field.getType(), uncapClassName, "set" + capitalise( field.getName() ), sc,
+                                     jClass );
 
                 sc.unindent();
 
@@ -709,27 +709,34 @@ public class Xpp3ReaderGenerator
             }
 */
 
-            sc.add( "else" );
+            if ( statement.startsWith( "else" ) )
+            {
+                sc.add( "else" );
 
-            sc.add( "{" );
+                sc.add( "{" );
 
-            sc.indent();
+                sc.indent();
+            }
 
             sc.add( "if ( strict )" );
-            
+
             sc.add( "{" );
-            
+
             sc.indent();
-            
-            sc.add( "throw new XmlPullParserException( \"Unrecognised tag: '\" + parser.getName() + \"'\", parser, null);" );
-            
-            sc.unindent();
-            
-            sc.add( "}" );
+
+            sc.add(
+                "throw new XmlPullParserException( \"Unrecognised tag: '\" + parser.getName() + \"'\", parser, null);" );
 
             sc.unindent();
 
             sc.add( "}" );
+
+            if ( statement.startsWith( "else" ) )
+            {
+                sc.unindent();
+
+                sc.add( "}" );
+            }
         }
         else
         {
@@ -746,14 +753,14 @@ public class Xpp3ReaderGenerator
             sc.indent();
 
             sc.add( "if ( strict )" );
-            
+
             sc.add( "{" );
-            
+
             sc.indent();
-            
+
             sc.add(
-            "throw new XmlPullParserException( \"Unrecognised tag: '\" + parser.getName() + \"'\", parser, null);" );
-            
+                "throw new XmlPullParserException( \"Unrecognised tag: '\" + parser.getName() + \"'\", parser, null);" );
+
             sc.unindent();
 
             sc.add( "}" );
@@ -882,7 +889,7 @@ public class Xpp3ReaderGenerator
         else if ( "DOM".equals( type ) )
         {
             jClass.addImport( "org.codehaus.plexus.util.xml.Xpp3DomBuilder" );
-            
+
             sc.add( objectName + "." + setterName + "( Xpp3DomBuilder.build( parser ) );" );
         }
         else
@@ -1215,16 +1222,16 @@ public class Xpp3ReaderGenerator
         sc.indent();
 
         sc.add( "if ( strict )" );
-        
+
         sc.add( "{" );
-        
+
         sc.indent();
-        
+
         sc.add(
-        "throw new XmlPullParserException( \"Missing required value for attribute '\" + attribute + \"'\", parser, null );" );
-        
+            "throw new XmlPullParserException( \"Missing required value for attribute '\" + attribute + \"'\", parser, null );" );
+
         sc.unindent();
-        
+
         sc.add( "}" );
 
         sc.unindent();
@@ -1410,16 +1417,16 @@ public class Xpp3ReaderGenerator
         sc.indent();
 
         sc.add( "if ( strict )" );
-        
+
         sc.add( "{" );
-        
+
         sc.indent();
-        
+
         sc.add( "throw new XmlPullParserException( \"Unable to parse element '\" + attribute + \"', must be " +
-                typeDesc + "\", parser, null );" );
-        
+            typeDesc + "\", parser, null );" );
+
         sc.unindent();
-        
+
         sc.add( "}" );
 
         sc.unindent();

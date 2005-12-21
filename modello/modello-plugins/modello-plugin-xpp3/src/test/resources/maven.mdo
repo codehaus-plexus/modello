@@ -122,9 +122,9 @@
           <name>description</name>
           <version>3.0.0+</version>
           <description>
-            A detailed description of the project.  This element is
+            A detailed description of the project. This element is
             usually specified as CDATA to enable the use of HTML tags
-            within the description.  This description is used to
+            within the description. This description is used to
             generate the
             &lt;a href="plugins/site/index.html"&gt;front page&lt;/a&gt;
             of the project's web site.
@@ -188,7 +188,8 @@
         <field>
           <name>siteDirectory</name>
           <version>3.0.0</version>
-          <description>The directory on the site host where site documentation is placed when the site is uploaded.</description>
+          <description>The directory on the site host where site documentation is placed when the site is
+            uploaded.</description>
           <type>String</type>
         </field>
         <field>
@@ -227,7 +228,8 @@
           <name>pluginRepositories</name>
           <version>4.0.0</version>
           <description>The lists of the remote repositories for discovering plugins</description>
-          <comment>This may be removed or relocated in the near future. It is undecided whether plugins really need a remote repository set of their own.</comment>
+          <comment>This may be removed or relocated in the near future. It is undecided whether plugins really need a
+            remote repository set of their own.</comment>
           <association>
             <type>Repository</type>
             <multiplicity>*</multiplicity>
@@ -247,9 +249,9 @@
           <version>3.0.0+</version>
           <description>
             This element describes all of the developers associated with a
-            project.  Each developer is described by a
+            project. Each developer is described by a
             &lt;code&gt;developer&lt;/code&gt; element, which is then described by
-            additional elements (described below).  The auto-generated site
+            additional elements (described below). The auto-generated site
             documentation references this information.
           </description>
           <association>
@@ -262,9 +264,9 @@
           <version>3.0.0+</version>
           <description>
             This element describes all of the contributors associated with a
-            project who are not developers.  Each contributor is described by a
+            project who are not developers. Each contributor is described by a
             &lt;code&gt;contributor&lt;/code&gt; element, which is then describe by additional
-            elements (described below).  The auto-generated site documentation
+            elements (described below). The auto-generated site documentation
             references this information.
           </description>
           <association>
@@ -277,7 +279,7 @@
           <version>3.0.0+</version>
           <description>
             This element describes all of the dependencies associated with a
-            project.  Each dependency is described by a
+            project. Each dependency is described by a
             &lt;code&gt;dependency&lt;/code&gt; element, which is then described by
             additional elements (described below).
           </description>
@@ -285,14 +287,15 @@
             <type>Dependency</type>
             <multiplicity>*</multiplicity>
           </association>
-          <comment>These should ultimately only be compile time dependencies when transitive dependencies come into play.</comment>
+          <comment>These should ultimately only be compile time dependencies when transitive dependencies come into
+            play.</comment>
         </field>
         <field>
           <name>overrides</name>
           <version>4.0.0</version>
           <description>
             This element describes all of the dependency overrides for a
-            project.  Each dependency is described by a
+            project. Each dependency is described by a
             &lt;code&gt;override&lt;/code&gt; element, which is then described by
             additional elements (described below).
           </description>
@@ -305,10 +308,10 @@
           <name>licenses</name>
           <version>3.0.0+</version>
           <description>
-            This element describes all of the licenses for this project.  Each license is described by a
+            This element describes all of the licenses for this project. Each license is described by a
             &lt;code&gt;license&lt;/code&gt; element, which is then describe by additional
-            elements (described below).  The auto-generated site documentation
-            references this information.  Projects should only list the license(s) that
+            elements (described below). The auto-generated site documentation
+            references this information. Projects should only list the license(s) that
             applies to the project and not the licenses that apply to dependencies.
           </description>
           <association>
@@ -348,9 +351,9 @@
           <version>3.0.0+</version>
           <description>
             This element includes the specification of reports to be
-            included in a Maven-generated site.  These reports will be run
+            included in a Maven-generated site. These reports will be run
             when a user executes
-            &lt;code&gt;maven site&lt;/code&gt;.  All of the
+            &lt;code&gt;maven site&lt;/code&gt;. All of the
             reports will be included in the navigation bar for browsing in
             the order they are specified.
           </description>
@@ -374,7 +377,8 @@
           <association>
             <type>Repository</type>
           </association>
-          <comment>This element needs to be renamed as it conflicts with the existing notion of repositories in Maven.</comment>
+          <comment>This element needs to be renamed as it conflicts with the existing notion of repositories in
+            Maven.</comment>
         </field>
         <field xml.tagName="builder">
           <name>build</name>
@@ -391,7 +395,7 @@
           <version>3.0.0+</version>
           <description>
             This element describes various attributes of the organziation to
-            which the project belongs.  These attributes are utilized when
+            which the project belongs. These attributes are utilized when
             documentation is created (for copyright notices and links).
           </description>
           <association>
@@ -457,12 +461,12 @@
           <code>
             public void setVersion(String version)
             {
-                this.currentVersion = version;
+            this.currentVersion = version;
             }
 
             public String getVersion()
             {
-                return currentVersion;
+            return currentVersion;
             }
           </code>
         </codeSegment>
@@ -473,12 +477,12 @@
 
             public void setPackage(String packageName)
             {
-                this.packageName = packageName;
+            this.packageName = packageName;
             }
 
             public String getPackage()
             {
-                return packageName;
+            return packageName;
             }
           </code>
         </codeSegment>
@@ -487,17 +491,17 @@
           <code>
             public String getId()
             {
-                StringBuffer id = new StringBuffer();
+            StringBuffer id = new StringBuffer();
 
-                id.append( getGroupId() );
-                id.append( ":" );
-                id.append( getArtifactId() );
-                id.append( ":" );
-                id.append( getType() );
-                id.append( ":" );
-                id.append( getVersion() );
+            id.append( getGroupId() );
+            id.append( ":" );
+            id.append( getArtifactId() );
+            id.append( ":" );
+            id.append( getType() );
+            id.append( ":" );
+            id.append( getVersion() );
 
-                return id.toString();
+            return id.toString();
             }
           </code>
         </codeSegment>
@@ -594,7 +598,7 @@
           <version>3.0.0+</version>
           <description>
             This element specifies a directory containing Aspect
-            sources of the project.  The generated build system will
+            sources of the project. The generated build system will
             compile the Aspects in this directory when the project is
             built if Aspects have been enabled (see the
             &lt;a href="plugins/aspectj/goals.html"&gt;Aspectj goals&lt;/a&gt; document).
@@ -617,9 +621,9 @@
           <required>true</required>
           <description>
             This element describes all of the sourceModifications associated with a
-            project.  Each source modification is described by a
+            project. Each source modification is described by a
             &lt;code&gt;sourceModification&lt;/code&gt; element, which is then described by
-            additional elements (described below).  These modifications are used
+            additional elements (described below). These modifications are used
             to exclude or include various source depending on the environment
             the build is running in.
           </description>
@@ -745,7 +749,7 @@
           <name>roles</name>
           <version>3.0.0+</version>
           <description>
-            The roles the contributor plays in the project.  Each role is
+            The roles the contributor plays in the project. Each role is
             describe by a
             &lt;code&gt;role&lt;/code&gt; element, the body of which is a
             role name.
@@ -865,12 +869,12 @@
           <code>
             public String getId()
             {
-                return groupId + ":" + artifactId + ":" + type + ":" + version;
+            return groupId + ":" + artifactId + ":" + type + ":" + version;
             }
 
             public String toString()
             {
-                return groupId + "/" + type + "s:" + artifactId + "-" + version;
+            return groupId + "/" + type + "s:" + artifactId + "-" + version;
             }
           </code>
         </codeSegment>
@@ -1051,7 +1055,8 @@
         <field>
           <name>repository</name>
           <version>4.0.0</version>
-          <description>Information needed for deploying to remote repository artifacts generated by the project</description>
+          <description>Information needed for deploying to remote repository artifacts generated by the
+            project</description>
           <association>
             <type>Repository</type>
           </association>
@@ -1086,7 +1091,7 @@
           <name>distribution</name>
           <version>3.0.0</version>
           <description>
-              The primary method by which this project may be distributed.
+            The primary method by which this project may be distributed.
             &lt;dl&gt;
             &lt;dt&gt;repo&lt;/dt&gt;
             &lt;dd&gt;may be downloaded from the Maven repository&lt;/dd&gt;
@@ -1109,9 +1114,9 @@
       <version>3.0.0+</version>
       <description>
         This element describes all of the mailing lists associated with
-        a project.  Each mailing list is described by a
+        a project. Each mailing list is described by a
         &lt;code&gt;mailingList&lt;/code&gt; element, which is then described by
-        additional elements (described below).  The auto-generated site
+        additional elements (described below). The auto-generated site
         documentation references this information.
       </description>
       <fields>
@@ -1137,7 +1142,7 @@
           <version>3.0.0+</version>
           <description>
             The email address or link that can be used to unsubscribe to
-            the mailing list.  If this is an email address, a
+            the mailing list. If this is an email address, a
             &lt;code&gt;mailto:&lt;/code&gt; link will automatically be created
             when the documentation is created.
           </description>
@@ -1148,7 +1153,7 @@
           <version>4.0.0</version>
           <description>
             The email address or link that can be used to post to
-            the mailing list.  If this is an email address, a
+            the mailing list. If this is an email address, a
             &lt;code&gt;mailto:&lt;/code&gt; link will automatically be created
             when the documentation is created.
           </description>
@@ -1198,12 +1203,12 @@
           <name>logo</name>
           <version>3.0.0+</version>
           <description>
-            The URL to the organization's logo image.  This can be an URL relative
+            The URL to the organization's logo image. This can be an URL relative
             to the base directory of the generated web site,
             (e.g.,
             &lt;code&gt;/images/org-logo.png&lt;/code&gt;) or an absolute URL
             (e.g.,
-            &lt;code&gt;http://my.corp/logo.png&lt;/code&gt;).  This value is used
+            &lt;code&gt;http://my.corp/logo.png&lt;/code&gt;). This value is used
             when generating the project documentation.
           </description>
           <type>String</type>
@@ -1258,32 +1263,32 @@
           <code>
             public java.util.List getDefaultExcludes()
             {
-                java.util.List defaultExcludes = new java.util.ArrayList();
-                defaultExcludes.add( "**/*~" );
-                defaultExcludes.add( "**/#*#" );
-                defaultExcludes.add( "**/.#*" );
-                defaultExcludes.add( "**/%*%" );
-                defaultExcludes.add( "**/._*" );
+            java.util.List defaultExcludes = new java.util.ArrayList();
+            defaultExcludes.add( "**/*~" );
+            defaultExcludes.add( "**/#*#" );
+            defaultExcludes.add( "**/.#*" );
+            defaultExcludes.add( "**/%*%" );
+            defaultExcludes.add( "**/._*" );
 
-                // CVS
-                defaultExcludes.add( "**/CVS" );
-                defaultExcludes.add( "**/CVS/**" );
-                defaultExcludes.add( "**/.cvsignore" );
+            // CVS
+            defaultExcludes.add( "**/CVS" );
+            defaultExcludes.add( "**/CVS/**" );
+            defaultExcludes.add( "**/.cvsignore" );
 
-                // SCCS
-                defaultExcludes.add( "**/SCCS" );
-                defaultExcludes.add( "**/SCCS/**" );
+            // SCCS
+            defaultExcludes.add( "**/SCCS" );
+            defaultExcludes.add( "**/SCCS/**" );
 
-                // Visual SourceSafe
-                defaultExcludes.add( "**/vssver.scc" );
+            // Visual SourceSafe
+            defaultExcludes.add( "**/vssver.scc" );
 
-                // Subversion
-                defaultExcludes.add( "**/.svn" );
-                defaultExcludes.add( "**/.svn/**" );
+            // Subversion
+            defaultExcludes.add( "**/.svn" );
+            defaultExcludes.add( "**/.svn/**" );
 
-                // Mac
-                defaultExcludes.add( "**/.DS_Store" );
-                return defaultExcludes;
+            // Mac
+            defaultExcludes.add( "**/.DS_Store" );
+            return defaultExcludes;
             }
           </code>
         </codeSegment>
@@ -1323,7 +1328,7 @@
           <description>
             The source configuration management system URL
             that describes the repository and how to connect to the
-            repository.  This is used by Maven when
+            repository. This is used by Maven when
             &lt;a href="plugins/dist/index.html"&gt;building versions&lt;/a&gt;
             from specific ID.
           </description>
@@ -1356,7 +1361,7 @@
           <description>
             The source configuration management system URL
             that describes the repository and how to connect to the
-            repository.  This is used by Maven when
+            repository. This is used by Maven when
             &lt;a href="plugins/dist/index.html"&gt;building versions&lt;/a&gt;
             from specific ID.
           </description>
@@ -1380,7 +1385,8 @@
         <field>
           <name>branches</name>
           <version>4.0.0</version>
-          <description>The SCM branches that are currently active for the project. These should only be those forked from the current branch or trunk that are intended to be used.</description>
+          <description>The SCM branches that are currently active for the project. These should only be those forked
+            from the current branch or trunk that are intended to be used.</description>
           <association>
             <type>String</type>
             <multiplicity>*</multiplicity>
@@ -1428,12 +1434,12 @@
           <code>
             public boolean isFiltering()
             {
-                return !"false".equals( filtering );
+            return !"false".equals( filtering );
             }
 
             public void setFiltering( boolean filtering )
             {
-                this.filtering = ( filtering ? "true" : "false" );
+            this.filtering = ( filtering ? "true" : "false" );
             }
           </code>
         </codeSegment>
@@ -1515,7 +1521,7 @@
           <name>id</name>
           <version>3.0.0</version>
           <description>
-            A unique identifier for a version.  This ID is
+            A unique identifier for a version. This ID is
             used to specify the version that
             &lt;a href="plugins/dist/index.html"&gt;
             &lt;code&gt;maven:dist&lt;/code&gt;
@@ -1530,8 +1536,8 @@
       <name>Repository</name>
       <version>4.0.0</version>
       <description>
-         Repository contains the information needed
-         for establishing connections with remote repoistory
+        Repository contains the information needed
+        for establishing connections with remote repoistory
       </description>
       <fields>
         <field>
@@ -1554,7 +1560,7 @@
           <name>url</name>
           <version>4.0.0</version>
           <description>
-             The url of of the repository
+            The url of of the repository
           </description>
           <type>String</type>
         </field>
@@ -1565,16 +1571,16 @@
           <code>
             public boolean equals( Object obj )
             {
-                Repository other =  ( Repository ) obj;
+            Repository other = ( Repository ) obj;
 
-                boolean retValue = false;
+            boolean retValue = false;
 
-                if ( id != null )
-                {
-                    retValue = id.equals( other.id );
-                }
+            if ( id != null )
+            {
+            retValue = id.equals( other.id );
+            }
 
-                return retValue;
+            return retValue;
             }
           </code>
         </codeSegment>
@@ -1585,8 +1591,8 @@
       <name>Site</name>
       <version>4.0.0</version>
       <description>
-         Site contains the information needed
-         for deploying websites.
+        Site contains the information needed
+        for deploying websites.
       </description>
       <fields>
         <field>
@@ -1609,7 +1615,7 @@
           <name>url</name>
           <version>4.0.0</version>
           <description>
-             The url of of the location where website is deployed
+            The url of of the location where website is deployed
           </description>
           <type>String</type>
         </field>
@@ -1690,6 +1696,19 @@
           <name>name</name>
           <version>4.0.0</version>
           <type>String</type>
+        </field>
+        <field xml.attribute="true">
+          <name>comment</name>
+          <version>4.0.0</version>
+          <type>String</type>
+        </field>
+        <field xml.listStyle="flat">
+          <name>components</name>
+          <version>4.0.0</version>
+          <association>
+            <type>Component</type>
+            <multiplicity>*</multiplicity>
+          </association>
         </field>
       </fields>
     </class>
