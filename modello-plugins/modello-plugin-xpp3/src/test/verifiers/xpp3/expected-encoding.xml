@@ -3,8 +3,11 @@
   <component>
     <name>component1</name>
   </component>
-  <component>
+  <component comment="comment2">
     <name>component2</name>
+    <component comment="subcomment">
+      <name>sub</name>
+    </component>
   </component>
   <repositories>
     <repo>
@@ -36,6 +39,6 @@
         </excludes>
       </sourceModification>
     </sourceModifications>
-    <unitTest />
+    <unitTest/>
   </builder>
 </mavenModel>
