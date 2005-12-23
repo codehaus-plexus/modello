@@ -143,16 +143,10 @@ public class ModelAssociation
             multiplicity = MANY_MULTIPLICITY;
         }
 
-        if ( !multiplicity.equals( ONE_MULTIPLICITY ) &&
-             !multiplicity.equals( MANY_MULTIPLICITY ) )
+        if ( !multiplicity.equals( ONE_MULTIPLICITY ) && !multiplicity.equals( MANY_MULTIPLICITY ) )
         {
             throw new ModelValidationException( "Association multiplicity '" + getName() + "' is incorrect: " +
-                                                "Possible values are '1', '*' or 'n'." );
-        }
-
-        if ( isIdentifier() && multiplicity == MANY_MULTIPLICITY )
-        {
-            throw new ModelValidationException( "A many association can't be a identifier." );
+                "Possible values are '1', '*' or 'n'." );
         }
 
         if ( isEmpty( getType() ) )

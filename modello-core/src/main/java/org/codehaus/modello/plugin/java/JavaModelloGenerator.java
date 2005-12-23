@@ -22,14 +22,6 @@ package org.codehaus.modello.plugin.java;
  * SOFTWARE.
  */
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.Iterator;
-import java.util.Properties;
-import java.util.List;
-
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.generator.java.javasource.JClass;
 import org.codehaus.modello.generator.java.javasource.JField;
@@ -47,6 +39,14 @@ import org.codehaus.modello.model.ModelDefault;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.ModelInterface;
 import org.codehaus.modello.plugin.AbstractModelloGenerator;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Properties;
 
 /**
  * @author <a href="mailto:jason@modello.org">Jason van Zyl </a>
@@ -122,7 +122,8 @@ public class JavaModelloGenerator
 
             if ( modelInterface.getCodeSegments( getGeneratedVersion() ) != null )
             {
-                for ( Iterator iterator = modelInterface.getCodeSegments( getGeneratedVersion() ).iterator(); iterator.hasNext(); )
+                for ( Iterator iterator = modelInterface.getCodeSegments( getGeneratedVersion() ).iterator();
+                      iterator.hasNext(); )
                 {
                     //TODO : add this method to jInterface or remove
                     // codeSegments and add method tag
@@ -177,7 +178,7 @@ public class JavaModelloGenerator
             JSourceWriter sourceWriter = new JSourceWriter( writer );
 
             JClass jClass = new JClass( modelClass.getName() );
-            
+
             jClass.getJDocComment().setComment( modelClass.getDescription() );
 
             addModelImports( jClass, modelClass );
@@ -221,7 +222,7 @@ public class JavaModelloGenerator
             }
 
             // ----------------------------------------------------------------------
-            // equals()
+            // equals() / hashCode() / toString()
             // ----------------------------------------------------------------------
 
             List identifierFields = modelClass.getIdentifierFields( getGeneratedVersion() );
@@ -231,31 +232,29 @@ public class JavaModelloGenerator
                 JMethod equals = generateEquals( modelClass );
 
                 jClass.addMethod( equals );
-            }
 
-            // ----------------------------------------------------------------------
-            // Generate hashCode()
-            // ----------------------------------------------------------------------
-
-            if ( identifierFields.size() != 0 )
-            {
                 JMethod hashCode = generateHashCode( modelClass );
 
                 jClass.addMethod( hashCode );
+
+                JMethod toString = generateToString( modelClass );
+
+                jClass.addMethod( toString );
             }
 
             if ( modelClass.getCodeSegments( getGeneratedVersion() ) != null )
             {
-                for ( Iterator iterator = modelClass.getCodeSegments( getGeneratedVersion() ).iterator(); iterator.hasNext(); )
+                for ( Iterator iterator = modelClass.getCodeSegments( getGeneratedVersion() ).iterator();
+                      iterator.hasNext(); )
                 {
                     CodeSegment codeSegment = (CodeSegment) iterator.next();
 
                     jClass.addSourceCode( codeSegment.getCode() );
                 }
             }
-            
+
             StringBuffer encodingStuff = new StringBuffer();
-            
+
             encodingStuff.append( "\n    private String modelEncoding = \"UTF-8\";" );
             encodingStuff.append( "\n" );
             encodingStuff.append( "\n    public void setModelEncoding( String modelEncoding )" );
@@ -267,7 +266,7 @@ public class JavaModelloGenerator
             encodingStuff.append( "\n    {" );
             encodingStuff.append( "\n        return modelEncoding;" );
             encodingStuff.append( "\n    }" );
-            
+
             jClass.addSourceCode( encodingStuff.toString() );
 
             jClass.print( sourceWriter );
@@ -291,73 +290,74 @@ public class JavaModelloGenerator
         sc.addIndented( "return true;" );
         sc.add( "}" );
         sc.add( "" );
-        sc.add( "if ( !(other instanceof " + modelClass.getName() + ") )");
+        sc.add( "if ( !(other instanceof " + modelClass.getName() + ") )" );
         sc.add( "{" );
         sc.addIndented( "return false;" );
         sc.add( "}" );
         sc.add( "" );
         sc.add( modelClass.getName() + " that = (" + modelClass.getName() + ") other;" );
+        sc.add( "boolean result = true;" );
 
-        int count = 0;
-
-        for (  Iterator j = modelClass.getIdentifierFields( getGeneratedVersion() ).iterator(); j.hasNext(); )
+        for ( Iterator j = modelClass.getIdentifierFields( getGeneratedVersion() ).iterator(); j.hasNext(); )
         {
             ModelField identifier = (ModelField) j.next();
 
-            if ( identifier.getType().equals( "boolean" ) ||
-                 identifier.getType().equals( "byte" ) ||
-                 identifier.getType().equals( "char" ) ||
-                 identifier.getType().equals( "double" ) ||
-                 identifier.getType().equals( "float" ) ||
-                 identifier.getType().equals( "int" ) ||
-                 identifier.getType().equals( "short" ) ||
-                 identifier.getType().equals( "long" ) )
+            String name = identifier.getName();
+            if ( "boolean".equals( identifier.getType() ) || "byte".equals( identifier.getType() ) ||
+                "char".equals( identifier.getType() ) || "double".equals( identifier.getType() ) ||
+                "float".equals( identifier.getType() ) || "int".equals( identifier.getType() ) ||
+                "short".equals( identifier.getType() ) || "long".equals( identifier.getType() ) )
             {
-                if ( count == 0 )
-                {
-                    sc.add( "return this." + identifier.getName() + "== " +
-                            "that.get" + capitalise( identifier.getName() ) + "()" );
-                }
-                else
-                {
-                    sc.append( " &&" );
-                    sc.indent();
-                    sc.indent();
-                    sc.add( "this." + identifier.getName() + "== " +
-                            "that.get" + capitalise( identifier.getName() ) + "()" );
-                    sc.unindent();
-                    sc.unindent();
-                }
-                count++;
+                sc.add( "result = result && " + name + "== that." + name + ";" );
             }
             else
             {
-                if ( count == 0 )
-                {
-                    sc.add( "return " +
-                            "this." + identifier.getName() + " != null && " +
-                            "this." + identifier.getName() + ".equals( " +
-                            "that.get" + capitalise( identifier.getName() ) + "() )"  );
-                }
-                else
-                {
-                    sc.append( " &&" );
-                    sc.indent();
-                    sc.indent();
-                    sc.add( "this." + identifier.getName() + " != null && " +
-                            "this." + identifier.getName() + ".equals( " +
-                            "that.get" + capitalise( identifier.getName() ) + "() )"  );
-                    sc.unindent();
-                    sc.unindent();
-                }
-
-                count++;
+                name = "get" + capitalise( name ) + "()";
+                sc.add( "result = result && ( " + name + " == null ? that." + name + " == null : " + name +
+                    ".equals( that." + name + " ) );" );
             }
         }
 
-        sc.append( ";" );
+        sc.add( "return result;" );
 
         return equals;
+    }
+
+    private JMethod generateToString( ModelClass modelClass )
+    {
+        JMethod toString = new JMethod( new JType( String.class.getName() ), "toString" );
+
+        List identifierFields = modelClass.getIdentifierFields( getGeneratedVersion() );
+
+        JSourceCode sc = toString.getSourceCode();
+
+        if ( identifierFields.size() == 0 )
+        {
+            sc.add( "return super.toString();" );
+
+            return toString;
+        }
+
+        sc.add( "StringBuffer buf = new StringBuffer();" );
+
+        for ( Iterator j = identifierFields.iterator(); j.hasNext(); )
+        {
+            ModelField identifier = (ModelField) j.next();
+
+            String getter = "boolean".equals( identifier.getType() ) ? "is" : "get";
+
+            sc.add( "buf.append( \"" + identifier.getName() + " = '\" );" );
+            sc.add( "buf.append( " + getter + capitalise( identifier.getName() ) + "()" + " + \"'\" );" );
+
+            if ( j.hasNext() )
+            {
+                sc.add( "buf.append( \"\\n\" ); " );
+            }
+        }
+
+        sc.add( "return buf.toString();" );
+
+        return toString;
     }
 
     private JMethod generateHashCode( ModelClass modelClass )
@@ -368,82 +368,31 @@ public class JavaModelloGenerator
 
         JSourceCode sc = hashCode.getSourceCode();
 
-        // The double converter uses this
-        sc.add( "long tmp;" );
-
         if ( identifierFields.size() == 0 )
         {
-            sc.add( "return super.hashCode();");
+            sc.add( "return super.hashCode();" );
 
             return hashCode;
         }
 
-        if ( identifierFields.size() == 1 )
+        sc.add( "int result = 17;" );
+        sc.add( "long tmp;" );
+
+        for ( Iterator j = identifierFields.iterator(); j.hasNext(); )
         {
-            ModelField identifier = (ModelField) identifierFields.get( 0 );
+            ModelField identifier = (ModelField) j.next();
 
-            if ( identifier.getType().equals( "byte" ) ||
-                 identifier.getType().equals( "char" ) ||
-                 identifier.getType().equals( "short" ) ||
-                 identifier.getType().equals( "int" ) ||
-                 identifier.getType().equals( "long" ) ||
-                 identifier.getType().equals( "double" ) ||
-                 identifier.getType().equals( "float" ) )
+            if ( "double".equals( identifier.getType() ) )
             {
-                sc.add( "return " + createHashCodeForField( identifier ) + ";" );
-
-                return hashCode;
+                sc.add( "tmp = Double.doubleToLongBits( " + identifier.getName() + " );" );
+                sc.add( "result = 37 * result + (int) ( tmp ^ ( tmp >>> 32 ) );" );
             }
             else
             {
-                sc.add( "if ( " + identifier.getName() + " == null )" );
-                sc.add( "{" );
-                sc.addIndented( "return super.hashCode();" );
-                sc.add( "}" );
-
-                sc.add( "return " + createHashCodeForField( identifier ) + ";" );
-
-                return hashCode;
+                sc.add( "result = 37 * result + " + createHashCodeForField( identifier ) + ";" );
             }
         }
 
-        boolean first = true;
-
-        for ( Iterator j = identifierFields.iterator(); j.hasNext(); )
-        {
-            ModelField identifier = (ModelField) j.next();
-
-            if ( identifier.isPrimitive() )
-            {
-                continue;
-            }
-
-            if ( first )
-            {
-                sc.add( "// If any of these fields are null, it doesn't have a ID yet and is to" );
-                sc.add( "// be considered unique in the entire object space to just return the" );
-                sc.add( "// hash code of the super object." );
-
-                first = false;
-            }
-
-            sc.add( "if ( " + identifier.getName() + " == null )" );
-            sc.add( "{" );
-            sc.addIndented( "return super.hashCode();" );
-            sc.add( "}" );
-        }
-
-        sc.add( "int result = 17;" );
-        sc.add( "" );
-
-        for ( Iterator j = identifierFields.iterator(); j.hasNext(); )
-        {
-            ModelField identifier = (ModelField) j.next();
-
-            sc.add( "result = 37 * result + " + createHashCodeForField( identifier ) + ";" );
-        }
-
-        sc.add( "" );
         sc.add( "return result;" );
 
         return hashCode;
@@ -451,33 +400,32 @@ public class JavaModelloGenerator
 
     private String createHashCodeForField( ModelField identifier )
     {
-        if ( identifier.getType().equals( "boolean" ) )
+        String name = identifier.getName();
+        String type = identifier.getType();
+
+        if ( "boolean".equals( type ) )
         {
-            return "( " + identifier.getName() + " ? 0 : 1 );";
+            return "( " + name + " ? 0 : 1 )";
         }
-        else if ( identifier.getType().equals( "byte" ) ||
-                  identifier.getType().equals( "char" ) ||
-                  identifier.getType().equals( "short" ) ||
-                  identifier.getType().equals( "int" ) )
+        else if ( "byte".equals( type ) || "char".equals( type ) || "short".equals( type ) || "int".equals( type ) )
         {
-            return "(int) " + identifier.getName();
+            return "(int) " + name;
         }
-        else if ( identifier.getType().equals( "long" ) )
+        else if ( "long".equals( type ) )
         {
-            return "(int) ( " + identifier.getName() + "^( " + identifier.getName() + " >>> 32 ) )";
+            return "(int) ( " + name + " ^ ( " + name + " >>> 32 ) )";
         }
-        else if ( identifier.getType().equals( "float" ) )
+        else if ( "float".equals( type ) )
         {
-            return "Float.floatToIntBits( " + identifier.getName() + " )";
+            return "Float.floatToIntBits( " + name + " )";
         }
-        else if ( identifier.getType().equals( "double" ) )
+        else if ( "double".equals( type ) )
         {
-            return "tmp = Double.doubleToLongBits( " + identifier.getName() + " );" + EOL +
-                   "(int) ( field ^ ( field >>> 32 ) )";
+            return "(int) ( tmp ^ ( tmp >>> 32 ) )";
         }
         else
         {
-            return identifier.getName() + ".hashCode()";
+            return "( " + name + " != null ? " + name + ".hashCode() : 0 )";
         }
     }
 
@@ -555,7 +503,7 @@ public class JavaModelloGenerator
 
         if ( javaFieldMetadata.isGetter() )
         {
-            
+
             jClass.addMethod( createGetter( field, modelField ) );
         }
 
@@ -576,7 +524,7 @@ public class JavaModelloGenerator
         JMethod getter = new JMethod( field.getType(), prefix + propertyName );
 
         getter.getJDocComment().setComment( "Get " + modelField.getDescription() );
-        
+
         getter.getSourceCode().add( "return this." + field.getName() + ";" );
 
         return getter;
@@ -589,14 +537,13 @@ public class JavaModelloGenerator
         JMethod setter = new JMethod( null, "set" + propertyName );
 
         setter.getJDocComment().setComment( "Set " + modelField.getDescription() );
-        
+
         setter.addParameter( new JParameter( field.getType(), field.getName() ) );
 
         JSourceCode sc = setter.getSourceCode();
 
-        if ( modelField instanceof ModelAssociation &&
-             isBidirectionalAssociation( (ModelAssociation) modelField ) &&
-             ModelAssociation.ONE_MULTIPLICITY.equals( ((ModelAssociation) modelField).getMultiplicity() ) )
+        if ( modelField instanceof ModelAssociation && isBidirectionalAssociation( (ModelAssociation) modelField ) &&
+            ModelAssociation.ONE_MULTIPLICITY.equals( ( (ModelAssociation) modelField ).getMultiplicity() ) )
         {
             ModelAssociation modelAssociation = (ModelAssociation) modelField;
 
@@ -609,7 +556,8 @@ public class JavaModelloGenerator
 
             sc.indent();
 
-            sc.add( "this." + field.getName() + ".break" + modelAssociation.getModelClass().getName() + "Association( this );" );
+            sc.add( "this." + field.getName() + ".break" + modelAssociation.getModelClass().getName() +
+                "Association( this );" );
 
             sc.unindent();
 
@@ -627,7 +575,8 @@ public class JavaModelloGenerator
 
             sc.indent();
 
-            sc.add( "this." + field.getName() + ".create" + modelAssociation.getModelClass().getName() + "Association( this );" );
+            sc.add( "this." + field.getName() + ".create" + modelAssociation.getModelClass().getName() +
+                "Association( this );" );
 
             sc.unindent();
 
@@ -710,8 +659,8 @@ public class JavaModelloGenerator
         {
             JMethod createMethod = new JMethod( null, "create" + modelAssociation.getTo() + "Association" );
 
-            createMethod.addParameter( new JParameter( new JClass( modelAssociation.getTo() ),
-                                                       uncapitalise( modelAssociation.getTo() ) ) );
+            createMethod.addParameter(
+                new JParameter( new JClass( modelAssociation.getTo() ), uncapitalise( modelAssociation.getTo() ) ) );
 
             // TODO: remove after tested
 //            createMethod.addException( new JClass( "Exception" ) );
@@ -726,7 +675,8 @@ public class JavaModelloGenerator
 
                 sc.indent();
 
-                sc.add( "break" + modelAssociation.getTo() + "Association( this." + modelAssociation.getName() + " );" );
+                sc.add(
+                    "break" + modelAssociation.getTo() + "Association( this." + modelAssociation.getName() + " );" );
 
                 sc.unindent();
 
@@ -740,17 +690,20 @@ public class JavaModelloGenerator
             {
                 jClass.addImport( "java.util.Collection" );
 
-                sc.add( "Collection " + modelAssociation.getName() + " = get" + capitalise( modelAssociation.getName() ) + "();" );
+                sc.add( "Collection " + modelAssociation.getName() + " = get" +
+                    capitalise( modelAssociation.getName() ) + "();" );
 
                 sc.add( "" );
 
-                sc.add( "if ( get" + capitalise( modelAssociation.getName() ) + "().contains(" + uncapitalise( modelAssociation.getTo() ) + ") )" );
+                sc.add( "if ( get" + capitalise( modelAssociation.getName() ) + "().contains(" +
+                    uncapitalise( modelAssociation.getTo() ) + ") )" );
 
                 sc.add( "{" );
 
                 sc.indent();
 
-                sc.add( "throw new IllegalStateException( \"" + uncapitalise( modelAssociation.getTo() ) + " is already assigned.\" );" );
+                sc.add( "throw new IllegalStateException( \"" + uncapitalise( modelAssociation.getTo() ) +
+                    " is already assigned.\" );" );
 
                 sc.unindent();
 
@@ -765,8 +718,8 @@ public class JavaModelloGenerator
 
             JMethod breakMethod = new JMethod( null, "break" + modelAssociation.getTo() + "Association" );
 
-            breakMethod.addParameter( new JParameter( new JClass( modelAssociation.getTo() ),
-                                                      uncapitalise( modelAssociation.getTo() ) ) );
+            breakMethod.addParameter(
+                new JParameter( new JClass( modelAssociation.getTo() ), uncapitalise( modelAssociation.getTo() ) ) );
 
             // TODO: remove after tested
 //            breakMethod.addException( new JClass( "Exception" ) );
@@ -775,13 +728,15 @@ public class JavaModelloGenerator
 
             if ( ModelAssociation.ONE_MULTIPLICITY.equals( modelAssociation.getMultiplicity() ) )
             {
-                sc.add( "if ( this." + modelAssociation.getName() + " != " + uncapitalise( modelAssociation.getTo() ) + " )" );
+                sc.add( "if ( this." + modelAssociation.getName() + " != " + uncapitalise( modelAssociation.getTo() ) +
+                    " )" );
 
                 sc.add( "{" );
 
                 sc.indent();
 
-                sc.add( "throw new IllegalStateException( \"" + uncapitalise( modelAssociation.getTo() ) + " isn't associated.\" );" );
+                sc.add( "throw new IllegalStateException( \"" + uncapitalise( modelAssociation.getTo() ) +
+                    " isn't associated.\" );" );
 
                 sc.unindent();
 
@@ -793,13 +748,15 @@ public class JavaModelloGenerator
             }
             else
             {
-                sc.add( "if ( ! get" + capitalise( modelAssociation.getName() ) + "().contains( " + uncapitalise( modelAssociation.getTo() ) + " ) )" );
+                sc.add( "if ( ! get" + capitalise( modelAssociation.getName() ) + "().contains( " +
+                    uncapitalise( modelAssociation.getTo() ) + " ) )" );
 
                 sc.add( "{" );
 
                 sc.indent();
 
-                sc.add( "throw new IllegalStateException( \"" + uncapitalise( modelAssociation.getTo() ) + " isn't associated.\" );" );
+                sc.add( "throw new IllegalStateException( \"" + uncapitalise( modelAssociation.getTo() ) +
+                    " isn't associated.\" );" );
 
                 sc.unindent();
 
@@ -807,7 +764,8 @@ public class JavaModelloGenerator
 
                 sc.add( "" );
 
-                sc.add( "get" + capitalise( modelAssociation.getName() ) + "().remove( " + uncapitalise( modelAssociation.getTo() ) + " );" );
+                sc.add( "get" + capitalise( modelAssociation.getName() ) + "().remove( " +
+                    uncapitalise( modelAssociation.getTo() ) + " );" );
             }
 
             jClass.addMethod( breakMethod );
@@ -833,8 +791,8 @@ public class JavaModelloGenerator
             addType = new JClass( "String" );
         }
 
-        if ( modelAssociation.getType().equals( ModelDefault.PROPERTIES )
-            || modelAssociation.getType().equals( ModelDefault.MAP ) )
+        if ( modelAssociation.getType().equals( ModelDefault.PROPERTIES ) ||
+            modelAssociation.getType().equals( ModelDefault.MAP ) )
         {
             JMethod adder = new JMethod( null, "add" + capitalise( singular( fieldName ) ) );
 
@@ -866,7 +824,8 @@ public class JavaModelloGenerator
                 // TODO: remove after tested
 //                adder.addException( new JClass( "Exception" ) );
 
-                adder.getSourceCode().add( parameterName + ".create" + modelAssociation.getModelClass().getName() + "Association( this );" );
+                adder.getSourceCode().add(
+                    parameterName + ".create" + modelAssociation.getModelClass().getName() + "Association( this );" );
             }
 
             jClass.addMethod( adder );
@@ -880,7 +839,8 @@ public class JavaModelloGenerator
                 // TODO: remove after tested
 //                remover.addException( new JClass( "Exception" ) );
 
-                remover.getSourceCode().add( parameterName + ".break" + modelAssociation.getModelClass().getName() + "Association( this );" );
+                remover.getSourceCode().add(
+                    parameterName + ".break" + modelAssociation.getModelClass().getName() + "Association( this );" );
             }
 
             remover.getSourceCode().add( "get" + capitalise( fieldName ) + "().remove( " + parameterName + " );" );
@@ -904,7 +864,7 @@ public class JavaModelloGenerator
         {
             ModelField modelField = (ModelField) j.next();
 
-            if ( !(modelField instanceof ModelAssociation) )
+            if ( !( modelField instanceof ModelAssociation ) )
             {
                 continue;
             }
