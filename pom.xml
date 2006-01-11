@@ -1,10 +1,10 @@
-<project>
+<?xml version="1.0" encoding="UTF-8"?><project>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.codehaus.modello</groupId>
   <artifactId>modello</artifactId>
   <packaging>pom</packaging>
   <name>Modello Parent</name>
-  <version>1.0-alpha-8-SNAPSHOT</version>
+  <version>1.0-alpha-8</version>
   <issueManagement>
     <system>jira</system>
     <url>http://jira.codehaus.org/browse/MODELLO</url>
@@ -94,9 +94,9 @@
     </developer>
   </developers>
   <scm>
-    <connection>scm:svn:https://svn.codehaus.org/modello/trunk/modello</connection>
-    <developerConnection>scm:svn:svn+ssh://svn.codehaus.org/home/projects/modello/scm/trunk/modello</developerConnection>
-    <url>http://svn.modello.codehaus.org/trunk/modello</url>
+    <connection>scm:svn:https://svn.codehaus.org/modello/tags/modello-1.0-alpha-8/modello</connection>
+    <developerConnection>scm:svn:svn+ssh://svn.codehaus.org/home/projects/modello/scm/tags/modello-1.0-alpha-8/modello</developerConnection>
+    <url>http://svn.modello.codehaus.org/tags/modello-1.0-alpha-8/modello</url>
   </scm>
   <organization>
     <name>Codehaus</name>
@@ -202,6 +202,48 @@
             <tagBase>https://svn.codehaus.org/modello/tags</tagBase>
           </configuration>
         </plugin>
+        <plugin>
+          <artifactId>maven-release-plugin</artifactId>
+          <configuration>
+            <tagBase>https://svn.codehaus.org/modello/tags</tagBase>
+          </configuration>
+        </plugin>
+        <plugin>
+          <artifactId>maven-release-plugin</artifactId>
+          <configuration>
+            <tagBase>https://svn.codehaus.org/modello/tags</tagBase>
+          </configuration>
+        </plugin>
+        <plugin>
+          <artifactId>maven-release-plugin</artifactId>
+          <configuration>
+            <tagBase>https://svn.codehaus.org/modello/tags</tagBase>
+          </configuration>
+        </plugin>
+        <plugin>
+          <artifactId>maven-release-plugin</artifactId>
+          <configuration>
+            <tagBase>https://svn.codehaus.org/modello/tags</tagBase>
+          </configuration>
+        </plugin>
+        <plugin>
+          <artifactId>maven-release-plugin</artifactId>
+          <configuration>
+            <tagBase>https://svn.codehaus.org/modello/tags</tagBase>
+          </configuration>
+        </plugin>
+        <plugin>
+          <artifactId>maven-release-plugin</artifactId>
+          <configuration>
+            <tagBase>https://svn.codehaus.org/modello/tags</tagBase>
+          </configuration>
+        </plugin>
+        <plugin>
+          <artifactId>maven-release-plugin</artifactId>
+          <configuration>
+            <tagBase>https://svn.codehaus.org/modello/tags</tagBase>
+          </configuration>
+        </plugin>
       </plugins>
     </pluginManagement>
   </build>
@@ -211,6 +253,20 @@
     <module>modello-test</module>
     <module>modello-plugins</module>
   </modules>
+  <repositories>
+    <repository>
+      <id>repo1</id>
+      <url>scp://beaver.codehaus.org/home/projects/maven/repository-staging/to-ibiblio/maven2</url>
+    </repository>
+    <repository>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <id>snapshots</id>
+      <name>Snapshot repository</name>
+      <url>http://snapshots.maven.codehaus.org/maven2/</url>
+    </repository>
+  </repositories>
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -289,20 +345,6 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
-  <repositories>
-    <repository>
-      <id>repo1</id>
-      <url>scp://beaver.codehaus.org/home/projects/maven/repository-staging/to-ibiblio/maven2</url>
-    </repository>
-    <repository>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-      <id>snapshots</id>
-      <name>Snapshot repository</name>
-      <url>http://snapshots.maven.codehaus.org/maven2/</url>
-    </repository>    
-  </repositories>
   <distributionManagement>
     <repository>
       <id>repo1</id>
