@@ -1,0 +1,126 @@
+package ${package};
+
+import org.codehaus.stash.ObjectDatabase;
+import org.codehaus.stash.ObjectStore;
+
+/**
+ * Generated Stash storage mechanism for  $model.name
+ * @author Mr Modello
+ */
+
+public class ${model.name}StashStore
+    extends ${extends}
+    implements Initializable, Startable
+{
+    private String databaseDirectory;
+
+    private ObjectDatabase database;
+
+    private ObjectStore store;
+
+    private boolean databaseCreated;
+
+    // ----------------------------------------------------------------------
+    // Component Lifecycle
+    // ----------------------------------------------------------------------
+
+    public void initialize()
+        throws Exception
+    {
+        if ( !databaseCreated )
+        {
+            createDatabase();
+
+            File f = new File( databaseDirectory );
+
+            if ( !f.exists() )
+            {
+                f.mkdirs();
+            }
+
+            try
+            {
+                database = new ObjectDatabase( databaseDirectory );
+
+#foreach ( $class in $model.allClasses )
+#if ( $class.getMetadata( $id ).isStorable() )
+                projectStore = database.createStore( ContinuumProject.class );
+
+                projectStore.createIndex( String.class, "name" );
+#end
+
+#end
+            }
+            catch ( Exception e )
+            {
+                throw new ContinuumStoreException( "Cannot create database: ", e );
+            }
+
+            databaseCreated = true;
+        }
+    }
+
+    public void start()
+        throws ${model.name}StoreException
+    {
+    }
+
+    public void stop()
+        throws ${model.name}StoreException
+    {
+    }
+
+    // ----------------------------------------------------------------------
+    // Storage methods
+    // ----------------------------------------------------------------------
+
+#foreach ( $class in $model.allClasses )
+#if ( $class.getMetadata( $id ).isStorable() )
+    public void add${class.name}( $class.name entity )
+        throws StoreException
+    {
+        try
+        {
+            String id = Long.toString( store.insert( entity ) );
+
+            entity.setId( id );
+
+            store.update( id, entity );
+
+            return id;
+        }
+        catch ( Exception e )
+        {
+            throw new ContinuumStoreException( "Cannot insert new ContinuumProject: ", e );
+        }
+    }
+
+    public void delete( String id )
+        throws StoreException
+    {
+        try
+        {
+            store.delete( id );
+        }
+        catch ( Exception e )
+        {
+            throw new ContinuumStoreException( "Cannot delete ContinuumProject: ", e );
+        }
+    }
+
+    public void update( String id, $class.name entity )
+        throws StoreException
+    {
+        try
+        {
+            store.update( id, entity );
+        }
+        catch ( Exception e )
+        {
+            throw new ContinuumStoreException( "Cannot delete ContinuumProject: ", e );
+        }
+    }
+#end
+
+#end
+}

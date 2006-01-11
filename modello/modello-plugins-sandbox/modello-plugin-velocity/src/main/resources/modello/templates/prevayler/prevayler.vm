@@ -1,0 +1,160 @@
+package ${package};
+
+import org.prevayler.*;
+import org.prevayler.implementation.*;
+import org.prevayler.convenience.*;
+
+/**
+ * Generated Prevayler storage mechanism for $model.name
+ * @author Mr Modello
+ */
+public class ${model.name}PrevaylerStore
+    implements Initializable, Startable
+{
+    private String databaseDirectory;
+
+    private Prevayler prevayler;
+
+    private Store store;
+
+    static class Store
+        implements Serializable
+    {
+#foreach ( $class in $model.allClasses )
+#if ( $class.getMetadata( $id ).isStorable() )
+        private Map ${class.name}Map = new HashMap();
+
+        void add${class.name}( ${class.name} o ) { ${class.name}Map.put( o.getId(), o ); }
+
+        void update${class.name}( ${class.name} o ) { ${class.name}Map.put( o. getId(), o ) }
+
+        void delete${class.name}( ${class.name} o ) { ${class.name}Map.remove( o.getId() ) }
+#end
+
+#end
+    }
+
+#foreach ( $class in $model.allClasses )
+#if ( $class.getMetadata( $id ).isStorable() )
+    // ----------------------------------------------------------------------
+    // ${class.name} Transactions
+    // ----------------------------------------------------------------------
+
+    public class Add${class.name}
+        implements TransactionWithQuery
+    {
+        private final ${class.name} o;
+
+        public Add${class.name}( ${class.name} o )
+        {
+            this.o = o;
+        }
+
+        public Object executeAndQuery(Object prevalentSystem, Date executionTime)
+            throws Exception
+        {
+            Store system = (Store) prevalentSystem;
+
+            system.add${class.name}( o );
+
+            return o;
+        }
+    }
+
+    public class Update${class.name}
+        implements TransactionWithQuery
+    {
+        private final ${class.name} o;
+
+        public Update${class.name}( ${class.name} o )
+        {
+            this.o = o;
+        }
+
+        public Object executeAndQuery(Object prevalentSystem, Date executionTime)
+            throws Exception
+        {
+            Store system = (Store) prevalentSystem;
+
+            system.update${class.name}( o );
+
+            return o;
+        }
+    }
+
+    public class Delete${class.name}
+        implements Transaction
+    {
+        private ${class.name} o;
+
+        public Remove${class.name}( ${class.name} o )
+        {
+            this.o = o;
+        }
+
+        public void executeOn(Object prevalentSystem, Date executionTime)
+        {
+            Store system = (Store) prevalentSystem;
+
+            system.delete${class.name}( o );
+        }
+    }
+#end
+
+#end
+
+    // ----------------------------------------------------------------------
+    // Component Lifecycle
+    // ----------------------------------------------------------------------
+
+    public void initialize()
+        throws Exception
+    {
+        prevayler = PrevaylerFactory.createPrevayler( new Store(), databaseDirectory );
+
+        store = (Store) prevayler.prevaylentSystem();
+    }
+
+    public void start()
+        throws ${model.name}StoreException
+    {
+    }
+
+    public void stop()
+        throws ${model.name}StoreException
+    {
+    }
+
+#foreach ( $class in $model.allClasses )
+#if ( $class.getMetadata( $id ).isStorable() )
+    // ----------------------------------------------------------------------
+    // ${class.name} CRUD
+    // ----------------------------------------------------------------------
+
+    public ${class.name} add${class.name}( $class.name o )
+        throws StoreException
+    {
+        return prevayler.execute( new Add${class.name}( o ) );
+    }
+
+    public ${class.name} update${class.name}( String id, $class.name o )
+        throws StoreException
+    {
+        return prevayler.execute( new Update${class.name}( o ) );
+    }
+
+    public void delete${class.name}( String id )
+        throws StoreException
+    {
+        prevayler.execute( new Delete${class.name}( id ) );
+    }
+
+    public ${class.name} get${class.name}( String id )
+        throws StoreException
+    {
+        return store.get${class.name}( id );
+    }
+#end
+
+#end
+}
