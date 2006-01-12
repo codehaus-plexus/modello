@@ -1,0 +1,114 @@
+<model>
+  <id>dhis</id>
+  <name>DHIS Model</name>
+  <packageName>no.uio.dhis</packageName>
+  <root>Model</root>
+  <classes>
+    <class>
+      <name>Model</name>
+      <version>2.0.0</version>
+      <fields>
+        <field id="true" generator="native">
+          <name>id</name>
+          <type>int</type>
+          <version>2.0.0</version>
+        </field>
+      </fields>
+    </class>
+    <class>
+      <name>UserInfoRole</name>
+      <version>2.0.0</version>
+      <fields>
+        <field id="true" generator="native">
+          <name>id</name>
+          <type>int</type>
+          <version>2.0.0</version>
+        </field>
+        <field length="230">
+          <name>name</name>
+          <type>String</type>
+          <version>2.0.0</version>
+        </field>
+        <field length="infinite">
+          <name>description</name>
+          <type>String</type>
+          <version>2.0.0</version>
+        </field>
+        <field>
+          <name>lastUser</name>
+          <type>int</type>
+          <version>2.0.0</version>
+        </field>
+        <!-- "yyyyMMdd hh:mm:ss".length=17 -->
+        <field length="17">
+          <name>lastUpdated</name>
+          <type>String</type>
+          <version>2.0.0</version>
+        </field>
+      </fields>
+    </class>
+    <class>
+      <name>UserProfile</name>
+      <fields>
+        <field id="true" generator="native">
+          <name>id</name>
+          <type>int</type>
+          <version>2.0.0</version>
+        </field>
+        <field length="15">
+          <name>userName</name>
+          <type>String</type>
+          <required>true</required>
+          <version>2.0.0</version>
+        </field>
+        <field length="230">
+          <name>surname</name>
+          <type>String</type>
+          <version>2.0.0</version>
+        </field>
+        <field length="230">
+          <name>firstName</name>
+          <type>String</type>
+          <version>2.0.0</version>
+        </field>
+        <field>
+          <name>infoRoleID</name>
+          <type>int</type>
+          <version>2.0.0</version>
+        </field>
+        <field length="15">
+          <name>telephoneNumber</name>
+          <type>String</type>
+          <version>2.0.0</version>
+        </field>
+        <field length="15">
+          <name>faxNumber</name>
+          <type>String</type>
+          <version>2.0.0</version>
+        </field>
+        <field length="15">
+          <name>cellNumber</name>
+          <type>String</type>
+          <version>2.0.0</version>
+        </field>
+        <field length="30">
+          <name>emailAddress</name>
+          <type>String</type>
+          <version>2.0.0</version>
+        </field>
+        <field length="infinite">
+          <name>userURL</name>
+          <type>String</type>
+          <version>2.0.0</version>
+        </field>
+      </fields>
+      <associations>
+        <association>
+          <name>userInfoRoles</name>
+          <to>UserInfoRole</to>
+          <toRole>userProfile</toRole>
+        </association>
+      </associations>
+    </class>
+  </classes>
+</model>

@@ -1,0 +1,27 @@
+package ${package};
+
+/**
+ * Generated storage mechanism for the $model.name model.
+ *
+ * @author Mr Modello
+ */
+public interface ${model.name}Store
+{
+#foreach ( $class in $model.allClasses )
+    // ----------------------------------------------------------------------
+    // $class.name storage methods
+    // ----------------------------------------------------------------------
+
+#if ( $class.getMetadata( $metadataId ).isStorable() )
+    public void add${class.name}( $class.name entity )
+        throws ${model.name}StoreException;
+
+    public void delete${class.name}( String id )
+        throws ${model.name}StoreException;
+
+    public void update${class.name}( String id, $class.name entity )
+        throws ${model.name}StoreException;
+#end
+
+#end
+}
