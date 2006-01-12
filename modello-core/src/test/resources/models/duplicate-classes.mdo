@@ -1,0 +1,12 @@
+<model>
+  <id>duplicate-classes</id>
+  <name>Duplicate Classes Test Model</name>
+  <classes>
+    <class>
+      <name>MyClass</name>
+    </class>
+    <class>
+      <name>MyClass</name>
+    </class>
+  </classes>
+</model>

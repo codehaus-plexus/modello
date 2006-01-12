@@ -1,0 +1,32 @@
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.codehaus.modello</groupId>
+    <artifactId>modello</artifactId>
+    <version>1.0-alpha-4-SNAPSHOT</version>
+  </parent>
+  <artifactId>modello-plugins-sandbox</artifactId>
+  <packaging>pom</packaging>
+  <version>1.0-alpha-4-SNAPSHOT</version>
+  <name>Modello Plugin Sandbox Parent</name>
+  <dependencies>
+    <dependency>
+      <groupId>org.codehaus.modello</groupId>
+      <artifactId>modello-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.modello</groupId>
+      <artifactId>modello-test</artifactId>
+    </dependency>
+  </dependencies>
+  <modules>
+    <module>modello-plugin-hibernate-old</module>
+    <module>modello-plugin-jdbc</module>
+    <module>modello-plugin-ojb</module>
+    <module>modello-plugin-velocity</module>
+    <module>modello-plugin-dtd</module>
+    <module>modello-plugin-hibernate-store</module>
+    <module>modello-plugin-ldap</module>
+    <module>modello-plugin-stash</module>
+  </modules>
+</project>

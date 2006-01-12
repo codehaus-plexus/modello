@@ -1,0 +1,19 @@
+<component-set>
+  <components>
+    <component>
+      <role>org.codehaus.modello.plugin.ModelloGenerator</role>
+      <role-hint>velocity</role-hint>
+      <implementation>org.codehaus.modello.plugin.velocity.VelocityGenerator</implementation>
+      <requirements>
+        <requirement>
+          <role>org.codehaus.plexus.velocity.VelocityComponent</role>
+        </requirement>
+      </requirements>
+    </component>
+    <component>
+      <role>org.codehaus.modello.metadata.MetadataPlugin</role>
+      <role-hint>velocity</role-hint>
+      <implementation>org.codehaus.modello.plugin.velocity.StashMetadataPlugin</implementation>
+    </component>
+  </components>
+</component-set>
