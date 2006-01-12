@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?><project>
+  <parent>
+    <artifactId>modello</artifactId>
+    <groupId>org.codehaus.modello</groupId>
+    <version>1.0-alpha-8</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.codehaus.modello</groupId>
+  <artifactId>modello-core</artifactId>
+  <name>Modello Core</name>
+  <version>1.0-alpha-8</version>
+  <dependencies>
+    <dependency>
+      <groupId>org.codehaus.modello</groupId>
+      <artifactId>modello-test</artifactId>
+      <version>1.0-alpha-8</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-container-default</artifactId>
+    </dependency>
+  </dependencies>
+</project>

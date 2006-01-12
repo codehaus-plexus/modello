@@ -1,0 +1,23 @@
+<model>
+  <id>duplicate-associations</id>
+  <name>Duplicate Associations Test Model</name>
+  <classes>
+    <class>
+      <name>MyClass</name>
+      <fields>
+        <field>
+          <name>MyAssociation</name>
+          <association>
+            <type>String</type>
+          </association>
+        </field>
+        <field>
+          <name>MyAssociation</name>
+          <association>
+            <type>String</type>
+          </association>
+        </field>
+      </fields>
+    </class>
+  </classes>
+</model>

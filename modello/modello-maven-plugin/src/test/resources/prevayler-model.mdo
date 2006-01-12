@@ -1,0 +1,24 @@
+<model>
+  <id>maven-prevayler-mojo-test-model</id>
+  <name>PrevaylerTest</name>
+  <root>Model</root>
+  <defaults>
+    <default>
+      <key>package</key>
+      <value>org.codehaus.mojo.modello.test.prevayler</value>
+    </default>
+  </defaults>
+  <classes>
+    <class>
+      <name>Model</name>
+      <version>1.0.0</version>
+      <fields>
+        <field>
+          <name>extend</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+      </fields>
+    </class>
+  </classes>
+</model>
