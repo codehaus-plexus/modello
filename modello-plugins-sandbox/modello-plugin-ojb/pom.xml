@@ -3,16 +3,12 @@
   <parent>
     <groupId>org.codehaus.modello</groupId>
     <artifactId>modello-plugins-sandbox</artifactId>
-    <version>1.0-alpha-4-SNAPSHOT</version>
+    <version>1</version>
   </parent>
   <artifactId>modello-plugin-ojb</artifactId>
   <version>1.0-alpha-4-SNAPSHOT</version>
   <name>Modello OJB Plugin</name>
   <dependencies>
-    <dependency>
-      <groupId>plexus</groupId>
-      <artifactId>plexus-velocity</artifactId>
-    </dependency>
     <dependency>
       <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-plugin-store</artifactId>
