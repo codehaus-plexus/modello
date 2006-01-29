@@ -22,6 +22,8 @@ package org.codehaus.modello;
  * SOFTWARE.
  */
 
+import org.codehaus.plexus.util.StringUtils;
+
 import java.io.FileReader;
 import java.util.Properties;
 
@@ -37,12 +39,6 @@ public class ModelloCli
 
     private static Properties parameters;
 
-//    private static String outputDirectory;
-
-//    private static String modelVersion;
-
-//    private static boolean packageWithVersion;
-
     public static void main( String[] args )
         throws Exception
     {
@@ -50,10 +46,7 @@ public class ModelloCli
 
         parseArgumentsFromCommandLine( args );
 
-//        modello.initialize();
-
         modello.generate( new FileReader( modelFile ), outputType, parameters );
-//        modello.work( new File( modelFile ), mode, new File( outputDirectory ), modelVersion, packageWithVersion );
     }
 
     public static void parseArgumentsFromCommandLine( String[] args )

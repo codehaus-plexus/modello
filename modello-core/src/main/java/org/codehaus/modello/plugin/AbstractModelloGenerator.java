@@ -29,7 +29,7 @@ import java.util.Properties;
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.ModelloRuntimeException;
-import org.codehaus.modello.generator.java.javasource.JClass;
+import org.codehaus.modello.plugin.java.javasource.JClass;
 import org.codehaus.modello.model.BaseElement;
 import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelClass;

@@ -23,14 +23,14 @@ package org.codehaus.modello.plugin.java;
  */
 
 import org.codehaus.modello.ModelloException;
-import org.codehaus.modello.generator.java.javasource.JClass;
-import org.codehaus.modello.generator.java.javasource.JField;
-import org.codehaus.modello.generator.java.javasource.JInterface;
-import org.codehaus.modello.generator.java.javasource.JMethod;
-import org.codehaus.modello.generator.java.javasource.JParameter;
-import org.codehaus.modello.generator.java.javasource.JSourceCode;
-import org.codehaus.modello.generator.java.javasource.JSourceWriter;
-import org.codehaus.modello.generator.java.javasource.JType;
+import org.codehaus.modello.plugin.java.javasource.JClass;
+import org.codehaus.modello.plugin.java.javasource.JField;
+import org.codehaus.modello.plugin.java.javasource.JInterface;
+import org.codehaus.modello.plugin.java.javasource.JMethod;
+import org.codehaus.modello.plugin.java.javasource.JParameter;
+import org.codehaus.modello.plugin.java.javasource.JSourceCode;
+import org.codehaus.modello.plugin.java.javasource.JSourceWriter;
+import org.codehaus.modello.plugin.java.javasource.JType;
 import org.codehaus.modello.model.CodeSegment;
 import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelAssociation;
