@@ -132,7 +132,7 @@ public class StoreMetadataPlugin
 
         if ( data.containsKey( PART ) )
         {
-            metadata.setPart( new Boolean( (String) data.get( PART ) ) );
+            metadata.setPart( Boolean.valueOf( (String) data.get( PART ) ) );
         }
 
         String keyType = (String) data.get( KEY_TYPE );

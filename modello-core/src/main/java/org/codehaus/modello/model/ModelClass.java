@@ -472,12 +472,8 @@ public class ModelClass
 
         ModelClass other = (ModelClass) o;
 
-        if ( !other.packageName.equals( other.packageName ) )
-        {
-            return false;
-        }
+        return packageName.equals( other.packageName );
 
-        return true;
     }
 
     public int hashCode()

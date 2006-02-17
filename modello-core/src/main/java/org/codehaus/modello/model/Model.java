@@ -231,7 +231,7 @@ public class Model
 
     public String getDefaultPackageName( boolean withVersion, Version version )
     {
-        String packageName = null;
+        String packageName;
 
         try
         {

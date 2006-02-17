@@ -349,7 +349,7 @@ public class JPoxJdoMappingModelloGenerator
                 {
                     String fetchGroupName = (String) i.next();
 
-                    List fetchList = null;
+                    List fetchList;
 
                     if ( fetchsMap.get( fetchGroupName ) == null )
                     {

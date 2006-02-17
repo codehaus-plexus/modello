@@ -57,7 +57,7 @@ public abstract class Verifier
             throw new VerifierException( "This tester cannot test primitive types." );
         }
 
-        if ( expectedValueType.getName() != "java.lang.String" )
+        if ( !expectedValueType.getName().equals( "java.lang.String" ) )
         {
             throw new VerifierException( "This tester cannot test any object other than java.lang.String." );
         }

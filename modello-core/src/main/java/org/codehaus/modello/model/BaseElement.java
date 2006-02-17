@@ -202,15 +202,7 @@ public abstract class BaseElement
 
         BaseElement baseElem = (BaseElement) other;
 
-        if ( name.equals( baseElem.getName() ) &&
-             versionRange.equals( baseElem.getVersionRange() ) )
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return name.equals( baseElem.getName() ) && versionRange.equals( baseElem.getVersionRange() );
     }
 
     public int hashCode()

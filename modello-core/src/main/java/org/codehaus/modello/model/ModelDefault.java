@@ -121,7 +121,7 @@ public class ModelDefault
 
     public boolean getBoolean()
     {
-        return new Boolean( value ).booleanValue();
+        return Boolean.valueOf( value ).booleanValue();
     }
 
     public void validateElement()

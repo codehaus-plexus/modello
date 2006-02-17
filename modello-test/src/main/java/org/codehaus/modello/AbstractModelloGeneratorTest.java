@@ -195,11 +195,6 @@ public abstract class AbstractModelloGeneratorTest
 
         Method verify = clazz.getMethod( "verify", new Class[0] );
 
-        if ( false )
-        {
-            printClasspath( classLoader );
-        }
-
         try
         {
             verify.invoke( clazz.newInstance(), new Object[0] );
