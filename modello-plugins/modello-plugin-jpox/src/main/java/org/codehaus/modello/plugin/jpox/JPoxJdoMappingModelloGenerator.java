@@ -22,19 +22,6 @@ package org.codehaus.modello.plugin.jpox;
  * SOFTWARE.
  */
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelAssociation;
@@ -48,6 +35,19 @@ import org.codehaus.modello.plugin.store.metadata.StoreAssociationMetadata;
 import org.codehaus.modello.plugin.store.metadata.StoreFieldMetadata;
 import org.codehaus.plexus.util.xml.PrettyPrintXMLWriter;
 import org.codehaus.plexus.util.xml.XMLWriter;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -91,7 +91,7 @@ public class JPoxJdoMappingModelloGenerator
 
             if ( isPackageWithVersion() )
             {
-                packageJdo = new File( getOutputDirectory(), "META-INF/package-" + getGeneratedVersion() +".jdo" );
+                packageJdo = new File( getOutputDirectory(), "META-INF/package-" + getGeneratedVersion() + ".jdo" );
             }
             else
             {
@@ -102,10 +102,10 @@ public class JPoxJdoMappingModelloGenerator
 
             if ( !parent.exists() )
             {
-                if( !parent.mkdirs() )
+                if ( !parent.mkdirs() )
                 {
-                    throw new ModelloException( "Error while creating parent directories for the file " +
-                                                "'" + packageJdo.getAbsolutePath() + "'." );
+                    throw new ModelloException( "Error while creating parent directories for the file " + "'" +
+                        packageJdo.getAbsolutePath() + "'." );
                 }
             }
 
@@ -124,7 +124,7 @@ public class JPoxJdoMappingModelloGenerator
     private void generatePackageJdo( File file, Model model )
         throws IOException, ModelloException
     {
-        OutputStreamWriter fileWriter = new OutputStreamWriter( new FileOutputStream( file ) , "UTF-8" );
+        OutputStreamWriter fileWriter = new OutputStreamWriter( new FileOutputStream( file ), "UTF-8" );
 
         PrintWriter printWriter = new PrintWriter( fileWriter );
 
@@ -175,8 +175,8 @@ public class JPoxJdoMappingModelloGenerator
                 continue;
             }
 
-            String packageName = ((ModelClass) list.get( 0 ) ).getPackageName( isPackageWithVersion(),
-                                                                               getGeneratedVersion() );
+            String packageName =
+                ( (ModelClass) list.get( 0 ) ).getPackageName( isPackageWithVersion(), getGeneratedVersion() );
 
             writer.startElement( "package" );
 
@@ -212,14 +212,13 @@ public class JPoxJdoMappingModelloGenerator
 
         if ( modelClass.getSuperClass() != null )
         {
-            persistenceCapableSuperclass = getModel().getClass( modelClass.getSuperClass(),
-                                                                getGeneratedVersion() );
+            persistenceCapableSuperclass = getModel().getClass( modelClass.getSuperClass(), getGeneratedVersion() );
         }
 
         if ( persistenceCapableSuperclass != null )
         {
-            String superPackageName = persistenceCapableSuperclass.getPackageName( isPackageWithVersion(),
-                                                                                   getGeneratedVersion() );
+            String superPackageName =
+                persistenceCapableSuperclass.getPackageName( isPackageWithVersion(), getGeneratedVersion() );
 
             writer.addAttribute( "persistence-capable-superclass",
                                  superPackageName + "." + persistenceCapableSuperclass.getName() );
@@ -245,8 +244,8 @@ public class JPoxJdoMappingModelloGenerator
             if ( !PRIMITIVE_IDENTITY_MAP.containsKey( modelField.getType() ) )
             {
                 throw new ModelloException( "The JDO mapping generator does not support the specified " +
-                                            "field type '" + modelField.getType() + "'. " +
-                                            "Supported types: " + PRIMITIVE_IDENTITY_MAP.keySet() );
+                    "field type '" + modelField.getType() + "'. " + "Supported types: " +
+                    PRIMITIVE_IDENTITY_MAP.keySet() );
             }
         }
 
@@ -269,7 +268,7 @@ public class JPoxJdoMappingModelloGenerator
             // http://www.jpox.org/docs/1_1/inheritance.html - in particular
             // the strategy="subclass-table" and strategy="new-table" parts
 
-            writer.addAttribute( "strategy", "new-table");
+            writer.addAttribute( "strategy", "new-table" );
 
             writer.endElement();
         }
@@ -292,7 +291,7 @@ public class JPoxJdoMappingModelloGenerator
         {
             ModelField modelField = (ModelField) it.next();
 
-            writeModelField( writer,  modelField );
+            writeModelField( writer, modelField );
         }
 
         // ----------------------------------------------------------------------
@@ -335,7 +334,7 @@ public class JPoxJdoMappingModelloGenerator
         // Write user fetch groups
         Map fetchsMap = new HashMap();
 
-        for ( Iterator it = fields.iterator();it.hasNext(); )
+        for ( Iterator it = fields.iterator(); it.hasNext(); )
         {
             ModelField field = (ModelField) it.next();
 
@@ -381,7 +380,7 @@ public class JPoxJdoMappingModelloGenerator
     {
         if ( !fields.isEmpty() )
         {
-            writer.startElement( "fetch-group");
+            writer.startElement( "fetch-group" );
 
             writer.addAttribute( "name", fetchGroupName );
 
@@ -419,6 +418,10 @@ public class JPoxJdoMappingModelloGenerator
         {
             writer.addAttribute( "null-value", "exception" );
         }
+        else if ( jpoxMetadata.getNullValue() != null )
+        {
+            writer.addAttribute( "null-value", jpoxMetadata.getNullValue() );
+        }
 
         // TODO: The value-strategy attribute should be customizable.
         // See http://www.jpox.org/docs/1_1/identity_generation.html
@@ -440,12 +443,20 @@ public class JPoxJdoMappingModelloGenerator
         }
         else
         {
-            if ( storeMetadata.getMaxSize() > 0 )
+            if ( storeMetadata.getMaxSize() > 0 ||
+                ( jpoxMetadata.getNullValue() != null && modelField.getDefaultValue() != null ) )
             {
                 writer.startElement( "column" );
 
-                writer.addAttribute( "length", String.valueOf( storeMetadata.getMaxSize() ) );
+                if ( storeMetadata.getMaxSize() > 0 )
+                {
+                    writer.addAttribute( "length", String.valueOf( storeMetadata.getMaxSize() ) );
+                }
 
+                if ( jpoxMetadata.getNullValue() != null && "default".equals( jpoxMetadata.getNullValue() ) )
+                {
+                    writer.addAttribute( "default-value", modelField.getDefaultValue() );
+                }
                 writer.endElement();
             }
         }
@@ -458,7 +469,8 @@ public class JPoxJdoMappingModelloGenerator
         StoreAssociationMetadata am =
             (StoreAssociationMetadata) association.getAssociationMetadata( StoreAssociationMetadata.ID );
 
-        JPoxAssociationMetadata jpoxMetadata = (JPoxAssociationMetadata) association.getAssociationMetadata( JPoxAssociationMetadata.ID );
+        JPoxAssociationMetadata jpoxMetadata =
+            (JPoxAssociationMetadata) association.getAssociationMetadata( JPoxAssociationMetadata.ID );
 
         if ( am.isPart() != null )
         {
@@ -472,8 +484,7 @@ public class JPoxJdoMappingModelloGenerator
             dependent = am.isPart().booleanValue();
         }
 
-        if ( association.getType().equals( "java.util.List" ) ||
-             association.getType().equals( "java.util.Set" ) )
+        if ( association.getType().equals( "java.util.List" ) || association.getType().equals( "java.util.Set" ) )
         {
             writer.startElement( "collection" );
 

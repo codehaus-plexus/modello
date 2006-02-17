@@ -56,6 +56,8 @@ public class JPoxMetadataPlugin
 
     public final static String MAPPED_BY = "jpox.mappedBy";
 
+    public final static String NULL_VALUE = "jpox.nullValue";
+
     // ----------------------------------------------------------------------
     // Map to Metadata
     // ----------------------------------------------------------------------
@@ -94,6 +96,13 @@ public class JPoxMetadataPlugin
         if ( !StringUtils.isEmpty( mappedBy ) )
         {
             metadata.setMappedBy( mappedBy );
+        }
+
+        String nullValue = (String) data.get( NULL_VALUE );
+
+        if ( !StringUtils.isEmpty( nullValue ) )
+        {
+            metadata.setNullValue( nullValue );
         }
 
         return metadata;
