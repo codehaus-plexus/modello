@@ -23,7 +23,6 @@ package org.codehaus.modello.generator.xml.xpp3;
  */
 
 import org.codehaus.modello.AbstractModelloGeneratorTest;
-import org.codehaus.modello.FileUtils;
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
@@ -31,6 +30,7 @@ import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.Version;
 import org.codehaus.modello.plugins.xml.XmlFieldMetadata;
+import org.codehaus.plexus.util.FileUtils;
 
 import java.io.File;
 import java.io.FileReader;
