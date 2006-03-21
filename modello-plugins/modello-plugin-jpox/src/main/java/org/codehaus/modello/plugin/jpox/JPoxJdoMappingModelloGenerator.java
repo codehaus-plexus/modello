@@ -388,6 +388,16 @@ public class JPoxJdoMappingModelloGenerator
             {
                 ModelField field = (ModelField) it.next();
 
+                if ( field instanceof ModelAssociation )
+                {
+                    StoreAssociationMetadata storeMetadata = getAssociationMetadata( (ModelAssociation) field );
+
+                    if ( storeMetadata.isPart() != null && storeMetadata.isPart().booleanValue() )
+                    {
+                        continue;
+                    }
+                }
+
                 writer.startElement( "field" );
 
                 writer.addAttribute( "name", field.getName() );
