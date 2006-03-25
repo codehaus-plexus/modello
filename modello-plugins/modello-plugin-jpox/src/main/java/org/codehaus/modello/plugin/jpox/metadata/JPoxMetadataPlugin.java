@@ -46,17 +46,17 @@ import java.util.Map;
 public class JPoxMetadataPlugin
     extends AbstractMetadataPlugin
 {
-    public final static String DEPENDENT = "jpox.dependent";
+    public static final String DEPENDENT = "jpox.dependent";
 
-    public final static String DETACHABLE = "jpox.detachable";
+    public static final String DETACHABLE = "jpox.detachable";
 
-    public final static String FETCH_GROUP_NAMES = "jpox.fetchGroupNames";
+    public static final String FETCH_GROUP_NAMES = "jpox.fetchGroupNames";
 
-    public final static String JOIN = "jpox.join";
+    public static final String JOIN = "jpox.join";
 
-    public final static String MAPPED_BY = "jpox.mappedBy";
+    public static final String MAPPED_BY = "jpox.mappedBy";
 
-    public final static String NULL_VALUE = "jpox.nullValue";
+    public static final String NULL_VALUE = "jpox.nullValue";
 
     // ----------------------------------------------------------------------
     // Map to Metadata
