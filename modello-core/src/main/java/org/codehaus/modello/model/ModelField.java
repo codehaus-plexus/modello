@@ -46,9 +46,8 @@ public class ModelField
 
     private transient ModelClass modelClass;
 
-    private static final String[] PRIMITIVE_TYPES = new String[]{"boolean", "char", "short", "int", "long", "float",
-        "double", "String", "Boolean", "Date", "DOM"};
-
+    private static final String[] PRIMITIVE_TYPES = new String[]{"boolean", "byte", "char", "short", "int", "long",
+        "float", "double", "String", "Boolean", "Date", "DOM"};
 
     public ModelField()
     {
@@ -162,8 +161,38 @@ public class ModelField
         return false;
     }
 
+    public boolean isArray()
+    {
+        return getType().endsWith( "[]" );
+    }
+
+    public boolean isPrimitiveArray()
+    {
+        String type = getType();
+
+        // TODO: This should not happen
+        if ( type == null )
+        {
+            return false;
+        }
+
+        for ( int i = 0; i < PRIMITIVE_TYPES.length; i++ )
+        {
+            String validType = PRIMITIVE_TYPES[i] + "[]";
+
+            System.out.println( "validType = " + validType );
+
+            if ( type.equals( validType ) )
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     // ----------------------------------------------------------------------
-    // BaseElement overrides
+    // BaseElement Overrides
     // ----------------------------------------------------------------------
 
     public void initialize( ModelClass modelClass )
@@ -196,7 +225,7 @@ public class ModelField
 
         // TODO: these definitions are duplicated throughout. Defined centrally, and loop through in the various uses
 
-        if ( ! isPrimitive() )
+        if ( ! isPrimitive() && ! isPrimitiveArray() )
         {
             throw new ModelValidationException( "Field '" + getName() + "': Illegal type: '" + type + "'." );
         }
@@ -208,7 +237,7 @@ public class ModelField
 
     public String toString()
     {
-        return "[Field: name=" + getName() + ", alias: " + alias + ", type: " + type + ", version: " +
-            getVersionRange() + "]";
+        return "[Field: name=" + getName() + ", alias: " + alias + ", type: " + type + ", " +
+            "version: " + getVersionRange() + "]";
     }
 }

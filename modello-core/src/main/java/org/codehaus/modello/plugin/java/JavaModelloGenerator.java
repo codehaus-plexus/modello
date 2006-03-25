@@ -55,8 +55,6 @@ import java.util.Properties;
 public class JavaModelloGenerator
     extends AbstractModelloGenerator
 {
-    private static final String EOL = System.getProperty( "line.separator" );
-
     public void generate( Model model, Properties parameters )
         throws ModelloException
     {
@@ -195,14 +193,11 @@ public class JavaModelloGenerator
                 jClass.setSuperClass( modelClass.getSuperClass() );
             }
 
-            if ( modelClass.getInterfaces().size() > 0 )
+            for ( Iterator j = modelClass.getInterfaces().iterator(); j.hasNext(); )
             {
-                for ( Iterator j = modelClass.getInterfaces().iterator(); j.hasNext(); )
-                {
-                    ModelInterface modelInterface = (ModelInterface) j.next();
+                String implementedInterface = (String) j.next();
 
-                    jClass.addInterface( modelInterface.getName() );
-                }
+                jClass.addInterface( implementedInterface );
             }
 
             jClass.addInterface( Serializable.class.getName() );
@@ -437,33 +432,65 @@ public class JavaModelloGenerator
         {
             type = JType.Boolean;
         }
+        else if ( modelField.getType().equals( "boolean[]" ) )
+        {
+            type = JType.Boolean.createArray();
+        }
         else if ( modelField.getType().equals( "byte" ) )
         {
             type = JType.Byte;
+        }
+        else if ( modelField.getType().equals( "byte[]" ) )
+        {
+            type = JType.Byte.createArray();
         }
         else if ( modelField.getType().equals( "char" ) )
         {
             type = JType.Char;
         }
+        else if ( modelField.getType().equals( "char[]" ) )
+        {
+            type = JType.Char.createArray();
+        }
         else if ( modelField.getType().equals( "double" ) )
         {
             type = JType.Double;
+        }
+        else if ( modelField.getType().equals( "double[]" ) )
+        {
+            type = JType.Double.createArray();
         }
         else if ( modelField.getType().equals( "float" ) )
         {
             type = JType.Float;
         }
+        else if ( modelField.getType().equals( "float[]" ) )
+        {
+            type = JType.Float.createArray();
+        }
         else if ( modelField.getType().equals( "int" ) )
         {
             type = JType.Int;
+        }
+        else if ( modelField.getType().equals( "int[]" ) )
+        {
+            type = JType.Int.createArray();
         }
         else if ( modelField.getType().equals( "short" ) )
         {
             type = JType.Short;
         }
+        else if ( modelField.getType().equals( "short[]" ) )
+        {
+            type = JType.Short.createArray();
+        }
         else if ( modelField.getType().equals( "long" ) )
         {
             type = JType.Long;
+        }
+        else if ( modelField.getType().equals( "long[]" ) )
+        {
+            type = JType.Long.createArray();
         }
         else if ( modelField.getType().equals( "DOM" ) )
         {
@@ -471,6 +498,14 @@ public class JavaModelloGenerator
             //   not usre how we'll treat it for the other sources, eg sql.
             type = new JClass( "Object" );
         }
+        else if ( modelField.getType().equals( "DOM[]" ) )
+        {
+            type = new JClass( "Object" ).createArray();
+        }
+        else if ( modelField.isArray() )
+        {
+            type = new JClass( modelField.getType() ).createArray();
+            }
         else
         {
             type = new JClass( modelField.getType() );
@@ -503,7 +538,6 @@ public class JavaModelloGenerator
 
         if ( javaFieldMetadata.isGetter() )
         {
-
             jClass.addMethod( createGetter( field, modelField ) );
         }
 

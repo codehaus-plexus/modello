@@ -228,9 +228,9 @@ public class ModelReader
                     if ( parseBaseElement( modelClass, parser ) )
                     {
                     }
-                    else if ( parser.getName().equals( "interface" ) )
+                    else if ( parser.getName().equals( "interfaces" ) )
                     {
-                        modelClass.addInterface( parser.nextText() );
+                        parseClassInterfaces( modelClass, parser );
                     }
                     else if ( parser.getName().equals( "superClass" ) )
                     {
@@ -260,6 +260,24 @@ public class ModelReader
             else
             {
                 parser.next();
+            }
+        }
+    }
+
+    private void parseClassInterfaces( ModelClass modelClass, XmlPullParser parser )
+        throws IOException, XmlPullParserException
+    {
+        while( parser.nextTag() == XmlPullParser.START_TAG )
+        {
+            System.out.println( "parser.getName(): " + parser.getName() );
+            if ( parser.getName().equals( "interface" ) )
+            {
+                System.out.println( "parser.getText() = " + parser.getText() );
+                modelClass.addInterface( parser.nextText() );
+            }
+            else
+            {
+                parser.nextText();
             }
         }
     }

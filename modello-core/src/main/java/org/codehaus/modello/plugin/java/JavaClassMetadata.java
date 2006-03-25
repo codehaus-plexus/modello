@@ -33,7 +33,7 @@ public class JavaClassMetadata
 {
     public final static String ID = JavaClassMetadata.class.getName();
 
-    private boolean abstractMode = false;
+    private boolean abstractMode;
 
     public void setAbstract( boolean abstractMode )
     {

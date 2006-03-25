@@ -11,6 +11,9 @@
     <class rootElement="true">
       <name>Boy</name>
       <version>1.0.0</version>
+      <interfaces>
+        <interface>java.lang.Serializable</interface>
+      </interfaces>
       <fields>
         <field>
           <name>name</name>
