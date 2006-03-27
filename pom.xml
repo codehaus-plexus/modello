@@ -235,4 +235,14 @@
       <url>sftp://beaver.codehaus.org/home/projects/maven/repository-staging/snapshots/maven2</url>
     </snapshotRepository>
   </distributionManagement>
+  <repositories>
+    <repository>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <id>snapshots</id>
+      <name>Maven Central Development Repository</name>
+      <url>http://snapshots.maven.codehaus.org/maven2</url>
+    </repository>
+  </repositories>
 </project>
