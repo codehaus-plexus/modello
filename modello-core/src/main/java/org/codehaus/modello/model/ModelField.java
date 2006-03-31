@@ -180,8 +180,6 @@ public class ModelField
         {
             String validType = PRIMITIVE_TYPES[i] + "[]";
 
-            System.out.println( "validType = " + validType );
-
             if ( type.equals( validType ) )
             {
                 return true;
