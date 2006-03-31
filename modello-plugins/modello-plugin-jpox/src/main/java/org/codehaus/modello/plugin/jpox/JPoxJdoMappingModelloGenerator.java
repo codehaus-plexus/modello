@@ -104,8 +104,8 @@ public class JPoxJdoMappingModelloGenerator
             {
                 if ( !parent.mkdirs() )
                 {
-                    throw new ModelloException( "Error while creating parent directories for the file " + "'" +
-                        packageJdo.getAbsolutePath() + "'." );
+                    throw new ModelloException( "Error while creating parent directories for the file " +
+                        "'" + packageJdo.getAbsolutePath() + "'." );
                 }
             }
 
@@ -175,8 +175,7 @@ public class JPoxJdoMappingModelloGenerator
                 continue;
             }
 
-            String packageName =
-                ( (ModelClass) list.get( 0 ) ).getPackageName( isPackageWithVersion(), getGeneratedVersion() );
+            String packageName = ( (ModelClass) list.get( 0 ) ).getPackageName( isPackageWithVersion(), getGeneratedVersion() );
 
             writer.startElement( "package" );
 
@@ -244,8 +243,8 @@ public class JPoxJdoMappingModelloGenerator
             if ( !PRIMITIVE_IDENTITY_MAP.containsKey( modelField.getType() ) )
             {
                 throw new ModelloException( "The JDO mapping generator does not support the specified " +
-                    "field type '" + modelField.getType() + "'. " + "Supported types: " +
-                    PRIMITIVE_IDENTITY_MAP.keySet() );
+                    "field type '" + modelField.getType() + "'. " +
+                    "Supported types: " + PRIMITIVE_IDENTITY_MAP.keySet() );
             }
         }
 
@@ -453,6 +452,12 @@ public class JPoxJdoMappingModelloGenerator
         }
         else
         {
+            if ( modelField.isPrimitiveArray() )
+            {
+                writer.startElement( "array" );
+                writer.endElement();
+            }
+
             if ( storeMetadata.getMaxSize() > 0 ||
                 ( jpoxMetadata.getNullValue() != null && modelField.getDefaultValue() != null ) )
             {
