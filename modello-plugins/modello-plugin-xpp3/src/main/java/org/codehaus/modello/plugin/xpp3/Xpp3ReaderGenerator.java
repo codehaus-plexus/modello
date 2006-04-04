@@ -374,321 +374,12 @@ public class Xpp3ReaderGenerator
 
             XmlFieldMetadata fieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
 
-            if ( fieldMetadata.isAttribute() )
+            if ( !fieldMetadata.isAttribute() )
             {
-                continue;
+                processField( fieldMetadata, field, statement, sc, uncapClassName, modelClass, jClass );
+
+                statement = "else if";
             }
-
-            String tagName = fieldMetadata.getTagName();
-
-            if ( tagName == null )
-            {
-                tagName = field.getName();
-            }
-
-            String singularTagName = fieldMetadata.getAssociationTagName();
-
-            if ( singularTagName == null )
-            {
-                singularTagName = singular( tagName );
-            }
-
-            boolean wrappedList = XmlFieldMetadata.LIST_STYLE_WRAPPED.equals( fieldMetadata.getListStyle() );
-
-            String capFieldName = capitalise( field.getName() );
-
-            String singularName = singular( field.getName() );
-
-            String optionalCheck = "";
-            if ( field.getAlias() != null && field.getAlias().length() > 0 )
-            {
-                optionalCheck = "|| parser.getName().equals( \"" + field.getAlias() + "\" ) ";
-            }
-
-            String tagComparison =
-                statement + " ( parser.getName().equals( \"" + tagName + "\" ) " + optionalCheck + " )";
-
-            if ( field instanceof ModelAssociation )
-            {
-                ModelAssociation association = (ModelAssociation) field;
-
-                String associationName = association.getName();
-
-                if ( ModelAssociation.ONE_MULTIPLICITY.equals( association.getMultiplicity() ) )
-                {
-                    sc.add( tagComparison );
-
-                    sc.add( "{" );
-
-                    sc.indent();
-
-                    addCodeToCheckIfParsed( sc, tagName );
-
-                    sc.add( uncapClassName + ".set" + capFieldName + "( parse" + association.getTo() + "( \"" +
-                        tagName + "\", parser, strict, encoding ) );" );
-
-                    sc.unindent();
-
-                    sc.add( "}" );
-                }
-                else
-                {
-                    //MANY_MULTIPLICITY
-
-                    String type = association.getType();
-
-                    if ( ModelDefault.LIST.equals( type ) || ModelDefault.SET.equals( type ) )
-                    {
-                        if ( wrappedList )
-                        {
-                            sc.add( tagComparison );
-
-                            sc.add( "{" );
-
-                            sc.indent();
-
-                            addCodeToCheckIfParsed( sc, tagName );
-
-                            sc.add( type + " " + associationName + " = " + association.getDefaultValue() + ";" );
-
-                            sc.add( uncapClassName + ".set" + capFieldName + "( " + associationName + " );" );
-
-                            sc.add( "while ( parser.nextTag() == XmlPullParser.START_TAG )" );
-
-                            sc.add( "{" );
-
-                            sc.indent();
-
-                            sc.add( "if ( parser.getName().equals( \"" + singularTagName + "\" ) )" );
-
-                            sc.add( "{" );
-
-                            sc.indent();
-                        }
-                        else
-                        {
-                            sc.add( statement + " ( parser.getName().equals( \"" + singularTagName + "\" ) )" );
-
-                            sc.add( "{" );
-
-                            sc.indent();
-
-                            sc.add(
-                                type + " " + associationName + " = " + uncapClassName + ".get" + capFieldName + "();" );
-
-                            sc.add( "if ( " + associationName + " == null )" );
-
-                            sc.add( "{" );
-
-                            sc.indent();
-
-                            sc.add( associationName + " = " + association.getDefaultValue() + ";" );
-
-                            sc.add( uncapClassName + ".set" + capFieldName + "( " + associationName + " );" );
-
-                            sc.unindent();
-
-                            sc.add( "}" );
-                        }
-
-                        if ( isClassInModel( association.getTo(), modelClass.getModel() ) )
-                        {
-                            sc.add( associationName + ".add( parse" + association.getTo() + "( \"" + singularTagName +
-                                "\", parser, strict, encoding ) );" );
-                        }
-                        else
-                        {
-                            writePrimitiveField( association, association.getTo(), associationName, "add", sc, jClass );
-                        }
-
-                        if ( wrappedList )
-                        {
-                            sc.unindent();
-
-                            sc.add( "}" );
-
-                            sc.add( "else" );
-
-                            sc.add( "{" );
-
-                            sc.indent();
-
-                            sc.add( "parser.nextText();" );
-
-                            sc.unindent();
-
-                            sc.add( "}" );
-
-                            sc.unindent();
-
-                            sc.add( "}" );
-
-                            sc.unindent();
-
-                            sc.add( "}" );
-                        }
-                        else
-                        {
-
-                            sc.unindent();
-
-                            sc.add( "}" );
-                        }
-                    }
-                    else
-                    {
-                        //Map or Properties
-
-                        sc.add( tagComparison );
-
-                        sc.add( "{" );
-
-                        sc.indent();
-
-                        addCodeToCheckIfParsed( sc, tagName );
-
-                        XmlAssociationMetadata xmlAssociationMetadata =
-                            (XmlAssociationMetadata) association.getAssociationMetadata( XmlAssociationMetadata.ID );
-
-                        if ( XmlAssociationMetadata.EXPLODE_MODE.equals( xmlAssociationMetadata.getMapStyle() ) )
-                        {
-                            sc.add( "while ( parser.nextTag() == XmlPullParser.START_TAG )" );
-
-                            sc.add( "{" );
-
-                            sc.indent();
-
-                            sc.add( "if ( parser.getName().equals( \"" + singularTagName + "\" ) )" );
-
-                            sc.add( "{" );
-
-                            sc.indent();
-
-                            sc.add( "String key = null;" );
-
-                            sc.add( "String value = null;" );
-
-                            sc.add( "//" + xmlAssociationMetadata.getMapStyle() + " mode." );
-
-                            sc.add( "while ( parser.nextTag() == XmlPullParser.START_TAG )" );
-
-                            sc.add( "{" );
-
-                            sc.indent();
-
-                            sc.add( "if ( parser.getName().equals( \"key\" ) )" );
-
-                            sc.add( "{" );
-
-                            sc.indent();
-
-                            sc.add( "key = parser.nextText();" );
-
-                            sc.unindent();
-
-                            sc.add( "}" );
-
-                            sc.add( "else if ( parser.getName().equals( \"value\" ) )" );
-
-                            sc.add( "{" );
-
-                            sc.indent();
-
-                            sc.add( "value = parser.nextText()" );
-
-                            if ( fieldMetadata.isTrim() )
-                            {
-                                sc.add( ".trim()" );
-                            }
-
-                            sc.add( ";" );
-
-                            sc.unindent();
-
-                            sc.add( "}" );
-
-                            sc.add( "else" );
-
-                            sc.add( "{" );
-
-                            sc.indent();
-
-                            sc.add( "parser.nextText();" );
-
-                            sc.unindent();
-
-                            sc.add( "}" );
-
-                            sc.unindent();
-
-                            sc.add( "}" );
-
-                            sc.add( uncapClassName + ".add" + capitalise( singularName ) + "( key, value );" );
-
-                            sc.unindent();
-
-                            sc.add( "}" );
-
-                            sc.add( "parser.next();" );
-
-                            sc.unindent();
-
-                            sc.add( "}" );
-                        }
-                        else
-                        {
-                            //INLINE Mode
-
-                            sc.add( "while ( parser.nextTag() == XmlPullParser.START_TAG )" );
-
-                            sc.add( "{" );
-
-                            sc.indent();
-
-                            sc.add( "String key = parser.getName();" );
-
-                            sc.add( "String value = parser.nextText()" );
-
-                            if ( fieldMetadata.isTrim() )
-                            {
-                                sc.add( ".trim()" );
-                            }
-
-                            sc.add( ";" );
-
-                            sc.add( uncapClassName + ".add" + capitalise( singularName ) + "( key, value );" );
-
-                            sc.unindent();
-
-                            sc.add( "}" );
-                        }
-
-                        sc.unindent();
-
-                        sc.add( "}" );
-                    }
-                }
-            }
-            else
-            {
-                sc.add( tagComparison );
-
-                sc.add( "{" );
-
-                sc.indent();
-
-                addCodeToCheckIfParsed( sc, tagName );
-
-                //ModelField
-                writePrimitiveField( field, field.getType(), uncapClassName, "set" + capitalise( field.getName() ), sc,
-                                     jClass );
-
-                sc.unindent();
-
-                sc.add( "}" );
-            }
-
-            statement = "else if";
         }
         if ( !rootElement )
         {
@@ -787,6 +478,317 @@ public class Xpp3ReaderGenerator
         sc.add( "return " + uncapClassName + ";" );
 
         jClass.addMethod( unmarshall );
+    }
+
+    private void processField( XmlFieldMetadata fieldMetadata, ModelField field, String statement, JSourceCode sc,
+                               String uncapClassName, ModelClass modelClass, JClass jClass )
+    {
+        String tagName = fieldMetadata.getTagName();
+
+        if ( tagName == null )
+        {
+            tagName = field.getName();
+        }
+
+        String singularTagName = fieldMetadata.getAssociationTagName();
+
+        if ( singularTagName == null )
+        {
+            singularTagName = singular( tagName );
+        }
+
+        boolean wrappedList = XmlFieldMetadata.LIST_STYLE_WRAPPED.equals( fieldMetadata.getListStyle() );
+
+        String capFieldName = capitalise( field.getName() );
+
+        String singularName = singular( field.getName() );
+
+        String optionalCheck = "";
+        if ( field.getAlias() != null && field.getAlias().length() > 0 )
+        {
+            optionalCheck = "|| parser.getName().equals( \"" + field.getAlias() + "\" ) ";
+        }
+
+        String tagComparison = statement + " ( parser.getName().equals( \"" + tagName + "\" ) " + optionalCheck + " )";
+
+        if ( field instanceof ModelAssociation )
+        {
+            ModelAssociation association = (ModelAssociation) field;
+
+            String associationName = association.getName();
+
+            if ( ModelAssociation.ONE_MULTIPLICITY.equals( association.getMultiplicity() ) )
+            {
+                sc.add( tagComparison );
+
+                sc.add( "{" );
+
+                sc.indent();
+
+                addCodeToCheckIfParsed( sc, tagName );
+
+                sc.add( uncapClassName + ".set" + capFieldName + "( parse" + association.getTo() + "( \"" + tagName +
+                    "\", parser, strict, encoding ) );" );
+
+                sc.unindent();
+
+                sc.add( "}" );
+            }
+            else
+            {
+                //MANY_MULTIPLICITY
+
+                String type = association.getType();
+
+                if ( ModelDefault.LIST.equals( type ) || ModelDefault.SET.equals( type ) )
+                {
+                    if ( wrappedList )
+                    {
+                        sc.add( tagComparison );
+
+                        sc.add( "{" );
+
+                        sc.indent();
+
+                        addCodeToCheckIfParsed( sc, tagName );
+
+                        sc.add( type + " " + associationName + " = " + association.getDefaultValue() + ";" );
+
+                        sc.add( uncapClassName + ".set" + capFieldName + "( " + associationName + " );" );
+
+                        sc.add( "while ( parser.nextTag() == XmlPullParser.START_TAG )" );
+
+                        sc.add( "{" );
+
+                        sc.indent();
+
+                        sc.add( "if ( parser.getName().equals( \"" + singularTagName + "\" ) )" );
+
+                        sc.add( "{" );
+
+                        sc.indent();
+                    }
+                    else
+                    {
+                        sc.add( statement + " ( parser.getName().equals( \"" + singularTagName + "\" ) )" );
+
+                        sc.add( "{" );
+
+                        sc.indent();
+
+                        sc.add( type + " " + associationName + " = " + uncapClassName + ".get" + capFieldName + "();" );
+
+                        sc.add( "if ( " + associationName + " == null )" );
+
+                        sc.add( "{" );
+
+                        sc.indent();
+
+                        sc.add( associationName + " = " + association.getDefaultValue() + ";" );
+
+                        sc.add( uncapClassName + ".set" + capFieldName + "( " + associationName + " );" );
+
+                        sc.unindent();
+
+                        sc.add( "}" );
+                    }
+
+                    if ( isClassInModel( association.getTo(), modelClass.getModel() ) )
+                    {
+                        sc.add( associationName + ".add( parse" + association.getTo() + "( \"" + singularTagName +
+                            "\", parser, strict, encoding ) );" );
+                    }
+                    else
+                    {
+                        writePrimitiveField( association, association.getTo(), associationName, "add", sc, jClass );
+                    }
+
+                    if ( wrappedList )
+                    {
+                        sc.unindent();
+
+                        sc.add( "}" );
+
+                        sc.add( "else" );
+
+                        sc.add( "{" );
+
+                        sc.indent();
+
+                        sc.add( "parser.nextText();" );
+
+                        sc.unindent();
+
+                        sc.add( "}" );
+
+                        sc.unindent();
+
+                        sc.add( "}" );
+
+                        sc.unindent();
+
+                        sc.add( "}" );
+                    }
+                    else
+                    {
+
+                        sc.unindent();
+
+                        sc.add( "}" );
+                    }
+                }
+                else
+                {
+                    //Map or Properties
+
+                    sc.add( tagComparison );
+
+                    sc.add( "{" );
+
+                    sc.indent();
+
+                    addCodeToCheckIfParsed( sc, tagName );
+
+                    XmlAssociationMetadata xmlAssociationMetadata =
+                        (XmlAssociationMetadata) association.getAssociationMetadata( XmlAssociationMetadata.ID );
+
+                    if ( XmlAssociationMetadata.EXPLODE_MODE.equals( xmlAssociationMetadata.getMapStyle() ) )
+                    {
+                        sc.add( "while ( parser.nextTag() == XmlPullParser.START_TAG )" );
+
+                        sc.add( "{" );
+
+                        sc.indent();
+
+                        sc.add( "if ( parser.getName().equals( \"" + singularTagName + "\" ) )" );
+
+                        sc.add( "{" );
+
+                        sc.indent();
+
+                        sc.add( "String key = null;" );
+
+                        sc.add( "String value = null;" );
+
+                        sc.add( "//" + xmlAssociationMetadata.getMapStyle() + " mode." );
+
+                        sc.add( "while ( parser.nextTag() == XmlPullParser.START_TAG )" );
+
+                        sc.add( "{" );
+
+                        sc.indent();
+
+                        sc.add( "if ( parser.getName().equals( \"key\" ) )" );
+
+                        sc.add( "{" );
+
+                        sc.indent();
+
+                        sc.add( "key = parser.nextText();" );
+
+                        sc.unindent();
+
+                        sc.add( "}" );
+
+                        sc.add( "else if ( parser.getName().equals( \"value\" ) )" );
+
+                        sc.add( "{" );
+
+                        sc.indent();
+
+                        sc.add( "value = parser.nextText()" );
+
+                        if ( fieldMetadata.isTrim() )
+                        {
+                            sc.add( ".trim()" );
+                        }
+
+                        sc.add( ";" );
+
+                        sc.unindent();
+
+                        sc.add( "}" );
+
+                        sc.add( "else" );
+
+                        sc.add( "{" );
+
+                        sc.indent();
+
+                        sc.add( "parser.nextText();" );
+
+                        sc.unindent();
+
+                        sc.add( "}" );
+
+                        sc.unindent();
+
+                        sc.add( "}" );
+
+                        sc.add( uncapClassName + ".add" + capitalise( singularName ) + "( key, value );" );
+
+                        sc.unindent();
+
+                        sc.add( "}" );
+
+                        sc.add( "parser.next();" );
+
+                        sc.unindent();
+
+                        sc.add( "}" );
+                    }
+                    else
+                    {
+                        //INLINE Mode
+
+                        sc.add( "while ( parser.nextTag() == XmlPullParser.START_TAG )" );
+
+                        sc.add( "{" );
+
+                        sc.indent();
+
+                        sc.add( "String key = parser.getName();" );
+
+                        sc.add( "String value = parser.nextText()" );
+
+                        if ( fieldMetadata.isTrim() )
+                        {
+                            sc.add( ".trim()" );
+                        }
+
+                        sc.add( ";" );
+
+                        sc.add( uncapClassName + ".add" + capitalise( singularName ) + "( key, value );" );
+
+                        sc.unindent();
+
+                        sc.add( "}" );
+                    }
+
+                    sc.unindent();
+
+                    sc.add( "}" );
+                }
+            }
+        }
+        else
+        {
+            sc.add( tagComparison );
+
+            sc.add( "{" );
+
+            sc.indent();
+
+            addCodeToCheckIfParsed( sc, tagName );
+
+            //ModelField
+            writePrimitiveField( field, field.getType(), uncapClassName, "set" + capitalise( field.getName() ), sc,
+                                 jClass );
+
+            sc.unindent();
+
+            sc.add( "}" );
+        }
     }
 
     private void addCodeToCheckIfParsed( JSourceCode sc, String tagName )

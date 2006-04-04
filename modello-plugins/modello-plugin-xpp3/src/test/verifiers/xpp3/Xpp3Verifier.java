@@ -229,6 +229,12 @@ public class Xpp3Verifier
         Assert.assertNotNull( "Actual", actual );
 
         assertModel( expected, actual );
+
+        buffer = new StringWriter();
+
+        writer.write( buffer, actual );
+
+        Assert.assertEquals( expectedXml.trim(), buffer.toString().trim() );
     }
 
     public void verifyReader()
