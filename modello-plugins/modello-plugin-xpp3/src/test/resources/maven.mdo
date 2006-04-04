@@ -1710,6 +1710,29 @@
             <multiplicity>*</multiplicity>
           </association>
         </field>
+        <field>
+          <name>custom</name>
+          <type>DOM</type>
+          <version>4.0.0</version>
+        </field>
+        <field>
+          <name>properties</name>
+          <version>4.0.0</version>
+          <type>Properties</type>
+          <association xml.mapStyle="explode">
+            <type>String</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+        <field>
+          <name>flatProperties</name>
+          <version>4.0.0</version>
+          <type>Properties</type>
+          <association xml.mapStyle="inline">
+            <type>String</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
       </fields>
     </class>
   </classes>

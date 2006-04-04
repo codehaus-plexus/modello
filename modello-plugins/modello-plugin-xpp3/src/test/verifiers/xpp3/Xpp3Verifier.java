@@ -35,6 +35,7 @@ import org.codehaus.modello.test.model.io.xpp3.MavenXpp3Reader;
 import org.codehaus.modello.test.model.io.xpp3.MavenXpp3Writer;
 import org.codehaus.modello.verifier.Verifier;
 import org.codehaus.plexus.util.FileUtils;
+import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
 import java.io.FileReader;
@@ -42,6 +43,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.List;
+import java.util.Properties;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -162,6 +164,41 @@ public class Xpp3Verifier
         c2.setComment( "subcomment" );
 
         component.getComponents().add( c2 );
+
+        component = new Component();
+
+        component.setName( "component3" );
+
+        Xpp3Dom xpp3Dom = new Xpp3Dom( "custom" );
+        Xpp3Dom child = new Xpp3Dom( "foo" );
+        child.setValue( "bar" );
+        xpp3Dom.addChild( child );
+        child = new Xpp3Dom( "bar" );
+        child.setAttribute( "att1", "value" );
+        child.setValue( "baz" );
+        xpp3Dom.addChild( child );
+        child = new Xpp3Dom( "el1" );
+        xpp3Dom.addChild( child );
+        Xpp3Dom el1 = child;
+        child = new Xpp3Dom( "el2" );
+        child.setValue( "text" );
+        el1.addChild( child );
+
+        component.setCustom( xpp3Dom );
+
+        expected.addComponent( component );
+
+        component = new Component();
+        component.setName( "component4" );
+        expected.addComponent( component );
+
+        Properties properties = new Properties();
+        properties.setProperty( "name", "value" );
+        component.setFlatProperties( properties );
+
+        properties = new Properties();
+        properties.setProperty( "key", "theValue" );
+        component.setProperties( properties );
 
         Repository repository = new Repository();
         repository.setId( "foo" );

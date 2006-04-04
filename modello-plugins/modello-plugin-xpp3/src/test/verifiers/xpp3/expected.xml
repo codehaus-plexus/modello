@@ -9,6 +9,28 @@
       <name>sub</name>
     </component>
   </component>
+  <component>
+    <name>component3</name>
+    <custom>
+      <foo>bar</foo>
+      <bar att1="value">baz</bar>
+      <el1>
+        <el2>text</el2>
+      </el1>
+    </custom>
+  </component>
+  <component>
+    <name>component4</name>
+    <properties>
+      <property>
+        <key>key</key>
+        <value>theValue</value>
+      </property>
+    </properties>
+    <flatProperties>
+      <name>value</name>
+    </flatProperties>
+  </component>
   <repositories>
     <repo>
       <id>foo</id>
