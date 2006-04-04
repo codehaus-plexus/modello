@@ -26,6 +26,7 @@ import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
+import org.codehaus.modello.model.ModelDefault;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.plugin.AbstractModelloGenerator;
 import org.codehaus.modello.plugin.java.javasource.JClass;
@@ -34,6 +35,7 @@ import org.codehaus.modello.plugin.java.javasource.JParameter;
 import org.codehaus.modello.plugin.java.javasource.JSourceCode;
 import org.codehaus.modello.plugin.java.javasource.JSourceWriter;
 import org.codehaus.modello.plugin.java.javasource.JType;
+import org.codehaus.modello.plugins.xml.XmlAssociationMetadata;
 import org.codehaus.modello.plugins.xml.XmlClassMetadata;
 import org.codehaus.modello.plugins.xml.XmlFieldMetadata;
 
@@ -108,11 +110,19 @@ public class Dom4jReaderGenerator
 
         jClass.addImport( "java.io.Reader" );
 
+        jClass.addImport( "java.util.Iterator" );
+
+        jClass.addImport( "org.codehaus.plexus.util.xml.Xpp3Dom" );
+
+        jClass.addImport( "org.dom4j.Attribute" );
+
         jClass.addImport( "org.dom4j.Document" );
 
         jClass.addImport( "org.dom4j.DocumentException" );
 
         jClass.addImport( "org.dom4j.Element" );
+
+        jClass.addImport( "org.dom4j.Node" );
 
         jClass.addImport( "org.dom4j.io.SAXReader" );
 
@@ -264,7 +274,7 @@ public class Dom4jReaderGenerator
             if ( fieldMetadata.isAttribute() )
             {
                 writePrimitiveField( field, field.getType(), uncapClassName, "set" + capitalise( field.getName() ), sc,
-                                     jClass );
+                                     jClass, "element", "childElement" );
             }
         }
 
@@ -288,7 +298,29 @@ public class Dom4jReaderGenerator
             sc.add( "}" );
         }
 
-        sc.add( "Element childElement;" );
+        sc.add( "java.util.Set parsed = new java.util.HashSet();" );
+
+        sc.add( "for ( Iterator i = element.nodeIterator(); i.hasNext(); )" );
+        sc.add( "{" );
+        sc.indent();
+
+        sc.add( "Node node = (Node) i.next();" );
+
+        sc.add( "if ( node.getNodeType() != Node.ELEMENT_NODE )" );
+        sc.add( "{" );
+        sc.indent();
+
+        // TODO: attach to model in some way
+
+        sc.unindent();
+        sc.add( "}" );
+        sc.add( "else" );
+        sc.add( "{" );
+        sc.indent();
+
+        sc.add( "Element childElement = (Element) node;" );
+
+        String statement = "if";
 
         for ( Iterator i = modelClass.getAllFields( getGeneratedVersion(), true ).iterator(); i.hasNext(); )
         {
@@ -298,50 +330,61 @@ public class Dom4jReaderGenerator
 
             if ( !fieldMetadata.isAttribute() )
             {
-                String tagName = fieldMetadata.getTagName();
+                processField( fieldMetadata, field, statement, sc, uncapClassName, modelClass, jClass );
 
-                if ( tagName == null )
-                {
-                    tagName = field.getName();
-                }
-
-                // TODO: switch to a nodeIterator style, find bad elements and track whitespace
-                sc.add( "childElement = element.element( \"" + tagName + "\" );" );
-
-                if ( field.getAlias() != null && field.getAlias().length() > 0 )
-                {
-                    sc.add( "if ( childElement == null )" );
-                    sc.add( "{" );
-                    sc.indent();
-
-                    sc.add( "childElement = element.element( \"" + field.getAlias() + "\" );" );
-
-                    sc.unindent();
-                    sc.add( "}" );
-                }
-
-                sc.add( "if ( childElement != null )" );
-                sc.add( "{" );
-                sc.indent();
-
-                processField( field, sc, tagName, uncapClassName, modelClass, jClass, fieldMetadata );
-
-                sc.unindent();
-                sc.add( "}" );
-
-                // TODO: else not found, do something if required, continue if optional}
+                statement = "else if";
             }
         }
+
+        if ( statement.startsWith( "else" ) )
+        {
+            sc.add( "else" );
+
+            sc.add( "{" );
+
+            sc.indent();
+        }
+
+        sc.add( "if ( strict )" );
+
+        sc.add( "{" );
+
+        sc.indent();
+
+        sc.add( "throw new DocumentException( \"Unrecognised tag: '\" + childElement.getName() + \"'\" );" );
+
+        sc.unindent();
+
+        sc.add( "}" );
+
+        if ( statement.startsWith( "else" ) )
+        {
+            sc.unindent();
+
+            sc.add( "}" );
+        }
+
+        sc.unindent();
+        sc.add( "}" );
+
+        sc.unindent();
+        sc.add( "}" );
 
         sc.add( "return " + uncapClassName + ";" );
 
         jClass.addMethod( unmarshall );
     }
 
-    private void processField( ModelField field, JSourceCode sc, String tagName, String uncapClassName,
-                               ModelClass modelClass, JClass jClass, XmlFieldMetadata fieldMetadata )
+    private void processField( XmlFieldMetadata fieldMetadata, ModelField field, String statement, JSourceCode sc,
+                               String uncapClassName, ModelClass modelClass, JClass jClass )
     {
-        // TODO
+        String tagName = fieldMetadata.getTagName();
+
+        if ( tagName == null )
+        {
+            tagName = field.getName();
+        }
+
         String singularTagName = fieldMetadata.getAssociationTagName();
 
         if ( singularTagName == null )
@@ -355,6 +398,15 @@ public class Dom4jReaderGenerator
 
         String singularName = singular( field.getName() );
 
+        String optionalCheck = "";
+        if ( field.getAlias() != null && field.getAlias().length() > 0 )
+        {
+            optionalCheck = "|| childElement.getName().equals( \"" + field.getAlias() + "\" ) ";
+        }
+
+        String tagComparison =
+            statement + " ( childElement.getName().equals( \"" + tagName + "\" ) " + optionalCheck + " )";
+
         if ( field instanceof ModelAssociation )
         {
             ModelAssociation association = (ModelAssociation) field;
@@ -363,8 +415,20 @@ public class Dom4jReaderGenerator
 
             if ( ModelAssociation.ONE_MULTIPLICITY.equals( association.getMultiplicity() ) )
             {
+                sc.add( tagComparison );
+
+                sc.add( "{" );
+
+                sc.indent();
+
+                addCodeToCheckIfParsed( sc, tagName );
+
                 sc.add( uncapClassName + ".set" + capFieldName + "( parse" + association.getTo() + "( \"" + tagName +
                     "\", childElement, strict, encoding ) );" );
+
+                sc.unindent();
+
+                sc.add( "}" );
             }
             else
             {
@@ -372,22 +436,48 @@ public class Dom4jReaderGenerator
 
                 String type = association.getType();
 
-/*
                 if ( ModelDefault.LIST.equals( type ) || ModelDefault.SET.equals( type ) )
                 {
                     if ( wrappedList )
                     {
-                        sc.add( type + " " + associationName + " = " + association.getDefaultValue() + ";" );
-
-                        sc.add( uncapClassName + ".set" + capFieldName + "( " + associationName + " );" );
-
-                        sc.add( "while ( parser.nextTag() == XmlPullParser.START_TAG )" );
+                        sc.add( tagComparison );
 
                         sc.add( "{" );
 
                         sc.indent();
 
-                        sc.add( "if ( parser.getName().equals( \"" + singularTagName + "\" ) )" );
+                        addCodeToCheckIfParsed( sc, tagName );
+
+                        sc.add( type + " " + associationName + " = " + association.getDefaultValue() + ";" );
+
+                        sc.add( uncapClassName + ".set" + capFieldName + "( " + associationName + " );" );
+
+                        sc.add( "for ( Iterator j = childElement.nodeIterator(); j.hasNext(); )" );
+
+                        sc.add( "{" );
+
+                        sc.indent();
+
+                        sc.add( "Node n = (Node) j.next();" );
+
+                        sc.add( "if ( n.getNodeType() != Node.ELEMENT_NODE )" );
+
+                        sc.add( "{" );
+                        sc.indent();
+
+                        // TODO: track the whitespace in the model
+
+                        sc.unindent();
+                        sc.add( "}" );
+
+                        sc.add( "else" );
+
+                        sc.add( "{" );
+                        sc.indent();
+
+                        sc.add( "Element listElement = (Element) n;" );
+
+                        sc.add( "if ( listElement.getName().equals( \"" + singularTagName + "\" ) )" );
 
                         sc.add( "{" );
 
@@ -395,11 +485,13 @@ public class Dom4jReaderGenerator
                     }
                     else
                     {
-                        sc.add( statement + " ( parser.getName().equals( \"" + singularTagName + "\" ) )" );
+                        sc.add( statement + " ( childElement.getName().equals( \"" + singularTagName + "\" ) )" );
 
                         sc.add( "{" );
 
                         sc.indent();
+
+                        sc.add( "Element listElement = childElement;" );
 
                         sc.add( type + " " + associationName + " = " + uncapClassName + ".get" + capFieldName + "();" );
 
@@ -421,11 +513,12 @@ public class Dom4jReaderGenerator
                     if ( isClassInModel( association.getTo(), modelClass.getModel() ) )
                     {
                         sc.add( associationName + ".add( parse" + association.getTo() + "( \"" + singularTagName +
-                            "\", parser, strict, encoding ) );" );
+                            "\", listElement, strict, encoding ) );" );
                     }
                     else
                     {
-                        writePrimitiveField( association, association.getTo(), associationName, "add", sc, jClass );
+                        writePrimitiveField( association, association.getTo(), associationName, "add", sc, jClass,
+                                             "childElement", "listElement" );
                     }
 
                     if ( wrappedList )
@@ -440,7 +533,9 @@ public class Dom4jReaderGenerator
 
                         sc.indent();
 
-                        sc.add( "parser.nextText();" );
+                        sc.unindent();
+
+                        sc.add( "}" );
 
                         sc.unindent();
 
@@ -456,7 +551,6 @@ public class Dom4jReaderGenerator
                     }
                     else
                     {
-
                         sc.unindent();
 
                         sc.add( "}" );
@@ -479,13 +573,32 @@ public class Dom4jReaderGenerator
 
                     if ( XmlAssociationMetadata.EXPLODE_MODE.equals( xmlAssociationMetadata.getMapStyle() ) )
                     {
-                        sc.add( "while ( parser.nextTag() == XmlPullParser.START_TAG )" );
+                        sc.add( "for ( Iterator j = childElement.nodeIterator(); j.hasNext(); )" );
 
                         sc.add( "{" );
 
                         sc.indent();
 
-                        sc.add( "if ( parser.getName().equals( \"" + singularTagName + "\" ) )" );
+                        sc.add( "Node n = (Node) j.next();" );
+
+                        sc.add( "if ( n.getNodeType() != Node.ELEMENT_NODE )" );
+
+                        sc.add( "{" );
+                        sc.indent();
+
+                        // TODO: track the whitespace in the model
+
+                        sc.unindent();
+                        sc.add( "}" );
+
+                        sc.add( "else" );
+
+                        sc.add( "{" );
+                        sc.indent();
+
+                        sc.add( "Element listElement = (Element) n;" );
+
+                        sc.add( "if ( listElement.getName().equals( \"" + singularTagName + "\" ) )" );
 
                         sc.add( "{" );
 
@@ -497,31 +610,50 @@ public class Dom4jReaderGenerator
 
                         sc.add( "//" + xmlAssociationMetadata.getMapStyle() + " mode." );
 
-                        sc.add( "while ( parser.nextTag() == XmlPullParser.START_TAG )" );
+                        sc.add( "for ( Iterator k = listElement.nodeIterator(); k.hasNext(); )" );
 
                         sc.add( "{" );
 
                         sc.indent();
 
-                        sc.add( "if ( parser.getName().equals( \"key\" ) )" );
+                        sc.add( "Node nd = (Node) k.next();" );
+
+                        sc.add( "if ( nd.getNodeType() != Node.ELEMENT_NODE )" );
+
+                        sc.add( "{" );
+                        sc.indent();
+
+                        // TODO: track the whitespace in the model
+
+                        sc.unindent();
+                        sc.add( "}" );
+
+                        sc.add( "else" );
+
+                        sc.add( "{" );
+                        sc.indent();
+
+                        sc.add( "Element propertyElement = (Element) nd;" );
+
+                        sc.add( "if ( propertyElement.getName().equals( \"key\" ) )" );
 
                         sc.add( "{" );
 
                         sc.indent();
 
-                        sc.add( "key = parser.nextText();" );
+                        sc.add( "key = propertyElement.getText();" );
 
                         sc.unindent();
 
                         sc.add( "}" );
 
-                        sc.add( "else if ( parser.getName().equals( \"value\" ) )" );
+                        sc.add( "else if ( propertyElement.getName().equals( \"value\" ) )" );
 
                         sc.add( "{" );
 
                         sc.indent();
 
-                        sc.add( "value = parser.nextText()" );
+                        sc.add( "value = propertyElement.getText()" );
 
                         if ( fieldMetadata.isTrim() )
                         {
@@ -540,7 +672,9 @@ public class Dom4jReaderGenerator
 
                         sc.indent();
 
-                        sc.add( "parser.nextText();" );
+                        sc.unindent();
+
+                        sc.add( "}" );
 
                         sc.unindent();
 
@@ -556,7 +690,9 @@ public class Dom4jReaderGenerator
 
                         sc.add( "}" );
 
-                        sc.add( "parser.next();" );
+                        sc.unindent();
+
+                        sc.add( "}" );
 
                         sc.unindent();
 
@@ -566,15 +702,34 @@ public class Dom4jReaderGenerator
                     {
                         //INLINE Mode
 
-                        sc.add( "while ( parser.nextTag() == XmlPullParser.START_TAG )" );
+                        sc.add( "for ( Iterator j = childElement.nodeIterator(); j.hasNext(); )" );
 
                         sc.add( "{" );
 
                         sc.indent();
 
-                        sc.add( "String key = parser.getName();" );
+                        sc.add( "Node n = (Node) j.next();" );
 
-                        sc.add( "String value = parser.nextText()" );
+                        sc.add( "if ( n.getNodeType() != Node.ELEMENT_NODE )" );
+
+                        sc.add( "{" );
+                        sc.indent();
+
+                        // TODO: track the whitespace in the model
+
+                        sc.unindent();
+                        sc.add( "}" );
+
+                        sc.add( "else" );
+
+                        sc.add( "{" );
+                        sc.indent();
+
+                        sc.add( "Element listElement = (Element) n;" );
+
+                        sc.add( "String key = listElement.getName();" );
+
+                        sc.add( "String value = listElement.getText()" );
 
                         if ( fieldMetadata.isTrim() )
                         {
@@ -588,20 +743,35 @@ public class Dom4jReaderGenerator
                         sc.unindent();
 
                         sc.add( "}" );
+
+                        sc.unindent();
+
+                        sc.add( "}" );
                     }
 
                     sc.unindent();
 
                     sc.add( "}" );
                 }
-*/
             }
         }
         else
         {
-            // TODO: check there are no others
+            sc.add( tagComparison );
+
+            sc.add( "{" );
+
+            sc.indent();
+
+            addCodeToCheckIfParsed( sc, tagName );
+
+            //ModelField
             writePrimitiveField( field, field.getType(), uncapClassName, "set" + capitalise( field.getName() ), sc,
-                                 jClass );
+                                 jClass, "element", "childElement" );
+
+            sc.unindent();
+
+            sc.add( "}" );
         }
     }
 
@@ -613,7 +783,7 @@ public class Dom4jReaderGenerator
 
         sc.indent();
 
-        sc.add( "throw new XmlPullParserException( \"Duplicated tag: '\" + parser.getName() + \"'\", parser, null);" );
+        sc.add( "throw new DocumentException( \"Duplicated tag: '\" + element.getName() + \"'\");" );
 
         sc.unindent();
 
@@ -623,7 +793,7 @@ public class Dom4jReaderGenerator
     }
 
     private void writePrimitiveField( ModelField field, String type, String objectName, String setterName,
-                                      JSourceCode sc, JClass jClass )
+                                      JSourceCode sc, JClass jClass, String parentElementName, String childElementName )
     {
         XmlFieldMetadata fieldMetaData = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
 
@@ -637,11 +807,11 @@ public class Dom4jReaderGenerator
         String parserGetter;
         if ( fieldMetaData.isAttribute() )
         {
-            parserGetter = "element.attributeValue( \"" + tagName + "\" )";
+            parserGetter = parentElementName + ".attributeValue( \"" + tagName + "\" )";
         }
         else
         {
-            parserGetter = "childElement.getText()";
+            parserGetter = childElementName + ".getText()";
         }
 
 // TODO: this and a default
@@ -700,18 +870,14 @@ public class Dom4jReaderGenerator
         {
             sc.add( objectName + "." + setterName + "( getDateValue( " + parserGetter + ", \"" + tagName + "\" ) );" );
         }
-/* TODO
         else if ( "DOM".equals( type ) )
         {
-            jClass.addImport( "org.codehaus.plexus.util.xml.Xpp3DomBuilder" );
-
-            sc.add( objectName + "." + setterName + "( Xpp3DomBuilder.build( parser ) );" );
+            sc.add( objectName + "." + setterName + "( writeElementToXpp3Dom( " + childElementName + " ) );" );
         }
         else
         {
             throw new IllegalArgumentException( "Unknown type: " + type );
         }
-*/
     }
 
     private void writeHelpers( JClass jClass )
@@ -922,6 +1088,49 @@ public class Dom4jReaderGenerator
 
         jClass.addMethod( method );
 */
+
+        method = new JMethod( new JClass( "Xpp3Dom" ), "writeElementToXpp3Dom" );
+
+        method.addParameter( new JParameter( new JClass( "Element" ), "element" ) );
+
+        sc = method.getSourceCode();
+
+        sc.add( "Xpp3Dom xpp3Dom = new Xpp3Dom( element.getName() );" );
+
+        sc.add( "if ( element.getText() != null )" );
+        sc.add( "{" );
+        sc.indent();
+
+        sc.add( "xpp3Dom.setValue( element.getText() );" );
+
+        sc.unindent();
+        sc.add( "}" );
+
+        sc.add( "for ( Iterator i = element.attributeIterator(); i.hasNext(); )" );
+        sc.add( "{" );
+        sc.indent();
+
+        sc.add( "Attribute attribute = (Attribute) i.next();" );
+        sc.add( "xpp3Dom.setAttribute( attribute.getName(), attribute.getValue() );" );
+
+        sc.unindent();
+        sc.add( "}" );
+
+        // TODO: would be nice to track whitespace in here
+
+        sc.add( "for ( Iterator i = element.elementIterator(); i.hasNext(); )" );
+        sc.add( "{" );
+        sc.indent();
+
+        sc.add( "Element child = (Element) i.next();" );
+        sc.add( "xpp3Dom.addChild( writeElementToXpp3Dom( child ) );" );
+
+        sc.unindent();
+        sc.add( "}" );
+
+        sc.add( "return xpp3Dom;" );
+
+        jClass.addMethod( method );
     }
 
     private void convertNumericalType( JSourceCode sc, String expression, String typeDesc )

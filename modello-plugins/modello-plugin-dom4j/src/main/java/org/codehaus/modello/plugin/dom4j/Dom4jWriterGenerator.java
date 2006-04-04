@@ -48,7 +48,6 @@ import java.util.Properties;
 /**
  * Generate a writer that uses Dom4J.
  * <p/>
- * TODO: finish
  * TODO: chunks are lifted from xpp3, including the tests. Can we abstract it in some way?
  *
  * @author <a href="mailto:brett@codehaus.org">Brett Porter</a>
