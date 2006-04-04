@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<mavenModel extender="/foo/bar" modelVersion="4.0.0">
+<?xml version="1.0" encoding="UTF-8"?><mavenModel extender="/foo/bar" modelVersion="4.0.0">
   <typeTester>
     <c>v</c>
     <i>1</i>
@@ -71,6 +70,6 @@
         </excludes>
       </sourceModification>
     </sourceModifications>
-    <unitTest/>
+    <unitTest />
   </builder>
 </mavenModel>
