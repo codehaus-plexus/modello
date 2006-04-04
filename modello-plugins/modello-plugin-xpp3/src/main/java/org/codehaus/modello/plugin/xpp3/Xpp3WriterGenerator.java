@@ -109,6 +109,8 @@ public class Xpp3WriterGenerator
 
         jClass.addImport( "java.io.Writer" );
 
+        jClass.addImport( "java.text.DateFormat" );
+
         jClass.addImport( "java.util.Iterator" );
 
         jClass.addField( new JField( new JClass( "org.codehaus.plexus.util.xml.pull.XmlSerializer" ), "serializer" ) );
@@ -459,7 +461,12 @@ public class Xpp3WriterGenerator
     {
         String textValue = initialValue;
 
-        if ( !"String".equals( type ) )
+        if ( "Date".equals( type ) )
+        {
+            textValue =
+                "DateFormat.getDateTimeInstance( DateFormat.FULL, DateFormat.FULL ).format( " + textValue + " )";
+        }
+        else if ( !"String".equals( type ) )
         {
             textValue = "String.valueOf( " + textValue + " )";
         }
@@ -469,27 +476,33 @@ public class Xpp3WriterGenerator
 
     private String getValueChecker( String type, String value, ModelField field )
     {
+        String retVal;
         if ( "boolean".equals( type ) || "double".equals( type ) || "float".equals( type ) || "int".equals( type ) ||
             "long".equals( type ) || "short".equals( type ) )
         {
-            return "if ( " + value + " != " + field.getDefaultValue() + " )";
+            retVal = "if ( " + value + " != " + field.getDefaultValue() + " )";
         }
         else if ( "char".equals( type ) )
         {
-            return "if ( " + value + " != '" + field.getDefaultValue() + "' )";
+            retVal = "if ( " + value + " != '" + field.getDefaultValue() + "' )";
         }
         else if ( ModelDefault.LIST.equals( type ) || ModelDefault.SET.equals( type ) ||
             ModelDefault.MAP.equals( type ) || ModelDefault.PROPERTIES.equals( type ) )
         {
-            return "if ( " + value + " != null && " + value + ".size() > 0 )";
+            retVal = "if ( " + value + " != null && " + value + ".size() > 0 )";
         }
         else if ( "String".equals( type ) && field.getDefaultValue() != null )
         {
-            return "if ( " + value + " != null && !" + value + ".equals( \"" + field.getDefaultValue() + "\" ) )";
+            retVal = "if ( " + value + " != null && !" + value + ".equals( \"" + field.getDefaultValue() + "\" ) )";
+        }
+        else if ( "Date".equals( type ) && field.getDefaultValue() != null )
+        {
+            retVal = "if ( " + value + " != null && !" + value + ".equals( \"" + field.getDefaultValue() + "\" ) )";
         }
         else
         {
-            return "if ( " + value + " != null )";
+            retVal = "if ( " + value + " != null )";
         }
+        return retVal;
     }
 }

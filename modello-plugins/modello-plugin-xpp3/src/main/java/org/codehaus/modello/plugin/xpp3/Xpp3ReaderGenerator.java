@@ -1370,6 +1370,7 @@ public class Xpp3ReaderGenerator
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
         method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
         method.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
+        method.addException( new JClass( "XmlPullParserException" ) );
 
         sc = method.getSourceCode();
 
@@ -1381,7 +1382,27 @@ public class Xpp3ReaderGenerator
 
         sc.add( "DateFormat dateParser = DateFormat.getDateTimeInstance( DateFormat.FULL, DateFormat.FULL );" );
 
-        sc.add( "return dateParser.parse( s, new ParsePosition( 0 ) );" );
+        sc.add( "dateParser.setLenient( true );" );
+
+        sc.add( "try" );
+        sc.add( "{" );
+        sc.indent();
+
+        sc.add( "return dateParser.parse( s );" );
+
+        sc.unindent();
+
+        sc.add( "}" );
+
+        sc.add( "catch ( java.text.ParseException e )" );
+        sc.add( "{" );
+        sc.indent();
+
+        sc.add( "throw new XmlPullParserException( e.getMessage() );" );
+
+        sc.unindent();
+
+        sc.add( "}" );
 
         sc.unindent();
 
