@@ -1113,7 +1113,7 @@ public class Dom4jReaderGenerator
 
         sc.add( "Xpp3Dom xpp3Dom = new Xpp3Dom( element.getName() );" );
 
-        sc.add( "if ( element.getText() != null )" );
+        sc.add( "if ( element.elements().isEmpty() && element.getText() != null )" );
         sc.add( "{" );
         sc.indent();
 
