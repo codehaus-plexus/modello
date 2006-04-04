@@ -203,7 +203,11 @@ public class ModelField
             {
                 defaultValue = "false";
             }
-            if ( "float".equals( type ) || "double".equals( type ) )
+            if ( "float".equals( type ) )
+            {
+                defaultValue = "0.0f";
+            }
+            if ( "double".equals( type ) )
             {
                 defaultValue = "0.0";
             }
@@ -235,7 +239,7 @@ public class ModelField
 
     public String toString()
     {
-        return "[Field: name=" + getName() + ", alias: " + alias + ", type: " + type + ", " +
-            "version: " + getVersionRange() + "]";
+        return "[Field: name=" + getName() + ", alias: " + alias + ", type: " + type + ", " + "version: " +
+            getVersionRange() + "]";
     }
 }

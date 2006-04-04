@@ -23,14 +23,6 @@ package org.codehaus.modello.plugin.java;
  */
 
 import org.codehaus.modello.ModelloException;
-import org.codehaus.modello.plugin.java.javasource.JClass;
-import org.codehaus.modello.plugin.java.javasource.JField;
-import org.codehaus.modello.plugin.java.javasource.JInterface;
-import org.codehaus.modello.plugin.java.javasource.JMethod;
-import org.codehaus.modello.plugin.java.javasource.JParameter;
-import org.codehaus.modello.plugin.java.javasource.JSourceCode;
-import org.codehaus.modello.plugin.java.javasource.JSourceWriter;
-import org.codehaus.modello.plugin.java.javasource.JType;
 import org.codehaus.modello.model.CodeSegment;
 import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelAssociation;
@@ -39,6 +31,14 @@ import org.codehaus.modello.model.ModelDefault;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.ModelInterface;
 import org.codehaus.modello.plugin.AbstractModelloGenerator;
+import org.codehaus.modello.plugin.java.javasource.JClass;
+import org.codehaus.modello.plugin.java.javasource.JField;
+import org.codehaus.modello.plugin.java.javasource.JInterface;
+import org.codehaus.modello.plugin.java.javasource.JMethod;
+import org.codehaus.modello.plugin.java.javasource.JParameter;
+import org.codehaus.modello.plugin.java.javasource.JSourceCode;
+import org.codehaus.modello.plugin.java.javasource.JSourceWriter;
+import org.codehaus.modello.plugin.java.javasource.JType;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -176,6 +176,8 @@ public class JavaModelloGenerator
             JSourceWriter sourceWriter = new JSourceWriter( writer );
 
             JClass jClass = new JClass( modelClass.getName() );
+
+            jClass.addImport( "java.util.Date" );
 
             jClass.getJDocComment().setComment( modelClass.getDescription() );
 
@@ -492,6 +494,16 @@ public class JavaModelloGenerator
         {
             type = JType.Long.createArray();
         }
+        else if ( modelField.getType().equals( "Date" ) )
+        {
+            // TODO: maybe DOM is not how to specify it in the model, but just Object and markup Xpp3Dom for the Xpp3Reader?
+            //   not usre how we'll treat it for the other sources, eg sql.
+            type = new JClass( "java.util.Date" );
+        }
+        else if ( modelField.getType().equals( "Date[]" ) )
+        {
+            type = new JClass( "java.util.Date" ).createArray();
+        }
         else if ( modelField.getType().equals( "DOM" ) )
         {
             // TODO: maybe DOM is not how to specify it in the model, but just Object and markup Xpp3Dom for the Xpp3Reader?
@@ -505,7 +517,7 @@ public class JavaModelloGenerator
         else if ( modelField.isArray() )
         {
             type = new JClass( modelField.getType() ).createArray();
-            }
+        }
         else
         {
             type = new JClass( modelField.getType() );
@@ -580,9 +592,6 @@ public class JavaModelloGenerator
             ModelAssociation.ONE_MULTIPLICITY.equals( ( (ModelAssociation) modelField ).getMultiplicity() ) )
         {
             ModelAssociation modelAssociation = (ModelAssociation) modelField;
-
-            // TODO: remove after tested
-//            setter.addException( new JClass( "Exception" ) );
 
             sc.add( "if ( this." + field.getName() + " != null )" );
 

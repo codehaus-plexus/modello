@@ -147,7 +147,8 @@
         <field>
           <name>issueTrackingUrl</name>
           <version>3.0.0</version>
-          <description><![CDATA[The URL where the issue tracking system used by the project can be found.]]></description>
+          <description>
+            <![CDATA[The URL where the issue tracking system used by the project can be found.]]></description>
           <type>String</type>
         </field>
         <field>
@@ -188,7 +189,8 @@
         <field>
           <name>siteDirectory</name>
           <version>3.0.0</version>
-          <description><![CDATA[The directory on the site host where site documentation is placed when the site is uploaded.]]></description>
+          <description>
+            <![CDATA[The directory on the site host where site documentation is placed when the site is uploaded.]]></description>
           <type>String</type>
         </field>
         <field>
@@ -201,7 +203,8 @@
         <field>
           <name>distributionDirectory</name>
           <version>3.0.0</version>
-          <description><![CDATA[The directory on the distribution host where artifacts are placed when uploaded.]]></description>
+          <description>
+            <![CDATA[The directory on the distribution host where artifacts are placed when uploaded.]]></description>
           <type>String</type>
           <comment>This naming is inconsistent and distribution should occur from a repository structure.</comment>
         </field>
@@ -223,7 +226,8 @@
             <type>Repository</type>
             <multiplicity>*</multiplicity>
           </association>
-          <comment>This may be removed or relocated in the near future. It is undecided whether plugins really need a remote repository set of their own.</comment>
+          <comment>This may be removed or relocated in the near future. It is undecided whether plugins really need a
+            remote repository set of their own.</comment>
         </field>
         <field>
           <name>mailingLists</name>
@@ -277,7 +281,8 @@
             <type>Dependency</type>
             <multiplicity>*</multiplicity>
           </association>
-          <comment>These should ultimately only be compile time dependencies when transitive dependencies come into play.</comment>
+          <comment>These should ultimately only be compile time dependencies when transitive dependencies come into
+            play.</comment>
         </field>
         <field>
           <name>overrides</name>
@@ -366,7 +371,8 @@
           <association>
             <type>Repository</type>
           </association>
-          <comment>This element needs to be renamed as it conflicts with the existing notion of repositories in Maven.</comment>
+          <comment>This element needs to be renamed as it conflicts with the existing notion of repositories in
+            Maven.</comment>
         </field>
         <field>
           <name>build</name>
@@ -448,12 +454,12 @@
           <code>
             public void setVersion(String version)
             {
-                this.currentVersion = version;
+            this.currentVersion = version;
             }
 
             public String getVersion()
             {
-                return currentVersion;
+            return currentVersion;
             }
           </code>
         </codeSegment>
@@ -464,12 +470,12 @@
 
             public void setPackage(String packageName)
             {
-                this.packageName = packageName;
+            this.packageName = packageName;
             }
 
             public String getPackage()
             {
-                return packageName;
+            return packageName;
             }
           </code>
         </codeSegment>
@@ -478,17 +484,17 @@
           <code>
             public String getId()
             {
-                StringBuffer id = new StringBuffer();
+            StringBuffer id = new StringBuffer();
 
-                id.append( getGroupId() );
-                id.append( ":" );
-                id.append( getArtifactId() );
-                id.append( ":" );
-                id.append( getType() );
-                id.append( ":" );
-                id.append( getVersion() );
+            id.append( getGroupId() );
+            id.append( ":" );
+            id.append( getArtifactId() );
+            id.append( ":" );
+            id.append( getType() );
+            id.append( ":" );
+            id.append( getVersion() );
 
-                return id.toString();
+            return id.toString();
             }
           </code>
         </codeSegment>
@@ -857,7 +863,7 @@
           <code>
             public String toString()
             {
-                return groupId + "/" + type + "s:" + artifactId + "-" + version;
+            return groupId + "/" + type + "s:" + artifactId + "-" + version;
             }
           </code>
         </codeSegment>
@@ -866,7 +872,7 @@
           <code>
             public String getId()
             {
-                return groupId + ":" + artifactId + ":" + type + ":" + version;
+            return groupId + ":" + artifactId + ":" + type + ":" + version;
             }
           </code>
         </codeSegment>
@@ -1039,7 +1045,8 @@
         <field>
           <name>repository</name>
           <version>4.0.0</version>
-          <description><![CDATA[Information needed for deploying to remote repository artifacts generated by the project]]></description>
+          <description>
+            <![CDATA[Information needed for deploying to remote repository artifacts generated by the project]]></description>
           <association>
             <type>Repository</type>
           </association>
@@ -1246,32 +1253,32 @@
           <code>
             public java.util.List getDefaultExcludes()
             {
-                java.util.List defaultExcludes = new java.util.ArrayList();
-                defaultExcludes.add( "**/*~" );
-                defaultExcludes.add( "**/#*#" );
-                defaultExcludes.add( "**/.#*" );
-                defaultExcludes.add( "**/%*%" );
-                defaultExcludes.add( "**/._*" );
+            java.util.List defaultExcludes = new java.util.ArrayList();
+            defaultExcludes.add( "**/*~" );
+            defaultExcludes.add( "**/#*#" );
+            defaultExcludes.add( "**/.#*" );
+            defaultExcludes.add( "**/%*%" );
+            defaultExcludes.add( "**/._*" );
 
-                // CVS
-                defaultExcludes.add( "**/CVS" );
-                defaultExcludes.add( "**/CVS/**" );
-                defaultExcludes.add( "**/.cvsignore" );
+            // CVS
+            defaultExcludes.add( "**/CVS" );
+            defaultExcludes.add( "**/CVS/**" );
+            defaultExcludes.add( "**/.cvsignore" );
 
-                // SCCS
-                defaultExcludes.add( "**/SCCS" );
-                defaultExcludes.add( "**/SCCS/**" );
+            // SCCS
+            defaultExcludes.add( "**/SCCS" );
+            defaultExcludes.add( "**/SCCS/**" );
 
-                // Visual SourceSafe
-                defaultExcludes.add( "**/vssver.scc" );
+            // Visual SourceSafe
+            defaultExcludes.add( "**/vssver.scc" );
 
-                // Subversion
-                defaultExcludes.add( "**/.svn" );
-                defaultExcludes.add( "**/.svn/**" );
+            // Subversion
+            defaultExcludes.add( "**/.svn" );
+            defaultExcludes.add( "**/.svn/**" );
 
-                // Mac
-                defaultExcludes.add( "**/.DS_Store" );
-                return defaultExcludes;
+            // Mac
+            defaultExcludes.add( "**/.DS_Store" );
+            return defaultExcludes;
             }
           </code>
         </codeSegment>
@@ -1370,7 +1377,8 @@
         <field>
           <name>branches</name>
           <version>4.0.0</version>
-          <description><![CDATA[The SCM branches that are currently active for the project. These should only be those forked from the current branch or trunk that are intended to be used.]]></description>
+          <description>
+            <![CDATA[The SCM branches that are currently active for the project. These should only be those forked from the current branch or trunk that are intended to be used.]]></description>
           <association>
             <type>String</type>
             <multiplicity>*</multiplicity>
@@ -1539,16 +1547,16 @@
           <code>
             public boolean equals( Object obj )
             {
-                Repository other =  ( Repository ) obj;
+            Repository other = ( Repository ) obj;
 
-                boolean retValue = false;
+            boolean retValue = false;
 
-                if ( id != null )
-                {
-                    retValue = id.equals( other.id );
-                }
+            if ( id != null )
+            {
+            retValue = id.equals( other.id );
+            }
 
-                return retValue;
+            return retValue;
             }
           </code>
         </codeSegment>
@@ -1653,6 +1661,11 @@
           <type>boolean</type>
           <defaultValue>true</defaultValue>
           <!-- @todo systemProperty tag (maven.online value) should be supported by modello -->
+        </field>
+        <field>
+          <name>date</name>
+          <type>Date</type>
+          <version>4.0.0</version>
         </field>
       </fields>
     </class>

@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <mavenModel extender="/foo/bar" modelVersion="4.0.0">
+  <typeTester>
+    <c>v</c>
+    <i>1</i>
+    <s>2</s>
+    <l>3</l>
+    <f>4.5</f>
+    <d>5.6</d>
+    <date>Friday, 6 January 2006 12:00:00 AM EST</date>
+  </typeTester>
   <name>Maven</name>
   <component>
     <name>component1</name>

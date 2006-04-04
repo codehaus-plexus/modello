@@ -31,6 +31,7 @@ import org.codehaus.modello.test.model.Organization;
 import org.codehaus.modello.test.model.Repository;
 import org.codehaus.modello.test.model.Scm;
 import org.codehaus.modello.test.model.SourceModification;
+import org.codehaus.modello.test.model.TypeTester;
 import org.codehaus.modello.test.model.io.dom4j.MavenDom4jReader;
 import org.codehaus.modello.test.model.io.dom4j.MavenDom4jWriter;
 import org.codehaus.modello.verifier.Verifier;
@@ -42,6 +43,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
@@ -203,6 +205,23 @@ public class Dom4jVerifier
         Repository repository = new Repository();
         repository.setId( "foo" );
         expected.addRepository( repository );
+
+        TypeTester typeTester = new TypeTester();
+        typeTester.setC( 'v' );
+        typeTester.setI( 1 );
+        typeTester.setS( (short) 2 );
+        typeTester.setL( 3L );
+        typeTester.setF( 4.5f );
+        typeTester.setD( 5.6 );
+        try
+        {
+            typeTester.setDate( new java.text.SimpleDateFormat( "yyyy-MM-dd" ).parse( "2006-01-06" ) );
+        }
+        catch ( java.text.ParseException e )
+        {
+            throw new DocumentException( "Couldn't set date: " + e.getMessage(), e );
+        }
+        expected.setTypeTester( typeTester );
 
         // ----------------------------------------------------------------------
         // Write out the model

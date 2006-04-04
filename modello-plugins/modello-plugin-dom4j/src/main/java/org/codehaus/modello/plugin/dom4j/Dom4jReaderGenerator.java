@@ -110,6 +110,12 @@ public class Dom4jReaderGenerator
 
         jClass.addImport( "java.io.Reader" );
 
+        jClass.addImport( "java.util.Date" );
+
+        jClass.addImport( "java.text.DateFormat" );
+
+        jClass.addImport( "java.text.ParsePosition" );
+
         jClass.addImport( "java.util.Iterator" );
 
         jClass.addImport( "org.codehaus.plexus.util.xml.Xpp3Dom" );
@@ -943,7 +949,6 @@ public class Dom4jReaderGenerator
         jClass.addMethod( method );
 */
         method = new JMethod( JType.Boolean, "getBooleanValue" );
-        method.addException( new JClass( "DocumentException" ) );
 
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
         method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
@@ -965,13 +970,11 @@ public class Dom4jReaderGenerator
         sc.add( "return false;" );
 
         jClass.addMethod( method );
-/*
+
         method = new JMethod( JType.Char, "getCharacterValue" );
-        method.addException( new JClass( "XmlPullParserException" ) );
 
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
         method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
-        method.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
 
         sc = method.getSourceCode();
 
@@ -992,12 +995,11 @@ public class Dom4jReaderGenerator
         jClass.addMethod( method );
 
         method = new JMethod( JType.Int, "getIntegerValue" );
-        method.addException( new JClass( "XmlPullParserException" ) );
 
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
         method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
-        method.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
         method.addParameter( new JParameter( JClass.Boolean, "strict" ) );
+        method.addException( new JClass( "DocumentException" ) );
 
         sc = method.getSourceCode();
 
@@ -1006,12 +1008,11 @@ public class Dom4jReaderGenerator
         jClass.addMethod( method );
 
         method = new JMethod( JType.Short, "getShortValue" );
-        method.addException( new JClass( "XmlPullParserException" ) );
 
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
         method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
-        method.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
         method.addParameter( new JParameter( JClass.Boolean, "strict" ) );
+        method.addException( new JClass( "DocumentException" ) );
 
         sc = method.getSourceCode();
 
@@ -1020,12 +1021,11 @@ public class Dom4jReaderGenerator
         jClass.addMethod( method );
 
         method = new JMethod( JType.Long, "getLongValue" );
-        method.addException( new JClass( "XmlPullParserException" ) );
 
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
         method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
-        method.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
         method.addParameter( new JParameter( JClass.Boolean, "strict" ) );
+        method.addException( new JClass( "DocumentException" ) );
 
         sc = method.getSourceCode();
 
@@ -1034,12 +1034,11 @@ public class Dom4jReaderGenerator
         jClass.addMethod( method );
 
         method = new JMethod( JType.Float, "getFloatValue" );
-        method.addException( new JClass( "XmlPullParserException" ) );
 
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
         method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
-        method.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
         method.addParameter( new JParameter( JClass.Boolean, "strict" ) );
+        method.addException( new JClass( "DocumentException" ) );
 
         sc = method.getSourceCode();
 
@@ -1048,12 +1047,11 @@ public class Dom4jReaderGenerator
         jClass.addMethod( method );
 
         method = new JMethod( JType.Double, "getDoubleValue" );
-        method.addException( new JClass( "XmlPullParserException" ) );
 
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
         method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
-        method.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
         method.addParameter( new JParameter( JClass.Boolean, "strict" ) );
+        method.addException( new JClass( "DocumentException" ) );
 
         sc = method.getSourceCode();
 
@@ -1062,11 +1060,10 @@ public class Dom4jReaderGenerator
         jClass.addMethod( method );
 
         method = new JMethod( new JClass( "java.util.Date" ), "getDateValue" );
-        method.addException( new JClass( "XmlPullParserException" ) );
 
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
         method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
-        method.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
+        method.addException( new JClass( "DocumentException" ) );
 
         sc = method.getSourceCode();
 
@@ -1078,7 +1075,27 @@ public class Dom4jReaderGenerator
 
         sc.add( "DateFormat dateParser = DateFormat.getDateTimeInstance( DateFormat.FULL, DateFormat.FULL );" );
 
-        sc.add( "return dateParser.parse( s, new ParsePosition( 0 ) );" );
+        sc.add( "dateParser.setLenient( true );" );
+
+        sc.add( "try" );
+        sc.add( "{" );
+        sc.indent();
+
+        sc.add( "return dateParser.parse( s );" );
+
+        sc.unindent();
+
+        sc.add( "}" );
+
+        sc.add( "catch ( java.text.ParseException e )" );
+        sc.add( "{" );
+        sc.indent();
+
+        sc.add( "throw new DocumentException( e.getMessage() );" );
+
+        sc.unindent();
+
+        sc.add( "}" );
 
         sc.unindent();
 
@@ -1087,7 +1104,6 @@ public class Dom4jReaderGenerator
         sc.add( "return null;" );
 
         jClass.addMethod( method );
-*/
 
         method = new JMethod( new JClass( "Xpp3Dom" ), "writeElementToXpp3Dom" );
 
@@ -1165,8 +1181,8 @@ public class Dom4jReaderGenerator
 
         sc.indent();
 
-        sc.add( "throw new XmlPullParserException( \"Unable to parse element '\" + attribute + \"', must be " +
-            typeDesc + "\", parser, null );" );
+        sc.add( "throw new DocumentException( \"Unable to parse element '\" + attribute + \"', must be " + typeDesc +
+            "\" );" );
 
         sc.unindent();
 

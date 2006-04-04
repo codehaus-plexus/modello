@@ -113,6 +113,8 @@ public class Dom4jWriterGenerator
 
         jClass.addImport( "java.util.Iterator" );
 
+        jClass.addImport( "java.text.DateFormat" );
+
         jClass.addImport( "org.codehaus.plexus.util.xml.Xpp3Dom" );
 
         jClass.addImport( "org.dom4j.Document" );
@@ -472,7 +474,12 @@ public class Dom4jWriterGenerator
     {
         String textValue = initialValue;
 
-        if ( !"String".equals( type ) )
+        if ( "Date".equals( type ) )
+        {
+            textValue =
+                "DateFormat.getDateTimeInstance( DateFormat.FULL, DateFormat.FULL ).format( " + textValue + " )";
+        }
+        else if ( !"String".equals( type ) )
         {
             textValue = "String.valueOf( " + textValue + " )";
         }
@@ -498,6 +505,10 @@ public class Dom4jWriterGenerator
             retVal = "if ( " + value + " != null && " + value + ".size() > 0 )";
         }
         else if ( "String".equals( type ) && field.getDefaultValue() != null )
+        {
+            retVal = "if ( " + value + " != null && !" + value + ".equals( \"" + field.getDefaultValue() + "\" ) )";
+        }
+        else if ( "Date".equals( type ) && field.getDefaultValue() != null )
         {
             retVal = "if ( " + value + " != null && !" + value + ".equals( \"" + field.getDefaultValue() + "\" ) )";
         }
