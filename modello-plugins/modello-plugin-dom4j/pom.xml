@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<project>
+  <parent>
+    <groupId>org.codehaus.modello</groupId>
+    <artifactId>modello-plugins</artifactId>
+    <version>1.0-alpha-9-SNAPSHOT</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>modello-plugin-dom4j</artifactId>
+  <name>Modello Dom4J Reader/Writer</name>
+  <dependencies>
+    <dependency>
+      <groupId>dom4j</groupId>
+      <artifactId>dom4j</artifactId>
+      <version>1.6.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.modello</groupId>
+      <artifactId>modello-plugin-xml</artifactId>
+      <version>1.0-alpha-9-SNAPSHOT</version>
+    </dependency>
+  </dependencies>
+</project>
