@@ -44,6 +44,9 @@
     <repo>
       <id>foo</id>
     </repo>
+    <repo>
+      <id>bar</id>
+    </repo>
   </repositories>
   <mailingLists>
     <mailingList>

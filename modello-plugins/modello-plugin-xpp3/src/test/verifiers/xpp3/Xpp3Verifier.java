@@ -222,6 +222,10 @@ public class Xpp3Verifier
         repository.setId( "foo" );
         expected.addRepository( repository );
 
+        repository = new Repository();
+        repository.setId( "bar" );
+        expected.addRepository( repository );
+
         // ----------------------------------------------------------------------
         // Write out the model
         // ----------------------------------------------------------------------
