@@ -4,7 +4,7 @@
   <artifactId>modello</artifactId>
   <packaging>pom</packaging>
   <name>Modello Parent</name>
-  <version>1.0-alpha-9-SNAPSHOT</version>
+  <version>1.0-alpha-9</version>
   <issueManagement>
     <system>jira</system>
     <url>http://jira.codehaus.org/browse/MODELLO</url>
@@ -94,9 +94,9 @@
     </developer>
   </developers>
   <scm>
-    <connection>scm:svn:https://svn.codehaus.org/modello/trunk</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/modello/trunk</developerConnection>
-    <url>http://svn.modello.codehaus.org/trunk</url>
+    <connection>scm:svn:https://svn.codehaus.org/modello/tags/modello-1.0-alpha-9</connection>
+    <developerConnection>scm:svn:https://svn.codehaus.org/modello/tags/modello-1.0-alpha-9</developerConnection>
+    <url>http://svn.modello.codehaus.org/tags/modello-1.0-alpha-9</url>
   </scm>
   <organization>
     <name>Codehaus</name>
@@ -120,6 +120,16 @@
     <module>modello-test</module>
     <module>modello-plugins</module>
   </modules>
+  <repositories>
+    <repository>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <id>snapshots</id>
+      <name>Maven Central Development Repository</name>
+      <url>http://snapshots.maven.codehaus.org/maven2</url>
+    </repository>
+  </repositories>
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -133,48 +143,48 @@
       <dependency>
         <groupId>org.codehaus.modello</groupId>
         <artifactId>modello-core</artifactId>
-        <version>1.0-alpha-9-SNAPSHOT</version>
+        <version>1.0-alpha-9</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.modello</groupId>
         <artifactId>modello-test</artifactId>
-        <version>1.0-alpha-9-SNAPSHOT</version>
+        <version>1.0-alpha-9</version>
         <scope>test</scope>
       </dependency>
       <dependency>
         <groupId>org.codehaus.modello</groupId>
         <artifactId>modello-plugin-prevayler</artifactId>
-        <version>1.0-alpha-9-SNAPSHOT</version>
+        <version>1.0-alpha-9</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.modello</groupId>
         <artifactId>modello-plugin-jpox</artifactId>
-        <version>1.0-alpha-9-SNAPSHOT</version>
+        <version>1.0-alpha-9</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.modello</groupId>
         <artifactId>modello-plugin-store</artifactId>
-        <version>1.0-alpha-9-SNAPSHOT</version>
+        <version>1.0-alpha-9</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.modello</groupId>
         <artifactId>modello-plugin-xdoc</artifactId>
-        <version>1.0-alpha-9-SNAPSHOT</version>
+        <version>1.0-alpha-9</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.modello</groupId>
         <artifactId>modello-plugin-xpp3</artifactId>
-        <version>1.0-alpha-9-SNAPSHOT</version>
+        <version>1.0-alpha-9</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.modello</groupId>
         <artifactId>modello-plugin-xml</artifactId>
-        <version>1.0-alpha-9-SNAPSHOT</version>
+        <version>1.0-alpha-9</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.modello</groupId>
         <artifactId>modello-plugin-xsd</artifactId>
-        <version>1.0-alpha-9-SNAPSHOT</version>
+        <version>1.0-alpha-9</version>
       </dependency>
       <dependency>
         <groupId>org.apache.maven</groupId>
@@ -235,14 +245,4 @@
       <url>sftp://beaver.codehaus.org/home/projects/maven/repository-staging/snapshots/maven2</url>
     </snapshotRepository>
   </distributionManagement>
-  <repositories>
-    <repository>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-      <id>snapshots</id>
-      <name>Maven Central Development Repository</name>
-      <url>http://snapshots.maven.codehaus.org/maven2</url>
-    </repository>
-  </repositories>
 </project>
