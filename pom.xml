@@ -143,48 +143,48 @@
       <dependency>
         <groupId>org.codehaus.modello</groupId>
         <artifactId>modello-core</artifactId>
-        <version>1.0-alpha-9</version>
+        <version>1.0-alpha-10-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.modello</groupId>
         <artifactId>modello-test</artifactId>
-        <version>1.0-alpha-9</version>
+        <version>1.0-alpha-10-SNAPSHOT</version>
         <scope>test</scope>
       </dependency>
       <dependency>
         <groupId>org.codehaus.modello</groupId>
         <artifactId>modello-plugin-prevayler</artifactId>
-        <version>1.0-alpha-9</version>
+        <version>1.0-alpha-10-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.modello</groupId>
         <artifactId>modello-plugin-jpox</artifactId>
-        <version>1.0-alpha-9</version>
+        <version>1.0-alpha-10-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.modello</groupId>
         <artifactId>modello-plugin-store</artifactId>
-        <version>1.0-alpha-9</version>
+        <version>1.0-alpha-10-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.modello</groupId>
         <artifactId>modello-plugin-xdoc</artifactId>
-        <version>1.0-alpha-9</version>
+        <version>1.0-alpha-10-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.modello</groupId>
         <artifactId>modello-plugin-xpp3</artifactId>
-        <version>1.0-alpha-9</version>
+        <version>1.0-alpha-10-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.modello</groupId>
         <artifactId>modello-plugin-xml</artifactId>
-        <version>1.0-alpha-9</version>
+        <version>1.0-alpha-10-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.modello</groupId>
         <artifactId>modello-plugin-xsd</artifactId>
-        <version>1.0-alpha-9</version>
+        <version>1.0-alpha-10-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.apache.maven</groupId>
