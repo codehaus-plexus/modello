@@ -2,13 +2,13 @@
   <parent>
     <artifactId>modello</artifactId>
     <groupId>org.codehaus.modello</groupId>
-    <version>1.0-alpha-9-SNAPSHOT</version>
+    <version>1.0-alpha-9</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>modello-maven-plugin</artifactId>
   <packaging>maven-plugin</packaging>
   <name>Modello Maven Plugin</name>
-  <version>1.0-alpha-9-SNAPSHOT</version>
+  <version>1.0-alpha-9</version>
   <build>
     <extensions>
       <extension>
@@ -29,22 +29,12 @@
     </dependency>
     <dependency>
       <groupId>org.codehaus.modello</groupId>
-      <artifactId>modello-plugin-prevayler</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.codehaus.modello</groupId>
-      <artifactId>modello-plugin-jpox</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-plugin-xdoc</artifactId>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>org.codehaus.modello</groupId>
-      <artifactId>modello-plugin-xpp3</artifactId>
+      <artifactId>modello-plugin-prevayler</artifactId>
       <scope>runtime</scope>
     </dependency>
     <dependency>
@@ -54,7 +44,17 @@
     </dependency>
     <dependency>
       <groupId>org.codehaus.modello</groupId>
+      <artifactId>modello-plugin-jpox</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.modello</groupId>
+      <artifactId>modello-plugin-xpp3</artifactId>
+      <scope>runtime</scope>
     </dependency>
   </dependencies>
   <distributionManagement>

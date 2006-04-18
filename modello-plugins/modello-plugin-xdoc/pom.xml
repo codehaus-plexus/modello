@@ -2,12 +2,12 @@
   <parent>
     <artifactId>modello-plugins</artifactId>
     <groupId>org.codehaus.modello</groupId>
-    <version>1.0-alpha-9-SNAPSHOT</version>
+    <version>1.0-alpha-9</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>modello-plugin-xdoc</artifactId>
   <name>Modello XDOC Plugin</name>
-  <version>1.0-alpha-9-SNAPSHOT</version>
+  <version>1.0-alpha-9</version>
   <dependencies>
     <dependency>
       <groupId>org.codehaus.modello</groupId>
