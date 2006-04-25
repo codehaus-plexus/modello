@@ -1,0 +1,9 @@
+<component-set>
+  <components>
+    <component>
+      <role>org.codehaus.modello.plugin.ModelloGenerator</role>
+      <role-hint>mkleint-writer</role-hint>
+      <implementation>org.codehaus.modello.plugin.mkleint.MkleintWriterGenerator</implementation>
+    </component>
+  </components>
+</component-set>
