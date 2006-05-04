@@ -613,12 +613,9 @@ public class JDOMWriterGenerator extends AbstractJDOMGenerator {
 
     private void createIterateMethod(String field, ModelClass toClass, String childFieldTagName, JClass jClass) {
         if (jClass.getMethod("iterate" + capitalise(field), 0) !=  null) {
-            System.out.println("method iterate" + capitalise(field) + " already exists");
+//            System.out.println("method iterate" + capitalise(field) + " already exists");
             return;
         }
-        System.out.println("here1 toclas=" + toClass);
-        System.out.println("childFieldTagName =" + childFieldTagName);
-        System.out.println("filed=" + field);
         JMethod toReturn = new JMethod( null, "iterate" + capitalise(field) );
         toReturn.addParameter( new JParameter( new JClass( "Counter" ), "counter" ) );
         toReturn.addParameter( new JParameter( new JClass( "Element" ), "parent" ) );
