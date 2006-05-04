@@ -58,7 +58,7 @@
     </dependency>
     <dependency>
       <groupId>org.codehaus.modello</groupId>
-      <artifactId>modello-plugin-mkleint</artifactId>
+      <artifactId>modello-plugin-jdom</artifactId>
       <version>1.0-alpha-9-SNAPSHOT</version>
       <scope>runtime</scope>
     </dependency>

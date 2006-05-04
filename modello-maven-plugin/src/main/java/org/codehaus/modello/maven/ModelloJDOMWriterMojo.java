@@ -6,14 +6,15 @@ import java.io.File;
 
 
 /**
- * @goal mkleint-writer
+ * @goal jdom-writer
  *
  * @phase generate-sources
  *
- * @description Creates mkleint writer from the model.
+ * @description Creates jdom writer from the model that is capable of preserving element ordering
+ * and comments. In future it should also preserve whitespace.
  *
  */
-public class ModelloMkleintWriterMojo
+public class ModelloJDOMWriterMojo
     extends AbstractModelloGeneratorMojo
 {
     /**
@@ -25,7 +26,7 @@ public class ModelloMkleintWriterMojo
 
     protected String getGeneratorType()
     {
-        return "mkleint-writer";
+        return "jdom-writer";
     }
 
     public File getOutputDirectory()

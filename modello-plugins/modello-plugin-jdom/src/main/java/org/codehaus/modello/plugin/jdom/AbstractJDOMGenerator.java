@@ -1,4 +1,4 @@
-package org.codehaus.modello.plugin.mkleint;
+package org.codehaus.modello.plugin.jdom;
 
 /*
  * Copyright (c) 2004, Jason van Zyl
@@ -29,7 +29,7 @@ import org.codehaus.modello.plugin.AbstractModelloGenerator;
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id: AbstractXpp3Generator.java 139 2004-09-27 08:02:35Z evenisse $
  */
-public abstract class AbstractMkleintGenerator
+public abstract class AbstractJDOMGenerator
     extends AbstractModelloGenerator
 {
     protected String getFileName( String suffix )

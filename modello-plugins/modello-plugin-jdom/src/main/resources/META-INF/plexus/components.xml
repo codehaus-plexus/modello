@@ -2,8 +2,8 @@
   <components>
     <component>
       <role>org.codehaus.modello.plugin.ModelloGenerator</role>
-      <role-hint>mkleint-writer</role-hint>
-      <implementation>org.codehaus.modello.plugin.mkleint.MkleintWriterGenerator</implementation>
+      <role-hint>jdom-writer</role-hint>
+      <implementation>org.codehaus.modello.plugin.jdom.JDOMWriterGenerator</implementation>
     </component>
   </components>
 </component-set>

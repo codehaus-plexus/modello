@@ -5,8 +5,8 @@
     <version>1.0-alpha-9-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>modello-plugin-mkleint</artifactId>
-  <name>Modello Mkleint's Plugin</name>
+  <artifactId>modello-plugin-jdom</artifactId>
+  <name>Modello JDOM Plugin</name>
   <version>1.0-alpha-9-SNAPSHOT</version>
   <dependencies>
     <dependency>

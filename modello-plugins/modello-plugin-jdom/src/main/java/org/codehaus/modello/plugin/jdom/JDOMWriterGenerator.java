@@ -14,7 +14,7 @@
  *  limitations under the License.
  * =========================================================================
  */
-package org.codehaus.modello.plugin.mkleint;
+package org.codehaus.modello.plugin.jdom;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,18 +45,18 @@ import java.util.Properties;
 
 /**
  */
-public class MkleintWriterGenerator extends AbstractMkleintGenerator {
+public class JDOMWriterGenerator extends AbstractJDOMGenerator {
     
     public void generate( Model model, Properties parameters ) throws ModelloException {
         initialize( model, parameters );
         try {
-            generateMkleintWriter();
+            generateJDOMWriter();
         } catch ( IOException ex ) {
-            throw new ModelloException( "Exception while generating mkleint's Writer.", ex );
+            throw new ModelloException( "Exception while generating JDOM Writer.", ex );
         }
     }
     
-    private void generateMkleintWriter() throws ModelloException, IOException {
+    private void generateJDOMWriter() throws ModelloException, IOException {
         Model objectModel = getModel();
         
         String packageName;
@@ -65,11 +65,11 @@ public class MkleintWriterGenerator extends AbstractMkleintGenerator {
         } else {
             packageName = objectModel.getDefaultPackageName( false, null );
         }
-        packageName = packageName + ".io.mkleint";
+        packageName = packageName + ".io.jdom";
         
         String directory = packageName.replace( '.', '/' );
         
-        String marshallerName = getFileName( "MkleintWriter" );
+        String marshallerName = getFileName( "JDOMWriter" );
         
         File f = new File( new File( getOutputDirectory(), directory ), marshallerName + ".java" );
         
