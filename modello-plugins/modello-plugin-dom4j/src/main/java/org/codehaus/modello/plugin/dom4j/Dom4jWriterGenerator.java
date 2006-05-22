@@ -164,7 +164,9 @@ public class Dom4jWriterGenerator
         sc.add( "write" + root + "( " + rootElement + ", \"" + rootElement + "\", document );" );
 
         // TODO: pretty printing optional
-        sc.add( "XMLWriter serializer = new XMLWriter( writer, OutputFormat.createPrettyPrint() );" );
+        sc.add( "OutputFormat format = OutputFormat.createPrettyPrint();" );
+        sc.add( "format.setLineSeparator( System.getProperty( \"line.separator\" ) );" );
+        sc.add( "XMLWriter serializer = new XMLWriter( writer, format );" );
 
         sc.add( "serializer.write( document );" );
 
