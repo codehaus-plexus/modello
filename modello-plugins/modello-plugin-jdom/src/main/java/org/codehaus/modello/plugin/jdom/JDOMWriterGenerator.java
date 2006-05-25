@@ -325,6 +325,7 @@ public class JDOMWriterGenerator extends AbstractJDOMGenerator {
         sc.indent();
         sc.add("Iterator it = list.iterator();");
         sc.add("Iterator elIt = element.getChildren(childName, element.getNamespace()).iterator();");
+        sc.add("if (! elIt.hasNext()) elIt = null;");
         sc.add("Counter innerCount = new Counter();");
         sc.add("while (it.hasNext()) {");
         sc.indent();
@@ -627,6 +628,7 @@ public class JDOMWriterGenerator extends AbstractJDOMGenerator {
         sc.indent();
         sc.add("Iterator it = list.iterator();");
         sc.add("Iterator elIt = element.getChildren(\"" + childFieldTagName + "\", element.getNamespace()).iterator();");
+        sc.add("if (!elIt.hasNext()) elIt = null;");
         sc.add("Counter innerCount = new Counter();");
         sc.add("while (it.hasNext()) {");
         sc.indent();
