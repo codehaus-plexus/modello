@@ -144,6 +144,7 @@ public class JDOMWriterGenerator extends AbstractJDOMGenerator {
     private void createConter(final JClass jClass) throws IllegalArgumentException {
         //inner counter class
         JClass counter = jClass.createInnerClass("Counter");
+        counter.getModifiers().setStatic(true);
         JField fld = new JField(new JType("int"), "currentIndex");
         fld.setInitString("0");
         counter.addField(fld);
@@ -165,7 +166,7 @@ public class JDOMWriterGenerator extends AbstractJDOMGenerator {
         marshall.addException( new JClass( "java.io.IOException" ) );
         
         JSourceCode sc = marshall.getSourceCode();
-        sc.add("update" + root + "(" + rootElement + ", new Counter(), document.getRootElement());");
+        sc.add("update" + root + "(" + rootElement + ", \"" + rootElement + "\", new Counter(), document.getRootElement());");
         sc.add("XMLOutputter outputter = new XMLOutputter();");
         sc.add("outputter.setFormat(Format.getPrettyFormat()");
         sc.add(".setIndent(\"    \")");
@@ -416,6 +417,7 @@ public class JDOMWriterGenerator extends AbstractJDOMGenerator {
         sc.indent();
         sc.add("Xpp3Dom dm = (Xpp3Dom) it2.next();");
         sc.add("Element elem = factory.element(dm.getName(), parent.getNamespace());");
+        sc.add("parent.addContent(elem);");
         sc.add("replaceXpp3DOM(elem, dm);");
         sc.unindent();
         sc.add("}");
@@ -496,21 +498,25 @@ public class JDOMWriterGenerator extends AbstractJDOMGenerator {
     private void updateClass(ModelClass clazz, JClass jClass, ArrayList alwaysExisting) {
         String className = clazz.getName();
         String uncapClassName = uncapitalise( className );
-//        XmlFieldMetadata clazzMetadata = (XmlFieldMetadata) clazz.getMetadata(XmlFieldMetadata.ID);
-        String clazzTagName = null; //clazzMetadata.getTagName();
+        String clazzTagName = null;
+        if (clazz.hasMetadata(XmlFieldMetadata.ID)) {
+            XmlFieldMetadata clazzMetadata = (XmlFieldMetadata) clazz.getMetadata(XmlFieldMetadata.ID);
+            clazzTagName = clazzMetadata.getTagName();
+        }
+        JMethod marshall = new JMethod( null, "update" + className);
+        marshall.addParameter( new JParameter( new JClass( className ), "value" ) );
+        marshall.addParameter( new JParameter( new JClass( "String" ), "xmlTag") );
+        marshall.addParameter( new JParameter( new JClass( "Counter" ), "counter" ) );
+        marshall.addParameter( new JParameter( new JClass( "Element" ), "element" ) );
         if (clazzTagName == null ) {
             clazzTagName = uncapClassName;
         }
-        JMethod marshall = new JMethod( null, "update" + className );
-        marshall.addParameter( new JParameter( new JClass( className ), "value" ) );
-        marshall.addParameter( new JParameter( new JClass( "Counter" ), "counter" ) );
-        marshall.addParameter( new JParameter( new JClass( "Element" ), "element" ) );
         JSourceCode sc = marshall.getSourceCode();
         if (alwaysExisting.contains(clazz)) {
            sc.add("Element root = element;"); 
         } else {
             sc.add("boolean shouldExist = value != null;");
-            sc.add("Element root = updateElement(counter, element, \"" + clazzTagName + "\", shouldExist);");
+            sc.add("Element root = updateElement(counter, element, xmlTag, shouldExist);");
             sc.add("if (shouldExist) {");
             sc.indent();
         }
@@ -539,7 +545,8 @@ public class JDOMWriterGenerator extends AbstractJDOMGenerator {
                 String associationName = association.getName();
                 ModelClass toClass = association.getToClass();
                 if ( ModelAssociation.ONE_MULTIPLICITY.equals( association.getMultiplicity() ) ) {
-                    sc.add("update" + capitalise(field.getType()) + "( " + value + ", innerCount, element);");
+                    sc.add("update" + capitalise(field.getType()) 
+                               + "( " + value + ", \"" + fieldTagName +  "\", innerCount, root);");
                 } else {
                     //MANY_MULTIPLICITY
 //                    
@@ -565,7 +572,7 @@ public class JDOMWriterGenerator extends AbstractJDOMGenerator {
                 }
             } else {
                 if ( "DOM".equals( field.getType() ) ) {
-                    
+                    sc.add("findAndReplaceXpp3DOM(innerCount, root, \"" + fieldTagName + "\", (Xpp3Dom)" + value + ");");
 //                    
 //                    sc.add( "((Xpp3Dom) " + value + ").writeToSerializer( NAMESPACE, serializer );" );
                 } else {
@@ -645,7 +652,7 @@ public class JDOMWriterGenerator extends AbstractJDOMGenerator {
         sc.add("element.addContent(el);");
         sc.unindent();
         sc.add("}");
-        sc.add("update" + toClass.getName() + "(value, innerCount, el);");
+        sc.add("update" + toClass.getName() + "(value, \"" + childFieldTagName + "\", innerCount, el);");
         sc.unindent();
         sc.add("}");
         sc.add("if (elIt != null) {");
