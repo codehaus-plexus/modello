@@ -557,7 +557,7 @@ public class JDOMWriterGenerator extends AbstractJDOMGenerator {
 //                        type = association.getType();
                         String toType = association.getTo();
                         if (toClass != null) {
-                            sc.add("iterate" + capitalise(field.getName()) + "(innerCount, root, " + value + ");");
+                            sc.add("iterate" + capitalise(toType) + "(innerCount, root, " + value + ");");
                             createIterateMethod(field.getName(), toClass, singular(fieldTagName), jClass);
                             alwaysExisting.add(toClass);
                         } else {
@@ -620,11 +620,11 @@ public class JDOMWriterGenerator extends AbstractJDOMGenerator {
     }
 
     private void createIterateMethod(String field, ModelClass toClass, String childFieldTagName, JClass jClass) {
-        if (jClass.getMethod("iterate" + capitalise(field), 0) !=  null) {
+        if (jClass.getMethod("iterate" + capitalise(toClass.getName()), 0) !=  null) {
 //            System.out.println("method iterate" + capitalise(field) + " already exists");
             return;
         }
-        JMethod toReturn = new JMethod( null, "iterate" + capitalise(field) );
+        JMethod toReturn = new JMethod( null, "iterate" + capitalise(toClass.getName()) );
         toReturn.addParameter( new JParameter( new JClass( "Counter" ), "counter" ) );
         toReturn.addParameter( new JParameter( new JClass( "Element" ), "parent" ) );
         toReturn.addParameter( new JParameter( new JClass( "java.util.Collection"), "list" ) );
