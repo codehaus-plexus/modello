@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<?xml version="1.0" encoding="UTF-8"?><project>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.codehaus.modello</groupId>
   <artifactId>modello</artifactId>
   <packaging>pom</packaging>
   <name>Modello Parent</name>
-  <version>1.0-alpha-10-SNAPSHOT</version>
+  <version>1.0-alpha-10</version>
   <issueManagement>
     <system>jira</system>
     <url>http://jira.codehaus.org/browse/MODELLO</url>
@@ -94,9 +94,9 @@
     </developer>
   </developers>
   <scm>
-    <connection>scm:svn:https://svn.codehaus.org/modello/trunk</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/modello/trunk</developerConnection>
-    <url>http://svn.modello.codehaus.org/trunk</url>
+    <connection>scm:svn:https://svn.codehaus.org/modello/tags/modello-1.0-alpha-10</connection>
+    <developerConnection>scm:svn:https://svn.codehaus.org/modello/tags/modello-1.0-alpha-10</developerConnection>
+    <url>http://svn.modello.codehaus.org/tags/modello-1.0-alpha-10</url>
   </scm>
   <organization>
     <name>Codehaus</name>
@@ -108,7 +108,7 @@
         <groupId>org.apache.maven.wagon</groupId>
         <artifactId>wagon-webdav</artifactId>
         <version>1.0-beta-1</version>
-        </extension>
+      </extension>
     </extensions>
     <pluginManagement>
       <plugins>
@@ -129,12 +129,12 @@
   </modules>
   <repositories>
     <repository>
-      <id>codehaus-snapshots</id>
-      <name>Codehaus Snapshot Development Repository</name>
-      <url>http://snapshots.repository.codehaus.org/</url>
       <releases>
         <enabled>false</enabled>
       </releases>
+      <id>codehaus-snapshots</id>
+      <name>Codehaus Snapshot Development Repository</name>
+      <url>http://snapshots.repository.codehaus.org/</url>
     </repository>
   </repositories>
   <dependencies>
@@ -258,7 +258,7 @@
     </snapshotRepository>
     <site>
       <id>modello-site</id>
-      <url>dav:https://dav.codehaus.org/modello/</url>
+      <url>dav:https://dav.codehaus.org/modello</url>
     </site>
   </distributionManagement>
 </project>

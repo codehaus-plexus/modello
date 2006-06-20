@@ -1,14 +1,14 @@
-<?xml version="1.0" encoding="UTF-8"?><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<?xml version="1.0" encoding="UTF-8"?><project>
   <parent>
     <artifactId>modello</artifactId>
     <groupId>org.codehaus.modello</groupId>
-    <version>1.0-alpha-10-SNAPSHOT</version>
+    <version>1.0-alpha-10</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>modello-maven-plugin</artifactId>
   <packaging>maven-plugin</packaging>
   <name>Modello Maven Plugin</name>
-  <version>1.0-alpha-10-SNAPSHOT</version>
+  <version>1.0-alpha-10</version>
   <build>
     <extensions>
       <extension>
@@ -20,21 +20,8 @@
   </build>
   <dependencies>
     <dependency>
-      <groupId>org.apache.maven</groupId>
-      <artifactId>maven-project</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven</groupId>
-      <artifactId>maven-plugin-api</artifactId>
-    </dependency>
-    <dependency>
       <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-plugin-xdoc</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.codehaus.modello</groupId>
-      <artifactId>modello-plugin-prevayler</artifactId>
       <scope>runtime</scope>
     </dependency>
     <dependency>
@@ -43,13 +30,18 @@
       <scope>runtime</scope>
     </dependency>
     <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-plugin-api</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-plugin-jpox</artifactId>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>org.codehaus.modello</groupId>
-      <artifactId>modello-core</artifactId>
+      <artifactId>modello-plugin-jdom</artifactId>
+      <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>org.codehaus.modello</groupId>
@@ -58,8 +50,16 @@
     </dependency>
     <dependency>
       <groupId>org.codehaus.modello</groupId>
-      <artifactId>modello-plugin-jdom</artifactId>
+      <artifactId>modello-plugin-prevayler</artifactId>
       <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-project</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.modello</groupId>
+      <artifactId>modello-core</artifactId>
     </dependency>
   </dependencies>
   <distributionManagement>
