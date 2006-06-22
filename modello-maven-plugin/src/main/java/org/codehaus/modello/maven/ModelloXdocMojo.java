@@ -29,7 +29,7 @@ import java.io.File;
 /**
  * @goal xdoc
  *
- * @description Creates XPP3 writer from the model.
+ * @description Creates XDOC from the model.
  *
  * @author <a href="mailto:brett@apache.org">Brett Porter</a>
  * @version $Id$
