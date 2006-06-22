@@ -9,15 +9,6 @@
   <packaging>maven-plugin</packaging>
   <name>Modello Maven Plugin</name>
   <version>1.0-alpha-10</version>
-  <build>
-    <extensions>
-      <extension>
-        <groupId>org.apache.maven.wagon</groupId>
-        <artifactId>wagon-ssh-external</artifactId>
-        <version>RELEASE</version>
-      </extension>
-    </extensions>
-  </build>
   <dependencies>
     <dependency>
       <groupId>org.codehaus.modello</groupId>
@@ -62,16 +53,4 @@
       <artifactId>modello-core</artifactId>
     </dependency>
   </dependencies>
-  <distributionManagement>
-    <repository>
-      <id>repo1</id>
-      <name>Maven Central Repository</name>
-      <url>scpexe://repo1.maven.org/home/projects/maven/repository-staging/to-ibiblio/maven2</url>
-    </repository>
-    <snapshotRepository>
-      <id>snapshots</id>
-      <name>Maven Snapshot Plugins Repository</name>
-      <url>scpexe://repo1.maven.org/home/projects/maven/repository-staging/snapshots/maven2</url>
-    </snapshotRepository>
-  </distributionManagement>
 </project>
