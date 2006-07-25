@@ -30,6 +30,8 @@ import org.codehaus.modello.model.ModelDefault;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.plugin.AbstractModelloGenerator;
 import org.codehaus.modello.plugin.java.javasource.JClass;
+import org.codehaus.modello.plugin.java.javasource.JConstructor;
+import org.codehaus.modello.plugin.java.javasource.JField;
 import org.codehaus.modello.plugin.java.javasource.JMethod;
 import org.codehaus.modello.plugin.java.javasource.JParameter;
 import org.codehaus.modello.plugin.java.javasource.JSourceCode;
@@ -89,6 +91,96 @@ public class Dom4jReaderGenerator
 
         String directory = packageName.replace( '.', '/' );
 
+        writeProcessingWrapperClass( directory, packageName );
+
+        writeReader( directory, packageName, objectModel );
+    }
+
+    private void writeProcessingWrapperClass( String directory, String packageName )
+        throws ModelloException, IOException
+    {
+        String unmarshallerName = getFileName( "ProcessingWrappedObject" );
+
+        File f = new File( new File( getOutputDirectory(), directory ), unmarshallerName + ".java" );
+
+        if ( !f.getParentFile().exists() )
+        {
+            f.getParentFile().mkdirs();
+        }
+
+        FileWriter writer = new FileWriter( f );
+
+        JSourceWriter sourceWriter = new JSourceWriter( writer );
+
+        JClass jClass = new JClass( unmarshallerName );
+
+        jClass.setPackageName( packageName );
+
+        jClass.addImport( "java.lang.reflect.Method" );
+
+        JConstructor constructor = new JConstructor( jClass );
+        constructor.addParameter( new JParameter( new JClass( "Object" ), "object" ) );
+        constructor.getSourceCode().add( "this.object = object;" );
+        jClass.addConstructor( constructor );
+
+        jClass.addField( new JField( new JClass( "Object" ), "object" ) );
+
+        JMethod method = new JMethod( "__addTextProcessing__" );
+        method.addParameter( new JParameter( new JClass( "String" ), "text" ) );
+        method.addParameter( new JParameter( new JClass( "String" ), "path" ) );
+        method.getSourceCode().add( "runMethod( \"__addTextProcessing__\", text, path );" );
+        jClass.addMethod( method );
+
+        method = new JMethod( "__addCommentProcessing__" );
+        method.addParameter( new JParameter( new JClass( "String" ), "text" ) );
+        method.addParameter( new JParameter( new JClass( "String" ), "path" ) );
+        method.getSourceCode().add( "runMethod( \"__addCommentProcessing__\", text, path );" );
+        jClass.addMethod( method );
+
+        method = new JMethod( "__addElementProcessing__" );
+        method.addParameter( new JParameter( new JClass( "String" ), "text" ) );
+        method.addParameter( new JParameter( new JClass( "String" ), "path" ) );
+        method.getSourceCode().add( "runMethod( \"__addElementProcessing__\", text, path );" );
+        jClass.addMethod( method );
+
+        method = new JMethod( "runMethod" );
+        method.addParameter( new JParameter( new JClass( "String" ), "method" ) );
+        method.addParameter( new JParameter( new JClass( "String" ), "text" ) );
+        method.addParameter( new JParameter( new JClass( "String" ), "path" ) );
+
+        JSourceCode sc = method.getSourceCode();
+
+        sc.add( "try" );
+        sc.add( "{" );
+        sc.indent();
+
+        sc.add( "Method m = object.getClass().getMethod( method, new Class[] { String.class, String.class } );" );
+        sc.add( "m.invoke( object, new String[] { text, path } );" );
+
+        sc.unindent();
+        sc.add( "}" );
+        sc.add( "catch ( Exception e )" );
+        sc.add( "{" );
+        sc.indent();
+
+        sc.add( "throw new RuntimeException( e.getMessage(), e );" );
+
+        sc.unindent();
+        sc.add( "}" );
+
+        jClass.addMethod( method );
+
+        jClass.print( sourceWriter );
+
+        writer.flush();
+
+        writer.close();
+    }
+
+
+    private void writeReader( String directory, String packageName, Model objectModel )
+        throws ModelloException, IOException
+    {
         String unmarshallerName = getFileName( "Dom4jReader" );
 
         File f = new File( new File( getOutputDirectory(), directory ), unmarshallerName + ".java" );
@@ -271,6 +363,8 @@ public class Dom4jReaderGenerator
 
         sc.add( uncapClassName + ".setModelEncoding( encoding );" );
 
+        sc.add( uncapClassName + ".__enableProcessing__();" );
+
         for ( Iterator i = modelClass.getAllFields( getGeneratedVersion(), true ).iterator(); i.hasNext(); )
         {
             ModelField field = (ModelField) i.next();
@@ -280,7 +374,7 @@ public class Dom4jReaderGenerator
             if ( fieldMetadata.isAttribute() )
             {
                 writePrimitiveField( field, field.getType(), uncapClassName, "set" + capitalise( field.getName() ), sc,
-                                     jClass, "element", "childElement" );
+                                     "element", "childElement", uncapClassName );
             }
         }
 
@@ -312,19 +406,7 @@ public class Dom4jReaderGenerator
 
         sc.add( "Node node = (Node) i.next();" );
 
-        sc.add( "if ( node.getNodeType() != Node.ELEMENT_NODE )" );
-        sc.add( "{" );
-        sc.indent();
-
-        // TODO: attach to model in some way
-
-        sc.unindent();
-        sc.add( "}" );
-        sc.add( "else" );
-        sc.add( "{" );
-        sc.indent();
-
-        sc.add( "Element childElement = (Element) node;" );
+        addNodeProcessingCode( sc, "node", "childElement", uncapClassName );
 
         String statement = "if";
 
@@ -336,7 +418,7 @@ public class Dom4jReaderGenerator
 
             if ( !fieldMetadata.isAttribute() )
             {
-                processField( fieldMetadata, field, statement, sc, uncapClassName, modelClass, jClass );
+                processField( fieldMetadata, field, statement, sc, uncapClassName, modelClass );
 
                 statement = "else if";
             }
@@ -381,8 +463,41 @@ public class Dom4jReaderGenerator
         jClass.addMethod( unmarshall );
     }
 
+    private void addNodeProcessingCode( JSourceCode sc, String nodeVariableName, String newElementName,
+                                        String uncapClassName )
+    {
+        // TODO: CDATA?
+
+        sc.add( "if ( " + nodeVariableName + ".getNodeType() == Node.TEXT_NODE )" );
+        sc.add( "{" );
+        sc.indent();
+
+        sc.add( uncapClassName + ".__addTextProcessing__( " + nodeVariableName + ".getText(), " + nodeVariableName +
+            ".getPath( element ) );" );
+
+        sc.unindent();
+        sc.add( "}" );
+        sc.add( "else if ( " + nodeVariableName + ".getNodeType() == Node.COMMENT_NODE )" );
+        sc.add( "{" );
+        sc.indent();
+
+        sc.add( uncapClassName + ".__addCommentProcessing__( " + nodeVariableName + ".getText(), " + nodeVariableName +
+            ".getPath( element ) );" );
+
+        sc.unindent();
+        sc.add( "}" );
+        sc.add( "else if ( " + nodeVariableName + ".getNodeType() == Node.ELEMENT_NODE )" );
+        sc.add( "{" );
+        sc.indent();
+
+        sc.add( uncapClassName + ".__addElementProcessing__( " + nodeVariableName + ".getText(), " + nodeVariableName +
+            ".getPath( element ) );" );
+
+        sc.add( "Element " + newElementName + " = (Element) " + nodeVariableName + ";" );
+    }
+
     private void processField( XmlFieldMetadata fieldMetadata, ModelField field, String statement, JSourceCode sc,
-                               String uncapClassName, ModelClass modelClass, JClass jClass )
+                               String uncapClassName, ModelClass modelClass )
     {
         String tagName = fieldMetadata.getTagName();
 
@@ -466,22 +581,7 @@ public class Dom4jReaderGenerator
 
                         sc.add( "Node n = (Node) j.next();" );
 
-                        sc.add( "if ( n.getNodeType() != Node.ELEMENT_NODE )" );
-
-                        sc.add( "{" );
-                        sc.indent();
-
-                        // TODO: track the whitespace in the model
-
-                        sc.unindent();
-                        sc.add( "}" );
-
-                        sc.add( "else" );
-
-                        sc.add( "{" );
-                        sc.indent();
-
-                        sc.add( "Element listElement = (Element) n;" );
+                        addNodeProcessingCode( sc, "n", "listElement", uncapClassName );
 
                         sc.add( "if ( listElement.getName().equals( \"" + singularTagName + "\" ) )" );
 
@@ -523,8 +623,8 @@ public class Dom4jReaderGenerator
                     }
                     else
                     {
-                        writePrimitiveField( association, association.getTo(), associationName, "add", sc, jClass,
-                                             "childElement", "listElement" );
+                        writePrimitiveField( association, association.getTo(), associationName, "add", sc,
+                                             "childElement", "listElement", uncapClassName );
                     }
 
                     if ( wrappedList )
@@ -587,22 +687,7 @@ public class Dom4jReaderGenerator
 
                         sc.add( "Node n = (Node) j.next();" );
 
-                        sc.add( "if ( n.getNodeType() != Node.ELEMENT_NODE )" );
-
-                        sc.add( "{" );
-                        sc.indent();
-
-                        // TODO: track the whitespace in the model
-
-                        sc.unindent();
-                        sc.add( "}" );
-
-                        sc.add( "else" );
-
-                        sc.add( "{" );
-                        sc.indent();
-
-                        sc.add( "Element listElement = (Element) n;" );
+                        addNodeProcessingCode( sc, "n", "listElement", uncapClassName );
 
                         sc.add( "if ( listElement.getName().equals( \"" + singularTagName + "\" ) )" );
 
@@ -624,22 +709,7 @@ public class Dom4jReaderGenerator
 
                         sc.add( "Node nd = (Node) k.next();" );
 
-                        sc.add( "if ( nd.getNodeType() != Node.ELEMENT_NODE )" );
-
-                        sc.add( "{" );
-                        sc.indent();
-
-                        // TODO: track the whitespace in the model
-
-                        sc.unindent();
-                        sc.add( "}" );
-
-                        sc.add( "else" );
-
-                        sc.add( "{" );
-                        sc.indent();
-
-                        sc.add( "Element propertyElement = (Element) nd;" );
+                        addNodeProcessingCode( sc, "nd", "propertyElement", uncapClassName );
 
                         sc.add( "if ( propertyElement.getName().equals( \"key\" ) )" );
 
@@ -716,22 +786,7 @@ public class Dom4jReaderGenerator
 
                         sc.add( "Node n = (Node) j.next();" );
 
-                        sc.add( "if ( n.getNodeType() != Node.ELEMENT_NODE )" );
-
-                        sc.add( "{" );
-                        sc.indent();
-
-                        // TODO: track the whitespace in the model
-
-                        sc.unindent();
-                        sc.add( "}" );
-
-                        sc.add( "else" );
-
-                        sc.add( "{" );
-                        sc.indent();
-
-                        sc.add( "Element listElement = (Element) n;" );
+                        addNodeProcessingCode( sc, "n", "listElement", uncapClassName );
 
                         sc.add( "String key = listElement.getName();" );
 
@@ -773,7 +828,7 @@ public class Dom4jReaderGenerator
 
             //ModelField
             writePrimitiveField( field, field.getType(), uncapClassName, "set" + capitalise( field.getName() ), sc,
-                                 jClass, "element", "childElement" );
+                                 "element", "childElement", uncapClassName );
 
             sc.unindent();
 
@@ -799,7 +854,8 @@ public class Dom4jReaderGenerator
     }
 
     private void writePrimitiveField( ModelField field, String type, String objectName, String setterName,
-                                      JSourceCode sc, JClass jClass, String parentElementName, String childElementName )
+                                      JSourceCode sc, String parentElementName, String childElementName,
+                                      String uncapClassName )
     {
         XmlFieldMetadata fieldMetaData = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
 
@@ -878,7 +934,8 @@ public class Dom4jReaderGenerator
         }
         else if ( "DOM".equals( type ) )
         {
-            sc.add( objectName + "." + setterName + "( writeElementToXpp3Dom( " + childElementName + " ) );" );
+            sc.add( objectName + "." + setterName + "( writeElementToXpp3Dom( " + childElementName +
+                ", element, new MavenProcessingWrappedObject( " + uncapClassName + " ) ) );" );
         }
         else
         {
@@ -998,7 +1055,7 @@ public class Dom4jReaderGenerator
 
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
         method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
-        method.addParameter( new JParameter( JClass.Boolean, "strict" ) );
+        method.addParameter( new JParameter( JType.Boolean, "strict" ) );
         method.addException( new JClass( "DocumentException" ) );
 
         sc = method.getSourceCode();
@@ -1011,7 +1068,7 @@ public class Dom4jReaderGenerator
 
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
         method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
-        method.addParameter( new JParameter( JClass.Boolean, "strict" ) );
+        method.addParameter( new JParameter( JType.Boolean, "strict" ) );
         method.addException( new JClass( "DocumentException" ) );
 
         sc = method.getSourceCode();
@@ -1024,7 +1081,7 @@ public class Dom4jReaderGenerator
 
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
         method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
-        method.addParameter( new JParameter( JClass.Boolean, "strict" ) );
+        method.addParameter( new JParameter( JType.Boolean, "strict" ) );
         method.addException( new JClass( "DocumentException" ) );
 
         sc = method.getSourceCode();
@@ -1037,7 +1094,7 @@ public class Dom4jReaderGenerator
 
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
         method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
-        method.addParameter( new JParameter( JClass.Boolean, "strict" ) );
+        method.addParameter( new JParameter( JType.Boolean, "strict" ) );
         method.addException( new JClass( "DocumentException" ) );
 
         sc = method.getSourceCode();
@@ -1050,7 +1107,7 @@ public class Dom4jReaderGenerator
 
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
         method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
-        method.addParameter( new JParameter( JClass.Boolean, "strict" ) );
+        method.addParameter( new JParameter( JType.Boolean, "strict" ) );
         method.addException( new JClass( "DocumentException" ) );
 
         sc = method.getSourceCode();
@@ -1107,22 +1164,26 @@ public class Dom4jReaderGenerator
 
         method = new JMethod( new JClass( "Xpp3Dom" ), "writeElementToXpp3Dom" );
 
-        method.addParameter( new JParameter( new JClass( "Element" ), "element" ) );
+        method.addParameter( new JParameter( new JClass( "Element" ), "rootElement" ) );
+        method.addParameter( new JParameter( new JClass( "Element" ), "baseElement" ) );
+        method.addParameter( new JParameter( new JClass( "MavenProcessingWrappedObject" ), "wrapper" ) );
 
         sc = method.getSourceCode();
 
-        sc.add( "Xpp3Dom xpp3Dom = new Xpp3Dom( element.getName() );" );
+        sc.add( "Xpp3Dom xpp3Dom = new Xpp3Dom( rootElement.getName() );" );
 
-        sc.add( "if ( element.elements().isEmpty() && element.getText() != null )" );
+        sc.add( "Element element = baseElement;");
+
+        sc.add( "if ( rootElement.elements().isEmpty() && rootElement.getText() != null )" );
         sc.add( "{" );
         sc.indent();
 
-        sc.add( "xpp3Dom.setValue( element.getText() );" );
+        sc.add( "xpp3Dom.setValue( rootElement.getText() );" );
 
         sc.unindent();
         sc.add( "}" );
 
-        sc.add( "for ( Iterator i = element.attributeIterator(); i.hasNext(); )" );
+        sc.add( "for ( Iterator i = rootElement.attributeIterator(); i.hasNext(); )" );
         sc.add( "{" );
         sc.indent();
 
@@ -1132,14 +1193,18 @@ public class Dom4jReaderGenerator
         sc.unindent();
         sc.add( "}" );
 
-        // TODO: would be nice to track whitespace in here
-
-        sc.add( "for ( Iterator i = element.elementIterator(); i.hasNext(); )" );
+        sc.add( "for ( Iterator i = rootElement.nodeIterator(); i.hasNext(); )" );
         sc.add( "{" );
         sc.indent();
 
-        sc.add( "Element child = (Element) i.next();" );
-        sc.add( "xpp3Dom.addChild( writeElementToXpp3Dom( child ) );" );
+        sc.add( "Node child = (Node) i.next();" );
+
+        addNodeProcessingCode( sc, "child", "e", "wrapper" );
+
+        sc.add( "xpp3Dom.addChild( writeElementToXpp3Dom( e, baseElement, wrapper ) );" );
+
+        sc.unindent();
+        sc.add( "}" );
 
         sc.unindent();
         sc.add( "}" );

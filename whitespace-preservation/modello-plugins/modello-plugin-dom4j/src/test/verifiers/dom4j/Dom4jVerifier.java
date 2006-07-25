@@ -67,6 +67,28 @@ public class Dom4jVerifier
         verifyReaderDuplicates();
 
         verifyWriter();
+
+        verifyRewriter();
+    }
+
+    public void verifyRewriter()
+        throws IOException, DocumentException
+    {
+        String path = "src/test/verifiers/dom4j/expected-whitespace.xml";
+
+        FileReader reader = new FileReader( path );
+        MavenDom4jReader modelReader = new MavenDom4jReader();
+
+        Model model = modelReader.read( reader );
+
+        StringWriter w = new StringWriter();
+
+        MavenDom4jWriter modelWriter = new MavenDom4jWriter();
+        modelWriter.write( w, model );
+
+        String expectedContent = FileUtils.fileRead( path );
+
+        Assert.assertEquals( expectedContent, w.toString() );
     }
 
     public void verifyEncodedRead()
@@ -206,6 +228,10 @@ public class Dom4jVerifier
         repository.setId( "foo" );
         expected.addRepository( repository );
 
+        repository = new Repository();
+        repository.setId( "bar" );
+        expected.addRepository( repository );
+
         TypeTester typeTester = new TypeTester();
         typeTester.setC( 'v' );
         typeTester.setI( 1 );
@@ -234,10 +260,6 @@ public class Dom4jVerifier
         writer.write( buffer, expected );
 
         String actualXml = buffer.toString();
-
-//        System.out.println( expectedXml );
-//
-//        System.err.println( actualXml );
 
         Assert.assertEquals( expectedXml.trim(), actualXml.trim() );
 

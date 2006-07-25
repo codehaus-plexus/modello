@@ -250,21 +250,9 @@ public class JavaModelloGenerator
                 }
             }
 
-            StringBuffer encodingStuff = new StringBuffer();
+            addEncodingFieldsAndMethods( jClass );
 
-            encodingStuff.append( "\n    private String modelEncoding = \"UTF-8\";" );
-            encodingStuff.append( "\n" );
-            encodingStuff.append( "\n    public void setModelEncoding( String modelEncoding )" );
-            encodingStuff.append( "\n    {" );
-            encodingStuff.append( "\n        this.modelEncoding = modelEncoding;" );
-            encodingStuff.append( "\n    }" );
-            encodingStuff.append( "\n" );
-            encodingStuff.append( "\n    public String getModelEncoding()" );
-            encodingStuff.append( "\n    {" );
-            encodingStuff.append( "\n        return modelEncoding;" );
-            encodingStuff.append( "\n    }" );
-
-            jClass.addSourceCode( encodingStuff.toString() );
+            addProcessingFieldsAndMethods( jClass );
 
             jClass.print( sourceWriter );
 
@@ -272,6 +260,109 @@ public class JavaModelloGenerator
 
             writer.close();
         }
+    }
+
+    private void addProcessingFieldsAndMethods( JClass jClass )
+    {
+        JField processing = new JField( new JClass( "java.util.List" ), "__processingOrder" );
+        jClass.addField( processing );
+
+        JField textProcessing = new JField( new JClass( "java.util.Map" ), "__processingText" );
+        jClass.addField( textProcessing );
+
+        JField elementProcessing = new JField( new JClass( "java.util.Map" ), "__processingElements" );
+        jClass.addField( elementProcessing );
+
+        JField comments = new JField( new JClass( "java.util.Map" ), "__processingComments" );
+        jClass.addField( comments );
+
+        JField enabled = new JField( JType.Boolean, "__enableProcessing" );
+        jClass.addField( enabled );
+
+        JMethod method = new JMethod( "__addCommentProcessing__" );
+        method.addParameter( new JParameter( new JClass( "String" ), "text" ) );
+        method.addParameter( new JParameter( new JClass( "String" ), "path" ) );
+        writeProcessingMethod( method.getSourceCode(), "__processingComments" );
+        jClass.addMethod( method );
+
+        method = new JMethod( "__addTextProcessing__" );
+        method.addParameter( new JParameter( new JClass( "String" ), "text" ) );
+        method.addParameter( new JParameter( new JClass( "String" ), "path" ) );
+        writeProcessingMethod( method.getSourceCode(), "__processingText" );
+        jClass.addMethod( method );
+
+        method = new JMethod( "__addElementProcessing__" );
+        method.addParameter( new JParameter( new JClass( "String" ), "text" ) );
+        method.addParameter( new JParameter( new JClass( "String" ), "path" ) );
+        writeProcessingMethod( method.getSourceCode(), "__processingElements" );
+        jClass.addMethod( method );
+
+        method = new JMethod( JType.Boolean, "__isEnableProcessing__" );
+        method.setSourceCode( "return __enableProcessing;" );
+        jClass.addMethod( method );
+
+        method = new JMethod( new JClass( "java.util.List" ), "__getProcessingOrder__" );
+        method.setSourceCode( "return __processingOrder;" );
+        jClass.addMethod( method );
+
+        method = new JMethod( new JClass( "java.util.Map" ), "__getProcessingElements__" );
+        method.setSourceCode( "return __processingElements;" );
+        jClass.addMethod( method );
+
+        method = new JMethod( new JClass( "java.util.Map" ), "__getProcessingComments__" );
+        method.setSourceCode( "return __processingComments;" );
+        jClass.addMethod( method );
+
+        method = new JMethod( new JClass( "java.util.Map" ), "__getProcessingText__" );
+        method.setSourceCode( "return __processingText;" );
+        jClass.addMethod( method );
+
+        method = new JMethod( "__enableProcessing__" );
+        method.getSourceCode().add( "__enableProcessing = true;" );
+        method.getSourceCode().add( "__processingText = new java.util.HashMap();" );
+        method.getSourceCode().add( "__processingComments = new java.util.HashMap();" );
+        method.getSourceCode().add( "__processingElements = new java.util.HashMap();" );
+        method.getSourceCode().add( "__processingOrder = new java.util.ArrayList();" );
+        jClass.addMethod( method );
+
+        method = new JMethod( "__disableProcessing__" );
+        method.getSourceCode().add( "__enableProcessing = false;" );
+        method.getSourceCode().add( "__processingText = null;" );
+        method.getSourceCode().add( "__processingComments = null;" );
+        method.getSourceCode().add( "__processingElements = null;" );
+        method.getSourceCode().add( "__processingOrder = null;" );
+        jClass.addMethod( method );
+    }
+
+    private void writeProcessingMethod( JSourceCode sc, String field )
+    {
+        sc.add( "int count = 0;" );
+        sc.add( "String key = path + '/' + count;" );
+        sc.add( "while ( " + field + ".containsKey( key ) )" );
+        sc.add( "{" );
+        sc.indent();
+        sc.add( "count++;" );
+        sc.add( "key = path + '/' + count;" );
+        sc.unindent();
+        sc.add( "}" );
+        sc.add( field + ".put( key, text );" );
+        sc.add( "__processingOrder.add( key );" );
+    }
+
+    private void addEncodingFieldsAndMethods( JClass jClass )
+    {
+        JField modelEncoding = new JField( new JClass( "String" ), "modelEncoding" );
+        modelEncoding.setInitString( "\"UTF-8\"" );
+        jClass.addField( modelEncoding );
+
+        JMethod setter = new JMethod( "setModelEncoding" );
+        setter.addParameter( new JParameter( new JClass( "String" ), "modelEncoding" ) );
+        setter.setSourceCode( "this.modelEncoding = modelEncoding;" );
+        jClass.addMethod( setter );
+
+        JMethod getter = new JMethod( new JClass( "String" ), "getModelEncoding" );
+        getter.setSourceCode( "return modelEncoding;" );
+        jClass.addMethod( getter );
     }
 
     private JMethod generateEquals( ModelClass modelClass )

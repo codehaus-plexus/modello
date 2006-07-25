@@ -166,7 +166,24 @@ public class Dom4jWriterGenerator
         // TODO: pretty printing optional
         sc.add( "OutputFormat format = OutputFormat.createPrettyPrint();" );
         sc.add( "format.setLineSeparator( System.getProperty( \"line.separator\" ) );" );
-        sc.add( "XMLWriter serializer = new XMLWriter( writer, format );" );
+        sc.add( "XMLWriter serializer;" );
+
+        sc.add( "if ( " + rootElement + ".__isEnableProcessing__() )" );
+        sc.add( "{" );
+        sc.indent();
+
+        sc.add( "serializer = new XMLWriter( writer, format );" );
+
+        sc.unindent();
+        sc.add( "}" );
+        sc.add( "else" );
+        sc.add( "{" );
+        sc.indent();
+
+        sc.add( "serializer = new XMLWriter( writer, OutputFormat.createPrettyPrint() );" );
+
+        sc.unindent();
+        sc.add( "}" );
 
         sc.add( "serializer.write( document );" );
 
@@ -267,6 +284,138 @@ public class Dom4jWriterGenerator
             }
         }
 
+        sc.add( "if ( " + uncapClassName + ".__isEnableProcessing__() )" );
+        sc.add( "{" );
+        sc.indent();
+
+        sc.add( "java.util.List __list = " + uncapClassName + ".__getProcessingOrder__();" );
+        addProcessingForLoopIntroCode( sc, uncapClassName, "__i", "__list" );
+
+        // An element
+
+        // peek ahead for more whitespace
+        sc.add( "java.util.List __p = new java.util.ArrayList();" );
+        sc.add( "for ( int __j = __i + 1; __j < __list.size(); __j++, __i++ )" );
+        sc.add( "{" );
+        sc.indent();
+
+        sc.add( "String s = (String) __list.get( __j );" );
+        sc.add( "if ( !s.startsWith( __listName + \"/\" ) )" );
+        sc.add( "{" );
+        sc.indent();
+
+        sc.add( "break;" );
+
+        sc.unindent();
+        sc.add( "}" );
+
+        sc.add( "__p.add( s );" );
+
+        sc.unindent();
+        sc.add( "}" );
+
+        processFields( modelClass, uncapClassName, sc, true );
+
+        sc.unindent();
+        sc.add( "}" );
+
+        sc.unindent();
+        sc.add( "}" );
+
+        sc.unindent();
+        sc.add( "}" );
+
+        sc.add( "else" );
+        sc.add( "{" );
+        sc.indent();
+
+        processFields( modelClass, uncapClassName, sc, false );
+
+        sc.unindent();
+        sc.add( "}" );
+
+        sc.unindent();
+        sc.add( "}" );
+
+        jClass.addMethod( marshall );
+    }
+
+    private void addProcessingForLoopIntroCode( JSourceCode sc, String uncapClassName, String loopVarName,
+                                                String processingListVar )
+    {
+        sc.add( "System.out.println( " + uncapClassName + " + \"-> \" + " + processingListVar + " );" ); // TODO
+        sc.add( "for ( int " + loopVarName + " = 0; " + loopVarName + " < " + processingListVar + ".size(); " +
+            loopVarName + "++ )" );
+        sc.add( "{" );
+        sc.indent();
+
+        String beginVar = processingListVar + "BeginIndex";
+        String endVar = processingListVar + "EndIndex";
+        String keyVar = processingListVar + "Key";
+        String nameVar = processingListVar + "Name";
+        sc.add( "String " + keyVar + " = (String) " + processingListVar + ".get( " + loopVarName + " );" );
+        sc.add( "int " + endVar + " = " + keyVar + ".lastIndexOf( '/' );" );
+        sc.add( "int " + beginVar + " = " + keyVar + ".lastIndexOf( '/', " + endVar + " - 1 ) + 1;" );
+        sc.add( "String " + nameVar + " = " + keyVar + ".substring( " + beginVar + ", " + endVar + " );" );
+
+        sc.add( "if ( \"text()\".equals( " + nameVar + " ) )" );
+        sc.add( "{" );
+        sc.indent();
+
+        sc.add( "Element toElement = element;" );
+        sc.add( "if ( " + beginVar + " > 0 )" );
+        sc.add( "{" );
+        sc.indent();
+
+        sc.add( "String[] subNames = " + keyVar + ".substring( 0, " + beginVar + " - 1 ).split( \"/\" );" );
+        sc.add( "for ( int j = 0; j < subNames.length; j++ )" );
+        sc.add( "{" );
+        sc.indent();
+
+        sc.add( "System.out.println( \"element: \" + element.getPath() );" ); // TODO
+        sc.add( "System.out.println( \"begin: \" + " + beginVar + " );" ); // TODO
+        sc.add( "System.out.println( \"key: \" + " + keyVar + " );" ); // TODO
+        sc.add( "System.out.println( \"subNames: \" + subNames[j] );" ); // TODO
+        sc.add( "System.out.println( \"text: \" + " + uncapClassName + ".__getProcessingText__().get( " + keyVar +
+            " ));" ); // TODO
+        sc.add( "toElement = toElement.element( subNames[j] );" );
+
+        sc.unindent();
+        sc.add( "}" );
+
+        sc.unindent();
+        sc.add( "}" );
+
+        sc.add( "String text = (String) " + uncapClassName + ".__getProcessingText__().get( " + keyVar + " );" );
+        sc.add( "if ( text != null )" );           // TODO: check shouldn't be required
+        sc.add( "{" );
+        sc.indent();
+
+        sc.add( "toElement.addText( text );" );
+
+        sc.unindent();
+        sc.add( "}" );
+
+        sc.unindent();
+        sc.add( "}" );
+
+        sc.add( "else if ( \"comment()\".equals( " + nameVar + " ) )" );
+        sc.add( "{" );
+        sc.indent();
+
+        sc.add( "element.addComment( (String) " + uncapClassName + ".__getProcessingComments__().get( " + keyVar +
+            " ) );" );
+
+        sc.unindent();
+        sc.add( "}" );
+
+        sc.add( "else" );
+        sc.add( "{" );
+        sc.indent();
+    }
+
+    private void processFields( ModelClass modelClass, String uncapClassName, JSourceCode sc, boolean conditional )
+    {
         // XML tags
         for ( Iterator fieldIterator = modelClass.getAllFields( getGeneratedVersion(), true ).iterator();
               fieldIterator.hasNext(); )
@@ -277,19 +426,13 @@ public class Dom4jWriterGenerator
 
             if ( !fieldMetadata.isAttribute() )
             {
-                processField( field, fieldMetadata, uncapClassName, sc, modelClass, jClass );
+                processField( field, fieldMetadata, uncapClassName, sc, modelClass, conditional );
             }
         }
-
-        sc.unindent();
-
-        sc.add( "}" );
-
-        jClass.addMethod( marshall );
     }
 
     private void processField( ModelField field, XmlFieldMetadata fieldMetadata, String uncapClassName, JSourceCode sc,
-                               ModelClass modelClass, JClass jClass )
+                               ModelClass modelClass, boolean conditional )
     {
         JavaFieldMetadata javaFieldMetadata = (JavaFieldMetadata) field.getMetadata( JavaFieldMetadata.ID );
 
@@ -323,13 +466,24 @@ public class Dom4jWriterGenerator
                 sc.add( getValueChecker( type, value, association ) );
 
                 sc.add( "{" );
-
                 sc.indent();
+
+                if ( conditional )
+                {
+                    sc.add( "if ( \"" + fieldTagName + "\".equals( __listName ) )" );
+                    sc.add( "{" );
+                    sc.indent();
+                }
 
                 sc.add( "write" + association.getTo() + "( " + value + ", \"" + fieldTagName + "\", element );" );
 
-                sc.unindent();
+                if ( conditional )
+                {
+                    sc.unindent();
+                    sc.add( "}" );
+                }
 
+                sc.unindent();
                 sc.add( "}" );
             }
             else
@@ -347,40 +501,67 @@ public class Dom4jWriterGenerator
 
                     sc.indent();
 
-                    sc.add( "Element listElement = element;" );
-
-                    if ( wrappedList )
+                    if ( conditional )
                     {
-                        sc.add( "listElement = element.addElement( \"" + fieldTagName + "\" );" );
-                    }
+                        String comparison = wrappedList ? fieldTagName : singularTagName;
+                        sc.add( "if ( \"" + comparison + "\".equals( __listName ) )" );
+                        sc.add( "{" );
+                        sc.indent();
 
-                    sc.add( "for ( Iterator iter = " + value + ".iterator(); iter.hasNext(); )" );
+                        sc.add( "Element listElement = element;" );
 
-                    sc.add( "{" );
+                        if ( wrappedList )
+                        {
+                            sc.add( "listElement = element.addElement( \"" + fieldTagName + "\" );" );
 
-                    sc.indent();
+                            addProcessingForLoopIntroCode( sc, uncapClassName, "iter", "__p" );
 
-                    if ( isClassInModel( association.getTo(), modelClass.getModel() ) )
-                    {
-                        sc.add( toType + " o = (" + toType + ") iter.next();" );
+                            // element
+                            sc.add(
+                                "int __index = Integer.valueOf( __pKey.substring( __pEndIndex + 1 ) ).intValue();" );
+                            String getter = value + ".get( __index );";
+                            writeCodeForListItem( association, modelClass, sc, toType, getter, singularTagName, field );
 
-                        sc.add( "write" + toType + "( o, \"" + singularTagName + "\", listElement );" );
+                            sc.unindent();
+                            sc.add( "}" );
+
+                            sc.unindent();
+                            sc.add( "}" );
+
+                        }
+                        else
+                        {
+                            sc.add(
+                                "int __index = Integer.valueOf( __listKey.substring( __listEndIndex + 1 ) ).intValue();" );
+                            String getter = value + ".get( __index );";
+                            writeCodeForListItem( association, modelClass, sc, toType, getter, singularTagName, field );
+                        }
+
+                        sc.unindent();
+                        sc.add( "}" );
                     }
                     else
                     {
-                        sc.add( toType + " " + singular( uncapitalise( field.getName() ) ) + " = (" + toType +
-                            ") iter.next();" );
+                        sc.add( "Element listElement = element;" );
 
-                        sc.add( "listElement.addElement( \"" + singularTagName + "\" ).setText( " +
-                            singular( uncapitalise( field.getName() ) ) + " );" );
+                        if ( wrappedList )
+                        {
+                            sc.add( "listElement = element.addElement( \"" + fieldTagName + "\" );" );
+                        }
+
+                        sc.add( "for ( Iterator iter = " + value + ".iterator(); iter.hasNext(); )" );
+                        sc.add( "{" );
+                        sc.indent();
+
+                        String getter = "iter.next();";
+
+                        writeCodeForListItem( association, modelClass, sc, toType, getter, singularTagName, field );
+
+                        sc.unindent();
+                        sc.add( "}" );
                     }
 
                     sc.unindent();
-
-                    sc.add( "}" );
-
-                    sc.unindent();
-
                     sc.add( "}" );
                 }
                 else
@@ -393,8 +574,14 @@ public class Dom4jWriterGenerator
                     sc.add( getValueChecker( type, value, field ) );
 
                     sc.add( "{" );
-
                     sc.indent();
+
+                    if ( conditional )
+                    {
+                        sc.add( "if ( \"" + fieldTagName + "\".equals( __listName ) )" );
+                        sc.add( "{" );
+                        sc.indent();
+                    }
 
                     sc.add( "Element listElement = element;" );
 
@@ -403,34 +590,90 @@ public class Dom4jWriterGenerator
                         sc.add( "listElement = element.addElement( \"" + fieldTagName + "\" );" );
                     }
 
-                    sc.add( "for ( Iterator iter = " + value + ".keySet().iterator(); iter.hasNext(); )" );
-
-                    sc.add( "{" );
-
-                    sc.indent();
-
-                    sc.add( "String key = (String) iter.next();" );
-
-                    sc.add( "String value = (String) " + value + ".get( key );" );
-
-                    if ( XmlAssociationMetadata.EXPLODE_MODE.equals( xmlAssociationMetadata.getMapStyle() ) )
+                    if ( conditional )
                     {
-                        sc.add( "Element assocElement = listElement.addElement( \"" + singular( associationName ) +
-                            "\" );" );
-                        sc.add( "assocElement.addElement( \"key\" ).setText( key );" );
-                        sc.add( "assocElement.addElement( \"value\" ).setText( value );" );
+                        sc.add( "Element assocElement = listElement;" );
+                        sc.add( "String key = null;" );
+                        addProcessingForLoopIntroCode( sc, uncapClassName, "iter", "__p" );
+
+                        // an element was encountered
+                        if ( XmlAssociationMetadata.EXPLODE_MODE.equals( xmlAssociationMetadata.getMapStyle() ) )
+                        {
+                            sc.add( "if ( __pBeginIndex == __listName.length() + 1 )" );
+                            sc.add( "{" );
+                            sc.indent();
+
+                            sc.add(
+                                "assocElement = listElement.addElement( \"" + singular( associationName ) + "\" );" );
+                            sc.add( "key = null;" );
+
+                            sc.unindent();
+                            sc.add( "}" );
+                            sc.add( "else if ( \"key\".equals( __pName ) )" );
+                            sc.add( "{" );
+                            sc.indent();
+
+                            sc.add(
+                                "key = (String) " + uncapClassName + ".__getProcessingElements__().get( __pKey );" );
+                            sc.add( "assocElement.addElement( \"key\" ).setText( key );" );
+
+                            sc.unindent();
+                            sc.add( "}" );
+                            sc.add( "else if ( \"value\".equals( __pName ) )" );
+                            sc.add( "{" );
+                            sc.indent();
+
+                            sc.add( "String value = (String) " + value + ".get( key );" );
+                            sc.add( "assocElement.addElement( \"value\" ).setText( value );" );
+
+                            sc.unindent();
+                            sc.add( "}" );
+                        }
+                        else
+                        {
+                            sc.add( "String value = (String) " + value + ".get( __pName );" );
+                            sc.add( "listElement.addElement( __pName ).setText( value );" );
+                        }
+
+                        sc.unindent();
+                        sc.add( "}" );
+
+                        sc.unindent();
+                        sc.add( "}" );
                     }
                     else
                     {
-                        sc.add( "listElement.addElement( key ).setText( value );" );
+                        sc.add( "for ( Iterator iter = " + value + ".keySet().iterator(); iter.hasNext(); )" );
+
+                        sc.add( "{" );
+                        sc.indent();
+
+                        sc.add( "String key = (String) iter.next();" );
+
+                        sc.add( "String value = (String) " + value + ".get( key );" );
+
+                        if ( XmlAssociationMetadata.EXPLODE_MODE.equals( xmlAssociationMetadata.getMapStyle() ) )
+                        {
+                            sc.add( "Element assocElement = listElement.addElement( \"" + singular( associationName ) +
+                                "\" );" );
+                            sc.add( "assocElement.addElement( \"key\" ).setText( key );" );
+                            sc.add( "assocElement.addElement( \"value\" ).setText( value );" );
+                        }
+                        else
+                        {
+                            sc.add( "listElement.addElement( key ).setText( value );" );
+                        }
+
+                        sc.unindent();
+                        sc.add( "}" );
+                    }
+                    if ( conditional )
+                    {
+                        sc.unindent();
+                        sc.add( "}" );
                     }
 
                     sc.unindent();
-
-                    sc.add( "}" );
-
-                    sc.unindent();
-
                     sc.add( "}" );
                 }
             }
@@ -440,12 +683,76 @@ public class Dom4jWriterGenerator
             sc.add( getValueChecker( type, value, field ) );
 
             sc.add( "{" );
-
             sc.indent();
+
+            if ( conditional )
+            {
+                sc.add( "if ( \"" + fieldTagName + "\".equals( __listName ) )" );
+                sc.add( "{" );
+                sc.indent();
+            }
 
             if ( "DOM".equals( field.getType() ) )
             {
-                sc.add( "writeXpp3DomToElement( (Xpp3Dom) " + value + ", element );" );
+                if ( conditional )
+                {
+                    sc.add( "System.out.println( __listName + \"-> \" + __p );" ); // TODO
+
+                    sc.add( "java.util.List __v = new java.util.ArrayList( __p.size() );" );
+                    sc.add( "for ( Iterator iter = __p.iterator(); iter.hasNext(); )" );
+                    sc.add( "{" );
+                    sc.indent();
+
+                    sc.add( "String path = (String) iter.next();" );
+                    sc.add( "__v.add( path.substring( path.indexOf( '/' ) + 1 ) );" );
+                    sc.add( "System.out.println( \"path: '\" + path ); " ); // TODO
+                    sc.add( "System.out.println( \"text: '\" + " + uncapClassName +
+                        ".__getProcessingText__().get( path ) + \"'\");" ); // TODO
+
+                    sc.unindent();
+                    sc.add( "}" );
+
+                    sc.add( "Xpp3Dom rootDom = (Xpp3Dom) " + value + ";" );
+                    sc.add( "Element subElement = writeXpp3DomToElementNonRecursive( rootDom, element );" );
+
+                    addProcessingForLoopIntroCode( sc, uncapClassName, "iter", "__v" );
+
+                    sc.add( "System.out.println( \"Processing: \" + __vKey + \"; \" + __vBeginIndex );" );
+                    // handle element
+                    sc.add( "Xpp3Dom childDom = rootDom;" );
+                    sc.add( "Element toElement = subElement;" );
+                    sc.add( "if ( __vBeginIndex > 0 )" );
+                    sc.add( "{" );
+                    sc.indent();
+
+                    sc.add( "String[] subNames = __vKey.substring( 0, __vBeginIndex - 1 ).split( \"/\" );" );
+                    sc.add( "for ( int si = 0; si < subNames.length; si++ )" );
+                    sc.add( "{" );
+                    sc.indent();
+
+                    // TODO: this isn't very deterministic, there may be multiple
+                    sc.add( "childDom = childDom.getChild( subNames[si] );" );
+                    sc.add( "toElement = toElement.element( subNames[si] );" );
+
+                    sc.unindent();
+                    sc.add( "}" );
+
+                    sc.unindent();
+                    sc.add( "}" );
+
+                    sc.add( "System.out.println( \"adding: \" + __vName + \" from: \" + childDom.getName() + \" to: \" + toElement.getName() );" );
+                    sc.add( "writeXpp3DomToElementNonRecursive( childDom.getChild( __vName ), toElement );" );
+
+                    sc.unindent();
+                    sc.add( "}" );
+
+                    sc.unindent();
+                    sc.add( "}" );
+                }
+                else
+                {
+                    sc.add( "writeXpp3DomToElement( (Xpp3Dom) " + value + ", element );" );
+                }
             }
             else
             {
@@ -453,9 +760,32 @@ public class Dom4jWriterGenerator
                     getValue( field.getType(), value ) + " );" );
             }
 
-            sc.unindent();
+            if ( conditional )
+            {
+                sc.unindent();
+                sc.add( "}" );
+            }
 
+            sc.unindent();
             sc.add( "}" );
+        }
+    }
+
+    private void writeCodeForListItem( ModelAssociation association, ModelClass modelClass, JSourceCode sc,
+                                       String toType, String getter, String singularTagName, ModelField field )
+    {
+        if ( isClassInModel( association.getTo(), modelClass.getModel() ) )
+        {
+            sc.add( toType + " o = (" + toType + ") " + getter );
+
+            sc.add( "write" + toType + "( o, \"" + singularTagName + "\", listElement );" );
+        }
+        else
+        {
+            sc.add( toType + " " + singular( uncapitalise( field.getName() ) ) + " = (" + toType + ") " + getter );
+
+            sc.add( "listElement.addElement( \"" + singularTagName + "\" ).setText( " +
+                singular( uncapitalise( field.getName() ) ) + " );" );
         }
     }
 
@@ -523,7 +853,7 @@ public class Dom4jWriterGenerator
 
     private void writeHelpers( JClass jClass )
     {
-        JMethod method = new JMethod( null, "writeXpp3DomToElement" );
+        JMethod method = new JMethod( new JClass( "Element" ), "writeXpp3DomToElementNonRecursive" );
 
         method.addParameter( new JParameter( new JClass( "Xpp3Dom" ), "xpp3Dom" ) );
 
@@ -551,6 +881,20 @@ public class Dom4jWriterGenerator
 
         sc.unindent();
         sc.add( "}" );
+
+        sc.add( "return element;" );
+
+        jClass.addMethod( method );
+
+        method = new JMethod( null, "writeXpp3DomToElement" );
+
+        method.addParameter( new JParameter( new JClass( "Xpp3Dom" ), "xpp3Dom" ) );
+
+        method.addParameter( new JParameter( new JClass( "Element" ), "parentElement" ) );
+
+        sc = method.getSourceCode();
+
+        sc.add( "Element element = writeXpp3DomToElementNonRecursive( xpp3Dom, parentElement );" );
 
         sc.add( "for ( Iterator i = Arrays.asList( xpp3Dom.getChildren() ).iterator(); i.hasNext(); )" );
         sc.add( "{" );

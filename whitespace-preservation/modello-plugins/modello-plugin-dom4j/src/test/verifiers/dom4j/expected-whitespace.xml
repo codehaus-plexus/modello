@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+    <!-- comment 1 -->
+<mavenModel extender="/foo/bar" modelVersion="4.0.0">
+
+  <!-- comment 2 -->
+  <name>Maven</name>
+  <component>
+    <name>component1</name>
+    <!--
+      comment 3
+      -->
+  </component>
+
+
+  <component>
+    <name>component3</name>
+    <custom>
+      <foo>bar</foo>
+      <bar att1="value">baz</bar>
+      <el1>
+
+        <el2>text</el2>
+
+      </el1>
+    </custom>
+
+    <properties>
+      <!-- 1 -->
+      <property>
+        <!-- 2 -->
+        <value>val</value>
+        <key>k</key>
+        <!-- 3 -->
+      </property>
+      <!-- 4 -->
+    </properties>
+
+    <flatProperties>
+      <!-- 1 -->
+
+      <name>val</name>
+      <!-- 2 -->
+
+    </flatProperties>
+  </component>
+
+  <mailingLists>
+    <!-- the lists is empty -->
+  </mailingLists>
+
+  <developers>
+    <developer>
+      <!-- dev 1 -->
+    </developer>
+
+    <developer>
+
+      <!-- dev2 -->
+    </developer>
+  </developers>
+
+  <!-- stays down here to test ordering -->
+  <typeTester>
+<c>v</c>
+    <i>1</i> <s>2</s> <l>3</l>
+    <f>4.5</f><d>5.6</d>
+    <date>Friday, 6 January 2006 12:00:00 AM EST</date>
+  </typeTester>
+
+</mavenModel>
+
