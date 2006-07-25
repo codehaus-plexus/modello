@@ -1,0 +1,22 @@
+<component-set>
+  <components>
+
+    <component>
+      <role>org.codehaus.modello.plugin.ModelloGenerator</role>
+      <role-hint>store</role-hint>
+      <implementation>org.codehaus.modello.plugin.store.StoreModelloGenerator</implementation>
+      <requirements>
+        <requirement>
+          <role>org.codehaus.plexus.velocity.VelocityComponent</role>
+        </requirement>
+      </requirements>
+    </component>
+
+    <component>
+      <role>org.codehaus.modello.metadata.MetadataPlugin</role>
+      <role-hint>store</role-hint>
+      <implementation>org.codehaus.modello.plugin.store.metadata.StoreMetadataPlugin</implementation>
+    </component>
+
+  </components>
+</component-set>
