@@ -94,7 +94,7 @@
     </developer>
   </developers>
   <scm>
-    <connection>scm:svn:https://svn.codehaus.org/modello/trunk</connection>
+    <connection>scm:svn:http://svn.codehaus.org/modello/trunk</connection>
     <developerConnection>scm:svn:https://svn.codehaus.org/modello/trunk</developerConnection>
     <url>http://svn.modello.codehaus.org/trunk</url>
   </scm>
@@ -150,53 +150,53 @@
       <dependency>
         <groupId>org.codehaus.modello</groupId>
         <artifactId>modello-core</artifactId>
-        <version>1.0-alpha-10-SNAPSHOT</version>
+        <version>1.0-alpha-11-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.modello</groupId>
         <artifactId>modello-test</artifactId>
-        <version>1.0-alpha-10-SNAPSHOT</version>
+        <version>1.0-alpha-11-SNAPSHOT</version>
         <scope>test</scope>
       </dependency>
       <dependency>
         <groupId>org.codehaus.modello</groupId>
         <artifactId>modello-plugin-prevayler</artifactId>
-        <version>1.0-alpha-10-SNAPSHOT</version>
+        <version>1.0-alpha-11-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.modello</groupId>
         <artifactId>modello-plugin-jpox</artifactId>
-        <version>1.0-alpha-10-SNAPSHOT</version>
+        <version>1.0-alpha-11-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.modello</groupId>
         <artifactId>modello-plugin-store</artifactId>
-        <version>1.0-alpha-10-SNAPSHOT</version>
+        <version>1.0-alpha-11-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.modello</groupId>
         <artifactId>modello-plugin-xdoc</artifactId>
-        <version>1.0-alpha-10-SNAPSHOT</version>
+        <version>1.0-alpha-11-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.modello</groupId>
         <artifactId>modello-plugin-xpp3</artifactId>
-        <version>1.0-alpha-10-SNAPSHOT</version>
+        <version>1.0-alpha-11-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.modello</groupId>
         <artifactId>modello-plugin-xml</artifactId>
-        <version>1.0-alpha-10-SNAPSHOT</version>
+        <version>1.0-alpha-11-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.modello</groupId>
         <artifactId>modello-plugin-xsd</artifactId>
-        <version>1.0-alpha-10-SNAPSHOT</version>
+        <version>1.0-alpha-11-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.modello</groupId>
         <artifactId>modello-plugin-jdom</artifactId>
-        <version>1.0-alpha-10-SNAPSHOT</version>
+        <version>1.0-alpha-11-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.apache.maven</groupId>
