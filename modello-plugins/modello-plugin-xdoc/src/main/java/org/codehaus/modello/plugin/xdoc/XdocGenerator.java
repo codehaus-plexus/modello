@@ -147,7 +147,7 @@ public class XdocGenerator
     }
 
     private void writeElementDescriptor( XMLWriter w, Model objectModel, ModelClass modelClass, ModelField field,
-                                         Set written )
+                                        Set written )
     {
         written.add( modelClass );
 
@@ -170,7 +170,7 @@ public class XdocGenerator
                     {
                         tagName = singular( tagName );
                     }
-                }                
+                }
             }
         }
         else
@@ -230,19 +230,45 @@ public class XdocGenerator
         {
             ModelField f = (ModelField) j.next();
 
+            XmlFieldMetadata fieldMetadata = (XmlFieldMetadata) f.getMetadata( XmlFieldMetadata.ID );
+
             w.startElement( "tr" );
 
             w.startElement( "td" );
 
             w.startElement( "code" );
 
-            w.writeText( f.getName() );
+            boolean flatAssociation = f instanceof ModelAssociation
+                && isClassInModel( ( (ModelAssociation) f ).getTo(), objectModel )
+                && XmlFieldMetadata.LIST_STYLE_FLAT.equals( fieldMetadata.getListStyle() );
+
+            if ( flatAssociation )
+            {
+
+                ModelAssociation association = (ModelAssociation) f;
+
+                ModelClass associationModelClass = objectModel.getClass( association.getTo(), getGeneratedVersion() );
+
+                w.writeText( uncapitalise( associationModelClass.getName() ) );
+
+            }
+            else
+            {
+
+                w.writeText( f.getName() );
+
+            }
 
             w.endElement();
 
             w.endElement();
 
             w.startElement( "td" );
+
+            if ( flatAssociation )
+            {
+                w.writeMarkup( "<b>List</b>  " );
+            }
 
             if ( f.getDescription() != null )
             {
@@ -298,6 +324,44 @@ public class XdocGenerator
         return fields;
     }
 
+    /**
+     * Return the child attribute fields of this class.
+     * @param objectModel global object model
+     * @param modelClass current class
+     * @return the list of attribute fields of this class
+     */
+    private List getAttributeFieldsForClass( Model objectModel, ModelClass modelClass )
+    {
+        List attributeFields = new ArrayList();
+        while ( modelClass != null )
+        {
+            List allFields = modelClass.getFields( getGeneratedVersion() );
+
+            Iterator allFieldsIt = allFields.iterator();
+
+            while ( allFieldsIt.hasNext() )
+            {
+                ModelField field = (ModelField) allFieldsIt.next();
+                XmlFieldMetadata fieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
+                if ( fieldMetadata.isAttribute() )
+                {
+                    attributeFields.add( field );
+                }
+            }
+
+            String superClass = modelClass.getSuperClass();
+            if ( superClass != null )
+            {
+                modelClass = objectModel.getClass( superClass, getGeneratedVersion() );
+            }
+            else
+            {
+                modelClass = null;
+            }
+        }
+        return attributeFields;
+    }
+
     private String getModelClassDescriptor( Model objectModel, ModelClass modelClass, ModelField field, int depth )
         throws ModelloRuntimeException
     {
@@ -327,7 +391,7 @@ public class XdocGenerator
                     {
                         tagName = singular( tagName );
                     }
-                }                
+                }
             }
         }
         else
@@ -346,14 +410,39 @@ public class XdocGenerator
 
         sb.append( "&lt;<a href=\"#class_" ).append( tagName ).append( "\">" ).append( tagName );
 
+        sb.append( "</a>" );
+
         List fields = getFieldsForClass( objectModel, modelClass );
+
+        List attributeFields = getAttributeFieldsForClass( objectModel, modelClass );
+
+        if ( attributeFields.size() > 0 )
+        {
+
+            for ( Iterator iter = attributeFields.iterator(); iter.hasNext(); )
+            {
+                ModelField f = (ModelField) iter.next();
+
+                sb.append( "  " );
+
+                sb.append( uncapitalise( f.getName() ) ).append( "=.." );
+            }
+
+            sb.append( " " );
+
+            fields.removeAll( attributeFields );
+
+        }
+
         if ( fields.size() > 0 )
         {
-            sb.append( "</a>&gt;\n" );
+            sb.append( "&gt;\n" );
 
             for ( Iterator iter = fields.iterator(); iter.hasNext(); )
             {
                 ModelField f = (ModelField) iter.next();
+
+                XmlFieldMetadata fieldMetadata = (XmlFieldMetadata) f.getMetadata( XmlFieldMetadata.ID );
 
                 ModelClass fieldModelClass;
 
@@ -361,32 +450,44 @@ public class XdocGenerator
                 {
                     ModelAssociation association = (ModelAssociation) f;
 
-                    if ( ModelAssociation.MANY_MULTIPLICITY.equals( association.getMultiplicity() ) )
+                    if ( XmlFieldMetadata.LIST_STYLE_FLAT.equals( fieldMetadata.getListStyle() ) )
                     {
-                        depth++;
+                        fieldModelClass = objectModel.getClass( association.getTo(), getGeneratedVersion() );
 
-                        for ( int i = 0; i < depth; i++ )
-                        {
-                            sb.append( "  " );
-                        }
+                        sb.append( getModelClassDescriptor( objectModel, fieldModelClass, f, depth + 1 ) );
 
-                        sb.append( "&lt;" ).append( uncapitalise( association.getName() ) ).append( "&gt;\n" );
                     }
 
-                    fieldModelClass = objectModel.getClass( association.getTo(), getGeneratedVersion() );
-
-                    sb.append( getModelClassDescriptor( objectModel, fieldModelClass, f, depth + 1 ) );
-
-                    if ( ModelAssociation.MANY_MULTIPLICITY.equals( association.getMultiplicity() ) )
+                    else
                     {
-                        for ( int i = 0; i < depth; i++ )
+
+                        if ( ModelAssociation.MANY_MULTIPLICITY.equals( association.getMultiplicity() ) )
                         {
-                            sb.append( "  " );
+                            depth++;
+
+                            for ( int i = 0; i < depth; i++ )
+                            {
+                                sb.append( "  " );
+                            }
+
+                            sb.append( "&lt;" ).append( uncapitalise( association.getName() ) ).append( "&gt;\n" );
                         }
 
-                        sb.append( "&lt;/" ).append( uncapitalise( association.getName() ) ).append( "&gt;\n" );
+                        fieldModelClass = objectModel.getClass( association.getTo(), getGeneratedVersion() );
 
-                        depth--;
+                        sb.append( getModelClassDescriptor( objectModel, fieldModelClass, f, depth + 1 ) );
+
+                        if ( ModelAssociation.MANY_MULTIPLICITY.equals( association.getMultiplicity() ) )
+                        {
+                            for ( int i = 0; i < depth; i++ )
+                            {
+                                sb.append( "  " );
+                            }
+
+                            sb.append( "&lt;/" ).append( uncapitalise( association.getName() ) ).append( "&gt;\n" );
+
+                            depth--;
+                        }
                     }
 
                 }
@@ -398,6 +499,7 @@ public class XdocGenerator
                     }
 
                     sb.append( "&lt;" ).append( uncapitalise( f.getName() ) ).append( "/&gt;\n" );
+
                 }
             }
 
@@ -410,7 +512,7 @@ public class XdocGenerator
         }
         else
         {
-            sb.append( "</a>/&gt;\n" );
+            sb.append( "/&gt;\n" );
         }
 
         return sb.toString();
