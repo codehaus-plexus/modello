@@ -557,13 +557,13 @@ public class JDOMWriterGenerator extends AbstractJDOMGenerator {
 //                        type = association.getType();
                         String toType = association.getTo();
                         if (toClass != null) {
-                            sc.add("iterate" + capitalise(toType) + "(innerCount, root, " + value + ");");
+                            sc.add("iterate" + capitalise(toType) + "(innerCount, root, " + value + 
+                                   ",\"" + field.getName() + "\",\"" + singular(fieldTagName) +  "\");");
                             createIterateMethod(field.getName(), toClass, singular(fieldTagName), jClass);
                             alwaysExisting.add(toClass);
                         } else {
                             //list of strings?
                             sc.add("findAndReplaceSimpleLists(innerCount, root, " +  value + ", \"" + fieldTagName + "\", \"" + singular(fieldTagName) + "\");");
-
                         }
                     } else {
                         //Map or Properties
@@ -573,12 +573,8 @@ public class JDOMWriterGenerator extends AbstractJDOMGenerator {
             } else {
                 if ( "DOM".equals( field.getType() ) ) {
                     sc.add("findAndReplaceXpp3DOM(innerCount, root, \"" + fieldTagName + "\", (Xpp3Dom)" + value + ");");
-//                    
-//                    sc.add( "((Xpp3Dom) " + value + ").writeToSerializer( NAMESPACE, serializer );" );
                 } else {
                     sc.add("findAndReplaceSimpleElement(innerCount, root,  \"" + fieldTagName + "\", " + getValueChecker( type, value, field ) + getValue( type, value) + ");");
-//                    sc.add( "serializer.startTag( NAMESPACE, " + "\"" + fieldTagName + "\" ).text( " +
-//                            getValue( field.getType(), value ) + " ).endTag( NAMESPACE, " + "\"" + fieldTagName + "\" );" );
                 }
             }
         }
@@ -628,13 +624,15 @@ public class JDOMWriterGenerator extends AbstractJDOMGenerator {
         toReturn.addParameter( new JParameter( new JClass( "Counter" ), "counter" ) );
         toReturn.addParameter( new JParameter( new JClass( "Element" ), "parent" ) );
         toReturn.addParameter( new JParameter( new JClass( "java.util.Collection"), "list" ) );
+        toReturn.addParameter( new JParameter( new JClass( "java.lang.String"), "parentTag" ) );
+        toReturn.addParameter( new JParameter( new JClass( "java.lang.String"), "childTag" ) );
         JSourceCode sc = toReturn.getSourceCode();
         sc.add("boolean shouldExist = list != null && list.size() > 0;");
-        sc.add("Element element = updateElement(counter, parent, \"" + field + "\", shouldExist);");
+        sc.add("Element element = updateElement(counter, parent, parentTag, shouldExist);");
         sc.add("if (shouldExist) {");
         sc.indent();
         sc.add("Iterator it = list.iterator();");
-        sc.add("Iterator elIt = element.getChildren(\"" + childFieldTagName + "\", element.getNamespace()).iterator();");
+        sc.add("Iterator elIt = element.getChildren(childTag, element.getNamespace()).iterator();");
         sc.add("if (!elIt.hasNext()) elIt = null;");
         sc.add("Counter innerCount = new Counter();");
         sc.add("while (it.hasNext()) {");
@@ -648,11 +646,11 @@ public class JDOMWriterGenerator extends AbstractJDOMGenerator {
         sc.unindent();
         sc.add("} else {");
         sc.indent();
-        sc.add("el = factory.element(\"" + childFieldTagName + "\", element.getNamespace());");
+        sc.add("el = factory.element(childTag, element.getNamespace());");
         sc.add("element.addContent(el);");
         sc.unindent();
         sc.add("}");
-        sc.add("update" + toClass.getName() + "(value, \"" + childFieldTagName + "\", innerCount, el);");
+        sc.add("update" + toClass.getName() + "(value, childTag, innerCount, el);");
         sc.unindent();
         sc.add("}");
         sc.add("if (elIt != null) {");
