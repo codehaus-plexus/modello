@@ -72,7 +72,7 @@ public class ModelloJPoxJdoMappingMojoTest
         // Assert
         // ----------------------------------------------------------------------
 
-        File configuration = new File( outputDirectory, "META-INF/package.jdo" );
+        File configuration = new File( outputDirectory, "package.jdo" );
 
         assertTrue( "Could not read the jpox configuration '" + configuration.getAbsolutePath() + "'.", configuration.canRead() );
     }
