@@ -87,16 +87,18 @@ public class JPoxJdoMappingModelloGenerator
 
         try
         {
-            File packageJdo;
+            String fileName;
 
             if ( isPackageWithVersion() )
             {
-                packageJdo = new File( getOutputDirectory(), "META-INF/package-" + getGeneratedVersion() + ".jdo" );
+                fileName = "package-" + getGeneratedVersion() + ".jdo";
             }
             else
             {
-                packageJdo = new File( getOutputDirectory(), "META-INF/package.jdo" );
+                fileName = "package.jdo";
             }
+
+            File packageJdo = new File( getOutputDirectory(), fileName );
 
             File parent = packageJdo.getParentFile();
 

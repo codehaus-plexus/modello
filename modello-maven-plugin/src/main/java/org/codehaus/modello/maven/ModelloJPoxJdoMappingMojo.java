@@ -38,7 +38,7 @@ public class ModelloJPoxJdoMappingMojo
     extends AbstractModelloGeneratorMojo
 {
     /**
-     * @parameter expression="${basedir}/target/classes"
+     * @parameter expression="${basedir}/target/classes/META-INF"
      *
      * @required
      */
