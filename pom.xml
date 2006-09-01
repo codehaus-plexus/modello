@@ -247,17 +247,17 @@
   </dependencyManagement>
   <distributionManagement>
     <repository>
-      <id>modello</id>
+      <id>codehaus.org</id>
       <name>Modello Repository</name>
       <url>dav:https://dav.codehaus.org/repository/modello/</url>
     </repository>
     <snapshotRepository>
-      <id>modello-snapshots</id>
+      <id>codehaus.org</id>
       <name>Modello Development Repository</name>
       <url>dav:https://dav.codehaus.org/snapshots.repository/modello/</url>
     </snapshotRepository>
     <site>
-      <id>modello-site</id>
+      <id>codehaus.org</id>
       <url>dav:https://dav.codehaus.org/modello</url>
     </site>
   </distributionManagement>
