@@ -181,5 +181,10 @@
         </field>
       </fields>
     </class>
+    <class jpox.table="MyTable">
+      <name>DifferentTable</name>
+      <packageName>org.mergere.user</packageName>
+      <version>1.0.0</version>
+    </class>
   </classes>
 </model>

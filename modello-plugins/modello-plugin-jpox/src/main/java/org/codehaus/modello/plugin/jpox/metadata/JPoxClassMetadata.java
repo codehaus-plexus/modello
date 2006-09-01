@@ -35,6 +35,8 @@ public class JPoxClassMetadata
 
     private boolean detachable;
 
+    private String table;
+
     public void setDetachable( boolean detachable )
     {
         this.detachable = detachable;
@@ -43,5 +45,15 @@ public class JPoxClassMetadata
     public boolean isDetachable()
     {
         return detachable;
+    }
+
+    public void setTable( String table )
+    {
+        this.table = table;
+    }
+
+    public String getTable()
+    {
+        return table;
     }
 }

@@ -58,6 +58,8 @@ public class JPoxMetadataPlugin
 
     public static final String NULL_VALUE = "jpox.nullValue";
 
+    public static final String TABLE = "jpox.table";
+
     // ----------------------------------------------------------------------
     // Map to Metadata
     // ----------------------------------------------------------------------
@@ -73,6 +75,13 @@ public class JPoxMetadataPlugin
         JPoxClassMetadata metadata = new JPoxClassMetadata();
 
         metadata.setDetachable( getBoolean( data, DETACHABLE, true ) );
+
+        String table = (String) data.get( TABLE );
+
+        if ( !StringUtils.isEmpty( table ) )
+        {
+            metadata.setTable( table );
+        }
 
         return metadata;
     }

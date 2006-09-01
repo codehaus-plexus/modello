@@ -33,6 +33,7 @@ import org.codehaus.modello.plugin.jpox.metadata.JPoxClassMetadata;
 import org.codehaus.modello.plugin.jpox.metadata.JPoxFieldMetadata;
 import org.codehaus.modello.plugin.store.metadata.StoreAssociationMetadata;
 import org.codehaus.modello.plugin.store.metadata.StoreFieldMetadata;
+import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.xml.PrettyPrintXMLWriter;
 import org.codehaus.plexus.util.xml.XMLWriter;
 
@@ -226,6 +227,11 @@ public class JPoxJdoMappingModelloGenerator
         }
 
         writer.addAttribute( "detachable", String.valueOf( jpoxMetadata.isDetachable() ) );
+
+        if ( !StringUtils.isEmpty( jpoxMetadata.getTable() ) )
+        {
+            writer.addAttribute( "table", jpoxMetadata.getTable() );
+        }
 
         // ----------------------------------------------------------------------
         // If this class has a primary key field mark make jpox manage the id
