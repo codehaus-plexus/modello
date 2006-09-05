@@ -40,6 +40,8 @@ public class JPoxFieldMetadata
     private String mappedBy;
 
     private String nullValue;
+    
+    private String columnName;
 
     public List getFetchGroupNames()
     {
@@ -69,6 +71,16 @@ public class JPoxFieldMetadata
     public void setNullValue( String nullValue )
     {
         this.nullValue = nullValue;
+    }
+
+    public String getColumnName()
+    {
+        return columnName;
+    }
+
+    public void setColumnName( String columnName )
+    {
+        this.columnName = columnName;
     }
 
 }

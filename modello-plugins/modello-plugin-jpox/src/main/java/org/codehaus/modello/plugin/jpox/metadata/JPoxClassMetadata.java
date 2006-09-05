@@ -36,6 +36,10 @@ public class JPoxClassMetadata
     private boolean detachable;
 
     private String table;
+    
+    private String identityType;
+    
+    private String identityClass;
 
     public void setDetachable( boolean detachable )
     {
@@ -55,5 +59,25 @@ public class JPoxClassMetadata
     public String getTable()
     {
         return table;
+    }
+
+    public String getIdentityClass()
+    {
+        return identityClass;
+    }
+
+    public void setIdentityClass( String identityClass )
+    {
+        this.identityClass = identityClass;
+    }
+
+    public String getIdentityType()
+    {
+        return identityType;
+    }
+
+    public void setIdentityType( String identityType )
+    {
+        this.identityType = identityType;
     }
 }

@@ -58,6 +58,8 @@ public class JPoxJdoMappingModelloGenerator
     extends AbstractModelloGenerator
 {
     private final static Map PRIMITIVE_IDENTITY_MAP;
+    
+    private final static List IDENTITY_TYPES;
 
     static
     {
@@ -75,6 +77,12 @@ public class JPoxJdoMappingModelloGenerator
         PRIMITIVE_IDENTITY_MAP.put( "Character", "javax.jdo.identity.CharIdentity" );
         PRIMITIVE_IDENTITY_MAP.put( "byte", "javax.jdo.identity.ByteIdentity" );
         PRIMITIVE_IDENTITY_MAP.put( "Byte", "javax.jdo.identity.ByteIdentity" );
+        
+        IDENTITY_TYPES = new ArrayList();
+        
+        IDENTITY_TYPES.add("application");
+        IDENTITY_TYPES.add("datastore");
+        IDENTITY_TYPES.add("nondurable");
     }
 
     public void generate( Model model, Properties properties )
@@ -240,29 +248,24 @@ public class JPoxJdoMappingModelloGenerator
 
         List fields = Collections.unmodifiableList( modelClass.getFields( getGeneratedVersion() ) );
 
-        List identifierFields = modelClass.getIdentifierFields( getGeneratedVersion() );
-
-        boolean applicationIdentityType = identifierFields.size() > 0;
-
-        for ( Iterator it = identifierFields.iterator(); it.hasNext(); )
-        {
-            ModelField modelField = (ModelField) it.next();
-
-            if ( !PRIMITIVE_IDENTITY_MAP.containsKey( modelField.getType() ) )
-            {
-                throw new ModelloException( "The JDO mapping generator does not support the specified " +
-                    "field type '" + modelField.getType() + "'. " +
-                    "Supported types: " + PRIMITIVE_IDENTITY_MAP.keySet() );
-            }
-        }
-
         // TODO: for now, assume that any primary key will be set in the super class
         // While it should be possible to have abstract super classes and have the
         // key defined in the sub class this is not implemented yet.
 
         if ( persistenceCapableSuperclass == null )
         {
-            if ( applicationIdentityType )
+            if(StringUtils.isNotEmpty( jpoxMetadata.getIdentityType() ))
+            {
+                String identityType = jpoxMetadata.getIdentityType();
+                if ( IDENTITY_TYPES.contains( identityType ) )
+                {
+                    throw new ModelloException( "The JDO mapping generator does not support the specified " +
+                                                "class identity type '" + identityType + "'. " +
+                                                "Supported types: " + IDENTITY_TYPES );
+                }
+                writer.addAttribute( "identity-type", identityType );
+            }
+            else if ( isInstantionApplicationType( modelClass ) )
             {
                 writer.addAttribute( "identity-type", "application" );
             }
@@ -280,13 +283,40 @@ public class JPoxJdoMappingModelloGenerator
             writer.endElement();
         }
 
-        for ( Iterator it = fields.iterator(); it.hasNext(); )
+        if(StringUtils.isNotEmpty( jpoxMetadata.getIdentityClass() ))
         {
-            ModelField modelField = (ModelField) it.next();
-
-            if ( modelField.isIdentifier() )
+            writer.addAttribute( "objectid-class", jpoxMetadata.getIdentityClass() );
+        }
+        else
+        {
+            // Obtain first identifier only.
+            int identityCount = 0;
+            String objectIdClass = null;
+            
+            for ( Iterator it = getIdentityFields( modelClass ).iterator(); it.hasNext(); )
             {
-                writer.addAttribute( "objectid-class", (String) PRIMITIVE_IDENTITY_MAP.get( modelField.getType() ) );
+                ModelField modelField = (ModelField) it.next();
+    
+                if ( modelField.isIdentifier() )
+                {
+                    identityCount++;
+                    if ( StringUtils.isEmpty( objectIdClass ) )
+                    {
+                        objectIdClass = (String) PRIMITIVE_IDENTITY_MAP.get( modelField.getType() );
+                    }
+                }
+            }
+            
+            if ( identityCount > 1 )
+            {
+                throw new ModelloException( "The JDO mapping generator does not support Object Identifier generation " + 
+                                            "for the " + identityCount + " fields specified as <identifier>" );
+            }
+            
+            // You can only have 1 objectid-class attribute.
+            if ( ( identityCount == 1 ) && StringUtils.isNotEmpty( objectIdClass ) )
+            {
+                writer.addAttribute( "objectid-class", objectIdClass );
             }
         }
 
@@ -438,6 +468,11 @@ public class JPoxJdoMappingModelloGenerator
         else if ( jpoxMetadata.getNullValue() != null )
         {
             writer.addAttribute( "null-value", jpoxMetadata.getNullValue() );
+        }
+        
+        if ( StringUtils.isNotEmpty( jpoxMetadata.getColumnName() ) )
+        {
+            writer.addAttribute( "column", jpoxMetadata.getColumnName() );
         }
 
         // TODO: The value-strategy attribute should be customizable.
@@ -620,6 +655,32 @@ public class JPoxJdoMappingModelloGenerator
         writer.addAttribute( "value", value );
 
         writer.endElement();
+    }
+    
+    private boolean isInstantionApplicationType(ModelClass modelClass)
+    {
+        List identifierFields = modelClass.getIdentifierFields( getGeneratedVersion() );
+        
+        return identifierFields.size() > 0;
+    }
+    
+    private List getIdentityFields(ModelClass modelClass) throws ModelloException
+    {
+        List identifierFields = modelClass.getIdentifierFields( getGeneratedVersion() );
+
+        for ( Iterator it = identifierFields.iterator(); it.hasNext(); )
+        {
+            ModelField modelField = (ModelField) it.next();
+
+            if ( !PRIMITIVE_IDENTITY_MAP.containsKey( modelField.getType() ) )
+            {
+                throw new ModelloException( "The JDO mapping generator does not support the specified " +
+                    "field type '" + modelField.getType() + "'. " +
+                    "Supported types: " + PRIMITIVE_IDENTITY_MAP.keySet() );
+            }
+        }
+        
+        return identifierFields;
     }
 
     private StoreAssociationMetadata getAssociationMetadata( ModelAssociation association )
