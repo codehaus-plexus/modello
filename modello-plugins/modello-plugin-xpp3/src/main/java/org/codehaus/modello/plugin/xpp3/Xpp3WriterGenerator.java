@@ -113,6 +113,8 @@ public class Xpp3WriterGenerator
 
         jClass.addImport( "java.util.Iterator" );
 
+        jClass.addImport( "java.util.Locale" );
+
         jClass.addField( new JField( new JClass( "org.codehaus.plexus.util.xml.pull.XmlSerializer" ), "serializer" ) );
 
         jClass.addField( new JField( new JClass( "String" ), "NAMESPACE" ) );
@@ -464,7 +466,7 @@ public class Xpp3WriterGenerator
         if ( "Date".equals( type ) )
         {
             textValue =
-                "DateFormat.getDateTimeInstance( DateFormat.FULL, DateFormat.FULL ).format( " + textValue + " )";
+                "DateFormat.getDateTimeInstance( DateFormat.FULL, DateFormat.FULL , Locale.US ).format( " + textValue + " )";
         }
         else if ( !"String".equals( type ) )
         {
@@ -472,6 +474,7 @@ public class Xpp3WriterGenerator
         }
 
         return textValue;
+
     }
 
     private String getValueChecker( String type, String value, ModelField field )

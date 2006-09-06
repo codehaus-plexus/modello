@@ -133,6 +133,8 @@ public class Xpp3ReaderGenerator
 
         jClass.addImport( "java.util.regex.Pattern" );
 
+        jClass.addImport( "java.util.Locale" );
+
         addModelImports( jClass, null );
 
         // ----------------------------------------------------------------------
@@ -1380,7 +1382,7 @@ public class Xpp3ReaderGenerator
 
         sc.indent();
 
-        sc.add( "DateFormat dateParser = DateFormat.getDateTimeInstance( DateFormat.FULL, DateFormat.FULL );" );
+        sc.add( "DateFormat dateParser = DateFormat.getDateTimeInstance( DateFormat.FULL, DateFormat.FULL , Locale.US );" );
 
         sc.add( "dateParser.setLenient( true );" );
 

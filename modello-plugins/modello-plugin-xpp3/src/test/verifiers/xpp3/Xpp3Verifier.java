@@ -43,8 +43,12 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.text.DateFormat;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.Properties;
+import java.util.TimeZone;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -59,6 +63,8 @@ public class Xpp3Verifier
     public void verify()
         throws IOException, XmlPullParserException
     {
+        TimeZone.setDefault(TimeZone.getTimeZone("America/New_York"));
+
         verifyWriter();
 
         verifyReader();
@@ -216,6 +222,7 @@ public class Xpp3Verifier
         {
             throw new XmlPullParserException( "Couldn't set date: " + e.getMessage() );
         }
+
         expected.setTypeTester( typeTester );
 
         Repository repository = new Repository();
@@ -291,6 +298,32 @@ public class Xpp3Verifier
         expected.setGroupId( groupId );
 
         Model actual = reader.read( new StringReader( xml ) );
+
+        assertModel( expected, actual );
+
+        // ----------------------------------------------------------------------
+        // Test that dates are correctly read back from xml
+        // ----------------------------------------------------------------------
+
+        StringBuffer dateXml = new StringBuffer();
+        dateXml.append("<mavenModel>\n<typeTester>\n");
+        dateXml.append("<date>Friday, January 6, 2006 12:00:00 AM EST</date>\n");
+        dateXml.append("</typeTester>\n</mavenModel>");
+
+        expected = new Model();
+
+        TypeTester typeTester = new TypeTester();
+
+        Calendar calendar = Calendar.getInstance();
+
+        calendar.clear();
+        calendar.set(2006,01,06,12,0);
+
+        typeTester.setDate(calendar.getTime());
+
+        expected.setTypeTester(typeTester);
+
+        actual = reader.read( new StringReader( dateXml.toString() ) );
 
         assertModel( expected, actual );
     }
