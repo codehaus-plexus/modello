@@ -111,6 +111,8 @@ public class Dom4jReaderGenerator
         jClass.addImport( "java.io.Reader" );
 
         jClass.addImport( "java.util.Date" );
+        
+        jClass.addImport( "java.util.Locale" );
 
         jClass.addImport( "java.text.DateFormat" );
 
@@ -172,10 +174,11 @@ public class Dom4jReaderGenerator
         unmarshall.addException( new JClass( "DocumentException" ) );
 
         sc = unmarshall.getSourceCode();
+        
         sc.add( "return read( reader, true );" );
 
         jClass.addMethod( unmarshall );
-
+        
         // ----------------------------------------------------------------------
         // Write the class parsers
         // ----------------------------------------------------------------------
@@ -1073,7 +1076,7 @@ public class Dom4jReaderGenerator
 
         sc.indent();
 
-        sc.add( "DateFormat dateParser = DateFormat.getDateTimeInstance( DateFormat.FULL, DateFormat.FULL );" );
+        sc.add( "DateFormat dateParser = DateFormat.getDateTimeInstance( DateFormat.FULL, DateFormat.FULL , Locale.US );" );
 
         sc.add( "dateParser.setLenient( true );" );
 

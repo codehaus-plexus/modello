@@ -112,6 +112,8 @@ public class Dom4jWriterGenerator
         jClass.addImport( "java.util.Arrays" );
 
         jClass.addImport( "java.util.Iterator" );
+        
+        jClass.addImport( "java.util.Locale" );
 
         jClass.addImport( "java.text.DateFormat" );
 
@@ -479,7 +481,7 @@ public class Dom4jWriterGenerator
         if ( "Date".equals( type ) )
         {
             textValue =
-                "DateFormat.getDateTimeInstance( DateFormat.FULL, DateFormat.FULL ).format( " + textValue + " )";
+            	"DateFormat.getDateTimeInstance( DateFormat.FULL, DateFormat.FULL , Locale.US ).format( " + textValue + " )";
         }
         else if ( !"String".equals( type ) )
         {

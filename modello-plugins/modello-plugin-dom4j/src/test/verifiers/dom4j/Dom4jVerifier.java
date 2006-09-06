@@ -43,9 +43,13 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.text.DateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Properties;
+import java.util.TimeZone;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -66,6 +70,8 @@ public class Dom4jVerifier
 
         verifyReaderDuplicates();
 
+        TimeZone.setDefault(TimeZone.getTimeZone("America/New_York"));
+        
         verifyWriter();
     }
 
@@ -254,6 +260,32 @@ public class Dom4jVerifier
         writer.write( buffer, actual );
 
         Assert.assertEquals( expectedXml.trim(), buffer.toString().trim() );
+        
+        // ----------------------------------------------------------------------
+        // Test that dates are correctly read back from xml
+        // ----------------------------------------------------------------------
+
+        StringBuffer dateXml = new StringBuffer();
+        dateXml.append("<mavenModel>\n<typeTester>\n");
+        dateXml.append("<date>Friday, January 6, 2006 12:00:00 AM EST</date>\n");
+        dateXml.append("</typeTester>\n</mavenModel>");
+
+        expected = new Model();
+
+        typeTester = new TypeTester();
+
+        Calendar calendar = Calendar.getInstance();
+
+        calendar.clear();
+        calendar.set(2006,01,06,12,0);
+
+        typeTester.setDate(calendar.getTime());
+
+        expected.setTypeTester(typeTester);
+
+        actual = reader.read( new StringReader( dateXml.toString() ) );
+
+        assertModel( expected, actual );
     }
 
     public void verifyReader()
