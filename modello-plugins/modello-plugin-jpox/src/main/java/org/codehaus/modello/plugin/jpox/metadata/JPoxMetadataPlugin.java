@@ -59,6 +59,16 @@ public class JPoxMetadataPlugin
     public static final String NULL_VALUE = "jpox.nullValue";
 
     public static final String TABLE = "jpox.table";
+    
+    public static final String COLUMN = "jpox.column";
+    
+    public static final String PRIMARY_KEY = "jpox.primary-key";
+    
+    public static final String IDENTITY_TYPE = "jpox.identity-type";
+    
+    public static final String IDENTITY_CLASS = "jpox.identity-class";
+    
+    public static final String USE_IDENTIFIERS = "jpox.use-identifiers-as-primary-key";
 
     // ----------------------------------------------------------------------
     // Map to Metadata
@@ -82,7 +92,23 @@ public class JPoxMetadataPlugin
         {
             metadata.setTable( table );
         }
+        
+        String identityType = (String) data.get( IDENTITY_TYPE );
 
+        if ( StringUtils.isNotEmpty( identityType ) )
+        {
+            metadata.setIdentityType( identityType );
+        }
+
+        String identityClass = (String) data.get( IDENTITY_CLASS );
+
+        if ( StringUtils.isNotEmpty( identityClass ) )
+        {
+            metadata.setIdentityClass( identityClass );
+        }
+        
+        metadata.setUseIdentifiersAsPrimaryKey( getBoolean( data, USE_IDENTIFIERS, true ) );
+        
         return metadata;
     }
 
@@ -90,6 +116,12 @@ public class JPoxMetadataPlugin
         throws ModelloException
     {
         JPoxFieldMetadata metadata = new JPoxFieldMetadata();
+        
+        JPoxClassMetadata classMetadata = (JPoxClassMetadata) field.getModelClass().getMetadata( JPoxClassMetadata.ID );
+
+        boolean useIdentifiersAsPrimaryKey = classMetadata.useIdentifiersAsPrimaryKey();
+
+        metadata.setPrimaryKey( getBoolean( data, PRIMARY_KEY, ( field.isIdentifier() && useIdentifiersAsPrimaryKey ) ) );
 
         String fetchGroupNames = (String) data.get( FETCH_GROUP_NAMES );
 
@@ -112,6 +144,13 @@ public class JPoxMetadataPlugin
         if ( !StringUtils.isEmpty( nullValue ) )
         {
             metadata.setNullValue( nullValue );
+        }
+        
+        String column = (String) data.get( COLUMN );
+
+        if ( StringUtils.isNotEmpty( column ) )
+        {
+            metadata.setColumnName( column );
         }
 
         return metadata;

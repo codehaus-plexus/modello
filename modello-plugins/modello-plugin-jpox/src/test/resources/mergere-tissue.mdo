@@ -13,11 +13,12 @@
       <name>Issue</name>
       <version>1.0.0</version>
       <fields>
-        <field>
-          <name>id</name>
+        <field jpox.column="id">
+          <name>accountId</name>
           <required>true</required>
           <version>1.0.0</version>
           <type>String</type>
+          <identifier>true</identifier>
         </field>
         <!-- This field should get persistence-modifier="none" -->
         <field stash.storable="false">
@@ -28,7 +29,7 @@
         <field>
           <name>assignee</name>
           <version>1.0.0</version>
-          <!-- this should set default-fetch-group=true -->
+          <!-- this should set default-fetch-group=false -->
           <association stash.part="false">
             <type>User</type>
           </association>
@@ -178,6 +179,48 @@
           <name>normalUserField</name>
           <version>1.0.0</version>
           <type>String</type>
+        </field>
+      </fields>
+    </class>
+    <class jpox.use-identifiers-as-primary-key="false">
+      <name>ComplexIdentity</name>
+      <packageName>org.codehaus.complex</packageName>
+      <version>1.0.0</version>
+      <fields>
+        <field jpox.primary-key="true">
+          <name>id</name>
+          <version>1.0.0</version>
+          <type>int</type>
+          <identifier>true</identifier>
+        </field>
+        <field>
+          <name>username</name>
+          <version>1.0.0</version>
+          <type>String</type>
+          <identifier>true</identifier>
+        </field>
+        <field>
+          <name>fullName</name>
+          <version>1.0.0</version>
+          <type>String</type>
+          <identifier>true</identifier>
+        </field>
+        <field>
+          <name>email</name>
+          <version>1.0.0</version>
+          <type>String</type>
+          <identifier>true</identifier>
+        </field>
+        <field>
+          <name>locked</name>
+          <version>1.0.0</version>
+          <type>boolean</type>
+          <identifier>true</identifier>
+        </field>
+        <field>
+          <name>lastLoginDate</name>
+          <version>1.0.0</version>
+          <type>Date</type>
         </field>
       </fields>
     </class>

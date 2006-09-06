@@ -14,5 +14,22 @@
       <artifactId>modello-plugin-store</artifactId>
       <version>1.0-alpha-11-SNAPSHOT</version>
     </dependency>
+    <dependency>
+      <groupId>dom4j</groupId>
+      <artifactId>dom4j</artifactId>
+      <version>1.6.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>jaxen</groupId>
+      <artifactId>jaxen</artifactId>
+      <version>1.0-FCS</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>saxpath</groupId>
+      <artifactId>saxpath</artifactId>
+      <version>1.0-FCS</version>
+    </dependency>
   </dependencies>
 </project>

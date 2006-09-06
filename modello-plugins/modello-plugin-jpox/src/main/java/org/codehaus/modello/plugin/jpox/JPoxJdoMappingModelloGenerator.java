@@ -257,7 +257,7 @@ public class JPoxJdoMappingModelloGenerator
             if(StringUtils.isNotEmpty( jpoxMetadata.getIdentityType() ))
             {
                 String identityType = jpoxMetadata.getIdentityType();
-                if ( IDENTITY_TYPES.contains( identityType ) )
+                if ( !IDENTITY_TYPES.contains( identityType ) )
                 {
                     throw new ModelloException( "The JDO mapping generator does not support the specified " +
                                                 "class identity type '" + identityType + "'. " +
@@ -285,38 +285,34 @@ public class JPoxJdoMappingModelloGenerator
 
         if(StringUtils.isNotEmpty( jpoxMetadata.getIdentityClass() ))
         {
+            // Use user provided objectId class.
             writer.addAttribute( "objectid-class", jpoxMetadata.getIdentityClass() );
         }
         else
         {
-            // Obtain first identifier only.
-            int identityCount = 0;
-            String objectIdClass = null;
+            // Calculate the objectId class.
             
-            for ( Iterator it = getIdentityFields( modelClass ).iterator(); it.hasNext(); )
+            List primaryKeys = getPrimaryKeyFields( modelClass );
+            
+            // TODO: write generation support for multi-primary-key support.
+            //       would likely need to write a java class that can supply an ObjectIdentity
+            //       to the jpox/jdo implementation.
+            if ( primaryKeys.size() > 1 )
             {
-                ModelField modelField = (ModelField) it.next();
-    
-                if ( modelField.isIdentifier() )
+                throw new ModelloException( "The JDO mapping generator does not yet support Object Identifier generation " + 
+                                            "for the " + primaryKeys.size() + " fields specified as <identifier> or " +
+                                            "with jpox.primary-key=\"true\"" );
+            }
+            
+            if(primaryKeys.size() == 1)
+            {
+                ModelField modelField = (ModelField) primaryKeys.get( 0 );
+                String objectIdClass = (String) PRIMITIVE_IDENTITY_MAP.get( modelField.getType() );
+                
+                if ( StringUtils.isNotEmpty( objectIdClass ) )
                 {
-                    identityCount++;
-                    if ( StringUtils.isEmpty( objectIdClass ) )
-                    {
-                        objectIdClass = (String) PRIMITIVE_IDENTITY_MAP.get( modelField.getType() );
-                    }
+                    writer.addAttribute( "objectid-class", objectIdClass );
                 }
-            }
-            
-            if ( identityCount > 1 )
-            {
-                throw new ModelloException( "The JDO mapping generator does not support Object Identifier generation " + 
-                                            "for the " + identityCount + " fields specified as <identifier>" );
-            }
-            
-            // You can only have 1 objectid-class attribute.
-            if ( ( identityCount == 1 ) && StringUtils.isNotEmpty( objectIdClass ) )
-            {
-                writer.addAttribute( "objectid-class", objectIdClass );
             }
         }
 
@@ -477,7 +473,7 @@ public class JPoxJdoMappingModelloGenerator
 
         // TODO: The value-strategy attribute should be customizable.
         // See http://www.jpox.org/docs/1_1/identity_generation.html
-        if ( modelField.isIdentifier() )
+        if ( jpoxMetadata.isPrimaryKey() )
         {
             writer.addAttribute( "primary-key", "true" );
 
@@ -664,25 +660,49 @@ public class JPoxJdoMappingModelloGenerator
         return identifierFields.size() > 0;
     }
     
-    private List getIdentityFields(ModelClass modelClass) throws ModelloException
+    private List getPrimaryKeyFields(ModelClass modelClass) throws ModelloException
     {
-        List identifierFields = modelClass.getIdentifierFields( getGeneratedVersion() );
-
-        for ( Iterator it = identifierFields.iterator(); it.hasNext(); )
+        List primaryKeys = new ArrayList();
+        List fields = modelClass.getFields( getGeneratedVersion() );
+        JPoxClassMetadata jpoxClassMetadata = (JPoxClassMetadata) modelClass.getMetadata( JPoxClassMetadata.ID );
+        
+        for ( Iterator it = fields.iterator(); it.hasNext(); )
         {
             ModelField modelField = (ModelField) it.next();
+            JPoxFieldMetadata jpoxFieldMetadata = (JPoxFieldMetadata) modelField.getMetadata( JPoxFieldMetadata.ID );
 
-            if ( !PRIMITIVE_IDENTITY_MAP.containsKey( modelField.getType() ) )
+            if ( jpoxClassMetadata.useIdentifiersAsPrimaryKey() )
             {
-                throw new ModelloException( "The JDO mapping generator does not support the specified " +
-                    "field type '" + modelField.getType() + "'. " +
-                    "Supported types: " + PRIMITIVE_IDENTITY_MAP.keySet() );
+                if ( modelField.isIdentifier() )
+                {
+                    assertSupportedIdentityPrimitive( modelField );
+                    primaryKeys.add( modelField );
+                }
+            }
+            else
+            {
+                if ( jpoxFieldMetadata.isPrimaryKey() )
+                {
+                    assertSupportedIdentityPrimitive( modelField );
+                    primaryKeys.add( modelField );
+                }
             }
         }
         
-        return identifierFields;
+        return primaryKeys;
     }
 
+    private void assertSupportedIdentityPrimitive( ModelField modelField )
+        throws ModelloException
+    {
+        if ( !PRIMITIVE_IDENTITY_MAP.containsKey( modelField.getType() ) )
+        {
+            throw new ModelloException( "The JDO mapping generator does not support the specified " +
+                "field type '" + modelField.getType() + "'. " +
+                "Supported types: " + PRIMITIVE_IDENTITY_MAP.keySet() );
+        }
+    }
+    
     private StoreAssociationMetadata getAssociationMetadata( ModelAssociation association )
     {
         return (StoreAssociationMetadata) association.getAssociationMetadata( StoreAssociationMetadata.ID );

@@ -22,15 +22,23 @@ package org.codehaus.modello.plugin.jpox;
  * SOFTWARE.
  */
 
-import java.io.FileReader;
-import java.io.File;
-import java.util.Properties;
-
 import org.codehaus.modello.AbstractModelloGeneratorTest;
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
-import org.codehaus.plexus.util.FileUtils;
+import org.codehaus.plexus.util.StringUtils;
+import org.dom4j.Attribute;
+import org.dom4j.Document;
+import org.dom4j.Element;
+import org.dom4j.Node;
+import org.dom4j.XPath;
+import org.dom4j.io.SAXReader;
+
+import java.io.File;
+import java.io.FileReader;
+import java.util.Properties;
+
+import junit.framework.AssertionFailedError;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -71,6 +79,99 @@ public class JPoxJdoMappingModelloGeneratorTest
 
         assertGeneratedFileExists( "package.jdo" );
 
-//        System.out.println( FileUtils.fileRead( new File( getGeneratedSources(), "META-INF/package.jdo" ) ) );
+        SAXReader reader = new SAXReader();
+        reader.setEntityResolver( new JdoEntityResolver() );
+        Document jdoDocument = reader.read( new File( "target/" + getName() + "/package.jdo" ) );
+
+        assertNotNull( jdoDocument );
+
+        
+        assertAttributeEquals( jdoDocument, "//class[@name='Issue']/field[@name='summary']", "persistence-modifier", "none" );
+        assertAttributeEquals( jdoDocument, "//class[@name='Issue']/field[@name='assignee']", "default-fetch-group", "false" );
+
+        assertAttributeMissing( jdoDocument, "//class[@name='Issue']/field[@name='reporter']", "default-fetch-group" );
+        assertAttributeEquals( jdoDocument, "//class[@name='Issue']/field[@name='configuration']", "default-fetch-group", "true" );
+
+        // Primary Key Tests
+        assertAttributeEquals( jdoDocument, "//class[@name='Issue']/field[@name='accountId']", "primary-key", "true" );
+        assertAttributeEquals( jdoDocument, "//class[@name='Issue']/field[@name='summary']", "primary-key", "false" );
+        
+        assertAttributeEquals( jdoDocument, "//class[@name='ComplexIdentity']/field[@name='id']", "primary-key", "true" );
+        assertAttributeEquals( jdoDocument, "//class[@name='ComplexIdentity']/field[@name='username']", "primary-key", "false" );
+        assertAttributeEquals( jdoDocument, "//class[@name='ComplexIdentity']/field[@name='fullName']", "primary-key", "false" );
+        assertAttributeEquals( jdoDocument, "//class[@name='ComplexIdentity']/field[@name='email']", "primary-key", "false" );
+        assertAttributeEquals( jdoDocument, "//class[@name='ComplexIdentity']/field[@name='locked']", "primary-key", "false" );
+        assertAttributeEquals( jdoDocument, "//class[@name='ComplexIdentity']/field[@name='lastLoginDate']", "primary-key", "false" );
+        
+        // Alternate Table and Column Names Tests.
+        assertAttributeEquals( jdoDocument, "//class[@name='DifferentTable']", "table", "MyTable" );
+        assertAttributeEquals( jdoDocument, "//class[@name='Issue']/field[@name='accountId']", "column", "id" );
+    }
+
+    private void assertAttributeEquals( Document doc, String xpathToNode, String attributeKey, String expectedValue )
+    {
+        if ( expectedValue == null )
+        {
+            throw new AssertionFailedError( "Unable to assert an attribute using a null expected value." );
+        }
+
+        Attribute attribute = findAttribute( doc, xpathToNode, attributeKey );
+
+        if ( attribute == null )
+        {
+            throw new AssertionFailedError( "Element at '" + xpathToNode + "' is missing the '" + attributeKey
+                + "' attribute." );
+        }
+
+        assertEquals( "Attribute value for '" + xpathToNode + "'", expectedValue, attribute.getValue() );
+    }
+
+    private Attribute findAttribute( Document doc, String xpathToNode, String attributeKey )
+        throws AssertionFailedError
+    {
+        if ( StringUtils.isEmpty( xpathToNode ) )
+        {
+            throw new AssertionFailedError( "Unable to assert an attribute using an empty xpath." );
+        }
+
+        if ( doc == null )
+        {
+            throw new AssertionFailedError( "Unable to assert an attribute using a null document." );
+        }
+
+        if ( StringUtils.isEmpty( attributeKey ) )
+        {
+            throw new AssertionFailedError( "Unable to assert an attribute using an empty attribute key." );
+        }
+
+        XPath xpath = doc.createXPath( xpathToNode );
+
+        Node node = xpath.selectSingleNode( doc );
+
+        if ( node == null )
+        {
+            throw new AssertionFailedError( "Expected Node at '" + xpathToNode + "', but was not found." );
+        }
+
+        if ( node.getNodeType() != Node.ELEMENT_NODE )
+        {
+            throw new AssertionFailedError( "Node at '" + xpathToNode + "' is not an xml element." );
+        }
+
+        Element elem = (Element) node;
+
+        Attribute attribute = elem.attribute( attributeKey );
+        return attribute;
+    }
+
+    private void assertAttributeMissing( Document doc, String xpathToNode, String attributeKey )
+    {
+        Attribute attribute = findAttribute( doc, xpathToNode, attributeKey );
+
+        if ( attribute != null )
+        {
+            throw new AssertionFailedError( "Node at '" + xpathToNode + "' should not have the attribute named '"
+                + attributeKey + "'." );
+        }
     }
 }

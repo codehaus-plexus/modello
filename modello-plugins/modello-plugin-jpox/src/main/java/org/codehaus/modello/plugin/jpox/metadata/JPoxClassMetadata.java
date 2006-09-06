@@ -40,6 +40,8 @@ public class JPoxClassMetadata
     private String identityType;
     
     private String identityClass;
+    
+    private boolean useIdentifiersAsPrimaryKey;
 
     public void setDetachable( boolean detachable )
     {
@@ -79,5 +81,15 @@ public class JPoxClassMetadata
     public void setIdentityType( String identityType )
     {
         this.identityType = identityType;
+    }
+
+    public boolean useIdentifiersAsPrimaryKey()
+    {
+        return useIdentifiersAsPrimaryKey;
+    }
+
+    public void setUseIdentifiersAsPrimaryKey( boolean userIdentifiersAsIdentity )
+    {
+        this.useIdentifiersAsPrimaryKey = userIdentifiersAsIdentity;
     }
 }

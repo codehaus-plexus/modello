@@ -42,6 +42,8 @@ public class JPoxFieldMetadata
     private String nullValue;
     
     private String columnName;
+    
+    private boolean primaryKey;
 
     public List getFetchGroupNames()
     {
@@ -81,6 +83,16 @@ public class JPoxFieldMetadata
     public void setColumnName( String columnName )
     {
         this.columnName = columnName;
+    }
+
+    public boolean isPrimaryKey()
+    {
+        return primaryKey;
+    }
+
+    public void setPrimaryKey( boolean primaryKey )
+    {
+        this.primaryKey = primaryKey;
     }
 
 }
