@@ -48,6 +48,11 @@ public class ModelloJPoxJdoMappingMojo
     {
         return "jpox-jdo-mapping";
     }
+    
+    protected boolean producesCompilableResult()
+    {
+        return false;
+    }
 
     public File getOutputDirectory()
     {
