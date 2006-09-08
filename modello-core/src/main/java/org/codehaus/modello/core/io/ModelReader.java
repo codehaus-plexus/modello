@@ -269,10 +269,8 @@ public class ModelReader
     {
         while( parser.nextTag() == XmlPullParser.START_TAG )
         {
-            System.out.println( "parser.getName(): " + parser.getName() );
             if ( parser.getName().equals( "interface" ) )
             {
-                System.out.println( "parser.getText() = " + parser.getText() );
                 modelClass.addInterface( parser.nextText() );
             }
             else

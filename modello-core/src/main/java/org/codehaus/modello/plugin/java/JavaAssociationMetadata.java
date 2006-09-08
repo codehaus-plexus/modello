@@ -31,5 +31,65 @@ import org.codehaus.modello.metadata.AssociationMetadata;
 public class JavaAssociationMetadata
     implements AssociationMetadata
 {
-    public final static String ID =JavaAssociationMetadata.class.getName();
+    public final static String ID = JavaAssociationMetadata.class.getName();
+
+    private boolean generateAdd;
+
+    private boolean generateRemove;
+
+    private boolean generateBreak;
+
+    private boolean generateCreate;
+
+    private String interfaceName;
+
+    public boolean isGenerateAdd()
+    {
+        return generateAdd;
+    }
+
+    public void setGenerateAdd( boolean generateAdd )
+    {
+        this.generateAdd = generateAdd;
+    }
+
+    public boolean isGenerateBreak()
+    {
+        return generateBreak;
+    }
+
+    public void setGenerateBreak( boolean generateBreak )
+    {
+        this.generateBreak = generateBreak;
+    }
+
+    public boolean isGenerateRemove()
+    {
+        return generateRemove;
+    }
+
+    public void setGenerateRemove( boolean generateRemove )
+    {
+        this.generateRemove = generateRemove;
+    }
+
+    public boolean isGenerateCreate()
+    {
+        return generateCreate;
+    }
+
+    public void setGenerateCreate( boolean genreateCreate )
+    {
+        this.generateCreate = genreateCreate;
+    }
+
+    public String getInterfaceName()
+    {
+        return interfaceName;
+    }
+
+    public void setInterfaceName( String interfaceName )
+    {
+        this.interfaceName = interfaceName;
+    }
 }

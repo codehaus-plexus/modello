@@ -32,6 +32,7 @@ import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
+import org.codehaus.plexus.util.StringUtils;
 
 import java.util.Map;
 
@@ -103,6 +104,20 @@ public class JavaMetadataPlugin
 
     public AssociationMetadata getAssociationMetadata( ModelAssociation association, Map data )
     {
-        return new JavaAssociationMetadata();
+        JavaAssociationMetadata metadata = new JavaAssociationMetadata();
+
+        metadata.setGenerateAdd( getBoolean( data, "java.generate-add", true ) );
+        metadata.setGenerateRemove( getBoolean( data, "java.generate-remove", true ) );
+        metadata.setGenerateBreak( getBoolean( data, "java.generate-break", true ) );
+        metadata.setGenerateCreate( getBoolean( data, "java.generate-create", true ) );
+
+        String interfaceName = (String) data.get( "java.use-interface" );
+
+        if ( StringUtils.isNotEmpty( interfaceName ) )
+        {
+            metadata.setInterfaceName( interfaceName );
+        }
+
+        return metadata;
     }
 }

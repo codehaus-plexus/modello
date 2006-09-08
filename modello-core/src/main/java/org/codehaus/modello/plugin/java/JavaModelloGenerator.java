@@ -39,6 +39,7 @@ import org.codehaus.modello.plugin.java.javasource.JParameter;
 import org.codehaus.modello.plugin.java.javasource.JSourceCode;
 import org.codehaus.modello.plugin.java.javasource.JSourceWriter;
 import org.codehaus.modello.plugin.java.javasource.JType;
+import org.codehaus.plexus.util.StringUtils;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -564,14 +565,33 @@ public class JavaModelloGenerator
         String propertyName = capitalise( field.getName() );
 
         JavaFieldMetadata javaFieldMetadata = (JavaFieldMetadata) modelField.getMetadata( JavaFieldMetadata.ID );
-
+        
         String prefix = javaFieldMetadata.isBooleanGetter() ? "is" : "get";
 
-        JMethod getter = new JMethod( field.getType(), prefix + propertyName );
+        JType returnType = field.getType();
+        String interfaceCast = "";
+
+        if ( modelField instanceof ModelAssociation )
+        {
+            ModelAssociation modelAssociation = (ModelAssociation) modelField;
+            
+            JavaAssociationMetadata javaAssociationMetadata = (JavaAssociationMetadata) modelAssociation
+                .getAssociationMetadata( JavaAssociationMetadata.ID );
+            
+            if ( StringUtils.isNotEmpty( javaAssociationMetadata.getInterfaceName() )
+                && !javaFieldMetadata.isBooleanGetter() )
+            {
+                returnType = new JClass( javaAssociationMetadata.getInterfaceName() );
+                
+                interfaceCast = "(" + javaAssociationMetadata.getInterfaceName() + ") ";
+            }
+        }
+        
+        JMethod getter = new JMethod( returnType, prefix + propertyName );
 
         getter.getJDocComment().setComment( "Get " + modelField.getDescription() );
 
-        getter.getSourceCode().add( "return this." + field.getName() + ";" );
+        getter.getSourceCode().add( "return " + interfaceCast + "this." + field.getName() + ";" );
 
         return getter;
     }
@@ -583,47 +603,75 @@ public class JavaModelloGenerator
         JMethod setter = new JMethod( null, "set" + propertyName );
 
         setter.getJDocComment().setComment( "Set " + modelField.getDescription() );
+        
+        JType parameterType = getDesiredType( modelField, false );
 
-        setter.addParameter( new JParameter( field.getType(), field.getName() ) );
+        setter.addParameter( new JParameter( parameterType, field.getName() ) );
 
         JSourceCode sc = setter.getSourceCode();
-
-        if ( modelField instanceof ModelAssociation && isBidirectionalAssociation( (ModelAssociation) modelField ) &&
-            ModelAssociation.ONE_MULTIPLICITY.equals( ( (ModelAssociation) modelField ).getMultiplicity() ) )
+        
+        if ( modelField instanceof ModelAssociation )
         {
             ModelAssociation modelAssociation = (ModelAssociation) modelField;
+            
+            JavaAssociationMetadata javaAssociationMetadata = (JavaAssociationMetadata) modelAssociation
+                .getAssociationMetadata( JavaAssociationMetadata.ID );
+            
+            if ( isBidirectionalAssociation( modelAssociation )
+                && ModelAssociation.ONE_MULTIPLICITY.equals( modelAssociation.getMultiplicity() ) )
+            {
+                if ( javaAssociationMetadata.isGenerateBreak() )
+                {
+                    sc.add( "if ( this." + field.getName() + " != null )" );
+    
+                    sc.add( "{" );
+    
+                    sc.indent();
+    
+                    sc.add( "this." + field.getName() + ".break" + modelAssociation.getModelClass().getName() +
+                        "Association( this );" );
+    
+                    sc.unindent();
+    
+                    sc.add( "}" );
+    
+                    sc.add( "" );
+                }
 
-            sc.add( "if ( this." + field.getName() + " != null )" );
+                sc.add( "this." + field.getName() + " = " + field.getName() + ";" );
 
-            sc.add( "{" );
+                if ( javaAssociationMetadata.isGenerateCreate() )
+                {
+                    sc.add( "" );
 
-            sc.indent();
-
-            sc.add( "this." + field.getName() + ".break" + modelAssociation.getModelClass().getName() +
-                "Association( this );" );
-
-            sc.unindent();
-
-            sc.add( "}" );
-
-            sc.add( "" );
-
-            sc.add( "this." + field.getName() + " = " + field.getName() + ";" );
-
-            sc.add( "" );
-
-            sc.add( "if ( " + field.getName() + " != null )" );
-
-            sc.add( "{" );
-
-            sc.indent();
-
-            sc.add( "this." + field.getName() + ".create" + modelAssociation.getModelClass().getName() +
-                "Association( this );" );
-
-            sc.unindent();
-
-            sc.add( "}" );
+                    sc.add( "if ( " + field.getName() + " != null )" );
+    
+                    sc.add( "{" );
+    
+                    sc.indent();
+    
+                    sc.add( "this." + field.getName() + ".create" + modelAssociation.getModelClass().getName() +
+                        "Association( this );" );
+    
+                    sc.unindent();
+    
+                    sc.add( "}" );
+                }
+            }
+            else
+            {
+                String interfaceCast = "";
+                
+                if ( StringUtils.isNotEmpty( javaAssociationMetadata.getInterfaceName() )
+                    && ModelAssociation.ONE_MULTIPLICITY.equals( modelAssociation.getMultiplicity() ) )
+                {
+                    interfaceCast = "(" + field.getType().getName() + ") ";
+                    
+                    createClassCastAssertion( sc, modelField, "set" );
+                }
+                
+                sc.add( "this." + field.getName() + " = " + interfaceCast + field.getName() + ";" );
+            }
         }
         else
         {
@@ -633,9 +681,57 @@ public class JavaModelloGenerator
         return setter;
     }
 
+    private void createClassCastAssertion( JSourceCode sc, ModelField modelField, String crudModifier )
+    {
+        String propertyName = capitalise( modelField.getName() );
+
+        JField field = createField( modelField );
+        String fieldName = field.getName();
+        JType type = field.getType();
+        
+        if ( modelField instanceof ModelAssociation )
+        {
+            ModelAssociation modelAssociation = (ModelAssociation) modelField;
+            JavaAssociationMetadata javaAssociationMetadata = (JavaAssociationMetadata) modelAssociation
+                .getAssociationMetadata( JavaAssociationMetadata.ID );
+
+            if ( StringUtils.isNotEmpty( javaAssociationMetadata.getInterfaceName() )
+                && ModelAssociation.ONE_MULTIPLICITY.equals( modelAssociation.getMultiplicity() ) )
+            {
+                type = new JClass( javaAssociationMetadata.getInterfaceName() );
+            }
+            else
+            {
+                fieldName = uncapitalise( modelAssociation.getTo() );
+                type = new JClass( modelAssociation.getTo() );
+            }
+        }
+        
+        String instanceName = type.getName();
+        
+        // Add sane class cast exception message
+        // When will sun ever fix this?
+
+        sc.add( "if ( !(" + fieldName + " instanceof " + instanceName + ") )" );
+
+        sc.add( "{" );
+
+        sc.indent();
+
+        sc.add( "throw new ClassCastException( \"" + modelField.getModelClass().getName() + "." + crudModifier
+            + propertyName + "(" + fieldName + ") parameter must be instanceof \" + " + instanceName
+            + ".class.getName() );" );
+
+        sc.unindent();
+
+        sc.add( "}" );
+    }
+
     private void createAssociation( JClass jClass, ModelAssociation modelAssociation )
     {
         JavaFieldMetadata javaFieldMetadata = (JavaFieldMetadata) modelAssociation.getMetadata( JavaFieldMetadata.ID );
+        
+        JavaAssociationMetadata javaAssociationMetadata = (JavaAssociationMetadata) modelAssociation.getAssociationMetadata( JavaAssociationMetadata.ID );
 
         if ( ModelAssociation.MANY_MULTIPLICITY.equals( modelAssociation.getMultiplicity() ) )
         {
@@ -700,132 +796,162 @@ public class JavaModelloGenerator
 
         if ( isBidirectionalAssociation( modelAssociation ) )
         {
-            JMethod createMethod = new JMethod( null, "create" + modelAssociation.getTo() + "Association" );
+            if(javaAssociationMetadata.isGenerateCreate())
+            {
+                createCreateAssociation( jClass, modelAssociation );
+            }
 
-            createMethod.addParameter(
-                new JParameter( new JClass( modelAssociation.getTo() ), uncapitalise( modelAssociation.getTo() ) ) );
+            if(javaAssociationMetadata.isGenerateBreak())
+            {
+                createBreakAssociation( jClass, modelAssociation );
+            }
+        }
+    }
 
-            // TODO: remove after tested
+    private void createCreateAssociation( JClass jClass, ModelAssociation modelAssociation )
+    {
+        JMethod createMethod = new JMethod( null, "create" + modelAssociation.getTo() + "Association" );
+        
+        JavaAssociationMetadata javaAssociationMetadata = (JavaAssociationMetadata) modelAssociation.getAssociationMetadata( JavaAssociationMetadata.ID );
+
+        createMethod.addParameter(
+            new JParameter( new JClass( modelAssociation.getTo() ), uncapitalise( modelAssociation.getTo() ) ) );
+
+        // TODO: remove after tested
 //            createMethod.addException( new JClass( "Exception" ) );
 
-            JSourceCode sc = createMethod.getSourceCode();
+        JSourceCode sc = createMethod.getSourceCode();
 
-            if ( ModelAssociation.ONE_MULTIPLICITY.equals( modelAssociation.getMultiplicity() ) )
+        if ( ModelAssociation.ONE_MULTIPLICITY.equals( modelAssociation.getMultiplicity() ) )
+        {
+            if(javaAssociationMetadata.isGenerateBreak())
             {
                 sc.add( "if ( this." + modelAssociation.getName() + " != null )" );
-
+    
                 sc.add( "{" );
-
+    
                 sc.indent();
-
+    
                 sc.add(
                     "break" + modelAssociation.getTo() + "Association( this." + modelAssociation.getName() + " );" );
-
+    
                 sc.unindent();
-
+    
                 sc.add( "}" );
-
+    
                 sc.add( "" );
-
-                sc.add( "this." + modelAssociation.getName() + " = " + uncapitalise( modelAssociation.getTo() ) + ";" );
-            }
-            else
-            {
-                jClass.addImport( "java.util.Collection" );
-
-                sc.add( "Collection " + modelAssociation.getName() + " = get" +
-                    capitalise( modelAssociation.getName() ) + "();" );
-
-                sc.add( "" );
-
-                sc.add( "if ( get" + capitalise( modelAssociation.getName() ) + "().contains(" +
-                    uncapitalise( modelAssociation.getTo() ) + ") )" );
-
-                sc.add( "{" );
-
-                sc.indent();
-
-                sc.add( "throw new IllegalStateException( \"" + uncapitalise( modelAssociation.getTo() ) +
-                    " is already assigned.\" );" );
-
-                sc.unindent();
-
-                sc.add( "}" );
-
-                sc.add( "" );
-
-                sc.add( modelAssociation.getName() + ".add( " + uncapitalise( modelAssociation.getTo() ) + " );" );
             }
 
-            jClass.addMethod( createMethod );
+            sc.add( "this." + modelAssociation.getName() + " = " + uncapitalise( modelAssociation.getTo() ) + ";" );
+        }
+        else
+        {
+            jClass.addImport( "java.util.Collection" );
 
-            JMethod breakMethod = new JMethod( null, "break" + modelAssociation.getTo() + "Association" );
+            sc.add( "Collection " + modelAssociation.getName() + " = get" +
+                capitalise( modelAssociation.getName() ) + "();" );
 
-            breakMethod.addParameter(
-                new JParameter( new JClass( modelAssociation.getTo() ), uncapitalise( modelAssociation.getTo() ) ) );
+            sc.add( "" );
 
-            // TODO: remove after tested
+            sc.add( "if ( get" + capitalise( modelAssociation.getName() ) + "().contains(" +
+                uncapitalise( modelAssociation.getTo() ) + ") )" );
+
+            sc.add( "{" );
+
+            sc.indent();
+
+            sc.add( "throw new IllegalStateException( \"" + uncapitalise( modelAssociation.getTo() ) +
+                " is already assigned.\" );" );
+
+            sc.unindent();
+
+            sc.add( "}" );
+
+            sc.add( "" );
+
+            sc.add( modelAssociation.getName() + ".add( " + uncapitalise( modelAssociation.getTo() ) + " );" );
+        }
+
+        jClass.addMethod( createMethod );
+    }
+
+    private void createBreakAssociation( JClass jClass, ModelAssociation modelAssociation )
+    {
+        JSourceCode sc;
+        JMethod breakMethod = new JMethod( null, "break" + modelAssociation.getTo() + "Association" );
+
+        breakMethod.addParameter(
+            new JParameter( new JClass( modelAssociation.getTo() ), uncapitalise( modelAssociation.getTo() ) ) );
+
+        // TODO: remove after tested
 //            breakMethod.addException( new JClass( "Exception" ) );
 
-            sc = breakMethod.getSourceCode();
+        sc = breakMethod.getSourceCode();
 
-            if ( ModelAssociation.ONE_MULTIPLICITY.equals( modelAssociation.getMultiplicity() ) )
-            {
-                sc.add( "if ( this." + modelAssociation.getName() + " != " + uncapitalise( modelAssociation.getTo() ) +
-                    " )" );
+        if ( ModelAssociation.ONE_MULTIPLICITY.equals( modelAssociation.getMultiplicity() ) )
+        {
+            sc.add( "if ( this." + modelAssociation.getName() + " != " + uncapitalise( modelAssociation.getTo() ) +
+                " )" );
 
-                sc.add( "{" );
+            sc.add( "{" );
 
-                sc.indent();
+            sc.indent();
 
-                sc.add( "throw new IllegalStateException( \"" + uncapitalise( modelAssociation.getTo() ) +
-                    " isn't associated.\" );" );
+            sc.add( "throw new IllegalStateException( \"" + uncapitalise( modelAssociation.getTo() ) +
+                " isn't associated.\" );" );
 
-                sc.unindent();
+            sc.unindent();
 
-                sc.add( "}" );
+            sc.add( "}" );
 
-                sc.add( "" );
+            sc.add( "" );
 
-                sc.add( "this." + modelAssociation.getName() + " = null;" );
-            }
-            else
-            {
-                sc.add( "if ( ! get" + capitalise( modelAssociation.getName() ) + "().contains( " +
-                    uncapitalise( modelAssociation.getTo() ) + " ) )" );
-
-                sc.add( "{" );
-
-                sc.indent();
-
-                sc.add( "throw new IllegalStateException( \"" + uncapitalise( modelAssociation.getTo() ) +
-                    " isn't associated.\" );" );
-
-                sc.unindent();
-
-                sc.add( "}" );
-
-                sc.add( "" );
-
-                sc.add( "get" + capitalise( modelAssociation.getName() ) + "().remove( " +
-                    uncapitalise( modelAssociation.getTo() ) + " );" );
-            }
-
-            jClass.addMethod( breakMethod );
+            sc.add( "this." + modelAssociation.getName() + " = null;" );
         }
+        else
+        {
+            sc.add( "if ( ! get" + capitalise( modelAssociation.getName() ) + "().contains( " +
+                uncapitalise( modelAssociation.getTo() ) + " ) )" );
+
+            sc.add( "{" );
+
+            sc.indent();
+
+            sc.add( "throw new IllegalStateException( \"" + uncapitalise( modelAssociation.getTo() ) +
+                " isn't associated.\" );" );
+
+            sc.unindent();
+
+            sc.add( "}" );
+
+            sc.add( "" );
+
+            sc.add( "get" + capitalise( modelAssociation.getName() ) + "().remove( " +
+                uncapitalise( modelAssociation.getTo() ) + " );" );
+        }
+
+        jClass.addMethod( breakMethod );
     }
 
     private void createAdder( ModelAssociation modelAssociation, JClass jClass )
     {
         String fieldName = modelAssociation.getName();
 
+        JavaAssociationMetadata javaAssociationMetadata = (JavaAssociationMetadata) modelAssociation.getAssociationMetadata( JavaAssociationMetadata.ID );
+        
         String parameterName = uncapitalise( modelAssociation.getTo() );
-
+        String implementationParameterName = parameterName;
+        
         boolean bidirectionalAssociation = isBidirectionalAssociation( modelAssociation );
 
         JType addType;
 
-        if ( modelAssociation.getToClass() != null )
+        if ( StringUtils.isNotEmpty( javaAssociationMetadata.getInterfaceName() ) )
+        {
+            addType = new JClass( javaAssociationMetadata.getInterfaceName() );
+            implementationParameterName = "( (" + modelAssociation.getTo() + ") " + parameterName + " )";
+        }
+        else if ( modelAssociation.getToClass() != null )
         {
             addType = new JClass( modelAssociation.getToClass().getName() );
         }
@@ -859,16 +985,18 @@ public class JavaModelloGenerator
             JMethod adder = new JMethod( null, "add" + singular( capitalise( fieldName ) ) );
 
             adder.addParameter( new JParameter( addType, parameterName ) );
+            
+            createClassCastAssertion( adder.getSourceCode(), modelAssociation, "add" );
 
-            adder.getSourceCode().add( "get" + capitalise( fieldName ) + "().add( " + parameterName + " );" );
+            adder.getSourceCode().add( "get" + capitalise( fieldName ) + "().add( " + implementationParameterName + " );" );
 
-            if ( bidirectionalAssociation )
+            if ( bidirectionalAssociation && javaAssociationMetadata.isGenerateCreate() )
             {
                 // TODO: remove after tested
 //                adder.addException( new JClass( "Exception" ) );
-
+                
                 adder.getSourceCode().add(
-                    parameterName + ".create" + modelAssociation.getModelClass().getName() + "Association( this );" );
+                    implementationParameterName + ".create" + modelAssociation.getModelClass().getName() + "Association( this );" );
             }
 
             jClass.addMethod( adder );
@@ -877,7 +1005,9 @@ public class JavaModelloGenerator
 
             remover.addParameter( new JParameter( addType, parameterName ) );
 
-            if ( bidirectionalAssociation )
+            createClassCastAssertion( remover.getSourceCode(), modelAssociation, "remove" );
+
+            if ( bidirectionalAssociation && javaAssociationMetadata.isGenerateBreak() )
             {
                 // TODO: remove after tested
 //                remover.addException( new JClass( "Exception" ) );
@@ -886,7 +1016,7 @@ public class JavaModelloGenerator
                     parameterName + ".break" + modelAssociation.getModelClass().getName() + "Association( this );" );
             }
 
-            remover.getSourceCode().add( "get" + capitalise( fieldName ) + "().remove( " + parameterName + " );" );
+            remover.getSourceCode().add( "get" + capitalise( fieldName ) + "().remove( " + implementationParameterName + " );" );
 
             jClass.addMethod( remover );
         }
@@ -928,5 +1058,33 @@ public class JavaModelloGenerator
         }
 
         return false;
+    }
+    
+    private JType getDesiredType( ModelField modelField, boolean useTo )
+    {
+        JField field = createField( modelField );
+        JType type = field.getType();
+
+        if ( modelField instanceof ModelAssociation )
+        {
+            ModelAssociation modelAssociation = (ModelAssociation) modelField;
+            JavaAssociationMetadata javaAssociationMetadata = (JavaAssociationMetadata) modelAssociation
+                .getAssociationMetadata( JavaAssociationMetadata.ID );
+
+            if ( StringUtils.isNotEmpty( javaAssociationMetadata.getInterfaceName() )
+                && ModelAssociation.ONE_MULTIPLICITY.equals( modelAssociation.getMultiplicity() ) )
+            {
+                type = new JClass( javaAssociationMetadata.getInterfaceName() );
+            }
+            else
+            {
+                if(useTo)
+                {
+                    type = new JClass( modelAssociation.getTo() );
+                }
+            }
+        }
+
+        return type;
     }
 }
