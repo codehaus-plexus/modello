@@ -38,7 +38,7 @@
           <version>1.0.0</version>
           <association java.generate-break="false" java.generate-create="false" java.use-interface="org.codehaus.modello.plugin.java.Permission">
             <type>BiPermission</type>
-            <!-- Intentionally not setting multiplicity to test interface override and casting. -->
+            <multiplicity>1</multiplicity>
           </association>
         </field>
       </fields>

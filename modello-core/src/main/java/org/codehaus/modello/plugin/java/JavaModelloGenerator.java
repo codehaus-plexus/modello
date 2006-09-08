@@ -613,64 +613,64 @@ public class JavaModelloGenerator
         if ( modelField instanceof ModelAssociation )
         {
             ModelAssociation modelAssociation = (ModelAssociation) modelField;
-            
+
             JavaAssociationMetadata javaAssociationMetadata = (JavaAssociationMetadata) modelAssociation
                 .getAssociationMetadata( JavaAssociationMetadata.ID );
-            
+
+            boolean isOneMultiplicity = false;
+
             if ( isBidirectionalAssociation( modelAssociation )
                 && ModelAssociation.ONE_MULTIPLICITY.equals( modelAssociation.getMultiplicity() ) )
             {
-                if ( javaAssociationMetadata.isGenerateBreak() )
-                {
-                    sc.add( "if ( this." + field.getName() + " != null )" );
-    
-                    sc.add( "{" );
-    
-                    sc.indent();
-    
-                    sc.add( "this." + field.getName() + ".break" + modelAssociation.getModelClass().getName() +
-                        "Association( this );" );
-    
-                    sc.unindent();
-    
-                    sc.add( "}" );
-    
-                    sc.add( "" );
-                }
-
-                sc.add( "this." + field.getName() + " = " + field.getName() + ";" );
-
-                if ( javaAssociationMetadata.isGenerateCreate() )
-                {
-                    sc.add( "" );
-
-                    sc.add( "if ( " + field.getName() + " != null )" );
-    
-                    sc.add( "{" );
-    
-                    sc.indent();
-    
-                    sc.add( "this." + field.getName() + ".create" + modelAssociation.getModelClass().getName() +
-                        "Association( this );" );
-    
-                    sc.unindent();
-    
-                    sc.add( "}" );
-                }
+                isOneMultiplicity = true;
             }
-            else
+
+            if ( isOneMultiplicity && javaAssociationMetadata.isGenerateBreak() )
             {
-                String interfaceCast = "";
-                
-                if ( StringUtils.isNotEmpty( javaAssociationMetadata.getInterfaceName() )
-                    && ModelAssociation.ONE_MULTIPLICITY.equals( modelAssociation.getMultiplicity() ) )
-                {
-                    interfaceCast = "(" + field.getType().getName() + ") ";
-                    
-                    createClassCastAssertion( sc, modelField, "set" );
-                }
-                
-                sc.add( "this." + field.getName() + " = " + interfaceCast + field.getName() + ";" );
+                sc.add( "if ( this." + field.getName() + " != null )" );
+
+                sc.add( "{" );
+
+                sc.indent();
+
+                sc.add( "this." + field.getName() + ".break" + modelAssociation.getModelClass().getName()
+                    + "Association( this );" );
+
+                sc.unindent();
+
+                sc.add( "}" );
+
+                sc.add( "" );
+            }
+
+            String interfaceCast = "";
+
+            if ( StringUtils.isNotEmpty( javaAssociationMetadata.getInterfaceName() )
+                && ModelAssociation.ONE_MULTIPLICITY.equals( modelAssociation.getMultiplicity() ) )
+            {
+                interfaceCast = "(" + field.getType().getName() + ") ";
+
+                createClassCastAssertion( sc, modelField, "set" );
+            }
+
+            sc.add( "this." + field.getName() + " = " + interfaceCast + field.getName() + ";" );
+
+            if ( isOneMultiplicity && javaAssociationMetadata.isGenerateCreate() )
+            {
+                sc.add( "" );
+
+                sc.add( "if ( " + field.getName() + " != null )" );
+
+                sc.add( "{" );
+
+                sc.indent();
+
+                sc.add( "this." + field.getName() + ".create" + modelAssociation.getModelClass().getName()
+                    + "Association( this );" );
+
+                sc.unindent();
+
+                sc.add( "}" );
             }
         }
         else
