@@ -23,6 +23,7 @@ package org.codehaus.modello.plugin.jpox;
  */
 
 import org.codehaus.modello.ModelloException;
+import org.codehaus.modello.ModelloRuntimeException;
 import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
@@ -222,7 +223,18 @@ public class JPoxJdoMappingModelloGenerator
 
         if ( modelClass.getSuperClass() != null )
         {
-            persistenceCapableSuperclass = getModel().getClass( modelClass.getSuperClass(), getGeneratedVersion() );
+            try
+            {
+                persistenceCapableSuperclass = getModel().getClass( modelClass.getSuperClass(), getGeneratedVersion() );
+            }
+            catch ( ModelloRuntimeException e )
+            {
+                // Fallback and don't fail if superClass isn't another defined modello class.
+                // It might be a reference to an external super class.
+                persistenceCapableSuperclass = null;
+                getLogger().warn( "Super Class: " + modelClass.getSuperClass()
+                                      + " is not defined within Model. Falling back to external usage." );
+            }
         }
 
         if ( persistenceCapableSuperclass != null )
