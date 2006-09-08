@@ -172,7 +172,7 @@ public class XsdGenerator
         {
             fields.addAll( modelClass.getFields( getGeneratedVersion() ) );
             String superClass = modelClass.getSuperClass();
-            if ( superClass != null )
+            if ( modelClass.hasSuperClass() && modelClass.isInternalSuperClass() )
             {
                 modelClass = objectModel.getClass( superClass, getGeneratedVersion() );
             }

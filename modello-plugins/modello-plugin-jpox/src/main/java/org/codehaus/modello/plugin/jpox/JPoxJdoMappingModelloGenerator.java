@@ -221,20 +221,9 @@ public class JPoxJdoMappingModelloGenerator
 
         ModelClass persistenceCapableSuperclass = null;
 
-        if ( modelClass.getSuperClass() != null )
+        if ( modelClass.hasSuperClass() && modelClass.isInternalSuperClass() )
         {
-            try
-            {
-                persistenceCapableSuperclass = getModel().getClass( modelClass.getSuperClass(), getGeneratedVersion() );
-            }
-            catch ( ModelloRuntimeException e )
-            {
-                // Fallback and don't fail if superClass isn't another defined modello class.
-                // It might be a reference to an external super class.
-                persistenceCapableSuperclass = null;
-                getLogger().warn( "Super Class: " + modelClass.getSuperClass()
-                                      + " is not defined within Model. Falling back to external usage." );
-            }
+            persistenceCapableSuperclass = getModel().getClass( modelClass.getSuperClass(), getGeneratedVersion() );
         }
 
         if ( persistenceCapableSuperclass != null )

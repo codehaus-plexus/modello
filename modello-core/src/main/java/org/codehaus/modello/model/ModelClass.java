@@ -42,7 +42,9 @@ public class ModelClass
     extends BaseElement
 {
     private String superClass;
-    
+
+    private boolean isInternalSuperClass;
+
     private List interfaces;
 
     private String packageName;
@@ -247,7 +249,7 @@ public class ModelClass
 
         ModelClass c = this;
 
-        while ( c.getSuperClass() != null )
+        while ( c.hasSuperClass() && c.isInternalSuperClass() )
         {
             ModelClass parent = model.getClass( c.getSuperClass(), getVersionRange() );
 
@@ -399,7 +401,12 @@ public class ModelClass
 
     public boolean hasSuperClass()
     {
-        return ( superClass != null );
+        return StringUtils.isNotEmpty( superClass );
+    }
+
+    public boolean isInternalSuperClass()
+    {
+        return isInternalSuperClass;
     }
 
     public ClassMetadata getMetadata( String key )
@@ -439,13 +446,16 @@ public class ModelClass
         throws ModelValidationException
     {
         // Check if superClass exists
-        if ( ! isEmpty( superClass ) )
+        if ( hasSuperClass() )
         {
-            // If you use '.' dot notation in your class name, assume
-            // you are refering to an external class name.
-            if ( superClass.indexOf( '.' ) == (-1) )
+            try
             {
                 model.getClass( superClass, getVersionRange() );
+                isInternalSuperClass = true;
+            }
+            catch ( ModelloRuntimeException e )
+            {
+                isInternalSuperClass = false;
             }
         }
 
