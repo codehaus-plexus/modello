@@ -142,8 +142,10 @@ public class Xpp3WriterGenerator
         JMethod marshall = new JMethod( null, "write" );
 
         marshall.addParameter( new JParameter( new JClass( "Writer" ), "writer" ) );
+        
+        String rootElementParameterName = uncapitalise( root );
 
-        marshall.addParameter( new JParameter( new JClass( root ), rootElement ) );
+        marshall.addParameter( new JParameter( new JClass( root ), rootElementParameterName ) );
 
         marshall.addException( new JClass( "java.io.IOException" ) );
 
@@ -159,9 +161,9 @@ public class Xpp3WriterGenerator
 
         sc.add( "serializer.setOutput( writer );" );
 
-        sc.add( "serializer.startDocument( " + rootElement + ".getModelEncoding(), null );" );
+        sc.add( "serializer.startDocument( " + rootElementParameterName + ".getModelEncoding(), null );" );
 
-        sc.add( "write" + root + "( " + rootElement + ", \"" + rootElement + "\", serializer );" );
+        sc.add( "write" + root + "( " + rootElementParameterName + ", \"" + rootElement + "\", serializer );" );
 
         sc.add( "serializer.endDocument();" );
 
