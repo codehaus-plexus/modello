@@ -42,7 +42,7 @@ public class ModelClass
     extends BaseElement
 {
     private String superClass;
-
+    
     private List interfaces;
 
     private String packageName;
@@ -441,7 +441,12 @@ public class ModelClass
         // Check if superClass exists
         if ( ! isEmpty( superClass ) )
         {
-            model.getClass( superClass, getVersionRange() );
+            // If you use '.' dot notation in your class name, assume
+            // you are refering to an external class name.
+            if ( superClass.indexOf( '.' ) == (-1) )
+            {
+                model.getClass( superClass, getVersionRange() );
+            }
         }
 
         if ( model.getDefault( ModelDefault.CHECK_DEPRECATION ).getBoolean() )

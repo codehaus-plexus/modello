@@ -15,6 +15,7 @@
       <interfaces>
         <interface>org.codehaus.modello.plugin.java.Role</interface>
       </interfaces>
+      <superClass>org.codehaus.modello.plugin.java.AbstractPrincipal</superClass>
       <fields>
         <field>
           <name>name</name>
