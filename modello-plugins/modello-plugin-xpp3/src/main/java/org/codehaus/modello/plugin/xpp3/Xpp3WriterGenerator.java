@@ -301,8 +301,8 @@ public class Xpp3WriterGenerator
 
                     sc.indent();
 
-                    sc.add(
-                        "write" + association.getTo() + "( " + value + ", \"" + fieldTagName + "\", serializer );" );
+                    sc.add( "write" + association.getTo() + "( (" + association.getTo() + ") " + value + ", \""
+                        + fieldTagName + "\", serializer );" );
 
                     sc.unindent();
 
