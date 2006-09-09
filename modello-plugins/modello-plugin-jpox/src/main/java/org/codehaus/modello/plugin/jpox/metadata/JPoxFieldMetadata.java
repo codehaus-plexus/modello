@@ -44,6 +44,10 @@ public class JPoxFieldMetadata
     private String columnName;
     
     private boolean primaryKey;
+    
+    private String persistenceModifier;
+    
+    private String valueStrategy;
 
     public List getFetchGroupNames()
     {
@@ -95,4 +99,23 @@ public class JPoxFieldMetadata
         this.primaryKey = primaryKey;
     }
 
+    public String getPersistenceModifier()
+    {
+        return persistenceModifier;
+    }
+
+    public void setPersistenceModifier( String persistenceModifier )
+    {
+        this.persistenceModifier = persistenceModifier;
+    }
+
+    public String getValueStrategy()
+    {
+        return valueStrategy;
+    }
+
+    public void setValueStrategy( String valueStrategy )
+    {
+        this.valueStrategy = valueStrategy;
+    }
 }

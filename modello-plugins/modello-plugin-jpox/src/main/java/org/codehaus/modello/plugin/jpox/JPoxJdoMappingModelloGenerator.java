@@ -23,7 +23,6 @@ package org.codehaus.modello.plugin.jpox;
  */
 
 import org.codehaus.modello.ModelloException;
-import org.codehaus.modello.ModelloRuntimeException;
 import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
@@ -457,6 +456,10 @@ public class JPoxJdoMappingModelloGenerator
         {
             writer.addAttribute( "persistence-modifier", "none" );
         }
+        else if ( StringUtils.isNotEmpty( jpoxMetadata.getPersistenceModifier() ) )
+        {
+            writer.addAttribute( "persistence-modifier", jpoxMetadata.getPersistenceModifier() );
+        }
 
         if ( modelField.isRequired() )
         {
@@ -472,13 +475,15 @@ public class JPoxJdoMappingModelloGenerator
             writer.addAttribute( "column", jpoxMetadata.getColumnName() );
         }
 
-        // TODO: The value-strategy attribute should be customizable.
-        // See http://www.jpox.org/docs/1_1/identity_generation.html
         if ( jpoxMetadata.isPrimaryKey() )
         {
             writer.addAttribute( "primary-key", "true" );
 
-            writer.addAttribute( "value-strategy", "native" );
+            // value-strategy is only useful when you have a primary-key defined for the field.
+            if ( StringUtils.isNotEmpty( jpoxMetadata.getValueStrategy() ) )
+            {
+                writer.addAttribute( "value-strategy", jpoxMetadata.getValueStrategy() );
+            }
         }
 
         if ( jpoxMetadata.getMappedBy() != null )
@@ -532,11 +537,11 @@ public class JPoxJdoMappingModelloGenerator
             writer.addAttribute( "default-fetch-group", am.isPart().toString() );
         }
 
-        boolean dependent = true;
+        boolean isStoreDependent = true;
 
         if ( am.isPart() != null )
         {
-            dependent = am.isPart().booleanValue();
+            isStoreDependent = am.isPart().booleanValue();
         }
 
         if ( association.getType().equals( "java.util.List" ) || association.getType().equals( "java.util.Set" ) )
@@ -552,7 +557,7 @@ public class JPoxJdoMappingModelloGenerator
                 writer.addAttribute( "element-type", association.getTo() );
             }
 
-            if ( jpoxMetadata.isDependent() )
+            if ( jpoxMetadata.isDependent() || isStoreDependent )
             {
                 writer.addAttribute( "dependent-element", "true" );
             }

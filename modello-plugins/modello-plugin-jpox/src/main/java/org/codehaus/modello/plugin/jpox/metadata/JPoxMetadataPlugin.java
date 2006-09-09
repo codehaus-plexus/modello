@@ -64,6 +64,10 @@ public class JPoxMetadataPlugin
     
     public static final String PRIMARY_KEY = "jpox.primary-key";
     
+    public static final String VALUE_STRATEGY = "jpox.value-strategy";
+    
+    public static final String PERSISTENCE_MODIFIER = "jpox.persistence-modifier";
+    
     public static final String IDENTITY_TYPE = "jpox.identity-type";
     
     public static final String IDENTITY_CLASS = "jpox.identity-class";
@@ -152,7 +156,20 @@ public class JPoxMetadataPlugin
         {
             metadata.setColumnName( column );
         }
+        
+        String persistenceModifier = (String) data.get( PERSISTENCE_MODIFIER );
 
+        if ( StringUtils.isNotEmpty( persistenceModifier ) )
+        {
+            metadata.setPersistenceModifier( persistenceModifier );
+        }
+
+        // According to http://www.jpox.org/docs/1_1/identity_generation.html the default value for
+        // this should be 'native', however this is untrue in jpox-1.1.1
+        metadata.setValueStrategy( "native" );
+        // Allowing the ability to unset the value-strategy using jpox.value-strategy="".
+        metadata.setValueStrategy( (String) data.get( VALUE_STRATEGY ) );
+        
         return metadata;
     }
 
