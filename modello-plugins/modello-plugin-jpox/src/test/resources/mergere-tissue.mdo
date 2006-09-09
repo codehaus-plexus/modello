@@ -142,7 +142,7 @@
       </fields>
     </class>
     <!-- This class has a non-storable and abstract super class -->
-    <class stash.storable="true">
+    <class stash.storable="true" jpox.table="MUser">
       <name>User</name>
       <packageName>org.mergere.user</packageName>
       <version>1.0.0</version>
