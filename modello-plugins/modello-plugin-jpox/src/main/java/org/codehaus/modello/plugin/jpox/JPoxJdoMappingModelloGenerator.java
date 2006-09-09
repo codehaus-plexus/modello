@@ -557,7 +557,7 @@ public class JPoxJdoMappingModelloGenerator
                 writer.addAttribute( "element-type", association.getTo() );
             }
 
-            if ( jpoxMetadata.isDependent() || isStoreDependent )
+            if ( jpoxMetadata.isDependent() )
             {
                 writer.addAttribute( "dependent-element", "true" );
             }
