@@ -166,10 +166,20 @@ public class JPoxMetadataPlugin
 
         // According to http://www.jpox.org/docs/1_1/identity_generation.html the default value for
         // this should be 'native', however this is untrue in jpox-1.1.1
-        metadata.setValueStrategy( (String) data.get( VALUE_STRATEGY ) );
-        if ( StringUtils.isEmpty( metadata.getValueStrategy() ) )
+        metadata.setValueStrategy( "native" );
+        
+        if ( StringUtils.isNotEmpty( (String) data.get( VALUE_STRATEGY ) ) )
         {
-            metadata.setValueStrategy( "native" );
+            String valueStrategy = (String) data.get( VALUE_STRATEGY );
+
+            if ( StringUtils.equals( valueStrategy, "off" ) )
+            {
+                metadata.setValueStrategy( null );
+            }
+            else
+            {
+                metadata.setValueStrategy( valueStrategy );
+            }
         }
         
         return metadata;

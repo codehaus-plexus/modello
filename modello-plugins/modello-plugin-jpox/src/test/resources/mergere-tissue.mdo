@@ -35,6 +35,14 @@
           </association>
         </field>
         <field>
+          <name>friends</name>
+          <version>1.0.0</version>
+          <association jpox.dependent="false">
+            <type>User</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+        <field>
           <name>reporter</name>
           <version>1.0.0</version>
           <!-- this should not set default-fetch-group at all -->
@@ -140,10 +148,11 @@
       <version>1.0.0</version>
       <superClass>AbstractUser</superClass>
       <fields>
-        <field>
+        <field jpox.primary-key="true" jpox.value-strategy="off">
           <name>id</name>
           <version>1.0.0</version>
           <type>String</type>
+          <identifier>true</identifier>
         </field>
         <field>
           <name>name</name>

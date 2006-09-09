@@ -60,6 +60,8 @@ public class JPoxJdoMappingModelloGenerator
     private final static Map PRIMITIVE_IDENTITY_MAP;
     
     private final static List IDENTITY_TYPES;
+    
+    private final static List VALUE_STRATEGY_LIST;
 
     static
     {
@@ -79,10 +81,21 @@ public class JPoxJdoMappingModelloGenerator
         PRIMITIVE_IDENTITY_MAP.put( "Byte", "javax.jdo.identity.ByteIdentity" );
         
         IDENTITY_TYPES = new ArrayList();
+        IDENTITY_TYPES.add( "application" );
+        IDENTITY_TYPES.add( "datastore" );
+        IDENTITY_TYPES.add( "nondurable" );
         
-        IDENTITY_TYPES.add("application");
-        IDENTITY_TYPES.add("datastore");
-        IDENTITY_TYPES.add("nondurable");
+        VALUE_STRATEGY_LIST = new ArrayList();
+        VALUE_STRATEGY_LIST.add( "off" );
+        VALUE_STRATEGY_LIST.add( "native" );
+        VALUE_STRATEGY_LIST.add( "sequence" );
+        VALUE_STRATEGY_LIST.add( "identity" );
+        VALUE_STRATEGY_LIST.add( "increment" );
+        VALUE_STRATEGY_LIST.add( "uuid-string" );
+        VALUE_STRATEGY_LIST.add( "uuid-hex" );
+        VALUE_STRATEGY_LIST.add( "datastore-uuid-hex" );
+        VALUE_STRATEGY_LIST.add( "max" );
+        VALUE_STRATEGY_LIST.add( "auid" );
     }
 
     public void generate( Model model, Properties properties )
@@ -251,6 +264,8 @@ public class JPoxJdoMappingModelloGenerator
         // TODO: for now, assume that any primary key will be set in the super class
         // While it should be possible to have abstract super classes and have the
         // key defined in the sub class this is not implemented yet.
+        
+        boolean needInheritance = false;
 
         if ( persistenceCapableSuperclass == null )
         {
@@ -272,6 +287,45 @@ public class JPoxJdoMappingModelloGenerator
         }
         else
         {
+            needInheritance = true;
+        }
+
+        if ( StringUtils.isNotEmpty( jpoxMetadata.getIdentityClass() ) )
+        {
+            // Use user provided objectId class.
+            writer.addAttribute( "objectid-class", jpoxMetadata.getIdentityClass() );
+        }
+        else
+        {
+            // Calculate the objectId class.
+
+            List primaryKeys = getPrimaryKeyFields( modelClass );
+
+            // TODO: write generation support for multi-primary-key support.
+            //       would likely need to write a java class that can supply an ObjectIdentity
+            //       to the jpox/jdo implementation.
+            if ( primaryKeys.size() > 1 )
+            {
+                throw new ModelloException( "The JDO mapping generator does not yet support Object Identifier generation "
+                                                + "for the " + primaryKeys.size()
+                                                + " fields specified as <identifier> or "
+                                                + "with jpox.primary-key=\"true\"" );
+            }
+
+            if ( primaryKeys.size() == 1 )
+            {
+                ModelField modelField = (ModelField) primaryKeys.get( 0 );
+                String objectIdClass = (String) PRIMITIVE_IDENTITY_MAP.get( modelField.getType() );
+
+                if ( StringUtils.isNotEmpty( objectIdClass ) )
+                {
+                    writer.addAttribute( "objectid-class", objectIdClass );
+                }
+            }
+        }
+        
+        if ( needInheritance )
+        {
             writer.startElement( "inheritance" );
 
             // TODO: The table strategy should be customizable
@@ -281,39 +335,6 @@ public class JPoxJdoMappingModelloGenerator
             writer.addAttribute( "strategy", "new-table" );
 
             writer.endElement();
-        }
-
-        if(StringUtils.isNotEmpty( jpoxMetadata.getIdentityClass() ))
-        {
-            // Use user provided objectId class.
-            writer.addAttribute( "objectid-class", jpoxMetadata.getIdentityClass() );
-        }
-        else
-        {
-            // Calculate the objectId class.
-            
-            List primaryKeys = getPrimaryKeyFields( modelClass );
-            
-            // TODO: write generation support for multi-primary-key support.
-            //       would likely need to write a java class that can supply an ObjectIdentity
-            //       to the jpox/jdo implementation.
-            if ( primaryKeys.size() > 1 )
-            {
-                throw new ModelloException( "The JDO mapping generator does not yet support Object Identifier generation " + 
-                                            "for the " + primaryKeys.size() + " fields specified as <identifier> or " +
-                                            "with jpox.primary-key=\"true\"" );
-            }
-            
-            if(primaryKeys.size() == 1)
-            {
-                ModelField modelField = (ModelField) primaryKeys.get( 0 );
-                String objectIdClass = (String) PRIMITIVE_IDENTITY_MAP.get( modelField.getType() );
-                
-                if ( StringUtils.isNotEmpty( objectIdClass ) )
-                {
-                    writer.addAttribute( "objectid-class", objectIdClass );
-                }
-            }
         }
 
         // ----------------------------------------------------------------------
@@ -442,7 +463,7 @@ public class JPoxJdoMappingModelloGenerator
         }
     }
 
-    private void writeModelField( XMLWriter writer, ModelField modelField )
+    private void writeModelField( XMLWriter writer, ModelField modelField ) throws ModelloException
     {
         writer.startElement( "field" );
 
@@ -482,6 +503,14 @@ public class JPoxJdoMappingModelloGenerator
             // value-strategy is only useful when you have a primary-key defined for the field.
             if ( StringUtils.isNotEmpty( jpoxMetadata.getValueStrategy() ) )
             {
+                String valueStrategy = jpoxMetadata.getValueStrategy();
+                if ( !VALUE_STRATEGY_LIST.contains( valueStrategy ) )
+                {
+                    throw new ModelloException( "The JDO mapping generator does not support the specified " +
+                                                "value-strategy '" + valueStrategy + "'. " +
+                                                "Supported types: " + VALUE_STRATEGY_LIST );
+                }
+                
                 writer.addAttribute( "value-strategy", jpoxMetadata.getValueStrategy() );
             }
         }
@@ -534,18 +563,13 @@ public class JPoxJdoMappingModelloGenerator
 
         if ( am.isPart() != null )
         {
+            // This gets added onto the <field> element
             writer.addAttribute( "default-fetch-group", am.isPart().toString() );
         }
-
-        boolean isStoreDependent = true;
-
-        if ( am.isPart() != null )
-        {
-            isStoreDependent = am.isPart().booleanValue();
-        }
-
+        
         if ( association.getType().equals( "java.util.List" ) || association.getType().equals( "java.util.Set" ) )
         {
+            // Start <collection> element
             writer.startElement( "collection" );
 
             if ( association.getTo().equals( "String" ) )
@@ -557,7 +581,7 @@ public class JPoxJdoMappingModelloGenerator
                 writer.addAttribute( "element-type", association.getTo() );
             }
 
-            if ( jpoxMetadata.isDependent() || isStoreDependent )
+            if ( jpoxMetadata.isDependent() )
             {
                 writer.addAttribute( "dependent-element", "true" );
             }
@@ -566,6 +590,7 @@ public class JPoxJdoMappingModelloGenerator
                 writer.addAttribute( "dependent-element", "false" );
             }
 
+            // End <collection> element
             writer.endElement();
 
             if ( jpoxMetadata.isJoin() )
