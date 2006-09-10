@@ -22,7 +22,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * DBKeywords 
+ * DBKeywords, checks against the SQL92 Reserved Word List.
+ * 
+ * TODO: Need to ensure that SQL99 and SQL2003 are also covered - http://developer.mimer.se/validator/sql-reserved-words.tml
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
@@ -30,6 +32,8 @@ import java.util.List;
 public class DBKeywords
 {
     private static final List sql92reserved;
+    
+    public static final String URL_SQL92 = "http://db.apache.org/derby/docs/10.1/ref/rrefkeywords29722.html";
 
     static
     {

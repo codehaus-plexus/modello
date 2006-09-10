@@ -258,7 +258,8 @@ public class JPoxJdoMappingModelloGenerator
                                             "SQL Reserved word '" + jpoxMetadata.getTable() + "' as an alternative" +
                                             "table name for the " + modelClass.getName() + " class.  Please use" +
                                             "a different name for the <class jpox.table=\"" + 
-                                            jpoxMetadata.getTable() + "\"> attribute.");
+                                            jpoxMetadata.getTable() + "\"> attribute.  See " + 
+                                            DBKeywords.URL_SQL92 + " for complete list.");
             }
             
             writer.addAttribute( "table", jpoxMetadata.getTable() );
@@ -271,7 +272,8 @@ public class JPoxJdoMappingModelloGenerator
                 throw new ModelloException( "The JDO mapping generator has detected the use of the " +
                                             "SQL Reserved word '" + modelClass.getName() + "' as a class name.  " +
                                             "Please specify an alternative jpox table name using the " +
-                                            "<class jpox.table=\"\"> attribute, or use a different class name."); 
+                                            "<class jpox.table=\"\"> attribute, or use a different class name.  See " + 
+                                            DBKeywords.URL_SQL92 + " for complete list."); 
             }
         }
 
@@ -522,7 +524,8 @@ public class JPoxJdoMappingModelloGenerator
                                             "column name for the " + modelField.getName() + " field of the " + 
                                             modelField.getModelClass().getName() + " class.  Please use" +
                                             "a different name for the <field jpox.column=\"" + 
-                                            jpoxMetadata.getColumnName() + "\"> attribute.");
+                                            jpoxMetadata.getColumnName() + "\"> attribute.  See " + 
+                                            DBKeywords.URL_SQL92 + " for complete list.");
             }
             
             writer.addAttribute( "column", jpoxMetadata.getColumnName() );
@@ -535,8 +538,9 @@ public class JPoxJdoMappingModelloGenerator
                 throw new ModelloException( "The JDO mapping generator has detected the use of the " +
                                             "SQL Reserved word '" + modelField.getName() + "' as a field name of the " +
                                             modelField.getModelClass().getName() + " class.  Please use specify an " +
-                                            "alternative jpox table name using the <field jpox.table=\"\"> " +
-                                            "attribute, or use a different class name."); 
+                                            "alternative jpox table name using the <field jpox.column=\"\"> " +
+                                            "attribute, or use a different class name.  See " + 
+                                            DBKeywords.URL_SQL92 + " for complete list."); 
             }
         }
 
