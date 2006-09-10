@@ -117,6 +117,15 @@ public class JavaMetadataPlugin
         {
             metadata.setInterfaceName( interfaceName );
         }
+        
+        String initMode = (String) data.get( "java.init" );
+        // default to lazy. (for backwards compatibilty reasons)
+        metadata.setInitializationMode( JavaAssociationMetadata.LAZY_INIT );
+        
+        if ( StringUtils.isNotEmpty( initMode ) )
+        {
+            metadata.setInitializationMode( initMode );
+        }
 
         return metadata;
     }

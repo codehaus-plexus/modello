@@ -24,6 +24,9 @@ package org.codehaus.modello.plugin.java;
 
 import org.codehaus.modello.metadata.AssociationMetadata;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
  * @version $Id$
@@ -33,6 +36,20 @@ public class JavaAssociationMetadata
 {
     public final static String ID = JavaAssociationMetadata.class.getName();
 
+    public final static String LAZY_INIT = "lazy";
+    public final static String CONSTRUCTOR_INIT = "constructor";
+    public final static String FIELD_INIT = "field";
+    
+    public final static List INIT_TYPES;
+    
+    static
+    {
+        INIT_TYPES = new ArrayList();
+        INIT_TYPES.add( LAZY_INIT );
+        INIT_TYPES.add( CONSTRUCTOR_INIT );
+        INIT_TYPES.add( FIELD_INIT );
+    }
+    
     private boolean generateAdd;
 
     private boolean generateRemove;
@@ -40,8 +57,10 @@ public class JavaAssociationMetadata
     private boolean generateBreak;
 
     private boolean generateCreate;
-
+    
     private String interfaceName;
+    
+    private String initializationMode;
 
     public boolean isGenerateAdd()
     {
@@ -91,5 +110,15 @@ public class JavaAssociationMetadata
     public void setInterfaceName( String interfaceName )
     {
         this.interfaceName = interfaceName;
+    }
+    
+    public String getInitializationMode()
+    {
+        return initializationMode;
+    }
+
+    public void setInitializationMode( String initializationMode )
+    {
+        this.initializationMode = initializationMode;
     }
 }

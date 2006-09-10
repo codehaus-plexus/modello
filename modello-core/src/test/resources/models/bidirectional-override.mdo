@@ -55,6 +55,39 @@
           <version>1.0.0</version>
           <type>String</type>
         </field>
+        <field>
+          <name>operations</name>
+          <version>1.0.0</version>
+          <association java.init="constructor">
+            <type>String</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+        <field>
+          <name>tasks</name>
+          <version>1.0.0</version>
+          <association java.init="lazy">
+            <type>String</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+        <field>
+          <name>resources</name>
+          <version>1.0.0</version>
+          <association java.init="field">
+            <type>String</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+        <field>
+          <name>statusIndicators</name>
+          <version>1.0.0</version>
+          <type>Map</type>
+          <association java.init="constructor">
+            <type>String</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
       </fields>
     </class>
   </classes>

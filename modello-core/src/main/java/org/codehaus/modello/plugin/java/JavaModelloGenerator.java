@@ -32,6 +32,7 @@ import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.ModelInterface;
 import org.codehaus.modello.plugin.AbstractModelloGenerator;
 import org.codehaus.modello.plugin.java.javasource.JClass;
+import org.codehaus.modello.plugin.java.javasource.JConstructor;
 import org.codehaus.modello.plugin.java.javasource.JField;
 import org.codehaus.modello.plugin.java.javasource.JInterface;
 import org.codehaus.modello.plugin.java.javasource.JMethod;
@@ -204,21 +205,31 @@ public class JavaModelloGenerator
             }
 
             jClass.addInterface( Serializable.class.getName() );
-
+            
+            JSourceCode jConstructorSource = new JSourceCode();
+            
             for ( Iterator j = modelClass.getFields( getGeneratedVersion() ).iterator(); j.hasNext(); )
             {
                 ModelField modelField = (ModelField) j.next();
 
                 if ( modelField instanceof ModelAssociation )
                 {
-                    createAssociation( jClass, (ModelAssociation) modelField );
+                    createAssociation( jClass, (ModelAssociation) modelField, jConstructorSource );
                 }
                 else
                 {
                     createField( jClass, modelField );
                 }
             }
-
+            
+            if ( !jConstructorSource.isEmpty() )
+            {
+                // Ironic that we are doing lazy init huh?
+                JConstructor jConstructor = jClass.createConstructor();
+                jConstructor.setSourceCode( jConstructorSource );
+                jClass.addConstructor( jConstructor );
+            }
+            
             // ----------------------------------------------------------------------
             // equals() / hashCode() / toString()
             // ----------------------------------------------------------------------
@@ -727,11 +738,20 @@ public class JavaModelloGenerator
         sc.add( "}" );
     }
 
-    private void createAssociation( JClass jClass, ModelAssociation modelAssociation )
+    private void createAssociation( JClass jClass, ModelAssociation modelAssociation, JSourceCode jConstructorSource ) throws ModelloException
     {
         JavaFieldMetadata javaFieldMetadata = (JavaFieldMetadata) modelAssociation.getMetadata( JavaFieldMetadata.ID );
         
         JavaAssociationMetadata javaAssociationMetadata = (JavaAssociationMetadata) modelAssociation.getAssociationMetadata( JavaAssociationMetadata.ID );
+        
+        if ( !JavaAssociationMetadata.INIT_TYPES.contains( javaAssociationMetadata.getInitializationMode() ) )
+        {
+            throw new ModelloException( "The Java Modello Generator cannot use '" + 
+                                        javaAssociationMetadata.getInitializationMode() + "' as a <association " +
+                                        "java.init=\"" + javaAssociationMetadata.getInitializationMode() + "\"> " +
+                                        "value, the only the following are acceptable " + 
+                                        JavaAssociationMetadata.INIT_TYPES );
+        }
 
         if ( ModelAssociation.MANY_MULTIPLICITY.equals( modelAssociation.getMultiplicity() ) )
         {
@@ -743,36 +763,46 @@ public class JavaModelloGenerator
             {
                 jField.setComment( modelAssociation.getComment() );
             }
-
-            // TODO: if the association field isn't lazy initialized set the
-            // default
-            //            jField.setInitString( modelAssociation.getDefaultValue() );
+            
+            if ( StringUtils.equals( javaAssociationMetadata.getInitializationMode(),
+                                     JavaAssociationMetadata.FIELD_INIT ) )
+            {
+                jField.setInitString( modelAssociation.getDefaultValue() );
+            }
+            
+            if ( StringUtils.equals( javaAssociationMetadata.getInitializationMode(),
+                                     JavaAssociationMetadata.CONSTRUCTOR_INIT ) )
+            {
+                jConstructorSource.add( "this." + jField.getName() + " = " + modelAssociation.getDefaultValue() + ";" );
+            }
 
             jClass.addField( jField );
 
             if ( javaFieldMetadata.isGetter() )
             {
-                // TODO: If the association field isn't lazy initialized create
-                // a normal getter
                 String propertyName = capitalise( jField.getName() );
-
+                
                 JMethod getter = new JMethod( jField.getType(), "get" + propertyName );
 
                 JSourceCode sc = getter.getSourceCode();
-
-                sc.add( "if ( this." + jField.getName() + " == null )" );
-
-                sc.add( "{" );
-
-                sc.indent();
-
-                sc.add( "this." + jField.getName() + " = " + modelAssociation.getDefaultValue() + ";" );
-
-                sc.unindent();
-
-                sc.add( "}" );
-
-                sc.add( "" );
+                
+                if ( StringUtils.equals( javaAssociationMetadata.getInitializationMode(),
+                                         JavaAssociationMetadata.LAZY_INIT ) )
+                {
+                    sc.add( "if ( this." + jField.getName() + " == null )" );
+    
+                    sc.add( "{" );
+    
+                    sc.indent();
+    
+                    sc.add( "this." + jField.getName() + " = " + modelAssociation.getDefaultValue() + ";" );
+    
+                    sc.unindent();
+    
+                    sc.add( "}" );
+    
+                    sc.add( "" );
+                }
 
                 sc.add( "return this." + jField.getName() + ";" );
 
