@@ -370,6 +370,12 @@ public class JPoxJdoMappingModelloGenerator
 
             writeModelField( writer, modelField );
         }
+        
+        // Write ignore for Model_Encoding
+        writer.startElement( "field" );
+        writer.addAttribute( "name", "modelEncoding" );
+        writer.addAttribute( "persistence-modifier", "none" );
+        writer.endElement();
 
         // ----------------------------------------------------------------------
         // Write out the "detailed" fetch group. This group will by default
@@ -663,14 +669,16 @@ public class JPoxJdoMappingModelloGenerator
                 writer.addAttribute( "value-type", association.getTo() );
             }
 
-            writer.addAttribute( "dependent-key", "true" );
-
             if ( jpoxMetadata.isDependent() )
             {
+                writer.addAttribute( "dependent-key", "true" );
+
                 writer.addAttribute( "dependent-value", "true" );
             }
             else
             {
+                writer.addAttribute( "dependent-key", "false" );
+
                 writer.addAttribute( "dependent-value", "false" );
             }
 
