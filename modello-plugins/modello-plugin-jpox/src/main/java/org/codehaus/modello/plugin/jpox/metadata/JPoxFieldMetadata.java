@@ -48,6 +48,10 @@ public class JPoxFieldMetadata
     private String persistenceModifier;
     
     private String valueStrategy;
+    
+    private String joinTableName;
+    
+    private String indexed;
 
     public List getFetchGroupNames()
     {
@@ -117,5 +121,25 @@ public class JPoxFieldMetadata
     public void setValueStrategy( String valueStrategy )
     {
         this.valueStrategy = valueStrategy;
+    }
+
+    public String getJoinTableName()
+    {
+        return joinTableName;
+    }
+
+    public void setJoinTableName( String joinTableName )
+    {
+        this.joinTableName = joinTableName;
+    }
+    
+    public String getIndexed()
+    {
+        return indexed;
+    }
+
+    public void setIndexed( String indexed )
+    {
+        this.indexed = indexed;
     }
 }

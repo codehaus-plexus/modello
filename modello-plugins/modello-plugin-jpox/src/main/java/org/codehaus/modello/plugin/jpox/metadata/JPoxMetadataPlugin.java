@@ -62,6 +62,10 @@ public class JPoxMetadataPlugin
     
     public static final String COLUMN = "jpox.column";
     
+    public static final String JOIN_TABLE = "jpox.join-table";
+    
+    public static final String INDEXED = "jpox.indexed";
+    
     public static final String PRIMARY_KEY = "jpox.primary-key";
     
     public static final String VALUE_STRATEGY = "jpox.value-strategy";
@@ -155,6 +159,20 @@ public class JPoxMetadataPlugin
         if ( StringUtils.isNotEmpty( column ) )
         {
             metadata.setColumnName( column );
+        }
+        
+        String joinTable = (String) data.get( JOIN_TABLE );
+        
+        if ( StringUtils.isNotEmpty( joinTable ) )
+        {
+            metadata.setJoinTableName( joinTable );
+        }
+        
+        String indexed = (String) data.get( INDEXED );
+        
+        if ( StringUtils.isNotEmpty( indexed ) )
+        {
+            metadata.setIndexed( indexed );
         }
         
         String persistenceModifier = (String) data.get( PERSISTENCE_MODIFIER );

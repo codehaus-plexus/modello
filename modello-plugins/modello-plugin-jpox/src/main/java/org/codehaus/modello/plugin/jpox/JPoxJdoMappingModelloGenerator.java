@@ -412,7 +412,7 @@ public class JPoxJdoMappingModelloGenerator
         // ----------------------------------------------------------------------
 
         // Write defaut detail fetch group
-        writeFetchGroup( writer, modelClass.getName() + "_detail", detailedFields );
+        writeFetchGroup( writer, modelClass.getName() + "_detail", detailedFields, true );
 
         // Write user fetch groups
         Map fetchsMap = new HashMap();
@@ -453,13 +453,13 @@ public class JPoxJdoMappingModelloGenerator
         {
             String fetchName = (String) it.next();
 
-            writeFetchGroup( writer, fetchName, (List) fetchsMap.get( fetchName ) );
+            writeFetchGroup( writer, fetchName, (List) fetchsMap.get( fetchName ), false );
         }
 
         writer.endElement(); // class
     }
 
-    private void writeFetchGroup( XMLWriter writer, String fetchGroupName, List fields )
+    private void writeFetchGroup( XMLWriter writer, String fetchGroupName, List fields, boolean onlyIfIsStashPart )
     {
         if ( !fields.isEmpty() )
         {
@@ -471,7 +471,7 @@ public class JPoxJdoMappingModelloGenerator
             {
                 ModelField field = (ModelField) it.next();
 
-                if ( field instanceof ModelAssociation )
+                if ( onlyIfIsStashPart && ( field instanceof ModelAssociation ) )
                 {
                     StoreAssociationMetadata storeMetadata = getAssociationMetadata( (ModelAssociation) field );
 
@@ -522,7 +522,7 @@ public class JPoxJdoMappingModelloGenerator
         
         if ( StringUtils.isNotEmpty( jpoxMetadata.getColumnName() ) )
         {
-            // Test Substitute Column Name.            
+            // Test proposed Column Name.            
             if( DBKeywords.isReserved( jpoxMetadata.getColumnName() ) )
             {
                 throw new ModelloException( "The JDO mapping generator has detected the use of the " +
@@ -538,7 +538,7 @@ public class JPoxJdoMappingModelloGenerator
         }
         else
         {
-            // Test base table name.
+            // Test proposed Field name.
             if( DBKeywords.isReserved( modelField.getName() ) )
             {
                 throw new ModelloException( "The JDO mapping generator has detected the use of the " +
@@ -548,6 +548,22 @@ public class JPoxJdoMappingModelloGenerator
                                             "attribute, or use a different class name.  See " + 
                                             DBKeywords.URL_SQL92 + " for complete list."); 
             }
+        }
+        
+        if ( StringUtils.isNotEmpty( jpoxMetadata.getJoinTableName() ) )
+        {
+            // Test proposed name for the Join Table for the field.
+            if( DBKeywords.isReserved( jpoxMetadata.getJoinTableName() ) )
+            {
+                throw new ModelloException( "The JDO mapping generator has detected the use of the " +
+                                            "SQL Reserved word '" + jpoxMetadata.getJoinTableName() + "' as name of a" +
+                                            "join table for the " + modelField.getName() + " field of the " + 
+                                            modelField.getModelClass().getName() + " class.  Please use" +
+                                            "a different name for the <field jpox.join-table=\"" + 
+                                            jpoxMetadata.getColumnName() + "\"> attribute.  See " + 
+                                            DBKeywords.URL_SQL92 + " for complete list.");
+            }
+            writer.addAttribute( "table", jpoxMetadata.getJoinTableName() );
         }
 
         if ( jpoxMetadata.isPrimaryKey() )
@@ -568,8 +584,13 @@ public class JPoxJdoMappingModelloGenerator
                 writer.addAttribute( "value-strategy", jpoxMetadata.getValueStrategy() );
             }
         }
+        
+        if ( StringUtils.isNotEmpty( jpoxMetadata.getIndexed() ) )
+        {
+            writer.addAttribute( "indexed", jpoxMetadata.getIndexed() );
+        }
 
-        if ( jpoxMetadata.getMappedBy() != null )
+        if ( StringUtils.isNotEmpty( jpoxMetadata.getMappedBy() ) )
         {
             writer.addAttribute( "mapped-by", jpoxMetadata.getMappedBy() );
         }
