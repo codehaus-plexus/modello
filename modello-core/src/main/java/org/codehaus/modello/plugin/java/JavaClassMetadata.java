@@ -34,6 +34,8 @@ public class JavaClassMetadata
     public final static String ID = JavaClassMetadata.class.getName();
 
     private boolean abstractMode;
+    
+    private boolean enabled;
 
     public void setAbstract( boolean abstractMode )
     {
@@ -43,5 +45,15 @@ public class JavaClassMetadata
     public boolean isAbstract()
     {
         return abstractMode;
+    }
+    
+    public boolean isEnabled()
+    {
+        return enabled;
+    }
+
+    public void setEnabled( boolean generate )
+    {
+        this.enabled = generate;
     }
 }

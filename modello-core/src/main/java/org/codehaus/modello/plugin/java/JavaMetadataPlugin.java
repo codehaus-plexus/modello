@@ -57,6 +57,8 @@ public class JavaMetadataPlugin
     {
         JavaClassMetadata metadata = new JavaClassMetadata();
 
+        metadata.setEnabled( getBoolean( data, "java.enabled", true ) );
+
         String abstractMode = (String) data.get( "java.abstract" );
 
         if ( abstractMode != null )

@@ -150,6 +150,12 @@ public class JavaModelloGenerator
             ModelClass modelClass = (ModelClass) i.next();
 
             JavaClassMetadata javaClassMetadata = (JavaClassMetadata) modelClass.getMetadata( JavaClassMetadata.ID );
+            
+            if ( !javaClassMetadata.isEnabled() )
+            {
+                // Skip generation of those classes that are not enabled for the java plugin.
+                continue;
+            }
 
             String packageName;
 
