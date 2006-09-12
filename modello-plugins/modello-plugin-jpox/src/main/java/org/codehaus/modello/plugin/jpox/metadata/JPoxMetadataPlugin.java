@@ -46,11 +46,15 @@ import java.util.Map;
 public class JPoxMetadataPlugin
     extends AbstractMetadataPlugin
 {
+    public static final String ENABLED = "jpox.enabled";
+    
     public static final String DEPENDENT = "jpox.dependent";
 
     public static final String DETACHABLE = "jpox.detachable";
 
     public static final String FETCH_GROUP_NAMES = "jpox.fetchGroupNames";
+    
+    public static final String NOT_PERSISTED_FIELDS = "jpox.not-persisted-fields"; 
 
     public static final String JOIN = "jpox.join";
 
@@ -92,7 +96,17 @@ public class JPoxMetadataPlugin
     {
         JPoxClassMetadata metadata = new JPoxClassMetadata();
 
+        metadata.setEnabled( getBoolean( data, ENABLED, true ) );
         metadata.setDetachable( getBoolean( data, DETACHABLE, true ) );
+        
+        String notPersistedFields = (String) data.get( NOT_PERSISTED_FIELDS );
+
+        if ( !StringUtils.isEmpty( notPersistedFields ) )
+        {
+            List ignoredFields = Arrays.asList( StringUtils.split( notPersistedFields ) );
+
+            metadata.setNotPersisted( ignoredFields );
+        }
 
         String table = (String) data.get( TABLE );
 

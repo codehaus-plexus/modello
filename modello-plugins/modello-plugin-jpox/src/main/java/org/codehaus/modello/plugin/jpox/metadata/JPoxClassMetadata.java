@@ -24,6 +24,8 @@ package org.codehaus.modello.plugin.jpox.metadata;
 
 import org.codehaus.modello.metadata.ClassMetadata;
 
+import java.util.List;
+
 /**
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
  * @version $Id$
@@ -33,8 +35,10 @@ public class JPoxClassMetadata
 {
     public static final String ID = JPoxClassMetadata.class.getName();
 
-    private boolean detachable;
+    private boolean enabled;
 
+    private boolean detachable;
+    
     private String table;
     
     private String identityType;
@@ -42,6 +46,8 @@ public class JPoxClassMetadata
     private String identityClass;
     
     private boolean useIdentifiersAsPrimaryKey;
+    
+    private List notPersisted;
 
     public void setDetachable( boolean detachable )
     {
@@ -91,5 +97,25 @@ public class JPoxClassMetadata
     public void setUseIdentifiersAsPrimaryKey( boolean userIdentifiersAsIdentity )
     {
         this.useIdentifiersAsPrimaryKey = userIdentifiersAsIdentity;
+    }
+
+    public List getNotPersisted()
+    {
+        return notPersisted;
+    }
+
+    public void setNotPersisted( List notPersisted )
+    {
+        this.notPersisted = notPersisted;
+    }
+
+    public boolean isEnabled()
+    {
+        return enabled;
+    }
+
+    public void setEnabled( boolean persisted )
+    {
+        this.enabled = persisted;
     }
 }

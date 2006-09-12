@@ -159,14 +159,15 @@ public class JPoxJdoMappingModelloGenerator
         for ( Iterator it = model.getClasses( getGeneratedVersion() ).iterator(); it.hasNext(); )
         {
             ModelClass modelClass = (ModelClass) it.next();
+            
+            JPoxClassMetadata jpoxMetadata = (JPoxClassMetadata) modelClass.getMetadata( JPoxClassMetadata.ID );
+            
+            if ( !jpoxMetadata.isEnabled() )
+            {
+                // Skip generation of those classes that are not enabled for the jpox plugin.
+                continue;
+            }
 
-//            StoreClassMetadata storeMetadata = (StoreClassMetadata) modelClass.getMetadata( StoreClassMetadata.ID );
-//
-//            if ( !metadata.isStorable() )
-//            {
-//                continue;
-//            }
-//
             String packageName = modelClass.getPackageName( isPackageWithVersion(), getGeneratedVersion() );
 
             List list = (List) classes.get( packageName );
@@ -174,11 +175,11 @@ public class JPoxJdoMappingModelloGenerator
             if ( list == null )
             {
                 list = new ArrayList();
-
-                classes.put( packageName, list );
             }
 
             list.add( modelClass );
+            
+            classes.put( packageName, list );
         }
 
         printWriter.println( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" );
@@ -193,7 +194,7 @@ public class JPoxJdoMappingModelloGenerator
         for ( Iterator it = classes.values().iterator(); it.hasNext(); )
         {
             List list = (List) it.next();
-
+            
             if ( list.size() == 0 )
             {
                 continue;
@@ -226,6 +227,12 @@ public class JPoxJdoMappingModelloGenerator
         throws ModelloException
     {
         JPoxClassMetadata jpoxMetadata = (JPoxClassMetadata) modelClass.getMetadata( JPoxClassMetadata.ID );
+        
+        if ( !jpoxMetadata.isEnabled() )
+        {
+            // Skip generation of those classes that are not enabled for the jpox plugin.
+            return;
+        }
 
         writer.startElement( "class" );
 
@@ -371,11 +378,20 @@ public class JPoxJdoMappingModelloGenerator
             writeModelField( writer, modelField );
         }
         
-        // Write ignore for Model_Encoding
-        writer.startElement( "field" );
-        writer.addAttribute( "name", "modelEncoding" );
-        writer.addAttribute( "persistence-modifier", "none" );
-        writer.endElement();
+        // Write ignored fields.
+        List ignoredFields = jpoxMetadata.getNotPersisted();
+        if ( ignoredFields != null )
+        {
+            Iterator it = ignoredFields.iterator();
+            while ( it.hasNext() )
+            {
+                String fieldName = (String) it.next();
+                writer.startElement( "field" );
+                writer.addAttribute( "name", fieldName );
+                writer.addAttribute( "persistence-modifier", "none" );
+                writer.endElement();
+            }
+        }
 
         // ----------------------------------------------------------------------
         // Write out the "detailed" fetch group. This group will by default
