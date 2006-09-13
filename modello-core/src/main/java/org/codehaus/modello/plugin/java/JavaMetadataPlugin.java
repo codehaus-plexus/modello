@@ -96,7 +96,7 @@ public class JavaMetadataPlugin
 
         String setter = (String) data.get( "java.setter" );
 
-        if ( adder != null )
+        if ( setter != null )
         {
             metadata.setSetter( Boolean.valueOf( setter ).booleanValue() );
         }
