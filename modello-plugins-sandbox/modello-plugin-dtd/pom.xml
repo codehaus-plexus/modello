@@ -1,0 +1,18 @@
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.codehaus.modello</groupId>
+    <artifactId>modello-plugins-sandbox</artifactId>
+    <version>1</version>
+  </parent>
+  <artifactId>modello-plugin-dtd</artifactId>
+  <version>1.0-alpha-4-SNAPSHOT</version>
+  <name>Modello DTD Plugin</name>
+  <dependencies>
+    <dependency>
+      <groupId>wutka</groupId>
+      <artifactId>dtdparser</artifactId>
+      <version>1.21</version>
+    </dependency>
+  </dependencies>
+</project>
