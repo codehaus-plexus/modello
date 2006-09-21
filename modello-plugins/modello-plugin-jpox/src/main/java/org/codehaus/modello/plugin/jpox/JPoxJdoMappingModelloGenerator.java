@@ -560,7 +560,7 @@ public class JPoxJdoMappingModelloGenerator
                 throw new ModelloException( "The JDO mapping generator has detected the use of the " +
                                             "SQL Reserved word '" + modelField.getName() + "' as a field name of the " +
                                             modelField.getModelClass().getName() + " class.  Please use specify an " +
-                                            "alternative jpox table name using the <field jpox.column=\"\"> " +
+                                            "alternative jpox column name using the <field jpox.column=\"\"> " +
                                             "attribute, or use a different class name.  See " + 
                                             DBKeywords.URL_SQL92 + " for complete list."); 
             }
