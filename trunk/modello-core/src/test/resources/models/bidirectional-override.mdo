@@ -1,0 +1,94 @@
+<model>
+  <id>bidirectional-override</id>
+  <name>BiDirModel</name>
+  <version>1.0.0</version>
+  <defaults>
+    <default>
+      <key>package</key>
+      <value>org.codehaus.modello.tests.bidiroverride</value>
+    </default>
+  </defaults>
+  <classes>
+    <class>
+      <name>BiRole</name>
+      <version>1.0.0</version>
+      <interfaces>
+        <interface>org.codehaus.modello.plugin.java.Role</interface>
+      </interfaces>
+      <superClass>org.codehaus.modello.plugin.java.AbstractPrincipal</superClass>
+      <fields>
+        <field>
+          <name>name</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>roles</name>
+          <version>1.0.0</version>
+          <association java.generate-break="false" java.generate-create="false" java.use-interface="org.codehaus.modello.plugin.java.Role">
+            <type>BiRole</type>
+            <multiplicity>*</multiplicity>
+          </association>
+          <description>
+            Child Roles
+          </description>
+        </field>
+        <field>
+          <name>permission</name>
+          <version>1.0.0</version>
+          <association java.generate-break="false" java.generate-create="false" java.use-interface="org.codehaus.modello.plugin.java.Permission">
+            <type>BiPermission</type>
+            <multiplicity>1</multiplicity>
+          </association>
+        </field>
+      </fields>
+    </class>
+    <class>
+      <name>BiPermission</name>
+      <version>1.0.0</version>
+      <interfaces>
+        <interface>org.codehaus.modello.plugin.java.Permission</interface>
+      </interfaces>
+      <fields>
+        <field>
+          <name>name</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>operations</name>
+          <version>1.0.0</version>
+          <association java.init="constructor">
+            <type>String</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+        <field>
+          <name>tasks</name>
+          <version>1.0.0</version>
+          <association java.init="lazy">
+            <type>String</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+        <field>
+          <name>resources</name>
+          <version>1.0.0</version>
+          <association java.init="field">
+            <type>String</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+        <field>
+          <name>statusIndicators</name>
+          <version>1.0.0</version>
+          <type>Map</type>
+          <association java.init="constructor">
+            <type>String</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+      </fields>
+    </class>
+  </classes>
+</model>

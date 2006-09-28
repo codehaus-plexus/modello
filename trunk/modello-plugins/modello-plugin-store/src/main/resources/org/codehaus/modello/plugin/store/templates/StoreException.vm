@@ -1,0 +1,20 @@
+package ${package};
+
+/**
+ * Generated exception for the store for the $model.name model.
+ *
+ * @author Mr Modello
+ */
+public class ${model.name}Exception
+    extends Exception
+{
+    public ${model.name}Exception( String message )
+    {
+        super( message );
+    }
+
+    public ${model.name}Exception( String message, Throwable cause )
+    {
+        super( message, cause );
+    }
+}

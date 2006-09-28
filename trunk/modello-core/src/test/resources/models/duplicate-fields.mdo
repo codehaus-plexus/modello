@@ -1,0 +1,17 @@
+<model>
+  <id>duplicate-fields</id>
+  <name>Duplicate Fields Test Model</name>
+  <classes>
+    <class>
+      <name>MyClass</name>
+      <fields>
+        <field>
+          <name>MyField</name>
+        </field>
+        <field>
+          <name>MyField</name>
+        </field>
+      </fields>
+    </class>
+  </classes>
+</model>
