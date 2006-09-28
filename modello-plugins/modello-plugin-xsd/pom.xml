@@ -7,12 +7,10 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>modello-plugin-xsd</artifactId>
   <name>Modello XSD Plugin</name>
-  <version>1.0-alpha-11-SNAPSHOT</version>
   <dependencies>
     <dependency>
       <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-plugin-xml</artifactId>
-      <version>1.0-alpha-11-SNAPSHOT</version>
     </dependency>
   </dependencies>
 </project>

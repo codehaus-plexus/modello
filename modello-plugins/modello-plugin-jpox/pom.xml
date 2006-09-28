@@ -7,12 +7,10 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>modello-plugin-jpox</artifactId>
   <name>Modello JPox Plugin</name>
-  <version>1.0-alpha-11-SNAPSHOT</version>
   <dependencies>
     <dependency>
       <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-plugin-store</artifactId>
-      <version>1.0-alpha-11-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>dom4j</groupId>

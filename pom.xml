@@ -20,26 +20,26 @@
   <mailingLists>
     <mailingList>
       <name>Modello Announce List</name>
-      <subscribe>mailto:announce-subscribe@modello.codehaus.org</subscribe>
-      <unsubscribe>mailto:announce-unsubscribe@modello.codehaus.org</unsubscribe>
+      <subscribe>http://xircles.codehaus.org/manage_email/announce@modello.codehaus.org</subscribe>
+      <unsubscribe>http://xircles.codehaus.org/projects/modello/lists</unsubscribe>
       <archive>http://archive.modello.codehaus.org/announce/</archive>
     </mailingList>
     <mailingList>
       <name>Modello Developer List</name>
-      <subscribe>mailto:dev-subscribe@modello.codehaus.org</subscribe>
-      <unsubscribe>mailto:dev-unsubscribe@modello.codehaus.org</unsubscribe>
+      <subscribe>http://xircles.codehaus.org/manage_email/dev@modello.codehaus.org</subscribe>
+      <unsubscribe>http://xircles.codehaus.org/projects/modello/lists</unsubscribe>
       <archive>http://archive.modello.codehaus.org/dev/</archive>
     </mailingList>
     <mailingList>
       <name>Modello User List</name>
-      <subscribe>mailto:user-subscribe@modello.codehaus.org</subscribe>
-      <unsubscribe>mailto:user-unsubscribe@modello.codehaus.org</unsubscribe>
+      <subscribe>http://xircles.codehaus.org/manage_email/user@modello.codehaus.org</subscribe>
+      <unsubscribe>http://xircles.codehaus.org/projects/modello/lists</unsubscribe>
       <archive>http://archive.modello.codehaus.org/user/</archive>
     </mailingList>
     <mailingList>
       <name>Modello Commits List</name>
-      <subscribe>mailto:scm-subscribe@modello.codehaus.org</subscribe>
-      <unsubscribe>mailto:scm-unsubscribe@modello.codehaus.org</unsubscribe>
+      <subscribe>http://xircles.codehaus.org/manage_email/scm@modello.codehaus.org</subscribe>
+      <unsubscribe>http://xircles.codehaus.org/projects/modello/lists</unsubscribe>
       <archive>http://archive.modello.codehaus.org/scm/</archive>
     </mailingList>
   </mailingLists>
@@ -74,7 +74,7 @@
       <roles>
         <role>Developer</role>
       </roles>
-      <timezone>-5</timezone>
+      <timezone>+1</timezone>
     </developer>
     <developer>
       <name>John Casey</name>

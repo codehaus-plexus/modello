@@ -8,18 +8,15 @@
   <artifactId>modello-maven-plugin</artifactId>
   <packaging>maven-plugin</packaging>
   <name>Modello Maven Plugin</name>
-  <version>1.0-alpha-11-SNAPSHOT</version>
   <dependencies>
     <dependency>
       <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-plugin-xdoc</artifactId>
-      <version>1.0-alpha-11-SNAPSHOT</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-plugin-xsd</artifactId>
-      <version>1.0-alpha-11-SNAPSHOT</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
@@ -29,25 +26,21 @@
     <dependency>
       <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-plugin-jpox</artifactId>
-      <version>1.0-alpha-11-SNAPSHOT</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-plugin-jdom</artifactId>
-      <version>1.0-alpha-11-SNAPSHOT</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-plugin-xpp3</artifactId>
-      <version>1.0-alpha-11-SNAPSHOT</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-plugin-prevayler</artifactId>
-      <version>1.0-alpha-11-SNAPSHOT</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
@@ -57,7 +50,6 @@
     <dependency>
       <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-core</artifactId>
-      <version>1.0-alpha-11-SNAPSHOT</version>
     </dependency>
   </dependencies>
 </project>

@@ -7,7 +7,6 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>modello-plugin-xpp3</artifactId>
   <name>Modello XPP3 Plugin</name>
-  <version>1.0-alpha-11-SNAPSHOT</version>
   <dependencies>
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
@@ -17,7 +16,6 @@
     <dependency>
       <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-plugin-xml</artifactId>
-      <version>1.0-alpha-11-SNAPSHOT</version>
     </dependency>
   </dependencies>
 </project>
