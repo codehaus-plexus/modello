@@ -8,7 +8,6 @@
   <groupId>org.codehaus.modello</groupId>
   <artifactId>modello-test</artifactId>
   <name>Modello Test Package</name>
-  <version>1.0-alpha-11-SNAPSHOT</version>
   <dependencies>
     <dependency>
       <groupId>org.apache.maven</groupId>
