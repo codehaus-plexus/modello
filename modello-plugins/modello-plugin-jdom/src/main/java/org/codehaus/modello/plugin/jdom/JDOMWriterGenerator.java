@@ -27,6 +27,7 @@ import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.plugin.java.JavaFieldMetadata;
 import org.codehaus.modello.plugin.java.javasource.JClass;
 import org.codehaus.modello.plugin.java.javasource.JConstructor;
+import org.codehaus.modello.plugin.java.javasource.JDocDescriptor;
 import org.codehaus.modello.plugin.java.javasource.JField;
 import org.codehaus.modello.plugin.java.javasource.JMethod;
 import org.codehaus.modello.plugin.java.javasource.JParameter;
@@ -44,6 +45,7 @@ import java.util.Iterator;
 import java.util.Properties;
 
 /**
+ * @author mkleint@codehaus.org
  */
 public class JDOMWriterGenerator extends AbstractJDOMGenerator {
     
@@ -87,6 +89,8 @@ public class JDOMWriterGenerator extends AbstractJDOMGenerator {
         // -------------------------------------------------------------
         jClass.setPackageName( packageName );
         jClass.addImport( "java.io.OutputStream" );
+        jClass.addImport( "java.io.OutputStreamWriter" );
+        jClass.addImport( "java.io.Writer" );
         jClass.addImport( "java.util.ArrayList" );
         jClass.addImport( "java.util.Iterator" );
         jClass.addImport( "java.util.List" );
@@ -132,6 +136,8 @@ public class JDOMWriterGenerator extends AbstractJDOMGenerator {
         
         // the public global write method..
         jClass.addMethod(generateWriteModel(root, rootElement));
+        jClass.addMethod(generateWriteModel2(root, rootElement));
+        jClass.addMethod(generateWriteModel3(root, rootElement));
         // the private utility classes;
         jClass.addMethods(generateUtilityMethods());
         
@@ -148,12 +154,22 @@ public class JDOMWriterGenerator extends AbstractJDOMGenerator {
         JField fld = new JField(new JType("int"), "currentIndex");
         fld.setInitString("0");
         counter.addField(fld);
+        fld = new JField(new JType("int"), "level");
+        counter.addField(fld);
+        
+        JConstructor constr = counter.createConstructor(new JParameter[] {
+            new JParameter(new JType("int"), "depthLevel")
+        });
+        constr.getSourceCode().append("level = depthLevel;");
         
         JMethod inc = new JMethod("increaseCount");
         inc.getSourceCode().add("currentIndex = currentIndex + 1;");
         counter.addMethod(inc);
         JMethod getter = new JMethod(new JType("int"), "getCurrentIndex");
         getter.getSourceCode().add("return currentIndex;");
+        counter.addMethod(getter);
+        getter = new JMethod(new JType("int"), "getDepth");
+        getter.getSourceCode().add("return level;");
         counter.addMethod(getter);
     }
     
@@ -165,13 +181,49 @@ public class JDOMWriterGenerator extends AbstractJDOMGenerator {
         marshall.addParameter(new JParameter(new JClass("OutputStream"), "stream"));
         marshall.addException( new JClass( "java.io.IOException" ) );
         
+        marshall.getJDocComment().appendComment("\n@deprecated");
+        
         JSourceCode sc = marshall.getSourceCode();
-        sc.add("update" + root + "(" + rootElement + ", \"" + rootElement + "\", new Counter(), document.getRootElement());");
+        sc.add("update" + root + "(" + rootElement + ", \"" + rootElement + "\", new Counter(0), document.getRootElement());");
         sc.add("XMLOutputter outputter = new XMLOutputter();");
         sc.add("outputter.setFormat(Format.getPrettyFormat()");
         sc.add(".setIndent(\"    \")");
         sc.add(".setLineSeparator(System.getProperty(\"line.separator\")));");
         sc.add("outputter.output(document, stream);");
+        
+        return marshall;
+        
+    }
+    private JMethod generateWriteModel2(String root, String rootElement) {
+        JMethod marshall = new JMethod( null, "write" );
+        
+        marshall.addParameter(new JParameter(new JClass(root), rootElement ) );
+        marshall.addParameter(new JParameter(new JClass("Document"), "document"));
+        marshall.addParameter(new JParameter(new JClass("OutputStreamWriter"), "writer"));
+        marshall.addException( new JClass( "java.io.IOException" ) );
+        
+        JSourceCode sc = marshall.getSourceCode();
+        sc.add("Format format = Format.getRawFormat()");
+        sc.add(".setEncoding(writer.getEncoding())");
+        sc.add(".setLineSeparator(System.getProperty(\"line.separator\"));");
+        sc.add("write(" + rootElement + ", document, writer, format);");
+        return marshall;
+        
+    }
+    private JMethod generateWriteModel3(String root, String rootElement) {
+        JMethod marshall = new JMethod( null, "write" );
+        
+        marshall.addParameter(new JParameter(new JClass(root), rootElement ) );
+        marshall.addParameter(new JParameter(new JClass("Document"), "document"));
+        marshall.addParameter(new JParameter(new JClass("Writer"), "writer"));
+        marshall.addParameter(new JParameter(new JClass("Format"), "jdomFormat"));
+        marshall.addException( new JClass( "java.io.IOException" ) );
+        
+        JSourceCode sc = marshall.getSourceCode();
+        sc.add("update" + root + "(" + rootElement + ", \"" + rootElement + "\", new Counter(0), document.getRootElement());");
+        sc.add("XMLOutputter outputter = new XMLOutputter();");
+        sc.add("outputter.setFormat(jdomFormat);");
+        sc.add("outputter.output(document, writer);");
         
         return marshall;
         
@@ -183,6 +235,7 @@ public class JDOMWriterGenerator extends AbstractJDOMGenerator {
         findRSElement.addParameter(new JParameter(new JClass("Element"), "parent"));
         findRSElement.addParameter(new JParameter(new JClass("String"), "name"));
         findRSElement.addParameter(new JParameter(new JClass("String"), "text"));
+        findRSElement.getModifiers().makeProtected();
         JSourceCode sc = findRSElement.getSourceCode();
         sc.add("boolean shouldExist = text != null && text.trim().length() > 0;");
         sc.add("Element element = updateElement(counter, parent, name, shouldExist);");
@@ -196,14 +249,11 @@ public class JDOMWriterGenerator extends AbstractJDOMGenerator {
         updateElement.addParameter(new JParameter(new JClass("Element"), "parent"));
         updateElement.addParameter(new JParameter(new JClass("String"), "name"));
         updateElement.addParameter(new JParameter(new JType("boolean"), "shouldExist"));
+        updateElement.getModifiers().makeProtected();
         sc = updateElement.getSourceCode();
         sc.add("Element element =  parent.getChild(name, parent.getNamespace());");
         sc.add("if (element != null && shouldExist) {");
-        sc.indent();
-        sc.add("if (parent.getChildren().indexOf(element) <= counter.getCurrentIndex()) {");
         sc.addIndented("counter.increaseCount();");
-        sc.add("}");
-        sc.unindent();
         sc.add("}");
         sc.add("if (element == null && shouldExist) {");
         sc.indent();
@@ -221,22 +271,27 @@ public class JDOMWriterGenerator extends AbstractJDOMGenerator {
         insAtPref.addParameter(new JParameter(new JClass("Element"), "parent"));
         insAtPref.addParameter(new JParameter(new JClass("Element"), "child"));
         insAtPref.addParameter(new JParameter(new JClass("Counter"), "counter"));
+        insAtPref.getModifiers().makeProtected();
         sc = insAtPref.getSourceCode();
-        
         sc.add("int contentIndex = 0;");
         sc.add("int elementCounter = 0;");
         sc.add("Iterator it = parent.getContent().iterator();");
         sc.add("Text lastText = null;");
+        sc.add("int offset = 0;");
         sc.add("while (it.hasNext() && elementCounter < counter.getCurrentIndex()) {");
         sc.indent();
         sc.add("Object next = it.next();");
+        sc.add("offset = offset + 1;");
         sc.add("if (next instanceof Element) {");
-        sc.addIndented("elementCounter = elementCounter + 1;");
+        sc.indent();
+        sc.add("elementCounter = elementCounter + 1;");
+        sc.add("contentIndex = contentIndex + offset;");
+        sc.add("offset = 0;");
+        sc.unindent();
         sc.add("}");
         sc.add("if (next instanceof Text) {");
         sc.addIndented("lastText = (Text)next;");
         sc.add("}");
-        sc.add("contentIndex = contentIndex + 1;");
         sc.unindent();
         sc.add("}");
 //        sc.add("if (lastText == null) {");
@@ -252,46 +307,43 @@ public class JDOMWriterGenerator extends AbstractJDOMGenerator {
 //        sc.add("}");
 //        sc.unindent();
 //        sc.add("}");
+        
         sc.add("if (lastText != null && lastText.getTextTrim().length() == 0) {");
         sc.addIndented("lastText = (Text)lastText.clone();");
         sc.add("} else {");
         sc.indent();
         sc.add("String starter = lineSeparator;");
-        sc.add("Element curPar = parent;");
-        sc.add("while (curPar != null) {");
+        sc.add("for (int i = 0; i < counter.getDepth(); i++) {");
         sc.indent();
-        sc.add("curPar = curPar.getParentElement();");
         sc.add("starter = starter + \"    \"; //TODO make settable?");
         sc.unindent();
         sc.add("}");
         sc.add("lastText = factory.text(starter);");
         sc.unindent();
         sc.add("}");
-        sc.add("if (counter.getCurrentIndex() >= elementCounter) {");
+        sc.add("if (parent.getContentSize() == 0) {");
         sc.indent();
-        sc.add("parent.addContent(lastText);");
-        sc.add("parent.addContent(child);");
-        sc.unindent();
-        sc.add("} else {");
-        sc.indent();
-        sc.add("parent.addContent(contentIndex, child);");
-        sc.add("parent.addContent(contentIndex, lastText);");
+        sc.add("Text finalText = (Text)lastText.clone();");
+        sc.add("finalText.setText(finalText.getText().substring(0, finalText.getText().length() - \"    \".length()));");
+        sc.add("parent.addContent(contentIndex, finalText);");
         sc.unindent();
         sc.add("}");
-        
+        sc.add("parent.addContent(contentIndex, child);");
+        sc.add("parent.addContent(contentIndex, lastText);");
         
         JMethod findRSProps = new JMethod(new JClass("Element"), "findAndReplaceProperties");
         findRSProps.addParameter(new JParameter(new JClass("Counter"), "counter"));
         findRSProps.addParameter(new JParameter(new JClass("Element"), "parent"));
         findRSProps.addParameter(new JParameter(new JClass("String"), "name"));
         findRSProps.addParameter(new JParameter(new JClass("Map"), "props"));
+        findRSProps.getModifiers().makeProtected();
         sc = findRSProps.getSourceCode();
         sc.add("boolean shouldExist = props != null && ! props.isEmpty();");
         sc.add("Element element = updateElement(counter, parent, name, shouldExist);");
         sc.add("if (shouldExist) {");
         sc.indent();
         sc.add("Iterator it = props.keySet().iterator();");
-        sc.add("Counter innerCounter = new Counter();");
+        sc.add("Counter innerCounter = new Counter(counter.getDepth() + 1);");
         sc.add("while (it.hasNext()) {");
         sc.indent();
         sc.add("String key = (String) it.next();");
@@ -319,6 +371,7 @@ public class JDOMWriterGenerator extends AbstractJDOMGenerator {
         findRSLists.addParameter(new JParameter(new JClass("java.util.Collection"), "list"));
         findRSLists.addParameter(new JParameter(new JClass("String"), "parentName"));
         findRSLists.addParameter(new JParameter(new JClass("String"), "childName"));
+        findRSLists.getModifiers().makeProtected();
         sc = findRSLists.getSourceCode();
         sc.add("boolean shouldExist = list != null && list.size() > 0;");
         sc.add("Element element = updateElement(counter, parent, parentName, shouldExist);");
@@ -327,7 +380,7 @@ public class JDOMWriterGenerator extends AbstractJDOMGenerator {
         sc.add("Iterator it = list.iterator();");
         sc.add("Iterator elIt = element.getChildren(childName, element.getNamespace()).iterator();");
         sc.add("if (! elIt.hasNext()) elIt = null;");
-        sc.add("Counter innerCount = new Counter();");
+        sc.add("Counter innerCount = new Counter(counter.getDepth() + 1);");
         sc.add("while (it.hasNext()) {");
         sc.indent();
         sc.add("String value = (String) it.next();");
@@ -340,7 +393,7 @@ public class JDOMWriterGenerator extends AbstractJDOMGenerator {
         sc.add("} else {");
         sc.indent();
         sc.add("el = factory.element(childName, element.getNamespace());");
-        sc.add("element.addContent(el);");
+        sc.add("insertAtPreferredLocation(element, el, innerCount);");
         sc.unindent();
         sc.add("}");
         sc.add("el.setText(value);");
@@ -365,17 +418,20 @@ public class JDOMWriterGenerator extends AbstractJDOMGenerator {
         findRSDom.addParameter(new JParameter(new JClass("Element"), "parent"));
         findRSDom.addParameter(new JParameter(new JClass("String"), "name"));
         findRSDom.addParameter(new JParameter(new JClass("Xpp3Dom"), "dom"));
+        findRSDom.getModifiers().makeProtected();
         sc = findRSDom.getSourceCode();
         sc.add("boolean shouldExist = dom != null && (dom.getChildCount() > 0 || dom.getValue() != null);");
         sc.add("Element element = updateElement(counter, parent, name, shouldExist);");
         sc.add("if (shouldExist) {");
-        sc.addIndented("replaceXpp3DOM(element, dom);");
+        sc.addIndented("replaceXpp3DOM(element, dom, new Counter(counter.getDepth() + 1));");
         sc.add("}");
         sc.add("return element;");
         
         JMethod findRSDom2 = new JMethod("replaceXpp3DOM");
         findRSDom2.addParameter(new JParameter(new JClass("Element"), "parent"));
         findRSDom2.addParameter(new JParameter(new JClass("Xpp3Dom"), "parentDom"));
+        findRSDom2.addParameter(new JParameter(new JClass("Counter"), "counter"));
+        findRSDom2.getModifiers().makeProtected();
         sc = findRSDom2.getSourceCode();
         sc.add("if (parentDom.getChildCount() > 0) {");
         sc.indent();
@@ -405,7 +461,8 @@ public class JDOMWriterGenerator extends AbstractJDOMGenerator {
         sc.add("if (corrDom != null) {");
         sc.indent();
         sc.add("domChilds.remove(corrDom);");
-        sc.add("replaceXpp3DOM(elem, corrDom);");
+        sc.add("replaceXpp3DOM(elem, corrDom, new Counter(counter.getDepth() + 1));");
+        sc.add("counter.increaseCount();");
         sc.unindent();
         sc.add("} else {");
         sc.addIndented("parent.removeContent(elem);");
@@ -417,63 +474,15 @@ public class JDOMWriterGenerator extends AbstractJDOMGenerator {
         sc.indent();
         sc.add("Xpp3Dom dm = (Xpp3Dom) it2.next();");
         sc.add("Element elem = factory.element(dm.getName(), parent.getNamespace());");
-        sc.add("parent.addContent(elem);");
-        sc.add("replaceXpp3DOM(elem, dm);");
+        sc.add("insertAtPreferredLocation(parent, elem, counter);");
+        sc.add("counter.increaseCount();");
+        sc.add("replaceXpp3DOM(elem, dm, new Counter(counter.getDepth() + 1));");
         sc.unindent();
         sc.add("}");
         sc.unindent();
         sc.add("} else if (parentDom.getValue() != null) {");
         sc.addIndented("parent.setText(parentDom.getValue());");
         sc.add("}");
-//----------------------------------------------
-//    public void findAndReplaceXpp3DOM(Element parent, Xpp3Dom parentDom) {
-//        if (parentDom.getChildCount() > 0) {
-//            Xpp3Dom[] childs = parentDom.getChildren();
-//            Collection domChilds = new ArrayList();
-//            for (int i = 0; i < childs.length; i++) {
-//                domChilds.add(childs[i]);
-//            }
-//            int domIndex = 0;
-//            ListIterator it = parent.getChildren().listIterator();
-//            while (it.hasNext()) {
-//Element elem = (Element) it.next();
-//Iterator it2 = domChilds.iterator();
-//Xpp3Dom corrDom = null;
-//while (it2.hasNext()) {
-//    Xpp3Dom dm = (Xpp3Dom)it2.next();
-//    if (dm.getName().equals(elem.getName())) {
-//        corrDom = dm;
-//        break;
-//    }
-//}
-//if (corrDom != null) {
-//    domChilds.remove(corrDom);
-//    findAndReplaceXpp3DOM(elem, corrDom);
-//} else {
-//    parent.removeContent(elem);
-//}
-//            }
-//            Iterator it2 = domChilds.iterator();
-//            while (it2.hasNext()) {
-//                Xpp3Dom dm = (Xpp3Dom) it2.next();
-//                Element elem = factory.element(dm.getName(), parent.getNamespace());
-//                findAndReplaceXpp3DOM(elem, dm);
-//            }
-//        } else if (parentDom.getValue() != null) {
-//            parent.setText(parentDom.getValue());
-//        }
-//    }
-//    
-//    public Element findAndReplaceXpp3DOM(Counter counter, Element parent, String name, Xpp3Dom dom) {
-//        boolean shouldExist = dom != null && (dom.getChildCount() > 0 || dom.getValue() != null);
-//        Element element = updateElement(counter, parent, name, shouldExist);
-//        if (shouldExist) {
-//            findAndReplaceXpp3DOM(element, dom);
-//        }
-//        return element;
-//    } 
-//----------------------------------------------------    
-        
         
         return new JMethod[] {
             findRSElement, 
@@ -508,6 +517,7 @@ public class JDOMWriterGenerator extends AbstractJDOMGenerator {
         marshall.addParameter( new JParameter( new JClass( "String" ), "xmlTag") );
         marshall.addParameter( new JParameter( new JClass( "Counter" ), "counter" ) );
         marshall.addParameter( new JParameter( new JClass( "Element" ), "element" ) );
+        marshall.getModifiers().makeProtected();
         if (clazzTagName == null ) {
             clazzTagName = uncapClassName;
         }
@@ -520,7 +530,7 @@ public class JDOMWriterGenerator extends AbstractJDOMGenerator {
             sc.add("if (shouldExist) {");
             sc.indent();
         }
-        sc.add("Counter innerCount = new Counter();");
+        sc.add("Counter innerCount = new Counter(counter.getDepth() + 1);");
         
         for ( Iterator i = clazz.getAllFields( getGeneratedVersion(), true ).iterator(); i.hasNext(); ) {
             ModelField field = (ModelField) i.next();
@@ -626,6 +636,7 @@ public class JDOMWriterGenerator extends AbstractJDOMGenerator {
         toReturn.addParameter( new JParameter( new JClass( "java.util.Collection"), "list" ) );
         toReturn.addParameter( new JParameter( new JClass( "java.lang.String"), "parentTag" ) );
         toReturn.addParameter( new JParameter( new JClass( "java.lang.String"), "childTag" ) );
+        toReturn.getModifiers().makeProtected();
         JSourceCode sc = toReturn.getSourceCode();
         sc.add("boolean shouldExist = list != null && list.size() > 0;");
         sc.add("Element element = updateElement(counter, parent, parentTag, shouldExist);");
@@ -634,7 +645,7 @@ public class JDOMWriterGenerator extends AbstractJDOMGenerator {
         sc.add("Iterator it = list.iterator();");
         sc.add("Iterator elIt = element.getChildren(childTag, element.getNamespace()).iterator();");
         sc.add("if (!elIt.hasNext()) elIt = null;");
-        sc.add("Counter innerCount = new Counter();");
+        sc.add("Counter innerCount = new Counter(counter.getDepth() + 1);");
         sc.add("while (it.hasNext()) {");
         sc.indent();
         sc.add(toClass.getName() + " value = (" + toClass.getName() + ") it.next();");
@@ -647,10 +658,11 @@ public class JDOMWriterGenerator extends AbstractJDOMGenerator {
         sc.add("} else {");
         sc.indent();
         sc.add("el = factory.element(childTag, element.getNamespace());");
-        sc.add("element.addContent(el);");
+        sc.add("insertAtPreferredLocation(element, el, innerCount);");
         sc.unindent();
         sc.add("}");
         sc.add("update" + toClass.getName() + "(value, childTag, innerCount, el);");
+        sc.add("innerCount.increaseCount();");
         sc.unindent();
         sc.add("}");
         sc.add("if (elIt != null) {");
