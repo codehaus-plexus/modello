@@ -275,7 +275,23 @@ public class JDOMWriterGenerator extends AbstractJDOMGenerator {
         sc.unindent();
         sc.add("}");
         sc.add("if (!shouldExist && element != null) {");
-        sc.addIndented("parent.removeChild(name, parent.getNamespace());");
+        sc.indent();
+        sc.add("int index = parent.indexOf(element);");
+        sc.add("if (index > 0) {");
+        sc.indent();
+        sc.add("Content previous = parent.getContent(index - 1);");
+        sc.add("if (previous instanceof Text) {");
+        sc.indent();
+        sc.add("Text txt = (Text)previous;");
+        sc.add("if (txt.getTextTrim().length() == 0) {");
+        sc.addIndented("parent.removeContent(txt);");
+        sc.add("}");
+        sc.unindent();
+        sc.add("}");
+        sc.unindent();
+        sc.add("}");
+        sc.add("parent.removeContent(element);");
+        sc.unindent();        
         sc.add("}");
         sc.add("return element;");
         
