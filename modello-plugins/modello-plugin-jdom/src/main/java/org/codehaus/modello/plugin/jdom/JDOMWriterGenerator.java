@@ -235,8 +235,20 @@ public class JDOMWriterGenerator extends AbstractJDOMGenerator {
         findRSElement.addParameter(new JParameter(new JClass("Element"), "parent"));
         findRSElement.addParameter(new JParameter(new JClass("String"), "name"));
         findRSElement.addParameter(new JParameter(new JClass("String"), "text"));
+        findRSElement.addParameter(new JParameter(new JClass("String"), "defaultValue"));
+        
         findRSElement.getModifiers().makeProtected();
         JSourceCode sc = findRSElement.getSourceCode();
+        sc.add("if (defaultValue != null && text != null && defaultValue.equals(text)) {");
+        sc.indent();
+        sc.add("Element element =  parent.getChild(name, parent.getNamespace());");
+        sc.add("// if exist and is default value or if doesn't exist.. just keep the way it is..");
+        sc.add("if ((element != null && defaultValue.equals(element.getText())) || element == null) {");
+        sc.addIndented("return element;");
+        sc.add("}");
+        sc.unindent();
+        sc.add("}");
+        
         sc.add("boolean shouldExist = text != null && text.trim().length() > 0;");
         sc.add("Element element = updateElement(counter, parent, name, shouldExist);");
         sc.add("if (shouldExist) {");
@@ -347,7 +359,7 @@ public class JDOMWriterGenerator extends AbstractJDOMGenerator {
         sc.add("while (it.hasNext()) {");
         sc.indent();
         sc.add("String key = (String) it.next();");
-        sc.add("findAndReplaceSimpleElement(innerCounter, element, key, (String)props.get(key));");
+        sc.add("findAndReplaceSimpleElement(innerCounter, element, key, (String)props.get(key), null);");
         sc.add("}");
         sc.unindent();
         sc.add("ArrayList lst = new ArrayList(props.keySet());");
@@ -584,7 +596,8 @@ public class JDOMWriterGenerator extends AbstractJDOMGenerator {
                 if ( "DOM".equals( field.getType() ) ) {
                     sc.add("findAndReplaceXpp3DOM(innerCount, root, \"" + fieldTagName + "\", (Xpp3Dom)" + value + ");");
                 } else {
-                    sc.add("findAndReplaceSimpleElement(innerCount, root,  \"" + fieldTagName + "\", " + getValueChecker( type, value, field ) + getValue( type, value) + ");");
+                    sc.add("findAndReplaceSimpleElement(innerCount, root,  \"" + fieldTagName + "\", " + getValueChecker( type, value, field ) + getValue( type, value) + ", " + 
+                            (field.getDefaultValue() != null ? ("\"" + field.getDefaultValue() + "\"") : "null") + ");");
                 }
             }
         }
@@ -618,8 +631,8 @@ public class JDOMWriterGenerator extends AbstractJDOMGenerator {
         } else if ( ModelDefault.LIST.equals( type ) || ModelDefault.SET.equals( type ) ||
                 ModelDefault.MAP.equals( type ) || ModelDefault.PROPERTIES.equals( type ) ) {
             return "" + value + " == null || " + value + ".size() == 0 ? null : ";
-        } else if ( "String".equals( type ) && field.getDefaultValue() != null ) {
-            return "" + value + " == null || " + value + ".equals( \"" + field.getDefaultValue() + "\" ) ? null : ";
+//        } else if ( "String".equals( type ) && field.getDefaultValue() != null ) {
+//            return "" + value + " == null || " + value + ".equals( \"" + field.getDefaultValue() + "\" ) ? null : ";
         } else {
             return "";
         }
