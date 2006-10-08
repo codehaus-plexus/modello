@@ -92,6 +92,14 @@
       </roles>
       <timezone>-5</timezone>
     </developer>
+    <developer>
+      <name>Arnaud Heritier</name>
+      <email>aheritier@gmail.com</email>
+      <roles>
+        <role>Developer</role>
+      </roles>
+      <timezone>+1</timezone>
+    </developer>
   </developers>
   <scm>
     <connection>scm:svn:http://svn.codehaus.org/modello/trunk</connection>
