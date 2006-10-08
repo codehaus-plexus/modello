@@ -110,6 +110,8 @@ public class Dom4jReaderGenerator
 
         jClass.addImport( "java.io.Reader" );
 
+        jClass.addImport( "java.net.URL" );
+        
         jClass.addImport( "java.util.Date" );
         
         jClass.addImport( "java.util.Locale" );
@@ -176,6 +178,43 @@ public class Dom4jReaderGenerator
         sc = unmarshall.getSourceCode();
         
         sc.add( "return read( reader, true );" );
+
+        jClass.addMethod( unmarshall );
+
+        unmarshall = new JMethod( new JClass( root.getName() ), "read" );
+
+        unmarshall.addParameter( new JParameter( new JClass( "URL" ), "url" ) );
+
+        unmarshall.addParameter( new JParameter( JType.Boolean, "strict" ) );
+
+        unmarshall.addException( new JClass( "IOException" ) );
+
+        unmarshall.addException( new JClass( "DocumentException" ) );
+
+        sc = unmarshall.getSourceCode();
+
+        sc.add( "SAXReader parser = new SAXReader();" );
+
+        sc.add( "Document document = parser.read( url );" );
+
+        sc.add( "String encoding = document.getXMLEncoding();" );
+
+        sc.add( "return parse" + root.getName() + "( \"" + getTagName( root ) +
+            "\", document.getRootElement(), strict, encoding );" );
+
+        jClass.addMethod( unmarshall );
+
+        unmarshall = new JMethod( new JClass( root.getName() ), "read" );
+
+        unmarshall.addParameter( new JParameter( new JClass( "URL" ), "url" ) );
+
+        unmarshall.addException( new JClass( "IOException" ) );
+
+        unmarshall.addException( new JClass( "DocumentException" ) );
+
+        sc = unmarshall.getSourceCode();
+        
+        sc.add( "return read( url, true );" );
 
         jClass.addMethod( unmarshall );
         
