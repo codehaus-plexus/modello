@@ -103,6 +103,14 @@
       </roles>
       <timezone>+1</timezone>
     </developer>
+    <developer>
+      <name>Milos Kleint</name>
+      <email>mkleint@codehaus.org</email>
+      <roles>
+        <role>Developer</role>
+      </roles>
+      <timezone>+1</timezone>
+    </developer>
   </developers>
   <scm>
     <connection>scm:svn:http://svn.codehaus.org/modello/trunk</connection>
