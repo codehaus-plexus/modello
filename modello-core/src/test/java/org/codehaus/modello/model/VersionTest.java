@@ -37,7 +37,7 @@ public class VersionTest
     {
         Version version = new Version( "1.2.3" );
 
-        assertEquals( 1, version.getMajor() );
+        assertEquals( 0, version.getMajor() );
 
         assertEquals( 2, version.getMinor() );
 
