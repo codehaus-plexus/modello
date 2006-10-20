@@ -12,7 +12,10 @@
   <ciManagement>
     <notifiers>
       <notifier>
-        <address>dev@modello.codehaus.org</address>
+        <type>mail</type>
+        <configuration>
+          <address>dev@modello.codehaus.org</address>
+        </configuration>
       </notifier>
     </notifiers>
   </ciManagement>
