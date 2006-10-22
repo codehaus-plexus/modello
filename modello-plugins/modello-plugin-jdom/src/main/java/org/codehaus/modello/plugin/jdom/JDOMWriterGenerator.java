@@ -121,7 +121,7 @@ public class JDOMWriterGenerator extends AbstractJDOMGenerator {
         JConstructor constructor = jClass.createConstructor();
         JSourceCode constCode = constructor.getSourceCode();
         constCode.add("factory = new DefaultJDOMFactory();");
-        constCode.add("lineSeparator = System.getProperty(\"line.separator\");");
+        constCode.add("lineSeparator = \"\\n\";");
         
         String root = objectModel.getRoot( getGeneratedVersion() );
         ModelClass rootClass = objectModel.getClass( root, getGeneratedVersion() );
