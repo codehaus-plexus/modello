@@ -306,7 +306,7 @@ public class JDOMWriterGenerator extends AbstractJDOMGenerator {
         sc.add("Iterator it = parent.getContent().iterator();");
         sc.add("Text lastText = null;");
         sc.add("int offset = 0;");
-        sc.add("while (it.hasNext() && elementCounter < counter.getCurrentIndex()) {");
+        sc.add("while (it.hasNext() && elementCounter <= counter.getCurrentIndex()) {");
         sc.indent();
         sc.add("Object next = it.next();");
         sc.add("offset = offset + 1;");
@@ -317,7 +317,7 @@ public class JDOMWriterGenerator extends AbstractJDOMGenerator {
         sc.add("offset = 0;");
         sc.unindent();
         sc.add("}");
-        sc.add("if (next instanceof Text) {");
+        sc.add("if (next instanceof Text && it.hasNext()) {");
         sc.addIndented("lastText = (Text)next;");
         sc.add("}");
         sc.unindent();
@@ -425,6 +425,8 @@ public class JDOMWriterGenerator extends AbstractJDOMGenerator {
         sc.unindent();
         sc.add("}");
         sc.add("el.setText(value);");
+        sc.add("innerCount.increaseCount();");
+        
         sc.unindent();
         sc.add("}");
         sc.add("if (elIt != null) {");
