@@ -27,6 +27,8 @@ import java.io.File;
  */
 
 /**
+ * Creates a JDO store from the Modello model.
+ *
  * @goal jpox-store
  *
  * @phase generate-sources
@@ -40,6 +42,8 @@ public class ModelloJPoxStoreMojo
     extends AbstractModelloGeneratorMojo
 {
     /**
+     * The output directory of the generated JDO store.
+     *
      * @parameter expression="${basedir}/target/generated-sources/modello"
      *
      * @required

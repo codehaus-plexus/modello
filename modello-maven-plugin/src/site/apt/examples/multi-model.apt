@@ -1,0 +1,85 @@
+ ------
+ Example of multi-model configuration
+ ------
+ Denis Cabasson
+ ------
+ 10 August 2006
+ ------
+
+Processing multiple Modello models.
+
+* Configuring your pom.xml
+
+  You can use the following configuration in your <<<pom.xml>>> to have the Modello
+  Plugin take two of your models into account (this configuration is taken
+  from the maven-assembly-plugin which indeed uses two different models).
+
++---+
+<project>
+  [...]
+  <build>
+    <plugins>
+      [...]
+        <groupId>org.codehaus.modello</groupId>
+        <artifactId>modello-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>descriptor</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>xpp3-reader</goal>
+              <goal>xpp3-writer</goal>
+              <goal>java</goal>
+              <goal>xsd</goal>
+            </goals>
+            <configuration>
+              <model>src/main/mdo/descriptor.mdo</model>
+              <version>1.0.0</version>
+            </configuration>
+          </execution>
+          <execution>
+            <id>component</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>xpp3-reader</goal>
+              <goal>xpp3-writer</goal>
+              <goal>java</goal>
+              <goal>xsd</goal>
+            </goals>
+            <configuration>
+              <model>src/main/mdo/component.mdo</model>
+              <version>1.0.0</version>
+            </configuration>
+          </execution>
+          <execution>
+            <id>descriptor-site</id>
+            <phase>pre-site</phase>
+            <goals>
+              <goal>xdoc</goal>
+              <goal>xsd</goal>
+            </goals>
+            <configuration>
+              <model>src/main/mdo/descriptor.mdo</model>
+              <version>1.0.0</version>
+            </configuration>
+          </execution>
+          <execution>
+            <id>component-site</id>
+            <phase>pre-site</phase>
+            <goals>
+              <goal>xdoc</goal>
+              <goal>xsd</goal>
+            </goals>
+            <configuration>
+              <model>src/main/mdo/component.mdo</model>
+              <version>1.0.0</version>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      [...]
+    </plugins>
+  </build>
+  [...]
+</project>
++---+

@@ -27,9 +27,9 @@ import org.codehaus.modello.maven.AbstractModelloGeneratorMojo;
 import java.io.File;
 
 /**
- * @goal xdoc
+ * Creates documentation for the model in xdoc format.
  *
- * @description Creates XDOC from the model.
+ * @goal xdoc
  *
  * @author <a href="mailto:brett@apache.org">Brett Porter</a>
  * @version $Id$
@@ -38,6 +38,8 @@ public class ModelloXdocMojo
     extends AbstractModelloGeneratorMojo
 {
     /**
+     * The output directory of the generated documentation.
+     *
      * @parameter expression="${basedir}/target/generated-site/xdoc"
      *
      * @required

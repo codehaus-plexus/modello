@@ -49,6 +49,8 @@ public abstract class AbstractModelloGeneratorMojo
     // ----------------------------------------------------------------------
 
     /**
+     * Base directory of the project.
+     *
      * @parameter expression="${basedir}"
      *
      * @required
@@ -56,6 +58,8 @@ public abstract class AbstractModelloGeneratorMojo
     private String basedir;
 
     /**
+     * Relative path to the mdo file for the current model.
+     *
      * @parameter expression="${model}"
      *
      * @required
@@ -63,6 +67,8 @@ public abstract class AbstractModelloGeneratorMojo
     private String model;
 
     /**
+     * The version of the model we will be working on.
+     *
      * @parameter expression="${version}"
      *
      * @required
@@ -79,11 +85,15 @@ public abstract class AbstractModelloGeneratorMojo
     private boolean packageWithVersion;
 
     /**
+     * <p>Note: This is passed by Maven and must not be configured by the user.</p>
+     *
      * @component
      */
     private ModelloCore modelloCore;
 
     /**
+     * The Maven project instance for the executing project.
+     *
      * @parameter expression="${project}"
      *
      * @required

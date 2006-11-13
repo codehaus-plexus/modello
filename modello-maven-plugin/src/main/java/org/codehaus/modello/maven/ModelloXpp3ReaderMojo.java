@@ -27,11 +27,11 @@ import java.io.File;
  */
 
 /**
+ * Creates an XPP3 reader from the model.
+ *
  * @goal xpp3-reader
  *
  * @phase generate-sources
- *
- * @description Creates XPP3 reader from the model.
  *
  * @author <a href="mailto:brett@apache.org">Brett Porter</a>
  * @version $Id$
@@ -40,6 +40,8 @@ public class ModelloXpp3ReaderMojo
     extends AbstractModelloGeneratorMojo
 {
     /**
+     * The output directory of the generated XPP reader.
+     *
      * @parameter expression="${basedir}/target/generated-sources/modello"
      *
      * @required

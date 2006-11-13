@@ -27,7 +27,7 @@ import org.codehaus.modello.maven.AbstractModelloGeneratorMojo;
 import java.io.File;
 
 /**
- * Creates a schema from the model.
+ * Creates an XML schema from the model.
  *
  * @goal xsd
  *
@@ -40,6 +40,8 @@ public class ModelloXsdMojo
     extends AbstractModelloGeneratorMojo
 {
     /**
+     * The output directory of the generated XML Schema.
+     *
      * @parameter expression="${basedir}/target/generated-site/xsd"
      *
      * @required

@@ -27,11 +27,11 @@ import org.codehaus.modello.maven.AbstractModelloGeneratorMojo;
 import java.io.File;
 
 /**
+ * Creates Java beans from the Modello model.
+ *
  * @goal java
  *
  * @phase generate-sources
- *
- * @description Creates java beans from the Modello model.
  *
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
@@ -40,6 +40,8 @@ public class ModelloJavaMojo
     extends AbstractModelloGeneratorMojo
 {
     /**
+     * The output directory of the generated Java beans.
+     *
      * @parameter expression="${basedir}/target/generated-sources/modello"
      *
      * @required

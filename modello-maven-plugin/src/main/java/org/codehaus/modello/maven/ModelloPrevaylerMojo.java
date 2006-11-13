@@ -27,11 +27,11 @@ import java.io.File;
  */
 
 /**
+ * Creates a Prevayler store from the Modello model.
+ *
  * @goal prevayler
  *
  * @phase generate-sources
- *
- * @description Creates a Prevayler store from the Modello model.
  *
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
@@ -40,6 +40,8 @@ public class ModelloPrevaylerMojo
     extends AbstractModelloGeneratorMojo
 {
     /**
+     * The output directory of the generated Prevayler store.
+     *
      * @parameter expression="${basedir}/target/generated-sources/modello"
      *
      * @required

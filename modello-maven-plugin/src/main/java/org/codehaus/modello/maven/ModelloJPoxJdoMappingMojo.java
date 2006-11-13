@@ -25,6 +25,8 @@ package org.codehaus.modello.maven;
 import java.io.File;
 
 /**
+ * Creates a JDO mapping from the Modello model.
+ *
  * @goal jpox-jdo-mapping
  *
  * @phase generate-resources
@@ -38,6 +40,8 @@ public class ModelloJPoxJdoMappingMojo
     extends AbstractModelloGeneratorMojo
 {
     /**
+     * The output directory of the generated classes of the JDO mapping.
+     *
      * @parameter expression="${basedir}/target/classes/META-INF"
      *
      * @required

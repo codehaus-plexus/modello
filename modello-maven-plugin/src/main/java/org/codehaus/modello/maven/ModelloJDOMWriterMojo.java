@@ -28,12 +28,12 @@ import java.io.File;
 
 
 /**
+ * Creates a jdom writer from the model that is capable of preserving element ordering
+ * and comments. In future it should also preserve whitespace.
+ *
  * @goal jdom-writer
  *
  * @phase generate-sources
- *
- * @description Creates jdom writer from the model that is capable of preserving element ordering
- * and comments. In future it should also preserve whitespace.
  *
  * @author <a href="mailto:mkleint@codehaus.org">Milos Kleint</a>
  *
@@ -42,6 +42,8 @@ public class ModelloJDOMWriterMojo
     extends AbstractModelloGeneratorMojo
 {
     /**
+     * The output directory of the generated jdom writer.
+     *
      * @parameter expression="${basedir}/target/generated-sources/modello"
      *
      * @required
