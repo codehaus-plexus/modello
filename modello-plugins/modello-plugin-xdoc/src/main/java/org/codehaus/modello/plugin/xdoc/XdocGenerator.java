@@ -116,7 +116,14 @@ public class XdocGenerator
 
         w.startElement( "p" );
 
-        w.writeMarkup( objectModel.getDescription() );
+        if ( objectModel.getDescription() != null )
+        {
+            w.writeMarkup( objectModel.getDescription() );
+        }
+        else
+        {
+            w.writeText( "No description." );
+        }
 
         w.endElement();
 
@@ -197,14 +204,18 @@ public class XdocGenerator
 
         w.addAttribute( "name", tagName );
 
+        w.startElement( "p" );
+
         if ( modelClass.getDescription() != null )
         {
-            w.startElement( "p" );
-
             w.writeMarkup( modelClass.getDescription() );
-
-            w.endElement();
         }
+        else
+        {
+            w.writeMarkup( "No description." );
+        }
+
+        w.endElement();
 
         w.startElement( "table" );
 
@@ -244,19 +255,15 @@ public class XdocGenerator
 
             if ( flatAssociation )
             {
-
                 ModelAssociation association = (ModelAssociation) f;
 
                 ModelClass associationModelClass = objectModel.getClass( association.getTo(), getGeneratedVersion() );
 
                 w.writeText( uncapitalise( associationModelClass.getName() ) );
-
             }
             else
             {
-
                 w.writeText( f.getName() );
-
             }
 
             w.endElement();
@@ -457,7 +464,6 @@ public class XdocGenerator
                         sb.append( getModelClassDescriptor( objectModel, fieldModelClass, f, depth + 1 ) );
 
                     }
-
                     else
                     {
 
