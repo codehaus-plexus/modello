@@ -188,9 +188,19 @@ public class XdocGenerator
         if ( field != null )
         {
             XmlFieldMetadata fieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
-            if ( fieldMetadata != null && fieldMetadata.getTagName() != null )
+            if ( fieldMetadata != null )
             {
-                tagName = fieldMetadata.getTagName();
+                if ( fieldMetadata.getAssociationTagName() != null )
+                {
+                    tagName = fieldMetadata.getAssociationTagName();
+                }
+                else
+                {
+                    if ( fieldMetadata.getTagName() != null )
+                    {
+                        tagName = fieldMetadata.getTagName();
+                    }
+                }
             }
         }
 
@@ -409,9 +419,19 @@ public class XdocGenerator
         if ( field != null )
         {
             XmlFieldMetadata fieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
-            if ( fieldMetadata != null && fieldMetadata.getTagName() != null )
+            if ( fieldMetadata != null )
             {
-                tagName = fieldMetadata.getTagName();
+                if ( fieldMetadata.getAssociationTagName() != null )
+                {
+                    tagName = fieldMetadata.getAssociationTagName();
+                }
+                else
+                {
+                    if ( fieldMetadata.getTagName() != null )
+                    {
+                        tagName = fieldMetadata.getTagName();
+                    }
+                }
             }
         }
 
