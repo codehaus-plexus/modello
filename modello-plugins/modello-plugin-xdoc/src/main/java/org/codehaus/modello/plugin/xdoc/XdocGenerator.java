@@ -296,6 +296,17 @@ public class XdocGenerator
                 w.writeText( "No description." );
             }
 
+            // Write the default value, if it exists.
+            // But only for fields that are not a ModelAssociation
+            if ( f.getDefaultValue() != null && !( f instanceof ModelAssociation ) )
+            {
+                w.writeText( " The default value is " );
+                w.startElement( "code" );
+                w.writeText( f.getDefaultValue() );
+                w.endElement();
+                w.writeText( "." );
+            }
+
             w.endElement();
 
             w.endElement();
