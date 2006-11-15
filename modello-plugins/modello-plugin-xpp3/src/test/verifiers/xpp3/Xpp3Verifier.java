@@ -216,7 +216,8 @@ public class Xpp3Verifier
         typeTester.setD( 5.6 );
         try
         {
-            typeTester.setDate( new java.text.SimpleDateFormat( "yyyy-MM-dd" ).parse( "2006-01-06" ) );
+            typeTester.setDate( new java.util.Date( 1136551996L ) );
+            typeTester.setFormattedDate( new java.text.SimpleDateFormat( "yyyyMMdd.hhmmss" ).parse( "20061112.123456" ) );
         }
         catch ( java.text.ParseException e )
         {
@@ -298,32 +299,6 @@ public class Xpp3Verifier
         expected.setGroupId( groupId );
 
         Model actual = reader.read( new StringReader( xml ) );
-
-        assertModel( expected, actual );
-
-        // ----------------------------------------------------------------------
-        // Test that dates are correctly read back from xml
-        // ----------------------------------------------------------------------
-
-        StringBuffer dateXml = new StringBuffer();
-        dateXml.append("<mavenModel>\n<typeTester>\n");
-        dateXml.append("<date>Friday, January 6, 2006 12:00:00 AM EST</date>\n");
-        dateXml.append("</typeTester>\n</mavenModel>");
-
-        expected = new Model();
-
-        TypeTester typeTester = new TypeTester();
-
-        Calendar calendar = Calendar.getInstance();
-
-        calendar.clear();
-        calendar.set(2006,01,06,12,0);
-
-        typeTester.setDate(calendar.getTime());
-
-        expected.setTypeTester(typeTester);
-
-        actual = reader.read( new StringReader( dateXml.toString() ) );
 
         assertModel( expected, actual );
     }

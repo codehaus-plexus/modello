@@ -887,8 +887,10 @@ public class Xpp3ReaderGenerator
         }
         else if ( "Date".equals( type ) )
         {
+            sc.add( "String dateFormat = " +
+                ( fieldMetaData.getFormat() != null ? "\"" + fieldMetaData.getFormat() + "\"" : "null" ) + ";" );
             sc.add( objectName + "." + setterName + "( getDateValue( " + parserGetter + ", \"" + tagName +
-                "\", parser ) );" );
+                "\", dateFormat, parser ) );" );
         }
         else if ( "DOM".equals( type ) )
         {
@@ -1371,6 +1373,7 @@ public class Xpp3ReaderGenerator
 
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
         method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
+        method.addParameter( new JParameter( new JClass( "String" ), "dateFormat" ) );
         method.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
         method.addException( new JClass( "XmlPullParserException" ) );
 
@@ -1382,9 +1385,25 @@ public class Xpp3ReaderGenerator
 
         sc.indent();
 
-        sc.add( "DateFormat dateParser = DateFormat.getDateTimeInstance( DateFormat.FULL, DateFormat.FULL , Locale.US );" );
+        sc.add( "if ( dateFormat == null )" );
 
-        sc.add( "dateParser.setLenient( true );" );
+        sc.add( "{" );
+
+        sc.indent();
+
+        sc.add( "return new java.util.Date( Long.valueOf( s ).longValue() );" );
+
+        sc.unindent();
+
+        sc.add( "}" );
+
+        sc.add( "else" );
+
+        sc.add( "{" );
+
+        sc.indent();
+
+        sc.add( "DateFormat dateParser = new java.text.SimpleDateFormat( dateFormat, Locale.US );" );
 
         sc.add( "try" );
         sc.add( "{" );
@@ -1401,6 +1420,10 @@ public class Xpp3ReaderGenerator
         sc.indent();
 
         sc.add( "throw new XmlPullParserException( e.getMessage() );" );
+
+        sc.unindent();
+
+        sc.add( "}" );
 
         sc.unindent();
 

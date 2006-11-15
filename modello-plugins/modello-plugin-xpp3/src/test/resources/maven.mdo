@@ -1781,6 +1781,11 @@
           <type>Date</type>
           <version>4.0.0</version>
         </field>
+        <field xml.format="yyyyMMdd.hhmmss">
+          <name>formattedDate</name>
+          <type>Date</type>
+          <version>4.0.0</version>
+        </field>
       </fields>
     </class>
   </classes>

@@ -90,6 +90,10 @@ public class XmlMetadataPlugin
 
         metadata.setListStyle( listStyle );
 
+        String format = (String) data.get( "xml.format" );
+
+        metadata.setFormat( format );
+
         return metadata;
     }
 

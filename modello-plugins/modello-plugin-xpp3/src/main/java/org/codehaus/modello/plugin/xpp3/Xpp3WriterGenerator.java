@@ -142,7 +142,7 @@ public class Xpp3WriterGenerator
         JMethod marshall = new JMethod( null, "write" );
 
         marshall.addParameter( new JParameter( new JClass( "Writer" ), "writer" ) );
-        
+
         String rootElementParameterName = uncapitalise( root );
 
         marshall.addParameter( new JParameter( new JClass( root ), rootElementParameterName ) );
@@ -245,7 +245,7 @@ public class Xpp3WriterGenerator
                 sc.indent();
 
                 sc.add( "serializer.attribute( NAMESPACE, \"" + fieldTagName + "\", " +
-                    getValue( field.getType(), value ) + " );" );
+                    getValue( field.getType(), value, fieldMetadata ) + " );" );
 
                 sc.unindent();
 
@@ -301,8 +301,8 @@ public class Xpp3WriterGenerator
 
                     sc.indent();
 
-                    sc.add( "write" + association.getTo() + "( (" + association.getTo() + ") " + value + ", \""
-                        + fieldTagName + "\", serializer );" );
+                    sc.add( "write" + association.getTo() + "( (" + association.getTo() + ") " + value + ", \"" +
+                        fieldTagName + "\", serializer );" );
 
                     sc.unindent();
 
@@ -438,7 +438,8 @@ public class Xpp3WriterGenerator
                 else
                 {
                     sc.add( "serializer.startTag( NAMESPACE, " + "\"" + fieldTagName + "\" ).text( " +
-                        getValue( field.getType(), value ) + " ).endTag( NAMESPACE, " + "\"" + fieldTagName + "\" );" );
+                        getValue( field.getType(), value, fieldMetadata ) + " ).endTag( NAMESPACE, " + "\"" +
+                        fieldTagName + "\" );" );
                 }
 
                 sc.unindent();
@@ -461,14 +462,21 @@ public class Xpp3WriterGenerator
         return javaFieldMetadata.isBooleanGetter() ? "is" : "get";
     }
 
-    private String getValue( String type, String initialValue )
+    private String getValue( String type, String initialValue, XmlFieldMetadata fieldMetadata )
     {
         String textValue = initialValue;
 
         if ( "Date".equals( type ) )
         {
-            textValue =
-                "DateFormat.getDateTimeInstance( DateFormat.FULL, DateFormat.FULL , Locale.US ).format( " + textValue + " )";
+            if ( fieldMetadata.getFormat() == null )
+            {
+                textValue = "Long.toString( " + textValue + ".getTime() )";
+            }
+            else
+            {
+                textValue = "new java.text.SimpleDateFormat( \"" + fieldMetadata.getFormat() +
+                    "\", Locale.US ).format( " + textValue + " )";
+            }
         }
         else if ( !"String".equals( type ) )
         {

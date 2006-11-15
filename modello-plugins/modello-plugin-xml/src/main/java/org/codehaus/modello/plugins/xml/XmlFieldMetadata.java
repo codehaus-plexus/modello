@@ -47,6 +47,18 @@ public class XmlFieldMetadata
 
     private boolean trim = true;
 
+    private String format;
+
+    public String getFormat()
+    {
+        return format;
+    }
+
+    public void setFormat( String format )
+    {
+        this.format = format;
+    }
+
     public String getListStyle()
     {
         return listStyle;
