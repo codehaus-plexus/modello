@@ -14,7 +14,7 @@
       <version>20060502</version>
       <exclusions>
         <exclusion>
-          <groupId>javax.xml</groupId>
+          <groupId>com.bea.xml</groupId>
           <artifactId>jsr173-ri</artifactId>
         </exclusion>
       </exclusions>
@@ -23,6 +23,11 @@
       <groupId>stax</groupId>
       <artifactId>stax-api</artifactId>
       <version>1.0.1</version>
+    </dependency>
+    <dependency>
+      <groupId>woodstox</groupId>
+      <artifactId>wstx-asl</artifactId>
+      <version>3.1.0</version>
     </dependency>
     <dependency>
       <groupId>org.codehaus.modello</groupId>
