@@ -1,0 +1,14 @@
+<component-set>
+  <components>
+    <component>
+      <role>org.codehaus.modello.plugin.ModelloGenerator</role>
+      <role-hint>stax-reader</role-hint>
+      <implementation>org.codehaus.modello.plugin.stax.StaxReaderGenerator</implementation>
+    </component>
+    <component>
+      <role>org.codehaus.modello.plugin.ModelloGenerator</role>
+      <role-hint>stax-writer</role-hint>
+      <implementation>org.codehaus.modello.plugin.stax.StaxWriterGenerator</implementation>
+    </component>
+  </components>
+</component-set>
