@@ -116,6 +116,8 @@ public class Xpp3WriterGenerator
 
         jClass.addImport( "java.util.Locale" );
 
+        jClass.addField( new JField( new JClass( "String" ), "NAMESPACE" ) );
+
         addModelImports( jClass, null );
 
         String root = objectModel.getRoot( getGeneratedVersion() );
