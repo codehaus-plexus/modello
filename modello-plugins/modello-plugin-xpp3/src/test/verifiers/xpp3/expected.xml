@@ -25,7 +25,7 @@
       <foo>bar</foo>
       <bar att1="value">baz</bar>
       <el1>
-        <el2>text</el2>
+        <el2>te&amp;xt</el2>
       </el1>
     </custom>
   </component>

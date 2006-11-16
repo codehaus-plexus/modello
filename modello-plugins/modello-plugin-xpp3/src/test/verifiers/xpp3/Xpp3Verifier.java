@@ -188,7 +188,7 @@ public class Xpp3Verifier
         xpp3Dom.addChild( child );
         Xpp3Dom el1 = child;
         child = new Xpp3Dom( "el2" );
-        child.setValue( "text" );
+        child.setValue( "te&xt" );
         el1.addChild( child );
 
         component.setCustom( xpp3Dom );
