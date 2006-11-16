@@ -40,7 +40,6 @@ import java.util.Map;
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
- *
  * @version $Id$
  */
 public class XmlMetadataPlugin
@@ -61,6 +60,10 @@ public class XmlMetadataPlugin
         XmlClassMetadata metadata = new XmlClassMetadata();
 
         metadata.setTagName( getTagName( data ) );
+
+        metadata.setNamespace( nullIfEmpty( data.get( "xml.namespace" ) ) );
+
+        metadata.setSchemaLocation( nullIfEmpty( data.get( "xml.schemaLocation" ) ) );
 
         return metadata;
     }

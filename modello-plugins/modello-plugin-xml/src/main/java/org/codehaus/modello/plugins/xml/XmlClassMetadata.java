@@ -31,9 +31,13 @@ import org.codehaus.modello.metadata.ClassMetadata;
 public class XmlClassMetadata
     implements ClassMetadata
 {
-    public final static String ID = XmlClassMetadata.class.getName();
+    public static final String ID = XmlClassMetadata.class.getName();
 
     private String tagName;
+
+    private String namespace;
+
+    private String schemaLocation;
 
     public String getTagName()
     {
@@ -43,5 +47,25 @@ public class XmlClassMetadata
     public void setTagName( String tagName )
     {
         this.tagName = tagName;
+    }
+
+    public String getNamespace()
+    {
+        return namespace;
+    }
+
+    public void setNamespace( String namespace )
+    {
+        this.namespace = namespace;
+    }
+
+    public String getSchemaLocation()
+    {
+        return schemaLocation;
+    }
+
+    public void setSchemaLocation( String schemaLocation )
+    {
+        this.schemaLocation = schemaLocation;
     }
 }

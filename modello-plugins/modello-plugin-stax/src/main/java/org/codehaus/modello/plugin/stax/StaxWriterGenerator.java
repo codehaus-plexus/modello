@@ -37,7 +37,9 @@ import org.codehaus.modello.plugin.java.javasource.JSourceWriter;
 import org.codehaus.modello.plugin.java.javasource.JType;
 import org.codehaus.modello.plugin.model.ModelClassMetadata;
 import org.codehaus.modello.plugins.xml.XmlAssociationMetadata;
+import org.codehaus.modello.plugins.xml.XmlClassMetadata;
 import org.codehaus.modello.plugins.xml.XmlFieldMetadata;
+import org.codehaus.plexus.util.StringUtils;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -213,12 +215,35 @@ public class StaxWriterGenerator
 
         sc.indent();
 
-        // TODO!
-//            xmlns="http://modello.codehaus.org/test/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-//            xsi:schemaLocation="http://modello.codehaus.org/test/4.0.0 http://modello.codehaus.org/xsd/maven-4.0.0.xsd"
-        sc.add( "String NAMESPACE=null;" );
+        XmlClassMetadata metadata = (XmlClassMetadata) modelClass.getMetadata( XmlClassMetadata.ID );
+        if ( metadata.getNamespace() != null )
+        {
+            String namespace =
+                StringUtils.replace( metadata.getNamespace(), "${version}", getGeneratedVersion().toString() );
+            sc.add( "String namespace = \"" + namespace + "\";" );
+        }
+        else
+        {
+            sc.add( "String namespace = null;" );
+        }
 
-        sc.add( "serializer.writeStartElement( NAMESPACE, tagName );" );
+        sc.add( "serializer.writeStartElement( namespace, tagName );" );
+
+        if ( metadata.getNamespace() != null )
+        {
+            sc.add( "serializer.writeDefaultNamespace( namespace );" );
+
+            if ( metadata.getSchemaLocation() != null )
+            {
+                String url =
+                    StringUtils.replace( metadata.getSchemaLocation(), "${version}", getGeneratedVersion().toString() );
+
+                sc.add( "serializer.writeNamespace( \"xsi\", \"http://www.w3.org/2001/XMLSchema-instance\" );" );
+                sc.add(
+                    "serializer.writeAttribute( \"http://www.w3.org/2001/XMLSchema-instance\", \"schemaLocation\", namespace + \" " +
+                        url + "\" );" );
+            }
+        }
 
         // XML attributes
         for ( Iterator i = modelClass.getAllFields( getGeneratedVersion(), true ).iterator(); i.hasNext(); )
@@ -248,7 +273,7 @@ public class StaxWriterGenerator
 
                 sc.indent();
 
-                sc.add( "serializer.writeAttribute( NAMESPACE, \"" + fieldTagName + "\", " +
+                sc.add( "serializer.writeAttribute( namespace, \"" + fieldTagName + "\", " +
                     getValue( field.getType(), value, fieldMetadata ) + " );" );
 
                 sc.unindent();
@@ -329,7 +354,7 @@ public class StaxWriterGenerator
 
                         if ( wrappedList )
                         {
-                            sc.add( "serializer.writeStartElement( NAMESPACE, " + "\"" + fieldTagName + "\" );" );
+                            sc.add( "serializer.writeStartElement( namespace, " + "\"" + fieldTagName + "\" );" );
                         }
 
                         sc.add( "for ( Iterator iter = " + value + ".iterator(); iter.hasNext(); )" );
@@ -349,7 +374,7 @@ public class StaxWriterGenerator
                             sc.add( toType + " " + singular( uncapitalise( field.getName() ) ) + " = (" + toType +
                                 ") iter.next();" );
 
-                            sc.add( "serializer.writeStartElement( NAMESPACE, " + "\"" + singularTagName + "\" );" );
+                            sc.add( "serializer.writeStartElement( namespace, " + "\"" + singularTagName + "\" );" );
                             sc.add(
                                 "serializer.writeCharacters( " + singular( uncapitalise( field.getName() ) ) + " );" );
                             sc.add( "serializer.writeEndElement();" );
@@ -383,7 +408,7 @@ public class StaxWriterGenerator
 
                         if ( wrappedList )
                         {
-                            sc.add( "serializer.writeStartElement( NAMESPACE, " + "\"" + fieldTagName + "\" );" );
+                            sc.add( "serializer.writeStartElement( namespace, " + "\"" + fieldTagName + "\" );" );
                         }
 
                         sc.add( "for ( Iterator iter = " + value + ".keySet().iterator(); iter.hasNext(); )" );
@@ -399,18 +424,18 @@ public class StaxWriterGenerator
                         if ( XmlAssociationMetadata.EXPLODE_MODE.equals( xmlAssociationMetadata.getMapStyle() ) )
                         {
                             sc.add(
-                                "serializer.writeStartElement( NAMESPACE, \"" + singular( associationName ) + "\" );" );
-                            sc.add( "serializer.writeStartElement( NAMESPACE, \"key\" );" );
+                                "serializer.writeStartElement( namespace, \"" + singular( associationName ) + "\" );" );
+                            sc.add( "serializer.writeStartElement( namespace, \"key\" );" );
                             sc.add( "serializer.writeCharacters( key );" );
                             sc.add( "serializer.writeEndElement();" );
-                            sc.add( "serializer.writeStartElement( NAMESPACE, \"value\" );" );
+                            sc.add( "serializer.writeStartElement( namespace, \"value\" );" );
                             sc.add( "serializer.writeCharacters( value );" );
                             sc.add( "serializer.writeEndElement();" );
                             sc.add( "serializer.writeEndElement();" );
                         }
                         else
                         {
-                            sc.add( "serializer.writeStartElement( NAMESPACE, \"\" + key + \"\" );" );
+                            sc.add( "serializer.writeStartElement( namespace, \"\" + key + \"\" );" );
                             sc.add( "serializer.writeCharacters( value );" );
                             sc.add( "serializer.writeEndElement();" );
                         }
@@ -442,11 +467,11 @@ public class StaxWriterGenerator
                 {
                     jClass.addImport( "org.codehaus.plexus.util.xml.Xpp3Dom" );
 
-                    sc.add( "writeDom( (Xpp3Dom) " + value + ", NAMESPACE, serializer );" );
+                    sc.add( "writeDom( (Xpp3Dom) " + value + ", namespace, serializer );" );
                 }
                 else
                 {
-                    sc.add( "serializer.writeStartElement( NAMESPACE, " + "\"" + fieldTagName + "\" );" );
+                    sc.add( "serializer.writeStartElement( namespace, " + "\"" + fieldTagName + "\" );" );
                     sc.add(
                         "serializer.writeCharacters( " + getValue( field.getType(), value, fieldMetadata ) + " );" );
                     sc.add( "serializer.writeEndElement();" );
@@ -472,7 +497,7 @@ public class StaxWriterGenerator
         JMethod method = new JMethod( "writeDom" );
 
         method.addParameter( new JParameter( new JType( "Xpp3Dom" ), "dom" ) );
-        method.addParameter( new JParameter( new JType( "String" ), "NAMESPACE" ) );
+        method.addParameter( new JParameter( new JType( "String" ), "namespace" ) );
         method.addParameter( new JParameter( new JType( "XMLStreamWriter" ), "serializer" ) );
 
         method.addException( new JClass( "XMLStreamException" ) );
@@ -496,7 +521,7 @@ public class StaxWriterGenerator
         sc.add( "{" );
 
         sc.indent();
-        sc.add( "writeDom( children[i], NAMESPACE, serializer );" );
+        sc.add( "writeDom( children[i], namespace, serializer );" );
         sc.unindent();
 
         sc.add( "}" );

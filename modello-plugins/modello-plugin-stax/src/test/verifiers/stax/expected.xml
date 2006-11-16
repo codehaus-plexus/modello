@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<mavenModel extender="/foo/bar" modelVersion="4.0.0">
+<mavenModel xmlns="http://modello.codehaus.org/test/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://modello.codehaus.org/test/4.0.0 http://modello.codehaus.org/xsd/maven-4.0.0.xsd" extender="/foo/bar" modelVersion="4.0.0">
   <typeTester>
     <c>v</c>
     <i>1</i>
