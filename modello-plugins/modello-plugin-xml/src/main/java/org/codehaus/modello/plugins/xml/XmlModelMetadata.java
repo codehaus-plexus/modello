@@ -31,5 +31,5 @@ import org.codehaus.modello.metadata.ModelMetadata;
 public class XmlModelMetadata
     implements ModelMetadata
 {
-    public final static String ID = XmlModelMetadata.class.getName();
+    public static final String ID = XmlModelMetadata.class.getName();
 }

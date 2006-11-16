@@ -30,7 +30,6 @@ import org.codehaus.modello.model.ModelDefault;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.plugin.java.JavaFieldMetadata;
 import org.codehaus.modello.plugin.java.javasource.JClass;
-import org.codehaus.modello.plugin.java.javasource.JField;
 import org.codehaus.modello.plugin.java.javasource.JMethod;
 import org.codehaus.modello.plugin.java.javasource.JParameter;
 import org.codehaus.modello.plugin.java.javasource.JSourceCode;
@@ -105,7 +104,9 @@ public class Xpp3WriterGenerator
 
         jClass.setPackageName( packageName );
 
-        jClass.addImport( "org.codehaus.plexus.util.xml.pull.*" );
+        jClass.addImport( "org.codehaus.plexus.util.xml.pull.XmlSerializer" );
+
+        jClass.addImport( "org.codehaus.plexus.util.xml.pull.MXSerializer" );
 
         jClass.addImport( "java.io.Writer" );
 
@@ -114,10 +115,6 @@ public class Xpp3WriterGenerator
         jClass.addImport( "java.util.Iterator" );
 
         jClass.addImport( "java.util.Locale" );
-
-        jClass.addField( new JField( new JClass( "org.codehaus.plexus.util.xml.pull.XmlSerializer" ), "serializer" ) );
-
-        jClass.addField( new JField( new JClass( "String" ), "NAMESPACE" ) );
 
         addModelImports( jClass, null );
 
@@ -151,7 +148,7 @@ public class Xpp3WriterGenerator
 
         JSourceCode sc = marshall.getSourceCode();
 
-        sc.add( "serializer = new MXSerializer();" );
+        sc.add( "XmlSerializer serializer = new MXSerializer();" );
 
         sc.add(
             "serializer.setProperty( \"http://xmlpull.org/v1/doc/properties.html#serializer-indentation\", \"  \" );" );

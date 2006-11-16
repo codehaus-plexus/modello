@@ -115,9 +115,6 @@ public class Dom4jWriterGenerator
         jClass.addImport( "java.io.Writer" );
         jClass.addImport( "java.util.Iterator" );
 
-        // jClass.addField( new JField( new JClass( "org.codehaus.plexus.util.xml.pull.XmlSerializer" ), "serializer" ) );
-        // jClass.addField( new JField( new JClass( "String" ), "NAMESPACE" ) );
-
         addModelImports( jClass, null );
 
         String root = objectModel.getRoot( getGeneratedVersion() );
