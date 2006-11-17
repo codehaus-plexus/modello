@@ -74,7 +74,7 @@ public abstract class AbstractModelloGeneratorTest
         this.name = name;
     }
 
-    public final void setUp()
+    protected void setUp()
         throws Exception
     {
         super.setUp();
