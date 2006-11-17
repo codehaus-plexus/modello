@@ -22,14 +22,14 @@ package org.codehaus.modello.model;
  * SOFTWARE.
  */
 
+import org.codehaus.modello.ModelloRuntimeException;
+import org.codehaus.modello.plugin.model.ModelClassMetadata;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import org.codehaus.modello.ModelloRuntimeException;
-import org.codehaus.modello.plugin.model.ModelClassMetadata;
 
 /**
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
@@ -54,6 +54,8 @@ public class Model
 
     private transient Map interfaceMap = new HashMap();
 
+    private VersionDefinition versionDefinition;
+
     public Model()
     {
         super( true );
@@ -67,6 +69,16 @@ public class Model
     public void setId( String id )
     {
         this.id = id;
+    }
+
+    public VersionDefinition getVersionDefinition()
+    {
+        return versionDefinition;
+    }
+
+    public void setVersionDefinition( VersionDefinition versionDefinition )
+    {
+        this.versionDefinition = versionDefinition;
     }
 
     public String getRoot( Version version )

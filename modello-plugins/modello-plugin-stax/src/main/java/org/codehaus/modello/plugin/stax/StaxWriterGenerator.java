@@ -119,6 +119,8 @@ public class StaxWriterGenerator
 
         jClass.addImport( "javanet.staxutils.IndentingXMLStreamWriter" );
 
+        jClass.addImport( "org.codehaus.plexus.util.xml.Xpp3Dom" );
+
         addModelImports( jClass, null );
 
         String root = objectModel.getRoot( getGeneratedVersion() );
@@ -461,8 +463,6 @@ public class StaxWriterGenerator
 
                 if ( "DOM".equals( field.getType() ) )
                 {
-                    jClass.addImport( "org.codehaus.plexus.util.xml.Xpp3Dom" );
-
                     sc.add( "writeDom( (Xpp3Dom) " + value + ", serializer );" );
                 }
                 else

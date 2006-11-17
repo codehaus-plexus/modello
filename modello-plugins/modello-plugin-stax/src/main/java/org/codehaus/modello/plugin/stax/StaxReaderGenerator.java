@@ -28,6 +28,7 @@ import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelDefault;
 import org.codehaus.modello.model.ModelField;
+import org.codehaus.modello.model.VersionDefinition;
 import org.codehaus.modello.plugin.java.javasource.JClass;
 import org.codehaus.modello.plugin.java.javasource.JMethod;
 import org.codehaus.modello.plugin.java.javasource.JParameter;
@@ -138,16 +139,16 @@ public class StaxReaderGenerator
 
         ModelClass root = objectModel.getClass( objectModel.getRoot( getGeneratedVersion() ), getGeneratedVersion() );
 
-        JMethod unmarshall = new JMethod( new JClass( root.getName() ), "read" );
+        JMethod method = new JMethod( new JClass( root.getName() ), "read" );
 
-        unmarshall.addParameter( new JParameter( new JClass( "Reader" ), "reader" ) );
+        method.addParameter( new JParameter( new JClass( "Reader" ), "reader" ) );
 
-        unmarshall.addParameter( new JParameter( JType.Boolean, "strict" ) );
+        method.addParameter( new JParameter( JType.Boolean, "strict" ) );
 
-        unmarshall.addException( new JClass( "IOException" ) );
-        unmarshall.addException( new JClass( "XMLStreamException" ) );
+        method.addException( new JClass( "IOException" ) );
+        method.addException( new JClass( "XMLStreamException" ) );
 
-        JSourceCode sc = unmarshall.getSourceCode();
+        JSourceCode sc = method.getSourceCode();
 
         sc.add( "XMLStreamReader xmlStreamReader = XMLInputFactory.newInstance().createXMLStreamReader( reader );" );
 
@@ -158,19 +159,64 @@ public class StaxReaderGenerator
         sc.add( "return parse" + root.getName() + "( \"" + getTagName( root ) +
             "\", xmlStreamReader, strict, encoding );" );
 
-        jClass.addMethod( unmarshall );
+        jClass.addMethod( method );
 
-        unmarshall = new JMethod( new JClass( root.getName() ), "read" );
+        method = new JMethod( new JClass( root.getName() ), "read" );
 
-        unmarshall.addParameter( new JParameter( new JClass( "Reader" ), "reader" ) );
+        method.addParameter( new JParameter( new JClass( "Reader" ), "reader" ) );
 
-        unmarshall.addException( new JClass( "IOException" ) );
-        unmarshall.addException( new JClass( "XMLStreamException" ) );
+        method.addException( new JClass( "IOException" ) );
+        method.addException( new JClass( "XMLStreamException" ) );
 
-        sc = unmarshall.getSourceCode();
+        sc = method.getSourceCode();
         sc.add( "return read( reader, true );" );
 
-        jClass.addMethod( unmarshall );
+        jClass.addMethod( method );
+
+        // Determine the version. Currently, it causes the document to be reparsed, but could be made more effecient in
+        // future by buffering the read XML and piping that into any consequent read method.
+
+        VersionDefinition versionDefinition = objectModel.getVersionDefinition();
+        if ( versionDefinition != null )
+        {
+            String value = null;
+            if ( "namespace".equals( versionDefinition.getType() ) )
+            {
+                XmlClassMetadata metadata = (XmlClassMetadata) root.getMetadata( XmlClassMetadata.ID );
+
+                value = metadata.getNamespace();
+                if ( value == null || value.indexOf( "${version}" ) < 0 )
+                {
+                    throw new ModelloException(
+                        "versionDefinition is namespace, but the model does not declare xml.namespace on the root element" );
+                }
+            }
+            else if ( "field".equals( versionDefinition.getType() ) )
+            {
+                ModelField field = root.getField( versionDefinition.getValue(), getGeneratedVersion() );
+
+                if ( field == null )
+                {
+                    throw new ModelloException(
+                        "versionDefinition is field, but the model root element does not declare a field '" + value +
+                            "'." );
+                }
+
+                if ( !"String".equals( field.getType() ) )
+                {
+                    throw new ModelloException( "versionDefinition is field, but the field is not of type String" );
+                }
+
+                XmlFieldMetadata metadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
+                value = metadata.getTagName();
+                if ( value == null )
+                {
+                    value = field.getName();
+                }
+            }
+
+            writeDetermineVersionMethod( jClass, versionDefinition, value );
+        }
 
         // ----------------------------------------------------------------------
         // Write the class parsers
@@ -195,6 +241,138 @@ public class StaxReaderGenerator
         writer.flush();
 
         writer.close();
+    }
+
+    private void writeDetermineVersionMethod( JClass jClass, VersionDefinition versionDefinition, String value )
+    {
+        JMethod method = new JMethod( new JClass( "String" ), "determineVersion" );
+
+        method.addParameter( new JParameter( new JClass( "Reader" ), "reader" ) );
+
+        method.addException( new JClass( "IOException" ) );
+        method.addException( new JClass( "XMLStreamException" ) );
+
+        JSourceCode sc = method.getSourceCode();
+
+        sc.add( "XMLStreamReader xmlStreamReader = XMLInputFactory.newInstance().createXMLStreamReader( reader );" );
+
+        sc.add( "while ( xmlStreamReader.hasNext() )" );
+
+        sc.add( "{" );
+
+        sc.indent();
+
+        sc.add( "int eventType = xmlStreamReader.next();" );
+
+        sc.add( "if ( eventType == XMLStreamConstants.START_ELEMENT )" );
+
+        sc.add( "{" );
+
+        sc.indent();
+
+        if ( "namespace".equals( versionDefinition.getType() ) )
+        {
+            sc.add( "String uri = xmlStreamReader.getNamespaceURI( \"\" );" );
+
+            sc.add( "if ( uri == null )" );
+
+            sc.add( "{" );
+
+            sc.indent();
+
+            sc.add(
+                "throw new XMLStreamException( \"No namespace specified, but versionDefinition requires it\", xmlStreamReader.getLocation() );" );
+
+            sc.unindent();
+
+            sc.add( "}" );
+
+            int index = value.indexOf( "${version}" );
+
+            sc.add( "String uriPrefix = \"" + value.substring( 0, index ) + "\";" );
+            sc.add( "String uriSuffix = \"" + value.substring( index + 10 ) + "\";" );
+
+            sc.add( "if ( !uri.startsWith( uriPrefix ) || !uri.endsWith( uriSuffix ) )" );
+
+            sc.add( "{" );
+
+            sc.indent();
+
+            sc.add( "throw new XMLStreamException( \"Namespace URI: '\" + uri + \"' does not match pattern '" + value +
+                "'\", xmlStreamReader.getLocation() );" );
+
+            sc.unindent();
+
+            sc.add( "}" );
+
+            sc.add( "return uri.substring( uriPrefix.length(), uri.length() - uriSuffix.length() );" );
+        }
+        else
+        {
+            // we are now at the root element. Search child elements for the correct tag name
+
+            sc.add( "int depth = 0;" );
+
+            sc.add( "while ( depth >= 0 )" );
+
+            sc.add( "{" );
+
+            sc.indent();
+
+            sc.add( "eventType = xmlStreamReader.next();" );
+
+            sc.add( "if ( eventType == XMLStreamConstants.START_ELEMENT )" );
+            sc.add( "{" );
+
+            sc.indent();
+
+            sc.add( "if ( depth == 0 && \"" + value + "\".equals( xmlStreamReader.getLocalName() ) )" );
+            sc.add( "{" );
+
+            sc.indent();
+
+            sc.add( "return xmlStreamReader.getElementText();" );
+
+            sc.unindent();
+
+            sc.add( "}" );
+
+            sc.add( "depth++;" );
+
+            sc.unindent();
+
+            sc.add( "}" );
+
+            sc.add( "if ( eventType == XMLStreamConstants.END_ELEMENT )" );
+            sc.add( "{" );
+
+            sc.indent();
+
+            sc.add( "depth--;" );
+
+            sc.unindent();
+
+            sc.add( "}" );
+
+            sc.unindent();
+
+            sc.add( "}" );
+
+            sc.add( "throw new XMLStreamException( \"Field: '" + value +
+                "' does not exist in the document.\", xmlStreamReader.getLocation() );" );
+        }
+
+        sc.unindent();
+
+        sc.add( "}" );
+
+        sc.unindent();
+
+        sc.add( "}" );
+
+        sc.add( "throw new XMLStreamException( \"Version not found in document\", xmlStreamReader.getLocation() );" );
+
+        jClass.addMethod( method );
     }
 
     private String getTagName( ModelClass root )
@@ -430,7 +608,8 @@ public class StaxReaderGenerator
 
             if ( fieldMetadata.isAttribute() )
             {
-                writePrimitiveField( field, field.getType(), uncapClassName, "set" + capitalise( field.getName() ), sc );
+                writePrimitiveField( field, field.getType(), uncapClassName, "set" + capitalise( field.getName() ),
+                                     sc );
             }
         }
     }

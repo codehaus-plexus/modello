@@ -22,9 +22,6 @@ package org.codehaus.modello.core.io;
  * SOFTWARE.
  */
 
-import java.io.FileReader;
-import java.util.List;
-
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelAssociation;
@@ -33,6 +30,9 @@ import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.Version;
 import org.codehaus.modello.model.VersionRange;
 import org.codehaus.plexus.PlexusTestCase;
+
+import java.io.FileReader;
+import java.util.List;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -51,6 +51,9 @@ public class ModelReaderTest
         Model model = modello.loadModel( new FileReader( getTestPath( "src/test/resources/models/simple.mdo" ) ) );
 
         assertNotNull( model );
+
+        assertEquals( "field", model.getVersionDefinition().getType() );
+        assertEquals( "foo", model.getVersionDefinition().getValue() );
 
         assertEquals( "simple", model.getId() );
 

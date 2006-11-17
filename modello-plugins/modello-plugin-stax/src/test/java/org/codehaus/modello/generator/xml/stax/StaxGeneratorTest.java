@@ -22,20 +22,15 @@ package org.codehaus.modello.generator.xml.stax;
  * SOFTWARE.
  */
 
-import org.codehaus.modello.AbstractModelloGeneratorTest;
-import org.codehaus.modello.ModelloParameterConstants;
-import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.Version;
 import org.codehaus.modello.plugins.xml.XmlFieldMetadata;
-import org.codehaus.plexus.util.FileUtils;
+import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 
-import java.io.File;
 import java.io.FileReader;
 import java.util.List;
-import java.util.Properties;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -43,9 +38,10 @@ import java.util.Properties;
  * @version $Id: StaxGeneratorTest.java 675 2006-11-16 10:58:59Z brett $
  */
 public class StaxGeneratorTest
-    extends AbstractModelloGeneratorTest
+    extends AbstractStaxGeneratorTestCase
 {
     public StaxGeneratorTest()
+        throws ComponentLookupException
     {
         super( "stax" );
     }
@@ -53,8 +49,6 @@ public class StaxGeneratorTest
     public void testStaxGenerator()
         throws Throwable
     {
-        ModelloCore modello = (ModelloCore) container.lookup( ModelloCore.ROLE );
-
         Model model = modello.loadModel( new FileReader( getTestPath( "src/test/resources/maven.mdo" ) ) );
 
         List classesList = model.getClasses( new Version( "4.0.0" ) );
@@ -87,45 +81,6 @@ public class StaxGeneratorTest
 
         assertEquals( "builder", xml.getTagName() );
 
-        File generatedSources = new File( getTestPath( "target/stax/sources" ) );
-
-        File classes = new File( getTestPath( "target/stax/classes" ) );
-
-        FileUtils.deleteDirectory( generatedSources );
-
-        FileUtils.deleteDirectory( classes );
-
-        generatedSources.mkdirs();
-
-        classes.mkdirs();
-
-        Properties parameters = new Properties();
-
-        parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, generatedSources.getAbsolutePath() );
-
-        parameters.setProperty( ModelloParameterConstants.VERSION, "4.0.0" );
-
-        parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString( false ) );
-
-        modello.generate( model, "java", parameters );
-
-        modello.generate( model, "stax-writer", parameters );
-
-        modello.generate( model, "stax-reader", parameters );
-
-        Properties properties = new Properties( System.getProperties() );
-        if ( properties.getProperty( "version" ) == null )
-        {
-            properties.load(
-                getClass().getResourceAsStream( "/META-INF/maven/org.codehaus.modello/modello-core/pom.properties" ) );
-        }
-        addDependency( "org.codehaus.modello", "modello-core", properties.getProperty( "version" ) );
-
-        addDependency( "net.java.dev.stax-utils", "stax-utils", "20060502" );
-        addDependency( "stax", "stax-api", "1.0.1" );
-
-        compile( generatedSources, classes );
-
-        verify( "org.codehaus.modello.generator.xml.stax.StaxVerifier", "stax" );
+        verifyModel( model, "org.codehaus.modello.generator.xml.stax.StaxVerifier" );
     }
 }

@@ -22,11 +22,6 @@ package org.codehaus.modello.core.io;
  * SOFTWARE.
  */
 
-import java.io.IOException;
-import java.io.Reader;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.model.BaseElement;
 import org.codehaus.modello.model.CodeSegment;
@@ -36,10 +31,16 @@ import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelDefault;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.ModelInterface;
+import org.codehaus.modello.model.VersionDefinition;
 import org.codehaus.modello.model.VersionRange;
 import org.codehaus.plexus.util.xml.pull.MXParser;
 import org.codehaus.plexus.util.xml.pull.XmlPullParser;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
+
+import java.io.IOException;
+import java.io.Reader;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -120,6 +121,10 @@ public class ModelReader
                 {
                     parseDefaults( model, parser );
                 }
+                else if ( parser.getName().equals( "versionDefinition" ) )
+                {
+                    parseVersionDefinition( model, parser );
+                }
                 else if ( parser.getName().equals( "interfaces" ) )
                 {
                     parseInterfaces( model, parser );
@@ -168,6 +173,33 @@ public class ModelReader
             {
                 parser.next();
             }
+        }
+    }
+
+    private void parseVersionDefinition( Model model, XmlPullParser parser )
+        throws XmlPullParserException, IOException
+    {
+        if ( "versionDefinition".equals( parser.getName() ) )
+        {
+            VersionDefinition versionDefinition = new VersionDefinition();
+
+            while ( parser.nextTag() == XmlPullParser.START_TAG )
+            {
+                if ( "type".equals( parser.getName() ) )
+                {
+                    versionDefinition.setType( parser.nextText() );
+                }
+                else if ( "value".equals( parser.getName() ) )
+                {
+                    versionDefinition.setValue( parser.nextText() );
+                }
+                else
+                {
+                    parser.nextText();
+                }
+            }
+
+            model.setVersionDefinition( versionDefinition );
         }
     }
 

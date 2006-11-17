@@ -1,0 +1,62 @@
+<!--
+ |
+ | o add specification element to a field, this would be more a technical description of
+ |   what is allowed in the field.
+ |
+ | o validators: there could be several levels of validation. Simple type validation could
+ |   be done with a regex, but we need inter-field validation and rules which could be
+ |   dealt with by something like drools.
+ |
+ | o i18n: would be good to be able to have names/descriptions/specifications
+ |   in as many languages as possible.
+ |
+ | o versioning of individual elements on the class level and the field level so that
+ |   different versions of the model can be output.
+ |
+ | o annotation mechanism so that changes to the model can be accurately tracked.
+ |
+ -->
+<model>
+  <id>maven</id>
+  <name>VersionInField</name>
+  <defaults>
+    <default>
+      <key>package</key>
+      <value>org.codehaus.modello.test.model.vif</value>
+    </default>
+  </defaults>
+  <versionDefinition>
+    <type>field</type>
+    <value>modelVersion</value>
+  </versionDefinition>
+  <classes>
+    <class rootElement="true" xml.tagName="mavenModel" xml.namespace="http://modello.codehaus.org/test/${version}"
+           xml.schemaLocation="http://modello.codehaus.org/xsd/maven-${version}.xsd">
+      <name>Model</name>
+      <version>3.0.0+</version>
+      <fields>
+        <field>
+          <name>modelVersion</name>
+          <version>4.0.0</version>
+          <required>true</required>
+          <description>The version of this model you are using.</description>
+          <type>String</type>
+        </field>
+        <field>
+          <name>name</name>
+          <version>3.0.0+</version>
+          <required>true</required>
+          <description>Human readable name of the project.</description>
+          <type>String</type>
+        </field>
+        <field>
+          <name>description</name>
+          <version>3.0.0+</version>
+          <required>true</required>
+          <description>Human readable description of the project.</description>
+          <type>String</type>
+        </field>
+      </fields>
+    </class>
+  </classes>
+</model>

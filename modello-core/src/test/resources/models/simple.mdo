@@ -7,6 +7,10 @@
       <value>foo.bar</value>
     </default>
   </defaults>
+  <versionDefinition>
+    <type>field</type>
+    <value>foo</value>
+  </versionDefinition>
   <classes>
     <class rootElement="true">
       <name>Boy</name>
