@@ -154,7 +154,13 @@ public class XdocGenerator
     }
 
     private void writeElementDescriptor( XMLWriter w, Model objectModel, ModelClass modelClass, ModelField field,
-                                        Set written )
+                                         Set written )
+    {
+        writeElementDescriptor( w, objectModel, modelClass, field, written, true );
+    }
+
+    private void writeElementDescriptor( XMLWriter w, Model objectModel, ModelClass modelClass, ModelField field,
+                                         Set written, boolean recursive )
     {
         written.add( modelClass );
 
@@ -320,14 +326,23 @@ public class XdocGenerator
         {
             ModelField f = (ModelField) iter.next();
 
-            if ( f instanceof ModelAssociation && isClassInModel( ( (ModelAssociation) f ).getTo(), objectModel ) )
+            if ( f instanceof ModelAssociation && isClassInModel( ( (ModelAssociation) f ).getTo(), objectModel )
+                && recursive )
             {
                 ModelAssociation association = (ModelAssociation) f;
                 ModelClass fieldModelClass = objectModel.getClass( association.getTo(), getGeneratedVersion() );
 
                 if ( !written.contains( f.getName() ) )
                 {
-                    writeElementDescriptor( w, objectModel, fieldModelClass, f, written );
+                    if ( ( modelClass.getName().equals( fieldModelClass.getName() ) )
+                        && ( modelClass.getPackageName().equals( fieldModelClass.getPackageName() ) ) )
+                    {
+                        writeElementDescriptor( w, objectModel, fieldModelClass, f, written, false );
+                    }
+                    else
+                    {
+                        writeElementDescriptor( w, objectModel, fieldModelClass, f, written );
+                    }
                 }
             }
         }
@@ -391,6 +406,12 @@ public class XdocGenerator
     }
 
     private String getModelClassDescriptor( Model objectModel, ModelClass modelClass, ModelField field, int depth )
+    {
+        return getModelClassDescriptor( objectModel, modelClass, field, depth, true );
+    }
+
+    private String getModelClassDescriptor( Model objectModel, ModelClass modelClass, ModelField field, int depth,
+                                            boolean recursive )
         throws ModelloRuntimeException
     {
         StringBuffer sb = new StringBuffer();
@@ -461,7 +482,7 @@ public class XdocGenerator
             {
                 ModelField f = (ModelField) iter.next();
 
-                sb.append( "  " );
+                sb.append( " " );
 
                 sb.append( uncapitalise( f.getName() ) ).append( "=.." );
             }
@@ -484,7 +505,8 @@ public class XdocGenerator
 
                 ModelClass fieldModelClass;
 
-                if ( f instanceof ModelAssociation && isClassInModel( ( (ModelAssociation) f ).getTo(), objectModel ) )
+                if ( f instanceof ModelAssociation && isClassInModel( ( (ModelAssociation) f ).getTo(), objectModel )
+                    && recursive )
                 {
                     ModelAssociation association = (ModelAssociation) f;
 
@@ -492,8 +514,15 @@ public class XdocGenerator
                     {
                         fieldModelClass = objectModel.getClass( association.getTo(), getGeneratedVersion() );
 
-                        sb.append( getModelClassDescriptor( objectModel, fieldModelClass, f, depth + 1 ) );
-
+                        if ( ( modelClass.getName().equals( fieldModelClass.getName() ) )
+                            && ( modelClass.getPackageName().equals( fieldModelClass.getPackageName() ) ) )
+                        {
+                            sb.append( getModelClassDescriptor( objectModel, fieldModelClass, f, depth + 1, false ) );
+                        }
+                        else
+                        {
+                            sb.append( getModelClassDescriptor( objectModel, fieldModelClass, f, depth + 1 ) );
+                        }
                     }
                     else
                     {
@@ -512,7 +541,15 @@ public class XdocGenerator
 
                         fieldModelClass = objectModel.getClass( association.getTo(), getGeneratedVersion() );
 
-                        sb.append( getModelClassDescriptor( objectModel, fieldModelClass, f, depth + 1 ) );
+                        if ( ( modelClass.getName().equals( fieldModelClass.getName() ) )
+                            && ( modelClass.getPackageName().equals( fieldModelClass.getPackageName() ) ) )
+                        {
+                            sb.append( getModelClassDescriptor( objectModel, fieldModelClass, f, depth + 1, false ) );
+                        }
+                        else
+                        {
+                            sb.append( getModelClassDescriptor( objectModel, fieldModelClass, f, depth + 1 ) );
+                        }
 
                         if ( ModelAssociation.MANY_MULTIPLICITY.equals( association.getMultiplicity() ) )
                         {
