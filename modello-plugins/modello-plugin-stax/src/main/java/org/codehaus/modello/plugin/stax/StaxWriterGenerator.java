@@ -536,11 +536,6 @@ public class StaxWriterGenerator
         jClass.addMethod( method );
     }
 
-    private String getPrefix( JavaFieldMetadata javaFieldMetadata )
-    {
-        return javaFieldMetadata.isBooleanGetter() ? "is" : "get";
-    }
-
     private String getValue( String type, String initialValue, XmlFieldMetadata fieldMetadata )
     {
         String textValue = initialValue;

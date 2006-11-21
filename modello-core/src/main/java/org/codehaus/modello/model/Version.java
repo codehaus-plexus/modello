@@ -33,6 +33,7 @@ import org.codehaus.plexus.util.StringUtils;
  * @version $Id$
  */
 public class Version
+    implements Comparable
 {
     public static final Version INFINITE = new Version( "32767.32767.32767" );
 
@@ -53,7 +54,9 @@ public class Version
 
         if ( splittedVersion.length > 3 )
         {
-            throw new ModelloRuntimeException( "Syntax error in the <version> field: The field must be at more 3 parts long (major, minor and micro). Was: '" + version + "'." );
+            throw new ModelloRuntimeException(
+                "Syntax error in the <version> field: The field must be at more 3 parts long (major, minor and micro). Was: '" +
+                    version + "'." );
         }
 
         String majorString = splittedVersion[0];
@@ -220,7 +223,6 @@ public class Version
         return false;
     }
 
-
     // ----------------------------------------------------------------------
     // Object overrides
     // ----------------------------------------------------------------------
@@ -234,9 +236,7 @@ public class Version
 
         Version other = (Version) object;
 
-        return this.major == other.major &&
-               this.minor == other.minor &&
-               this.micro == other.micro;
+        return this.major == other.major && this.minor == other.minor && this.micro == other.micro;
     }
 
     public int hashCode()
@@ -252,5 +252,23 @@ public class Version
     public String toString( String prefix, String separator )
     {
         return prefix + major + separator + minor + separator + micro;
+    }
+
+    public int compareTo( Object o )
+    {
+        Version otherVersion = (Version) o;
+
+        if ( greaterThan( otherVersion ) )
+        {
+            return +1;
+        }
+        else if ( equals( otherVersion ) )
+        {
+            return 0;
+        }
+        else
+        {
+            return -1;
+        }
     }
 }

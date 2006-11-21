@@ -36,6 +36,8 @@ public class ModelloParameterConstants
 
     public static final String STRICT_PARSER = "modello.strict.parser";
 
+    public static final String ALL_VERSIONS = "modello.all.versions";
+
     private ModelloParameterConstants()
     {
     }

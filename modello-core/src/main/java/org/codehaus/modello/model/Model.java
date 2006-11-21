@@ -34,7 +34,6 @@ import java.util.Map;
 /**
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
- *
  * @version $Id$
  */
 public class Model
@@ -87,7 +86,7 @@ public class Model
 
         String className = null;
 
-        for (Iterator i = classes.iterator(); i.hasNext(); )
+        for ( Iterator i = classes.iterator(); i.hasNext(); )
         {
             ModelClass currentClass = (ModelClass) i.next();
 
@@ -97,7 +96,7 @@ public class Model
             {
                 metadata = (ModelClassMetadata) currentClass.getMetadata( ModelClassMetadata.ID );
             }
-            catch( Exception e )
+            catch ( Exception e )
             {
             }
 
@@ -109,7 +108,8 @@ public class Model
                 }
                 else
                 {
-                    throw new ModelloRuntimeException( "There are more than one class as root elememt for this version " + version + "." );
+                    throw new ModelloRuntimeException(
+                        "There are more than one class as root elememt for this version " + version + "." );
                 }
             }
         }
@@ -140,7 +140,7 @@ public class Model
     {
         ArrayList classList = new ArrayList();
 
-        for (Iterator i = classes.iterator(); i.hasNext(); )
+        for ( Iterator i = classes.iterator(); i.hasNext(); )
         {
             ModelClass currentClass = (ModelClass) i.next();
 
@@ -160,23 +160,43 @@ public class Model
 
     public ModelClass getClass( String type, VersionRange versionRange )
     {
+        ModelClass value = getModelClass( type, versionRange );
+
+        if ( value != null )
+        {
+            return value;
+        }
+
+        throw new ModelloRuntimeException(
+            "There are no class '" + type + "' in version range '" + versionRange.toString() + "'." );
+    }
+
+    public boolean hasClass( String type, Version version )
+    {
+        ModelClass value = getModelClass( type, new VersionRange( version ) );
+
+        return value != null;
+    }
+
+    private ModelClass getModelClass( String type, VersionRange versionRange )
+    {
         ArrayList classList = (ArrayList) classMap.get( type );
 
+        ModelClass value = null;
         if ( classList != null )
         {
-            for (Iterator i = classList.iterator(); i.hasNext(); )
+            for ( Iterator i = classList.iterator(); i.hasNext() && value == null; )
             {
                 ModelClass modelClass = (ModelClass) i.next();
 
-                if (  versionRange.getFromVersion().inside( modelClass.getVersionRange() )
-                    && versionRange.getToVersion().inside( modelClass.getVersionRange() ) )
+                if ( versionRange.getFromVersion().inside( modelClass.getVersionRange() ) &&
+                    versionRange.getToVersion().inside( modelClass.getVersionRange() ) )
                 {
-                    return modelClass;
+                    value = modelClass;
                 }
             }
         }
-
-        throw new ModelloRuntimeException( "There are no class '" + type + "' in version range '" + versionRange.toString() + "'." );
+        return value;
     }
 
     public void addClass( ModelClass modelClass )
@@ -185,7 +205,7 @@ public class Model
         {
             ArrayList classList = (ArrayList) classMap.get( modelClass.getName() );
 
-            for (Iterator i = classList.iterator(); i.hasNext(); )
+            for ( Iterator i = classList.iterator(); i.hasNext(); )
             {
                 ModelClass currentClass = (ModelClass) i.next();
 
@@ -275,7 +295,7 @@ public class Model
     {
         ArrayList interfaceList = new ArrayList();
 
-        for (Iterator i = interfaces.iterator(); i.hasNext(); )
+        for ( Iterator i = interfaces.iterator(); i.hasNext(); )
         {
             ModelInterface currentInterface = (ModelInterface) i.next();
 
@@ -299,19 +319,20 @@ public class Model
 
         if ( interfaceList != null )
         {
-            for (Iterator i = interfaceList.iterator(); i.hasNext(); )
+            for ( Iterator i = interfaceList.iterator(); i.hasNext(); )
             {
                 ModelInterface modelInterface = (ModelInterface) i.next();
 
-                if (  versionRange.getFromVersion().inside( modelInterface.getVersionRange() )
-                    && versionRange.getToVersion().inside( modelInterface.getVersionRange() ) )
+                if ( versionRange.getFromVersion().inside( modelInterface.getVersionRange() ) &&
+                    versionRange.getToVersion().inside( modelInterface.getVersionRange() ) )
                 {
                     return modelInterface;
                 }
             }
         }
 
-        throw new ModelloRuntimeException( "There are no interface '" + type + "' in version range '" + versionRange.toString() + "'." );
+        throw new ModelloRuntimeException(
+            "There are no interface '" + type + "' in version range '" + versionRange.toString() + "'." );
     }
 
     public void addInterface( ModelInterface modelInterface )
@@ -320,7 +341,7 @@ public class Model
         {
             ArrayList interfaceList = (ArrayList) interfaceMap.get( modelInterface.getName() );
 
-            for (Iterator i = interfaceList.iterator(); i.hasNext(); )
+            for ( Iterator i = interfaceList.iterator(); i.hasNext(); )
             {
                 ModelInterface currentInterface = (ModelInterface) i.next();
 

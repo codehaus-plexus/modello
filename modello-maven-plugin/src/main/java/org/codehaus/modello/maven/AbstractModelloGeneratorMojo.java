@@ -22,20 +22,23 @@ package org.codehaus.modello.maven;
  * SOFTWARE.
  */
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.util.Properties;
-
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
-
+import org.codehaus.modello.ModelloException;
+import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelValidationException;
-import org.codehaus.modello.ModelloParameterConstants;
-import org.codehaus.modello.ModelloException;
+import org.codehaus.plexus.util.StringUtils;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Properties;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -52,7 +55,6 @@ public abstract class AbstractModelloGeneratorMojo
      * Base directory of the project.
      *
      * @parameter expression="${basedir}"
-     *
      * @required
      */
     private String basedir;
@@ -61,7 +63,6 @@ public abstract class AbstractModelloGeneratorMojo
      * Relative path to the mdo file for the current model.
      *
      * @parameter expression="${model}"
-     *
      * @required
      */
     private String model;
@@ -70,7 +71,6 @@ public abstract class AbstractModelloGeneratorMojo
      * The version of the model we will be working on.
      *
      * @parameter expression="${version}"
-     *
      * @required
      */
     private String version;
@@ -79,7 +79,6 @@ public abstract class AbstractModelloGeneratorMojo
      * True if the generated package names should include the version.
      *
      * @parameter expression="${packageWithVersion}" default-value="false"
-     *
      * @required
      */
     private boolean packageWithVersion;
@@ -95,10 +94,17 @@ public abstract class AbstractModelloGeneratorMojo
      * The Maven project instance for the executing project.
      *
      * @parameter expression="${project}"
-     *
      * @required
      */
     private MavenProject project;
+
+    /**
+     * Additional historical versions to generate, each being packaged with the version regardless of the
+     * <code>packageWithVersion</code> setting.
+     *
+     * @parameter
+     */
+    private List/*<String>*/ packagedVersions = Collections.EMPTY_LIST;
 
     // ----------------------------------------------------------------------
     // Overridables
@@ -115,9 +121,11 @@ public abstract class AbstractModelloGeneratorMojo
 
     /**
      * Creates a Properties objects.
-     *
+     * <p/>
      * The abstract mojo will override the output directory, the version and the
      * package with version flag.
+     *
+     * @return the parameters
      */
     protected Properties createParameters()
     {
@@ -126,11 +134,11 @@ public abstract class AbstractModelloGeneratorMojo
 
     /**
      * Override this method to customize the values in the properties set.
-     *
+     * <p/>
      * This method will be called after the parameters have been populated with the
      * parameters in the abstract mojo.
      *
-     * @param parameters
+     * @param parameters the parameters to customize
      */
     protected void customizeParameters( Properties parameters )
     {
@@ -157,8 +165,12 @@ public abstract class AbstractModelloGeneratorMojo
 
         parameters.setProperty( ModelloParameterConstants.VERSION, version );
 
-        parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.valueOf( packageWithVersion ).toString() );
-        
+        parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION,
+                                Boolean.toString( packageWithVersion ) );
+
+        parameters.setProperty( ModelloParameterConstants.ALL_VERSIONS,
+                                StringUtils.join( packagedVersions.iterator(), "," ) );
+
         customizeParameters( parameters );
 
         // ----------------------------------------------------------------------
@@ -172,7 +184,20 @@ public abstract class AbstractModelloGeneratorMojo
             Model model = modelloCore.loadModel( fileReader );
 
             // TODO: dynamicall resolve/load the generator type
+            getLog().info( "Generating current version: " + version );
             modelloCore.generate( model, getGeneratorType(), parameters );
+
+            for ( Iterator i = packagedVersions.iterator(); i.hasNext(); )
+            {
+                String version = (String) i.next();
+
+                parameters.setProperty( ModelloParameterConstants.VERSION, version );
+
+                parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString( true ) );
+
+                getLog().info( "Generating packaged version: " + version );
+                modelloCore.generate( model, getGeneratorType(), parameters );
+            }
 
             if ( producesCompilableResult() && project != null )
             {
@@ -255,5 +280,10 @@ public abstract class AbstractModelloGeneratorMojo
     public void setProject( MavenProject project )
     {
         this.project = project;
+    }
+
+    public void setPackagedVersions( List/*<String>*/ packagedVersions )
+    {
+        this.packagedVersions = Collections.unmodifiableList( packagedVersions );
     }
 }

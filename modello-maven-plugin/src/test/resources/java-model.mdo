@@ -11,14 +11,18 @@
   <classes>
     <class>
       <name>Model</name>
-      <version>1.0.0</version>
+      <version>0.9.0+</version>
       <fields>
         <field>
           <name>extend</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <type>String</type>
         </field>
       </fields>
+    </class>
+    <class>
+      <name>NewModel</name>
+      <version>1.0.0+</version>
     </class>
   </classes>
 </model>

@@ -457,11 +457,6 @@ public class Xpp3WriterGenerator
         jClass.addMethod( marshall );
     }
 
-    private String getPrefix( JavaFieldMetadata javaFieldMetadata )
-    {
-        return javaFieldMetadata.isBooleanGetter() ? "is" : "get";
-    }
-
     private String getValue( String type, String initialValue, XmlFieldMetadata fieldMetadata )
     {
         String textValue = initialValue;

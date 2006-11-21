@@ -1,7 +1,7 @@
 package org.codehaus.modello.maven;
 
 /*
- * Copyright (c) 2004, Codehaus.org
+ * Copyright (c) 2006, Codehaus.org
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -30,20 +30,20 @@ import java.io.File;
 import java.util.Arrays;
 
 /**
- * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id$
+ * @author <a href="mailto:brett@apache.org">Brett Porter</a>
+ * @version $Id: ModelloJavaMojoTest.java 439 2005-07-18 06:44:32Z brett $
  */
-public class ModelloJavaMojoTest
+public class ModelloConvertersMojoTest
     extends PlexusTestCase
 {
-    public void testModelloJavaMojo()
+    public void testModelloConvertersMojo()
         throws Exception
     {
         ModelloCore modelloCore = (ModelloCore) lookup( ModelloCore.ROLE );
 
-        ModelloJavaMojo mojo = new ModelloJavaMojo();
+        ModelloConvertersMojo mojo = new ModelloConvertersMojo();
 
-        File outputDirectory = getTestFile( "target/java-test" );
+        File outputDirectory = getTestFile( "target/converters-test" );
 
         FileUtils.deleteDirectory( outputDirectory );
 
@@ -69,29 +69,34 @@ public class ModelloJavaMojoTest
         // Assert
         // ----------------------------------------------------------------------
 
-        File javaFile = new File( outputDirectory, "org/codehaus/mojo/modello/javatest/Model.java" );
+        File javaFile =
+            new File( outputDirectory, "org/codehaus/mojo/modello/javatest/v1_0_0/convert/VersionConverter.java" );
 
         assertTrue( "The generated java file doesn't exist: '" + javaFile.getAbsolutePath() + "'.", javaFile.exists() );
 
-        javaFile = new File( outputDirectory, "org/codehaus/mojo/modello/javatest/NewModel.java" );
+        javaFile =
+            new File( outputDirectory, "org/codehaus/mojo/modello/javatest/v1_0_0/convert/BasicVersionConverter.java" );
 
         assertTrue( "The generated java file doesn't exist: '" + javaFile.getAbsolutePath() + "'.", javaFile.exists() );
 
-        javaFile = new File( outputDirectory, "org/codehaus/mojo/modello/javatest/v1_0_0/Model.java" );
+        javaFile =
+            new File( outputDirectory, "org/codehaus/mojo/modello/javatest/v0_9_0/convert/VersionConverter.java" );
 
         assertTrue( "The generated java file doesn't exist: '" + javaFile.getAbsolutePath() + "'.", javaFile.exists() );
 
-        javaFile = new File( outputDirectory, "org/codehaus/mojo/modello/javatest/v1_0_0/NewModel.java" );
+        javaFile =
+            new File( outputDirectory, "org/codehaus/mojo/modello/javatest/v0_9_0/convert/BasicVersionConverter.java" );
 
         assertTrue( "The generated java file doesn't exist: '" + javaFile.getAbsolutePath() + "'.", javaFile.exists() );
 
-        javaFile = new File( outputDirectory, "org/codehaus/mojo/modello/javatest/v0_9_0/Model.java" );
+        javaFile = new File( outputDirectory, "org/codehaus/mojo/modello/javatest/convert/VersionConverter.java" );
 
-        assertTrue( "The generated java file doesn't exist: '" + javaFile.getAbsolutePath() + "'.", javaFile.exists() );
+        assertFalse( "The generated java file doesn't exist: '" + javaFile.getAbsolutePath() + "'.",
+                     javaFile.exists() );
 
-        javaFile = new File( outputDirectory, "org/codehaus/mojo/modello/javatest/v0_9_0/NewModel.java" );
+        javaFile = new File( outputDirectory, "org/codehaus/mojo/modello/javatest/convert/BasicVersionConverter.java" );
 
-        assertFalse( "The generated java file shouldn't exist: '" + javaFile.getAbsolutePath() + "'.",
+        assertFalse( "The generated java file doesn't exist: '" + javaFile.getAbsolutePath() + "'.",
                      javaFile.exists() );
     }
 }
