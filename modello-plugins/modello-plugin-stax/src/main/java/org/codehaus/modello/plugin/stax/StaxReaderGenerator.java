@@ -29,6 +29,7 @@ import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelDefault;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.VersionDefinition;
+import org.codehaus.modello.plugin.java.JavaFieldMetadata;
 import org.codehaus.modello.plugin.java.javasource.JClass;
 import org.codehaus.modello.plugin.java.javasource.JMethod;
 import org.codehaus.modello.plugin.java.javasource.JParameter;
@@ -249,40 +250,9 @@ public class StaxReaderGenerator
                     "versionDefinition is namespace, but the model does not declare xml.namespace on the root element" );
             }
 
-            sc.add( "String uri = xmlStreamReader.getNamespaceURI( \"\" );" );
+            sc.add( "return getVersionFromRootNamespace( xmlStreamReader );" );
 
-            sc.add( "if ( uri == null )" );
-
-            sc.add( "{" );
-
-            sc.indent();
-
-            sc.add(
-                "throw new XMLStreamException( \"No namespace specified, but versionDefinition requires it\", xmlStreamReader.getLocation() );" );
-
-            sc.unindent();
-
-            sc.add( "}" );
-
-            int index = namespace.indexOf( "${version}" );
-
-            sc.add( "String uriPrefix = \"" + namespace.substring( 0, index ) + "\";" );
-            sc.add( "String uriSuffix = \"" + namespace.substring( index + 10 ) + "\";" );
-
-            sc.add( "if ( !uri.startsWith( uriPrefix ) || !uri.endsWith( uriSuffix ) )" );
-
-            sc.add( "{" );
-
-            sc.indent();
-
-            sc.add( "throw new XMLStreamException( \"Namespace URI: '\" + uri + \"' does not match pattern '" +
-                namespace + "'\", xmlStreamReader.getLocation() );" );
-
-            sc.unindent();
-
-            sc.add( "}" );
-
-            sc.add( "return uri.substring( uriPrefix.length(), uri.length() - uriSuffix.length() );" );
+            writeNamespaceVersionGetMethod( namespace, jClass );
         }
         else
         {
@@ -301,78 +271,9 @@ public class StaxReaderGenerator
                 throw new ModelloException( "versionDefinition is field, but the field is not of type String" );
             }
 
-            XmlFieldMetadata metadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
-            value = metadata.getTagName();
-            if ( value == null )
-            {
-                value = field.getName();
-            }
+            sc.add( "return getVersionFromField( xmlStreamReader );" );
 
-            // we are now at the root element. Search child elements for the correct tag name
-
-            sc.add( "int depth = 0;" );
-
-            sc.add( "while ( depth >= 0 )" );
-
-            sc.add( "{" );
-
-            sc.indent();
-
-            sc.add( "eventType = xmlStreamReader.next();" );
-
-            sc.add( "if ( eventType == XMLStreamConstants.START_ELEMENT )" );
-            sc.add( "{" );
-
-            sc.indent();
-
-            sc.add( "if ( depth == 0 && \"" + value + "\".equals( xmlStreamReader.getLocalName() ) )" );
-            sc.add( "{" );
-
-            sc.indent();
-
-            sc.add( "return xmlStreamReader.getElementText();" );
-
-            sc.unindent();
-
-            sc.add( "}" );
-
-            if ( field.getAlias() != null )
-            {
-                sc.add( "if ( depth == 0 && \"" + field.getAlias() + "\".equals( xmlStreamReader.getLocalName() ) )" );
-                sc.add( "{" );
-
-                sc.indent();
-
-                sc.add( "return xmlStreamReader.getElementText();" );
-
-                sc.unindent();
-
-                sc.add( "}" );
-            }
-
-            sc.add( "depth++;" );
-
-            sc.unindent();
-
-            sc.add( "}" );
-
-            sc.add( "if ( eventType == XMLStreamConstants.END_ELEMENT )" );
-            sc.add( "{" );
-
-            sc.indent();
-
-            sc.add( "depth--;" );
-
-            sc.unindent();
-
-            sc.add( "}" );
-
-            sc.unindent();
-
-            sc.add( "}" );
-
-            sc.add( "throw new XMLStreamException( \"Field: '" + value +
-                "' does not exist in the document.\", xmlStreamReader.getLocation() );" );
+            writeFieldVersionGetMethod( field, jClass );
         }
 
         sc.unindent();
@@ -386,6 +287,134 @@ public class StaxReaderGenerator
         sc.add( "throw new XMLStreamException( \"Version not found in document\", xmlStreamReader.getLocation() );" );
 
         jClass.addMethod( method );
+    }
+
+    private static void writeFieldVersionGetMethod( ModelField field, JClass jClass )
+    {
+        JMethod method = new JMethod( new JType( "String" ), "getVersionFromField" );
+        method.addParameter( new JParameter( new JType( "XMLStreamReader" ), "xmlStreamReader" ) );
+        method.addException( new JClass( "XMLStreamException" ) );
+        jClass.addMethod( method );
+
+        JSourceCode sc = method.getSourceCode();
+
+        XmlFieldMetadata metadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
+        String value = metadata.getTagName();
+        if ( value == null )
+        {
+            value = field.getName();
+        }
+
+        // we are now at the root element. Search child elements for the correct tag name
+
+        sc.add( "int depth = 0;" );
+
+        sc.add( "while ( depth >= 0 )" );
+
+        sc.add( "{" );
+
+        sc.indent();
+
+        sc.add( "int eventType = xmlStreamReader.next();" );
+
+        sc.add( "if ( eventType == XMLStreamConstants.START_ELEMENT )" );
+        sc.add( "{" );
+
+        sc.indent();
+
+        sc.add( "if ( depth == 0 && \"" + value + "\".equals( xmlStreamReader.getLocalName() ) )" );
+        sc.add( "{" );
+
+        sc.indent();
+
+        sc.add( "return xmlStreamReader.getElementText();" );
+
+        sc.unindent();
+
+        sc.add( "}" );
+
+        if ( field.getAlias() != null )
+        {
+            sc.add( "if ( depth == 0 && \"" + field.getAlias() + "\".equals( xmlStreamReader.getLocalName() ) )" );
+            sc.add( "{" );
+
+            sc.indent();
+
+            sc.add( "return xmlStreamReader.getElementText();" );
+
+            sc.unindent();
+
+            sc.add( "}" );
+        }
+
+        sc.add( "depth++;" );
+
+        sc.unindent();
+
+        sc.add( "}" );
+
+        sc.add( "if ( eventType == XMLStreamConstants.END_ELEMENT )" );
+        sc.add( "{" );
+
+        sc.indent();
+
+        sc.add( "depth--;" );
+
+        sc.unindent();
+
+        sc.add( "}" );
+
+        sc.unindent();
+
+        sc.add( "}" );
+
+        sc.add( "throw new XMLStreamException( \"Field: '" + value +
+            "' does not exist in the document.\", xmlStreamReader.getLocation() );" );
+    }
+
+    private static void writeNamespaceVersionGetMethod( String namespace, JClass jClass )
+    {
+        JMethod method = new JMethod( new JType( "String" ), "getVersionFromRootNamespace" );
+        method.addParameter( new JParameter( new JType( "XMLStreamReader" ), "xmlStreamReader" ) );
+        method.addException( new JClass( "XMLStreamException" ) );
+        jClass.addMethod( method );
+
+        JSourceCode sc = method.getSourceCode();
+
+        sc.add( "String uri = xmlStreamReader.getNamespaceURI( \"\" );" );
+
+        sc.add( "if ( uri == null )" );
+
+        sc.add( "{" );
+
+        sc.indent();
+
+        sc.add(
+            "throw new XMLStreamException( \"No namespace specified, but versionDefinition requires it\", xmlStreamReader.getLocation() );" );
+
+        sc.unindent();
+
+        sc.add( "}" );
+
+        int index = namespace.indexOf( "${version}" );
+
+        sc.add( "String uriPrefix = \"" + namespace.substring( 0, index ) + "\";" );
+        sc.add( "String uriSuffix = \"" + namespace.substring( index + 10 ) + "\";" );
+
+        sc.add( "if ( !uri.startsWith( uriPrefix ) || !uri.endsWith( uriSuffix ) )" );
+
+        sc.add( "{" );
+
+        sc.indent();
+
+        sc.add( "throw new XMLStreamException( \"Namespace URI: '\" + uri + \"' does not match pattern '" + namespace +
+            "'\", xmlStreamReader.getLocation() );" );
+
+        sc.unindent();
+
+        sc.add( "}" );
+
+        sc.add( "return uri.substring( uriPrefix.length(), uri.length() - uriSuffix.length() );" );
     }
 
     private String getTagName( ModelClass root )
@@ -488,6 +517,14 @@ public class StaxReaderGenerator
 
             sc.indent();
 
+            VersionDefinition versionDefinition = modelClass.getModel().getVersionDefinition();
+            if ( versionDefinition != null && "namespace".equals( versionDefinition.getType() ) )
+            {
+                sc.add( "String modelVersion = getVersionFromRootNamespace( xmlStreamReader );" );
+
+                writeModelVersionCheck( sc );
+            }
+
             writeAttributes( modelClass, uncapClassName, sc );
 
             sc.add( "foundRoot = true;" );
@@ -509,7 +546,7 @@ public class StaxReaderGenerator
 
             if ( !fieldMetadata.isAttribute() )
             {
-                processField( fieldMetadata, field, statement, sc, uncapClassName, modelClass );
+                processField( fieldMetadata, field, statement, sc, uncapClassName, modelClass, rootElement );
 
                 statement = "else if";
             }
@@ -628,7 +665,7 @@ public class StaxReaderGenerator
     }
 
     private void processField( XmlFieldMetadata fieldMetadata, ModelField field, String statement, JSourceCode sc,
-                               String uncapClassName, ModelClass modelClass )
+                               String uncapClassName, ModelClass modelClass, boolean rootElement )
     {
         String tagName = fieldMetadata.getTagName();
 
@@ -934,10 +971,41 @@ public class StaxReaderGenerator
             //ModelField
             writePrimitiveField( field, field.getType(), uncapClassName, "set" + capitalise( field.getName() ), sc );
 
+            if ( rootElement )
+            {
+                VersionDefinition versionDefinition = modelClass.getModel().getVersionDefinition();
+                if ( versionDefinition != null && "field".equals( versionDefinition.getType() ) )
+                {
+                    if ( versionDefinition.getValue().equals( field.getName() ) ||
+                        versionDefinition.getValue().equals( field.getAlias() ) )
+                    {
+                        JavaFieldMetadata metadata = (JavaFieldMetadata) field.getMetadata( JavaFieldMetadata.ID );
+                        sc.add( "String modelVersion = " + uncapClassName + "." + getPrefix( metadata ) +
+                            capitalise( field.getName() ) + "();" );
+
+                        writeModelVersionCheck( sc );
+                    }
+                }
+            }
+
             sc.unindent();
 
             sc.add( "}" );
         }
+    }
+
+    private void writeModelVersionCheck( JSourceCode sc )
+    {
+        sc.add( "if ( !modelVersion.equals( \"" + getGeneratedVersion() + "\" ) )" );
+        sc.add( "{" );
+        sc.indent();
+
+        sc.add(
+            "throw new XMLStreamException( \"Document model version of '\" + modelVersion + \"' doesn't match reader version of '" +
+                getGeneratedVersion() + "'\", xmlStreamReader.getLocation() );" );
+
+        sc.unindent();
+        sc.add( "}" );
     }
 
     private void addCodeToCheckIfParsed( JSourceCode sc, String tagName )

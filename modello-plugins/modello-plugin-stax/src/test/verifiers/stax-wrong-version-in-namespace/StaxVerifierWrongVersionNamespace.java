@@ -23,8 +23,8 @@ package org.codehaus.modello.generator.xml.stax;
  */
 
 import junit.framework.Assert;
-import org.codehaus.modello.test.model.vif.Model;
-import org.codehaus.modello.test.model.vif.io.stax.VersionInFieldStaxReader;
+import org.codehaus.modello.test.model.vin.Model;
+import org.codehaus.modello.test.model.vin.io.stax.VersionInNamespaceStaxReader;
 import org.codehaus.modello.verifier.Verifier;
 
 import java.io.FileReader;
@@ -34,28 +34,29 @@ import javax.xml.stream.XMLStreamException;
 /**
  * @version $Id: Xpp3Verifier.java 675 2006-11-16 10:58:59Z brett $
  */
-public class StaxVerifierVersionInField
+public class StaxVerifierWrongVersionNamespace
     extends Verifier
 {
-    /**
-     * TODO: Add a association thats not under the root element
-     */
     public void verify()
         throws IOException, XMLStreamException
     {
-        String path = "src/test/verifiers/stax-version-in-field/version-in-field.xml";
+        String path = "src/test/verifiers/stax-wrong-version-in-namespace/wrong-version-in-namespace.xml";
 
         FileReader reader = new FileReader( path );
-        VersionInFieldStaxReader modelReader = new VersionInFieldStaxReader();
+        VersionInNamespaceStaxReader modelReader = new VersionInNamespaceStaxReader();
 
-        Assert.assertEquals( "4.0.0", modelReader.determineVersion( reader ) );
+        Assert.assertEquals( "3.2.1", modelReader.determineVersion( reader ) );
 
         reader = new FileReader( path );
-        Model model = modelReader.read( reader );
-
-        Assert.assertEquals( "4.0.0", model.getModelVersion() );
-
-        Assert.assertEquals( "Maven", model.getName() );
-        Assert.assertEquals( "Something out of place.", model.getDescription() );
+        try
+        {
+            modelReader.read( reader );
+            Assert.fail( "Should have choked on the version" );
+        }
+        catch ( XMLStreamException e )
+        {
+            Assert.assertTrue( e.getMessage().endsWith(
+            "Document model version of '3.2.1' doesn't match reader version of '4.0.0'" ) );
+        }
     }
 }

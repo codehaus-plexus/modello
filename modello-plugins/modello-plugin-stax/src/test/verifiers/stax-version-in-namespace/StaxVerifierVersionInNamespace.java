@@ -37,9 +37,6 @@ import javax.xml.stream.XMLStreamException;
 public class StaxVerifierVersionInNamespace
     extends Verifier
 {
-    /**
-     * TODO: Add a association thats not under the root element
-     */
     public void verify()
         throws IOException, XMLStreamException
     {
@@ -48,7 +45,7 @@ public class StaxVerifierVersionInNamespace
         FileReader reader = new FileReader( path );
         VersionInNamespaceStaxReader modelReader = new VersionInNamespaceStaxReader();
 
-        Assert.assertEquals( "3.2.1", modelReader.determineVersion( reader ) );
+        Assert.assertEquals( "4.0.0", modelReader.determineVersion( reader ) );
 
         reader = new FileReader( path );
         Model model = modelReader.read( reader );
