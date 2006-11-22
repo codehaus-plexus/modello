@@ -996,6 +996,9 @@ public class StaxReaderGenerator
 
     private void writeModelVersionCheck( JSourceCode sc )
     {
+        sc.add( "// legacy hack for pomVersion == 3" );
+        sc.add( "if ( modelVersion.equals( \"3\" ) ) modelVersion = \"3.0.0\";" );
+
         sc.add( "if ( !modelVersion.equals( \"" + getGeneratedVersion() + "\" ) )" );
         sc.add( "{" );
         sc.indent();
