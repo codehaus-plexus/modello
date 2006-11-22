@@ -227,10 +227,7 @@ public class ConverterGenerator
                             }
                             else
                             {
-                                JavaFieldMetadata javaFieldMetadata =
-                                    (JavaFieldMetadata) modelField.getMetadata( JavaFieldMetadata.ID );
-                                String value = parameterName + "." + getPrefix( javaFieldMetadata ) + name + "()";
-                                sc.add( "list.add( " + value + " );" );
+                                sc.add( "list.add( v );" );
                             }
 
                             sc.unindent();
@@ -277,10 +274,7 @@ public class ConverterGenerator
                             }
                             else
                             {
-                                JavaFieldMetadata javaFieldMetadata =
-                                    (JavaFieldMetadata) modelField.getMetadata( JavaFieldMetadata.ID );
-                                String value = parameterName + "." + getPrefix( javaFieldMetadata ) + name + "()";
-                                sc.add( "map.put( entry.getKey(), " + value + " );" );
+                                sc.add( "map.put( entry.getKey(), v );" );
                             }
 
                             sc.unindent();

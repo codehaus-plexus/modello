@@ -24,6 +24,7 @@ import org.codehaus.modello.verifier.Verifier;
 
 import junit.framework.Assert;
 import java.io.*;
+import org.codehaus.plexus.util.FileUtils;
 
 public class ConvertersVerifier
     extends Verifier
@@ -31,10 +32,12 @@ public class ConvertersVerifier
     public void verify()
         throws Exception
     {
-        // TODO: more testing of variables. Note that this is *not* a full POM translation (fields like currentVersion are not mapped)
+        // Note that this is *not* a full POM translation (fields like currentVersion are not mapped)
+
+        // TODO! read version from pomVersion, store in modelVersion
 
         org.codehaus.modello.test.maven.v3_0_0.io.stax.MavenStaxReader reader = new org.codehaus.modello.test.maven.v3_0_0.io.stax.MavenStaxReader();
-        org.codehaus.modello.test.maven.v3_0_0.Model modelV3 = reader.read( new InputStreamReader( new ByteArrayInputStream( "<model><artifactId>artifactId</artifactId><currentVersion>1.0</currentVersion></model>".getBytes())) );
+        org.codehaus.modello.test.maven.v3_0_0.Model modelV3 = reader.read( new FileReader( "src/test/verifiers/converters/input.xml" ) );
 
         org.codehaus.modello.test.maven.v3_0_0.convert.VersionConverter convertV3 = new org.codehaus.modello.test.maven.v3_0_0.convert.BasicVersionConverter();
         org.codehaus.modello.test.maven.v4_0_0.Model modelV4 = convertV3.convertModel( modelV3 );
@@ -46,6 +49,6 @@ public class ConvertersVerifier
         org.codehaus.modello.test.maven.io.stax.MavenStaxWriter writer = new org.codehaus.modello.test.maven.io.stax.MavenStaxWriter();
         writer.write( sw, model );
 
-        Assert.assertEquals( "<?xml version='1.0' encoding='UTF-8'?>\n<model>\n  <artifactId>artifactId</artifactId>\n</model>", sw.toString() );
+        Assert.assertEquals( FileUtils.fileRead( "src/test/verifiers/converters/expected.xml" ), sw.toString() );
     }
 }
