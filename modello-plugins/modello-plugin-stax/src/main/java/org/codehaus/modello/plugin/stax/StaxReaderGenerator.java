@@ -29,7 +29,6 @@ import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelDefault;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.VersionDefinition;
-import org.codehaus.modello.plugin.java.JavaFieldMetadata;
 import org.codehaus.modello.plugin.java.javasource.JClass;
 import org.codehaus.modello.plugin.java.javasource.JMethod;
 import org.codehaus.modello.plugin.java.javasource.JParameter;
@@ -971,21 +970,11 @@ public class StaxReaderGenerator
             //ModelField
             writePrimitiveField( field, field.getType(), uncapClassName, "set" + capitalise( field.getName() ), sc );
 
-            if ( rootElement )
+            if ( rootElement && field.isModelVersionField() )
             {
-                VersionDefinition versionDefinition = modelClass.getModel().getVersionDefinition();
-                if ( versionDefinition != null && "field".equals( versionDefinition.getType() ) )
-                {
-                    if ( versionDefinition.getValue().equals( field.getName() ) ||
-                        versionDefinition.getValue().equals( field.getAlias() ) )
-                    {
-                        JavaFieldMetadata metadata = (JavaFieldMetadata) field.getMetadata( JavaFieldMetadata.ID );
-                        sc.add( "String modelVersion = " + uncapClassName + "." + getPrefix( metadata ) +
-                            capitalise( field.getName() ) + "();" );
+                sc.add( "String modelVersion = " + uncapClassName + ".get" + capitalise( field.getName() ) + "();" );
 
-                        writeModelVersionCheck( sc );
-                    }
-                }
+                writeModelVersionCheck( sc );
             }
 
             sc.unindent();

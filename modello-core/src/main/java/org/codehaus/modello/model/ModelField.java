@@ -227,7 +227,7 @@ public class ModelField
 
         // TODO: these definitions are duplicated throughout. Defined centrally, and loop through in the various uses
 
-        if ( ! isPrimitive() && ! isPrimitiveArray() )
+        if ( !isPrimitive() && !isPrimitiveArray() )
         {
             throw new ModelValidationException( "Field '" + getName() + "': Illegal type: '" + type + "'." );
         }
@@ -241,5 +241,20 @@ public class ModelField
     {
         return "[Field: name=" + getName() + ", alias: " + alias + ", type: " + type + ", " + "version: " +
             getVersionRange() + "]";
+    }
+
+    public boolean isModelVersionField()
+    {
+        Model model = modelClass.getModel();
+        boolean isField = false;
+        VersionDefinition versionDefinition = model.getVersionDefinition();
+        if ( versionDefinition != null && "field".equals( versionDefinition.getType() ) )
+        {
+            if ( versionDefinition.getValue().equals( getName() ) || versionDefinition.getValue().equals( alias ) )
+            {
+                isField = true;
+            }
+        }
+        return isField;
     }
 }

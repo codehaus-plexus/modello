@@ -26,6 +26,10 @@
       <value>org.codehaus.modello.test.maven</value>
     </default>
   </defaults>
+  <versionDefinition>
+    <type>field</type>
+    <value>modelVersion</value>
+  </versionDefinition>
   <classes>
     <class rootElement="true">
       <name>Model</name>
@@ -58,7 +62,8 @@
           <type>String</type>
         </field>
         <field>
-          <name>pomVersion</name>
+          <name>modelVersion</name>
+          <alias>pomVersion</alias>
           <version>3.0.0</version>
           <required>true</required>
           <type>String</type>
