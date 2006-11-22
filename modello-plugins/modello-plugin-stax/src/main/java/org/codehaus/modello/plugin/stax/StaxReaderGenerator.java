@@ -179,43 +179,7 @@ public class StaxReaderGenerator
         VersionDefinition versionDefinition = objectModel.getVersionDefinition();
         if ( versionDefinition != null )
         {
-            String value = null;
-            if ( "namespace".equals( versionDefinition.getType() ) )
-            {
-                XmlClassMetadata metadata = (XmlClassMetadata) root.getMetadata( XmlClassMetadata.ID );
-
-                value = metadata.getNamespace();
-                if ( value == null || value.indexOf( "${version}" ) < 0 )
-                {
-                    throw new ModelloException(
-                        "versionDefinition is namespace, but the model does not declare xml.namespace on the root element" );
-                }
-            }
-            else if ( "field".equals( versionDefinition.getType() ) )
-            {
-                ModelField field = root.getField( versionDefinition.getValue(), getGeneratedVersion() );
-
-                if ( field == null )
-                {
-                    throw new ModelloException(
-                        "versionDefinition is field, but the model root element does not declare a field '" + value +
-                            "'." );
-                }
-
-                if ( !"String".equals( field.getType() ) )
-                {
-                    throw new ModelloException( "versionDefinition is field, but the field is not of type String" );
-                }
-
-                XmlFieldMetadata metadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
-                value = metadata.getTagName();
-                if ( value == null )
-                {
-                    value = field.getName();
-                }
-            }
-
-            writeDetermineVersionMethod( jClass, versionDefinition, value );
+            writeDetermineVersionMethod( jClass, objectModel );
         }
 
         // ----------------------------------------------------------------------
@@ -243,8 +207,11 @@ public class StaxReaderGenerator
         writer.close();
     }
 
-    private void writeDetermineVersionMethod( JClass jClass, VersionDefinition versionDefinition, String value )
+    private void writeDetermineVersionMethod( JClass jClass, Model objectModel )
+        throws ModelloException
     {
+        VersionDefinition versionDefinition = objectModel.getVersionDefinition();
+
         JMethod method = new JMethod( new JClass( "String" ), "determineVersion" );
 
         method.addParameter( new JParameter( new JClass( "Reader" ), "reader" ) );
@@ -270,8 +237,18 @@ public class StaxReaderGenerator
 
         sc.indent();
 
+        ModelClass root = objectModel.getClass( objectModel.getRoot( getGeneratedVersion() ), getGeneratedVersion() );
         if ( "namespace".equals( versionDefinition.getType() ) )
         {
+            XmlClassMetadata metadata = (XmlClassMetadata) root.getMetadata( XmlClassMetadata.ID );
+
+            String namespace = metadata.getNamespace();
+            if ( namespace == null || namespace.indexOf( "${version}" ) < 0 )
+            {
+                throw new ModelloException(
+                    "versionDefinition is namespace, but the model does not declare xml.namespace on the root element" );
+            }
+
             sc.add( "String uri = xmlStreamReader.getNamespaceURI( \"\" );" );
 
             sc.add( "if ( uri == null )" );
@@ -287,10 +264,10 @@ public class StaxReaderGenerator
 
             sc.add( "}" );
 
-            int index = value.indexOf( "${version}" );
+            int index = namespace.indexOf( "${version}" );
 
-            sc.add( "String uriPrefix = \"" + value.substring( 0, index ) + "\";" );
-            sc.add( "String uriSuffix = \"" + value.substring( index + 10 ) + "\";" );
+            sc.add( "String uriPrefix = \"" + namespace.substring( 0, index ) + "\";" );
+            sc.add( "String uriSuffix = \"" + namespace.substring( index + 10 ) + "\";" );
 
             sc.add( "if ( !uri.startsWith( uriPrefix ) || !uri.endsWith( uriSuffix ) )" );
 
@@ -298,8 +275,8 @@ public class StaxReaderGenerator
 
             sc.indent();
 
-            sc.add( "throw new XMLStreamException( \"Namespace URI: '\" + uri + \"' does not match pattern '" + value +
-                "'\", xmlStreamReader.getLocation() );" );
+            sc.add( "throw new XMLStreamException( \"Namespace URI: '\" + uri + \"' does not match pattern '" +
+                namespace + "'\", xmlStreamReader.getLocation() );" );
 
             sc.unindent();
 
@@ -309,6 +286,28 @@ public class StaxReaderGenerator
         }
         else
         {
+            String value = versionDefinition.getValue();
+            ModelField field = root.getField( value, getGeneratedVersion() );
+
+            if ( field == null )
+            {
+                throw new ModelloException(
+                    "versionDefinition is field, but the model root element does not declare a field '" + value +
+                        "'." );
+            }
+
+            if ( !"String".equals( field.getType() ) )
+            {
+                throw new ModelloException( "versionDefinition is field, but the field is not of type String" );
+            }
+
+            XmlFieldMetadata metadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
+            value = metadata.getTagName();
+            if ( value == null )
+            {
+                value = field.getName();
+            }
+
             // we are now at the root element. Search child elements for the correct tag name
 
             sc.add( "int depth = 0;" );
@@ -336,6 +335,20 @@ public class StaxReaderGenerator
             sc.unindent();
 
             sc.add( "}" );
+
+            if ( field.getAlias() != null )
+            {
+                sc.add( "if ( depth == 0 && \"" + field.getAlias() + "\".equals( xmlStreamReader.getLocalName() ) )" );
+                sc.add( "{" );
+
+                sc.indent();
+
+                sc.add( "return xmlStreamReader.getElementText();" );
+
+                sc.unindent();
+
+                sc.add( "}" );
+            }
 
             sc.add( "depth++;" );
 
