@@ -751,7 +751,8 @@ public class StaxReaderGenerator
 
                         sc.indent();
 
-                        sc.add( "xmlStreamReader.nextTag();" );
+                        sc.add(
+                            "throw new XMLStreamException( \"Unrecognised tag: '\" + xmlStreamReader.getLocalName() + \"'\", xmlStreamReader.getLocation() );" );
 
                         sc.unindent();
 
