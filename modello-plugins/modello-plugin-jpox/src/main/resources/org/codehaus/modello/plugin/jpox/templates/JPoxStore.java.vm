@@ -406,6 +406,65 @@ public class ${model.name}JPoxStore
 
 #end
 
+    public ${model.name}ModelloMetadata get${model.name}ModelloMetadata( boolean detach )
+        throws Exception
+    {
+        try
+        {
+            PersistenceManager pm = begin();
+
+            pm.getFetchPlan().setGroup( FetchPlan.DEFAULT );
+
+            Query query = pm.newQuery( ${model.name}ModelloMetadata.class );
+
+            query.setIgnoreCache( true );
+
+            Collection result = (Collection) query.execute();
+
+            if ( result.isEmpty() )
+            {
+                return null;
+            }
+
+            ${model.name}ModelloMetadata object = (${model.name}ModelloMetadata) result.iterator().next();
+
+            if ( detach )
+            {
+                object = (${model.name}ModelloMetadata) pm.detachCopy( object );
+            }
+
+            commit();
+
+            return object;
+        }
+        catch( Exception ex )
+        {
+            rollback();
+
+            throw ex;
+        }
+    }
+
+    public void store${model.name}ModelloMetadata( ${model.name}ModelloMetadata o )
+        throws Exception
+    {
+        try
+        {
+            PersistenceManager pm = begin();
+
+            // TODO: does this work if it doesn't exist?
+            pm.attachCopy( o, true );
+
+            commit();
+        }
+        catch( Exception ex )
+        {
+            rollback();
+
+            throw ex;
+        }
+    }
+
     // ----------------------------------------------------------------------
     // Utility Methods
     // ----------------------------------------------------------------------

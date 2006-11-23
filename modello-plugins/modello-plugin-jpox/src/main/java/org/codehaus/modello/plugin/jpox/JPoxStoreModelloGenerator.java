@@ -22,16 +22,14 @@ package org.codehaus.modello.plugin.jpox;
  * SOFTWARE.
  */
 
-import java.util.Properties;
-
-import org.apache.velocity.VelocityContext;
 import org.apache.velocity.context.Context;
-
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.model.Model;
 import org.codehaus.modello.plugin.store.AbstractVelocityModelloGenerator;
 import org.codehaus.modello.plugin.store.metadata.StoreClassMetadata;
 import org.codehaus.modello.plugin.store.metadata.StoreFieldMetadata;
+
+import java.util.Properties;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -45,9 +43,7 @@ public class JPoxStoreModelloGenerator
     {
         initialize( model, properties );
 
-        // ----------------------------------------------------------------------
         // Initialize the Velocity context
-        // ----------------------------------------------------------------------
 
         Context context = makeStubVelocityContext( model, getGeneratedVersion() );
 
@@ -55,16 +51,17 @@ public class JPoxStoreModelloGenerator
 
         context.put( "storeFieldMetadataId", StoreFieldMetadata.ID );
 
-        // ----------------------------------------------------------------------
-        // Generate the JPoxStore
-        // ----------------------------------------------------------------------
-
+        // Generate a ModelloMetadata class for storing model information in the database
         String packageName = model.getDefaultPackageName( isPackageWithVersion(), getGeneratedVersion() );
 
-        String className = model.getName() + "JPoxStore";
+        String className = model.getName() + "ModelloMetadata";
+        writeClass( "/org/codehaus/modello/plugin/jpox/templates/ModelloMetadata.java.vm", getOutputDirectory(),
+                    packageName, className, context );
 
-        writeClass( "/org/codehaus/modello/plugin/jpox/templates/JPoxStore.java.vm",
-                    getOutputDirectory(), packageName, className,
-                    context );
+        // Generate the JPoxStore
+        className = model.getName() + "JPoxStore";
+
+        writeClass( "/org/codehaus/modello/plugin/jpox/templates/JPoxStore.java.vm", getOutputDirectory(), packageName,
+                    className, context );
     }
 }

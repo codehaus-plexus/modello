@@ -22,6 +22,7 @@ package org.codehaus.modello.plugin.jpox;
  * SOFTWARE.
  */
 
+import junit.framework.AssertionFailedError;
 import org.codehaus.modello.AbstractModelloGeneratorTest;
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
@@ -40,8 +41,6 @@ import java.io.FileReader;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
-
-import junit.framework.AssertionFailedError;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -90,51 +89,67 @@ public class JPoxJdoMappingModelloGeneratorTest
 
         // Tree should consist of only elements with attributes. NO TEXT.
         assertNoTextNodes( jdoDocument, "//jdo", true );
-        
-        assertAttributeEquals( jdoDocument, "//class[@name='Issue']/field[@name='summary']", "persistence-modifier", "none" );
+
+        assertAttributeEquals( jdoDocument, "//class[@name='TissueModelloMetadata']/field[@name='modelVersion']/column",
+                               "default-value", "1.0.0" );
+
+        assertAttributeEquals( jdoDocument, "//class[@name='Issue']/field[@name='summary']", "persistence-modifier",
+                               "none" );
 
         // -----------------------------------------------------------------------
         // Association Tests.
-        
+
         //   mdo/association/jpox.dependent-element == false (only on association with "*" multiplicity (default type)
-        assertAttributeEquals( jdoDocument, "//class[@name='Issue']/field[@name='friends']/collection", "dependent-element", "false" );
-        
+        assertAttributeEquals( jdoDocument, "//class[@name='Issue']/field[@name='friends']/collection",
+                               "dependent-element", "false" );
+
         //   mdo/association (default type) with "1" multiplicity.
         assertElementNotExists( jdoDocument, "//class[@name='Issue']/field[@name='assignee']/collection" );
-        
+
         //   mdo/association (map) with "*" multiplicity.
         assertElementExists( jdoDocument, "//class[@name='Issue']/field[@name='configuration']/map" );
 
         // -----------------------------------------------------------------------
         // Fetch Group Tests
         assertAttributeMissing( jdoDocument, "//class[@name='Issue']/field[@name='reporter']", "default-fetch-group" );
-        assertAttributeEquals( jdoDocument, "//class[@name='Issue']/field[@name='configuration']", "default-fetch-group", "true" );
-        assertAttributeEquals( jdoDocument, "//class[@name='Issue']/field[@name='assignee']", "default-fetch-group", "false" );
-        
+        assertAttributeEquals( jdoDocument, "//class[@name='Issue']/field[@name='configuration']",
+                               "default-fetch-group", "true" );
+        assertAttributeEquals( jdoDocument, "//class[@name='Issue']/field[@name='assignee']", "default-fetch-group",
+                               "false" );
+
         // -----------------------------------------------------------------------
         // Value Strategy Tests
         //   defaulted
-        assertAttributeEquals( jdoDocument, "//class[@name='ComplexIdentity']/field[@name='id']", "value-strategy", "native" );
-        assertAttributeEquals( jdoDocument, "//class[@name='Issue']/field[@name='accountId']", "value-strategy", "native" );
+        assertAttributeEquals( jdoDocument, "//class[@name='ComplexIdentity']/field[@name='id']", "value-strategy",
+                               "native" );
+        assertAttributeEquals( jdoDocument, "//class[@name='Issue']/field[@name='accountId']", "value-strategy",
+                               "native" );
         //   intentionally unset
         assertAttributeMissing( jdoDocument, "//class[@name='User']/field[@name='id']", "value-strategy" );
-        
+
         // -----------------------------------------------------------------------
         // Superclass Tests
-        assertAttributeEquals( jdoDocument, "//class[@name='User']", "persistence-capable-superclass", "org.mergere.user.AbstractUser" );
+        assertAttributeEquals( jdoDocument, "//class[@name='User']", "persistence-capable-superclass",
+                               "org.mergere.user.AbstractUser" );
 
         // -----------------------------------------------------------------------
         // Primary Key Tests
         assertAttributeEquals( jdoDocument, "//class[@name='Issue']/field[@name='accountId']", "primary-key", "true" );
         assertAttributeEquals( jdoDocument, "//class[@name='Issue']/field[@name='summary']", "primary-key", "false" );
-        
-        assertAttributeEquals( jdoDocument, "//class[@name='ComplexIdentity']/field[@name='id']", "primary-key", "true" );
-        assertAttributeEquals( jdoDocument, "//class[@name='ComplexIdentity']/field[@name='username']", "primary-key", "false" );
-        assertAttributeEquals( jdoDocument, "//class[@name='ComplexIdentity']/field[@name='fullName']", "primary-key", "false" );
-        assertAttributeEquals( jdoDocument, "//class[@name='ComplexIdentity']/field[@name='email']", "primary-key", "false" );
-        assertAttributeEquals( jdoDocument, "//class[@name='ComplexIdentity']/field[@name='locked']", "primary-key", "false" );
-        assertAttributeEquals( jdoDocument, "//class[@name='ComplexIdentity']/field[@name='lastLoginDate']", "primary-key", "false" );
-        
+
+        assertAttributeEquals( jdoDocument, "//class[@name='ComplexIdentity']/field[@name='id']", "primary-key",
+                               "true" );
+        assertAttributeEquals( jdoDocument, "//class[@name='ComplexIdentity']/field[@name='username']", "primary-key",
+                               "false" );
+        assertAttributeEquals( jdoDocument, "//class[@name='ComplexIdentity']/field[@name='fullName']", "primary-key",
+                               "false" );
+        assertAttributeEquals( jdoDocument, "//class[@name='ComplexIdentity']/field[@name='email']", "primary-key",
+                               "false" );
+        assertAttributeEquals( jdoDocument, "//class[@name='ComplexIdentity']/field[@name='locked']", "primary-key",
+                               "false" );
+        assertAttributeEquals( jdoDocument, "//class[@name='ComplexIdentity']/field[@name='lastLoginDate']",
+                               "primary-key", "false" );
+
         // -----------------------------------------------------------------------
         // Alternate Table and Column Names Tests.
         assertAttributeEquals( jdoDocument, "//class[@name='DifferentTable']", "table", "MyTable" );
@@ -152,18 +167,18 @@ public class JPoxJdoMappingModelloGeneratorTest
 
         if ( attribute == null )
         {
-            throw new AssertionFailedError( "Element at '" + xpathToNode + "' is missing the '" + attributeKey
-                + "' attribute." );
+            throw new AssertionFailedError(
+                "Element at '" + xpathToNode + "' is missing the '" + attributeKey + "' attribute." );
         }
 
         assertEquals( "Attribute value for '" + xpathToNode + "'", expectedValue, attribute.getValue() );
     }
-    
+
     private void assertElementExists( Document doc, String xpathToNode )
     {
         findElement( doc, xpathToNode );
     }
-    
+
     private void assertElementNotExists( Document doc, String xpathToNode )
     {
         if ( StringUtils.isEmpty( xpathToNode ) )
@@ -175,7 +190,7 @@ public class JPoxJdoMappingModelloGeneratorTest
         {
             throw new AssertionFailedError( "Unable to assert an attribute using a null document." );
         }
-        
+
         XPath xpath = doc.createXPath( xpathToNode );
 
         Node node = xpath.selectSingleNode( doc );
@@ -184,10 +199,10 @@ public class JPoxJdoMappingModelloGeneratorTest
         {
             throw new AssertionFailedError( "Element at '" + xpathToNode + "' should not exist." );
         }
-        
+
         // In case node returns something other than an element.
     }
-    
+
     private Element findElement( Document doc, String xpathToNode )
     {
         if ( StringUtils.isEmpty( xpathToNode ) )
@@ -199,7 +214,7 @@ public class JPoxJdoMappingModelloGeneratorTest
         {
             throw new AssertionFailedError( "Unable to assert an attribute using a null document." );
         }
-        
+
         XPath xpath = doc.createXPath( xpathToNode );
 
         Node node = xpath.selectSingleNode( doc );
@@ -237,11 +252,11 @@ public class JPoxJdoMappingModelloGeneratorTest
 
         if ( attribute != null )
         {
-            throw new AssertionFailedError( "Node at '" + xpathToNode + "' should not have the attribute named '"
-                + attributeKey + "'." );
+            throw new AssertionFailedError(
+                "Node at '" + xpathToNode + "' should not have the attribute named '" + attributeKey + "'." );
         }
     }
-    
+
     private void assertNoTextNodes( Document doc, String xpathToParentNode, boolean recursive )
     {
         if ( StringUtils.isEmpty( xpathToParentNode ) )
@@ -253,16 +268,16 @@ public class JPoxJdoMappingModelloGeneratorTest
         {
             throw new AssertionFailedError( "Unable to assert an attribute using a null document." );
         }
-        
+
         XPath xpath = doc.createXPath( xpathToParentNode );
 
         List nodes = xpath.selectNodes( doc );
-        
-        if ( (nodes == null ) || nodes.isEmpty() )
+
+        if ( ( nodes == null ) || nodes.isEmpty() )
         {
             throw new AssertionFailedError( "Expected Node(s) at '" + xpathToParentNode + "', but was not found." );
         }
-        
+
         Iterator it = nodes.iterator();
         while ( it.hasNext() )
         {
@@ -271,7 +286,7 @@ public class JPoxJdoMappingModelloGeneratorTest
             assertNoTextNode( "No Text should exist in '" + xpathToParentNode + "'", node, recursive );
         }
     }
-    
+
     private boolean assertNoTextNode( String message, Node node, boolean recursive )
     {
         if ( node.getNodeType() == Node.TEXT_NODE || node.getNodeType() == Node.CDATA_SECTION_NODE )
@@ -284,7 +299,7 @@ public class JPoxJdoMappingModelloGeneratorTest
                 throw new AssertionFailedError( message + " found <" + text + ">" );
             }
         }
-        
+
         if ( recursive )
         {
             if ( node instanceof Branch )

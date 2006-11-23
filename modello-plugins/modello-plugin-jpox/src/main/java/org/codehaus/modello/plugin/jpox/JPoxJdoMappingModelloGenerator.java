@@ -58,9 +58,9 @@ public class JPoxJdoMappingModelloGenerator
     extends AbstractModelloGenerator
 {
     private final static Map PRIMITIVE_IDENTITY_MAP;
-    
+
     private final static List IDENTITY_TYPES;
-    
+
     private final static List VALUE_STRATEGY_LIST;
 
     static
@@ -79,12 +79,12 @@ public class JPoxJdoMappingModelloGenerator
         PRIMITIVE_IDENTITY_MAP.put( "Character", "javax.jdo.identity.CharIdentity" );
         PRIMITIVE_IDENTITY_MAP.put( "byte", "javax.jdo.identity.ByteIdentity" );
         PRIMITIVE_IDENTITY_MAP.put( "Byte", "javax.jdo.identity.ByteIdentity" );
-        
+
         IDENTITY_TYPES = new ArrayList();
         IDENTITY_TYPES.add( "application" );
         IDENTITY_TYPES.add( "datastore" );
         IDENTITY_TYPES.add( "nondurable" );
-        
+
         VALUE_STRATEGY_LIST = new ArrayList();
         VALUE_STRATEGY_LIST.add( "off" );
         VALUE_STRATEGY_LIST.add( "native" );
@@ -128,8 +128,8 @@ public class JPoxJdoMappingModelloGenerator
             {
                 if ( !parent.mkdirs() )
                 {
-                    throw new ModelloException( "Error while creating parent directories for the file " +
-                        "'" + packageJdo.getAbsolutePath() + "'." );
+                    throw new ModelloException( "Error while creating parent directories for the file " + "'" +
+                        packageJdo.getAbsolutePath() + "'." );
                 }
             }
 
@@ -159,9 +159,9 @@ public class JPoxJdoMappingModelloGenerator
         for ( Iterator it = model.getClasses( getGeneratedVersion() ).iterator(); it.hasNext(); )
         {
             ModelClass modelClass = (ModelClass) it.next();
-            
+
             JPoxClassMetadata jpoxMetadata = (JPoxClassMetadata) modelClass.getMetadata( JPoxClassMetadata.ID );
-            
+
             if ( !jpoxMetadata.isEnabled() )
             {
                 // Skip generation of those classes that are not enabled for the jpox plugin.
@@ -178,7 +178,7 @@ public class JPoxJdoMappingModelloGenerator
             }
 
             list.add( modelClass );
-            
+
             classes.put( packageName, list );
         }
 
@@ -194,13 +194,14 @@ public class JPoxJdoMappingModelloGenerator
         for ( Iterator it = classes.values().iterator(); it.hasNext(); )
         {
             List list = (List) it.next();
-            
+
             if ( list.size() == 0 )
             {
                 continue;
             }
 
-            String packageName = ( (ModelClass) list.get( 0 ) ).getPackageName( isPackageWithVersion(), getGeneratedVersion() );
+            String packageName =
+                ( (ModelClass) list.get( 0 ) ).getPackageName( isPackageWithVersion(), getGeneratedVersion() );
 
             writer.startElement( "package" );
 
@@ -212,6 +213,8 @@ public class JPoxJdoMappingModelloGenerator
 
                 writeClass( writer, modelClass );
             }
+
+            writeModelloMetadataClass( writer );
 
             writer.endElement(); // package
         }
@@ -227,7 +230,7 @@ public class JPoxJdoMappingModelloGenerator
         throws ModelloException
     {
         JPoxClassMetadata jpoxMetadata = (JPoxClassMetadata) modelClass.getMetadata( JPoxClassMetadata.ID );
-        
+
         if ( !jpoxMetadata.isEnabled() )
         {
             // Skip generation of those classes that are not enabled for the jpox plugin.
@@ -259,28 +262,26 @@ public class JPoxJdoMappingModelloGenerator
         if ( !StringUtils.isEmpty( jpoxMetadata.getTable() ) )
         {
             // Test Substitute Table Name.            
-            if( DBKeywords.isReserved( jpoxMetadata.getTable() ) )
+            if ( DBKeywords.isReserved( jpoxMetadata.getTable() ) )
             {
                 throw new ModelloException( "The JDO mapping generator has detected the use of the " +
-                                            "SQL Reserved word '" + jpoxMetadata.getTable() + "' as an alternative" +
-                                            "table name for the " + modelClass.getName() + " class.  Please use" +
-                                            "a different name for the <class jpox.table=\"" + 
-                                            jpoxMetadata.getTable() + "\"> attribute.  See " + 
-                                            DBKeywords.URL_SQL92 + " for complete list.");
+                    "SQL Reserved word '" + jpoxMetadata.getTable() + "' as an alternative" + "table name for the " +
+                    modelClass.getName() + " class.  Please use" + "a different name for the <class jpox.table=\"" +
+                    jpoxMetadata.getTable() + "\"> attribute.  See " + DBKeywords.URL_SQL92 + " for complete list." );
             }
-            
+
             writer.addAttribute( "table", jpoxMetadata.getTable() );
         }
         else
         {
             // Test base table name.
-            if( DBKeywords.isReserved( modelClass.getName() ) )
+            if ( DBKeywords.isReserved( modelClass.getName() ) )
             {
                 throw new ModelloException( "The JDO mapping generator has detected the use of the " +
-                                            "SQL Reserved word '" + modelClass.getName() + "' as a class name.  " +
-                                            "Please specify an alternative jpox table name using the " +
-                                            "<class jpox.table=\"\"> attribute, or use a different class name.  See " + 
-                                            DBKeywords.URL_SQL92 + " for complete list."); 
+                    "SQL Reserved word '" + modelClass.getName() + "' as a class name.  " +
+                    "Please specify an alternative jpox table name using the " +
+                    "<class jpox.table=\"\"> attribute, or use a different class name.  See " + DBKeywords.URL_SQL92 +
+                    " for complete list." );
             }
         }
 
@@ -294,19 +295,18 @@ public class JPoxJdoMappingModelloGenerator
         // TODO: for now, assume that any primary key will be set in the super class
         // While it should be possible to have abstract super classes and have the
         // key defined in the sub class this is not implemented yet.
-        
+
         boolean needInheritance = false;
 
         if ( persistenceCapableSuperclass == null )
         {
-            if(StringUtils.isNotEmpty( jpoxMetadata.getIdentityType() ))
+            if ( StringUtils.isNotEmpty( jpoxMetadata.getIdentityType() ) )
             {
                 String identityType = jpoxMetadata.getIdentityType();
                 if ( !IDENTITY_TYPES.contains( identityType ) )
                 {
                     throw new ModelloException( "The JDO mapping generator does not support the specified " +
-                                                "class identity type '" + identityType + "'. " +
-                                                "Supported types: " + IDENTITY_TYPES );
+                        "class identity type '" + identityType + "'. " + "Supported types: " + IDENTITY_TYPES );
                 }
                 writer.addAttribute( "identity-type", identityType );
             }
@@ -336,10 +336,10 @@ public class JPoxJdoMappingModelloGenerator
             //       to the jpox/jdo implementation.
             if ( primaryKeys.size() > 1 )
             {
-                throw new ModelloException( "The JDO mapping generator does not yet support Object Identifier generation "
-                                                + "for the " + primaryKeys.size()
-                                                + " fields specified as <identifier> or "
-                                                + "with jpox.primary-key=\"true\"" );
+                throw new ModelloException(
+                    "The JDO mapping generator does not yet support Object Identifier generation " + "for the " +
+                        primaryKeys.size() + " fields specified as <identifier> or " +
+                        "with jpox.primary-key=\"true\"" );
             }
 
             if ( primaryKeys.size() == 1 )
@@ -353,7 +353,7 @@ public class JPoxJdoMappingModelloGenerator
                 }
             }
         }
-        
+
         if ( needInheritance )
         {
             writer.startElement( "inheritance" );
@@ -377,7 +377,7 @@ public class JPoxJdoMappingModelloGenerator
 
             writeModelField( writer, modelField );
         }
-        
+
         // Write ignored fields.
         List ignoredFields = jpoxMetadata.getNotPersisted();
         if ( ignoredFields != null )
@@ -475,6 +475,31 @@ public class JPoxJdoMappingModelloGenerator
         writer.endElement(); // class
     }
 
+    private void writeModelloMetadataClass( XMLWriter writer )
+        throws ModelloException
+    {
+        writer.startElement( "class" );
+
+        writer.addAttribute( "name", getModel().getName() + "ModelloMetadata" );
+
+        writer.addAttribute( "detachable", String.valueOf( true ) );
+
+        writer.startElement( "field" );
+
+        writer.addAttribute( "name", "modelVersion" );
+        writer.addAttribute( "null-value", "default" );
+
+        writer.startElement( "column" );
+
+        writer.addAttribute( "default-value", getGeneratedVersion().toString() );
+
+        writer.endElement(); // column
+
+        writer.endElement(); // field
+
+        writer.endElement(); // class
+    }
+
     private void writeFetchGroup( XMLWriter writer, String fetchGroupName, List fields, boolean onlyIfIsStashPart )
     {
         if ( !fields.isEmpty() )
@@ -508,7 +533,8 @@ public class JPoxJdoMappingModelloGenerator
         }
     }
 
-    private void writeModelField( XMLWriter writer, ModelField modelField ) throws ModelloException
+    private void writeModelField( XMLWriter writer, ModelField modelField )
+        throws ModelloException
     {
         writer.startElement( "field" );
 
@@ -535,49 +561,46 @@ public class JPoxJdoMappingModelloGenerator
         {
             writer.addAttribute( "null-value", jpoxMetadata.getNullValue() );
         }
-        
+
         if ( StringUtils.isNotEmpty( jpoxMetadata.getColumnName() ) )
         {
             // Test proposed Column Name.            
-            if( DBKeywords.isReserved( jpoxMetadata.getColumnName() ) )
+            if ( DBKeywords.isReserved( jpoxMetadata.getColumnName() ) )
             {
                 throw new ModelloException( "The JDO mapping generator has detected the use of the " +
-                                            "SQL Reserved word '" + jpoxMetadata.getColumnName() + "' as an alternative" +
-                                            "column name for the " + modelField.getName() + " field of the " + 
-                                            modelField.getModelClass().getName() + " class.  Please use" +
-                                            "a different name for the <field jpox.column=\"" + 
-                                            jpoxMetadata.getColumnName() + "\"> attribute.  See " + 
-                                            DBKeywords.URL_SQL92 + " for complete list.");
+                    "SQL Reserved word '" + jpoxMetadata.getColumnName() + "' as an alternative" +
+                    "column name for the " + modelField.getName() + " field of the " +
+                    modelField.getModelClass().getName() + " class.  Please use" +
+                    "a different name for the <field jpox.column=\"" + jpoxMetadata.getColumnName() +
+                    "\"> attribute.  See " + DBKeywords.URL_SQL92 + " for complete list." );
             }
-            
+
             writer.addAttribute( "column", jpoxMetadata.getColumnName() );
         }
         else
         {
             // Test proposed Field name.
-            if( DBKeywords.isReserved( modelField.getName() ) )
+            if ( DBKeywords.isReserved( modelField.getName() ) )
             {
                 throw new ModelloException( "The JDO mapping generator has detected the use of the " +
-                                            "SQL Reserved word '" + modelField.getName() + "' as a field name of the " +
-                                            modelField.getModelClass().getName() + " class.  Please specify an " +
-                                            "alternative jpox column name using the <field jpox.column=\"\"> " +
-                                            "attribute, or use a different class name.  See " + 
-                                            DBKeywords.URL_SQL92 + " for complete list."); 
+                    "SQL Reserved word '" + modelField.getName() + "' as a field name of the " +
+                    modelField.getModelClass().getName() + " class.  Please specify an " +
+                    "alternative jpox column name using the <field jpox.column=\"\"> " +
+                    "attribute, or use a different class name.  See " + DBKeywords.URL_SQL92 + " for complete list." );
             }
         }
-        
+
         if ( StringUtils.isNotEmpty( jpoxMetadata.getJoinTableName() ) )
         {
             // Test proposed name for the Join Table for the field.
-            if( DBKeywords.isReserved( jpoxMetadata.getJoinTableName() ) )
+            if ( DBKeywords.isReserved( jpoxMetadata.getJoinTableName() ) )
             {
                 throw new ModelloException( "The JDO mapping generator has detected the use of the " +
-                                            "SQL Reserved word '" + jpoxMetadata.getJoinTableName() + "' as name of a" +
-                                            "join table for the " + modelField.getName() + " field of the " + 
-                                            modelField.getModelClass().getName() + " class.  Please specify" +
-                                            "an alternative name for the <field jpox.join-table=\"" + 
-                                            jpoxMetadata.getColumnName() + "\"> attribute.  See " + 
-                                            DBKeywords.URL_SQL92 + " for complete list.");
+                    "SQL Reserved word '" + jpoxMetadata.getJoinTableName() + "' as name of a" + "join table for the " +
+                    modelField.getName() + " field of the " + modelField.getModelClass().getName() +
+                    " class.  Please specify" + "an alternative name for the <field jpox.join-table=\"" +
+                    jpoxMetadata.getColumnName() + "\"> attribute.  See " + DBKeywords.URL_SQL92 +
+                    " for complete list." );
             }
             writer.addAttribute( "table", jpoxMetadata.getJoinTableName() );
         }
@@ -593,14 +616,13 @@ public class JPoxJdoMappingModelloGenerator
                 if ( !VALUE_STRATEGY_LIST.contains( valueStrategy ) )
                 {
                     throw new ModelloException( "The JDO mapping generator does not support the specified " +
-                                                "value-strategy '" + valueStrategy + "'. " +
-                                                "Supported types: " + VALUE_STRATEGY_LIST );
+                        "value-strategy '" + valueStrategy + "'. " + "Supported types: " + VALUE_STRATEGY_LIST );
                 }
-                
+
                 writer.addAttribute( "value-strategy", jpoxMetadata.getValueStrategy() );
             }
         }
-        
+
         if ( StringUtils.isNotEmpty( jpoxMetadata.getIndexed() ) )
         {
             writer.addAttribute( "indexed", jpoxMetadata.getIndexed() );
@@ -657,7 +679,7 @@ public class JPoxJdoMappingModelloGenerator
             // This gets added onto the <field> element
             writer.addAttribute( "default-fetch-group", am.isPart().toString() );
         }
-        
+
         if ( association.getType().equals( "java.util.List" ) || association.getType().equals( "java.util.Set" ) )
         {
             // Start <collection> element
@@ -776,20 +798,21 @@ public class JPoxJdoMappingModelloGenerator
 
         writer.endElement();
     }
-    
-    private boolean isInstantionApplicationType(ModelClass modelClass)
+
+    private boolean isInstantionApplicationType( ModelClass modelClass )
     {
         List identifierFields = modelClass.getIdentifierFields( getGeneratedVersion() );
-        
+
         return identifierFields.size() > 0;
     }
-    
-    private List getPrimaryKeyFields(ModelClass modelClass) throws ModelloException
+
+    private List getPrimaryKeyFields( ModelClass modelClass )
+        throws ModelloException
     {
         List primaryKeys = new ArrayList();
         List fields = modelClass.getFields( getGeneratedVersion() );
         JPoxClassMetadata jpoxClassMetadata = (JPoxClassMetadata) modelClass.getMetadata( JPoxClassMetadata.ID );
-        
+
         for ( Iterator it = fields.iterator(); it.hasNext(); )
         {
             ModelField modelField = (ModelField) it.next();
@@ -812,7 +835,7 @@ public class JPoxJdoMappingModelloGenerator
                 }
             }
         }
-        
+
         return primaryKeys;
     }
 
@@ -821,12 +844,11 @@ public class JPoxJdoMappingModelloGenerator
     {
         if ( !PRIMITIVE_IDENTITY_MAP.containsKey( modelField.getType() ) )
         {
-            throw new ModelloException( "The JDO mapping generator does not support the specified " +
-                "field type '" + modelField.getType() + "'. " +
-                "Supported types: " + PRIMITIVE_IDENTITY_MAP.keySet() );
+            throw new ModelloException( "The JDO mapping generator does not support the specified " + "field type '" +
+                modelField.getType() + "'. " + "Supported types: " + PRIMITIVE_IDENTITY_MAP.keySet() );
         }
     }
-    
+
     private StoreAssociationMetadata getAssociationMetadata( ModelAssociation association )
     {
         return (StoreAssociationMetadata) association.getAssociationMetadata( StoreAssociationMetadata.ID );
