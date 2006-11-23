@@ -44,7 +44,7 @@ public class JpoxVerifierVersion
         Properties properties = new Properties();
         properties.setProperty( "javax.jdo.PersistenceManagerFactoryClass", "org.jpox.PersistenceManagerFactoryImpl" );
         properties.setProperty( "javax.jdo.option.ConnectionDriverName", "org.hsqldb.jdbcDriver" );
-        properties.setProperty( "javax.jdo.option.ConnectionURL", "jdbc:hsqldb:mem://localhost:/test" );
+        properties.setProperty( "javax.jdo.option.ConnectionURL", "jdbc:hsqldb:mem:test" );
         properties.setProperty( "javax.jdo.option.ConnectionUserName", "sa" );
         properties.setProperty( "javax.jdo.option.ConnectionPassword", "" );
         properties.setProperty( "org.jpox.autoCreateTables", "true" );

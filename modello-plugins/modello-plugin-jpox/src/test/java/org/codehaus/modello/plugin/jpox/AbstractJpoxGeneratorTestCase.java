@@ -126,7 +126,7 @@ public abstract class AbstractJpoxGeneratorTestCase
 
         addDependency( "jpox", "jpox", "1.1.1" );
         addDependency( "javax.jdo", "jdo2-api", "2.0" );
-        addDependency( "hsqldb", "hsqldb", "1.7.1" );
+        addDependency( "hsqldb", "hsqldb", "1.8.0.7" );
         addDependency( "log4j", "log4j", "1.2.8" );
 
         compile( generatedSources, classes );
