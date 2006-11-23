@@ -111,10 +111,12 @@ public class JPoxJdoMappingModelloGenerator
         {
             String fileName = "package.jdo";
 
-            // TODO: shouldn't this be generated per package?
-            String packageName = getModel().getDefaultPackageName( isPackageWithVersion(), getGeneratedVersion() );
-            String dir = packageName.replace( '.', '/' );
-            File directory = new File( getOutputDirectory(), dir );
+            // TODO: we should generate it per package, into the package directory. This will not support multiple
+            // versions per package.
+//            String packageName = getModel().getDefaultPackageName( isPackageWithVersion(), getGeneratedVersion() );
+//            String dir = packageName.replace( '.', '/' );
+//            File directory = new File( getOutputDirectory(), dir );
+            File directory = getOutputDirectory();
             File packageJdo = new File( directory, fileName );
 
             File parent = packageJdo.getParentFile();
