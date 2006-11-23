@@ -1,7 +1,7 @@
-package org.codehaus.modello.verifier;
+package org.codehaus.modello.generator.xml.stax;
 
 /*
- * Copyright (c) 2004, Codehaus.org
+ * Copyright (c) 2006, Codehaus.org
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -22,25 +22,31 @@ package org.codehaus.modello.verifier;
  * SOFTWARE.
  */
 
+import org.codehaus.modello.model.Model;
+import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
+
+import java.io.FileReader;
+
 /**
- * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id$
+ * @version $Id: StaxGeneratorTest.java 675 2006-11-16 10:58:59Z brett $
  */
-public class VerifierException
-    extends RuntimeException
+public class StaxGeneratorVersionReaderDelegateTest
+    extends AbstractStaxGeneratorTestCase
 {
-    public VerifierException( String msg )
+    public StaxGeneratorVersionReaderDelegateTest()
+        throws ComponentLookupException
     {
-        super( msg );
+        super( "stax-version-reader-delegate" );
     }
 
-    public VerifierException( String msg, Exception ex )
+    public void testStaxReaderVersionInField()
+        throws Throwable
     {
-        super( msg, ex );
+        Model model =
+            modello.loadModel( new FileReader( getTestPath( "src/test/resources/version-in-namespace.mdo" ) ) );
+
+        verifyModel( model, "org.codehaus.modello.generator.xml.stax.StaxVerifierVersionReaderDelegate",
+                     new String[]{"4.0.0", "4.0.1"} );
     }
 
-    public VerifierException( String msg, Throwable throwable )
-    {
-        super( msg, throwable );
-    }
 }

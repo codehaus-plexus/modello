@@ -23,11 +23,13 @@ package org.codehaus.modello.plugin.stax;
  */
 
 import org.codehaus.modello.ModelloException;
+import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelDefault;
 import org.codehaus.modello.model.ModelField;
+import org.codehaus.modello.model.Version;
 import org.codehaus.modello.model.VersionDefinition;
 import org.codehaus.modello.plugin.java.javasource.JClass;
 import org.codehaus.modello.plugin.java.javasource.JMethod;
@@ -42,7 +44,9 @@ import org.codehaus.modello.plugins.xml.XmlFieldMetadata;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -61,6 +65,17 @@ public class StaxReaderGenerator
         try
         {
             generateStaxReader();
+
+            VersionDefinition versionDefinition = model.getVersionDefinition();
+            if ( versionDefinition != null )
+            {
+                String versions = parameters.getProperty( ModelloParameterConstants.ALL_VERSIONS );
+
+                if ( versions != null )
+                {
+                    generateStaxReaderDelegate( Arrays.asList( versions.split( "," ) ) );
+                }
+            }
         }
         catch ( IOException ex )
         {
@@ -199,6 +214,141 @@ public class StaxReaderGenerator
         // ----------------------------------------------------------------------
         //
         // ----------------------------------------------------------------------
+
+        jClass.print( sourceWriter );
+
+        writer.flush();
+
+        writer.close();
+    }
+
+    private void generateStaxReaderDelegate( List/*<String>*/ versions )
+        throws ModelloException, IOException
+    {
+        Model objectModel = getModel();
+
+        String packageName = objectModel.getDefaultPackageName( false, null );
+
+        packageName += ".io.stax";
+
+        String directory = packageName.replace( '.', '/' );
+
+        String unmarshallerName = getFileName( "StaxReaderDelegate" );
+
+        File f = new File( new File( getOutputDirectory(), directory ), unmarshallerName + ".java" );
+
+        if ( !f.getParentFile().exists() )
+        {
+            f.getParentFile().mkdirs();
+        }
+
+        FileWriter writer = new FileWriter( f );
+
+        JSourceWriter sourceWriter = new JSourceWriter( writer );
+
+        JClass jClass = new JClass( unmarshallerName );
+
+        jClass.setPackageName( packageName );
+
+        jClass.addImport( "java.io.File" );
+        jClass.addImport( "java.io.FileReader" );
+        jClass.addImport( "java.io.IOException" );
+        jClass.addImport( "java.io.Reader" );
+
+        jClass.addImport( "javax.xml.stream.*" );
+
+        jClass.addImport( "org.codehaus.plexus.util.IOUtil" );
+
+        JMethod method = new JMethod( new JClass( "Object" ), "read" );
+
+        method.addParameter( new JParameter( new JClass( "File" ), "f" ) );
+
+        method.addParameter( new JParameter( JType.Boolean, "strict" ) );
+
+        method.addException( new JClass( "IOException" ) );
+        method.addException( new JClass( "XMLStreamException" ) );
+
+        jClass.addMethod( method );
+
+        JSourceCode sc = method.getSourceCode();
+
+        sc.add( "String modelVersion;" );
+        sc.add( "Reader reader = new FileReader( f );" );
+
+        sc.add( "try" );
+        sc.add( "{" );
+        sc.indent();
+
+        sc.add( "modelVersion = determineVersion( reader );" );
+
+        sc.unindent();
+        sc.add( "}" );
+        sc.add( "finally" );
+        sc.add( "{" );
+        sc.indent();
+
+        sc.add( "IOUtil.close( reader );" );
+
+        sc.unindent();
+        sc.add( "}" );
+
+        sc.add( "reader = new FileReader( f );" );
+        sc.add( "try" );
+        sc.add( "{" );
+        sc.indent();
+
+        String prefix = "";
+        for ( Iterator i = versions.iterator(); i.hasNext(); )
+        {
+            String version = (String) i.next();
+
+            sc.add( prefix + "if ( \"" + version + "\".equals( modelVersion ) )" );
+            sc.add( "{" );
+            sc.indent();
+
+            sc.add( "return new " + getModel().getDefaultPackageName( true, new Version( version ) ) + ".io.stax." +
+                getFileName( "StaxReader" ) + "().read( reader, strict );" );
+
+            sc.unindent();
+            sc.add( "}" );
+
+            prefix = "else ";
+        }
+
+        sc.add( "else" );
+        sc.add( "{" );
+        sc.indent();
+
+        sc.add(
+            "throw new XMLStreamException( \"Document version '\" + modelVersion + \"' has no corresponding reader.\" );" );
+
+        sc.unindent();
+        sc.add( "}" );
+
+        sc.unindent();
+        sc.add( "}" );
+        sc.add( "finally" );
+        sc.add( "{" );
+        sc.indent();
+
+        sc.add( "IOUtil.close( reader );" );
+
+        sc.unindent();
+        sc.add( "}" );
+
+        method = new JMethod( new JClass( "Object" ), "read" );
+
+        method.addParameter( new JParameter( new JClass( "File" ), "f" ) );
+
+        method.addException( new JClass( "IOException" ) );
+        method.addException( new JClass( "XMLStreamException" ) );
+
+        sc = method.getSourceCode();
+        sc.add( "return read( f, true );" );
+
+        jClass.addMethod( method );
+
+        writeDetermineVersionMethod( jClass, objectModel );
 
         jClass.print( sourceWriter );
 

@@ -29,15 +29,19 @@ import org.apache.maven.artifact.repository.ArtifactRepositoryFactory;
 import org.apache.maven.artifact.repository.layout.ArtifactRepositoryLayout;
 import org.apache.maven.settings.MavenSettingsBuilder;
 import org.apache.maven.settings.Settings;
+import org.codehaus.modello.verifier.VerifierException;
 import org.codehaus.plexus.compiler.Compiler;
 import org.codehaus.plexus.compiler.CompilerConfiguration;
 import org.codehaus.plexus.compiler.CompilerError;
+import org.codehaus.plexus.compiler.CompilerException;
 import org.codehaus.plexus.compiler.javac.JavacCompiler;
 import org.codehaus.plexus.util.FileUtils;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
@@ -106,10 +110,10 @@ public abstract class AbstractModelloGeneratorTest
     }
 
     public void addDependency( String groupId, String artifactId, String version )
-        throws Exception
+        throws MalformedURLException
     {
-        Artifact artifact = artifactFactory.createArtifact( groupId, artifactId, version, Artifact.SCOPE_COMPILE,
-                                                            "jar" );
+        Artifact artifact =
+            artifactFactory.createArtifact( groupId, artifactId, version, Artifact.SCOPE_COMPILE, "jar" );
 
         File dependencyFile = new File( repository.getBasedir(), repository.pathOf( artifact ) );
 
@@ -131,7 +135,7 @@ public abstract class AbstractModelloGeneratorTest
     }
 
     protected void compile( File generatedSources, File destinationDirectory )
-        throws Exception
+        throws IOException, CompilerException
     {
         addDependency( "junit", "junit", "3.8.1" );
 
@@ -156,8 +160,8 @@ public abstract class AbstractModelloGeneratorTest
             classPathElements[i + 2] = ( (File) dependencies.get( i ) ).getAbsolutePath();
         }
 
-        String[] sourceDirectories = new String[]{getTestPath( "src/test/verifiers/" + getName() ),
-            generatedSources.getAbsolutePath()};
+        String[] sourceDirectories =
+            new String[]{getTestPath( "src/test/verifiers/" + getName() ), generatedSources.getAbsolutePath()};
 
         Compiler compiler = new JavacCompiler();
 
@@ -180,7 +184,7 @@ public abstract class AbstractModelloGeneratorTest
     }
 
     protected void verify( String className, String testName )
-        throws Throwable
+        throws MalformedURLException
     {
         addClassPathFile( getTestFile( "target/" + getName() + "/classes" ) );
 
@@ -191,22 +195,29 @@ public abstract class AbstractModelloGeneratorTest
         URLClassLoader classLoader = URLClassLoader.newInstance( (URL[]) urls.toArray( new URL[urls.size()] ),
                                                                  Thread.currentThread().getContextClassLoader() );
 
-        Class clazz = classLoader.loadClass( className );
-
-        Method verify = clazz.getMethod( "verify", new Class[0] );
-
         try
         {
-            verify.invoke( clazz.newInstance(), new Object[0] );
+            Class clazz = classLoader.loadClass( className );
+
+            Method verify = clazz.getMethod( "verify", new Class[0] );
+
+            try
+            {
+                verify.invoke( clazz.newInstance(), new Object[0] );
+            }
+            catch ( InvocationTargetException ex )
+            {
+                throw ex.getCause();
+            }
         }
-        catch ( InvocationTargetException ex )
+        catch ( Throwable throwable )
         {
-            throw ex.getCause();
+            throw new VerifierException( "Error verifying modello tests: " + throwable.getMessage(), throwable );
         }
     }
 
     protected void addClassPathFile( File file )
-        throws Exception
+        throws MalformedURLException
     {
         assertTrue( "File doesn't exists: " + file.getAbsolutePath(), file.exists() );
 
