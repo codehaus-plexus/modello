@@ -34,9 +34,9 @@ public class ConvertersVerifier
     {
         // Note that this is *not* a full POM translation (fields like currentVersion are not mapped)
 
-        org.codehaus.modello.test.maven.v3_0_0.io.stax.MavenStaxReader reader = new org.codehaus.modello.test.maven.v3_0_0.io.stax.MavenStaxReader();
+        org.codehaus.modello.test.maven.io.stax.MavenStaxReaderDelegate reader = new org.codehaus.modello.test.maven.io.stax.MavenStaxReaderDelegate();
 
-        org.codehaus.modello.test.maven.v3_0_0.Model modelV3 = reader.read( new FileReader( "src/test/verifiers/converters/input.xml" ) );
+        org.codehaus.modello.test.maven.v3_0_0.Model modelV3 = (org.codehaus.modello.test.maven.v3_0_0.Model) reader.read( new File( "src/test/verifiers/converters/input.xml" ) );
 
         org.codehaus.modello.test.maven.v3_0_0.convert.VersionConverter convertV3 = new org.codehaus.modello.test.maven.v3_0_0.convert.BasicVersionConverter();
         org.codehaus.modello.test.maven.v4_0_0.Model modelV4 = convertV3.convertModel( modelV3 );

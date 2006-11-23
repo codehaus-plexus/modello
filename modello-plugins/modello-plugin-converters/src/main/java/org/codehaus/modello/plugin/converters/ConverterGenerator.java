@@ -30,6 +30,7 @@ import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelDefault;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.Version;
+import org.codehaus.modello.model.VersionDefinition;
 import org.codehaus.modello.plugin.AbstractModelloGenerator;
 import org.codehaus.modello.plugin.java.JavaClassMetadata;
 import org.codehaus.modello.plugin.java.JavaFieldMetadata;
@@ -107,6 +108,8 @@ public class ConverterGenerator
         basicConverterClass.setPackageName( packageName );
         basicConverterClass.addInterface( conversionInterface );
 
+        VersionDefinition versionDefinition = objectModel.getVersionDefinition();
+
         for ( Iterator i = objectModel.getClasses( generatedVersion ).iterator(); i.hasNext(); )
         {
             ModelClass modelClass = (ModelClass) i.next();
@@ -181,13 +184,26 @@ public class ConverterGenerator
             {
                 ModelField modelField = (ModelField) j.next();
 
+                String name = capitalise( modelField.getName() );
+
+                if ( nextVersion != null )
+                {
+                    if ( versionDefinition != null && "field".equals( versionDefinition.getType() ) )
+                    {
+                        if ( versionDefinition.getValue().equals( modelField.getName() ) ||
+                            versionDefinition.getValue().equals( modelField.getAlias() ) )
+                        {
+                            sc.add( "value.set" + name + "( \"" + nextVersion + "\" );" );
+                            continue;
+                        }
+                    }
+                }
+
                 if ( nextVersion != null && !nextVersion.inside( modelField.getVersionRange() ) )
                 {
                     // Don't convert - it's not there in the next one
                     continue;
                 }
-
-                String name = capitalise( modelField.getName() );
 
                 if ( modelField instanceof ModelAssociation )
                 {

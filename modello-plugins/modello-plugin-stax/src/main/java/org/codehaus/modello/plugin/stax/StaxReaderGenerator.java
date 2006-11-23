@@ -297,6 +297,8 @@ public class StaxReaderGenerator
         sc.add( "{" );
         sc.indent();
 
+        writeModelVersionHack( sc );
+
         String prefix = "";
         for ( Iterator i = versions.iterator(); i.hasNext(); )
         {
@@ -355,6 +357,12 @@ public class StaxReaderGenerator
         writer.flush();
 
         writer.close();
+    }
+
+    private static void writeModelVersionHack( JSourceCode sc )
+    {
+        sc.add( "// legacy hack for pomVersion == 3" );
+        sc.add( "if ( modelVersion.equals( \"3\" ) ) modelVersion = \"3.0.0\";" );
     }
 
     private void writeDetermineVersionMethod( JClass jClass, Model objectModel )
@@ -1135,8 +1143,7 @@ public class StaxReaderGenerator
 
     private void writeModelVersionCheck( JSourceCode sc )
     {
-        sc.add( "// legacy hack for pomVersion == 3" );
-        sc.add( "if ( modelVersion.equals( \"3\" ) ) modelVersion = \"3.0.0\";" );
+        writeModelVersionHack( sc );
 
         sc.add( "if ( !modelVersion.equals( \"" + getGeneratedVersion() + "\" ) )" );
         sc.add( "{" );

@@ -56,16 +56,10 @@
         </field>
         <field>
           <name>modelVersion</name>
-          <version>4.0.0</version>
+          <alias>pomVersion</alias>
+          <version>3.0.0+</version>
           <required>true</required>
           <description><![CDATA[The version of this model you are using.]]></description>
-          <type>String</type>
-        </field>
-        <field>
-          <name>modelVersion</name>
-          <alias>pomVersion</alias>
-          <version>3.0.0</version>
-          <required>true</required>
           <type>String</type>
         </field>
         <field>
