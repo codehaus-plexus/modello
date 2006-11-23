@@ -164,7 +164,7 @@
         </excludes>
       </sourceModification>
     </sourceModifications>
-    <unitTest/>
+    <unitTest />
     <resources>
       <resource>
         <directory>dir</directory>
