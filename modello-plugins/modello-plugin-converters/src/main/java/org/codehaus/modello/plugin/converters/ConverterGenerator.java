@@ -87,6 +87,11 @@ public class ConverterGenerator
         // if nextVersion remains null, there is none greater so we are converting back to the unpackaged version
 
         generateConverters( nextVersion );
+
+        if ( nextVersion == null )
+        {
+            generateConverterTool( allVersions );
+        }
     }
 
     private void generateConverters( Version nextVersion )
@@ -349,6 +354,143 @@ public class ConverterGenerator
             IOUtil.close( classWriter );
             IOUtil.close( interfaceWriter );
         }
+    }
+
+    private void generateConverterTool( List allVersions )
+        throws ModelloException
+    {
+        Model objectModel = getModel();
+
+        String basePackage = objectModel.getDefaultPackageName( false, null );
+        String packageName = basePackage + ".convert";
+
+        String jDoc = "Converts between the available versions of the model.";
+
+        JClass converterClass = new JClass( "ConverterTool" );
+        converterClass.getJDocComment().setComment( jDoc );
+        converterClass.setPackageName( packageName );
+
+        converterClass.addImport( "java.io.File" );
+        converterClass.addImport( "java.io.IOException" );
+
+        converterClass.addImport( "javax.xml.stream.*" );
+
+        for ( Iterator i = allVersions.iterator(); i.hasNext(); )
+        {
+            Version v = (Version) i.next();
+
+            writeConvertMethod( converterClass, objectModel, basePackage, allVersions, v );
+        }
+        writeConvertMethod( converterClass, objectModel, basePackage, allVersions, null );
+
+        String directory = packageName.replace( '.', '/' );
+
+        File dir = new File( getOutputDirectory(), directory );
+        if ( !dir.exists() )
+        {
+            dir.mkdirs();
+        }
+
+        Writer classWriter = getFileWriter( dir, "ConverterTool.java" );
+
+        try
+        {
+            converterClass.print( new JSourceWriter( classWriter ) );
+
+            // this one already flushes/closes the interfaceWriter
+        }
+        finally
+        {
+            IOUtil.close( classWriter );
+        }
+    }
+
+    private static void writeConvertMethod( JClass converterClass, Model objectModel, String basePackage,
+                                            List allVersions, Version v )
+    {
+        String targetPackage = objectModel.getDefaultPackageName( v != null, v );
+        String targetClass = targetPackage + ".Model"; /// TODO! hack
+
+        String methodName = "convertFromFile";
+        if ( v != null )
+        {
+            methodName += "_" + v.toString( "v", "_" );
+        }
+        JMethod method = new JMethod( new JType( targetClass ), methodName );
+        method.addParameter( new JParameter( new JType( "File" ), "f" ) );
+        method.addException( new JClass( "IOException" ) );
+        method.addException( new JClass( "XMLStreamException" ) );
+        converterClass.addMethod( method );
+
+        JSourceCode sc = method.getSourceCode();
+
+        // TODO: hack!
+        sc.add( basePackage + ".io.stax.MavenStaxReaderDelegate reader = new " + basePackage +
+            ".io.stax.MavenStaxReaderDelegate();" );
+
+        sc.add( "Object value = reader.read( f );" );
+
+        String prefix = "";
+        for ( Iterator j = allVersions.iterator(); j.hasNext(); )
+        {
+            Version sourceVersion = (Version) j.next();
+            // TODO! class name hack
+            String sourcePackage = objectModel.getDefaultPackageName( true, sourceVersion );
+            String sourceClass = sourcePackage + ".Model";
+            sc.add( prefix + "if ( value instanceof " + sourceClass + " )" );
+            sc.add( "{" );
+            sc.indent();
+
+            boolean foundFirst = false;
+            for ( Iterator k = allVersions.iterator(); k.hasNext(); )
+            {
+                Version targetVersion = (Version) k.next();
+
+                if ( !foundFirst )
+                {
+                    if ( targetVersion.equals( sourceVersion ) )
+                    {
+                        foundFirst = true;
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+
+                if ( targetVersion.equals( v ) )
+                {
+                    break;
+                }
+
+                // TODO: need to be able to specify converter class implementation
+                String p = objectModel.getDefaultPackageName( true, targetVersion );
+                // TODO! class name hack
+                String c = p + ".Model";
+                // TODO! method name hack
+                sc.add( "value = new " + p + ".convert.BasicVersionConverter().convertModel( (" + c + ") value );" );
+            }
+
+            sc.unindent();
+            sc.add( "}" );
+
+            prefix = "else ";
+
+            if ( sourceVersion.equals( v ) )
+            {
+                break;
+            }
+        }
+        sc.add( "else" );
+        sc.add( "{" );
+        sc.indent();
+
+        sc.add( "throw new IllegalStateException( \"Can't find converter for class '\" + value.getClass() + \"'\" );" );
+
+        sc.unindent();
+        sc.add( "}" );
+
+        sc.add( "return (" + targetClass + ") value;" );
     }
 
     private static String getSourceClassName( ModelClass modelClass, Version generatedVersion )

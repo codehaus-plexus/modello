@@ -34,20 +34,41 @@ public class ConvertersVerifier
     {
         // Note that this is *not* a full POM translation (fields like currentVersion are not mapped)
 
-        org.codehaus.modello.test.maven.io.stax.MavenStaxReaderDelegate reader = new org.codehaus.modello.test.maven.io.stax.MavenStaxReaderDelegate();
+        File file = new File( "src/test/verifiers/converters/input.xml" );
 
-        org.codehaus.modello.test.maven.v3_0_0.Model modelV3 = (org.codehaus.modello.test.maven.v3_0_0.Model) reader.read( new File( "src/test/verifiers/converters/input.xml" ) );
-
-        org.codehaus.modello.test.maven.v3_0_0.convert.VersionConverter convertV3 = new org.codehaus.modello.test.maven.v3_0_0.convert.BasicVersionConverter();
-        org.codehaus.modello.test.maven.v4_0_0.Model modelV4 = convertV3.convertModel( modelV3 );
-
-        org.codehaus.modello.test.maven.v4_0_0.convert.VersionConverter convertV4 = new org.codehaus.modello.test.maven.v4_0_0.convert.BasicVersionConverter();
-        org.codehaus.modello.test.maven.Model model = convertV4.convertModel( modelV4 );
-
+        org.codehaus.modello.test.maven.convert.ConverterTool convert = new org.codehaus.modello.test.maven.convert.ConverterTool();
+        org.codehaus.modello.test.maven.v3_0_0.Model modelV3 = convert.convertFromFile_v3_0_0( file );
         StringWriter sw = new StringWriter();
+        org.codehaus.modello.test.maven.v3_0_0.io.stax.MavenStaxWriter writerV3 = new org.codehaus.modello.test.maven.v3_0_0.io.stax.MavenStaxWriter();
+        writerV3.write( sw, modelV3 );
+
+        Assert.assertEquals( FileUtils.fileRead( "src/test/verifiers/converters/expected-v3.xml" ), sw.toString() );
+
+        org.codehaus.modello.test.maven.v4_0_0.Model modelV4 = convert.convertFromFile_v4_0_0( file );
+
+        sw = new StringWriter();
+        org.codehaus.modello.test.maven.v4_0_0.io.stax.MavenStaxWriter writerV4 = new org.codehaus.modello.test.maven.v4_0_0.io.stax.MavenStaxWriter();
+        writerV4.write( sw, modelV4 );
+
+        Assert.assertEquals( FileUtils.fileRead( "src/test/verifiers/converters/expected.xml" ), sw.toString() );
+
+        org.codehaus.modello.test.maven.Model model = convert.convertFromFile( file );
+
+        sw = new StringWriter();
         org.codehaus.modello.test.maven.io.stax.MavenStaxWriter writer = new org.codehaus.modello.test.maven.io.stax.MavenStaxWriter();
         writer.write( sw, model );
 
         Assert.assertEquals( FileUtils.fileRead( "src/test/verifiers/converters/expected.xml" ), sw.toString() );
+
+        // Test trying to convert to an old version
+        try
+        {
+            modelV3 = convert.convertFromFile_v3_0_0( new File( "src/test/verifiers/converters/expected.xml" ) );
+            Assert.fail( "Should have failed to convert" );
+        }
+        catch ( IllegalStateException e )
+        {
+            Assert.assertTrue( true );
+        }
     }
 }
