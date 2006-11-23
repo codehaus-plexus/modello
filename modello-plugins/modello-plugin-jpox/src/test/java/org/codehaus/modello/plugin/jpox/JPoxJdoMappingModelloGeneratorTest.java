@@ -79,11 +79,11 @@ public class JPoxJdoMappingModelloGeneratorTest
         // Assert
         // ----------------------------------------------------------------------
 
-        assertGeneratedFileExists( "package.jdo" );
+        assertGeneratedFileExists( "org/mergere/tissue/package.jdo" );
 
         SAXReader reader = new SAXReader();
         reader.setEntityResolver( new JdoEntityResolver() );
-        Document jdoDocument = reader.read( new File( "target/" + getName() + "/package.jdo" ) );
+        Document jdoDocument = reader.read( new File( "target/" + getName() + "/org/mergere/tissue/package.jdo" ) );
 
         assertNotNull( jdoDocument );
 

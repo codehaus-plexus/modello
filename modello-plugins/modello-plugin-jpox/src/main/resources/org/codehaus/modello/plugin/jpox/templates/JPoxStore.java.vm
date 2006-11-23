@@ -206,22 +206,9 @@ public class ${model.name}JPoxStore
         {
             PersistenceManager pm = begin();
 
-            Object id;
+            pm.makePersistent( o );
 
-            // New instance so store it
-            if ( o.getId() == null )
-            {
-                pm.makePersistent( o );
-
-                id = pm.getObjectId( o );
-            }
-            // exists, so update it
-            else
-            {
-                pm.attachCopy( o, true );
-
-                id = o.getId();
-            }
+            Object id = pm.getObjectId( o );
 
             commit();
 
@@ -452,8 +439,7 @@ public class ${model.name}JPoxStore
         {
             PersistenceManager pm = begin();
 
-            // TODO: does this work if it doesn't exist?
-            pm.attachCopy( o, true );
+            pm.makePersistent( o );
 
             commit();
         }

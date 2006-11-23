@@ -73,6 +73,8 @@ public abstract class AbstractModelloGeneratorTest
 
     private ArtifactRepositoryLayout repositoryLayout;
 
+    private List classPathElements = new ArrayList();
+
     protected AbstractModelloGeneratorTest( String name )
     {
         this.name = name;
@@ -112,16 +114,22 @@ public abstract class AbstractModelloGeneratorTest
     public void addDependency( String groupId, String artifactId, String version )
         throws MalformedURLException
     {
+        File dependencyFile = getDepedencyFile( groupId, artifactId, version );
+
+        dependencies.add( dependencyFile );
+
+        addClassPathFile( dependencyFile );
+    }
+
+    protected File getDepedencyFile( String groupId, String artifactId, String version )
+    {
         Artifact artifact =
             artifactFactory.createArtifact( groupId, artifactId, version, Artifact.SCOPE_COMPILE, "jar" );
 
         File dependencyFile = new File( repository.getBasedir(), repository.pathOf( artifact ) );
 
         assertTrue( "Cant find dependency: " + dependencyFile.getAbsolutePath(), dependencyFile.isFile() );
-
-        dependencies.add( dependencyFile );
-
-        addClassPathFile( dependencyFile );
+        return dependencyFile;
     }
 
     public String getName()
@@ -192,8 +200,10 @@ public abstract class AbstractModelloGeneratorTest
 
         addClassPathFile( getTestFile( "target/test-classes" ) );
 
-        URLClassLoader classLoader = URLClassLoader.newInstance( (URL[]) urls.toArray( new URL[urls.size()] ),
-                                                                 Thread.currentThread().getContextClassLoader() );
+        ClassLoader oldCCL = Thread.currentThread().getContextClassLoader();
+        URLClassLoader classLoader = URLClassLoader.newInstance( (URL[]) urls.toArray( new URL[urls.size()] ), oldCCL );
+
+        Thread.currentThread().setContextClassLoader( classLoader );
 
         try
         {
@@ -214,6 +224,10 @@ public abstract class AbstractModelloGeneratorTest
         {
             throw new VerifierException( "Error verifying modello tests: " + throwable.getMessage(), throwable );
         }
+        finally
+        {
+            Thread.currentThread().setContextClassLoader( oldCCL );
+        }
     }
 
     protected void addClassPathFile( File file )
@@ -222,6 +236,8 @@ public abstract class AbstractModelloGeneratorTest
         assertTrue( "File doesn't exists: " + file.getAbsolutePath(), file.exists() );
 
         urls.add( file.toURL() );
+
+        classPathElements.add( file.getAbsolutePath() );
     }
 
     protected void printClasspath( URLClassLoader classLoader )
@@ -243,5 +259,10 @@ public abstract class AbstractModelloGeneratorTest
         assertTrue( "Missing generated file: " + file.getAbsolutePath(), file.canRead() );
 
         assertTrue( "The generated file is empty.", file.length() > 0 );
+    }
+
+    protected List getClassPathElements()
+    {
+        return classPathElements;
     }
 }

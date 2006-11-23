@@ -109,18 +109,13 @@ public class JPoxJdoMappingModelloGenerator
 
         try
         {
-            String fileName;
+            String fileName = "package.jdo";
 
-            if ( isPackageWithVersion() )
-            {
-                fileName = "package-" + getGeneratedVersion() + ".jdo";
-            }
-            else
-            {
-                fileName = "package.jdo";
-            }
-
-            File packageJdo = new File( getOutputDirectory(), fileName );
+            // TODO: shouldn't this be generated per package?
+            String packageName = getModel().getDefaultPackageName( isPackageWithVersion(), getGeneratedVersion() );
+            String dir = packageName.replace( '.', '/' );
+            File directory = new File( getOutputDirectory(), dir );
+            File packageJdo = new File( directory, fileName );
 
             File parent = packageJdo.getParentFile();
 
@@ -191,17 +186,18 @@ public class JPoxJdoMappingModelloGenerator
 
         writer.startElement( "jdo" );
 
-        for ( Iterator it = classes.values().iterator(); it.hasNext(); )
+        for ( Iterator it = classes.entrySet().iterator(); it.hasNext(); )
         {
-            List list = (List) it.next();
+            Map.Entry entry = (Map.Entry) it.next();
+
+            List list = (List) entry.getValue();
 
             if ( list.size() == 0 )
             {
                 continue;
             }
 
-            String packageName =
-                ( (ModelClass) list.get( 0 ) ).getPackageName( isPackageWithVersion(), getGeneratedVersion() );
+            String packageName = (String) entry.getKey();
 
             writer.startElement( "package" );
 
@@ -214,7 +210,10 @@ public class JPoxJdoMappingModelloGenerator
                 writeClass( writer, modelClass );
             }
 
-            writeModelloMetadataClass( writer );
+            if ( packageName.equals( model.getDefaultPackageName( isPackageWithVersion(), getGeneratedVersion() ) ) )
+            {
+                writeModelloMetadataClass( writer );
+            }
 
             writer.endElement(); // package
         }

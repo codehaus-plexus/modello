@@ -30,14 +30,14 @@
           <name>assignee</name>
           <version>1.0.0</version>
           <!-- this should set default-fetch-group=false -->
-          <association stash.part="false">
+          <association stash.part="false" java.generate-create="false" java.generate-break="false">
             <type>User</type>
           </association>
         </field>
         <field>
           <name>friends</name>
           <version>1.0.0</version>
-          <association jpox.dependent="false">
+          <association jpox.dependent="false" java.generate-create="false" java.generate-break="false">
             <type>User</type>
             <multiplicity>*</multiplicity>
           </association>
@@ -46,7 +46,7 @@
           <name>reporter</name>
           <version>1.0.0</version>
           <!-- this should not set default-fetch-group at all -->
-          <association>
+          <association java.generate-create="false" java.generate-break="false">
             <type>User</type>
           </association>
         </field>
@@ -67,9 +67,7 @@
           <version>1.0.0</version>
           <type>Map</type>
           <!-- this should set default-fetch-group=true -->
-          <!-- The keyType will once in the future be properly validated and then this
-               should fail -->
-          <association stash.part="true" stash.keyType="Foo">
+          <association stash.part="true" stash.keyType="java.lang.Integer">
             <type>String</type>
             <multiplicity>*</multiplicity>
           </association>
@@ -79,9 +77,7 @@
           <version>1.0.0</version>
           <type>Map</type>
           <!-- this should not set default-fetch-group=true -->
-          <!-- The keyType will once in the future be properly validated and then this
-               should fail -->
-          <association stash.keyType="Bar">
+          <association stash.keyType="java.lang.String">
             <type>String</type>
             <multiplicity>*</multiplicity>
           </association>
@@ -164,7 +160,7 @@
           <version>1.0.0</version>
           <type>Set</type>
           <!-- this should *not* set default-fetch-group=true -->
-          <association>
+          <association java.generate-break="false" java.generate-create="false">
             <type>Issue</type>
             <multiplicity>*</multiplicity>
           </association>
