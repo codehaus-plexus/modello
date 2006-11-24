@@ -1,0 +1,469 @@
+package ${package};
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+
+import javax.jdo.Extent;
+import javax.jdo.FetchPlan;
+import javax.jdo.Query;
+import javax.jdo.PersistenceManager;
+import javax.jdo.PersistenceManagerFactory;
+import javax.jdo.JDOUserException;
+import javax.jdo.Transaction;
+
+// Model class imports
+#foreach ( $class in $classes )
+#if ( $class.getMetadata( $storeClassMetadataId ).isStorable() && ${class.packageName} != ${package} )
+import ${class.packageName}.${class.name};
+#end
+#end
+
+/**
+ * Generated JPox storage mechanism for ${model.name}.
+ *
+ * @author Mr Modello
+ */
+public class ${model.name}JPoxStore
+{
+#foreach ( $class in $classes )
+#if ( $class.getMetadata( $storeClassMetadataId ).isStorable() )
+        public final static String ${class.name}_DETAIL_FETCH_GROUP = "${class.name}_detail";
+#end
+#end
+    private static ThreadLocal threadState = new ThreadLocal();
+
+    private PersistenceManagerFactory pmf;
+
+    public ${model.name}JPoxStore( PersistenceManagerFactory pmf )
+    {
+        this.pmf = pmf;
+    }
+
+    // ----------------------------------------------------------------------
+    //
+    // ----------------------------------------------------------------------
+
+    public static class ThreadState
+    {
+        private PersistenceManager pm;
+
+        private Transaction tx;
+
+        private int depth;
+
+        public PersistenceManager getPersistenceManager()
+        {
+            return pm;
+        }
+
+        public Transaction getTransaction()
+        {
+            return tx;
+        }
+
+        public int getDepth()
+        {
+            return depth;
+        }
+    }
+
+    // ----------------------------------------------------------------------
+    // Transaction Management Methods
+    // ----------------------------------------------------------------------
+
+    public ThreadState getThreadState()
+    {
+        return (ThreadState) threadState.get();
+    }
+
+    public PersistenceManager begin()
+        throws Exception
+    {
+        ThreadState state = (ThreadState) threadState.get();
+
+        if ( state == null )
+        {
+            state = new ThreadState();
+
+            state.pm = pmf.getPersistenceManager();
+
+            state.tx = state.pm.currentTransaction();
+
+            state.tx.begin();
+
+            threadState.set( state );
+
+            return state.pm;
+        }
+        else
+        {
+            state.depth++;
+
+            return state.pm;
+        }
+    }
+
+    public void commit()
+        throws Exception
+    {
+        ThreadState state = (ThreadState) threadState.get();
+
+        if ( state == null )
+        {
+            throw new Exception( "commit() must only be called after begin()." );
+        }
+
+        if ( state.depth > 0 )
+        {
+            state.depth--;
+
+            return;
+        }
+
+        threadState.set( null );
+
+        try
+        {
+            state.tx.commit();
+        }
+        catch( Exception ex )
+        {
+            if ( state.tx.isActive() )
+            {
+                state.tx.rollback();
+            }
+
+            throw ex;
+        }
+        finally
+        {
+            closePersistenceManager( state.pm );
+        }
+    }
+
+    public void rollback()
+        throws Exception
+    {
+        ThreadState state = (ThreadState) threadState.get();
+
+        if ( state == null )
+        {
+            // The tx is not active because it has already been committed or rolled back
+
+            return;
+        }
+
+        threadState.set( null );
+
+        try
+        {
+            if ( state.tx.isActive() )
+            {
+                state.tx.rollback();
+            }
+        }
+        finally
+        {
+            closePersistenceManager( state.pm );
+        }
+    }
+
+#foreach ( $class in $classes )
+#if ( $class.getMetadata( $storeClassMetadataId ).isStorable() )
+    // ----------------------------------------------------------------------
+    // ${class.name} CRUD
+    // ----------------------------------------------------------------------
+
+    public Object add${class.name}( $class.name o )
+        throws Exception
+    {
+        try
+        {
+            PersistenceManager pm = begin();
+
+            pm.makePersistent( o );
+
+            Object id = pm.getObjectId( o );
+
+            commit();
+
+            return id;
+        }
+        catch( Exception ex )
+        {
+            rollback();
+
+            throw ex;
+        }
+    }
+
+#if ( $class.getIdentifierFields( $version ).size() > 0 )
+    public Object store${class.name}( $class.name o )
+        throws Exception
+    {
+        try
+        {
+            PersistenceManager pm = begin();
+
+            pm.makePersistent( o );
+
+            Object id = pm.getObjectId( o );
+
+            commit();
+
+            return id;
+        }
+        catch( Exception ex )
+        {
+            rollback();
+
+            throw ex;
+        }
+    }
+#end
+
+    public void delete${class.name}( String id )
+        throws Exception
+    {
+        try
+        {
+            PersistenceManager pm = begin();
+
+            Query query = pm.newQuery( ${class.name}.class );
+
+            query.setIgnoreCache( true );
+
+            // TODO: Use all known identifier fields in this filter
+            query.setFilter( "this.id == \"" + id + "\"" );
+
+            Collection result = (Collection) query.execute();
+
+            if ( result.isEmpty() )
+            {
+                throw new RuntimeException( "No such object of type \"${class.name}\" with id: \"" + id + "\"." );
+            }
+
+            pm.deletePersistentAll( result );
+
+            commit();
+        }
+        catch( Exception ex )
+        {
+            rollback();
+
+            throw ex;
+        }
+    }
+
+    public ${class.name} get${class.name}( String id, boolean detach )
+        throws Exception
+    {
+        try
+        {
+            PersistenceManager pm = begin();
+
+            pm.getFetchPlan().setGroup( FetchPlan.DEFAULT );
+
+            pm.getFetchPlan().addGroup( "${class.name}_detail" );
+
+            Query query = pm.newQuery( ${class.name}.class );
+
+            query.setIgnoreCache( true );
+
+            query.setFilter( "this.id == \"" + id + "\"" );
+
+            Collection result = (Collection) query.execute();
+
+            if ( result.isEmpty() )
+            {
+                throw new RuntimeException( "No such object of type \"${class.name}\" with id: \"" + id + "\"." );
+            }
+
+            ${class.name} object = (${class.name}) result.iterator().next();
+
+            if ( detach )
+            {
+                object = (${class.name}) pm.detachCopy( object );
+            }
+
+            commit();
+
+            return object;
+        }
+        catch( Exception ex )
+        {
+            rollback();
+
+            throw ex;
+        }
+    }
+
+    public ${class.name} get${class.name}ByJdoId( Object id, boolean detach )
+        throws Exception
+    {
+        try
+        {
+            PersistenceManager pm = begin();
+
+            pm.getFetchPlan().setGroup( FetchPlan.DEFAULT );
+
+            pm.getFetchPlan().addGroup( "${class.name}_detail" );
+
+            ${class.name} object = (${class.name}) pm.getObjectById( id, true );
+
+            if ( detach )
+            {
+                object = (${class.name}) pm.detachCopy( object );
+            }
+
+            commit();
+
+            return object;
+        }
+        catch( Exception ex )
+        {
+            rollback();
+
+            throw ex;
+        }
+    }
+
+    public Collection get${class.name}Collection( boolean detach, String filter, String ordering )
+        throws Exception
+    {
+        try
+        {
+            PersistenceManager pm = begin();
+
+            Extent extent = pm.getExtent( ${class.name}.class, true );
+
+            Query query = pm.newQuery( extent );
+
+            if ( ordering != null )
+            {
+                query.setOrdering( ordering );
+            }
+
+            if ( filter != null )
+            {
+                query.setFilter( filter );
+            }
+
+            Collection result = ((Collection) query.execute() );
+
+            Collection collection;
+
+            // TODO: Why did was this done with a iterator and not makeTransientAll()? -- trygve
+            //       I would guess I had to do it this way to make sure JPOX fetched all fields
+            //       so this should probably go away now if detach works like expected.
+            //       Also; why refresh()?
+            if ( detach )
+            {
+                collection = new ArrayList();
+
+                for ( Iterator it = result.iterator(); it.hasNext(); )
+                {
+                    Object object = it.next();
+
+                    pm.refresh( object );
+
+                    object = pm.detachCopy( object );
+
+                    collection.add( object );
+                }
+            }
+            else
+            {
+                collection = result;
+            }
+
+            commit();
+
+            return collection;
+        }
+        catch( Exception ex )
+        {
+            rollback();
+
+            throw ex;
+        }
+    }
+#end
+
+#end
+
+    public ${model.name}ModelloMetadata get${model.name}ModelloMetadata( boolean detach )
+        throws Exception
+    {
+        try
+        {
+            PersistenceManager pm = begin();
+
+            pm.getFetchPlan().setGroup( FetchPlan.DEFAULT );
+
+            Query query = pm.newQuery( ${model.name}ModelloMetadata.class );
+
+            query.setIgnoreCache( true );
+
+            Collection result = (Collection) query.execute();
+
+            if ( result.isEmpty() )
+            {
+                return null;
+            }
+
+            ${model.name}ModelloMetadata object = (${model.name}ModelloMetadata) result.iterator().next();
+
+            if ( detach )
+            {
+                object = (${model.name}ModelloMetadata) pm.detachCopy( object );
+            }
+
+            commit();
+
+            return object;
+        }
+        catch( Exception ex )
+        {
+            rollback();
+
+            throw ex;
+        }
+    }
+
+    public void store${model.name}ModelloMetadata( ${model.name}ModelloMetadata o )
+        throws Exception
+    {
+        try
+        {
+            PersistenceManager pm = begin();
+
+            pm.makePersistent( o );
+
+            commit();
+        }
+        catch( Exception ex )
+        {
+            rollback();
+
+            throw ex;
+        }
+    }
+
+    // ----------------------------------------------------------------------
+    // Utility Methods
+    // ----------------------------------------------------------------------
+
+    private void closePersistenceManager( PersistenceManager pm )
+    {
+        try
+        {
+            pm.close();
+        }
+        catch( JDOUserException ex )
+        {
+            ex.printStackTrace();
+        }
+    }
+}

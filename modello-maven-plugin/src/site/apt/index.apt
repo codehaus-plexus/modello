@@ -1,0 +1,45 @@
+ ------
+ Introduction
+ ------
+ Denis Cabasson
+ ------
+ 10 August 2006
+ ------
+
+
+Modello Maven Plugin
+
+  This plugin makes uses of the {{{http://modello.codehaus.org/}Modello}} project.
+
+* Goals Overview
+
+  * {{{xsd-mojo.html}modello:xsd}} Generates an XML Schema from the Modello model.
+
+  * {{{xpp3-writer-mojo.html}modello:xpp3-writer}} Generates an XML Pull Parser writer from the Modello model.
+
+  * {{{xpp3-reader-mojo.html}modello:xpp3-reader}} Generates an XML Pull Parser reader from the Modello model.
+
+  * {{{xdoc-mojo.html}modello:xdoc}} Generates standard documentation for the Modello model, in xdoc format.
+
+  * {{{prevayler-mojo.html}modello:prevayler}} Generates a {{{http://www.prevayler.org/}Prevayler}} store for the Modello model.
+
+  * {{{jpox-store-mojo.html}modello:jpox-store}} Generates a {{{http://java.sun.com/products/jdo/}JDO}} store for the Modello model.
+
+  * {{{jpox-jdo-mapping-mojo.html}modello:jpox-jdo-mapping}} Creates a {{{http://java.sun.com/products/jdo/}JDO}} mapping from the Modello model.
+
+  * {{{jdom-writer-mojo.html}modello:jdom-writer}} Generates a {{{http://www.jdom.org/}jdom}} writer from the model that is capable of preserving element ordering and comments.
+
+  * {{{java-mojo.html}modello:java}} Generates Java beans from the Modello model.
+
+  []
+
+* Usage
+
+  Instructions on how to use the Modello Plugin can be found {{{usage.html}here}}.
+
+* Examples
+
+  To provide you with better understanding of some usages of the Modello Plugin,
+  you can take a look at the following example:
+
+  * {{{examples/multi-model.html}Including multiple models}}

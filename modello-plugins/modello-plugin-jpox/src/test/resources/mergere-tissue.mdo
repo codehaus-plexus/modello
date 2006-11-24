@@ -1,0 +1,238 @@
+<model>
+  <id>tissue</id>
+  <name>Tissue</name>
+  <description>Tissue's entity model.></description>
+  <defaults>
+    <default>
+      <key>package</key>
+      <value>org.mergere.tissue</value>
+    </default>
+  </defaults>
+  <classes>
+    <class stash.storable="true">
+      <name>Issue</name>
+      <version>1.0.0</version>
+      <fields>
+        <field jpox.column="id">
+          <name>accountId</name>
+          <required>true</required>
+          <version>1.0.0</version>
+          <type>String</type>
+          <identifier>true</identifier>
+        </field>
+        <!-- This field should get persistence-modifier="none" -->
+        <field stash.storable="false">
+          <name>summary</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>assignee</name>
+          <version>1.0.0</version>
+          <!-- this should set default-fetch-group=false -->
+          <association stash.part="false" java.generate-create="false" java.generate-break="false">
+            <type>User</type>
+          </association>
+        </field>
+        <field>
+          <name>friends</name>
+          <version>1.0.0</version>
+          <association jpox.dependent="false" java.generate-create="false" java.generate-break="false">
+            <type>User</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+        <field>
+          <name>reporter</name>
+          <version>1.0.0</version>
+          <!-- this should not set default-fetch-group at all -->
+          <association java.generate-create="false" java.generate-break="false">
+            <type>User</type>
+          </association>
+        </field>
+        <field>
+          <name>status</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>project</name>
+          <version>1.0.0</version>
+          <association>
+            <type>Project</type>
+          </association>
+        </field>
+        <field>
+          <name>configuration</name>
+          <version>1.0.0</version>
+          <type>Map</type>
+          <!-- this should set default-fetch-group=true -->
+          <association stash.part="true" stash.keyType="java.lang.Integer">
+            <type>String</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+        <field>
+          <name>configuration2</name>
+          <version>1.0.0</version>
+          <type>Map</type>
+          <!-- this should not set default-fetch-group=true -->
+          <association stash.keyType="java.lang.String">
+            <type>String</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+      </fields>
+    </class>
+
+    <!--
+     |
+     |
+     |
+    -->
+    <class stash.storable="true">
+      <name>Project</name>
+      <version>1.0.0</version>
+      <fields>
+        <field stash.maxSize="10">
+          <name>id</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>name</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>url</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>lead</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>issues</name>
+          <version>1.0.0</version>
+          <type>List</type>
+          <association>
+            <type>Issue</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+      </fields>
+    </class>
+    <class java.abstract="true">
+      <name>AbstractUser</name>
+      <packageName>org.mergere.user</packageName>
+      <version>1.0.0</version>
+      <fields>
+        <field>
+          <name>abstractField</name>
+          <version>1.0.0</version>
+          <type>int</type>
+        </field>
+      </fields>
+    </class>
+    <!-- This class has a non-storable and abstract super class -->
+    <class stash.storable="true" jpox.table="MUser">
+      <name>User</name>
+      <packageName>org.mergere.user</packageName>
+      <version>1.0.0</version>
+      <superClass>AbstractUser</superClass>
+      <fields>
+        <field jpox.primary-key="true" jpox.value-strategy="off">
+          <name>id</name>
+          <version>1.0.0</version>
+          <type>String</type>
+          <identifier>true</identifier>
+        </field>
+        <field>
+          <name>name</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>issues</name>
+          <version>1.0.0</version>
+          <type>Set</type>
+          <!-- this should *not* set default-fetch-group=true -->
+          <association java.generate-break="false" java.generate-create="false">
+            <type>Issue</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+      </fields>
+    </class>
+    <class>
+      <name>AdminUser</name>
+      <packageName>org.mergere.user.admin</packageName>
+      <version>1.0.0</version>
+      <superClass>User</superClass>
+    </class>
+    <!-- This class has a storable super class -->
+    <class stash.storable="true">
+      <name>NormalUser</name>
+      <packageName>org.mergere.user</packageName>
+      <version>1.0.0</version>
+      <superClass>User</superClass>
+      <fields>
+        <field>
+          <name>normalUserField</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+      </fields>
+    </class>
+    <class jpox.use-identifiers-as-primary-key="false">
+      <name>ComplexIdentity</name>
+      <packageName>org.codehaus.complex</packageName>
+      <version>1.0.0</version>
+      <fields>
+        <field jpox.primary-key="true">
+          <name>id</name>
+          <version>1.0.0</version>
+          <type>int</type>
+          <identifier>true</identifier>
+        </field>
+        <field>
+          <name>username</name>
+          <version>1.0.0</version>
+          <type>String</type>
+          <identifier>true</identifier>
+        </field>
+        <field>
+          <name>fullName</name>
+          <version>1.0.0</version>
+          <type>String</type>
+          <identifier>true</identifier>
+        </field>
+        <field>
+          <name>email</name>
+          <version>1.0.0</version>
+          <type>String</type>
+          <identifier>true</identifier>
+        </field>
+        <field>
+          <name>locked</name>
+          <version>1.0.0</version>
+          <type>boolean</type>
+          <identifier>true</identifier>
+        </field>
+        <field>
+          <name>lastLoginDate</name>
+          <version>1.0.0</version>
+          <type>Date</type>
+        </field>
+      </fields>
+    </class>
+    <class jpox.table="MyTable">
+      <name>DifferentTable</name>
+      <packageName>org.mergere.user</packageName>
+      <version>1.0.0</version>
+    </class>
+  </classes>
+</model>

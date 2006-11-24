@@ -1,0 +1,1546 @@
+<?xml version="1.0"?>
+<document>
+  <properties>
+    <title>Maven</title>
+  </properties>
+  <body>
+    <section name="Maven">
+      <p>Maven's model for Java project.</p>
+      <source>
+&lt;<a href="#class_model">model</a> extend=.. &gt;
+  &lt;<a href="#class_parent">parent</a>&gt;
+    &lt;artifactId/&gt;
+    &lt;groupId/&gt;
+    &lt;version/&gt;
+  &lt;/parent&gt;
+  &lt;modelVersion/&gt;
+  &lt;groupId/&gt;
+  &lt;artifactId/&gt;
+  &lt;type/&gt;
+  &lt;name/&gt;
+  &lt;version/&gt;
+  &lt;shortDescription/&gt;
+  &lt;description/&gt;
+  &lt;url/&gt;
+  &lt;logo/&gt;
+  &lt;<a href="#class_issueManagement">issueManagement</a>&gt;
+    &lt;system/&gt;
+    &lt;url/&gt;
+  &lt;/issueManagement&gt;
+  &lt;<a href="#class_ciManagement">ciManagement</a>&gt;
+    &lt;system/&gt;
+    &lt;url/&gt;
+    &lt;nagEmailAddress/&gt;
+  &lt;/ciManagement&gt;
+  &lt;inceptionYear/&gt;
+  &lt;repositories&gt;
+    &lt;<a href="#class_repository">repository</a>&gt;
+      &lt;id/&gt;
+      &lt;name/&gt;
+      &lt;url/&gt;
+    &lt;/repository&gt;
+  &lt;/repositories&gt;
+  &lt;pluginRepositories&gt;
+    &lt;<a href="#class_pluginRepository">pluginRepository</a>&gt;
+      &lt;id/&gt;
+      &lt;name/&gt;
+      &lt;url/&gt;
+    &lt;/pluginRepository&gt;
+  &lt;/pluginRepositories&gt;
+  &lt;mailingLists&gt;
+    &lt;<a href="#class_mailingList">mailingList</a>&gt;
+      &lt;name/&gt;
+      &lt;subscribe/&gt;
+      &lt;unsubscribe/&gt;
+      &lt;post/&gt;
+      &lt;archive/&gt;
+      &lt;archives/&gt;
+    &lt;/mailingList&gt;
+  &lt;/mailingLists&gt;
+  &lt;developers&gt;
+    &lt;<a href="#class_developer">developer</a>&gt;
+      &lt;id/&gt;
+      &lt;name/&gt;
+      &lt;email/&gt;
+      &lt;url/&gt;
+      &lt;organization/&gt;
+      &lt;roles/&gt;
+      &lt;timezone/&gt;
+    &lt;/developer&gt;
+  &lt;/developers&gt;
+  &lt;contributors&gt;
+    &lt;<a href="#class_contributor">contributor</a>&gt;
+      &lt;name/&gt;
+      &lt;email/&gt;
+      &lt;url/&gt;
+      &lt;organization/&gt;
+      &lt;roles/&gt;
+      &lt;timezone/&gt;
+    &lt;/contributor&gt;
+  &lt;/contributors&gt;
+  &lt;dependencies&gt;
+    &lt;<a href="#class_dependency">dependency</a>&gt;
+      &lt;groupId/&gt;
+      &lt;artifactId/&gt;
+      &lt;version/&gt;
+      &lt;url/&gt;
+      &lt;artifact/&gt;
+      &lt;type/&gt;
+      &lt;properties/&gt;
+    &lt;/dependency&gt;
+  &lt;/dependencies&gt;
+  &lt;overrides&gt;
+    &lt;<a href="#class_override">override</a>&gt;
+      &lt;groupId/&gt;
+      &lt;artifactId/&gt;
+      &lt;type/&gt;
+      &lt;version/&gt;
+      &lt;file/&gt;
+    &lt;/override&gt;
+  &lt;/overrides&gt;
+  &lt;licenses&gt;
+    &lt;<a href="#class_license">license</a>&gt;
+      &lt;name/&gt;
+      &lt;url/&gt;
+      &lt;comments/&gt;
+    &lt;/license&gt;
+  &lt;/licenses&gt;
+  &lt;packageGroups&gt;
+    &lt;<a href="#class_packageGroup">packageGroup</a>&gt;
+      &lt;title/&gt;
+      &lt;packages/&gt;
+    &lt;/packageGroup&gt;
+  &lt;/packageGroups&gt;
+  &lt;reports/&gt;
+  &lt;<a href="#class_scm">scm</a>&gt;
+    &lt;connection/&gt;
+    &lt;developerConnection/&gt;
+    &lt;url/&gt;
+    &lt;branches/&gt;
+  &lt;/scm&gt;
+  &lt;<a href="#class_builder">builder</a>&gt;
+    &lt;sourceDirectory/&gt;
+    &lt;unitTestSourceDirectory/&gt;
+    &lt;aspectSourceDirectory/&gt;
+    &lt;integrationUnitTestSourceDirectory/&gt;
+    &lt;sourceModifications&gt;
+      &lt;<a href="#class_sourceModification">sourceModification</a>&gt;
+        &lt;className/&gt;
+        &lt;property/&gt;
+        &lt;directory/&gt;
+        &lt;targetPath/&gt;
+        &lt;filtering/&gt;
+        &lt;includes/&gt;
+        &lt;excludes/&gt;
+      &lt;/sourceModification&gt;
+    &lt;/sourceModifications&gt;
+    &lt;<a href="#class_unitTest">unitTest</a>&gt;
+      &lt;resources&gt;
+        &lt;<a href="#class_resource">resource</a>&gt;
+          &lt;directory/&gt;
+          &lt;targetPath/&gt;
+          &lt;filtering/&gt;
+          &lt;includes/&gt;
+          &lt;excludes/&gt;
+        &lt;/resource&gt;
+      &lt;/resources&gt;
+      &lt;includes/&gt;
+      &lt;excludes/&gt;
+    &lt;/unitTest&gt;
+    &lt;resources&gt;
+      &lt;<a href="#class_resource">resource</a>&gt;
+        &lt;directory/&gt;
+        &lt;targetPath/&gt;
+        &lt;filtering/&gt;
+        &lt;includes/&gt;
+        &lt;excludes/&gt;
+      &lt;/resource&gt;
+    &lt;/resources&gt;
+    &lt;directory/&gt;
+    &lt;output/&gt;
+    &lt;finalName/&gt;
+    &lt;testOutput/&gt;
+  &lt;/builder&gt;
+  &lt;<a href="#class_organization">organization</a>&gt;
+    &lt;name/&gt;
+    &lt;url/&gt;
+    &lt;logo/&gt;
+  &lt;/organization&gt;
+  &lt;<a href="#class_distributionManagement">distributionManagement</a>&gt;
+    &lt;<a href="#class_repository">repository</a>&gt;
+      &lt;id/&gt;
+      &lt;name/&gt;
+      &lt;url/&gt;
+    &lt;/repository&gt;
+    &lt;<a href="#class_site">site</a>&gt;
+      &lt;id/&gt;
+      &lt;name/&gt;
+      &lt;url/&gt;
+    &lt;/site&gt;
+  &lt;/distributionManagement&gt;
+  &lt;<a href="#class_local">local</a>&gt;
+    &lt;repository/&gt;
+    &lt;online/&gt;
+  &lt;/local&gt;
+  &lt;properties/&gt;
+  &lt;preGoals&gt;
+    &lt;<a href="#class_preGoal">preGoal</a>&gt;
+      &lt;name/&gt;
+      &lt;attain/&gt;
+    &lt;/preGoal&gt;
+  &lt;/preGoals&gt;
+  &lt;postGoals&gt;
+    &lt;<a href="#class_postGoal">postGoal</a>&gt;
+      &lt;name/&gt;
+      &lt;attain/&gt;
+    &lt;/postGoal&gt;
+  &lt;/postGoals&gt;
+&lt;/model&gt;
+</source>
+      <a name="class_model"/>
+      <subsection name="model">
+        <p>No description.</p>
+        <table>
+          <tr>
+            <th>Element</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td>
+              <code>extend</code>
+            </td>
+            <td>
+            The location of the parent project, if one exists. Values from the parent project will be
+            the default for this project if they are left unspecified. 
+            The path may be absolute, or relative to the current project.xml file.
+          </td>
+          </tr>
+          <tr>
+            <td>
+              <code>parent</code>
+            </td>
+            <td>Specified which project to extend.</td>
+          </tr>
+          <tr>
+            <td>
+              <code>modelVersion</code>
+            </td>
+            <td>The version of this model you are using.</td>
+          </tr>
+          <tr>
+            <td>
+              <code>groupId</code>
+            </td>
+            <td>The primary grouping for your project.</td>
+          </tr>
+          <tr>
+            <td>
+              <code>artifactId</code>
+            </td>
+            <td>The identifier used when generating the artifact for your project.</td>
+          </tr>
+          <tr>
+            <td>
+              <code>type</code>
+            </td>
+            <td>The type of artifact this project produces. The default value is <code>jar</code>.</td>
+          </tr>
+          <tr>
+            <td>
+              <code>name</code>
+            </td>
+            <td>Human readable name of the project.</td>
+          </tr>
+          <tr>
+            <td>
+              <code>version</code>
+            </td>
+            <td>The current version of the project.</td>
+          </tr>
+          <tr>
+            <td>
+              <code>shortDescription</code>
+            </td>
+            <td>An abbreviated description of the project.</td>
+          </tr>
+          <tr>
+            <td>
+              <code>description</code>
+            </td>
+            <td>
+            A detailed description of the project.  This element is
+            usually specified as CDATA to enable the use of HTML tags
+            within the description.  This description is used to
+            generate the
+            <a href="plugins/site/index.html">front page</a>
+            of the project's web site.
+          </td>
+          </tr>
+          <tr>
+            <td>
+              <code>url</code>
+            </td>
+            <td>The URL where the project can be found.</td>
+          </tr>
+          <tr>
+            <td>
+              <code>logo</code>
+            </td>
+            <td>The logo for the project.</td>
+          </tr>
+          <tr>
+            <td>
+              <code>issueManagement</code>
+            </td>
+            <td>The project's issue management information.</td>
+          </tr>
+          <tr>
+            <td>
+              <code>ciManagement</code>
+            </td>
+            <td>The project's continuous integration management information.</td>
+          </tr>
+          <tr>
+            <td>
+              <code>inceptionYear</code>
+            </td>
+            <td>The year the project started.</td>
+          </tr>
+          <tr>
+            <td>
+              <code>repositories</code>
+            </td>
+            <td>The lists of the remote repositories</td>
+          </tr>
+          <tr>
+            <td>
+              <code>pluginRepositories</code>
+            </td>
+            <td>The lists of the remote repositories for discovering plugins</td>
+          </tr>
+          <tr>
+            <td>
+              <code>mailingLists</code>
+            </td>
+            <td>The mailing lists for the project.</td>
+          </tr>
+          <tr>
+            <td>
+              <code>developers</code>
+            </td>
+            <td>
+            This element describes all of the developers associated with a
+            project.  Each developer is described by a
+            <code>developer</code> element, which is then described by
+            additional elements (described below).  The auto-generated site
+            documentation references this information.
+          </td>
+          </tr>
+          <tr>
+            <td>
+              <code>contributors</code>
+            </td>
+            <td>
+            This element describes all of the contributors associated with a
+            project who are not developers.  Each contributor is described by a
+            <code>contributor</code> element, which is then describe by additional
+            elements (described below).  The auto-generated site documentation
+            references this information.
+          </td>
+          </tr>
+          <tr>
+            <td>
+              <code>dependencies</code>
+            </td>
+            <td>
+            This element describes all of the dependencies associated with a
+            project.  Each dependency is described by a
+            <code>dependency</code> element, which is then described by
+            additional elements (described below).
+          </td>
+          </tr>
+          <tr>
+            <td>
+              <code>overrides</code>
+            </td>
+            <td>
+            This element describes all of the dependency overrides for a
+            project.  Each dependency is described by a
+            <code>override</code> element, which is then described by
+            additional elements (described below).
+          </td>
+          </tr>
+          <tr>
+            <td>
+              <code>licenses</code>
+            </td>
+            <td>
+            This element describes all of the licenses for this project.  Each license is described by a
+            <code>license</code> element, which is then describe by additional
+            elements (described below).  The auto-generated site documentation
+            references this information.  Projects should only list the license(s) that
+            applies to the project and not the licenses that apply to dependencies.
+          </td>
+          </tr>
+          <tr>
+            <td>
+              <code>packageGroups</code>
+            </td>
+            <td>Package groups required for complete javadocs.</td>
+          </tr>
+          <tr>
+            <td>
+              <code>reports</code>
+            </td>
+            <td>
+            This element includes the specification of reports to be
+            included in a Maven-generated site.  These reports will be run
+            when a user executes
+            <code>maven site</code>.  All of the
+            reports will be included in the navigation bar for browsing in
+            the order they are specified.
+          </td>
+          </tr>
+          <tr>
+            <td>
+              <code>scm</code>
+            </td>
+            <td>Specification for the SCM use by the project.</td>
+          </tr>
+          <tr>
+            <td>
+              <code>build</code>
+            </td>
+            <td>Information required to build the project.</td>
+          </tr>
+          <tr>
+            <td>
+              <code>organization</code>
+            </td>
+            <td>
+            This element describes various attributes of the organziation to
+            which the project belongs.  These attributes are utilized when
+            documentation is created (for copyright notices and links).
+          </td>
+          </tr>
+          <tr>
+            <td>
+              <code>distributionManagement</code>
+            </td>
+            <td>Distribution information for a project.</td>
+          </tr>
+          <tr>
+            <td>
+              <code>local</code>
+            </td>
+            <td>Local configuration information.</td>
+          </tr>
+          <tr>
+            <td>
+              <code>properties</code>
+            </td>
+            <td>
+            Properties about the project. This allows you to configure your project and the
+            plugins it uses.
+          </td>
+          </tr>
+          <tr>
+            <td>
+              <code>preGoals</code>
+            </td>
+            <td>Set of decorator(s) injected before the target goal(s).</td>
+          </tr>
+          <tr>
+            <td>
+              <code>postGoals</code>
+            </td>
+            <td>Set of decorator(s) injected after the target goal(s).</td>
+          </tr>
+        </table>
+      </subsection>
+      <a name="class_parent"/>
+      <subsection name="parent">
+        <p>No description.</p>
+        <table>
+          <tr>
+            <th>Element</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td>
+              <code>artifactId</code>
+            </td>
+            <td>The artifact id of the project to extend.</td>
+          </tr>
+          <tr>
+            <td>
+              <code>groupId</code>
+            </td>
+            <td>The group id of the project to extend.</td>
+          </tr>
+          <tr>
+            <td>
+              <code>version</code>
+            </td>
+            <td>The versi>on of the project to extend.</td>
+          </tr>
+        </table>
+      </subsection>
+      <a name="class_issueManagement"/>
+      <subsection name="issueManagement">
+        <p>No description.</p>
+        <table>
+          <tr>
+            <th>Element</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td>
+              <code>system</code>
+            </td>
+            <td>The name of the issue management system i.e. Bugzilla</td>
+          </tr>
+          <tr>
+            <td>
+              <code>url</code>
+            </td>
+            <td>Url for the issue management system use by the project.</td>
+          </tr>
+        </table>
+      </subsection>
+      <a name="class_ciManagement"/>
+      <subsection name="ciManagement">
+        <p>No description.</p>
+        <table>
+          <tr>
+            <th>Element</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td>
+              <code>system</code>
+            </td>
+            <td>The name of the continuous integration system i.e. Bugzilla</td>
+          </tr>
+          <tr>
+            <td>
+              <code>url</code>
+            </td>
+            <td>Url for the continuous integration system use by the project.</td>
+          </tr>
+          <tr>
+            <td>
+              <code>nagEmailAddress</code>
+            </td>
+            <td>Email address for the party to be notified on unsuccessful builds.</td>
+          </tr>
+        </table>
+      </subsection>
+      <a name="class_repository"/>
+      <subsection name="repository">
+        <p>
+         Repository contains the information needed
+         for establishing connections with remote repoistory
+      </p>
+        <table>
+          <tr>
+            <th>Element</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td>
+              <code>id</code>
+            </td>
+            <td>
+            A unique identifier for a repository.
+          </td>
+          </tr>
+          <tr>
+            <td>
+              <code>name</code>
+            </td>
+            <td>
+            Human readable name of the repository
+          </td>
+          </tr>
+          <tr>
+            <td>
+              <code>url</code>
+            </td>
+            <td>
+             The url of of the repository
+          </td>
+          </tr>
+        </table>
+      </subsection>
+      <a name="class_pluginRepository"/>
+      <subsection name="pluginRepository">
+        <p>
+         Repository contains the information needed
+         for establishing connections with remote repoistory
+      </p>
+        <table>
+          <tr>
+            <th>Element</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td>
+              <code>id</code>
+            </td>
+            <td>
+            A unique identifier for a repository.
+          </td>
+          </tr>
+          <tr>
+            <td>
+              <code>name</code>
+            </td>
+            <td>
+            Human readable name of the repository
+          </td>
+          </tr>
+          <tr>
+            <td>
+              <code>url</code>
+            </td>
+            <td>
+             The url of of the repository
+          </td>
+          </tr>
+        </table>
+      </subsection>
+      <a name="class_mailingList"/>
+      <subsection name="mailingList">
+        <p>
+        This element describes all of the mailing lists associated with
+        a project.  Each mailing list is described by a
+        <code>mailingList</code> element, which is then described by
+        additional elements (described below).  The auto-generated site
+        documentation references this information.
+      </p>
+        <table>
+          <tr>
+            <th>Element</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td>
+              <code>name</code>
+            </td>
+            <td>The name of the mailing list.</td>
+          </tr>
+          <tr>
+            <td>
+              <code>subscribe</code>
+            </td>
+            <td>
+            The email address or link that can be used to subscribe to the mailing list.
+            If this is an email address, a
+            <code>mailto:</code> link will automatically be created when
+            the documentation is created.
+          </td>
+          </tr>
+          <tr>
+            <td>
+              <code>unsubscribe</code>
+            </td>
+            <td>
+            The email address or link that can be used to unsubscribe to
+            the mailing list.  If this is an email address, a
+            <code>mailto:</code> link will automatically be created
+            when the documentation is created.
+          </td>
+          </tr>
+          <tr>
+            <td>
+              <code>post</code>
+            </td>
+            <td>
+            The email address or link that can be used to post to
+            the mailing list.  If this is an email address, a
+            <code>mailto:</code> link will automatically be created
+            when the documentation is created.
+          </td>
+          </tr>
+          <tr>
+            <td>
+              <code>archive</code>
+            </td>
+            <td>The link to a URL where you can browse the archive.</td>
+          </tr>
+          <tr>
+            <td>
+              <code>archives</code>
+            </td>
+            <td>The link to a URL where you can browse the archive.</td>
+          </tr>
+        </table>
+      </subsection>
+      <a name="class_developer"/>
+      <subsection name="developer">
+        <p>No description.</p>
+        <table>
+          <tr>
+            <th>Element</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td>
+              <code>id</code>
+            </td>
+            <td>The username of the developer.</td>
+          </tr>
+          <tr>
+            <td>
+              <code>name</code>
+            </td>
+            <td>The full name of the contributor.</td>
+          </tr>
+          <tr>
+            <td>
+              <code>email</code>
+            </td>
+            <td>The email address of the contributor.</td>
+          </tr>
+          <tr>
+            <td>
+              <code>url</code>
+            </td>
+            <td>The URL for the homepage of the contributor.</td>
+          </tr>
+          <tr>
+            <td>
+              <code>organization</code>
+            </td>
+            <td>The organization to which the contributor belongs.</td>
+          </tr>
+          <tr>
+            <td>
+              <code>roles</code>
+            </td>
+            <td>
+            The roles the contributor plays in the project.  Each role is
+            describe by a
+            <code>role</code> element, the body of which is a
+            role name.
+          </td>
+          </tr>
+          <tr>
+            <td>
+              <code>timezone</code>
+            </td>
+            <td>
+            The timezone the contributor is in. This is a number in the range -14 to 14.
+          </td>
+          </tr>
+        </table>
+      </subsection>
+      <a name="class_contributor"/>
+      <subsection name="contributor">
+        <p>No description.</p>
+        <table>
+          <tr>
+            <th>Element</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td>
+              <code>name</code>
+            </td>
+            <td>The full name of the contributor.</td>
+          </tr>
+          <tr>
+            <td>
+              <code>email</code>
+            </td>
+            <td>The email address of the contributor.</td>
+          </tr>
+          <tr>
+            <td>
+              <code>url</code>
+            </td>
+            <td>The URL for the homepage of the contributor.</td>
+          </tr>
+          <tr>
+            <td>
+              <code>organization</code>
+            </td>
+            <td>The organization to which the contributor belongs.</td>
+          </tr>
+          <tr>
+            <td>
+              <code>roles</code>
+            </td>
+            <td>
+            The roles the contributor plays in the project.  Each role is
+            describe by a
+            <code>role</code> element, the body of which is a
+            role name.
+          </td>
+          </tr>
+          <tr>
+            <td>
+              <code>timezone</code>
+            </td>
+            <td>
+            The timezone the contributor is in. This is a number in the range -14 to 14.
+          </td>
+          </tr>
+        </table>
+      </subsection>
+      <a name="class_dependency"/>
+      <subsection name="dependency">
+        <p>No description.</p>
+        <table>
+          <tr>
+            <th>Element</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td>
+              <code>groupId</code>
+            </td>
+            <td>
+            The project group that produced the dependency, e.g.
+            <code>geronimo</code>.
+          </td>
+          </tr>
+          <tr>
+            <td>
+              <code>artifactId</code>
+            </td>
+            <td>
+            The unique id for an artifact produced by the project group, e.g.
+            <code>germonimo-jms</code>
+          </td>
+          </tr>
+          <tr>
+            <td>
+              <code>version</code>
+            </td>
+            <td>
+            The version of the dependency., e.g.
+            <code>3.2.1</code>
+          </td>
+          </tr>
+          <tr>
+            <td>
+              <code>url</code>
+            </td>
+            <td>
+            This url will be provided to the user if the jar file cannot be downloaded
+            from the central repository.
+          </td>
+          </tr>
+          <tr>
+            <td>
+              <code>artifact</code>
+            </td>
+            <td>Literal name of the artifact</td>
+          </tr>
+          <tr>
+            <td>
+              <code>type</code>
+            </td>
+            <td>
+            Other known recognised dependency types are:
+            <code>ejb</code> and
+            <code>plugin</code>.
+           The default value is <code>jar</code>.</td>
+          </tr>
+          <tr>
+            <td>
+              <code>properties</code>
+            </td>
+            <td>
+            Properties about the dependency. Various plugins allow you to
+            <code>mark</code> dependencies with properties. For example the
+            <a href="plugins/war/index.html">war</a> plugin looks for a
+            <code>war.bundle</code> property, and if found will include the dependency
+            in
+            <code>WEB-INF/lib</code>. For example syntax, check the war plugin docs.
+          </td>
+          </tr>
+        </table>
+      </subsection>
+      <a name="class_override"/>
+      <subsection name="override">
+        <p>No description.</p>
+        <table>
+          <tr>
+            <th>Element</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td>
+              <code>groupId</code>
+            </td>
+            <td>
+            The project group that produced the dependency, e.g.
+            <code>geronimo</code>.
+          </td>
+          </tr>
+          <tr>
+            <td>
+              <code>artifactId</code>
+            </td>
+            <td>
+            The unique id for an artifact produced by the project group, e.g.
+            <code>germonimo-jms</code>
+          </td>
+          </tr>
+          <tr>
+            <td>
+              <code>type</code>
+            </td>
+            <td>
+            Other known recognised dependency types are:
+            <code>ejb</code> and
+            <code>plugin</code>.
+           The default value is <code>jar</code>.</td>
+          </tr>
+          <tr>
+            <td>
+              <code>version</code>
+            </td>
+            <td>
+            The version of the dependency., e.g.
+            <code>3.2.1</code>
+          </td>
+          </tr>
+          <tr>
+            <td>
+              <code>file</code>
+            </td>
+            <td>
+            The filename of the dependency that will be used to override the one from the repository, e.g.
+            <code>lib/non-distributable-code-1.3.jar</code>
+          </td>
+          </tr>
+        </table>
+      </subsection>
+      <a name="class_license"/>
+      <subsection name="license">
+        <p>No description.</p>
+        <table>
+          <tr>
+            <th>Element</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td>
+              <code>name</code>
+            </td>
+            <td>The full legal name of the license.</td>
+          </tr>
+          <tr>
+            <td>
+              <code>url</code>
+            </td>
+            <td>The official url for the license text.</td>
+          </tr>
+          <tr>
+            <td>
+              <code>comments</code>
+            </td>
+            <td>the description</td>
+          </tr>
+        </table>
+      </subsection>
+      <a name="class_packageGroup"/>
+      <subsection name="packageGroup">
+        <p>No description.</p>
+        <table>
+          <tr>
+            <th>Element</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td>
+              <code>title</code>
+            </td>
+            <td>the description</td>
+          </tr>
+          <tr>
+            <td>
+              <code>packages</code>
+            </td>
+            <td>the description</td>
+          </tr>
+        </table>
+      </subsection>
+      <a name="class_scm"/>
+      <subsection name="scm">
+        <p>No description.</p>
+        <table>
+          <tr>
+            <th>Element</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td>
+              <code>connection</code>
+            </td>
+            <td>
+            The source configuration management system URL
+            that describes the repository and how to connect to the
+            repository.  This is used by Maven when
+            <a
+              href="plugins/dist/index.html">building versions</a>
+            from specific ID.
+          </td>
+          </tr>
+          <tr>
+            <td>
+              <code>developerConnection</code>
+            </td>
+            <td>
+            Just like connection, but for developers, i.e. this scm connection
+            will not be read only.
+          </td>
+          </tr>
+          <tr>
+            <td>
+              <code>url</code>
+            </td>
+            <td>The URL to the project's browsable CVS repository.</td>
+          </tr>
+          <tr>
+            <td>
+              <code>branches</code>
+            </td>
+            <td>The SCM branches that are currently active for the project. These should only be those forked from the current branch or trunk that are intended to be used.</td>
+          </tr>
+        </table>
+      </subsection>
+      <a name="class_builder"/>
+      <subsection name="builder">
+        <p>No description.</p>
+        <table>
+          <tr>
+            <th>Element</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td>
+              <code>sourceDirectory</code>
+            </td>
+            <td>
+            This element specifies a directory containing the source
+            of the project. The generated build system will compile
+            the source in this directory when the project is built.
+            The path given is relative to the project descriptor.
+          </td>
+          </tr>
+          <tr>
+            <td>
+              <code>unitTestSourceDirectory</code>
+            </td>
+            <td>
+            This element specifies a directory containing the unit test
+            source of the project. The generated build system will
+            compile these directories when the project is being tested.
+            The unit tests must use the JUnit test framework.
+            The path given is relative to the project descriptor.
+          </td>
+          </tr>
+          <tr>
+            <td>
+              <code>aspectSourceDirectory</code>
+            </td>
+            <td>
+            This element specifies a directory containing Aspect
+            sources of the project.  The generated build system will
+            compile the Aspects in this directory when the project is
+            built if Aspects have been enabled (see the
+            <a
+              href="plugins/aspectj/goals.html">Aspectj goals</a> document).
+            The path given is relative to the project descriptor.
+          </td>
+          </tr>
+          <tr>
+            <td>
+              <code>integrationUnitTestSourceDirectory</code>
+            </td>
+            <td>
+            This element specifies a directory containing integration test
+            sources of the project.
+          </td>
+          </tr>
+          <tr>
+            <td>
+              <code>sourceModifications</code>
+            </td>
+            <td>
+            This element describes all of the sourceModifications associated with a
+            project.  Each source modification is described by a
+            <code>sourceModification</code> element, which is then described by
+            additional elements (described below).  These modifications are used
+            to exclude or include various source depending on the environment
+            the build is running in.
+          </td>
+          </tr>
+          <tr>
+            <td>
+              <code>unitTest</code>
+            </td>
+            <td>This element specifies unit tests associated with the project.</td>
+          </tr>
+          <tr>
+            <td>
+              <code>resources</code>
+            </td>
+            <td>
+            This element describes all of the resources associated with a project or unit tests.
+            Each resource is described by a resource element, which is then described by additional
+            elements (described
+            <a href="#resource">below</a>). These resources are used to
+            complete the jar file or to run unit test.
+          </td>
+          </tr>
+          <tr>
+            <td>
+              <code>directory</code>
+            </td>
+            <td>
+            The directory where all generated by the build is placed.
+          </td>
+          </tr>
+          <tr>
+            <td>
+              <code>output</code>
+            </td>
+            <td>
+            The directory where compiled application classes are placed.
+          </td>
+          </tr>
+          <tr>
+            <td>
+              <code>finalName</code>
+            </td>
+            <td>
+            The filename (including an extension, but with no path information) that the produced artifact
+            will be called. The default value is artifactId-version.extension (where extension is derived from
+            type).
+          </td>
+          </tr>
+          <tr>
+            <td>
+              <code>testOutput</code>
+            </td>
+            <td>
+            The directory where compiled test classes are placed.
+          </td>
+          </tr>
+        </table>
+      </subsection>
+      <a name="class_sourceModification"/>
+      <subsection name="sourceModification">
+        <p>No description.</p>
+        <table>
+          <tr>
+            <th>Element</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td>
+              <code>className</code>
+            </td>
+            <td>
+            If the class with this name can
+            <strong>not</strong> be
+            loaded, then the includes and excludes specified below
+            will be applied to the contents of the
+            <a href="#sourceDirectory">sourceDirectory</a>
+          </td>
+          </tr>
+          <tr>
+            <td>
+              <code>property</code>
+            </td>
+            <td>the description</td>
+          </tr>
+          <tr>
+            <td>
+              <code>directory</code>
+            </td>
+            <td>
+            Describe the directory where the resource is stored.
+            The path may be absolute, or relative to the project.xml file.
+          </td>
+          </tr>
+          <tr>
+            <td>
+              <code>targetPath</code>
+            </td>
+            <td>
+            Describe the resource target path. For example, if you want that resource
+            appear into a specific package (
+            <code>org.apache.maven.messages</code>), you must specify this
+            element with this value :
+            <code>org/apache/maven/messages</code>
+          </td>
+          </tr>
+          <tr>
+            <td>
+              <code>filtering</code>
+            </td>
+            <td>Describe if resources are filtered or not. The default value is <code>false</code>.</td>
+          </tr>
+          <tr>
+            <td>
+              <code>includes</code>
+            </td>
+            <td>the description</td>
+          </tr>
+          <tr>
+            <td>
+              <code>excludes</code>
+            </td>
+            <td>the description</td>
+          </tr>
+        </table>
+      </subsection>
+      <a name="class_unitTest"/>
+      <subsection name="unitTest">
+        <p>No description.</p>
+        <table>
+          <tr>
+            <th>Element</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td>
+              <code>resources</code>
+            </td>
+            <td>the description</td>
+          </tr>
+          <tr>
+            <td>
+              <code>includes</code>
+            </td>
+            <td>the description</td>
+          </tr>
+          <tr>
+            <td>
+              <code>excludes</code>
+            </td>
+            <td>the description</td>
+          </tr>
+        </table>
+      </subsection>
+      <a name="class_resource"/>
+      <subsection name="resource">
+        <p>No description.</p>
+        <table>
+          <tr>
+            <th>Element</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td>
+              <code>directory</code>
+            </td>
+            <td>
+            Describe the directory where the resource is stored.
+            The path may be absolute, or relative to the project.xml file.
+          </td>
+          </tr>
+          <tr>
+            <td>
+              <code>targetPath</code>
+            </td>
+            <td>
+            Describe the resource target path. For example, if you want that resource
+            appear into a specific package (
+            <code>org.apache.maven.messages</code>), you must specify this
+            element with this value :
+            <code>org/apache/maven/messages</code>
+          </td>
+          </tr>
+          <tr>
+            <td>
+              <code>filtering</code>
+            </td>
+            <td>Describe if resources are filtered or not. The default value is <code>false</code>.</td>
+          </tr>
+          <tr>
+            <td>
+              <code>includes</code>
+            </td>
+            <td>the description</td>
+          </tr>
+          <tr>
+            <td>
+              <code>excludes</code>
+            </td>
+            <td>the description</td>
+          </tr>
+        </table>
+      </subsection>
+      <a name="class_resource"/>
+      <subsection name="resource">
+        <p>No description.</p>
+        <table>
+          <tr>
+            <th>Element</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td>
+              <code>directory</code>
+            </td>
+            <td>
+            Describe the directory where the resource is stored.
+            The path may be absolute, or relative to the project.xml file.
+          </td>
+          </tr>
+          <tr>
+            <td>
+              <code>targetPath</code>
+            </td>
+            <td>
+            Describe the resource target path. For example, if you want that resource
+            appear into a specific package (
+            <code>org.apache.maven.messages</code>), you must specify this
+            element with this value :
+            <code>org/apache/maven/messages</code>
+          </td>
+          </tr>
+          <tr>
+            <td>
+              <code>filtering</code>
+            </td>
+            <td>Describe if resources are filtered or not. The default value is <code>false</code>.</td>
+          </tr>
+          <tr>
+            <td>
+              <code>includes</code>
+            </td>
+            <td>the description</td>
+          </tr>
+          <tr>
+            <td>
+              <code>excludes</code>
+            </td>
+            <td>the description</td>
+          </tr>
+        </table>
+      </subsection>
+      <a name="class_organization"/>
+      <subsection name="organization">
+        <p>No description.</p>
+        <table>
+          <tr>
+            <th>Element</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td>
+              <code>name</code>
+            </td>
+            <td>The full name of the organization.</td>
+          </tr>
+          <tr>
+            <td>
+              <code>url</code>
+            </td>
+            <td>The URL to the organization's home page.</td>
+          </tr>
+          <tr>
+            <td>
+              <code>logo</code>
+            </td>
+            <td>
+            The URL to the organization's logo image.  This can be an URL relative
+            to the base directory of the generated web site,
+            (e.g.,
+            <code>/images/org-logo.png</code>) or an absolute URL
+            (e.g.,
+            <code>http://my.corp/logo.png</code>).  This value is used
+            when generating the project documentation.
+          </td>
+          </tr>
+        </table>
+      </subsection>
+      <a name="class_distributionManagement"/>
+      <subsection name="distributionManagement">
+        <p>
+        This elements describes all that pertains to distribution for a project.
+      </p>
+        <table>
+          <tr>
+            <th>Element</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td>
+              <code>repository</code>
+            </td>
+            <td>Information needed for deploying to remote repository artifacts generated by the project</td>
+          </tr>
+          <tr>
+            <td>
+              <code>site</code>
+            </td>
+            <td>Information needed for deploying website files of the project.</td>
+          </tr>
+        </table>
+      </subsection>
+      <a name="class_repository"/>
+      <subsection name="repository">
+        <p>
+         Repository contains the information needed
+         for establishing connections with remote repoistory
+      </p>
+        <table>
+          <tr>
+            <th>Element</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td>
+              <code>id</code>
+            </td>
+            <td>
+            A unique identifier for a repository.
+          </td>
+          </tr>
+          <tr>
+            <td>
+              <code>name</code>
+            </td>
+            <td>
+            Human readable name of the repository
+          </td>
+          </tr>
+          <tr>
+            <td>
+              <code>url</code>
+            </td>
+            <td>
+             The url of of the repository
+          </td>
+          </tr>
+        </table>
+      </subsection>
+      <a name="class_site"/>
+      <subsection name="site">
+        <p>
+         Site contains the information needed
+         for deploying websites.
+      </p>
+        <table>
+          <tr>
+            <th>Element</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td>
+              <code>id</code>
+            </td>
+            <td>
+            A unique identifier for a deployment locataion.
+          </td>
+          </tr>
+          <tr>
+            <td>
+              <code>name</code>
+            </td>
+            <td>
+            Human readable name of the deployment location
+          </td>
+          </tr>
+          <tr>
+            <td>
+              <code>url</code>
+            </td>
+            <td>
+             The url of of the location where website is deployed
+          </td>
+          </tr>
+        </table>
+      </subsection>
+      <a name="class_local"/>
+      <subsection name="local">
+        <p>
+        Local contains the information that is specific to the user's
+        local environment. This would only be expected in a user or site pom,
+        not a project POM.
+      </p>
+        <table>
+          <tr>
+            <th>Element</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td>
+              <code>repository</code>
+            </td>
+            <td>
+            The local repository that contains downloaded artifacts.
+          </td>
+          </tr>
+          <tr>
+            <td>
+              <code>online</code>
+            </td>
+            <td>
+            Whether to run the build online. If not, no remote repositories are consulted for plugins or dependencies
+            and this configuration may be used by other plugins requiring online access.
+           The default value is <code>true</code>.</td>
+          </tr>
+        </table>
+      </subsection>
+      <a name="class_preGoal"/>
+      <subsection name="preGoal">
+        <p>No description.</p>
+        <table>
+          <tr>
+            <th>Element</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td>
+              <code>name</code>
+            </td>
+            <td>The target goal which should be decorated.</td>
+          </tr>
+          <tr>
+            <td>
+              <code>attain</code>
+            </td>
+            <td>
+            The goal which should be injected into the execution chain.
+          </td>
+          </tr>
+        </table>
+      </subsection>
+      <a name="class_postGoal"/>
+      <subsection name="postGoal">
+        <p>No description.</p>
+        <table>
+          <tr>
+            <th>Element</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td>
+              <code>name</code>
+            </td>
+            <td>The target goal which should be decorated.</td>
+          </tr>
+          <tr>
+            <td>
+              <code>attain</code>
+            </td>
+            <td>
+            The goal which should be injected into the execution chain.
+          </td>
+          </tr>
+        </table>
+      </subsection>
+    </section>
+  </body>
+</document>

@@ -1,0 +1,971 @@
+<plugin>
+  <description>Modello Maven Plugin enables the use of Modello in Maven builds.</description>
+  <groupId>org.codehaus.modello</groupId>
+  <artifactId>modello-maven-plugin</artifactId>
+  <version>1.0-alpha-12-SNAPSHOT</version>
+  <goalPrefix>modello</goalPrefix>
+  <isolatedRealm>false</isolatedRealm>
+  <inheritedByDefault>true</inheritedByDefault>
+  <mojos>
+    <mojo>
+      <goal>converters</goal>
+      <description>Creates classes that can convert between different versions of the model.</description>
+      <requiresDirectInvocation>false</requiresDirectInvocation>
+      <requiresProject>true</requiresProject>
+      <requiresReports>false</requiresReports>
+      <aggregator>false</aggregator>
+      <requiresOnline>false</requiresOnline>
+      <inheritedByDefault>true</inheritedByDefault>
+      <phase>generate-sources</phase>
+      <implementation>org.codehaus.modello.maven.ModelloConvertersMojo</implementation>
+      <language>java</language>
+      <instantiationStrategy>per-lookup</instantiationStrategy>
+      <executionStrategy>once-per-session</executionStrategy>
+      <parameters>
+        <parameter>
+          <name>basedir</name>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>Base directory of the project.</description>
+        </parameter>
+        <parameter>
+          <name>model</name>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>Relative path to the mdo file for the current model.</description>
+        </parameter>
+        <parameter>
+          <name>outputDirectory</name>
+          <type>java.io.File</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>The output directory of the generated Java beans.</description>
+        </parameter>
+        <parameter>
+          <name>packageWithVersion</name>
+          <type>boolean</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>True if the generated package names should include the version.</description>
+        </parameter>
+        <parameter>
+          <name>packagedVersions</name>
+          <type>java.util.List</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Additional historical versions to generate, each being packaged with the version regardless of the &lt;code&gt;packageWithVersion&lt;/code&gt; setting.</description>
+        </parameter>
+        <parameter>
+          <name>project</name>
+          <type>org.apache.maven.project.MavenProject</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>The Maven project instance for the executing project.</description>
+        </parameter>
+        <parameter>
+          <name>version</name>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>The version of the model we will be working on.</description>
+        </parameter>
+      </parameters>
+      <configuration>
+        <packageWithVersion implementation="boolean" default-value="false">${packageWithVersion}</packageWithVersion>
+        <outputDirectory implementation="java.io.File">${basedir}/target/generated-sources/modello</outputDirectory>
+        <project implementation="org.apache.maven.project.MavenProject">${project}</project>
+        <model implementation="java.lang.String">${model}</model>
+        <basedir implementation="java.lang.String">${basedir}</basedir>
+        <version implementation="java.lang.String">${version}</version>
+      </configuration>
+      <requirements>
+        <requirement>
+          <role>org.codehaus.modello.core.ModelloCore</role>
+          <field-name>modelloCore</field-name>
+        </requirement>
+      </requirements>
+    </mojo>
+    <mojo>
+      <goal>java</goal>
+      <description>Creates Java beans from the Modello model.</description>
+      <requiresDirectInvocation>false</requiresDirectInvocation>
+      <requiresProject>true</requiresProject>
+      <requiresReports>false</requiresReports>
+      <aggregator>false</aggregator>
+      <requiresOnline>false</requiresOnline>
+      <inheritedByDefault>true</inheritedByDefault>
+      <phase>generate-sources</phase>
+      <implementation>org.codehaus.modello.maven.ModelloJavaMojo</implementation>
+      <language>java</language>
+      <instantiationStrategy>per-lookup</instantiationStrategy>
+      <executionStrategy>once-per-session</executionStrategy>
+      <parameters>
+        <parameter>
+          <name>basedir</name>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>Base directory of the project.</description>
+        </parameter>
+        <parameter>
+          <name>model</name>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>Relative path to the mdo file for the current model.</description>
+        </parameter>
+        <parameter>
+          <name>outputDirectory</name>
+          <type>java.io.File</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>The output directory of the generated Java beans.</description>
+        </parameter>
+        <parameter>
+          <name>packageWithVersion</name>
+          <type>boolean</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>True if the generated package names should include the version.</description>
+        </parameter>
+        <parameter>
+          <name>packagedVersions</name>
+          <type>java.util.List</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Additional historical versions to generate, each being packaged with the version regardless of the &lt;code&gt;packageWithVersion&lt;/code&gt; setting.</description>
+        </parameter>
+        <parameter>
+          <name>project</name>
+          <type>org.apache.maven.project.MavenProject</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>The Maven project instance for the executing project.</description>
+        </parameter>
+        <parameter>
+          <name>version</name>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>The version of the model we will be working on.</description>
+        </parameter>
+      </parameters>
+      <configuration>
+        <packageWithVersion implementation="boolean" default-value="false">${packageWithVersion}</packageWithVersion>
+        <outputDirectory implementation="java.io.File">${basedir}/target/generated-sources/modello</outputDirectory>
+        <project implementation="org.apache.maven.project.MavenProject">${project}</project>
+        <model implementation="java.lang.String">${model}</model>
+        <basedir implementation="java.lang.String">${basedir}</basedir>
+        <version implementation="java.lang.String">${version}</version>
+      </configuration>
+      <requirements>
+        <requirement>
+          <role>org.codehaus.modello.core.ModelloCore</role>
+          <field-name>modelloCore</field-name>
+        </requirement>
+      </requirements>
+    </mojo>
+    <mojo>
+      <goal>jdom-writer</goal>
+      <description>Creates a jdom writer from the model that is capable of preserving element ordering and comments. In future it should also preserve whitespace.</description>
+      <requiresDirectInvocation>false</requiresDirectInvocation>
+      <requiresProject>true</requiresProject>
+      <requiresReports>false</requiresReports>
+      <aggregator>false</aggregator>
+      <requiresOnline>false</requiresOnline>
+      <inheritedByDefault>true</inheritedByDefault>
+      <phase>generate-sources</phase>
+      <implementation>org.codehaus.modello.maven.ModelloJDOMWriterMojo</implementation>
+      <language>java</language>
+      <instantiationStrategy>per-lookup</instantiationStrategy>
+      <executionStrategy>once-per-session</executionStrategy>
+      <parameters>
+        <parameter>
+          <name>basedir</name>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>Base directory of the project.</description>
+        </parameter>
+        <parameter>
+          <name>model</name>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>Relative path to the mdo file for the current model.</description>
+        </parameter>
+        <parameter>
+          <name>outputDirectory</name>
+          <type>java.io.File</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>The output directory of the generated jdom writer.</description>
+        </parameter>
+        <parameter>
+          <name>packageWithVersion</name>
+          <type>boolean</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>True if the generated package names should include the version.</description>
+        </parameter>
+        <parameter>
+          <name>packagedVersions</name>
+          <type>java.util.List</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Additional historical versions to generate, each being packaged with the version regardless of the &lt;code&gt;packageWithVersion&lt;/code&gt; setting.</description>
+        </parameter>
+        <parameter>
+          <name>project</name>
+          <type>org.apache.maven.project.MavenProject</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>The Maven project instance for the executing project.</description>
+        </parameter>
+        <parameter>
+          <name>version</name>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>The version of the model we will be working on.</description>
+        </parameter>
+      </parameters>
+      <configuration>
+        <packageWithVersion implementation="boolean" default-value="false">${packageWithVersion}</packageWithVersion>
+        <outputDirectory implementation="java.io.File">${basedir}/target/generated-sources/modello</outputDirectory>
+        <project implementation="org.apache.maven.project.MavenProject">${project}</project>
+        <model implementation="java.lang.String">${model}</model>
+        <basedir implementation="java.lang.String">${basedir}</basedir>
+        <version implementation="java.lang.String">${version}</version>
+      </configuration>
+      <requirements>
+        <requirement>
+          <role>org.codehaus.modello.core.ModelloCore</role>
+          <field-name>modelloCore</field-name>
+        </requirement>
+      </requirements>
+    </mojo>
+    <mojo>
+      <goal>jpox-jdo-mapping</goal>
+      <description>Creates a JDO mapping from the Modello model.</description>
+      <requiresDirectInvocation>false</requiresDirectInvocation>
+      <requiresProject>true</requiresProject>
+      <requiresReports>false</requiresReports>
+      <aggregator>false</aggregator>
+      <requiresOnline>false</requiresOnline>
+      <inheritedByDefault>true</inheritedByDefault>
+      <phase>generate-resources</phase>
+      <implementation>org.codehaus.modello.maven.ModelloJPoxJdoMappingMojo</implementation>
+      <language>java</language>
+      <instantiationStrategy>per-lookup</instantiationStrategy>
+      <executionStrategy>once-per-session</executionStrategy>
+      <parameters>
+        <parameter>
+          <name>basedir</name>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>Base directory of the project.</description>
+        </parameter>
+        <parameter>
+          <name>model</name>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>Relative path to the mdo file for the current model.</description>
+        </parameter>
+        <parameter>
+          <name>outputDirectory</name>
+          <type>java.io.File</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>The output directory of the generated classes of the JDO mapping.</description>
+        </parameter>
+        <parameter>
+          <name>packageWithVersion</name>
+          <type>boolean</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>True if the generated package names should include the version.</description>
+        </parameter>
+        <parameter>
+          <name>packagedVersions</name>
+          <type>java.util.List</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Additional historical versions to generate, each being packaged with the version regardless of the &lt;code&gt;packageWithVersion&lt;/code&gt; setting.</description>
+        </parameter>
+        <parameter>
+          <name>project</name>
+          <type>org.apache.maven.project.MavenProject</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>The Maven project instance for the executing project.</description>
+        </parameter>
+        <parameter>
+          <name>version</name>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>The version of the model we will be working on.</description>
+        </parameter>
+      </parameters>
+      <configuration>
+        <packageWithVersion implementation="boolean" default-value="false">${packageWithVersion}</packageWithVersion>
+        <outputDirectory implementation="java.io.File">${basedir}/target/classes/META-INF</outputDirectory>
+        <project implementation="org.apache.maven.project.MavenProject">${project}</project>
+        <model implementation="java.lang.String">${model}</model>
+        <basedir implementation="java.lang.String">${basedir}</basedir>
+        <version implementation="java.lang.String">${version}</version>
+      </configuration>
+      <requirements>
+        <requirement>
+          <role>org.codehaus.modello.core.ModelloCore</role>
+          <field-name>modelloCore</field-name>
+        </requirement>
+      </requirements>
+    </mojo>
+    <mojo>
+      <goal>jpox-store</goal>
+      <description>Creates a JDO store from the Modello model.</description>
+      <requiresDirectInvocation>false</requiresDirectInvocation>
+      <requiresProject>true</requiresProject>
+      <requiresReports>false</requiresReports>
+      <aggregator>false</aggregator>
+      <requiresOnline>false</requiresOnline>
+      <inheritedByDefault>true</inheritedByDefault>
+      <phase>generate-sources</phase>
+      <implementation>org.codehaus.modello.maven.ModelloJPoxStoreMojo</implementation>
+      <language>java</language>
+      <instantiationStrategy>per-lookup</instantiationStrategy>
+      <executionStrategy>once-per-session</executionStrategy>
+      <parameters>
+        <parameter>
+          <name>basedir</name>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>Base directory of the project.</description>
+        </parameter>
+        <parameter>
+          <name>model</name>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>Relative path to the mdo file for the current model.</description>
+        </parameter>
+        <parameter>
+          <name>outputDirectory</name>
+          <type>java.io.File</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>The output directory of the generated JDO store.</description>
+        </parameter>
+        <parameter>
+          <name>packageWithVersion</name>
+          <type>boolean</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>True if the generated package names should include the version.</description>
+        </parameter>
+        <parameter>
+          <name>packagedVersions</name>
+          <type>java.util.List</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Additional historical versions to generate, each being packaged with the version regardless of the &lt;code&gt;packageWithVersion&lt;/code&gt; setting.</description>
+        </parameter>
+        <parameter>
+          <name>project</name>
+          <type>org.apache.maven.project.MavenProject</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>The Maven project instance for the executing project.</description>
+        </parameter>
+        <parameter>
+          <name>version</name>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>The version of the model we will be working on.</description>
+        </parameter>
+      </parameters>
+      <configuration>
+        <packageWithVersion implementation="boolean" default-value="false">${packageWithVersion}</packageWithVersion>
+        <outputDirectory implementation="java.io.File">${basedir}/target/generated-sources/modello</outputDirectory>
+        <project implementation="org.apache.maven.project.MavenProject">${project}</project>
+        <model implementation="java.lang.String">${model}</model>
+        <basedir implementation="java.lang.String">${basedir}</basedir>
+        <version implementation="java.lang.String">${version}</version>
+      </configuration>
+      <requirements>
+        <requirement>
+          <role>org.codehaus.modello.core.ModelloCore</role>
+          <field-name>modelloCore</field-name>
+        </requirement>
+      </requirements>
+    </mojo>
+    <mojo>
+      <goal>prevayler</goal>
+      <description>Creates a Prevayler store from the Modello model.</description>
+      <requiresDirectInvocation>false</requiresDirectInvocation>
+      <requiresProject>true</requiresProject>
+      <requiresReports>false</requiresReports>
+      <aggregator>false</aggregator>
+      <requiresOnline>false</requiresOnline>
+      <inheritedByDefault>true</inheritedByDefault>
+      <phase>generate-sources</phase>
+      <implementation>org.codehaus.modello.maven.ModelloPrevaylerMojo</implementation>
+      <language>java</language>
+      <instantiationStrategy>per-lookup</instantiationStrategy>
+      <executionStrategy>once-per-session</executionStrategy>
+      <parameters>
+        <parameter>
+          <name>basedir</name>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>Base directory of the project.</description>
+        </parameter>
+        <parameter>
+          <name>model</name>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>Relative path to the mdo file for the current model.</description>
+        </parameter>
+        <parameter>
+          <name>outputDirectory</name>
+          <type>java.io.File</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>The output directory of the generated Prevayler store.</description>
+        </parameter>
+        <parameter>
+          <name>packageWithVersion</name>
+          <type>boolean</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>True if the generated package names should include the version.</description>
+        </parameter>
+        <parameter>
+          <name>packagedVersions</name>
+          <type>java.util.List</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Additional historical versions to generate, each being packaged with the version regardless of the &lt;code&gt;packageWithVersion&lt;/code&gt; setting.</description>
+        </parameter>
+        <parameter>
+          <name>project</name>
+          <type>org.apache.maven.project.MavenProject</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>The Maven project instance for the executing project.</description>
+        </parameter>
+        <parameter>
+          <name>version</name>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>The version of the model we will be working on.</description>
+        </parameter>
+      </parameters>
+      <configuration>
+        <packageWithVersion implementation="boolean" default-value="false">${packageWithVersion}</packageWithVersion>
+        <outputDirectory implementation="java.io.File">${basedir}/target/generated-sources/modello</outputDirectory>
+        <project implementation="org.apache.maven.project.MavenProject">${project}</project>
+        <model implementation="java.lang.String">${model}</model>
+        <basedir implementation="java.lang.String">${basedir}</basedir>
+        <version implementation="java.lang.String">${version}</version>
+      </configuration>
+      <requirements>
+        <requirement>
+          <role>org.codehaus.modello.core.ModelloCore</role>
+          <field-name>modelloCore</field-name>
+        </requirement>
+      </requirements>
+    </mojo>
+    <mojo>
+      <goal>stax-reader</goal>
+      <description>Creates an StAX reader from the model.</description>
+      <requiresDirectInvocation>false</requiresDirectInvocation>
+      <requiresProject>true</requiresProject>
+      <requiresReports>false</requiresReports>
+      <aggregator>false</aggregator>
+      <requiresOnline>false</requiresOnline>
+      <inheritedByDefault>true</inheritedByDefault>
+      <phase>generate-sources</phase>
+      <implementation>org.codehaus.modello.maven.ModelloStaxReaderMojo</implementation>
+      <language>java</language>
+      <instantiationStrategy>per-lookup</instantiationStrategy>
+      <executionStrategy>once-per-session</executionStrategy>
+      <parameters>
+        <parameter>
+          <name>basedir</name>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>Base directory of the project.</description>
+        </parameter>
+        <parameter>
+          <name>model</name>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>Relative path to the mdo file for the current model.</description>
+        </parameter>
+        <parameter>
+          <name>outputDirectory</name>
+          <type>java.io.File</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>The output directory of the generated StAX reader.</description>
+        </parameter>
+        <parameter>
+          <name>packageWithVersion</name>
+          <type>boolean</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>True if the generated package names should include the version.</description>
+        </parameter>
+        <parameter>
+          <name>packagedVersions</name>
+          <type>java.util.List</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Additional historical versions to generate, each being packaged with the version regardless of the &lt;code&gt;packageWithVersion&lt;/code&gt; setting.</description>
+        </parameter>
+        <parameter>
+          <name>project</name>
+          <type>org.apache.maven.project.MavenProject</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>The Maven project instance for the executing project.</description>
+        </parameter>
+        <parameter>
+          <name>version</name>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>The version of the model we will be working on.</description>
+        </parameter>
+      </parameters>
+      <configuration>
+        <packageWithVersion implementation="boolean" default-value="false">${packageWithVersion}</packageWithVersion>
+        <outputDirectory implementation="java.io.File">${basedir}/target/generated-sources/modello</outputDirectory>
+        <project implementation="org.apache.maven.project.MavenProject">${project}</project>
+        <model implementation="java.lang.String">${model}</model>
+        <basedir implementation="java.lang.String">${basedir}</basedir>
+        <version implementation="java.lang.String">${version}</version>
+      </configuration>
+      <requirements>
+        <requirement>
+          <role>org.codehaus.modello.core.ModelloCore</role>
+          <field-name>modelloCore</field-name>
+        </requirement>
+      </requirements>
+    </mojo>
+    <mojo>
+      <goal>stax-writer</goal>
+      <description>Creates an StAX writer from the model.</description>
+      <requiresDirectInvocation>false</requiresDirectInvocation>
+      <requiresProject>true</requiresProject>
+      <requiresReports>false</requiresReports>
+      <aggregator>false</aggregator>
+      <requiresOnline>false</requiresOnline>
+      <inheritedByDefault>true</inheritedByDefault>
+      <phase>generate-sources</phase>
+      <implementation>org.codehaus.modello.maven.ModelloStaxWriterMojo</implementation>
+      <language>java</language>
+      <instantiationStrategy>per-lookup</instantiationStrategy>
+      <executionStrategy>once-per-session</executionStrategy>
+      <parameters>
+        <parameter>
+          <name>basedir</name>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>Base directory of the project.</description>
+        </parameter>
+        <parameter>
+          <name>model</name>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>Relative path to the mdo file for the current model.</description>
+        </parameter>
+        <parameter>
+          <name>outputDirectory</name>
+          <type>java.io.File</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>The output directory of the generated StAX writer.</description>
+        </parameter>
+        <parameter>
+          <name>packageWithVersion</name>
+          <type>boolean</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>True if the generated package names should include the version.</description>
+        </parameter>
+        <parameter>
+          <name>packagedVersions</name>
+          <type>java.util.List</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Additional historical versions to generate, each being packaged with the version regardless of the &lt;code&gt;packageWithVersion&lt;/code&gt; setting.</description>
+        </parameter>
+        <parameter>
+          <name>project</name>
+          <type>org.apache.maven.project.MavenProject</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>The Maven project instance for the executing project.</description>
+        </parameter>
+        <parameter>
+          <name>version</name>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>The version of the model we will be working on.</description>
+        </parameter>
+      </parameters>
+      <configuration>
+        <packageWithVersion implementation="boolean" default-value="false">${packageWithVersion}</packageWithVersion>
+        <outputDirectory implementation="java.io.File">${basedir}/target/generated-sources/modello</outputDirectory>
+        <project implementation="org.apache.maven.project.MavenProject">${project}</project>
+        <model implementation="java.lang.String">${model}</model>
+        <basedir implementation="java.lang.String">${basedir}</basedir>
+        <version implementation="java.lang.String">${version}</version>
+      </configuration>
+      <requirements>
+        <requirement>
+          <role>org.codehaus.modello.core.ModelloCore</role>
+          <field-name>modelloCore</field-name>
+        </requirement>
+      </requirements>
+    </mojo>
+    <mojo>
+      <goal>xdoc</goal>
+      <description>Creates documentation for the model in xdoc format.</description>
+      <requiresDirectInvocation>false</requiresDirectInvocation>
+      <requiresProject>true</requiresProject>
+      <requiresReports>false</requiresReports>
+      <aggregator>false</aggregator>
+      <requiresOnline>false</requiresOnline>
+      <inheritedByDefault>true</inheritedByDefault>
+      <implementation>org.codehaus.modello.maven.ModelloXdocMojo</implementation>
+      <language>java</language>
+      <instantiationStrategy>per-lookup</instantiationStrategy>
+      <executionStrategy>once-per-session</executionStrategy>
+      <parameters>
+        <parameter>
+          <name>basedir</name>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>Base directory of the project.</description>
+        </parameter>
+        <parameter>
+          <name>model</name>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>Relative path to the mdo file for the current model.</description>
+        </parameter>
+        <parameter>
+          <name>outputDirectory</name>
+          <type>java.io.File</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>The output directory of the generated documentation.</description>
+        </parameter>
+        <parameter>
+          <name>packageWithVersion</name>
+          <type>boolean</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>True if the generated package names should include the version.</description>
+        </parameter>
+        <parameter>
+          <name>packagedVersions</name>
+          <type>java.util.List</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Additional historical versions to generate, each being packaged with the version regardless of the &lt;code&gt;packageWithVersion&lt;/code&gt; setting.</description>
+        </parameter>
+        <parameter>
+          <name>project</name>
+          <type>org.apache.maven.project.MavenProject</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>The Maven project instance for the executing project.</description>
+        </parameter>
+        <parameter>
+          <name>version</name>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>The version of the model we will be working on.</description>
+        </parameter>
+      </parameters>
+      <configuration>
+        <packageWithVersion implementation="boolean" default-value="false">${packageWithVersion}</packageWithVersion>
+        <outputDirectory implementation="java.io.File">${basedir}/target/generated-site/xdoc</outputDirectory>
+        <project implementation="org.apache.maven.project.MavenProject">${project}</project>
+        <model implementation="java.lang.String">${model}</model>
+        <basedir implementation="java.lang.String">${basedir}</basedir>
+        <version implementation="java.lang.String">${version}</version>
+      </configuration>
+      <requirements>
+        <requirement>
+          <role>org.codehaus.modello.core.ModelloCore</role>
+          <field-name>modelloCore</field-name>
+        </requirement>
+      </requirements>
+    </mojo>
+    <mojo>
+      <goal>xpp3-reader</goal>
+      <description>Creates an XPP3 reader from the model.</description>
+      <requiresDirectInvocation>false</requiresDirectInvocation>
+      <requiresProject>true</requiresProject>
+      <requiresReports>false</requiresReports>
+      <aggregator>false</aggregator>
+      <requiresOnline>false</requiresOnline>
+      <inheritedByDefault>true</inheritedByDefault>
+      <phase>generate-sources</phase>
+      <implementation>org.codehaus.modello.maven.ModelloXpp3ReaderMojo</implementation>
+      <language>java</language>
+      <instantiationStrategy>per-lookup</instantiationStrategy>
+      <executionStrategy>once-per-session</executionStrategy>
+      <parameters>
+        <parameter>
+          <name>basedir</name>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>Base directory of the project.</description>
+        </parameter>
+        <parameter>
+          <name>model</name>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>Relative path to the mdo file for the current model.</description>
+        </parameter>
+        <parameter>
+          <name>outputDirectory</name>
+          <type>java.io.File</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>The output directory of the generated XPP reader.</description>
+        </parameter>
+        <parameter>
+          <name>packageWithVersion</name>
+          <type>boolean</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>True if the generated package names should include the version.</description>
+        </parameter>
+        <parameter>
+          <name>packagedVersions</name>
+          <type>java.util.List</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Additional historical versions to generate, each being packaged with the version regardless of the &lt;code&gt;packageWithVersion&lt;/code&gt; setting.</description>
+        </parameter>
+        <parameter>
+          <name>project</name>
+          <type>org.apache.maven.project.MavenProject</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>The Maven project instance for the executing project.</description>
+        </parameter>
+        <parameter>
+          <name>version</name>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>The version of the model we will be working on.</description>
+        </parameter>
+      </parameters>
+      <configuration>
+        <packageWithVersion implementation="boolean" default-value="false">${packageWithVersion}</packageWithVersion>
+        <outputDirectory implementation="java.io.File">${basedir}/target/generated-sources/modello</outputDirectory>
+        <project implementation="org.apache.maven.project.MavenProject">${project}</project>
+        <model implementation="java.lang.String">${model}</model>
+        <basedir implementation="java.lang.String">${basedir}</basedir>
+        <version implementation="java.lang.String">${version}</version>
+      </configuration>
+      <requirements>
+        <requirement>
+          <role>org.codehaus.modello.core.ModelloCore</role>
+          <field-name>modelloCore</field-name>
+        </requirement>
+      </requirements>
+    </mojo>
+    <mojo>
+      <goal>xpp3-writer</goal>
+      <description>Creates an XPP3 writer from the model.</description>
+      <requiresDirectInvocation>false</requiresDirectInvocation>
+      <requiresProject>true</requiresProject>
+      <requiresReports>false</requiresReports>
+      <aggregator>false</aggregator>
+      <requiresOnline>false</requiresOnline>
+      <inheritedByDefault>true</inheritedByDefault>
+      <phase>generate-sources</phase>
+      <implementation>org.codehaus.modello.maven.ModelloXpp3WriterMojo</implementation>
+      <language>java</language>
+      <instantiationStrategy>per-lookup</instantiationStrategy>
+      <executionStrategy>once-per-session</executionStrategy>
+      <parameters>
+        <parameter>
+          <name>basedir</name>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>Base directory of the project.</description>
+        </parameter>
+        <parameter>
+          <name>model</name>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>Relative path to the mdo file for the current model.</description>
+        </parameter>
+        <parameter>
+          <name>outputDirectory</name>
+          <type>java.io.File</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>The output directory of the generated XPP writer.</description>
+        </parameter>
+        <parameter>
+          <name>packageWithVersion</name>
+          <type>boolean</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>True if the generated package names should include the version.</description>
+        </parameter>
+        <parameter>
+          <name>packagedVersions</name>
+          <type>java.util.List</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Additional historical versions to generate, each being packaged with the version regardless of the &lt;code&gt;packageWithVersion&lt;/code&gt; setting.</description>
+        </parameter>
+        <parameter>
+          <name>project</name>
+          <type>org.apache.maven.project.MavenProject</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>The Maven project instance for the executing project.</description>
+        </parameter>
+        <parameter>
+          <name>version</name>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>The version of the model we will be working on.</description>
+        </parameter>
+      </parameters>
+      <configuration>
+        <packageWithVersion implementation="boolean" default-value="false">${packageWithVersion}</packageWithVersion>
+        <outputDirectory implementation="java.io.File">${basedir}/target/generated-sources/modello</outputDirectory>
+        <project implementation="org.apache.maven.project.MavenProject">${project}</project>
+        <model implementation="java.lang.String">${model}</model>
+        <basedir implementation="java.lang.String">${basedir}</basedir>
+        <version implementation="java.lang.String">${version}</version>
+      </configuration>
+      <requirements>
+        <requirement>
+          <role>org.codehaus.modello.core.ModelloCore</role>
+          <field-name>modelloCore</field-name>
+        </requirement>
+      </requirements>
+    </mojo>
+    <mojo>
+      <goal>xsd</goal>
+      <description>Creates an XML schema from the model.</description>
+      <requiresDirectInvocation>false</requiresDirectInvocation>
+      <requiresProject>true</requiresProject>
+      <requiresReports>false</requiresReports>
+      <aggregator>false</aggregator>
+      <requiresOnline>false</requiresOnline>
+      <inheritedByDefault>true</inheritedByDefault>
+      <phase>generate-sources</phase>
+      <implementation>org.codehaus.modello.maven.ModelloXsdMojo</implementation>
+      <language>java</language>
+      <instantiationStrategy>per-lookup</instantiationStrategy>
+      <executionStrategy>once-per-session</executionStrategy>
+      <parameters>
+        <parameter>
+          <name>basedir</name>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>Base directory of the project.</description>
+        </parameter>
+        <parameter>
+          <name>model</name>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>Relative path to the mdo file for the current model.</description>
+        </parameter>
+        <parameter>
+          <name>outputDirectory</name>
+          <type>java.io.File</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>The output directory of the generated XML Schema.</description>
+        </parameter>
+        <parameter>
+          <name>packageWithVersion</name>
+          <type>boolean</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>True if the generated package names should include the version.</description>
+        </parameter>
+        <parameter>
+          <name>packagedVersions</name>
+          <type>java.util.List</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Additional historical versions to generate, each being packaged with the version regardless of the &lt;code&gt;packageWithVersion&lt;/code&gt; setting.</description>
+        </parameter>
+        <parameter>
+          <name>project</name>
+          <type>org.apache.maven.project.MavenProject</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>The Maven project instance for the executing project.</description>
+        </parameter>
+        <parameter>
+          <name>version</name>
+          <type>java.lang.String</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>The version of the model we will be working on.</description>
+        </parameter>
+      </parameters>
+      <configuration>
+        <packageWithVersion implementation="boolean" default-value="false">${packageWithVersion}</packageWithVersion>
+        <outputDirectory implementation="java.io.File">${basedir}/target/generated-site/xsd</outputDirectory>
+        <project implementation="org.apache.maven.project.MavenProject">${project}</project>
+        <model implementation="java.lang.String">${model}</model>
+        <basedir implementation="java.lang.String">${basedir}</basedir>
+        <version implementation="java.lang.String">${version}</version>
+      </configuration>
+      <requirements>
+        <requirement>
+          <role>org.codehaus.modello.core.ModelloCore</role>
+          <field-name>modelloCore</field-name>
+        </requirement>
+      </requirements>
+    </mojo>
+  </mojos>
+  <dependencies/>
+</plugin>

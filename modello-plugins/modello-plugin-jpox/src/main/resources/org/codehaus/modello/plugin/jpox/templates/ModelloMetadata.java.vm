@@ -1,0 +1,40 @@
+package ${package};
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+
+import javax.jdo.Extent;
+import javax.jdo.FetchPlan;
+import javax.jdo.Query;
+import javax.jdo.PersistenceManager;
+import javax.jdo.PersistenceManagerFactory;
+import javax.jdo.JDOUserException;
+import javax.jdo.Transaction;
+
+// Model class imports
+#foreach ( $class in $classes )
+#if ( $class.getMetadata( $storeClassMetadataId ).isStorable() && ${class.packageName} != ${package} )
+import ${class.packageName}.${class.name};
+#end
+#end
+
+/**
+ * Generated ModelloMetadata class for ${model.name}.
+ *
+ * @author Mr Modello
+ */
+public class ${model.name}ModelloMetadata
+{
+    private String modelVersion;
+
+    public String getModelVersion()
+    {
+        return modelVersion;
+    }
+
+    public void setModelVersion( String modelVersion )
+    {
+        this.modelVersion = modelVersion;
+    }
+}
