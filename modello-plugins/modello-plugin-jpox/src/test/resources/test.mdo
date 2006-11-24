@@ -11,7 +11,7 @@
   </defaults>
   <classes>
     <class rootElement="true"
-           jpox.stashable="false">
+           stash.storable="false">
       <name>RbacDatabase</name>
       <version>1.0.1+</version>
       <fields>
@@ -34,7 +34,7 @@
       </fields>
     </class>
 
-    <class jpox.stashable="true"
+    <class stash.storable="true"
            jpox.table="ROLES"
            jpox.not-persisted-fields="modelEncoding">
       <name>JdoRole</name>
@@ -102,7 +102,7 @@
       </fields>
     </class>
 
-    <class jpox.stashable="true"
+    <class stash.storable="true"
            jpox.table="PERMISSIONS"
            jpox.not-persisted-fields="modelEncoding">
       <name>JdoPermission</name>
@@ -148,7 +148,7 @@
       </fields>
     </class>
 
-    <class jpox.stashable="true"
+    <class stash.storable="true"
            jpox.table="OPERATIONS"
            jpox.not-persisted-fields="modelEncoding">
       <name>JdoOperation</name>
@@ -184,7 +184,7 @@
       </fields>
     </class>
 
-    <class jpox.stashable="true"
+    <class stash.storable="true"
            jpox.table="RESOURCES"
            jpox.not-persisted-fields="modelEncoding">
       <name>JdoResource</name>
@@ -222,7 +222,7 @@
       </fields>
     </class>
 
-    <class jpox.stashable="true"
+    <class stash.storable="true"
            jpox.table="USER_ASSIGNMENTS"
            jpox.not-persisted-fields="modelEncoding">
       <name>JdoUserAssignment</name>

@@ -43,11 +43,14 @@ public class JpoxVerifierVersion
     {
         Properties properties = new Properties();
         properties.setProperty( "javax.jdo.PersistenceManagerFactoryClass", "org.jpox.PersistenceManagerFactoryImpl" );
-        properties.setProperty( "javax.jdo.option.ConnectionDriverName", "org.hsqldb.jdbcDriver" );
-        properties.setProperty( "javax.jdo.option.ConnectionURL", "jdbc:hsqldb:mem:test" );
+        properties.setProperty( "javax.jdo.option.ConnectionDriverName", "org.apache.derby.jdbc.EmbeddedDriver" );
+        properties.setProperty( "javax.jdo.option.ConnectionURL", "jdbc:derby:target/jpox-version/database;create=true" );
         properties.setProperty( "javax.jdo.option.ConnectionUserName", "sa" );
         properties.setProperty( "javax.jdo.option.ConnectionPassword", "" );
-        properties.setProperty( "org.jpox.autoCreateTables", "true" );
+        properties.setProperty( "org.jpox.autoCreateSchema", "true" );
+        properties.setProperty( "org.jpox.validateTables", "false" );
+        properties.setProperty( "org.jpox.validateColumns", "false" );
+        properties.setProperty( "org.jpox.validateConstraints", "false" );
 
         PropertyConfigurator.configure( getClass().getResource( "/log4j.properties" ) );
         // Logger.getLogger( "JPOX" ).setLevel( Level.DEBUG );

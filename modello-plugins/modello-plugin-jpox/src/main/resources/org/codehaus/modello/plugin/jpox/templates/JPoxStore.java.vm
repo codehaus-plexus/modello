@@ -14,7 +14,7 @@ import javax.jdo.Transaction;
 
 // Model class imports
 #foreach ( $class in $classes )
-#if ( $class.getMetadata( $storeClassMetadataId ).isStorable() && ${class.packageName} != ${package} )
+#if ( $class.getMetadata( $storeClassMetadataId ).storable && ${class.packageName} != ${package} )
 import ${class.packageName}.${class.name};
 #end
 #end
@@ -27,7 +27,7 @@ import ${class.packageName}.${class.name};
 public class ${model.name}JPoxStore
 {
 #foreach ( $class in $classes )
-#if ( $class.getMetadata( $storeClassMetadataId ).isStorable() )
+#if ( $class.getMetadata( $storeClassMetadataId ).storable )
         public final static String ${class.name}_DETAIL_FETCH_GROUP = "${class.name}_detail";
 #end
 #end
@@ -78,7 +78,6 @@ public class ${model.name}JPoxStore
     }
 
     public PersistenceManager begin()
-        throws Exception
     {
         ThreadState state = (ThreadState) threadState.get();
 
@@ -105,13 +104,12 @@ public class ${model.name}JPoxStore
     }
 
     public void commit()
-        throws Exception
     {
         ThreadState state = (ThreadState) threadState.get();
 
         if ( state == null )
         {
-            throw new Exception( "commit() must only be called after begin()." );
+            throw new IllegalStateException( "commit() must only be called after begin()." );
         }
 
         if ( state.depth > 0 )
@@ -127,23 +125,18 @@ public class ${model.name}JPoxStore
         {
             state.tx.commit();
         }
-        catch( Exception ex )
+        finally
         {
             if ( state.tx.isActive() )
             {
                 state.tx.rollback();
             }
 
-            throw ex;
-        }
-        finally
-        {
             closePersistenceManager( state.pm );
         }
     }
 
     public void rollback()
-        throws Exception
     {
         ThreadState state = (ThreadState) threadState.get();
 
@@ -170,13 +163,12 @@ public class ${model.name}JPoxStore
     }
 
 #foreach ( $class in $classes )
-#if ( $class.getMetadata( $storeClassMetadataId ).isStorable() )
+#if ( $class.getMetadata( $storeClassMetadataId ).storable )
     // ----------------------------------------------------------------------
     // ${class.name} CRUD
     // ----------------------------------------------------------------------
 
     public Object add${class.name}( $class.name o )
-        throws Exception
     {
         try
         {
@@ -190,17 +182,14 @@ public class ${model.name}JPoxStore
 
             return id;
         }
-        catch( Exception ex )
+        finally
         {
             rollback();
-
-            throw ex;
         }
     }
 
 #if ( $class.getIdentifierFields( $version ).size() > 0 )
     public Object store${class.name}( $class.name o )
-        throws Exception
     {
         try
         {
@@ -214,17 +203,14 @@ public class ${model.name}JPoxStore
 
             return id;
         }
-        catch( Exception ex )
+        finally
         {
             rollback();
-
-            throw ex;
         }
     }
 #end
 
     public void delete${class.name}( String id )
-        throws Exception
     {
         try
         {
@@ -248,14 +234,13 @@ public class ${model.name}JPoxStore
 
             commit();
         }
-        catch( Exception ex )
+        finally
         {
             rollback();
-
-            throw ex;
         }
     }
 
+#if ( $class.getIdentifierFields( $version ).size() == 1 )
     public ${class.name} get${class.name}( String id, boolean detach )
         throws Exception
     {
@@ -271,7 +256,9 @@ public class ${model.name}JPoxStore
 
             query.setIgnoreCache( true );
 
-            query.setFilter( "this.id == \"" + id + "\"" );
+            #foreach ( $idField in $class.getIdentifierFields( $version ) )
+            query.setFilter( "this.${idField.name} == \"" + id + "\"" );
+            #end
 
             Collection result = (Collection) query.execute();
 
@@ -291,16 +278,14 @@ public class ${model.name}JPoxStore
 
             return object;
         }
-        catch( Exception ex )
+        finally
         {
             rollback();
-
-            throw ex;
         }
     }
+#end
 
     public ${class.name} get${class.name}ByJdoId( Object id, boolean detach )
-        throws Exception
     {
         try
         {
@@ -321,16 +306,13 @@ public class ${model.name}JPoxStore
 
             return object;
         }
-        catch( Exception ex )
+        finally
         {
             rollback();
-
-            throw ex;
         }
     }
 
     public Collection get${class.name}Collection( boolean detach, String filter, String ordering )
-        throws Exception
     {
         try
         {
@@ -382,11 +364,9 @@ public class ${model.name}JPoxStore
 
             return collection;
         }
-        catch( Exception ex )
+        finally
         {
             rollback();
-
-            throw ex;
         }
     }
 #end
@@ -394,7 +374,6 @@ public class ${model.name}JPoxStore
 #end
 
     public ${model.name}ModelloMetadata get${model.name}ModelloMetadata( boolean detach )
-        throws Exception
     {
         try
         {
@@ -424,16 +403,13 @@ public class ${model.name}JPoxStore
 
             return object;
         }
-        catch( Exception ex )
+        finally
         {
             rollback();
-
-            throw ex;
         }
     }
 
     public void store${model.name}ModelloMetadata( ${model.name}ModelloMetadata o )
-        throws Exception
     {
         try
         {
@@ -443,11 +419,38 @@ public class ${model.name}JPoxStore
 
             commit();
         }
-        catch( Exception ex )
+        finally
         {
             rollback();
+        }
+    }
 
-            throw ex;
+    public void eraseModelFromDatabase()
+    {
+        try
+        {
+            PersistenceManager pm = begin();
+
+            Query query = pm.newQuery( ${model.name}ModelloMetadata.class );
+
+            query.setIgnoreCache( true );
+
+            query.deletePersistentAll();
+
+            #foreach ($class in $classes)
+            query = pm.newQuery( ${class.name}.class );
+
+            query.setIgnoreCache( true );
+
+            query.deletePersistentAll();
+            #end
+
+
+            commit();
+        }
+        finally
+        {
+            rollback();
         }
     }
 
