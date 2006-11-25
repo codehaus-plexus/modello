@@ -91,6 +91,8 @@ public abstract class AbstractJpoxGeneratorTestCase
 
         modello.generate( model, "jpox-store", parameters );
 
+        modello.generate( model, "jpox-metadata-class", parameters );
+
         parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, classes.getAbsolutePath() );
         modello.generate( model, "jpox-jdo-mapping", parameters );
 

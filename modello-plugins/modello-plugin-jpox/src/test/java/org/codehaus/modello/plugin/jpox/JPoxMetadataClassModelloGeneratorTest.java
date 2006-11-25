@@ -1,7 +1,7 @@
 package org.codehaus.modello.plugin.jpox;
 
 /*
- * Copyright (c) 2005, Codehaus.org
+ * Copyright (c) 2006, Codehaus.org
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -32,14 +32,14 @@ import java.util.Properties;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id$
+ * @version $Id: JPoxStoreModelloGeneratorTest.java 699 2006-11-23 03:37:55Z brett $
  */
-public class JPoxStoreModelloGeneratorTest
+public class JPoxMetadataClassModelloGeneratorTest
     extends AbstractModelloGeneratorTest
 {
-    public JPoxStoreModelloGeneratorTest()
+    public JPoxMetadataClassModelloGeneratorTest()
     {
-        super( "jpox-store" );
+        super( "jpox-metadata-class" );
     }
 
     public void testSimpleInvocation()
@@ -61,12 +61,12 @@ public class JPoxStoreModelloGeneratorTest
 
         parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.FALSE.toString() );
 
-        core.generate( model, "jpox-store", parameters );
+        core.generate( model, "jpox-metadata-class", parameters );
 
         // ----------------------------------------------------------------------
         // Assert
         // ----------------------------------------------------------------------
 
-        assertGeneratedFileExists( "org/mergere/tissue/TissueJPoxStore.java" );
+        assertGeneratedFileExists( "org/mergere/tissue/TissueModelloMetadata.java" );
     }
 }
