@@ -1,7 +1,7 @@
 package org.codehaus.modello.maven;
 
 /*
- * Copyright (c) 2004, Codehaus.org
+ * Copyright (c) 2006, Codehaus.org
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -28,12 +28,12 @@ import java.io.File;
  * Creates a JDO store from the Modello model.
  *
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id$
- * @goal jpox-store
+ * @version $Id: ModelloJPoxStoreMojo.java 669 2006-11-13 19:01:03Z dennisl $
+ * @goal jpox-metadata-class
  * @phase generate-sources
  * @description Creates a JDO store from the Modello model.
  */
-public class ModelloJPoxStoreMojo
+public class ModelloJPoxMetadataClassMojo
     extends AbstractModelloGeneratorMojo
 {
     /**
@@ -46,7 +46,7 @@ public class ModelloJPoxStoreMojo
 
     protected String getGeneratorType()
     {
-        return "jpox-store";
+        return "jpox-metadata-class";
     }
 
     public File getOutputDirectory()
