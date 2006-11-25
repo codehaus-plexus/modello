@@ -1,7 +1,7 @@
 package org.codehaus.modello.plugin.jpox;
 
 /*
- * Copyright (c) 2005, Codehaus.org
+ * Copyright (c) 2006, Codehaus.org
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -35,7 +35,7 @@ import java.util.Properties;
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
-public class JPoxStoreModelloGenerator
+public class JPoxMetadataClassModelloGenerator
     extends AbstractVelocityModelloGenerator
 {
     public void generate( Model model, Properties parameters )
@@ -54,10 +54,8 @@ public class JPoxStoreModelloGenerator
         // Generate a ModelloMetadata class for storing model information in the database
         String packageName = model.getDefaultPackageName( isPackageWithVersion(), getGeneratedVersion() );
 
-        // Generate the JPoxStore
-        String className = model.getName() + "JPoxStore";
-
-        writeClass( "org/codehaus/modello/plugin/jpox/templates/JPoxStore.java.vm", getOutputDirectory(), packageName,
-                    className, context );
+        String className = model.getName() + "ModelloMetadata";
+        writeClass( "org/codehaus/modello/plugin/jpox/templates/ModelloMetadata.java.vm", getOutputDirectory(),
+                    packageName, className, context );
     }
 }

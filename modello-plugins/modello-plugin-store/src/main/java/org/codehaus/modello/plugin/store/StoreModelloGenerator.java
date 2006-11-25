@@ -86,9 +86,9 @@ public class StoreModelloGenerator
             }
         }
 
-        String interfaceTemplate = "/org/codehaus/modello/plugin/store/templates/Store.vm";
+        String interfaceTemplate = "org/codehaus/modello/plugin/store/templates/Store.vm";
 
-        String exceptionTemplate = "/org/codehaus/modello/plugin/store/templates/StoreException.vm";
+        String exceptionTemplate = "org/codehaus/modello/plugin/store/templates/StoreException.vm";
 
         writeTemplate( interfaceTemplate, interfaceFile, context );
 
