@@ -55,7 +55,7 @@ public class JPoxMetadataClassModelloGenerator
         String packageName = model.getDefaultPackageName( isPackageWithVersion(), getGeneratedVersion() );
 
         String className = model.getName() + "ModelloMetadata";
-        writeClass( "/org/codehaus/modello/plugin/jpox/templates/ModelloMetadata.java.vm", getOutputDirectory(),
+        writeClass( "org/codehaus/modello/plugin/jpox/templates/ModelloMetadata.java.vm", getOutputDirectory(),
                     packageName, className, context );
     }
 }

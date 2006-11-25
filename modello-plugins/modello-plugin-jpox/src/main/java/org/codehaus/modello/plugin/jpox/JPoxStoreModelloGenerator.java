@@ -57,7 +57,7 @@ public class JPoxStoreModelloGenerator
         // Generate the JPoxStore
         String className = model.getName() + "JPoxStore";
 
-        writeClass( "/org/codehaus/modello/plugin/jpox/templates/JPoxStore.java.vm", getOutputDirectory(), packageName,
+        writeClass( "org/codehaus/modello/plugin/jpox/templates/JPoxStore.java.vm", getOutputDirectory(), packageName,
                     className, context );
     }
 }
