@@ -21,8 +21,6 @@ Modello Maven Plugin
 
   * {{{xdoc-mojo.html}modello:xdoc}} Generates standard documentation for the Modello model, in xdoc format.
 
-  * {{{prevayler-mojo.html}modello:prevayler}} Generates a {{{http://www.prevayler.org/}Prevayler}} store for the Modello model.
-
   * {{{jpox-store-mojo.html}modello:jpox-store}} Generates a {{{http://java.sun.com/products/jdo/}JDO}} store for the Modello model.
 
   * {{{jpox-jdo-mapping-mojo.html}modello:jpox-jdo-mapping}} Creates a {{{http://java.sun.com/products/jdo/}JDO}} mapping from the Modello model.
