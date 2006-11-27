@@ -258,18 +258,7 @@ public class StaxWriterGenerator
         {
             if ( modelClass.getIdentifierFields( getGeneratedVersion() ).size() != 1 )
             {
-                sc.add( "String id = (String) idMap.get( " + uncapClassName + " );" );
-                sc.add( "if ( id == null )" );
-                sc.add( "{" );
-                sc.indent();
-
-                sc.add( "++curId;" );
-                sc.add( "id = String.valueOf( curId );" );
-                sc.add( "idMap.put( " + uncapClassName + ", id );" );
-
-                sc.unindent();
-                sc.add( "}" );
-                sc.add( "serializer.writeAttribute( \"modello.id\", id );" );
+                writeIdMapCheck( sc, uncapClassName, "modello.id" );
             }
         }
 
@@ -543,19 +532,7 @@ public class StaxWriterGenerator
     {
         if ( referenceIdentifierField instanceof DummyIdModelField )
         {
-            sc.add( "String id = (String) idMap.get( " + value + " );" );
-            sc.add( "if ( id == null )" );
-            sc.add( "{" );
-            sc.indent();
-
-            sc.add( "++curId;" );
-            sc.add( "id = String.valueOf( curId );" );
-            sc.add( "idMap.put( " + value + ", id );" );
-
-            sc.unindent();
-            sc.add( "}" );
-
-            sc.add( "serializer.writeAttribute( \"" + referenceIdentifierField.getName() + "\", id );" );
+            writeIdMapCheck( sc, value, referenceIdentifierField.getName() );
         }
         else
         {
@@ -563,6 +540,29 @@ public class StaxWriterGenerator
                 referenceIdentifierField.getType(), getFieldValue( value, referenceIdentifierField ),
                 (XmlFieldMetadata) referenceIdentifierField.getMetadata( XmlFieldMetadata.ID ) ) + " );" );
         }
+    }
+
+    private static void writeIdMapCheck( JSourceCode sc, String value, String attributeName )
+    {
+        sc.add( "if ( !idMap.containsKey( " + value + " ) )" );
+        sc.add( "{" );
+        sc.indent();
+
+        sc.add( "++curId;" );
+        sc.add( "String id = String.valueOf( curId );" );
+        sc.add( "idMap.put( " + value + ", id );" );
+        sc.add( "serializer.writeAttribute( \"" + attributeName + "\", id );" );
+
+        sc.unindent();
+        sc.add( "}" );
+        sc.add( "else" );
+        sc.add( "{" );
+        sc.indent();
+
+        sc.add( "serializer.writeAttribute( \"" + attributeName + "\", (String) idMap.get( " + value + " ) );" );
+
+        sc.unindent();
+        sc.add( "}" );
     }
 
     private String getFieldValue( String uncapClassName, ModelField field )
