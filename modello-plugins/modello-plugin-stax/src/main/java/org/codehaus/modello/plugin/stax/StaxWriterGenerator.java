@@ -180,6 +180,7 @@ public class StaxWriterGenerator
     }
 
     private void writeAllClasses( Model objectModel, JClass jClass )
+        throws ModelloException
     {
         for ( Iterator i = objectModel.getClasses( getGeneratedVersion() ).iterator(); i.hasNext(); )
         {
@@ -190,6 +191,7 @@ public class StaxWriterGenerator
     }
 
     private void writeClass( ModelClass modelClass, JClass jClass )
+        throws ModelloException
     {
         String className = modelClass.getName();
 
@@ -251,8 +253,6 @@ public class StaxWriterGenerator
 
             XmlFieldMetadata fieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
 
-            JavaFieldMetadata javaFieldMetadata = (JavaFieldMetadata) field.getMetadata( JavaFieldMetadata.ID );
-
             String fieldTagName = fieldMetadata.getTagName();
 
             if ( fieldTagName == null )
@@ -262,7 +262,7 @@ public class StaxWriterGenerator
 
             String type = field.getType();
 
-            String value = uncapClassName + "." + getPrefix( javaFieldMetadata ) + capitalise( field.getName() ) + "()";
+            String value = getFieldValue( uncapClassName, field );
 
             if ( fieldMetadata.isAttribute() )
             {
@@ -308,7 +308,7 @@ public class StaxWriterGenerator
 
             String type = field.getType();
 
-            String value = uncapClassName + "." + getPrefix( javaFieldMetadata ) + capitalise( field.getName() ) + "()";
+            String value = getFieldValue( uncapClassName, field );
 
             if ( fieldMetadata.isAttribute() )
             {
@@ -321,20 +321,39 @@ public class StaxWriterGenerator
 
                 String associationName = association.getName();
 
+                ModelField referenceIdentifierField = getReferenceIdentifierField( association );
+
                 if ( ModelAssociation.ONE_MULTIPLICITY.equals( association.getMultiplicity() ) )
                 {
-                    sc.add( getValueChecker( type, value, association ) );
+                    if ( referenceIdentifierField != null )
+                    {
+                        // if stash.part, then store as a reference instead
 
-                    sc.add( "{" );
+                        sc.add( "serializer.writeStartElement( \"" + fieldTagName + "\" );" );
 
-                    sc.indent();
+                        XmlFieldMetadata xmlFieldMetadata =
+                            (XmlFieldMetadata) referenceIdentifierField.getMetadata( XmlFieldMetadata.ID );
+                        String fieldValue = getFieldValue( value, referenceIdentifierField );
+                        sc.add( "serializer.writeAttribute( \"" + referenceIdentifierField.getName() + "\", " +
+                            getValue( referenceIdentifierField.getType(), fieldValue, xmlFieldMetadata ) + " );" );
 
-                    sc.add( "write" + association.getTo() + "( (" + association.getTo() + ") " + value + ", \"" +
-                        fieldTagName + "\", serializer );" );
+                        sc.add( "serializer.writeEndElement();" );
+                    }
+                    else
+                    {
+                        sc.add( getValueChecker( type, value, association ) );
 
-                    sc.unindent();
+                        sc.add( "{" );
 
-                    sc.add( "}" );
+                        sc.indent();
+
+                        sc.add( "write" + association.getTo() + "( (" + association.getTo() + ") " + value + ", \"" +
+                            fieldTagName + "\", serializer );" );
+
+                        sc.unindent();
+
+                        sc.add( "}" );
+                    }
                 }
                 else
                 {
@@ -366,7 +385,23 @@ public class StaxWriterGenerator
                         {
                             sc.add( toType + " o = (" + toType + ") iter.next();" );
 
-                            sc.add( "write" + toType + "( o, \"" + singularTagName + "\", serializer );" );
+                            if ( referenceIdentifierField != null )
+                            {
+                                sc.add( "serializer.writeStartElement( \"" + singularTagName + "\" );" );
+
+                                XmlFieldMetadata xmlFieldMetadata =
+                                    (XmlFieldMetadata) referenceIdentifierField.getMetadata( XmlFieldMetadata.ID );
+                                String fieldValue = getFieldValue( "o", referenceIdentifierField );
+                                sc.add( "serializer.writeAttribute( \"" + referenceIdentifierField.getName() + "\", " +
+                                    getValue( referenceIdentifierField.getType(), fieldValue, xmlFieldMetadata ) +
+                                    " );" );
+
+                                sc.add( "serializer.writeEndElement();" );
+                            }
+                            else
+                            {
+                                sc.add( "write" + toType + "( o, \"" + singularTagName + "\", serializer );" );
+                            }
                         }
                         else
                         {
@@ -486,6 +521,13 @@ public class StaxWriterGenerator
         sc.add( "}" );
 
         jClass.addMethod( marshall );
+    }
+
+    private String getFieldValue( String uncapClassName, ModelField field )
+    {
+        JavaFieldMetadata javaFieldMetadata = (JavaFieldMetadata) field.getMetadata( JavaFieldMetadata.ID );
+
+        return uncapClassName + "." + getPrefix( javaFieldMetadata ) + capitalise( field.getName() ) + "()";
     }
 
     private void createWriteDomMethod( JClass jClass )

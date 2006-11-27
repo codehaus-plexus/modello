@@ -32,11 +32,13 @@ import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.Version;
 import org.codehaus.modello.model.VersionDefinition;
 import org.codehaus.modello.plugin.java.javasource.JClass;
+import org.codehaus.modello.plugin.java.javasource.JField;
 import org.codehaus.modello.plugin.java.javasource.JMethod;
 import org.codehaus.modello.plugin.java.javasource.JParameter;
 import org.codehaus.modello.plugin.java.javasource.JSourceCode;
 import org.codehaus.modello.plugin.java.javasource.JSourceWriter;
 import org.codehaus.modello.plugin.java.javasource.JType;
+import org.codehaus.modello.plugin.store.metadata.StoreAssociationMetadata;
 import org.codehaus.modello.plugins.xml.XmlAssociationMetadata;
 import org.codehaus.modello.plugins.xml.XmlClassMetadata;
 import org.codehaus.modello.plugins.xml.XmlFieldMetadata;
@@ -45,9 +47,11 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 
 /**
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
@@ -57,6 +61,8 @@ import java.util.Properties;
 public class StaxReaderGenerator
     extends AbstractStaxGenerator
 {
+    private Set/*<ModelClass>*/ parts;
+
     public void generate( Model model, Properties parameters )
         throws ModelloException
     {
@@ -154,7 +160,8 @@ public class StaxReaderGenerator
 
         ModelClass root = objectModel.getClass( objectModel.getRoot( getGeneratedVersion() ), getGeneratedVersion() );
 
-        JMethod method = new JMethod( new JClass( root.getName() ), "read" );
+        JClass returnType = new JClass( root.getName() );
+        JMethod method = new JMethod( returnType, "read" );
 
         method.addParameter( new JParameter( new JClass( "Reader" ), "reader" ) );
 
@@ -171,12 +178,19 @@ public class StaxReaderGenerator
 
         sc.add( "String encoding = xmlStreamReader.getCharacterEncodingScheme();" );
 
-        sc.add( "return parse" + root.getName() + "( \"" + getTagName( root ) +
+        sc.add( returnType + " value = parse" + root.getName() + "( \"" + getTagName( root ) +
             "\", xmlStreamReader, strict, encoding );" );
+
+        if ( writeReferenceResolver( root, jClass ) )
+        {
+            sc.add( "resolveReferences( value );" );
+        }
+
+        sc.add( "return value;" );
 
         jClass.addMethod( method );
 
-        method = new JMethod( new JClass( root.getName() ), "read" );
+        method = new JMethod( returnType, "read" );
 
         method.addParameter( new JParameter( new JClass( "Reader" ), "reader" ) );
 
@@ -589,6 +603,7 @@ public class StaxReaderGenerator
     }
 
     private void writeAllClassesParser( Model objectModel, JClass jClass )
+        throws ModelloException
     {
         ModelClass root = objectModel.getClass( objectModel.getRoot( getGeneratedVersion() ), getGeneratedVersion() );
 
@@ -608,6 +623,7 @@ public class StaxReaderGenerator
     }
 
     private void writeClassParser( ModelClass modelClass, JClass jClass, boolean rootElement )
+        throws ModelloException
     {
         String className = modelClass.getName();
 
@@ -615,7 +631,8 @@ public class StaxReaderGenerator
 
         String uncapClassName = uncapitalise( className );
 
-        JMethod unmarshall = new JMethod( new JClass( className ), "parse" + capClassName );
+        JClass returnType = new JClass( className );
+        JMethod unmarshall = new JMethod( returnType, "parse" + capClassName );
 
         unmarshall.addParameter( new JParameter( new JClass( "String" ), "tagName" ) );
 
@@ -703,7 +720,7 @@ public class StaxReaderGenerator
 
             if ( !fieldMetadata.isAttribute() )
             {
-                processField( fieldMetadata, field, statement, sc, uncapClassName, modelClass, rootElement );
+                processField( fieldMetadata, field, statement, sc, uncapClassName, modelClass, rootElement, jClass );
 
                 statement = "else if";
             }
@@ -800,12 +817,193 @@ public class StaxReaderGenerator
 
         sc.add( "}" );
 
+        if ( isAssociationPartToClass( modelClass ) )
+        {
+            String instanceFieldName = getInstanceFieldName( className );
+            jClass.addField( new JField( new JType( "java.util.Map" ), instanceFieldName ) );
+
+            sc.add( "if ( " + instanceFieldName + " == null )" );
+            sc.add( "{" );
+            sc.indent();
+
+            sc.add( instanceFieldName + " = new java.util.HashMap();" );
+
+            sc.unindent();
+            sc.add( "}" );
+
+            List identifierFields = modelClass.getIdentifierFields( getGeneratedVersion() );
+
+            ModelField field = (ModelField) identifierFields.get( 0 );
+
+            sc.add( instanceFieldName + ".put( " + uncapClassName + ".get" + capitalise( field.getName() ) + "(), " +
+                uncapClassName + ");" );
+        }
         sc.add( "return " + uncapClassName + ";" );
 
         jClass.addMethod( unmarshall );
     }
 
+    private boolean isAssociationPartToClass( ModelClass modelClass )
+    {
+        if ( parts == null )
+        {
+            parts = new HashSet();
+            for ( Iterator i = modelClass.getModel().getClasses( getGeneratedVersion() ).iterator(); i.hasNext(); )
+            {
+                ModelClass clazz = (ModelClass) i.next();
+
+                for ( Iterator j = clazz.getFields( getGeneratedVersion() ).iterator(); j.hasNext(); )
+                {
+                    ModelField modelField = (ModelField) j.next();
+
+                    if ( modelField instanceof ModelAssociation )
+                    {
+                        ModelAssociation assoc = (ModelAssociation) modelField;
+
+                        StoreAssociationMetadata assocMetadata =
+                            (StoreAssociationMetadata) assoc.getAssociationMetadata( StoreAssociationMetadata.ID );
+
+                        if ( assocMetadata.isPart() != null && assocMetadata.isPart().booleanValue() )
+                        {
+                            parts.add( assoc.getToClass() );
+                        }
+                    }
+                }
+            }
+        }
+        return parts.contains( modelClass );
+    }
+
+    private boolean writeReferenceResolver( ModelClass modelClass, JClass jClass )
+        throws ModelloException
+    {
+        String className = modelClass.getName();
+
+        JMethod[] existingMethods = jClass.getMethods();
+        for ( int i = 0; i < existingMethods.length; i++ )
+        {
+            if ( "resolveReferences".equals( existingMethods[i].getName() ) )
+            {
+                if ( existingMethods[i].getParameter( 0 ).getType().getName().equals( className ) )
+                {
+                    return true;
+                }
+            }
+        }
+
+        JMethod unmarshall = new JMethod( "resolveReferences" );
+
+        unmarshall.addParameter( new JParameter( new JClass( className ), "value" ) );
+
+        unmarshall.getModifiers().makePrivate();
+
+        JSourceCode sc = unmarshall.getSourceCode();
+
+        sc.add( "java.util.Map refs;" );
+
+        //Write other fields
+
+        boolean possibleReferences = false;
+        for ( Iterator i = modelClass.getAllFields( getGeneratedVersion(), true ).iterator(); i.hasNext(); )
+        {
+            ModelField field = (ModelField) i.next();
+
+            if ( field instanceof ModelAssociation )
+            {
+                ModelAssociation association = (ModelAssociation) field;
+
+                ModelField referenceIdentifierField = getReferenceIdentifierField( association );
+
+                if ( referenceIdentifierField != null )
+                {
+                    String refFieldName = getRefFieldName( association );
+                    String to = association.getTo();
+                    String instanceFieldName = getInstanceFieldName( to );
+
+                    sc.add( "refs = (java.util.Map) " + refFieldName + ".get( value );" );
+
+                    sc.add( "if ( refs != null )" );
+                    sc.add( "{" );
+                    sc.indent();
+
+                    if ( ModelAssociation.ONE_MULTIPLICITY.equals( association.getMultiplicity() ) )
+                    {
+                        sc.add( "String id = (String) refs.get( \"" + association.getName() + "\" );" );
+                        sc.add( to + " ref = (" + to + ") " + instanceFieldName + ".get( id );" );
+                        sc.add( "value.set" + capitalise( association.getName() ) + "( ref );" );
+                    }
+                    else
+                    {
+                        sc.add( "for ( int i = 0; i < value.get" + capitalise( association.getName() ) +
+                            "().size(); i++ )" );
+                        sc.add( "{" );
+                        sc.indent();
+
+                        sc.add( "String id = (String) refs.get( \"" + association.getName() + ".\" + i );" );
+                        sc.add( to + " ref = (" + to + ") " + instanceFieldName + ".get( id );" );
+                        sc.add( "if ( ref != null )" );
+                        sc.add( "{" );
+                        sc.indent();
+
+                        sc.add( "value.get" + capitalise( association.getName() ) + "().set( i, ref );" );
+
+                        sc.unindent();
+                        sc.add( "}" );
+
+                        sc.unindent();
+                        sc.add( "}" );
+                    }
+
+                    sc.unindent();
+                    sc.add( "}" );
+
+                    possibleReferences = true;
+                }
+
+                if ( writeReferenceResolver( association.getToClass(), jClass ) )
+                {
+                    if ( ModelAssociation.ONE_MULTIPLICITY.equals( association.getMultiplicity() ) )
+                    {
+                        sc.add( "resolveReferences( value.get" + capitalise( association.getName() ) + "() );" );
+                    }
+                    else
+                    {
+                        sc.add( "for ( java.util.Iterator i = value.get" + capitalise( association.getName() ) +
+                            "().iterator(); i.hasNext(); )" );
+                        sc.add( "{" );
+                        sc.indent();
+
+                        sc.add( "resolveReferences( (" + association.getTo() + ") i.next() );" );
+
+                        sc.unindent();
+                        sc.add( "}" );
+                    }
+
+                    possibleReferences = true;
+                }
+            }
+        }
+
+        if ( possibleReferences )
+        {
+            jClass.addMethod( unmarshall );
+        }
+
+        return possibleReferences;
+    }
+
+    private static String getRefFieldName( ModelAssociation association )
+    {
+        return uncapitalise( association.getTo() ) + "References";
+    }
+
+    private static String getInstanceFieldName( String to )
+    {
+        return uncapitalise( to ) + "Instances";
+    }
+
     private void writeAttributes( ModelClass modelClass, String uncapClassName, JSourceCode sc )
+        throws ModelloException
     {
         for ( Iterator i = modelClass.getAllFields( getGeneratedVersion(), true ).iterator(); i.hasNext(); )
         {
@@ -822,7 +1020,8 @@ public class StaxReaderGenerator
     }
 
     private void processField( XmlFieldMetadata fieldMetadata, ModelField field, String statement, JSourceCode sc,
-                               String uncapClassName, ModelClass modelClass, boolean rootElement )
+                               String uncapClassName, ModelClass modelClass, boolean rootElement, JClass jClass )
+        throws ModelloException
     {
         String tagName = fieldMetadata.getTagName();
 
@@ -868,6 +1067,13 @@ public class StaxReaderGenerator
                 sc.indent();
 
                 addCodeToCheckIfParsed( sc, tagName );
+
+                ModelField referenceIdentifierField = getReferenceIdentifierField( association );
+
+                if ( referenceIdentifierField != null )
+                {
+                    addCodeToAddReferences( association, jClass, sc, referenceIdentifierField, uncapClassName );
+                }
 
                 sc.add( uncapClassName + ".set" + capFieldName + "( parse" + association.getTo() + "( \"" + tagName +
                     "\", xmlStreamReader, strict, encoding ) );" );
@@ -938,6 +1144,13 @@ public class StaxReaderGenerator
 
                     if ( isClassInModel( association.getTo(), modelClass.getModel() ) )
                     {
+                        ModelField referenceIdentifierField = getReferenceIdentifierField( association );
+
+                        if ( referenceIdentifierField != null )
+                        {
+                            addCodeToAddReferences( association, jClass, sc, referenceIdentifierField, uncapClassName );
+                        }
+
                         sc.add( associationName + ".add( parse" + association.getTo() + "( \"" + singularTagName +
                             "\", xmlStreamReader, strict, encoding ) );" );
                     }
@@ -1139,6 +1352,54 @@ public class StaxReaderGenerator
 
             sc.add( "}" );
         }
+    }
+
+    private static void addCodeToAddReferences( ModelAssociation association, JClass jClass, JSourceCode sc,
+                                                ModelField referenceIdentifierField, String referredFromClass )
+    {
+        String refFieldName = getRefFieldName( association );
+        if ( jClass.getField( refFieldName ) == null )
+        {
+            jClass.addField( new JField( new JType( "java.util.Map" ), refFieldName ) );
+        }
+
+        sc.add( "String value = xmlStreamReader.getAttributeValue( \"\", \"" + referenceIdentifierField.getName() +
+            "\" );" );
+        sc.add( "if ( value != null )" );
+        sc.add( "{" );
+        sc.indent();
+
+        sc.add( "// This is a reference to an element elsewhere in the model" );
+        sc.add( "if ( " + refFieldName + " == null )" );
+        sc.add( "{" );
+        sc.indent();
+
+        sc.add( refFieldName + " = new java.util.HashMap();" );
+
+        sc.unindent();
+        sc.add( "}" );
+
+        sc.add( "java.util.Map refs = (java.util.Map) " + refFieldName + ".get( " + referredFromClass + " );" );
+        sc.add( "if ( refs == null )" );
+        sc.add( "{" );
+        sc.indent();
+
+        sc.add( "refs = new java.util.HashMap();" );
+        sc.add( refFieldName + ".put( " + referredFromClass + ", refs );" );
+
+        sc.unindent();
+        sc.add( "}" );
+
+        if ( ModelAssociation.ONE_MULTIPLICITY.equals( association.getMultiplicity() ) )
+        {
+            sc.add( "refs.put( \"" + association.getName() + "\", value );" );
+        }
+        else
+        {
+            sc.add( "refs.put( \"" + association.getName() + ".\" + " + association.getName() + ".size(), value );" );
+        }
+        sc.unindent();
+        sc.add( "}" );
     }
 
     private void writeModelVersionCheck( JSourceCode sc )

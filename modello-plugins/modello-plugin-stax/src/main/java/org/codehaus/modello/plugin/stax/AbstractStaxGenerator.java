@@ -23,7 +23,13 @@ package org.codehaus.modello.plugin.stax;
  */
 
 import org.codehaus.modello.ModelloException;
+import org.codehaus.modello.model.ModelAssociation;
+import org.codehaus.modello.model.ModelClass;
+import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.plugin.AbstractModelloGenerator;
+import org.codehaus.modello.plugin.store.metadata.StoreAssociationMetadata;
+
+import java.util.List;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -38,5 +44,37 @@ public abstract class AbstractStaxGenerator
         String name = getModel().getName();
 
         return name + suffix;
+    }
+
+    protected ModelField getReferenceIdentifierField( ModelAssociation association )
+        throws ModelloException
+    {
+        StoreAssociationMetadata assocMetadata =
+            (StoreAssociationMetadata) association.getAssociationMetadata( StoreAssociationMetadata.ID );
+
+        ModelField referenceIdentifierField = null;
+        if ( assocMetadata.isPart() != null && assocMetadata.isPart().booleanValue() )
+        {
+            String associationName = association.getName();
+
+            ModelClass modelClass = association.getModelClass();
+            if ( !isClassInModel( association.getTo(), modelClass.getModel() ) )
+            {
+                throw new ModelloException( "Can't use stash.part on the '" + associationName + "' association of '" +
+                    modelClass.getName() + "' because the target class '" + association.getTo() +
+                    "' is not in the model" );
+            }
+
+            List identifierFields = association.getToClass().getIdentifierFields( getGeneratedVersion() );
+            if ( identifierFields.size() != 1 )
+            {
+                throw new ModelloException( "Can't use stash.part on the '" + associationName + "' association of '" +
+                    modelClass.getName() + "' because the target class '" + association.getTo() +
+                    "' does not have a unique, single-field identifier." );
+            }
+
+            referenceIdentifierField = (ModelField) identifierFields.get( 0 );
+        }
+        return referenceIdentifierField;
     }
 }

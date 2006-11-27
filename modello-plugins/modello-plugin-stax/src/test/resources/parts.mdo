@@ -1,0 +1,162 @@
+<!--
+  ~ Copyright (c) 2006, Codehaus.org
+  ~
+  ~ Permission is hereby granted, free of charge, to any person obtaining a copy of
+  ~ this software and associated documentation files (the "Software"), to deal in
+  ~ the Software without restriction, including without limitation the rights to
+  ~ use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+  ~ of the Software, and to permit persons to whom the Software is furnished to do
+  ~ so, subject to the following conditions:
+  ~
+  ~ The above copyright notice and this permission notice shall be included in all
+  ~ copies or substantial portions of the Software.
+  ~
+  ~ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  ~ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  ~ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  ~ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  ~ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  ~ SOFTWARE.
+  -->
+
+<model>
+  <id>maven</id>
+  <name>Parts</name>
+  <defaults>
+    <default>
+      <key>package</key>
+      <value>org.codehaus.modello.test.model.parts</value>
+    </default>
+  </defaults>
+  <classes>
+    <class rootElement="true">
+      <name>Model</name>
+      <version>3.0.0+</version>
+      <fields>
+        <field>
+          <name>singleReference</name>
+          <version>3.0.0+</version>
+          <association>
+            <type>SingleReference</type>
+          </association>
+        </field>
+        <field>
+          <name>secondReference</name>
+          <version>3.0.0+</version>
+          <association>
+            <type>SingleReference</type>
+          </association>
+        </field>
+        <field>
+          <name>thirdReference</name>
+          <version>3.0.0+</version>
+          <association>
+            <type>SingleReference</type>
+          </association>
+        </field>
+        <field>
+          <name>dualReference</name>
+          <version>3.0.0+</version>
+          <association>
+            <type>DualReference</type>
+          </association>
+        </field>
+        <field>
+          <name>dupeReference</name>
+          <version>3.0.0+</version>
+          <association>
+            <type>DualReference</type>
+          </association>
+        </field>
+        <field>
+          <name>referenceList</name>
+          <version>3.0.0+</version>
+          <association>
+            <type>ReferenceList</type>
+          </association>
+        </field>
+        <field>
+          <name>singleReferences</name>
+          <version>3.0.0+</version>
+          <association>
+            <type>SingleReference</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+        <field>
+          <name>references</name>
+          <version>3.0.0+</version>
+          <association>
+            <type>Reference</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+      </fields>
+    </class>
+    <class>
+      <name>Reference</name>
+      <version>3.0.0+</version>
+      <fields>
+        <field>
+          <name>id</name>
+          <type>String</type>
+          <version>3.0.0+</version>
+          <identifier>true</identifier>
+        </field>
+        <field>
+          <name>name</name>
+          <type>String</type>
+          <version>3.0.0+</version>
+        </field>
+      </fields>
+    </class>
+    <class>
+      <name>ReferenceList</name>
+      <version>3.0.0+</version>
+      <fields>
+        <field>
+          <name>items</name>
+          <version>3.0.0+</version>
+          <association stash.part="true">
+            <type>Reference</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+      </fields>
+    </class>
+    <class>
+      <name>SingleReference</name>
+      <version>3.0.0+</version>
+      <fields>
+        <field>
+          <name>reference</name>
+          <version>3.0.0+</version>
+          <association stash.part="true">
+            <type>Reference</type>
+          </association>
+        </field>
+      </fields>
+    </class>
+    <class>
+      <name>DualReference</name>
+      <version>3.0.0+</version>
+      <fields>
+        <field>
+          <name>first</name>
+          <version>3.0.0+</version>
+          <association stash.part="true">
+            <type>Reference</type>
+          </association>
+        </field>
+        <field>
+          <name>second</name>
+          <version>3.0.0+</version>
+          <association stash.part="true">
+            <type>Reference</type>
+          </association>
+        </field>
+      </fields>
+    </class>
+  </classes>
+</model>
