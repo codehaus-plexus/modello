@@ -38,7 +38,6 @@ import org.codehaus.modello.plugin.java.javasource.JParameter;
 import org.codehaus.modello.plugin.java.javasource.JSourceCode;
 import org.codehaus.modello.plugin.java.javasource.JSourceWriter;
 import org.codehaus.modello.plugin.java.javasource.JType;
-import org.codehaus.modello.plugin.store.metadata.StoreAssociationMetadata;
 import org.codehaus.modello.plugins.xml.XmlAssociationMetadata;
 import org.codehaus.modello.plugins.xml.XmlClassMetadata;
 import org.codehaus.modello.plugins.xml.XmlFieldMetadata;
@@ -47,11 +46,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
-import java.util.Set;
 
 /**
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
@@ -61,8 +58,6 @@ import java.util.Set;
 public class StaxReaderGenerator
     extends AbstractStaxGenerator
 {
-    private Set/*<ModelClass>*/ parts;
-
     public void generate( Model model, Properties parameters )
         throws ModelloException
     {
@@ -662,6 +657,8 @@ public class StaxReaderGenerator
 
         sc.add( "java.util.Set parsed = new java.util.HashSet();" );
 
+        String instanceFieldName = getInstanceFieldName( className );
+
         if ( rootElement )
         {
             sc.add( "boolean foundRoot = false;" );
@@ -679,6 +676,30 @@ public class StaxReaderGenerator
         else
         {
             writeAttributes( modelClass, uncapClassName, sc );
+
+            if ( isAssociationPartToClass( modelClass ) )
+            {
+                jClass.addField( new JField( new JType( "java.util.Map" ), instanceFieldName ) );
+
+                sc.add( "if ( " + instanceFieldName + " == null )" );
+                sc.add( "{" );
+                sc.indent();
+
+                sc.add( instanceFieldName + " = new java.util.HashMap();" );
+
+                sc.unindent();
+                sc.add( "}" );
+
+                sc.add( "String v = xmlStreamReader.getAttributeValue( \"\", \"modello.id\" );" );
+                sc.add( "if ( v != null )" );
+                sc.add( "{" );
+                sc.indent();
+
+                sc.add( instanceFieldName + ".put( v, " + uncapClassName + ");" );
+
+                sc.unindent();
+                sc.add( "}" );
+            }
 
             sc.add( "while ( xmlStreamReader.nextTag() == XMLStreamConstants.START_ELEMENT )" );
         }
@@ -825,59 +846,20 @@ public class StaxReaderGenerator
 
         if ( isAssociationPartToClass( modelClass ) )
         {
-            String instanceFieldName = getInstanceFieldName( className );
-            jClass.addField( new JField( new JType( "java.util.Map" ), instanceFieldName ) );
-
-            sc.add( "if ( " + instanceFieldName + " == null )" );
-            sc.add( "{" );
-            sc.indent();
-
-            sc.add( instanceFieldName + " = new java.util.HashMap();" );
-
-            sc.unindent();
-            sc.add( "}" );
-
             List identifierFields = modelClass.getIdentifierFields( getGeneratedVersion() );
 
-            ModelField field = (ModelField) identifierFields.get( 0 );
+            if ( identifierFields.size() == 1 )
+            {
+                ModelField field = (ModelField) identifierFields.get( 0 );
 
-            sc.add( instanceFieldName + ".put( " + uncapClassName + ".get" + capitalise( field.getName() ) + "(), " +
-                uncapClassName + ");" );
+                sc.add( instanceFieldName + ".put( " + uncapClassName + ".get" + capitalise( field.getName() ) +
+                    "(), " + uncapClassName + ");" );
+            }
         }
+
         sc.add( "return " + uncapClassName + ";" );
 
         jClass.addMethod( unmarshall );
-    }
-
-    private boolean isAssociationPartToClass( ModelClass modelClass )
-    {
-        if ( parts == null )
-        {
-            parts = new HashSet();
-            for ( Iterator i = modelClass.getModel().getClasses( getGeneratedVersion() ).iterator(); i.hasNext(); )
-            {
-                ModelClass clazz = (ModelClass) i.next();
-
-                for ( Iterator j = clazz.getFields( getGeneratedVersion() ).iterator(); j.hasNext(); )
-                {
-                    ModelField modelField = (ModelField) j.next();
-
-                    if ( modelField instanceof ModelAssociation )
-                    {
-                        ModelAssociation assoc = (ModelAssociation) modelField;
-
-                        StoreAssociationMetadata assocMetadata =
-                            (StoreAssociationMetadata) assoc.getAssociationMetadata( StoreAssociationMetadata.ID );
-
-                        if ( assocMetadata.isPart() != null && assocMetadata.isPart().booleanValue() )
-                        {
-                            parts.add( assoc.getToClass() );
-                        }
-                    }
-                }
-            }
-        }
-        return parts.contains( modelClass );
     }
 
     private GeneratorNode findRequiredReferenceResolvers( ModelClass modelClass, GeneratorNode parent )

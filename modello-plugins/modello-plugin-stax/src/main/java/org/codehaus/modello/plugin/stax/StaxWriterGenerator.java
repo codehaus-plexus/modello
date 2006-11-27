@@ -30,6 +30,8 @@ import org.codehaus.modello.model.ModelDefault;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.plugin.java.JavaFieldMetadata;
 import org.codehaus.modello.plugin.java.javasource.JClass;
+import org.codehaus.modello.plugin.java.javasource.JConstructor;
+import org.codehaus.modello.plugin.java.javasource.JField;
 import org.codehaus.modello.plugin.java.javasource.JMethod;
 import org.codehaus.modello.plugin.java.javasource.JParameter;
 import org.codehaus.modello.plugin.java.javasource.JSourceCode;
@@ -122,6 +124,12 @@ public class StaxWriterGenerator
         jClass.addImport( "org.codehaus.plexus.util.xml.Xpp3Dom" );
 
         addModelImports( jClass, null );
+
+        jClass.addField( new JField( JType.Int, "curId" ) );
+        jClass.addField( new JField( new JType( "java.util.Map" ), "idMap" ) );
+        JConstructor constructor = new JConstructor( jClass );
+        constructor.getSourceCode().add( "idMap = new java.util.HashMap();" );
+        jClass.addConstructor( constructor );
 
         String root = objectModel.getRoot( getGeneratedVersion() );
 
@@ -246,6 +254,25 @@ public class StaxWriterGenerator
             }
         }
 
+        if ( isAssociationPartToClass( modelClass ) )
+        {
+            if ( modelClass.getIdentifierFields( getGeneratedVersion() ).size() != 1 )
+            {
+                sc.add( "String id = (String) idMap.get( " + uncapClassName + " );" );
+                sc.add( "if ( id == null )" );
+                sc.add( "{" );
+                sc.indent();
+
+                sc.add( "++curId;" );
+                sc.add( "id = String.valueOf( curId );" );
+                sc.add( "idMap.put( " + uncapClassName + ", id );" );
+
+                sc.unindent();
+                sc.add( "}" );
+                sc.add( "serializer.writeAttribute( \"modello.id\", id );" );
+            }
+        }
+
         // XML attributes
         for ( Iterator i = modelClass.getAllFields( getGeneratedVersion(), true ).iterator(); i.hasNext(); )
         {
@@ -289,8 +316,6 @@ public class StaxWriterGenerator
 
             XmlFieldMetadata fieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
 
-            JavaFieldMetadata javaFieldMetadata = (JavaFieldMetadata) field.getMetadata( JavaFieldMetadata.ID );
-
             String fieldTagName = fieldMetadata.getTagName();
 
             if ( fieldTagName == null )
@@ -331,11 +356,7 @@ public class StaxWriterGenerator
 
                         sc.add( "serializer.writeStartElement( \"" + fieldTagName + "\" );" );
 
-                        XmlFieldMetadata xmlFieldMetadata =
-                            (XmlFieldMetadata) referenceIdentifierField.getMetadata( XmlFieldMetadata.ID );
-                        String fieldValue = getFieldValue( value, referenceIdentifierField );
-                        sc.add( "serializer.writeAttribute( \"" + referenceIdentifierField.getName() + "\", " +
-                            getValue( referenceIdentifierField.getType(), fieldValue, xmlFieldMetadata ) + " );" );
+                        writeElementAttribute( sc, referenceIdentifierField, value );
 
                         sc.add( "serializer.writeEndElement();" );
                     }
@@ -389,12 +410,7 @@ public class StaxWriterGenerator
                             {
                                 sc.add( "serializer.writeStartElement( \"" + singularTagName + "\" );" );
 
-                                XmlFieldMetadata xmlFieldMetadata =
-                                    (XmlFieldMetadata) referenceIdentifierField.getMetadata( XmlFieldMetadata.ID );
-                                String fieldValue = getFieldValue( "o", referenceIdentifierField );
-                                sc.add( "serializer.writeAttribute( \"" + referenceIdentifierField.getName() + "\", " +
-                                    getValue( referenceIdentifierField.getType(), fieldValue, xmlFieldMetadata ) +
-                                    " );" );
+                                writeElementAttribute( sc, referenceIdentifierField, "o" );
 
                                 sc.add( "serializer.writeEndElement();" );
                             }
@@ -521,6 +537,32 @@ public class StaxWriterGenerator
         sc.add( "}" );
 
         jClass.addMethod( marshall );
+    }
+
+    private void writeElementAttribute( JSourceCode sc, ModelField referenceIdentifierField, String value )
+    {
+        if ( referenceIdentifierField instanceof DummyIdModelField )
+        {
+            sc.add( "String id = (String) idMap.get( " + value + " );" );
+            sc.add( "if ( id == null )" );
+            sc.add( "{" );
+            sc.indent();
+
+            sc.add( "++curId;" );
+            sc.add( "id = String.valueOf( curId );" );
+            sc.add( "idMap.put( " + value + ", id );" );
+
+            sc.unindent();
+            sc.add( "}" );
+
+            sc.add( "serializer.writeAttribute( \"" + referenceIdentifierField.getName() + "\", id );" );
+        }
+        else
+        {
+            sc.add( "serializer.writeAttribute( \"" + referenceIdentifierField.getName() + "\", " + getValue(
+                referenceIdentifierField.getType(), getFieldValue( value, referenceIdentifierField ),
+                (XmlFieldMetadata) referenceIdentifierField.getMetadata( XmlFieldMetadata.ID ) ) + " );" );
+        }
     }
 
     private String getFieldValue( String uncapClassName, ModelField field )

@@ -1,4 +1,4 @@
-package org.codehaus.modello.generator.xml.stax;
+package org.codehaus.modello.plugin.stax;
 
 /*
  * Copyright (c) 2006, Codehaus.org
@@ -22,40 +22,13 @@ package org.codehaus.modello.generator.xml.stax;
  * SOFTWARE.
  */
 
-import org.codehaus.modello.model.Model;
-import org.codehaus.modello.model.ModelClass;
-import org.codehaus.modello.model.Version;
-import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
+import org.codehaus.modello.model.ModelField;
 
-import java.io.FileReader;
-import java.util.List;
-
-/**
- * @version $Id: StaxGeneratorTest.java 675 2006-11-16 10:58:59Z brett $
- */
-public class StaxGeneratorPartsTest
-    extends AbstractStaxGeneratorTestCase
+public class DummyIdModelField
+    extends ModelField
 {
-    public StaxGeneratorPartsTest()
-        throws ComponentLookupException
+    public String getName()
     {
-        super( "stax-parts" );
+        return "modello.refid";
     }
-
-    public void testStaxReaderParts()
-        throws Throwable
-    {
-        Model model = modello.loadModel( new FileReader( getTestPath( "src/test/resources/parts.mdo" ) ) );
-
-        List classesList = model.getClasses( new Version( "4.0.0" ) );
-
-        assertEquals( 9, classesList.size() );
-
-        ModelClass clazz = (ModelClass) classesList.get( 0 );
-
-        assertEquals( "Model", clazz.getName() );
-
-        verifyModel( model, "org.codehaus.modello.generator.xml.stax.StaxVerifierParts" );
-    }
-
 }

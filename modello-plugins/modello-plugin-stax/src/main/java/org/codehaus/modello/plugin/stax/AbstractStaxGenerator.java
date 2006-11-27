@@ -29,7 +29,10 @@ import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.plugin.AbstractModelloGenerator;
 import org.codehaus.modello.plugin.store.metadata.StoreAssociationMetadata;
 
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -38,6 +41,8 @@ import java.util.List;
 public abstract class AbstractStaxGenerator
     extends AbstractModelloGenerator
 {
+    private Set/*<ModelClass>*/ parts;
+
     protected String getFileName( String suffix )
         throws ModelloException
     {
@@ -66,15 +71,47 @@ public abstract class AbstractStaxGenerator
             }
 
             List identifierFields = association.getToClass().getIdentifierFields( getGeneratedVersion() );
-            if ( identifierFields.size() != 1 )
+            if ( identifierFields.size() == 1 )
             {
-                throw new ModelloException( "Can't use stash.part on the '" + associationName + "' association of '" +
-                    modelClass.getName() + "' because the target class '" + association.getTo() +
-                    "' does not have a unique, single-field identifier." );
+                referenceIdentifierField = (ModelField) identifierFields.get( 0 );
             }
-
-            referenceIdentifierField = (ModelField) identifierFields.get( 0 );
+            else
+            {
+                referenceIdentifierField = new DummyIdModelField();
+                referenceIdentifierField.setName( "modello.refid" );
+            }
         }
         return referenceIdentifierField;
+    }
+
+    protected boolean isAssociationPartToClass( ModelClass modelClass )
+    {
+        if ( parts == null )
+        {
+            parts = new HashSet();
+            for ( Iterator i = modelClass.getModel().getClasses( getGeneratedVersion() ).iterator(); i.hasNext(); )
+            {
+                ModelClass clazz = (ModelClass) i.next();
+
+                for ( Iterator j = clazz.getFields( getGeneratedVersion() ).iterator(); j.hasNext(); )
+                {
+                    ModelField modelField = (ModelField) j.next();
+
+                    if ( modelField instanceof ModelAssociation )
+                    {
+                        ModelAssociation assoc = (ModelAssociation) modelField;
+
+                        StoreAssociationMetadata assocMetadata =
+                            (StoreAssociationMetadata) assoc.getAssociationMetadata( StoreAssociationMetadata.ID );
+
+                        if ( assocMetadata.isPart() != null && assocMetadata.isPart().booleanValue() )
+                        {
+                            parts.add( assoc.getToClass() );
+                        }
+                    }
+                }
+            }
+        }
+        return parts.contains( modelClass );
     }
 }

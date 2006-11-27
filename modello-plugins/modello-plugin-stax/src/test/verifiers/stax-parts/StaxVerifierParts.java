@@ -26,6 +26,8 @@ import junit.framework.Assert;
 import org.codehaus.modello.test.model.parts.Model;
 import org.codehaus.modello.test.model.parts.SingleReference;
 import org.codehaus.modello.test.model.parts.Reference;
+import org.codehaus.modello.test.model.parts.DummyReference;
+import org.codehaus.modello.test.model.parts.DummyIdReference;
 import org.codehaus.modello.test.model.parts.io.stax.PartsStaxReader;
 import org.codehaus.modello.test.model.parts.io.stax.PartsStaxWriter;
 import org.codehaus.modello.verifier.Verifier;
@@ -85,6 +87,34 @@ public class StaxVerifierParts
         Assert.assertEquals( "parent", model.getNestedReference().getId() );
         Assert.assertEquals( model.getNestedReference(), model.getNestedReference().getChildReference().getParentReference() );
         Assert.assertEquals( 3, model.getReferences().size() );
+        Assert.assertNotNull( model.getDummyReference() );
+        Assert.assertNotNull( model.getDummyReference().getReference() );
+        Assert.assertEquals( "Dummy 2", model.getDummyReference().getReference().getName() );
+        Assert.assertEquals( "Description 2", model.getDummyReference().getReference().getDescription() );
+        Assert.assertNotNull( model.getOtherDummyReference() );
+        Assert.assertNotNull( model.getOtherDummyReference().getReference() );
+        Assert.assertEquals( "Dummy 1", model.getOtherDummyReference().getReference().getName() );
+        Assert.assertEquals( "Description 1", model.getOtherDummyReference().getReference().getDescription() );
+        Assert.assertEquals( 3, model.getDummyIdReferences().size() );
+        Assert.assertEquals( 4, model.getDummyReferences().size() );
+        Assert.assertEquals( "Dummy 3", ((DummyReference)model.getDummyReferences().get( 0 )).getReference().getName() );
+        Assert.assertEquals( "Description 3", ((DummyReference)model.getDummyReferences().get( 0 )).getReference().getDescription() );
+        Assert.assertEquals( "Dummy 1", ((DummyReference)model.getDummyReferences().get( 1 )).getReference().getName() );
+        Assert.assertEquals( "Description 1", ((DummyReference)model.getDummyReferences().get( 1 )).getReference().getDescription() );
+        Assert.assertEquals( "Dummy 1", ((DummyReference)model.getDummyReferences().get( 2 )).getReference().getName() );
+        Assert.assertEquals( "Description 1", ((DummyReference)model.getDummyReferences().get( 2 )).getReference().getDescription() );
+        Assert.assertEquals( "Dummy 2", ((DummyReference)model.getDummyReferences().get( 3 )).getReference().getName() );
+        Assert.assertEquals( "Description 2", ((DummyReference)model.getDummyReferences().get( 3 )).getReference().getDescription() );
+        Assert.assertEquals( 4, model.getDummyPointers().size() );
+        Assert.assertEquals( "Dummy 3", ((DummyIdReference)model.getDummyPointers().get( 0 )).getName() );
+        Assert.assertEquals( "Description 3", ((DummyIdReference)model.getDummyPointers().get( 0 )).getDescription() );
+        Assert.assertEquals( "Dummy 1", ((DummyIdReference)model.getDummyPointers().get( 1 )).getName() );
+        Assert.assertEquals( "Description 1", ((DummyIdReference)model.getDummyPointers().get( 1 )).getDescription() );
+        Assert.assertEquals( "Dummy 1", ((DummyIdReference)model.getDummyPointers().get( 2 )).getName() );
+        Assert.assertEquals( "Description 1", ((DummyIdReference)model.getDummyPointers().get( 2 )).getDescription() );
+        Assert.assertEquals( "Dummy 2", ((DummyIdReference)model.getDummyPointers().get( 3 )).getName() );
+        Assert.assertEquals( "Description 2", ((DummyIdReference)model.getDummyPointers().get( 3 )).getDescription() );
+
 
         String expected = FileUtils.fileRead( path );
 

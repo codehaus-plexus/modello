@@ -99,6 +99,44 @@
             <multiplicity>*</multiplicity>
           </association>
         </field>
+        <field>
+          <name>dummyReference</name>
+          <version>3.0.0+</version>
+          <association>
+            <type>DummyReference</type>
+          </association>
+        </field>
+        <field>
+          <name>dummyIdReferences</name>
+          <version>3.0.0+</version>
+          <association>
+            <type>DummyIdReference</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+        <field>
+          <name>otherDummyReference</name>
+          <version>3.0.0+</version>
+          <association>
+            <type>DummyReference</type>
+          </association>
+        </field>
+        <field>
+          <name>dummyReferences</name>
+          <version>3.0.0+</version>
+          <association>
+            <type>DummyReference</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+        <field>
+          <name>dummyPointers</name>
+          <version>3.0.0+</version>
+          <association stash.part="true">
+            <type>DummyIdReference</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
       </fields>
     </class>
     <class>
@@ -194,6 +232,35 @@
           <association stash.part="true">
             <type>Reference</type>
           </association>
+        </field>
+      </fields>
+    </class>
+    <class>
+      <name>DummyReference</name>
+      <version>3.0.0+</version>
+      <fields>
+        <field>
+          <name>reference</name>
+          <version>3.0.0+</version>
+          <association stash.part="true">
+            <type>DummyIdReference</type>
+          </association>
+        </field>
+      </fields>
+    </class>
+    <class>
+      <name>DummyIdReference</name>
+      <version>3.0.0+</version>
+      <fields>
+        <field>
+          <name>name</name>
+          <version>3.0.0+</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>description</name>
+          <version>3.0.0+</version>
+          <type>String</type>
         </field>
       </fields>
     </class>
