@@ -912,74 +912,81 @@ public class StaxReaderGenerator
             {
                 ModelAssociation association = (ModelAssociation) field;
 
-                ModelField referenceIdentifierField = getReferenceIdentifierField( association );
-
-                if ( referenceIdentifierField != null )
+                if ( !modelClass.getName().equals( association.getTo() ) )
                 {
-                    String refFieldName = getRefFieldName( association );
-                    String to = association.getTo();
-                    String instanceFieldName = getInstanceFieldName( to );
+                    ModelField referenceIdentifierField = getReferenceIdentifierField( association );
 
-                    sc.add( "refs = (java.util.Map) " + refFieldName + ".get( value );" );
-
-                    sc.add( "if ( refs != null )" );
-                    sc.add( "{" );
-                    sc.indent();
-
-                    if ( ModelAssociation.ONE_MULTIPLICITY.equals( association.getMultiplicity() ) )
+                    if ( referenceIdentifierField != null )
                     {
-                        sc.add( "String id = (String) refs.get( \"" + association.getName() + "\" );" );
-                        sc.add( to + " ref = (" + to + ") " + instanceFieldName + ".get( id );" );
-                        sc.add( "value.set" + capitalise( association.getName() ) + "( ref );" );
-                    }
-                    else
-                    {
-                        sc.add( "for ( int i = 0; i < value.get" + capitalise( association.getName() ) +
-                            "().size(); i++ )" );
+                        String refFieldName = getRefFieldName( association );
+                        String to = association.getTo();
+                        String instanceFieldName = getInstanceFieldName( to );
+
+                        sc.add( "refs = (java.util.Map) " + refFieldName + ".get( value );" );
+
+                        sc.add( "if ( refs != null )" );
                         sc.add( "{" );
                         sc.indent();
 
-                        sc.add( "String id = (String) refs.get( \"" + association.getName() + ".\" + i );" );
-                        sc.add( to + " ref = (" + to + ") " + instanceFieldName + ".get( id );" );
-                        sc.add( "if ( ref != null )" );
-                        sc.add( "{" );
-                        sc.indent();
+                        if ( ModelAssociation.ONE_MULTIPLICITY.equals( association.getMultiplicity() ) )
+                        {
+                            sc.add( "String id = (String) refs.get( \"" + association.getName() + "\" );" );
+                            sc.add( to + " ref = (" + to + ") " + instanceFieldName + ".get( id );" );
+                            sc.add( "value.set" + capitalise( association.getName() ) + "( ref );" );
+                        }
+                        else
+                        {
+                            sc.add( "for ( int i = 0; i < value.get" + capitalise( association.getName() ) +
+                                "().size(); i++ )" );
+                            sc.add( "{" );
+                            sc.indent();
 
-                        sc.add( "value.get" + capitalise( association.getName() ) + "().set( i, ref );" );
+                            sc.add( "String id = (String) refs.get( \"" + association.getName() + ".\" + i );" );
+                            sc.add( to + " ref = (" + to + ") " + instanceFieldName + ".get( id );" );
+                            sc.add( "if ( ref != null )" );
+                            sc.add( "{" );
+                            sc.indent();
+
+                            sc.add( "value.get" + capitalise( association.getName() ) + "().set( i, ref );" );
+
+                            sc.unindent();
+                            sc.add( "}" );
+
+                            sc.unindent();
+                            sc.add( "}" );
+                        }
 
                         sc.unindent();
                         sc.add( "}" );
 
-                        sc.unindent();
-                        sc.add( "}" );
+                        possibleReferences = true;
                     }
 
-                    sc.unindent();
-                    sc.add( "}" );
-
-                    possibleReferences = true;
-                }
-
-                if ( writeReferenceResolver( association.getToClass(), jClass ) )
-                {
-                    if ( ModelAssociation.ONE_MULTIPLICITY.equals( association.getMultiplicity() ) )
+                    if ( isClassInModel( association.getTo(), getModel() ) )
                     {
-                        sc.add( "resolveReferences( value.get" + capitalise( association.getName() ) + "() );" );
+                        if ( writeReferenceResolver( association.getToClass(), jClass ) )
+                        {
+                            if ( ModelAssociation.ONE_MULTIPLICITY.equals( association.getMultiplicity() ) )
+                            {
+                                sc.add(
+                                    "resolveReferences( value.get" + capitalise( association.getName() ) + "() );" );
+                            }
+                            else
+                            {
+                                sc.add( "for ( java.util.Iterator i = value.get" + capitalise( association.getName() ) +
+                                    "().iterator(); i.hasNext(); )" );
+                                sc.add( "{" );
+                                sc.indent();
+
+                                sc.add( "resolveReferences( (" + association.getTo() + ") i.next() );" );
+
+                                sc.unindent();
+                                sc.add( "}" );
+                            }
+
+                            possibleReferences = true;
+                        }
                     }
-                    else
-                    {
-                        sc.add( "for ( java.util.Iterator i = value.get" + capitalise( association.getName() ) +
-                            "().iterator(); i.hasNext(); )" );
-                        sc.add( "{" );
-                        sc.indent();
-
-                        sc.add( "resolveReferences( (" + association.getTo() + ") i.next() );" );
-
-                        sc.unindent();
-                        sc.add( "}" );
-                    }
-
-                    possibleReferences = true;
                 }
             }
         }
