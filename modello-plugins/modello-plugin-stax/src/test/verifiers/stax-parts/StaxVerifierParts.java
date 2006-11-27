@@ -82,6 +82,8 @@ public class StaxVerifierParts
         Assert.assertEquals( "Single Reference", ((SingleReference)model.getSingleReferences().get( 1 )).getReference().getName() );
         Assert.assertEquals( "another", ((SingleReference)model.getSingleReferences().get( 2 )).getReference().getId() );
         Assert.assertEquals( "Another Reference", ((SingleReference)model.getSingleReferences().get( 2 )).getReference().getName() );
+        Assert.assertEquals( "parent", model.getNestedReference().getId() );
+        Assert.assertEquals( model.getNestedReference(), model.getNestedReference().getChildReference().getParentReference() );
         Assert.assertEquals( 3, model.getReferences().size() );
 
         String expected = FileUtils.fileRead( path );

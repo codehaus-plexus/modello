@@ -181,10 +181,16 @@ public class StaxReaderGenerator
         sc.add( returnType + " value = parse" + root.getName() + "( \"" + getTagName( root ) +
             "\", xmlStreamReader, strict, encoding );" );
 
-        if ( writeReferenceResolver( root, jClass ) )
+        GeneratorNode rootNode = findRequiredReferenceResolvers( root, null );
+
+        writeReferenceResolvers( rootNode, jClass );
+        for ( Iterator i = rootNode.getNodesWithReferencableChildren().values().iterator(); i.hasNext(); )
         {
-            sc.add( "resolveReferences( value );" );
+            GeneratorNode node = (GeneratorNode) i.next();
+            writeReferenceResolvers( node, jClass );
         }
+
+        sc.add( "resolveReferences( value );" );
 
         sc.add( "return value;" );
 
@@ -874,36 +880,13 @@ public class StaxReaderGenerator
         return parts.contains( modelClass );
     }
 
-    private boolean writeReferenceResolver( ModelClass modelClass, JClass jClass )
+    private GeneratorNode findRequiredReferenceResolvers( ModelClass modelClass, GeneratorNode parent )
         throws ModelloException
     {
         String className = modelClass.getName();
 
-        JMethod[] existingMethods = jClass.getMethods();
-        for ( int i = 0; i < existingMethods.length; i++ )
-        {
-            if ( "resolveReferences".equals( existingMethods[i].getName() ) )
-            {
-                if ( existingMethods[i].getParameter( 0 ).getType().getName().equals( className ) )
-                {
-                    return true;
-                }
-            }
-        }
+        GeneratorNode value = new GeneratorNode( className, parent );
 
-        JMethod unmarshall = new JMethod( "resolveReferences" );
-
-        unmarshall.addParameter( new JParameter( new JClass( className ), "value" ) );
-
-        unmarshall.getModifiers().makePrivate();
-
-        JSourceCode sc = unmarshall.getSourceCode();
-
-        sc.add( "java.util.Map refs;" );
-
-        //Write other fields
-
-        boolean possibleReferences = false;
         for ( Iterator i = modelClass.getAllFields( getGeneratedVersion(), true ).iterator(); i.hasNext(); )
         {
             ModelField field = (ModelField) i.next();
@@ -912,91 +895,133 @@ public class StaxReaderGenerator
             {
                 ModelAssociation association = (ModelAssociation) field;
 
-                if ( !modelClass.getName().equals( association.getTo() ) )
+                if ( isClassInModel( association.getTo(), getModel() ) )
                 {
                     ModelField referenceIdentifierField = getReferenceIdentifierField( association );
 
+                    GeneratorNode child = null;
                     if ( referenceIdentifierField != null )
                     {
-                        String refFieldName = getRefFieldName( association );
-                        String to = association.getTo();
-                        String instanceFieldName = getInstanceFieldName( to );
-
-                        sc.add( "refs = (java.util.Map) " + refFieldName + ".get( value );" );
-
-                        sc.add( "if ( refs != null )" );
-                        sc.add( "{" );
-                        sc.indent();
-
-                        if ( ModelAssociation.ONE_MULTIPLICITY.equals( association.getMultiplicity() ) )
-                        {
-                            sc.add( "String id = (String) refs.get( \"" + association.getName() + "\" );" );
-                            sc.add( to + " ref = (" + to + ") " + instanceFieldName + ".get( id );" );
-                            sc.add( "value.set" + capitalise( association.getName() ) + "( ref );" );
-                        }
-                        else
-                        {
-                            sc.add( "for ( int i = 0; i < value.get" + capitalise( association.getName() ) +
-                                "().size(); i++ )" );
-                            sc.add( "{" );
-                            sc.indent();
-
-                            sc.add( "String id = (String) refs.get( \"" + association.getName() + ".\" + i );" );
-                            sc.add( to + " ref = (" + to + ") " + instanceFieldName + ".get( id );" );
-                            sc.add( "if ( ref != null )" );
-                            sc.add( "{" );
-                            sc.indent();
-
-                            sc.add( "value.get" + capitalise( association.getName() ) + "().set( i, ref );" );
-
-                            sc.unindent();
-                            sc.add( "}" );
-
-                            sc.unindent();
-                            sc.add( "}" );
-                        }
-
-                        sc.unindent();
-                        sc.add( "}" );
-
-                        possibleReferences = true;
+                        child = new GeneratorNode( association, parent );
+                        child.setReferencable( true );
                     }
-
-                    if ( isClassInModel( association.getTo(), getModel() ) )
+                    else
                     {
-                        if ( writeReferenceResolver( association.getToClass(), jClass ) )
+                        if ( !value.getChain().contains( association.getTo() ) )
                         {
-                            if ( ModelAssociation.ONE_MULTIPLICITY.equals( association.getMultiplicity() ) )
-                            {
-                                sc.add(
-                                    "resolveReferences( value.get" + capitalise( association.getName() ) + "() );" );
-                            }
-                            else
-                            {
-                                sc.add( "for ( java.util.Iterator i = value.get" + capitalise( association.getName() ) +
-                                    "().iterator(); i.hasNext(); )" );
-                                sc.add( "{" );
-                                sc.indent();
-
-                                sc.add( "resolveReferences( (" + association.getTo() + ") i.next() );" );
-
-                                sc.unindent();
-                                sc.add( "}" );
-                            }
-
-                            possibleReferences = true;
+                            // descend into child
+                            child = findRequiredReferenceResolvers( association.getToClass(), value );
+                            child.setAssociation( association );
                         }
+                    }
+                    if ( child != null )
+                    {
+                        value.addChild( child );
                     }
                 }
             }
         }
 
-        if ( possibleReferences )
+        // propogate the flag up
+        for ( Iterator i = value.getChildren().iterator(); i.hasNext(); )
         {
-            jClass.addMethod( unmarshall );
+            GeneratorNode child = (GeneratorNode) i.next();
+
+            if ( child.isReferencable() || child.isReferencableChildren() )
+            {
+                value.setReferencableChildren( true );
+            }
+
+            value.addNodesWithReferencableChildren( child.getNodesWithReferencableChildren() );
         }
 
-        return possibleReferences;
+        return value;
+    }
+
+    private void writeReferenceResolvers( GeneratorNode node, JClass jClass )
+    {
+        JMethod unmarshall = new JMethod( "resolveReferences" );
+
+        unmarshall.addParameter( new JParameter( new JClass( node.getTo() ), "value" ) );
+
+        unmarshall.getModifiers().makePrivate();
+
+        JSourceCode sc = unmarshall.getSourceCode();
+
+        sc.add( "java.util.Map refs;" );
+
+        for ( Iterator i = node.getChildren().iterator(); i.hasNext(); )
+        {
+            GeneratorNode child = (GeneratorNode) i.next();
+
+            if ( child.isReferencable() )
+            {
+                ModelAssociation association = child.getAssociation();
+                String refFieldName = getRefFieldName( association );
+                String to = association.getTo();
+                String instanceFieldName = getInstanceFieldName( to );
+
+                sc.add( "refs = (java.util.Map) " + refFieldName + ".get( value );" );
+
+                sc.add( "if ( refs != null )" );
+                sc.add( "{" );
+                sc.indent();
+
+                if ( ModelAssociation.ONE_MULTIPLICITY.equals( association.getMultiplicity() ) )
+                {
+                    sc.add( "String id = (String) refs.get( \"" + association.getName() + "\" );" );
+                    sc.add( to + " ref = (" + to + ") " + instanceFieldName + ".get( id );" );
+                    sc.add( "value.set" + capitalise( association.getName() ) + "( ref );" );
+                }
+                else
+                {
+                    sc.add(
+                        "for ( int i = 0; i < value.get" + capitalise( association.getName() ) + "().size(); i++ )" );
+                    sc.add( "{" );
+                    sc.indent();
+
+                    sc.add( "String id = (String) refs.get( \"" + association.getName() + ".\" + i );" );
+                    sc.add( to + " ref = (" + to + ") " + instanceFieldName + ".get( id );" );
+                    sc.add( "if ( ref != null )" );
+                    sc.add( "{" );
+                    sc.indent();
+
+                    sc.add( "value.get" + capitalise( association.getName() ) + "().set( i, ref );" );
+
+                    sc.unindent();
+                    sc.add( "}" );
+
+                    sc.unindent();
+                    sc.add( "}" );
+                }
+
+                sc.unindent();
+                sc.add( "}" );
+            }
+
+            if ( child.isReferencableChildren() )
+            {
+                ModelAssociation association = child.getAssociation();
+                if ( ModelAssociation.ONE_MULTIPLICITY.equals( association.getMultiplicity() ) )
+                {
+                    sc.add( "resolveReferences( value.get" + capitalise( association.getName() ) + "() );" );
+                }
+                else
+                {
+                    sc.add( "for ( java.util.Iterator i = value.get" + capitalise( association.getName() ) +
+                        "().iterator(); i.hasNext(); )" );
+                    sc.add( "{" );
+                    sc.indent();
+
+                    sc.add( "resolveReferences( (" + association.getTo() + ") i.next() );" );
+
+                    sc.unindent();
+                    sc.add( "}" );
+                }
+            }
+        }
+
+        jClass.addMethod( unmarshall );
     }
 
     private static String getRefFieldName( ModelAssociation association )

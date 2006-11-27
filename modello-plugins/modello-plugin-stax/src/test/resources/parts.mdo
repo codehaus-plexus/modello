@@ -85,6 +85,13 @@
           </association>
         </field>
         <field>
+          <name>nestedReference</name>
+          <version>3.0.0+</version>
+          <association>
+            <type>ParentReference</type>
+          </association>
+        </field>
+        <field>
           <name>references</name>
           <version>3.0.0+</version>
           <association>
@@ -108,6 +115,38 @@
           <name>name</name>
           <type>String</type>
           <version>3.0.0+</version>
+        </field>
+      </fields>
+    </class>
+    <class>
+      <name>ParentReference</name>
+      <version>3.0.0+</version>
+      <fields>
+        <field>
+          <name>id</name>
+          <type>String</type>
+          <version>3.0.0+</version>
+          <identifier>true</identifier>
+        </field>
+        <field>
+          <name>childReference</name>
+          <version>3.0.0+</version>
+          <association>
+            <type>ChildReference</type>
+          </association>
+        </field>
+      </fields>
+    </class>
+    <class>
+      <name>ChildReference</name>
+      <version>3.0.0+</version>
+      <fields>
+        <field>
+          <name>parentReference</name>
+          <version>3.0.0+</version>
+          <association stash.part="true">
+            <type>ParentReference</type>
+          </association>
         </field>
       </fields>
     </class>

@@ -1,41 +1,47 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <model>
   <singleReference>
-    <reference id="single" />
+    <reference id="single"/>
   </singleReference>
   <secondReference>
-    <reference id="single" />
+    <reference id="single"/>
   </secondReference>
   <thirdReference>
-    <reference id="other" />
+    <reference id="other"/>
   </thirdReference>
   <dualReference>
-    <first id="single" />
-    <second id="other" />
+    <first id="single"/>
+    <second id="other"/>
   </dualReference>
   <dupeReference>
-    <first id="single" />
-    <second id="single" />
+    <first id="single"/>
+    <second id="single"/>
   </dupeReference>
   <referenceList>
     <items>
-      <item id="single" />
-      <item id="single" />
-      <item id="other" />
-      <item id="another" />
+      <item id="single"/>
+      <item id="single"/>
+      <item id="other"/>
+      <item id="another"/>
     </items>
   </referenceList>
   <singleReferences>
     <singleReference>
-      <reference id="other" />
+      <reference id="other"/>
     </singleReference>
     <singleReference>
-      <reference id="single" />
+      <reference id="single"/>
     </singleReference>
     <singleReference>
-      <reference id="another" />
+      <reference id="another"/>
     </singleReference>
   </singleReferences>
+  <nestedReference>
+    <id>parent</id>
+    <childReference>
+      <parentReference id="parent"/>
+    </childReference>
+  </nestedReference>
   <references>
     <reference>
       <id>single</id>
