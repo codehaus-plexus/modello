@@ -157,6 +157,23 @@
       </fields>
     </class>
     <class>
+      <name>IntReference</name>
+      <version>3.0.0+</version>
+      <fields>
+        <field>
+          <name>id</name>
+          <type>int</type>
+          <version>3.0.0+</version>
+          <identifier>true</identifier>
+        </field>
+        <field>
+          <name>name</name>
+          <type>String</type>
+          <version>3.0.0+</version>
+        </field>
+      </fields>
+    </class>
+    <class>
       <name>ParentReference</name>
       <version>3.0.0+</version>
       <fields>

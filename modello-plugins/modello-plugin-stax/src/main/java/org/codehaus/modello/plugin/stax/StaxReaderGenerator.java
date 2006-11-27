@@ -852,8 +852,9 @@ public class StaxReaderGenerator
             {
                 ModelField field = (ModelField) identifierFields.get( 0 );
 
-                sc.add( instanceFieldName + ".put( " + uncapClassName + ".get" + capitalise( field.getName() ) +
-                    "(), " + uncapClassName + ");" );
+                String v = uncapClassName + ".get" + capitalise( field.getName() ) + "()";
+                v = getValue( field.getType(), v, (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID ) );
+                sc.add( instanceFieldName + ".put( " + v + ", " + uncapClassName + ");" );
             }
         }
 

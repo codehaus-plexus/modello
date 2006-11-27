@@ -620,31 +620,6 @@ public class StaxWriterGenerator
         jClass.addMethod( method );
     }
 
-    private String getValue( String type, String initialValue, XmlFieldMetadata fieldMetadata )
-    {
-        String textValue = initialValue;
-
-        if ( "Date".equals( type ) )
-        {
-            if ( fieldMetadata.getFormat() == null )
-            {
-                textValue = "Long.toString( " + textValue + ".getTime() )";
-            }
-            else
-            {
-                textValue = "new java.text.SimpleDateFormat( \"" + fieldMetadata.getFormat() +
-                    "\", Locale.US ).format( " + textValue + " )";
-            }
-        }
-        else if ( !"String".equals( type ) )
-        {
-            textValue = "String.valueOf( " + textValue + " )";
-        }
-
-        return textValue;
-
-    }
-
     private String getValueChecker( String type, String value, ModelField field )
     {
         String retVal;
