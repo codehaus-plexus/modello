@@ -23,6 +23,7 @@ package org.codehaus.modello.plugin.stax;
  */
 
 import org.codehaus.modello.ModelloException;
+import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
@@ -33,6 +34,7 @@ import org.codehaus.modello.plugins.xml.XmlFieldMetadata;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 
 /**
@@ -43,6 +45,14 @@ public abstract class AbstractStaxGenerator
     extends AbstractModelloGenerator
 {
     private Set/*<ModelClass>*/ parts;
+
+    protected void initialize( Model model, Properties parameters )
+        throws ModelloException
+    {
+        super.initialize( model, parameters );
+
+        parts = null;
+    }
 
     protected String getFileName( String suffix )
         throws ModelloException
