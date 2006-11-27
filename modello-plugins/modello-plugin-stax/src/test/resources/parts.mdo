@@ -132,7 +132,7 @@
         <field>
           <name>dummyPointers</name>
           <version>3.0.0+</version>
-          <association stash.part="true">
+          <association xml.reference="true">
             <type>DummyIdReference</type>
             <multiplicity>*</multiplicity>
           </association>
@@ -182,7 +182,7 @@
         <field>
           <name>parentReference</name>
           <version>3.0.0+</version>
-          <association stash.part="true">
+          <association xml.reference="true">
             <type>ParentReference</type>
           </association>
         </field>
@@ -195,7 +195,7 @@
         <field>
           <name>items</name>
           <version>3.0.0+</version>
-          <association stash.part="true">
+          <association xml.reference="true">
             <type>Reference</type>
             <multiplicity>*</multiplicity>
           </association>
@@ -209,7 +209,7 @@
         <field>
           <name>reference</name>
           <version>3.0.0+</version>
-          <association stash.part="true">
+          <association xml.reference="true">
             <type>Reference</type>
           </association>
         </field>
@@ -222,14 +222,14 @@
         <field>
           <name>first</name>
           <version>3.0.0+</version>
-          <association stash.part="true">
+          <association xml.reference="true">
             <type>Reference</type>
           </association>
         </field>
         <field>
           <name>second</name>
           <version>3.0.0+</version>
-          <association stash.part="true">
+          <association xml.reference="true">
             <type>Reference</type>
           </association>
         </field>
@@ -242,7 +242,7 @@
         <field>
           <name>reference</name>
           <version>3.0.0+</version>
-          <association stash.part="true">
+          <association xml.reference="true">
             <type>DummyIdReference</type>
           </association>
         </field>

@@ -27,7 +27,7 @@ import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.plugin.AbstractModelloGenerator;
-import org.codehaus.modello.plugin.store.metadata.StoreAssociationMetadata;
+import org.codehaus.modello.plugins.xml.XmlAssociationMetadata;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -54,19 +54,19 @@ public abstract class AbstractStaxGenerator
     protected ModelField getReferenceIdentifierField( ModelAssociation association )
         throws ModelloException
     {
-        StoreAssociationMetadata assocMetadata =
-            (StoreAssociationMetadata) association.getAssociationMetadata( StoreAssociationMetadata.ID );
+        XmlAssociationMetadata assocMetadata =
+            (XmlAssociationMetadata) association.getAssociationMetadata( XmlAssociationMetadata.ID );
 
         ModelField referenceIdentifierField = null;
-        if ( assocMetadata.isPart() != null && assocMetadata.isPart().booleanValue() )
+        if ( assocMetadata.isReference() )
         {
             String associationName = association.getName();
 
             ModelClass modelClass = association.getModelClass();
             if ( !isClassInModel( association.getTo(), modelClass.getModel() ) )
             {
-                throw new ModelloException( "Can't use stash.part on the '" + associationName + "' association of '" +
-                    modelClass.getName() + "' because the target class '" + association.getTo() +
+                throw new ModelloException( "Can't use xml.reference on the '" + associationName +
+                    "' association of '" + modelClass.getName() + "' because the target class '" + association.getTo() +
                     "' is not in the model" );
             }
 
@@ -101,10 +101,10 @@ public abstract class AbstractStaxGenerator
                     {
                         ModelAssociation assoc = (ModelAssociation) modelField;
 
-                        StoreAssociationMetadata assocMetadata =
-                            (StoreAssociationMetadata) assoc.getAssociationMetadata( StoreAssociationMetadata.ID );
+                        XmlAssociationMetadata assocMetadata =
+                            (XmlAssociationMetadata) assoc.getAssociationMetadata( XmlAssociationMetadata.ID );
 
-                        if ( assocMetadata.isPart() != null && assocMetadata.isPart().booleanValue() )
+                        if ( assocMetadata.isReference() )
                         {
                             parts.add( assoc.getToClass() );
                         }

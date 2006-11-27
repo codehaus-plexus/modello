@@ -31,13 +31,15 @@ import org.codehaus.modello.metadata.AssociationMetadata;
 public class XmlAssociationMetadata
     implements AssociationMetadata
 {
-    public final static String ID = XmlAssociationMetadata.class.getName();
+    public static final String ID = XmlAssociationMetadata.class.getName();
 
     public static final String EXPLODE_MODE = "explode";
 
     public static final String INLINE_MODE = "inline";
 
     private String mapStyle = INLINE_MODE;
+
+    private boolean reference;
 
     /**
      * @return Returns the map style.
@@ -60,5 +62,15 @@ public class XmlAssociationMetadata
         {
             this.mapStyle = mapStyle;
         }
+    }
+
+    public boolean isReference()
+    {
+        return reference;
+    }
+
+    public void setReference( boolean reference )
+    {
+        this.reference = reference;
     }
 }

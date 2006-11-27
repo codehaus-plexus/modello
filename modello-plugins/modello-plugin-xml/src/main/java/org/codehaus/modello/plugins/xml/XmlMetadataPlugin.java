@@ -108,6 +108,13 @@ public class XmlMetadataPlugin
 
         metadata.setMapStyle( mapStyle );
 
+        String reference = (String) data.get( "xml.reference" );
+
+        if ( reference != null )
+        {
+            metadata.setReference( Boolean.valueOf( reference ).booleanValue() );
+        }
+
         return metadata;
     }
 

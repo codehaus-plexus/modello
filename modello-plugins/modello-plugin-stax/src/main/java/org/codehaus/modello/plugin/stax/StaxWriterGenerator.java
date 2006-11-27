@@ -352,7 +352,7 @@ public class StaxWriterGenerator
                 {
                     if ( referenceIdentifierField != null )
                     {
-                        // if stash.part, then store as a reference instead
+                        // if xml.reference, then store as a reference instead
 
                         sc.add( "serializer.writeStartElement( \"" + fieldTagName + "\" );" );
 
