@@ -1985,7 +1985,7 @@ public class StaxReaderGenerator
         sc.indent();
 
         sc.add( "throw new XMLStreamException( \"Unable to parse element '\" + attribute + \"', must be " + typeDesc +
-            "\", xmlStreamReader.getLocation() );" );
+            " but was '\" + s + \"'\", xmlStreamReader.getLocation() );" );
 
         sc.unindent();
 
