@@ -844,6 +844,7 @@ public class StaxReaderGenerator
 
         sc.add( "}" );
 
+        // This must be last so that we guarantee the ID has been filled already
         if ( isAssociationPartToClass( modelClass ) )
         {
             List identifierFields = modelClass.getIdentifierFields( getGeneratedVersion() );
@@ -950,16 +951,27 @@ public class StaxReaderGenerator
                 sc.add( "{" );
                 sc.indent();
 
+                String capAssocName = capitalise( association.getName() );
                 if ( ModelAssociation.ONE_MULTIPLICITY.equals( association.getMultiplicity() ) )
                 {
                     sc.add( "String id = (String) refs.get( \"" + association.getName() + "\" );" );
                     sc.add( to + " ref = (" + to + ") " + instanceFieldName + ".get( id );" );
-                    sc.add( "value.set" + capitalise( association.getName() ) + "( ref );" );
+
+                    // Don't set if it already is, since the Java plugin generates create/break that will throw an
+                    // exception
+
+                    sc.add( "if ( ref != null && !ref.equals( value.get" + capAssocName + "() ) )" );
+                    sc.add( "{" );
+                    sc.indent();
+
+                    sc.add( "value.set" + capAssocName + "( ref );" );
+
+                    sc.unindent();
+                    sc.add( "}" );
                 }
                 else
                 {
-                    sc.add(
-                        "for ( int i = 0; i < value.get" + capitalise( association.getName() ) + "().size(); i++ )" );
+                    sc.add( "for ( int i = 0; i < value.get" + capAssocName + "().size(); i++ )" );
                     sc.add( "{" );
                     sc.indent();
 
@@ -969,7 +981,7 @@ public class StaxReaderGenerator
                     sc.add( "{" );
                     sc.indent();
 
-                    sc.add( "value.get" + capitalise( association.getName() ) + "().set( i, ref );" );
+                    sc.add( "value.get" + capAssocName + "().set( i, ref );" );
 
                     sc.unindent();
                     sc.add( "}" );
@@ -1088,10 +1100,20 @@ public class StaxReaderGenerator
                 if ( referenceIdentifierField != null )
                 {
                     addCodeToAddReferences( association, jClass, sc, referenceIdentifierField, uncapClassName );
-                }
 
-                sc.add( uncapClassName + ".set" + capFieldName + "( parse" + association.getTo() + "( \"" + tagName +
-                    "\", xmlStreamReader, strict, encoding ) );" );
+                    // gobble the rest of the tag
+                    sc.add( "while ( xmlStreamReader.getEventType() != XMLStreamConstants.END_ELEMENT )" );
+                    sc.add( "{" );
+                    sc.indent();
+                    sc.add( "xmlStreamReader.next();" );
+                    sc.unindent();
+                    sc.add( "}" );
+                }
+                else
+                {
+                    sc.add( uncapClassName + ".set" + capFieldName + "( parse" + association.getTo() + "( \"" +
+                        tagName + "\", xmlStreamReader, strict, encoding ) );" );
+                }
 
                 sc.unindent();
 
@@ -1166,8 +1188,20 @@ public class StaxReaderGenerator
                             addCodeToAddReferences( association, jClass, sc, referenceIdentifierField, uncapClassName );
                         }
 
-                        sc.add( associationName + ".add( parse" + association.getTo() + "( \"" + singularTagName +
-                            "\", xmlStreamReader, strict, encoding ) );" );
+                        if ( association.getTo().equals( modelClass.getName() ) )
+                        {
+                            // HACK: the addXXX method will cause an OOME when compiling a self-referencing class, so we
+                            //  just add it to the array. This could disrupt the links if you are using break/create
+                            //  constraints in modello.
+                            sc.add( associationName + ".add( parse" + association.getTo() + "( \"" + singularTagName +
+                                "\", xmlStreamReader, strict, encoding ) );" );
+                        }
+                        else
+                        {
+                            sc.add( uncapClassName + ".add" + capitalise( singular( associationName ) ) + "( parse" +
+                                association.getTo() + "( \"" + singularTagName +
+                                "\", xmlStreamReader, strict, encoding ) );" );
+                        }
                     }
                     else
                     {
