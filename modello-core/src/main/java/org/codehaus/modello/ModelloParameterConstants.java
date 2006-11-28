@@ -28,15 +28,17 @@ package org.codehaus.modello;
  */
 public class ModelloParameterConstants
 {
-    public final static String VERSION = "modello.version";
+    public static final String VERSION = "modello.version";
 
-    public final static String OUTPUT_DIRECTORY = "modello.output.directory";
+    public static final String OUTPUT_DIRECTORY = "modello.output.directory";
 
-    public final static String PACKAGE_WITH_VERSION = "modello.package.with.version";
+    public static final String PACKAGE_WITH_VERSION = "modello.package.with.version";
 
     public static final String STRICT_PARSER = "modello.strict.parser";
 
     public static final String ALL_VERSIONS = "modello.all.versions";
+
+    public static final String FILENAME = "modello.output.filename";
 
     private ModelloParameterConstants()
     {

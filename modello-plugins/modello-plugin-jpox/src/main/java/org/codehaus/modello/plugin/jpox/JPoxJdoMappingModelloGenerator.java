@@ -23,6 +23,7 @@ package org.codehaus.modello.plugin.jpox;
  */
 
 import org.codehaus.modello.ModelloException;
+import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
@@ -63,6 +64,10 @@ public class JPoxJdoMappingModelloGenerator
 
     private final static List VALUE_STRATEGY_LIST;
 
+    private String valueStrategyOverride;
+
+    private String objectIdClassOverride;
+
     static
     {
         PRIMITIVE_IDENTITY_MAP = new HashMap();
@@ -98,6 +103,16 @@ public class JPoxJdoMappingModelloGenerator
         VALUE_STRATEGY_LIST.add( "auid" );
     }
 
+
+    protected void initialize( Model model, Properties parameters )
+        throws ModelloException
+    {
+        super.initialize( model, parameters );
+
+        valueStrategyOverride = parameters.getProperty( "JPOX.override.value-strategy" );
+        objectIdClassOverride = parameters.getProperty( "JPOX.override.objectid-class" );
+    }
+
     public void generate( Model model, Properties properties )
         throws ModelloException
     {
@@ -109,7 +124,7 @@ public class JPoxJdoMappingModelloGenerator
 
         try
         {
-            String fileName = "package.jdo";
+            String fileName = properties.getProperty( ModelloParameterConstants.FILENAME, "package.jdo" );
 
             // TODO: we should generate it per package, into the package directory. This will not support multiple
             // versions per package.
@@ -321,7 +336,14 @@ public class JPoxJdoMappingModelloGenerator
             needInheritance = true;
         }
 
-        if ( StringUtils.isNotEmpty( jpoxMetadata.getIdentityClass() ) )
+        if ( objectIdClassOverride != null )
+        {
+            if ( StringUtils.isNotEmpty( objectIdClassOverride ) )
+            {
+                writer.addAttribute( "objectid-class", jpoxMetadata.getIdentityClass() );
+            }
+        }
+        else if ( StringUtils.isNotEmpty( jpoxMetadata.getIdentityClass() ) )
         {
             // Use user provided objectId class.
             writer.addAttribute( "objectid-class", jpoxMetadata.getIdentityClass() );
@@ -611,16 +633,13 @@ public class JPoxJdoMappingModelloGenerator
             writer.addAttribute( "primary-key", "true" );
 
             // value-strategy is only useful when you have a primary-key defined for the field.
-            if ( StringUtils.isNotEmpty( jpoxMetadata.getValueStrategy() ) )
+            if ( StringUtils.isNotEmpty( valueStrategyOverride ) )
             {
-                String valueStrategy = jpoxMetadata.getValueStrategy();
-                if ( !VALUE_STRATEGY_LIST.contains( valueStrategy ) )
-                {
-                    throw new ModelloException( "The JDO mapping generator does not support the specified " +
-                        "value-strategy '" + valueStrategy + "'. " + "Supported types: " + VALUE_STRATEGY_LIST );
-                }
-
-                writer.addAttribute( "value-strategy", jpoxMetadata.getValueStrategy() );
+                writeValueStrategy( valueStrategyOverride, writer );
+            }
+            else if ( StringUtils.isNotEmpty( jpoxMetadata.getValueStrategy() ) )
+            {
+                writeValueStrategy( jpoxMetadata.getValueStrategy(), writer );
             }
         }
 
@@ -665,6 +684,18 @@ public class JPoxJdoMappingModelloGenerator
         }
 
         writer.endElement(); // field
+    }
+
+    private static void writeValueStrategy( String valueStrategy, XMLWriter writer )
+        throws ModelloException
+    {
+        if ( !VALUE_STRATEGY_LIST.contains( valueStrategy ) )
+        {
+            throw new ModelloException( "The JDO mapping generator does not support the specified " +
+                "value-strategy '" + valueStrategy + "'. " + "Supported types: " + VALUE_STRATEGY_LIST );
+        }
+
+        writer.addAttribute( "value-strategy", valueStrategy );
     }
 
     private void writeAssociation( XMLWriter writer, ModelAssociation association )

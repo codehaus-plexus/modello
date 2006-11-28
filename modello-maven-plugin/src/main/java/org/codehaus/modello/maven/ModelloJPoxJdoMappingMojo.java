@@ -22,19 +22,19 @@ package org.codehaus.modello.maven;
  * SOFTWARE.
  */
 
+import org.codehaus.modello.ModelloParameterConstants;
+
 import java.io.File;
+import java.util.Properties;
 
 /**
  * Creates a JDO mapping from the Modello model.
  *
- * @goal jpox-jdo-mapping
- *
- * @phase generate-resources
- *
- * @description Creates a JDO mapping from the Modello model.
- *
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
+ * @goal jpox-jdo-mapping
+ * @phase generate-resources
+ * @description Creates a JDO mapping from the Modello model.
  */
 public class ModelloJPoxJdoMappingMojo
     extends AbstractModelloGeneratorMojo
@@ -43,16 +43,24 @@ public class ModelloJPoxJdoMappingMojo
      * The output directory of the generated classes of the JDO mapping.
      *
      * @parameter expression="${basedir}/target/classes/META-INF"
-     *
      * @required
      */
     private File outputDirectory;
+
+    /**
+     * Produce a mapping file suitable for replication. It will have an alternate extension of '.jdorepl' so it is not
+     * picked up by default, and all value-strategy and objectid-class entries are removed from the mapping so that
+     * the original identities can be used.
+     *
+     * @parameter default-value="false"
+     */
+    private boolean replicationParameters;
 
     protected String getGeneratorType()
     {
         return "jpox-jdo-mapping";
     }
-    
+
     protected boolean producesCompilableResult()
     {
         return false;
@@ -66,5 +74,19 @@ public class ModelloJPoxJdoMappingMojo
     public void setOutputDirectory( File outputDirectory )
     {
         this.outputDirectory = outputDirectory;
+    }
+
+
+    protected void customizeParameters( Properties parameters )
+    {
+        super.customizeParameters( parameters );
+
+        if ( replicationParameters )
+        {
+            parameters.setProperty( ModelloParameterConstants.FILENAME, "package.jdorepl" );
+
+            parameters.setProperty( "JPOX.override.value-strategy", "off" );
+            parameters.setProperty( "JPOX.override.objectid-class", "" );
+        }
     }
 }
