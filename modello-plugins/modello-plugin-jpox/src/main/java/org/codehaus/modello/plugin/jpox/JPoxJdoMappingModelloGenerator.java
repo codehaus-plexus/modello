@@ -91,7 +91,7 @@ public class JPoxJdoMappingModelloGenerator
         IDENTITY_TYPES.add( "nondurable" );
 
         VALUE_STRATEGY_LIST = new ArrayList();
-        VALUE_STRATEGY_LIST.add( "off" );
+        //VALUE_STRATEGY_LIST.add( "off" ); -- this isn't really valid. It turns it on. We use it internally to set an explicit null
         VALUE_STRATEGY_LIST.add( "native" );
         VALUE_STRATEGY_LIST.add( "sequence" );
         VALUE_STRATEGY_LIST.add( "identity" );
@@ -689,13 +689,15 @@ public class JPoxJdoMappingModelloGenerator
     private static void writeValueStrategy( String valueStrategy, XMLWriter writer )
         throws ModelloException
     {
-        if ( !VALUE_STRATEGY_LIST.contains( valueStrategy ) )
+        if ( !"off".equals( valueStrategy ) )
         {
-            throw new ModelloException( "The JDO mapping generator does not support the specified " +
-                "value-strategy '" + valueStrategy + "'. " + "Supported types: " + VALUE_STRATEGY_LIST );
+            if ( !VALUE_STRATEGY_LIST.contains( valueStrategy ) )
+            {
+                throw new ModelloException( "The JDO mapping generator does not support the specified " +
+                    "value-strategy '" + valueStrategy + "'. " + "Supported types: " + VALUE_STRATEGY_LIST );
+            }
+            writer.addAttribute( "value-strategy", valueStrategy );
         }
-
-        writer.addAttribute( "value-strategy", valueStrategy );
     }
 
     private void writeAssociation( XMLWriter writer, ModelAssociation association )
