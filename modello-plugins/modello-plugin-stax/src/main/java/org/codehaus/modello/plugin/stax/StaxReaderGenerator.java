@@ -945,6 +945,10 @@ public class StaxReaderGenerator
                 String to = association.getTo();
                 String instanceFieldName = getInstanceFieldName( to );
 
+                sc.add( "if ( " + refFieldName + " != null )" );
+                sc.add( "{" );
+                sc.indent();
+
                 sc.add( "refs = (java.util.Map) " + refFieldName + ".get( value );" );
 
                 sc.add( "if ( refs != null )" );
@@ -989,6 +993,9 @@ public class StaxReaderGenerator
                     sc.unindent();
                     sc.add( "}" );
                 }
+
+                sc.unindent();
+                sc.add( "}" );
 
                 sc.unindent();
                 sc.add( "}" );

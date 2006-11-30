@@ -63,6 +63,13 @@
           </association>
         </field>
         <field>
+          <name>nothingReference</name>
+          <version>3.0.0+</version>
+          <association xml.reference="true">
+            <type>NothingReference</type>
+          </association>
+        </field>
+        <field>
           <name>dualReference</name>
           <version>3.0.0+</version>
           <association>
@@ -237,6 +244,13 @@
             <type>Reference</type>
           </association>
         </field>
+      </fields>
+    </class>
+    <!-- Test relies on no instances of this class existing in the model data -->
+    <class>
+      <name>NothingReference</name>
+      <version>3.0.0+</version>
+      <fields>
       </fields>
     </class>
     <class>
