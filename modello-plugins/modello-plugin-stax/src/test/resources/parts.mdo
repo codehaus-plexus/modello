@@ -56,6 +56,13 @@
           </association>
         </field>
         <field>
+          <name>nullReference</name>
+          <version>3.0.0+</version>
+          <association>
+            <type>SingleReference</type>
+          </association>
+        </field>
+        <field>
           <name>dualReference</name>
           <version>3.0.0+</version>
           <association>

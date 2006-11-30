@@ -339,6 +339,10 @@ public class StaxWriterGenerator
 
                 if ( ModelAssociation.ONE_MULTIPLICITY.equals( association.getMultiplicity() ) )
                 {
+                    sc.add( getValueChecker( type, value, association ) );
+                    sc.add( "{" );
+                    sc.indent();
+
                     if ( referenceIdentifierField != null )
                     {
                         // if xml.reference, then store as a reference instead
@@ -351,19 +355,12 @@ public class StaxWriterGenerator
                     }
                     else
                     {
-                        sc.add( getValueChecker( type, value, association ) );
-
-                        sc.add( "{" );
-
-                        sc.indent();
-
                         sc.add( "write" + association.getTo() + "( (" + association.getTo() + ") " + value + ", \"" +
                             fieldTagName + "\", serializer );" );
-
-                        sc.unindent();
-
-                        sc.add( "}" );
                     }
+
+                    sc.unindent();
+                    sc.add( "}" );
                 }
                 else
                 {
@@ -536,9 +533,9 @@ public class StaxWriterGenerator
         }
         else
         {
-            sc.add( "serializer.writeAttribute( \"" + referenceIdentifierField.getName() + "\", " + getValue(
-                referenceIdentifierField.getType(), getFieldValue( value, referenceIdentifierField ),
-                (XmlFieldMetadata) referenceIdentifierField.getMetadata( XmlFieldMetadata.ID ) ) + " );" );
+            String v = getValue( referenceIdentifierField.getType(), getFieldValue( value, referenceIdentifierField ),
+                                 (XmlFieldMetadata) referenceIdentifierField.getMetadata( XmlFieldMetadata.ID ) );
+            sc.add( "serializer.writeAttribute( \"" + referenceIdentifierField.getName() + "\", " + v + " );" );
         }
     }
 

@@ -62,6 +62,7 @@ public class StaxVerifierParts
         Assert.assertEquals( "Single Reference", model.getSecondReference().getReference().getName() );
         Assert.assertEquals( "other", model.getThirdReference().getReference().getId() );
         Assert.assertEquals( "Other Reference", model.getThirdReference().getReference().getName() );
+        Assert.assertNull( model.getNullReference().getReference() );
         Assert.assertEquals( "single", model.getDualReference().getFirst().getId() );
         Assert.assertEquals( "Single Reference", model.getDualReference().getFirst().getName() );
         Assert.assertEquals( "other", model.getDualReference().getSecond().getId() );
