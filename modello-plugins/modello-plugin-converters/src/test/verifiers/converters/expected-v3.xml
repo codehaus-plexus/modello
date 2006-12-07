@@ -1,4 +1,4 @@
-<?xml version='1.0'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <model>
   <extend>../project.xml</extend>
   <modelVersion>3</modelVersion>
@@ -164,7 +164,7 @@
         </excludes>
       </sourceModification>
     </sourceModifications>
-    <unitTest />
+    <unitTest></unitTest>
     <resources>
       <resource>
         <directory>dir</directory>
