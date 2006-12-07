@@ -246,9 +246,9 @@ public class StaxVerifier
 
         String actualXml = buffer.toString();
 
-//        System.out.println( expectedXml );
+//      System.out.println( expectedXml );
 //
-//        System.err.println( actualXml );
+//        System.out.println( actualXml );
 
         Assert.assertEquals( expectedXml.trim(), actualXml.trim() );
 

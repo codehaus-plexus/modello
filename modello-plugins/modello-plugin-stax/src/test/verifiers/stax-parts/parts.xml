@@ -1,46 +1,46 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <model>
   <singleReference>
-    <reference id="single" />
+    <reference id="single"></reference>
   </singleReference>
   <secondReference>
-    <reference id="single" />
+    <reference id="single"></reference>
   </secondReference>
   <thirdReference>
-    <reference id="other" />
+    <reference id="other"></reference>
   </thirdReference>
-  <nullReference />
+  <nullReference></nullReference>
   <dualReference>
-    <first id="single" />
-    <second id="other" />
+    <first id="single"></first>
+    <second id="other"></second>
   </dualReference>
   <dupeReference>
-    <first id="single" />
-    <second id="single" />
+    <first id="single"></first>
+    <second id="single"></second>
   </dupeReference>
   <referenceList>
     <items>
-      <item id="single" />
-      <item id="single" />
-      <item id="other" />
-      <item id="another" />
+      <item id="single"></item>
+      <item id="single"></item>
+      <item id="other"></item>
+      <item id="another"></item>
     </items>
   </referenceList>
   <singleReferences>
     <singleReference>
-      <reference id="other" />
+      <reference id="other"></reference>
     </singleReference>
     <singleReference>
-      <reference id="single" />
+      <reference id="single"></reference>
     </singleReference>
     <singleReference>
-      <reference id="another" />
+      <reference id="another"></reference>
     </singleReference>
   </singleReferences>
   <nestedReference>
     <id>parent</id>
     <childReference>
-      <parentReference id="parent" />
+      <parentReference id="parent"></parentReference>
     </childReference>
   </nestedReference>
   <references>
@@ -58,7 +58,7 @@
     </reference>
   </references>
   <dummyReference>
-    <reference modello.refid="1" />
+    <reference modello.refid="1"></reference>
   </dummyReference>
   <dummyIdReferences>
     <dummyIdReference modello.id="2">
@@ -75,26 +75,26 @@
     </dummyIdReference>
   </dummyIdReferences>
   <otherDummyReference>
-    <reference modello.refid="2" />
+    <reference modello.refid="2"></reference>
   </otherDummyReference>
   <dummyReferences>
     <dummyReference>
-      <reference modello.refid="3" />
+      <reference modello.refid="3"></reference>
     </dummyReference>
     <dummyReference>
-      <reference modello.refid="2" />
+      <reference modello.refid="2"></reference>
     </dummyReference>
     <dummyReference>
-      <reference modello.refid="2" />
+      <reference modello.refid="2"></reference>
     </dummyReference>
     <dummyReference>
-      <reference modello.refid="1" />
+      <reference modello.refid="1"></reference>
     </dummyReference>
   </dummyReferences>
   <dummyPointers>
-    <dummyPointer modello.refid="3" />
-    <dummyPointer modello.refid="2" />
-    <dummyPointer modello.refid="2" />
-    <dummyPointer modello.refid="1" />
+    <dummyPointer modello.refid="3"></dummyPointer>
+    <dummyPointer modello.refid="2"></dummyPointer>
+    <dummyPointer modello.refid="2"></dummyPointer>
+    <dummyPointer modello.refid="1"></dummyPointer>
   </dummyPointers>
 </model>

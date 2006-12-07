@@ -690,7 +690,7 @@ public class StaxReaderGenerator
                 sc.unindent();
                 sc.add( "}" );
 
-                sc.add( "String v = xmlStreamReader.getAttributeValue( \"\", \"modello.id\" );" );
+                sc.add( "String v = xmlStreamReader.getAttributeValue( null, \"modello.id\" );" );
                 sc.add( "if ( v != null )" );
                 sc.add( "{" );
                 sc.indent();
@@ -1419,7 +1419,7 @@ public class StaxReaderGenerator
             jClass.addField( new JField( new JType( "java.util.Map" ), refFieldName ) );
         }
 
-        sc.add( "String value = xmlStreamReader.getAttributeValue( \"\", \"" + referenceIdentifierField.getName() +
+        sc.add( "String value = xmlStreamReader.getAttributeValue( null, \"" + referenceIdentifierField.getName() +
             "\" );" );
         sc.add( "if ( value != null )" );
         sc.add( "{" );
@@ -1507,7 +1507,7 @@ public class StaxReaderGenerator
         String parserGetter;
         if ( fieldMetaData.isAttribute() )
         {
-            parserGetter = "xmlStreamReader.getAttributeValue( \"\", \"" + tagName + "\" )";
+            parserGetter = "xmlStreamReader.getAttributeValue( null, \"" + tagName + "\" )";
         }
         else
         {
