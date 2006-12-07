@@ -122,6 +122,15 @@ public class StaxVerifierParts
         PartsStaxWriter modelWriter = new PartsStaxWriter();
         StringWriter w = new StringWriter();
         modelWriter.write( w, model );
-        Assert.assertEquals( expected, w.toString() );
+        Assert.assertEquals( expected, scrubXmlDeclQuotes( w.toString() ) );
+    }
+
+    private String scrubXmlDeclQuotes( String s )
+    {
+        if ( s.startsWith( "<?xml version='1.0' encoding='UTF-8'?>"))
+        {
+            return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + s.substring( "<?xml version='1.0' encoding='UTF-8'?>".length() );
+        }
+        return s;
     }
 }

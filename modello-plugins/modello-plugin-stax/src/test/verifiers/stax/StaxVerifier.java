@@ -250,7 +250,7 @@ public class StaxVerifier
 //
 //        System.out.println( actualXml );
 
-        Assert.assertEquals( expectedXml.trim(), actualXml.trim() );
+        Assert.assertEquals( expectedXml.trim(), scrubXmlDeclQuotes( actualXml.trim() ) );
 
         MavenStaxReader reader = new MavenStaxReader();
 
@@ -264,7 +264,16 @@ public class StaxVerifier
 
         writer.write( buffer, actual );
 
-        Assert.assertEquals( expectedXml.trim(), buffer.toString().trim() );
+        Assert.assertEquals( expectedXml.trim(), scrubXmlDeclQuotes( buffer.toString().trim() ) );
+    }
+
+    private String scrubXmlDeclQuotes( String s )
+    {
+        if ( s.startsWith( "<?xml version='1.0' encoding='UTF-8'?>"))
+        {
+            return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + s.substring( "<?xml version='1.0' encoding='UTF-8'?>".length() );
+        }
+        return s;
     }
 
     public void verifyReader()
