@@ -166,7 +166,9 @@ public class StaxWriterGenerator
         sc.add( "XMLOutputFactory factory = XMLOutputFactory.newInstance();" );
 
         sc.add(
-            "XMLStreamWriter serializer = new IndentingXMLStreamWriter( factory.createXMLStreamWriter( writer ) );" );
+            "IndentingXMLStreamWriter serializer = new IndentingXMLStreamWriter( factory.createXMLStreamWriter( writer ) );" );
+
+        sc.add( "serializer.setNewLine( serializer.getLineSeparator() );" );
 
         sc.add( "serializer.writeStartDocument( " + rootElementParameterName + ".getModelEncoding(), \"1.0\" );" );
 
