@@ -311,6 +311,8 @@ public class Xpp3ReaderGenerator
 
         sc.add( uncapClassName + ".setModelEncoding( encoding );" );
 
+        sc.add( "java.util.Set parsed = new java.util.HashSet();" );
+
         for ( Iterator i = modelClass.getAllFields( getGeneratedVersion(), true ).iterator(); i.hasNext(); )
         {
             ModelField field = (ModelField) i.next();
@@ -323,8 +325,6 @@ public class Xpp3ReaderGenerator
                                      jClass );
             }
         }
-
-        sc.add( "java.util.Set parsed = new java.util.HashSet();" );
 
         if ( rootElement )
         {
@@ -368,11 +368,18 @@ public class Xpp3ReaderGenerator
             statement = "else if";
         }
 
+        boolean hasRequired = false;
+
         //Write other fields
 
         for ( Iterator i = modelClass.getAllFields( getGeneratedVersion(), true ).iterator(); i.hasNext(); )
         {
             ModelField field = (ModelField) i.next();
+
+            if ( field.isRequired() )
+            {
+                hasRequired = true;
+            }
 
             XmlFieldMetadata fieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
 
@@ -476,6 +483,52 @@ public class Xpp3ReaderGenerator
         sc.unindent();
 
         sc.add( "}" );
+        
+        if ( hasRequired )
+        {
+            sc.add( "/* Perform Required Checks */" );
+            
+            sc.add("if ( strict )");
+            
+            sc.add("{");
+            
+            sc.indent();
+            
+            for ( Iterator i = modelClass.getAllFields( getGeneratedVersion(), true ).iterator(); i.hasNext(); )
+            {
+                ModelField field = (ModelField) i.next();
+                
+                if ( !field.isRequired() )
+                {
+                    continue;
+                }
+                
+                XmlFieldMetadata fieldMetaData = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
+
+                String tagName = fieldMetaData.getTagName();
+
+                if ( tagName == null )
+                {
+                    tagName = field.getName();
+                }
+                
+                sc.add( "if ( !parsed.contains( \"" + tagName + "\" ) )" );
+                
+                sc.add( "{" );
+                
+                sc.indent();
+                
+                sc.add( "throw new IllegalStateException( \"" + uncapClassName + "/" + tagName + " is required.\" );" );
+                
+                sc.unindent();
+                
+                sc.add( "}" );
+            }
+            
+            sc.unindent();
+            
+            sc.add( "}" );
+        }
 
         sc.add( "return " + uncapClassName + ";" );
 
@@ -901,6 +954,11 @@ public class Xpp3ReaderGenerator
         else
         {
             throw new IllegalArgumentException( "Unknown type: " + type );
+        }
+        
+        if ( fieldMetaData.isAttribute() )
+        {
+            sc.add( "parsed.add( \"" + tagName + "\" );" );
         }
     }
 
