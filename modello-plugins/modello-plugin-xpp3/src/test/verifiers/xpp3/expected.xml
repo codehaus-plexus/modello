@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?><mavenModel extender="/foo/bar" modelVersion="4.0.0">
-  <groupId>com.example.foo</groupId>
-  <artifactId>foo</artifactId>
   <typeTester>
     <c>v</c>
     <i>1</i>
@@ -12,8 +10,6 @@
     <formattedDate>20061112.123456</formattedDate>
   </typeTester>
   <name>Maven</name>
-  <version>1.0</version>
-  <inceptionYear>2005</inceptionYear>
   <component>
     <name>component1</name>
   </component>
