@@ -136,6 +136,8 @@
           <artifactId>maven-release-plugin</artifactId>
           <configuration>
             <tagBase>https://svn.codehaus.org/modello/tags</tagBase>
+            <!-- modello tests require installation first at present -->
+            <preparationGoals>clean install</preparationGoals>
           </configuration>
         </plugin>
       </plugins>
