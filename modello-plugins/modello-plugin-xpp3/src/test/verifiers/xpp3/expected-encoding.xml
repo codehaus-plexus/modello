@@ -1,5 +1,4 @@
-<mavenModel extender="/foo/bar">
-  <modelVersion>4.0.0</modelVersion>
+<mavenModel extender="/foo/bar" modelVersion="4.0.0">
   <name>Maven#&x00A9;</name>
   <component>
     <name>component1</name>
@@ -32,8 +31,6 @@
       <name>value</name>
     </flatProperties>
   </component>
-  <groupId>com.example.foo</groupId>
-  <artifactId>foo</artifactId>
   <repositories>
     <repo>
       <id>foo</id>

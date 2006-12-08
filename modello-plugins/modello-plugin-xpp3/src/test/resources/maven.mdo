@@ -17,7 +17,6 @@
  |
  -->
 <model>
-  <modelVersion>4.0.0</modelVersion>
   <id>maven</id>
   <name>Maven</name>
   <description>Maven's model for Java project.</description>
