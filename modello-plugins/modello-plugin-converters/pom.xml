@@ -14,5 +14,17 @@
       <artifactId>modello-plugin-stax</artifactId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>stax</groupId>
+      <artifactId>stax-api</artifactId>
+      <version>1.0.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>stax</groupId>
+      <artifactId>stax</artifactId>
+      <version>1.2.0</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 </project>
