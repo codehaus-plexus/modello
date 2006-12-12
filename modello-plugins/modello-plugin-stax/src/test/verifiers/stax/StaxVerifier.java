@@ -250,7 +250,7 @@ public class StaxVerifier
 //
 //        System.out.println( actualXml );
 
-        Assert.assertEquals( expectedXml.trim(), scrubXmlDeclQuotes( actualXml.trim() ) );
+        Assert.assertEquals( cleanLineEndings( expectedXml.trim() ), scrubXmlDeclQuotes( actualXml.trim() ) );
 
         MavenStaxReader reader = new MavenStaxReader();
 
@@ -264,7 +264,12 @@ public class StaxVerifier
 
         writer.write( buffer, actual );
 
-        Assert.assertEquals( expectedXml.trim(), scrubXmlDeclQuotes( buffer.toString().trim() ) );
+        Assert.assertEquals( cleanLineEndings( expectedXml.trim() ), scrubXmlDeclQuotes( buffer.toString().trim() ) );
+    }
+
+    private String cleanLineEndings( String s )
+    {
+        return s.replaceAll( "\r\n", "\n" );
     }
 
     private String scrubXmlDeclQuotes( String s )

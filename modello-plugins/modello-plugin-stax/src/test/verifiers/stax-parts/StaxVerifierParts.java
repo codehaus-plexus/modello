@@ -122,7 +122,7 @@ public class StaxVerifierParts
         PartsStaxWriter modelWriter = new PartsStaxWriter();
         StringWriter w = new StringWriter();
         modelWriter.write( w, model );
-        Assert.assertEquals( expected, scrubXmlDeclQuotes( w.toString() ) );
+        Assert.assertEquals( cleanLineEndings( expected ), scrubXmlDeclQuotes( w.toString() ) );
     }
 
     private String scrubXmlDeclQuotes( String s )
@@ -132,5 +132,10 @@ public class StaxVerifierParts
             return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + s.substring( "<?xml version='1.0' encoding='UTF-8'?>".length() );
         }
         return s;
+    }
+
+    private String cleanLineEndings( String s )
+    {
+        return s.replaceAll( "\r\n", "\n" );
     }
 }
