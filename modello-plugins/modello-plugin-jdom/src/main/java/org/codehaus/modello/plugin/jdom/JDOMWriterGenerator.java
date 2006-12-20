@@ -630,9 +630,15 @@ public class JDOMWriterGenerator
                         String toType = association.getTo();
                         if ( toClass != null )
                         {
-                            sc.add( "iterate" + capitalise( toType ) + "(innerCount, root, " + value + ",\"" +
-                                field.getName() + "\",\"" + singular( fieldTagName ) + "\");" );
-                            createIterateMethod( field.getName(), toClass, singular( fieldTagName ), jClass );
+                            if (wrappedList) {
+                                sc.add( "iterate" + capitalise( toType ) + "(innerCount, root, " + value + ",\"" +
+                                    field.getName() + "\",\"" + singular( fieldTagName ) + "\");" );
+                                createIterateMethod( field.getName(), toClass, singular( fieldTagName ), jClass );
+                            } else {
+                                //assume flat..
+                                sc.add( "iterate2" + capitalise( toType ) + "(innerCount, root, " + value + ",\"" + singular( fieldTagName ) + "\");" );
+                                createIterateMethod2( field.getName(), toClass, singular( fieldTagName ), jClass );
+                            }
                             alwaysExisting.add( toClass );
                         }
                         else
@@ -766,5 +772,57 @@ public class JDOMWriterGenerator
 
         jClass.addMethod( toReturn );
     }
+    
+    private void createIterateMethod2( String field, ModelClass toClass, String childFieldTagName, JClass jClass )
+    {
+        if ( jClass.getMethod( "iterate2" + capitalise( toClass.getName() ), 0 ) != null )
+        {
+//            System.out.println("method iterate" + capitalise(field) + " already exists");
+            return;
+        }
+        JMethod toReturn = new JMethod( null, "iterate2" + capitalise( toClass.getName() ) );
+        toReturn.addParameter( new JParameter( new JClass( "Counter" ), "counter" ) );
+        toReturn.addParameter( new JParameter( new JClass( "Element" ), "parent" ) );
+        toReturn.addParameter( new JParameter( new JClass( "java.util.Collection" ), "list" ) );
+        toReturn.addParameter( new JParameter( new JClass( "java.lang.String" ), "childTag" ) );
+        toReturn.getModifiers().makeProtected();
+        JSourceCode sc = toReturn.getSourceCode();
+        sc.add( "Iterator it = list.iterator();" );
+        sc.add( "Iterator elIt = parent.getChildren(childTag, parent.getNamespace()).iterator();" );
+        sc.add( "if (!elIt.hasNext()) elIt = null;" );
+        sc.add( "Counter innerCount = new Counter(counter.getDepth() + 1);" );
+        sc.add( "while (it.hasNext()) {" );
+        sc.indent();
+        sc.add( toClass.getName() + " value = (" + toClass.getName() + ") it.next();" );
+        sc.add( "Element el;" );
+        sc.add( "if (elIt != null && elIt.hasNext()) {" );
+        sc.indent();
+        sc.add( "el = (Element) elIt.next();" );
+        sc.add( "if (! elIt.hasNext()) elIt = null;" );
+        sc.unindent();
+        sc.add( "} else {" );
+        sc.indent();
+        sc.add( "el = factory.element(childTag, parent.getNamespace());" );
+        sc.add( "insertAtPreferredLocation(parent, el, innerCount);" );
+        sc.unindent();
+        sc.add( "}" );
+        sc.add( "update" + toClass.getName() + "(value, childTag, innerCount, el);" );
+        sc.add( "innerCount.increaseCount();" );
+        sc.unindent();
+        sc.add( "}" );
+        sc.add( "if (elIt != null) {" );
+        sc.indent();
+        sc.add( "while (elIt.hasNext()) {" );
+        sc.indent();
+        sc.add( "elIt.next();" );
+        sc.add( "elIt.remove();" );
+        sc.unindent();
+        sc.add( "}" );
+        sc.unindent();
+        sc.add( "}" );
+
+        jClass.addMethod( toReturn );
+    }
+    
 
 }
