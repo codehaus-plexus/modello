@@ -36,6 +36,13 @@
       <artifactId>jpox</artifactId>
       <version>1.1.1</version>
       <scope>test</scope>
+      <exclusions>
+        <!-- mkleint: seems not to be required and is hard to come by the binary -->
+        <exclusion>
+          <artifactId>jdbc-stdext</artifactId>
+          <groupId>javax.sql</groupId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>jaxen</groupId>
