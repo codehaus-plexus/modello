@@ -63,6 +63,11 @@
       <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-core</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-component-api</artifactId>
+      <scope>runtime</scope>
+    </dependency>
   </dependencies>
   <reporting>
     <plugins>
