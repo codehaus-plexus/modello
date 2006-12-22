@@ -22,9 +22,10 @@ package org.codehaus.modello.maven;
  * SOFTWARE.
  */
 
-import org.codehaus.modello.maven.AbstractModelloGeneratorMojo;
+import org.codehaus.modello.ModelloParameterConstants;
 
 import java.io.File;
+import java.util.Properties;
 
 /**
  * Creates documentation for the model in xdoc format.
@@ -46,6 +47,17 @@ public class ModelloXdocMojo
      */
     private File outputDirectory;
 
+    /**
+     * The first version of the model. This is used to decide whether or not
+     * to show the since column. If this is not specified, it defaults to the
+     * version of the model, which in turn means that the since column will not
+     * be shown.
+     *
+     * @parameter
+     * @since 1.0-alpha-14
+     */
+    private String firstVersion;
+
     protected String getGeneratorType()
     {
         return "xdoc";
@@ -64,5 +76,28 @@ public class ModelloXdocMojo
     public void setOutputDirectory( File outputDirectory )
     {
         this.outputDirectory = outputDirectory;
+    }
+
+    protected void customizeParameters( Properties parameters )
+    {
+        super.customizeParameters( parameters );
+
+        // Use version if firstVersion was not specified
+        if ( firstVersion == null )
+        {
+            firstVersion = getVersion();
+        }
+
+        parameters.put( ModelloParameterConstants.FIRST_VERSION, firstVersion );
+    }
+
+    public String getFirstVersion()
+    {
+        return firstVersion;
+    }
+
+    public void setFirstVersion( String firstVersion )
+    {
+        this.firstVersion = firstVersion;
     }
 }

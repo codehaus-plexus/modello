@@ -39,6 +39,8 @@ public class ModelloParameterConstants
     public static final String ALL_VERSIONS = "modello.all.versions";
 
     public static final String FILENAME = "modello.output.filename";
+    
+    public static final String FIRST_VERSION = "modello.first.version";
 
     private ModelloParameterConstants()
     {

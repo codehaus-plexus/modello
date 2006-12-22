@@ -23,11 +23,14 @@ package org.codehaus.modello.plugin.xdoc;
  */
 
 import org.codehaus.modello.ModelloException;
+import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.ModelloRuntimeException;
 import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
+import org.codehaus.modello.model.Version;
+import org.codehaus.modello.model.VersionRange;
 import org.codehaus.modello.plugin.AbstractModelloGenerator;
 import org.codehaus.modello.plugin.model.ModelClassMetadata;
 import org.codehaus.modello.plugins.xml.XmlFieldMetadata;
@@ -52,10 +55,26 @@ import java.util.Set;
 public class XdocGenerator
     extends AbstractModelloGenerator
 {
+    private static final VersionRange DEFAULT_VERSION_RANGE = new VersionRange( "0.0.0+" );
+
+    private Version firstVersion = DEFAULT_VERSION_RANGE.getFromVersion();
+    
+    private Version version = DEFAULT_VERSION_RANGE.getFromVersion();
+
     public void generate( Model model, Properties parameters )
         throws ModelloException
     {
         initialize( model, parameters );
+
+        if ( parameters.getProperty( ModelloParameterConstants.FIRST_VERSION ) != null )
+        {
+            firstVersion = new Version( parameters.getProperty( ModelloParameterConstants.FIRST_VERSION ) );
+        }
+
+        if ( parameters.getProperty( ModelloParameterConstants.VERSION ) != null )
+        {
+            version = new Version( parameters.getProperty( ModelloParameterConstants.VERSION ) );
+        }
 
         try
         {
@@ -249,6 +268,17 @@ public class XdocGenerator
 
         w.endElement();
 
+        boolean showSinceColumn = version.greaterThan( firstVersion );
+
+        if ( showSinceColumn )
+        {
+            w.startElement( "th" );
+
+            w.writeText( "Since" );
+
+            w.endElement();
+        }
+
         w.endElement();
 
         List fields = getFieldsForClass( objectModel, modelClass );
@@ -260,6 +290,8 @@ public class XdocGenerator
             XmlFieldMetadata fieldMetadata = (XmlFieldMetadata) f.getMetadata( XmlFieldMetadata.ID );
 
             w.startElement( "tr" );
+
+            // Element
 
             w.startElement( "td" );
 
@@ -285,6 +317,8 @@ public class XdocGenerator
             w.endElement();
 
             w.endElement();
+
+            // Description
 
             w.startElement( "td" );
 
@@ -314,6 +348,24 @@ public class XdocGenerator
             }
 
             w.endElement();
+
+            // Since
+
+            if ( showSinceColumn )
+            {
+                w.startElement( "td" );
+
+                if ( f.getVersionRange() != null )
+                {
+                    Version fromVersion = f.getVersionRange().getFromVersion();
+                    if ( fromVersion != null && fromVersion.greaterThan( firstVersion ) )
+                    {
+                        w.writeMarkup( fromVersion.toString() );
+                    }
+                }
+
+                w.endElement();
+            }
 
             w.endElement();
         }
