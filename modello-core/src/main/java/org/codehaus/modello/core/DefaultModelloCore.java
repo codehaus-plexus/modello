@@ -22,13 +22,6 @@ package org.codehaus.modello.core;
  * SOFTWARE.
  */
 
-import java.io.Reader;
-import java.io.Writer;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Properties;
-
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.ModelloRuntimeException;
 import org.codehaus.modello.core.io.ModelReader;
@@ -45,6 +38,13 @@ import org.codehaus.modello.model.ModelDefault;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.ModelValidationException;
 import org.codehaus.modello.plugin.ModelloGenerator;
+
+import java.io.Reader;
+import java.io.Writer;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Properties;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>

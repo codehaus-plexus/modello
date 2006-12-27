@@ -24,8 +24,6 @@ package org.codehaus.modello.plugin.jpox.metadata;
 
 import org.codehaus.modello.metadata.AssociationMetadata;
 
-import java.util.List;
-
 /**
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
  * @version $Id$

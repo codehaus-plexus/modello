@@ -22,10 +22,10 @@ package org.codehaus.modello.core;
  * SOFTWARE.
  */
 
-import java.io.FileReader;
-
 import org.codehaus.modello.ModelloRuntimeException;
 import org.codehaus.plexus.PlexusTestCase;
+
+import java.io.FileReader;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>

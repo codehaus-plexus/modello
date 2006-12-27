@@ -1,7 +1,5 @@
 package org.codehaus.modello.maven;
 
-import org.codehaus.modello.maven.AbstractModelloGeneratorMojo;
-
 import java.io.File;
 
 /*

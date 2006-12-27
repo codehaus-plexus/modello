@@ -22,27 +22,26 @@ package org.codehaus.modello.plugin.store;
  * SOFTWARE.
  */
 
+import org.apache.velocity.Template;
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.context.Context;
+import org.apache.velocity.exception.ParseErrorException;
+import org.apache.velocity.exception.ResourceNotFoundException;
+import org.codehaus.modello.ModelloException;
+import org.codehaus.modello.model.Model;
+import org.codehaus.modello.model.ModelClass;
+import org.codehaus.modello.model.Version;
+import org.codehaus.modello.plugin.AbstractModelloGenerator;
+import org.codehaus.modello.plugin.store.tool.JavaTool;
+import org.codehaus.plexus.velocity.VelocityComponent;
+
 import java.io.File;
-import java.io.Writer;
 import java.io.FileWriter;
+import java.io.Writer;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.velocity.context.Context;
-import org.apache.velocity.Template;
-import org.apache.velocity.VelocityContext;
-import org.apache.velocity.exception.ResourceNotFoundException;
-import org.apache.velocity.exception.ParseErrorException;
-
-import org.codehaus.modello.plugin.AbstractModelloGenerator;
-import org.codehaus.modello.plugin.store.tool.JavaTool;
-import org.codehaus.modello.ModelloException;
-import org.codehaus.modello.model.Version;
-import org.codehaus.modello.model.ModelClass;
-import org.codehaus.modello.model.Model;
-import org.codehaus.plexus.velocity.VelocityComponent;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>

@@ -22,13 +22,13 @@ package org.codehaus.modello.metadata;
  * SOFTWARE.
  */
 
-import java.util.Map;
-
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
+
+import java.util.Map;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>

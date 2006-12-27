@@ -22,13 +22,13 @@ package org.codehaus.modello.plugin.store;
  * SOFTWARE.
  */
 
-import java.io.FileReader;
-import java.util.Properties;
-
 import org.codehaus.modello.AbstractModelloGeneratorTest;
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
+
+import java.io.FileReader;
+import java.util.Properties;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>

@@ -22,7 +22,6 @@ package org.codehaus.modello.plugin.jpox;
  * SOFTWARE.
  */
 
-import junit.framework.Assert;
 import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.Version;
@@ -31,6 +30,8 @@ import org.codehaus.plexus.component.repository.exception.ComponentLookupExcepti
 
 import java.io.FileReader;
 import java.util.List;
+
+import junit.framework.Assert;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>

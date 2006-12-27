@@ -22,13 +22,13 @@ package org.codehaus.modello.plugin;
  * SOFTWARE.
  */
 
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.Map;
-
 import org.codehaus.modello.ModelloRuntimeException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
+
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>

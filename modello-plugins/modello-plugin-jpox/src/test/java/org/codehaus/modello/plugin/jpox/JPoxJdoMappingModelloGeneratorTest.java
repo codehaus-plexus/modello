@@ -22,7 +22,6 @@ package org.codehaus.modello.plugin.jpox;
  * SOFTWARE.
  */
 
-import junit.framework.AssertionFailedError;
 import org.codehaus.modello.AbstractModelloGeneratorTest;
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
@@ -41,6 +40,8 @@ import java.io.FileReader;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
+
+import junit.framework.AssertionFailedError;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>

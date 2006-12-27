@@ -22,12 +22,11 @@ package org.codehaus.modello.maven;
  * SOFTWARE.
  */
 
-import java.io.File;
-
 import org.codehaus.modello.core.ModelloCore;
-import org.codehaus.modello.maven.ModelloJPoxJdoMappingMojo;
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.util.FileUtils;
+
+import java.io.File;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>

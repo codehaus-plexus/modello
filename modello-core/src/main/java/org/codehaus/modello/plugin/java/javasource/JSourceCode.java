@@ -68,9 +68,9 @@ package org.codehaus.modello.plugin.java.javasource;
  * SOFTWARE.
  */
 
-import java.util.Vector;
-
 import org.codehaus.modello.ModelloRuntimeException;
+
+import java.util.Vector;
 
 /**
  * A class for holding in-memory Java source code.

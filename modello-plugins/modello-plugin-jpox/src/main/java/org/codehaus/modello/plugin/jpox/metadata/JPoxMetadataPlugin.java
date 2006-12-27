@@ -22,6 +22,7 @@ package org.codehaus.modello.plugin.jpox.metadata;
  * SOFTWARE.
  */
 
+import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.metadata.AbstractMetadataPlugin;
 import org.codehaus.modello.metadata.AssociationMetadata;
 import org.codehaus.modello.metadata.ClassMetadata;
@@ -31,7 +32,6 @@ import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
-import org.codehaus.modello.ModelloException;
 import org.codehaus.plexus.util.StringUtils;
 
 import java.util.Arrays;

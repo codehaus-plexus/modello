@@ -22,10 +22,10 @@ package org.codehaus.modello.core;
  * SOFTWARE.
  */
 
+import org.codehaus.modello.plugin.ModelloGenerator;
+
 import java.util.Iterator;
 import java.util.Map;
-
-import org.codehaus.modello.plugin.ModelloGenerator;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>

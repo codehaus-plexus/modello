@@ -22,11 +22,11 @@ package org.codehaus.modello.model;
  * SOFTWARE.
  */
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.codehaus.modello.ModelloRuntimeException;
 import org.codehaus.modello.metadata.Metadata;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This is the base class for all elements of the model.

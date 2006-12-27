@@ -22,19 +22,18 @@ package org.codehaus.modello.plugin.store;
  * SOFTWARE.
  */
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.Writer;
-import java.util.Properties;
-
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.context.Context;
-
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.model.Model;
 import org.codehaus.modello.plugin.AbstractModelloGenerator;
 import org.codehaus.modello.plugin.store.metadata.StoreClassMetadata;
 import org.codehaus.plexus.velocity.VelocityComponent;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.Writer;
+import java.util.Properties;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>

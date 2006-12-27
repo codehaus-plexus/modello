@@ -22,8 +22,6 @@ package org.codehaus.modello.maven;
  * SOFTWARE.
  */
 
-import org.codehaus.modello.maven.AbstractModelloGeneratorMojo;
-
 import java.io.File;
 
 /**

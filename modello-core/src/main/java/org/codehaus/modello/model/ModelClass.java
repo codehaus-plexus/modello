@@ -22,15 +22,15 @@ package org.codehaus.modello.model;
  * SOFTWARE.
  */
 
+import org.codehaus.modello.ModelloRuntimeException;
+import org.codehaus.modello.metadata.ClassMetadata;
+import org.codehaus.plexus.util.StringUtils;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import org.codehaus.modello.ModelloRuntimeException;
-import org.codehaus.modello.metadata.ClassMetadata;
-import org.codehaus.plexus.util.StringUtils;
 
 /**
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>

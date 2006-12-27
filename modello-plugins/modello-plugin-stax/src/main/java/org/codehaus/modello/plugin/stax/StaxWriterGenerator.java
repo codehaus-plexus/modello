@@ -23,9 +23,20 @@ package org.codehaus.modello.plugin.stax;
  */
 
 import org.codehaus.modello.ModelloException;
-import org.codehaus.modello.model.*;
+import org.codehaus.modello.model.Model;
+import org.codehaus.modello.model.ModelAssociation;
+import org.codehaus.modello.model.ModelClass;
+import org.codehaus.modello.model.ModelDefault;
+import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.plugin.java.JavaFieldMetadata;
-import org.codehaus.modello.plugin.java.javasource.*;
+import org.codehaus.modello.plugin.java.javasource.JClass;
+import org.codehaus.modello.plugin.java.javasource.JConstructor;
+import org.codehaus.modello.plugin.java.javasource.JField;
+import org.codehaus.modello.plugin.java.javasource.JMethod;
+import org.codehaus.modello.plugin.java.javasource.JParameter;
+import org.codehaus.modello.plugin.java.javasource.JSourceCode;
+import org.codehaus.modello.plugin.java.javasource.JSourceWriter;
+import org.codehaus.modello.plugin.java.javasource.JType;
 import org.codehaus.modello.plugin.model.ModelClassMetadata;
 import org.codehaus.modello.plugins.xml.XmlAssociationMetadata;
 import org.codehaus.modello.plugins.xml.XmlClassMetadata;

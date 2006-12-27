@@ -22,11 +22,6 @@ package org.codehaus.modello.plugin.xsd;
  * SOFTWARE.
  */
 
-import java.io.File;
-import java.io.FileReader;
-import java.util.List;
-import java.util.Properties;
-
 import org.codehaus.modello.AbstractModelloGeneratorTest;
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
@@ -36,6 +31,11 @@ import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.Version;
 import org.codehaus.modello.plugins.xml.XmlFieldMetadata;
 import org.codehaus.plexus.util.FileUtils;
+
+import java.io.File;
+import java.io.FileReader;
+import java.util.List;
+import java.util.Properties;
 
 /**
  * @author <a href="mailto:brett@codehaus.org">Brett Porter</a>
