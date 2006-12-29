@@ -65,7 +65,7 @@ public class StaxReaderGenerator
 
         try
         {
-            generateStaxReader();
+            generateStaxReaders();
 
             VersionDefinition versionDefinition = model.getVersionDefinition();
             if ( versionDefinition != null )
@@ -84,7 +84,7 @@ public class StaxReaderGenerator
         }
     }
 
-    private void generateStaxReader()
+    private void generateStaxReaders()
         throws ModelloException, IOException
     {
         Model objectModel = getModel();
@@ -124,7 +124,11 @@ public class StaxReaderGenerator
         jClass.addImport( "java.io.IOException" );
 
         jClass.addImport( "java.io.Reader" );
+        
+        jClass.addImport( "java.io.File" );
 
+        jClass.addImport( "java.io.FileInputStream" );
+        
         jClass.addImport( "java.io.StringWriter" );
 
         jClass.addImport( "java.io.StringReader" );
@@ -155,6 +159,15 @@ public class StaxReaderGenerator
 
         ModelClass root = objectModel.getClass( objectModel.getRoot( getGeneratedVersion() ), getGeneratedVersion() );
 
+        GeneratorNode rootNode = findRequiredReferenceResolvers( root, null );
+
+        writeReferenceResolvers( rootNode, jClass );
+        for ( Iterator i = rootNode.getNodesWithReferencableChildren().values().iterator(); i.hasNext(); )
+        {
+            GeneratorNode node = (GeneratorNode) i.next();
+            writeReferenceResolvers( node, jClass );
+        }
+
         JClass returnType = new JClass( root.getName() );
         JMethod method = new JMethod( returnType, "read" );
 
@@ -176,15 +189,6 @@ public class StaxReaderGenerator
         sc.add( returnType + " value = parse" + root.getName() + "( \"" + getTagName( root ) +
             "\", xmlStreamReader, strict, encoding );" );
 
-        GeneratorNode rootNode = findRequiredReferenceResolvers( root, null );
-
-        writeReferenceResolvers( rootNode, jClass );
-        for ( Iterator i = rootNode.getNodesWithReferencableChildren().values().iterator(); i.hasNext(); )
-        {
-            GeneratorNode node = (GeneratorNode) i.next();
-            writeReferenceResolvers( node, jClass );
-        }
-
         sc.add( "resolveReferences( value );" );
 
         sc.add( "return value;" );
@@ -200,6 +204,46 @@ public class StaxReaderGenerator
 
         sc = method.getSourceCode();
         sc.add( "return read( reader, true );" );
+
+        jClass.addMethod( method );
+
+        method = new JMethod( returnType, "read" );
+
+        method.addParameter( new JParameter( new JClass( "String" ), "filePath" ) );
+
+        method.addParameter( new JParameter( JType.Boolean, "strict" ) );
+
+        method.addException( new JClass( "IOException" ) );
+        method.addException( new JClass( "XMLStreamException" ) );
+
+        sc = method.getSourceCode();
+
+        sc.add( "File file = new File(filePath);" );
+        
+        sc.add( "XMLStreamReader xmlStreamReader = XMLInputFactory.newInstance().createXMLStreamReader( file.toURL().toExternalForm(), new FileInputStream(file) );" );
+
+        sc.add( "" );
+
+        sc.add( "String encoding = xmlStreamReader.getCharacterEncodingScheme();" );
+
+        sc.add( returnType + " value = parse" + root.getName() + "( \"" + getTagName( root ) +
+            "\", xmlStreamReader, strict, encoding );" );
+
+        sc.add( "resolveReferences( value );" );
+
+        sc.add( "return value;" );
+
+        jClass.addMethod( method );
+
+        method = new JMethod( returnType, "read" );
+
+        method.addParameter( new JParameter( new JClass( "String" ), "filePath" ) );
+
+        method.addException( new JClass( "IOException" ) );
+        method.addException( new JClass( "XMLStreamException" ) );
+
+        sc = method.getSourceCode();
+        sc.add( "return read( filePath, true );" );
 
         jClass.addMethod( method );
 
