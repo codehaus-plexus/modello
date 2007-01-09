@@ -462,6 +462,18 @@ public class Xpp3ReaderGenerator
 
             sc.add( "}" );
 
+            sc.add( "else" );
+            sc.add( "{" );
+
+            sc.indent();
+
+            sc.add(
+            "throw new XmlPullParserException( \"Unrecognised root tag: '\" + parser.getName() + \"'\", parser, null );" );
+
+            sc.unindent();
+
+            sc.add( "}" );
+
             sc.unindent();
 
             sc.add( "}" );

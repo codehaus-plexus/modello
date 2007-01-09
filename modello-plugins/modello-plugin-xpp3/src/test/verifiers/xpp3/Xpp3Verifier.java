@@ -61,7 +61,7 @@ public class Xpp3Verifier
      * TODO: Add a association thats not under the root element
      */
     public void verify()
-        throws IOException, XmlPullParserException
+        throws Exception
     {
         TimeZone.setDefault(TimeZone.getTimeZone("America/New_York"));
 
@@ -72,6 +72,8 @@ public class Xpp3Verifier
         verifyReaderAliases();
 
         verifyReaderDuplicates();
+
+        verifyThrowingExceptionWithWrongRootElement();
     }
 
     public void verifyEncodedRead()
@@ -86,6 +88,26 @@ public class Xpp3Verifier
 
         Assert.assertEquals( "Maven\u00A9", model.getName() );
     }
+
+    public void verifyThrowingExceptionWithWrongRootElement()
+        throws Exception
+    {
+        String path = "src/test/verifiers/xpp3/model-with-wrong-root-element.xml";
+
+        FileReader reader = new FileReader( path );
+
+        MavenXpp3Reader modelReader = new MavenXpp3Reader();
+
+        try
+        {
+            modelReader.read( reader );
+        }
+        catch( XmlPullParserException e )
+        {
+            Assert.assertTrue( e.getMessage().startsWith( "Unrecognised root tag" ) );
+        }
+    }
+
 
     public void verifyWriter()
         throws IOException, XmlPullParserException
