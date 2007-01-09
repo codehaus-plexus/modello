@@ -6,6 +6,7 @@
   <packaging>pom</packaging>
   <name>Modello Parent</name>
   <version>1.0-alpha-14-SNAPSHOT</version>
+  <url>http://modello.codehaus.org/</url>
   <issueManagement>
     <system>jira</system>
     <url>http://jira.codehaus.org/browse/MODELLO</url>
@@ -113,10 +114,17 @@
       <timezone>+1</timezone>
     </developer>
   </developers>
+  <licenses>
+    <license>
+      <name>The MIT License</name>
+      <url>http://opensource.org/licenses/mit-license.php</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
   <scm>
     <connection>scm:svn:http://svn.codehaus.org/modello/trunk</connection>
     <developerConnection>scm:svn:https://svn.codehaus.org/modello/trunk</developerConnection>
-    <url>http://svn.modello.codehaus.org/trunk</url>
+    <url>http://svn.modello.codehaus.org/browse/modello/trunk</url>
   </scm>
   <organization>
     <name>Codehaus</name>
