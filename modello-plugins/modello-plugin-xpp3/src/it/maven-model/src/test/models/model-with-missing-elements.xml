@@ -1,0 +1,7 @@
+<project>
+  <dependencies>
+    <groupId>one</groupId>
+    <artifactId>two</artifactId>
+    <version>1.0</version>
+  </dependencies>
+</project>
