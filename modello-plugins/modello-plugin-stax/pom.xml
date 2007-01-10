@@ -22,11 +22,37 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>woodstox</groupId>
+      <artifactId>wstx-asl</artifactId>
+      <version>3.2.0</version>
+      <scope>test</scope>
+    </dependency>
+<!--
+    <dependency>
+      <groupId>stax</groupId>
+      <artifactId>stax</artifactId>
+      <version>1.1.1-dev</version>
+      <exclusions>
+        <exclusion>
+          <groupId>xmlbeans</groupId>
+          <artifactId>xmlbeans-jsr173-api</artifactId>
+        </exclusion>
+      </exclusions>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>woodstox</groupId>
+      <artifactId>wstx-asl</artifactId>
+      <version>3.0.2</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>stax</groupId>
       <artifactId>stax</artifactId>
       <version>1.2.0</version>
       <scope>test</scope>
     </dependency>
+-->
     <dependency>
       <groupId>stax</groupId>
       <artifactId>stax-api</artifactId>

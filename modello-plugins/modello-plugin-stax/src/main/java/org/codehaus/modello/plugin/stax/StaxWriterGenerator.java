@@ -109,13 +109,21 @@ public class StaxWriterGenerator
 
         jClass.setPackageName( packageName );
 
+        jClass.addImport( "java.io.InputStream" );
+
+        jClass.addImport( "java.io.IOException" );
+
         jClass.addImport( "java.io.Writer" );
+
+        jClass.addImport( "java.io.StringWriter" );
 
         jClass.addImport( "java.text.DateFormat" );
 
         jClass.addImport( "java.util.Iterator" );
 
         jClass.addImport( "java.util.Locale" );
+
+        jClass.addImport( "java.util.jar.Manifest" );
 
         jClass.addImport( "javax.xml.stream.*" );
 
@@ -165,11 +173,33 @@ public class StaxWriterGenerator
 
         sc.add( "XMLOutputFactory factory = XMLOutputFactory.newInstance();" );
 
+        // currently, only woodstox supports Windows line endings. It works with Java 6/RI and stax <= 1.1.1 as well
+        // but we have no way to detect them
+        sc.add( "boolean supportWindowsLineEndings = false;" );
+        sc.add( "if ( factory.isPropertySupported( \"com.ctc.wstx.outputEscapeCr\" ) )" );
+        sc.add( "{" );
+        sc.indent();
+        sc.add( "factory.setProperty( \"com.ctc.wstx.outputEscapeCr\", Boolean.FALSE );" );
+        sc.add( "supportWindowsLineEndings = true;" );
+        sc.unindent();
+        sc.add( "}" );
+
+        sc.add( "if ( factory.isPropertySupported( \"org.codehaus.stax2.automaticEmptyElements\" ) )" );
+        sc.add( "{" );
+        sc.indent();
+        sc.add( "factory.setProperty( \"org.codehaus.stax2.automaticEmptyElements\", Boolean.FALSE );" );
+        sc.unindent();
+        sc.add( "}" );
+
         sc.add(
             "IndentingXMLStreamWriter serializer = new IndentingXMLStreamWriter( factory.createXMLStreamWriter( writer ) );" );
 
-        // TODO: re-enable when StAX and/or Woodstox support writing windows line endings in their current versions
-//        sc.add( "serializer.setNewLine( serializer.getLineSeparator() );" );
+        sc.add( "if ( supportWindowsLineEndings )" );
+        sc.add( "{" );
+        sc.indent();
+        sc.add( "serializer.setNewLine( serializer.getLineSeparator() );" );
+        sc.unindent();
+        sc.add( "}" );
 
         sc.add( "serializer.writeStartDocument( " + rootElementParameterName + ".getModelEncoding(), \"1.0\" );" );
 

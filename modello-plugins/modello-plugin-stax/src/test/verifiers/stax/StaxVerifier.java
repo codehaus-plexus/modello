@@ -274,6 +274,8 @@ public class StaxVerifier
 
     private String scrubXmlDeclQuotes( String s )
     {
+        s = cleanLineEndings( s );
+
         if ( s.startsWith( "<?xml version='1.0' encoding='UTF-8'?>"))
         {
             return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + s.substring( "<?xml version='1.0' encoding='UTF-8'?>".length() );
