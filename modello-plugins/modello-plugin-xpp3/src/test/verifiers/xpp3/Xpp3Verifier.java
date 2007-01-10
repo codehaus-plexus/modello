@@ -74,6 +74,8 @@ public class Xpp3Verifier
         verifyReaderDuplicates();
 
         verifyThrowingExceptionWithWrongRootElement();
+
+        verifyThrowingExceptionWithWrongElement();
     }
 
     public void verifyEncodedRead()
@@ -104,10 +106,43 @@ public class Xpp3Verifier
         }
         catch( XmlPullParserException e )
         {
-            Assert.assertTrue( e.getMessage().startsWith( "Unrecognised root tag" ) );
+            Assert.assertTrue( e.getMessage().startsWith( "Unrecognised tag: 'wrongRoot'" ) );
         }
+
+        reader = new FileReader( path );
+
+        // no failure if it is wrong but strict is off
+        modelReader.read( reader, false );
     }
 
+    public void verifyThrowingExceptionWithWrongElement()
+        throws Exception
+    {
+        String path = "src/test/verifiers/xpp3/model-with-wrong-element.xml";
+
+        FileReader reader = new FileReader( path );
+
+        MavenXpp3Reader modelReader = new MavenXpp3Reader();
+
+        try
+        {
+            modelReader.read( reader );
+        }
+        catch( XmlPullParserException e )
+        {
+            Assert.assertTrue( e.getMessage().startsWith( "Unrecognised tag: 'bar'" ) );
+        }
+
+        reader = new FileReader( path );
+
+        // no failure if it is wrong but strict is off
+        Model model = modelReader.read( reader, false );
+
+        // check nothing important was missed
+        Assert.assertEquals( "connection", model.getScm().getConnection() );
+        Assert.assertEquals( "developerConnection", model.getScm().getDeveloperConnection() );
+        Assert.assertEquals( "url", model.getScm().getUrl() );
+    }
 
     public void verifyWriter()
         throws IOException, XmlPullParserException

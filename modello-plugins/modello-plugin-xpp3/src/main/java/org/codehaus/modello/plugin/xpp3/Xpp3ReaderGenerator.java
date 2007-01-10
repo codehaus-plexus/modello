@@ -424,6 +424,20 @@ public class Xpp3ReaderGenerator
 
             sc.add( "}" );
 
+            sc.add( "else" );
+
+            sc.add( "{" );
+
+            sc.indent();
+
+            sc.add( "// swallow up to end tag since this is not valid" );
+            
+            sc.add( "while ( parser.next() != XmlPullParser.END_TAG ) {}" );
+
+            sc.unindent();
+
+            sc.add( "}" );
+
             if ( statement.startsWith( "else" ) )
             {
                 sc.unindent();
@@ -433,19 +447,7 @@ public class Xpp3ReaderGenerator
         }
         else
         {
-            sc.add( "else" );
-
-            sc.add( "{" );
-
-            sc.indent();
-
-            sc.add( "if ( foundRoot )" );
-
-            sc.add( "{" );
-
-            sc.indent();
-
-            sc.add( "if ( strict )" );
+            sc.add( "else if ( !foundRoot && strict )" );
 
             sc.add( "{" );
 
@@ -453,26 +455,6 @@ public class Xpp3ReaderGenerator
 
             sc.add(
                 "throw new XmlPullParserException( \"Unrecognised tag: '\" + parser.getName() + \"'\", parser, null);" );
-
-            sc.unindent();
-
-            sc.add( "}" );
-
-            sc.unindent();
-
-            sc.add( "}" );
-
-            sc.add( "else" );
-            sc.add( "{" );
-
-            sc.indent();
-
-            sc.add(
-            "throw new XmlPullParserException( \"Unrecognised root tag: '\" + parser.getName() + \"'\", parser, null );" );
-
-            sc.unindent();
-
-            sc.add( "}" );
 
             sc.unindent();
 
