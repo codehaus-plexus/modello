@@ -9,7 +9,7 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.codehaus.modello</groupId>
-  <artifactId>modello-plugin-openjpa</artifactId>
+  <artifactId>modello-plugin-jpa</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <name>Modello Plugin OpenJPA</name>
   <dependencies>

@@ -1,4 +1,4 @@
-package org.codehaus.modello.plugin.openjpa;
+package org.codehaus.modello.plugin;
 
 /**
  * Copyright 2007-2008 The Apache Software Foundation.
@@ -16,23 +16,31 @@ package org.codehaus.modello.plugin.openjpa;
  * the License.
  */
 
-import org.codehaus.modello.AbstractModelloGeneratorTest;
+import org.codehaus.modello.ModelloException;
+import org.codehaus.modello.model.Model;
+
+import java.util.Properties;
 
 /**
+ * Generates the an ORM (Object Relational Mapping) from the Modello model
+ * source.
+ * 
  * @author <a href='mailto:rahul.thakur.xdev@gmail.com'>Rahul Thakur</a>
  * @version $Id$
  * @since 1.0.0
  */
-public class OpenJpaOrmMappingModelloGeneratorTest extends AbstractModelloGeneratorTest
+public class JpaOrmMappingModelloGenerator extends AbstractModelloGenerator
 {
 
     /**
-     * @param name
+     * {@inheritDoc}
+     * 
+     * @see org.codehaus.modello.plugin.ModelloGenerator#generate(org.codehaus.modello.model.Model,
+     *      java.util.Properties)
      */
-    public OpenJpaOrmMappingModelloGeneratorTest( String name )
+    public void generate( Model model, Properties properties ) throws ModelloException
     {
-        super( name );
-        // TODO: Implement!
+        // TODO Implement!
     }
 
 }
