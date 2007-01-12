@@ -1,0 +1,1137 @@
+<model>
+  <id>continuum</id>
+  <name>Continuum</name>
+  <description>Continuum's object model.</description>
+  <defaults>
+    <default>
+      <key>package</key>
+      <value>org.apache.maven.continuum.model.project</value>
+    </default>
+  </defaults>
+
+  <classes>
+    <class rootElement="true" jpox.enabled="false" stash.storable="false">
+      <name>ContinuumDatabase</name>
+      <version>1.1.0+</version>
+      <fields>
+        <field>
+          <name>projectGroups</name>
+          <version>1.1.0+</version>
+          <association>
+            <type>ProjectGroup</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+        <field>
+          <name>systemConfiguration</name>
+          <version>1.1.0+</version>
+          <association>
+            <type>SystemConfiguration</type>
+          </association>
+        </field>
+        <!-- independent references -->
+        <field>
+          <name>installations</name>
+          <version>1.1.0+</version>
+          <association>
+            <type>Installation</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+        <field>
+          <name>schedules</name>
+          <version>1.1.0+</version>
+          <association>
+            <type>Schedule</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+        <field>
+          <name>profiles</name>
+          <version>1.1.0+</version>
+          <association>
+            <type>Profile</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+      </fields>
+    </class>
+
+    <class>
+      <name>ProjectGroup</name>
+      <version>1.1.0+</version>
+      <fields>
+        <field>
+          <name>id</name>
+          <version>1.1.0+</version>
+          <required>true</required>
+          <type>long</type>
+          <identifier>true</identifier>
+        </field>
+        <field jpox.column="groupKey">
+          <name>key</name>
+          <verison>1.1.0+</verison>
+          <required>true</required>
+          <type>String</type>
+        </field>
+        <field>
+          <name>groupId</name>
+          <version>1.1.0+</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>name</name>
+          <version>1.1.0+</version>
+          <type>String</type>
+        </field>
+        <field stash.maxSize="8192">
+          <name>description</name>
+          <version>1.1.0+</version>
+          <type>String</type>
+        </field>
+        <field jpox.mappedBy="projectGroup" jpox.fetchGroupNames="projectgroup-projects project-build-details">
+          <name>projects</name>
+          <version>1.1.0+</version>
+          <association jpox.join="false">
+            <type>Project</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+        <field jpox.fetchGroupNames="project-build-details">
+          <name>notifiers</name>
+          <version>1.1.0+</version>
+          <association>
+            <type>ProjectNotifier</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+        <field jpox.fetchGroupNames="project-build-details">
+          <name>buildDefinitions</name>
+          <version>1.1.0+</version>
+          <association>
+            <type>BuildDefinition</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+      </fields>
+    </class>
+
+    <class>
+      <name>Project</name>
+      <version>1.1.0+</version>
+      <fields>
+        <field>
+          <name>id</name>
+          <required>true</required>
+          <identifier>true</identifier>
+          <version>1.1.0+</version>
+          <type>long</type>
+        </field>
+        <field jpox.column="projectKey">
+          <name>key</name>
+          <verison>1.1.0+</verison>
+          <required>true</required>
+          <type>String</type>
+        </field>
+        <field>
+          <name>groupKey</name>
+          <verison>1.1.0+</verison>
+          <required>true</required>
+          <type>String</type>          
+        </field>
+        <field>
+          <name>groupId</name>
+          <version>1.1.0+</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>artifactId</name>
+          <version>1.1.0+</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>executorId</name>
+          <version>1.1.0+</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>name</name>
+          <version>1.1.0+</version>
+          <type>String</type>
+        </field>
+        <field stash.maxSize="8192">
+          <name>description</name>
+          <version>1.1.0+</version>
+          <type>String</type>
+        </field>
+        <field stash.maxSize="256">
+          <name>url</name>
+          <version>1.1.0+</version>
+          <type>String</type>
+        </field>
+        <field stash.maxSize="256">
+          <name>scmUrl</name>
+          <version>1.1.0+</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>scmTag</name>
+          <version>1.1.0+</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>scmUsername</name>
+          <version>1.1.0+</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>scmPassword</name>
+          <version>1.1.0+</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>version</name>
+          <version>1.1.0+</version>
+          <type>String</type>
+        </field>
+        <!-- TODO: should these 3 just be queried from the builds list? -->
+        <field>
+          <name>state</name>
+          <version>1.1.0+</version>
+          <type>int</type>
+          <defaultValue>1</defaultValue>
+        </field>
+        <field>
+          <name>oldState</name>
+          <version>1.1.0+</version>
+          <type>int</type>
+        </field>
+        <!-- TODO: maybe buildresult itself? -->
+        <field>
+          <name>latestBuildId</name>
+          <version>1.1.0+</version>
+          <type>long</type>
+        </field>
+        <field>
+          <name>buildNumber</name>
+          <version>1.1.0+</version>
+          <type>long</type>
+        </field>
+        <field stash.maxSize="256">
+          <name>workingDirectory</name>
+          <version>1.1.0+</version>
+          <type>String</type>
+        </field>
+        <field jpox.mappedBy="project" jpox.fetchGroupNames="project-with-builds">
+          <name>buildResults</name>
+          <version>1.1.0+</version>
+          <association jpox.join="false">
+            <type>BuildResult</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+        <!-- TODO: remove -->
+        <field jpox.fetchGroupNames="project-with-checkout-result">
+          <name>checkoutResult</name>
+          <version>1.1.0+</version>
+          <association>
+            <type>ScmResult</type>
+          </association>
+        </field>
+        <field jpox.fetchGroupNames="project-all-details">
+          <name>developers</name>
+          <version>1.1.0+</version>
+          <association jpox.join="false">
+            <type>ProjectDeveloper</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+        <field jpox.fetchGroupNames="project-all-details project-dependencies">
+          <name>parent</name>
+          <version>1.1.0+</version>
+          <association jpox.join="false">
+            <type>ProjectDependency</type>
+          </association>
+        </field>
+        <field jpox.fetchGroupNames="project-all-details project-dependencies">
+          <name>dependencies</name>
+          <version>1.1.0+</version>
+          <association jpox.join="false">
+            <type>ProjectDependency</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+        <field>
+          <name>projectGroup</name>
+          <version>1.1.0+</version>
+          <required>true</required>
+          <association stash.part="true" xml.reference="true" jpox.dependent="false">
+            <type>ProjectGroup</type>
+          </association>
+        </field>
+        <field jpox.fetchGroupNames="project-build-details project-all-details">
+          <name>notifiers</name>
+          <version>1.1.0+</version>
+          <association>
+            <type>ProjectNotifier</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+        <field jpox.fetchGroupNames="project-build-details project-all-details">
+          <name>buildDefinitions</name>
+          <version>1.1.0+</version>
+          <association>
+            <type>BuildDefinition</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+      </fields>
+    </class>
+
+    <class>
+      <name>ProjectNotifier</name>
+      <version>1.1.0+</version>
+      <description>
+        Configures one method for notifying users/developers when a build breaks.
+      </description>
+      <fields>
+        <field>
+          <name>id</name>
+          <required>true</required>
+          <identifier>true</identifier>
+          <version>1.1.0+</version>
+          <type>long</type>
+        </field>
+        <field>
+          <name>type</name>
+          <version>1.1.0+</version>
+          <defaultValue>mail</defaultValue>
+          <type>String</type>
+          <description>The mechanism used to deliver notifications.</description>
+        </field>
+        <field jpox.column="notifierorigin">
+          <name>from</name>
+          <version>1.1.0+</version>
+          <type>int</type>
+          <description>The origin of the notifier (pom or user).</description>
+        </field>
+        <field>
+          <name>enabled</name>
+          <version>1.1.0+</version>
+          <defaultValue>true</defaultValue>
+          <type>boolean</type>
+        </field>
+        <field>
+          <name>recipientType</name>
+          <version>1.1.0+</version>
+          <type>int</type>
+        </field>
+        <field>
+          <name>sendOnSuccess</name>
+          <version>1.1.0+</version>
+          <type>boolean</type>
+          <defaultValue>true</defaultValue>
+        </field>
+        <field>
+          <name>sendOnFailure</name>
+          <version>1.1.0+</version>
+          <type>boolean</type>
+          <defaultValue>true</defaultValue>
+        </field>
+        <field>
+          <name>sendOnError</name>
+          <version>1.1.0+</version>
+          <type>boolean</type>
+          <defaultValue>true</defaultValue>
+        </field>
+        <field>
+          <name>sendOnWarning</name>
+          <version>1.1.0+</version>
+          <type>boolean</type>
+          <defaultValue>true</defaultValue>
+        </field>
+        <field>
+          <name>configuration</name>
+          <version>1.1.0+</version>
+          <description>Extended configuration specific to this notifier goes here.</description>
+          <type>Map</type>
+          <association xml.mapStyle="inline" stash.part="true" stash.keyType="java.lang.String">
+            <type>String</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+      </fields>
+      <codeSegments>
+        <codeSegment>
+          <version>1.1.0+</version>
+          <code><![CDATA[
+
+              public static final int FROM_PROJECT = 1;
+
+              public static final int FROM_USER = 2;
+
+              public boolean isFromProject()
+              {
+                  return from == FROM_PROJECT;
+              }
+
+              public boolean isFromUser()
+              {
+                  return from == FROM_USER;
+              }
+          ]]></code>
+        </codeSegment>
+      </codeSegments>
+    </class>
+
+    <class>
+      <name>ProjectDeveloper</name>
+      <version>1.1.0+</version>
+      <fields>
+        <field>
+          <name>scmId</name>
+          <version>1.1.0+</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>name</name>
+          <version>1.1.0+</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>email</name>
+          <version>1.1.0+</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>continuumId</name>
+          <version>1.1.0+</version>
+          <type>int</type>
+        </field>
+      </fields>
+    </class>
+
+    <class>
+      <name>ProjectDependency</name>
+      <version>1.1.0+</version>
+      <fields>
+        <field>
+          <name>groupId</name>
+          <version>1.1.0+</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>artifactId</name>
+          <version>1.1.0+</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>version</name>
+          <version>1.1.0+</version>
+          <type>String</type>
+        </field>
+      </fields>
+    </class>
+
+    <class>
+      <name>BuildResult</name>
+      <version>1.1.0+</version>
+      <description><![CDATA[
+        This class is a single continuum build.
+      ]]></description>
+      <fields>
+        <field>
+          <name>project</name>
+          <version>1.1.0+</version>
+          <!-- required>true</required -->
+          <association xml.reference="true" stash.part="true" jpox.dependent="false">
+            <type>Project</type>
+          </association>
+        </field>
+        <field>
+          <name>id</name>
+          <version>1.1.0+</version>
+          <type>long</type>
+          <identifier>true</identifier>
+        </field>
+        <field>
+          <name>buildNumber</name>
+          <version>1.1.0+</version>
+          <type>long</type>
+        </field>
+        <field>
+          <name>state</name>
+          <version>1.1.0+</version>
+          <type>int</type>
+        </field>
+        <field>
+          <name>trigger</name>
+          <version>1.1.0+</version>
+          <type>int</type>
+        </field>
+        <field>
+          <name>startTime</name>
+          <version>1.1.0+</version>
+          <!-- TODO: Because JPOX persists as UTC and pulls back using the local time, we have to take over -->
+          <type>long</type>
+        </field>
+        <field>
+          <name>endTime</name>
+          <version>1.1.0+</version>
+          <!-- TODO: Because JPOX persists as UTC and pulls back using the local time, we have to take over -->
+          <type>long</type>
+        </field>
+        <field stash.maxSize="8192">
+          <name>error</name>
+          <version>1.1.0+</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>success</name>
+          <version>1.1.0+</version>
+          <type>boolean</type>
+        </field>
+        <field>
+          <name>exitCode</name>
+          <version>1.1.0+</version>
+          <type>int</type>
+        </field>
+        <field jpox.fetchGroupNames="build-result-with-details">
+          <name>scmResult</name>
+          <version>1.1.0+</version>
+          <association>
+            <type>ScmResult</type>
+          </association>
+        </field>
+        <field jpox.fetchGroupNames="build-result-with-details">
+          <name>testResult</name>
+          <version>1.1.0+</version>
+          <association>
+            <type>TestResult</type>
+          </association>
+        </field>
+        <field jpox.fetchGroupNames="build-result-with-details">
+          <name>modifiedDependencies</name>
+          <version>1.1.0+</version>
+          <association>
+            <type>ProjectDependency</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+      </fields>
+    </class>
+
+    <class>
+      <name>ScmResult</name>
+      <packageName>org.apache.maven.continuum.model.scm</packageName>
+      <version>1.1.0+</version>
+      <fields>
+        <field>
+          <name>success</name>
+          <version>1.1.0+</version>
+          <type>boolean</type>
+        </field>
+        <field>
+          <name>commandLine</name>
+          <version>1.1.0+</version>
+          <type>String</type>
+        </field>
+        <field stash.maxSize="1024">
+          <name>providerMessage</name>
+          <version>1.1.0+</version>
+          <type>String</type>
+        </field>
+        <!-- TODO: page to disk? -->
+        <field stash.maxSize="1024">
+          <name>commandOutput</name>
+          <version>1.1.0+</version>
+          <type>String</type>
+        </field>
+        <field stash.maxSize="8192" jpox.column="exceptionstring">
+          <name>exception</name>
+          <version>1.1.0+</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>changes</name>
+          <version>1.1.0+</version>
+          <association stash.part="true" jpox.join="false">
+            <type>ChangeSet</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+      </fields>
+    </class>
+
+    <class>
+      <name>ChangeSet</name>
+      <packageName>org.apache.maven.continuum.model.scm</packageName>
+      <version>1.1.0+</version>
+      <fields>
+        <field>
+          <name>id</name>
+          <version>1.1.0+</version>
+          <type>String</type>
+          <identity>true</identity>
+        </field>
+        <field>
+          <name>author</name>
+          <version>1.1.0+</version>
+          <type>String</type>
+        </field>
+        <field stash.maxSize="8192">
+          <name>comment</name>
+          <version>1.1.0+</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>date</name>
+          <version>1.1.0+</version>
+          <!-- TODO: Because JPOX persists as UTC and pulls back using the local time, we have to take over -->
+          <type>long</type>
+        </field>
+        <field>
+          <name>files</name>
+          <version>1.1.0+</version>
+          <association stash.part="true" jpox.join="false">
+            <type>ChangeFile</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+      </fields>
+      <codeSegments>
+        <codeSegment>
+          <version>1.1.0+</version>
+          <code><![CDATA[
+            /**
+             * @return Returns string representation of the changeset
+             */
+            public String toString()
+            {
+                String result = author + "\n" + date + "\n";
+
+                if ( files != null )
+                {
+                    for ( java.util.Iterator i = files.iterator(); i.hasNext(); )
+                    {
+                        ChangeFile file = (ChangeFile) i.next();
+
+                        result += file + "\n";
+                    }
+                }
+
+                result += comment;
+
+                return result;
+            }
+
+            /**
+             * @see java.lang.Object#equals(java.lang.Object)
+             */
+            public boolean equals( Object obj )
+            {
+                if ( obj instanceof ChangeSet )
+                {
+                    ChangeSet changeSet = (ChangeSet) obj;
+
+                    if ( toString().equals( changeSet.toString() ) )
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+
+            public java.util.Date getDateAsDate()
+            {
+                if ( date > 0 )
+                {
+                    return new java.util.Date( date );
+                }
+
+                return null;
+            }
+          ]]></code>
+        </codeSegment>
+      </codeSegments>
+    </class>
+
+    <class>
+      <name>ChangeFile</name>
+      <packageName>org.apache.maven.continuum.model.scm</packageName>
+      <version>1.1.0+</version>
+      <fields>
+        <field>
+          <name>name</name>
+          <version>1.1.0+</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>revision</name>
+          <version>1.1.0+</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>status</name>
+          <version>1.1.0+</version>
+          <type>String</type>
+        </field>
+      </fields>
+      <codeSegments>
+        <codeSegment>
+          <version>1.1.0+</version>
+          <code><![CDATA[
+            /**
+             * Provide a version of the object as a string for debugging purposes
+             *
+             * @return a {@link String}made up of the properties of the object
+             */
+            public String toString()
+            {
+                StringBuffer buffer = new StringBuffer( getName() );
+
+                if ( getRevision() != null )
+                {
+                    buffer.append( ", " ).append( getRevision() );
+                }
+
+                return buffer.toString();
+            }
+          ]]></code>
+        </codeSegment>
+      </codeSegments>
+    </class>
+
+    <class>
+      <name>TestResult</name>
+      <packageName>org.apache.maven.continuum.model.scm</packageName>
+      <version>1.1.0+</version>
+      <fields>
+        <field>
+          <name>testCount</name>
+          <version>1.1.0+</version>
+          <type>int</type>
+        </field>
+        <field>
+          <name>failureCount</name>
+          <version>1.1.0+</version>
+          <type>int</type>
+        </field>
+        <field>
+          <name>totalTime</name>
+          <version>1.1.0+</version>
+          <type>long</type>
+        </field>
+        <field>
+          <name>suiteResults</name>
+          <version>1.1.0+</version>
+          <association stash.part="true" jpox.join="false">
+            <type>SuiteResult</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+      </fields>
+    </class>
+
+    <class>
+      <name>SuiteResult</name>
+      <packageName>org.apache.maven.continuum.model.scm</packageName>
+      <version>1.1.0+</version>
+      <fields>
+        <field>
+          <name>name</name>
+          <version>1.1.0+</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>testCount</name>
+          <version>1.1.0+</version>
+          <type>int</type>
+        </field>
+        <field>
+          <name>failureCount</name>
+          <version>1.1.0+</version>
+          <type>int</type>
+        </field>
+        <field>
+          <name>totalTime</name>
+          <version>1.1.0+</version>
+          <type>long</type>
+        </field>
+        <field>
+          <name>failures</name>
+          <version>1.1.0+</version>
+          <association stash.part="true" jpox.join="false">
+            <type>TestCaseFailure</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+      </fields>
+    </class>
+
+    <class>
+      <name>TestCaseFailure</name>
+      <packageName>org.apache.maven.continuum.model.scm</packageName>
+      <version>1.1.0+</version>
+      <fields>
+        <field>
+          <name>name</name>
+          <version>1.1.0+</version>
+          <type>String</type>
+        </field>
+        <field stash.maxSize="8192" jpox.column="exceptionstring">
+          <name>exception</name>
+          <version>1.1.0+</version>
+          <type>String</type>
+        </field>
+      </fields>
+    </class>
+
+    <class>
+      <name>BuildDefinition</name>
+      <version>1.1.0+</version>
+      <fields>
+        <field>
+          <name>id</name>
+          <required>true</required>
+          <identifier>true</identifier>
+          <version>1.1.0+</version>
+          <type>long</type>
+        </field>
+        <field>
+          <name>defaultForProject</name>
+          <version>1.1.0+</version>
+          <type>boolean</type>
+          <defaultValue>false</defaultValue>
+        </field>
+        <field>
+          <name>goals</name>
+          <version>1.1.0+</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>arguments</name>
+          <version>1.1.0+</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>buildFile</name>
+          <version>1.1.0+</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>buildFresh</name>
+          <version>1.1.0+</version>
+          <type>boolean</type>
+          <defaultValue>false</defaultValue>
+          <description>
+            true if the build is to be smoked and checked back out from the scm each build
+          </description>
+        </field>
+        <field>
+          <name>schedule</name>
+          <version>1.1.0+</version>
+          <association xml.reference="true" stash.part="true" jpox.dependent="false">
+            <type>Schedule</type>
+          </association>
+        </field>
+        <field>
+          <name>profile</name>
+          <version>1.1.0+</version>
+          <association xml.reference="true" stash.part="true" jpox.dependent="false">
+            <type>Profile</type>
+          </association>
+        </field>
+        <field jpox.nullValue="default">
+          <name>latestBuildId</name>
+          <version>1.1.0+</version>
+          <type>long</type>
+          <defaultValue>0</defaultValue>
+        </field>
+      </fields>
+    </class>
+
+    <class>
+      <name>Schedule</name>
+      <version>1.1.0+</version>
+      <description><![CDATA[
+        Schedule for a project.
+      ]]></description>
+      <fields>
+        <field>
+          <name>id</name>
+          <identifier>true</identifier>
+          <version>1.1.0+</version>
+          <type>long</type>
+        </field>
+        <field>
+          <name>active</name>
+          <version>1.1.0+</version>
+          <type>boolean</type>
+        </field>
+        <field>
+          <name>name</name>
+          <version>1.1.0+</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>description</name>
+          <version>1.1.0+</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>delay</name>
+          <description><![CDATA[
+            Delay in seconds.
+          ]]></description>
+          <version>1.1.0+</version>
+          <type>long</type>
+        </field>
+        <field>
+          <name>maxJobExecutionTime</name>
+          <description>
+            Maximum execution time of a job in seconds before it's
+            terminated.
+          </description>
+          <version>1.1.0+</version>
+          <type>long</type>
+          <defaultValue>3600</defaultValue>
+        </field>
+        <field>
+          <name>cronExpression</name>
+          <version>1.1.0+</version>
+          <type>String</type>
+        </field>
+      </fields>
+    </class>
+
+    <class>
+      <name>Profile</name>
+      <version>1.1.0+</version>
+      <fields>
+        <field>
+          <name>id</name>
+          <identifier>true</identifier>
+          <version>1.1.0+</version>
+          <type>long</type>
+        </field>
+        <field>
+          <name>active</name>
+          <version>1.1.0+</version>
+          <type>boolean</type>
+        </field>
+        <field>
+          <name>name</name>
+          <version>1.1.0+</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>description</name>
+          <version>1.1.0+</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>scmMode</name>
+          <version>1.1.0+</version>
+          <type>int</type>
+        </field>
+        <field>
+          <name>buildWithoutChanges</name>
+          <version>1.1.0+</version>
+          <type>boolean</type>
+        </field>
+        <field>
+          <name>jdk</name>
+          <version>1.1.0+</version>
+          <association xml.reference="true" stash.part="true" jpox.dependent="false">
+            <type>Installation</type>
+          </association>
+        </field>
+        <field>
+          <name>builder</name>
+          <version>1.1.0+</version>
+          <association xml.reference="true" stash.part="true" jpox.dependent="false">
+            <type>Installation</type>
+          </association>
+        </field>
+      </fields>
+    </class>
+
+    <class jpox.use-identifiers-as-primary-key="false">
+      <name>Installation</name>
+      <packageName>org.apache.maven.continuum.model.system</packageName>
+      <version>1.1.0+</version>
+      <fields>
+        <field>
+          <name>version</name>
+          <version>1.1.0+</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>path</name>
+          <version>1.1.0+</version>
+          <type>String</type>
+        </field>
+        <field jpox.primary-key="true" jpox.value-strategy="off">
+          <name>name</name>
+          <version>1.1.0+</version>
+          <type>String</type>
+          <identifier>true</identifier>
+        </field>
+      </fields>
+    </class>
+
+    <class>
+      <name>SystemConfiguration</name>
+      <packageName>org.apache.maven.continuum.model.system</packageName>
+      <version>1.1.0+</version>
+      <fields>
+        <field>
+          <name>guestAccountEnabled</name>
+          <version>1.1.0+</version>
+          <type>boolean</type>
+          <defaultValue>true</defaultValue>
+        </field>
+        <field>
+          <name>defaultScheduleDescription</name>
+          <version>1.1.0+</version>
+          <type>String</type>
+          <defaultValue>Run hourly</defaultValue>
+        </field>
+        <field>
+          <name>defaultScheduleCronExpression</name>
+          <version>1.1.0+</version>
+          <type>String</type>
+          <defaultValue>0 0 * * * ?</defaultValue>
+        </field>
+        <field>
+          <name>workingDirectory</name>
+          <version>1.1.0+</version>
+          <type>String</type>
+          <defaultValue>working-directory</defaultValue>
+        </field>
+        <field>
+          <name>buildOutputDirectory</name>
+          <version>1.1.0+</version>
+          <type>String</type>
+          <defaultValue>build-output-directory</defaultValue>
+        </field>
+        <field>
+          <name>deploymentRepositoryDirectory</name>
+          <version>1.1.0+</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>baseUrl</name>
+          <version>1.1.0+</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>initialized</name>
+          <version>1.1.0+</version>
+          <type>boolean</type>
+          <defaultValue>false</defaultValue>
+        </field>
+      </fields>
+    </class>
+
+    <class>
+      <name>NotificationAddress</name>
+      <version>1.1.0+</version>
+      <packageName>org.apache.maven.continuum.model.system</packageName>
+      <description>
+        Configures one method for notifying users/developers when a build breaks.
+      </description>
+      <fields>
+        <field>
+          <name>type</name>
+          <version>1.1.0+</version>
+          <defaultValue>mail</defaultValue>
+          <type>String</type>
+          <description>The mechanism used to deliver notifications.</description>
+        </field>
+        <field>
+          <name>address</name>
+          <version>1.1.0+</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>configuration</name>
+          <version>1.1.0+</version>
+          <description>Extended configuration specific to this notifier goes here.</description>
+          <type>Map</type>
+          <association xml.mapStyle="inline" stash.part="true" stash.keyType="java.lang.String">
+            <type>String</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+      </fields>
+    </class>
+
+    <!-- TODO: this isn't really appropriate to generate with Modello -->
+    <class jpox.enabled="false" stash.storable="false">
+      <name>ContinuumProjectState</name>
+      <packageName>org.apache.maven.continuum.project</packageName>
+      <version>1.1.0+</version>
+      <fields>
+        <field>
+          <name>name</name>
+          <version>1.1.0+</version>
+          <type>String</type>
+        </field>
+      </fields>
+      <codeSegments>
+        <codeSegment>
+           <version>1.1.0+</version>
+           <code><![CDATA[
+    public final static int NEW = 1;
+    public final static int OK = 2;
+    public final static int FAILED = 3;
+    public final static int ERROR = 4;
+    public final static int BUILDING = 6;
+    public final static int CHECKING_OUT = 7;
+    public final static int UPDATING = 8;
+    public final static int WARNING = 9;
+    public final static int CHECKEDOUT = 10;
+
+    // TODO: maybe move these to another class
+    public static final int TRIGGER_FORCED = 1;
+
+    // TODO: remove
+    public static final int TRIGGER_SCHEDULED = 0;
+
+    public static final int TRIGGER_UNKNOWN = TRIGGER_SCHEDULED;
+
+    public String getI18nKey()
+    {
+        return "org.apache.maven.continuum.project.state." + name;
+    }
+
+    public boolean equals( Object object )
+    {
+        if ( !( object instanceof ContinuumProjectState ) )
+        {
+            return false;
+        }
+
+        ContinuumProjectState other = (ContinuumProjectState) object;
+
+        return name.equals( other.name );
+    }
+
+    public int hashCode()
+    {
+        return name.hashCode();
+    }
+
+    public String toString()
+    {
+        return name;
+    }
+           ]]></code>
+        </codeSegment>
+      </codeSegments>
+    </class>
+  </classes>
+</model>

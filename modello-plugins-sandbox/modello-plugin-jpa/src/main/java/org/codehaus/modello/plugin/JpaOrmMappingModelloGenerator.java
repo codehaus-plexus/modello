@@ -17,8 +17,11 @@ package org.codehaus.modello.plugin;
  */
 
 import org.codehaus.modello.ModelloException;
+import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.model.Model;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Properties;
 
 /**
@@ -26,8 +29,11 @@ import java.util.Properties;
  * source.
  * 
  * @author <a href='mailto:rahul.thakur.xdev@gmail.com'>Rahul Thakur</a>
- * @version $Id$
+ * @version $Id: JpaOrmMappingModelloGenerator.java 780 2007-01-11 19:09:14Z
+ *          rahul $
  * @since 1.0.0
+ * @plexus.component role="org.codehaus.modello.plugin.ModelloGenerator"
+ *                   role-hint="jpa-mapping"
  */
 public class JpaOrmMappingModelloGenerator extends AbstractModelloGenerator
 {
@@ -40,7 +46,26 @@ public class JpaOrmMappingModelloGenerator extends AbstractModelloGenerator
      */
     public void generate( Model model, Properties properties ) throws ModelloException
     {
-        // TODO Implement!
+        initialize( model, properties );
+
+        String fileName = properties.getProperty( ModelloParameterConstants.FILENAME, "orm.xml" );
+
+        File directory = getOutputDirectory();
+        File orm = new File( directory, fileName );
+
+        File parent = orm.getParentFile();
+
+        if ( !parent.exists() )
+        {
+            if ( !parent.mkdirs() )
+            {
+                throw new ModelloException( "Error while creating parent directories for the file " + "'"
+                                + orm.getAbsolutePath() + "'." );
+            }
+        }
+
+        // generateOrm( orm, model );
+
     }
 
 }

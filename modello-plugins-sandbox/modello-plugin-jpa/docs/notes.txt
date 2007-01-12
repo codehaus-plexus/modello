@@ -1,0 +1,56 @@
+  
+
+1)  Writing new Modello Generators 
+==================================
+
+Modello Generators are Plexus components. Writing a Modello Generator for a new
+Data model is like implementing a new Plexus Component and pluggin it into 
+Modello engine. 
+
+
+1-1)  Creating a new Generator class
+
+You can create a new Modello Generator implementation by extending 
+org.codehaus.modello.plugin.AbstractModelloGenerator
+
+, or, by implementing interface
+org.codehaus.modello.plugin.ModelloGenerator
+
+
+
+
+
+We take the example of JpaOrmMappingModelloGenerator
+
+
+public class JpaOrmMappingModelloGenerator extends AbstractModelloGenerator {
+
+  // Body snipped.
+
+}
+
+
+
+
+
+
+
+
+
+                          Appendix
+-------------------------------------------------------------------------------
+
+Unit testing a Modello Generator implementation
+===============================================
+
+To setup unit tests for your new Generator, extend the following class. 
+
+Modello provides the following class that can be used quickly setting up unit 
+tests for your new Generator implementation. 
+
+org.codehaus.modello.AbstractModelloGeneratorTest
+
+*Notable is your unit test extension should have a default no-arg constructor 
+else the JUnit framework will fail while attempting to setup your unit test.
+
+
