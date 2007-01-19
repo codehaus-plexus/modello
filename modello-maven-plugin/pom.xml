@@ -68,6 +68,11 @@
       <artifactId>plexus-component-api</artifactId>
       <scope>runtime</scope>
     </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-container-default</artifactId>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
   <reporting>
     <plugins>
