@@ -51,7 +51,8 @@ public class JpaOrmMappingModelloGeneratorTest extends AbstractModelloGeneratorT
 
         Properties parameters = new Properties();
 
-        parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, "target/output" );
+        // parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, "target/output" );
+        parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, getGeneratedSources().getAbsolutePath() );
 
         parameters.setProperty( ModelloParameterConstants.VERSION, "1.0.0" );
 
