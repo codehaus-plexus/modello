@@ -14,7 +14,7 @@
  * the License.
  */
 
-package org.codehaus.modello.plugin.metadata;
+package org.codehaus.modello.plugin.jpa.metadata;
 
 import org.codehaus.modello.metadata.ClassMetadata;
 

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.codehaus.modello.plugin.metadata;
+package org.codehaus.modello.plugin.jpa.metadata;
 
 import java.util.Map;
 
