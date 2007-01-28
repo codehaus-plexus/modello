@@ -45,7 +45,7 @@ public class JpaMetadataPlugin
     public AssociationMetadata getAssociationMetadata( ModelAssociation modelAssociation, Map data )
         throws ModelloException
     {
-        // TODO Auto-generated method stub        
+        // TODO Auto-generated method stub
         return new JpaAssociationLevelMetadata();
     }
 
@@ -59,8 +59,8 @@ public class JpaMetadataPlugin
     {
         JpaClassLevelMetadata metadata = new JpaClassLevelMetadata();
 
-        // TODO: set up Jpa specific metadata here
-        metadata.setEntity( getBoolean( data, IS_ENTITY, false ) );
+        // TODO: set up Jpa specific metadata here        
+        metadata.setEntity( getBoolean( data, IS_ENTITY, true ) );
 
         String tableName = (String) data.get( TABLE_NAME );
 

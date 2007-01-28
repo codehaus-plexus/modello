@@ -106,11 +106,11 @@ public class JpaOrmMappingModelloGenerator
 
             if ( !metadata.isEmbeddable() && !metadata.isEntity() )
             {
-                getLogger().debug( "Skipping '" + modelClass.getName() + ";'" );
+                getLogger().debug( "Skipping '" + modelClass.getName() + "'" );
                 continue;
             }
 
-            getLogger().debug( "Adding '" + modelClass.getName() + ";'" );
+            getLogger().info( "Adding '" + modelClass.getName() + "'" );
 
             String packageName = modelClass.getPackageName( isPackageWithVersion(), getGeneratedVersion() );
 
@@ -138,7 +138,20 @@ public class JpaOrmMappingModelloGenerator
                            "http://java.sun.com/xml/ns/persistence/orm http://java.sun.com/xml/ns/persistence/orm_1_0.xsd" );
         writer.addAttribute( "version", "1.0" );
 
-        // TODO: Write out mappings for classes
+        // Write out mappings for Entity classes
+        for ( Iterator it = classes.entrySet().iterator(); it.hasNext(); )
+        {
+            Map.Entry entry = (Map.Entry) it.next();
+
+            List list = (List) entry.getValue();
+            
+            for ( Iterator it2 = list.iterator(); it2.hasNext(); )
+            {
+                ModelClass modelClass = (ModelClass) it2.next();
+
+                writeClass( writer, modelClass );
+            }
+        }
 
         writer.endElement(); // close root element
 
@@ -148,4 +161,26 @@ public class JpaOrmMappingModelloGenerator
 
     }
 
+    /**
+     * Writes out the mapping definition for an Entity class.
+     *  
+     * @param writer {@link XMLWriter} instance write out ORM mapping elements.
+     * @param modelClass 
+     * @throws ModelloException if there was error writing out the mapping definition for a class.
+     */
+    private void writeClass( XMLWriter writer, ModelClass modelClass )
+        throws ModelloException
+    {
+        writer.startElement( "entity" );
+
+        writer.addAttribute( "class", modelClass.getPackageName() + "." + modelClass.getName() );
+
+        writer.addAttribute( "access", "property" );
+
+        writer.addAttribute( "metadata-complete", "true" );
+
+        // TODO: process fields here.
+
+        writer.endElement(); // close entity
+    }
 }

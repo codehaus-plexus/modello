@@ -10,7 +10,8 @@
   </defaults>
 
   <classes>
-    <class rootElement="true" jpox.enabled="false" stash.storable="false">
+    <class rootElement="true" jpox.enabled="false" jpa.isEntity="false"
+      stash.storable="false">
       <name>ContinuumDatabase</name>
       <version>1.1.0+</version>
       <fields>
@@ -57,7 +58,7 @@
       </fields>
     </class>
 
-    <class>
+    <class jpa.table="PROJECT_GROUP">
       <name>ProjectGroup</name>
       <version>1.1.0+</version>
       <fields>
@@ -89,7 +90,8 @@
           <version>1.1.0+</version>
           <type>String</type>
         </field>
-        <field jpox.mappedBy="projectGroup" jpox.fetchGroupNames="projectgroup-projects project-build-details">
+        <field jpox.mappedBy="projectGroup"
+          jpox.fetchGroupNames="projectgroup-projects project-build-details">
           <name>projects</name>
           <version>1.1.0+</version>
           <association jpox.join="false">
@@ -116,7 +118,7 @@
       </fields>
     </class>
 
-    <class>
+    <class jpa.table="PROJECT">
       <name>Project</name>
       <version>1.1.0+</version>
       <fields>
@@ -137,7 +139,7 @@
           <name>groupKey</name>
           <verison>1.1.0+</verison>
           <required>true</required>
-          <type>String</type>          
+          <type>String</type>
         </field>
         <field>
           <name>groupId</name>
@@ -222,7 +224,8 @@
           <version>1.1.0+</version>
           <type>String</type>
         </field>
-        <field jpox.mappedBy="project" jpox.fetchGroupNames="project-with-builds">
+        <field jpox.mappedBy="project"
+          jpox.fetchGroupNames="project-with-builds">
           <name>buildResults</name>
           <version>1.1.0+</version>
           <association jpox.join="false">
@@ -246,14 +249,16 @@
             <multiplicity>*</multiplicity>
           </association>
         </field>
-        <field jpox.fetchGroupNames="project-all-details project-dependencies">
+        <field
+          jpox.fetchGroupNames="project-all-details project-dependencies">
           <name>parent</name>
           <version>1.1.0+</version>
           <association jpox.join="false">
             <type>ProjectDependency</type>
           </association>
         </field>
-        <field jpox.fetchGroupNames="project-all-details project-dependencies">
+        <field
+          jpox.fetchGroupNames="project-all-details project-dependencies">
           <name>dependencies</name>
           <version>1.1.0+</version>
           <association jpox.join="false">
@@ -265,11 +270,13 @@
           <name>projectGroup</name>
           <version>1.1.0+</version>
           <required>true</required>
-          <association stash.part="true" xml.reference="true" jpox.dependent="false">
+          <association stash.part="true" xml.reference="true"
+            jpox.dependent="false">
             <type>ProjectGroup</type>
           </association>
         </field>
-        <field jpox.fetchGroupNames="project-build-details project-all-details">
+        <field
+          jpox.fetchGroupNames="project-build-details project-all-details">
           <name>notifiers</name>
           <version>1.1.0+</version>
           <association>
@@ -277,7 +284,8 @@
             <multiplicity>*</multiplicity>
           </association>
         </field>
-        <field jpox.fetchGroupNames="project-build-details project-all-details">
+        <field
+          jpox.fetchGroupNames="project-build-details project-all-details">
           <name>buildDefinitions</name>
           <version>1.1.0+</version>
           <association>
@@ -288,11 +296,12 @@
       </fields>
     </class>
 
-    <class>
+    <class jpa.table="PROJECT_NOTIFIER">
       <name>ProjectNotifier</name>
       <version>1.1.0+</version>
       <description>
-        Configures one method for notifying users/developers when a build breaks.
+        Configures one method for notifying users/developers when a
+        build breaks.
       </description>
       <fields>
         <field>
@@ -307,13 +316,17 @@
           <version>1.1.0+</version>
           <defaultValue>mail</defaultValue>
           <type>String</type>
-          <description>The mechanism used to deliver notifications.</description>
+          <description>
+            The mechanism used to deliver notifications.
+          </description>
         </field>
         <field jpox.column="notifierorigin">
           <name>from</name>
           <version>1.1.0+</version>
           <type>int</type>
-          <description>The origin of the notifier (pom or user).</description>
+          <description>
+            The origin of the notifier (pom or user).
+          </description>
         </field>
         <field>
           <name>enabled</name>
@@ -353,9 +366,12 @@
         <field>
           <name>configuration</name>
           <version>1.1.0+</version>
-          <description>Extended configuration specific to this notifier goes here.</description>
+          <description>
+            Extended configuration specific to this notifier goes here.
+          </description>
           <type>Map</type>
-          <association xml.mapStyle="inline" stash.part="true" stash.keyType="java.lang.String">
+          <association xml.mapStyle="inline" stash.part="true"
+            stash.keyType="java.lang.String">
             <type>String</type>
             <multiplicity>*</multiplicity>
           </association>
@@ -364,7 +380,8 @@
       <codeSegments>
         <codeSegment>
           <version>1.1.0+</version>
-          <code><![CDATA[
+          <code>
+            <![CDATA[
 
               public static final int FROM_PROJECT = 1;
 
@@ -379,12 +396,13 @@
               {
                   return from == FROM_USER;
               }
-          ]]></code>
+          ]]>
+          </code>
         </codeSegment>
       </codeSegments>
     </class>
 
-    <class>
+    <class jpa.table="PROJECT_DEVELOPER">
       <name>ProjectDeveloper</name>
       <version>1.1.0+</version>
       <fields>
@@ -411,7 +429,7 @@
       </fields>
     </class>
 
-    <class>
+    <class jpa.table="PROJECT_DEPENDENCY">
       <name>ProjectDependency</name>
       <version>1.1.0+</version>
       <fields>
@@ -433,18 +451,21 @@
       </fields>
     </class>
 
-    <class>
+    <class jpa.table="BUILD_RESULT">
       <name>BuildResult</name>
       <version>1.1.0+</version>
-      <description><![CDATA[
+      <description>
+        <![CDATA[
         This class is a single continuum build.
-      ]]></description>
+      ]]>
+      </description>
       <fields>
         <field>
           <name>project</name>
           <version>1.1.0+</version>
           <!-- required>true</required -->
-          <association xml.reference="true" stash.part="true" jpox.dependent="false">
+          <association xml.reference="true" stash.part="true"
+            jpox.dependent="false">
             <type>Project</type>
           </association>
         </field>
@@ -521,7 +542,7 @@
       </fields>
     </class>
 
-    <class>
+    <class jpa.table="SCM_RESULT">
       <name>ScmResult</name>
       <packageName>org.apache.maven.continuum.model.scm</packageName>
       <version>1.1.0+</version>
@@ -563,7 +584,7 @@
       </fields>
     </class>
 
-    <class>
+    <class jpa.table="CHANGE_SET">
       <name>ChangeSet</name>
       <packageName>org.apache.maven.continuum.model.scm</packageName>
       <version>1.1.0+</version>
@@ -602,7 +623,8 @@
       <codeSegments>
         <codeSegment>
           <version>1.1.0+</version>
-          <code><![CDATA[
+          <code>
+            <![CDATA[
             /**
              * @return Returns string representation of the changeset
              */
@@ -652,7 +674,8 @@
 
                 return null;
             }
-          ]]></code>
+          ]]>
+          </code>
         </codeSegment>
       </codeSegments>
     </class>
@@ -681,7 +704,8 @@
       <codeSegments>
         <codeSegment>
           <version>1.1.0+</version>
-          <code><![CDATA[
+          <code>
+            <![CDATA[
             /**
              * Provide a version of the object as a string for debugging purposes
              *
@@ -698,7 +722,8 @@
 
                 return buffer.toString();
             }
-          ]]></code>
+          ]]>
+          </code>
         </codeSegment>
       </codeSegments>
     </class>
@@ -826,20 +851,23 @@
           <type>boolean</type>
           <defaultValue>false</defaultValue>
           <description>
-            true if the build is to be smoked and checked back out from the scm each build
+            true if the build is to be smoked and checked back out from
+            the scm each build
           </description>
         </field>
         <field>
           <name>schedule</name>
           <version>1.1.0+</version>
-          <association xml.reference="true" stash.part="true" jpox.dependent="false">
+          <association xml.reference="true" stash.part="true"
+            jpox.dependent="false">
             <type>Schedule</type>
           </association>
         </field>
         <field>
           <name>profile</name>
           <version>1.1.0+</version>
-          <association xml.reference="true" stash.part="true" jpox.dependent="false">
+          <association xml.reference="true" stash.part="true"
+            jpox.dependent="false">
             <type>Profile</type>
           </association>
         </field>
@@ -855,9 +883,11 @@
     <class>
       <name>Schedule</name>
       <version>1.1.0+</version>
-      <description><![CDATA[
+      <description>
+        <![CDATA[
         Schedule for a project.
-      ]]></description>
+      ]]>
+      </description>
       <fields>
         <field>
           <name>id</name>
@@ -882,9 +912,11 @@
         </field>
         <field>
           <name>delay</name>
-          <description><![CDATA[
+          <description>
+            <![CDATA[
             Delay in seconds.
-          ]]></description>
+          ]]>
+          </description>
           <version>1.1.0+</version>
           <type>long</type>
         </field>
@@ -944,14 +976,16 @@
         <field>
           <name>jdk</name>
           <version>1.1.0+</version>
-          <association xml.reference="true" stash.part="true" jpox.dependent="false">
+          <association xml.reference="true" stash.part="true"
+            jpox.dependent="false">
             <type>Installation</type>
           </association>
         </field>
         <field>
           <name>builder</name>
           <version>1.1.0+</version>
-          <association xml.reference="true" stash.part="true" jpox.dependent="false">
+          <association xml.reference="true" stash.part="true"
+            jpox.dependent="false">
             <type>Installation</type>
           </association>
         </field>
@@ -1041,7 +1075,8 @@
       <version>1.1.0+</version>
       <packageName>org.apache.maven.continuum.model.system</packageName>
       <description>
-        Configures one method for notifying users/developers when a build breaks.
+        Configures one method for notifying users/developers when a
+        build breaks.
       </description>
       <fields>
         <field>
@@ -1049,7 +1084,9 @@
           <version>1.1.0+</version>
           <defaultValue>mail</defaultValue>
           <type>String</type>
-          <description>The mechanism used to deliver notifications.</description>
+          <description>
+            The mechanism used to deliver notifications.
+          </description>
         </field>
         <field>
           <name>address</name>
@@ -1059,9 +1096,12 @@
         <field>
           <name>configuration</name>
           <version>1.1.0+</version>
-          <description>Extended configuration specific to this notifier goes here.</description>
+          <description>
+            Extended configuration specific to this notifier goes here.
+          </description>
           <type>Map</type>
-          <association xml.mapStyle="inline" stash.part="true" stash.keyType="java.lang.String">
+          <association xml.mapStyle="inline" stash.part="true"
+            stash.keyType="java.lang.String">
             <type>String</type>
             <multiplicity>*</multiplicity>
           </association>
@@ -1070,7 +1110,7 @@
     </class>
 
     <!-- TODO: this isn't really appropriate to generate with Modello -->
-    <class jpox.enabled="false" stash.storable="false">
+    <class jpox.enabled="false" stash.storable="false" jpa.isEntity="false">
       <name>ContinuumProjectState</name>
       <packageName>org.apache.maven.continuum.project</packageName>
       <version>1.1.0+</version>
@@ -1083,8 +1123,9 @@
       </fields>
       <codeSegments>
         <codeSegment>
-           <version>1.1.0+</version>
-           <code><![CDATA[
+          <version>1.1.0+</version>
+          <code>
+            <![CDATA[
     public final static int NEW = 1;
     public final static int OK = 2;
     public final static int FAILED = 3;
@@ -1129,7 +1170,8 @@
     {
         return name;
     }
-           ]]></code>
+           ]]>
+          </code>
         </codeSegment>
       </codeSegments>
     </class>

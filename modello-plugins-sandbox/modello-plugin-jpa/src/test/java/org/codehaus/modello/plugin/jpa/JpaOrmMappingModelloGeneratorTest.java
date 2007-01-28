@@ -16,13 +16,16 @@ package org.codehaus.modello.plugin.jpa;
  * the License.
  */
 
+import java.io.File;
+import java.io.FileReader;
+import java.util.Properties;
+
 import org.codehaus.modello.AbstractModelloGeneratorTest;
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
-
-import java.io.FileReader;
-import java.util.Properties;
+import org.dom4j.Document;
+import org.dom4j.io.SAXReader;
 
 /**
  * @author <a href='mailto:rahul.thakur.xdev@gmail.com'>Rahul Thakur</a>
@@ -30,7 +33,8 @@ import java.util.Properties;
  *          rahul $
  * @since 1.0.0
  */
-public class JpaOrmMappingModelloGeneratorTest extends AbstractModelloGeneratorTest
+public class JpaOrmMappingModelloGeneratorTest
+    extends AbstractModelloGeneratorTest
 {
 
     /**
@@ -41,26 +45,33 @@ public class JpaOrmMappingModelloGeneratorTest extends AbstractModelloGeneratorT
         super( "jpa-mapping" );
     }
 
-    public void testOrmMappingGeneration() throws Exception
+    public void testOrmMappingGeneration()
+        throws Exception
     {
 
         ModelloCore core = (ModelloCore) lookup( ModelloCore.ROLE );
 
-        Model model =
-            core.loadModel( new FileReader( getTestFile( getBasedir(), "src/test/resources/continuum-jpa.xml" ) ) );
+        Model model = core
+            .loadModel( new FileReader( getTestFile( getBasedir(), "src/test/resources/continuum-jpa.xml" ) ) );
 
         Properties parameters = new Properties();
 
         // parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, "target/output" );
         parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, getGeneratedSources().getAbsolutePath() );
 
-        parameters.setProperty( ModelloParameterConstants.VERSION, "1.0.0" );
+        parameters.setProperty( ModelloParameterConstants.VERSION, "1.1.0" );
 
         parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.FALSE.toString() );
 
         core.generate( model, "jpa-mapping", parameters );
 
         assertGeneratedFileExists( "orm.xml" );
+
+        // verify structure of generated ORM
+        SAXReader reader = new SAXReader();
+        Document ormDoc = reader.read( new File( "target/" + getName() + "/orm.xml" ) );
+
+        assertNotNull( ormDoc );
 
     }
 }
