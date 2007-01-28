@@ -25,7 +25,8 @@ import org.codehaus.modello.metadata.ClassMetadata;
  * @version $Id$
  * @since 1.0.0
  */
-public class JpaClassLevelMetadata implements ClassMetadata
+public class JpaClassLevelMetadata
+    implements ClassMetadata
 {
 
     public static final String ID = JpaClassLevelMetadata.class.getName();
@@ -33,13 +34,69 @@ public class JpaClassLevelMetadata implements ClassMetadata
     /**
      * Determines if a Class defined in the Model is a PersistableEntity.
      * <p>
-     * This is <code>true</code> if the class is persistable else
+     * This is <code>true</code> if the class is persistable, else
      * <code>false</code>.
      */
     private boolean isEntity;
 
-    private boolean isEmbedded;
+    /**
+     * Determines if a Class defined in the Data Model is a Embeddable.<p>
+     * This is <code>true</code> if embeddable, else <code>false</code>.
+     */
+    private boolean isEmbeddable;
 
-    private String tableName;
+    /**
+     * Table name that the Class defined in the Data Model maps to in the 
+     * database.
+     */
+    private String table;
+
+    /**
+     * @return the isEntity
+     */
+    public boolean isEntity()
+    {
+        return isEntity;
+    }
+
+    /**
+     * @param isEntity the isEntity to set
+     */
+    public void setEntity( boolean isEntity )
+    {
+        this.isEntity = isEntity;
+    }
+
+    /**
+     * @return the isEmbeddable
+     */
+    public boolean isEmbeddable()
+    {
+        return isEmbeddable;
+    }
+
+    /**
+     * @param isEmbeddable the isEmbeddable to set
+     */
+    public void setEmbeddable( boolean isEmbeddable )
+    {
+        this.isEmbeddable = isEmbeddable;
+    }
+
+    /**
+     * @return the tableName
+     */
+    public String getTable()
+    {
+        return table;
+    }
+
+    /**
+     * @param tableName the tableName to set
+     */
+    public void setTable( String tableName )
+    {
+        this.table = tableName;
+    }
 
 }

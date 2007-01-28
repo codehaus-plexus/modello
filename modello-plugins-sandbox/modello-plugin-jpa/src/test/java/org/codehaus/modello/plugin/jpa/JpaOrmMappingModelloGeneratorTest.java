@@ -1,4 +1,4 @@
-package org.codehaus.modello.plugin.openjpa;
+package org.codehaus.modello.plugin.jpa;
 
 /**
  * Copyright 2007-2008 The Apache Software Foundation.

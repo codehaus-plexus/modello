@@ -1,4 +1,4 @@
-package org.codehaus.modello.plugin;
+package org.codehaus.modello.plugin.jpa;
 
 /**
  * Copyright 2007-2008 The Apache Software Foundation.
@@ -16,20 +16,26 @@ package org.codehaus.modello.plugin;
  * the License.
  */
 
-import org.codehaus.modello.ModelloException;
-import org.codehaus.modello.ModelloParameterConstants;
-import org.codehaus.modello.model.Model;
-import org.codehaus.plexus.util.xml.PrettyPrintXMLWriter;
-import org.codehaus.plexus.util.xml.XMLWriter;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+
+import org.codehaus.modello.ModelloException;
+import org.codehaus.modello.ModelloParameterConstants;
+import org.codehaus.modello.model.Model;
+import org.codehaus.modello.model.ModelClass;
+import org.codehaus.modello.plugin.AbstractModelloGenerator;
+import org.codehaus.modello.plugin.metadata.JpaClassLevelMetadata;
+import org.codehaus.plexus.util.xml.PrettyPrintXMLWriter;
+import org.codehaus.plexus.util.xml.XMLWriter;
 
 /**
  * Generates the an ORM (Object Relational Mapping) from the Modello model
@@ -91,7 +97,36 @@ public class JpaOrmMappingModelloGenerator
 
         Map classes = new HashMap();
 
-        // TODO: Prepare classes to be mapped here 
+        // Processed classes to be mapped here 
+        for ( Iterator it = model.getClasses( getGeneratedVersion() ).iterator(); it.hasNext(); )
+        {
+            ModelClass modelClass = (ModelClass) it.next();
+
+            JpaClassLevelMetadata metadata = (JpaClassLevelMetadata) modelClass.getMetadata( JpaClassLevelMetadata.ID );
+
+            if ( !metadata.isEmbeddable() && !metadata.isEntity() )
+            {
+                getLogger().debug( "Skipping '" + modelClass.getName() + ";'" );
+                continue;
+            }
+
+            getLogger().debug( "Adding '" + modelClass.getName() + ";'" );
+
+            String packageName = modelClass.getPackageName( isPackageWithVersion(), getGeneratedVersion() );
+
+            List list = (List) classes.get( packageName );
+
+            if ( list == null )
+            {
+                list = new ArrayList();
+            }
+
+            list.add( modelClass );
+
+            getLogger().info( "Added " + list.size() + " mapped classes for package '" + packageName + "'" );
+
+            classes.put( packageName, list );
+        }
 
         printWriter.println( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" );
 
