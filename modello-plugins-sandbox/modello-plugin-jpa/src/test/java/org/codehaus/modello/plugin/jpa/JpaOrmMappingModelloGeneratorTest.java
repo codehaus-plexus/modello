@@ -18,6 +18,7 @@ package org.codehaus.modello.plugin.jpa;
 
 import java.io.File;
 import java.io.FileReader;
+import java.util.List;
 import java.util.Properties;
 
 import org.codehaus.modello.AbstractModelloGeneratorTest;
@@ -25,7 +26,9 @@ import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
 import org.dom4j.Document;
+import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+import org.dom4j.XPath;
 import org.dom4j.io.SAXReader;
 
 /**
@@ -37,6 +40,8 @@ import org.dom4j.io.SAXReader;
 public class JpaOrmMappingModelloGeneratorTest
     extends AbstractModelloGeneratorTest
 {
+
+    private static final String ORM_XML = "orm.xml";
 
     /**
      * @param arg0
@@ -67,11 +72,11 @@ public class JpaOrmMappingModelloGeneratorTest
 
         core.generate( model, "jpa-mapping", parameters );
 
-        assertGeneratedFileExists( "orm.xml" );
+        assertGeneratedFileExists( ORM_XML );
 
         // verify structure of generated ORM
         SAXReader reader = new SAXReader();
-        Document ormDoc = reader.read( new File( "target/" + getName() + "/orm.xml" ) );
+        Document ormDoc = reader.read( new File( "target/" + getName() + "/" + ORM_XML ) );
         assertNotNull( ormDoc );
 
         Element rootElement = ormDoc.getRootElement();
@@ -79,5 +84,9 @@ public class JpaOrmMappingModelloGeneratorTest
         assertEquals( "entity-mappings", rootElement.getName() );
 
         // TODO: Use Dom4jUtils to verify.
+        XPath expression = DocumentHelper.createXPath( "/entity-mappings" );
+        List nodes = expression.selectNodes( ormDoc );
+        assertNotNull( nodes );
+        assertEquals( 1, nodes.size() );
     }
 }
