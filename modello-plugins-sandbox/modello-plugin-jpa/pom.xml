@@ -11,7 +11,11 @@
   <groupId>org.codehaus.modello</groupId>
   <artifactId>modello-plugin-jpa</artifactId>
   <version>1.0.0-SNAPSHOT</version>
-  <name>Modello Plugin OpenJPA</name>
+  <name>Modello Plugin JPA</name>
+  <description>
+    Modello Plugin extension to process a Data Model and generate JPA
+    artifacts.
+  </description>
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
