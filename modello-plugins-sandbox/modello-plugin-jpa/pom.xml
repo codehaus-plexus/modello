@@ -29,6 +29,17 @@
       <version>1.6.1</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>jaxen</groupId>
+      <artifactId>jaxen</artifactId>
+      <version>1.0-FCS</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>saxpath</groupId>
+      <artifactId>saxpath</artifactId>
+      <version>1.0-FCS</version>
+    </dependency>
   </dependencies>
   <build>
     <plugins>

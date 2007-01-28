@@ -25,6 +25,7 @@ import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
 import org.dom4j.Document;
+import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
 /**
@@ -56,7 +57,8 @@ public class JpaOrmMappingModelloGeneratorTest
 
         Properties parameters = new Properties();
 
-        // parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, "target/output" );
+        // parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY,
+        // "target/output" );
         parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, getGeneratedSources().getAbsolutePath() );
 
         parameters.setProperty( ModelloParameterConstants.VERSION, "1.1.0" );
@@ -70,8 +72,12 @@ public class JpaOrmMappingModelloGeneratorTest
         // verify structure of generated ORM
         SAXReader reader = new SAXReader();
         Document ormDoc = reader.read( new File( "target/" + getName() + "/orm.xml" ) );
-
         assertNotNull( ormDoc );
 
+        Element rootElement = ormDoc.getRootElement();
+        assertNotNull( rootElement );
+        assertEquals( "entity-mappings", rootElement.getName() );
+
+        // TODO: Use Dom4jUtils to verify.
     }
 }

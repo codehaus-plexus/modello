@@ -1,3 +1,5 @@
+package org.codehaus.modello.plugin.jpa.metadata;
+
 /**
  * Copyright 2007-2008 The Apache Software Foundation.
  * 
@@ -13,8 +15,6 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-
-package org.codehaus.modello.plugin.jpa.metadata;
 
 import org.codehaus.modello.metadata.ClassMetadata;
 
@@ -40,13 +40,14 @@ public class JpaClassLevelMetadata
     private boolean isEntity;
 
     /**
-     * Determines if a Class defined in the Data Model is a Embeddable.<p>
+     * Determines if a Class defined in the Data Model is a Embeddable.
+     * <p>
      * This is <code>true</code> if embeddable, else <code>false</code>.
      */
     private boolean isEmbeddable;
 
     /**
-     * Table name that the Class defined in the Data Model maps to in the 
+     * Table name that the Class defined in the Data Model maps to in the
      * database.
      */
     private String table;
