@@ -23,6 +23,7 @@ package org.codehaus.modello.plugin.store.tool;
  */
 
 import org.codehaus.modello.model.ModelField;
+import org.codehaus.plexus.util.StringUtils;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -34,20 +35,43 @@ public class JavaTool
     {
         if ( field.getType().equals( "boolean" ) )
         {
-            return "is" +
-                   field.getName().substring( 0, 1 ).toUpperCase() +
-                   field.getName().substring( 1 );
+            return "is" + field.getName().substring( 0, 1 ).toUpperCase() + field.getName().substring( 1 );
         }
 
-        return "get" +
-               field.getName().substring( 0, 1 ).toUpperCase() +
-               field.getName().substring( 1 );
+        return "get" + field.getName().substring( 0, 1 ).toUpperCase() + field.getName().substring( 1 );
     }
 
     public String makeSetter( ModelField field )
     {
-        return "set" +
-               field.getName().substring( 0, 1 ).toUpperCase() +
-               field.getName().substring( 1 );
+        return "set" + field.getName().substring( 0, 1 ).toUpperCase() + field.getName().substring( 1 );
+    }
+
+    public void fail( String message )
+        throws Exception
+    {
+        throw new Exception( message );
+    }
+
+    public String uncapitalise( String s )
+    {
+        return StringUtils.uncapitalise( s );
+    }
+
+    public String singular( String name )
+    {
+        if ( name.endsWith( "ies" ) )
+        {
+            return name.substring( 0, name.length() - 3 ) + "y";
+        }
+        else if ( name.endsWith( "es" ) && name.endsWith( "ches" ) )
+        {
+            return name.substring( 0, name.length() - 2 );
+        }
+        else if ( name.endsWith( "s" ) )
+        {
+            return name.substring( 0, name.length() - 1 );
+        }
+
+        return name;
     }
 }

@@ -1,0 +1,115 @@
+package ${package};
+
+import org.codehaus.plexus.registry.Registry;
+
+// Util imports
+import java.util.*;
+
+// Model class imports
+#foreach ( $class in $classes )
+#if ( ${class.packageName} != ${package} )
+import ${class.packageName}.${class.name};
+#end
+#end
+
+## TODO! make it possible to change property name via metadata
+## TODO! handle other types
+
+#macro ( handlePrimitive $localVar $registryVar $name $type )
+#if ( $type == "boolean" )
+            $type $localVar = ${registryVar}.getBoolean( prefix + "${name}" );
+#elseif ( $type == "char" )
+    $javaTool.fail( "Type not yet handled: $type" )
+#elseif ( $type == "double" )
+    $javaTool.fail( "Type not yet handled: $type" )
+#elseif ( $type == "float" )
+    $javaTool.fail( "Type not yet handled: $type" )
+#elseif ( $type == "int" )
+            $type $localVar = ${registryVar}.getInt( prefix + "${name}" );
+#elseif ( $type == "long" )
+    $javaTool.fail( "Type not yet handled: $type" )
+#elseif ( $type == "short" )
+    $javaTool.fail( "Type not yet handled: $type" )
+#elseif ( $type == "String" )
+            $type $localVar = ${registryVar}.getString( prefix + "${name}" );
+#elseif ( $type == "Boolean" )
+    $javaTool.fail( "Type not yet handled: $type" )
+#elseif ( $type == "Date" )
+    $javaTool.fail( "Type not yet handled: $type" )
+#elseif ( $type == "DOM" )
+    $javaTool.fail( "Type not yet handled: $type" )
+#else
+    $javaTool.fail( "Unknown type: $type" )
+#end
+#end
+
+#macro ( fillCollection $uncapFieldName $singularFieldName $to )
+#if ( $model.hasClass( $to, $version ) )
+## TODO! hide the (0) etc implementation details
+## TODO! make it possible to have unwrapped lists via metadata
+            Registry subRegistry;
+            do
+            {
+                subRegistry = registry.getSubRegistry( prefix + "${uncapFieldName}.${singularFieldName}(" + registryValue.size() + ")" );
+                if ( !subRegistry.isEmpty() )
+                {
+                    $to v = read${to}( "", subRegistry );
+                    registryValue.add( v );
+                }
+            }
+            while ( !subRegistry.isEmpty() );
+#else
+            registryValue.addAll( registry.getList( prefix + "${uncapFieldName}.${singularFieldName}" ) );
+#end
+#end
+
+/**
+ * Generate Plexus Registry input mechanism for model '${model.name}'.
+ */
+public class ${model.name}RegistryReader
+{
+    public ${model.name} read( Registry registry )
+    {
+#set ( $root = $model.getClass( $model.getRoot( $version ), $version ) )
+        return read${root.name}( "", registry );
+    }
+
+#foreach ( $class in $classes )
+    private ${class.name} read${class.name}( String prefix, Registry registry )
+    {
+        ${class.name} value = new ${class.name}();
+
+#foreach ( $field in $class.getAllFields( $version, true ) )
+        {
+## TODO: handle aliases
+## TODO: handle required (and optional for those that cry when the registry item is not found)
+#if ( $field.primitive )
+#handlePrimitive( "registryValue" "registry" $field.name $field.type )
+#else
+#set ( $assoc = $field )
+#set ( $uncapFieldName = $javaTool.uncapitalise($field.name) )
+#set ( $singularFieldName = $javaTool.singular($uncapFieldName) )
+#if ( $assoc.multiplicity == "1" )
+            $assoc.to registryValue = read${assoc.to}( prefix + "${uncapFieldName}.", registry );
+#else
+#if ( $assoc.type == "java.util.List" )
+            List registryValue = new ArrayList();
+#fillCollection( $uncapFieldName $singularFieldName $assoc.to )
+#elseif ( $assoc.type == "java.util.Set" )
+            Set registryValue = new HashSet();
+#fillCollection( $uncapFieldName $singularFieldName $assoc.to )
+#else
+## TODO! handle map and properties
+    $javaTool.fail( "Unknown collection type: $assoc.type" )
+#end
+#end
+#end
+            value.${javaTool.makeSetter( $field )}( registryValue );
+        }
+#end
+
+        return value;
+    }
+    
+#end
+}

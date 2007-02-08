@@ -1,7 +1,7 @@
-package org.codehaus.modello.generator.xml.stax;
+package org.codehaus.modello.plugin.registry;
 
 /*
- * Copyright (c) 2006, Codehaus.org
+ * Copyright (c) 2007, Codehaus.org
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -23,48 +23,37 @@ package org.codehaus.modello.generator.xml.stax;
  */
 
 import org.codehaus.modello.AbstractModelloGeneratorTest;
-import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
-import org.codehaus.plexus.compiler.CompilerException;
 import org.codehaus.plexus.util.FileUtils;
-import org.codehaus.plexus.util.StringUtils;
 
 import java.io.File;
-import java.io.IOException;
+import java.io.FileReader;
 import java.util.Properties;
 
-public abstract class AbstractStaxGeneratorTestCase
+/**
+ * @author <a href="mailto:brett@apache.org">Brett Porter</a>
+ * @version $Id: Xpp3GeneratorTest.java 675 2006-11-16 10:58:59Z brett $
+ */
+public class RegistryReaderGeneratorTest
     extends AbstractModelloGeneratorTest
 {
-    protected ModelloCore modello;
-
-    protected AbstractStaxGeneratorTestCase( String name )
+    public RegistryReaderGeneratorTest()
     {
-        super( name );
+        super( "registry-reader" );
     }
 
-    protected void setUp()
-        throws Exception
+    public void testRegistryReader()
+        throws Throwable
     {
-        super.setUp();
+        ModelloCore modello = (ModelloCore) container.lookup( ModelloCore.ROLE );
 
-        modello = (ModelloCore) container.lookup( ModelloCore.ROLE );
-    }
+        Model model = modello.loadModel( new FileReader( getTestPath( "src/test/resources/model.mdo" ) ) );
 
-    protected void verifyModel( Model model, String className )
-        throws IOException, ModelloException, CompilerException
-    {
-        verifyModel( model, className, null );
-    }
+        File generatedSources = new File( getTestPath( "target/registry-reader/sources" ) );
 
-    protected void verifyModel( Model model, String className, String[] versions )
-        throws IOException, ModelloException, CompilerException
-    {
-        File generatedSources = new File( getTestPath( "target/" + getName() + "/sources" ) );
-
-        File classes = new File( getTestPath( "target/" + getName() + "/classes" ) );
+        File classes = new File( getTestPath( "target/registry-reader/classes" ) );
 
         FileUtils.deleteDirectory( generatedSources );
 
@@ -78,33 +67,13 @@ public abstract class AbstractStaxGeneratorTestCase
 
         parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, generatedSources.getAbsolutePath() );
 
-        parameters.setProperty( ModelloParameterConstants.VERSION, "4.0.0" );
+        parameters.setProperty( ModelloParameterConstants.VERSION, "1.0.0" );
 
         parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString( false ) );
 
         modello.generate( model, "java", parameters );
 
-        modello.generate( model, "stax-writer", parameters );
-
-        modello.generate( model, "stax-reader", parameters );
-
-        if ( versions != null && versions.length > 0 )
-        {
-            parameters.setProperty( ModelloParameterConstants.ALL_VERSIONS, StringUtils.join( versions, "," ) );
-
-            for ( int i = 0; i < versions.length; i++ )
-            {
-                parameters.setProperty( ModelloParameterConstants.VERSION, versions[i] );
-
-                parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString( true ) );
-
-                modello.generate( model, "java", parameters );
-
-                modello.generate( model, "stax-writer", parameters );
-
-                modello.generate( model, "stax-reader", parameters );
-            }
-        }
+        modello.generate( model, "registry-reader", parameters );
 
         Properties properties = new Properties( System.getProperties() );
         if ( properties.getProperty( "version" ) == null )
@@ -113,13 +82,16 @@ public abstract class AbstractStaxGeneratorTestCase
                 getClass().getResourceAsStream( "/META-INF/maven/org.codehaus.modello/modello-core/pom.properties" ) );
         }
         addDependency( "org.codehaus.modello", "modello-core", properties.getProperty( "version" ) );
-
-        addDependency( "net.java.dev.stax-utils", "stax-utils", "20060502" );
-        addDependency( "stax", "stax-api", "1.0.1" );
-        addDependency( "woodstox", "wstx-asl", "3.2.0" );
+        addDependency( "org.codehaus.plexus", "plexus-registry", "1.0-SNAPSHOT" );
+        addDependency( "org.codehaus.plexus", "plexus-component-api", "1.0-alpha-16" );
+        addDependency( "org.codehaus.plexus", "plexus-container-default", "1.0-alpha-16" );
+        addDependency( "commons-collections", "commons-collections", "3.1" );
+        addDependency( "commons-configuration", "commons-configuration", "1.3" );
+        addDependency( "commons-lang", "commons-lang", "2.1" );
+        addDependency( "commons-logging", "commons-logging-api", "1.0.4" );
 
         compile( generatedSources, classes );
 
-        verify( className, getName() );
+        verify( "org.codehaus.modello.plugin.registry.RegistryReaderVerifier", "registry-reader" );
     }
 }

@@ -177,6 +177,7 @@ public abstract class AbstractModelloGeneratorTest
         configuration.setClasspathEntries( Arrays.asList( classPathElements ) );
         configuration.setSourceLocations( Arrays.asList( sourceDirectories ) );
         configuration.setOutputLocation( destinationDirectory.getAbsolutePath() );
+        configuration.setDebug( true );
 
         List messages = compiler.compile( configuration );
 
@@ -201,7 +202,7 @@ public abstract class AbstractModelloGeneratorTest
         addClassPathFile( getTestFile( "target/test-classes" ) );
 
         ClassLoader oldCCL = Thread.currentThread().getContextClassLoader();
-        URLClassLoader classLoader = URLClassLoader.newInstance( (URL[]) urls.toArray( new URL[urls.size()] ), oldCCL );
+        URLClassLoader classLoader = URLClassLoader.newInstance( (URL[]) urls.toArray( new URL[urls.size()] ), null );
 
         Thread.currentThread().setContextClassLoader( classLoader );
 

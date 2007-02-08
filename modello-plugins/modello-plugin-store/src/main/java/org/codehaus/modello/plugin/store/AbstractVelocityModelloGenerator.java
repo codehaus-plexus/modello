@@ -50,7 +50,9 @@ import java.util.Map;
 public abstract class AbstractVelocityModelloGenerator
     extends AbstractModelloGenerator
 {
-    /** @requirement */
+    /**
+     * @requirement
+     */
     private VelocityComponent velocity;
 
     // ----------------------------------------------------------------------
@@ -58,6 +60,18 @@ public abstract class AbstractVelocityModelloGenerator
     // ----------------------------------------------------------------------
 
     protected static Context makeStubVelocityContext( Model model, Version version )
+    {
+        String packageName = getGeneratedPackage( model, version );
+
+        return makeStubVelocityContext( model, version, packageName );
+    }
+
+    private static String getGeneratedPackage( Model model, Version version )
+    {
+        return model.getDefaultPackageName( false, version );
+    }
+
+    protected static Context makeStubVelocityContext( Model model, Version version, String packageName )
     {
         List classes = model.getClasses( version );
 
@@ -76,8 +90,6 @@ public abstract class AbstractVelocityModelloGenerator
 
         context.put( "version", version );
 
-        context.put( "package", model.getDefaultPackageName( false, version ) );
-
         context.put( "model", model );
 
         context.put( "classes", classes );
@@ -86,10 +98,13 @@ public abstract class AbstractVelocityModelloGenerator
 
         context.put( "javaTool", new JavaTool() );
 
+        context.put( "package", packageName );
+
         return context;
     }
 
-    protected void writeClass( String templateName, File basedir, String packageName, String className, Context context )
+    protected void writeClass( String templateName, File basedir, String packageName, String className,
+                               Context context )
         throws ModelloException
     {
         File packageFile = new File( getOutputDirectory(), packageName.replace( '.', File.separatorChar ) );
@@ -102,52 +117,35 @@ public abstract class AbstractVelocityModelloGenerator
     protected void writeTemplate( String templateName, File file, Context context )
         throws ModelloException
     {
-        Template template;
+        Template template = getTemplate( templateName );
 
-        try
+        if ( template == null )
         {
-            template = getTemplate( templateName );
+            ClassLoader old = Thread.currentThread().getContextClassLoader();
 
-            if ( template == null )
+            try
             {
-                ClassLoader old = Thread.currentThread().getContextClassLoader();
+                Thread.currentThread().setContextClassLoader( this.getClass().getClassLoader() );
 
-                try
-                {
-                    Thread.currentThread().setContextClassLoader( this.getClass().getClassLoader() );
-
-                    template = getTemplate( templateName );
-
-                    if ( template == null )
-                    {
-                        throw new ModelloException( "Could not find the template '" + templateName + "'." );
-                    }
-                }
-                finally
-                {
-                    Thread.currentThread().setContextClassLoader( old );
-                }
+                template = getTemplate( templateName );
+            }
+            finally
+            {
+                Thread.currentThread().setContextClassLoader( old );
             }
         }
-        catch ( ParseErrorException e )
-        {
-            throw new ModelloException( "Could not parse the template '" + templateName + "'.", e );
-        }
-        catch ( Exception e )
-        {
-            if ( e instanceof ModelloException )
-            {
-                throw (ModelloException) e;
-            }
 
-            throw new ModelloException( "Error while loading template '" + templateName + "'.", e );
+        if ( template == null )
+        {
+            throw new ModelloException( "Could not find the template '" + templateName + "'." );
         }
 
         if ( !file.getParentFile().exists() )
         {
             if ( !file.getParentFile().mkdirs() )
             {
-                throw new ModelloException( "Error while creating parent directories for '" + file.getAbsolutePath() + "'." );
+                throw new ModelloException(
+                    "Error while creating parent directories for '" + file.getAbsolutePath() + "'." );
             }
         }
 
@@ -170,7 +168,7 @@ public abstract class AbstractVelocityModelloGenerator
     // ----------------------------------------------------------------------
 
     private Template getTemplate( String name )
-        throws ParseErrorException, Exception
+        throws ModelloException
     {
         try
         {
@@ -179,6 +177,14 @@ public abstract class AbstractVelocityModelloGenerator
         catch ( ResourceNotFoundException e )
         {
             return null;
+        }
+        catch ( ParseErrorException e )
+        {
+            throw new ModelloException( "Could not parse the template '" + name + "'.", e );
+        }
+        catch ( Exception e )
+        {
+            throw new ModelloException( "Error while loading template '" + name + "'.", e );
         }
     }
 }
