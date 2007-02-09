@@ -22,21 +22,41 @@ package org.codehaus.modello.plugin.registry;
  * SOFTWARE.
  */
 
+import org.apache.velocity.context.Context;
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.model.Model;
+import org.codehaus.modello.plugin.store.AbstractVelocityModelloGenerator;
 
 import java.util.Properties;
 
-/**
- * @author <a href="mailto:brett@apache.org">Brett Porter</a>
- * @version $Id: JPoxStoreModelloGenerator.java 713 2006-11-25 21:58:06Z jvanzyl $
- */
-public class RegistryReaderGenerator
-    extends AbstractRegistryGenerator
+public abstract class AbstractRegistryGenerator
+    extends AbstractVelocityModelloGenerator
 {
-    public void generate( Model model, Properties parameters )
+    protected void generate( Model model, Properties parameters, String outputType )
         throws ModelloException
     {
-        generate( model, parameters, "RegistryReader" );
+        initialize( model, parameters );
+
+        // Initialize the Velocity context
+
+        String packageName;
+        if ( isPackageWithVersion() )
+        {
+            packageName = model.getDefaultPackageName( true, getGeneratedVersion() );
+        }
+        else
+        {
+            packageName = model.getDefaultPackageName( false, null );
+        }
+
+        packageName += ".io.registry";
+
+        Context context = makeStubVelocityContext( model, getGeneratedVersion(), packageName );
+
+        // Generate the reader
+        String className = model.getName() + outputType;
+
+        writeClass( "org/codehaus/modello/plugin/registry/" + outputType + ".java.vm", getOutputDirectory(),
+                    packageName, className, context );
     }
 }

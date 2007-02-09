@@ -1,4 +1,4 @@
-package org.codehaus.modello.plugin.registry;
+package org.codehaus.modello.maven;
 
 /*
  * Copyright (c) 2007, Codehaus.org
@@ -22,21 +22,39 @@ package org.codehaus.modello.plugin.registry;
  * SOFTWARE.
  */
 
-import org.codehaus.modello.ModelloException;
-import org.codehaus.modello.model.Model;
-
-import java.util.Properties;
+import java.io.File;
 
 /**
+ * Creates a Plexus Registry writer from the Modello model.
+ *
  * @author <a href="mailto:brett@apache.org">Brett Porter</a>
- * @version $Id: JPoxStoreModelloGenerator.java 713 2006-11-25 21:58:06Z jvanzyl $
+ * @version $Id: ModelloJPoxStoreMojo.java 712 2006-11-25 02:16:58Z brett $
+ * @goal registry-writer
+ * @phase generate-sources
  */
-public class RegistryReaderGenerator
-    extends AbstractRegistryGenerator
+public class ModelloPlexusRegistryWriterMojo
+    extends AbstractModelloGeneratorMojo
 {
-    public void generate( Model model, Properties parameters )
-        throws ModelloException
+    /**
+     * The output directory of the generated reader.
+     *
+     * @parameter expression="${basedir}/target/generated-sources/modello"
+     * @required
+     */
+    private File outputDirectory;
+
+    protected String getGeneratorType()
     {
-        generate( model, parameters, "RegistryReader" );
+        return "registry-writer";
+    }
+
+    public File getOutputDirectory()
+    {
+        return outputDirectory;
+    }
+
+    public void setOutputDirectory( File outputDirectory )
+    {
+        this.outputDirectory = outputDirectory;
     }
 }

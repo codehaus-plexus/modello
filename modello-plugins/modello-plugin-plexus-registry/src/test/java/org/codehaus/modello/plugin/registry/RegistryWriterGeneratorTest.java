@@ -22,21 +22,23 @@ package org.codehaus.modello.plugin.registry;
  * SOFTWARE.
  */
 
-import org.codehaus.modello.ModelloException;
-import org.codehaus.modello.model.Model;
-
-import java.util.Properties;
-
 /**
  * @author <a href="mailto:brett@apache.org">Brett Porter</a>
- * @version $Id: JPoxStoreModelloGenerator.java 713 2006-11-25 21:58:06Z jvanzyl $
+ * @version $Id: Xpp3GeneratorTest.java 675 2006-11-16 10:58:59Z brett $
  */
-public class RegistryReaderGenerator
-    extends AbstractRegistryGenerator
+public class RegistryWriterGeneratorTest
+    extends AbstractRegistryGeneratorTestCase
 {
-    public void generate( Model model, Properties parameters )
-        throws ModelloException
+    public RegistryWriterGeneratorTest()
     {
-        generate( model, parameters, "RegistryReader" );
+        super( "registry-writer" );
+    }
+
+    public void testRegistryWriter()
+        throws Throwable
+    {
+        prepareTest( "registry-writer" );
+
+        verify( "org.codehaus.modello.plugin.registry.RegistryWriterVerifier", "registry-writer" );
     }
 }

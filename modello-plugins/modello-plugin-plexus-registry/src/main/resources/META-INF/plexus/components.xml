@@ -32,5 +32,15 @@
         </requirement>
       </requirements>
     </component>
+    <component>
+      <role>org.codehaus.modello.plugin.ModelloGenerator</role>
+      <role-hint>registry-writer</role-hint>
+      <implementation>org.codehaus.modello.plugin.registry.RegistryWriterGenerator</implementation>
+      <requirements>
+        <requirement>
+          <role>org.codehaus.plexus.velocity.VelocityComponent</role>
+        </requirement>
+      </requirements>
+    </component>
   </components>
 </component-set>

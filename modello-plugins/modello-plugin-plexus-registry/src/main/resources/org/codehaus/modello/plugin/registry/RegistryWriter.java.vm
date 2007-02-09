@@ -1,0 +1,133 @@
+package ${package};
+
+import org.codehaus.plexus.registry.Registry;
+
+// Util imports
+import java.util.*;
+
+// Model class imports
+#foreach ( $class in $classes )
+#if ( ${class.packageName} != ${package} )
+import ${class.packageName}.${class.name};
+#end
+#end
+
+## TODO! make it possible to change property name via metadata
+## TODO! handle other types
+
+#macro ( writePrimitive $type $value $name )
+#if ( $type == "boolean" )
+                registry.setBoolean( prefix + $name, $value );
+#elseif ( $type == "char" )
+    $javaTool.fail( "Type not yet handled: $type" )
+#elseif ( $type == "double" )
+    $javaTool.fail( "Type not yet handled: $type" )
+#elseif ( $type == "float" )
+    $javaTool.fail( "Type not yet handled: $type" )
+#elseif ( $type == "int" )
+                registry.setInt( prefix + $name, $value );
+#elseif ( $type == "long" )
+    $javaTool.fail( "Type not yet handled: $type" )
+#elseif ( $type == "short" )
+    $javaTool.fail( "Type not yet handled: $type" )
+#elseif ( $type == "String" )
+                registry.setString( prefix + $name, $value );
+#elseif ( $type == "Boolean" )
+    $javaTool.fail( "Type not yet handled: $type" )
+#elseif ( $type == "Date" )
+    $javaTool.fail( "Type not yet handled: $type" )
+#elseif ( $type == "DOM" )
+    $javaTool.fail( "Type not yet handled: $type" )
+#else
+    $javaTool.fail( "Unknown type: $type" )
+#end
+#end
+
+#macro ( writeValueChecker $type $value $field )
+#if ( $type == "boolean" || $type == "double" || $type == "float" || $type == "int" || $type == "long" || $type == "short" )
+$value != $field.defaultValue
+#elseif ( $type == "char" )
+$value != '$field.defaultValue'
+#elseif ( $type == "java.util.List" || $type == "java.util.Set" || $type == "java.util.Map" || $type == "java.util.Properties" )
+$value != null && ${value}.size() > 0
+#elseif ( $type == "String" && $field.defaultValue )
+$value != null && !${value}.equals( "$field.defaultValue" )
+#elseif ( $type == "Date" && $field.defaultValue )
+$value != null && !${value}.equals( "$field.defaultValue" )
+#else
+$value != null
+#end
+#end
+
+/**
+ * Generate Plexus Registry output mechanism for model '${model.name}'.
+ */
+public class ${model.name}RegistryWriter
+{
+    public void write( ${model.name} model, Registry registry )
+    {
+#set ( $root = $model.getClass( $model.getRoot( $version ), $version ) )
+        write${root.name}( "", model, registry );
+    }
+
+#foreach ( $class in $classes )
+    private void write${class.name}( String prefix, ${class.name} value, Registry registry )
+    {
+        if ( value != null )
+        {
+#foreach ( $field in $class.getAllFields( $version, true ) )
+#set ( $uncapFieldName = $javaTool.uncapitalise($field.name) )
+#set ( $value = "value.${javaTool.makeGetter( $field )}()" )
+#if ( $field.primitive )
+            if ( #writeValueChecker( $field.type $value $field ) )
+            {
+                String name = "$uncapFieldName";
+#writePrimitive( $field.type $value "name" )
+            }
+#else
+#set ( $assoc = $field )
+#if ( $assoc.multiplicity == "1" )
+            if ( #writeValueChecker( $field.type $value $field ) )
+            {
+                write${assoc.to}( prefix + "${uncapFieldName}.", $value, registry );
+            }
+#else
+            if ( #writeValueChecker( $assoc.type $value $field ) )
+            {
+#if ( $assoc.type == "java.util.List" || $assoc.type == "java.util.Set" )
+## TODO! make it possible to have unwrapped lists via metadata
+                int count = 0;
+                for ( Iterator iter = ${value}.iterator(); iter.hasNext(); count++ )
+                {
+#set ( $singularFieldName = $javaTool.singular($uncapFieldName) )
+                    String name = "${uncapFieldName}.${singularFieldName}(" + count + ")";
+#if ( $model.hasClass( $assoc.to, $version ) )
+                    $assoc.to o = ( $assoc.to ) iter.next();
+                    write${assoc.to}( prefix + name + ".", o, registry );
+#else
+                    $assoc.to $singularFieldName = ( $assoc.to ) iter.next();
+    #writePrimitive( $assoc.to $singularFieldName "name" )
+#end
+                }
+#elseif ( $assoc.type == "java.util.Map" || $assoc.type == "java.util.Properties" )
+## TODO! make it possible to have exploded maps in xml via metadata
+## TODO! make it possible to have unwrapped lists via metadata
+                for ( Iterator iter = ${value}.keySet().iterator(); iter.hasNext(); )
+                {
+                    String key = (String) iter.next();
+                    String v = (String) ${value}.get( key );
+
+                    registry.setString( prefix + "${uncapFieldName}." + key, v );
+                }
+#else
+    $javaTool.fail( "Unknown collection type: $assoc.type" )
+#end
+            }
+#end
+#end
+#end
+        }
+    }
+    
+#end    
+}

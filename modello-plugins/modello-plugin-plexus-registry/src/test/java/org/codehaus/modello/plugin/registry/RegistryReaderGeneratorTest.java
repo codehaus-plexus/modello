@@ -22,22 +22,12 @@ package org.codehaus.modello.plugin.registry;
  * SOFTWARE.
  */
 
-import org.codehaus.modello.AbstractModelloGeneratorTest;
-import org.codehaus.modello.ModelloParameterConstants;
-import org.codehaus.modello.core.ModelloCore;
-import org.codehaus.modello.model.Model;
-import org.codehaus.plexus.util.FileUtils;
-
-import java.io.File;
-import java.io.FileReader;
-import java.util.Properties;
-
 /**
  * @author <a href="mailto:brett@apache.org">Brett Porter</a>
  * @version $Id: Xpp3GeneratorTest.java 675 2006-11-16 10:58:59Z brett $
  */
 public class RegistryReaderGeneratorTest
-    extends AbstractModelloGeneratorTest
+    extends AbstractRegistryGeneratorTestCase
 {
     public RegistryReaderGeneratorTest()
     {
@@ -47,51 +37,8 @@ public class RegistryReaderGeneratorTest
     public void testRegistryReader()
         throws Throwable
     {
-        ModelloCore modello = (ModelloCore) container.lookup( ModelloCore.ROLE );
-
-        Model model = modello.loadModel( new FileReader( getTestPath( "src/test/resources/model.mdo" ) ) );
-
-        File generatedSources = new File( getTestPath( "target/registry-reader/sources" ) );
-
-        File classes = new File( getTestPath( "target/registry-reader/classes" ) );
-
-        FileUtils.deleteDirectory( generatedSources );
-
-        FileUtils.deleteDirectory( classes );
-
-        generatedSources.mkdirs();
-
-        classes.mkdirs();
-
-        Properties parameters = new Properties();
-
-        parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, generatedSources.getAbsolutePath() );
-
-        parameters.setProperty( ModelloParameterConstants.VERSION, "1.0.0" );
-
-        parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString( false ) );
-
-        modello.generate( model, "java", parameters );
-
-        modello.generate( model, "registry-reader", parameters );
-
-        Properties properties = new Properties( System.getProperties() );
-        if ( properties.getProperty( "version" ) == null )
-        {
-            properties.load(
-                getClass().getResourceAsStream( "/META-INF/maven/org.codehaus.modello/modello-core/pom.properties" ) );
-        }
-        addDependency( "org.codehaus.modello", "modello-core", properties.getProperty( "version" ) );
-        addDependency( "org.codehaus.plexus", "plexus-registry", "1.0-SNAPSHOT" );
-        addDependency( "org.codehaus.plexus", "plexus-component-api", "1.0-alpha-16" );
-        addDependency( "org.codehaus.plexus", "plexus-container-default", "1.0-alpha-16" );
-        addDependency( "commons-collections", "commons-collections", "3.1" );
-        addDependency( "commons-configuration", "commons-configuration", "1.3" );
-        addDependency( "commons-lang", "commons-lang", "2.1" );
-        addDependency( "commons-logging", "commons-logging-api", "1.0.4" );
-
-        compile( generatedSources, classes );
-
+        prepareTest( "registry-reader" );
+        
         verify( "org.codehaus.modello.plugin.registry.RegistryReaderVerifier", "registry-reader" );
     }
 }

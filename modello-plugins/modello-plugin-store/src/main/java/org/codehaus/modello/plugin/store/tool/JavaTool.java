@@ -57,6 +57,11 @@ public class JavaTool
         return StringUtils.uncapitalise( s );
     }
 
+    public String capitalise( String s )
+    {
+        return StringUtils.capitalise( s );
+    }
+
     public String singular( String name )
     {
         if ( name.endsWith( "ies" ) )

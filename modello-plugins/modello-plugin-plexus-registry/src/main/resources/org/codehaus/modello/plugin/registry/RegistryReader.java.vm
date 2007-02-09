@@ -85,11 +85,8 @@ public class ${model.name}RegistryReader
 #if ( $assoc.multiplicity == "1" )
         $assoc.to $uncapFieldName = read${assoc.to}( prefix + "${uncapFieldName}.", registry );
 #else
-#if ( $assoc.type == "java.util.List" )
-        List $uncapFieldName = $assoc.defaultValue;
-#fillCollection( $uncapFieldName $assoc.to )
-#elseif ( $assoc.type == "java.util.Set" )
-        Set $uncapFieldName = $assoc.defaultValue;
+#if ( $assoc.type == "java.util.List" || $assoc.type == "java.util.Set" )
+        $assoc.type $uncapFieldName = $assoc.defaultValue;
 #fillCollection( $uncapFieldName $assoc.to )
 #elseif ( $assoc.type == "java.util.Map" || $assoc.type == "java.util.Properties" )
 ## TODO! make it possible to have exploded maps in xml via metadata

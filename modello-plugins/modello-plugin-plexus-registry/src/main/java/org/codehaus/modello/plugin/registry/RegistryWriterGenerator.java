@@ -31,12 +31,12 @@ import java.util.Properties;
  * @author <a href="mailto:brett@apache.org">Brett Porter</a>
  * @version $Id: JPoxStoreModelloGenerator.java 713 2006-11-25 21:58:06Z jvanzyl $
  */
-public class RegistryReaderGenerator
+public class RegistryWriterGenerator
     extends AbstractRegistryGenerator
 {
     public void generate( Model model, Properties parameters )
         throws ModelloException
     {
-        generate( model, parameters, "RegistryReader" );
+        generate( model, parameters, "RegistryWriter" );
     }
 }
