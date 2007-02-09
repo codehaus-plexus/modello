@@ -3,7 +3,7 @@
  */
 package org.codehaus.modello.plugin.metadata.jpa.processors;
 
-import org.codehaus.modello.plugin.metadata.jpa.EntityMetadata;
+import org.codehaus.modello.plugin.metadata.jpa.EntityProcessorMetadata;
 import org.codehaus.modello.plugin.metadata.processor.MetadataProcessor;
 import org.codehaus.modello.plugin.metadata.processor.MetadataProcessorFactory;
 import org.codehaus.modello.plugin.metadata.processor.MetadataProcessorInstantiationException;
@@ -33,7 +33,7 @@ public class JpaMetadataProcessorFactoryTest
                                                                                     "jpa" );
         assertNotNull( factory );
 
-        MetadataProcessor processor = factory.createMetadataProcessor( new EntityMetadata() );
+        MetadataProcessor processor = factory.createMetadataProcessor( new EntityProcessorMetadata() );
 
         assertNotNull( processor );
         assertTrue( processor instanceof EntityMetadataProcessor );

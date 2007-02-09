@@ -15,7 +15,7 @@ import org.codehaus.modello.plugin.metadata.processor.ProcessorMetadata;
  * @plexus.component role="org.codehaus.modello.plugin.metadata.processor.ClassMetadataProcessorMetadata"
  *                   role-hint="table"
  */
-public class TableMetadata
+public class TableProcessorMetadata
     implements ClassMetadataProcessorMetadata
 {
     public static final String KEY = "table";

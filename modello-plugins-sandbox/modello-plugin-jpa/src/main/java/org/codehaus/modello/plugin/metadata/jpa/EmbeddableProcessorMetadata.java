@@ -16,7 +16,7 @@ import org.codehaus.modello.plugin.metadata.processor.ProcessorMetadata;
  * @plexus.component role="org.codehaus.modello.plugin.metadata.processor.ClassMetadataProcessorMetadata"
  *                   role-hint="embeddable"
  */
-public class EmbeddableMetadata
+public class EmbeddableProcessorMetadata
     implements ClassMetadataProcessorMetadata
 {
 

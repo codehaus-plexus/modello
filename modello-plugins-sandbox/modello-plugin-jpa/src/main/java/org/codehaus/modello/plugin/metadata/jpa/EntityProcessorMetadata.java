@@ -15,7 +15,7 @@ import org.codehaus.modello.plugin.metadata.processor.ProcessorMetadata;
  * @plexus.component role="org.codehaus.modello.plugin.metadata.processor.ClassMetadataProcessorMetadata"
  *                   role-hint="entity"
  */
-public class EntityMetadata
+public class EntityProcessorMetadata
     implements ClassMetadataProcessorMetadata
 {
 

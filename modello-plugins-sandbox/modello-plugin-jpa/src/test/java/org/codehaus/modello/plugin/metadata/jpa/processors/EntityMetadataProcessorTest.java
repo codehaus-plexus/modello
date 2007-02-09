@@ -3,7 +3,7 @@
  */
 package org.codehaus.modello.plugin.metadata.jpa.processors;
 
-import org.codehaus.modello.plugin.metadata.jpa.EntityMetadata;
+import org.codehaus.modello.plugin.metadata.jpa.EntityProcessorMetadata;
 import org.codehaus.modello.plugin.metadata.processor.MetadataProcessor;
 import org.codehaus.modello.plugin.metadata.processor.MetadataProcessorContext;
 import org.codehaus.plexus.PlexusTestCase;
@@ -31,7 +31,7 @@ public class EntityMetadataProcessorTest
         assertNotNull( processor );
 
         // TODO: Implement validate()
-        boolean valid = processor.validate( new MetadataProcessorContext(), new EntityMetadata() );
+        boolean valid = processor.validate( new MetadataProcessorContext(), new EntityProcessorMetadata() );
 
         assertTrue( "Invalid metadata", valid );
     }
