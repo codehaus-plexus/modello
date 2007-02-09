@@ -4,6 +4,7 @@
 package org.codehaus.modello.plugin.metadata.jpa.processors;
 
 import org.codehaus.modello.plugin.metadata.processor.MetadataProcessor;
+import org.codehaus.modello.plugin.metadata.processor.MetadataProcessorContext;
 import org.codehaus.modello.plugin.metadata.processor.MetadataProcessorException;
 import org.codehaus.modello.plugin.metadata.processor.ProcessorMetadata;
 
@@ -21,10 +22,10 @@ public class TableMetadataProcessor
     /**
      * {@inheritDoc}
      * 
-     * @see org.codehaus.modello.plugin.metadata.processor.MetadataProcessor#process(java.lang.Object,
+     * @see org.codehaus.modello.plugin.metadata.processor.MetadataProcessor#process(MetadataProcessorContext,
      *      org.codehaus.modello.plugin.metadata.processor.ProcessorMetadata)
      */
-    public void process( Object context, ProcessorMetadata metadata )
+    public void process( MetadataProcessorContext context, ProcessorMetadata metadata )
         throws MetadataProcessorException
     {
         // TODO Auto-generated method stub
@@ -35,14 +36,13 @@ public class TableMetadataProcessor
     /**
      * {@inheritDoc}
      * 
-     * @see org.codehaus.modello.plugin.metadata.processor.MetadataProcessor#validate(java.lang.Object,
+     * @see org.codehaus.modello.plugin.metadata.processor.MetadataProcessor#validate(MetadataProcessorContext,
      *      org.codehaus.modello.plugin.metadata.processor.ProcessorMetadata)
      */
-    public boolean validate( Object context, ProcessorMetadata metadata )
+    public boolean validate( MetadataProcessorContext context, ProcessorMetadata metadata )
     {
         // TODO Auto-generated method stub
-        System.out.println( "Validating metadata : " + metadata.getKey() );
-        return false;
+        return true;
     }
 
 }

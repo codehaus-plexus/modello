@@ -16,7 +16,12 @@ package org.codehaus.modello.plugin.jpa.metadata;
  * the License.
  */
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.codehaus.modello.metadata.ClassMetadata;
+import org.codehaus.modello.plugin.metadata.processor.MetadataProcessor;
+import org.codehaus.modello.plugin.metadata.processor.ProcessorMetadata;
 
 /**
  * Wraps the <b>Class</b> level JPA metadata.
@@ -31,73 +36,31 @@ public class JpaClassLevelMetadata
 
     public static final String ID = JpaClassLevelMetadata.class.getName();
 
+    private List processorMetadata= new ArrayList();
+
     /**
-     * Determines if a Class defined in the Model is a PersistableEntity.
+     * Adds the Class level {@link ProcessorMetadata} to the list wrapped within
+     * the extensions.
+     * 
+     * @param metadata
+     */
+    public void add( ProcessorMetadata metadata )
+    {
+        this.processorMetadata.add( metadata );
+    }
+
+    /**
+     * Returns a list of {@link ProcessorMetadata} instances wrapped by the
+     * extensions.
      * <p>
-     * This is <code>true</code> if the class is persistable, else
-     * <code>false</code>.
+     * These are inturn used to obtain the associated {@link MetadataProcessor}
+     * to handle the {@link ProcessorMetadata} instance.
+     * 
+     * @return list of {@link ProcessorMetadata}
      */
-    private boolean isEntity;
-
-    /**
-     * Determines if a Class defined in the Data Model is a Embeddable.
-     * <p>
-     * This is <code>true</code> if embeddable, else <code>false</code>.
-     */
-    private boolean isEmbeddable;
-
-    /**
-     * Table name that the Class defined in the Data Model maps to in the
-     * database.
-     */
-    private String table;
-
-    /**
-     * @return the isEntity
-     */
-    public boolean isEntity()
+    public List getProcessorMetadata()
     {
-        return isEntity;
-    }
-
-    /**
-     * @param isEntity the isEntity to set
-     */
-    public void setEntity( boolean isEntity )
-    {
-        this.isEntity = isEntity;
-    }
-
-    /**
-     * @return the isEmbeddable
-     */
-    public boolean isEmbeddable()
-    {
-        return isEmbeddable;
-    }
-
-    /**
-     * @param isEmbeddable the isEmbeddable to set
-     */
-    public void setEmbeddable( boolean isEmbeddable )
-    {
-        this.isEmbeddable = isEmbeddable;
-    }
-
-    /**
-     * @return the tableName
-     */
-    public String getTable()
-    {
-        return table;
-    }
-
-    /**
-     * @param tableName the tableName to set
-     */
-    public void setTable( String tableName )
-    {
-        this.table = tableName;
+        return this.processorMetadata;
     }
 
 }

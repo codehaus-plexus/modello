@@ -28,7 +28,7 @@ public interface MetadataProcessor
      * @return <code>true</code> if the metadata is valid, else
      *         <code>false</code>.
      */
-    public boolean validate( Object context, ProcessorMetadata metadata );
+    public boolean validate( MetadataProcessorContext context, ProcessorMetadata metadata );
 
     /**
      * Processes metadata and adds the results to the context.
@@ -38,7 +38,7 @@ public interface MetadataProcessor
      * @throws MetadataProcessorException if there was an error processing the
      *             metadata.
      */
-    public void process( Object context, ProcessorMetadata metadata )
+    public void process( MetadataProcessorContext context, ProcessorMetadata metadata )
         throws MetadataProcessorException;
 
 }

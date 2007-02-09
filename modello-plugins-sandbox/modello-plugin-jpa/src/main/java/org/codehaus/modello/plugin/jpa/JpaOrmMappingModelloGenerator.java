@@ -34,6 +34,12 @@ import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.plugin.AbstractModelloGenerator;
 import org.codehaus.modello.plugin.jpa.metadata.JpaClassLevelMetadata;
+import org.codehaus.modello.plugin.metadata.processor.MetadataProcessor;
+import org.codehaus.modello.plugin.metadata.processor.MetadataProcessorContext;
+import org.codehaus.modello.plugin.metadata.processor.MetadataProcessorException;
+import org.codehaus.modello.plugin.metadata.processor.MetadataProcessorFactory;
+import org.codehaus.modello.plugin.metadata.processor.MetadataProcessorInstantiationException;
+import org.codehaus.modello.plugin.metadata.processor.ProcessorMetadata;
 import org.codehaus.plexus.util.xml.PrettyPrintXMLWriter;
 import org.codehaus.plexus.util.xml.XMLWriter;
 
@@ -51,6 +57,11 @@ import org.codehaus.plexus.util.xml.XMLWriter;
 public class JpaOrmMappingModelloGenerator
     extends AbstractModelloGenerator
 {
+
+    /**
+     * @plexus.requirement role-hint="jpa"
+     */
+    private MetadataProcessorFactory processorFactory;
 
     /**
      * {@inheritDoc}
@@ -97,17 +108,39 @@ public class JpaOrmMappingModelloGenerator
 
         Map classes = new HashMap();
 
-        // Processed classes to be mapped here 
+        // Processed classes to be mapped here
         for ( Iterator it = model.getClasses( getGeneratedVersion() ).iterator(); it.hasNext(); )
         {
             ModelClass modelClass = (ModelClass) it.next();
 
             JpaClassLevelMetadata metadata = (JpaClassLevelMetadata) modelClass.getMetadata( JpaClassLevelMetadata.ID );
 
-            if ( !metadata.isEmbeddable() && !metadata.isEntity() )
+            List processorMetadataList = metadata.getProcessorMetadata();
+            for ( Iterator it2 = processorMetadataList.iterator(); it2.hasNext(); )
             {
-                getLogger().debug( "Skipping '" + modelClass.getName() + "'" );
-                continue;
+                ProcessorMetadata procMetadata = (ProcessorMetadata) it2.next();
+                try
+                {
+                    MetadataProcessor metadataProcessor = processorFactory.createMetadataProcessor( procMetadata );
+
+                    // FIXME: Pass Context when we set it up.
+                    boolean valid = metadataProcessor.validate( new MetadataProcessorContext(), procMetadata );
+
+                    // FIXME: Pass Context when we set it up.
+                    if ( valid )
+                        metadataProcessor.process( new MetadataProcessorContext(), procMetadata );
+                }
+                catch ( MetadataProcessorInstantiationException e )
+                {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                catch ( MetadataProcessorException e )
+                {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+
             }
 
             getLogger().info( "Adding '" + modelClass.getName() + "'" );
@@ -144,7 +177,7 @@ public class JpaOrmMappingModelloGenerator
             Map.Entry entry = (Map.Entry) it.next();
 
             List list = (List) entry.getValue();
-            
+
             for ( Iterator it2 = list.iterator(); it2.hasNext(); )
             {
                 ModelClass modelClass = (ModelClass) it2.next();
@@ -163,10 +196,11 @@ public class JpaOrmMappingModelloGenerator
 
     /**
      * Writes out the mapping definition for an Entity class.
-     *  
+     * 
      * @param writer {@link XMLWriter} instance write out ORM mapping elements.
-     * @param modelClass 
-     * @throws ModelloException if there was error writing out the mapping definition for a class.
+     * @param modelClass
+     * @throws ModelloException if there was error writing out the mapping
+     *             definition for a class.
      */
     private void writeClass( XMLWriter writer, ModelClass modelClass )
         throws ModelloException

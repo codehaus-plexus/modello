@@ -13,6 +13,8 @@ import org.codehaus.modello.plugin.metadata.processor.ProcessorMetadata;
  * @author <a href='mailto:rahul.thakur.xdev@gmail.com'>Rahul Thakur</a>
  * @since 1.0.0
  * @version $Id$
+ * @plexus.component role="org.codehaus.modello.plugin.metadata.processor.ClassMetadataProcessorMetadata"
+ *                   role-hint="embeddable"
  */
 public class EmbeddableMetadata
     implements ClassMetadataProcessorMetadata

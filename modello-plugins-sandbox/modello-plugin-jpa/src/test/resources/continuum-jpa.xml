@@ -10,7 +10,7 @@
   </defaults>
 
   <classes>
-    <class rootElement="true" jpox.enabled="false" jpa.isEntity="false"
+    <class rootElement="true" jpox.enabled="false" jpa.entity="false"
       stash.storable="false">
       <name>ContinuumDatabase</name>
       <version>1.1.0+</version>
@@ -1110,7 +1110,7 @@
     </class>
 
     <!-- TODO: this isn't really appropriate to generate with Modello -->
-    <class jpox.enabled="false" stash.storable="false" jpa.isEntity="false">
+    <class jpox.enabled="false" stash.storable="false" jpa.entity="false">
       <name>ContinuumProjectState</name>
       <packageName>org.apache.maven.continuum.project</packageName>
       <version>1.1.0+</version>

@@ -16,7 +16,9 @@ package org.codehaus.modello.plugin.jpa.metadata;
  * the License.
  */
 
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.metadata.AbstractMetadataPlugin;
@@ -29,8 +31,13 @@ import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
-import org.codehaus.modello.plugin.metadata.processor.MetadataProcessor;
-import org.codehaus.modello.plugin.metadata.processor.MetadataProcessorFactory;
+import org.codehaus.modello.plugin.metadata.processor.ClassMetadataProcessorMetadata;
+import org.codehaus.plexus.PlexusConstants;
+import org.codehaus.plexus.PlexusContainer;
+import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
+import org.codehaus.plexus.context.Context;
+import org.codehaus.plexus.context.ContextException;
+import org.codehaus.plexus.personality.plexus.lifecycle.phase.Contextualizable;
 
 /**
  * A {@link MetadataPlugin} extension that processes JPA specific metadata.
@@ -43,20 +50,30 @@ import org.codehaus.modello.plugin.metadata.processor.MetadataProcessorFactory;
  */
 public class JpaMetadataPlugin
     extends AbstractMetadataPlugin
+    implements Contextualizable
 {
 
-    public static final String IS_ENTITY = "jpa.isEntity";
-
-    public static final String IS_EMBEDDABLE = "jpa.isEmbeddable";
-
-    public static final String TABLE_NAME = "jpa.table";
+    /**
+     * Prefix that identifies the attributes meant for consumption by the
+     * Modello JPA Plugin.
+     */
+    private static final String PLUGIN_PREFIX = "jpa.";
 
     /**
-     * Used to lookup {@link MetadataProcessor} instances.
-     * 
-     * @plexus.requirement role-hint="jpa"
+     * For Metdata lookups.
      */
-    private MetadataProcessorFactory processorFactory;
+    private PlexusContainer container;
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see org.codehaus.plexus.personality.plexus.lifecycle.phase.Contextualizable#contextualize(org.codehaus.plexus.context.Context)
+     */
+    public void contextualize( Context context )
+        throws ContextException
+    {
+        this.container = (PlexusContainer) context.get( PlexusConstants.PLEXUS_KEY );
+    }
 
     /**
      * {@inheritDoc}
@@ -82,7 +99,35 @@ public class JpaMetadataPlugin
     {
         JpaClassLevelMetadata metadata = new JpaClassLevelMetadata();
 
-        // TODO: Use MetadataProcessorFactory to lookup Processor instances.
+        // obtain all keys in the data passed in
+        Set attrs = data.keySet();
+
+        // iterate and identify ones that a JPA Modello Plugin specific
+        for ( Iterator it = attrs.iterator(); it.hasNext(); )
+        {
+            String attribute = (String) it.next();
+            if ( attribute.startsWith( PLUGIN_PREFIX ) )
+            {
+                String hint = attribute.substring( PLUGIN_PREFIX.length() );
+                getLogger().info(
+                                  "Looking up ProcessorMetadata for PLUGIN_PREFIX : " + PLUGIN_PREFIX + " , hint: "
+                                      + hint );
+                try
+                {
+                    ClassMetadataProcessorMetadata processorMetadata = (ClassMetadataProcessorMetadata) container
+                        .lookup( ClassMetadataProcessorMetadata.ROLE, hint );
+                    metadata.add( processorMetadata );
+                }
+                catch ( ComponentLookupException e )
+                {
+                    // FIXME Revisit handling.
+                    e.printStackTrace();
+                }
+            }
+
+        }
+
+        // Look up ClassMetadataProcessorMetadata instances
 
         return metadata;
     }
