@@ -46,18 +46,13 @@ import ${class.packageName}.${class.name};
 #macro ( fillCollection $uncapFieldName $to )
 #set ( $singularFieldName = $javaTool.singular($uncapFieldName) )
 #if ( $model.hasClass( $to, $version ) )
-## TODO! hide the (0) etc implementation details
 ## TODO! make it possible to have unwrapped lists via metadata
-        do
+        List ${uncapFieldName}Subsets = registry.getSubsetList( prefix + "${uncapFieldName}.${singularFieldName}" );
+        for ( Iterator i = ${uncapFieldName}Subsets.iterator(); i.hasNext(); )
         {
-            subRegistry = registry.getSubRegistry( prefix + "${uncapFieldName}.${singularFieldName}(" + ${uncapFieldName}.size() + ")" );
-            if ( !subRegistry.isEmpty() )
-            {
-                $to v = read${to}( "", subRegistry );
-                ${uncapFieldName}.add( v );
-            }
+            $to v = read${to}( "", (Registry) i.next() );
+            ${uncapFieldName}.add( v );
         }
-        while ( !subRegistry.isEmpty() );
 #else
         ${uncapFieldName}.addAll( registry.getList( prefix + "${uncapFieldName}.${singularFieldName}" ) );
 #end
@@ -77,8 +72,6 @@ public class ${model.name}RegistryReader
 #foreach ( $class in $classes )
     private ${class.name} read${class.name}( String prefix, Registry registry )
     {
-        Registry subRegistry;
-
         ${class.name} value = new ${class.name}();
 
 #foreach ( $field in $class.getAllFields( $version, true ) )
@@ -100,8 +93,7 @@ public class ${model.name}RegistryReader
 #fillCollection( $uncapFieldName $assoc.to )
 #elseif ( $assoc.type == "java.util.Map" || $assoc.type == "java.util.Properties" )
 ## TODO! make it possible to have exploded maps in xml via metadata
-        subRegistry = registry.getSubRegistry( prefix + "${uncapFieldName}" );
-        $assoc.type $uncapFieldName = subRegistry.asProperties();
+        $assoc.type $uncapFieldName = registry.getProperties( prefix + "${uncapFieldName}" );
 #else
     $javaTool.fail( "Unknown collection type: $assoc.type" )
 #end
