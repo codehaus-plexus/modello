@@ -29,7 +29,8 @@ import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
-import org.codehaus.plexus.util.StringUtils;
+import org.codehaus.modello.plugin.metadata.processor.MetadataProcessor;
+import org.codehaus.modello.plugin.metadata.processor.MetadataProcessorFactory;
 
 /**
  * A {@link MetadataPlugin} extension that processes JPA specific metadata.
@@ -49,6 +50,13 @@ public class JpaMetadataPlugin
     public static final String IS_EMBEDDABLE = "jpa.isEmbeddable";
 
     public static final String TABLE_NAME = "jpa.table";
+
+    /**
+     * Used to lookup {@link MetadataProcessor} instances.
+     * 
+     * @plexus.requirement role-hint="jpa"
+     */
+    private MetadataProcessorFactory processorFactory;
 
     /**
      * {@inheritDoc}
@@ -74,15 +82,7 @@ public class JpaMetadataPlugin
     {
         JpaClassLevelMetadata metadata = new JpaClassLevelMetadata();
 
-        // TODO: set up Jpa specific metadata here
-        metadata.setEntity( getBoolean( data, IS_ENTITY, true ) );
-
-        String tableName = (String) data.get( TABLE_NAME );
-
-        if ( !StringUtils.isEmpty( tableName ) )
-        {
-            metadata.setTable( tableName );
-        }
+        // TODO: Use MetadataProcessorFactory to lookup Processor instances.
 
         return metadata;
     }

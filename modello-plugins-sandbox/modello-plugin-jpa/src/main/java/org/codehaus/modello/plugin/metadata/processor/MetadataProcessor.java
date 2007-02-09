@@ -15,6 +15,12 @@ public interface MetadataProcessor
 {
 
     /**
+     * Key for {@link MetadataProcessor} lookups in a Plexus container where the
+     * processor extensions can be distinguished based on <code>role-hint</code>.
+     */
+    public static String ROLE = MetadataProcessor.class.getName();
+
+    /**
      * Checks the current metadata for validity.
      * 
      * @param context
