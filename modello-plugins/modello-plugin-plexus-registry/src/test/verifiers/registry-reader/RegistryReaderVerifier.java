@@ -76,5 +76,17 @@ public class RegistryReaderVerifier
         Collections.sort( names );
         Assert.assertEquals( Arrays.asList( new String[] { "SetName1", "SetName2" } ), names );
         Assert.assertEquals( Arrays.asList( new String[] { "S1", "S2", "S3", "S4", "S5" } ), model.getStringReferences() );
+
+        Map map = model.getMap();
+        Assert.assertEquals( 3, map.size() );
+        Assert.assertEquals( "value1", map.get( "property" ) );
+        Assert.assertEquals( "value2", map.get( "property2" ) );
+        Assert.assertEquals( "value3", map.get( "something.else" ) );
+
+        Properties properties = model.getProperties();
+        Assert.assertEquals( 3, properties.size() );
+        Assert.assertEquals( "value1", properties.getProperty( "property" ) );
+        Assert.assertEquals( "value2", properties.getProperty( "property2" ) );
+        Assert.assertEquals( "value3", properties.getProperty( "something.else" ) );
     }
 }

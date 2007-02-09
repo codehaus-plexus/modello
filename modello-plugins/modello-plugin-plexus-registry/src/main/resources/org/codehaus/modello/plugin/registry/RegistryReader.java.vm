@@ -98,8 +98,11 @@ public class ${model.name}RegistryReader
 #elseif ( $assoc.type == "java.util.Set" )
             Set registryValue = new HashSet();
 #fillCollection( $uncapFieldName $singularFieldName $assoc.to )
+#elseif ( $assoc.type == "java.util.Map" || $assoc.type == "java.util.Properties" )
+## TODO! make it possible to have exploded maps in xml via metadata
+            Registry subRegistry = registry.getSubRegistry( prefix + "${uncapFieldName}" );
+            $assoc.type registryValue = subRegistry.asProperties();
 #else
-## TODO! handle map and properties
     $javaTool.fail( "Unknown collection type: $assoc.type" )
 #end
 #end

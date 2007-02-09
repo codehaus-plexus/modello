@@ -40,4 +40,11 @@
       <name>SetName2</name>
     </setReference>
   </setReferences>
+  <properties>
+    <property>value1</property>
+    <property2>value2</property2>
+    <something>
+      <else>value3</else>
+    </something>
+  </properties>
 </configuration>

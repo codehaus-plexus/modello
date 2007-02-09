@@ -141,9 +141,7 @@ public class StoreMetadataPlugin
         {
             if ( StringUtils.isEmpty( keyType ) )
             {
-                throw new ModelloException( "When the association is a java.util.Map key type has to be specified." +
-                                            "Class: '" + association.getModelClass().getName() + "', " +
-                                            "field : '" + association.getName() + "'." );
+                keyType = "String";
             }
 
             // TODO: assert the key type

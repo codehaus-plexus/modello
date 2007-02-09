@@ -95,6 +95,24 @@
             <multiplicity>*</multiplicity>
           </association>
         </field>
+        <field>
+          <name>map</name>
+          <version>1.0.0+</version>
+          <type>Map</type>
+          <association>
+            <type>String</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+        <field>
+          <name>properties</name>
+          <version>1.0.0+</version>
+          <type>Properties</type>
+          <association>
+            <type>String</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
       </fields>
     </class>
     <class>
