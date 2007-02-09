@@ -88,5 +88,10 @@ public class RegistryReaderVerifier
         Assert.assertEquals( "value1", properties.getProperty( "property" ) );
         Assert.assertEquals( "value2", properties.getProperty( "property2" ) );
         Assert.assertEquals( "value3", properties.getProperty( "something.else" ) );
+
+        // test defaults
+        Assert.assertEquals( "def", model.getDefString() );
+        Assert.assertEquals( 8080, model.getDefNumeric() );
+        Assert.assertEquals( true, model.isDefBoolean() );
     }
 }

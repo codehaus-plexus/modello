@@ -50,6 +50,24 @@
           <type>int</type>
         </field>
         <field>
+          <name>defString</name>
+          <version>1.0.0+</version>
+          <type>String</type>
+          <defaultValue>def</defaultValue>
+        </field>
+        <field>
+          <name>defNumeric</name>
+          <version>1.0.0+</version>
+          <type>int</type>
+          <defaultValue>8080</defaultValue>
+        </field>
+        <field>
+          <name>defBoolean</name>
+          <version>1.0.0+</version>
+          <type>boolean</type>
+          <defaultValue>true</defaultValue>
+        </field>
+        <field>
           <name>reference</name>
           <version>1.0.0+</version>
           <association>

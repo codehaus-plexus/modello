@@ -15,9 +15,9 @@ import ${class.packageName}.${class.name};
 ## TODO! make it possible to change property name via metadata
 ## TODO! handle other types
 
-#macro ( handlePrimitive $localVar $registryVar $name $type )
+#macro ( handlePrimitive $localVar $registryVar $name $type $getter )
 #if ( $type == "boolean" )
-        $type $localVar = ${registryVar}.getBoolean( prefix + "${name}" );
+        $type $localVar = ${registryVar}.getBoolean( prefix + "${name}", $getter );
 #elseif ( $type == "char" )
     $javaTool.fail( "Type not yet handled: $type" )
 #elseif ( $type == "double" )
@@ -25,13 +25,13 @@ import ${class.packageName}.${class.name};
 #elseif ( $type == "float" )
     $javaTool.fail( "Type not yet handled: $type" )
 #elseif ( $type == "int" )
-        $type $localVar = ${registryVar}.getInt( prefix + "${name}" );
+        $type $localVar = ${registryVar}.getInt( prefix + "${name}", $getter );
 #elseif ( $type == "long" )
     $javaTool.fail( "Type not yet handled: $type" )
 #elseif ( $type == "short" )
     $javaTool.fail( "Type not yet handled: $type" )
 #elseif ( $type == "String" )
-        $type $localVar = ${registryVar}.getString( prefix + "${name}" );
+        $type $localVar = ${registryVar}.getString( prefix + "${name}", $getter );
 #elseif ( $type == "Boolean" )
     $javaTool.fail( "Type not yet handled: $type" )
 #elseif ( $type == "Date" )
@@ -86,17 +86,17 @@ public class ${model.name}RegistryReader
 ## TODO: handle required (and optional for those that cry when the registry item is not found)
 #set ( $uncapFieldName = $javaTool.uncapitalise($field.name) )
 #if ( $field.primitive )
-#handlePrimitive( $uncapFieldName "registry" $field.name $field.type )
+#handlePrimitive( $uncapFieldName "registry" $field.name $field.type "value.${javaTool.makeGetter( $field )}()" )
 #else
 #set ( $assoc = $field )
 #if ( $assoc.multiplicity == "1" )
         $assoc.to $uncapFieldName = read${assoc.to}( prefix + "${uncapFieldName}.", registry );
 #else
 #if ( $assoc.type == "java.util.List" )
-        List $uncapFieldName = new ArrayList();
+        List $uncapFieldName = $assoc.defaultValue;
 #fillCollection( $uncapFieldName $assoc.to )
 #elseif ( $assoc.type == "java.util.Set" )
-        Set $uncapFieldName = new HashSet();
+        Set $uncapFieldName = $assoc.defaultValue;
 #fillCollection( $uncapFieldName $assoc.to )
 #elseif ( $assoc.type == "java.util.Map" || $assoc.type == "java.util.Properties" )
 ## TODO! make it possible to have exploded maps in xml via metadata
