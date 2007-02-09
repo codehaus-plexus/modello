@@ -17,7 +17,7 @@ import ${class.packageName}.${class.name};
 
 #macro ( handlePrimitive $localVar $registryVar $name $type )
 #if ( $type == "boolean" )
-            $type $localVar = ${registryVar}.getBoolean( prefix + "${name}" );
+        $type $localVar = ${registryVar}.getBoolean( prefix + "${name}" );
 #elseif ( $type == "char" )
     $javaTool.fail( "Type not yet handled: $type" )
 #elseif ( $type == "double" )
@@ -25,13 +25,13 @@ import ${class.packageName}.${class.name};
 #elseif ( $type == "float" )
     $javaTool.fail( "Type not yet handled: $type" )
 #elseif ( $type == "int" )
-            $type $localVar = ${registryVar}.getInt( prefix + "${name}" );
+        $type $localVar = ${registryVar}.getInt( prefix + "${name}" );
 #elseif ( $type == "long" )
     $javaTool.fail( "Type not yet handled: $type" )
 #elseif ( $type == "short" )
     $javaTool.fail( "Type not yet handled: $type" )
 #elseif ( $type == "String" )
-            $type $localVar = ${registryVar}.getString( prefix + "${name}" );
+        $type $localVar = ${registryVar}.getString( prefix + "${name}" );
 #elseif ( $type == "Boolean" )
     $javaTool.fail( "Type not yet handled: $type" )
 #elseif ( $type == "Date" )
@@ -43,23 +43,23 @@ import ${class.packageName}.${class.name};
 #end
 #end
 
-#macro ( fillCollection $uncapFieldName $singularFieldName $to )
+#macro ( fillCollection $uncapFieldName $to )
+#set ( $singularFieldName = $javaTool.singular($uncapFieldName) )
 #if ( $model.hasClass( $to, $version ) )
 ## TODO! hide the (0) etc implementation details
 ## TODO! make it possible to have unwrapped lists via metadata
-            Registry subRegistry;
-            do
+        do
+        {
+            subRegistry = registry.getSubRegistry( prefix + "${uncapFieldName}.${singularFieldName}(" + ${uncapFieldName}.size() + ")" );
+            if ( !subRegistry.isEmpty() )
             {
-                subRegistry = registry.getSubRegistry( prefix + "${uncapFieldName}.${singularFieldName}(" + registryValue.size() + ")" );
-                if ( !subRegistry.isEmpty() )
-                {
-                    $to v = read${to}( "", subRegistry );
-                    registryValue.add( v );
-                }
+                $to v = read${to}( "", subRegistry );
+                ${uncapFieldName}.add( v );
             }
-            while ( !subRegistry.isEmpty() );
+        }
+        while ( !subRegistry.isEmpty() );
 #else
-            registryValue.addAll( registry.getList( prefix + "${uncapFieldName}.${singularFieldName}" ) );
+        ${uncapFieldName}.addAll( registry.getList( prefix + "${uncapFieldName}.${singularFieldName}" ) );
 #end
 #end
 
@@ -77,38 +77,37 @@ public class ${model.name}RegistryReader
 #foreach ( $class in $classes )
     private ${class.name} read${class.name}( String prefix, Registry registry )
     {
+        Registry subRegistry;
+
         ${class.name} value = new ${class.name}();
 
 #foreach ( $field in $class.getAllFields( $version, true ) )
-        {
 ## TODO: handle aliases
 ## TODO: handle required (and optional for those that cry when the registry item is not found)
+#set ( $uncapFieldName = $javaTool.uncapitalise($field.name) )
 #if ( $field.primitive )
-#handlePrimitive( "registryValue" "registry" $field.name $field.type )
+#handlePrimitive( $uncapFieldName "registry" $field.name $field.type )
 #else
 #set ( $assoc = $field )
-#set ( $uncapFieldName = $javaTool.uncapitalise($field.name) )
-#set ( $singularFieldName = $javaTool.singular($uncapFieldName) )
 #if ( $assoc.multiplicity == "1" )
-            $assoc.to registryValue = read${assoc.to}( prefix + "${uncapFieldName}.", registry );
+        $assoc.to $uncapFieldName = read${assoc.to}( prefix + "${uncapFieldName}.", registry );
 #else
 #if ( $assoc.type == "java.util.List" )
-            List registryValue = new ArrayList();
-#fillCollection( $uncapFieldName $singularFieldName $assoc.to )
+        List $uncapFieldName = new ArrayList();
+#fillCollection( $uncapFieldName $assoc.to )
 #elseif ( $assoc.type == "java.util.Set" )
-            Set registryValue = new HashSet();
-#fillCollection( $uncapFieldName $singularFieldName $assoc.to )
+        Set $uncapFieldName = new HashSet();
+#fillCollection( $uncapFieldName $assoc.to )
 #elseif ( $assoc.type == "java.util.Map" || $assoc.type == "java.util.Properties" )
 ## TODO! make it possible to have exploded maps in xml via metadata
-            Registry subRegistry = registry.getSubRegistry( prefix + "${uncapFieldName}" );
-            $assoc.type registryValue = subRegistry.asProperties();
+        subRegistry = registry.getSubRegistry( prefix + "${uncapFieldName}" );
+        $assoc.type $uncapFieldName = subRegistry.asProperties();
 #else
     $javaTool.fail( "Unknown collection type: $assoc.type" )
 #end
 #end
 #end
-            value.${javaTool.makeSetter( $field )}( registryValue );
-        }
+        value.${javaTool.makeSetter( $field )}( $uncapFieldName );
 #end
 
         return value;
