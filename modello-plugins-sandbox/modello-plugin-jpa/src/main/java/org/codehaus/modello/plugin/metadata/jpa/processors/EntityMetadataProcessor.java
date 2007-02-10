@@ -5,11 +5,14 @@ package org.codehaus.modello.plugin.metadata.jpa.processors;
 
 import java.io.PrintWriter;
 
+import org.codehaus.modello.model.ModelClass;
+import org.codehaus.modello.plugin.metadata.processor.ClassMetadataProcessorMetadata;
 import org.codehaus.modello.plugin.metadata.processor.MetadataProcessor;
 import org.codehaus.modello.plugin.metadata.processor.MetadataProcessorContext;
 import org.codehaus.modello.plugin.metadata.processor.MetadataProcessorException;
 import org.codehaus.modello.plugin.metadata.processor.ProcessorMetadata;
 import org.dom4j.Document;
+import org.dom4j.Element;
 
 /**
  * Processes any {@link EntityProcessorMetadata} instances encountered.
@@ -33,10 +36,15 @@ public class EntityMetadataProcessor
     public void process( MetadataProcessorContext context, ProcessorMetadata metadata )
         throws MetadataProcessorException
     {
-        // TODO Auto-generated method stub
-        System.out.println( "Processing metadata : " + metadata.getKey() );
-        
-        // TODO Contribute to the Document here.
+        ModelClass modelClass = ( (ClassMetadataProcessorMetadata) metadata ).getModelClass();
+        String packageName = ( (ClassMetadataProcessorMetadata) metadata ).getpackageName();
+
+        Document doc = context.getDocument();
+        Element rootElement = doc.getRootElement();
+        Element entity = rootElement.addElement( "entity" );
+        entity.addAttribute( "class", packageName + "." + modelClass.getName() );
+        entity.addAttribute( "access", "property" );
+        entity.addAttribute( "metadata-complete", "true" );
     }
 
     /**

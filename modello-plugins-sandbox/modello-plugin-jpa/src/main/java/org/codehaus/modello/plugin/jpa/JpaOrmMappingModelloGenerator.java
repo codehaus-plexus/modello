@@ -20,12 +20,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 
 import org.codehaus.modello.ModelloException;
@@ -34,14 +30,18 @@ import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.plugin.AbstractModelloGenerator;
 import org.codehaus.modello.plugin.jpa.metadata.JpaClassLevelMetadata;
+import org.codehaus.modello.plugin.metadata.processor.ClassMetadataProcessorMetadata;
 import org.codehaus.modello.plugin.metadata.processor.MetadataProcessor;
 import org.codehaus.modello.plugin.metadata.processor.MetadataProcessorContext;
 import org.codehaus.modello.plugin.metadata.processor.MetadataProcessorException;
 import org.codehaus.modello.plugin.metadata.processor.MetadataProcessorFactory;
 import org.codehaus.modello.plugin.metadata.processor.MetadataProcessorInstantiationException;
 import org.codehaus.modello.plugin.metadata.processor.ProcessorMetadata;
-import org.codehaus.plexus.util.xml.PrettyPrintXMLWriter;
-import org.codehaus.plexus.util.xml.XMLWriter;
+import org.dom4j.Document;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
+import org.dom4j.io.OutputFormat;
+import org.dom4j.io.XMLWriter;
 
 /**
  * Generates the an ORM (Object Relational Mapping) from the Modello model
@@ -102,16 +102,23 @@ public class JpaOrmMappingModelloGenerator
     {
         OutputStreamWriter fileWriter = new OutputStreamWriter( new FileOutputStream( orm ), "UTF-8" );
 
-        PrintWriter printWriter = new PrintWriter( fileWriter );
+        org.dom4j.io.XMLWriter writer = null;
 
-        XMLWriter writer = new PrettyPrintXMLWriter( printWriter );
-
-        Map classes = new HashMap();
+        Document document = DocumentHelper.createDocument();
+        Element root = document.addElement( "entity-mappings" );
+        root.addAttribute( "xmlns", "http://java.sun.com/xml/ns/persistence/orm" );
+        root.addAttribute( "xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance" );
+        root
+            .addAttribute( "xsi:schemaLocation",
+                           "http://java.sun.com/xml/ns/persistence/orm http://java.sun.com/xml/ns/persistence/orm_1_0.xsd" );
+        root.addAttribute( "version", "1.0" );
 
         // Processed classes to be mapped here
         for ( Iterator it = model.getClasses( getGeneratedVersion() ).iterator(); it.hasNext(); )
         {
             ModelClass modelClass = (ModelClass) it.next();
+
+            String packageName = modelClass.getPackageName( isPackageWithVersion(), getGeneratedVersion() );
 
             JpaClassLevelMetadata metadata = (JpaClassLevelMetadata) modelClass.getMetadata( JpaClassLevelMetadata.ID );
 
@@ -121,14 +128,24 @@ public class JpaOrmMappingModelloGenerator
                 ProcessorMetadata procMetadata = (ProcessorMetadata) it2.next();
                 try
                 {
+                    ( (ClassMetadataProcessorMetadata) procMetadata ).setModelClass( modelClass );
+
+                    ( (ClassMetadataProcessorMetadata) procMetadata ).setPackageName( modelClass.getPackageName() );
+
                     MetadataProcessor metadataProcessor = processorFactory.createMetadataProcessor( procMetadata );
 
-                    // FIXME: Pass Context when we set it up.
-                    boolean valid = metadataProcessor.validate( new MetadataProcessorContext(), procMetadata );
+                    // set up Processor Context.
+                    MetadataProcessorContext processorContext = new MetadataProcessorContext();
+                    processorContext.setDocument( document );
+                    processorContext.setModel( model );
 
-                    // FIXME: Pass Context when we set it up.
+                    boolean valid = metadataProcessor.validate( processorContext, procMetadata );
+
                     if ( valid )
-                        metadataProcessor.process( new MetadataProcessorContext(), procMetadata );
+                        metadataProcessor.process( processorContext, procMetadata );
+                    else
+                        throw new ModelloException( "Processor Metadata validate failed for '" + procMetadata.getKey()
+                            + "'" );
                 }
                 catch ( MetadataProcessorInstantiationException e )
                 {
@@ -140,58 +157,13 @@ public class JpaOrmMappingModelloGenerator
                     // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
-
-            }
-
-            getLogger().info( "Adding '" + modelClass.getName() + "'" );
-
-            String packageName = modelClass.getPackageName( isPackageWithVersion(), getGeneratedVersion() );
-
-            List list = (List) classes.get( packageName );
-
-            if ( list == null )
-            {
-                list = new ArrayList();
-            }
-
-            list.add( modelClass );
-
-            getLogger().info( "Added " + list.size() + " mapped classes for package '" + packageName + "'" );
-
-            classes.put( packageName, list );
-        }
-
-        printWriter.println( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" );
-
-        writer.startElement( "entity-mappings" );
-        writer.addAttribute( "xmlns", "http://java.sun.com/xml/ns/persistence/orm" );
-        writer.addAttribute( "xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance" );
-        writer
-            .addAttribute( "xsi:schemaLocation",
-                           "http://java.sun.com/xml/ns/persistence/orm http://java.sun.com/xml/ns/persistence/orm_1_0.xsd" );
-        writer.addAttribute( "version", "1.0" );
-
-        // Write out mappings for Entity classes
-        for ( Iterator it = classes.entrySet().iterator(); it.hasNext(); )
-        {
-            Map.Entry entry = (Map.Entry) it.next();
-
-            List list = (List) entry.getValue();
-
-            for ( Iterator it2 = list.iterator(); it2.hasNext(); )
-            {
-                ModelClass modelClass = (ModelClass) it2.next();
-
-                writeClass( writer, modelClass );
             }
         }
 
-        writer.endElement(); // close root element
-
-        printWriter.println();
-
-        printWriter.close();
-
+        OutputFormat format = OutputFormat.createPrettyPrint();
+        writer = new XMLWriter( fileWriter, format );
+        writer.write( document );
+        writer.close();
     }
 
     /**
@@ -201,8 +173,9 @@ public class JpaOrmMappingModelloGenerator
      * @param modelClass
      * @throws ModelloException if there was error writing out the mapping
      *             definition for a class.
+     * @deprecated <em>Not being used.</em>
      */
-    private void writeClass( XMLWriter writer, ModelClass modelClass )
+    private void writeClass( org.codehaus.plexus.util.xml.XMLWriter writer, ModelClass modelClass )
         throws ModelloException
     {
         writer.startElement( "entity" );

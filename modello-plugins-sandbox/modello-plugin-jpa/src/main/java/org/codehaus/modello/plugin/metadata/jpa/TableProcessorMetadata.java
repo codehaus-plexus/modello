@@ -3,6 +3,7 @@
  */
 package org.codehaus.modello.plugin.metadata.jpa;
 
+import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.plugin.metadata.processor.ClassMetadataProcessorMetadata;
 import org.codehaus.modello.plugin.metadata.processor.ProcessorMetadata;
 
@@ -20,6 +21,10 @@ public class TableProcessorMetadata
 {
     public static final String KEY = "table";
 
+    private ModelClass modelClass;
+
+    private String packageName;
+
     /**
      * {@inheritDoc}
      * 
@@ -28,6 +33,46 @@ public class TableProcessorMetadata
     public String getKey()
     {
         return KEY;
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see org.codehaus.modello.plugin.metadata.processor.ClassMetadataProcessorMetadata#getModelClass()
+     */
+    public ModelClass getModelClass()
+    {
+        return this.modelClass;
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see org.codehaus.modello.plugin.metadata.processor.ClassMetadataProcessorMetadata#setModelClass(org.codehaus.modello.model.ModelClass)
+     */
+    public void setModelClass( ModelClass modelClass )
+    {
+        this.modelClass = modelClass;
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see org.codehaus.modello.plugin.metadata.processor.ClassMetadataProcessorMetadata#getpackageName()
+     */
+    public String getpackageName()
+    {
+        return this.packageName;
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see org.codehaus.modello.plugin.metadata.processor.ClassMetadataProcessorMetadata#setPackageName(java.lang.String)
+     */
+    public void setPackageName( String packageName )
+    {
+        this.packageName = packageName;
     }
 
 }
