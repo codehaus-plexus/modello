@@ -770,6 +770,9 @@ public class JClass extends JStructure
             jsw.write( (String) iterator.next() );
         }
 
+        jsw.writeln();
+        jsw.unindent();
+
         jsw.writeln( '}' );
         jsw.flush();
     } //-- printSource
