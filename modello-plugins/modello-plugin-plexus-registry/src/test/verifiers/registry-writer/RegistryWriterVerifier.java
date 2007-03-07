@@ -30,7 +30,7 @@ import org.codehaus.modello.verifier.Verifier;
 import org.codehaus.plexus.logging.Logger;
 import org.codehaus.plexus.logging.console.ConsoleLogger;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
-import org.codehaus.plexus.registry.CommonsConfigurationRegistry;
+import org.codehaus.plexus.registry.commons.CommonsConfigurationRegistry;
 import org.codehaus.plexus.registry.Registry;
 
 import junit.framework.Assert;
@@ -149,5 +149,15 @@ public class RegistryWriterVerifier
         modelWriter.write( model, registry );
         Assert.assertEquals( "list-name2", registry.getString( "listReferences.listReference(0).name" ) );
         Assert.assertEquals( "list-name3", registry.getString( "listReferences.listReference(1).name" ) );
+        Assert.assertNull( registry.getString( "listReferences.listReference(2).name" ) );
+
+        // test removing an element from a map
+        model.getMap().remove( "property2" );
+        modelWriter.write( model, registry );
+        map = registry.getProperties( "map" );
+        Assert.assertEquals( 2, map.size() );
+        Assert.assertEquals( "value1", map.get( "property" ) );
+        Assert.assertNull( "value2", map.get( "property2" ) );
+        Assert.assertEquals( "value3", map.get( "something.else" ) );
     }
 }

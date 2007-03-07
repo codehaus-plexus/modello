@@ -96,6 +96,8 @@ public class ${model.name}RegistryWriter
             {
 #if ( $assoc.type == "java.util.List" || $assoc.type == "java.util.Set" )
 ## TODO! make it possible to have unwrapped lists via metadata
+                registry.removeSubset( prefix + "${uncapFieldName}" );
+
                 int count = 0;
                 for ( Iterator iter = ${value}.iterator(); iter.hasNext(); count++ )
                 {
@@ -112,6 +114,8 @@ public class ${model.name}RegistryWriter
 #elseif ( $assoc.type == "java.util.Map" || $assoc.type == "java.util.Properties" )
 ## TODO! make it possible to have exploded maps in xml via metadata
 ## TODO! make it possible to have unwrapped lists via metadata
+                registry.removeSubset( prefix + "${uncapFieldName}" );
+                
                 for ( Iterator iter = ${value}.keySet().iterator(); iter.hasNext(); )
                 {
                     String key = (String) iter.next();

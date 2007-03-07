@@ -29,7 +29,7 @@ import org.codehaus.modello.verifier.Verifier;
 import org.codehaus.plexus.logging.Logger;
 import org.codehaus.plexus.logging.console.ConsoleLogger;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
-import org.codehaus.plexus.registry.CommonsConfigurationRegistry;
+import org.codehaus.plexus.registry.commons.CommonsConfigurationRegistry;
 import org.codehaus.plexus.registry.Registry;
 
 import junit.framework.Assert;

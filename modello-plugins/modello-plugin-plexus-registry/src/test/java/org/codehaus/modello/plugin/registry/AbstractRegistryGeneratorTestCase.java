@@ -83,7 +83,8 @@ public abstract class AbstractRegistryGeneratorTestCase
                 getClass().getResourceAsStream( "/META-INF/maven/org.codehaus.modello/modello-core/pom.properties" ) );
         }
         addDependency( "org.codehaus.modello", "modello-core", properties.getProperty( "version" ) );
-        addDependency( "org.codehaus.plexus", "plexus-registry", "1.0-SNAPSHOT" );
+        addDependency( "org.codehaus.plexus.registry", "plexus-registry-api", "1.0-alpha-2-SNAPSHOT" );
+        addDependency( "org.codehaus.plexus.registry", "plexus-registry-commons", "1.0-alpha-2-SNAPSHOT" );
         addDependency( "org.codehaus.plexus", "plexus-component-api", "1.0-alpha-16" );
         addDependency( "org.codehaus.plexus", "plexus-container-default", "1.0-alpha-16" );
         addDependency( "commons-collections", "commons-collections", "3.1" );
