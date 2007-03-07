@@ -64,11 +64,11 @@ public class RegistryWriterVerifier
         model.setNumeric( 9 );
         model.setReference( createReference( "ref-name" ) );
         model.setEmptyReference( new EmptyReference() );
-        model.setListReferences( Arrays.asList( new Reference[] {
+        model.setListReferences( new ArrayList( Arrays.asList( new Reference[] {
             createReference( "list-name1" ),
             createReference( "list-name2" ),
             createReference( "list-name3" )
-        }));
+        })));
         model.setSetReferences( new HashSet( Arrays.asList( new Reference[] {
             createReference( "set-name1" ),
             createReference( "set-name2" ),
@@ -143,5 +143,11 @@ public class RegistryWriterVerifier
         {
             // expected
         }
+
+        // test removing an element from a list [MODELLO-84]
+        model.getListReferences().remove( 0 );
+        modelWriter.write( model, registry );
+        Assert.assertEquals( "list-name2", registry.getString( "listReferences.listReference(0).name" ) );
+        Assert.assertEquals( "list-name3", registry.getString( "listReferences.listReference(1).name" ) );
     }
 }
