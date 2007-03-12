@@ -97,8 +97,8 @@ public class SQLReservedWordsTest extends PlexusTestCase
         assertNull( "Should be null.", actual );
 
         actual = keywords.getKeywordSourceString( "ADD" );
-        assertEquals( "SQL 92, SQL 99, SQL 2003, JDBC, " + "Derby Server, HSQLDB, MySQL, Oracle, PL/SQL, "
-                        + "Microsoft SQL Server, ODBC", actual );
+        assertEquals( "SQL 92, SQL 99, SQL 2003, JDBC, Derby Server, HSQLDB, MySQL, PostgreSQL, Oracle, PL/SQL, " +
+                "Microsoft SQL Server, Microsoft Access, IBM DB/2, ODBC", actual );
 
         actual = keywords.getKeywordSourceString( "MULTISET" );
         assertEquals( "SQL 2003, HSQLDB", actual );
