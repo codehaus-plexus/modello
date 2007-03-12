@@ -1,0 +1,12 @@
+<?xml version="1.0" ?>
+<component-set>
+  <components>
+
+    <component>
+      <role>org.codehaus.modello.db.SQLReservedWords</role>
+      <role-hint>default</role-hint>
+      <implementation>org.codehaus.modello.db.SQLReservedWords</implementation>
+    </component>
+
+  </components>
+</component-set>
