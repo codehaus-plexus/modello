@@ -89,7 +89,7 @@ public class DefaultModelloCore
         {
             MetadataPlugin plugin = (MetadataPlugin) plugins.next();
 
-            Map attributes = Collections.EMPTY_MAP;
+            Map attributes = Collections.unmodifiableMap( modelReader.getAttributesForModel() );
 
             attributes = Collections.unmodifiableMap( attributes );
 

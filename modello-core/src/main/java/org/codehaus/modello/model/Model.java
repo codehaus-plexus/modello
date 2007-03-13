@@ -23,6 +23,7 @@ package org.codehaus.modello.model;
  */
 
 import org.codehaus.modello.ModelloRuntimeException;
+import org.codehaus.modello.metadata.ModelMetadata;
 import org.codehaus.modello.plugin.model.ModelClassMetadata;
 
 import java.util.ArrayList;
@@ -78,6 +79,11 @@ public class Model
     public void setVersionDefinition( VersionDefinition versionDefinition )
     {
         this.versionDefinition = versionDefinition;
+    }
+    
+    public ModelMetadata getMetadata( String key )
+    {
+        return (ModelMetadata) getMetadata( ModelMetadata.class, key );
     }
 
     public String getRoot( Version version )

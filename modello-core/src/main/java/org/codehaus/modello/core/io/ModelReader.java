@@ -49,12 +49,19 @@ import java.util.Map;
  */
 public class ModelReader
 {
+    private Map modelAttributes = new HashMap();
+    
     private Map classAttributes = new HashMap();
 
     private Map fieldAttributes = new HashMap();
 
     private Map associationAttributes = new HashMap();
 
+    public Map getAttributesForModel()
+    {
+        return (Map) modelAttributes;
+    }
+    
     public Map getAttributesForModel( Model model )
     {
         return (Map) fieldAttributes.get( model.getName() );
@@ -105,7 +112,7 @@ public class ModelReader
         throws XmlPullParserException, IOException
     {
         int eventType = parser.getEventType();
-
+        
         while ( eventType != XmlPullParser.END_DOCUMENT )
         {
             if ( eventType == XmlPullParser.START_TAG )
@@ -132,6 +139,10 @@ public class ModelReader
                 else if ( parser.getName().equals( "classes" ) )
                 {
                     parseClasses( model, parser );
+                }
+                else if ( parser.getName().equals( "model" ) )
+                {
+                    modelAttributes = getAttributes( parser );
                 }
                 else
                 {
