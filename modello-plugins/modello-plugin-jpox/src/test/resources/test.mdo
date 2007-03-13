@@ -35,7 +35,7 @@
     </class>
 
     <class stash.storable="true"
-           jpox.table="ROLES"
+           jpox.table="SECURITY_ROLES"
            jpox.not-persisted-fields="modelEncoding">
       <name>JdoRole</name>
       <version>1.0.0+</version>
@@ -127,7 +127,8 @@
             true if this object is permanent.
           </description>
         </field>
-        <field jpox.indexed="true">
+        <field jpox.indexed="true"
+               jpox.column="SECURITY_OPERATIONS">
           <name>operation</name>
           <version>1.0.0+</version>
           <association stash.part="true"
@@ -136,7 +137,8 @@
             <multiplicity>1</multiplicity>
           </association>
         </field>
-        <field jpox.indexed="true">
+        <field jpox.indexed="true"
+               jpox.column="SECURITY_RESOURCES">
           <name>resource</name>
           <version>1.0.0+</version>
           <association stash.part="true"
@@ -235,7 +237,7 @@
           <type>String</type>
           <identifier>true</identifier>
         </field>
-        <field>
+        <field jpox.column="LAST_UPDATED">
           <name>timestamp</name>
           <version>1.0.0+</version>
           <type>Date</type>

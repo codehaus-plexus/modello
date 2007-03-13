@@ -16,6 +16,11 @@
       <role>org.codehaus.modello.plugin.ModelloGenerator</role>
       <role-hint>jpox-jdo-mapping</role-hint>
       <implementation>org.codehaus.modello.plugin.jpox.JPoxJdoMappingModelloGenerator</implementation>
+      <requirements>
+        <requirement>
+          <role>org.codehaus.modello.db.SQLReservedWords</role>
+        </requirement>
+      </requirements>
     </component>
 
     <component>

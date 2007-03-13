@@ -24,6 +24,7 @@ package org.codehaus.modello.plugin.jpox;
 
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.ModelloParameterConstants;
+import org.codehaus.modello.db.SQLReservedWords;
 import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
@@ -54,6 +55,8 @@ import java.util.Properties;
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
+ * @plexus.component role="org.codehaus.modello.plugin.ModelloGenerator"
+ *              role-hint="jpox-jdo-mapping"
  */
 public class JPoxJdoMappingModelloGenerator
     extends AbstractModelloGenerator
@@ -63,6 +66,11 @@ public class JPoxJdoMappingModelloGenerator
     private final static List IDENTITY_TYPES;
 
     private final static List VALUE_STRATEGY_LIST;
+    
+    /**
+     * @plexus.requirement
+     */
+    private SQLReservedWords sqlReservedWords;
 
     private String valueStrategyOverride;
 
@@ -241,6 +249,12 @@ public class JPoxJdoMappingModelloGenerator
 
         printWriter.close();
     }
+    
+    private String violatesSqlReserved( String word )
+    {
+        return "(Violates following tracked SQL Reserved Word Sources: "
+                        + sqlReservedWords.getKeywordSourceString( word ) + ")";
+    }
 
     private void writeClass( XMLWriter writer, ModelClass modelClass )
         throws ModelloException
@@ -278,12 +292,12 @@ public class JPoxJdoMappingModelloGenerator
         if ( !StringUtils.isEmpty( jpoxMetadata.getTable() ) )
         {
             // Test Substitute Table Name.            
-            if ( DBKeywords.isReserved( jpoxMetadata.getTable() ) )
+            if ( sqlReservedWords.isKeyword( jpoxMetadata.getTable() ) )
             {
                 throw new ModelloException( "The JDO mapping generator has detected the use of the " +
-                    "SQL Reserved word '" + jpoxMetadata.getTable() + "' as an alternative" + "table name for the " +
-                    modelClass.getName() + " class.  Please use" + "a different name for the <class jpox.table=\"" +
-                    jpoxMetadata.getTable() + "\"> attribute.  See " + DBKeywords.URL_SQL92 + " for complete list." );
+                    "SQL Reserved word '" + jpoxMetadata.getTable() + "' as an alternative table name for the " +
+                    modelClass.getName() + " class.  Please use a different name for the <class jpox.table=\"" +
+                    jpoxMetadata.getTable() + "\"> attribute.  " + violatesSqlReserved( jpoxMetadata.getTable() ) );
             }
 
             writer.addAttribute( "table", jpoxMetadata.getTable() );
@@ -291,13 +305,13 @@ public class JPoxJdoMappingModelloGenerator
         else
         {
             // Test base table name.
-            if ( DBKeywords.isReserved( modelClass.getName() ) )
+            if ( sqlReservedWords.isKeyword( modelClass.getName() ) )
             {
                 throw new ModelloException( "The JDO mapping generator has detected the use of the " +
                     "SQL Reserved word '" + modelClass.getName() + "' as a class name.  " +
                     "Please specify an alternative jpox table name using the " +
-                    "<class jpox.table=\"\"> attribute, or use a different class name.  See " + DBKeywords.URL_SQL92 +
-                    " for complete list." );
+                    "<class jpox.table=\"\"> attribute, or use a different class name.  " + 
+                    violatesSqlReserved( modelClass.getName() ) );
             }
         }
 
@@ -588,14 +602,14 @@ public class JPoxJdoMappingModelloGenerator
         if ( StringUtils.isNotEmpty( jpoxMetadata.getColumnName() ) )
         {
             // Test proposed Column Name.            
-            if ( DBKeywords.isReserved( jpoxMetadata.getColumnName() ) )
+            if ( sqlReservedWords.isKeyword( jpoxMetadata.getColumnName() ) )
             {
                 throw new ModelloException( "The JDO mapping generator has detected the use of the " +
-                    "SQL Reserved word '" + jpoxMetadata.getColumnName() + "' as an alternative" +
+                    "SQL Reserved word '" + jpoxMetadata.getColumnName() + "' as an alternative " +
                     "column name for the " + modelField.getName() + " field of the " +
-                    modelField.getModelClass().getName() + " class.  Please use" +
+                    modelField.getModelClass().getName() + " class.  Please use " +
                     "a different name for the <field jpox.column=\"" + jpoxMetadata.getColumnName() +
-                    "\"> attribute.  See " + DBKeywords.URL_SQL92 + " for complete list." );
+                    "\"> attribute.  " + violatesSqlReserved( jpoxMetadata.getColumnName() ) );
             }
 
             writer.addAttribute( "column", jpoxMetadata.getColumnName() );
@@ -603,27 +617,27 @@ public class JPoxJdoMappingModelloGenerator
         else
         {
             // Test proposed Field name.
-            if ( DBKeywords.isReserved( modelField.getName() ) )
+            if ( sqlReservedWords.isKeyword( modelField.getName() ) )
             {
                 throw new ModelloException( "The JDO mapping generator has detected the use of the " +
                     "SQL Reserved word '" + modelField.getName() + "' as a field name of the " +
                     modelField.getModelClass().getName() + " class.  Please specify an " +
                     "alternative jpox column name using the <field jpox.column=\"\"> " +
-                    "attribute, or use a different class name.  See " + DBKeywords.URL_SQL92 + " for complete list." );
+                    "attribute, or use a different class name.  " + violatesSqlReserved( modelField.getName() ) );
             }
         }
 
         if ( StringUtils.isNotEmpty( jpoxMetadata.getJoinTableName() ) )
         {
             // Test proposed name for the Join Table for the field.
-            if ( DBKeywords.isReserved( jpoxMetadata.getJoinTableName() ) )
+            if ( sqlReservedWords.isKeyword( jpoxMetadata.getJoinTableName() ) )
             {
                 throw new ModelloException( "The JDO mapping generator has detected the use of the " +
                     "SQL Reserved word '" + jpoxMetadata.getJoinTableName() + "' as name of a" + "join table for the " +
                     modelField.getName() + " field of the " + modelField.getModelClass().getName() +
                     " class.  Please specify" + "an alternative name for the <field jpox.join-table=\"" +
-                    jpoxMetadata.getColumnName() + "\"> attribute.  See " + DBKeywords.URL_SQL92 +
-                    " for complete list." );
+                    jpoxMetadata.getColumnName() + "\"> attribute.  " + 
+                    violatesSqlReserved( jpoxMetadata.getJoinTableName() ) );
             }
             writer.addAttribute( "table", jpoxMetadata.getJoinTableName() );
         }
@@ -818,19 +832,6 @@ public class JPoxJdoMappingModelloGenerator
                 writer.addAttribute( "dependent", "true" );
             }
         }
-    }
-
-    private void writeExtension( XMLWriter writer, String vendorName, String key, String value )
-    {
-        writer.startElement( "extension" );
-
-        writer.addAttribute( "vendor-name", vendorName );
-
-        writer.addAttribute( "key", key );
-
-        writer.addAttribute( "value", value );
-
-        writer.endElement();
     }
 
     private boolean isInstantionApplicationType( ModelClass modelClass )
