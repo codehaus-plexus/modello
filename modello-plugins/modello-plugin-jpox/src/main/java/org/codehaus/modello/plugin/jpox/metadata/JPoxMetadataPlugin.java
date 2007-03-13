@@ -43,18 +43,17 @@ import java.util.Map;
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
  * @version $Id$
  */
-public class JPoxMetadataPlugin
-    extends AbstractMetadataPlugin
+public class JPoxMetadataPlugin extends AbstractMetadataPlugin
 {
     public static final String ENABLED = "jpox.enabled";
-    
+
     public static final String DEPENDENT = "jpox.dependent";
 
     public static final String DETACHABLE = "jpox.detachable";
 
     public static final String FETCH_GROUP_NAMES = "jpox.fetchGroupNames";
-    
-    public static final String NOT_PERSISTED_FIELDS = "jpox.not-persisted-fields"; 
+
+    public static final String NOT_PERSISTED_FIELDS = "jpox.not-persisted-fields";
 
     public static final String JOIN = "jpox.join";
 
@@ -63,23 +62,29 @@ public class JPoxMetadataPlugin
     public static final String NULL_VALUE = "jpox.nullValue";
 
     public static final String TABLE = "jpox.table";
-    
+
+    public static final String TABLE_PREFIX = "jpox.table-prefix";
+
     public static final String COLUMN = "jpox.column";
-    
+
+    public static final String COLUMN_PREFIX = "jpox.column-prefix";
+
+    public static final String RESERVED_WORD_STRICTNESS = "jpox.reserved-word-strictness";
+
     public static final String JOIN_TABLE = "jpox.join-table";
-    
+
     public static final String INDEXED = "jpox.indexed";
-    
+
     public static final String PRIMARY_KEY = "jpox.primary-key";
-    
+
     public static final String VALUE_STRATEGY = "jpox.value-strategy";
-    
+
     public static final String PERSISTENCE_MODIFIER = "jpox.persistence-modifier";
-    
+
     public static final String IDENTITY_TYPE = "jpox.identity-type";
-    
+
     public static final String IDENTITY_CLASS = "jpox.identity-class";
-    
+
     public static final String USE_IDENTIFIERS = "jpox.use-identifiers-as-primary-key";
 
     // ----------------------------------------------------------------------
@@ -88,17 +93,58 @@ public class JPoxMetadataPlugin
 
     public ModelMetadata getModelMetadata( Model model, Map data )
     {
-        return new JPoxModelMetadata();
+        JPoxModelMetadata metadata = new JPoxModelMetadata();
+
+        String columnPrefix = (String) data.get( COLUMN_PREFIX );
+
+        if ( StringUtils.isNotEmpty( columnPrefix ) )
+        {
+            metadata.setColumnPrefix( columnPrefix );
+        }
+
+        String tablePrefix = (String) data.get( TABLE_PREFIX );
+
+        if ( StringUtils.isNotEmpty( tablePrefix ) )
+        {
+            metadata.setTablePrefix( tablePrefix );
+        }
+
+        String reservedWordStrictness = (String) data.get( RESERVED_WORD_STRICTNESS );
+
+        // Set default.
+        metadata.setReservedWordStrictness( JPoxModelMetadata.WARNING );
+        
+        // Set based on provided.
+        if ( StringUtils.isNotEmpty( reservedWordStrictness ) )
+        {
+            if ( JPoxModelMetadata.ERROR.equalsIgnoreCase( reservedWordStrictness ) )
+            {
+                metadata.setReservedWordStrictness( JPoxModelMetadata.ERROR );
+            }
+            else if ( JPoxModelMetadata.WARNING.equalsIgnoreCase( reservedWordStrictness ) )
+            {
+                metadata.setReservedWordStrictness( JPoxModelMetadata.WARNING );
+            }
+            else
+            {
+                getLogger().warn(
+                                  "Unknown reserved word strictness value: '" + reservedWordStrictness + "'.  "
+                                                  + "Only '" + JPoxModelMetadata.ERROR + "' and '"
+                                                  + JPoxModelMetadata.WARNING
+                                                  + "' are acceptable inputs.  Defaulting to 'warning'." );
+            }
+        }
+
+        return metadata;
     }
 
-    public ClassMetadata getClassMetadata( ModelClass clazz, Map data )
-        throws ModelloException
+    public ClassMetadata getClassMetadata( ModelClass clazz, Map data ) throws ModelloException
     {
         JPoxClassMetadata metadata = new JPoxClassMetadata();
 
         metadata.setEnabled( getBoolean( data, ENABLED, true ) );
         metadata.setDetachable( getBoolean( data, DETACHABLE, true ) );
-        
+
         String notPersistedFields = (String) data.get( NOT_PERSISTED_FIELDS );
 
         if ( !StringUtils.isEmpty( notPersistedFields ) )
@@ -114,7 +160,14 @@ public class JPoxMetadataPlugin
         {
             metadata.setTable( table );
         }
-        
+
+        String columnPrefix = (String) data.get( COLUMN_PREFIX );
+
+        if ( !StringUtils.isEmpty( columnPrefix ) )
+        {
+            metadata.setColumnPrefix( columnPrefix );
+        }
+
         String identityType = (String) data.get( IDENTITY_TYPE );
 
         if ( StringUtils.isNotEmpty( identityType ) )
@@ -128,17 +181,16 @@ public class JPoxMetadataPlugin
         {
             metadata.setIdentityClass( identityClass );
         }
-        
+
         metadata.setUseIdentifiersAsPrimaryKey( getBoolean( data, USE_IDENTIFIERS, true ) );
-        
+
         return metadata;
     }
 
-    public FieldMetadata getFieldMetadata( ModelField field, Map data )
-        throws ModelloException
+    public FieldMetadata getFieldMetadata( ModelField field, Map data ) throws ModelloException
     {
         JPoxFieldMetadata metadata = new JPoxFieldMetadata();
-        
+
         JPoxClassMetadata classMetadata = (JPoxClassMetadata) field.getModelClass().getMetadata( JPoxClassMetadata.ID );
 
         boolean useIdentifiersAsPrimaryKey = classMetadata.useIdentifiersAsPrimaryKey();
@@ -167,28 +219,28 @@ public class JPoxMetadataPlugin
         {
             metadata.setNullValue( nullValue );
         }
-        
+
         String column = (String) data.get( COLUMN );
 
         if ( StringUtils.isNotEmpty( column ) )
         {
             metadata.setColumnName( column );
         }
-        
+
         String joinTable = (String) data.get( JOIN_TABLE );
-        
+
         if ( StringUtils.isNotEmpty( joinTable ) )
         {
             metadata.setJoinTableName( joinTable );
         }
-        
+
         String indexed = (String) data.get( INDEXED );
-        
+
         if ( StringUtils.isNotEmpty( indexed ) )
         {
             metadata.setIndexed( indexed );
         }
-        
+
         String persistenceModifier = (String) data.get( PERSISTENCE_MODIFIER );
 
         if ( StringUtils.isNotEmpty( persistenceModifier ) )
@@ -199,7 +251,7 @@ public class JPoxMetadataPlugin
         // According to http://www.jpox.org/docs/1_1/identity_generation.html the default value for
         // this should be 'native', however this is untrue in jpox-1.1.1
         metadata.setValueStrategy( "native" );
-        
+
         if ( StringUtils.isNotEmpty( (String) data.get( VALUE_STRATEGY ) ) )
         {
             String valueStrategy = (String) data.get( VALUE_STRATEGY );
@@ -213,12 +265,11 @@ public class JPoxMetadataPlugin
                 metadata.setValueStrategy( valueStrategy );
             }
         }
-        
+
         return metadata;
     }
 
-    public AssociationMetadata getAssociationMetadata( ModelAssociation association, Map data )
-        throws ModelloException
+    public AssociationMetadata getAssociationMetadata( ModelAssociation association, Map data ) throws ModelloException
     {
         JPoxAssociationMetadata metadata = new JPoxAssociationMetadata();
 

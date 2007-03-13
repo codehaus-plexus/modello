@@ -41,6 +41,8 @@ public class JPoxClassMetadata
     
     private String table;
     
+    private String columnPrefix;
+    
     private String identityType;
     
     private String identityClass;
@@ -117,5 +119,15 @@ public class JPoxClassMetadata
     public void setEnabled( boolean persisted )
     {
         this.enabled = persisted;
+    }
+
+    public String getColumnPrefix()
+    {
+        return columnPrefix;
+    }
+
+    public void setColumnPrefix( String columnPrefix )
+    {
+        this.columnPrefix = columnPrefix;
     }
 }

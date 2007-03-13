@@ -33,12 +33,21 @@ import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.cli.CommandLineException;
 import org.codehaus.plexus.util.cli.CommandLineUtils;
 import org.codehaus.plexus.util.cli.Commandline;
+import org.dom4j.Attribute;
+import org.dom4j.Branch;
+import org.dom4j.Document;
+import org.dom4j.Element;
+import org.dom4j.Node;
+import org.dom4j.XPath;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Properties;
+
+import junit.framework.AssertionFailedError;
 
 public abstract class AbstractJpoxGeneratorTestCase
     extends AbstractModelloGeneratorTest
@@ -134,7 +143,7 @@ public abstract class AbstractJpoxGeneratorTestCase
         compile( generatedSources, classes );
 
         enhance( classes );
-
+        
         verify( className, getName() );
     }
 
@@ -209,5 +218,164 @@ public abstract class AbstractJpoxGeneratorTestCase
         {
             throw new ModelloException( "The JPox enhancer tool exited with a non-null exit code." );
         }
+    }
+    
+    protected void assertAttributeEquals( Document doc, String xpathToNode, String attributeKey, String expectedValue )
+    {
+        if ( expectedValue == null )
+        {
+            throw new AssertionFailedError( "Unable to assert an attribute using a null expected value." );
+        }
+    
+        Attribute attribute = findAttribute( doc, xpathToNode, attributeKey );
+    
+        if ( attribute == null )
+        {
+            throw new AssertionFailedError( "Element at '" + xpathToNode + "' is missing the '" + attributeKey
+                            + "' attribute." );
+        }
+    
+        assertEquals( "Attribute value for '" + xpathToNode + "'", expectedValue, attribute.getValue() );
+    }
+
+    protected void assertElementExists( Document doc, String xpathToNode )
+    {
+        findElement( doc, xpathToNode );
+    }
+
+    protected void assertElementNotExists( Document doc, String xpathToNode )
+    {
+        if ( StringUtils.isEmpty( xpathToNode ) )
+        {
+            throw new AssertionFailedError( "Unable to assert an attribute using an empty xpath." );
+        }
+    
+        if ( doc == null )
+        {
+            throw new AssertionFailedError( "Unable to assert an attribute using a null document." );
+        }
+    
+        XPath xpath = doc.createXPath( xpathToNode );
+    
+        Node node = xpath.selectSingleNode( doc );
+    
+        if ( node != null )
+        {
+            throw new AssertionFailedError( "Element at '" + xpathToNode + "' should not exist." );
+        }
+    
+        // In case node returns something other than an element.
+    }
+
+    private Element findElement( Document doc, String xpathToNode )
+    {
+        if ( StringUtils.isEmpty( xpathToNode ) )
+        {
+            throw new AssertionFailedError( "Unable to assert an attribute using an empty xpath." );
+        }
+    
+        if ( doc == null )
+        {
+            throw new AssertionFailedError( "Unable to assert an attribute using a null document." );
+        }
+    
+        XPath xpath = doc.createXPath( xpathToNode );
+    
+        Node node = xpath.selectSingleNode( doc );
+    
+        if ( node == null )
+        {
+            throw new AssertionFailedError( "Expected Node at '" + xpathToNode + "', but was not found." );
+        }
+    
+        if ( node.getNodeType() != Node.ELEMENT_NODE )
+        {
+            throw new AssertionFailedError( "Node at '" + xpathToNode + "' is not an xml element." );
+        }
+    
+        return (Element) node;
+    }
+
+    private Attribute findAttribute( Document doc, String xpathToNode, String attributeKey ) throws AssertionFailedError
+    {
+        if ( StringUtils.isEmpty( attributeKey ) )
+        {
+            throw new AssertionFailedError( "Unable to assert an attribute using an empty attribute key." );
+        }
+    
+        Element elem = findElement( doc, xpathToNode );
+    
+        Attribute attribute = elem.attribute( attributeKey );
+        return attribute;
+    }
+
+    protected void assertAttributeMissing( Document doc, String xpathToNode, String attributeKey )
+    {
+        Attribute attribute = findAttribute( doc, xpathToNode, attributeKey );
+    
+        if ( attribute != null )
+        {
+            throw new AssertionFailedError( "Node at '" + xpathToNode + "' should not have the attribute named '"
+                            + attributeKey + "'." );
+        }
+    }
+
+    protected void assertNoTextNodes( Document doc, String xpathToParentNode, boolean recursive )
+    {
+        if ( StringUtils.isEmpty( xpathToParentNode ) )
+        {
+            throw new AssertionFailedError( "Unable to assert an attribute using an empty xpath." );
+        }
+    
+        if ( doc == null )
+        {
+            throw new AssertionFailedError( "Unable to assert an attribute using a null document." );
+        }
+    
+        XPath xpath = doc.createXPath( xpathToParentNode );
+    
+        List nodes = xpath.selectNodes( doc );
+    
+        if ( ( nodes == null ) || nodes.isEmpty() )
+        {
+            throw new AssertionFailedError( "Expected Node(s) at '" + xpathToParentNode + "', but was not found." );
+        }
+    
+        Iterator it = nodes.iterator();
+        while ( it.hasNext() )
+        {
+            Node node = (Node) it.next();
+    
+            assertNoTextNode( "No Text should exist in '" + xpathToParentNode + "'", node, recursive );
+        }
+    }
+
+    private boolean assertNoTextNode( String message, Node node, boolean recursive )
+    {
+        if ( node.getNodeType() == Node.TEXT_NODE || node.getNodeType() == Node.CDATA_SECTION_NODE )
+        {
+            // Double check that it isn't just whitespace.
+            String text = StringUtils.trim( node.getText() );
+    
+            if ( StringUtils.isNotEmpty( text ) )
+            {
+                throw new AssertionFailedError( message + " found <" + text + ">" );
+            }
+        }
+    
+        if ( recursive )
+        {
+            if ( node instanceof Branch )
+            {
+                Iterator it = ( (Branch) node ).nodeIterator();
+                while ( it.hasNext() )
+                {
+                    Node child = (Node) it.next();
+                    assertNoTextNode( message, child, recursive );
+                }
+            }
+        }
+    
+        return false;
     }
 }

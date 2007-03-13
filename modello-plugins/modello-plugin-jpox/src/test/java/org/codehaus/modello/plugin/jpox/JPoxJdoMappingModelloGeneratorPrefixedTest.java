@@ -32,23 +32,22 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.Properties;
 
-
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
-public class JPoxJdoMappingModelloGeneratorTest extends AbstractJpoxGeneratorTestCase
+public class JPoxJdoMappingModelloGeneratorPrefixedTest extends AbstractJpoxGeneratorTestCase
 {
-    public JPoxJdoMappingModelloGeneratorTest()
+    public JPoxJdoMappingModelloGeneratorPrefixedTest()
     {
         super( "jpox-jdo-mapping" );
     }
 
-    public void testSimpleInvocation() throws Exception
+    public void testInvocationWithPrefixes() throws Exception
     {
         ModelloCore core = (ModelloCore) lookup( ModelloCore.ROLE );
 
-        Model model = core.loadModel( new FileReader( getTestPath( "src/test/resources/mergere-tissue.mdo" ) ) );
+        Model model = core.loadModel( new FileReader( getTestPath( "src/test/resources/test-with-prefixes.mdo" ) ) );
 
         // ----------------------------------------------------------------------
         // Generate the code
@@ -80,68 +79,32 @@ public class JPoxJdoMappingModelloGeneratorTest extends AbstractJpoxGeneratorTes
         assertNoTextNodes( jdoDocument, "//jdo", true );
 
         assertAttributeEquals( jdoDocument,
-                               "//class[@name='TissueModelloMetadata']/field[@name='modelVersion']/column",
+                               "//class[@name='RbacJdoModelModelloMetadata']/field[@name='modelVersion']/column",
                                "default-value", "1.0.0" );
 
-        assertAttributeEquals( jdoDocument, "//class[@name='Issue']/field[@name='summary']", "persistence-modifier",
+        assertAttributeEquals( jdoDocument, "//class[@name='JdoResource']/field[@name='modelEncoding']", "persistence-modifier",
                                "none" );
 
         // -----------------------------------------------------------------------
         // Association Tests.
 
         //   mdo/association/jpox.dependent-element == false (only on association with "*" multiplicity (default type)
-        assertAttributeEquals( jdoDocument, "//class[@name='Issue']/field[@name='friends']/collection",
+        assertAttributeEquals( jdoDocument, "//class[@name='JdoRole']/field[@name='permissions']/collection",
                                "dependent-element", "false" );
 
         //   mdo/association (default type) with "1" multiplicity.
-        assertElementNotExists( jdoDocument, "//class[@name='Issue']/field[@name='assignee']/collection" );
-
-        //   mdo/association (map) with "*" multiplicity.
-        assertElementExists( jdoDocument, "//class[@name='Issue']/field[@name='configuration']/map" );
+        assertElementNotExists( jdoDocument, "//class[@name='JdoPermission']/field[@name='operation']/collection" );
 
         // -----------------------------------------------------------------------
         // Fetch Group Tests
-        assertAttributeMissing( jdoDocument, "//class[@name='Issue']/field[@name='reporter']", "default-fetch-group" );
-        assertAttributeEquals( jdoDocument, "//class[@name='Issue']/field[@name='configuration']",
+        assertAttributeMissing( jdoDocument, "//class[@name='JdoRole']/field[@name='assignable']", "default-fetch-group" );
+        assertAttributeEquals( jdoDocument, "//class[@name='JdoRole']/field[@name='childRoleNames']",
                                "default-fetch-group", "true" );
-        assertAttributeEquals( jdoDocument, "//class[@name='Issue']/field[@name='assignee']", "default-fetch-group",
-                               "false" );
-
-        // -----------------------------------------------------------------------
-        // Value Strategy Tests
-        //   defaulted
-        assertAttributeEquals( jdoDocument, "//class[@name='ComplexIdentity']/field[@name='id']", "value-strategy",
-                               "native" );
-        assertAttributeEquals( jdoDocument, "//class[@name='Issue']/field[@name='accountId']", "value-strategy",
-                               "native" );
-        //   intentionally unset
-        assertAttributeMissing( jdoDocument, "//class[@name='User']/field[@name='id']", "value-strategy" );
-
-        // -----------------------------------------------------------------------
-        // Superclass Tests
-        assertAttributeEquals( jdoDocument, "//class[@name='User']", "persistence-capable-superclass",
-                               "org.mergere.user.AbstractUser" );
-
-        // -----------------------------------------------------------------------
-        // Primary Key Tests
-        assertAttributeEquals( jdoDocument, "//class[@name='Issue']/field[@name='accountId']", "primary-key", "true" );
-        assertAttributeEquals( jdoDocument, "//class[@name='Issue']/field[@name='summary']", "primary-key", "false" );
-
-        assertAttributeEquals( jdoDocument, "//class[@name='ComplexIdentity']/field[@name='id']", "primary-key", "true" );
-        assertAttributeEquals( jdoDocument, "//class[@name='ComplexIdentity']/field[@name='username']", "primary-key",
-                               "false" );
-        assertAttributeEquals( jdoDocument, "//class[@name='ComplexIdentity']/field[@name='fullName']", "primary-key",
-                               "false" );
-        assertAttributeEquals( jdoDocument, "//class[@name='ComplexIdentity']/field[@name='email']", "primary-key",
-                               "false" );
-        assertAttributeEquals( jdoDocument, "//class[@name='ComplexIdentity']/field[@name='locked']", "primary-key",
-                               "false" );
-        assertAttributeEquals( jdoDocument, "//class[@name='ComplexIdentity']/field[@name='lastLoginDate']",
-                               "primary-key", "false" );
 
         // -----------------------------------------------------------------------
         // Alternate Table and Column Names Tests.
-        assertAttributeEquals( jdoDocument, "//class[@name='DifferentTable']", "table", "MyTable" );
-        assertAttributeEquals( jdoDocument, "//class[@name='Issue']/field[@name='accountId']", "column", "id" );
+        assertAttributeEquals( jdoDocument, "//class[@name='JdoPermission']", "table", "SECURITY_PERMISSIONS" );
+        assertAttributeEquals( jdoDocument, "//class[@name='JdoOperation']/field[@name='name']", "column", "OPERATION_NAME" );
+        assertAttributeEquals( jdoDocument, "//class[@name='JdoRole']/field[@name='permissions']", "table", "SECURITY_ROLE_PERMISSION_MAP" );
     }
 }

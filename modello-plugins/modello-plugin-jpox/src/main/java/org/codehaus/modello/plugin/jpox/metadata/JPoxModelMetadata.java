@@ -28,7 +28,47 @@ import org.codehaus.modello.metadata.ModelMetadata;
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
  * @version $Id$
  */
-public class JPoxModelMetadata
-    implements ModelMetadata
+public class JPoxModelMetadata implements ModelMetadata
 {
+    public static final String ID = JPoxModelMetadata.class.getName();
+    
+    public static final String ERROR = "error";
+    
+    public static final String WARNING = "warning";
+
+    private String columnPrefix;
+
+    private String tablePrefix;
+    
+    private String reservedWordStrictness;
+    
+    public String getColumnPrefix()
+    {
+        return columnPrefix;
+    }
+
+    public void setColumnPrefix( String columnPrefix )
+    {
+        this.columnPrefix = columnPrefix;
+    }
+
+    public String getTablePrefix()
+    {
+        return tablePrefix;
+    }
+
+    public void setTablePrefix( String tablePrefix )
+    {
+        this.tablePrefix = tablePrefix;
+    }
+
+    public String getReservedWordStrictness()
+    {
+        return reservedWordStrictness;
+    }
+
+    public void setReservedWordStrictness( String reservedWordStrictness )
+    {
+        this.reservedWordStrictness = reservedWordStrictness;
+    }
 }

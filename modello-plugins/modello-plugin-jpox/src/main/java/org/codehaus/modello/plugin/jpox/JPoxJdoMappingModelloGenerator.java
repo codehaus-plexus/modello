@@ -25,6 +25,7 @@ package org.codehaus.modello.plugin.jpox;
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.db.SQLReservedWords;
+import org.codehaus.modello.db.SQLReservedWords.KeywordSource;
 import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
@@ -33,6 +34,7 @@ import org.codehaus.modello.plugin.AbstractModelloGenerator;
 import org.codehaus.modello.plugin.jpox.metadata.JPoxAssociationMetadata;
 import org.codehaus.modello.plugin.jpox.metadata.JPoxClassMetadata;
 import org.codehaus.modello.plugin.jpox.metadata.JPoxFieldMetadata;
+import org.codehaus.modello.plugin.jpox.metadata.JPoxModelMetadata;
 import org.codehaus.modello.plugin.store.metadata.StoreAssociationMetadata;
 import org.codehaus.modello.plugin.store.metadata.StoreFieldMetadata;
 import org.codehaus.plexus.util.StringUtils;
@@ -61,6 +63,10 @@ import java.util.Properties;
 public class JPoxJdoMappingModelloGenerator
     extends AbstractModelloGenerator
 {
+    private static final char EOL = '\n';
+
+    private static final String ERROR_LINE = "----------------------------------------------------------------";
+
     private final static Map PRIMITIVE_IDENTITY_MAP;
 
     private final static List IDENTITY_TYPES;
@@ -250,12 +256,6 @@ public class JPoxJdoMappingModelloGenerator
         printWriter.close();
     }
     
-    private String violatesSqlReserved( String word )
-    {
-        return "(Violates following tracked SQL Reserved Word Sources: "
-                        + sqlReservedWords.getKeywordSourceString( word ) + ")";
-    }
-
     private void writeClass( XMLWriter writer, ModelClass modelClass )
         throws ModelloException
     {
@@ -289,32 +289,8 @@ public class JPoxJdoMappingModelloGenerator
 
         writer.addAttribute( "detachable", String.valueOf( jpoxMetadata.isDetachable() ) );
 
-        if ( !StringUtils.isEmpty( jpoxMetadata.getTable() ) )
-        {
-            // Test Substitute Table Name.            
-            if ( sqlReservedWords.isKeyword( jpoxMetadata.getTable() ) )
-            {
-                throw new ModelloException( "The JDO mapping generator has detected the use of the " +
-                    "SQL Reserved word '" + jpoxMetadata.getTable() + "' as an alternative table name for the " +
-                    modelClass.getName() + " class.  Please use a different name for the <class jpox.table=\"" +
-                    jpoxMetadata.getTable() + "\"> attribute.  " + violatesSqlReserved( jpoxMetadata.getTable() ) );
-            }
-
-            writer.addAttribute( "table", jpoxMetadata.getTable() );
-        }
-        else
-        {
-            // Test base table name.
-            if ( sqlReservedWords.isKeyword( modelClass.getName() ) )
-            {
-                throw new ModelloException( "The JDO mapping generator has detected the use of the " +
-                    "SQL Reserved word '" + modelClass.getName() + "' as a class name.  " +
-                    "Please specify an alternative jpox table name using the " +
-                    "<class jpox.table=\"\"> attribute, or use a different class name.  " + 
-                    violatesSqlReserved( modelClass.getName() ) );
-            }
-        }
-
+        writer.addAttribute( "table", getTableName( modelClass, jpoxMetadata ) );
+        
         // ----------------------------------------------------------------------
         // If this class has a primary key field mark make jpox manage the id
         // as a autoincrement variable
@@ -512,8 +488,173 @@ public class JPoxJdoMappingModelloGenerator
         writer.endElement(); // class
     }
 
-    private void writeModelloMetadataClass( XMLWriter writer )
+    /**
+     * Utility method to obtain the table name from the {@link ModelClass} or {@link JPoxClassMetadata} taking into
+     * account the possibility of prefixes in use at the {@link JPoxModelMetadata} level.
+     * 
+     * @param modelClass the model class to get the class.name from.
+     * @param classMetadata the class metadata to get the class-metadata.table name from.
+     * @return the table name (with possible prefix applied) 
+     * @throws ModelloException if there was a problem with the table name violating a sql reserved word.
+     */
+    private String getTableName( ModelClass modelClass, JPoxClassMetadata classMetadata )
         throws ModelloException
+    {
+        JPoxModelMetadata modelMetadata = (JPoxModelMetadata) modelClass.getModel().getMetadata( JPoxModelMetadata.ID );
+        
+        boolean hasPrefix = StringUtils.isNotEmpty( modelMetadata.getTablePrefix() );
+        boolean hasAlternateName = StringUtils.isNotEmpty( classMetadata.getTable() );
+
+        String prefix = "";
+
+        if ( hasPrefix )
+        {
+            prefix = modelMetadata.getTablePrefix().trim();
+        }
+
+        String tableName = null;
+
+        if ( hasAlternateName )
+        {
+            tableName = prefix + classMetadata.getTable();
+        }
+        else
+        {
+            tableName = prefix + modelClass.getName();
+        }
+
+        if ( sqlReservedWords.isKeyword( tableName ) )
+        {
+            StringBuffer emsg = new StringBuffer();
+            
+            /* ----------------------------------------------------------------
+             *   SQL Reserved Word Violation: 'ROLES'
+             *   Context: TABLE NAME
+             */
+            emsg.append( EOL ).append( ERROR_LINE ).append( EOL );
+            emsg.append( "  SQL Reserved Word Violation: " ).append( tableName ).append( EOL );
+            emsg.append( "  Context: TABLE NAME" ).append( EOL );
+            emsg.append( " ").append( EOL );
+
+            /*   In Model:
+             *     <model jpox.table-prefix="">
+             *       <class jpox.table="">
+             *         <name>JdoRole</name>
+             *       </class>
+             *     </model>
+             */
+            emsg.append( "  In Model:" ).append( EOL );
+            emsg.append( "    <model" );
+            if ( hasPrefix )
+            {
+                emsg.append( " jpox.table-prefix=\"" ).append( modelMetadata.getTablePrefix() ).append( "\"" );
+            }
+            emsg.append( ">" ).append( EOL );
+            emsg.append( "      <class" );
+            if ( hasAlternateName )
+            {
+                emsg.append( " jpox.table=\"" ).append( classMetadata.getTable() ).append( "\"" );
+            }
+            emsg.append( ">" ).append( EOL );
+            emsg.append( "        <name>" ).append( modelClass.getName() ).append( "</name>" ).append( EOL );
+            emsg.append( "      </class>" ).append( EOL );
+            emsg.append( "    </model>" ).append( EOL );
+            emsg.append( " ").append( EOL );
+
+            /*   Violation Source(s): Oracle (WARNING)
+             *                        SQL 99 (ERROR)
+             *                        
+             *   Severity: ERROR - You must change this name for maximum
+             *             compatibility amoungst JDBC SQL Servers.
+             *             
+             *   Severity: WARNING - You are encouraged to change this name
+             *             for maximum compatibility amoungst JDBC SQL Servers.
+             */
+            boolean hasError = appendKeywordSourceViolations( tableName, emsg );
+
+            /*   Suggestions: 1) Use a different prefix in
+             *                   <model jpox.table-prefix="DIFFERENT_">
+             *                2) Use a different alternate table name using
+             *                   <class jpox.table="DIFFERENT">
+             *                3) Use a different class name in
+             *                   <class>
+             *                     <name>DIFFERENT</name>
+             *                   </class>
+             * ----------------------------------------------------------------                  
+             */
+            emsg.append( "  Suggestions: 1) Use a different prefix in" ).append( EOL );
+            emsg.append( "                  <model jpox.table-prefix=\"DIFFERENT_\">" ).append( EOL );
+            emsg.append( "               2) Use a different alternate table name using" ).append( EOL );
+            emsg.append( "                  <class jpox.table=\"DIFFERENT\">" ).append( EOL );
+            emsg.append( "               3) Use a different class name in" ).append( EOL );
+            emsg.append( "                  <class>" ).append( EOL );
+            emsg.append( "                    <name>DIFFERENT</name>" ).append( EOL );
+            emsg.append( "                  </class>" ).append( EOL );
+
+            emsg.append( ERROR_LINE );
+
+            // Determine possible exception.
+            if ( hasError || modelMetadata.getReservedWordStrictness().equals( JPoxModelMetadata.WARNING ) )
+            {
+                throw new ModelloException( emsg.toString() );
+            }
+            
+            // No exception. use it. But log it.
+            getLogger().warn( emsg.toString() );
+        }
+
+        return tableName;
+    }
+
+    /**
+     * Support method for the {@link #getTableName(ModelClass, JPoxClassMetadata)}, 
+     * {@link #getColumnName(ModelField, JPoxFieldMetadata)}, and 
+     * {@link #getJoinTableName(ModelField, JPoxFieldMetadata)} reserved word tests.
+     * 
+     * @param word the word in violation.
+     * @param emsg the string buffer to append to.
+     * @return if this word has any ERROR severity level violations.
+     */
+    private boolean appendKeywordSourceViolations( String word, StringBuffer emsg )
+    {
+        List sources = sqlReservedWords.getKeywordSourceList( word );
+        boolean hasError = false;
+        emsg.append( "  Violation Source(s): " );
+        for ( Iterator it = sources.iterator(); it.hasNext(); )
+        {
+            KeywordSource source = (KeywordSource) it.next();
+            emsg.append( source.getName() ).append( " (" ).append( source.getSeverity() ).append( ")" );
+            emsg.append( EOL );
+
+            if ( source.getSeverity().equalsIgnoreCase( "ERROR" ) )
+            {
+                hasError = true;
+            }
+
+            if ( it.hasNext() )
+            {
+                emsg.append( "                       " );
+            }
+        }
+        emsg.append( " ").append( EOL );
+        
+        emsg.append( "  Severity: " );
+        if ( hasError )
+        {
+            emsg.append( "ERROR - You must change this name for the maximum" ).append( EOL );
+            emsg.append( "            compatibility amoungst JDBC SQL Servers." ).append( EOL );
+        }
+        else
+        {
+            emsg.append( "WARNING - You are encouraged to change this name" ).append( EOL );
+            emsg.append( "            for maximum compatibility amoungst JDBC SQL Servers." ).append( EOL );
+        }
+        emsg.append( " ").append( EOL );        
+        
+        return hasError;
+    }
+
+    private void writeModelloMetadataClass( XMLWriter writer ) throws ModelloException
     {
         writer.startElement( "class" );
 
@@ -570,8 +711,7 @@ public class JPoxJdoMappingModelloGenerator
         }
     }
 
-    private void writeModelField( XMLWriter writer, ModelField modelField )
-        throws ModelloException
+    private void writeModelField( XMLWriter writer, ModelField modelField ) throws ModelloException
     {
         writer.startElement( "field" );
 
@@ -599,47 +739,16 @@ public class JPoxJdoMappingModelloGenerator
             writer.addAttribute( "null-value", jpoxMetadata.getNullValue() );
         }
 
-        if ( StringUtils.isNotEmpty( jpoxMetadata.getColumnName() ) )
+        String columnName = getColumnName( modelField, jpoxMetadata );
+        
+        if ( !StringUtils.equalsIgnoreCase( columnName, modelField.getName() ) )
         {
-            // Test proposed Column Name.            
-            if ( sqlReservedWords.isKeyword( jpoxMetadata.getColumnName() ) )
-            {
-                throw new ModelloException( "The JDO mapping generator has detected the use of the " +
-                    "SQL Reserved word '" + jpoxMetadata.getColumnName() + "' as an alternative " +
-                    "column name for the " + modelField.getName() + " field of the " +
-                    modelField.getModelClass().getName() + " class.  Please use " +
-                    "a different name for the <field jpox.column=\"" + jpoxMetadata.getColumnName() +
-                    "\"> attribute.  " + violatesSqlReserved( jpoxMetadata.getColumnName() ) );
-            }
-
-            writer.addAttribute( "column", jpoxMetadata.getColumnName() );
-        }
-        else
-        {
-            // Test proposed Field name.
-            if ( sqlReservedWords.isKeyword( modelField.getName() ) )
-            {
-                throw new ModelloException( "The JDO mapping generator has detected the use of the " +
-                    "SQL Reserved word '" + modelField.getName() + "' as a field name of the " +
-                    modelField.getModelClass().getName() + " class.  Please specify an " +
-                    "alternative jpox column name using the <field jpox.column=\"\"> " +
-                    "attribute, or use a different class name.  " + violatesSqlReserved( modelField.getName() ) );
-            }
+            writer.addAttribute( "column", columnName );
         }
 
         if ( StringUtils.isNotEmpty( jpoxMetadata.getJoinTableName() ) )
         {
-            // Test proposed name for the Join Table for the field.
-            if ( sqlReservedWords.isKeyword( jpoxMetadata.getJoinTableName() ) )
-            {
-                throw new ModelloException( "The JDO mapping generator has detected the use of the " +
-                    "SQL Reserved word '" + jpoxMetadata.getJoinTableName() + "' as name of a" + "join table for the " +
-                    modelField.getName() + " field of the " + modelField.getModelClass().getName() +
-                    " class.  Please specify" + "an alternative name for the <field jpox.join-table=\"" +
-                    jpoxMetadata.getColumnName() + "\"> attribute.  " + 
-                    violatesSqlReserved( jpoxMetadata.getJoinTableName() ) );
-            }
-            writer.addAttribute( "table", jpoxMetadata.getJoinTableName() );
+            writer.addAttribute( "table", getJoinTableName( modelField, jpoxMetadata ) );
         }
 
         if ( jpoxMetadata.isPrimaryKey() )
@@ -679,8 +788,8 @@ public class JPoxJdoMappingModelloGenerator
                 writer.endElement();
             }
 
-            if ( storeMetadata.getMaxSize() > 0 ||
-                ( jpoxMetadata.getNullValue() != null && modelField.getDefaultValue() != null ) )
+            if ( storeMetadata.getMaxSize() > 0
+                            || ( jpoxMetadata.getNullValue() != null && modelField.getDefaultValue() != null ) )
             {
                 writer.startElement( "column" );
 
@@ -700,15 +809,278 @@ public class JPoxJdoMappingModelloGenerator
         writer.endElement(); // field
     }
 
-    private static void writeValueStrategy( String valueStrategy, XMLWriter writer )
-        throws ModelloException
+    /**
+     * Utility method to obtain the join table name from the {@link JPoxFieldMetadata} taking into
+     * account the possibility of prefixes in use at the {@link JPoxModelMetadata} level.
+     * 
+     * @param modelField the model field to get the field.name from.
+     * @param fieldMetadata the field metadata to get the field-metadata.join-table name from.
+     * @return the join table name (with possible prefix applied) 
+     * @throws ModelloException if there was a problem with the table name violating a sql reserved word.
+     */
+    private String getJoinTableName( ModelField modelField, JPoxFieldMetadata fieldMetadata ) throws ModelloException
+    {
+        ModelClass modelClass = modelField.getModelClass();
+        JPoxModelMetadata modelMetadata = (JPoxModelMetadata) modelClass.getModel().getMetadata( JPoxModelMetadata.ID );
+        
+        boolean hasPrefix = StringUtils.isNotEmpty( modelMetadata.getTablePrefix() );
+        
+        String prefix = "";
+
+        if ( hasPrefix )
+        {
+            prefix = modelMetadata.getTablePrefix().trim();
+        }
+        
+        String joinTableName = prefix + fieldMetadata.getJoinTableName();;
+
+        if ( sqlReservedWords.isKeyword( joinTableName ) )
+        {
+            StringBuffer emsg = new StringBuffer();
+            
+            /* ----------------------------------------------------------------
+             *   SQL Reserved Word Violation: 'ROLES'
+             *   Context: TABLE NAME
+             */
+            emsg.append( EOL ).append( ERROR_LINE ).append( EOL );
+            emsg.append( "  SQL Reserved Word Violation: " ).append( joinTableName ).append( EOL );
+            emsg.append( "  Context: JOIN TABLE NAME" ).append( EOL );
+            emsg.append( " ").append( EOL );
+
+            /*   In Model:
+             *     <model jpox.table-prefix="">
+             *       <class jpox.table="">
+             *         <name>JdoRole</name>
+             *         <fields>
+             *           <field jpox.join-table="Foo">
+             *             <name>Operation</name>
+             *           </field>
+             *         </fields>
+             *       </class>
+             *     </model>
+             */
+            emsg.append( "  In Model:" ).append( EOL );
+            emsg.append( "    <model" );
+            if ( hasPrefix )
+            {
+                emsg.append( " jpox.table-prefix=\"" ).append( modelMetadata.getTablePrefix() ).append( "\"" );
+            }
+            emsg.append( ">" ).append( EOL );
+            emsg.append( "      <class>" ).append( EOL );
+            emsg.append( "        <name>" ).append( modelClass.getName() ).append( "</name>" ).append( EOL );
+            emsg.append( "        <fields>" ).append( EOL );
+            emsg.append( "          <field jpox.join-table=\"" ).append( fieldMetadata.getJoinTableName() );
+            emsg.append( "\">" ).append( EOL );
+            emsg.append( "            <name>" ).append( modelField.getName() ).append( "</name>" ).append( EOL );
+            emsg.append( "          <field>" ).append( EOL );
+            emsg.append( "        </fields>" ).append( EOL );
+            emsg.append( "      </class>" ).append( EOL );
+            emsg.append( "    </model>" ).append( EOL );
+            emsg.append( " ").append( EOL );
+
+            /*   Violation Source(s): Oracle (WARNING)
+             *                        SQL 99 (ERROR)
+             *                        
+             *   Severity: ERROR - You must change this name for maximum
+             *             compatibility amoungst JDBC SQL Servers.
+             *             
+             *   Severity: WARNING - You are encouraged to change this name
+             *             for maximum compatibility amoungst JDBC SQL Servers.
+             */
+            boolean hasError = appendKeywordSourceViolations( joinTableName, emsg );
+
+            /*   Suggestions: 1) Use a different table prefix in
+             *                   <model jpox.table-prefix="DIFFERENT_">
+             *                2) Use a different join table name using
+             *                   <field jpox.join-table="DIFFERENT">
+             * ----------------------------------------------------------------                  
+             */
+            emsg.append( "  Suggestions: 1) Use a different table prefix in" ).append( EOL );
+            emsg.append( "                  <model jpox.table-prefix=\"DIFFERENT_\">" ).append( EOL );
+            emsg.append( "               2) Use a different join table name using" ).append( EOL );
+            emsg.append( "                  <field jpox.join-table=\"DIFFERENT\">" ).append( EOL );
+
+            emsg.append( ERROR_LINE );
+
+            // Determine possible exception.
+            if ( hasError || modelMetadata.getReservedWordStrictness().equals( JPoxModelMetadata.WARNING ) )
+            {
+                throw new ModelloException( emsg.toString() );
+            }
+            
+            // No exception. use it. But log it.
+            getLogger().warn( emsg.toString() );
+        }
+        
+        return joinTableName;
+    }
+
+    /**
+     * Utility method to obtain the column name from the {@link ModelField} or {@link JPoxFieldMetadata} taking into
+     * account the possibility of prefixes in use at the {@link JPoxModelMetadata} or {@link JPoxClassMetadata} level.
+     * 
+     * @param modelField the model field to get the field.name from.
+     * @param fieldMetadata the field metadata to get the field-metadata.column name from.
+     * @return the column name (with possible prefix applied) 
+     * @throws ModelloException if there was a problem with the column name violating a sql reserved word.
+     */
+    private String getColumnName( ModelField modelField, JPoxFieldMetadata fieldMetadata ) throws ModelloException
+    {
+        boolean hasClassPrefix = false;
+        boolean hasModelPrefix = false;
+        boolean hasAlternateName = false;
+
+        ModelClass modelClass = modelField.getModelClass();
+        JPoxClassMetadata classMetadata = (JPoxClassMetadata) modelClass.getMetadata( JPoxClassMetadata.ID );
+        JPoxModelMetadata modelMetadata = (JPoxModelMetadata) modelClass.getModel().getMetadata( JPoxModelMetadata.ID );
+
+        String prefix = "";
+
+        if ( StringUtils.isNotEmpty( modelMetadata.getColumnPrefix() ) )
+        {
+            prefix = modelMetadata.getColumnPrefix().trim();
+            hasModelPrefix = true;
+        }
+
+        if ( StringUtils.isNotEmpty( classMetadata.getColumnPrefix() ) )
+        {
+            prefix = classMetadata.getColumnPrefix();
+            hasClassPrefix = true;
+        }
+
+        String columnName = "";
+
+        if ( StringUtils.isNotEmpty( fieldMetadata.getColumnName() ) )
+        {
+            columnName = prefix + fieldMetadata.getColumnName();
+            hasAlternateName = true;
+        }
+        else
+        {
+            columnName = prefix + modelField.getName();
+        }
+
+        if ( sqlReservedWords.isKeyword( columnName ) )
+        {
+            StringBuffer emsg = new StringBuffer();
+
+            /* ----------------------------------------------------------------
+             *   SQL Reserved Word Violation: 'ROLES'
+             *   Context: TABLE NAME
+             */
+            emsg.append( EOL ).append( ERROR_LINE ).append( EOL );
+            emsg.append( "  SQL Reserved Word Violation: " ).append( columnName ).append( EOL );
+            emsg.append( "  Context: COLUMN NAME" ).append( EOL );
+            emsg.append( " " ).append( EOL );
+
+            /*   In Model:
+             *     <model jpox.column-prefix="">
+             *       <class jpox.column-prefix="">
+             *         <name>JdoRole</name>
+             *         <fields>
+             *           <field jpox.column="">
+             *             <name>operation</name>
+             *           </field>
+             *         </fields>
+             *       </class>
+             *     </model>
+             */
+            emsg.append( "  In Model:" ).append( EOL );
+            emsg.append( "    <model" );
+            if ( hasModelPrefix )
+            {
+                emsg.append( " jpox.column-prefix=\"" ).append( modelMetadata.getColumnPrefix() ).append( "\"" );
+            }
+            emsg.append( ">" ).append( EOL );
+            emsg.append( "      <class" );
+            if ( hasClassPrefix )
+            {
+                emsg.append( " jpox.column-prefix=\"" ).append( classMetadata.getColumnPrefix() ).append( "\"" );
+            }
+            emsg.append( ">" ).append( EOL );
+            emsg.append( "        <name>" ).append( modelClass.getName() ).append( "</name>" ).append( EOL );
+            emsg.append( "        <fields>" ).append( EOL );
+            emsg.append( "          <field" );
+            if ( hasAlternateName )
+            {
+                emsg.append( " jpox.column=\"" ).append( fieldMetadata.getColumnName() ).append( "\"" );
+            }
+            emsg.append( ">" ).append( EOL );
+            emsg.append( "            <name>" ).append( modelField.getName() ).append( "</name>" ).append( EOL );
+            emsg.append( "          <field>" ).append( EOL );
+            emsg.append( "        </fields>" ).append( EOL );
+            emsg.append( "      </class>" ).append( EOL );
+            emsg.append( "    </model>" ).append( EOL );
+            emsg.append( " " ).append( EOL );
+
+            /*   Violation Source(s): Oracle (WARNING)
+             *                        SQL 99 (ERROR)
+             *                        
+             *   Severity: ERROR - You must change this name for maximum
+             *             compatibility amoungst JDBC SQL Servers.
+             *             
+             *   Severity: WARNING - You are encouraged to change this name
+             *             for maximum compatibility amoungst JDBC SQL Servers.
+             */
+            boolean hasError = appendKeywordSourceViolations( columnName, emsg );
+
+            /*   Suggestions: 1) Use a different model column prefix in
+             *                   <model jpox.column-prefix="DIFFERENT_">
+             *                2) Use a different class column prefix in
+             *                   <class jpox.column-prefix="DIFFERENT_">
+             *                3) Use a different alternate column name using
+             *                   <field jpox.column="DIFFERENT">
+             *                4) Use a different field name in
+             *                   <class>
+             *                     <name>Foo</name>
+             *                     <fields>
+             *                       <field>
+             *                         <name>DIFFERENT</name>
+             *                       </field>
+             *                     </fields>
+             *                   </class>
+             * ----------------------------------------------------------------                  
+             */
+            emsg.append( "  Suggestions: 1) Use a different model column prefix in" ).append( EOL );
+            emsg.append( "                  <model jpox.column-prefix=\"DIFFERENT_\">" ).append( EOL );
+            emsg.append( "               2) Use a different class column prefix in" ).append( EOL );
+            emsg.append( "                  <class jpox.column-prefix=\"DIFFERENT_\">" ).append( EOL );
+            emsg.append( "               3) Use a different alternate column name using" ).append( EOL );
+            emsg.append( "                  <field jpox.column=\"DIFFERENT\">" ).append( EOL );
+            emsg.append( "               4) Use a different field name in" ).append( EOL );
+            emsg.append( "                  <class>" ).append( EOL );
+            emsg.append( "                    <name>" ).append( modelClass.getName() ).append( "</name>" ).append( EOL );
+            emsg.append( "                    <fields>" ).append( EOL );
+            emsg.append( "                      <field>" ).append( EOL );
+            emsg.append( "                        <name>DIFFERENT</name>" ).append( EOL );
+            emsg.append( "                      <field>" ).append( EOL );
+            emsg.append( "                    </fields>" ).append( EOL );
+            emsg.append( "                  </class>" ).append( EOL );
+
+            emsg.append( ERROR_LINE );
+
+            // Determine possible exception.
+            if ( hasError || modelMetadata.getReservedWordStrictness().equals( JPoxModelMetadata.WARNING ) )
+            {
+                throw new ModelloException( emsg.toString() );
+            }
+            
+            // No exception. use it. But log it.
+            getLogger().warn( emsg.toString() );
+        }
+
+        return columnName;
+    }
+
+    private static void writeValueStrategy( String valueStrategy, XMLWriter writer ) throws ModelloException
     {
         if ( !"off".equals( valueStrategy ) )
         {
             if ( !VALUE_STRATEGY_LIST.contains( valueStrategy ) )
             {
-                throw new ModelloException( "The JDO mapping generator does not support the specified " +
-                    "value-strategy '" + valueStrategy + "'. " + "Supported types: " + VALUE_STRATEGY_LIST );
+                throw new ModelloException( "The JDO mapping generator does not support the specified "
+                                + "value-strategy '" + valueStrategy + "'. " + "Supported types: "
+                                + VALUE_STRATEGY_LIST );
             }
             writer.addAttribute( "value-strategy", valueStrategy );
         }
@@ -825,7 +1197,8 @@ public class JPoxJdoMappingModelloGenerator
                 writer.endElement();
             }
         }
-        else // One association
+        else
+        // One association
         {
             if ( jpoxMetadata.isDependent() )
             {
@@ -841,8 +1214,7 @@ public class JPoxJdoMappingModelloGenerator
         return identifierFields.size() > 0;
     }
 
-    private List getPrimaryKeyFields( ModelClass modelClass )
-        throws ModelloException
+    private List getPrimaryKeyFields( ModelClass modelClass ) throws ModelloException
     {
         List primaryKeys = new ArrayList();
         List fields = modelClass.getFields( getGeneratedVersion() );
@@ -874,13 +1246,12 @@ public class JPoxJdoMappingModelloGenerator
         return primaryKeys;
     }
 
-    private void assertSupportedIdentityPrimitive( ModelField modelField )
-        throws ModelloException
+    private void assertSupportedIdentityPrimitive( ModelField modelField ) throws ModelloException
     {
         if ( !PRIMITIVE_IDENTITY_MAP.containsKey( modelField.getType() ) )
         {
-            throw new ModelloException( "The JDO mapping generator does not support the specified " + "field type '" +
-                modelField.getType() + "'. " + "Supported types: " + PRIMITIVE_IDENTITY_MAP.keySet() );
+            throw new ModelloException( "The JDO mapping generator does not support the specified " + "field type '"
+                            + modelField.getType() + "'. " + "Supported types: " + PRIMITIVE_IDENTITY_MAP.keySet() );
         }
     }
 
