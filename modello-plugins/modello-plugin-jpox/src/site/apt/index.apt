@@ -1,0 +1,25 @@
+ -----
+ Modello JPOX Plugin
+ -----
+ Joakim Erdfelt
+ -----
+ 14 March 2007
+ -----
+
+Welcome to Modello JPOX Plugin
+
+  The Modello JPOX Plugin is responsibile for providing various modello model transformations useful for the JPOX/JDO developer.
+
+    * jpox-jdo-mapping: Produces a package.jdo file describing the model.
+
+    * jpox-store: Produces a java source file that provides a basic DAO / Store for the objects within the model.
+
+    * jpox-metadata-class: Produces a java source file that can supply the basic model version object suitable for tracking the model version vs table schema version.
+
+  We welcome developers to the modello community who are interested in contributing. If you'd like to discuss modello, subscribe and post to
+  {{{mail-lists.html} the development mailing list}}, <<<dev@modello.codehaus.org>>>.
+
+  If you'd like to obtain the code, you can get it from Subversion. See {{{source-repository.html} SCM details}} for more information.
+
+  Bugs, issues and new ideas should be reported in the issue tracker - see {{{issue-tracking.html} this page}}.
+

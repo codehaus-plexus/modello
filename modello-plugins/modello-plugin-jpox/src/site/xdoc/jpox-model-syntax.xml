@@ -1,0 +1,334 @@
+<?xml version="1.0" ?>
+
+<document>
+  <properties>
+    <author email="joakime@codehaus.org">Joakim Erdfelt</author>
+    <title>jpox-jdo-mapping model syntax</title>
+  </properties>
+
+  <head>
+    <style type="text/css">
+      pre.model-xml {
+        background-color: #f3f3ff;
+        border: 1px dashed #aaaaff;
+        padding: 15px;
+      }
+
+      pre.model-xml a {
+        font-style: normal;
+        color: #000088;
+      }
+
+      pre.model-xml a em {
+        color: #7777ff;
+      }
+    </style>
+  </head>
+
+  <body>
+    <section name="Modello JPOX Model Syntax">
+<pre class="model-xml">
+&lt;model <a href="#model-reserved-word-strictness">jpox.reserved-word-strictness="<em>(enum)</em>"</a>
+       <a href="#model-table-prefix">jpox.table-prefix="<em>(String)</em>"</a>
+       <a href="#model-column-prefix">jpox.column-prefix="<em>(String)</em>"</a>&gt;
+  &lt;name&gt;ExampleModel&lt;/name&gt;
+  &lt;classes&gt;
+    &lt;class <a href="#class-enabled">jpox.enabled="<em>(boolean)</em>"</a>
+           <a href="#class-detachable">jpox.detachable="<em>(boolean)</em>"</a>
+           <a href="#class-not-persisted-fields">jpox.not-persisted-fields="<em>(List)</em>"</a>
+           <a href="#class-table">jpox.table="<em>(String)</em>"</a>
+           <a href="#class-column-prefix">jpox.column-prefix="<em>(String)</em>"</a>
+           <a href="#class-identity-type">jpox.identity-type="<em>(enum)</em>"</a>
+           <a href="#class-identity-class">jpox.identity-class="<em>(String)</em>"</a>
+           <a href="#class-use-identifiers-as-primary-key">jpox.use-identifiers-as-primary-key="<em>(boolean)</em>"</a>&gt;
+      &lt;name&gt;SimpleClass&lt;/name&gt;
+      &lt;fields&gt;
+        &lt;field <a href="#field-fetch-groups">jpox.fetch-groups="<em>(List)</em>"</a>
+               <a href="#field-mapped-by">jpox.mapped-by="<em>(String)</em>"</a>
+               <a href="#field-null-value">jpox.null-value="<em>(String)</em>"</a>
+               <a href="#field-column">jpox.column="<em>(String)</em>"</a>
+               <a href="#field-join-table">jpox.join-table="<em>(String)</em>"</a>
+               <a href="#field-indexed">jpox.indexed="<em>(enum)</em>"</a>
+               <a href="#field-persistence-modifier">jpox.persistence-modifier="<em>(enum)</em>"</a>
+               <a href="#field-value-strategy">jpox.value-strategy="<em>(enum)</em>"</a>&gt;
+          &lt;name&gt;simple&lt;/name&gt;
+          &lt;type&gt;String&lt;/type&gt;
+          &lt;required&gt;true&lt;/required&gt;
+        &lt;/field&gt;
+        &lt;field&gt;
+          &lt;name&gt;associative&lt;/name&gt;
+          &lt;required&gt;false&lt;/required&gt;
+          &lt;association <a href="#association-dependent">jpox.dependent="<em>(boolean)</em>"</a>
+                       <a href="#association-join">jpox.join="<em>(boolean)</em>"</a>&gt;
+            &lt;type&gt;AnotherClass&lt;/type&gt;
+            &lt;multiplicity&gt;*&lt;/multiplicity&gt;
+          &lt;/association&gt;
+        &lt;/field&gt;
+      &lt;/fields&gt;
+    &lt;/class&gt;
+  &lt;/classes&gt;
+&lt;/model&gt;
+</pre>
+
+  <table>
+    <tr>
+      <th>Context</th>
+      <th>Attribute</th>
+      <th>Values</th>
+      <th>Description</th>
+    </tr>
+    <tr>
+      <td>Model</td>
+      <td><a name="model-reserved-word-strictness">jpox.reserved-word-strictness</a></td>
+      <td>"warning" or "error" (default: warning)</td>
+      <td>
+        <p>
+          This allows you to set the level of strictness on the reserved
+          word violations within the TABLE / COLUMN / JOIN-TABLE names.
+        </p>
+        <p>
+          A setting of "error" will only throw an exception if a reserved
+          word violation severity level of ERROR is encountered.
+        </p>
+        <p>
+          An attempt to use a reserved word found within the core SQL92 /
+          SQL99 / or SQL2003 set of reserved words are considered an ERROR.
+          Use of a reserved word found within a vendor specific SQL
+          implementation is considered a WARNING.
+        </p>
+        <p>
+          You are encouraged to fix all reserved word violations to make
+          your code as portable across multiple SQL implementations as
+          possible.
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td>Model</td>
+      <td><a name="model-table-prefix">jpox.table-prefix</a></td>
+      <td>
+        Any non-empty String.
+        <br/>(No Default)
+      </td>
+      <td>
+        <!-- TODO: Description -->
+      </td>
+    </tr>
+    <tr>
+      <td>Model</td>
+      <td><a name="model-column-prefix">jpox.column-prefix</a></td>
+      <td>
+        Any non-empty String.
+        <br/>(No Default)
+      </td>
+      <td>
+        <!-- TODO: Description -->
+      </td>
+    </tr>
+    <tr>
+      <td>Class</td>
+      <td><a name="class-enabled">jpox.enabled</a></td>
+      <td>
+        true or false.
+        <br/>(Default: true)
+      </td>
+      <td>
+        <!-- TODO: Description -->
+      </td>
+    </tr>
+    <tr>
+      <td>Class</td>
+      <td><a name="class-detachable">jpox.detachable</a></td>
+      <td>
+        true or false
+        <br/>(Default: true)
+      </td>
+      <td>
+        <!-- TODO: Description -->
+      </td>
+    </tr>
+    <tr>
+      <td>Class</td>
+      <td><a name="class-not-persisted-fields">jpox.not-persisted-fields</a></td>
+      <td>
+        List of fields that are not persisted (seperated by spaces)
+        <br/>(No Default)
+      </td>
+      <td>
+        <!-- TODO: Description -->
+      </td>
+    </tr>
+    <tr>
+      <td>Class</td>
+      <td><a name="class-table">jpox.table</a></td>
+      <td>
+        Any non-empty String.
+        <br/>(No Default)
+      </td>
+      <td>
+        <!-- TODO: Description -->
+      </td>
+    </tr>
+    <tr>
+      <td>Class</td>
+      <td><a name="class-column-prefix">jpox.column-prefix</a></td>
+      <td>
+        Any non-empty String.
+        <br/>(No Default)
+      </td>
+      <td>
+        <!-- TODO: Description -->
+      </td>
+    </tr>
+    <tr>
+      <td>Class</td>
+      <td><a name="class-identity-type">jpox.identity-type</a></td>
+      <td>
+        "application", "datastore", or "nondurable"
+        <br/>(No Default)
+      </td>
+      <td>
+        <!-- TODO: Description -->
+      </td>
+    </tr>
+    <tr>
+      <td>Class</td>
+      <td><a name="class-identity-class">jpox.identity-class</a></td>
+      <td>
+        Any non-empty String.
+        Refers to a Java Class name in the same package as
+        the model.
+        <br/>(No Default)
+      </td>
+      <td>
+        <!-- TODO: Description -->
+      </td>
+    </tr>
+    <tr>
+      <td>Class</td>
+      <td><a name="class-use-identifiers-as-primary-key">jpox.use-identifiers-as-primary-key</a></td>
+      <td>
+        true or false
+        <br/>(Default: true)
+      </td>
+      <td>
+        <!-- TODO: Description -->
+      </td>
+    </tr>
+    <tr>
+      <td>Field</td>
+      <td><a name="field-fetch-groups">jpox.fetch-groups</a></td>
+      <td>
+        List of fetch-group names (seperated by space).
+        <br/>(No Default)
+      </td>
+      <td>
+        <!-- TODO: Description -->
+      </td>
+    </tr>
+    <tr>
+      <td>Field</td>
+      <td><a name="field-mapped-by">jpox.mapped-by</a></td>
+      <td>
+        Any non-empty String.
+        <br/>(No Default)
+      </td>
+      <td>
+        <!-- TODO: Description -->
+      </td>
+    </tr>
+    <tr>
+      <td>Field</td>
+      <td><a name="field-null-value">jpox.null-value</a></td>
+      <td>
+        Any non-empty String.
+        <br/>(No Default)
+      </td>
+      <td>
+        <!-- TODO: Description -->
+      </td>
+    </tr>
+    <tr>
+      <td>Field</td>
+      <td><a name="field-column">jpox.column</a></td>
+      <td>
+        Any non-empty String.
+        <br/>(No Default)
+      </td>
+      <td>
+        <!-- TODO: Description -->
+      </td>
+    </tr>
+    <tr>
+      <td>Field</td>
+      <td><a name="field-join-table">jpox.join-table</a></td>
+      <td>
+        Any non-empty String.
+        <br/>(No Default)
+      </td>
+      <td>
+        <!-- TODO: Description -->
+      </td>
+    </tr>
+    <tr>
+      <td>Field</td>
+      <td><a name="field-indexed">jpox.indexed</a></td>
+      <td>
+        'true', 'false', or 'unique'
+        <br/>(No Default)
+      </td>
+      <td>
+        <!-- TODO: Description -->
+      </td>
+    </tr>
+    <tr>
+      <td>Field</td>
+      <td><a name="field-persistence-modifier">jpox.persistence-modifier</a></td>
+      <td>
+        'persistent', 'transactiona', or 'none'
+        <br/>(No Default)
+      </td>
+      <td>
+        <!-- TODO: Description -->
+      </td>
+    </tr>
+    <tr>
+      <td>Field</td>
+      <td><a name="field-value-strategy">jpox.value-strategy</a></td>
+      <td>
+        'off', 'native', 'sequence', 'identity', 'increment', 'uuid-string',
+        'uuid-hex', 'datastore-uuid-hex', 'max', or 'auid'
+        <br/>(Default: 'native')
+      </td>
+      <td>
+        <!-- TODO: Description -->
+      </td>
+    </tr>
+    <tr>
+      <td>Association</td>
+      <td><a name="association-dependent">jpox.dependent</a></td>
+      <td>
+        true or false
+        <br/>(Default: true)
+      </td>
+      <td>
+        <!-- TODO: Description -->
+      </td>
+    </tr>
+    <tr>
+      <td>Association</td>
+      <td><a name="association-join">jpox.join</a></td>
+      <td>
+        true or false
+        <br/>(Default: true)
+      </td>
+      <td>
+        <!-- TODO: Description -->
+      </td>
+    </tr>
+  </table>
+
+    </section>
+  </body>
+</document>
+
