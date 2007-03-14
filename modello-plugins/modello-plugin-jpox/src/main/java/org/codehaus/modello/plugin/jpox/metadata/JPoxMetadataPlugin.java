@@ -51,15 +51,15 @@ public class JPoxMetadataPlugin extends AbstractMetadataPlugin
 
     public static final String DETACHABLE = "jpox.detachable";
 
-    public static final String FETCH_GROUP_NAMES = "jpox.fetchGroupNames";
+    public static final String FETCH_GROUPS = "jpox.fetch-groups";
 
     public static final String NOT_PERSISTED_FIELDS = "jpox.not-persisted-fields";
 
     public static final String JOIN = "jpox.join";
 
-    public static final String MAPPED_BY = "jpox.mappedBy";
+    public static final String MAPPED_BY = "jpox.mapped-by";
 
-    public static final String NULL_VALUE = "jpox.nullValue";
+    public static final String NULL_VALUE = "jpox.null-value";
 
     public static final String TABLE = "jpox.table";
 
@@ -196,8 +196,20 @@ public class JPoxMetadataPlugin extends AbstractMetadataPlugin
         boolean useIdentifiersAsPrimaryKey = classMetadata.useIdentifiersAsPrimaryKey();
 
         metadata.setPrimaryKey( getBoolean( data, PRIMARY_KEY, ( field.isIdentifier() && useIdentifiersAsPrimaryKey ) ) );
-
-        String fetchGroupNames = (String) data.get( FETCH_GROUP_NAMES );
+        
+        // Backwards Compatibility Syntax.
+        String fetchGroupNames = (String) data.get( "jpox.fetchGroupNames" ); 
+        
+        if( fetchGroupNames != null )
+        {
+            getLogger().warn( "You are using the <field jpox.fetchGroupNames=\"\"> attribute syntax.  " +
+                    "It has been deprecated in favor of the <field jpox.fetch-groups=\"\"> syntax instead." );
+        }
+        else
+        {
+            // Correct Syntax.
+            fetchGroupNames = (String) data.get( FETCH_GROUPS );
+        }
 
         if ( !StringUtils.isEmpty( fetchGroupNames ) )
         {
@@ -206,14 +218,38 @@ public class JPoxMetadataPlugin extends AbstractMetadataPlugin
             metadata.setFetchGroupNames( fetchGroups );
         }
 
-        String mappedBy = (String) data.get( MAPPED_BY );
+        // Backwards Compatibility Syntax.
+        String mappedBy = (String) data.get( "jpox.mappedBy" );
+        
+        if ( mappedBy != null )
+        {
+            getLogger().warn( "You are using the <field jpox.mappedBy=\"\"> attribute syntax.  " +
+                              "It has been deprecated in favor of the <field jpox.mapped-by=\"\"> syntax instead.");
+        }
+        else
+        {
+            // Correct Syntax.
+            mappedBy = (String) data.get( MAPPED_BY );
+        }
 
         if ( !StringUtils.isEmpty( mappedBy ) )
         {
             metadata.setMappedBy( mappedBy );
         }
 
-        String nullValue = (String) data.get( NULL_VALUE );
+        // Backwards Compatibility Syntax.
+        String nullValue = (String) data.get( "jpox.nullValue" );
+        
+        if ( nullValue != null )
+        {
+            getLogger().warn( "You are using the <field jpox.nullValue=\"\"> attribute syntax.  " +
+                              "It has been deprecated in favor of the <field jpox.null-value=\"\"> syntax instead.");
+        }
+        else
+        {
+            // Correct Syntax.
+            nullValue = (String) data.get( NULL_VALUE );
+        }
 
         if ( !StringUtils.isEmpty( nullValue ) )
         {
