@@ -16,7 +16,7 @@
  | o annotation mechanism so that changes to the model can be accurately tracked.
  |
  -->
-<model>
+<model xsd.namespace="http://maven.apache.org/POM/4.0.0" xsd.target-namespace="http://maven.apache.org/POM/4.0.0">
   <id>maven</id>
   <name>Maven</name>
   <description><![CDATA[Maven's model for Java project.]]></description>
@@ -62,6 +62,13 @@
           <version>3.0.0</version>
           <required>true</required>
           <type>String</type>
+        </field>
+        <!-- This isn't a real maven model field, just something to test out the Date generic handling
+             of the modello-plugin-xsd -->
+        <field>
+          <name>builtOn</name>
+          <version>4.0.0</version>
+          <type>Date</type>
         </field>
         <field>
           <name>id</name>

@@ -29,6 +29,8 @@ import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.plugin.AbstractModelloGenerator;
 import org.codehaus.modello.plugin.model.ModelClassMetadata;
+import org.codehaus.modello.plugin.xsd.metadata.XsdModelMetadata;
+import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.xml.PrettyPrintXMLWriter;
 import org.codehaus.plexus.util.xml.XMLWriter;
 
@@ -93,12 +95,33 @@ public class XsdGenerator
         w.startElement( "xs:schema" );
         w.addAttribute( "xmlns:xs", "http://www.w3.org/2001/XMLSchema" );
         w.addAttribute( "elementFormDefault", "qualified" );
-        // TODO: make configurable
-        w.addAttribute( "targetNamespace", "http://maven.apache.org/POM/4.0.0" );
-        w.addAttribute( "xmlns", "http://maven.apache.org/POM/4.0.0" );
 
         ModelClass root = objectModel.getClass( objectModel.getRoot( getGeneratedVersion() ), getGeneratedVersion() );
-
+        
+        XsdModelMetadata modelMetadata = (XsdModelMetadata) root.getModel().getMetadata( XsdModelMetadata.ID );
+        
+        if ( StringUtils.isNotEmpty( modelMetadata.getNamespace() ) )
+        {
+            w.addAttribute( "xmlns", modelMetadata.getNamespace() );
+        }
+        else
+        {
+            // Old Default - UGH.
+            // TODO: Remove this backwards compatibility hack.
+            w.addAttribute( "xmlns", "http://maven.apache.org/POM/4.0.0" );
+        }
+        
+        if ( StringUtils.isNotEmpty( modelMetadata.getTargetNamespace() ) )
+        {
+            w.addAttribute( "targetNamespace", modelMetadata.getTargetNamespace() );
+        }
+        else
+        {
+            // Old Default - UGH.
+            // TODO: Remove this backwards compatibility hack.
+            w.addAttribute( "targetNamespace", "http://maven.apache.org/POM/4.0.0" );
+        }
+        
         w.startElement( "xs:element" );
         String tagName = getTagName( root );
         w.addAttribute( "name", tagName );
@@ -328,6 +351,14 @@ public class XsdGenerator
         else if ( "boolean".equals( type ) )
         {
             return "xs:boolean";
+        }
+        else if ( "long".equals( type ) )
+        {
+            return "xs:long";
+        }
+        else if ( "Date".equals( type ) )
+        {
+            return "xs:date";
         }
         else
         {
