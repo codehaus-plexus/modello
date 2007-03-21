@@ -40,9 +40,12 @@ public class ModelloJPoxJdoMappingMojo
     extends AbstractModelloGeneratorMojo
 {
     /**
-     * The output directory of the generated classes of the JDO mapping.
+     * The output directory of the generated JDO mapping file.
+     * 
+     * Please be aware of the &lt;model jpox.mapping-in-package="true" &gt; attribute present in
+     * the model file itself.
      *
-     * @parameter expression="${basedir}/target/classes/META-INF"
+     * @parameter expression="${basedir}/target/generated-resources/modello"
      * @required
      */
     private File outputDirectory;
@@ -55,7 +58,7 @@ public class ModelloJPoxJdoMappingMojo
      * @parameter default-value="false"
      */
     private boolean replicationParameters;
-
+    
     protected String getGeneratorType()
     {
         return "jpox-jdo-mapping";
@@ -64,6 +67,11 @@ public class ModelloJPoxJdoMappingMojo
     protected boolean producesCompilableResult()
     {
         return false;
+    }
+    
+    protected boolean producesResources()
+    {
+        return true;
     }
 
     public File getOutputDirectory()
@@ -76,11 +84,10 @@ public class ModelloJPoxJdoMappingMojo
         this.outputDirectory = outputDirectory;
     }
 
-
     protected void customizeParameters( Properties parameters )
     {
         super.customizeParameters( parameters );
-
+        
         if ( replicationParameters )
         {
             parameters.setProperty( ModelloParameterConstants.FILENAME, "package.jdorepl" );

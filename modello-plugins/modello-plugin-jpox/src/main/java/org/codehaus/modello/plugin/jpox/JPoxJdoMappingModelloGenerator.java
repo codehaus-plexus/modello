@@ -140,13 +140,23 @@ public class JPoxJdoMappingModelloGenerator
         {
             String fileName = properties.getProperty( ModelloParameterConstants.FILENAME, "package.jdo" );
 
-            // TODO: we should generate it per package, into the package directory. This will not support multiple
-            // versions per package.
-//            String packageName = getModel().getDefaultPackageName( isPackageWithVersion(), getGeneratedVersion() );
-//            String dir = packageName.replace( '.', '/' );
-//            File directory = new File( getOutputDirectory(), dir );
-            File directory = getOutputDirectory();
-            File packageJdo = new File( directory, fileName );
+            JPoxModelMetadata metadata = (JPoxModelMetadata) model.getMetadata( JPoxModelMetadata.ID );
+            File packageJdo = null;
+            
+            if ( metadata.isMappingInPackage() )
+            {
+                // Use package name.
+                String packageName = model.getDefaultPackageName( isPackageWithVersion(), getGeneratedVersion() );
+                String dir = StringUtils.replace( packageName, '.', '/' );
+                File directory = new File( getOutputDirectory(), dir );
+                packageJdo = new File( directory, fileName );
+            }
+            else
+            {
+                // Use the specified location.
+                File directory = getOutputDirectory();
+                packageJdo = new File( directory, fileName );
+            }
 
             File parent = packageJdo.getParentFile();
 

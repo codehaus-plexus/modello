@@ -42,6 +42,8 @@ public class JPoxModelMetadata implements ModelMetadata
     
     private String reservedWordStrictness;
     
+    private boolean mappingInPackage = false;
+    
     public String getColumnPrefix()
     {
         return columnPrefix;
@@ -70,5 +72,15 @@ public class JPoxModelMetadata implements ModelMetadata
     public void setReservedWordStrictness( String reservedWordStrictness )
     {
         this.reservedWordStrictness = reservedWordStrictness;
+    }
+
+    public boolean isMappingInPackage()
+    {
+        return mappingInPackage;
+    }
+
+    public void setMappingInPackage( boolean mappingInPackage )
+    {
+        this.mappingInPackage = mappingInPackage;
     }
 }

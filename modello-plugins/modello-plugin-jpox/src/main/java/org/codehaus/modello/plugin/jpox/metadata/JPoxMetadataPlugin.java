@@ -70,6 +70,8 @@ public class JPoxMetadataPlugin extends AbstractMetadataPlugin
     public static final String COLUMN_PREFIX = "jpox.column-prefix";
 
     public static final String RESERVED_WORD_STRICTNESS = "jpox.reserved-word-strictness";
+    
+    public static final String MAPPING_IN_PACKAGE = "jpox.mapping-in-package";
 
     public static final String JOIN_TABLE = "jpox.join-table";
 
@@ -108,6 +110,8 @@ public class JPoxMetadataPlugin extends AbstractMetadataPlugin
         {
             metadata.setTablePrefix( tablePrefix );
         }
+        
+        metadata.setMappingInPackage( getBoolean( data, MAPPING_IN_PACKAGE, false ) );
 
         String reservedWordStrictness = (String) data.get( RESERVED_WORD_STRICTNESS );
 

@@ -22,6 +22,7 @@ package org.codehaus.modello.maven;
  * SOFTWARE.
  */
 
+import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
@@ -118,6 +119,11 @@ public abstract class AbstractModelloGeneratorMojo
     {
         return true;
     }
+    
+    protected boolean producesResources()
+    {
+        return false;
+    }
 
     /**
      * Creates a Properties objects.
@@ -202,6 +208,13 @@ public abstract class AbstractModelloGeneratorMojo
             if ( producesCompilableResult() && project != null )
             {
                 project.addCompileSourceRoot( outputDirectory );
+            }
+            
+            if ( producesResources() && project != null )
+            {
+                Resource resource = new Resource();
+                resource.setDirectory( outputDirectory );
+                project.addResource( resource );
             }
         }
         catch ( FileNotFoundException e )
