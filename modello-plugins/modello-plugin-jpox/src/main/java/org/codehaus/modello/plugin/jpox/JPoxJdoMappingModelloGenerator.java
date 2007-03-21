@@ -48,6 +48,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -751,11 +752,6 @@ public class JPoxJdoMappingModelloGenerator
 
         String columnName = getColumnName( modelField, jpoxMetadata );
         
-        if ( !StringUtils.equalsIgnoreCase( columnName, modelField.getName() ) )
-        {
-            writer.addAttribute( "column", columnName );
-        }
-
         if ( StringUtils.isNotEmpty( jpoxMetadata.getJoinTableName() ) )
         {
             writer.addAttribute( "table", getJoinTableName( modelField, jpoxMetadata ) );
@@ -797,20 +793,36 @@ public class JPoxJdoMappingModelloGenerator
                 writer.startElement( "array" );
                 writer.endElement();
             }
+            
+            // Store potential column properties.
+            Properties columnProps = new Properties();
 
-            if ( storeMetadata.getMaxSize() > 0
-                            || ( jpoxMetadata.getNullValue() != null && modelField.getDefaultValue() != null ) )
+            if ( !StringUtils.equalsIgnoreCase( columnName, modelField.getName() ) )
+            {
+                columnProps.setProperty( "name", columnName );
+            }
+
+            if ( storeMetadata.getMaxSize() > 0 )
+            {
+                columnProps.setProperty( "length", String.valueOf( storeMetadata.getMaxSize() ) );
+            }
+
+            if ( StringUtils.equals( jpoxMetadata.getNullValue(), "default" ) )
+            {
+                columnProps.setProperty( "default-value", modelField.getDefaultValue() );
+            }
+
+            // Now write the column sub element (if it has properties)
+            if ( !columnProps.isEmpty() )
             {
                 writer.startElement( "column" );
 
-                if ( storeMetadata.getMaxSize() > 0 )
+                for ( Enumeration en = columnProps.propertyNames(); en.hasMoreElements(); )
                 {
-                    writer.addAttribute( "length", String.valueOf( storeMetadata.getMaxSize() ) );
-                }
+                    String attributeName = (String) en.nextElement();
+                    String attributeValue = columnProps.getProperty( attributeName );
+                    writer.addAttribute( attributeName, attributeValue );
 
-                if ( jpoxMetadata.getNullValue() != null && "default".equals( jpoxMetadata.getNullValue() ) )
-                {
-                    writer.addAttribute( "default-value", modelField.getDefaultValue() );
                 }
                 writer.endElement();
             }

@@ -104,7 +104,7 @@ public class JPoxJdoMappingModelloGeneratorPrefixedTest extends AbstractJpoxGene
         // -----------------------------------------------------------------------
         // Alternate Table and Column Names Tests.
         assertAttributeEquals( jdoDocument, "//class[@name='JdoPermission']", "table", "SECURITY_PERMISSIONS" );
-        assertAttributeEquals( jdoDocument, "//class[@name='JdoOperation']/field[@name='name']", "column", "OPERATION_NAME" );
+        assertAttributeEquals( jdoDocument, "//class[@name='JdoOperation']/field[@name='name']/column", "name", "OPERATION_NAME" );
         assertAttributeEquals( jdoDocument, "//class[@name='JdoRole']/field[@name='permissions']", "table", "SECURITY_ROLE_PERMISSION_MAP" );
     }
 }

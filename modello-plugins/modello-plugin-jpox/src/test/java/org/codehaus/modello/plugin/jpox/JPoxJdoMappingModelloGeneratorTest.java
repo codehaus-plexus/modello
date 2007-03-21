@@ -142,6 +142,6 @@ public class JPoxJdoMappingModelloGeneratorTest extends AbstractJpoxGeneratorTes
         // -----------------------------------------------------------------------
         // Alternate Table and Column Names Tests.
         assertAttributeEquals( jdoDocument, "//class[@name='DifferentTable']", "table", "MyTable" );
-        assertAttributeEquals( jdoDocument, "//class[@name='Issue']/field[@name='accountId']", "column", "id" );
+        assertAttributeEquals( jdoDocument, "//class[@name='Issue']/field[@name='accountId']/column", "name", "id" );
     }
 }
