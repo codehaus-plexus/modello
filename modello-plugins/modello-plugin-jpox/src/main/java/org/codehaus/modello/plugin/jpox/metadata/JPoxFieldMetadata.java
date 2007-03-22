@@ -23,6 +23,7 @@ package org.codehaus.modello.plugin.jpox.metadata;
  */
 
 import org.codehaus.modello.metadata.FieldMetadata;
+import org.codehaus.plexus.util.StringUtils;
 
 import java.util.List;
 
@@ -30,28 +31,41 @@ import java.util.List;
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
  * @version $Id$
  */
-public class JPoxFieldMetadata
-    implements FieldMetadata
+public class JPoxFieldMetadata implements FieldMetadata
 {
     public static final String ID = JPoxFieldMetadata.class.getName();
+
+    public static final String[] FOREIGN_KEY_ACTIONS = new String[] { "cascade", "restrict", "null", "default" };
+
+    public static final String[] BOOLEANS = new String[] { "true", "false" };
 
     private List fetchGroupNames;
 
     private String mappedBy;
 
     private String nullValue;
-    
+
     private String columnName;
-    
+
     private boolean primaryKey;
-    
+
     private String persistenceModifier;
-    
+
     private String valueStrategy;
-    
+
     private String joinTableName;
-    
+
     private String indexed;
+
+    private boolean unique;
+
+    private boolean foreignKey;
+
+    private String foreignKeyDeferred;
+
+    private String foreignKeyDeleteAction;
+
+    private String foreignKeyUpdateAction;
 
     public List getFetchGroupNames()
     {
@@ -132,7 +146,7 @@ public class JPoxFieldMetadata
     {
         this.joinTableName = joinTableName;
     }
-    
+
     public String getIndexed()
     {
         return indexed;
@@ -141,5 +155,70 @@ public class JPoxFieldMetadata
     public void setIndexed( String indexed )
     {
         this.indexed = indexed;
+    }
+
+    public String getForeignKeyDeferred()
+    {
+        return foreignKeyDeferred;
+    }
+
+    public void setForeignKeyDeferred( String foreignKeyDeferred )
+    {
+        this.foreignKeyDeferred = foreignKeyDeferred;
+
+        if ( StringUtils.isNotEmpty( this.foreignKeyDeferred ) )
+        {
+            this.foreignKey = true;
+        }
+    }
+
+    public String getForeignKeyDeleteAction()
+    {
+        return foreignKeyDeleteAction;
+    }
+
+    public void setForeignKeyDeleteAction( String foreignKeyDeleteAction )
+    {
+        this.foreignKeyDeleteAction = foreignKeyDeleteAction;
+
+        if ( StringUtils.isNotEmpty( this.foreignKeyDeleteAction ) )
+        {
+            this.foreignKey = true;
+        }
+    }
+
+    public String getForeignKeyUpdateAction()
+    {
+        return foreignKeyUpdateAction;
+    }
+
+    public void setForeignKeyUpdateAction( String foreignKeyUpdateAction )
+    {
+        this.foreignKeyUpdateAction = foreignKeyUpdateAction;
+
+        if ( StringUtils.isNotEmpty( this.foreignKeyUpdateAction ) )
+        {
+            this.foreignKey = true;
+        }
+    }
+
+    public boolean isUnique()
+    {
+        return unique;
+    }
+
+    public void setUnique( boolean unique )
+    {
+        this.unique = unique;
+    }
+
+    public boolean isForeignKey()
+    {
+        return foreignKey;
+    }
+
+    public void setForeignKey( boolean foreignKey )
+    {
+        this.foreignKey = foreignKey;
     }
 }

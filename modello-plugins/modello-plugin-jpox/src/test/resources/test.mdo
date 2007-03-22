@@ -231,7 +231,9 @@
       <description>binding of a principal to a role</description>
       <version>1.0.0+</version>
       <fields>
-        <field jpox.primary-key="true" jpox.value-strategy="off">
+        <field jpox.primary-key="true" 
+               jpox.value-strategy="off"
+               jpox.foreign-key-delete-action="cascade">
           <name>principal</name>
           <version>1.0.0+</version>
           <type>String</type>

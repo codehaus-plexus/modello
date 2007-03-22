@@ -61,8 +61,7 @@ import java.util.Properties;
  * @plexus.component role="org.codehaus.modello.plugin.ModelloGenerator"
  *              role-hint="jpox-jdo-mapping"
  */
-public class JPoxJdoMappingModelloGenerator
-    extends AbstractModelloGenerator
+public class JPoxJdoMappingModelloGenerator extends AbstractModelloGenerator
 {
     private static final char EOL = '\n';
 
@@ -73,7 +72,7 @@ public class JPoxJdoMappingModelloGenerator
     private final static List IDENTITY_TYPES;
 
     private final static List VALUE_STRATEGY_LIST;
-    
+
     /**
      * @plexus.requirement
      */
@@ -118,9 +117,7 @@ public class JPoxJdoMappingModelloGenerator
         VALUE_STRATEGY_LIST.add( "auid" );
     }
 
-
-    protected void initialize( Model model, Properties parameters )
-        throws ModelloException
+    protected void initialize( Model model, Properties parameters ) throws ModelloException
     {
         super.initialize( model, parameters );
 
@@ -128,8 +125,7 @@ public class JPoxJdoMappingModelloGenerator
         objectIdClassOverride = parameters.getProperty( "JPOX.override.objectid-class" );
     }
 
-    public void generate( Model model, Properties properties )
-        throws ModelloException
+    public void generate( Model model, Properties properties ) throws ModelloException
     {
         initialize( model, properties );
 
@@ -143,7 +139,7 @@ public class JPoxJdoMappingModelloGenerator
 
             JPoxModelMetadata metadata = (JPoxModelMetadata) model.getMetadata( JPoxModelMetadata.ID );
             File packageJdo = null;
-            
+
             if ( metadata.isMappingInPackage() )
             {
                 // Use package name.
@@ -165,8 +161,8 @@ public class JPoxJdoMappingModelloGenerator
             {
                 if ( !parent.mkdirs() )
                 {
-                    throw new ModelloException( "Error while creating parent directories for the file " + "'" +
-                        packageJdo.getAbsolutePath() + "'." );
+                    throw new ModelloException( "Error while creating parent directories for the file " + "'"
+                                    + packageJdo.getAbsolutePath() + "'." );
                 }
             }
 
@@ -182,8 +178,7 @@ public class JPoxJdoMappingModelloGenerator
     //
     // ----------------------------------------------------------------------
 
-    private void generatePackageJdo( File file, Model model )
-        throws IOException, ModelloException
+    private void generatePackageJdo( File file, Model model ) throws IOException, ModelloException
     {
         OutputStreamWriter fileWriter = new OutputStreamWriter( new FileOutputStream( file ), "UTF-8" );
 
@@ -266,9 +261,8 @@ public class JPoxJdoMappingModelloGenerator
 
         printWriter.close();
     }
-    
-    private void writeClass( XMLWriter writer, ModelClass modelClass )
-        throws ModelloException
+
+    private void writeClass( XMLWriter writer, ModelClass modelClass ) throws ModelloException
     {
         JPoxClassMetadata jpoxMetadata = (JPoxClassMetadata) modelClass.getMetadata( JPoxClassMetadata.ID );
 
@@ -294,14 +288,14 @@ public class JPoxJdoMappingModelloGenerator
             String superPackageName =
                 persistenceCapableSuperclass.getPackageName( isPackageWithVersion(), getGeneratedVersion() );
 
-            writer.addAttribute( "persistence-capable-superclass",
-                                 superPackageName + "." + persistenceCapableSuperclass.getName() );
+            writer.addAttribute( "persistence-capable-superclass", superPackageName + "."
+                            + persistenceCapableSuperclass.getName() );
         }
 
         writer.addAttribute( "detachable", String.valueOf( jpoxMetadata.isDetachable() ) );
 
         writer.addAttribute( "table", getTableName( modelClass, jpoxMetadata ) );
-        
+
         // ----------------------------------------------------------------------
         // If this class has a primary key field mark make jpox manage the id
         // as a autoincrement variable
@@ -322,8 +316,9 @@ public class JPoxJdoMappingModelloGenerator
                 String identityType = jpoxMetadata.getIdentityType();
                 if ( !IDENTITY_TYPES.contains( identityType ) )
                 {
-                    throw new ModelloException( "The JDO mapping generator does not support the specified " +
-                        "class identity type '" + identityType + "'. " + "Supported types: " + IDENTITY_TYPES );
+                    throw new ModelloException( "The JDO mapping generator does not support the specified "
+                                    + "class identity type '" + identityType + "'. " + "Supported types: "
+                                    + IDENTITY_TYPES );
                 }
                 writer.addAttribute( "identity-type", identityType );
             }
@@ -361,9 +356,10 @@ public class JPoxJdoMappingModelloGenerator
             if ( primaryKeys.size() > 1 )
             {
                 throw new ModelloException(
-                    "The JDO mapping generator does not yet support Object Identifier generation " + "for the " +
-                        primaryKeys.size() + " fields specified as <identifier> or " +
-                        "with jpox.primary-key=\"true\"" );
+                                            "The JDO mapping generator does not yet support Object Identifier generation "
+                                                            + "for the " + primaryKeys.size()
+                                                            + " fields specified as <identifier> or "
+                                                            + "with jpox.primary-key=\"true\"" );
             }
 
             if ( primaryKeys.size() == 1 )
@@ -508,11 +504,10 @@ public class JPoxJdoMappingModelloGenerator
      * @return the table name (with possible prefix applied) 
      * @throws ModelloException if there was a problem with the table name violating a sql reserved word.
      */
-    private String getTableName( ModelClass modelClass, JPoxClassMetadata classMetadata )
-        throws ModelloException
+    private String getTableName( ModelClass modelClass, JPoxClassMetadata classMetadata ) throws ModelloException
     {
         JPoxModelMetadata modelMetadata = (JPoxModelMetadata) modelClass.getModel().getMetadata( JPoxModelMetadata.ID );
-        
+
         boolean hasPrefix = StringUtils.isNotEmpty( modelMetadata.getTablePrefix() );
         boolean hasAlternateName = StringUtils.isNotEmpty( classMetadata.getTable() );
 
@@ -537,7 +532,7 @@ public class JPoxJdoMappingModelloGenerator
         if ( sqlReservedWords.isKeyword( tableName ) )
         {
             StringBuffer emsg = new StringBuffer();
-            
+
             /* ----------------------------------------------------------------
              *   SQL Reserved Word Violation: 'ROLES'
              *   Context: TABLE NAME
@@ -545,7 +540,7 @@ public class JPoxJdoMappingModelloGenerator
             emsg.append( EOL ).append( ERROR_LINE ).append( EOL );
             emsg.append( "  SQL Reserved Word Violation: " ).append( tableName ).append( EOL );
             emsg.append( "  Context: TABLE NAME" ).append( EOL );
-            emsg.append( " ").append( EOL );
+            emsg.append( " " ).append( EOL );
 
             /*   In Model:
              *     <model jpox.table-prefix="">
@@ -570,7 +565,7 @@ public class JPoxJdoMappingModelloGenerator
             emsg.append( "        <name>" ).append( modelClass.getName() ).append( "</name>" ).append( EOL );
             emsg.append( "      </class>" ).append( EOL );
             emsg.append( "    </model>" ).append( EOL );
-            emsg.append( " ").append( EOL );
+            emsg.append( " " ).append( EOL );
 
             /*   Violation Source(s): Oracle (WARNING)
              *                        SQL 99 (ERROR)
@@ -609,7 +604,7 @@ public class JPoxJdoMappingModelloGenerator
             {
                 throw new ModelloException( emsg.toString() );
             }
-            
+
             // No exception. use it. But log it.
             getLogger().warn( emsg.toString() );
         }
@@ -647,8 +642,8 @@ public class JPoxJdoMappingModelloGenerator
                 emsg.append( "                       " );
             }
         }
-        emsg.append( " ").append( EOL );
-        
+        emsg.append( " " ).append( EOL );
+
         emsg.append( "  Severity: " );
         if ( hasError )
         {
@@ -660,8 +655,8 @@ public class JPoxJdoMappingModelloGenerator
             emsg.append( "WARNING - You are encouraged to change this name" ).append( EOL );
             emsg.append( "            for maximum compatibility amoungst JDBC SQL Servers." ).append( EOL );
         }
-        emsg.append( " ").append( EOL );        
-        
+        emsg.append( " " ).append( EOL );
+
         return hasError;
     }
 
@@ -751,7 +746,7 @@ public class JPoxJdoMappingModelloGenerator
         }
 
         String columnName = getColumnName( modelField, jpoxMetadata );
-        
+
         if ( StringUtils.isNotEmpty( jpoxMetadata.getJoinTableName() ) )
         {
             writer.addAttribute( "table", getJoinTableName( modelField, jpoxMetadata ) );
@@ -793,6 +788,8 @@ public class JPoxJdoMappingModelloGenerator
                 writer.startElement( "array" );
                 writer.endElement();
             }
+
+            // Work out potential <column> subelement
             
             // Store potential column properties.
             Properties columnProps = new Properties();
@@ -826,6 +823,37 @@ public class JPoxJdoMappingModelloGenerator
                 }
                 writer.endElement();
             }
+
+            // Work out potential <unique> subelement.
+            if ( jpoxMetadata.isUnique() )
+            {
+                writer.startElement( "unique" );
+                writer.addAttribute( "name", columnName.toUpperCase() + "_UNIQUE_CONSTRAINT" );
+                writer.endElement();
+            }
+            
+            // Work out potential <foreign-key> subelement
+            if ( jpoxMetadata.isForeignKey() )
+            {
+                writer.startElement( "foreign-key" );
+                writer.addAttribute( "name", columnName.toUpperCase() + "_FK" );
+                
+                if ( StringUtils.isNotEmpty( jpoxMetadata.getForeignKeyDeferred() ) )
+                {
+                    writer.addAttribute( "deferred", jpoxMetadata.getForeignKeyDeferred() );
+                }
+                
+                if ( StringUtils.isNotEmpty( jpoxMetadata.getForeignKeyDeleteAction() ) )
+                {
+                    writer.addAttribute( "delete-action", jpoxMetadata.getForeignKeyDeleteAction() );
+                }
+
+                if ( StringUtils.isNotEmpty( jpoxMetadata.getForeignKeyUpdateAction() ) )
+                {
+                    writer.addAttribute( "update-action", jpoxMetadata.getForeignKeyUpdateAction() );
+                }
+                writer.endElement();
+            }
         }
 
         writer.endElement(); // field
@@ -844,22 +872,23 @@ public class JPoxJdoMappingModelloGenerator
     {
         ModelClass modelClass = modelField.getModelClass();
         JPoxModelMetadata modelMetadata = (JPoxModelMetadata) modelClass.getModel().getMetadata( JPoxModelMetadata.ID );
-        
+
         boolean hasPrefix = StringUtils.isNotEmpty( modelMetadata.getTablePrefix() );
-        
+
         String prefix = "";
 
         if ( hasPrefix )
         {
             prefix = modelMetadata.getTablePrefix().trim();
         }
-        
-        String joinTableName = prefix + fieldMetadata.getJoinTableName();;
+
+        String joinTableName = prefix + fieldMetadata.getJoinTableName();
+        ;
 
         if ( sqlReservedWords.isKeyword( joinTableName ) )
         {
             StringBuffer emsg = new StringBuffer();
-            
+
             /* ----------------------------------------------------------------
              *   SQL Reserved Word Violation: 'ROLES'
              *   Context: TABLE NAME
@@ -867,7 +896,7 @@ public class JPoxJdoMappingModelloGenerator
             emsg.append( EOL ).append( ERROR_LINE ).append( EOL );
             emsg.append( "  SQL Reserved Word Violation: " ).append( joinTableName ).append( EOL );
             emsg.append( "  Context: JOIN TABLE NAME" ).append( EOL );
-            emsg.append( " ").append( EOL );
+            emsg.append( " " ).append( EOL );
 
             /*   In Model:
              *     <model jpox.table-prefix="">
@@ -898,7 +927,7 @@ public class JPoxJdoMappingModelloGenerator
             emsg.append( "        </fields>" ).append( EOL );
             emsg.append( "      </class>" ).append( EOL );
             emsg.append( "    </model>" ).append( EOL );
-            emsg.append( " ").append( EOL );
+            emsg.append( " " ).append( EOL );
 
             /*   Violation Source(s): Oracle (WARNING)
              *                        SQL 99 (ERROR)
@@ -929,11 +958,11 @@ public class JPoxJdoMappingModelloGenerator
             {
                 throw new ModelloException( emsg.toString() );
             }
-            
+
             // No exception. use it. But log it.
             getLogger().warn( emsg.toString() );
         }
-        
+
         return joinTableName;
     }
 
@@ -1086,7 +1115,7 @@ public class JPoxJdoMappingModelloGenerator
             {
                 throw new ModelloException( emsg.toString() );
             }
-            
+
             // No exception. use it. But log it.
             getLogger().warn( emsg.toString() );
         }

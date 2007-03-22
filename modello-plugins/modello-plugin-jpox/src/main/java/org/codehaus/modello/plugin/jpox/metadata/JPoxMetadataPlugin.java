@@ -70,7 +70,7 @@ public class JPoxMetadataPlugin extends AbstractMetadataPlugin
     public static final String COLUMN_PREFIX = "jpox.column-prefix";
 
     public static final String RESERVED_WORD_STRICTNESS = "jpox.reserved-word-strictness";
-    
+
     public static final String MAPPING_IN_PACKAGE = "jpox.mapping-in-package";
 
     public static final String JOIN_TABLE = "jpox.join-table";
@@ -78,6 +78,14 @@ public class JPoxMetadataPlugin extends AbstractMetadataPlugin
     public static final String INDEXED = "jpox.indexed";
 
     public static final String PRIMARY_KEY = "jpox.primary-key";
+
+    public static final String UNIQUE = "jpox.unique";
+
+    public static final String FOREIGN_KEY_DEFERRED = "jpox.foreign-key-deferred";
+
+    public static final String FOREIGN_KEY_DELETE_ACTION = "jpox.foreign-key-delete-action";
+
+    public static final String FOREIGN_KEY_UPDATE_ACTION = "jpox.foreign-key-update-action";
 
     public static final String VALUE_STRATEGY = "jpox.value-strategy";
 
@@ -110,14 +118,14 @@ public class JPoxMetadataPlugin extends AbstractMetadataPlugin
         {
             metadata.setTablePrefix( tablePrefix );
         }
-        
+
         metadata.setMappingInPackage( getBoolean( data, MAPPING_IN_PACKAGE, false ) );
 
         String reservedWordStrictness = (String) data.get( RESERVED_WORD_STRICTNESS );
 
         // Set default.
         metadata.setReservedWordStrictness( JPoxModelMetadata.WARNING );
-        
+
         // Set based on provided.
         if ( StringUtils.isNotEmpty( reservedWordStrictness ) )
         {
@@ -200,14 +208,15 @@ public class JPoxMetadataPlugin extends AbstractMetadataPlugin
         boolean useIdentifiersAsPrimaryKey = classMetadata.useIdentifiersAsPrimaryKey();
 
         metadata.setPrimaryKey( getBoolean( data, PRIMARY_KEY, ( field.isIdentifier() && useIdentifiersAsPrimaryKey ) ) );
-        
+
         // Backwards Compatibility Syntax.
-        String fetchGroupNames = (String) data.get( "jpox.fetchGroupNames" ); 
-        
-        if( fetchGroupNames != null )
+        String fetchGroupNames = (String) data.get( "jpox.fetchGroupNames" );
+
+        if ( fetchGroupNames != null )
         {
-            getLogger().warn( "You are using the <field jpox.fetchGroupNames=\"\"> attribute syntax.  " +
-                    "It has been deprecated in favor of the <field jpox.fetch-groups=\"\"> syntax instead." );
+            getLogger().warn(
+                              "You are using the <field jpox.fetchGroupNames=\"\"> attribute syntax.  "
+                                              + "It has been deprecated in favor of the <field jpox.fetch-groups=\"\"> syntax instead." );
         }
         else
         {
@@ -224,11 +233,12 @@ public class JPoxMetadataPlugin extends AbstractMetadataPlugin
 
         // Backwards Compatibility Syntax.
         String mappedBy = (String) data.get( "jpox.mappedBy" );
-        
+
         if ( mappedBy != null )
         {
-            getLogger().warn( "You are using the <field jpox.mappedBy=\"\"> attribute syntax.  " +
-                              "It has been deprecated in favor of the <field jpox.mapped-by=\"\"> syntax instead.");
+            getLogger().warn(
+                              "You are using the <field jpox.mappedBy=\"\"> attribute syntax.  "
+                                              + "It has been deprecated in favor of the <field jpox.mapped-by=\"\"> syntax instead." );
         }
         else
         {
@@ -243,11 +253,12 @@ public class JPoxMetadataPlugin extends AbstractMetadataPlugin
 
         // Backwards Compatibility Syntax.
         String nullValue = (String) data.get( "jpox.nullValue" );
-        
+
         if ( nullValue != null )
         {
-            getLogger().warn( "You are using the <field jpox.nullValue=\"\"> attribute syntax.  " +
-                              "It has been deprecated in favor of the <field jpox.null-value=\"\"> syntax instead.");
+            getLogger().warn(
+                              "You are using the <field jpox.nullValue=\"\"> attribute syntax.  "
+                                              + "It has been deprecated in favor of the <field jpox.null-value=\"\"> syntax instead." );
         }
         else
         {
@@ -306,6 +317,14 @@ public class JPoxMetadataPlugin extends AbstractMetadataPlugin
             }
         }
 
+        metadata.setUnique( getBoolean( data, UNIQUE, false ) );
+        metadata.setForeignKey( getBoolean( data, FOREIGN_KEY_DEFERRED, false ) );
+        metadata.setForeignKeyDeferred( getEnumString( data, FOREIGN_KEY_DEFERRED, JPoxFieldMetadata.BOOLEANS, null ) );
+        metadata.setForeignKeyDeleteAction( getEnumString( data, FOREIGN_KEY_DELETE_ACTION,
+                                                           JPoxFieldMetadata.FOREIGN_KEY_ACTIONS, null ) );
+        metadata.setForeignKeyUpdateAction( getEnumString( data, FOREIGN_KEY_UPDATE_ACTION,
+                                                           JPoxFieldMetadata.FOREIGN_KEY_ACTIONS, null ) );
+
         return metadata;
     }
 
@@ -318,6 +337,41 @@ public class JPoxMetadataPlugin extends AbstractMetadataPlugin
         metadata.setJoin( getBoolean( data, JOIN, true ) );
 
         return metadata;
+    }
+
+    protected String getString( Map data, String key, String defaultValue )
+    {
+        String value = (String) data.get( key );
+
+        if ( StringUtils.isEmpty( value ) )
+        {
+            return defaultValue;
+        }
+
+        return value;
+    }
+
+    protected String getEnumString( Map data, String key, String[] legalValues, String defaultValue )
+        throws ModelloException
+    {
+        String value = (String) data.get( key );
+
+        if ( StringUtils.isEmpty( value ) )
+        {
+            return defaultValue;
+        }
+
+        for ( int i = 0; i < legalValues.length; i++ )
+        {
+            String enumString = legalValues[i];
+            if ( StringUtils.equals( enumString, value ) )
+            {
+                return value;
+            }
+        }
+
+        String emsg = "Unknown " + key + " value: '" + value + "'.  " + "(Allowed values: " + legalValues + ")";
+        throw new ModelloException( emsg );
     }
 
     // ----------------------------------------------------------------------
