@@ -154,6 +154,7 @@
   <modules>
     <module>modello-maven-plugin</module>
     <module>modello-core</module>
+    <module>modello-db-keywords</module>
     <module>modello-test</module>
     <module>modello-plugins</module>
   </modules>
@@ -187,6 +188,11 @@
         <artifactId>modello-test</artifactId>
         <version>1.0-alpha-15-SNAPSHOT</version>
         <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.codehaus.modello</groupId>
+        <artifactId>modello-db-keywords</artifactId>
+        <version>1.0-alpha-15-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.modello</groupId>
