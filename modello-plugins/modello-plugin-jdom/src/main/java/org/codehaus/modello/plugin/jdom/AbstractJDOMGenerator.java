@@ -23,14 +23,14 @@ package org.codehaus.modello.plugin.jdom;
  */
 
 import org.codehaus.modello.ModelloException;
-import org.codehaus.modello.plugin.AbstractModelloGenerator;
+import org.codehaus.modello.plugin.java.AbstractJavaModelloGenerator;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id: AbstractXpp3Generator.java 139 2004-09-27 08:02:35Z evenisse $
  */
 public abstract class AbstractJDOMGenerator
-    extends AbstractModelloGenerator
+    extends AbstractJavaModelloGenerator
 {
     protected String getFileName( String suffix )
         throws ModelloException

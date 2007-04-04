@@ -116,7 +116,7 @@ public abstract class AbstractStaxGeneratorTestCase
 
         addDependency( "net.java.dev.stax-utils", "stax-utils", "20060502" );
         addDependency( "stax", "stax-api", "1.0.1" );
-        addDependency( "woodstox", "wstx-asl", "3.2.0" );
+        addDependency( "org.codehaus.woodstox", "wstx-asl", "3.2.0" );
 
         compile( generatedSources, classes );
 

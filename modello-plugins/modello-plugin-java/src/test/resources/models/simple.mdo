@@ -1,0 +1,51 @@
+<model>
+  <id>simple</id>
+  <name>Simple Modello Test Model</name>
+  <defaults>
+    <default>
+      <key>package</key>
+      <value>foo.bar</value>
+    </default>
+  </defaults>
+  <versionDefinition>
+    <type>field</type>
+    <value>foo</value>
+  </versionDefinition>
+  <classes>
+    <class rootElement="true">
+      <name>Boy</name>
+      <version>1.0.0</version>
+      <interfaces>
+        <interface>java.lang.Serializable</interface>
+      </interfaces>
+      <fields>
+        <field>
+          <name>name</name>
+          <alias>moniker</alias>
+          <version>1.0.0</version>
+          <type>String</type>
+          <identifier>true</identifier>
+        </field>
+        <field toto="tutu">
+          <name>girlfriends</name>
+          <version>1.0.0</version>
+          <association>
+            <type>Girl</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+      </fields>
+    </class>
+    <class>
+      <name>Girl</name>
+      <version>1.0.0</version>
+      <fields>
+        <field>
+          <name>age</name>
+          <version>1.0.0+</version>
+          <type>int</type>
+        </field>
+      </fields>
+    </class>
+  </classes>
+</model>
