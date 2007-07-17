@@ -2,9 +2,9 @@ package org.codehaus.modello.xpp3;
 
 import junit.framework.TestCase;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
+import org.codehaus.plexus.util.ReaderFactory;
 
 import java.io.File;
-import java.io.FileReader;
 
 /** @author Jason van Zyl */
 public class Xpp3ParsingTest
@@ -17,7 +17,7 @@ public class Xpp3ParsingTest
 
         MavenXpp3Reader reader = new MavenXpp3Reader();
                 
-        reader.read( new FileReader( model ), true );
+        reader.read( ReaderFactory.newXmlReader( model ), true );
     }
 
     public void testXpp3ParsingWithModelWithMissingElements()
@@ -27,7 +27,7 @@ public class Xpp3ParsingTest
 
         MavenXpp3Reader reader = new MavenXpp3Reader();
 
-        reader.read( new FileReader( model ), true );
+        reader.read( ReaderFactory.newXmlReader( model ), true );
     }
 
 }

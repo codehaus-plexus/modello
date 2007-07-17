@@ -31,9 +31,9 @@ import org.codehaus.modello.model.ModelValidationException;
 import org.codehaus.plexus.compiler.CompilerException;
 import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 import org.codehaus.plexus.util.FileUtils;
+import org.codehaus.plexus.util.ReaderFactory;
 
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -50,11 +50,11 @@ public abstract class AbstractRegistryGeneratorTestCase
     {
         ModelloCore modello = (ModelloCore) container.lookup( ModelloCore.ROLE );
 
-        Model model = modello.loadModel( new FileReader( getTestPath( "src/test/resources/model.mdo" ) ) );
+        Model model = modello.loadModel( ReaderFactory.newXmlReader( getTestFile( "src/test/resources/model.mdo" ) ) );
 
-        File generatedSources = new File( getTestPath( "target/" + outputType + "/sources" ) );
+        File generatedSources = getTestFile( "target/" + outputType + "/sources" );
 
-        File classes = new File( getTestPath( "target/" + outputType + "/classes" ) );
+        File classes = getTestFile( "target/" + outputType + "/classes" );
 
         FileUtils.deleteDirectory( generatedSources );
 
@@ -76,15 +76,9 @@ public abstract class AbstractRegistryGeneratorTestCase
 
         modello.generate( model, outputType, parameters );
 
-        Properties properties = new Properties( System.getProperties() );
-        if ( properties.getProperty( "version" ) == null )
-        {
-            properties.load(
-                getClass().getResourceAsStream( "/META-INF/maven/org.codehaus.modello/modello-core/pom.properties" ) );
-        }
-        addDependency( "org.codehaus.modello", "modello-core", properties.getProperty( "version" ) );
-        addDependency( "org.codehaus.plexus.registry", "plexus-registry-api", "1.0-alpha-2-SNAPSHOT" );
-        addDependency( "org.codehaus.plexus.registry", "plexus-registry-commons", "1.0-alpha-2-SNAPSHOT" );
+        addDependency( "org.codehaus.modello", "modello-core", getModelloVersion() );
+        addDependency( "org.codehaus.plexus.registry", "plexus-registry-api", "1.0-alpha-2" );
+        addDependency( "org.codehaus.plexus.registry", "plexus-registry-commons", "1.0-alpha-2" );
         addDependency( "org.codehaus.plexus", "plexus-component-api", "1.0-alpha-16" );
         addDependency( "org.codehaus.plexus", "plexus-container-default", "1.0-alpha-16" );
         addDependency( "commons-collections", "commons-collections", "3.1" );

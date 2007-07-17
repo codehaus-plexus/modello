@@ -26,8 +26,8 @@ import org.codehaus.modello.AbstractModelloGeneratorTest;
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
+import org.codehaus.plexus.util.ReaderFactory;
 
-import java.io.FileReader;
 import java.util.Properties;
 
 /**
@@ -47,7 +47,7 @@ public class JPoxMetadataClassModelloGeneratorTest
     {
         ModelloCore core = (ModelloCore) lookup( ModelloCore.ROLE );
 
-        Model model = core.loadModel( new FileReader( getTestPath( "src/test/resources/mergere-tissue.mdo" ) ) );
+        Model model = core.loadModel( ReaderFactory.newXmlReader( getTestFile( "src/test/resources/mergere-tissue.mdo" ) ) );
 
         // ----------------------------------------------------------------------
         // Generate the code

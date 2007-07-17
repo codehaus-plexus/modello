@@ -24,8 +24,7 @@ package org.codehaus.modello.core;
 
 import org.codehaus.modello.ModelloRuntimeException;
 import org.codehaus.plexus.PlexusTestCase;
-
-import java.io.FileReader;
+import org.codehaus.plexus.util.ReaderFactory;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -41,7 +40,7 @@ public class DefaultModelloCoreTest
 
         try
         {
-            modello.loadModel( new FileReader( getTestFile( "src/test/resources/models/duplicate-classes.mdo" ) ) );
+            modello.loadModel( ReaderFactory.newXmlReader( getTestFile( "src/test/resources/models/duplicate-classes.mdo" ) ) );
 
             fail( "Expected ModelloRuntimeException." );
         }
@@ -58,7 +57,7 @@ public class DefaultModelloCoreTest
 
         try
         {
-            modello.loadModel( new FileReader( getTestFile( "src/test/resources/models/duplicate-fields.mdo" ) ) );
+            modello.loadModel( ReaderFactory.newXmlReader( getTestFile( "src/test/resources/models/duplicate-fields.mdo" ) ) );
 
             fail( "Expected ModelloRuntimeException." );
         }
@@ -75,7 +74,7 @@ public class DefaultModelloCoreTest
 
         try
         {
-            modello.loadModel( new FileReader( getTestFile( "src/test/resources/models/duplicate-associations.mdo" ) ) );
+            modello.loadModel( ReaderFactory.newXmlReader( getTestFile( "src/test/resources/models/duplicate-associations.mdo" ) ) );
 
             fail( "Expected ModelloRuntimeException." );
         }

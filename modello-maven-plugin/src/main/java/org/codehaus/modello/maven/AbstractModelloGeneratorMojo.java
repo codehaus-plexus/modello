@@ -31,11 +31,13 @@ import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelValidationException;
+import org.codehaus.plexus.util.ReaderFactory;
 import org.codehaus.plexus.util.StringUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -185,11 +187,11 @@ public abstract class AbstractModelloGeneratorMojo
 
         try
         {
-            FileReader fileReader = new FileReader( new File( basedir, model ) );
+            Reader reader = ReaderFactory.newXmlReader( new File( basedir, model ) );
 
-            Model model = modelloCore.loadModel( fileReader );
+            Model model = modelloCore.loadModel( reader );
 
-            // TODO: dynamicall resolve/load the generator type
+            // TODO: dynamically resolve/load the generator type
             getLog().info( "Generating current version: " + version );
             modelloCore.generate( model, getGeneratorType(), parameters );
 
@@ -228,6 +230,10 @@ public abstract class AbstractModelloGeneratorMojo
         catch ( ModelValidationException e )
         {
             throw new MojoExecutionException( "Error generating.", e );
+        }
+        catch ( IOException e )
+        {
+            throw new MojoExecutionException( "Couldn't read file.", e );
         }
     }
 

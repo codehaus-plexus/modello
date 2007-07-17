@@ -26,9 +26,11 @@ import junit.framework.Assert;
 import org.codehaus.modello.test.model.vif.Model;
 import org.codehaus.modello.test.model.vif.io.stax.VersionInFieldStaxReader;
 import org.codehaus.modello.verifier.Verifier;
+import org.codehaus.plexus.util.ReaderFactory;
 
-import java.io.FileReader;
+import java.io.File;
 import java.io.IOException;
+import java.io.Reader;
 import javax.xml.stream.XMLStreamException;
 
 /**
@@ -40,14 +42,14 @@ public class StaxVerifierWrongVersion
     public void verify()
         throws IOException, XMLStreamException
     {
-        String path = "src/test/verifiers/stax-wrong-version/wrong-version.xml";
+        File file = new File( "src/test/verifiers/stax-wrong-version/wrong-version.xml" );
 
-        FileReader reader = new FileReader( path );
+        Reader reader = ReaderFactory.newXmlReader( file );
         VersionInFieldStaxReader modelReader = new VersionInFieldStaxReader();
 
         Assert.assertEquals( "1.2.3", modelReader.determineVersion( reader ) );
 
-        reader = new FileReader( path );
+        reader = ReaderFactory.newXmlReader( file );
         try
         {
             modelReader.read( reader );

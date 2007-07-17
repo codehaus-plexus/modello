@@ -22,12 +22,12 @@ package org.codehaus.modello.plugin.velocity;
  * SOFTWARE.
  */
 
-import java.io.FileReader;
 import java.util.Properties;
 
 import org.codehaus.modello.AbstractModelloGeneratorTest;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
+import org.codehaus.plexus.util.ReaderFactory;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -50,7 +50,7 @@ public class VelocityGeneratorTest
 
         Properties p = new Properties();
 
-        Model model = core.loadModel( new FileReader( getTestPath( "src/test/resources/mergere-tissue.mdo" ) ) );
+        Model model = core.loadModel( ReaderFactory.newXmlReader( getTestFile( "src/test/resources/mergere-tissue.mdo" ) ) );
 
         core.generate( model, "velocity", p );
     }

@@ -24,7 +24,6 @@ package org.codehaus.modello.plugin.ldap;
 
 import java.util.Properties;
 import java.io.File;
-import java.io.FileReader;
 import java.io.BufferedReader;
 
 import org.codehaus.modello.ModelloGeneratorTest;
@@ -32,6 +31,7 @@ import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.FileUtils;
 import org.codehaus.modello.model.Model;
 import org.codehaus.modello.core.ModelloCore;
+import org.codehaus.plexus.util.ReaderFactory;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -54,7 +54,7 @@ public class LdapSchemaGeneratorTest
         // Set up
         // ----------------------------------------------------------------------
 
-        Model model = modello.loadModel( new FileReader( getTestPath( "src/test/models/simple.mdo" ) ) );
+        Model model = modello.loadModel( ReaderFactory.newXmlReader( getTestFile( "src/test/models/simple.mdo" ) ) );
 
         File generatedSources = getTestFile( "target/ldap-schema" );
 

@@ -22,9 +22,10 @@ package org.codehaus.modello;
  * SOFTWARE.
  */
 
+import org.codehaus.plexus.util.ReaderFactory;
 import org.codehaus.plexus.util.StringUtils;
 
-import java.io.FileReader;
+import java.io.File;
 import java.util.Properties;
 
 /**
@@ -33,7 +34,7 @@ import java.util.Properties;
  */
 public class ModelloCli
 {
-    private static String modelFile;
+    private static File modelFile;
 
     private static String outputType;
 
@@ -46,7 +47,7 @@ public class ModelloCli
 
         parseArgumentsFromCommandLine( args );
 
-        modello.generate( new FileReader( modelFile ), outputType, parameters );
+        modello.generate( ReaderFactory.newXmlReader( modelFile ), outputType, parameters );
     }
 
     public static void parseArgumentsFromCommandLine( String[] args )
@@ -59,7 +60,7 @@ public class ModelloCli
             System.exit( 1 );
         }
 
-        modelFile = args[0];
+        modelFile = new File( args[0] );
 
         outputType = args[1];
 

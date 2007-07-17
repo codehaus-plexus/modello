@@ -26,10 +26,10 @@ import org.codehaus.modello.ModelloGeneratorTest;
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
+import org.codehaus.plexus.util.ReaderFactory;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -50,7 +50,7 @@ public class ObjStateFactoryModelloGeneratorTest
     {
         ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
 
-        Model model = modello.loadModel( new FileReader( getTestPath( "src/test/models/simple.mdo" ) ) );
+        Model model = modello.loadModel( ReaderFactory.newXmlReader( getTestFile( "src/test/models/simple.mdo" ) ) );
 
 
         // ----------------------------------------------------------------------

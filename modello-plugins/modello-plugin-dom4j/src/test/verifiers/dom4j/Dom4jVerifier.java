@@ -36,13 +36,15 @@ import org.codehaus.modello.test.model.io.dom4j.MavenDom4jReader;
 import org.codehaus.modello.test.model.io.dom4j.MavenDom4jWriter;
 import org.codehaus.modello.verifier.Verifier;
 import org.codehaus.plexus.util.FileUtils;
+import org.codehaus.plexus.util.ReaderFactory;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.dom4j.DocumentException;
 
-import java.io.FileReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.io.Reader;
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -80,7 +82,7 @@ public class Dom4jVerifier
     {
         String path = "src/test/verifiers/dom4j/expected-encoding.xml";
 
-        FileReader reader = new FileReader( path );
+        Reader reader = ReaderFactory.newXmlReader( new File( path ) );
         MavenDom4jReader modelReader = new MavenDom4jReader();
 
         Model model = modelReader.read( reader );

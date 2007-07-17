@@ -127,13 +127,7 @@ public abstract class AbstractJpoxGeneratorTestCase
             }
         }
 
-        Properties properties = new Properties( System.getProperties() );
-        if ( properties.getProperty( "version" ) == null )
-        {
-            properties.load(
-                getClass().getResourceAsStream( "/META-INF/maven/org.codehaus.modello/modello-core/pom.properties" ) );
-        }
-        addDependency( "org.codehaus.modello", "modello-core", properties.getProperty( "version" ) );
+        addDependency( "org.codehaus.modello", "modello-core", getModelloVersion() );
 
         addDependency( "jpox", "jpox", "1.1.1" );
         addDependency( "javax.jdo", "jdo2-api", "2.0" );

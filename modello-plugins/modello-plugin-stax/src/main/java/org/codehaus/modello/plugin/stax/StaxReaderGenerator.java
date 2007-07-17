@@ -41,6 +41,7 @@ import org.codehaus.modello.plugin.java.javasource.JType;
 import org.codehaus.modello.plugins.xml.XmlAssociationMetadata;
 import org.codehaus.modello.plugins.xml.XmlClassMetadata;
 import org.codehaus.modello.plugins.xml.XmlFieldMetadata;
+import org.codehaus.plexus.util.ReaderFactory;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -310,13 +311,13 @@ public class StaxReaderGenerator
         jClass.setPackageName( packageName );
 
         jClass.addImport( "java.io.File" );
-        jClass.addImport( "java.io.FileReader" );
         jClass.addImport( "java.io.IOException" );
         jClass.addImport( "java.io.Reader" );
 
         jClass.addImport( "javax.xml.stream.*" );
 
         jClass.addImport( "org.codehaus.plexus.util.IOUtil" );
+        jClass.addImport( "org.codehaus.plexus.util.ReaderFactory" );
 
         JMethod method = new JMethod( new JClass( "Object" ), "read" );
 
@@ -332,7 +333,7 @@ public class StaxReaderGenerator
         JSourceCode sc = method.getSourceCode();
 
         sc.add( "String modelVersion;" );
-        sc.add( "Reader reader = new FileReader( f );" );
+        sc.add( "Reader reader = ReaderFactory.newXmlReader( f );" );
 
         sc.add( "try" );
         sc.add( "{" );
@@ -351,7 +352,7 @@ public class StaxReaderGenerator
         sc.unindent();
         sc.add( "}" );
 
-        sc.add( "reader = new FileReader( f );" );
+        sc.add( "reader = ReaderFactory.newXmlReader( f );" );
         sc.add( "try" );
         sc.add( "{" );
         sc.indent();

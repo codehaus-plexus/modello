@@ -31,9 +31,9 @@ import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.Version;
 import org.codehaus.modello.plugins.xml.XmlFieldMetadata;
 import org.codehaus.plexus.util.FileUtils;
+import org.codehaus.plexus.util.ReaderFactory;
 
 import java.io.File;
-import java.io.FileReader;
 import java.util.List;
 import java.util.Properties;
 
@@ -55,7 +55,7 @@ public class Dom4jGeneratorTest
     {
         ModelloCore modello = (ModelloCore) container.lookup( ModelloCore.ROLE );
 
-        Model model = modello.loadModel( new FileReader( getTestPath( "src/test/resources/maven.mdo" ) ) );
+        Model model = modello.loadModel( ReaderFactory.newXmlReader( getTestFile( "src/test/resources/maven.mdo" ) ) );
 
         List classesList = model.getClasses( new Version( "4.0.0" ) );
 
@@ -87,9 +87,9 @@ public class Dom4jGeneratorTest
 
         assertEquals( "builder", xml.getTagName() );
 
-        File generatedSources = new File( getTestPath( "target/dom4j/sources" ) );
+        File generatedSources = getTestFile( "target/dom4j/sources" );
 
-        File classes = new File( getTestPath( "target/dom4j/classes" ) );
+        File classes = getTestFile( "target/dom4j/classes" );
 
         FileUtils.deleteDirectory( generatedSources );
 
@@ -113,13 +113,7 @@ public class Dom4jGeneratorTest
 
         modello.generate( model, "dom4j-reader", parameters );
 
-        Properties properties = new Properties( System.getProperties() );
-        if ( properties.getProperty( "version" ) == null )
-        {
-            properties.load(
-                getClass().getResourceAsStream( "/META-INF/maven/org.codehaus.modello/modello-core/pom.properties" ) );
-        }
-        addDependency( "org.codehaus.modello", "modello-core", properties.getProperty( "version" ) );
+        addDependency( "org.codehaus.modello", "modello-core", getModelloVersion() );
 
         addDependency( "dom4j", "dom4j", "1.6.1" );
 

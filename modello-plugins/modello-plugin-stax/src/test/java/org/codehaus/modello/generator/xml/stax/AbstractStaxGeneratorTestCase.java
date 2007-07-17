@@ -106,13 +106,7 @@ public abstract class AbstractStaxGeneratorTestCase
             }
         }
 
-        Properties properties = new Properties( System.getProperties() );
-        if ( properties.getProperty( "version" ) == null )
-        {
-            properties.load(
-                getClass().getResourceAsStream( "/META-INF/maven/org.codehaus.modello/modello-core/pom.properties" ) );
-        }
-        addDependency( "org.codehaus.modello", "modello-core", properties.getProperty( "version" ) );
+        addDependency( "org.codehaus.modello", "modello-core", getModelloVersion() );
 
         addDependency( "net.java.dev.stax-utils", "stax-utils", "20060502" );
         addDependency( "stax", "stax-api", "1.0.1" );

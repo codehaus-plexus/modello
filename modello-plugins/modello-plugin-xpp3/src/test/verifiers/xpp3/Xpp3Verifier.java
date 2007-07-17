@@ -36,13 +36,15 @@ import org.codehaus.modello.test.model.io.xpp3.MavenXpp3Writer;
 import org.codehaus.modello.test.model.TypeTester;
 import org.codehaus.modello.verifier.Verifier;
 import org.codehaus.plexus.util.FileUtils;
+import org.codehaus.plexus.util.ReaderFactory;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
-import java.io.FileReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.io.Reader;
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.List;
@@ -81,9 +83,9 @@ public class Xpp3Verifier
     public void verifyEncodedRead()
         throws IOException, XmlPullParserException
     {
-        String path = "src/test/verifiers/xpp3/expected-encoding.xml";
+        File file = new File( "src/test/verifiers/xpp3/expected-encoding.xml" );
 
-        FileReader reader = new FileReader( path );
+        Reader reader = ReaderFactory.newXmlReader( file );
         MavenXpp3Reader modelReader = new MavenXpp3Reader();
 
         Model model = modelReader.read( reader );
@@ -94,9 +96,9 @@ public class Xpp3Verifier
     public void verifyThrowingExceptionWithWrongRootElement()
         throws Exception
     {
-        String path = "src/test/verifiers/xpp3/model-with-wrong-root-element.xml";
+        File file = new File( "src/test/verifiers/xpp3/model-with-wrong-root-element.xml" );
 
-        FileReader reader = new FileReader( path );
+        Reader reader = ReaderFactory.newXmlReader( file );
 
         MavenXpp3Reader modelReader = new MavenXpp3Reader();
 
@@ -109,7 +111,7 @@ public class Xpp3Verifier
             Assert.assertTrue( e.getMessage().startsWith( "Unrecognised tag: 'wrongRoot'" ) );
         }
 
-        reader = new FileReader( path );
+        reader = ReaderFactory.newXmlReader( file );
 
         // no failure if it is wrong but strict is off
         modelReader.read( reader, false );
@@ -118,9 +120,9 @@ public class Xpp3Verifier
     public void verifyThrowingExceptionWithWrongElement()
         throws Exception
     {
-        String path = "src/test/verifiers/xpp3/model-with-wrong-element.xml";
+        File file = new File( "src/test/verifiers/xpp3/model-with-wrong-element.xml" );
 
-        FileReader reader = new FileReader( path );
+        Reader reader = ReaderFactory.newXmlReader( file );
 
         MavenXpp3Reader modelReader = new MavenXpp3Reader();
 
@@ -133,7 +135,7 @@ public class Xpp3Verifier
             Assert.assertTrue( e.getMessage().startsWith( "Unrecognised tag: 'bar'" ) );
         }
 
-        reader = new FileReader( path );
+        reader = ReaderFactory.newXmlReader( file );
 
         // no failure if it is wrong but strict is off
         Model model = modelReader.read( reader, false );

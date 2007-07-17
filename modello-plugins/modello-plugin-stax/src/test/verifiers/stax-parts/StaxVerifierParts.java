@@ -32,9 +32,11 @@ import org.codehaus.modello.test.model.parts.io.stax.PartsStaxReader;
 import org.codehaus.modello.test.model.parts.io.stax.PartsStaxWriter;
 import org.codehaus.modello.verifier.Verifier;
 import org.codehaus.plexus.util.FileUtils;
+import org.codehaus.plexus.util.ReaderFactory;
 
-import java.io.FileReader;
+import java.io.File;
 import java.io.IOException;
+import java.io.Reader;
 import java.io.StringWriter;
 import javax.xml.stream.XMLStreamException;
 
@@ -47,9 +49,9 @@ public class StaxVerifierParts
     public void verify()
         throws IOException, XMLStreamException
     {
-        String path = "src/test/verifiers/stax-parts/parts.xml";
+        File file = new File( "src/test/verifiers/stax-parts/parts.xml" );
 
-        FileReader reader = new FileReader( path );
+        Reader reader = ReaderFactory.newXmlReader( file );
         PartsStaxReader modelReader = new PartsStaxReader();
 
         Model model = modelReader.read( reader );
@@ -117,7 +119,7 @@ public class StaxVerifierParts
         Assert.assertEquals( "Description 2", ((DummyIdReference)model.getDummyPointers().get( 3 )).getDescription() );
 
 
-        String expected = FileUtils.fileRead( path );
+        String expected = FileUtils.fileRead( file );
 
         PartsStaxWriter modelWriter = new PartsStaxWriter();
         StringWriter w = new StringWriter();

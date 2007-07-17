@@ -31,9 +31,9 @@ import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.Version;
 import org.codehaus.modello.plugins.xml.XmlFieldMetadata;
+import org.codehaus.plexus.util.ReaderFactory;
 
 import java.io.File;
-import java.io.FileReader;
 import java.util.List;
 import java.util.Properties;
 
@@ -54,7 +54,7 @@ public class Dom4jGeneratorTest
     {
         ModelloCore modello = (ModelloCore) container.lookup( ModelloCore.ROLE );
 
-        Model model = modello.loadModel( new FileReader( getTestPath( "src/test/resources/maven.mdo" ) ) );
+        Model model = modello.loadModel( ReaderFactory.newXmleader( getTestFile( "src/test/resources/maven.mdo" ) ) );
 
         List classesList = model.getClasses( new Version( "4.0.0" ) );
 

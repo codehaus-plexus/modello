@@ -25,11 +25,11 @@ package org.codehaus.modello.plugin.jpox;
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
+import org.codehaus.plexus.util.ReaderFactory;
 import org.dom4j.Document;
 import org.dom4j.io.SAXReader;
 
 import java.io.File;
-import java.io.FileReader;
 import java.util.Properties;
 
 /**
@@ -47,7 +47,7 @@ public class JPoxJdoMappingModelloGeneratorPrefixedTest extends AbstractJpoxGene
     {
         ModelloCore core = (ModelloCore) lookup( ModelloCore.ROLE );
 
-        Model model = core.loadModel( new FileReader( getTestPath( "src/test/resources/test-with-prefixes.mdo" ) ) );
+        Model model = core.loadModel( ReaderFactory.newXmlReader( getTestFile( "src/test/resources/test-with-prefixes.mdo" ) ) );
 
         // ----------------------------------------------------------------------
         // Generate the code

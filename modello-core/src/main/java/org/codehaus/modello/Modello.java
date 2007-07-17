@@ -29,7 +29,6 @@ import java.util.Properties;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelValidationException;
-import org.codehaus.plexus.embed.Embedder;
 import org.codehaus.plexus.PlexusContainer;
 import org.codehaus.plexus.DefaultPlexusContainer;
 

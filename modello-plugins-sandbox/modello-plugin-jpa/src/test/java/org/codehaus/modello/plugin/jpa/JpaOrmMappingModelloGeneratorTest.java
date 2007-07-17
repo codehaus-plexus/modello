@@ -17,7 +17,6 @@ package org.codehaus.modello.plugin.jpa;
  */
 
 import java.io.File;
-import java.io.FileReader;
 import java.util.List;
 import java.util.Properties;
 
@@ -25,6 +24,7 @@ import org.codehaus.modello.AbstractModelloGeneratorTest;
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
+import org.codehaus.plexus.util.ReaderFactory;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
@@ -58,7 +58,7 @@ public class JpaOrmMappingModelloGeneratorTest
         ModelloCore core = (ModelloCore) lookup( ModelloCore.ROLE );
 
         Model model = core
-            .loadModel( new FileReader( getTestFile( getBasedir(), "src/test/resources/continuum-jpa.xml" ) ) );
+            .loadModel( ReaderFactory.newXmlReader( getTestFile( getBasedir(), "src/test/resources/continuum-jpa.xml" ) ) );
 
         Properties parameters = new Properties();
 

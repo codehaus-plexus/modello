@@ -141,21 +141,26 @@ public abstract class AbstractModelloGeneratorTest
     {
         return dependencies;
     }
-
+    
+    protected String getModelloVersion()
+    {
+        Properties properties = new Properties( System.getProperties() );
+        if ( properties.getProperty( "version" ) == null )
+        {
+            properties.load(
+                getClass().getResourceAsStream( "/META-INF/maven/org.codehaus.modello/modello-core/pom.properties" ) );
+        }
+        return properties.getProperty( "version" );
+    }
+    
     protected void compile( File generatedSources, File destinationDirectory )
         throws IOException, CompilerException
     {
         addDependency( "junit", "junit", "3.8.1" );
 
-        addDependency( "org.codehaus.plexus", "plexus-utils", "1.0.4" );
+        addDependency( "org.codehaus.plexus", "plexus-utils", "1.4.3" );
 
-        Properties properties = new Properties( System.getProperties() );
-        if ( properties.getProperty( "version" ) == null )
-        {
-            properties.load(
-                getClass().getResourceAsStream( "/META-INF/maven/org.codehaus.modello/modello-test/pom.properties" ) );
-        }
-        addDependency( "org.codehaus.modello", "modello-test", properties.getProperty( "version" ) );
+        addDependency( "org.codehaus.modello", "modello-test", getModelloVersion() );
 
         String[] classPathElements = new String[dependencies.size() + 2];
 

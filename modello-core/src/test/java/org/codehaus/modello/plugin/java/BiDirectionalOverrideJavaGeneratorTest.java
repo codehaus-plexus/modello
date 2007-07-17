@@ -21,9 +21,9 @@ import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
 import org.codehaus.plexus.util.FileUtils;
+import org.codehaus.plexus.util.ReaderFactory;
 
 import java.io.File;
-import java.io.FileReader;
 import java.util.Properties;
 
 /**
@@ -49,9 +49,9 @@ public class BiDirectionalOverrideJavaGeneratorTest
     public void testJavaGenerator()
         throws Throwable
     {
-        generatedSources = new File( getTestPath( "target/" + getName() + "/sources" ) );
+        generatedSources = getTestFile( "target/" + getName() + "/sources" );
 
-        classes = new File( getTestPath( "target/" + getName() + "/classes" ) );
+        classes = getTestFile( "target/" + getName() + "/classes" );
 
         FileUtils.deleteDirectory( generatedSources );
 
@@ -69,7 +69,7 @@ public class BiDirectionalOverrideJavaGeneratorTest
 
         parameters.setProperty( ModelloParameterConstants.VERSION, "1.0.0" );
 
-        Model model = modello.loadModel( new FileReader( getTestPath( modelFile ) ) );
+        Model model = modello.loadModel( ReaderFactory.newXmlReader( getTestFile( modelFile ) ) );
 
         String plugin = "java";
         modello.generate( model, plugin, parameters );

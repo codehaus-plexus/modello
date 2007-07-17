@@ -36,10 +36,12 @@ import org.codehaus.modello.test.model.io.stax.MavenStaxWriter;
 import org.codehaus.modello.test.model.TypeTester;
 import org.codehaus.modello.verifier.Verifier;
 import org.codehaus.plexus.util.FileUtils;
+import org.codehaus.plexus.util.ReaderFactory;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 
-import java.io.FileReader;
+import java.io.File;
 import java.io.IOException;
+import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.text.DateFormat;
@@ -77,9 +79,9 @@ public class StaxVerifier
     public void verifyEncodedRead()
         throws IOException, XMLStreamException
     {
-        String path = "src/test/verifiers/stax/expected-encoding.xml";
+        File file = new File( "src/test/verifiers/stax/expected-encoding.xml" );
 
-        FileReader reader = new FileReader( path );
+        Reader reader = ReaderFactory.newXmlReader( file );
         MavenStaxReader modelReader = new MavenStaxReader();
 
         Model model = modelReader.read( reader );
