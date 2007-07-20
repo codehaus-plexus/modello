@@ -284,13 +284,8 @@
       </dependency>
       <dependency>
         <groupId>org.codehaus.plexus</groupId>
-        <artifactId>plexus-component-api</artifactId>
-        <version>1.0-alpha-25</version>
-      </dependency>
-      <dependency>
-        <groupId>org.codehaus.plexus</groupId>
         <artifactId>plexus-container-default</artifactId>
-        <version>1.0-alpha-25</version>
+        <version>1.0-alpha-29</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.plexus</groupId>
