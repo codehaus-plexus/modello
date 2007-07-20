@@ -42,6 +42,11 @@
     </dependency>
     <dependency>
       <groupId>org.codehaus.modello</groupId>
+      <artifactId>modello-plugin-jpox</artifactId>
+      <scope>runtime</scope>
+    </dependency>    
+    <dependency>
+      <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-plugin-converters</artifactId>
       <scope>runtime</scope>
     </dependency>

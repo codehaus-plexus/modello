@@ -26,6 +26,8 @@ import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelValidationException;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
 import java.util.Properties;
@@ -40,6 +42,9 @@ public interface ModelloCore
 
     MetadataPluginManager getMetadataPluginManager();
 
+    Model loadModel( File file )
+        throws IOException, ModelloException, ModelValidationException;
+    
     Model loadModel( Reader reader )
         throws ModelloException, ModelValidationException;
 

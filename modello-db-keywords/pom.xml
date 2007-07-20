@@ -10,9 +10,12 @@
   <name>Modello Database Keywords Library</name>
   <dependencies>
     <dependency>
+      <groupId>org.codehaus.modello</groupId>
+      <artifactId>modello-core</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-utils</artifactId>
-      <version>1.4</version>
     </dependency>
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
