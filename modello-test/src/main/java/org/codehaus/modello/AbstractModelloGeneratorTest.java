@@ -143,6 +143,7 @@ public abstract class AbstractModelloGeneratorTest
     }
     
     protected String getModelloVersion()
+        throws IOException
     {
         Properties properties = new Properties( System.getProperties() );
         if ( properties.getProperty( "version" ) == null )
