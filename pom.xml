@@ -46,7 +46,7 @@
       <subscribe>http://xircles.codehaus.org/manage_email/scm@modello.codehaus.org</subscribe>
       <unsubscribe>http://xircles.codehaus.org/projects/modello/lists</unsubscribe>
       <archive>http://archive.modello.codehaus.org/scm/</archive>
-    </mailingList>
+     </mailingList>
   </mailingLists>
   <developers>
     <developer>
