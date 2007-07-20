@@ -39,6 +39,7 @@ import org.codehaus.plexus.util.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
@@ -141,19 +142,25 @@ public abstract class AbstractModelloGeneratorTest
     {
         return dependencies;
     }
-    
+
     protected String getModelloVersion()
         throws IOException
     {
         Properties properties = new Properties( System.getProperties() );
+
         if ( properties.getProperty( "version" ) == null )
         {
-            properties.load(
-                getClass().getResourceAsStream( "/META-INF/maven/org.codehaus.modello/modello-core/pom.properties" ) );
+            InputStream is = getResourceAsStream( "/META-INF/maven/org.codehaus.modello/modello-test/pom.properties" );
+
+            if ( is != null )
+            {
+                properties.load( is );
+            }
         }
+
         return properties.getProperty( "version" );
     }
-    
+
     protected void compile( File generatedSources, File destinationDirectory )
         throws IOException, CompilerException
     {
