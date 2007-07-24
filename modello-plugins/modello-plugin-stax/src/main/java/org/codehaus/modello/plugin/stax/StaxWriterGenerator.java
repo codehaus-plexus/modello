@@ -42,10 +42,11 @@ import org.codehaus.modello.plugins.xml.XmlAssociationMetadata;
 import org.codehaus.modello.plugins.xml.XmlClassMetadata;
 import org.codehaus.modello.plugins.xml.XmlFieldMetadata;
 import org.codehaus.plexus.util.StringUtils;
+import org.codehaus.plexus.util.WriterFactory;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 import java.util.Iterator;
 import java.util.Properties;
 
@@ -101,7 +102,7 @@ public class StaxWriterGenerator
             f.getParentFile().mkdirs();
         }
 
-        FileWriter writer = new FileWriter( f );
+        Writer writer = WriterFactory.newPlatformWriter( f );
 
         JSourceWriter sourceWriter = new JSourceWriter( writer );
 

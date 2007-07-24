@@ -23,8 +23,8 @@ package org.codehaus.modello.plugin.ldap;
  */
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 import java.util.Iterator;
 import java.util.Properties;
 import java.util.List;
@@ -39,6 +39,7 @@ import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.plugin.AbstractModelloGenerator;
+import org.codehaus.plexus.util.WriterFactory;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -101,7 +102,7 @@ public class ObjStateFactoryModelloGenerator
             }
         }
 
-        FileWriter writer = new FileWriter( f );
+        Writer writer = WriterFactory.newPlatformWriter( f );
 
         JSourceWriter sourceWriter = new JSourceWriter( writer );
 

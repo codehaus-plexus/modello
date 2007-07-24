@@ -33,12 +33,12 @@ import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.Version;
 import org.codehaus.modello.plugin.AbstractModelloGenerator;
 import org.codehaus.modello.plugin.store.tool.JavaTool;
+import org.codehaus.plexus.util.WriterFactory;
 import org.codehaus.plexus.velocity.VelocityComponent;
 
 import java.io.File;
-import java.io.FileWriter;
-import java.io.Writer;
 import java.util.HashMap;
+import java.io.Writer;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -151,7 +151,7 @@ public abstract class AbstractVelocityModelloGenerator
 
         try
         {
-            Writer writer = new FileWriter( file );
+            Writer writer = WriterFactory.newPlatformWriter( file );
 
             template.merge( context, writer );
 

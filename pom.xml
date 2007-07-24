@@ -285,12 +285,12 @@
       <dependency>
         <groupId>org.codehaus.plexus</groupId>
         <artifactId>plexus-container-default</artifactId>
-        <version>1.0-alpha-29</version>
+        <version>1.0-alpha-30-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.plexus</groupId>
         <artifactId>plexus-utils</artifactId>
-        <version>1.4.3</version>
+        <version>1.4.4</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.plexus</groupId>

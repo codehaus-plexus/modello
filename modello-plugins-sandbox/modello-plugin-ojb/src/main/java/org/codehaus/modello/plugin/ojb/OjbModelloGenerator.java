@@ -25,7 +25,6 @@ package org.codehaus.modello.plugin.ojb;
 import java.util.Properties;
 import java.io.File;
 import java.io.Writer;
-import java.io.FileWriter;
 
 import org.apache.velocity.context.Context;
 import org.apache.velocity.VelocityContext;
@@ -34,6 +33,7 @@ import org.codehaus.modello.plugin.AbstractModelloGenerator;
 import org.codehaus.modello.plugin.store.metadata.StoreClassMetadata;
 import org.codehaus.modello.model.Model;
 import org.codehaus.modello.ModelloException;
+import org.codehaus.plexus.util.WriterFactory;
 import org.codehaus.plexus.velocity.VelocityComponent;
 
 /**
@@ -97,7 +97,7 @@ public class OjbModelloGenerator
     {
         try
         {
-            Writer writer = new FileWriter( file );
+            Writer writer = WriterFactory.newXmlWriter( file );
 
             velocity.getEngine().mergeTemplate( template, context, writer );
 

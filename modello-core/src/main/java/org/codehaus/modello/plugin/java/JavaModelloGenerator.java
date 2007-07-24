@@ -41,9 +41,10 @@ import org.codehaus.modello.plugin.java.javasource.JSourceCode;
 import org.codehaus.modello.plugin.java.javasource.JSourceWriter;
 import org.codehaus.modello.plugin.java.javasource.JType;
 import org.codehaus.plexus.util.StringUtils;
+import org.codehaus.plexus.util.WriterFactory;
 
 import java.io.File;
-import java.io.FileWriter;
+import java.io.Writer;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Iterator;
@@ -107,7 +108,7 @@ public class JavaModelloGenerator
                 f.getParentFile().mkdirs();
             }
 
-            FileWriter writer = new FileWriter( f );
+            Writer writer = WriterFactory.newPlatformWriter( f );
 
             JSourceWriter sourceWriter = new JSourceWriter( writer );
 
@@ -179,7 +180,7 @@ public class JavaModelloGenerator
                 f.getParentFile().mkdirs();
             }
 
-            FileWriter writer = new FileWriter( f );
+            Writer writer = WriterFactory.newPlatformWriter( f );
 
             JSourceWriter sourceWriter = new JSourceWriter( writer );
 

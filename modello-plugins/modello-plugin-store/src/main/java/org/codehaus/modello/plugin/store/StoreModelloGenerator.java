@@ -28,10 +28,10 @@ import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.model.Model;
 import org.codehaus.modello.plugin.AbstractModelloGenerator;
 import org.codehaus.modello.plugin.store.metadata.StoreClassMetadata;
+import org.codehaus.plexus.util.WriterFactory;
 import org.codehaus.plexus.velocity.VelocityComponent;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.Writer;
 import java.util.Properties;
 
@@ -103,7 +103,7 @@ public class StoreModelloGenerator
     {
         try
         {
-            Writer writer = new FileWriter( file );
+            Writer writer = WriterFactory.newPlatformWriter( file );
 
             velocity.getEngine().mergeTemplate( template, context, writer );
 

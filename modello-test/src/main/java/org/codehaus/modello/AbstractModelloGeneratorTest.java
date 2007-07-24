@@ -146,7 +146,8 @@ public abstract class AbstractModelloGeneratorTest
     protected String getModelloVersion()
         throws IOException
     {
-        Properties properties = new Properties( System.getProperties() );
+        return "1.0-alpha-17-SNAPSHOT" ;
+        /*Properties properties = new Properties( System.getProperties() );
 
         if ( properties.getProperty( "version" ) == null )
         {
@@ -158,7 +159,7 @@ public abstract class AbstractModelloGeneratorTest
             }
         }
 
-        return properties.getProperty( "version" );
+        return properties.getProperty( "version" );*/
     }
 
     protected void compile( File generatedSources, File destinationDirectory )
@@ -166,7 +167,7 @@ public abstract class AbstractModelloGeneratorTest
     {
         addDependency( "junit", "junit", "3.8.1" );
 
-        addDependency( "org.codehaus.plexus", "plexus-utils", "1.4.3" );
+        addDependency( "org.codehaus.plexus", "plexus-utils", "1.4.4" );
 
         addDependency( "org.codehaus.modello", "modello-test", getModelloVersion() );
 

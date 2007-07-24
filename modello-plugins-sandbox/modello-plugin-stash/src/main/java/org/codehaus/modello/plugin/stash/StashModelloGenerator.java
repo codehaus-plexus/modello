@@ -24,7 +24,6 @@ package org.codehaus.modello.plugin.stash;
 
 import java.util.Properties;
 import java.io.Writer;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.File;
 
@@ -38,6 +37,7 @@ import org.codehaus.modello.plugin.AbstractModelloGenerator;
 import org.codehaus.modello.plugin.stash.metadata.StashClassMetadata;
 import org.codehaus.modello.model.Model;
 import org.codehaus.modello.ModelloException;
+import org.codehaus.plexus.util.WriterFactory;
 import org.codehaus.plexus.velocity.VelocityComponent;
 
 /**
@@ -93,7 +93,7 @@ public class StashModelloGenerator
 
         try
         {
-            Writer writer = new FileWriter( file );
+            Writer writer = WriterFactory.newPlatformWriter( file );
 
             velocity.getEngine().mergeTemplate( template, context, writer );
 

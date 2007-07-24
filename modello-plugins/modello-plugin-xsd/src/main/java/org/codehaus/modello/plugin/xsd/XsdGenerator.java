@@ -31,12 +31,13 @@ import org.codehaus.modello.plugin.AbstractModelloGenerator;
 import org.codehaus.modello.plugin.model.ModelClassMetadata;
 import org.codehaus.modello.plugin.xsd.metadata.XsdModelMetadata;
 import org.codehaus.plexus.util.StringUtils;
+import org.codehaus.plexus.util.WriterFactory;
 import org.codehaus.plexus.util.xml.PrettyPrintXMLWriter;
 import org.codehaus.plexus.util.xml.XMLWriter;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -85,7 +86,7 @@ public class XsdGenerator
             f.getParentFile().mkdirs();
         }
 
-        FileWriter writer = new FileWriter( f );
+        Writer writer = WriterFactory.newPlatformWriter( f );
 
         XMLWriter w = new PrettyPrintXMLWriter( writer );
 

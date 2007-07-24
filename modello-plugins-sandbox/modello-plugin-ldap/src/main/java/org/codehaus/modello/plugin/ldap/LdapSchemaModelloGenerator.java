@@ -23,9 +23,9 @@ package org.codehaus.modello.plugin.ldap;
  */
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.Writer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -43,6 +43,7 @@ import org.codehaus.modello.plugin.AbstractModelloGenerator;
 import org.codehaus.modello.plugin.ldap.model.AttributeType;
 import org.codehaus.modello.plugin.ldap.model.ObjectClass;
 import org.codehaus.modello.plugin.ldap.metadata.LdapFieldMetadata;
+import org.codehaus.plexus.util.WriterFactory;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -83,7 +84,7 @@ public class LdapSchemaModelloGenerator
 
         try
         {
-            FileWriter output = new FileWriter( file );
+            Writer output = WriterFactory.newPlatformWriter( file );
 
             PrintWriter printer = new PrintWriter( output );
 

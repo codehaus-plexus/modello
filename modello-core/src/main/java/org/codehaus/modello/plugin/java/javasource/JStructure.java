@@ -68,9 +68,10 @@ package org.codehaus.modello.plugin.java.javasource;
  */
 
 import java.io.File;
-import java.io.FileWriter;
 import java.util.Enumeration;
 import java.util.Vector;
+
+import org.codehaus.plexus.util.WriterFactory;
 
 /**
  * This class represents the basic Java "structure" for a Java
@@ -594,7 +595,7 @@ abstract class JStructure extends JType
         JSourceWriter jsw = null;
         try
         {
-            jsw = new JSourceWriter( new FileWriter( file ) );
+            jsw = new JSourceWriter( WriterFactory.newPlatformWriter( file ) );
         }
         catch ( java.io.IOException ioe )
         {

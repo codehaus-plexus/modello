@@ -76,12 +76,13 @@ package org.codehaus.modello.plugin.java.javasource;
  */
 
 import java.io.File;
-import java.io.FileWriter;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.Vector;
+
+import org.codehaus.plexus.util.WriterFactory;
 
 /**
  * A representation of the Java Source code for a Java compilation
@@ -370,7 +371,7 @@ public class JCompUnit
         JSourceWriter jsw = null;
         try
         {
-            jsw = new JSourceWriter( new FileWriter( file ) );
+            jsw = new JSourceWriter( WriterFactory.newPlatformWriter( file ) );
         }
         catch ( java.io.IOException ioe )
         {

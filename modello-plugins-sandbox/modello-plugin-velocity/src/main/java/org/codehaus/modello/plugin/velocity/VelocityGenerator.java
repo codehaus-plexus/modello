@@ -22,7 +22,6 @@ package org.codehaus.modello.plugin.velocity;
  * SOFTWARE.
  */
 
-import java.io.FileWriter;
 import java.io.Writer;
 import java.util.Properties;
 
@@ -34,6 +33,7 @@ import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.Version;
 import org.codehaus.modello.plugin.AbstractModelloGenerator;
+import org.codehaus.plexus.util.WriterFactory;
 import org.codehaus.plexus.velocity.VelocityComponent;
 
 /**
@@ -71,7 +71,7 @@ public class VelocityGenerator
 
             context.put( "model", model );
 
-            Writer writer = new FileWriter( "foo.txt" );
+            Writer writer = WriterFactory.newPlatformWriter( "foo.txt" );
 
             velocity.getEngine().mergeTemplate( "/modello/templates/prevayler/prevayler.vm", context, writer );
 

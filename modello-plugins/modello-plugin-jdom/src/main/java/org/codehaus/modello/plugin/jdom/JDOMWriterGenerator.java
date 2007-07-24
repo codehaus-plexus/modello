@@ -33,10 +33,11 @@ import org.codehaus.modello.plugin.java.javasource.JSourceWriter;
 import org.codehaus.modello.plugin.java.javasource.JType;
 import org.codehaus.modello.plugin.model.ModelClassMetadata;
 import org.codehaus.modello.plugins.xml.XmlFieldMetadata;
+import org.codehaus.plexus.util.WriterFactory;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Properties;
@@ -89,7 +90,7 @@ public class JDOMWriterGenerator
             f.getParentFile().mkdirs();
         }
 
-        FileWriter writer = new FileWriter( f );
+        Writer writer = WriterFactory.newPlatformWriter( f );
 
         JSourceWriter sourceWriter = new JSourceWriter( writer );
 

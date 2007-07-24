@@ -43,9 +43,9 @@ import org.codehaus.modello.plugin.java.javasource.JSourceCode;
 import org.codehaus.modello.plugin.java.javasource.JSourceWriter;
 import org.codehaus.modello.plugin.java.javasource.JType;
 import org.codehaus.plexus.util.IOUtil;
+import org.codehaus.plexus.util.WriterFactory;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
@@ -498,15 +498,15 @@ public class ConverterGenerator
         return modelClass.getPackageName( true, generatedVersion ) + "." + modelClass.getName();
     }
 
-    private static FileWriter getFileWriter( File dir, String name )
+    private static Writer getFileWriter( File dir, String name )
         throws ModelloException
     {
         File f = new File( dir, name );
 
-        FileWriter writer;
+        Writer writer;
         try
         {
-            writer = new FileWriter( f );
+            writer = WriterFactory.newPlatformWriter( f );
         }
         catch ( IOException e )
         {
