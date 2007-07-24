@@ -146,8 +146,7 @@ public abstract class AbstractModelloGeneratorTest
     protected String getModelloVersion()
         throws IOException
     {
-        return "1.0-alpha-17-SNAPSHOT" ;
-        /*Properties properties = new Properties( System.getProperties() );
+        Properties properties = new Properties( System.getProperties() );
 
         if ( properties.getProperty( "version" ) == null )
         {
@@ -159,7 +158,7 @@ public abstract class AbstractModelloGeneratorTest
             }
         }
 
-        return properties.getProperty( "version" );*/
+        return properties.getProperty( "version" );
     }
 
     protected void compile( File generatedSources, File destinationDirectory )
