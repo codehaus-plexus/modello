@@ -138,7 +138,7 @@ public class Xpp3WriterGenerator
             rootElement = metadata.getTagName();
         }
 
-        // Write the parse method which will do the unmarshalling.
+        // Write the write method which will do the marshalling.
 
         JMethod marshall = new JMethod( null, "write" );
 

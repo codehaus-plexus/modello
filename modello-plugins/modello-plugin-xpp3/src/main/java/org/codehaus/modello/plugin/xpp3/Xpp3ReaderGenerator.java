@@ -108,7 +108,7 @@ public class Xpp3ReaderGenerator
 
         jClass.addImport( "org.codehaus.plexus.util.IOUtil" );
 
-        jClass.addImport( "org.codehaus.plexus.util.xml.XmlReader" );
+        jClass.addImport( "org.codehaus.plexus.util.ReaderFactory" );
 
         jClass.addImport( "org.codehaus.plexus.util.xml.pull.MXParser" );
 
@@ -173,20 +173,20 @@ public class Xpp3ReaderGenerator
         // The getter
         JMethod addDefaultEntitiesGetter = new JMethod( JType.Boolean, "getAddDefaultEntities" );
 
-        addDefaultEntitiesSetter.setComment( "Returns the state of the \"add default entities\" flag." );
+        addDefaultEntitiesGetter.setComment( "Returns the state of the \"add default entities\" flag." );
 
         addDefaultEntitiesGetter.setSourceCode( "return addDefaultEntities;" );
 
         jClass.addMethod( addDefaultEntitiesGetter );
 
         // ----------------------------------------------------------------------
-        // Write the deprecated parse(Reader) method which will do the unmarshalling.
+        // Write the parse(Reader) method which will do the unmarshalling.
         // ----------------------------------------------------------------------
 
         ModelClass root = objectModel.getClass( objectModel.getRoot( getGeneratedVersion() ), getGeneratedVersion() );
 
         JMethod unmarshall = new JMethod( new JClass( root.getName() ), "read" );
-        unmarshall.setComment( "@deprecated prefer read(InputStream, boolean)" );
+        unmarshall.setComment( "@see ReaderFactory#newXmlReader" );
 
         unmarshall.addParameter( new JParameter( new JClass( "Reader" ), "reader" ) );
 
@@ -216,7 +216,7 @@ public class Xpp3ReaderGenerator
         jClass.addMethod( unmarshall );
 
         unmarshall = new JMethod( new JClass( root.getName() ), "read" );
-        unmarshall.setComment( "@deprecated prefer read(InputStream)" );
+        unmarshall.setComment( "@see ReaderFactory#newXmlReader" );
 
         unmarshall.addParameter( new JParameter( new JClass( "Reader" ), "reader" ) );
 
@@ -243,11 +243,13 @@ public class Xpp3ReaderGenerator
 
         sc = unmarshall.getSourceCode();
 
-        sc.add( "Reader reader = new XmlReader( in );" );
+        sc.add( "Reader reader = ReaderFactory.newXmlReader( in );" );
 
         sc.add( "" );
 
         sc.add( "return read( reader, strict );" );
+
+        jClass.addMethod( unmarshall );
 
         unmarshall = new JMethod( new JClass( root.getName() ), "read" );
 
@@ -258,7 +260,7 @@ public class Xpp3ReaderGenerator
 
         sc = unmarshall.getSourceCode();
 
-        sc.add( "Reader reader = new XmlReader( in );" );
+        sc.add( "Reader reader = ReaderFactory.newXmlReader( in );" );
 
         sc.add( "" );
         
