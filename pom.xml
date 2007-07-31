@@ -1,11 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.codehaus.modello</groupId>
   <artifactId>modello</artifactId>
   <packaging>pom</packaging>
   <name>Modello Parent</name>
-  <version>1.0-alpha-17-SNAPSHOT</version>
+  <version>1.0-alpha-17</version>
   <url>http://modello.codehaus.org/</url>
   <issueManagement>
     <system>jira</system>
@@ -90,7 +89,7 @@
       <timezone>-5</timezone>
     </developer>
     <developer>
-      <name>Trygve Laugst&#248;l</name>
+      <name>Trygve Laugstøl</name>
       <email>trygvis@codehaus.org</email>
       <roles>
         <role>Developer</role>
@@ -98,7 +97,7 @@
       <timezone>-5</timezone>
     </developer>
     <developer>
-      <name>Arnaud H&#233;ritier</name>
+      <name>Arnaud Héritier</name>
       <email>aheritier@gmail.com</email>
       <roles>
         <role>Developer</role>
@@ -114,7 +113,7 @@
       <timezone>+1</timezone>
     </developer>
     <developer>
-      <name>Herv&#233; Boutemy</name>
+      <name>Hervé Boutemy</name>
       <email>hboutemy@codehaus.org</email>
       <roles>
         <role>Developer</role>
@@ -130,9 +129,9 @@
     </license>
   </licenses>
   <scm>
-    <connection>scm:svn:http://svn.codehaus.org/modello/trunk</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/modello/trunk</developerConnection>
-    <url>http://svn.modello.codehaus.org/browse/modello/trunk</url>
+    <connection>scm:svn:http://svn.codehaus.org/modello/tags/modello-1.0-alpha-17</connection>
+    <developerConnection>scm:svn:https://svn.codehaus.org/modello/tags/modello-1.0-alpha-17</developerConnection>
+    <url>http://svn.modello.codehaus.org/browse/modello/tags/modello-1.0-alpha-17</url>
   </scm>
   <organization>
     <name>Codehaus</name>
@@ -189,68 +188,68 @@
       <dependency>
         <groupId>org.codehaus.modello</groupId>
         <artifactId>modello-core</artifactId>
-        <version>1.0-alpha-17-SNAPSHOT</version>
+        <version>1.0-alpha-17</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.modello</groupId>
         <artifactId>modello-test</artifactId>
-        <version>1.0-alpha-17-SNAPSHOT</version>
+        <version>1.0-alpha-17</version>
         <scope>test</scope>
       </dependency>
       <dependency>
         <groupId>org.codehaus.modello</groupId>
         <artifactId>modello-db-keywords</artifactId>
-        <version>1.0-alpha-17-SNAPSHOT</version>
+        <version>1.0-alpha-17</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.modello</groupId>
         <artifactId>modello-plugin-plexus-registry</artifactId>
-        <version>1.0-alpha-17-SNAPSHOT</version>
+        <version>1.0-alpha-17</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.modello</groupId>
         <artifactId>modello-plugin-jpox</artifactId>
-        <version>1.0-alpha-17-SNAPSHOT</version>
+        <version>1.0-alpha-17</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.modello</groupId>
         <artifactId>modello-plugin-store</artifactId>
-        <version>1.0-alpha-17-SNAPSHOT</version>
+        <version>1.0-alpha-17</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.modello</groupId>
         <artifactId>modello-plugin-xdoc</artifactId>
-        <version>1.0-alpha-17-SNAPSHOT</version>
+        <version>1.0-alpha-17</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.modello</groupId>
         <artifactId>modello-plugin-converters</artifactId>
-        <version>1.0-alpha-17-SNAPSHOT</version>
+        <version>1.0-alpha-17</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.modello</groupId>
         <artifactId>modello-plugin-stax</artifactId>
-        <version>1.0-alpha-17-SNAPSHOT</version>
+        <version>1.0-alpha-17</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.modello</groupId>
         <artifactId>modello-plugin-xpp3</artifactId>
-        <version>1.0-alpha-17-SNAPSHOT</version>
+        <version>1.0-alpha-17</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.modello</groupId>
         <artifactId>modello-plugin-xml</artifactId>
-        <version>1.0-alpha-17-SNAPSHOT</version>
+        <version>1.0-alpha-17</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.modello</groupId>
         <artifactId>modello-plugin-xsd</artifactId>
-        <version>1.0-alpha-17-SNAPSHOT</version>
+        <version>1.0-alpha-17</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.modello</groupId>
         <artifactId>modello-plugin-jdom</artifactId>
-        <version>1.0-alpha-17-SNAPSHOT</version>
+        <version>1.0-alpha-17</version>
       </dependency>
       <dependency>
         <groupId>org.apache.maven</groupId>
