@@ -79,7 +79,7 @@ public abstract class AbstractRegistryGeneratorTestCase
         addDependency( "org.codehaus.modello", "modello-core", getModelloVersion() );
         addDependency( "org.codehaus.plexus.registry", "plexus-registry-api", "1.0-alpha-2" );
         addDependency( "org.codehaus.plexus.registry", "plexus-registry-commons", "1.0-alpha-2" );
-        addDependency( "org.codehaus.plexus", "plexus-container-default", "1.0-alpha-29" );
+        addDependency( "org.codehaus.plexus", "plexus-container-default", "1.0-alpha-30" );
         addDependency( "commons-collections", "commons-collections", "3.1" );
         addDependency( "commons-configuration", "commons-configuration", "1.3" );
         addDependency( "commons-lang", "commons-lang", "2.1" );
