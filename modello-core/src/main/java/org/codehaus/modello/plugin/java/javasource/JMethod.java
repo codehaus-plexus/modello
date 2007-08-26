@@ -137,6 +137,12 @@ public class JMethod implements JMember
         _signature = new JMethodSignature( name, returnType );
         this.jdc = _signature.getJDocComment();
         jdc.appendComment( "Method " + name );
+
+        //-- create comment
+        if ( returnType != null )
+        {
+            jdc.addDescriptor( JDocDescriptor.createReturnDesc( returnType.getName() ) );
+        }
     } //-- JMethod
 
 

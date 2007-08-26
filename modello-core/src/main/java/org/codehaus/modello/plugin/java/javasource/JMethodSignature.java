@@ -71,7 +71,7 @@ package org.codehaus.modello.plugin.java.javasource;
 import java.util.Vector;
 
 /**
- * A class which holds information about the signtaure
+ * A class which holds information about the signature
  * of a JMethod.
  *
  * The code in this package was modelled after the Java Reflection API
@@ -158,6 +158,9 @@ public final class JMethodSignature
         }
         //-- add exception
         exceptions.addElement( exp );
+
+        //-- create comment
+        jdc.addDescriptor( JDocDescriptor.createExceptionDesc( expClassName, null ) );
     } //-- addException
 
     /**

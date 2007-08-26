@@ -273,11 +273,19 @@ public class JavaModelloGenerator
 
             encodingStuff.append( "\n    private String modelEncoding = \"UTF-8\";" );
             encodingStuff.append( "\n" );
+            encodingStuff.append( "\n    /**" );
+            encodingStuff.append( "\n     * Set an encoding used for reading/writing the model." );
+            encodingStuff.append( "\n     *" );
+            encodingStuff.append( "\n     * @param modelEncoding the encoding used when reading/writing the model." );
+            encodingStuff.append( "\n     */" );
             encodingStuff.append( "\n    public void setModelEncoding( String modelEncoding )" );
             encodingStuff.append( "\n    {" );
             encodingStuff.append( "\n        this.modelEncoding = modelEncoding;" );
             encodingStuff.append( "\n    }" );
             encodingStuff.append( "\n" );
+            encodingStuff.append( "\n    /**" );
+            encodingStuff.append( "\n     * @return the current encoding used when reading/writing this model." );
+            encodingStuff.append( "\n     */" );
             encodingStuff.append( "\n    public String getModelEncoding()" );
             encodingStuff.append( "\n    {" );
             encodingStuff.append( "\n        return modelEncoding;" );

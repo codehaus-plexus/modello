@@ -361,7 +361,7 @@ public class JDocDescriptor
                 sb.append( "@author" );
                 break;
             case EXCEPTION:
-                sb.append( "@exception" );
+                sb.append( "@throws" );
                 break;
             case PARAM:
                 sb.append( "@param" );
