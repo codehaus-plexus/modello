@@ -123,8 +123,7 @@ public class JavaModelloGenerator
 
             if ( modelInterface.getCodeSegments( getGeneratedVersion() ) != null )
             {
-                for ( Iterator iterator = modelInterface.getCodeSegments( getGeneratedVersion() ).iterator();
-                      iterator.hasNext(); )
+                for ( Iterator iterator = modelInterface.getCodeSegments( getGeneratedVersion() ).iterator(); iterator.hasNext(); )
                 {
                     //TODO : add this method to jInterface or remove
                     // codeSegments and add method tag

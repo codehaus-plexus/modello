@@ -22,12 +22,19 @@ package org.codehaus.modello.plugin.xpp3;
  * SOFTWARE.
  */
 
+import java.io.File;
+import java.io.IOException;
+import java.io.Writer;
+import java.util.Iterator;
+import java.util.Properties;
+
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelDefault;
 import org.codehaus.modello.model.ModelField;
+import org.codehaus.modello.plugin.java.JavaClassMetadata;
 import org.codehaus.modello.plugin.java.javasource.JClass;
 import org.codehaus.modello.plugin.java.javasource.JField;
 import org.codehaus.modello.plugin.java.javasource.JMethod;
@@ -39,12 +46,6 @@ import org.codehaus.modello.plugins.xml.XmlAssociationMetadata;
 import org.codehaus.modello.plugins.xml.XmlClassMetadata;
 import org.codehaus.modello.plugins.xml.XmlFieldMetadata;
 import org.codehaus.plexus.util.WriterFactory;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.Writer;
-import java.util.Iterator;
-import java.util.Properties;
 
 /**
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
@@ -326,6 +327,13 @@ public class Xpp3ReaderGenerator
 
     private void writeClassParser( ModelClass modelClass, JClass jClass, boolean rootElement )
     {
+        JavaClassMetadata md = (JavaClassMetadata) modelClass.getMetadata(JavaClassMetadata.class.getName());
+
+        // Skip abstract classes, no way to parse them out into objects
+        if (md.isAbstract()) {
+            return;
+        }
+
         String className = modelClass.getName();
 
         String capClassName = capitalise( className );
@@ -333,7 +341,7 @@ public class Xpp3ReaderGenerator
         String uncapClassName = uncapitalise( className );
 
         JMethod unmarshall = new JMethod( new JClass( className ), "parse" + capClassName );
-
+        
         unmarshall.addParameter( new JParameter( new JClass( "String" ), "tagName" ) );
 
         unmarshall.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );

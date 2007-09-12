@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<model>
+    <id>abstract</id>
+    <name>Abstract</name>
+    
+    <defaults>
+        <default>
+            <key>package</key>
+            <value>org.codehaus.modello.generator.xml.xpp3.test.abstracto</value>
+        </default>
+    </defaults>
+    
+    <classes>
+        <class rootElement="true" xml.tagName="root">
+            <name>Root</name>
+            <version>1.0.0+</version>
+            <superClass>Node</superClass>
+            <fields>
+                <field>
+                    <name>leaves</name>
+                    <version>1.0.0+</version>
+                    <association>
+                        <type>Leaf</type>
+                        <multiplicity>*</multiplicity>
+                    </association>
+                </field>
+            </fields>
+        </class>
+        
+        <class java.abstract="true">
+            <name>Node</name>
+            <version>1.0.0+</version>
+            <fields>
+                <field>
+                    <name>id</name>
+                    <type>String</type>
+                    <version>1.0.0+</version>
+                    <required>true</required>
+                </field>
+            </fields>
+        </class>
+        
+        <class>
+            <name>Leaf</name>
+            <superClass>Node</superClass>
+            <version>1.0.0+</version>
+            <fields>
+                <field>
+                    <name>id</name>
+                    <type>String</type>
+                    <version>1.0.0+</version>
+                    <required>true</required>
+                </field>
+            </fields>
+        </class>
+    </classes>
+</model>

@@ -551,6 +551,10 @@ abstract class JStructure extends JType
     } //-- removeImport
 
 
+    public boolean isAbstract() {
+        return modifiers.isAbstract();
+    }
+    
     public static boolean isValidClassName( String name )
     {
 

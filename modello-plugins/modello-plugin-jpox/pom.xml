@@ -46,6 +46,10 @@
           <artifactId>jdbc-stdext</artifactId>
           <groupId>javax.sql</groupId>
         </exclusion>
+        <exclusion>
+          <groupId>javax.resource</groupId>
+          <artifactId>connector</artifactId>
+        </exclusion>
       </exclusions>
     </dependency>
     <dependency>
