@@ -469,10 +469,7 @@ public class XdocGenerator
     {
         StringBuffer sb = new StringBuffer();
 
-        for ( int i = 0; i < depth; i++ )
-        {
-            sb.append( "  " );
-        }
+        indent( sb, depth );
 
         ModelClassMetadata metadata = (ModelClassMetadata) modelClass.getMetadata( ModelClassMetadata.ID );
 
@@ -554,86 +551,58 @@ public class XdocGenerator
             {
                 ModelField f = (ModelField) iter.next();
 
-                XmlFieldMetadata fieldMetadata = (XmlFieldMetadata) f.getMetadata( XmlFieldMetadata.ID );
-
-                ModelClass fieldModelClass;
-
                 if ( f instanceof ModelAssociation && isClassInModel( ( (ModelAssociation) f ).getTo(), objectModel )
                     && recursive )
                 {
                     ModelAssociation association = (ModelAssociation) f;
 
-                    if ( XmlFieldMetadata.LIST_STYLE_FLAT.equals( fieldMetadata.getListStyle() ) )
-                    {
-                        fieldModelClass = objectModel.getClass( association.getTo(), getGeneratedVersion() );
+                    XmlFieldMetadata fieldMetadata = (XmlFieldMetadata) f.getMetadata( XmlFieldMetadata.ID );
 
-                        if ( ( modelClass.getName().equals( fieldModelClass.getName() ) )
-                            && ( modelClass.getPackageName().equals( fieldModelClass.getPackageName() ) ) )
-                        {
-                            sb.append( getModelClassDescriptor( objectModel, fieldModelClass, f, depth + 1, false ) );
-                        }
-                        else
-                        {
-                            sb.append( getModelClassDescriptor( objectModel, fieldModelClass, f, depth + 1 ) );
-                        }
+                    boolean listStyleWrapped =
+                        ModelAssociation.MANY_MULTIPLICITY.equals( association.getMultiplicity() )
+                        && !XmlFieldMetadata.LIST_STYLE_FLAT.equals( fieldMetadata.getListStyle() ); 
+
+                    if ( listStyleWrapped )
+                    {
+                        depth++;
+
+                        indent( sb, depth );
+
+                        sb.append( "&lt;" ).append( uncapitalise( association.getName() ) ).append( "&gt;\n" );
+                    }
+
+                    ModelClass fieldModelClass = objectModel.getClass( association.getTo(), getGeneratedVersion() );
+
+                    if ( ( modelClass.getName().equals( fieldModelClass.getName() ) )
+                        && ( modelClass.getPackageName().equals( fieldModelClass.getPackageName() ) ) )
+                    {
+                        sb.append( getModelClassDescriptor( objectModel, fieldModelClass, f, depth + 1, false ) );
                     }
                     else
                     {
+                        sb.append( getModelClassDescriptor( objectModel, fieldModelClass, f, depth + 1 ) );
+                    }
 
-                        if ( ModelAssociation.MANY_MULTIPLICITY.equals( association.getMultiplicity() ) )
-                        {
-                            depth++;
+                    if ( listStyleWrapped )
+                    {
+                        indent( sb, depth );
 
-                            for ( int i = 0; i < depth; i++ )
-                            {
-                                sb.append( "  " );
-                            }
+                        sb.append( "&lt;/" ).append( uncapitalise( association.getName() ) ).append( "&gt;\n" );
 
-                            sb.append( "&lt;" ).append( uncapitalise( association.getName() ) ).append( "&gt;\n" );
-                        }
-
-                        fieldModelClass = objectModel.getClass( association.getTo(), getGeneratedVersion() );
-
-                        if ( ( modelClass.getName().equals( fieldModelClass.getName() ) )
-                            && ( modelClass.getPackageName().equals( fieldModelClass.getPackageName() ) ) )
-                        {
-                            sb.append( getModelClassDescriptor( objectModel, fieldModelClass, f, depth + 1, false ) );
-                        }
-                        else
-                        {
-                            sb.append( getModelClassDescriptor( objectModel, fieldModelClass, f, depth + 1 ) );
-                        }
-
-                        if ( ModelAssociation.MANY_MULTIPLICITY.equals( association.getMultiplicity() ) )
-                        {
-                            for ( int i = 0; i < depth; i++ )
-                            {
-                                sb.append( "  " );
-                            }
-
-                            sb.append( "&lt;/" ).append( uncapitalise( association.getName() ) ).append( "&gt;\n" );
-
-                            depth--;
-                        }
+                        depth--;
                     }
 
                 }
                 else
                 {
-                    for ( int i = 0; i < depth + 1; i++ )
-                    {
-                        sb.append( "  " );
-                    }
+                    indent( sb, depth + 1 );
 
                     sb.append( "&lt;" ).append( uncapitalise( f.getName() ) ).append( "/&gt;\n" );
 
                 }
             }
 
-            for ( int i = 0; i < depth; i++ )
-            {
-                sb.append( "  " );
-            }
+            indent( sb, depth );
 
             sb.append( "&lt;/" ).append( tagName ).append( "&gt;\n" );
         }
@@ -643,5 +612,13 @@ public class XdocGenerator
         }
 
         return sb.toString();
+    }
+
+    private static void indent( StringBuffer sb, int depth )
+    {
+        for ( int i = 0; i < depth; i++ )
+        {
+            sb.append( "  " );
+        }
     }
 }
