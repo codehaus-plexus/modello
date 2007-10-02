@@ -27,7 +27,9 @@ import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.ModelloRuntimeException;
 import org.codehaus.modello.model.BaseElement;
 import org.codehaus.modello.model.Model;
+import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
+import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.ModelInterface;
 import org.codehaus.modello.model.Version;
 import org.codehaus.modello.plugin.java.JavaFieldMetadata;
@@ -101,6 +103,12 @@ public abstract class AbstractModelloGenerator
         }
 
         return false;
+    }
+
+    protected boolean isInnerAssociation( ModelField field )
+    {
+        return field instanceof ModelAssociation
+            && isClassInModel( ( (ModelAssociation) field ).getTo(), getModel() );
     }
 
     protected boolean isMap( String fieldType )

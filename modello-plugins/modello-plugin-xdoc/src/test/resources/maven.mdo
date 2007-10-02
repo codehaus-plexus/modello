@@ -27,7 +27,7 @@
     </default>
   </defaults>
   <classes>
-    <class rootElement="true">
+    <class rootElement="true" xml.tagName="project">
       <name>Model</name>
       <version>3.0.0+</version>
       <fields>
@@ -420,6 +420,17 @@
             <type>String</type>
             <multiplicity>*</multiplicity>
           </association>
+        </field>
+        <field xml.tagName="package">
+          <name>packageName</name>
+          <version>3.0.0+</version>
+          <type>String</type>
+          <description>
+            <![CDATA[
+            The Java package name of the project.  This value is used
+            when generating JavaDoc.
+            ]]>
+          </description>
         </field>
         <field>
           <name>preGoals</name>

@@ -31,8 +31,8 @@ import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.Version;
 import org.codehaus.modello.model.VersionRange;
-import org.codehaus.modello.plugin.AbstractModelloGenerator;
 import org.codehaus.modello.plugin.model.ModelClassMetadata;
+import org.codehaus.modello.plugins.xml.AbstractXmlGenerator;
 import org.codehaus.modello.plugins.xml.XmlFieldMetadata;
 import org.codehaus.plexus.util.WriterFactory;
 import org.codehaus.plexus.util.xml.PrettyPrintXMLWriter;
@@ -54,7 +54,7 @@ import java.util.Set;
  * @version $Id$
  */
 public class XdocGenerator
-    extends AbstractModelloGenerator
+    extends AbstractXmlGenerator
 {
     private static final VersionRange DEFAULT_VERSION_RANGE = new VersionRange( "0.0.0+" );
 
@@ -280,7 +280,7 @@ public class XdocGenerator
             }
             else
             {
-                w.writeText( f.getName() );
+                w.writeText( resolveFieldTagName( f ) );
             }
 
             w.endElement();
@@ -462,7 +462,7 @@ public class XdocGenerator
 
                 sb.append( " " );
 
-                sb.append( uncapitalise( f.getName() ) ).append( "=.." );
+                sb.append( resolveFieldTagName( f ) ).append( "=.." );
             }
 
             sb.append( " " );
@@ -524,7 +524,7 @@ public class XdocGenerator
                 {
                     appendSpacer( sb, depth + 1 );
 
-                    sb.append( "&lt;" ).append( uncapitalise( f.getName() ) ).append( "/&gt;\n" );
+                    sb.append( "&lt;" ).append( resolveFieldTagName( f ) ).append( "/&gt;\n" );
 
                 }
             }
@@ -539,12 +539,6 @@ public class XdocGenerator
         }
 
         return sb.toString();
-    }
-
-    private boolean isInnerAssociation( ModelField field )
-    {
-        return field instanceof ModelAssociation
-            && isClassInModel( ( (ModelAssociation) field ).getTo(), getModel() );
     }
 
     /**

@@ -441,6 +441,17 @@
             <multiplicity>*</multiplicity>
           </association>
         </field>
+        <field xml.tagName="package">
+          <name>packageName</name>
+          <version>3.0.0+</version>
+          <type>String</type>
+          <description>
+            <![CDATA[
+            The Java package name of the project.  This value is used
+            when generating JavaDoc.
+            ]]>
+          </description>
+        </field>
         <field>
           <name>preGoals</name>
           <version>4.0.0</version>

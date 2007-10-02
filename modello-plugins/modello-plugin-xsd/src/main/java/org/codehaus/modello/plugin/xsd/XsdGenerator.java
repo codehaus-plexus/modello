@@ -27,9 +27,9 @@ import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
-import org.codehaus.modello.plugin.AbstractModelloGenerator;
 import org.codehaus.modello.plugin.model.ModelClassMetadata;
 import org.codehaus.modello.plugin.xsd.metadata.XsdModelMetadata;
+import org.codehaus.modello.plugins.xml.AbstractXmlGenerator;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.WriterFactory;
 import org.codehaus.plexus.util.xml.PrettyPrintXMLWriter;
@@ -50,7 +50,7 @@ import java.util.Set;
  * @version $Id$
  */
 public class XsdGenerator
-    extends AbstractModelloGenerator
+    extends AbstractXmlGenerator
 {
     public void generate( Model model, Properties parameters )
         throws ModelloException
@@ -212,7 +212,7 @@ public class XsdGenerator
             ModelField field = (ModelField) j.next();
 
             w.startElement( "xs:element" );
-            w.addAttribute( "name", field.getName() );
+            w.addAttribute( "name", resolveFieldTagName( field ) );
 
             // Usually, would only do this if the field is not "required", but due to inheritence, it may be present,
             // even if not here, so we need to let it slide
