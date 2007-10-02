@@ -254,16 +254,29 @@ public class XdocGenerator
 
             w.startElement( "code" );
 
-            boolean flatAssociation = isInnerAssociation( f )
-                && XmlFieldMetadata.LIST_STYLE_FLAT.equals( fieldMetadata.getListStyle() );
+            boolean flatAssociation = false;
 
-            if ( flatAssociation )
+            if ( isInnerAssociation( f ) )
             {
+                flatAssociation = XmlFieldMetadata.LIST_STYLE_FLAT.equals( fieldMetadata.getListStyle() );
+
                 ModelAssociation assoc = (ModelAssociation) f;
 
                 ModelClass associationModelClass = getModel().getClass( assoc.getTo(), getGeneratedVersion() );
 
-                w.writeText( uncapitalise( associationModelClass.getName() ) );
+                w.startElement( "a" );
+                w.addAttribute( "href", "#class_" + uncapitalise( associationModelClass.getName() ) );
+
+                if ( flatAssociation )
+                {
+                    w.writeText( uncapitalise( associationModelClass.getName() ) );
+                }
+                else
+                {
+                    w.writeText( f.getName() );
+                }
+
+                w.endElement();
             }
             else
             {
