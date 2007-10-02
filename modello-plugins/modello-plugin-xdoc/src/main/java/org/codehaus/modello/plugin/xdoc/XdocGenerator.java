@@ -152,7 +152,7 @@ public class XdocGenerator
         StringBuffer sb = new StringBuffer();
 
         ModelClass root = objectModel.getClass( objectModel.getRoot( getGeneratedVersion() ), getGeneratedVersion() );
-        sb.append( getModelClassDescriptor( objectModel, root, null, 0 ) );
+        sb.append( getModelClassDescriptor( root, null, 0 ) );
 
         w.writeMarkup( "\n" + sb );
 
@@ -160,7 +160,7 @@ public class XdocGenerator
 
         // Element descriptors
         // Traverse from root so "abstract" models aren't included
-        writeElementDescriptor( w, objectModel, root, null, new HashSet() );
+        writeElementDescriptor( w, root, null, new HashSet() );
 
         w.endElement();
 
@@ -173,62 +173,18 @@ public class XdocGenerator
         writer.close();
     }
 
-    private void writeElementDescriptor( XMLWriter w, Model objectModel, ModelClass modelClass, ModelField field,
+    private void writeElementDescriptor( XMLWriter w, ModelClass modelClass, ModelAssociation association,
                                          Set written )
     {
-        writeElementDescriptor( w, objectModel, modelClass, field, written, true );
+        writeElementDescriptor( w, modelClass, association, written, true );
     }
 
-    private void writeElementDescriptor( XMLWriter w, Model objectModel, ModelClass modelClass, ModelField field,
+    private void writeElementDescriptor( XMLWriter w, ModelClass modelClass, ModelAssociation association,
                                          Set written, boolean recursive )
     {
         written.add( modelClass );
 
-        ModelClassMetadata metadata = (ModelClassMetadata) modelClass.getMetadata( ModelClassMetadata.ID );
-
-        String tagName;
-        if ( metadata == null || metadata.getTagName() == null )
-        {
-            if ( field == null )
-            {
-                tagName = uncapitalise( modelClass.getName() );
-            }
-            else
-            {
-                tagName = field.getName();
-                if ( field instanceof ModelAssociation )
-                {
-                    ModelAssociation a = (ModelAssociation) field;
-                    if ( ModelAssociation.MANY_MULTIPLICITY.equals( a.getMultiplicity() ) )
-                    {
-                        tagName = singular( tagName );
-                    }
-                }
-            }
-        }
-        else
-        {
-            tagName = metadata.getTagName();
-        }
-
-        if ( field != null )
-        {
-            XmlFieldMetadata fieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
-            if ( fieldMetadata != null )
-            {
-                if ( fieldMetadata.getAssociationTagName() != null )
-                {
-                    tagName = fieldMetadata.getAssociationTagName();
-                }
-                else
-                {
-                    if ( fieldMetadata.getTagName() != null )
-                    {
-                        tagName = fieldMetadata.getTagName();
-                    }
-                }
-            }
-        }
+        String tagName = resolveTagName( modelClass, association );
 
         w.startElement( "a" );
 
@@ -282,7 +238,7 @@ public class XdocGenerator
 
         w.endElement();
 
-        List fields = getFieldsForClass( objectModel, modelClass );
+        List fields = getFieldsForClass( modelClass );
 
         for ( Iterator j = fields.iterator(); j.hasNext(); )
         {
@@ -298,15 +254,14 @@ public class XdocGenerator
 
             w.startElement( "code" );
 
-            boolean flatAssociation = f instanceof ModelAssociation
-                && isClassInModel( ( (ModelAssociation) f ).getTo(), objectModel )
+            boolean flatAssociation = isInnerAssociation( f )
                 && XmlFieldMetadata.LIST_STYLE_FLAT.equals( fieldMetadata.getListStyle() );
 
             if ( flatAssociation )
             {
-                ModelAssociation association = (ModelAssociation) f;
+                ModelAssociation assoc = (ModelAssociation) f;
 
-                ModelClass associationModelClass = objectModel.getClass( association.getTo(), getGeneratedVersion() );
+                ModelClass associationModelClass = getModel().getClass( assoc.getTo(), getGeneratedVersion() );
 
                 w.writeText( uncapitalise( associationModelClass.getName() ) );
             }
@@ -379,29 +334,28 @@ public class XdocGenerator
         {
             ModelField f = (ModelField) iter.next();
 
-            if ( f instanceof ModelAssociation && isClassInModel( ( (ModelAssociation) f ).getTo(), objectModel )
-                && recursive )
+            if ( isInnerAssociation( f ) && recursive )
             {
-                ModelAssociation association = (ModelAssociation) f;
-                ModelClass fieldModelClass = objectModel.getClass( association.getTo(), getGeneratedVersion() );
+                ModelAssociation assoc = (ModelAssociation) f;
+                ModelClass fieldModelClass = getModel().getClass( assoc.getTo(), getGeneratedVersion() );
 
                 if ( !written.contains( f.getName() ) )
                 {
                     if ( ( modelClass.getName().equals( fieldModelClass.getName() ) )
                         && ( modelClass.getPackageName().equals( fieldModelClass.getPackageName() ) ) )
                     {
-                        writeElementDescriptor( w, objectModel, fieldModelClass, f, written, false );
+                        writeElementDescriptor( w, fieldModelClass, assoc, written, false );
                     }
                     else
                     {
-                        writeElementDescriptor( w, objectModel, fieldModelClass, f, written );
+                        writeElementDescriptor( w, fieldModelClass, assoc, written );
                     }
                 }
             }
         }
     }
 
-    private List getFieldsForClass( Model objectModel, ModelClass modelClass )
+    private List getFieldsForClass( ModelClass modelClass )
     {
         List fields = new ArrayList();
         while ( modelClass != null )
@@ -410,7 +364,7 @@ public class XdocGenerator
             String superClass = modelClass.getSuperClass();
             if ( superClass != null )
             {
-                modelClass = objectModel.getClass( superClass, getGeneratedVersion() );
+                modelClass = getModel().getClass( superClass, getGeneratedVersion() );
             }
             else
             {
@@ -426,7 +380,7 @@ public class XdocGenerator
      * @param modelClass current class
      * @return the list of attribute fields of this class
      */
-    private List getAttributeFieldsForClass( Model objectModel, ModelClass modelClass )
+    private List getAttributeFieldsForClass( ModelClass modelClass )
     {
         List attributeFields = new ArrayList();
         while ( modelClass != null )
@@ -448,7 +402,7 @@ public class XdocGenerator
             String superClass = modelClass.getSuperClass();
             if ( superClass != null )
             {
-                modelClass = objectModel.getClass( superClass, getGeneratedVersion() );
+                modelClass = getModel().getClass( superClass, getGeneratedVersion() );
             }
             else
             {
@@ -458,72 +412,33 @@ public class XdocGenerator
         return attributeFields;
     }
 
-    private String getModelClassDescriptor( Model objectModel, ModelClass modelClass, ModelField field, int depth )
+    private String getModelClassDescriptor( ModelClass modelClass, ModelAssociation association, int depth )
     {
-        return getModelClassDescriptor( objectModel, modelClass, field, depth, true );
+        return getModelClassDescriptor( modelClass, association, depth, true );
     }
 
-    private String getModelClassDescriptor( Model objectModel, ModelClass modelClass, ModelField field, int depth,
-                                            boolean recursive )
+    /**
+     * Build the pretty tree describing the model. This method is recursive.
+     * @param modelClass the class we are printing the model
+     * @param association the association we are coming from (can be <code>null</code>)
+     * @param depth how deep we currently are (for spacers purpose)
+     * @param recursive are we still in recursive mode or not
+     * @return the String representing the tree model
+     * @throws ModelloRuntimeException
+     */
+    private String getModelClassDescriptor( ModelClass modelClass, ModelAssociation association, int depth, boolean recursive )
         throws ModelloRuntimeException
     {
         StringBuffer sb = new StringBuffer();
 
-        indent( sb, depth );
+        appendSpacer( sb, depth );
 
-        ModelClassMetadata metadata = (ModelClassMetadata) modelClass.getMetadata( ModelClassMetadata.ID );
+        String tagName = resolveTagName( modelClass, association );
+        sb.append( "&lt;<a href=\"#class_" ).append( tagName ).append( "\">" ).append( tagName ).append( "</a>" );
 
-        String tagName;
-        if ( metadata == null || metadata.getTagName() == null )
-        {
-            if ( field == null )
-            {
-                tagName = uncapitalise( modelClass.getName() );
-            }
-            else
-            {
-                tagName = field.getName();
-                if ( field instanceof ModelAssociation )
-                {
-                    ModelAssociation a = (ModelAssociation) field;
-                    if ( ModelAssociation.MANY_MULTIPLICITY.equals( a.getMultiplicity() ) )
-                    {
-                        tagName = singular( tagName );
-                    }
-                }
-            }
-        }
-        else
-        {
-            tagName = metadata.getTagName();
-        }
+        List fields = getFieldsForClass( modelClass );
 
-        if ( field != null )
-        {
-            XmlFieldMetadata fieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
-            if ( fieldMetadata != null )
-            {
-                if ( fieldMetadata.getAssociationTagName() != null )
-                {
-                    tagName = fieldMetadata.getAssociationTagName();
-                }
-                else
-                {
-                    if ( fieldMetadata.getTagName() != null )
-                    {
-                        tagName = fieldMetadata.getTagName();
-                    }
-                }
-            }
-        }
-
-        sb.append( "&lt;<a href=\"#class_" ).append( tagName ).append( "\">" ).append( tagName );
-
-        sb.append( "</a>" );
-
-        List fields = getFieldsForClass( objectModel, modelClass );
-
-        List attributeFields = getAttributeFieldsForClass( objectModel, modelClass );
+        List attributeFields = getAttributeFieldsForClass( modelClass );
 
         if ( attributeFields.size() > 0 )
         {
@@ -551,43 +466,42 @@ public class XdocGenerator
             {
                 ModelField f = (ModelField) iter.next();
 
-                if ( f instanceof ModelAssociation && isClassInModel( ( (ModelAssociation) f ).getTo(), objectModel )
-                    && recursive )
+                if ( isInnerAssociation( f ) && recursive )
                 {
-                    ModelAssociation association = (ModelAssociation) f;
+                    ModelAssociation assoc = (ModelAssociation) f;
 
                     XmlFieldMetadata fieldMetadata = (XmlFieldMetadata) f.getMetadata( XmlFieldMetadata.ID );
 
                     boolean listStyleWrapped =
-                        ModelAssociation.MANY_MULTIPLICITY.equals( association.getMultiplicity() )
-                        && !XmlFieldMetadata.LIST_STYLE_FLAT.equals( fieldMetadata.getListStyle() ); 
+                        ModelAssociation.MANY_MULTIPLICITY.equals( assoc.getMultiplicity() )
+                        && XmlFieldMetadata.LIST_STYLE_WRAPPED.equals( fieldMetadata.getListStyle() ); 
 
                     if ( listStyleWrapped )
                     {
                         depth++;
 
-                        indent( sb, depth );
+                        appendSpacer( sb, depth );
 
-                        sb.append( "&lt;" ).append( uncapitalise( association.getName() ) ).append( "&gt;\n" );
+                        sb.append( "&lt;" ).append( uncapitalise( assoc.getName() ) ).append( "&gt;\n" );
                     }
 
-                    ModelClass fieldModelClass = objectModel.getClass( association.getTo(), getGeneratedVersion() );
+                    ModelClass fieldModelClass = getModel().getClass( assoc.getTo(), getGeneratedVersion() );
 
                     if ( ( modelClass.getName().equals( fieldModelClass.getName() ) )
                         && ( modelClass.getPackageName().equals( fieldModelClass.getPackageName() ) ) )
                     {
-                        sb.append( getModelClassDescriptor( objectModel, fieldModelClass, f, depth + 1, false ) );
+                        sb.append( getModelClassDescriptor( fieldModelClass, assoc, depth + 1, false ) );
                     }
                     else
                     {
-                        sb.append( getModelClassDescriptor( objectModel, fieldModelClass, f, depth + 1 ) );
+                        sb.append( getModelClassDescriptor( fieldModelClass, assoc, depth + 1 ) );
                     }
 
                     if ( listStyleWrapped )
                     {
-                        indent( sb, depth );
+                        appendSpacer( sb, depth );
 
-                        sb.append( "&lt;/" ).append( uncapitalise( association.getName() ) ).append( "&gt;\n" );
+                        sb.append( "&lt;/" ).append( uncapitalise( assoc.getName() ) ).append( "&gt;\n" );
 
                         depth--;
                     }
@@ -595,14 +509,14 @@ public class XdocGenerator
                 }
                 else
                 {
-                    indent( sb, depth + 1 );
+                    appendSpacer( sb, depth + 1 );
 
                     sb.append( "&lt;" ).append( uncapitalise( f.getName() ) ).append( "/&gt;\n" );
 
                 }
             }
 
-            indent( sb, depth );
+            appendSpacer( sb, depth );
 
             sb.append( "&lt;/" ).append( tagName ).append( "&gt;\n" );
         }
@@ -614,7 +528,72 @@ public class XdocGenerator
         return sb.toString();
     }
 
-    private static void indent( StringBuffer sb, int depth )
+    private boolean isInnerAssociation( ModelField field )
+    {
+        return field instanceof ModelAssociation
+            && isClassInModel( ( (ModelAssociation) field ).getTo(), getModel() );
+    }
+
+    /**
+     * Compute the tagName of a given class, living inside an association.
+     * @param modelClass the class we are looking for the tag name
+     * @param association the association where this class is used
+     * @return the tag name to use
+     */
+    private String resolveTagName( ModelClass modelClass, ModelAssociation association )
+    {
+        ModelClassMetadata metadata = (ModelClassMetadata) modelClass.getMetadata( ModelClassMetadata.ID );
+
+        String tagName;
+        if ( metadata == null || metadata.getTagName() == null )
+        {
+            if ( association == null )
+            {
+                tagName = uncapitalise( modelClass.getName() );
+            }
+            else
+            {
+                tagName = association.getName();
+    
+                if ( ModelAssociation.MANY_MULTIPLICITY.equals( association.getMultiplicity() ) )
+                {
+                    tagName = singular( tagName );
+                }
+            }
+        }
+        else
+        {
+            tagName = metadata.getTagName();
+        }
+    
+        if ( association != null )
+        {
+            XmlFieldMetadata fieldMetadata = (XmlFieldMetadata) association.getMetadata( XmlFieldMetadata.ID );
+            if ( fieldMetadata != null )
+            {
+                if ( fieldMetadata.getAssociationTagName() != null )
+                {
+                    tagName = fieldMetadata.getAssociationTagName();
+                }
+                else
+                {
+                    if ( fieldMetadata.getTagName() != null )
+                    {
+                        tagName = fieldMetadata.getTagName();
+                    }
+                }
+            }
+        }
+        
+        return tagName;
+    }
+    
+    /**
+     * Appends the required spacers to the given StringBuffer.
+     * @param sb where to append the spacers
+     * @param depth the depth of spacers to generate
+     */
+    private static void appendSpacer( StringBuffer sb, int depth )
     {
         for ( int i = 0; i < depth; i++ )
         {
