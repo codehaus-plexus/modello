@@ -37,7 +37,9 @@ import org.codehaus.modello.plugin.java.javasource.JClass;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -103,6 +105,33 @@ public abstract class AbstractModelloGenerator
         }
 
         return false;
+    }
+
+    /**
+     * Return the child fields of this class.
+     * @param modelClass current class
+     * @return the list of fields of this class
+     */
+    protected List getFieldsForClass( ModelClass modelClass )
+    {
+        List fields = new ArrayList();
+
+        while ( modelClass != null )
+        {
+            fields.addAll( modelClass.getFields( getGeneratedVersion() ) );
+
+            String superClass = modelClass.getSuperClass();
+            if ( superClass != null )
+            {
+                modelClass = getModel().getClass( superClass, getGeneratedVersion() );
+            }
+            else
+            {
+                modelClass = null;
+            }
+        }
+
+        return fields;
     }
 
     protected boolean isInnerAssociation( ModelField field )

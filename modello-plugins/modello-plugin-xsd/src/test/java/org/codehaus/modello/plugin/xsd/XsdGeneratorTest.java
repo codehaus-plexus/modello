@@ -49,13 +49,14 @@ public class XsdGeneratorTest
         super( "xsd" );
     }
 
-    public void testJavaGenerator()
+    public void testXsdGenerator()
         throws Throwable
     {
         ModelloCore modello = (ModelloCore) container.lookup( ModelloCore.ROLE );
 
         Model model = modello.loadModel( ReaderFactory.newXmlReader( getTestFile( "src/test/resources/maven.mdo" ) ) );
 
+        // check misc. properties of the model loaded
         List classesList = model.getClasses( new Version( "4.0.0" ) );
 
         assertEquals( 26, classesList.size() );
@@ -86,6 +87,7 @@ public class XsdGeneratorTest
 
         assertEquals( "builder", xml.getTagName() );
 
+        // generate XSD file
         File generatedSources = new File( getTestPath( "target/xsd" ) );
 
         FileUtils.deleteDirectory( generatedSources );

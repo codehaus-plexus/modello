@@ -41,7 +41,6 @@ import org.codehaus.plexus.util.xml.XMLWriter;
 import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -366,63 +365,6 @@ public class XdocGenerator
                 }
             }
         }
-    }
-
-    private List getFieldsForClass( ModelClass modelClass )
-    {
-        List fields = new ArrayList();
-        while ( modelClass != null )
-        {
-            fields.addAll( modelClass.getFields( getGeneratedVersion() ) );
-            String superClass = modelClass.getSuperClass();
-            if ( superClass != null )
-            {
-                modelClass = getModel().getClass( superClass, getGeneratedVersion() );
-            }
-            else
-            {
-                modelClass = null;
-            }
-        }
-        return fields;
-    }
-
-    /**
-     * Return the child attribute fields of this class.
-     * @param objectModel global object model
-     * @param modelClass current class
-     * @return the list of attribute fields of this class
-     */
-    private List getAttributeFieldsForClass( ModelClass modelClass )
-    {
-        List attributeFields = new ArrayList();
-        while ( modelClass != null )
-        {
-            List allFields = modelClass.getFields( getGeneratedVersion() );
-
-            Iterator allFieldsIt = allFields.iterator();
-
-            while ( allFieldsIt.hasNext() )
-            {
-                ModelField field = (ModelField) allFieldsIt.next();
-                XmlFieldMetadata fieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
-                if ( fieldMetadata.isAttribute() )
-                {
-                    attributeFields.add( field );
-                }
-            }
-
-            String superClass = modelClass.getSuperClass();
-            if ( superClass != null )
-            {
-                modelClass = getModel().getClass( superClass, getGeneratedVersion() );
-            }
-            else
-            {
-                modelClass = null;
-            }
-        }
-        return attributeFields;
     }
 
     private String getModelClassDescriptor( ModelClass modelClass, ModelAssociation association, int depth )

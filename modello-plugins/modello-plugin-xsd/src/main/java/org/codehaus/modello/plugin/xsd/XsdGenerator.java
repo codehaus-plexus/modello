@@ -38,7 +38,6 @@ import org.codehaus.plexus.util.xml.XMLWriter;
 import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -191,20 +190,11 @@ public class XsdGenerator
 
         w.startElement( "xs:all" );
 
-        List fields = new ArrayList();
-        while ( modelClass != null )
-        {
-            fields.addAll( modelClass.getFields( getGeneratedVersion() ) );
-            String superClass = modelClass.getSuperClass();
-            if ( modelClass.hasSuperClass() && modelClass.isInternalSuperClass() )
-            {
-                modelClass = objectModel.getClass( superClass, getGeneratedVersion() );
-            }
-            else
-            {
-                modelClass = null;
-            }
-        }
+        List fields = getFieldsForClass( modelClass );
+        
+        List attributeFields = getAttributeFieldsForClass( modelClass );
+
+        fields.removeAll( attributeFields );
 
         Set toWrite = new HashSet();
         for ( Iterator j = fields.iterator(); j.hasNext(); )
@@ -231,14 +221,13 @@ public class XsdGenerator
             }
             else
             {
-                if ( field instanceof ModelAssociation &&
-                    isClassInModel( ( (ModelAssociation) field ).getTo(), objectModel ) )
+                if ( isInnerAssociation( field ) )
                 {
                     ModelAssociation association = (ModelAssociation) field;
                     ModelClass fieldModelClass = objectModel.getClass( association.getTo(), getGeneratedVersion() );
 
                     toWrite.add( fieldModelClass );
-                    if ( "*".equals( association.getMultiplicity() ) )
+                    if ( ModelAssociation.MANY_MULTIPLICITY.equals( association.getMultiplicity() ) )
                     {
                         writeFieldDocumentation( w, field );
                         writeListElement( w, field, fieldModelClass.getName() );
@@ -272,9 +261,41 @@ public class XsdGenerator
             w.endElement();
         }
 
-        w.endElement();
+        w.endElement(); // xs:all
 
-        w.endElement();
+        for ( Iterator j = attributeFields.iterator(); j.hasNext(); )
+        {
+            ModelField field = (ModelField) j.next();
+
+            w.startElement( "xs:attribute" );
+
+            String xsdType = getXsdType( field.getType() );
+
+            String tagName = resolveFieldTagName( field );
+
+            w.addAttribute( "name", tagName );
+
+            if ( xsdType != null )
+            {
+                w.addAttribute( "type", xsdType );
+
+                if ( field.getDefaultValue() != null )
+                {
+                    w.addAttribute( "default", field.getDefaultValue() );
+                }
+            }
+            else
+            {
+                throw new IllegalStateException( "Attribute field of a non-primitive type '" + field.getType()
+                    + "' for '" + field.getName() + "'" );
+            }
+
+            writeFieldDocumentation( w, field );
+
+            w.endElement();
+        }
+
+        w.endElement(); // xs:complexType
 
         for ( Iterator iter = toWrite.iterator(); iter.hasNext(); )
         {

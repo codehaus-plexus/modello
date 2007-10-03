@@ -22,6 +22,11 @@ package org.codehaus.modello.plugins.xml;
  * SOFTWARE.
  */
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.plugin.AbstractModelloGenerator;
 import org.codehaus.plexus.util.StringUtils;
@@ -56,4 +61,40 @@ public abstract class AbstractXmlGenerator
         return tagName;
     }
 
+    /**
+     * Return the child attribute fields of this class.
+     * @param modelClass current class
+     * @return the list of attribute fields of this class
+     */
+    protected List getAttributeFieldsForClass( ModelClass modelClass )
+    {
+        List attributeFields = new ArrayList();
+
+        while ( modelClass != null )
+        {
+            List allFields = modelClass.getFields( getGeneratedVersion() );
+
+            for (Iterator allFieldsIt = allFields.iterator(); allFieldsIt.hasNext(); )
+            {
+                ModelField field = (ModelField) allFieldsIt.next();
+                XmlFieldMetadata fieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
+                if ( fieldMetadata.isAttribute() )
+                {
+                    attributeFields.add( field );
+                }
+            }
+
+            String superClass = modelClass.getSuperClass();
+            if ( superClass != null )
+            {
+                modelClass = getModel().getClass( superClass, getGeneratedVersion() );
+            }
+            else
+            {
+                modelClass = null;
+            }
+        }
+
+        return attributeFields;
+    }
 }
