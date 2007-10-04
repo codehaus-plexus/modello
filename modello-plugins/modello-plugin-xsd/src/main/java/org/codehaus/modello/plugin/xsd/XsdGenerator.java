@@ -28,8 +28,10 @@ import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.plugin.model.ModelClassMetadata;
+import org.codehaus.modello.plugin.xsd.metadata.XsdClassMetadata;
 import org.codehaus.modello.plugin.xsd.metadata.XsdModelMetadata;
 import org.codehaus.modello.plugins.xml.AbstractXmlGenerator;
+import org.codehaus.modello.plugins.xml.XmlFieldMetadata;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.WriterFactory;
 import org.codehaus.plexus.util.xml.PrettyPrintXMLWriter;
@@ -188,8 +190,6 @@ public class XsdGenerator
 
         writeClassDocumentation( w, modelClass );
 
-        w.startElement( "xs:all" );
-
         List fields = getFieldsForClass( modelClass );
         
         List attributeFields = getAttributeFieldsForClass( modelClass );
@@ -197,71 +197,117 @@ public class XsdGenerator
         fields.removeAll( attributeFields );
 
         Set toWrite = new HashSet();
-        for ( Iterator j = fields.iterator(); j.hasNext(); )
+
+        if ( fields.size() > 0 )
         {
-            ModelField field = (ModelField) j.next();
-
-            w.startElement( "xs:element" );
-            w.addAttribute( "name", resolveFieldTagName( field ) );
-
-            // Usually, would only do this if the field is not "required", but due to inheritence, it may be present,
-            // even if not here, so we need to let it slide
-            w.addAttribute( "minOccurs", "0" );
-
-            String xsdType = getXsdType( field.getType() );
-            if ( xsdType != null )
+            XsdClassMetadata metadata = (XsdClassMetadata) modelClass.getMetadata( XsdClassMetadata.ID );
+            boolean compositorAll = XsdClassMetadata.COMPOSITOR_ALL.equals( metadata.getCompositor() );
+            
+            if ( compositorAll )
             {
-                w.addAttribute( "type", xsdType );
-
-                if ( field.getDefaultValue() != null )
-                {
-                    w.addAttribute( "default", field.getDefaultValue() );
-                }
-                writeFieldDocumentation( w, field );
+                w.startElement( "xs:all" );
             }
             else
             {
-                if ( isInnerAssociation( field ) )
+                w.startElement( "xs:sequence" );
+            }
+    
+            for ( Iterator j = fields.iterator(); j.hasNext(); )
+            {
+                ModelField field = (ModelField) j.next();
+    
+                w.startElement( "xs:element" );
+    
+                // Usually, would only do this if the field is not "required", but due to inheritence, it may be present,
+                // even if not here, so we need to let it slide
+                w.addAttribute( "minOccurs", "0" );
+    
+                String xsdType = getXsdType( field.getType() );
+                if ( xsdType != null )
                 {
-                    ModelAssociation association = (ModelAssociation) field;
-                    ModelClass fieldModelClass = objectModel.getClass( association.getTo(), getGeneratedVersion() );
-
-                    toWrite.add( fieldModelClass );
-                    if ( ModelAssociation.MANY_MULTIPLICITY.equals( association.getMultiplicity() ) )
+                    w.addAttribute( "name", resolveFieldTagName( field ) );
+                    w.addAttribute( "type", xsdType );
+    
+                    if ( field.getDefaultValue() != null )
                     {
-                        writeFieldDocumentation( w, field );
-                        writeListElement( w, field, fieldModelClass.getName() );
+                        w.addAttribute( "default", field.getDefaultValue() );
                     }
-                    else
-                    {
-                        w.addAttribute( "type", fieldModelClass.getName() );
-                        writeFieldDocumentation( w, field );
-                    }
+                    writeFieldDocumentation( w, field );
                 }
                 else
                 {
-                    if ( List.class.getName().equals( field.getType() ) )
+                    if ( isInnerAssociation( field ) )
                     {
-                        writeFieldDocumentation( w, field );
-                        writeListElement( w, field, getXsdType( "String" ) );
-                    }
-                    else if ( Properties.class.getName().equals( field.getType() ) || "DOM".equals( field.getType() ) )
-                    {
-                        writeFieldDocumentation( w, field );
-                        writePropertiesElement( w );
+                        ModelAssociation association = (ModelAssociation) field;
+                        ModelClass fieldModelClass = objectModel.getClass( association.getTo(), getGeneratedVersion() );
+    
+                        toWrite.add( fieldModelClass );
+
+                        if ( ModelAssociation.MANY_MULTIPLICITY.equals( association.getMultiplicity() ) )
+                        {
+                            XmlFieldMetadata fieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
+
+                            if ( XmlFieldMetadata.LIST_STYLE_WRAPPED.equals( fieldMetadata.getListStyle() ))
+                            {
+                                w.addAttribute( "name", resolveFieldTagName( field ) );
+                                writeFieldDocumentation( w, field );
+                                writeListElement( w, field, fieldModelClass.getName() );
+                            }
+                            else
+                            {
+                                if ( compositorAll )
+                                {
+                                    // xs:all does not accept maxOccurs="unbounded", xs:sequence MUST be used
+                                    // to be able to represent this constraint
+                                    throw new IllegalStateException( field.getName() + " field is declared as xml.listStyle=\"flat\" "
+                                        + "then class " + modelClass.getName() + " MUST be declared as xsd.compositor=\"sequence\"" );
+                                }
+                                
+                                if ( fieldMetadata != null && fieldMetadata.getAssociationTagName() != null )
+                                {
+                                    w.addAttribute( "name", fieldMetadata.getAssociationTagName() );
+                                }
+                                else
+                                {
+                                    w.addAttribute( "name", singular( association.getName() ) );
+                                }
+
+                                w.addAttribute( "type", fieldModelClass.getName() );
+                                w.addAttribute( "maxOccurs", "unbounded" );
+                                writeFieldDocumentation( w, field );
+                            }
+                        }
+                        else
+                        {
+                            w.addAttribute( "type", fieldModelClass.getName() );
+                            writeFieldDocumentation( w, field );
+                        }
                     }
                     else
                     {
-                        throw new IllegalStateException(
-                            "Non-association field of a non-primitive type '" + field.getType() + "' for '" + field.getName() + "'" );
+                        if ( List.class.getName().equals( field.getType() ) )
+                        {
+                            writeFieldDocumentation( w, field );
+                            writeListElement( w, field, getXsdType( "String" ) );
+                        }
+                        else if ( Properties.class.getName().equals( field.getType() ) || "DOM".equals( field.getType() ) )
+                        {
+                            writeFieldDocumentation( w, field );
+                            writePropertiesElement( w );
+                        }
+                        else
+                        {
+                            throw new IllegalStateException(
+                                "Non-association field of a non-primitive type '" + field.getType() + "' for '" + field.getName() + "'" );
+                        }
                     }
                 }
+    
+                w.endElement();
             }
-
-            w.endElement();
+    
+            w.endElement(); // xs:all or xs:sequence
         }
-
-        w.endElement(); // xs:all
 
         for ( Iterator j = attributeFields.iterator(); j.hasNext(); )
         {

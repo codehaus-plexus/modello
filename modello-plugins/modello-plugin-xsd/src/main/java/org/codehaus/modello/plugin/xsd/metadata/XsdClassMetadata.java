@@ -27,4 +27,30 @@ import org.codehaus.modello.metadata.ClassMetadata;
 public class XsdClassMetadata implements ClassMetadata
 {
     public static final String ID = XsdClassMetadata.class.getName();
+    
+    public static final String COMPOSITOR_ALL = "all";
+    
+    public static final String COMPOSITOR_SEQUENCE = "sequence";
+    
+    private String compositor = COMPOSITOR_ALL;
+
+    public String getCompositor()
+    {
+        return compositor;
+    }
+
+    public void setCompositor( String compositor )
+    {
+        if ( COMPOSITOR_ALL.equals( compositor ) || COMPOSITOR_SEQUENCE.equals( compositor ) )
+        {
+            this.compositor = compositor;
+        }
+        else
+        {
+            // default
+            this.compositor = COMPOSITOR_ALL;
+        }
+    }
+
+    
 }

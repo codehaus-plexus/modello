@@ -41,6 +41,8 @@ public class XsdMetadataPlugin extends AbstractMetadataPlugin
     public static final String NAMESPACE = "xsd.namespace";
 
     public static final String TARGET_NAMESPACE = "xsd.target-namespace";
+    
+    public static final String COMPOSITOR = "xsd.compositor";
 
     public AssociationMetadata getAssociationMetadata( ModelAssociation association, Map data ) throws ModelloException
     {
@@ -49,7 +51,16 @@ public class XsdMetadataPlugin extends AbstractMetadataPlugin
 
     public ClassMetadata getClassMetadata( ModelClass clazz, Map data ) throws ModelloException
     {
-        return new XsdClassMetadata();
+        XsdClassMetadata metadata = new XsdClassMetadata();
+        
+        String compositor = (String) data.get( COMPOSITOR );
+
+        if ( StringUtils.isNotEmpty( compositor ) )
+        {
+            metadata.setCompositor( compositor );
+        }
+
+        return metadata;
     }
 
     public FieldMetadata getFieldMetadata( ModelField field, Map data ) throws ModelloException
