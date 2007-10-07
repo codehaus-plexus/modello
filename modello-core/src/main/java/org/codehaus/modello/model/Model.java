@@ -80,7 +80,7 @@ public class Model
     {
         this.versionDefinition = versionDefinition;
     }
-    
+
     public ModelMetadata getMetadata( String key )
     {
         return (ModelMetadata) getMetadata( ModelMetadata.class, key );
@@ -115,14 +115,14 @@ public class Model
                 else
                 {
                     throw new ModelloRuntimeException(
-                        "There are more than one class as root elememt for this version " + version + "." );
+                        "There are more than one class as root element for this version " + version + "." );
                 }
             }
         }
 
         if ( className == null )
         {
-            throw new ModelloRuntimeException( "There aren't root elememt for version " + version + "." );
+            throw new ModelloRuntimeException( "There aren't root element for version " + version + "." );
         }
 
         return className;
