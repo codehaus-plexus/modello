@@ -441,6 +441,9 @@
             <multiplicity>*</multiplicity>
           </association>
         </field>
+        <!-- We can't do this because we can't use package as a field name (java reserved word),
+        and packageName generates getPackageName()/setPackageName() methods, then this attribute
+        has to be treated as codeSegment...
         <field xml.tagName="package">
           <name>packageName</name>
           <version>3.0.0+</version>
@@ -451,7 +454,7 @@
             when generating JavaDoc.
             ]]>
           </description>
-        </field>
+        </field-->
         <field>
           <name>preGoals</name>
           <version>4.0.0</version>

@@ -36,7 +36,7 @@
           <version>3.0.0+</version>
           <description><![CDATA[
             The location of the parent project, if one exists. Values from the parent project will be
-            the default for this project if they are left unspecified. 
+            the default for this project if they are left unspecified.
             The path may be absolute, or relative to the current project.xml file.
           ]]></description>
           <type>String</type>
@@ -421,6 +421,9 @@
             <multiplicity>*</multiplicity>
           </association>
         </field>
+        <!-- We can't do this because we can't use package as a field name (java reserved word),
+        and packageName generates getPackageName()/setPackageName() methods, then this attribute
+        has to be treated as codeSegment...
         <field xml.tagName="package">
           <name>packageName</name>
           <version>3.0.0+</version>
@@ -431,7 +434,7 @@
             when generating JavaDoc.
             ]]>
           </description>
-        </field>
+        </field-->
         <field>
           <name>preGoals</name>
           <version>4.0.0</version>
@@ -893,7 +896,7 @@
             {
                 return getGroupId();
             }
-        
+
             public String getArtifact()
             {
                 // If the jar name has been explicty set then use that. This
@@ -902,26 +905,26 @@
                 {
                     return getJar();
                 }
-        
+
                 return getArtifactId() + "-" + getVersion() + "." + getExtension();
             }
-        
+
             public String getExtension()
             {
                 if ("ejb".equals(getType()) || "plugin".equals(getType()) || "aspect".equals(getType())) return "jar";
                 return getType();
             }
-        
+
             public boolean isAddedToClasspath()
             {
                 return ("jar".equals(getType()) || "ejb".equals(getType()));
             }
-        
+
             public boolean isPlugin()
             {
                 return ("plugin".equals(getType()));
             }
-        
+
             public String getProperty( String property )
             {
                 return getProperties().getProperty( property );
@@ -933,16 +936,16 @@
                 {
                     return true;
                 }
-            
+
                 if ( !( o instanceof Dependency ) )
                 {
                     return false;
                 }
-            
+
                 Dependency d  = (Dependency) o;
                 return getId().equals( d.getId() );
             }
-            
+
             public int hashCode()
             {
                 return getId().hashCode();
