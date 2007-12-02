@@ -89,7 +89,7 @@
       <timezone>-5</timezone>
     </developer>
     <developer>
-      <name>Trygve Laugstøl</name>
+      <name>Trygve Laugstol</name>
       <email>trygvis@codehaus.org</email>
       <roles>
         <role>Developer</role>
@@ -97,7 +97,7 @@
       <timezone>-5</timezone>
     </developer>
     <developer>
-      <name>Arnaud Héritier</name>
+      <name>Arnaud Heritier</name>
       <email>aheritier@gmail.com</email>
       <roles>
         <role>Developer</role>
@@ -113,7 +113,7 @@
       <timezone>+1</timezone>
     </developer>
     <developer>
-      <name>Hervé Boutemy</name>
+      <name>Herve Boutemy</name>
       <email>hboutemy@codehaus.org</email>
       <roles>
         <role>Developer</role>
