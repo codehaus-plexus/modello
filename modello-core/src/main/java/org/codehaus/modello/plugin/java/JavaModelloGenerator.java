@@ -187,7 +187,10 @@ public class JavaModelloGenerator
 
             jClass.addImport( "java.util.Date" );
 
-            jClass.getJDocComment().setComment( modelClass.getDescription() );
+            if ( StringUtils.isNotEmpty( modelClass.getDescription() ) )
+            {
+                jClass.getJDocComment().setComment( appendPeriod( modelClass.getDescription() ) );
+            }
 
             addModelImports( jClass, modelClass );
 
@@ -421,6 +424,28 @@ public class JavaModelloGenerator
         return hashCode;
     }
 
+    /**
+     * Utility method that adds a period to the end of a string, if the last
+     * non-whitespace character of the string is not a punctuation mark or an
+     * end-tag.
+     *
+     * @param string The string to work with
+     * @return The string that came in but with a period at the end
+     */
+    private String appendPeriod( String string )
+    {
+        String trimmedString = string.trim();
+        if ( trimmedString.endsWith( "." ) || trimmedString.endsWith( "!" ) || trimmedString.endsWith( "?" )
+            || trimmedString.endsWith( ">" ) )
+        {
+            return string;
+        }
+        else
+        {
+            return string + ".";
+        }
+    }
+
     private String createHashCodeForField( ModelField identifier )
     {
         String name = identifier.getName();
@@ -568,6 +593,11 @@ public class JavaModelloGenerator
             }
         }
 
+        if ( StringUtils.isNotEmpty( modelField.getDescription() ) )
+        {
+            field.setComment( appendPeriod( modelField.getDescription() ) );
+        }
+
         return field;
     }
 
@@ -619,7 +649,18 @@ public class JavaModelloGenerator
 
         JMethod getter = new JMethod( returnType, prefix + propertyName );
 
-        getter.getJDocComment().setComment( "Get " + modelField.getDescription() );
+        StringBuffer comment = new StringBuffer( "Get " );
+        if ( StringUtils.isEmpty( modelField.getDescription() ) )
+        {
+            comment.append( "the " );
+            comment.append( field.getName() );
+            comment.append( " field" );
+        }
+        else
+        {
+            comment.append( StringUtils.lowercaseFirstLetter( modelField.getDescription() ) );
+        }
+        getter.getJDocComment().setComment( appendPeriod( comment.toString() ) );
 
         getter.getSourceCode().add( "return " + interfaceCast + "this." + field.getName() + ";" );
 
@@ -632,7 +673,18 @@ public class JavaModelloGenerator
 
         JMethod setter = new JMethod( null, "set" + propertyName );
 
-        setter.getJDocComment().setComment( "Set " + modelField.getDescription() );
+        StringBuffer comment = new StringBuffer( "Set " );
+        if ( StringUtils.isEmpty( modelField.getDescription() ) )
+        {
+            comment.append( "the " );
+            comment.append( field.getName() );
+            comment.append( " field" );
+        }
+        else
+        {
+            comment.append( StringUtils.lowercaseFirstLetter( modelField.getDescription() ) );
+        }
+        setter.getJDocComment().setComment( appendPeriod( comment.toString() ) );
 
         JType parameterType = getDesiredType( modelField, false );
 
