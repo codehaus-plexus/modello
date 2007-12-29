@@ -104,7 +104,7 @@ public class JField implements JMember
         this.modifiers = new JModifiers();
         this.modifiers.makePrivate();
         comment = new JDocComment();
-        comment.appendComment( "Field " + name );
+        comment.appendComment( "Field " + name + "." );
 
     } //-- JField
 
