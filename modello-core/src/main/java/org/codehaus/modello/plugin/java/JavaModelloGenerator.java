@@ -434,6 +434,11 @@ public class JavaModelloGenerator
      */
     private String appendPeriod( String string )
     {
+        if ( string == null )
+        {
+            return string;
+        }
+
         String trimmedString = string.trim();
         if ( trimmedString.endsWith( "." ) || trimmedString.endsWith( "!" ) || trimmedString.endsWith( "?" )
             || trimmedString.endsWith( ">" ) )
