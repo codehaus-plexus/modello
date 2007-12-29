@@ -107,8 +107,6 @@ public class Xpp3ReaderGenerator
 
         jClass.setPackageName( packageName );
 
-        jClass.addImport( "org.codehaus.plexus.util.IOUtil" );
-
         jClass.addImport( "org.codehaus.plexus.util.ReaderFactory" );
 
         jClass.addImport( "org.codehaus.plexus.util.xml.pull.MXParser" );
@@ -123,21 +121,7 @@ public class Xpp3ReaderGenerator
 
         jClass.addImport( "java.io.Reader" );
 
-        jClass.addImport( "java.io.StringWriter" );
-
-        jClass.addImport( "java.io.StringReader" );
-
-        jClass.addImport( "java.io.ByteArrayInputStream" );
-
-        jClass.addImport( "java.io.InputStreamReader" );
-
         jClass.addImport( "java.text.DateFormat" );
-
-        jClass.addImport( "java.text.ParsePosition" );
-
-        jClass.addImport( "java.util.regex.Matcher" );
-
-        jClass.addImport( "java.util.regex.Pattern" );
 
         jClass.addImport( "java.util.Locale" );
 
