@@ -174,7 +174,7 @@ public class Model
         }
 
         throw new ModelloRuntimeException(
-            "There are no class '" + type + "' in version range '" + versionRange.toString() + "'." );
+            "There is no class '" + type + "' in the version range '" + versionRange.toString() + "'." );
     }
 
     public boolean hasClass( String type, Version version )
@@ -338,7 +338,7 @@ public class Model
         }
 
         throw new ModelloRuntimeException(
-            "There are no interface '" + type + "' in version range '" + versionRange.toString() + "'." );
+            "There is no interface '" + type + "' in the version range '" + versionRange.toString() + "'." );
     }
 
     public void addInterface( ModelInterface modelInterface )
