@@ -465,7 +465,7 @@ public class Xpp3ReaderGenerator
             sc.indent();
 
             sc.add(
-                "throw new XmlPullParserException( \"Unrecognised tag: '\" + parser.getName() + \"'\", parser, null);" );
+                "throw new XmlPullParserException( \"Unrecognised tag: '\" + parser.getName() + \"'\", parser, null );" );
 
             sc.unindent();
 
@@ -501,7 +501,7 @@ public class Xpp3ReaderGenerator
             sc.indent();
 
             sc.add(
-                "throw new XmlPullParserException( \"Unrecognised tag: '\" + parser.getName() + \"'\", parser, null);" );
+                "throw new XmlPullParserException( \"Unrecognised tag: '\" + parser.getName() + \"'\", parser, null );" );
 
             sc.unindent();
 
@@ -658,7 +658,7 @@ public class Xpp3ReaderGenerator
 
                         sc.indent();
 
-                        sc.add( "parser.nextText();" );
+                        sc.add( "throw new XmlPullParserException( \"Unrecognised association: '\" + parser.getName() + \"'\", parser, null );" );
 
                         sc.unindent();
 
@@ -739,14 +739,7 @@ public class Xpp3ReaderGenerator
 
                         sc.indent();
 
-                        sc.add( "value = parser.nextText()" );
-
-                        if ( fieldMetadata.isTrim() )
-                        {
-                            sc.add( ".trim()" );
-                        }
-
-                        sc.add( ";" );
+                        sc.add( "value = parser.nextText()" + ( fieldMetadata.isTrim() ? ".trim()" : "" ) + ";" );
 
                         sc.unindent();
 
@@ -792,14 +785,7 @@ public class Xpp3ReaderGenerator
 
                         sc.add( "String key = parser.getName();" );
 
-                        sc.add( "String value = parser.nextText()" );
-
-                        if ( fieldMetadata.isTrim() )
-                        {
-                            sc.add( ".trim()" );
-                        }
-
-                        sc.add( ";" );
+                        sc.add( "String value = parser.nextText()" + ( fieldMetadata.isTrim() ? ".trim()" : "" ) + ";" );
 
                         sc.add( uncapClassName + ".add" + capitalise( singularName ) + "( key, value );" );
 
@@ -842,7 +828,7 @@ public class Xpp3ReaderGenerator
 
         sc.indent();
 
-        sc.add( "throw new XmlPullParserException( \"Duplicated tag: '\" + parser.getName() + \"'\", parser, null);" );
+        sc.add( "throw new XmlPullParserException( \"Duplicated tag: '\" + parser.getName() + \"'\", parser, null );" );
 
         sc.unindent();
 

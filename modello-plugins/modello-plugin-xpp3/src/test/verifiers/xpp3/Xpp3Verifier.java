@@ -78,6 +78,8 @@ public class Xpp3Verifier
 
         verifyReaderDuplicates();
 
+        verifyReaderMissingTags();
+
         verifyThrowingExceptionWithWrongRootElement();
 
         verifyThrowingExceptionWithWrongElement();
@@ -434,6 +436,26 @@ public class Xpp3Verifier
         {
             reader.read( new StringReader( xml ) );
             Assert.fail( "Should have obtained a parse error for duplicate build" );
+        }
+        catch ( XmlPullParserException expected )
+        {
+            Assert.assertTrue( true );
+        }
+    }
+
+    public void verifyReaderMissingTags()
+        throws IOException, XmlPullParserException
+    {
+        MavenXpp3Reader reader = new MavenXpp3Reader();
+
+        // The following is missing the <dependency> and </dependency> tags
+        String xml =
+            "<mavenModel>\n" + "  <dependencies><groupId>org.apache.cocoon</groupId><artifactId>cocoon-core</artifactId><version>2.2.0-SNAPSHOT</version></dependencies>\n" + "</mavenModel>";
+
+        try
+        {
+            reader.read( new StringReader( xml ) );
+            Assert.fail( "Should have obtained a parse error for missing dependency" );
         }
         catch ( XmlPullParserException expected )
         {
