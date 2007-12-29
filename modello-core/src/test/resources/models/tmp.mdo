@@ -1,0 +1,31 @@
+<model>
+  <id>tmp</id>
+  <name>Modello Test Model with tmp</name>
+  <defaults>
+    <default>
+      <key>package</key>
+      <value>foo.bar</value>
+    </default>
+  </defaults>
+  <classes>
+    <class rootElement="true">
+      <name>MyClass</name>
+      <version>1.0.0</version>
+      <fields>
+        <field>
+          <name>id</name>
+          <version>1.0.0</version>
+          <required>true</required>
+          <type>String</type>
+          <identifier>true</identifier>
+        </field>
+        <field>
+          <name>tmp</name>
+          <version>1.0.0</version>
+          <type>double</type>
+          <identifier>true</identifier>
+        </field>
+      </fields>
+    </class>
+  </classes>
+</model>

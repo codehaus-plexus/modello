@@ -324,6 +324,8 @@ public class JavaModelloGenerator
         sc.add( modelClass.getName() + " that = (" + modelClass.getName() + ") other;" );
         sc.add( "boolean result = true;" );
 
+        sc.add( "" );
+
         for ( Iterator j = modelClass.getIdentifierFields( getGeneratedVersion() ).iterator(); j.hasNext(); )
         {
             ModelField identifier = (ModelField) j.next();
@@ -334,7 +336,7 @@ public class JavaModelloGenerator
                 "float".equals( identifier.getType() ) || "int".equals( identifier.getType() ) ||
                 "short".equals( identifier.getType() ) || "long".equals( identifier.getType() ) )
             {
-                sc.add( "result = result && " + name + "== that." + name + ";" );
+                sc.add( "result = result && " + name + " == that." + name + ";" );
             }
             else
             {
@@ -343,6 +345,13 @@ public class JavaModelloGenerator
                     ".equals( that." + name + " ) );" );
             }
         }
+
+        if ( modelClass.getSuperClass() != null )
+        {
+            sc.add( "result = result && ( super.equals( other ) );" );
+        }
+
+        sc.add( "" );
 
         sc.add( "return result;" );
 
@@ -366,6 +375,8 @@ public class JavaModelloGenerator
 
         sc.add( "StringBuffer buf = new StringBuffer();" );
 
+        sc.add( "" );
+
         for ( Iterator j = identifierFields.iterator(); j.hasNext(); )
         {
             ModelField identifier = (ModelField) j.next();
@@ -373,13 +384,22 @@ public class JavaModelloGenerator
             String getter = "boolean".equals( identifier.getType() ) ? "is" : "get";
 
             sc.add( "buf.append( \"" + identifier.getName() + " = '\" );" );
-            sc.add( "buf.append( " + getter + capitalise( identifier.getName() ) + "()" + " + \"'\" );" );
+            sc.add( "buf.append( " + getter + capitalise( identifier.getName() ) + "() );" );
+            sc.add( "buf.append( \"'\" );" );
 
             if ( j.hasNext() )
             {
                 sc.add( "buf.append( \"\\n\" ); " );
             }
         }
+
+        if ( modelClass.getSuperClass() != null )
+        {
+            sc.add( "buf.append( \"\\n\" );" );
+            sc.add( "buf.append( super.toString() );" );
+        }
+
+        sc.add( "" );
 
         sc.add( "return buf.toString();" );
 
@@ -402,22 +422,22 @@ public class JavaModelloGenerator
         }
 
         sc.add( "int result = 17;" );
-        sc.add( "long tmp;" );
+
+        sc.add( "" );
 
         for ( Iterator j = identifierFields.iterator(); j.hasNext(); )
         {
             ModelField identifier = (ModelField) j.next();
 
-            if ( "double".equals( identifier.getType() ) )
-            {
-                sc.add( "tmp = Double.doubleToLongBits( " + identifier.getName() + " );" );
-                sc.add( "result = 37 * result + (int) ( tmp ^ ( tmp >>> 32 ) );" );
-            }
-            else
-            {
-                sc.add( "result = 37 * result + " + createHashCodeForField( identifier ) + ";" );
-            }
+            sc.add( "result = 37 * result + " + createHashCodeForField( identifier ) + ";" );
         }
+
+        if ( modelClass.getSuperClass() != null )
+        {
+            sc.add( "result = 37 * result + super.hashCode();" );
+        }
+
+        sc.add( "" );
 
         sc.add( "return result;" );
 
@@ -474,7 +494,7 @@ public class JavaModelloGenerator
         }
         else if ( "double".equals( type ) )
         {
-            return "(int) ( tmp ^ ( tmp >>> 32 ) )";
+            return "(int) ( Double.doubleToLongBits( " + identifier.getName() + " ) ^ ( Double.doubleToLongBits( " + identifier.getName() + " ) >>> 32 ) )";
         }
         else
         {
