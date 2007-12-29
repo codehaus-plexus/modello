@@ -35,6 +35,7 @@ import org.codehaus.modello.model.Version;
 import org.codehaus.modello.plugin.java.JavaFieldMetadata;
 import org.codehaus.modello.plugin.java.javasource.JClass;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
+import org.codehaus.plexus.util.StringUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -180,7 +181,7 @@ public abstract class AbstractModelloGenerator
 
     protected String capitalise( String str )
     {
-        if ( str == null || str.length() == 0 )
+        if ( StringUtils.isEmpty( str ) )
         {
             return str;
         }
@@ -193,6 +194,11 @@ public abstract class AbstractModelloGenerator
 
     protected String singular( String name )
     {
+        if ( StringUtils.isEmpty( name ) )
+        {
+            return name;
+        }
+
         if ( name.endsWith( "ies" ) )
         {
             return name.substring( 0, name.length() - 3 ) + "y";
@@ -201,7 +207,7 @@ public abstract class AbstractModelloGenerator
         {
             return name.substring( 0, name.length() - 2 );
         }
-        else if ( name.endsWith( "s" ) )
+        else if ( name.endsWith( "s" ) && ( name.length() != 1) )
         {
             return name.substring( 0, name.length() - 1 );
         }
@@ -211,7 +217,7 @@ public abstract class AbstractModelloGenerator
 
     public static String uncapitalise( String str )
     {
-        if ( str == null || str.length() == 0 )
+        if ( StringUtils.isEmpty( str ) )
         {
             return str;
         }
