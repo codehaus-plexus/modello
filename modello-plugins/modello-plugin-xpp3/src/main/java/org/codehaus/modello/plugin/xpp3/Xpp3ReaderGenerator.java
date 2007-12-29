@@ -151,7 +151,7 @@ public class Xpp3ReaderGenerator
         JField addDefaultEntities = new JField( JType.Boolean, "addDefaultEntities" );
 
         addDefaultEntities.setComment(
-            "If set the parser till be loaded with all single characters from the XHTML specification.\n" +
+            "If set the parser will be loaded with all single characters from the XHTML specification.\n" +
                 "The entities used:\n" + "<ul>\n" + "<li>http://www.w3.org/TR/xhtml1/DTD/xhtml-lat1.ent</li>\n" +
                 "<li>http://www.w3.org/TR/xhtml1/DTD/xhtml-special.ent</li>\n" +
                 "<li>http://www.w3.org/TR/xhtml1/DTD/xhtml-symbol.ent</li>\n" + "</ul>\n" );
@@ -889,7 +889,7 @@ public class Xpp3ReaderGenerator
         if ( "boolean".equals( type ) )
         {
             sc.add( objectName + "." + setterName + "( getBooleanValue( " + parserGetter + ", \"" + tagName +
-                "\", parser ) );" );
+                "\", parser, \"" + field.getDefaultValue() + "\" ) );" );
         }
         else if ( "char".equals( type ) )
         {
@@ -1295,16 +1295,29 @@ public class Xpp3ReaderGenerator
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
         method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
         method.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
+        method.addParameter( new JParameter( new JClass( "String" ), "defaultValue" ) );
 
         sc = method.getSourceCode();
 
-        sc.add( "if ( s != null )" );
+        sc.add( "if ( s != null && s.length() != 0 )" );
 
         sc.add( "{" );
 
         sc.indent();
 
         sc.add( "return Boolean.valueOf( s ).booleanValue();" );
+
+        sc.unindent();
+
+        sc.add( "}" );
+
+        sc.add( "if ( defaultValue != null )" );
+
+        sc.add( "{" );
+
+        sc.indent();
+
+        sc.add( "return Boolean.valueOf( defaultValue ).booleanValue();" );
 
         sc.unindent();
 

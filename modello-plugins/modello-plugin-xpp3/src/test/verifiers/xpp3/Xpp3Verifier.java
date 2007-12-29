@@ -25,6 +25,7 @@ package org.codehaus.modello.generator.xml.xpp3;
 import junit.framework.Assert;
 import org.codehaus.modello.test.model.Build;
 import org.codehaus.modello.test.model.Component;
+import org.codehaus.modello.test.model.Local;
 import org.codehaus.modello.test.model.MailingList;
 import org.codehaus.modello.test.model.Model;
 import org.codehaus.modello.test.model.Organization;
@@ -72,6 +73,8 @@ public class Xpp3Verifier
         verifyReader();
 
         verifyReaderAliases();
+
+        verifyReaderDefaultValue();
 
         verifyReaderDuplicates();
 
@@ -385,6 +388,27 @@ public class Xpp3Verifier
         assertModel( expected, actual );
     }
 
+    public void verifyReaderDefaultValue()
+        throws IOException, XmlPullParserException
+    {
+        MavenXpp3Reader reader = new MavenXpp3Reader();
+
+        // The defaultValue for local/online is true
+        String xml = "<mavenModel>\n" + "  <local><online></online></local>\n" + "</mavenModel>";
+
+        Model expected = new Model();
+
+        Local local = new Local();
+
+        local.setOnline( true );
+
+        expected.setLocal( local );
+
+        Model actual = reader.read( new StringReader( xml ) );
+
+        assertModel( expected, actual );
+    }
+
     public void verifyReaderDuplicates()
         throws IOException, XmlPullParserException
     {
@@ -484,6 +508,8 @@ public class Xpp3Verifier
         assertOrganization( expected.getOrganization(), actual.getOrganization() );
 */
         assertBuild( expected.getBuild(), actual.getBuild() );
+
+        assertLocal( expected.getLocal(), actual.getLocal() );
     }
 
     public void assertMailingLists( List expected, List actual )
@@ -559,6 +585,25 @@ public class Xpp3Verifier
 
             Assert.assertEquals( "/model/builder/unitTestSourceDirectory", expected.getUnitTestSourceDirectory(),
                                  actual.getUnitTestSourceDirectory() );
+        }
+    }
+
+    public void assertLocal( Local expected, Object actualObject )
+    {
+        if ( expected == null )
+        {
+            Assert.assertNull( "/model/local", actualObject );
+        }
+        else
+        {
+            Assert.assertNotNull( "/model/local", actualObject );
+
+            Assert.assertEquals( "/model/local", Local.class, actualObject.getClass() );
+
+            Local actual = (Local) actualObject;
+
+            Assert.assertEquals( "/model/local/online", expected.isOnline(),
+                                 actual.isOnline() );
         }
     }
 }
