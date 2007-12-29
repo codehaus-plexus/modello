@@ -42,7 +42,9 @@ public class ConvertersVerifier
         org.codehaus.modello.test.maven.v3_0_0.io.stax.MavenStaxWriter writerV3 = new org.codehaus.modello.test.maven.v3_0_0.io.stax.MavenStaxWriter();
         writerV3.write( sw, modelV3 );
 
-        Assert.assertEquals( convertLineEndings( FileUtils.fileRead( "src/test/verifiers/converters/expected-v3.xml" ).trim() ), scrubXmlDeclQuotes( sw.toString() ).trim() );
+        Assert.assertEquals(
+            convertLineEndings( FileUtils.fileRead( "src/test/verifiers/converters/expected-v3.xml" ).trim() ),
+            convertLineEndings( scrubXmlDeclQuotes( sw.toString() ).trim() ) );
 
         org.codehaus.modello.test.maven.v4_0_0.Model modelV4 = convert.convertFromFile_v4_0_0( file );
 
@@ -50,7 +52,9 @@ public class ConvertersVerifier
         org.codehaus.modello.test.maven.v4_0_0.io.stax.MavenStaxWriter writerV4 = new org.codehaus.modello.test.maven.v4_0_0.io.stax.MavenStaxWriter();
         writerV4.write( sw, modelV4 );
 
-        Assert.assertEquals( convertLineEndings( FileUtils.fileRead( "src/test/verifiers/converters/expected.xml" ).trim() ), scrubXmlDeclQuotes( sw.toString() ).trim() );
+        Assert.assertEquals(
+            convertLineEndings( FileUtils.fileRead( "src/test/verifiers/converters/expected.xml" ).trim() ),
+            convertLineEndings( scrubXmlDeclQuotes( sw.toString() ).trim() ) );
 
         org.codehaus.modello.test.maven.Model model = convert.convertFromFile( file );
 
@@ -58,7 +62,9 @@ public class ConvertersVerifier
         org.codehaus.modello.test.maven.io.stax.MavenStaxWriter writer = new org.codehaus.modello.test.maven.io.stax.MavenStaxWriter();
         writer.write( sw, model );
 
-        Assert.assertEquals( convertLineEndings( FileUtils.fileRead( "src/test/verifiers/converters/expected.xml" ).trim() ), scrubXmlDeclQuotes( sw.toString() ).trim() );
+        Assert.assertEquals(
+            convertLineEndings( FileUtils.fileRead( "src/test/verifiers/converters/expected.xml" ).trim() ),
+            convertLineEndings( scrubXmlDeclQuotes( sw.toString() ).trim() ) );
 
         // Test trying to convert to an old version
         try
