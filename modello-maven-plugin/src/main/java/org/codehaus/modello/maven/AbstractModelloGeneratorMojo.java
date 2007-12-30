@@ -66,9 +66,17 @@ public abstract class AbstractModelloGeneratorMojo
      * Relative path to the mdo file for the current model.
      *
      * @parameter expression="${model}"
-     * @required
+     * @deprecated Use models instead
      */
     private String model;
+
+    /**
+     * List of relative paths to mdo files containing the models.
+     *
+     * @parameter
+     * @todo Make this @required when model is no longer supported
+     */
+    private String[] models;
 
     /**
      * The version of the model we will be working on.
@@ -187,36 +195,18 @@ public abstract class AbstractModelloGeneratorMojo
 
         try
         {
-            Reader reader = ReaderFactory.newXmlReader( new File( basedir, model ) );
-
-            Model model = modelloCore.loadModel( reader );
-
-            // TODO: dynamically resolve/load the generator type
-            getLog().info( "Generating current version: " + version );
-            modelloCore.generate( model, getGeneratorType(), parameters );
-
-            for ( Iterator i = packagedVersions.iterator(); i.hasNext(); )
+            if ( models != null )
             {
-                String version = (String) i.next();
-
-                parameters.setProperty( ModelloParameterConstants.VERSION, version );
-
-                parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString( true ) );
-
-                getLog().info( "Generating packaged version: " + version );
-                modelloCore.generate( model, getGeneratorType(), parameters );
+                for ( int i = 0; i < models.length; i++ )
+                {
+                    doExecute( models[i], outputDirectory, parameters );
+                }
             }
 
-            if ( producesCompilableResult() && project != null )
+            // Keeping this for backwards compatibility
+            if ( model != null )
             {
-                project.addCompileSourceRoot( outputDirectory );
-            }
-            
-            if ( producesResources() && project != null )
-            {
-                Resource resource = new Resource();
-                resource.setDirectory( outputDirectory );
-                project.addResource( resource );
+                doExecute( model, outputDirectory, parameters );
             }
         }
         catch ( FileNotFoundException e )
@@ -237,6 +227,54 @@ public abstract class AbstractModelloGeneratorMojo
         }
     }
 
+    /**
+     * Performs execute on a single specified model.
+     *
+     * @param modelStr
+     * @param parameters
+     * @param outputDirectory
+     * @throws IOException
+     * @throws ModelloException
+     * @throws ModelValidationException
+     */
+    private void doExecute( String modelStr, String outputDirectory, Properties parameters )
+        throws IOException, ModelloException, ModelValidationException
+    {
+        getLog().info( "Working on model: " + modelStr );
+
+        Reader reader = ReaderFactory.newXmlReader( new File( basedir, modelStr ) );
+
+        Model model = modelloCore.loadModel( reader );
+
+        // TODO: dynamically resolve/load the generator type
+        getLog().info( "Generating current version: " + version );
+        modelloCore.generate( model, getGeneratorType(), parameters );
+
+        for ( Iterator i = packagedVersions.iterator(); i.hasNext(); )
+        {
+            String version = (String) i.next();
+
+            parameters.setProperty( ModelloParameterConstants.VERSION, version );
+
+            parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString( true ) );
+
+            getLog().info( "Generating packaged version: " + version );
+            modelloCore.generate( model, getGeneratorType(), parameters );
+        }
+
+        if ( producesCompilableResult() && project != null )
+        {
+            project.addCompileSourceRoot( outputDirectory );
+        }
+
+        if ( producesResources() && project != null )
+        {
+            Resource resource = new Resource();
+            resource.setDirectory( outputDirectory );
+            project.addResource( resource );
+        }
+    }
+
     // ----------------------------------------------------------------------
     // Accessors
     // ----------------------------------------------------------------------
@@ -251,11 +289,17 @@ public abstract class AbstractModelloGeneratorMojo
         this.basedir = basedir;
     }
 
+    /**
+     * @deprecated Use getModels() instead
+     */
     public String getModel()
     {
         return model;
     }
 
+    /**
+     * @deprecated Use setModels(String[]) instead
+     */
     public void setModel( String model )
     {
         this.model = model;
@@ -304,5 +348,21 @@ public abstract class AbstractModelloGeneratorMojo
     public void setPackagedVersions( List/*<String>*/ packagedVersions )
     {
         this.packagedVersions = Collections.unmodifiableList( packagedVersions );
+    }
+
+    /**
+     * @return Returns the paths to the models.
+     */
+    public String[] getModels()
+    {
+        return models;
+    }
+
+    /**
+     * @param models Sets the paths to the models.
+     */
+    public void setModels( String[] models )
+    {
+        this.models = models;
     }
 }

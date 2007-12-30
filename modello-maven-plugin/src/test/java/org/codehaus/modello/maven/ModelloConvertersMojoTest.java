@@ -53,7 +53,9 @@ public class ModelloConvertersMojoTest
 
         mojo.setOutputDirectory( outputDirectory );
 
-        mojo.setModel( getTestPath( "src/test/resources/java-model.mdo" ) );
+        String models[] = new String[1];
+        models[0] = new String( getTestPath( "src/test/resources/java-model.mdo" ) );
+        mojo.setModels( models );
 
         mojo.setVersion( "1.0.0" );
 
