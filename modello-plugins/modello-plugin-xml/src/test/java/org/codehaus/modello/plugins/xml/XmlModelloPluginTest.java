@@ -76,6 +76,16 @@ public class XmlModelloPluginTest
 
         assertNotNull( xml );
 
+        assertFalse( xml.isAttribute() );
+
+        extend = clazz.getField( "extend", new Version( "4.1.0" ) );
+
+        assertTrue( extend.hasMetadata( XmlFieldMetadata.ID ) );
+
+        xml = (XmlFieldMetadata) extend.getMetadata( XmlFieldMetadata.ID );
+
+        assertNotNull( xml );
+
         assertTrue( xml.isAttribute() );
 
         ModelField parent = clazz.getField( "parent", new Version( "4.0.0" ) );

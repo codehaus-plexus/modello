@@ -61,11 +61,6 @@ public class ModelReader
     {
         return (Map) modelAttributes;
     }
-    
-    public Map getAttributesForModel( Model model )
-    {
-        return (Map) fieldAttributes.get( model.getName() );
-    }
 
     public Map getAttributesForClass( ModelClass modelClass )
     {
@@ -74,13 +69,13 @@ public class ModelReader
 
     public Map getAttributesForField( ModelField modelField )
     {
-        return (Map) fieldAttributes.get( modelField.getModelClass().getName() + ":" + modelField.getName() );
+        return (Map) fieldAttributes.get( modelField.getModelClass().getName() + ":" + modelField.getName() + ":" + modelField.getVersionRange() );
     }
 
     public Map getAttributesForAssociation( ModelAssociation modelAssociation )
     {
         return (Map) associationAttributes.get(
-            modelAssociation.getModelClass().getName() + ":" + modelAssociation.getName() );
+            modelAssociation.getModelClass().getName() + ":" + modelAssociation.getName() + ":" + modelAssociation.getVersionRange() );
     }
 
     public Model loadModel( Reader reader )
@@ -381,7 +376,9 @@ public class ModelReader
 
                 if ( modelField.getName() != null )
                 {
-                    fieldAttributes.put( modelClass.getName() + ":" + modelField.getName(), fAttributes );
+                    fieldAttributes.put(
+                        modelClass.getName() + ":" + modelField.getName() + ":" + modelField.getVersionRange(),
+                        fAttributes );
                 }
 
                 if ( modelAssociation != null )
@@ -410,8 +407,8 @@ public class ModelReader
 
                     if ( modelAssociation.getName() != null )
                     {
-                        associationAttributes.put( modelClass.getName() + ":" + modelAssociation.getName(),
-                                                   aAttributes );
+                        associationAttributes.put( modelClass.getName() + ":" + modelAssociation.getName() + ":" +
+                            modelAssociation.getVersionRange(), aAttributes );
                     }
 
                     modelClass.addField( modelAssociation );

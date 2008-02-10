@@ -13,12 +13,22 @@
       <name>Model</name>
       <version>3.0.0+</version>
       <fields>
-        <field xml.attribute="true">
+        <field>
           <name>extend</name>
-          <version>3.0.0+</version>
+          <version>3.0.0/4.0.0</version>
           <description>
             The location of the parent project, if one exists. Values from the parent project will be
             the default for this project if they are left unspecified. 
+            The path may be absolute, or relative to the current project.xml file.
+          </description>
+          <type>String</type>
+        </field>
+        <field xml.attribute="true">
+          <name>extend</name>
+          <version>4.1.0+</version>
+          <description>
+            The location of the parent project, if one exists. Values from the parent project will be
+            the default for this project if they are left unspecified.
             The path may be absolute, or relative to the current project.xml file.
           </description>
           <type>String</type>
