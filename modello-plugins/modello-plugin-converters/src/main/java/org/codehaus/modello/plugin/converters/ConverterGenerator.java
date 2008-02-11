@@ -24,6 +24,7 @@ package org.codehaus.modello.plugin.converters;
 
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.ModelloParameterConstants;
+import org.codehaus.modello.ModelloRuntimeException;
 import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
@@ -127,6 +128,7 @@ public class ConverterGenerator
                 continue;
             }
 
+            // check if it's present in the next version
             if ( nextVersion != null && !nextVersion.inside( modelClass.getVersionRange() ) )
             {
                 // Don't convert - it's not there in the next one
@@ -204,10 +206,26 @@ public class ConverterGenerator
                     }
                 }
 
+                // check if it's present in the next version
                 if ( nextVersion != null && !nextVersion.inside( modelField.getVersionRange() ) )
                 {
-                    // Don't convert - it's not there in the next one
-                    continue;
+                    // check if it is present in a new definition instead
+                    ModelField newField = null;
+                    try
+                    {
+                        newField = modelClass.getField( modelField.getName(), nextVersion );
+                    }
+                    catch ( ModelloRuntimeException e )
+                    {
+                        // Don't convert - it's not there in the next one
+                        continue;
+                    }
+
+                    if ( !newField.getType().equals( modelField.getType() ) )
+                    {
+                        // Don't convert - it's a different type in the next one
+                        continue;
+                    }
                 }
 
                 if ( modelField instanceof ModelAssociation )

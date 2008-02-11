@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<model>
+<model groupId="groupId">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>groupId</groupId>
   <artifactId>artifactId</artifactId>
   <name>name</name>
   <description>description</description>

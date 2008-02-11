@@ -73,7 +73,14 @@
         </field>
         <field>
           <name>groupId</name>
-          <version>3.0.0+</version>
+          <version>3.0.0</version>
+          <required>true</required>
+          <description><![CDATA[The primary grouping for your project.]]></description>
+          <type>String</type>
+        </field>
+        <field xml.attribute="true">
+          <name>groupId</name>
+          <version>4.0.0</version>
           <required>true</required>
           <description><![CDATA[The primary grouping for your project.]]></description>
           <type>String</type>
