@@ -1559,12 +1559,16 @@ public class StaxReaderGenerator
             parserGetter = "xmlStreamReader.getElementText()";
         }
 
-/* TODO: this and a default
+/* TODO:
         if ( fieldMetaData.isRequired() )
         {
             parserGetter = "getRequiredAttributeValue( " + parserGetter + ", \"" + tagName + "\", parser, strict, encoding )";
         }
 */
+        if ( field.getDefaultValue() != null )
+        {
+            parserGetter = "getDefaultValue( " + parserGetter + ", \"" + field.getDefaultValue() + "\" )";
+        }
 
         if ( fieldMetaData.isTrim() )
         {
@@ -1768,6 +1772,29 @@ public class StaxReaderGenerator
         sc.indent();
 
         sc.add( "s = s.trim();" );
+
+        sc.unindent();
+
+        sc.add( "}" );
+
+        sc.add( "return s;" );
+
+        jClass.addMethod( method );
+
+        method = new JMethod( new JClass( "String" ), "getDefaultValue" );
+
+        method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
+        method.addParameter( new JParameter( new JClass( "String" ), "v" ) );
+
+        sc = method.getSourceCode();
+
+        sc.add( "if ( s == null )" );
+
+        sc.add( "{" );
+
+        sc.indent();
+
+        sc.add( "s = v;" );
 
         sc.unindent();
 

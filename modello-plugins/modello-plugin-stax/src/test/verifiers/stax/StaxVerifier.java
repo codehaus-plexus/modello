@@ -89,6 +89,19 @@ public class StaxVerifier
         Assert.assertEquals( "Maven\u00A9", model.getName() );
     }
 
+    public void verifyReadDefaultAttribute()
+        throws IOException, XMLStreamException
+    {
+        File file = new File( "src/test/verifiers/stax/expected-default-extend.xml" );
+
+        Reader reader = ReaderFactory.newXmlReader( file );
+        MavenStaxReader modelReader = new MavenStaxReader();
+
+        Model model = modelReader.read( reader );
+
+        Assert.assertEquals( "foo", model.getExtend() );
+    }
+
     public void verifyWriter()
         throws IOException, XMLStreamException
     {

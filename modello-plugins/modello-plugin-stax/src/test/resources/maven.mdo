@@ -40,6 +40,7 @@
             The path may be absolute, or relative to the current project.xml file.
           </description>
           <type>String</type>
+          <defaultValue>foo</defaultValue>
         </field>
         <field>
           <name>parent</name>
