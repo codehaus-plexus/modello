@@ -20,14 +20,5 @@
     </dependency>
   </dependencies>
   <modules>
-    <module>modello-plugin-ojb</module>  
-    <!--
-    <module>modello-plugin-jdbc</module>
-    <module>modello-plugin-velocity</module>
-    <module>modello-plugin-dtd</module>
-    <module>modello-plugin-hibernate-store</module>
-    <module>modello-plugin-ldap</module>
-    <module>modello-plugin-stash</module>
-    -->
   </modules>
 </project>
