@@ -493,7 +493,6 @@ public class JDOMWriterGenerator
         sc.add( "for (int i = 0; i < childs.length; i++) {" );
         sc.addIndented( "domChilds.add(childs[i]);" );
         sc.add( "}" );
-        sc.add( "int domIndex = 0;" );
         sc.add( "ListIterator it = parent.getChildren().listIterator();" );
         sc.add( "while (it.hasNext()) {" );
         sc.indent();
@@ -518,7 +517,7 @@ public class JDOMWriterGenerator
         sc.add( "counter.increaseCount();" );
         sc.unindent();
         sc.add( "} else {" );
-        sc.addIndented( "parent.removeContent(elem);" );
+        sc.addIndented( "it.remove();" );
         sc.add( "}" );
         sc.unindent();
         sc.add( "}" );
