@@ -96,7 +96,7 @@ public class ModelloGenerateMojo extends AbstractModelloGeneratorMojo
     private String generatorId;
 
     /**
-     * The output directory of the generated JDO store.
+     * The output directory of the generated source files.
      *
      * @parameter expression="${basedir}/target/generated-sources/modello"
      * @required
