@@ -13,7 +13,7 @@
     Modello Maven Plugin enables the use of Modello in Maven builds.
   </description>
   <prerequisites>
-    <maven>2.0</maven>
+    <maven>2.0.6</maven>
   </prerequisites>
   <dependencies>
     <dependency>
