@@ -6,6 +6,7 @@
   <name>Modello Parent</name>
   <version>1.0-alpha-19-SNAPSHOT</version>
   <url>http://modello.codehaus.org/</url>
+
   <issueManagement>
     <system>jira</system>
     <url>http://jira.codehaus.org/browse/MODELLO</url>
@@ -47,6 +48,7 @@
       <archive>http://archive.modello.codehaus.org/scm/</archive>
      </mailingList>
   </mailingLists>
+
   <developers>
     <developer>
       <name>Brett Porter</name>
@@ -121,6 +123,7 @@
       <timezone>+1</timezone>
     </developer>
   </developers>
+
   <licenses>
     <license>
       <name>The MIT License</name>
@@ -137,6 +140,7 @@
     <name>Codehaus</name>
     <url>http://www.codehaus.org/</url>
   </organization>
+
   <build>
     <extensions>
       <extension>
@@ -158,6 +162,7 @@
       </plugins>
     </pluginManagement>
   </build>
+
   <modules>
     <module>modello-maven-plugin</module>
     <module>modello-core</module>
@@ -165,6 +170,7 @@
     <module>modello-test</module>
     <module>modello-plugins</module>
   </modules>
+
   <repositories>
     <repository>
       <releases>
@@ -175,6 +181,7 @@
       <url>http://snapshots.repository.codehaus.org/</url>
     </repository>
   </repositories>
+
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -183,6 +190,7 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -239,7 +247,6 @@
       <dependency>
         <groupId>org.codehaus.modello</groupId>
         <artifactId>modello-plugin-xml</artifactId>
-
         <version>1.0-alpha-19-SNAPSHOT</version>
       </dependency>
       <dependency>
@@ -290,7 +297,7 @@
       <dependency>
         <groupId>org.codehaus.plexus</groupId>
         <artifactId>plexus-utils</artifactId>
-        <version>1.4.5</version>
+        <version>1.5.1</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.plexus</groupId>
@@ -299,6 +306,7 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
+
   <distributionManagement>
     <repository>
       <id>codehaus.org</id>
