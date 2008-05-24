@@ -69,9 +69,9 @@ public class StoreModelloGenerator
         // Generate the code
         // ----------------------------------------------------------------------
 
-        String packageName = model.getDefaultPackageName( false, getGeneratedVersion() ).replace( '.', File.separatorChar );
+        String packageName = model.getDefaultPackageName( false, getGeneratedVersion() );
 
-        File packageFile = new File( getOutputDirectory(), packageName );
+        File packageFile = new File( getOutputDirectory(), packageName.replace( '.', File.separatorChar ) );
 
         File interfaceFile = new File( packageFile, model.getName() + "Store.java" );
 
@@ -103,7 +103,8 @@ public class StoreModelloGenerator
     {
         try
         {
-            Writer writer = WriterFactory.newPlatformWriter( file );
+            Writer writer = getEncoding() == null ? WriterFactory.newPlatformWriter( file )
+                                : WriterFactory.newWriter( file, getEncoding() );
 
             velocity.getEngine().mergeTemplate( template, context, writer );
 

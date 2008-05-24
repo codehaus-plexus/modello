@@ -38,11 +38,8 @@ import org.codehaus.modello.plugin.java.javasource.JType;
 import org.codehaus.modello.plugins.xml.XmlAssociationMetadata;
 import org.codehaus.modello.plugins.xml.XmlClassMetadata;
 import org.codehaus.modello.plugins.xml.XmlFieldMetadata;
-import org.codehaus.plexus.util.WriterFactory;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.Writer;
 import java.util.Iterator;
 import java.util.Properties;
 
@@ -88,20 +85,9 @@ public class Dom4jReaderGenerator
 
         packageName += ".io.dom4j";
 
-        String directory = packageName.replace( '.', '/' );
-
         String unmarshallerName = getFileName( "Dom4jReader" );
 
-        File f = new File( new File( getOutputDirectory(), directory ), unmarshallerName + ".java" );
-
-        if ( !f.getParentFile().exists() )
-        {
-            f.getParentFile().mkdirs();
-        }
-
-        Writer writer = WriterFactory.newPlatformWriter( f );
-
-        JSourceWriter sourceWriter = new JSourceWriter( writer );
+        JSourceWriter sourceWriter = newJSourceWriter( packageName, unmarshallerName );
 
         JClass jClass = new JClass( unmarshallerName );
 
@@ -237,9 +223,7 @@ public class Dom4jReaderGenerator
 
         jClass.print( sourceWriter );
 
-        writer.flush();
-
-        writer.close();
+        sourceWriter.close();
     }
 
     private String getTagName( ModelClass root )

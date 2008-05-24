@@ -34,10 +34,14 @@ import org.codehaus.modello.model.ModelInterface;
 import org.codehaus.modello.model.Version;
 import org.codehaus.modello.plugin.java.JavaFieldMetadata;
 import org.codehaus.modello.plugin.java.javasource.JClass;
+import org.codehaus.modello.plugin.java.javasource.JSourceWriter;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.StringUtils;
+import org.codehaus.plexus.util.WriterFactory;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -60,6 +64,8 @@ public abstract class AbstractModelloGenerator
 
     private boolean packageWithVersion;
 
+    private String encoding;
+
     protected void initialize( Model model, Properties parameters )
         throws ModelloException
     {
@@ -73,6 +79,8 @@ public abstract class AbstractModelloGenerator
 
         packageWithVersion = Boolean.valueOf(
             getParameter( parameters, ModelloParameterConstants.PACKAGE_WITH_VERSION ) ).booleanValue();
+
+        encoding = parameters.getProperty( ModelloParameterConstants.ENCODING );
     }
 
     protected Model getModel()
@@ -93,6 +101,37 @@ public abstract class AbstractModelloGenerator
     public File getOutputDirectory()
     {
         return outputDirectory;
+    }
+
+    protected String getEncoding()
+    {
+        return encoding;
+    }
+
+    /**
+     * Create a new java source file writer, with configured encoding.
+     * 
+     * @param packageName the package of the source file to create
+     * @param className the class of the source file to create
+     * @return a JSourceWriter with configured encoding
+     * @throws IOException
+     */
+    protected JSourceWriter newJSourceWriter( String packageName, String className )
+    throws IOException
+    {
+        String directory = packageName.replace( '.', File.separatorChar );
+
+        File f = new File( new File( getOutputDirectory(), directory ), className + ".java" );
+
+        if ( !f.getParentFile().exists() )
+        {
+            f.getParentFile().mkdirs();
+        }
+
+        Writer writer = ( encoding == null ) ? WriterFactory.newPlatformWriter( f )
+                        : WriterFactory.newWriter( f, encoding );
+
+        return new JSourceWriter( writer );
     }
 
     protected boolean isClassInModel( String fieldType, Model model )

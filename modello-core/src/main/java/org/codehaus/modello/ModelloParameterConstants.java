@@ -42,6 +42,8 @@ public class ModelloParameterConstants
     
     public static final String FIRST_VERSION = "modello.first.version";
 
+    public static final String ENCODING = "modello.output.encoding";
+    
     private ModelloParameterConstants()
     {
     }

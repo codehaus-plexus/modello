@@ -41,10 +41,7 @@ import org.codehaus.modello.plugin.java.javasource.JSourceCode;
 import org.codehaus.modello.plugin.java.javasource.JSourceWriter;
 import org.codehaus.modello.plugin.java.javasource.JType;
 import org.codehaus.plexus.util.StringUtils;
-import org.codehaus.plexus.util.WriterFactory;
 
-import java.io.File;
-import java.io.Writer;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Iterator;
@@ -97,20 +94,7 @@ public class JavaModelloGenerator
                 packageName = modelInterface.getPackageName( false, null );
             }
 
-            char fileSeparator = System.getProperty( "file.separator" ).charAt( 0 );
-
-            String directory = packageName.replace( '.', fileSeparator );
-
-            File f = new File( new File( getOutputDirectory(), directory ), modelInterface.getName() + ".java" );
-
-            if ( !f.getParentFile().exists() )
-            {
-                f.getParentFile().mkdirs();
-            }
-
-            Writer writer = WriterFactory.newPlatformWriter( f );
-
-            JSourceWriter sourceWriter = new JSourceWriter( writer );
+            JSourceWriter sourceWriter = newJSourceWriter( packageName, modelInterface.getName() );
 
             JInterface jInterface = new JInterface( modelInterface.getName() );
 
@@ -136,9 +120,7 @@ public class JavaModelloGenerator
 
             jInterface.print( sourceWriter );
 
-            writer.flush();
-
-            writer.close();
+            sourceWriter.close();
         }
 
         // ----------------------------------------------------------------------
@@ -168,20 +150,7 @@ public class JavaModelloGenerator
                 packageName = modelClass.getPackageName( false, null );
             }
 
-            char fileSeparator = System.getProperty( "file.separator" ).charAt( 0 );
-
-            String directory = packageName.replace( '.', fileSeparator );
-
-            File f = new File( new File( getOutputDirectory(), directory ), modelClass.getName() + ".java" );
-
-            if ( !f.getParentFile().exists() )
-            {
-                f.getParentFile().mkdirs();
-            }
-
-            Writer writer = WriterFactory.newPlatformWriter( f );
-
-            JSourceWriter sourceWriter = new JSourceWriter( writer );
+            JSourceWriter sourceWriter = newJSourceWriter( packageName, modelClass.getName() );
 
             JClass jClass = new JClass( modelClass.getName() );
 
@@ -297,9 +266,7 @@ public class JavaModelloGenerator
 
             jClass.print( sourceWriter );
 
-            writer.flush();
-
-            writer.close();
+            sourceWriter.close();
         }
     }
 

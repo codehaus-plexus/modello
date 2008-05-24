@@ -516,7 +516,7 @@ public class ConverterGenerator
         return modelClass.getPackageName( true, generatedVersion ) + "." + modelClass.getName();
     }
 
-    private static Writer getFileWriter( File dir, String name )
+    private Writer getFileWriter( File dir, String name )
         throws ModelloException
     {
         File f = new File( dir, name );
@@ -524,7 +524,8 @@ public class ConverterGenerator
         Writer writer;
         try
         {
-            writer = WriterFactory.newPlatformWriter( f );
+            writer = getEncoding() == null ? WriterFactory.newPlatformWriter( f )
+                            : WriterFactory.newWriter( f, getEncoding() );
         }
         catch ( IOException e )
         {

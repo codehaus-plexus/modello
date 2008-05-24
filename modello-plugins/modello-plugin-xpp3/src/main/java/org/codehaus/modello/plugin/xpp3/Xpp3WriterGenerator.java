@@ -38,11 +38,8 @@ import org.codehaus.modello.plugin.java.javasource.JSourceWriter;
 import org.codehaus.modello.plugin.model.ModelClassMetadata;
 import org.codehaus.modello.plugins.xml.XmlAssociationMetadata;
 import org.codehaus.modello.plugins.xml.XmlFieldMetadata;
-import org.codehaus.plexus.util.WriterFactory;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.Writer;
 import java.util.Iterator;
 import java.util.Properties;
 
@@ -87,20 +84,9 @@ public class Xpp3WriterGenerator
 
         packageName += ".io.xpp3";
 
-        String directory = packageName.replace( '.', '/' );
-
         String marshallerName = getFileName( "Xpp3Writer" );
 
-        File f = new File( new File( getOutputDirectory(), directory ), marshallerName + ".java" );
-
-        if ( !f.getParentFile().exists() )
-        {
-            f.getParentFile().mkdirs();
-        }
-
-        Writer writer = WriterFactory.newPlatformWriter( f );
-
-        JSourceWriter sourceWriter = new JSourceWriter( writer );
+        JSourceWriter sourceWriter = newJSourceWriter( packageName, marshallerName );
 
         JClass jClass = new JClass( marshallerName );
 
@@ -174,9 +160,7 @@ public class Xpp3WriterGenerator
 
         jClass.print( sourceWriter );
 
-        writer.flush();
-
-        writer.close();
+        sourceWriter.close();
     }
 
     private void writeAllClasses( Model objectModel, JClass jClass )

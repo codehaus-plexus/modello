@@ -103,20 +103,9 @@ public class StaxReaderGenerator
 
         packageName += ".io.stax";
 
-        String directory = packageName.replace( '.', '/' );
-
         String unmarshallerName = getFileName( "StaxReader" );
 
-        File f = new File( new File( getOutputDirectory(), directory ), unmarshallerName + ".java" );
-
-        if ( !f.getParentFile().exists() )
-        {
-            f.getParentFile().mkdirs();
-        }
-
-        Writer writer = WriterFactory.newPlatformWriter( f );
-
-        JSourceWriter sourceWriter = new JSourceWriter( writer );
+        JSourceWriter sourceWriter = newJSourceWriter( packageName, unmarshallerName );
 
         JClass jClass = new JClass( unmarshallerName );
 
@@ -277,9 +266,7 @@ public class StaxReaderGenerator
 
         jClass.print( sourceWriter );
 
-        writer.flush();
-
-        writer.close();
+        sourceWriter.close();
     }
 
     private void generateStaxReaderDelegate( List/*<String>*/ versions )

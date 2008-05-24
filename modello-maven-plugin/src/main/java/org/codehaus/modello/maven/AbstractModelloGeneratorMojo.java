@@ -85,6 +85,14 @@ public abstract class AbstractModelloGeneratorMojo
     private String version;
 
     /**
+     * The encoding to use when generating Java source files.
+     * 
+     * @parameter expression="${encoding}" default-value="${project.build.sourceEncoding}"
+     * @since 1.0-alpha-19
+     */
+    private String encoding;
+
+    /**
      * True if the generated package names should include the version.
      *
      * @parameter expression="${packageWithVersion}" default-value="false"
@@ -184,6 +192,11 @@ public abstract class AbstractModelloGeneratorMojo
 
         parameters.setProperty( ModelloParameterConstants.ALL_VERSIONS,
                                 StringUtils.join( packagedVersions.iterator(), "," ) );
+
+        if ( encoding != null )
+        {
+            parameters.setProperty( ModelloParameterConstants.ENCODING, encoding );
+        }
 
         customizeParameters( parameters );
 

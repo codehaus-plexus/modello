@@ -22,9 +22,7 @@ package org.codehaus.modello.plugin.xpp3;
  * SOFTWARE.
  */
 
-import java.io.File;
 import java.io.IOException;
-import java.io.Writer;
 import java.util.Iterator;
 import java.util.Properties;
 
@@ -45,7 +43,6 @@ import org.codehaus.modello.plugin.java.javasource.JType;
 import org.codehaus.modello.plugins.xml.XmlAssociationMetadata;
 import org.codehaus.modello.plugins.xml.XmlClassMetadata;
 import org.codehaus.modello.plugins.xml.XmlFieldMetadata;
-import org.codehaus.plexus.util.WriterFactory;
 
 /**
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
@@ -88,20 +85,9 @@ public class Xpp3ReaderGenerator
 
         packageName += ".io.xpp3";
 
-        String directory = packageName.replace( '.', '/' );
-
         String unmarshallerName = getFileName( "Xpp3Reader" );
 
-        File f = new File( new File( getOutputDirectory(), directory ), unmarshallerName + ".java" );
-
-        if ( !f.getParentFile().exists() )
-        {
-            f.getParentFile().mkdirs();
-        }
-
-        Writer writer = WriterFactory.newPlatformWriter( f );
-
-        JSourceWriter sourceWriter = new JSourceWriter( writer );
+        JSourceWriter sourceWriter = newJSourceWriter( packageName, unmarshallerName );
 
         JClass jClass = new JClass( unmarshallerName );
 
@@ -271,9 +257,7 @@ public class Xpp3ReaderGenerator
 
         jClass.print( sourceWriter );
 
-        writer.flush();
-
-        writer.close();
+        sourceWriter.close();
     }
 
     private String getTagName( ModelClass root )
