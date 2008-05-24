@@ -73,21 +73,21 @@ public class XsdGenerator
     {
         Model objectModel = getModel();
 
-        String directory = getOutputDirectory().getAbsolutePath();
+        File directory = getOutputDirectory();
 
         if ( isPackageWithVersion() )
         {
-            directory += "/" + getGeneratedVersion();
+            directory = new File( directory, getGeneratedVersion().toString() );
+        }
+
+        if ( !directory.exists() )
+        {
+            directory.mkdirs();
         }
 
         File f = new File( directory, objectModel.getId() + "-" + getGeneratedVersion() + ".xsd" );
 
-        if ( !f.getParentFile().exists() )
-        {
-            f.getParentFile().mkdirs();
-        }
-
-        Writer writer = WriterFactory.newPlatformWriter( f );
+        Writer writer = WriterFactory.newXmlWriter( f );
 
         XMLWriter w = new PrettyPrintXMLWriter( writer );
 
