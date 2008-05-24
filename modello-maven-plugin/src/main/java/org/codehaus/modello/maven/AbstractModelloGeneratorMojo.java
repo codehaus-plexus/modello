@@ -31,13 +31,11 @@ import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelValidationException;
-import org.codehaus.plexus.util.ReaderFactory;
 import org.codehaus.plexus.util.StringUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.Reader;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -242,9 +240,7 @@ public abstract class AbstractModelloGeneratorMojo
     {
         getLog().info( "Working on model: " + modelStr );
 
-        Reader reader = ReaderFactory.newXmlReader( new File( basedir, modelStr ) );
-
-        Model model = modelloCore.loadModel( reader );
+        Model model = modelloCore.loadModel( new File( basedir, modelStr ) );
 
         // TODO: dynamically resolve/load the generator type
         getLog().info( "Generating current version: " + version );

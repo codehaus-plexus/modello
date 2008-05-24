@@ -38,6 +38,7 @@ import org.codehaus.modello.model.ModelDefault;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.ModelValidationException;
 import org.codehaus.modello.plugin.ModelloGenerator;
+import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.ReaderFactory;
 
 import java.io.File;
@@ -78,7 +79,17 @@ public class DefaultModelloCore
     public Model loadModel( File file )
         throws IOException, ModelloException, ModelValidationException
     {
-        return loadModel( ReaderFactory.newXmlReader( file ) );
+        Reader reader = null;
+        
+        try
+        {
+            reader = ReaderFactory.newXmlReader( file );
+            return loadModel( reader );
+        }
+        finally
+        {
+            IOUtil.close( reader );
+        }
     }    
 
     public Model loadModel( Reader reader )
