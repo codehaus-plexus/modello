@@ -95,7 +95,6 @@ public class JDOMWriterGenerator
         jClass.addImport( "java.util.Map" );
         jClass.addImport( "java.util.Collection" );
         jClass.addImport( "java.util.ListIterator" );
-        jClass.addImport( "org.apache.maven.model.Model" );
         jClass.addImport( "org.jdom.DefaultJDOMFactory" );
         jClass.addImport( "org.jdom.Content" );
         jClass.addImport( "org.jdom.Element" );
