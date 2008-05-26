@@ -151,7 +151,8 @@ public abstract class AbstractVelocityModelloGenerator
 
         try
         {
-            Writer writer = WriterFactory.newPlatformWriter( file );
+            Writer writer = getEncoding() == null ? WriterFactory.newPlatformWriter( file )
+                            : WriterFactory.newWriter( file, getEncoding() );
 
             template.merge( context, writer );
 
