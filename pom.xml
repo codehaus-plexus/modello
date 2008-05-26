@@ -256,6 +256,11 @@
       </dependency>
       <dependency>
         <groupId>org.codehaus.modello</groupId>
+        <artifactId>modello-plugin-dom4j</artifactId>
+        <version>1.0-alpha-19-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>org.codehaus.modello</groupId>
         <artifactId>modello-plugin-jdom</artifactId>
         <version>1.0-alpha-19-SNAPSHOT</version>
       </dependency>
