@@ -1206,6 +1206,8 @@ public class Xpp3ReaderGenerator
 
         jClass.addMethod( method );
 
+        // --------------------------------------------------------------------
+
         method = new JMethod( new JClass( "String" ), "getRequiredAttributeValue" );
         method.addException( new JClass( "XmlPullParserException" ) );
 
@@ -1242,6 +1244,23 @@ public class Xpp3ReaderGenerator
         sc.add( "return s;" );
 
         jClass.addMethod( method );
+
+        // --------------------------------------------------------------------
+
+        method = new JMethod( JType.Boolean, "getBooleanValue" );
+        method.addException( new JClass( "XmlPullParserException" ) );
+
+        method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
+        method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
+        method.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
+
+        sc = method.getSourceCode();
+
+        sc.add( "return getBooleanValue( s, attribute, parser, null );" );
+
+        jClass.addMethod( method );
+
+        // --------------------------------------------------------------------
 
         method = new JMethod( JType.Boolean, "getBooleanValue" );
         method.addException( new JClass( "XmlPullParserException" ) );
@@ -1281,6 +1300,8 @@ public class Xpp3ReaderGenerator
 
         jClass.addMethod( method );
 
+        // --------------------------------------------------------------------
+
         method = new JMethod( JType.Char, "getCharacterValue" );
         method.addException( new JClass( "XmlPullParserException" ) );
 
@@ -1306,6 +1327,8 @@ public class Xpp3ReaderGenerator
 
         jClass.addMethod( method );
 
+        // --------------------------------------------------------------------
+
         method = new JMethod( JType.Int, "getIntegerValue" );
         method.addException( new JClass( "XmlPullParserException" ) );
 
@@ -1319,6 +1342,8 @@ public class Xpp3ReaderGenerator
         convertNumericalType( sc, "Integer.valueOf( s ).intValue()", "an integer" );
 
         jClass.addMethod( method );
+
+        // --------------------------------------------------------------------
 
         method = new JMethod( JType.Short, "getShortValue" );
         method.addException( new JClass( "XmlPullParserException" ) );
@@ -1334,6 +1359,8 @@ public class Xpp3ReaderGenerator
 
         jClass.addMethod( method );
 
+        // --------------------------------------------------------------------
+
         method = new JMethod( JType.Long, "getLongValue" );
         method.addException( new JClass( "XmlPullParserException" ) );
 
@@ -1347,6 +1374,8 @@ public class Xpp3ReaderGenerator
         convertNumericalType( sc, "Long.valueOf( s ).longValue()", "a long integer" );
 
         jClass.addMethod( method );
+
+        // --------------------------------------------------------------------
 
         method = new JMethod( JType.Float, "getFloatValue" );
         method.addException( new JClass( "XmlPullParserException" ) );
@@ -1362,6 +1391,8 @@ public class Xpp3ReaderGenerator
 
         jClass.addMethod( method );
 
+        // --------------------------------------------------------------------
+
         method = new JMethod( JType.Double, "getDoubleValue" );
         method.addException( new JClass( "XmlPullParserException" ) );
 
@@ -1375,6 +1406,24 @@ public class Xpp3ReaderGenerator
         convertNumericalType( sc, "Double.valueOf( s ).doubleValue()", "a floating point number" );
 
         jClass.addMethod( method );
+
+        // --------------------------------------------------------------------
+
+        method = new JMethod( new JClass( "java.util.Date" ), "getDateValue" );
+        method.addException( new JClass( "XmlPullParserException" ) );
+
+        method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
+        method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
+        method.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
+        method.addException( new JClass( "XmlPullParserException" ) );
+
+        sc = method.getSourceCode();
+
+        sc.add( "return getDateValue( s, attribute, null, parser );" );
+
+        jClass.addMethod( method );
+
+        // --------------------------------------------------------------------
 
         method = new JMethod( new JClass( "java.util.Date" ), "getDateValue" );
         method.addException( new JClass( "XmlPullParserException" ) );
