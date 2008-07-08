@@ -428,6 +428,14 @@ public class XsdGenerator
         {
             return "xs:date";
         }
+        else if ("float".equals( type )) 
+        {
+            return "xs:float";
+        } 
+        else if ("double".equals( type )) 
+        {
+            return "xs:double";
+        }
         else
         {
             return null;
