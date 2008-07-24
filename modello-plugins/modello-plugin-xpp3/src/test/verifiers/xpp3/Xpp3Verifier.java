@@ -78,7 +78,11 @@ public class Xpp3Verifier
 
         verifyReaderDuplicates();
 
-        verifyReaderMissingTags();
+        verifyReaderMissingTags_DefaultMode();
+        
+        verifyReaderMissingTags_StrictMode();
+        
+        verifyReaderMissingTags_NonStrictMode();
 
         verifyThrowingExceptionWithWrongRootElement();
 
@@ -443,7 +447,7 @@ public class Xpp3Verifier
         }
     }
 
-    public void verifyReaderMissingTags()
+    public void verifyReaderMissingTags_DefaultMode()
         throws IOException, XmlPullParserException
     {
         MavenXpp3Reader reader = new MavenXpp3Reader();
@@ -461,6 +465,42 @@ public class Xpp3Verifier
         {
             Assert.assertTrue( true );
         }
+    }
+
+    public void verifyReaderMissingTags_StrictMode()
+        throws IOException, XmlPullParserException
+    {
+        MavenXpp3Reader reader = new MavenXpp3Reader();
+
+        // The following is missing the <dependency> and </dependency> tags
+        String xml =
+            "<mavenModel>\n"
+                + "  <dependencies><groupId>org.apache.cocoon</groupId><artifactId>cocoon-core</artifactId><version>2.2.0-SNAPSHOT</version></dependencies>\n"
+                + "</mavenModel>";
+
+        try
+        {
+            reader.read( new StringReader( xml ), true );
+            Assert.fail( "Should have obtained a parse error for missing dependency" );
+        }
+        catch ( XmlPullParserException expected )
+        {
+            Assert.assertTrue( true );
+        }
+    }
+
+    public void verifyReaderMissingTags_NonStrictMode()
+        throws IOException, XmlPullParserException
+    {
+        MavenXpp3Reader reader = new MavenXpp3Reader();
+
+        // The following is missing the <dependency> and </dependency> tags
+        String xml =
+            "<mavenModel>\n"
+                + "  <dependencies><groupId>org.apache.cocoon</groupId><artifactId>cocoon-core</artifactId><version>2.2.0-SNAPSHOT</version></dependencies>\n"
+                + "</mavenModel>";
+
+        reader.read( new StringReader( xml ), false );
     }
 
     // ----------------------------------------------------------------------
