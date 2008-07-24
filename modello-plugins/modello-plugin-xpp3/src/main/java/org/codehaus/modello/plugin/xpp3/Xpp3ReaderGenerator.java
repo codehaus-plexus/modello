@@ -620,7 +620,7 @@ public class Xpp3ReaderGenerator
 
                         sc.add( "}" );
 
-                        sc.add( "else" );
+                        sc.add( "else if ( strict )" );
 
                         sc.add( "{" );
 
@@ -632,6 +632,20 @@ public class Xpp3ReaderGenerator
 
                         sc.add( "}" );
 
+                        sc.add( "else" );
+
+                        sc.add( "{" );
+
+                        sc.indent();
+
+			            sc.add( "// swallow up to end tag since this is not valid" );
+
+			            sc.add( "while ( parser.next() != XmlPullParser.END_TAG ) {}" );
+
+                        sc.unindent();
+
+                        sc.add( "}" );
+			
                         sc.unindent();
 
                         sc.add( "}" );
