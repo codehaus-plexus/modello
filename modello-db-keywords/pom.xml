@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.codehaus.modello</groupId>
     <artifactId>modello</artifactId>
-    <version>1.0-alpha-20-SNAPSHOT</version>
+    <version>1.0-alpha-20</version>
   </parent>
   <artifactId>modello-db-keywords</artifactId>
   <name>Modello Database Keywords Library</name>
