@@ -33,7 +33,7 @@ import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.ReaderFactory;
 
 /**
- * @author <a href="mailto:brett@codehaus.org">Brett Porter</a>
+ * @author <a href="mailto:olamy@apache.org">Brett Porter</a>
  * @version $Id$
  */
 public class ChangesXsdGeneratorTest

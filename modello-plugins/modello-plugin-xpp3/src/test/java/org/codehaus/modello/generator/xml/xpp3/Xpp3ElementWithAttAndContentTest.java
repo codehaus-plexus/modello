@@ -1,16 +1,5 @@
 package org.codehaus.modello.generator.xml.xpp3;
 
-import java.io.File;
-import java.util.Properties;
-
-import org.codehaus.modello.AbstractModelloGeneratorTest;
-import org.codehaus.modello.ModelloParameterConstants;
-import org.codehaus.modello.core.ModelloCore;
-import org.codehaus.modello.model.Model;
-import org.codehaus.plexus.util.FileUtils;
-import org.codehaus.plexus.util.ReaderFactory;
-
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -29,6 +18,17 @@ import org.codehaus.plexus.util.ReaderFactory;
  * specific language governing permissions and limitations
  * under the License.
  */
+
+import java.io.File;
+import java.util.Properties;
+
+import org.codehaus.modello.AbstractModelloGeneratorTest;
+import org.codehaus.modello.ModelloParameterConstants;
+import org.codehaus.modello.core.ModelloCore;
+import org.codehaus.modello.model.Model;
+import org.codehaus.plexus.util.FileUtils;
+import org.codehaus.plexus.util.ReaderFactory;
+
 
 /**
  * @author <a href="mailto:olamy@apache.org">olamy</a>

@@ -73,7 +73,14 @@ public class Xpp3ChangesVerifier
         
         Document actual = changesReader.read( reader );
 
+        Assert.assertNotNull( actual );
         
+        Body body = actual.getBody();
+        
+        Release release = (Release) body.getReleases().get( 0 );
+        Action action = (Action) release.getActions().get( 0 );        
+        
+        Assert.assertEquals( "Added additional documentation on how to configure the plugin.", action.getAction() );
     }
     
     public void verifyWriter()
