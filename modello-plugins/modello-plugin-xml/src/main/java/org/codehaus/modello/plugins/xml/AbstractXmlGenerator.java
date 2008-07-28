@@ -97,4 +97,38 @@ public abstract class AbstractXmlGenerator
 
         return attributeFields;
     }
+    
+    protected boolean hasContentField( List /* ModelField */modelFields )
+    {
+        if ( modelFields == null )
+        {
+            return false;
+        }
+        for ( Iterator j = modelFields.iterator(); j.hasNext(); )
+        {
+            ModelField field = (ModelField) j.next();
+            if ( "Content".equals( field.getType() ) )
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    protected ModelField getContentField( List /* ModelField */modelFields )
+    {
+        if ( modelFields == null )
+        {
+            return null;
+        }
+        for ( Iterator j = modelFields.iterator(); j.hasNext(); )
+        {
+            ModelField field = (ModelField) j.next();
+            if ( "Content".equals( field.getType() ) )
+            {
+                return field;
+            }
+        }
+        return null;
+    }
 }

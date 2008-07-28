@@ -561,6 +561,10 @@ public class JavaModelloGenerator
         {
             type = new JClass( modelField.getType() ).createArray();
         }
+        else if ( modelField.getType().equals( "Content" ) )
+        {
+            type = new JClass( "String" );
+        }
         else
         {
             type = new JClass( modelField.getType() );

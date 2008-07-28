@@ -325,6 +325,8 @@ public class Xpp3ReaderGenerator
         JSourceCode sc = unmarshall.getSourceCode();
 
         sc.add( className + " " + uncapClassName + " = new " + className + "();" );
+        
+        ModelField contentField = null; 
 
         for ( Iterator i = modelClass.getAllFields( getGeneratedVersion(), true ).iterator(); i.hasNext(); )
         {
@@ -337,8 +339,20 @@ public class Xpp3ReaderGenerator
                 writePrimitiveField( field, field.getType(), uncapClassName, "set" + capitalise( field.getName() ), sc,
                                      jClass );
             }
+            // TODO check if we have already one with this type and throws Exception
+            if ( field.getType().equals( "Content" ) )
+            {
+                contentField = field;
+            }
         }
 
+        if (contentField != null)
+        {
+            sc.add( "parser.next();" );
+            sc.add( uncapClassName + ".set" + capitalise( contentField.getName() )
+                + "( getTrimmedValue( parser.getText() ) ); " );            
+        }
+        
         sc.add( "java.util.Set parsed = new java.util.HashSet();" );
 
         if ( rootElement )
@@ -906,6 +920,10 @@ public class Xpp3ReaderGenerator
             jClass.addImport( "org.codehaus.plexus.util.xml.Xpp3DomBuilder" );
 
             sc.add( objectName + "." + setterName + "( Xpp3DomBuilder.build( parser ) );" );
+        }
+        else if ("Content".equals( type ))
+        {    
+            //skip this
         }
         else
         {

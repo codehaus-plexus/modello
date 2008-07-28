@@ -46,6 +46,14 @@ public class ModelloXdocMojo
      * @required
      */
     private File outputDirectory;
+    
+    /**
+     * 
+     * @parameter 
+     * 
+     * @since 1.0-alpha-21
+     */
+    private String xdocFileName;
 
     /**
      * The first version of the model. This is used to decide whether or not
@@ -89,6 +97,11 @@ public class ModelloXdocMojo
         }
 
         parameters.put( ModelloParameterConstants.FIRST_VERSION, firstVersion );
+       
+        if ( xdocFileName != null )
+        {
+            parameters.put( ModelloParameterConstants.OUTPUT_XDOC_FILE_NAME, xdocFileName );
+        }
     }
 
     public String getFirstVersion()

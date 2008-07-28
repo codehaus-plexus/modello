@@ -44,6 +44,8 @@ public class ModelloParameterConstants
 
     public static final String ENCODING = "modello.output.encoding";
     
+    public static final String OUTPUT_XDOC_FILE_NAME = "modello.output.xdoc.file";
+    
     private ModelloParameterConstants()
     {
     }

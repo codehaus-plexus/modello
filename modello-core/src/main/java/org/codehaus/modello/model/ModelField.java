@@ -47,7 +47,7 @@ public class ModelField
     private transient ModelClass modelClass;
 
     private static final String[] PRIMITIVE_TYPES = new String[]{"boolean", "byte", "char", "short", "int", "long",
-        "float", "double", "String", "Boolean", "Date", "DOM"};
+        "float", "double", "String", "Boolean", "Date", "DOM", "Content"};
 
     public ModelField()
     {

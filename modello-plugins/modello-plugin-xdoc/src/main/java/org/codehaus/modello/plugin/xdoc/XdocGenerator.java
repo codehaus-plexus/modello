@@ -22,6 +22,16 @@ package org.codehaus.modello.plugin.xdoc;
  * SOFTWARE.
  */
 
+import java.io.File;
+import java.io.IOException;
+import java.io.Writer;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Properties;
+import java.util.Set;
+
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.ModelloRuntimeException;
@@ -37,15 +47,6 @@ import org.codehaus.modello.plugins.xml.XmlFieldMetadata;
 import org.codehaus.plexus.util.WriterFactory;
 import org.codehaus.plexus.util.xml.PrettyPrintXMLWriter;
 import org.codehaus.plexus.util.xml.XMLWriter;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.Writer;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Properties;
-import java.util.Set;
 
 /**
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
@@ -78,7 +79,7 @@ public class XdocGenerator
 
         try
         {
-            generateXdoc();
+            generateXdoc( parameters );
         }
         catch ( IOException ex )
         {
@@ -86,7 +87,7 @@ public class XdocGenerator
         }
     }
 
-    private void generateXdoc()
+    private void generateXdoc( Properties parameters )
         throws IOException
     {
         Model objectModel = getModel();
@@ -103,8 +104,16 @@ public class XdocGenerator
             directory.mkdirs();
         }
 
+        // we assume parameters not null
+        String xdocFileName = parameters.getProperty( ModelloParameterConstants.OUTPUT_XDOC_FILE_NAME );
+                
         File f = new File( directory, objectModel.getId() + ".xml" );
 
+        if (xdocFileName != null)
+        {
+            f = new File(directory, xdocFileName);
+        }
+        
         Writer writer = WriterFactory.newXmlWriter( f );
 
         XMLWriter w = new PrettyPrintXMLWriter( writer );
@@ -207,14 +216,76 @@ public class XdocGenerator
         }
 
         w.endElement();
+        
+        ModelField contentField = getContentField( getFieldsForClass( modelClass ) );
+        
+        if (contentField != null)
+        {
+            w.startElement( "p" );
+            w.startElement( "b" );
+            w.writeText( "Element Content : " );
+            w.writeMarkup( contentField.getDescription() );
+            w.endElement();
+            w.endElement();
+        }
+        List attributeFields = new ArrayList( getAttributeFieldsForClass( modelClass ) );
+        List elementFields = new ArrayList( getFieldsForClass( modelClass ) );
+        elementFields.removeAll( attributeFields );
+        generateFieldsTable( w, elementFields, true );
+        generateFieldsTable( w, attributeFields, false );
 
+        w.endElement();
+        
+        for ( Iterator iter = getFieldsForClass( modelClass ).iterator(); iter.hasNext(); )
+        {
+            ModelField f = (ModelField) iter.next();
+
+            if ( isInnerAssociation( f ) && recursive )
+            {
+                ModelAssociation assoc = (ModelAssociation) f;
+                ModelClass fieldModelClass = getModel().getClass( assoc.getTo(), getGeneratedVersion() );
+
+                if ( !written.contains( f.getName() ) )
+                {
+                    if ( ( modelClass.getName().equals( fieldModelClass.getName() ) )
+                        && ( modelClass.getPackageName().equals( fieldModelClass.getPackageName() ) ) )
+                    {
+                        writeElementDescriptor( w, fieldModelClass, assoc, written, false );
+                    }
+                    else
+                    {
+                        writeElementDescriptor( w, fieldModelClass, assoc, written );
+                    }
+                }
+            }
+        }
+    }
+    
+    private void generateFieldsTable( XMLWriter w, List fields, boolean elementFields )
+    {
+        
+        if ( fields == null || fields.isEmpty() )
+        {
+            // skip empty table
+            return;
+        }
+        
+        // skip if only one field and Content type
+        if (fields.size() == 1)
+        {
+            if ( "Content".equals( (( ModelField ) fields.get( 0 )).getType() ) )
+            {
+                return;
+            }            
+        }
+        
         w.startElement( "table" );
 
         w.startElement( "tr" );
 
         w.startElement( "th" );
-
-        w.writeText( "Element" );
+       
+        w.writeText( elementFields ? "Element" : "Attribute" );
 
         w.endElement();
 
@@ -237,17 +308,18 @@ public class XdocGenerator
 
         w.endElement();
 
-        List fields = getFieldsForClass( modelClass );
-
         for ( Iterator j = fields.iterator(); j.hasNext(); )
         {
             ModelField f = (ModelField) j.next();
-
+            
+            if ( "Content".equals( f.getType() ) )
+            {
+                continue;
+            }
+           
             XmlFieldMetadata fieldMetadata = (XmlFieldMetadata) f.getMetadata( XmlFieldMetadata.ID );
 
             w.startElement( "tr" );
-
-            // Element
 
             w.startElement( "td" );
 
@@ -340,31 +412,6 @@ public class XdocGenerator
 
         w.endElement();
 
-        w.endElement();
-
-        for ( Iterator iter = fields.iterator(); iter.hasNext(); )
-        {
-            ModelField f = (ModelField) iter.next();
-
-            if ( isInnerAssociation( f ) && recursive )
-            {
-                ModelAssociation assoc = (ModelAssociation) f;
-                ModelClass fieldModelClass = getModel().getClass( assoc.getTo(), getGeneratedVersion() );
-
-                if ( !written.contains( f.getName() ) )
-                {
-                    if ( ( modelClass.getName().equals( fieldModelClass.getName() ) )
-                        && ( modelClass.getPackageName().equals( fieldModelClass.getPackageName() ) ) )
-                    {
-                        writeElementDescriptor( w, fieldModelClass, assoc, written, false );
-                    }
-                    else
-                    {
-                        writeElementDescriptor( w, fieldModelClass, assoc, written );
-                    }
-                }
-            }
-        }
     }
 
     private String getModelClassDescriptor( ModelClass modelClass, ModelAssociation association, int depth )

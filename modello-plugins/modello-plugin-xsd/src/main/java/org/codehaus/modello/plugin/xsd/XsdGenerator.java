@@ -189,9 +189,21 @@ public class XsdGenerator
         w.addAttribute( "name", modelClass.getName() );
 
         writeClassDocumentation( w, modelClass );
-
-        List fields = getFieldsForClass( modelClass );
         
+        List fields = getFieldsForClass( modelClass );
+
+        boolean hasContentField = hasContentField( fields );
+        
+        // if yes it's an extension of xs:string
+        if ( hasContentField )
+        {
+            w.startElement( "xs:simpleContent" );
+
+            w.startElement( "xs:extension" );
+
+            w.addAttribute( "base", "xs:string" );
+        }
+    
         List attributeFields = getAttributeFieldsForClass( modelClass );
 
         fields.removeAll( attributeFields );
@@ -203,25 +215,35 @@ public class XsdGenerator
             XsdClassMetadata metadata = (XsdClassMetadata) modelClass.getMetadata( XsdClassMetadata.ID );
             boolean compositorAll = XsdClassMetadata.COMPOSITOR_ALL.equals( metadata.getCompositor() );
             
-            if ( compositorAll )
+            if ( !hasContentField )
             {
-                w.startElement( "xs:all" );
+
+                if ( compositorAll )
+                {
+                    w.startElement( "xs:all" );
+                }
+                else
+                {
+                    w.startElement( "xs:sequence" );
+                }
             }
-            else
-            {
-                w.startElement( "xs:sequence" );
-            }
-    
+            
             for ( Iterator j = fields.iterator(); j.hasNext(); )
             {
                 ModelField field = (ModelField) j.next();
-    
-                w.startElement( "xs:element" );
-    
+                
+                if ( !hasContentField )
+                {
+                    w.startElement( "xs:element" );
+                }
+                
                 // Usually, would only do this if the field is not "required", but due to inheritence, it may be present,
                 // even if not here, so we need to let it slide
-                w.addAttribute( "minOccurs", "0" );
-    
+                if ( !hasContentField )
+                {
+                    w.addAttribute( "minOccurs", "0" );
+                }
+                
                 String xsdType = getXsdType( field.getType() );
                 if ( xsdType != null )
                 {
@@ -279,6 +301,7 @@ public class XsdGenerator
                         }
                         else
                         {
+                            w.addAttribute( "name", resolveFieldTagName( field ) );
                             w.addAttribute( "type", fieldModelClass.getName() );
                             writeFieldDocumentation( w, field );
                         }
@@ -295,6 +318,10 @@ public class XsdGenerator
                             writeFieldDocumentation( w, field );
                             writePropertiesElement( w );
                         }
+                        else if ( "Content".equals( field.getType() ) )
+                        {
+                            // skip this
+                        }
                         else
                         {
                             throw new IllegalStateException(
@@ -302,11 +329,15 @@ public class XsdGenerator
                         }
                     }
                 }
-    
-                w.endElement();
+                if ( !hasContentField )
+                {
+                    w.endElement();
+                }
             }
-    
-            w.endElement(); // xs:all or xs:sequence
+            if ( !hasContentField )
+            {
+                w.endElement(); // xs:all or xs:sequence
+            }
         }
 
         for ( Iterator j = attributeFields.iterator(); j.hasNext(); )
@@ -340,7 +371,14 @@ public class XsdGenerator
 
             w.endElement();
         }
-
+        
+        if ( hasContentField )
+        {
+            w.endElement(); //xs:extension
+            
+            w.endElement(); //xs:simpleContent
+        }
+        
         w.endElement(); // xs:complexType
 
         for ( Iterator iter = toWrite.iterator(); iter.hasNext(); )
