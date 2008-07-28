@@ -23,6 +23,9 @@ package org.codehaus.modello.maven;
  */
 
 import java.io.File;
+import java.util.Properties;
+
+import org.codehaus.modello.ModelloParameterConstants;
 
 /**
  * Creates an XML schema from the model.
@@ -45,11 +48,29 @@ public class ModelloXsdMojo
      * @required
      */
     private File outputDirectory;
+    
+    /**
+     * 
+     * @parameter 
+     * 
+     * @since 1.0-alpha-21
+     */
+    private String xsdFileName;    
 
     protected String getGeneratorType()
     {
         return "xsd";
     }
+    
+    protected void customizeParameters( Properties parameters )
+    {
+        super.customizeParameters( parameters );
+       
+        if ( xsdFileName != null )
+        {
+            parameters.put( ModelloParameterConstants.OUTPUT_XSD_FILE_NAME, xsdFileName );
+        }
+    }    
 
     protected boolean producesCompilableResult()
     {

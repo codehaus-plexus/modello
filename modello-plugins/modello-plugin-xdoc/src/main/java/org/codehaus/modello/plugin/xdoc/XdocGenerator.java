@@ -109,9 +109,9 @@ public class XdocGenerator
                 
         File f = new File( directory, objectModel.getId() + ".xml" );
 
-        if (xdocFileName != null)
+        if ( xdocFileName != null )
         {
-            f = new File(directory, xdocFileName);
+            f = new File( directory, xdocFileName );
         }
         
         Writer writer = WriterFactory.newXmlWriter( f );

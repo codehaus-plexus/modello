@@ -46,6 +46,8 @@ public class ModelloParameterConstants
     
     public static final String OUTPUT_XDOC_FILE_NAME = "modello.output.xdoc.file";
     
+    public static final String OUTPUT_XSD_FILE_NAME = "modello.output.xsd.file";
+    
     private ModelloParameterConstants()
     {
     }

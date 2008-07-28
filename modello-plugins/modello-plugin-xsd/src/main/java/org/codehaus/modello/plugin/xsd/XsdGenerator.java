@@ -23,6 +23,7 @@ package org.codehaus.modello.plugin.xsd;
  */
 
 import org.codehaus.modello.ModelloException;
+import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
@@ -60,7 +61,7 @@ public class XsdGenerator
 
         try
         {
-            generateXsd();
+            generateXsd( parameters );
         }
         catch ( IOException ex )
         {
@@ -68,7 +69,7 @@ public class XsdGenerator
         }
     }
 
-    private void generateXsd()
+    private void generateXsd( Properties parameters )
         throws IOException
     {
         Model objectModel = getModel();
@@ -85,7 +86,15 @@ public class XsdGenerator
             directory.mkdirs();
         }
 
+        // we assume parameters not null
+        String xsdFileName = parameters.getProperty( ModelloParameterConstants.OUTPUT_XSD_FILE_NAME );        
+        
         File f = new File( directory, objectModel.getId() + "-" + getGeneratedVersion() + ".xsd" );
+        
+        if ( xsdFileName != null )
+        {
+            f = new File( directory, xsdFileName );
+        }        
 
         Writer writer = WriterFactory.newXmlWriter( f );
 
