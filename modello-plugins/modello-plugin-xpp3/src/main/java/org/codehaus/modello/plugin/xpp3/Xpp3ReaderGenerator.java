@@ -340,7 +340,7 @@ public class Xpp3ReaderGenerator
                                      jClass );
             }
             // TODO check if we have already one with this type and throws Exception
-            if ( field.getType().equals( "Content" ) )
+            if ( "Content".equals( field.getType() ) )
             {
                 contentField = field;
             }
