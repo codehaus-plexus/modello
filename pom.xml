@@ -169,10 +169,12 @@
       <plugins>
         <plugin>
           <artifactId>maven-release-plugin</artifactId>
+          <version>2.0-beta-7</version>
           <configuration>
             <tagBase>https://svn.codehaus.org/modello/tags</tagBase>
             <!-- modello tests require installation first at present -->
             <preparationGoals>clean install</preparationGoals>
+            <useReleaseProfile>true</useReleaseProfile>
           </configuration>
         </plugin>
       </plugins>
@@ -344,4 +346,38 @@
       <url>dav:https://dav.codehaus.org/modello</url>
     </site>
   </distributionManagement>
+  <profiles>
+    <profile>
+      <id>release</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-source-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>attach-sources</id>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>attach-javadocs</id>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>      
+      </build>
+    </profile>
+  </profiles>  
+
 </project>
