@@ -1,6 +1,23 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
 
-<model>
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+<model xsd.namespace="http://maven.apache.org/changes/1.0.0" xsd.target-namespace="http://maven.apache.org/changes/1.0.0">
   <id>changes</id>
   <name>Changes</name>
   <description>
@@ -24,20 +41,20 @@
         <field>
           <name>properties</name>
           <version>1.0.0</version>
-          <required>true</required>
           <association>
             <type>Properties</type>
-            <muliplicity>1</muliplicity>
+            <multiplicity>1</multiplicity>
           </association>
-          <description>The properties of the project.</description>
-        </field>
+          <description>
+            Contains the properties of this document.
+          </description>
+        </field> 
         <field>
           <name>body</name>
           <version>1.0.0</version>
           <required>true</required>
           <association>
             <type>Body</type>
-            <muliplicity>1</muliplicity>
           </association>
           <description>
             Contains the releases of this project with the actions taken
@@ -60,10 +77,11 @@
         <field>
           <name>author</name>
           <version>1.0.0</version>
-          <type>String</type>
-          <description>
-            Page Author
-          </description>
+          <description>Page Author</description>
+          <association>
+            <type>Author</type>
+            <multiplicity>1</multiplicity>
+          </association>          
         </field>
       </fields>
     </class>
@@ -71,7 +89,7 @@
       <name>Body</name>
       <version>1.0.0</version>
       <fields>
-        <field xml.listStyle="flat">
+        <field xml.listStyle="flat" xml.tagName="release">
           <name>releases</name>
           <version>1.0.0</version>
           <association>
@@ -80,16 +98,6 @@
           </association>
           <description>The list of releases for this project.</description>
         </field>
-        <field>
-          <name>properties</name>
-          <version>1.0.0</version>
-          <association>
-            <type>Properties</type>
-          </association>
-          <description>
-            Contains the properties of this document.
-          </description>
-        </field>        
       </fields>
     </class>
     <class xsd.compositor="sequence">
@@ -118,7 +126,7 @@
           ]]>
           </description>
         </field>
-        <field>
+        <field xml.attribute="true">
           <name>description</name>
           <version>1.0.0</version>
           <type>String</type>
@@ -126,7 +134,7 @@
             A short description of this release.
           </description>
         </field>
-        <field xml.listStyle="flat">
+        <field xml.listStyle="flat" xml.tagName="action">
           <name>actions</name>
           <version>1.0.0</version>
           <association>
@@ -135,9 +143,33 @@
           </association>
           <description>The list of actions taken for this release.</description>
         </field>
-        
       </fields>
     </class>
+    <class>
+      <name>Author</name>
+      <version>1.0.0</version>
+      <description>
+        A description of the author page.
+      </description>
+      <fields>
+        <field>
+          <name>name</name>
+          <version>1.0.0</version>
+          <type>Content</type>
+          <description>
+            The page author name.
+          </description>
+        </field>    
+        <field xml.attribute="true" xml.tagName="email">
+          <name>authorEmail</name>
+          <version>1.0.0</version>
+          <type>String</type>
+          <description>
+            The page author email.
+          </description>
+        </field>
+      </fields>
+    </class>        
     <class xsd.compositor="sequence">
       <name>Action</name>
       <version>1.0.0</version>
@@ -165,7 +197,7 @@
             ]]>
           </description>
         </field>
-        <field xml.attribute="true">
+        <field xml.attribute="true" xml.tagName="due-to">
           <name>dueTo</name>
           <version>1.0.0</version>
           <type>String</type>
@@ -173,7 +205,7 @@
             Name of the person to be credited for this change. This can be used when a patch is submitted by a non-committer.
           </description>
         </field>
-        <field xml.attribute="true">
+        <field xml.attribute="true" xml.tagName="due-to-email">
           <name>dueToEmail</name>
           <version>1.0.0</version>
           <type>String</type>
@@ -190,7 +222,7 @@
             <![CDATA[
               <p>Id of the issue related to this change. This is the id in your issue tracking system.</p>
               <p>The Changes plugin will generate a URL out of this id. The URL is constructed using the value of the issueLinkTemplate parameter.</p>
-              </p>See the <a href="changes-report.html">changes-report mojo</a> for more details.</p>
+              <p>See the <a href="changes-report.html">changes-report mojo</a> for more details.</p>
             ]]>
           </description>
         </field>                     
@@ -219,7 +251,7 @@
             <![CDATA[
               <p>Id of issue tracking system. If empty 'default' value will be use.</p>
               <p>The Changes plugin will generate a URL out of this id. The URL is constructed using the value of the issueLinkTemplatePerSystem parameter.</p>
-              </p>See the <a href="changes-report.html">changes-report mojo</a> for more details.</p>
+              <p>See the <a href="changes-report.html">changes-report mojo</a> for more details.</p>
             ]]>
           </description>
         </field>    
@@ -228,11 +260,29 @@
           <version>1.0.0</version>
           <type>String</type>
           <description>fix date</description>
-        </field>              
+        </field>     
+        <field xml.listStyle="flat" xml.tagName="dueto" xml.associationTagName="dueto">
+          <name>dueTos</name>
+          <version>1.0.0</version>
+          <association>
+            <type>DueTo</type>
+            <multiplicity>*</multiplicity>
+          </association>
+          <description>A list of contibutors for this issue.</description>
+        </field>
+        <field xml.listStyle="flat" xml.tagName="fixes" xml.associationTagName="fixes">
+          <name>fixedIssues</name>
+          <version>1.0.0</version>
+          <association>
+            <type>FixedIssue</type>
+            <multiplicity>*</multiplicity>
+          </association>
+          <description>A list of fix issues.</description>
+        </field>                         
       </fields>
       <codeSegments>
         <codeSegment>
-          <version>1.0.0</version>
+          <version>1.0.9+</version>
           <code><![CDATA[
             public static final String ADD_ACTION = "add";
         
@@ -245,6 +295,48 @@
         </codeSegment>
       </codeSegments>      
     </class>
+    <class xsd.compositor="sequence">
+      <name>DueTo</name>
+      <version>1.0.0</version>
+      <description>
+        Extras Name and Email of the person to be credited for this change. This can be used when a patch is submitted by a non-committer.
+      </description>
+      <fields>
+        <field xml.attribute="true">
+          <name>name</name>
+          <version>1.0.0</version>
+          <type>String</type>
+          <description>Name of the person to be credited for this change.</description>
+        </field>
+        <field xml.attribute="true">
+          <name>email</name>
+          <version>1.0.0</version>
+          <type>String</type>
+          <description>Name of the person to be credited for this change.</description>
+        </field>        
+      </fields>
+    </class>
+    <class xsd.compositor="sequence" xml.tagName="fixes">
+      <name>FixedIssue</name>
+      <version>1.0.0</version>
+      <description>
+        A fixed issue.
+      </description>
+      <fields>
+        <field xml.attribute="true">
+          <name>issue</name>
+          <version>1.0.0</version>
+          <type>String</type>
+          <description>
+            <![CDATA[
+              <p>Id of the issue related to this change. This is the id in your issue tracking system.</p>
+              <p>The Changes plugin will generate a URL out of this id. The URL is constructed using the value of the issueLinkTemplate parameter.</p>
+              <p>See the <a href="changes-report.html">changes-report mojo</a> for more details.</p>
+            ]]>
+          </description>          
+        </field>
+      </fields>
+    </class>          
   </classes>
 </model>
 
