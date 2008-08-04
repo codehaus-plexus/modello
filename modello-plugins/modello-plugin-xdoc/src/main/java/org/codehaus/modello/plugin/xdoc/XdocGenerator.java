@@ -336,11 +336,26 @@ public class XdocGenerator
                 ModelClass associationModelClass = getModel().getClass( assoc.getTo(), getGeneratedVersion() );
 
                 w.startElement( "a" );
-                w.addAttribute( "href", "#class_" + uncapitalise( associationModelClass.getName() ) );
-
+                
+                                
+                if ( fieldMetadata.getTagName() != null )
+                {
+                    w.addAttribute( "href", "#class_" + fieldMetadata.getTagName() );
+                }
+                else
+                {
+                    w.addAttribute( "href", "#class_" + uncapitalise( associationModelClass.getName() ) );
+                }
                 if ( flatAssociation )
                 {
-                    w.writeText( uncapitalise( associationModelClass.getName() ) );
+                    if ( fieldMetadata.getTagName() != null )
+                    {
+                        w.writeText( uncapitalise( fieldMetadata.getTagName() ) );
+                    }
+                    else
+                    {
+                        w.writeText( uncapitalise( associationModelClass.getName() ) );
+                    }
                 }
                 else
                 {
