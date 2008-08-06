@@ -175,6 +175,7 @@
             <!-- modello tests require installation first at present -->
             <preparationGoals>clean install</preparationGoals>
             <useReleaseProfile>true</useReleaseProfile>
+            <goals>deploy</goals>
           </configuration>
         </plugin>
       </plugins>
