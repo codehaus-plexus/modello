@@ -33,7 +33,9 @@ Processing multiple Modello models.
               <goal>xsd</goal>
             </goals>
             <configuration>
-              <model>src/main/mdo/descriptor.mdo</model>
+              <models>
+                <model>src/main/mdo/descriptor.mdo</model>
+              <models>
               <version>1.0.0</version>
             </configuration>
           </execution>
@@ -47,7 +49,9 @@ Processing multiple Modello models.
               <goal>xsd</goal>
             </goals>
             <configuration>
-              <model>src/main/mdo/component.mdo</model>
+              <models>
+                <model>src/main/mdo/component.mdo</model>
+              </models>
               <version>1.0.0</version>
             </configuration>
           </execution>
@@ -59,7 +63,9 @@ Processing multiple Modello models.
               <goal>xsd</goal>
             </goals>
             <configuration>
-              <model>src/main/mdo/descriptor.mdo</model>
+              <models>
+                <model>src/main/mdo/descriptor.mdo</model>
+              </models>
               <version>1.0.0</version>
             </configuration>
           </execution>
@@ -71,7 +77,9 @@ Processing multiple Modello models.
               <goal>xsd</goal>
             </goals>
             <configuration>
-              <model>src/main/mdo/component.mdo</model>
+              <models>
+                <model>src/main/mdo/component.mdo</model>
+              <models>
               <version>1.0.0</version>
             </configuration>
           </execution>
