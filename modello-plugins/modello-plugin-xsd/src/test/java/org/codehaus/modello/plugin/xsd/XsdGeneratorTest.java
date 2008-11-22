@@ -106,8 +106,8 @@ public class XsdGeneratorTest
 
         //addDependency( "modello", "modello-core", "1.0-SNAPSHOT" );
 
-        // TODO write verfier which compile generated schema : use jaxp        
-        
+        // TODO write verfier which compile generated schema : use jaxp
+
         //verify( "org.codehaus.modello.generator.xml.xsd.XsdVerifier", "xsd" );
     }
 }

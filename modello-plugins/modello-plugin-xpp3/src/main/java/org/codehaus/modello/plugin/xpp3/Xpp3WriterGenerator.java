@@ -202,14 +202,14 @@ public class Xpp3WriterGenerator
         sc.add( "serializer.startTag( NAMESPACE, tagName );" );
 
         ModelField contentField = null;
-        
+
         String contentValue = null;
-        
+
         // XML attributes
         for ( Iterator i = modelClass.getAllFields( getGeneratedVersion(), true ).iterator(); i.hasNext(); )
         {
             ModelField field = (ModelField) i.next();
-            
+
             XmlFieldMetadata fieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
 
             JavaFieldMetadata javaFieldMetadata = (JavaFieldMetadata) field.getMetadata( JavaFieldMetadata.ID );
@@ -220,7 +220,7 @@ public class Xpp3WriterGenerator
             {
                 fieldTagName = field.getName();
             }
-            
+
             String type = field.getType();
 
             String value = uncapClassName + "." + getPrefix( javaFieldMetadata ) + capitalise( field.getName() ) + "()";
@@ -230,8 +230,8 @@ public class Xpp3WriterGenerator
                 contentField = field;
                 contentValue = value;
                 continue;
-            }            
-            
+            }
+
             if ( fieldMetadata.isAttribute() )
             {
                 sc.add( getValueChecker( type, value, field ) );
@@ -255,19 +255,19 @@ public class Xpp3WriterGenerator
             XmlFieldMetadata fieldMetadata = (XmlFieldMetadata) contentField.getMetadata( XmlFieldMetadata.ID );
             sc.add( "serializer.text( " + getValue( contentField.getType(), contentValue, fieldMetadata ) + ");" );
         }
-        
+
         // XML tags
         for ( Iterator fieldIterator = modelClass.getAllFields( getGeneratedVersion(), true ).iterator();
               fieldIterator.hasNext(); )
         {
-           
+
             ModelField field = (ModelField) fieldIterator.next();
-            
+
             if ( "Content".equals( field.getType() ) )
             {
                 // skip field with type Content
                 continue;
-            }             
+            }
 
             XmlFieldMetadata fieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
 

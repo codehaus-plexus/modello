@@ -59,7 +59,7 @@ public class XdocGenerator
     private static final VersionRange DEFAULT_VERSION_RANGE = new VersionRange( "0.0.0+" );
 
     private Version firstVersion = DEFAULT_VERSION_RANGE.getFromVersion();
-    
+
     private Version version = DEFAULT_VERSION_RANGE.getFromVersion();
 
     public void generate( Model model, Properties parameters )
@@ -106,14 +106,14 @@ public class XdocGenerator
 
         // we assume parameters not null
         String xdocFileName = parameters.getProperty( ModelloParameterConstants.OUTPUT_XDOC_FILE_NAME );
-                
+
         File f = new File( directory, objectModel.getId() + ".xml" );
 
         if ( xdocFileName != null )
         {
             f = new File( directory, xdocFileName );
         }
-        
+
         Writer writer = WriterFactory.newXmlWriter( f );
 
         XMLWriter w = new PrettyPrintXMLWriter( writer );
@@ -216,9 +216,9 @@ public class XdocGenerator
         }
 
         w.endElement();
-        
+
         ModelField contentField = getContentField( getFieldsForClass( modelClass ) );
-        
+
         if (contentField != null)
         {
             w.startElement( "p" );
@@ -235,7 +235,7 @@ public class XdocGenerator
         generateFieldsTable( w, attributeFields, false );
 
         w.endElement();
-        
+
         for ( Iterator iter = getFieldsForClass( modelClass ).iterator(); iter.hasNext(); )
         {
             ModelField f = (ModelField) iter.next();
@@ -260,31 +260,31 @@ public class XdocGenerator
             }
         }
     }
-    
+
     private void generateFieldsTable( XMLWriter w, List fields, boolean elementFields )
     {
-        
+
         if ( fields == null || fields.isEmpty() )
         {
             // skip empty table
             return;
         }
-        
+
         // skip if only one field and Content type
-        if (fields.size() == 1)
+        if ( fields.size() == 1 )
         {
             if ( "Content".equals( (( ModelField ) fields.get( 0 )).getType() ) )
             {
                 return;
-            }            
+            }
         }
-        
+
         w.startElement( "table" );
 
         w.startElement( "tr" );
 
         w.startElement( "th" );
-       
+
         w.writeText( elementFields ? "Element" : "Attribute" );
 
         w.endElement();
@@ -311,12 +311,12 @@ public class XdocGenerator
         for ( Iterator j = fields.iterator(); j.hasNext(); )
         {
             ModelField f = (ModelField) j.next();
-            
+
             if ( "Content".equals( f.getType() ) )
             {
                 continue;
             }
-           
+
             XmlFieldMetadata fieldMetadata = (XmlFieldMetadata) f.getMetadata( XmlFieldMetadata.ID );
 
             w.startElement( "tr" );
@@ -336,8 +336,8 @@ public class XdocGenerator
                 ModelClass associationModelClass = getModel().getClass( assoc.getTo(), getGeneratedVersion() );
 
                 w.startElement( "a" );
-                
-                                
+
+
                 if ( fieldMetadata.getTagName() != null )
                 {
                     w.addAttribute( "href", "#class_" + fieldMetadata.getTagName() );
@@ -491,7 +491,7 @@ public class XdocGenerator
 
                     boolean listStyleWrapped =
                         ModelAssociation.MANY_MULTIPLICITY.equals( assoc.getMultiplicity() )
-                        && XmlFieldMetadata.LIST_STYLE_WRAPPED.equals( fieldMetadata.getListStyle() ); 
+                        && XmlFieldMetadata.LIST_STYLE_WRAPPED.equals( fieldMetadata.getListStyle() );
 
                     if ( listStyleWrapped )
                     {
@@ -565,7 +565,7 @@ public class XdocGenerator
             else
             {
                 tagName = association.getName();
-    
+
                 if ( ModelAssociation.MANY_MULTIPLICITY.equals( association.getMultiplicity() ) )
                 {
                     tagName = singular( tagName );
@@ -576,7 +576,7 @@ public class XdocGenerator
         {
             tagName = metadata.getTagName();
         }
-    
+
         if ( association != null )
         {
             XmlFieldMetadata fieldMetadata = (XmlFieldMetadata) association.getMetadata( XmlFieldMetadata.ID );
@@ -595,10 +595,10 @@ public class XdocGenerator
                 }
             }
         }
-        
+
         return tagName;
     }
-    
+
     /**
      * Appends the required spacers to the given StringBuffer.
      * @param sb where to append the spacers

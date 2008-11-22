@@ -16,7 +16,7 @@ public class Xpp3ParsingTest
         File model = new File( System.getProperty( "basedir" ), "src/test/models/model-with-wrong-root-tag.xml" );
 
         MavenXpp3Reader reader = new MavenXpp3Reader();
-                
+
         reader.read( ReaderFactory.newXmlReader( model ), true );
     }
 

@@ -87,14 +87,14 @@ public class XsdGenerator
         }
 
         // we assume parameters not null
-        String xsdFileName = parameters.getProperty( ModelloParameterConstants.OUTPUT_XSD_FILE_NAME );        
-        
+        String xsdFileName = parameters.getProperty( ModelloParameterConstants.OUTPUT_XSD_FILE_NAME );
+
         File f = new File( directory, objectModel.getId() + "-" + getGeneratedVersion() + ".xsd" );
-        
+
         if ( xsdFileName != null )
         {
             f = new File( directory, xsdFileName );
-        }        
+        }
 
         Writer writer = WriterFactory.newXmlWriter( f );
 
@@ -108,9 +108,9 @@ public class XsdGenerator
         w.addAttribute( "elementFormDefault", "qualified" );
 
         ModelClass root = objectModel.getClass( objectModel.getRoot( getGeneratedVersion() ), getGeneratedVersion() );
-        
+
         XsdModelMetadata modelMetadata = (XsdModelMetadata) root.getModel().getMetadata( XsdModelMetadata.ID );
-        
+
         if ( StringUtils.isNotEmpty( modelMetadata.getNamespace() ) )
         {
             w.addAttribute( "xmlns", modelMetadata.getNamespace() );
@@ -121,7 +121,7 @@ public class XsdGenerator
             // TODO: Remove this backwards compatibility hack.
             w.addAttribute( "xmlns", "http://maven.apache.org/POM/4.0.0" );
         }
-        
+
         if ( StringUtils.isNotEmpty( modelMetadata.getTargetNamespace() ) )
         {
             w.addAttribute( "targetNamespace", modelMetadata.getTargetNamespace() );
@@ -132,7 +132,7 @@ public class XsdGenerator
             // TODO: Remove this backwards compatibility hack.
             w.addAttribute( "targetNamespace", "http://maven.apache.org/POM/4.0.0" );
         }
-        
+
         w.startElement( "xs:element" );
         String tagName = getTagName( root );
         w.addAttribute( "name", tagName );
@@ -196,17 +196,17 @@ public class XsdGenerator
 
         w.startElement( "xs:complexType" );
         w.addAttribute( "name", modelClass.getName() );
-        
+
         List fields = getFieldsForClass( modelClass );
 
         boolean hasContentField = hasContentField( fields );
-        
+
         List attributeFields = getAttributeFieldsForClass( modelClass );
 
-        fields.removeAll( attributeFields );       
-        
+        fields.removeAll( attributeFields );
+
         boolean mixedContent = hasContentField && fields.size() > 0;
-        
+
         // other fields with complexType
         // if yes it's a mixed content element and attribute
         if ( mixedContent )
@@ -222,8 +222,8 @@ public class XsdGenerator
 
             w.addAttribute( "base", "xs:string" );
         }
-        
-        writeClassDocumentation( w, modelClass );        
+
+        writeClassDocumentation( w, modelClass );
 
         Set toWrite = new HashSet();
 
@@ -231,7 +231,7 @@ public class XsdGenerator
         {
             XsdClassMetadata metadata = (XsdClassMetadata) modelClass.getMetadata( XsdClassMetadata.ID );
             boolean compositorAll = XsdClassMetadata.COMPOSITOR_ALL.equals( metadata.getCompositor() );
-            
+
             if ( ( mixedContent ) || ( !hasContentField ) )
             {
                 if ( compositorAll )
@@ -243,29 +243,29 @@ public class XsdGenerator
                     w.startElement( "xs:sequence" );
                 }
             }
-            
+
             for ( Iterator j = fields.iterator(); j.hasNext(); )
             {
                 ModelField field = (ModelField) j.next();
-               
+
                 if ( !hasContentField )
                 {
                     w.startElement( "xs:element" );
                 }
-                
+
                 // Usually, would only do this if the field is not "required", but due to inheritence, it may be present,
                 // even if not here, so we need to let it slide
                 if ( !hasContentField )
                 {
                     w.addAttribute( "minOccurs", "0" );
                 }
-                
+
                 String xsdType = getXsdType( field.getType() );
                 if ( xsdType != null )
                 {
                     w.addAttribute( "name", resolveFieldTagName( field ) );
                     w.addAttribute( "type", xsdType );
-    
+
                     if ( field.getDefaultValue() != null )
                     {
                         w.addAttribute( "default", field.getDefaultValue() );
@@ -279,7 +279,7 @@ public class XsdGenerator
                     {
                         ModelAssociation association = (ModelAssociation) field;
                         ModelClass fieldModelClass = objectModel.getClass( association.getTo(), getGeneratedVersion() );
-    
+
                         toWrite.add( fieldModelClass );
 
                         if ( ModelAssociation.MANY_MULTIPLICITY.equals( association.getMultiplicity() ) )
@@ -290,7 +290,7 @@ public class XsdGenerator
                             {
                                 w.addAttribute( "name", resolveFieldTagName( field ) );
                                 writeFieldDocumentation( w, field );
-                                
+
                                 writeListElement( w, field, fieldModelClass.getName() );
                             }
                             else
@@ -302,13 +302,13 @@ public class XsdGenerator
                                     throw new IllegalStateException( field.getName() + " field is declared as xml.listStyle=\"flat\" "
                                         + "then class " + modelClass.getName() + " MUST be declared as xsd.compositor=\"sequence\"" );
                                 }
-                                
+
                                 if ( mixedContent )
                                 {
                                     w.startElement( "xs:element" );
                                     w.addAttribute( "minOccurs", "0" );
-                                }                                
-                                
+                                }
+
                                 if ( fieldMetadata != null && fieldMetadata.getAssociationTagName() != null )
                                 {
                                     w.addAttribute( "name", fieldMetadata.getAssociationTagName() );
@@ -320,13 +320,13 @@ public class XsdGenerator
 
                                 w.addAttribute( "type", fieldModelClass.getName() );
                                 w.addAttribute( "maxOccurs", "unbounded" );
-                                
+
                                 writeFieldDocumentation( w, field );
-                                
+
                                 if ( mixedContent )
                                 {
                                     w.endElement();
-                                }                                
+                                }
                             }
                         }
                         else
@@ -402,15 +402,15 @@ public class XsdGenerator
 
             w.endElement();
         }
-        
+
         if ( hasContentField && !mixedContent )
         {
             w.endElement(); //xs:extension
-            
+
             w.endElement(); //xs:simpleContent
-        }        
-        
-        
+        }
+
+
         w.endElement(); // xs:complexType
 
         for ( Iterator iter = toWrite.iterator(); iter.hasNext(); )
@@ -498,11 +498,11 @@ public class XsdGenerator
         {
             return "xs:date";
         }
-        else if ("float".equals( type )) 
+        else if ("float".equals( type ) )
         {
             return "xs:float";
-        } 
-        else if ("double".equals( type )) 
+        }
+        else if ("double".equals( type ) )
         {
             return "xs:double";
         }

@@ -19,7 +19,7 @@ package org.codehaus.modello.plugin.xsd.metadata;
 import org.codehaus.modello.metadata.ClassMetadata;
 
 /**
- * XsdClassMetadata 
+ * XsdClassMetadata
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
@@ -27,11 +27,11 @@ import org.codehaus.modello.metadata.ClassMetadata;
 public class XsdClassMetadata implements ClassMetadata
 {
     public static final String ID = XsdClassMetadata.class.getName();
-    
+
     public static final String COMPOSITOR_ALL = "all";
-    
+
     public static final String COMPOSITOR_SEQUENCE = "sequence";
-    
+
     private String compositor = COMPOSITOR_ALL;
 
     public String getCompositor()
@@ -52,5 +52,4 @@ public class XsdClassMetadata implements ClassMetadata
         }
     }
 
-    
 }

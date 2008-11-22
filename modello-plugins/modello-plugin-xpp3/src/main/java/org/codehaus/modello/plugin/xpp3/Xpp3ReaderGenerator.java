@@ -234,7 +234,7 @@ public class Xpp3ReaderGenerator
         sc.add( "Reader reader = ReaderFactory.newXmlReader( in );" );
 
         sc.add( "" );
-        
+
         sc.add( "return read( reader );" );
 
         jClass.addMethod( unmarshall );
@@ -309,7 +309,7 @@ public class Xpp3ReaderGenerator
         String uncapClassName = uncapitalise( className );
 
         JMethod unmarshall = new JMethod( new JClass( className ), "parse" + capClassName );
-        
+
         unmarshall.addParameter( new JParameter( new JClass( "String" ), "tagName" ) );
 
         unmarshall.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
@@ -325,8 +325,8 @@ public class Xpp3ReaderGenerator
         JSourceCode sc = unmarshall.getSourceCode();
 
         sc.add( className + " " + uncapClassName + " = new " + className + "();" );
-        
-        ModelField contentField = null; 
+
+        ModelField contentField = null;
 
         for ( Iterator i = modelClass.getAllFields( getGeneratedVersion(), true ).iterator(); i.hasNext(); )
         {
@@ -350,9 +350,9 @@ public class Xpp3ReaderGenerator
         {
             sc.add( "parser.next();" );
             sc.add( uncapClassName + ".set" + capitalise( contentField.getName() )
-                + "( getTrimmedValue( parser.getText() ) ); " );            
+                + "( getTrimmedValue( parser.getText() ) ); " );
         }
-        
+
         sc.add( "java.util.Set parsed = new java.util.HashSet();" );
 
         if ( rootElement )
@@ -460,7 +460,7 @@ public class Xpp3ReaderGenerator
             sc.indent();
 
             sc.add( "// swallow up to end tag since this is not valid" );
-            
+
             sc.add( "while ( parser.next() != XmlPullParser.END_TAG ) {}" );
 
             sc.unindent();
@@ -652,14 +652,14 @@ public class Xpp3ReaderGenerator
 
                         sc.indent();
 
-			            sc.add( "// swallow up to end tag since this is not valid" );
+                        sc.add( "// swallow up to end tag since this is not valid" );
 
-			            sc.add( "while ( parser.next() != XmlPullParser.END_TAG ) {}" );
+                        sc.add( "while ( parser.next() != XmlPullParser.END_TAG ) {}" );
 
                         sc.unindent();
 
                         sc.add( "}" );
-			
+
                         sc.unindent();
 
                         sc.add( "}" );
@@ -922,7 +922,7 @@ public class Xpp3ReaderGenerator
             sc.add( objectName + "." + setterName + "( Xpp3DomBuilder.build( parser ) );" );
         }
         else if ("Content".equals( type ))
-        {    
+        {
             //skip this
         }
         else

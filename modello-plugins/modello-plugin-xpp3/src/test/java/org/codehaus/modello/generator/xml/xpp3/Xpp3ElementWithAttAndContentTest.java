@@ -42,14 +42,14 @@ public class Xpp3ElementWithAttAndContentTest
     {
         super( "xpp3-changes" );
     }
-    
+
     public void testModelGeneration()
         throws Exception
     {
         ModelloCore modello = (ModelloCore) container.lookup( ModelloCore.ROLE );
 
         Model model = modello.loadModel( ReaderFactory.newXmlReader( getTestFile( "src/test/resources/changes.mdo" ) ) );
-        
+
         File generatedSources = new File( getTestPath( "target/xpp3-changes/sources" ) );
 
         File classes = new File( getTestPath( "target/xpp3-changes/classes" ) );
@@ -77,11 +77,11 @@ public class Xpp3ElementWithAttAndContentTest
         modello.generate( model, "xpp3-reader", parameters );
 
         addDependency( "org.codehaus.modello", "modello-core", getModelloVersion() );
-        
-        compile( generatedSources, classes ); 
+
+        compile( generatedSources, classes );
 
         verify( "org.codehaus.modello.generator.xml.xpp3.Xpp3ChangesVerifier", "xpp3-changes" );
-        
-        
+
+
     }
 }
