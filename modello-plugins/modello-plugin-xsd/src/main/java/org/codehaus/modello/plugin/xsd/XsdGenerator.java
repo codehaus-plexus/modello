@@ -482,15 +482,15 @@ public class XsdGenerator
         {
             return "xs:string";
         }
-        else if ( "int".equals( type ) )
+        else if ( "int".equals( type ) || "Integer".equals( type ) )
         {
             return "xs:int";
         }
-        else if ( "boolean".equals( type ) )
+        else if ( "boolean".equals( type ) || "Boolean".equals( type ) )
         {
             return "xs:boolean";
         }
-        else if ( "long".equals( type ) )
+        else if ( "long".equals( type ) || "Long".equals( type ) )
         {
             return "xs:long";
         }
@@ -498,11 +498,11 @@ public class XsdGenerator
         {
             return "xs:date";
         }
-        else if ("float".equals( type ) )
+        else if ("float".equals( type ) || "Float".equals( type ) )
         {
             return "xs:float";
         }
-        else if ("double".equals( type ) )
+        else if ("double".equals( type ) || "Double".equals( type ) )
         {
             return "xs:double";
         }
