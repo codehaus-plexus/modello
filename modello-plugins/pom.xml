@@ -8,7 +8,8 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>modello-plugins</artifactId>
   <packaging>pom</packaging>
-  <name>Modello Plugin Parent</name>
+  <name>Modello Plugins</name>
+
   <modules>
     <module>modello-plugin-converters</module>
     <module>modello-plugin-xml</module>
@@ -22,6 +23,7 @@
     <module>modello-plugin-dom4j</module>
     <module>modello-plugin-plexus-registry</module>
   </modules>
+
   <dependencies>
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
