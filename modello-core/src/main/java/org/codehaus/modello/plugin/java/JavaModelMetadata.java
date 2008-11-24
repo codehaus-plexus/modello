@@ -31,5 +31,5 @@ import org.codehaus.modello.metadata.ModelMetadata;
 public class JavaModelMetadata
     implements ModelMetadata
 {
-    public final static String ID = JavaModelMetadata.class.getName();
+    public static final String ID = JavaModelMetadata.class.getName();
 }

@@ -246,7 +246,7 @@ public abstract class AbstractModelloGenerator
         {
             return name.substring( 0, name.length() - 2 );
         }
-        else if ( name.endsWith( "s" ) && ( name.length() != 1) )
+        else if ( name.endsWith( "s" ) && ( name.length() != 1 ) )
         {
             return name.substring( 0, name.length() - 1 );
         }
@@ -276,8 +276,8 @@ public abstract class AbstractModelloGenerator
 
             if ( baseElem != null && baseElem instanceof ModelInterface )
             {
-                if ( modelInterface.equals( (ModelInterface) baseElem ) ||
-                    modelInterface.getPackageName( isPackageWithVersion(), getGeneratedVersion() ).equals(
+                if ( modelInterface.equals( (ModelInterface) baseElem )
+                     || modelInterface.getPackageName( isPackageWithVersion(), getGeneratedVersion() ).equals(
                         ( (ModelInterface) baseElem ).getPackageName( isPackageWithVersion(),
                                                                       getGeneratedVersion() ) ) )
                 {
@@ -302,8 +302,8 @@ public abstract class AbstractModelloGenerator
 
             if ( baseElem != null && baseElem instanceof ModelClass )
             {
-                if ( modelClass.equals( (ModelClass) baseElem ) ||
-                    modelClass.getPackageName( isPackageWithVersion(), getGeneratedVersion() ).equals(
+                if ( modelClass.equals( (ModelClass) baseElem )
+                     || modelClass.getPackageName( isPackageWithVersion(), getGeneratedVersion() ).equals(
                         ( (ModelClass) baseElem ).getPackageName( isPackageWithVersion(), getGeneratedVersion() ) ) )
                 {
                     continue;

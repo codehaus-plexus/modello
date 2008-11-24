@@ -88,8 +88,7 @@ public class VersionRange
 
     public int hashCode()
     {
-        return fromVersion.hashCode() +
-               toVersion.hashCode();
+        return fromVersion.hashCode() + toVersion.hashCode();
     }
 
     public boolean equals( Object obj )
@@ -101,8 +100,7 @@ public class VersionRange
 
         VersionRange other = (VersionRange) obj;
 
-        return fromVersion.equals( other.fromVersion ) &&
-               toVersion.equals( other.toVersion );
+        return fromVersion.equals( other.fromVersion ) && toVersion.equals( other.toVersion );
     }
 
     public String toString()

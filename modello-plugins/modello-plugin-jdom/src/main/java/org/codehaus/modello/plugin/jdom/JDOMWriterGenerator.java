@@ -183,8 +183,8 @@ public class JDOMWriterGenerator
         marshall.getJDocComment().appendComment( "\n@deprecated" );
 
         JSourceCode sc = marshall.getSourceCode();
-        sc.add( "update" + root + "(" + rootElement + ", \"" + rootElement +
-            "\", new Counter(0), document.getRootElement());" );
+        sc.add( "update" + root + "(" + rootElement + ", \"" + rootElement
+            + "\", new Counter(0), document.getRootElement());" );
         sc.add( "XMLOutputter outputter = new XMLOutputter();" );
         sc.add( "outputter.setFormat(Format.getPrettyFormat()" );
         sc.add( ".setIndent(\"    \")" );
@@ -224,8 +224,8 @@ public class JDOMWriterGenerator
         marshall.addException( new JClass( "java.io.IOException" ) );
 
         JSourceCode sc = marshall.getSourceCode();
-        sc.add( "update" + root + "(" + rootElement + ", \"" + rootElement +
-            "\", new Counter(0), document.getRootElement());" );
+        sc.add( "update" + root + "(" + rootElement + ", \"" + rootElement
+            + "\", new Counter(0), document.getRootElement());" );
         sc.add( "XMLOutputter outputter = new XMLOutputter();" );
         sc.add( "outputter.setFormat(jdomFormat);" );
         sc.add( "outputter.output(document, writer);" );
@@ -597,8 +597,8 @@ public class JDOMWriterGenerator
                 ModelClass toClass = association.getToClass();
                 if ( ModelAssociation.ONE_MULTIPLICITY.equals( association.getMultiplicity() ) )
                 {
-                    sc.add( "update" + capitalise( field.getType() ) + "( " + value + ", \"" + fieldTagName +
-                        "\", innerCount, root);" );
+                    sc.add( "update" + capitalise( field.getType() ) + "( " + value + ", \"" + fieldTagName
+                        + "\", innerCount, root);" );
                 }
                 else
                 {
@@ -613,11 +613,14 @@ public class JDOMWriterGenerator
                         String toType = association.getTo();
                         if ( toClass != null )
                         {
-                            if (wrappedList) {
-                                sc.add( "iterate" + capitalise( toType ) + "(innerCount, root, " + value + ",\"" +
-                                    field.getName() + "\",\"" + singular( fieldTagName ) + "\");" );
+                            if (wrappedList)
+                            {
+                                sc.add( "iterate" + capitalise( toType ) + "(innerCount, root, " + value + ",\""
+                                    + field.getName() + "\",\"" + singular( fieldTagName ) + "\");" );
                                 createIterateMethod( field.getName(), toClass, singular( fieldTagName ), jClass );
-                            } else {
+                            }
+                            else
+                            {
                                 //assume flat..
                                 sc.add( "iterate2" + capitalise( toType ) + "(innerCount, root, " + value + ",\"" + singular( fieldTagName ) + "\");" );
                                 createIterateMethod2( field.getName(), toClass, singular( fieldTagName ), jClass );
@@ -627,8 +630,8 @@ public class JDOMWriterGenerator
                         else
                         {
                             //list of strings?
-                            sc.add( "findAndReplaceSimpleLists(innerCount, root, " + value + ", \"" + fieldTagName +
-                                "\", \"" + singular( fieldTagName ) + "\");" );
+                            sc.add( "findAndReplaceSimpleLists(innerCount, root, " + value + ", \"" + fieldTagName
+                                + "\", \"" + singular( fieldTagName ) + "\");" );
                         }
                     }
                     else
@@ -648,10 +651,10 @@ public class JDOMWriterGenerator
                 }
                 else
                 {
-                    sc.add( "findAndReplaceSimpleElement(innerCount, root,  \"" + fieldTagName + "\", " +
-                        getValueChecker( type, value, field ) + getValue( type, value ) + ", " +
-                        ( field.getDefaultValue() != null ? ( "\"" + field.getDefaultValue() + "\"" ) : "null" ) +
-                        ");" );
+                    sc.add( "findAndReplaceSimpleElement(innerCount, root,  \"" + fieldTagName + "\", "
+                        + getValueChecker( type, value, field ) + getValue( type, value ) + ", "
+                        + ( field.getDefaultValue() != null ? ( "\"" + field.getDefaultValue() + "\"" ) : "null" )
+                        + ");" );
                 }
             }
         }
@@ -676,8 +679,8 @@ public class JDOMWriterGenerator
 
     private String getValueChecker( String type, String value, ModelField field )
     {
-        if ( "boolean".equals( type ) || "double".equals( type ) || "float".equals( type ) || "int".equals( type ) ||
-            "long".equals( type ) || "short".equals( type ) )
+        if ( "boolean".equals( type ) || "double".equals( type ) || "float".equals( type ) || "int".equals( type )
+            || "long".equals( type ) || "short".equals( type ) )
         {
             return "" + value + " == " + field.getDefaultValue() + " ? null : ";
         }
@@ -685,8 +688,8 @@ public class JDOMWriterGenerator
         {
             return "" + value + " == '" + field.getDefaultValue() + "' ? null : ";
         }
-        else if ( ModelDefault.LIST.equals( type ) || ModelDefault.SET.equals( type ) ||
-            ModelDefault.MAP.equals( type ) || ModelDefault.PROPERTIES.equals( type ) )
+        else if ( ModelDefault.LIST.equals( type ) || ModelDefault.SET.equals( type )
+            || ModelDefault.MAP.equals( type ) || ModelDefault.PROPERTIES.equals( type ) )
         {
             return "" + value + " == null || " + value + ".size() == 0 ? null : ";
 //        } else if ( "String".equals( type ) && field.getDefaultValue() != null ) {

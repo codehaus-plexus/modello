@@ -138,7 +138,7 @@ public class ModelClass
             {
                 p = model.getDefault( ModelDefault.PACKAGE ).getValue();
             }
-            catch( Exception e )
+            catch ( Exception e )
             {
                 p = ModelDefault.PACKAGE_VALUE;
             }
@@ -185,7 +185,7 @@ public class ModelClass
 
         ArrayList fieldList = new ArrayList();
 
-        for (Iterator i = getAllFields( withInheritedField ).iterator(); i.hasNext(); )
+        for ( Iterator i = getAllFields( withInheritedField ).iterator(); i.hasNext(); )
         {
             ModelField currentField = (ModelField) i.next();
 
@@ -195,7 +195,7 @@ public class ModelClass
             }
         }
 
-        for (Iterator i = allFieldsList.iterator(); i.hasNext(); )
+        for ( Iterator i = allFieldsList.iterator(); i.hasNext(); )
         {
             ModelField currentField = (ModelField) i.next();
 
@@ -220,7 +220,7 @@ public class ModelClass
     {
         ArrayList fieldList = new ArrayList();
 
-        for (Iterator i = getAllFields().iterator(); i.hasNext(); )
+        for ( Iterator i = getAllFields().iterator(); i.hasNext(); )
         {
             ModelField currentField = (ModelField) i.next();
 
@@ -286,11 +286,11 @@ public class ModelClass
 
         if ( fieldList != null )
         {
-            for (Iterator i = fieldList.iterator(); i.hasNext(); )
+            for ( Iterator i = fieldList.iterator(); i.hasNext(); )
             {
                 ModelField modelField = (ModelField) i.next();
 
-                if (  versionRange.getFromVersion().inside( modelField.getVersionRange() )
+                if ( versionRange.getFromVersion().inside( modelField.getVersionRange() )
                     && versionRange.getToVersion().inside( modelField.getVersionRange() ) )
                 {
                     return modelField;
@@ -307,7 +307,7 @@ public class ModelClass
         {
             ArrayList fieldList = (ArrayList) fieldMap.get( modelField.getName() );
 
-            for (Iterator i = fieldList.iterator(); i.hasNext(); )
+            for ( Iterator i = fieldList.iterator(); i.hasNext(); )
             {
                 ModelField currentField = (ModelField) i.next();
 
@@ -373,7 +373,7 @@ public class ModelClass
 
         if ( codeSegments != null )
         {
-            for (Iterator i = codeSegments.iterator(); i.hasNext(); )
+            for ( Iterator i = codeSegments.iterator(); i.hasNext(); )
             {
                 CodeSegment codeSegment = (CodeSegment) i.next();
 
@@ -461,8 +461,8 @@ public class ModelClass
 
         if ( model.getDefault( ModelDefault.CHECK_DEPRECATION ).getBoolean() )
         {
-            if ( ! Version.INFINITE.equals( getVersionRange().getToVersion() ) &&
-                getDeprecatedVersion() == null)
+            if ( ! Version.INFINITE.equals( getVersionRange().getToVersion() )
+                 && getDeprecatedVersion() == null )
             {
                 throw new ModelValidationException( "You must define the deprecated version of '" + getName() + "' class." );
             }

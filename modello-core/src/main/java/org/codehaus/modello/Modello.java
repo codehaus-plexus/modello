@@ -39,9 +39,9 @@ import org.codehaus.plexus.DefaultPlexusContainer;
  */
 public class Modello
 {
-    PlexusContainer container;
+    private PlexusContainer container;
 
-    ModelloCore core;
+    private ModelloCore core;
 
     public Modello()
         throws ModelloException
@@ -52,7 +52,7 @@ public class Modello
 
             core = (ModelloCore) container.lookup( ModelloCore.ROLE );
         }
-        catch( Exception ex )
+        catch ( Exception ex )
         {
             throw new ModelloException( "Error while starting plexus.", ex );
         }

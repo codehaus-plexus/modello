@@ -31,7 +31,7 @@ import org.codehaus.modello.metadata.ClassMetadata;
 public class ModelClassMetadata
     implements ClassMetadata
 {
-    public final static String ID = ModelClassMetadata.class.getName();
+    public static final String ID = ModelClassMetadata.class.getName();
 
     private boolean rootElement = false;
 

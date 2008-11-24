@@ -34,11 +34,11 @@ import java.util.List;
 public class JavaAssociationMetadata
     implements AssociationMetadata
 {
-    public final static String ID = JavaAssociationMetadata.class.getName();
+    public static final String ID = JavaAssociationMetadata.class.getName();
 
-    public final static String LAZY_INIT = "lazy";
-    public final static String CONSTRUCTOR_INIT = "constructor";
-    public final static String FIELD_INIT = "field";
+    public static final String LAZY_INIT = "lazy";
+    public static final String CONSTRUCTOR_INIT = "constructor";
+    public static final String FIELD_INIT = "field";
     
     public final static List INIT_TYPES;
     

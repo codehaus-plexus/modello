@@ -239,8 +239,8 @@ public class ModelField
 
     public String toString()
     {
-        return "[Field: name=" + getName() + ", alias: " + alias + ", type: " + type + ", " + "version: " +
-            getVersionRange() + "]";
+        return "[Field: name=" + getName() + ", alias: " + alias + ", type: " + type + ", " + "version: "
+            + getVersionRange() + "]";
     }
 
     public boolean isModelVersionField()

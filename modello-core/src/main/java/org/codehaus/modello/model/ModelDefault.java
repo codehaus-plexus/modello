@@ -143,12 +143,12 @@ public class ModelDefault
     private static void validateKey( String key )
         throws ModelValidationException
     {
-        if ( ! SET.equalsIgnoreCase( key ) &&
-             ! LIST.equalsIgnoreCase( key ) &&
-             ! MAP.equalsIgnoreCase( key ) &&
-             ! PROPERTIES.equalsIgnoreCase( key ) &&
-             ! CHECK_DEPRECATION.equalsIgnoreCase( key ) &&
-             ! PACKAGE.equalsIgnoreCase( key ) )
+        if ( ! SET.equalsIgnoreCase( key )
+             && ! LIST.equalsIgnoreCase( key )
+             && ! MAP.equalsIgnoreCase( key )
+             && ! PROPERTIES.equalsIgnoreCase( key )
+             && ! CHECK_DEPRECATION.equalsIgnoreCase( key )
+             && ! PACKAGE.equalsIgnoreCase( key ) )
         {
             throw new ModelValidationException( "The key of default element must be 'Set', 'List', 'Map', 'Properties', 'checkDeprecation' or 'package', was '" + key + "'." );
         }

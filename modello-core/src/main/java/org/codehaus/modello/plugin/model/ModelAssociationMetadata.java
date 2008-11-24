@@ -31,5 +31,5 @@ import org.codehaus.modello.metadata.AssociationMetadata;
 public class ModelAssociationMetadata
     implements AssociationMetadata
 {
-    public final static String ID = ModelAssociationMetadata.class.getName();
+    public static final String ID = ModelAssociationMetadata.class.getName();
 }

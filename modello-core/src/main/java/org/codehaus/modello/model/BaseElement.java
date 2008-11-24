@@ -212,7 +212,6 @@ public abstract class BaseElement
             return System.identityHashCode( this );
         }
 
-        return name.hashCode() +
-               versionRange.toString().hashCode();
+        return name.hashCode() + versionRange.toString().hashCode();
     }
 }

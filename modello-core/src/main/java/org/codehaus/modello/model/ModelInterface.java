@@ -82,7 +82,7 @@ public class ModelInterface
             {
                 p = model.getDefault( ModelDefault.PACKAGE ).getValue();
             }
-            catch( Exception e )
+            catch ( Exception e )
             {
                 p = ModelDefault.PACKAGE_VALUE;
             }
@@ -124,11 +124,11 @@ public class ModelInterface
 
         if ( codeSegments != null )
         {
-            for (Iterator i = codeSegments.iterator(); i.hasNext(); )
+            for ( Iterator i = codeSegments.iterator(); i.hasNext(); )
             {
                 CodeSegment codeSegment = (CodeSegment) i.next();
 
-                if (  versionRange.getFromVersion().inside( codeSegment.getVersionRange() )
+                if ( versionRange.getFromVersion().inside( codeSegment.getVersionRange() )
                     && versionRange.getToVersion().inside( codeSegment.getVersionRange() ) )
                 {
                     codeSegmentsList.add( codeSegment );

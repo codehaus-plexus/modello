@@ -33,7 +33,7 @@ public class VersionUtil
 {
     public static boolean isInConflict( VersionRange version1, VersionRange version2 )
     {
-        return !( version1.getToVersion().lesserThan( version2.getFromVersion() ) ||
-            version2.getToVersion().lesserThan( version1.getFromVersion() ) );
+        return !( version1.getToVersion().lesserThan( version2.getFromVersion() )
+                  || version2.getToVersion().lesserThan( version1.getFromVersion() ) );
     }
 }

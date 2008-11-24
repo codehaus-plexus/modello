@@ -145,8 +145,8 @@ public class ModelAssociation
 
         if ( !multiplicity.equals( ONE_MULTIPLICITY ) && !multiplicity.equals( MANY_MULTIPLICITY ) )
         {
-            throw new ModelValidationException( "Association multiplicity '" + getName() + "' is incorrect: " +
-                "Possible values are '1', '*' or 'n'." );
+            throw new ModelValidationException( "Association multiplicity '" + getName() + "' is incorrect: "
+                                                + "Possible values are '1', '*' or 'n'." );
         }
 
         if ( isEmpty( getType() ) )

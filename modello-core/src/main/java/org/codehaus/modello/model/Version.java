@@ -55,8 +55,8 @@ public class Version
         if ( splittedVersion.length > 3 )
         {
             throw new ModelloRuntimeException(
-                "Syntax error in the <version> field: The field must be at more 3 parts long (major, minor and micro). Was: '" +
-                    version + "'." );
+                "Syntax error in the <version> field: The field must be at more 3 parts long (major, minor and micro). Was: '"
+                + version + "'." );
         }
 
         String majorString = splittedVersion[0];

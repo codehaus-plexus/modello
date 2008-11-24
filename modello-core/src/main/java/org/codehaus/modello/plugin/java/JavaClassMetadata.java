@@ -31,7 +31,7 @@ import org.codehaus.modello.metadata.ClassMetadata;
 public class JavaClassMetadata
     implements ClassMetadata
 {
-    public final static String ID = JavaClassMetadata.class.getName();
+    public static final String ID = JavaClassMetadata.class.getName();
 
     private boolean abstractMode;
     

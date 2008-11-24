@@ -355,11 +355,11 @@ public class Dom4jWriterGenerator
                     }
                     else
                     {
-                        sc.add( toType + " " + singular( uncapitalise( field.getName() ) ) + " = (" + toType +
-                            ") iter.next();" );
+                        sc.add( toType + " " + singular( uncapitalise( field.getName() ) ) + " = (" + toType
+                            + ") iter.next();" );
 
-                        sc.add( "listElement.addElement( \"" + singularTagName + "\" ).setText( " +
-                            singular( uncapitalise( field.getName() ) ) + " );" );
+                        sc.add( "listElement.addElement( \"" + singularTagName + "\" ).setText( "
+                            + singular( uncapitalise( field.getName() ) ) + " );" );
                     }
 
                     sc.unindent();
@@ -402,8 +402,8 @@ public class Dom4jWriterGenerator
 
                     if ( XmlAssociationMetadata.EXPLODE_MODE.equals( xmlAssociationMetadata.getMapStyle() ) )
                     {
-                        sc.add( "Element assocElement = listElement.addElement( \"" + singular( associationName ) +
-                            "\" );" );
+                        sc.add( "Element assocElement = listElement.addElement( \"" + singular( associationName )
+                            + "\" );" );
                         sc.add( "assocElement.addElement( \"key\" ).setText( key );" );
                         sc.add( "assocElement.addElement( \"value\" ).setText( value );" );
                     }
@@ -436,8 +436,8 @@ public class Dom4jWriterGenerator
             }
             else
             {
-                sc.add( "element.addElement( \"" + fieldTagName + "\" ).setText( " +
-                    getValue( field.getType(), value ) + " );" );
+                sc.add( "element.addElement( \"" + fieldTagName + "\" ).setText( "
+                    + getValue( field.getType(), value ) + " );" );
             }
 
             sc.unindent();
@@ -460,8 +460,8 @@ public class Dom4jWriterGenerator
 
         if ( "Date".equals( type ) )
         {
-            textValue = "DateFormat.getDateTimeInstance( DateFormat.FULL, DateFormat.FULL , Locale.US ).format( " +
-                textValue + " )";
+            textValue = "DateFormat.getDateTimeInstance( DateFormat.FULL, DateFormat.FULL , Locale.US ).format( "
+                + textValue + " )";
         }
         else if ( !"String".equals( type ) )
         {
@@ -474,8 +474,8 @@ public class Dom4jWriterGenerator
     private String getValueChecker( String type, String value, ModelField field )
     {
         String retVal;
-        if ( "boolean".equals( type ) || "double".equals( type ) || "float".equals( type ) || "int".equals( type ) ||
-            "long".equals( type ) || "short".equals( type ) )
+        if ( "boolean".equals( type ) || "double".equals( type ) || "float".equals( type ) || "int".equals( type )
+            || "long".equals( type ) || "short".equals( type ) )
         {
             retVal = "if ( " + value + " != " + field.getDefaultValue() + " )";
         }
@@ -483,8 +483,8 @@ public class Dom4jWriterGenerator
         {
             retVal = "if ( " + value + " != '" + field.getDefaultValue() + "' )";
         }
-        else if ( ModelDefault.LIST.equals( type ) || ModelDefault.SET.equals( type ) ||
-            ModelDefault.MAP.equals( type ) || ModelDefault.PROPERTIES.equals( type ) )
+        else if ( ModelDefault.LIST.equals( type ) || ModelDefault.SET.equals( type )
+            || ModelDefault.MAP.equals( type ) || ModelDefault.PROPERTIES.equals( type ) )
         {
             retVal = "if ( " + value + " != null && " + value + ".size() > 0 )";
         }

@@ -149,8 +149,8 @@ public class Dom4jReaderGenerator
 
         sc.add( "String encoding = document.getXMLEncoding();" );
 
-        sc.add( "return parse" + root.getName() + "( \"" + getTagName( root ) +
-            "\", document.getRootElement(), strict, encoding );" );
+        sc.add( "return parse" + root.getName() + "( \"" + getTagName( root )
+            + "\", document.getRootElement(), strict, encoding );" );
 
         jClass.addMethod( unmarshall );
 
@@ -186,8 +186,8 @@ public class Dom4jReaderGenerator
 
         sc.add( "String encoding = document.getXMLEncoding();" );
 
-        sc.add( "return parse" + root.getName() + "( \"" + getTagName( root ) +
-            "\", document.getRootElement(), strict, encoding );" );
+        sc.add( "return parse" + root.getName() + "( \"" + getTagName( root )
+            + "\", document.getRootElement(), strict, encoding );" );
 
         jClass.addMethod( unmarshall );
 
@@ -456,8 +456,8 @@ public class Dom4jReaderGenerator
 
                 addCodeToCheckIfParsed( sc, tagName );
 
-                sc.add( uncapClassName + ".set" + capFieldName + "( parse" + association.getTo() + "( \"" + tagName +
-                    "\", childElement, strict, encoding ) );" );
+                sc.add( uncapClassName + ".set" + capFieldName + "( parse" + association.getTo() + "( \"" + tagName
+                    + "\", childElement, strict, encoding ) );" );
 
                 sc.unindent();
 
@@ -545,8 +545,8 @@ public class Dom4jReaderGenerator
 
                     if ( isClassInModel( association.getTo(), modelClass.getModel() ) )
                     {
-                        sc.add( associationName + ".add( parse" + association.getTo() + "( \"" + singularTagName +
-                            "\", listElement, strict, encoding ) );" );
+                        sc.add( associationName + ".add( parse" + association.getTo() + "( \"" + singularTagName
+                            + "\", listElement, strict, encoding ) );" );
                     }
                     else
                     {
@@ -871,28 +871,28 @@ public class Dom4jReaderGenerator
         }
         else if ( "double".equals( type ) )
         {
-            sc.add( objectName + "." + setterName + "( getDoubleValue( " + parserGetter + ", \"" + tagName +
-                "\", strict ) );" );
+            sc.add( objectName + "." + setterName + "( getDoubleValue( " + parserGetter + ", \"" + tagName
+                + "\", strict ) );" );
         }
         else if ( "float".equals( type ) )
         {
-            sc.add( objectName + "." + setterName + "( getFloatValue( " + parserGetter + ", \"" + tagName +
-                "\", strict ) );" );
+            sc.add( objectName + "." + setterName + "( getFloatValue( " + parserGetter + ", \"" + tagName
+                + "\", strict ) );" );
         }
         else if ( "int".equals( type ) )
         {
-            sc.add( objectName + "." + setterName + "( getIntegerValue( " + parserGetter + ", \"" + tagName +
-                "\", strict ) );" );
+            sc.add( objectName + "." + setterName + "( getIntegerValue( " + parserGetter + ", \"" + tagName
+                + "\", strict ) );" );
         }
         else if ( "long".equals( type ) )
         {
-            sc.add( objectName + "." + setterName + "( getLongValue( " + parserGetter + ", \"" + tagName +
-                "\", strict ) );" );
+            sc.add( objectName + "." + setterName + "( getLongValue( " + parserGetter + ", \"" + tagName
+                + "\", strict ) );" );
         }
         else if ( "short".equals( type ) )
         {
-            sc.add( objectName + "." + setterName + "( getShortValue( " + parserGetter + ", \"" + tagName +
-                "\", strict ) );" );
+            sc.add( objectName + "." + setterName + "( getShortValue( " + parserGetter + ", \"" + tagName
+                + "\", strict ) );" );
         }
         else if ( "String".equals( type ) || "Boolean".equals( type ) )
         {
@@ -1208,8 +1208,8 @@ public class Dom4jReaderGenerator
 
         sc.indent();
 
-        sc.add( "throw new DocumentException( \"Unable to parse element '\" + attribute + \"', must be " + typeDesc +
-            "\" );" );
+        sc.add( "throw new DocumentException( \"Unable to parse element '\" + attribute + \"', must be " + typeDesc
+            + "\" );" );
 
         sc.unindent();
 

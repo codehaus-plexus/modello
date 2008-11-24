@@ -31,7 +31,7 @@ import org.codehaus.modello.metadata.FieldMetadata;
 public class JavaFieldMetadata
     implements FieldMetadata
 {
-    public final static String ID = JavaFieldMetadata.class.getName();
+    public static final String ID = JavaFieldMetadata.class.getName();
 
     private boolean adder = true;
 

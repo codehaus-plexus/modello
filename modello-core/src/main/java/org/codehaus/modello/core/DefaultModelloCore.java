@@ -107,7 +107,7 @@ public class DefaultModelloCore
         // Handle Metadata
         // ----------------------------------------------------------------------
 
-        for( Iterator plugins = metadataPluginManager.getPluginsIterator(); plugins.hasNext(); )
+        for ( Iterator plugins = metadataPluginManager.getPluginsIterator(); plugins.hasNext(); )
         {
             MetadataPlugin plugin = (MetadataPlugin) plugins.next();
 
@@ -125,7 +125,7 @@ public class DefaultModelloCore
             model.addMetadata( metadata );
         }
 
-        for( Iterator classes = model.getAllClasses().iterator(); classes.hasNext(); )
+        for ( Iterator classes = model.getAllClasses().iterator(); classes.hasNext(); )
         {
             ModelClass clazz = (ModelClass) classes.next();
 
@@ -133,7 +133,7 @@ public class DefaultModelloCore
 
             attributes = Collections.unmodifiableMap( attributes );
 
-            for( Iterator plugins = metadataPluginManager.getPluginsIterator(); plugins.hasNext(); )
+            for ( Iterator plugins = metadataPluginManager.getPluginsIterator(); plugins.hasNext(); )
             {
                 MetadataPlugin plugin = (MetadataPlugin) plugins.next();
 
@@ -147,7 +147,7 @@ public class DefaultModelloCore
                 clazz.addMetadata( metadata );
             }
 
-            for( Iterator fields = clazz.getAllFields().iterator(); fields.hasNext(); )
+            for ( Iterator fields = clazz.getAllFields().iterator(); fields.hasNext(); )
             {
                 Object field = fields.next();
 
@@ -163,7 +163,7 @@ public class DefaultModelloCore
 
                     associationAttributes = Collections.unmodifiableMap( associationAttributes );
 
-                    for( Iterator plugins = metadataPluginManager.getPluginsIterator(); plugins.hasNext(); )
+                    for ( Iterator plugins = metadataPluginManager.getPluginsIterator(); plugins.hasNext(); )
                     {
                         MetadataPlugin plugin = (MetadataPlugin) plugins.next();
 
@@ -194,7 +194,7 @@ public class DefaultModelloCore
 
                     attributes = Collections.unmodifiableMap( attributes );
 
-                    for( Iterator plugins = metadataPluginManager.getPluginsIterator(); plugins.hasNext(); )
+                    for ( Iterator plugins = metadataPluginManager.getPluginsIterator(); plugins.hasNext(); )
                     {
                         MetadataPlugin plugin = (MetadataPlugin) plugins.next();
 
@@ -217,25 +217,25 @@ public class DefaultModelloCore
 
         model.validate();
 
-        for( Iterator defaults = model.getDefaults().iterator(); defaults.hasNext(); )
+        for ( Iterator defaults = model.getDefaults().iterator(); defaults.hasNext(); )
         {
             ModelDefault modelDefault = (ModelDefault) defaults.next();
 
             modelDefault.validateElement();
         }
 
-        for( Iterator classes = model.getAllClasses().iterator(); classes.hasNext(); )
+        for ( Iterator classes = model.getAllClasses().iterator(); classes.hasNext(); )
         {
             ModelClass modelClass = (ModelClass) classes.next();
 
             modelClass.validate();
         }
 
-        for( Iterator classes = model.getAllClasses().iterator(); classes.hasNext(); )
+        for ( Iterator classes = model.getAllClasses().iterator(); classes.hasNext(); )
         {
             ModelClass modelClass = (ModelClass) classes.next();
 
-            for( Iterator fields = modelClass.getAllFields().iterator(); fields.hasNext(); )
+            for ( Iterator fields = modelClass.getAllFields().iterator(); fields.hasNext(); )
             {
                 Object field = fields.next();
 
@@ -253,7 +253,7 @@ public class DefaultModelloCore
                 }
             }
 
-            for( Iterator codeSegments = modelClass.getAllCodeSegments().iterator(); codeSegments.hasNext(); )
+            for ( Iterator codeSegments = modelClass.getAllCodeSegments().iterator(); codeSegments.hasNext(); )
             {
                 CodeSegment codeSegment = (CodeSegment) codeSegments.next();
 

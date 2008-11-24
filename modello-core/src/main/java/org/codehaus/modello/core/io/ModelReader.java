@@ -305,7 +305,7 @@ public class ModelReader
     private void parseClassInterfaces( ModelClass modelClass, XmlPullParser parser )
         throws IOException, XmlPullParserException
     {
-        while( parser.nextTag() == XmlPullParser.START_TAG )
+        while ( parser.nextTag() == XmlPullParser.START_TAG )
         {
             if ( parser.getName().equals( "interface" ) )
             {
@@ -407,8 +407,8 @@ public class ModelReader
 
                     if ( modelAssociation.getName() != null )
                     {
-                        associationAttributes.put( modelClass.getName() + ":" + modelAssociation.getName() + ":" +
-                            modelAssociation.getVersionRange(), aAttributes );
+                        associationAttributes.put( modelClass.getName() + ":" + modelAssociation.getName() + ":"
+                                                   + modelAssociation.getVersionRange(), aAttributes );
                     }
 
                     modelClass.addField( modelAssociation );

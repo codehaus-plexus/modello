@@ -298,18 +298,18 @@ public class JavaModelloGenerator
             ModelField identifier = (ModelField) j.next();
 
             String name = identifier.getName();
-            if ( "boolean".equals( identifier.getType() ) || "byte".equals( identifier.getType() ) ||
-                "char".equals( identifier.getType() ) || "double".equals( identifier.getType() ) ||
-                "float".equals( identifier.getType() ) || "int".equals( identifier.getType() ) ||
-                "short".equals( identifier.getType() ) || "long".equals( identifier.getType() ) )
+            if ( "boolean".equals( identifier.getType() ) || "byte".equals( identifier.getType() )
+                 || "char".equals( identifier.getType() ) || "double".equals( identifier.getType() )
+                 || "float".equals( identifier.getType() ) || "int".equals( identifier.getType() )
+                 || "short".equals( identifier.getType() ) || "long".equals( identifier.getType() ) )
             {
                 sc.add( "result = result && " + name + " == that." + name + ";" );
             }
             else
             {
                 name = "get" + capitalise( name ) + "()";
-                sc.add( "result = result && ( " + name + " == null ? that." + name + " == null : " + name +
-                    ".equals( that." + name + " ) );" );
+                sc.add( "result = result && ( " + name + " == null ? that." + name + " == null : " + name
+                        + ".equals( that." + name + " ) );" );
             }
         }
 
@@ -634,8 +634,8 @@ public class JavaModelloGenerator
             JavaAssociationMetadata javaAssociationMetadata = (JavaAssociationMetadata) modelAssociation
                 .getAssociationMetadata( JavaAssociationMetadata.ID );
 
-            if ( StringUtils.isNotEmpty( javaAssociationMetadata.getInterfaceName() ) &&
-                !javaFieldMetadata.isBooleanGetter() )
+            if ( StringUtils.isNotEmpty( javaAssociationMetadata.getInterfaceName() )
+                 && !javaFieldMetadata.isBooleanGetter() )
             {
                 returnType = new JClass( javaAssociationMetadata.getInterfaceName() );
 
@@ -697,8 +697,8 @@ public class JavaModelloGenerator
 
             boolean isOneMultiplicity = false;
 
-            if ( isBidirectionalAssociation( modelAssociation ) &&
-                ModelAssociation.ONE_MULTIPLICITY.equals( modelAssociation.getMultiplicity() ) )
+            if ( isBidirectionalAssociation( modelAssociation )
+                 && ModelAssociation.ONE_MULTIPLICITY.equals( modelAssociation.getMultiplicity() ) )
             {
                 isOneMultiplicity = true;
             }
@@ -723,8 +723,8 @@ public class JavaModelloGenerator
 
             String interfaceCast = "";
 
-            if ( StringUtils.isNotEmpty( javaAssociationMetadata.getInterfaceName() ) &&
-                ModelAssociation.ONE_MULTIPLICITY.equals( modelAssociation.getMultiplicity() ) )
+            if ( StringUtils.isNotEmpty( javaAssociationMetadata.getInterfaceName() )
+                 && ModelAssociation.ONE_MULTIPLICITY.equals( modelAssociation.getMultiplicity() ) )
             {
                 interfaceCast = "(" + field.getType().getName() + ") ";
 
@@ -773,8 +773,8 @@ public class JavaModelloGenerator
             JavaAssociationMetadata javaAssociationMetadata = (JavaAssociationMetadata) modelAssociation
                 .getAssociationMetadata( JavaAssociationMetadata.ID );
 
-            if ( StringUtils.isNotEmpty( javaAssociationMetadata.getInterfaceName() ) &&
-                ModelAssociation.ONE_MULTIPLICITY.equals( modelAssociation.getMultiplicity() ) )
+            if ( StringUtils.isNotEmpty( javaAssociationMetadata.getInterfaceName() )
+                 && ModelAssociation.ONE_MULTIPLICITY.equals( modelAssociation.getMultiplicity() ) )
             {
                 type = new JClass( javaAssociationMetadata.getInterfaceName() );
             }
@@ -796,8 +796,8 @@ public class JavaModelloGenerator
 
         sc.indent();
 
-        sc.add( "throw new ClassCastException( \"" + modelField.getModelClass().getName() + "." + crudModifier +
-            propertyName + "(" + fieldName + ") parameter must be instanceof \" + " + instanceName +
+        sc.add( "throw new ClassCastException( \"" + modelField.getModelClass().getName() + "." + crudModifier
+            + propertyName + "(" + fieldName + ") parameter must be instanceof \" + " + instanceName +
             ".class.getName() );" );
 
         sc.unindent();
@@ -815,10 +815,10 @@ public class JavaModelloGenerator
 
         if ( !JavaAssociationMetadata.INIT_TYPES.contains( javaAssociationMetadata.getInitializationMode() ) )
         {
-            throw new ModelloException( "The Java Modello Generator cannot use '" +
-                javaAssociationMetadata.getInitializationMode() + "' as a <association " + "java.init=\"" +
-                javaAssociationMetadata.getInitializationMode() + "\"> " +
-                "value, the only the following are acceptable " + JavaAssociationMetadata.INIT_TYPES );
+            throw new ModelloException( "The Java Modello Generator cannot use '"
+                + javaAssociationMetadata.getInitializationMode() + "' as a <association " + "java.init=\""
+                + javaAssociationMetadata.getInitializationMode() + "\"> "
+                + "value, the only the following are acceptable " + JavaAssociationMetadata.INIT_TYPES );
         }
 
         if ( ModelAssociation.MANY_MULTIPLICITY.equals( modelAssociation.getMultiplicity() ) )
@@ -947,20 +947,20 @@ public class JavaModelloGenerator
         {
             jClass.addImport( "java.util.Collection" );
 
-            sc.add( "Collection " + modelAssociation.getName() + " = get" + capitalise( modelAssociation.getName() ) +
-                "();" );
+            sc.add( "Collection " + modelAssociation.getName() + " = get" + capitalise( modelAssociation.getName() )
+                    + "();" );
 
             sc.add( "" );
 
-            sc.add( "if ( get" + capitalise( modelAssociation.getName() ) + "().contains(" +
-                uncapitalise( modelAssociation.getTo() ) + ") )" );
+            sc.add( "if ( get" + capitalise( modelAssociation.getName() ) + "().contains("
+                    + uncapitalise( modelAssociation.getTo() ) + ") )" );
 
             sc.add( "{" );
 
             sc.indent();
 
-            sc.add( "throw new IllegalStateException( \"" + uncapitalise( modelAssociation.getTo() ) +
-                " is already assigned.\" );" );
+            sc.add( "throw new IllegalStateException( \"" + uncapitalise( modelAssociation.getTo() )
+                    + " is already assigned.\" );" );
 
             sc.unindent();
 
@@ -996,8 +996,8 @@ public class JavaModelloGenerator
 
             sc.indent();
 
-            sc.add( "throw new IllegalStateException( \"" + uncapitalise( modelAssociation.getTo() ) +
-                " isn't associated.\" );" );
+            sc.add( "throw new IllegalStateException( \"" + uncapitalise( modelAssociation.getTo() )
+                    + " isn't associated.\" );" );
 
             sc.unindent();
 
@@ -1009,15 +1009,15 @@ public class JavaModelloGenerator
         }
         else
         {
-            sc.add( "if ( ! get" + capitalise( modelAssociation.getName() ) + "().contains( " +
-                uncapitalise( modelAssociation.getTo() ) + " ) )" );
+            sc.add( "if ( ! get" + capitalise( modelAssociation.getName() ) + "().contains( "
+                    + uncapitalise( modelAssociation.getTo() ) + " ) )" );
 
             sc.add( "{" );
 
             sc.indent();
 
-            sc.add( "throw new IllegalStateException( \"" + uncapitalise( modelAssociation.getTo() ) +
-                " isn't associated.\" );" );
+            sc.add( "throw new IllegalStateException( \"" + uncapitalise( modelAssociation.getTo() )
+                    + " isn't associated.\" );" );
 
             sc.unindent();
 
@@ -1025,8 +1025,8 @@ public class JavaModelloGenerator
 
             sc.add( "" );
 
-            sc.add( "get" + capitalise( modelAssociation.getName() ) + "().remove( " +
-                uncapitalise( modelAssociation.getTo() ) + " );" );
+            sc.add( "get" + capitalise( modelAssociation.getName() ) + "().remove( "
+                    + uncapitalise( modelAssociation.getTo() ) + " );" );
         }
 
         jClass.addMethod( breakMethod );
@@ -1060,8 +1060,8 @@ public class JavaModelloGenerator
             addType = new JClass( "String" );
         }
 
-        if ( modelAssociation.getType().equals( ModelDefault.PROPERTIES ) ||
-            modelAssociation.getType().equals( ModelDefault.MAP ) )
+        if ( modelAssociation.getType().equals( ModelDefault.PROPERTIES )
+             || modelAssociation.getType().equals( ModelDefault.MAP ) )
         {
             JMethod adder = new JMethod( null, "add" + capitalise( singular( fieldName ) ) );
 
@@ -1096,8 +1096,8 @@ public class JavaModelloGenerator
                 // TODO: remove after tested
 //                adder.addException( new JClass( "Exception" ) );
 
-                adder.getSourceCode().add( implementationParameterName + ".create" +
-                    modelAssociation.getModelClass().getName() + "Association( this );" );
+                adder.getSourceCode().add( implementationParameterName + ".create"
+                    + modelAssociation.getModelClass().getName() + "Association( this );" );
             }
 
             jClass.addMethod( adder );
@@ -1173,8 +1173,8 @@ public class JavaModelloGenerator
             JavaAssociationMetadata javaAssociationMetadata = (JavaAssociationMetadata) modelAssociation
                 .getAssociationMetadata( JavaAssociationMetadata.ID );
 
-            if ( StringUtils.isNotEmpty( javaAssociationMetadata.getInterfaceName() ) &&
-                ModelAssociation.ONE_MULTIPLICITY.equals( modelAssociation.getMultiplicity() ) )
+            if ( StringUtils.isNotEmpty( javaAssociationMetadata.getInterfaceName() )
+                 && ModelAssociation.ONE_MULTIPLICITY.equals( modelAssociation.getMultiplicity() ) )
             {
                 type = new JClass( javaAssociationMetadata.getInterfaceName() );
             }

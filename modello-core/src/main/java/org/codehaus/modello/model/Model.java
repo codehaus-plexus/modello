@@ -195,8 +195,8 @@ public class Model
             {
                 ModelClass modelClass = (ModelClass) i.next();
 
-                if ( versionRange.getFromVersion().inside( modelClass.getVersionRange() ) &&
-                    versionRange.getToVersion().inside( modelClass.getVersionRange() ) )
+                if ( versionRange.getFromVersion().inside( modelClass.getVersionRange() )
+                     && versionRange.getToVersion().inside( modelClass.getVersionRange() ) )
                 {
                     value = modelClass;
                 }
@@ -329,8 +329,8 @@ public class Model
             {
                 ModelInterface modelInterface = (ModelInterface) i.next();
 
-                if ( versionRange.getFromVersion().inside( modelInterface.getVersionRange() ) &&
-                    versionRange.getToVersion().inside( modelInterface.getVersionRange() ) )
+                if ( versionRange.getFromVersion().inside( modelInterface.getVersionRange() )
+                     && versionRange.getToVersion().inside( modelInterface.getVersionRange() ) )
                 {
                     return modelInterface;
                 }
