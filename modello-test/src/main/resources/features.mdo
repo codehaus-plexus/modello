@@ -1,0 +1,190 @@
+<model>
+  <id>features</id>
+  <name>Modello Features test</name>
+  <description>A model to test Modello features with every plugin.</description>
+
+  <defaults>
+    <default>
+      <key>package</key>
+      <value>org.codehaus.modello.test.features</value>
+    </default>
+  </defaults>
+
+  <classes>
+
+    <class rootElement="true">
+      <name>Features</name>
+      <version>1.0.0+</version>
+      <fields>
+        <field>
+          <name>simpleTypes</name>
+          <version>1.0.0+</version>
+          <association>
+            <type>SimpleTypes</type>
+          </association>
+        </field>
+        <field>
+          <name>xmlFeatures</name>
+          <version>1.0.0+</version>
+          <association>
+            <type>XmlFeatures</type>
+          </association>
+        </field>
+        <field>
+          <name>comment</name>
+          <version>1.0.0+</version>
+          <type>String</type>
+          <comment>Test of a comment.</comment>
+        </field>
+        <field>
+          <name>description</name>
+          <version>1.0.0+</version>
+          <description>Test of a description.</description>
+          <type>String</type>
+        </field>
+        <field>
+          <name>required</name>
+          <version>1.0.0+</version>
+          <required>true</required>
+          <description>Test of a required field.</description>
+          <type>String</type>
+        </field>
+      </fields>
+      <codeSegments>
+        <codeSegment>
+          <version>1.0.0+</version>
+          <code>
+            /* this text goes directly into generated code */
+          </code>
+        </codeSegment>
+      </codeSegments>
+    </class>
+
+    <class>
+      <name>SimpleTypes</name>
+      <version>1.0.0+</version>
+      <description>
+        Test of every simple types supported.
+      </description>
+      <fields>
+        <field>
+          <name>primitiveBoolean</name>
+          <version>1.0.0+</version>
+          <description>boolean primitive</description>
+          <type>boolean</type>
+        </field>
+        <field>
+          <name>primitiveInt</name>
+          <version>1.0.0+</version>
+          <description>int primitive</description>
+          <type>int</type>
+        </field>
+        <field>
+          <name>primitiveLong</name>
+          <version>1.0.0+</version>
+          <description>long primitive</description>
+          <type>long</type>
+        </field>
+        <field>
+          <name>primitiveFloat</name>
+          <version>1.0.0+</version>
+          <description>float primitive</description>
+          <type>float</type>
+        </field>
+        <field>
+          <name>primitiveDouble</name>
+          <version>1.0.0+</version>
+          <description>double primitive</description>
+          <type>double</type>
+        </field>
+        <field>
+          <name>objectBoolean</name>
+          <version>1.0.0+</version>
+          <description>Boolean class</description>
+          <type>Boolean</type>
+        </field>
+        <!--field>
+          <name>objectInteger</name>
+          <version>1.0.0+</version>
+          <description>Integer class</description>
+          <type>Integer</type>
+        </field>
+        <field>
+          <name>objectLong</name>
+          <version>1.0.0+</version>
+          <description>Long class</description>
+          <type>Long</type>
+        </field>
+        <field>
+          <name>objectFloat</name>
+          <version>1.0.0+</version>
+          <description>Float class</description>
+          <type>Float</type>
+        </field>
+        <field>
+          <name>objectDouble</name>
+          <version>1.0.0+</version>
+          <description>Double class</description>
+          <type>Double</type>
+        </field-->
+        <field>
+          <name>objectString</name>
+          <version>1.0.0+</version>
+          <description>String class</description>
+          <type>String</type>
+        </field>
+        <field>
+          <name>objectDate</name>
+          <version>1.0.0+</version>
+          <description>Date class</description>
+          <type>Date</type>
+        </field>
+        <!-- TODO: char, short, byte -->
+      </fields>
+    </class>
+
+    <class>
+      <name>XmlFeatures</name>
+      <version>1.0.0+</version>
+      <fields>
+        <field xml.attribute="true">
+          <name>attribute</name>
+          <version>1.0.0+</version>
+          <description>a field as XML attribute instead of element.</description>
+          <type>String</type>
+        </field>
+        <field xml.tagName="tagName">
+          <name>fieldName</name>
+          <version>1.0.0+</version>
+          <description>a field with an XML name different from the field name.</description>
+          <type>String</type>
+        </field>
+        <field xml.attribute="true" xml.tagName="tagNameAttribute">
+          <name>fieldNameAttribute</name>
+          <version>1.0.0+</version>
+          <description></description>
+          <type>String</type>
+        </field>
+        <!--field xml.listStyle="flat">
+          <name>components</name>
+          <version>1.0.0+</version>
+          <association>
+            <type>Component</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+        <field xml.associationTagName="repo">
+          <name>repositories</name>
+          <version>1.0.0+</version>
+          <description>The lists of the remote repositories</description>
+          <association>
+            <type>Repository</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field-->
+      </fields>
+    </class>
+
+  </classes>
+
+</model>

@@ -1,7 +1,5 @@
-package org.codehaus.modello;
-
 /*
- * Copyright (c) 2005, Codehaus.org
+ * Copyright (c) 2004, Codehaus.org
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -22,22 +20,17 @@ package org.codehaus.modello;
  * SOFTWARE.
  */
 
-import java.io.IOException;
-import java.io.Reader;
+import org.codehaus.modello.verifier.Verifier;
 
-import org.codehaus.plexus.PlexusTestCase;
-import org.codehaus.plexus.util.ReaderFactory;
+import java.util.ArrayList;
+import java.util.List;
 
-/**
- * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id$
- */
-public class AbstractModelloTest
-    extends PlexusTestCase
+import junit.framework.Assert;
+
+public class JavaVerifier
+    extends Verifier
 {
-    protected Reader getModelResource( String name )
-        throws IOException
+    public void verify()
     {
-        return ReaderFactory.newXmlReader( getClass().getResourceAsStream( name ) );
     }
 }
