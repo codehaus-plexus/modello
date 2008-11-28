@@ -50,7 +50,7 @@ public class XdocGeneratorTest
         super( "xdoc" );
     }
 
-    public void testJavaGenerator()
+    public void testMavenXdocGenerator()
         throws Throwable
     {
         ModelloCore modello = (ModelloCore) container.lookup( ModelloCore.ROLE );
@@ -87,18 +87,15 @@ public class XdocGeneratorTest
 
         assertEquals( "builder", xml.getTagName() );
 
-        File generatedSources = new File( getTestPath( "target/xdocs" ) );
+        File generatedSources = getTestFile( "target/generated-site/xdoc" );
 
         FileUtils.deleteDirectory( generatedSources );
 
         generatedSources.mkdirs();
 
         Properties parameters = new Properties();
-
         parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, generatedSources.getAbsolutePath() );
-
         parameters.setProperty( ModelloParameterConstants.VERSION, "4.0.0" );
-
         parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString( false ) );
 
         modello.generate( model, "xdoc", parameters );
@@ -106,5 +103,22 @@ public class XdocGeneratorTest
         //addDependency( "modello", "modello-core", "1.0-SNAPSHOT" );
 
         //verify( "org.codehaus.modello.generator.xml.cdoc.XdocVerifier", "xdoc" );
+    }
+
+    public void testFeaturesXdocGenerator()
+        throws Throwable
+    {
+        File generatedSources = getTestFile( "target/generated-site/xdoc" );
+
+        ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
+
+        Properties parameters = new Properties();
+        parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, generatedSources.getAbsolutePath() );
+        parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString( false ) );
+        parameters.setProperty( ModelloParameterConstants.VERSION, "1.0.0" );
+
+        Model model = modello.loadModel( getModelResource( "/features.mdo" ) );
+
+        modello.generate( model, "xdoc", parameters );
     }
 }

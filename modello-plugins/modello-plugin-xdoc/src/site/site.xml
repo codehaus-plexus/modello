@@ -9,6 +9,10 @@
 
     <menu ref="parent" />
 
+    <menu name="Examples">
+      <item name="Features Test" href="features.html"/>
+    </menu>
+
   </body>
 
 </project>
