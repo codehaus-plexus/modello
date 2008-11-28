@@ -1,3 +1,5 @@
+<?xml version="1.0"?>
+
 <model>
   <id>features</id>
   <name>Modello Features test</name>
@@ -70,73 +72,73 @@
         <field>
           <name>primitiveBoolean</name>
           <version>1.0.0+</version>
-          <description>boolean primitive</description>
+          <description>&lt;code&gt;boolean&lt;/code&gt; primitive.</description>
           <type>boolean</type>
         </field>
         <field>
           <name>primitiveInt</name>
           <version>1.0.0+</version>
-          <description>int primitive</description>
+          <description>&lt;code&gt;int&lt;/code&gt; primitive.</description>
           <type>int</type>
         </field>
         <field>
           <name>primitiveLong</name>
           <version>1.0.0+</version>
-          <description>long primitive</description>
+          <description>&lt;code&gt;long&lt;/code&gt; primitive.</description>
           <type>long</type>
         </field>
         <field>
           <name>primitiveFloat</name>
           <version>1.0.0+</version>
-          <description>float primitive</description>
+          <description>&lt;code&gt;float&lt;/code&gt; primitive.</description>
           <type>float</type>
         </field>
         <field>
           <name>primitiveDouble</name>
           <version>1.0.0+</version>
-          <description>double primitive</description>
+          <description>&lt;code&gt;double&lt;/code&gt; primitive.</description>
           <type>double</type>
         </field>
         <field>
           <name>objectBoolean</name>
           <version>1.0.0+</version>
-          <description>Boolean class</description>
+          <description>&lt;code&gt;Boolean&lt;/code&gt; class.</description>
           <type>Boolean</type>
         </field>
         <!--field>
           <name>objectInteger</name>
           <version>1.0.0+</version>
-          <description>Integer class</description>
+          <description>&lt;code&gt;Integer&lt;/code&gt; class.</description>
           <type>Integer</type>
         </field>
         <field>
           <name>objectLong</name>
           <version>1.0.0+</version>
-          <description>Long class</description>
+          <description>&lt;code&gt;Long&lt;/code&gt; class.</description>
           <type>Long</type>
         </field>
         <field>
           <name>objectFloat</name>
           <version>1.0.0+</version>
-          <description>Float class</description>
+          <description>&lt;code&gt;Float&lt;/code&gt; class.</description>
           <type>Float</type>
         </field>
         <field>
           <name>objectDouble</name>
           <version>1.0.0+</version>
-          <description>Double class</description>
+          <description>&lt;code&gt;Double&lt;/code&gt; class.</description>
           <type>Double</type>
         </field-->
         <field>
           <name>objectString</name>
           <version>1.0.0+</version>
-          <description>String class</description>
+          <description>&lt;code&gt;String&lt;/code&gt; class.</description>
           <type>String</type>
         </field>
         <field>
           <name>objectDate</name>
           <version>1.0.0+</version>
-          <description>Date class</description>
+          <description>&lt;code&gt;Date&lt;/code&gt; class.</description>
           <type>Date</type>
         </field>
         <!-- TODO: char, short, byte -->
@@ -146,42 +148,58 @@
     <class>
       <name>XmlFeatures</name>
       <version>1.0.0+</version>
+      <description>Test of XML specific parameters.</description>
       <fields>
         <field xml.attribute="true">
           <name>attribute</name>
           <version>1.0.0+</version>
-          <description>a field as XML attribute instead of element.</description>
+          <description>&lt;code&gt;xml.attribute="true"&lt;/code&gt;: a field as XML attribute instead of element.</description>
           <type>String</type>
         </field>
         <field xml.tagName="tagName">
           <name>fieldName</name>
           <version>1.0.0+</version>
-          <description>a field with an XML name different from the field name.</description>
+          <description>&lt;code&gt;xml.tagName="&lt;i&gt;tagName&lt;/i&gt;"&lt;/code&gt;: a field with an XML name different from the field name.</description>
           <type>String</type>
         </field>
         <field xml.attribute="true" xml.tagName="tagNameAttribute">
           <name>fieldNameAttribute</name>
           <version>1.0.0+</version>
-          <description></description>
+          <description>&lt;code&gt;xml.attribute="true" xml.tagName="&lt;i&gt;tagName&lt;/i&gt;"&lt;/code&gt;</description>
           <type>String</type>
         </field>
-        <!--field xml.listStyle="flat">
-          <name>components</name>
+        <field xml.listStyle="flat">
+          <name>xmlListStyleFlat</name>
           <version>1.0.0+</version>
+          <description>&lt;code&gt;xml.listStyle="flat"&lt;/code&gt;: a "flat" list, without enclosing tag.</description>
           <association>
-            <type>Component</type>
+            <type>AssociationDemo</type>
             <multiplicity>*</multiplicity>
           </association>
         </field>
-        <field xml.associationTagName="repo">
-          <name>repositories</name>
+        <field xml.associationTagName="association">
+          <name>xmlAssociationTagName</name>
           <version>1.0.0+</version>
-          <description>The lists of the remote repositories</description>
+          <description>&lt;code&gt;xml.associationTagName="&lt;i&gt;association&lt;/i&gt;"&lt;/code&gt;: a list with an XML name different from the field name.</description>
           <association>
-            <type>Repository</type>
+            <type>AssociationDemo</type>
             <multiplicity>*</multiplicity>
           </association>
-        </field-->
+        </field>
+      </fields>
+    </class>
+
+    <class>
+      <name>AssociationDemo</name>
+      <version>1.0.0+</version>
+      <description>A simple class for association demo.</description>
+      <fields>
+        <field>
+          <name>objectString</name>
+          <version>1.0.0+</version>
+          <description>String class.</description>
+          <type>String</type>
+        </field>
       </fields>
     </class>
 

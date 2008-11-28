@@ -63,11 +63,8 @@ public class FeaturesJavaGeneratorTest
         ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
 
         Properties parameters = new Properties();
-
         parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, generatedSources.getAbsolutePath() );
-
         parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString( false ) );
-
         parameters.setProperty( ModelloParameterConstants.VERSION, "1.0.0" );
 
         Model model = modello.loadModel( getModelResource( "/features.mdo" ) );
