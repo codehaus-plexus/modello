@@ -3,7 +3,7 @@
 <model>
   <id>features</id>
   <name>Modello Features test</name>
-  <description>A model to test Modello features with every plugin.</description>
+  <description>A model to test Modello features with every plugin and point to plugin specific features.</description>
 
   <defaults>
     <default>
@@ -56,6 +56,20 @@
           <version>1.0.0+</version>
           <association>
             <type>XmlFeatures</type>
+          </association>
+        </field>
+        <field>
+          <name>jpoxFeatures</name>
+          <version>1.0.0+</version>
+          <association>
+            <type>JPoxFeatures</type>
+          </association>
+        </field>
+        <field>
+          <name>storeFeatures</name>
+          <version>1.0.0+</version>
+          <association>
+            <type>StoreFeatures</type>
           </association>
         </field>
       </fields>
@@ -156,7 +170,10 @@
     <class>
       <name>JavaFeatures</name>
       <version>1.0.0+</version>
-      <description>Test of java generation specific parameters.</description>
+      <description><![CDATA[Test of java generation specific parameters: see
+        <a href="http://fisheye.codehaus.org/browse/modello/trunk/modello-core/src/main/java/org/codehaus/modello/plugin/java/JavaMetadataPlugin.java?r=trunk">JavaMetadataPlugin</a>
+        class.]]>
+      </description>
       <fields>
         <!--field>
           <name>javaEnabled</name>
@@ -194,7 +211,10 @@
     <class>
       <name>XmlFeatures</name>
       <version>1.0.0+</version>
-      <description>Test of XML specific parameters.</description>
+      <description><![CDATA[Test of XML specific parameters: see
+        <a href="http://fisheye.codehaus.org/browse/modello/trunk/modello-plugins/modello-plugin-xml/src/main/java/org/codehaus/modello/plugins/xml/XmlMetadataPlugin.java?r=trunk">XmlMetadataPlugin</a>
+        class.]]>
+      </description>
       <fields>
         <field xml.attribute="true">
           <name>attribute</name>
@@ -231,6 +251,63 @@
             <type>AssociationDemo</type>
             <multiplicity>*</multiplicity>
           </association>
+        </field>
+        <field>
+          <name>xsdFeatures</name>
+          <version>1.0.0+</version>
+          <association>
+            <type>XsdFeatures</type>
+          </association>
+        </field>
+      </fields>
+    </class>
+
+    <class xsd.compositor="sequence">
+      <name>XsdFeatures</name>
+      <version>1.0.0+</version>
+      <description><![CDATA[Test of XSD specific parameters: see
+        <a href="http://fisheye.codehaus.org/browse/modello/trunk/modello-plugins/modello-plugin-xsd/src/main/java/org/codehaus/modello/plugin/xsd/metadata/XsdMetadataPlugin.java?r=trunk">XsdMetadataPlugin</a>
+        class.]]>
+      </description>
+      <fields>
+        <field xml.attribute="true">
+          <name>attribute</name>
+          <version>1.0.0+</version>
+          <type>String</type>
+        </field>
+      </fields>
+    </class>
+
+    <class>
+      <name>JPoxFeatures</name>
+      <version>1.0.0+</version>
+      <description><![CDATA[Test of JPox specific parameters: see
+        <a href="http://fisheye.codehaus.org/browse/modello/trunk/modello-plugins/modello-plugin-jpox/src/main/java/org/codehaus/modello/plugin/jpox/metadata/JPoxMetadataPlugin.java?r=trunk">JPoxMetadataPlugin</a>
+        class.]]>
+      </description>
+      <fields>
+        <field jpox.column="column">
+          <name>jpoxColumn</name>
+          <version>1.0.0+</version>
+          <description><![CDATA[<code>&lt;field jpox.column="<i>column name</i>"&gt;</code>.]]></description>
+          <type>String</type>
+        </field>
+      </fields>
+    </class>
+
+    <class>
+      <name>StoreFeatures</name>
+      <version>1.0.0+</version>
+      <description><![CDATA[Test of Store specific parameters: see
+        <a href="http://fisheye.codehaus.org/browse/modello/trunk/modello-plugins/modello-plugin-store/src/main/java/org/codehaus/modello/plugin/store/metadata/StoreMetadataPlugin.java?r=trunk">StoreMetadataPlugin</a>
+        class.]]>
+      </description>
+      <fields>
+        <field stash.storable="false">
+          <name>stashStorable</name>
+          <version>1.0.0+</version>
+          <description><![CDATA[<code>&lt;field stash.storable="false"&gt;</code>.]]></description>
+          <type>String</type>
         </field>
       </fields>
     </class>
