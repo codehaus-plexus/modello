@@ -166,7 +166,7 @@ public abstract class AbstractModelloGeneratorTest
     {
         addDependency( "junit", "junit", "3.8.1" );
 
-        addDependency( "org.codehaus.plexus", "plexus-utils", "1.4.5" );
+        addDependency( "org.codehaus.plexus", "plexus-utils", "1.5.1" );
 
         addDependency( "org.codehaus.modello", "modello-test", getModelloVersion() );
 
