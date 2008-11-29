@@ -2,7 +2,7 @@
 
 <model>
   <id>features</id>
-  <name>Modello Features test</name>
+  <name>ModelloFeaturesTest</name>
   <description>A model to test Modello features with every plugin and point to plugin specific features.</description>
 
   <defaults>
@@ -128,7 +128,7 @@
         </field>
         <field>
           <name>objectBoolean</name>
-          <version>1.0.0+</version>
+          <version>2.0.0+</version>
           <description><![CDATA[<code>Boolean</code> class.]]></description>
           <type>Boolean</type>
           <defaultValue>Boolean.FALSE</defaultValue>
@@ -197,26 +197,27 @@
         </field-->
         <field>
           <name>javaAbstract</name>
-          <version>1.0.0+</version>
+          <version>2.0.0+</version>
           <association>
             <type>JavaAbstractFeature</type>
           </association>
         </field>
-        <!-- TODO:
-         - association features: java.use-interface="interfaceName", java.init="lazy|constructor|field"
+        <!--
+         - class features: java.enabled="false" 
+         - association features: java.generate-add="false" java.generate-remove="false", java.generate-break="false" java.generate-create="false", java.use-interface="interfaceName", java.init="lazy|constructor|field"
          - field features: java.adder="false", java.getter="false", java.setter="false" -->
       </fields>
     </class>
 
     <class java.enabled="false">
       <name>JavaEnabledFeature</name>
-      <version>1.0.0+</version>
+      <version>2.0.0+</version>
       <description><![CDATA[<code>&lt;class java.enabled="false"&gt;</code>: a class disabled for java generation.]]></description>
     </class>
 
     <class java.abstract="true">
       <name>JavaAbstractFeature</name>
-      <version>1.0.0+</version>
+      <version>2.0.0+</version>
       <description><![CDATA[<code>&lt;class java.abstract="true"&gt;</code>: a class generated in java as abstract.]]></description>
     </class>
 

@@ -26,74 +26,56 @@ import org.codehaus.modello.AbstractModelloGeneratorTest;
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
-import org.codehaus.modello.model.ModelClass;
-import org.codehaus.modello.model.ModelField;
-import org.codehaus.modello.model.Version;
-import org.codehaus.modello.plugins.xml.XmlFieldMetadata;
 import org.codehaus.plexus.util.FileUtils;
-import org.codehaus.plexus.util.ReaderFactory;
-
-import org.codehaus.plexus.compiler.Compiler;
-import org.codehaus.plexus.compiler.CompilerConfiguration;
-import org.codehaus.plexus.compiler.CompilerError;
-import org.codehaus.plexus.compiler.CompilerException;
-import org.codehaus.plexus.compiler.javac.JavacCompiler;
 
 import java.io.File;
-
-import java.util.List;
 import java.util.Properties;
 
 /**
- * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
+ * @author Hervé Boutemy
  * @version $Id$
  */
-public class _AbstractElementTest
+public class FeaturesXpp3GeneratorTest
     extends AbstractModelloGeneratorTest
 {
-    public _AbstractElementTest()
+    public FeaturesXpp3GeneratorTest()
     {
-        super( "abstracto" );
+        super( "features" );
     }
 
-    public void testAbstract()
+    private File generatedSources;
+
+    private File classes;
+
+    public void testJavaGenerator()
         throws Throwable
     {
-        ModelloCore modello = (ModelloCore) container.lookup( ModelloCore.ROLE );
+        generatedSources = getTestFile( "target/" + getName() + "/sources" );
 
-        Model model = modello.loadModel( ReaderFactory.newXmlReader( getTestFile( "src/test/resources/abstract.mdo" ) ) );
-
-        List classesList = model.getClasses( new Version( "1.0.0" ) );
-
-        File generatedSources = new File( getTestPath( "target/abstracto/sources" ) );
-
-        File classes = new File( getTestPath( "target/abstracto/classes" ) );
+        classes = getTestFile( "target/" + getName() + "/classes" );
 
         FileUtils.deleteDirectory( generatedSources );
-
-        FileUtils.deleteDirectory( classes );
 
         generatedSources.mkdirs();
 
         classes.mkdirs();
 
+        ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
+
         Properties parameters = new Properties();
-
         parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, generatedSources.getAbsolutePath() );
-
+        parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString( false ) );
         parameters.setProperty( ModelloParameterConstants.VERSION, "1.0.0" );
 
-        parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString( false ) );
+        Model model = modello.loadModel( getModelResource( "/features.mdo" ) );
 
         modello.generate( model, "java", parameters );
-
         modello.generate( model, "xpp3-writer", parameters );
-
         modello.generate( model, "xpp3-reader", parameters );
 
-        //addDependency( "org.codehaus.modello", "modello-core", getModelloVersion() );
+        addDependency( "xmlunit", "xmlunit", "1.2" );
+        compile( generatedSources, classes );
 
-        // compile( generatedSources, classes );
+        verify( "org.codehaus.modello.generator.xml.xpp3.Xpp3FeaturesVerifier", getName() );
     }
 }

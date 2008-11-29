@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+
+<features>
+  <simpleTypes>
+    <primitiveBoolean>false</primitiveBoolean>
+    <primitiveInt>-7</primitiveInt>
+    <primitiveLong>-7</primitiveLong>
+    <primitiveFloat>-7.7</primitiveFloat>
+    <primitiveDouble>-7.7</primitiveDouble>
+    <objectString>String value from XML file</objectString>
+    <objectDate>1227991027743</objectDate>
+  </simpleTypes>
+
+  <xmlFeatures attribute="a value from XML file" tagNameAttribute="another value from XML file">
+    <tagName>value from XML file</tagName>
+
+    <xmlListStyleFlat><id>flat first</id></xmlListStyleFlat>
+    <xmlListStyleFlat><id>flat second</id></xmlListStyleFlat>
+    <xmlListStyleFlat><id>flat third</id></xmlListStyleFlat>
+
+    <xmlAssociationTagName>
+      <association><id>first</id></association>
+      <association><id>second</id></association>
+      <association><id>third</id></association>
+    </xmlAssociationTagName>
+
+    <xsdFeatures attribute="one more value from XML file" />
+  </xmlFeatures>
+</features>
