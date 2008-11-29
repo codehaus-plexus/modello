@@ -19,20 +19,6 @@
       <version>1.0.0+</version>
       <fields>
         <field>
-          <name>simpleTypes</name>
-          <version>1.0.0+</version>
-          <association>
-            <type>SimpleTypes</type>
-          </association>
-        </field>
-        <field>
-          <name>xmlFeatures</name>
-          <version>1.0.0+</version>
-          <association>
-            <type>XmlFeatures</type>
-          </association>
-        </field>
-        <field>
           <name>comment</name>
           <version>1.0.0+</version>
           <type>String</type>
@@ -51,6 +37,27 @@
           <description>Test of a required field.</description>
           <type>String</type>
         </field>
+        <field>
+          <name>simpleTypes</name>
+          <version>1.0.0+</version>
+          <association>
+            <type>SimpleTypes</type>
+          </association>
+        </field>
+        <field>
+          <name>javaFeatures</name>
+          <version>1.0.0+</version>
+          <association>
+            <type>JavaFeatures</type>
+          </association>
+        </field>
+        <field>
+          <name>xmlFeatures</name>
+          <version>1.0.0+</version>
+          <association>
+            <type>XmlFeatures</type>
+          </association>
+        </field>
       </fields>
       <codeSegments>
         <codeSegment>
@@ -65,84 +72,123 @@
     <class>
       <name>SimpleTypes</name>
       <version>1.0.0+</version>
-      <description>
-        Test of every simple types supported.
+      <description><![CDATA[
+        <code>&lt;field&gt;&lt;type&gt;<i>chose a type</i>&lt;/type&gt;&lt;field&gt;</code>:
+        Test of every simple types supported.]]>
       </description>
       <fields>
         <field>
           <name>primitiveBoolean</name>
           <version>1.0.0+</version>
-          <description>&lt;code&gt;boolean&lt;/code&gt; primitive.</description>
+          <description><![CDATA[<code>boolean</code> primitive.]]></description>
           <type>boolean</type>
         </field>
         <field>
           <name>primitiveInt</name>
           <version>1.0.0+</version>
-          <description>&lt;code&gt;int&lt;/code&gt; primitive.</description>
+          <description><![CDATA[<code>int</code> primitive.]]></description>
           <type>int</type>
         </field>
         <field>
           <name>primitiveLong</name>
           <version>1.0.0+</version>
-          <description>&lt;code&gt;long&lt;/code&gt; primitive.</description>
+          <description><![CDATA[<code>long</code> primitive.]]></description>
           <type>long</type>
         </field>
         <field>
           <name>primitiveFloat</name>
           <version>1.0.0+</version>
-          <description>&lt;code&gt;float&lt;/code&gt; primitive.</description>
+          <description><![CDATA[<code>float</code> primitive.]]></description>
           <type>float</type>
         </field>
         <field>
           <name>primitiveDouble</name>
           <version>1.0.0+</version>
-          <description>&lt;code&gt;double&lt;/code&gt; primitive.</description>
+          <description><![CDATA[<code>double</code> primitive.]]></description>
           <type>double</type>
         </field>
         <field>
           <name>objectBoolean</name>
           <version>1.0.0+</version>
-          <description>&lt;code&gt;Boolean&lt;/code&gt; class.</description>
+          <description><![CDATA[<code>Boolean</code> class.]]></description>
           <type>Boolean</type>
         </field>
         <!--field>
           <name>objectInteger</name>
           <version>1.0.0+</version>
-          <description>&lt;code&gt;Integer&lt;/code&gt; class.</description>
+          <description><![CDATA[<code>Integer</code> class.]]></description>
           <type>Integer</type>
         </field>
         <field>
           <name>objectLong</name>
           <version>1.0.0+</version>
-          <description>&lt;code&gt;Long&lt;/code&gt; class.</description>
+          <description><![CDATA[<code>Long</code> class.]]></description>
           <type>Long</type>
         </field>
         <field>
           <name>objectFloat</name>
           <version>1.0.0+</version>
-          <description>&lt;code&gt;Float&lt;/code&gt; class.</description>
+          <description><![CDATA[<code>Float</code> class.]]></description>
           <type>Float</type>
         </field>
         <field>
           <name>objectDouble</name>
           <version>1.0.0+</version>
-          <description>&lt;code&gt;Double&lt;/code&gt; class.</description>
+          <description><![CDATA[<code>Double</code> class.]]></description>
           <type>Double</type>
         </field-->
         <field>
           <name>objectString</name>
           <version>1.0.0+</version>
-          <description>&lt;code&gt;String&lt;/code&gt; class.</description>
+          <description><![CDATA[<code>String</code> class.]]></description>
           <type>String</type>
         </field>
         <field>
           <name>objectDate</name>
           <version>1.0.0+</version>
-          <description>&lt;code&gt;Date&lt;/code&gt; class.</description>
+          <description><![CDATA[<code>Date</code> class.]]></description>
           <type>Date</type>
         </field>
         <!-- TODO: char, short, byte -->
       </fields>
+    </class>
+
+    <class>
+      <name>JavaFeatures</name>
+      <version>1.0.0+</version>
+      <description>Test of java generation specific parameters.</description>
+      <fields>
+        <!--field>
+          <name>javaEnabled</name>
+          <version>1.0.0+</version>
+          <association java.generate-add="false" java.generate-remove="false">
+            <type>JavaEnabledFeature</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field-->
+        <field>
+          <name>javaAbstract</name>
+          <version>1.0.0+</version>
+          <association>
+            <type>JavaAbstractFeature</type>
+          </association>
+        </field>
+        <!-- TODO:
+         - association features: java.use-interface="interfaceName", java.init="lazy|constructor|field"
+         - field features: java.adder="false", java.getter="false", java.setter="false" -->
+      </fields>
+    </class>
+
+    <class java.enabled="false">
+      <name>JavaEnabledFeature</name>
+      <version>1.0.0+</version>
+      <description><![CDATA[<code>&lt;class java.enabled="false"&gt;</code>: a class disabled for java generation.]]></description>
+    </class>
+
+    <class java.abstract="true">
+      <name>JavaAbstractFeature</name>
+      <version>1.0.0+</version>
+      <description><![CDATA[<code>&lt;class java.abstract="true"&gt;</code>: a class generated in java as abstract.]]></description>
     </class>
 
     <class>
@@ -153,25 +199,25 @@
         <field xml.attribute="true">
           <name>attribute</name>
           <version>1.0.0+</version>
-          <description>&lt;code&gt;xml.attribute="true"&lt;/code&gt;: a field as XML attribute instead of element.</description>
+          <description><![CDATA[<code>&lt;field xml.attribute="true"&gt;</code>: a field as XML attribute instead of element.]]></description>
           <type>String</type>
         </field>
         <field xml.tagName="tagName">
           <name>fieldName</name>
           <version>1.0.0+</version>
-          <description>&lt;code&gt;xml.tagName="&lt;i&gt;tagName&lt;/i&gt;"&lt;/code&gt;: a field with an XML name different from the field name.</description>
+          <description><![CDATA[<code>&lt;field xml.tagName="<i>tagName</i>"&gt;</code>: a field with an XML name different from the field name.]]></description>
           <type>String</type>
         </field>
         <field xml.attribute="true" xml.tagName="tagNameAttribute">
           <name>fieldNameAttribute</name>
           <version>1.0.0+</version>
-          <description>&lt;code&gt;xml.attribute="true" xml.tagName="&lt;i&gt;tagName&lt;/i&gt;"&lt;/code&gt;</description>
+          <description><![CDATA[<code>&lt;field xml.attribute="true" xml.tagName="<i>tagName</i>"&gt;</code>]]></description>
           <type>String</type>
         </field>
         <field xml.listStyle="flat">
           <name>xmlListStyleFlat</name>
           <version>1.0.0+</version>
-          <description>&lt;code&gt;xml.listStyle="flat"&lt;/code&gt;: a "flat" list, without enclosing tag.</description>
+          <description><![CDATA[<code>&lt;field xml.listStyle="flat"&gt;</code>: a "flat" list, ie without enclosing tag.]]></description>
           <association>
             <type>AssociationDemo</type>
             <multiplicity>*</multiplicity>
@@ -180,7 +226,7 @@
         <field xml.associationTagName="association">
           <name>xmlAssociationTagName</name>
           <version>1.0.0+</version>
-          <description>&lt;code&gt;xml.associationTagName="&lt;i&gt;association&lt;/i&gt;"&lt;/code&gt;: a list with an XML name different from the field name.</description>
+          <description><![CDATA[<code>&lt;field xml.associationTagName="<i>association</i>"&gt;</code>: a list with an XML name different from the field name.]]></description>
           <association>
             <type>AssociationDemo</type>
             <multiplicity>*</multiplicity>
@@ -195,9 +241,8 @@
       <description>A simple class for association demo.</description>
       <fields>
         <field>
-          <name>objectString</name>
+          <name>id</name>
           <version>1.0.0+</version>
-          <description>String class.</description>
           <type>String</type>
         </field>
       </fields>
