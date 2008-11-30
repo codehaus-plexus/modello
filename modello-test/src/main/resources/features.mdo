@@ -247,6 +247,12 @@
           <description><![CDATA[<code>&lt;field xml.attribute="true" xml.tagName="<i>tagName</i>"&gt;</code>]]></description>
           <type>String</type>
         </field>
+        <field xml.format="yyyy-MM-dd HH:mm">
+          <name>dateXmlFormat</name>
+          <version>1.0.0+</version>
+          <description><![CDATA[<code>&lt;field xml.format="<i>SimpleDateFormat specification</i>"&gt;</code>: a Date field with a specified format.]]></description>
+          <type>Date</type>
+        </field>
         <field xml.listStyle="flat">
           <name>xmlListStyleFlat</name>
           <version>1.0.0+</version>
