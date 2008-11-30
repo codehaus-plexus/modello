@@ -16,5 +16,12 @@
       <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-plugin-xml</artifactId>
     </dependency>
+    <!-- dependencies needed by FeaturesXpp3GeneratorTest -->
+    <dependency>
+      <groupId>xmlunit</groupId>
+      <artifactId>xmlunit</artifactId>
+      <version>1.2</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 </project>
