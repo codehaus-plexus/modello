@@ -67,14 +67,18 @@ public class Xpp3FeaturesVerifier
         throws Exception
     {
         ModelloFeaturesTestXpp3Writer writer = new ModelloFeaturesTestXpp3Writer();
-    
+
         StringWriter buffer = new StringWriter();
-    
+
+        // workaround for MODELLO-126
+        features.getSimpleTypes().setObjectDate( null ); 
+
         writer.write( buffer, features );
-    
+
         String actualXml = buffer.toString();
-    
+
         XMLUnit.setIgnoreWhitespace( true );
+        XMLUnit.setIgnoreComments( true );
         Diff diff = XMLUnit.compareXML( IOUtil.toString( getClass().getResourceAsStream( "/features.xml" ), "UTF-8" ), actualXml );
 
         if ( !diff.identical() )

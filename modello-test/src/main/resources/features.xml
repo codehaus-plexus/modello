@@ -8,7 +8,10 @@
     <primitiveFloat>-7.7</primitiveFloat>
     <primitiveDouble>-7.7</primitiveDouble>
     <objectString>String value from XML file</objectString>
-    <objectDate>1227991027743</objectDate>
+    <!-- TODO: MODELLO-126 inconsistent Date parsing features
+      <objectDate>1227991027743</objectDate> for XPP3
+      <objectDate>Saturday, November 29, 2008 9:37:07 PM GMT+01:00</objectDate> for dom4j
+    -->
   </simpleTypes>
 
   <xmlFeatures attribute="a value from XML file" tagNameAttribute="another value from XML file">
