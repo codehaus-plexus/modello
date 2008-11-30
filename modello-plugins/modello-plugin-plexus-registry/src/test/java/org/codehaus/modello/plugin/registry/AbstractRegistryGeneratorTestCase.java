@@ -84,7 +84,11 @@ public abstract class AbstractRegistryGeneratorTestCase
         addDependency( "commons-configuration", "commons-configuration", "1.3" );
         addDependency( "commons-lang", "commons-lang", "2.1" );
         addDependency( "commons-logging", "commons-logging-api", "1.0.4" );
-        addDependency( "xerces", "xercesImpl", "2.9.1" );
+        if ( "1.5".compareTo( System.getProperty( "java.specification.version" ) ) <= 0 )
+        {
+            // causes a conflict with JDK 1.4 => add this dependency only with JDK 1.5+
+            addDependency( "xerces", "xercesImpl", "2.9.1" );
+        }
 
         compile( generatedSources, classes );
     }
