@@ -1,7 +1,7 @@
 package org.codehaus.modello.plugin.dom4j;
 
 /*
- * Copyright (c) 2006, Codehaus.org
+ * Copyright (c) 2004, Codehaus.org
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -26,93 +26,57 @@ import org.codehaus.modello.AbstractModelloGeneratorTest;
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
-import org.codehaus.modello.model.ModelClass;
-import org.codehaus.modello.model.ModelField;
-import org.codehaus.modello.model.Version;
-import org.codehaus.modello.plugins.xml.XmlFieldMetadata;
 import org.codehaus.plexus.util.FileUtils;
 
 import java.io.File;
-import java.util.List;
 import java.util.Properties;
 
 /**
- * Test the generators.
- *
- * @author <a href="mailto:brett@codehaus.org">Brett Porter</a>
+ * @author Hervé Boutemy
+ * @version $Id$
  */
-public class Dom4jGeneratorTest
+public class FeaturesDom4jGeneratorTest
     extends AbstractModelloGeneratorTest
 {
-    public Dom4jGeneratorTest()
+    public FeaturesDom4jGeneratorTest()
     {
-        super( "dom4j" );
+        super( "features" );
     }
 
-    public void testDom4jGenerator()
+    private File generatedSources;
+
+    private File classes;
+
+    public void testJavaGenerator()
         throws Throwable
     {
-        ModelloCore modello = (ModelloCore) container.lookup( ModelloCore.ROLE );
+        generatedSources = getTestFile( "target/" + getName() + "/sources" );
 
-        Model model = modello.loadModel( getTestFile( "src/test/resources/maven.mdo" ) );
-
-        List classesList = model.getClasses( new Version( "4.0.0" ) );
-
-        assertEquals( 28, classesList.size() );
-
-        ModelClass clazz = (ModelClass) classesList.get( 0 );
-
-        assertEquals( "Model", clazz.getName() );
-
-        ModelField extend = clazz.getField( "extend", new Version( "4.0.0" ) );
-
-        assertTrue( extend.hasMetadata( XmlFieldMetadata.ID ) );
-
-        XmlFieldMetadata xml = (XmlFieldMetadata) extend.getMetadata( XmlFieldMetadata.ID );
-
-        assertNotNull( xml );
-
-        assertTrue( xml.isAttribute() );
-
-        assertEquals( "extender", xml.getTagName() );
-
-        ModelField build = clazz.getField( "build", new Version( "4.0.0" ) );
-
-        assertTrue( build.hasMetadata( XmlFieldMetadata.ID ) );
-
-        xml = (XmlFieldMetadata) build.getMetadata( XmlFieldMetadata.ID );
-
-        assertNotNull( xml );
-
-        assertEquals( "builder", xml.getTagName() );
-
-        File generatedSources = getTestFile( "target/dom4j/sources" );
-
-        File classes = getTestFile( "target/dom4j/classes" );
+        classes = getTestFile( "target/" + getName() + "/classes" );
 
         FileUtils.deleteDirectory( generatedSources );
-
-        FileUtils.deleteDirectory( classes );
 
         generatedSources.mkdirs();
 
         classes.mkdirs();
 
+        ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
+
         Properties parameters = new Properties();
         parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, generatedSources.getAbsolutePath() );
-        parameters.setProperty( ModelloParameterConstants.VERSION, "4.0.0" );
         parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString( false ) );
+        parameters.setProperty( ModelloParameterConstants.VERSION, "1.0.0" );
+
+        Model model = modello.loadModel( getModelResource( "/features.mdo" ) );
 
         modello.generate( model, "java", parameters );
         modello.generate( model, "dom4j-writer", parameters );
         modello.generate( model, "dom4j-reader", parameters );
 
-        addDependency( "org.codehaus.modello", "modello-core", getModelloVersion() );
         addDependency( "dom4j", "dom4j", "1.6.1" );
-
+        addDependency( "xmlunit", "xmlunit", "1.2" );
         compile( generatedSources, classes );
 
-        verify( "org.codehaus.modello.generator.xml.dom4j.Dom4jVerifier", "dom4j" );
+        verify( "org.codehaus.modello.generator.xml.dom4j.Dom4jFeaturesVerifier", getName() );
     }
-
 }
