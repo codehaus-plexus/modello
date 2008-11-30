@@ -78,7 +78,7 @@ import java.util.Vector;
  * as much as possible to reduce the learning curve.
  *
  * @author <a href="mailto:kvisco@intalio.com">Keith Visco</a>
- * @version $Revision$ $Date$
+ * @version $Id$
  **/
 public final class JMethodSignature
 {
@@ -356,12 +356,18 @@ public final class JMethodSignature
         jsw.write( '(' );
 
         //-- print parameters
-        for ( int i = 0; i < params.size(); i++ )
+        if ( params.size() > 0 )
         {
-            if ( i > 0 ) jsw.write( ", " );
-            jsw.write( params.get( i ) );
+            jsw.write( ' ' );
+            for ( int i = 0; i < params.size(); i++ )
+            {
+                if ( i > 0 ) jsw.write( ", " );
+                jsw.write( params.get( i ) );
+            }
+            jsw.write( ' ' );
         }
-        jsw.write( ")" );
+
+        jsw.write( ')' );
 
         if ( exceptions.size() > 0 )
         {
@@ -398,12 +404,18 @@ public final class JMethodSignature
         sb.append( '(' );
 
         //-- print parameters
-        for ( int i = 0; i < params.size(); i++ )
+        if ( params.size() > 0 )
         {
-            JParameter jParam = (JParameter) params.get( i );
-            if ( i > 0 ) sb.append( ", " );
-            sb.append( jParam.getType().getName() );
+            sb.append( ' ' );
+            for ( int i = 0; i < params.size(); i++ )
+            {
+                JParameter jParam = (JParameter) params.get( i );
+                if ( i > 0 ) sb.append( ", " );
+                sb.append( jParam.getType().getName() );
+            }
+            sb.append( ' ' );
         }
+
         sb.append( ") " );
 
         return sb.toString();
@@ -411,8 +423,6 @@ public final class JMethodSignature
 
     protected String[] getParameterClassNames()
     {
-
-
         Vector names = new Vector( params.size() );
 
         for ( int i = 0; i < params.size(); i++ )
