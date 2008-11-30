@@ -1,7 +1,7 @@
 package org.codehaus.modello.generator.xml.stax;
 
 /*
- * Copyright (c) 2006, Codehaus.org
+ * Copyright (c) 2004, Codehaus.org
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -23,87 +23,66 @@ package org.codehaus.modello.generator.xml.stax;
  */
 
 import org.codehaus.modello.AbstractModelloGeneratorTest;
-import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
-import org.codehaus.plexus.compiler.CompilerException;
 import org.codehaus.plexus.util.FileUtils;
-import org.codehaus.plexus.util.StringUtils;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Properties;
 
-public abstract class AbstractStaxGeneratorTestCase
+/**
+ * @author Hervé Boutemy
+ * @version $Id$
+ */
+public class FeaturesStaxGeneratorTest
     extends AbstractModelloGeneratorTest
 {
-    protected ModelloCore modello;
-
-    protected AbstractStaxGeneratorTestCase( String name )
+    public FeaturesStaxGeneratorTest()
     {
-        super( name );
+        super( "features" );
     }
 
-    protected void setUp()
-        throws Exception
+    private File generatedSources;
+
+    private File classes;
+
+    public void testJavaGenerator()
+        throws Throwable
     {
-        super.setUp();
+        generatedSources = getTestFile( "target/" + getName() + "/sources" );
 
-        modello = (ModelloCore) container.lookup( ModelloCore.ROLE );
-    }
-
-    protected void verifyModel( Model model, String className )
-        throws IOException, ModelloException, CompilerException
-    {
-        verifyModel( model, className, null );
-    }
-
-    protected void verifyModel( Model model, String className, String[] versions )
-        throws IOException, ModelloException, CompilerException
-    {
-        File generatedSources = new File( getTestPath( "target/" + getName() + "/sources" ) );
-
-        File classes = new File( getTestPath( "target/" + getName() + "/classes" ) );
+        classes = getTestFile( "target/" + getName() + "/classes" );
 
         FileUtils.deleteDirectory( generatedSources );
-
-        FileUtils.deleteDirectory( classes );
 
         generatedSources.mkdirs();
 
         classes.mkdirs();
 
+        ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
+
         Properties parameters = new Properties();
         parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, generatedSources.getAbsolutePath() );
-        parameters.setProperty( ModelloParameterConstants.VERSION, "4.0.0" );
         parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString( false ) );
+        parameters.setProperty( ModelloParameterConstants.VERSION, "1.0.0" );
+
+        Model model = modello.loadModel( getModelResource( "/features.mdo" ) );
 
         modello.generate( model, "java", parameters );
         modello.generate( model, "stax-writer", parameters );
         modello.generate( model, "stax-reader", parameters );
 
-        if ( versions != null && versions.length > 0 )
-        {
-            parameters.setProperty( ModelloParameterConstants.ALL_VERSIONS, StringUtils.join( versions, "," ) );
-
-            for ( int i = 0; i < versions.length; i++ )
-            {
-                parameters.setProperty( ModelloParameterConstants.VERSION, versions[i] );
-                parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString( true ) );
-
-                modello.generate( model, "java", parameters );
-                modello.generate( model, "stax-writer", parameters );
-                modello.generate( model, "stax-reader", parameters );
-            }
-        }
-
-        addDependency( "net.java.dev.stax-utils", "stax-utils", "20060502" );
         addDependency( "stax", "stax-api", "1.0.1" );
         addDependency( "org.codehaus.woodstox", "wstx-asl", "3.2.0" );
+        addDependency( "net.java.dev.stax-utils", "stax-utils", "20060502" );
+        addDependency( "xmlunit", "xmlunit", "1.2" );
 
         compile( generatedSources, classes );
 
-        verify( className, getName() );
+        // TODO: see why without this, version system property is set to "2.4.1" value after verify
+        System.setProperty( "version", getModelloVersion() );
+
+        verify( "org.codehaus.modello.generator.xml.stax.StaxFeaturesVerifier", getName() );
     }
 }

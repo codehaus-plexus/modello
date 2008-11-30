@@ -114,11 +114,11 @@ public class StaxReaderGenerator
         jClass.addImport( "java.io.IOException" );
 
         jClass.addImport( "java.io.Reader" );
-        
+
         jClass.addImport( "java.io.File" );
 
         jClass.addImport( "java.io.FileInputStream" );
-        
+
         jClass.addImport( "java.io.StringWriter" );
 
         jClass.addImport( "java.io.StringReader" );
@@ -209,7 +209,7 @@ public class StaxReaderGenerator
         sc = method.getSourceCode();
 
         sc.add( "File file = new File(filePath);" );
-        
+
         sc.add( "XMLStreamReader xmlStreamReader = XMLInputFactory.newInstance().createXMLStreamReader( file.toURL().toExternalForm(), new FileInputStream(file) );" );
 
         sc.add( "" );
