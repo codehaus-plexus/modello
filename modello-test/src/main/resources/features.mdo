@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<model>
+<model xsd.namespace="http://modello.codehaus.org/FEATURES" xsd.target-namespace="http://modello.codehaus.org/FEATURES">
   <id>features</id>
   <name>ModelloFeaturesTest</name>
   <description>A model to test Modello features with every plugin and point to plugin specific features.</description>
@@ -221,7 +221,7 @@
       <description><![CDATA[<code>&lt;class java.abstract="true"&gt;</code>: a class generated in java as abstract.]]></description>
     </class>
 
-    <class>
+    <class xsd.compositor="sequence">
       <name>XmlFeatures</name>
       <version>1.0.0+</version>
       <description><![CDATA[Test of XML specific parameters: see

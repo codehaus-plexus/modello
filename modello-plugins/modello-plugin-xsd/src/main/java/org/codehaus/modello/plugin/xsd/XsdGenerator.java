@@ -98,60 +98,63 @@ public class XsdGenerator
 
         Writer writer = WriterFactory.newXmlWriter( f );
 
-        XMLWriter w = new PrettyPrintXMLWriter( writer );
-
-        writer.write( "<?xml version=\"1.0\"?>\n" );
-
-        // TODO: the writer should be knowledgable of namespaces, but this works
-        w.startElement( "xs:schema" );
-        w.addAttribute( "xmlns:xs", "http://www.w3.org/2001/XMLSchema" );
-        w.addAttribute( "elementFormDefault", "qualified" );
-
-        ModelClass root = objectModel.getClass( objectModel.getRoot( getGeneratedVersion() ), getGeneratedVersion() );
-
-        XsdModelMetadata modelMetadata = (XsdModelMetadata) root.getModel().getMetadata( XsdModelMetadata.ID );
-
-        if ( StringUtils.isNotEmpty( modelMetadata.getNamespace() ) )
+        try
         {
-            w.addAttribute( "xmlns", modelMetadata.getNamespace() );
+            XMLWriter w = new PrettyPrintXMLWriter( writer );
+
+            writer.write( "<?xml version=\"1.0\"?>\n" );
+
+            // TODO: the writer should be knowledgable of namespaces, but this works
+            w.startElement( "xs:schema" );
+            w.addAttribute( "xmlns:xs", "http://www.w3.org/2001/XMLSchema" );
+            w.addAttribute( "elementFormDefault", "qualified" );
+
+            ModelClass root = objectModel.getClass( objectModel.getRoot( getGeneratedVersion() ), getGeneratedVersion() );
+
+            XsdModelMetadata modelMetadata = (XsdModelMetadata) root.getModel().getMetadata( XsdModelMetadata.ID );
+
+            if ( StringUtils.isNotEmpty( modelMetadata.getNamespace() ) )
+            {
+                w.addAttribute( "xmlns", modelMetadata.getNamespace() );
+            }
+            else
+            {
+                // Old Default - UGH.
+                // TODO: Remove this backwards compatibility hack.
+                w.addAttribute( "xmlns", "http://maven.apache.org/POM/4.0.0" );
+            }
+
+            if ( StringUtils.isNotEmpty( modelMetadata.getTargetNamespace() ) )
+            {
+                w.addAttribute( "targetNamespace", modelMetadata.getTargetNamespace() );
+            }
+            else
+            {
+                // Old Default - UGH.
+                // TODO: Remove this backwards compatibility hack.
+                w.addAttribute( "targetNamespace", "http://maven.apache.org/POM/4.0.0" );
+            }
+
+            w.startElement( "xs:element" );
+            String tagName = getTagName( root );
+            w.addAttribute( "name", tagName );
+            w.addAttribute( "type", root.getName() );
+
+            writeClassDocumentation( w, root );
+
+            w.endElement();
+
+            // Element descriptors
+            // Traverse from root so "abstract" models aren't included
+            int initialCapacity = objectModel.getClasses( getGeneratedVersion() ).size();
+            writeComplexTypeDescriptor( w, objectModel, root, new HashSet( initialCapacity ) );
+
+            w.endElement();
         }
-        else
+        finally
         {
-            // Old Default - UGH.
-            // TODO: Remove this backwards compatibility hack.
-            w.addAttribute( "xmlns", "http://maven.apache.org/POM/4.0.0" );
+            writer.close();
         }
-
-        if ( StringUtils.isNotEmpty( modelMetadata.getTargetNamespace() ) )
-        {
-            w.addAttribute( "targetNamespace", modelMetadata.getTargetNamespace() );
-        }
-        else
-        {
-            // Old Default - UGH.
-            // TODO: Remove this backwards compatibility hack.
-            w.addAttribute( "targetNamespace", "http://maven.apache.org/POM/4.0.0" );
-        }
-
-        w.startElement( "xs:element" );
-        String tagName = getTagName( root );
-        w.addAttribute( "name", tagName );
-        w.addAttribute( "type", root.getName() );
-
-        writeClassDocumentation( w, root );
-
-        w.endElement();
-
-        // Element descriptors
-        // Traverse from root so "abstract" models aren't included
-        int initialCapacity = objectModel.getClasses( getGeneratedVersion() ).size();
-        writeComplexTypeDescriptor( w, objectModel, root, new HashSet( initialCapacity ) );
-
-        w.endElement();
-
-        writer.flush();
-
-        writer.close();
     }
 
     private static void writeClassDocumentation( XMLWriter w, ModelClass modelClass )
@@ -268,7 +271,7 @@ public class XsdGenerator
 
                     if ( field.getDefaultValue() != null )
                     {
-                        w.addAttribute( "default", field.getDefaultValue() );
+                        //w.addAttribute( "default", field.getDefaultValue() );
                     }
                     writeFieldDocumentation( w, field );
                 }
