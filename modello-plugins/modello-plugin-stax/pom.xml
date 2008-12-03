@@ -61,5 +61,12 @@
       <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-plugin-store</artifactId>
     </dependency>
+    <!-- dependencies needed by FeaturesStaxGeneratorTest -->
+    <dependency>
+      <groupId>xmlunit</groupId>
+      <artifactId>xmlunit</artifactId>
+      <version>1.2</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 </project>
