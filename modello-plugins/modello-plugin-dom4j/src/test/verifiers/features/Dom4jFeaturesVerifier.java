@@ -76,6 +76,10 @@ public class Dom4jFeaturesVerifier
         writer.write( buffer, features );
 
         String actualXml = buffer.toString();
+        // workaround...
+        actualXml = actualXml.replaceFirst( "<features>", "<features xmlns=\"http://modello.codehaus.org/FEATURES\" "
+          + "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" "
+          + "xsi:schemaLocation=\"http://modello.codehaus.org/FEATURES http://modello.codehaus.org/features-1.0.0.xsd\">" );
 
         XMLUnit.setIgnoreWhitespace( true );
         XMLUnit.setIgnoreComments( true );

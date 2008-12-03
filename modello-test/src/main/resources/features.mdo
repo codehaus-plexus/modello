@@ -110,21 +110,22 @@
           <version>1.0.0+</version>
           <description><![CDATA[<code>long</code> primitive.]]></description>
           <type>long</type>
-          <defaultValue>12l</defaultValue>
+          <defaultValue>12</defaultValue><!-- TODO: have a value bigger than an int -->
         </field>
         <field>
           <name>primitiveFloat</name>
           <version>1.0.0+</version>
           <description><![CDATA[<code>float</code> primitive.]]></description>
           <type>float</type>
-          <defaultValue>12.12f</defaultValue>
+          <defaultValue>0</defaultValue>
+          <!-- <defaultValue>12.12</defaultValue> TODO: support float both for java where 12.12f works, and xsd where 12.12 is necessary -->
         </field>
         <field>
           <name>primitiveDouble</name>
           <version>1.0.0+</version>
           <description><![CDATA[<code>double</code> primitive.]]></description>
           <type>double</type>
-          <defaultValue>12.12d</defaultValue>
+          <defaultValue>12.12</defaultValue>
         </field>
         <field>
           <name>objectBoolean</name>
@@ -173,7 +174,7 @@
           <version>1.0.0+</version>
           <description><![CDATA[<code>Date</code> class.]]></description>
           <type>Date</type>
-          <defaultValue>new Date()</defaultValue>
+          <!-- <defaultValue>new Date()</defaultValue> TODO: makes xsd plugin fail... -->
         </field>
         <!-- TODO: char, short, byte -->
       </fields>

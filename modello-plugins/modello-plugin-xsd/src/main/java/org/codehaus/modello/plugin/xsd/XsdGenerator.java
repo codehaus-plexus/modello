@@ -271,7 +271,7 @@ public class XsdGenerator
 
                     if ( field.getDefaultValue() != null )
                     {
-                        //w.addAttribute( "default", field.getDefaultValue() );
+                        w.addAttribute( "default", field.getDefaultValue() );
                     }
                     writeFieldDocumentation( w, field );
                 }
