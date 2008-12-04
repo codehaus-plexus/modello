@@ -4,8 +4,10 @@
    xsi:schemaLocation="http://modello.codehaus.org/FEATURES http://modello.codehaus.org/features-1.0.0.xsd">
   <simpleTypes>
     <primitiveBoolean>false</primitiveBoolean>
-    <primitiveInt>-7</primitiveInt>
-    <primitiveLong>-7</primitiveLong><!-- TODO: have a default value bigger than an int -->
+    <!--primitiveByte>-70</primitiveByte-->
+    <primitiveShort>-7070</primitiveShort>
+    <primitiveInt>-707070</primitiveInt>
+    <primitiveLong>-707070707070</primitiveLong><!-- TODO: have a default value bigger than an int -->
     <primitiveFloat>-7.7</primitiveFloat>
     <primitiveDouble>-7.7</primitiveDouble>
     <objectString>String value from XML file</objectString>

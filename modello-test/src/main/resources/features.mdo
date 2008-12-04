@@ -98,19 +98,33 @@
           <type>boolean</type>
           <defaultValue>true</defaultValue>
         </field>
+        <!--field>
+          <name>primitiveByte</name>
+          <version>1.0.0+</version>
+          <description><![CDATA[<code>byte</code> primitive.]]></description>
+          <type>byte</type>
+          <defaultValue>12</defaultValue>
+        </field-->
+        <field>
+          <name>primitiveShort</name>
+          <version>1.0.0+</version>
+          <description><![CDATA[<code>short</code> primitive.]]></description>
+          <type>short</type>
+          <defaultValue>1212</defaultValue>
+        </field>
         <field>
           <name>primitiveInt</name>
           <version>1.0.0+</version>
           <description><![CDATA[<code>int</code> primitive.]]></description>
           <type>int</type>
-          <defaultValue>12</defaultValue>
+          <defaultValue>121212</defaultValue>
         </field>
         <field>
           <name>primitiveLong</name>
           <version>1.0.0+</version>
           <description><![CDATA[<code>long</code> primitive.]]></description>
           <type>long</type>
-          <defaultValue>12</defaultValue><!-- TODO: have a value bigger than an int -->
+          <defaultValue>121212</defaultValue><!-- TODO: have a value bigger than an int -->
         </field>
         <field>
           <name>primitiveFloat</name>
@@ -176,7 +190,7 @@
           <type>Date</type>
           <!-- <defaultValue>new Date()</defaultValue> TODO: makes xsd plugin fail... -->
         </field>
-        <!-- TODO: char, short, byte -->
+        <!-- TODO: char -->
       </fields>
     </class>
 

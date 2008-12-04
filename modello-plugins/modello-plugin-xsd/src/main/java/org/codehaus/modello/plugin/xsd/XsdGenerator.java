@@ -485,21 +485,25 @@ public class XsdGenerator
         {
             return "xs:string";
         }
-        else if ( "int".equals( type ) || "Integer".equals( type ) )
-        {
-            return "xs:int";
-        }
         else if ( "boolean".equals( type ) || "Boolean".equals( type ) )
         {
             return "xs:boolean";
         }
+        else if ( "byte".equals( type ) || "Byte".equals( type ) )
+        {
+            return "xs:byte";
+        }
+        else if ( "short".equals( type ) || "Short".equals( type ) )
+        {
+            return "xs:short";
+        }
+        else if ( "int".equals( type ) || "Integer".equals( type ) )
+        {
+            return "xs:int";
+        }
         else if ( "long".equals( type ) || "Long".equals( type ) )
         {
             return "xs:long";
-        }
-        else if ( "Date".equals( type ) )
-        {
-            return "xs:date";
         }
         else if ("float".equals( type ) || "Float".equals( type ) )
         {
@@ -508,6 +512,10 @@ public class XsdGenerator
         else if ("double".equals( type ) || "Double".equals( type ) )
         {
             return "xs:double";
+        }
+        else if ( "Date".equals( type ) )
+        {
+            return "xs:date";
         }
         else
         {
