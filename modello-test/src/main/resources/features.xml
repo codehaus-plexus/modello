@@ -7,7 +7,7 @@
     <!--primitiveByte>-70</primitiveByte-->
     <primitiveShort>-7070</primitiveShort>
     <primitiveInt>-707070</primitiveInt>
-    <primitiveLong>-707070707070</primitiveLong><!-- TODO: have a default value bigger than an int -->
+    <primitiveLong>-707070707070</primitiveLong>
     <primitiveFloat>-7.7</primitiveFloat>
     <primitiveDouble>-7.7</primitiveDouble>
     <objectString>String value from XML file</objectString>
@@ -28,11 +28,11 @@
     <xmlListStyleFlat><id>flat third</id></xmlListStyleFlat>
 
     <!-- TODO: fix inconsistency between xsd plugin, which does not accept the following, and other XML plugins 
-    <xmlAssociationTagName>
+    <xmlAssociationTagNames>
       <association><id>first</id></association>
       <association><id>second</id></association>
       <association><id>third</id></association>
-    </xmlAssociationTagName>
+    </xmlAssociationTagNames>
     -->
 
     <xsdFeatures attribute="one more value from XML file" />

@@ -149,6 +149,20 @@
           <defaultValue>Boolean.FALSE</defaultValue>
         </field>
         <!--field>
+          <name>objectByte</name>
+          <version>1.0.0+</version>
+          <description><![CDATA[<code>Byte</code> class.]]></description>
+          <type>Byte</type>
+          <defaultValue>12</defaultValue>
+        </field>
+        <field>
+          <name>objectShort</name>
+          <version>1.0.0+</version>
+          <description><![CDATA[<code>Short</code> class.]]></description>
+          <type>Short</type>
+          <defaultValue>1212</defaultValue>
+        </field>
+        <field>
           <name>objectInteger</name>
           <version>1.0.0+</version>
           <description><![CDATA[<code>Integer</code> class.]]></description>
@@ -269,7 +283,7 @@
           <type>Date</type>
         </field>
         <field xml.listStyle="flat">
-          <name>xmlListStyleFlat</name>
+          <name>xmlListStyleFlats</name>
           <version>1.0.0+</version>
           <description><![CDATA[<code>&lt;field xml.listStyle="flat"&gt;</code>: a "flat" list, ie without enclosing tag.]]></description>
           <association>
@@ -277,10 +291,10 @@
             <multiplicity>*</multiplicity>
           </association>
         </field>
-        <field xml.associationTagName="association">
-          <name>xmlAssociationTagName</name>
+        <field xml.associationTagName="associations">
+          <name>xmlAssociationTagNames</name>
           <version>1.0.0+</version>
-          <description><![CDATA[<code>&lt;field xml.associationTagName="<i>association</i>"&gt;</code>: a list with an XML name different from the field name.]]></description>
+          <description><![CDATA[<code>&lt;field xml.associationTagName="<i>associations</i>"&gt;</code>: a list with an XML name different from the field name.]]></description>
           <association>
             <type>AssociationDemo</type>
             <multiplicity>*</multiplicity>
