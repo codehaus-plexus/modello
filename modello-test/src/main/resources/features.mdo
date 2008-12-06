@@ -12,6 +12,11 @@
     </default>
   </defaults>
 
+  <!--versionDefinition>
+    <type></type>
+    <value></value>
+  </versionDefinition-->
+
   <classes>
 
     <class rootElement="true">
