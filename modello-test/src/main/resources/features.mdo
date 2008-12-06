@@ -108,13 +108,13 @@
           <type>byte</type>
           <defaultValue>12</defaultValue>
         </field-->
-        <!--field>
+        <field>
           <name>primitiveChar</name>
-          <version>1.0.0+</version>
+          <version>2.0.0+</version>
           <description><![CDATA[<code>char</code> primitive.]]></description>
           <type>char</type>
           <defaultValue>H</defaultValue>
-        </field-->
+        </field>
         <field>
           <name>primitiveShort</name>
           <version>1.0.0+</version>

@@ -5,6 +5,7 @@
   <simpleTypes>
     <primitiveBoolean>false</primitiveBoolean>
     <!--primitiveByte>-70</primitiveByte-->
+    <primitiveChar>h</primitiveChar>
     <primitiveShort>-7070</primitiveShort>
     <primitiveInt>-707070</primitiveInt>
     <primitiveLong>-707070707070</primitiveLong>

@@ -583,6 +583,10 @@ public class JavaModelloGenerator
             {
                 field.setInitString( "\"" + modelField.getDefaultValue() + "\"" );
             }
+            else if ( modelField.getType().equals( "char" ) )
+            {
+                field.setInitString( "'" + modelField.getDefaultValue() + "'" );
+            }
             else
             {
                 field.setInitString( modelField.getDefaultValue() );
