@@ -13,15 +13,12 @@
   <modules>
     <module>modello-plugin-converters</module>
     <module>modello-plugin-xml</module>
-    <module>modello-plugin-store</module>
-    <module>modello-plugin-jpox</module>
     <module>modello-plugin-xdoc</module>
     <module>modello-plugin-xsd</module>
     <module>modello-plugin-xpp3</module>
     <module>modello-plugin-stax</module>
     <module>modello-plugin-jdom</module>
     <module>modello-plugin-dom4j</module>
-    <module>modello-plugin-plexus-registry</module>
   </modules>
 
   <dependencies>

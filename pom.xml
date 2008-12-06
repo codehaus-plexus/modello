@@ -280,7 +280,6 @@
   <modules>
     <module>modello-maven-plugin</module>
     <module>modello-core</module>
-    <module>modello-db-keywords</module>
     <module>modello-test</module>
     <module>modello-plugins</module>
   </modules>
