@@ -264,16 +264,35 @@ public class XsdGenerator
                 }
 
                 String xsdType = getXsdType( field.getType() );
-                if ( xsdType != null )
+                if ( ( xsdType != null ) || "char".equals( field.getType() ) || "Char".equals( field.getType() ) )
                 {
                     w.addAttribute( "name", resolveFieldTagName( field ) );
-                    w.addAttribute( "type", xsdType );
+                    if ( xsdType != null )
+                    {
+                        // schema built-in datatype
+                        w.addAttribute( "type", xsdType );
+                    }
 
                     if ( field.getDefaultValue() != null )
                     {
                         w.addAttribute( "default", field.getDefaultValue() );
                     }
+
                     writeFieldDocumentation( w, field );
+
+                    if ( xsdType == null )
+                    {
+                        // a char, described as a simpleType base on string with a length restriction to 1
+                        w.startElement( "xs:simpleType" );
+                        w.startElement( "xs:restriction" );
+                        w.addAttribute( "base", "xs:string" );
+                        w.startElement( "xs:length" );
+                        w.addAttribute( "value", "1" );
+                        w.addAttribute( "fixed", "true" );
+                        w.endElement();
+                        w.endElement();
+                        w.endElement();
+                    }
                 }
                 else
                 {

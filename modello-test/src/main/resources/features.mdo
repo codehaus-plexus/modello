@@ -110,7 +110,7 @@
         </field-->
         <field>
           <name>primitiveChar</name>
-          <version>2.0.0+</version>
+          <version>1.0.0+</version>
           <description><![CDATA[<code>char</code> primitive.]]></description>
           <type>char</type>
           <defaultValue>H</defaultValue>
