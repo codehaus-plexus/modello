@@ -4,9 +4,11 @@
     <groupId>org.codehaus.modello</groupId>
     <version>1.0-alpha-22-SNAPSHOT</version>
   </parent>
+
   <modelVersion>4.0.0</modelVersion>
   <artifactId>modello-plugin-dom4j</artifactId>
   <name>Modello Dom4J Reader/Writer</name>
+
   <dependencies>
     <dependency>
       <groupId>org.codehaus.modello</groupId>
@@ -17,6 +19,7 @@
       <artifactId>dom4j</artifactId>
       <version>1.6.1</version>
     </dependency>
+
     <!-- dependencies needed by FeaturesDom4jGeneratorTest -->
     <dependency>
       <groupId>xmlunit</groupId>

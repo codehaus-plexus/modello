@@ -4,9 +4,11 @@
     <groupId>org.codehaus.modello</groupId>
     <version>1.0-alpha-22-SNAPSHOT</version>
   </parent>
+
   <modelVersion>4.0.0</modelVersion>
   <artifactId>modello-plugin-xpp3</artifactId>
   <name>Modello XPP3 Plugin</name>
+
   <dependencies>
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
@@ -16,6 +18,7 @@
       <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-plugin-xml</artifactId>
     </dependency>
+
     <!-- dependencies needed by FeaturesXpp3GeneratorTest -->
     <dependency>
       <groupId>xmlunit</groupId>

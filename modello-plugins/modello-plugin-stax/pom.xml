@@ -5,9 +5,11 @@
     <groupId>org.codehaus.modello</groupId>
     <version>1.0-alpha-22-SNAPSHOT</version>
   </parent>
+
   <modelVersion>4.0.0</modelVersion>
   <artifactId>modello-plugin-stax</artifactId>
   <name>Modello StAX Plugin</name>
+
   <dependencies>
     <dependency>
       <groupId>net.java.dev.stax-utils</groupId>
@@ -57,6 +59,7 @@
       <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-plugin-xml</artifactId>
     </dependency>
+
     <!-- dependencies needed by FeaturesStaxGeneratorTest -->
     <dependency>
       <groupId>xmlunit</groupId>

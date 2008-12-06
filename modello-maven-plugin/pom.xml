@@ -5,6 +5,7 @@
     <groupId>org.codehaus.modello</groupId>
     <version>1.0-alpha-22-SNAPSHOT</version>
   </parent>
+
   <modelVersion>4.0.0</modelVersion>
   <artifactId>modello-maven-plugin</artifactId>
   <packaging>maven-plugin</packaging>
@@ -12,9 +13,11 @@
   <description>
     Modello Maven Plugin enables the use of Modello in Maven builds.
   </description>
+
   <prerequisites>
     <maven>2.0.6</maven>
   </prerequisites>
+
   <dependencies>
     <dependency>
       <groupId>org.apache.maven</groupId>
@@ -74,20 +77,9 @@
       <scope>runtime</scope>
     </dependency>
   </dependencies>
+
   <reporting>
     <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <configuration>
-          <minmemory>128m</minmemory>
-          <maxmemory>512m</maxmemory>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jxr-plugin</artifactId>
-      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-plugin-plugin</artifactId>
