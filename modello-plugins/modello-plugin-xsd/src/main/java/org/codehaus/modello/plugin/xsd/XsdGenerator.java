@@ -517,7 +517,7 @@ public class XsdGenerator
         }
         else if ( "Date".equals( type ) )
         {
-            return "xs:date";
+            return "xs:dateTime";
         }
         else
         {
