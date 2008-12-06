@@ -15,7 +15,25 @@
       <objectDate>1227991027743</objectDate> for XPP3
       <objectDate>Saturday, November 29, 2008 9:37:07 PM GMT+01:00</objectDate> for dom4j
     -->
+    <!-- dom>
+      <foo>bar</foo>
+      <bar att1="value">baz</bar>
+      <el1>
+        <el2>text</el2>
+      </el1>
+    </dom-->
   </simpleTypes>
+
+  <associationFeatures>
+    <listReferences>
+      <listReference><id>first</id></listReference>
+      <listReference><id>second</id></listReference>
+      <listReference><id>third</id></listReference>
+    </listReferences>
+    <!--properties>
+      <theKey>theValue</theKey>
+    </properties-->
+  </associationFeatures>
 
   <xmlFeatures attribute="a value from XML file" tagNameAttribute="another value from XML file">
     <tagName>value from XML file</tagName>
@@ -34,6 +52,16 @@
       <association><id>third</id></association>
     </xmlAssociationTagNames>
     -->
+
+    <!--propertiesExplode>
+      <property>
+        <key>theKey</key>
+        <value>theValue</value>
+      </property>
+    </propertiesExplode>
+    <propertiesInline>
+      <theKey>theValue</theKey>
+    </propertiesInline-->
 
     <xsdFeatures attribute="one more value from XML file" />
   </xmlFeatures>
