@@ -245,8 +245,8 @@ public class Dom4jWriterGenerator
 
                 sc.indent();
 
-                sc.add(
-                    "element.addAttribute( \"" + fieldTagName + "\", " + getValue( field.getType(), value ) + " );" );
+                sc.add( "element.addAttribute( \"" + fieldTagName + "\", "
+                        + getValue( field.getType(), value, fieldMetadata ) + " );" );
 
                 sc.unindent();
 
@@ -437,7 +437,7 @@ public class Dom4jWriterGenerator
             else
             {
                 sc.add( "element.addElement( \"" + fieldTagName + "\" ).setText( "
-                    + getValue( field.getType(), value ) + " );" );
+                    + getValue( field.getType(), value, fieldMetadata ) + " );" );
             }
 
             sc.unindent();
@@ -454,14 +454,22 @@ public class Dom4jWriterGenerator
         return name + suffix;
     }
 
-    private String getValue( String type, String initialValue )
+    private String getValue( String type, String initialValue, XmlFieldMetadata fieldMetadata )
     {
         String textValue = initialValue;
 
         if ( "Date".equals( type ) )
         {
-            textValue = "DateFormat.getDateTimeInstance( DateFormat.FULL, DateFormat.FULL , Locale.US ).format( "
-                + textValue + " )";
+            if ( fieldMetadata.getFormat() == null )
+            {
+                textValue = "DateFormat.getDateTimeInstance( DateFormat.FULL, DateFormat.FULL , Locale.US ).format( "
+                    + textValue + " )";
+            }
+            else
+            {
+                textValue = "new java.text.SimpleDateFormat( \"" + fieldMetadata.getFormat() +
+                    "\", Locale.US ).format( " + textValue + " )";
+            }
         }
         else if ( !"String".equals( type ) )
         {

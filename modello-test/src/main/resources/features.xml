@@ -42,7 +42,7 @@
 
   <xmlFeatures attribute="a value from XML file" tagNameAttribute="another value from XML file">
     <tagName>value from XML file</tagName>
-    <!-- commented out because of MODELLO-127: xml.format model attribute not supported by Dom4J plugin
+    <!-- commented out because of MODELLO-130: date/time format in xsd plugin is broken
       <dateXmlFormat>2012-12-24 22:12</dateXmlFormat>
     -->
 

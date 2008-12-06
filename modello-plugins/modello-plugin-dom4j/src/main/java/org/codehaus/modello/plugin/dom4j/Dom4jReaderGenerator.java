@@ -901,7 +901,10 @@ public class Dom4jReaderGenerator
         }
         else if ( "Date".equals( type ) )
         {
-            sc.add( objectName + "." + setterName + "( getDateValue( " + parserGetter + ", \"" + tagName + "\" ) );" );
+            sc.add( "String dateFormat = " +
+                    ( fieldMetaData.getFormat() != null ? "\"" + fieldMetaData.getFormat() + "\"" : "null" ) + ";" );
+                sc.add( objectName + "." + setterName + "( getDateValue( " + parserGetter + ", \"" + tagName +
+                    "\", dateFormat ) );" );
         }
         else if ( "DOM".equals( type ) )
         {
@@ -1090,6 +1093,7 @@ public class Dom4jReaderGenerator
 
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
         method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
+        method.addParameter( new JParameter( new JClass( "String" ), "dateFormat" ) );
         method.addException( new JClass( "DocumentException" ) );
 
         sc = method.getSourceCode();
@@ -1100,9 +1104,29 @@ public class Dom4jReaderGenerator
 
         sc.indent();
 
-        sc.add( "DateFormat dateParser = DateFormat.getDateTimeInstance( DateFormat.FULL, DateFormat.FULL , Locale.US );" );
+        sc.add( "DateFormat dateParser;" );
+
+        sc.add( "if ( dateFormat == null )" );
+
+        sc.add( "{" );
+
+        sc.indent();
+
+        sc.add( "dateParser = DateFormat.getDateTimeInstance( DateFormat.FULL, DateFormat.FULL , Locale.US );" );
 
         sc.add( "dateParser.setLenient( true );" );
+
+        sc.unindent();
+
+        sc.add( "} else {" );
+
+        sc.indent();
+
+        sc.add( "dateParser = new java.text.SimpleDateFormat( dateFormat, Locale.US );" );
+
+        sc.unindent();
+
+        sc.add( "}" );
 
         sc.add( "try" );
         sc.add( "{" );
