@@ -30,9 +30,14 @@
       <listReference><id>second</id></listReference>
       <listReference><id>third</id></listReference>
     </listReferences>
-    <!--properties>
+    <stringReferences>
+      <stringReference>first</stringReference>
+      <stringReference>second</stringReference>
+      <stringReference>third</stringReference>
+    </stringReferences>
+    <properties>
       <theKey>theValue</theKey>
-    </properties-->
+    </properties>
   </associationFeatures>
 
   <xmlFeatures attribute="a value from XML file" tagNameAttribute="another value from XML file">
@@ -58,10 +63,10 @@
         <key>theKey</key>
         <value>theValue</value>
       </property>
-    </propertiesExplode>
+    </propertiesExplode-->
     <propertiesInline>
       <theKey>theValue</theKey>
-    </propertiesInline-->
+    </propertiesInline>
 
     <xsdFeatures attribute="one more value from XML file" />
   </xmlFeatures>

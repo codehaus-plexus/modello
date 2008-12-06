@@ -342,6 +342,8 @@ public class XsdGenerator
                     }
                     else
                     {
+                        w.addAttribute( "name", resolveFieldTagName( field ) );
+
                         if ( List.class.getName().equals( field.getType() ) )
                         {
                             writeFieldDocumentation( w, field );
