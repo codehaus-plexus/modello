@@ -57,10 +57,6 @@
       <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-plugin-xml</artifactId>
     </dependency>
-    <dependency>
-      <groupId>org.codehaus.modello</groupId>
-      <artifactId>modello-plugin-store</artifactId>
-    </dependency>
     <!-- dependencies needed by FeaturesStaxGeneratorTest -->
     <dependency>
       <groupId>xmlunit</groupId>
