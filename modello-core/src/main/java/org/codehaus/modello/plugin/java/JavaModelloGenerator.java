@@ -282,16 +282,16 @@ public class JavaModelloGenerator
         sc.add( "{" );
         sc.addIndented( "return true;" );
         sc.add( "}" );
-        sc.add( "" );
+        sc.add( "", (short) 0 );
         sc.add( "if ( !(other instanceof " + modelClass.getName() + ") )" );
         sc.add( "{" );
         sc.addIndented( "return false;" );
         sc.add( "}" );
-        sc.add( "" );
+        sc.add( "", (short) 0 );
         sc.add( modelClass.getName() + " that = (" + modelClass.getName() + ") other;" );
         sc.add( "boolean result = true;" );
 
-        sc.add( "" );
+        sc.add( "", (short) 0 );
 
         for ( Iterator j = modelClass.getIdentifierFields( getGeneratedVersion() ).iterator(); j.hasNext(); )
         {
@@ -318,7 +318,7 @@ public class JavaModelloGenerator
             sc.add( "result = result && ( super.equals( other ) );" );
         }
 
-        sc.add( "" );
+        sc.add( "", (short) 0 );
 
         sc.add( "return result;" );
 
@@ -342,7 +342,7 @@ public class JavaModelloGenerator
 
         sc.add( "StringBuffer buf = new StringBuffer();" );
 
-        sc.add( "" );
+        sc.add( "", (short) 0 );
 
         for ( Iterator j = identifierFields.iterator(); j.hasNext(); )
         {
@@ -366,7 +366,7 @@ public class JavaModelloGenerator
             sc.add( "buf.append( super.toString() );" );
         }
 
-        sc.add( "" );
+        sc.add( "", (short) 0 );
 
         sc.add( "return buf.toString();" );
 
@@ -390,7 +390,7 @@ public class JavaModelloGenerator
 
         sc.add( "int result = 17;" );
 
-        sc.add( "" );
+        sc.add( "", (short) 0 );
 
         for ( Iterator j = identifierFields.iterator(); j.hasNext(); )
         {
@@ -404,7 +404,7 @@ public class JavaModelloGenerator
             sc.add( "result = 37 * result + super.hashCode();" );
         }
 
-        sc.add( "" );
+        sc.add( "", (short) 0 );
 
         sc.add( "return result;" );
 
@@ -718,7 +718,7 @@ public class JavaModelloGenerator
 
                 sc.add( "}" );
 
-                sc.add( "" );
+                sc.add( "", (short) 0 );
             }
 
             String interfaceCast = "";
@@ -735,7 +735,7 @@ public class JavaModelloGenerator
 
             if ( isOneMultiplicity && javaAssociationMetadata.isGenerateCreate() )
             {
-                sc.add( "" );
+                sc.add( "", (short) 0 );
 
                 sc.add( "if ( " + field.getName() + " != null )" );
 
@@ -869,7 +869,7 @@ public class JavaModelloGenerator
 
                     sc.add( "}" );
 
-                    sc.add( "" );
+                    sc.add( "", (short) 0 );
                 }
 
                 sc.add( "return this." + jField.getName() + ";" );
@@ -938,7 +938,7 @@ public class JavaModelloGenerator
 
                 sc.add( "}" );
 
-                sc.add( "" );
+                sc.add( "", (short) 0 );
             }
 
             sc.add( "this." + modelAssociation.getName() + " = " + uncapitalise( modelAssociation.getTo() ) + ";" );
@@ -950,7 +950,7 @@ public class JavaModelloGenerator
             sc.add( "Collection " + modelAssociation.getName() + " = get" + capitalise( modelAssociation.getName() )
                     + "();" );
 
-            sc.add( "" );
+            sc.add( "", (short) 0 );
 
             sc.add( "if ( get" + capitalise( modelAssociation.getName() ) + "().contains("
                     + uncapitalise( modelAssociation.getTo() ) + ") )" );
@@ -966,7 +966,7 @@ public class JavaModelloGenerator
 
             sc.add( "}" );
 
-            sc.add( "" );
+            sc.add( "", (short) 0 );
 
             sc.add( modelAssociation.getName() + ".add( " + uncapitalise( modelAssociation.getTo() ) + " );" );
         }
@@ -1003,7 +1003,7 @@ public class JavaModelloGenerator
 
             sc.add( "}" );
 
-            sc.add( "" );
+            sc.add( "", (short) 0 );
 
             sc.add( "this." + modelAssociation.getName() + " = null;" );
         }
@@ -1023,7 +1023,7 @@ public class JavaModelloGenerator
 
             sc.add( "}" );
 
-            sc.add( "" );
+            sc.add( "", (short) 0 );
 
             sc.add( "get" + capitalise( modelAssociation.getName() ) + "().remove( "
                     + uncapitalise( modelAssociation.getTo() ) + " );" );
