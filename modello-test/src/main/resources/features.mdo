@@ -17,6 +17,10 @@
     <class rootElement="true">
       <name>Features</name>
       <version>1.0.0+</version>
+      <!--
+        1.0.0: features supported by every plugin,
+        2.0.0: features supported by java plugin but there are problems with some other plugins
+      -->
       <fields>
         <field>
           <name>comment</name>
