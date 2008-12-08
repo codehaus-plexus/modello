@@ -410,19 +410,33 @@ public class XsdGenerator
             if ( xsdType != null )
             {
                 w.addAttribute( "type", xsdType );
-
-                if ( field.getDefaultValue() != null )
-                {
-                    w.addAttribute( "default", field.getDefaultValue() );
-                }
             }
-            else
+
+            if ( field.getDefaultValue() != null )
+            {
+                w.addAttribute( "default", field.getDefaultValue() );
+            }
+
+            writeFieldDocumentation( w, field );
+
+            if ( "char".equals( field.getType() ) || "Char".equals( field.getType() ) )
+            {
+                // a char, described as a simpleType base on string with a length restriction to 1
+                w.startElement( "xs:simpleType" );
+                w.startElement( "xs:restriction" );
+                w.addAttribute( "base", "xs:string" );
+                w.startElement( "xs:length" );
+                w.addAttribute( "value", "1" );
+                w.addAttribute( "fixed", "true" );
+                w.endElement();
+                w.endElement();
+                w.endElement();
+            }
+            else if ( xsdType == null )
             {
                 throw new IllegalStateException( "Attribute field of a non-primitive type '" + field.getType()
                     + "' for '" + field.getName() + "'" );
             }
-
-            writeFieldDocumentation( w, field );
 
             w.endElement();
         }
