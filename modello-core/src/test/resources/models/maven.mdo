@@ -1662,11 +1662,6 @@
           <defaultValue>true</defaultValue>
           <!-- @todo systemProperty tag (maven.online value) should be supported by modello -->
         </field>
-        <field>
-          <name>date</name>
-          <type>Date</type>
-          <version>4.0.0</version>
-        </field>
       </fields>
     </class>
   </classes>

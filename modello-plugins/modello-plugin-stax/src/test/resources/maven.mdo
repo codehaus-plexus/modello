@@ -94,13 +94,6 @@
           <defaultValue>jar</defaultValue>
         </field>
         <field>
-          <name>typeTester</name>
-          <version>4.0.0</version>
-          <association>
-            <type>TypeTester</type>
-          </association>
-        </field>
-        <field>
           <name>name</name>
           <version>3.0.0+</version>
           <required>true</required>
@@ -1740,52 +1733,6 @@
             <type>String</type>
             <multiplicity>*</multiplicity>
           </association>
-        </field>
-      </fields>
-    </class>
-    <class>
-      <name>TypeTester</name>
-      <version>4.0.0</version>
-      <fields>
-        <field>
-          <name>c</name>
-          <type>char</type>
-          <version>4.0.0</version>
-        </field>
-        <field>
-          <name>i</name>
-          <type>int</type>
-          <version>4.0.0</version>
-        </field>
-        <field>
-          <name>s</name>
-          <type>short</type>
-          <version>4.0.0</version>
-        </field>
-        <field>
-          <name>l</name>
-          <type>long</type>
-          <version>4.0.0</version>
-        </field>
-        <field>
-          <name>f</name>
-          <type>float</type>
-          <version>4.0.0</version>
-        </field>
-        <field>
-          <name>d</name>
-          <type>double</type>
-          <version>4.0.0</version>
-        </field>
-        <field>
-          <name>date</name>
-          <type>Date</type>
-          <version>4.0.0</version>
-        </field>
-        <field xml.format="yyyyMMdd.hhmmss">
-          <name>formattedDate</name>
-          <type>Date</type>
-          <version>4.0.0</version>
         </field>
       </fields>
     </class>

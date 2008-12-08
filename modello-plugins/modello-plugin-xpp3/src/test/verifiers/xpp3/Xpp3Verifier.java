@@ -34,7 +34,6 @@ import org.codehaus.modello.test.model.Scm;
 import org.codehaus.modello.test.model.SourceModification;
 import org.codehaus.modello.test.model.io.xpp3.MavenXpp3Reader;
 import org.codehaus.modello.test.model.io.xpp3.MavenXpp3Writer;
-import org.codehaus.modello.test.model.TypeTester;
 import org.codehaus.modello.verifier.Verifier;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.ReaderFactory;
@@ -274,25 +273,6 @@ public class Xpp3Verifier
         properties = new Properties();
         properties.setProperty( "key", "theValue" );
         component.setProperties( properties );
-
-        TypeTester typeTester = new TypeTester();
-        typeTester.setC( 'v' );
-        typeTester.setI( 1 );
-        typeTester.setS( (short) 2 );
-        typeTester.setL( 3L );
-        typeTester.setF( 4.5f );
-        typeTester.setD( 5.6 );
-        try
-        {
-            typeTester.setDate( new java.util.Date( 1136551996L ) );
-            typeTester.setFormattedDate( new java.text.SimpleDateFormat( "yyyyMMdd.hhmmss" ).parse( "20061112.123456" ) );
-        }
-        catch ( java.text.ParseException e )
-        {
-            throw new XmlPullParserException( "Couldn't set date: " + e.getMessage() );
-        }
-
-        expected.setTypeTester( typeTester );
 
         Repository repository = new Repository();
         repository.setId( "foo" );

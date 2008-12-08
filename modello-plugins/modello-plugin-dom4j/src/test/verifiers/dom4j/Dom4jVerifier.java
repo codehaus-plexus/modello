@@ -31,7 +31,6 @@ import org.codehaus.modello.test.model.Organization;
 import org.codehaus.modello.test.model.Repository;
 import org.codehaus.modello.test.model.Scm;
 import org.codehaus.modello.test.model.SourceModification;
-import org.codehaus.modello.test.model.TypeTester;
 import org.codehaus.modello.test.model.io.dom4j.MavenDom4jReader;
 import org.codehaus.modello.test.model.io.dom4j.MavenDom4jWriter;
 import org.codehaus.modello.verifier.Verifier;
@@ -214,23 +213,6 @@ public class Dom4jVerifier
         repository.setId( "foo" );
         expected.addRepository( repository );
 
-        TypeTester typeTester = new TypeTester();
-        typeTester.setC( 'v' );
-        typeTester.setI( 1 );
-        typeTester.setS( (short) 2 );
-        typeTester.setL( 3L );
-        typeTester.setF( 4.5f );
-        typeTester.setD( 5.6 );
-        try
-        {
-            typeTester.setDate( new java.text.SimpleDateFormat( "yyyy-MM-dd" ).parse( "2006-01-06" ) );
-        }
-        catch ( java.text.ParseException e )
-        {
-            throw new DocumentException( "Couldn't set date: " + e.getMessage(), e );
-        }
-        expected.setTypeTester( typeTester );
-
         // ----------------------------------------------------------------------
         // Write out the model
         // ----------------------------------------------------------------------
@@ -262,32 +244,6 @@ public class Dom4jVerifier
         writer.write( buffer, actual );
 
         Assert.assertEquals( expectedXml.trim(), buffer.toString().trim() );
-        
-        // ----------------------------------------------------------------------
-        // Test that dates are correctly read back from xml
-        // ----------------------------------------------------------------------
-
-        StringBuffer dateXml = new StringBuffer();
-        dateXml.append("<mavenModel>\n<typeTester>\n");
-        dateXml.append("<date>Friday, January 6, 2006 12:00:00 AM EST</date>\n");
-        dateXml.append("</typeTester>\n</mavenModel>");
-
-        expected = new Model();
-
-        typeTester = new TypeTester();
-
-        Calendar calendar = Calendar.getInstance();
-
-        calendar.clear();
-        calendar.set(2006,01,06,12,0);
-
-        typeTester.setDate(calendar.getTime());
-
-        expected.setTypeTester(typeTester);
-
-        actual = reader.read( new StringReader( dateXml.toString() ) );
-
-        assertModel( expected, actual );
     }
 
     public void verifyReader()
