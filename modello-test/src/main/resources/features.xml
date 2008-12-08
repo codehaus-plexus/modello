@@ -4,7 +4,7 @@
    xsi:schemaLocation="http://modello.codehaus.org/FEATURES http://modello.codehaus.org/features-1.0.0.xsd">
   <simpleTypes>
     <primitiveBoolean>false</primitiveBoolean>
-    <!--primitiveByte>-70</primitiveByte-->
+    <primitiveByte>-70</primitiveByte>
     <primitiveChar>h</primitiveChar>
     <primitiveShort>-7070</primitiveShort>
     <primitiveInt>-707070</primitiveInt>

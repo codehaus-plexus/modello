@@ -101,13 +101,13 @@
           <type>boolean</type>
           <defaultValue>true</defaultValue>
         </field>
-        <!--field>
+        <field>
           <name>primitiveByte</name>
           <version>1.0.0+</version>
           <description><![CDATA[<code>byte</code> primitive.]]></description>
           <type>byte</type>
           <defaultValue>12</defaultValue>
-        </field-->
+        </field>
         <field>
           <name>primitiveChar</name>
           <version>1.0.0+</version>

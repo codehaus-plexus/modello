@@ -483,7 +483,7 @@ public class Dom4jWriterGenerator
     {
         String retVal;
         if ( "boolean".equals( type ) || "double".equals( type ) || "float".equals( type ) || "int".equals( type )
-            || "long".equals( type ) || "short".equals( type ) )
+            || "long".equals( type ) || "short".equals( type ) || "byte".equals( type ) )
         {
             retVal = "if ( " + value + " != " + field.getDefaultValue() + " )";
         }

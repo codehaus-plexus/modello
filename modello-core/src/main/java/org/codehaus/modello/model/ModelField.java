@@ -211,7 +211,8 @@ public class ModelField
             {
                 defaultValue = "0.0";
             }
-            if ( "int".equals( type ) || "long".equals( type ) || "char".equals( type ) || "short".equals( type ) )
+            if ( "int".equals( type ) || "long".equals( type ) || "char".equals( type ) || "short".equals( type )
+                 || "byte".equals( type ) )
             {
                 defaultValue = "0";
             }

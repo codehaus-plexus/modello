@@ -1581,6 +1581,11 @@ public class StaxReaderGenerator
             sc.add( objectName + "." + setterName + "( getShortValue( " + parserGetter + ", \"" + tagName +
                 "\", xmlStreamReader, strict ) );" );
         }
+        else if ( "byte".equals( type ) )
+        {
+            sc.add( objectName + "." + setterName + "( getByteValue( " + parserGetter + ", \"" + tagName +
+                "\", xmlStreamReader, strict ) );" );
+        }
         else if ( "String".equals( type ) || "Boolean".equals( type ) )
         {
             // TODO: other Primitive types
@@ -1887,6 +1892,20 @@ public class StaxReaderGenerator
         sc = method.getSourceCode();
 
         convertNumericalType( sc, "Short.valueOf( s ).shortValue()", "a short integer" );
+
+        jClass.addMethod( method );
+
+        method = new JMethod( JType.Byte, "getByteValue" );
+        method.addException( new JClass( "XMLStreamException" ) );
+
+        method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
+        method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
+        method.addParameter( new JParameter( new JClass( "XMLStreamReader" ), "xmlStreamReader" ) );
+        method.addParameter( new JParameter( JType.Boolean, "strict" ) );
+
+        sc = method.getSourceCode();
+
+        convertNumericalType( sc, "Byte.valueOf( s ).byteValue()", "a byte" );
 
         jClass.addMethod( method );
 
