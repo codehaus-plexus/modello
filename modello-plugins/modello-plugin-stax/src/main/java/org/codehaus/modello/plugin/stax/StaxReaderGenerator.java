@@ -628,14 +628,7 @@ public class StaxReaderGenerator
         {
             ModelClass clazz = (ModelClass) i.next();
 
-            if ( root.getName().equals( clazz.getName() ) )
-            {
-                writeClassParser( clazz, jClass, true );
-            }
-            else
-            {
-                writeClassParser( clazz, jClass, false );
-            }
+            writeClassParser( clazz, jClass, root.getName().equals( clazz.getName() ) );
         }
     }
 
