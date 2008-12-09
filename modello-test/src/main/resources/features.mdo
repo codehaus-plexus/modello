@@ -249,7 +249,7 @@
         </field>
         <field>
           <name>setReferences</name>
-          <version>2.0.0+</version><!-- TODO: causes a problem with xsd plugin -->
+          <version>1.0.0+</version>
           <type>Set</type>
           <association>
             <type>Reference</type>

@@ -31,6 +31,9 @@
       <listReference><id>second</id></listReference>
       <listReference><id>third</id></listReference>
     </listReferences>
+    <setReferences>
+      <setReference><id>first</id></setReference>
+    </setReferences>
     <stringReferences>
       <stringReference>first</stringReference>
       <stringReference>second</stringReference>
