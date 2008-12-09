@@ -16,13 +16,13 @@
       <objectDate>1227991027743</objectDate> for XPP3
       <objectDate>Saturday, November 29, 2008 9:37:07 PM GMT+01:00</objectDate> for dom4j
     -->
-    <!-- dom>
+    <dom>
       <foo>bar</foo>
       <bar att1="value">baz</bar>
       <el1>
         <el2>text</el2>
       </el1>
-    </dom-->
+    </dom>
   </simpleTypes>
 
   <associationFeatures>

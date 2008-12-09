@@ -223,7 +223,7 @@
         </field>
         <field>
           <name>dom</name>
-          <version>2.0.0+</version>
+          <version>1.0.0+</version>
           <description><![CDATA[<code>DOM</code> type.]]></description>
           <type>DOM</type>
         </field>
