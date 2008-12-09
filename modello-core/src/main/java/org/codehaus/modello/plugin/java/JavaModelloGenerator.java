@@ -587,6 +587,14 @@ public class JavaModelloGenerator
             {
                 field.setInitString( "'" + modelField.getDefaultValue() + "'" );
             }
+            else if ( modelField.getType().equals( "long" ) )
+            {
+                field.setInitString( modelField.getDefaultValue() + "L" );
+            }
+            else if ( modelField.getType().equals( "float" ) )
+            {
+                field.setInitString( modelField.getDefaultValue() + "f" );
+            }
             else
             {
                 field.setInitString( modelField.getDefaultValue() );

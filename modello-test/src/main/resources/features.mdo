@@ -134,7 +134,7 @@
           <version>1.0.0+</version>
           <description><![CDATA[<code>long</code> primitive.]]></description>
           <type>long</type>
-          <defaultValue>121212</defaultValue><!-- TODO: have a value bigger than an int -->
+          <defaultValue>12121212</defaultValue>
         </field>
         <field>
           <name>primitiveFloat</name>
@@ -142,7 +142,7 @@
           <description><![CDATA[<code>float</code> primitive.]]></description>
           <type>float</type>
           <defaultValue>0</defaultValue>
-          <!-- <defaultValue>12.12</defaultValue> TODO: support float both for java where 12.12f works, and xsd where 12.12 is necessary -->
+          <defaultValue>12.12</defaultValue>
         </field>
         <field>
           <name>primitiveDouble</name>
@@ -455,7 +455,7 @@
           <version>1.0.0+</version>
           <description><![CDATA[<code>long</code> primitive.]]></description>
           <type>long</type>
-          <defaultValue>121212</defaultValue><!-- TODO: have a value bigger than an int -->
+          <defaultValue>12121212</defaultValue>
         </field>
         <field xml.attribute="true">
           <name>primitiveFloat</name>
@@ -463,7 +463,7 @@
           <description><![CDATA[<code>float</code> primitive.]]></description>
           <type>float</type>
           <defaultValue>0</defaultValue>
-          <!-- <defaultValue>12.12</defaultValue> TODO: support float both for java where 12.12f works, and xsd where 12.12 is necessary -->
+          <defaultValue>12.12</defaultValue>
         </field>
         <field xml.attribute="true">
           <name>primitiveDouble</name>
