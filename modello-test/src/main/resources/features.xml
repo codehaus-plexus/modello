@@ -72,15 +72,15 @@
     </xmlAssociationTagNames>
     -->
 
-    <!--propertiesExplode>
-      <property>
+    <explodeProperties>
+      <explodeProperty>
         <key>theKey</key>
         <value>theValue</value>
-      </property>
-    </propertiesExplode-->
-    <propertiesInline>
+      </explodeProperty>
+    </explodeProperties>
+    <inlineProperties>
       <theKey>theValue</theKey>
-    </propertiesInline>
+    </inlineProperties>
 
     <xsdFeatures attribute="one more value from XML file" />
   </xmlFeatures>

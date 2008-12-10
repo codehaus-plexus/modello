@@ -379,8 +379,8 @@
           </association>
         </field>
         <field>
-          <name>propertiesExplode</name>
-          <version>2.0.0+</version><!-- TODO: not supported by StAX plugin -->
+          <name>explodeProperties</name>
+          <version>1.0.0+</version>
           <description><![CDATA[<code>&lt;type&gt;Properties&lt;/type&gt;&lt;association xml.mapStyle="explode"&gt;</code>.]]></description>
           <type>Properties</type>
           <association xml.mapStyle="explode">
@@ -389,7 +389,7 @@
           </association>
         </field>
         <field>
-          <name>propertiesInline</name>
+          <name>inlineProperties</name>
           <version>1.0.0+</version>
           <description><![CDATA[<code>&lt;type&gt;Properties&lt;/type&gt;&lt;association xml.mapStyle="inline"&gt;</code> (default).]]></description>
           <type>Properties</type>
