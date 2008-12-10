@@ -282,16 +282,7 @@ public class XsdGenerator
 
                     if ( xsdType == null )
                     {
-                        // a char, described as a simpleType base on string with a length restriction to 1
-                        w.startElement( "xs:simpleType" );
-                        w.startElement( "xs:restriction" );
-                        w.addAttribute( "base", "xs:string" );
-                        w.startElement( "xs:length" );
-                        w.addAttribute( "value", "1" );
-                        w.addAttribute( "fixed", "true" );
-                        w.endElement();
-                        w.endElement();
-                        w.endElement();
+                        writeCharElement( w );
                     }
                 }
                 else
@@ -421,16 +412,7 @@ public class XsdGenerator
 
             if ( "char".equals( field.getType() ) || "Char".equals( field.getType() ) )
             {
-                // a char, described as a simpleType base on string with a length restriction to 1
-                w.startElement( "xs:simpleType" );
-                w.startElement( "xs:restriction" );
-                w.addAttribute( "base", "xs:string" );
-                w.startElement( "xs:length" );
-                w.addAttribute( "value", "1" );
-                w.addAttribute( "fixed", "true" );
-                w.endElement();
-                w.endElement();
-                w.endElement();
+                writeCharElement( w );
             }
             else if ( xsdType == null )
             {
@@ -477,7 +459,26 @@ public class XsdGenerator
         return tagName;
     }
 
-    private void writePropertiesElement( XMLWriter w )
+    private static void writeCharElement( XMLWriter w )
+    {
+        // a char, described as a simpleType base on string with a length restriction to 1
+        w.startElement( "xs:simpleType" );
+
+        w.startElement( "xs:restriction" );
+        w.addAttribute( "base", "xs:string" );
+
+        w.startElement( "xs:length" );
+        w.addAttribute( "value", "1" );
+        w.addAttribute( "fixed", "true" );
+
+        w.endElement();
+
+        w.endElement();
+
+        w.endElement();
+    }
+
+    private static void writePropertiesElement( XMLWriter w )
     {
         w.startElement( "xs:complexType" );
 
