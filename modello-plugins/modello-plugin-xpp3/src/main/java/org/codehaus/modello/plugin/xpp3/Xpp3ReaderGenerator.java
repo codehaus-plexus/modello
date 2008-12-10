@@ -476,7 +476,7 @@ public class Xpp3ReaderGenerator
         }
         else
         {
-            sc.add( "else if ( !foundRoot && strict )" );
+            sc.add( "else if ( strict )" );
 
             sc.add( "{" );
 

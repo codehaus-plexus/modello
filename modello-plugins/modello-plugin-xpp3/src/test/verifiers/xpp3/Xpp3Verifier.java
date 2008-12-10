@@ -35,6 +35,7 @@ import org.codehaus.modello.test.model.SourceModification;
 import org.codehaus.modello.test.model.io.xpp3.MavenXpp3Reader;
 import org.codehaus.modello.test.model.io.xpp3.MavenXpp3Writer;
 import org.codehaus.modello.verifier.Verifier;
+import org.codehaus.modello.verifier.VerifierException;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.ReaderFactory;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
@@ -86,6 +87,7 @@ public class Xpp3Verifier
         verifyThrowingExceptionWithWrongRootElement();
 
         verifyThrowingExceptionWithWrongElement();
+        verifyThrowingExceptionWithWrongElement2();
     }
 
     public void verifyEncodedRead()
@@ -113,6 +115,7 @@ public class Xpp3Verifier
         try
         {
             modelReader.read( reader );
+            throw new VerifierException( "reading model-with-wrong-root-element.xml with strict=true should fail." );
         }
         catch( XmlPullParserException e )
         {
@@ -137,6 +140,37 @@ public class Xpp3Verifier
         try
         {
             modelReader.read( reader );
+            throw new VerifierException( "reading model-with-wrong-element.xml with strict=true should fail." );
+        }
+        catch( XmlPullParserException e )
+        {
+            Assert.assertTrue( e.getMessage().startsWith( "Unrecognised tag: 'bar'" ) );
+        }
+
+        reader = ReaderFactory.newXmlReader( file );
+
+        // no failure if it is wrong but strict is off
+        Model model = modelReader.read( reader, false );
+
+        // check nothing important was missed
+        Assert.assertEquals( "connection", model.getScm().getConnection() );
+        Assert.assertEquals( "developerConnection", model.getScm().getDeveloperConnection() );
+        Assert.assertEquals( "url", model.getScm().getUrl() );
+    }
+
+    public void verifyThrowingExceptionWithWrongElement2()
+        throws Exception
+    {
+        File file = new File( "src/test/verifiers/xpp3/model-with-wrong-element2.xml" );
+
+        Reader reader = ReaderFactory.newXmlReader( file );
+
+        MavenXpp3Reader modelReader = new MavenXpp3Reader();
+
+        try
+        {
+            modelReader.read( reader );
+            throw new VerifierException( "reading model-with-wrong-element2.xml with strict=true should fail." );
         }
         catch( XmlPullParserException e )
         {
