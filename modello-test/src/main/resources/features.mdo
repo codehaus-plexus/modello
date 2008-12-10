@@ -12,10 +12,10 @@
     </default>
   </defaults>
 
-  <!--versionDefinition>
-    <type></type>
-    <value></value>
-  </versionDefinition-->
+  <versionDefinition><!-- feature really supported by StAX plugin only, which checks version of the document when parsing it -->
+    <type>field</type><!-- other value: namespace, only in StAX plugin -->
+    <value>versionField</value>
+  </versionDefinition>
 
   <classes>
 
@@ -27,6 +27,12 @@
         2.0.0: features supported by java plugin but there are problems with some other plugins
       -->
       <fields>
+        <field>
+          <name>versionField</name>
+          <version>1.0.0+</version>
+          <description>A field described as model's versionDefinition field: its value contains the version of the model used.</description>
+          <type>String</type>
+        </field>
         <field>
           <name>comment</name>
           <version>1.0.0+</version>

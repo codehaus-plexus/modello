@@ -2,6 +2,9 @@
 
 <features xmlns="http://modello.codehaus.org/FEATURES" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
    xsi:schemaLocation="http://modello.codehaus.org/FEATURES http://modello.codehaus.org/features-1.0.0.xsd">
+  <versionField>1.0.0</versionField>
+  <!--required></required--><!-- TODO: this field is marked required but not set in the XML, should fail... -->
+
   <simpleTypes>
     <primitiveBoolean>false</primitiveBoolean>
     <primitiveByte>-70</primitiveByte>
