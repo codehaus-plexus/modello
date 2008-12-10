@@ -30,10 +30,11 @@ import org.codehaus.modello.verifier.Verifier;
 import org.codehaus.modello.verifier.VerifierException;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.IOUtil;
-import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
 import org.custommonkey.xmlunit.Diff;
 import org.custommonkey.xmlunit.XMLUnit;
+
+import org.dom4j.DocumentException;
 
 import java.io.File;
 import java.io.IOException;
@@ -55,6 +56,8 @@ public class Dom4jFeaturesVerifier
         verifyWriter( features );
 
         verifyBadVersion();
+
+        verifyWrongElement();
     }
 
     public Features verifyReader()
@@ -105,13 +108,39 @@ public class Dom4jFeaturesVerifier
             //throw new VerifierException( "Reading a document with a version different from the version of the parser should fail." );
             System.err.print( "[WARNING] missing feature: reading a document with a version different from the version of the parser should fail." );
         }
-        catch ( Exception e )
+        catch ( DocumentException de )
         {
             // expected failure
-            if ( e.getMessage().indexOf( "Document model version of '2.0.0' doesn't match reader version of '1.0.0'" ) < 0 )
+            if ( de.getMessage().indexOf( "Document model version of '2.0.0' doesn't match reader version of '1.0.0'" ) < 0 )
             {
                 throw new VerifierException( "Unexpected failure when reading a document with a version different from"
-                                             + " the version of the parser: \"" + e.getMessage() + "\"", e );
+                                             + " the version of the parser: \"" + de.getMessage() + "\"", de );
+            }
+        }
+    }
+
+    public void verifyWrongElement()
+        throws Exception
+    {
+        ModelloFeaturesTestDom4jReader reader = new ModelloFeaturesTestDom4jReader();
+
+        // reading with strict=false should accept unknown element
+        reader.read( getClass().getResource( "/features-wrong-element.xml" ), false );
+
+        // by default, strict=true: reading should not accept unknown element
+        try
+        {
+            reader.read( getClass().getResource( "/features-wrong-element.xml" ) );
+
+            throw new VerifierException( "Reading a document with an unknown element under strict option should fail." );
+        }
+        catch ( DocumentException de )
+        {
+            // expected failure
+            if ( de.getMessage().indexOf( "'invalidElement'" ) < 0 )
+            {
+                throw new VerifierException( "Unexpected failure when reading a document an unknown element under"
+                                             + " strict option: \"" + de.getMessage() + "\"", de );
             }
         }
     }

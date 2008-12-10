@@ -56,6 +56,8 @@ public class Xpp3FeaturesVerifier
         verifyWriter( features );
 
         verifyBadVersion();
+
+        verifyWrongElement();
     }
 
     public Features verifyReader()
@@ -106,13 +108,39 @@ public class Xpp3FeaturesVerifier
             //throw new VerifierException( "Reading a document with a version different from the version of the parser should fail." );
             System.err.print( "[WARNING] missing feature: reading a document with a version different from the version of the parser should fail." );
         }
-        catch ( Exception e )
+        catch ( XmlPullParserException xppe )
         {
             // expected failure
-            if ( e.getMessage().indexOf( "Document model version of '2.0.0' doesn't match reader version of '1.0.0'" ) < 0 )
+            if ( xppe.getMessage().indexOf( "Document model version of '2.0.0' doesn't match reader version of '1.0.0'" ) < 0 )
             {
                 throw new VerifierException( "Unexpected failure when reading a document with a version different from"
-                                             + " the version of the parser: \"" + e.getMessage() + "\"", e );
+                                             + " the version of the parser: \"" + xppe.getMessage() + "\"", xppe );
+            }
+        }
+    }
+
+    public void verifyWrongElement()
+        throws Exception
+    {
+        ModelloFeaturesTestXpp3Reader reader = new ModelloFeaturesTestXpp3Reader();
+
+        // reading with strict=false should accept unknown element
+        reader.read( getClass().getResourceAsStream( "/features-wrong-element.xml" ), false );
+
+        // by default, strict=true: reading should not accept unknown element
+        try
+        {
+            reader.read( getClass().getResourceAsStream( "/features-wrong-element.xml" ) );
+
+            throw new VerifierException( "Reading a document with an unknown element under strict option should fail." );
+        }
+        catch ( XmlPullParserException xppe )
+        {
+            // expected failure
+            if ( xppe.getMessage().indexOf( "'invalidElement'" ) < 0 )
+            {
+                throw new VerifierException( "Unexpected failure when reading a document an unknown element under"
+                                             + " strict option: \"" + xppe.getMessage() + "\"", xppe );
             }
         }
     }

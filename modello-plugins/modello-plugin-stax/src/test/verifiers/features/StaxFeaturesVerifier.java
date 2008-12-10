@@ -58,6 +58,8 @@ public class StaxFeaturesVerifier
         verifyWriter( features );
 
         verifyBadVersion();
+
+        verifyWrongElement();
     }
 
     public Features verifyReader()
@@ -115,6 +117,32 @@ public class StaxFeaturesVerifier
             {
                 throw new VerifierException( "Unexpected failure when reading a document with a version different from"
                                              + " the version of the parser: \"" + xse.getMessage() + "\"", xse );
+            }
+        }
+    }
+
+    public void verifyWrongElement()
+        throws Exception
+    {
+        ModelloFeaturesTestStaxReader reader = new ModelloFeaturesTestStaxReader();
+
+        // reading with strict=false should accept unknown element
+        reader.read( new InputStreamReader( getClass().getResourceAsStream( "/features-wrong-element.xml" ), "UTF-8" ), false );
+
+        // by default, strict=true: reading should not accept unknown element
+        try
+        {
+            reader.read( new InputStreamReader( getClass().getResourceAsStream( "/features-wrong-element.xml" ), "UTF-8" ) );
+
+            throw new VerifierException( "Reading a document with an unknown element under strict option should fail." );
+        }
+        catch ( XMLStreamException xse )
+        {
+            // expected failure
+            if ( xse.getMessage().indexOf( "'invalidElement'" ) < 0 )
+            {
+                throw new VerifierException( "Unexpected failure when reading a document an unknown element under"
+                                             + " strict option: \"" + xse.getMessage() + "\"", xse );
             }
         }
     }
