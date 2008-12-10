@@ -41,6 +41,8 @@ import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.io.StringWriter;
 
+import javax.xml.stream.XMLStreamException;
+
 /**
  * @author Hervé Boutemy
  * @version $Id$
@@ -54,6 +56,8 @@ public class StaxFeaturesVerifier
         Features features = verifyReader();
 
         verifyWriter( features );
+
+        verifyBadVersion();
     }
 
     public Features verifyReader()
@@ -90,6 +94,28 @@ public class StaxFeaturesVerifier
         {
             System.err.println( actualXml );
             throw new VerifierException( "writer result is not the same as original content: " + diff );
+        }
+    }
+
+    public void verifyBadVersion()
+        throws Exception
+    {
+        ModelloFeaturesTestStaxReader reader = new ModelloFeaturesTestStaxReader();
+
+        try
+        {
+            reader.read( new InputStreamReader( getClass().getResourceAsStream( "/features-bad-version.xml" ), "UTF-8" ) );
+
+            throw new VerifierException( "Reading a document with a version different from the version of the parser should fail." );
+        }
+        catch ( XMLStreamException xse )
+        {
+            // expected failure
+            if ( xse.getMessage().indexOf( "Document model version of '2.0.0' doesn't match reader version of '1.0.0'" ) < 0 )
+            {
+                throw new VerifierException( "Unexpected failure when reading a document with a version different from"
+                                             + " the version of the parser: \"" + xse.getMessage() + "\"", xse );
+            }
         }
     }
 }

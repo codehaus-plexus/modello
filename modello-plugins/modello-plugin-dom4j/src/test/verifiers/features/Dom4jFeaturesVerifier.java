@@ -53,6 +53,8 @@ public class Dom4jFeaturesVerifier
         Features features = verifyReader();
 
         verifyWriter( features );
+
+        verifyBadVersion();
     }
 
     public Features verifyReader()
@@ -88,6 +90,29 @@ public class Dom4jFeaturesVerifier
         if ( !diff.identical() )
         {
             throw new VerifierException( "writer result is not the same as original content: " + diff );
+        }
+    }
+
+    public void verifyBadVersion()
+        throws Exception
+    {
+        ModelloFeaturesTestDom4jReader reader = new ModelloFeaturesTestDom4jReader();
+
+        try
+        {
+            reader.read( getClass().getResource( "/features-bad-version.xml" ) );
+
+            //throw new VerifierException( "Reading a document with a version different from the version of the parser should fail." );
+            System.err.print( "[WARNING] missing feature: reading a document with a version different from the version of the parser should fail." );
+        }
+        catch ( Exception e )
+        {
+            // expected failure
+            if ( e.getMessage().indexOf( "Document model version of '2.0.0' doesn't match reader version of '1.0.0'" ) < 0 )
+            {
+                throw new VerifierException( "Unexpected failure when reading a document with a version different from"
+                                             + " the version of the parser: \"" + e.getMessage() + "\"", e );
+            }
         }
     }
 }
