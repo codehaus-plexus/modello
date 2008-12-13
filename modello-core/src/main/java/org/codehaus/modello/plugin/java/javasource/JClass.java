@@ -615,22 +615,20 @@ public class JClass extends JStructure
 
         buffer.append( "class " );
         buffer.append( getLocalName() );
-        buffer.append( ' ' );
+        jsw.writeln( buffer.toString() );
+        buffer.setLength( 0 );
+        jsw.indent();
+
         if ( _superClass != null )
         {
             buffer.append( "extends " );
             buffer.append( _superClass );
-            buffer.append( ' ' );
+            jsw.writeln( buffer.toString() );
+            buffer.setLength( 0 );
         }
+
         if ( getInterfaceCount() > 0 )
         {
-            boolean endl = false;
-            if ( ( getInterfaceCount() > 1 ) || ( _superClass != null ) )
-            {
-                jsw.writeln( buffer.toString() );
-                buffer.setLength( 0 );
-                endl = true;
-            }
             buffer.append( "implements " );
 
             Enumeration e = getInterfaces();
@@ -639,19 +637,14 @@ public class JClass extends JStructure
                 buffer.append( e.nextElement() );
                 if ( e.hasMoreElements() ) buffer.append( ", " );
             }
-            if ( endl )
-            {
-                jsw.writeln( buffer.toString() );
-                buffer.setLength( 0 );
-            }
-            else
-                buffer.append( ' ' );
+
+            jsw.writeln( buffer.toString() );
+            buffer.setLength( 0 );
         }
 
-        buffer.append( '{' );
-        jsw.writeln( buffer.toString() );
-        buffer.setLength( 0 );
-        jsw.writeln();
+        jsw.unindent();
+
+        jsw.writeln( '{' );
 
         jsw.indent();
 
@@ -708,7 +701,8 @@ public class JClass extends JStructure
         if ( !_staticInitializer.isEmpty() )
         {
             jsw.writeln();
-            jsw.writeln( "static {" );
+            jsw.writeln( "static" );
+            jsw.writeln( "{" );
             jsw.writeln( _staticInitializer.toString() );
             jsw.writeln( "};" );
             jsw.writeln();
