@@ -573,6 +573,7 @@
       <fields>
         <field>
           <name>id</name>
+          <alias>key</alias>
           <version>1.0.0+</version>
           <type>String</type>
         </field>

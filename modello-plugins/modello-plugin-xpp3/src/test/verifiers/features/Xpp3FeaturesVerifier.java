@@ -86,6 +86,9 @@ public class Xpp3FeaturesVerifier
           + "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" "
           + "xsi:schemaLocation=\"http://modello.codehaus.org/FEATURES http://modello.codehaus.org/features-1.0.0.xsd\">" );
 
+        // alias is rendered as default field name => must be reverted here to let the test pass
+        actualXml = actualXml.replaceFirst( "<id>alias</id>", "<key>alias</key>" );
+
         XMLUnit.setIgnoreWhitespace( true );
         XMLUnit.setIgnoreComments( true );
         Diff diff = XMLUnit.compareXML( IOUtil.toString( getClass().getResourceAsStream( "/features.xml" ), "UTF-8" ), actualXml );

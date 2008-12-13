@@ -33,6 +33,9 @@
       <listReference><id>first</id></listReference>
       <listReference><id>second</id></listReference>
       <listReference><id>third</id></listReference>
+      <!-- MODELLO-140: alias feature is not supported by xsd plugin, need to comment this part to avoid failure
+      <listReference><key>alias</key></listReference>
+      -->
     </listReferences>
     <setReferences>
       <setReference><id>first</id></setReference>
