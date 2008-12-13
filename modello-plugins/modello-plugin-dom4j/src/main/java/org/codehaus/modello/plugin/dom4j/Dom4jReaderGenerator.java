@@ -916,6 +916,7 @@ public class Dom4jReaderGenerator
     private void writeHelpers( JClass jClass )
     {
         JMethod method = new JMethod( new JClass( "String" ), "getTrimmedValue" );
+        method.getModifiers().makePrivate();
 
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
 
@@ -937,9 +938,12 @@ public class Dom4jReaderGenerator
 
         jClass.addMethod( method );
 
+        // --------------------------------------------------------------------
+
 /* TODO
         method = new JMethod( new JClass( "String" ), "getRequiredAttributeValue" );
         method.addException( new JClass( "XmlPullParserException" ) );
+        method.getModifiers().makePrivate();
 
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
         method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
@@ -975,7 +979,10 @@ public class Dom4jReaderGenerator
 
         jClass.addMethod( method );
 */
+        // --------------------------------------------------------------------
+
         method = new JMethod( JType.Boolean, "getBooleanValue" );
+        method.getModifiers().makePrivate();
 
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
         method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
@@ -998,7 +1005,10 @@ public class Dom4jReaderGenerator
 
         jClass.addMethod( method );
 
+        // --------------------------------------------------------------------
+
         method = new JMethod( JType.Char, "getCharacterValue" );
+        method.getModifiers().makePrivate();
 
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
         method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
@@ -1021,7 +1031,10 @@ public class Dom4jReaderGenerator
 
         jClass.addMethod( method );
 
+        // --------------------------------------------------------------------
+
         method = new JMethod( JType.Int, "getIntegerValue" );
+        method.getModifiers().makePrivate();
 
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
         method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
@@ -1034,7 +1047,10 @@ public class Dom4jReaderGenerator
 
         jClass.addMethod( method );
 
+        // --------------------------------------------------------------------
+
         method = new JMethod( JType.Short, "getShortValue" );
+        method.getModifiers().makePrivate();
 
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
         method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
@@ -1047,7 +1063,10 @@ public class Dom4jReaderGenerator
 
         jClass.addMethod( method );
 
+        // --------------------------------------------------------------------
+
         method = new JMethod( JType.Byte, "getByteValue" );
+        method.getModifiers().makePrivate();
 
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
         method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
@@ -1060,7 +1079,10 @@ public class Dom4jReaderGenerator
 
         jClass.addMethod( method );
 
+        // --------------------------------------------------------------------
+
         method = new JMethod( JType.Long, "getLongValue" );
+        method.getModifiers().makePrivate();
 
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
         method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
@@ -1073,7 +1095,10 @@ public class Dom4jReaderGenerator
 
         jClass.addMethod( method );
 
+        // --------------------------------------------------------------------
+
         method = new JMethod( JType.Float, "getFloatValue" );
+        method.getModifiers().makePrivate();
 
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
         method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
@@ -1086,7 +1111,10 @@ public class Dom4jReaderGenerator
 
         jClass.addMethod( method );
 
+        // --------------------------------------------------------------------
+
         method = new JMethod( JType.Double, "getDoubleValue" );
+        method.getModifiers().makePrivate();
 
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
         method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
@@ -1099,7 +1127,10 @@ public class Dom4jReaderGenerator
 
         jClass.addMethod( method );
 
+        // --------------------------------------------------------------------
+
         method = new JMethod( new JClass( "java.util.Date" ), "getDateValue" );
+        method.getModifiers().makePrivate();
 
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
         method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
@@ -1166,7 +1197,10 @@ public class Dom4jReaderGenerator
 
         jClass.addMethod( method );
 
+        // --------------------------------------------------------------------
+
         method = new JMethod( new JClass( "Xpp3Dom" ), "writeElementToXpp3Dom" );
+        method.getModifiers().makePrivate();
 
         method.addParameter( new JParameter( new JClass( "Element" ), "element" ) );
 
