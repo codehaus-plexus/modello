@@ -44,11 +44,9 @@ import org.codehaus.modello.plugin.java.javasource.JSourceCode;
 import org.codehaus.modello.plugin.java.javasource.JSourceWriter;
 import org.codehaus.modello.plugin.java.javasource.JType;
 import org.codehaus.plexus.util.IOUtil;
-import org.codehaus.plexus.util.WriterFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -85,18 +83,26 @@ public class ConverterGenerator
                 nextVersion = v;
             }
         }
-        // if nextVersion remains null, there is none greater so we are converting back to the unpackaged version
 
-        generateConverters( nextVersion );
-
-        if ( nextVersion == null )
+        try
         {
-            generateConverterTool( allVersions );
+            // if nextVersion remains null, there is none greater so we are converting back to the unpackaged version
+
+            generateConverters( nextVersion );
+
+            if ( nextVersion == null )
+            {
+                generateConverterTool( allVersions );
+            }
+        }
+        catch ( IOException ex )
+        {
+            throw new ModelloException( "Exception while generating model converters.", ex );
         }
     }
 
     private void generateConverters( Version nextVersion )
-        throws ModelloException
+        throws ModelloException, IOException
     {
         Model objectModel = getModel();
 
@@ -349,21 +355,16 @@ public class ConverterGenerator
             sc.add( "return value;" );
         }
 
-        String directory = packageName.replace( '.', '/' );
-
-        File dir = new File( getOutputDirectory(), directory );
-        if ( !dir.exists() )
-        {
-            dir.mkdirs();
-        }
-
-        Writer interfaceWriter = getFileWriter( dir, "VersionConverter.java" );
-        Writer classWriter = getFileWriter( dir, "BasicVersionConverter.java" );
+        JSourceWriter interfaceWriter = null;
+        JSourceWriter classWriter = null;
 
         try
         {
-            conversionInterface.print( new JSourceWriter( interfaceWriter ) );
-            basicConverterClass.print( new JSourceWriter( classWriter ) );
+            interfaceWriter = newJSourceWriter( packageName, "VersionConverter" );
+            classWriter = newJSourceWriter( packageName, "BasicVersionConverter" );
+
+            conversionInterface.print( interfaceWriter );
+            basicConverterClass.print( classWriter );
 
             // this one already flushes/closes the interfaceWriter
         }
@@ -375,7 +376,7 @@ public class ConverterGenerator
     }
 
     private void generateConverterTool( List allVersions )
-        throws ModelloException
+        throws ModelloException, IOException
     {
         Model objectModel = getModel();
 
@@ -409,10 +410,11 @@ public class ConverterGenerator
             dir.mkdirs();
         }
 
-        Writer classWriter = getFileWriter( dir, "ConverterTool.java" );
+        JSourceWriter classWriter = null; 
 
         try
         {
+            classWriter = newJSourceWriter(  packageName, "ConverterTool" );
             converterClass.print( new JSourceWriter( classWriter ) );
 
             // this one already flushes/closes the interfaceWriter
@@ -514,23 +516,5 @@ public class ConverterGenerator
     private static String getSourceClassName( ModelClass modelClass, Version generatedVersion )
     {
         return modelClass.getPackageName( true, generatedVersion ) + "." + modelClass.getName();
-    }
-
-    private Writer getFileWriter( File dir, String name )
-        throws ModelloException
-    {
-        File f = new File( dir, name );
-
-        Writer writer;
-        try
-        {
-            writer = getEncoding() == null ? WriterFactory.newPlatformWriter( f )
-                            : WriterFactory.newWriter( f, getEncoding() );
-        }
-        catch ( IOException e )
-        {
-            throw new ModelloException( "Unable to generate: " + f + "; reason: " + e.getMessage(), e );
-        }
-        return writer;
     }
 }
