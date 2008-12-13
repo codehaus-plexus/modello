@@ -704,7 +704,7 @@ public class StaxReaderGenerator
                 sc.add( "{" );
                 sc.indent();
 
-                sc.add( instanceFieldName + ".put( v, " + uncapClassName + ");" );
+                sc.add( instanceFieldName + ".put( v, " + uncapClassName + " );" );
 
                 sc.unindent();
                 sc.add( "}" );
@@ -1093,7 +1093,7 @@ public class StaxReaderGenerator
         }
 
         String tagComparison =
-            statement + " ( xmlStreamReader.getLocalName().equals( \"" + tagName + "\" ) " + optionalCheck + " )";
+            statement + " ( xmlStreamReader.getLocalName().equals( \"" + tagName + "\" ) " + optionalCheck + ")";
 
         if ( field instanceof ModelAssociation )
         {
@@ -1536,7 +1536,7 @@ public class StaxReaderGenerator
 
         if ( fieldMetaData.isTrim() )
         {
-            parserGetter = "getTrimmedValue( " + parserGetter + ")";
+            parserGetter = "getTrimmedValue( " + parserGetter + " )";
         }
 
         if ( "boolean".equals( type ) )

@@ -430,7 +430,7 @@ public class Dom4jReaderGenerator
         }
 
         String tagComparison =
-            statement + " ( childElement.getName().equals( \"" + tagName + "\" ) " + optionalCheck + " )";
+            statement + " ( childElement.getName().equals( \"" + tagName + "\" ) " + optionalCheck + ")";
 
         if ( field instanceof ModelAssociation )
         {
@@ -808,7 +808,7 @@ public class Dom4jReaderGenerator
 
         sc.indent();
 
-        sc.add( "throw new DocumentException( \"Duplicated tag: '\" + element.getName() + \"'\");" );
+        sc.add( "throw new DocumentException( \"Duplicated tag: '\" + element.getName() + \"'\" );" );
 
         sc.unindent();
 
@@ -1159,11 +1159,15 @@ public class Dom4jReaderGenerator
 
         sc.unindent();
 
-        sc.add( "} else {" );
+        sc.add( "}" );
+
+        sc.add( "else" );
+
+        sc.add( "{" );
 
         sc.indent();
 
-        sc.add( "dateParser = new java.text.SimpleDateFormat( dateFormat, Locale.US );" );
+        sc.addIndented( "dateParser = new java.text.SimpleDateFormat( dateFormat, Locale.US );" );
 
         sc.unindent();
 

@@ -527,7 +527,7 @@ public class Xpp3ReaderGenerator
             optionalCheck = "|| parser.getName().equals( \"" + field.getAlias() + "\" ) ";
         }
 
-        String tagComparison = statement + " ( parser.getName().equals( \"" + tagName + "\" ) " + optionalCheck + " )";
+        String tagComparison = statement + " ( parser.getName().equals( \"" + tagName + "\" ) " + optionalCheck + ")";
 
         if ( field instanceof ModelAssociation )
         {
@@ -858,7 +858,7 @@ public class Xpp3ReaderGenerator
 
         if ( fieldMetaData.isTrim() )
         {
-            parserGetter = "getTrimmedValue( " + parserGetter + ")";
+            parserGetter = "getTrimmedValue( " + parserGetter + " )";
         }
 
         if ( "boolean".equals( type ) )

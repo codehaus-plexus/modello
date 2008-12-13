@@ -416,7 +416,7 @@ public final class JMethodSignature
             sb.append( ' ' );
         }
 
-        sb.append( ") " );
+        sb.append( ')' );
 
         return sb.toString();
     } //-- toString
