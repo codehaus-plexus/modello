@@ -662,14 +662,15 @@ public class StaxReaderGenerator
 
         sc.add( className + " " + uncapClassName + " = new " + className + "();" );
 
-        sc.add( uncapClassName + ".setModelEncoding( encoding );" );
-
         sc.add( "java.util.Set parsed = new java.util.HashSet();" );
 
         String instanceFieldName = getInstanceFieldName( className );
 
         if ( rootElement )
         {
+            // encoding parameter is only used in root class
+            sc.add( uncapClassName + ".setModelEncoding( encoding );" );
+
             sc.add( "boolean foundRoot = false;" );
 
             sc.add( "while ( xmlStreamReader.hasNext() )" );

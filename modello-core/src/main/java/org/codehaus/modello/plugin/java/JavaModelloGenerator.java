@@ -39,6 +39,7 @@ import org.codehaus.modello.plugin.java.javasource.JParameter;
 import org.codehaus.modello.plugin.java.javasource.JSourceCode;
 import org.codehaus.modello.plugin.java.javasource.JSourceWriter;
 import org.codehaus.modello.plugin.java.javasource.JType;
+import org.codehaus.modello.plugin.model.ModelClassMetadata;
 import org.codehaus.plexus.util.StringUtils;
 
 import java.io.IOException;
@@ -239,29 +240,34 @@ public class JavaModelloGenerator
                 }
             }
 
-            StringBuffer encodingStuff = new StringBuffer();
+            ModelClassMetadata metadata = (ModelClassMetadata) modelClass.getMetadata( ModelClassMetadata.ID );
 
-            encodingStuff.append( "\n    private String modelEncoding = \"UTF-8\";" );
-            encodingStuff.append( "\n" );
-            encodingStuff.append( "\n    /**" );
-            encodingStuff.append( "\n     * Set an encoding used for reading/writing the model." );
-            encodingStuff.append( "\n     *" );
-            encodingStuff.append( "\n     * @param modelEncoding the encoding used when reading/writing the model." );
-            encodingStuff.append( "\n     */" );
-            encodingStuff.append( "\n    public void setModelEncoding( String modelEncoding )" );
-            encodingStuff.append( "\n    {" );
-            encodingStuff.append( "\n        this.modelEncoding = modelEncoding;" );
-            encodingStuff.append( "\n    }" );
-            encodingStuff.append( "\n" );
-            encodingStuff.append( "\n    /**" );
-            encodingStuff.append( "\n     * @return the current encoding used when reading/writing this model." );
-            encodingStuff.append( "\n     */" );
-            encodingStuff.append( "\n    public String getModelEncoding()" );
-            encodingStuff.append( "\n    {" );
-            encodingStuff.append( "\n        return modelEncoding;" );
-            encodingStuff.append( "\n    }" );
+            if ( ( metadata != null ) && metadata.isRootElement() )
+            {
+                StringBuffer encodingStuff = new StringBuffer();
 
-            jClass.addSourceCode( encodingStuff.toString() );
+                encodingStuff.append( "\n    private String modelEncoding = \"UTF-8\";" );
+                encodingStuff.append( "\n" );
+                encodingStuff.append( "\n    /**" );
+                encodingStuff.append( "\n     * Set an encoding used for reading/writing the model." );
+                encodingStuff.append( "\n     *" );
+                encodingStuff.append( "\n     * @param modelEncoding the encoding used when reading/writing the model." );
+                encodingStuff.append( "\n     */" );
+                encodingStuff.append( "\n    public void setModelEncoding( String modelEncoding )" );
+                encodingStuff.append( "\n    {" );
+                encodingStuff.append( "\n        this.modelEncoding = modelEncoding;" );
+                encodingStuff.append( "\n    }" );
+                encodingStuff.append( "\n" );
+                encodingStuff.append( "\n    /**" );
+                encodingStuff.append( "\n     * @return the current encoding used when reading/writing this model." );
+                encodingStuff.append( "\n     */" );
+                encodingStuff.append( "\n    public String getModelEncoding()" );
+                encodingStuff.append( "\n    {" );
+                encodingStuff.append( "\n        return modelEncoding;" );
+                encodingStuff.append( "\n    }" );
+
+                jClass.addSourceCode( encodingStuff.toString() );
+            }
 
             jClass.print( sourceWriter );
 

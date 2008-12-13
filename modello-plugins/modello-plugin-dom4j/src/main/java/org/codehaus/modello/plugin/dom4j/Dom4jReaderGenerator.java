@@ -288,8 +288,6 @@ public class Dom4jReaderGenerator
 
         sc.add( className + " " + uncapClassName + " = new " + className + "();" );
 
-        sc.add( uncapClassName + ".setModelEncoding( encoding );" );
-
         for ( Iterator i = modelClass.getAllFields( getGeneratedVersion(), true ).iterator(); i.hasNext(); )
         {
             ModelField field = (ModelField) i.next();
@@ -305,6 +303,9 @@ public class Dom4jReaderGenerator
 
         if ( rootElement )
         {
+            // encoding parameter is only used in root class
+            sc.add( uncapClassName + ".setModelEncoding( encoding );" );
+
             sc.add( "if ( strict )" );
             sc.add( "{" );
             sc.indent();
