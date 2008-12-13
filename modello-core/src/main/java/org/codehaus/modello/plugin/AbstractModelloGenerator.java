@@ -25,25 +25,16 @@ package org.codehaus.modello.plugin;
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.ModelloRuntimeException;
-import org.codehaus.modello.model.BaseElement;
 import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
-import org.codehaus.modello.model.ModelInterface;
 import org.codehaus.modello.model.Version;
-import org.codehaus.modello.plugin.java.JavaFieldMetadata;
-import org.codehaus.modello.plugin.java.javasource.JClass;
-import org.codehaus.modello.plugin.java.javasource.JSourceWriter;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.StringUtils;
-import org.codehaus.plexus.util.WriterFactory;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.Writer;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
@@ -106,32 +97,6 @@ public abstract class AbstractModelloGenerator
     protected String getEncoding()
     {
         return encoding;
-    }
-
-    /**
-     * Create a new java source file writer, with configured encoding.
-     * 
-     * @param packageName the package of the source file to create
-     * @param className the class of the source file to create
-     * @return a JSourceWriter with configured encoding
-     * @throws IOException
-     */
-    protected JSourceWriter newJSourceWriter( String packageName, String className )
-    throws IOException
-    {
-        String directory = packageName.replace( '.', File.separatorChar );
-
-        File f = new File( new File( getOutputDirectory(), directory ), className + ".java" );
-
-        if ( !f.getParentFile().exists() )
-        {
-            f.getParentFile().mkdirs();
-        }
-
-        Writer writer = ( encoding == null ) ? WriterFactory.newPlatformWriter( f )
-                        : WriterFactory.newWriter( f, encoding );
-
-        return new JSourceWriter( writer );
     }
 
     protected boolean isClassInModel( String fieldType, Model model )
@@ -267,61 +232,6 @@ public abstract class AbstractModelloGenerator
             .toString();
     }
 
-    protected void addModelImports( JClass jClass, BaseElement baseElem )
-        throws ModelloException
-    {
-        for ( Iterator i = getModel().getInterfaces( getGeneratedVersion() ).iterator(); i.hasNext(); )
-        {
-            ModelInterface modelInterface = (ModelInterface) i.next();
-
-            if ( baseElem != null && baseElem instanceof ModelInterface )
-            {
-                if ( modelInterface.equals( (ModelInterface) baseElem )
-                     || modelInterface.getPackageName( isPackageWithVersion(), getGeneratedVersion() ).equals(
-                        ( (ModelInterface) baseElem ).getPackageName( isPackageWithVersion(),
-                                                                      getGeneratedVersion() ) ) )
-                {
-                    continue;
-                }
-            }
-
-            if ( isPackageWithVersion() )
-            {
-                jClass.addImport(
-                    modelInterface.getPackageName( true, getGeneratedVersion() ) + "." + modelInterface.getName() );
-            }
-            else
-            {
-                jClass.addImport( modelInterface.getPackageName( false, null ) + "." + modelInterface.getName() );
-            }
-        }
-
-        for ( Iterator i = getModel().getClasses( getGeneratedVersion() ).iterator(); i.hasNext(); )
-        {
-            ModelClass modelClass = (ModelClass) i.next();
-
-            if ( baseElem != null && baseElem instanceof ModelClass )
-            {
-                if ( modelClass.equals( (ModelClass) baseElem )
-                     || modelClass.getPackageName( isPackageWithVersion(), getGeneratedVersion() ).equals(
-                        ( (ModelClass) baseElem ).getPackageName( isPackageWithVersion(), getGeneratedVersion() ) ) )
-                {
-                    continue;
-                }
-            }
-
-            if ( isPackageWithVersion() )
-            {
-                jClass.addImport(
-                    modelClass.getPackageName( true, getGeneratedVersion() ) + "." + modelClass.getName() );
-            }
-            else
-            {
-                jClass.addImport( modelClass.getPackageName( false, null ) + "." + modelClass.getName() );
-            }
-        }
-    }
-
     // ----------------------------------------------------------------------
     // Text utils
     // ----------------------------------------------------------------------
@@ -365,10 +275,5 @@ public abstract class AbstractModelloGenerator
         }
 
         return value;
-    }
-
-    protected String getPrefix( JavaFieldMetadata javaFieldMetadata )
-    {
-        return javaFieldMetadata.isBooleanGetter() ? "is" : "get";
     }
 }

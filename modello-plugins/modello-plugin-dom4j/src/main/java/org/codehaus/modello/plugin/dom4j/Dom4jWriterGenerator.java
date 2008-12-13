@@ -28,7 +28,7 @@ import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelDefault;
 import org.codehaus.modello.model.ModelField;
-import org.codehaus.modello.plugin.AbstractModelloGenerator;
+import org.codehaus.modello.plugin.java.AbstractJavaModelloGenerator;
 import org.codehaus.modello.plugin.java.JavaFieldMetadata;
 import org.codehaus.modello.plugin.java.javasource.JClass;
 import org.codehaus.modello.plugin.java.javasource.JMethod;
@@ -51,7 +51,7 @@ import java.util.Properties;
  * @author <a href="mailto:brett@codehaus.org">Brett Porter</a>
  */
 public class Dom4jWriterGenerator
-    extends AbstractModelloGenerator
+    extends AbstractJavaModelloGenerator
 {
     public void generate( Model model, Properties parameters )
         throws ModelloException

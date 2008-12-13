@@ -30,7 +30,6 @@ import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelDefault;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.ModelInterface;
-import org.codehaus.modello.plugin.AbstractModelloGenerator;
 import org.codehaus.modello.plugin.java.javasource.JClass;
 import org.codehaus.modello.plugin.java.javasource.JConstructor;
 import org.codehaus.modello.plugin.java.javasource.JField;
@@ -53,7 +52,7 @@ import java.util.Properties;
  * @version $Id$
  */
 public class JavaModelloGenerator
-    extends AbstractModelloGenerator
+    extends AbstractJavaModelloGenerator
 {
     public void generate( Model model, Properties parameters )
         throws ModelloException
