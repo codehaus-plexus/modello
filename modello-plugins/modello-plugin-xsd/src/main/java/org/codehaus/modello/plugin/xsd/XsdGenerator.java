@@ -120,7 +120,7 @@ public class XsdGenerator
             }
             w.addAttribute( "xmlns", modelMetadata.getNamespace() );
 
-            if ( StringUtils.isNotEmpty( modelMetadata.getTargetNamespace() ) )
+            if ( StringUtils.isEmpty( modelMetadata.getTargetNamespace() ) )
             {
                 throw new ModelloException( "Cannot generate xsd without targetNamespace specification:"
                                             + " <model xsd.target-namespace='...'>" );
