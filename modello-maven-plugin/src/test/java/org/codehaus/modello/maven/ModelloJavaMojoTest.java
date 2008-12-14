@@ -54,14 +54,14 @@ public class ModelloJavaMojoTest
         mojo.setOutputDirectory( outputDirectory );
 
         String models[] = new String[1];
-        models[0] = new String( getTestPath( "src/test/resources/java-model.mdo" ) );
+        models[0] = getTestPath( "src/test/resources/java-model.mdo" );
         mojo.setModels( models );
 
         mojo.setVersion( "1.0.0" );
 
         mojo.setPackageWithVersion( false );
 
-        mojo.setPackagedVersions( Arrays.asList( new String[]{"0.9.0", "1.0.0"} ) );
+        mojo.setPackagedVersions( Arrays.asList( new String[] { "0.9.0", "1.0.0" } ) );
 
         mojo.setModelloCore( modelloCore );
 

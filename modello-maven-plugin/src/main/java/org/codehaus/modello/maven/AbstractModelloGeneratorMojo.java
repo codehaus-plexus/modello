@@ -61,18 +61,10 @@ public abstract class AbstractModelloGeneratorMojo
     private String basedir;
 
     /**
-     * Relative path to the mdo file for the current model.
-     *
-     * @parameter expression="${model}"
-     * @deprecated Use models instead
-     */
-    private String model;
-
-    /**
      * List of relative paths to mdo files containing the models.
      *
      * @parameter
-     * @todo Make this @required when model is no longer supported
+     * @required
      */
     private String[] models;
 
@@ -206,18 +198,9 @@ public abstract class AbstractModelloGeneratorMojo
 
         try
         {
-            if ( models != null )
+            for ( int i = 0; i < models.length; i++ )
             {
-                for ( int i = 0; i < models.length; i++ )
-                {
-                    doExecute( models[i], outputDirectory, parameters );
-                }
-            }
-
-            // Keeping this for backwards compatibility
-            if ( model != null )
-            {
-                doExecute( model, outputDirectory, parameters );
+                doExecute( models[i], outputDirectory, parameters );
             }
         }
         catch ( FileNotFoundException e )
@@ -296,22 +279,6 @@ public abstract class AbstractModelloGeneratorMojo
     public void setBasedir( String basedir )
     {
         this.basedir = basedir;
-    }
-
-    /**
-     * @deprecated Use getModels() instead
-     */
-    public String getModel()
-    {
-        return model;
-    }
-
-    /**
-     * @deprecated Use setModels(String[]) instead
-     */
-    public void setModel( String model )
-    {
-        this.model = model;
     }
 
     public String getVersion()
