@@ -70,7 +70,7 @@ public class XsdGenerator
     }
 
     private void generateXsd( Properties parameters )
-        throws IOException
+        throws IOException, ModelloException
     {
         Model objectModel = getModel();
 
@@ -113,27 +113,19 @@ public class XsdGenerator
 
             XsdModelMetadata modelMetadata = (XsdModelMetadata) root.getModel().getMetadata( XsdModelMetadata.ID );
 
-            if ( StringUtils.isNotEmpty( modelMetadata.getNamespace() ) )
+            if ( StringUtils.isEmpty( modelMetadata.getNamespace() ) )
             {
-                w.addAttribute( "xmlns", modelMetadata.getNamespace() );
+                throw new ModelloException( "Cannot generate xsd without xmlns specification:"
+                                            + " <model xsd.namespace='...'>" );
             }
-            else
-            {
-                // Old Default - UGH.
-                // TODO: Remove this backwards compatibility hack.
-                w.addAttribute( "xmlns", "http://maven.apache.org/POM/4.0.0" );
-            }
+            w.addAttribute( "xmlns", modelMetadata.getNamespace() );
 
             if ( StringUtils.isNotEmpty( modelMetadata.getTargetNamespace() ) )
             {
-                w.addAttribute( "targetNamespace", modelMetadata.getTargetNamespace() );
+                throw new ModelloException( "Cannot generate xsd without targetNamespace specification:"
+                                            + " <model xsd.target-namespace='...'>" );
             }
-            else
-            {
-                // Old Default - UGH.
-                // TODO: Remove this backwards compatibility hack.
-                w.addAttribute( "targetNamespace", "http://maven.apache.org/POM/4.0.0" );
-            }
+            w.addAttribute( "targetNamespace", modelMetadata.getTargetNamespace() );
 
             w.startElement( "xs:element" );
             String tagName = getTagName( root );
