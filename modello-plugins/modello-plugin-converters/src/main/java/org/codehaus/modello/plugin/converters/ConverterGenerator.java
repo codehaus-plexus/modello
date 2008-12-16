@@ -100,15 +100,15 @@ public class ConverterGenerator
         }
     }
 
-    private void generateConverters( Version nextVersion )
+    private void generateConverters( Version toVersion )
         throws ModelloException, IOException
     {
         Model objectModel = getModel();
 
-        Version generatedVersion = getGeneratedVersion();
-        String packageName = objectModel.getDefaultPackageName( true, generatedVersion ) + ".convert";
+        Version fromVersion = getGeneratedVersion();
+        String packageName = objectModel.getDefaultPackageName( true, fromVersion ) + ".convert";
 
-        String jDoc = "Converts between version " + generatedVersion + " and version " + nextVersion + " of the model.";
+        String jDoc = "Converts from version " + fromVersion + " to version " + toVersion + " of the model.";
 
         JInterface conversionInterface = new JInterface( "VersionConverter" );
         conversionInterface.getJDocComment().setComment( jDoc );
@@ -121,7 +121,7 @@ public class ConverterGenerator
 
         VersionDefinition versionDefinition = objectModel.getVersionDefinition();
 
-        for ( Iterator i = objectModel.getClasses( generatedVersion ).iterator(); i.hasNext(); )
+        for ( Iterator i = objectModel.getClasses( fromVersion ).iterator(); i.hasNext(); )
         {
             ModelClass modelClass = (ModelClass) i.next();
 
@@ -134,7 +134,7 @@ public class ConverterGenerator
             }
 
             // check if it's present in the next version
-            if ( nextVersion != null && !nextVersion.inside( modelClass.getVersionRange() ) )
+            if ( toVersion != null && !toVersion.inside( modelClass.getVersionRange() ) )
             {
                 // Don't convert - it's not there in the next one
                 continue;
@@ -142,9 +142,9 @@ public class ConverterGenerator
 
             String methodName = "convert" + modelClass.getName();
             String parameterName = uncapitalise( modelClass.getName() );
-            String sourceClass = getSourceClassName( modelClass, generatedVersion );
+            String sourceClass = getSourceClassName( modelClass, fromVersion );
             String targetClass =
-                modelClass.getPackageName( nextVersion != null, nextVersion ) + "." + modelClass.getName();
+                modelClass.getPackageName( toVersion != null, toVersion ) + "." + modelClass.getName();
 
             if ( !javaClassMetadata.isAbstract() )
             {
@@ -192,33 +192,33 @@ public class ConverterGenerator
                 sc.add( "" );
             }
 
-            for ( Iterator j = modelClass.getFields( generatedVersion ).iterator(); j.hasNext(); )
+            for ( Iterator j = modelClass.getFields( fromVersion ).iterator(); j.hasNext(); )
             {
                 ModelField modelField = (ModelField) j.next();
 
                 String name = capitalise( modelField.getName() );
 
-                if ( nextVersion != null )
+                if ( toVersion != null )
                 {
                     if ( versionDefinition != null && "field".equals( versionDefinition.getType() ) )
                     {
                         if ( versionDefinition.getValue().equals( modelField.getName() ) ||
                             versionDefinition.getValue().equals( modelField.getAlias() ) )
                         {
-                            sc.add( "value.set" + name + "( \"" + nextVersion + "\" );" );
+                            sc.add( "value.set" + name + "( \"" + toVersion + "\" );" );
                             continue;
                         }
                     }
                 }
 
                 // check if it's present in the next version
-                if ( nextVersion != null && !nextVersion.inside( modelField.getVersionRange() ) )
+                if ( toVersion != null && !toVersion.inside( modelField.getVersionRange() ) )
                 {
                     // check if it is present in a new definition instead
                     ModelField newField = null;
                     try
                     {
-                        newField = modelClass.getField( modelField.getName(), nextVersion );
+                        newField = modelClass.getField( modelField.getName(), toVersion );
                     }
                     catch ( ModelloRuntimeException e )
                     {
@@ -257,7 +257,7 @@ public class ConverterGenerator
 
                             if ( isClassInModel( assoc.getTo(), modelClass.getModel() ) )
                             {
-                                String className = getSourceClassName( assoc.getToClass(), generatedVersion );
+                                String className = getSourceClassName( assoc.getToClass(), fromVersion );
                                 sc.add( className + " v = (" + className + ") i.next();" );
                             }
                             else
@@ -304,7 +304,7 @@ public class ConverterGenerator
 
                             if ( isClassInModel( assoc.getTo(), modelClass.getModel() ) )
                             {
-                                String className = getSourceClassName( assoc.getToClass(), generatedVersion );
+                                String className = getSourceClassName( assoc.getToClass(), fromVersion );
                                 sc.add( className + " v = (" + className + ") entry.getValue();" );
                             }
                             else
@@ -359,8 +359,8 @@ public class ConverterGenerator
 
         try
         {
-            interfaceWriter = newJSourceWriter( packageName, "VersionConverter" );
-            classWriter = newJSourceWriter( packageName, "BasicVersionConverter" );
+            interfaceWriter = newJSourceWriter( packageName, conversionInterface.getName( true ) );
+            classWriter = newJSourceWriter( packageName, basicConverterClass.getName( true ) );
 
             conversionInterface.print( interfaceWriter );
             basicConverterClass.print( classWriter );

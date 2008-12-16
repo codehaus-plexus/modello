@@ -91,7 +91,7 @@ public class UpgradeGenerator
 
         String packageName = objectModel.getDefaultPackageName( true, toVersion ) + ".upgrade";
 
-        String jDoc = "Converts between version " + fromVersion + " and version " + toVersion + " of the model.";
+        String jDoc = "Converts from version " + fromVersion + " to version " + toVersion + " of the model.";
 
         JInterface conversionInterface = new JInterface( "VersionUpgrade" );
         conversionInterface.getJDocComment().setComment( jDoc );
@@ -341,11 +341,11 @@ public class UpgradeGenerator
 
         try
         {
-            classWriter = newJSourceWriter( packageName, basicConverterClass.getName( true ) );
             interfaceWriter = newJSourceWriter( packageName, conversionInterface.getName( true ) );
+            classWriter = newJSourceWriter( packageName, basicConverterClass.getName( true ) );
 
-            conversionInterface.print( new JSourceWriter( interfaceWriter ) );
-            basicConverterClass.print( new JSourceWriter( classWriter ) );
+            conversionInterface.print( interfaceWriter );
+            basicConverterClass.print( classWriter );
 
             // this one already flushes/closes the interfaceWriter
         }
