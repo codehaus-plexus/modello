@@ -53,7 +53,7 @@ public class ModelloCli
     public static void parseArgumentsFromCommandLine( String[] args )
         throws Exception
     {
-        if ( args.length != 5 )
+        if ( args.length < 5 )
         {
             usage();
 
@@ -104,6 +104,11 @@ public class ModelloCli
         }
 
         parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, packageWithVersion );
+
+        if ( args.length > 5 )
+        {
+            parameters.setProperty( ModelloParameterConstants.ENCODING, args[5] );
+        }
     }
 
     // ----------------------------------------------------------------------
@@ -112,6 +117,6 @@ public class ModelloCli
 
     private static void usage()
     {
-        System.err.println( "Usage: modello <model> <outputType> <output directory> <modelVersion> <packageWithVersion>" );
+        System.err.println( "Usage: modello <model> <outputType> <output directory> <modelVersion> <packageWithVersion> [<encoding>]" );
     }
 }
