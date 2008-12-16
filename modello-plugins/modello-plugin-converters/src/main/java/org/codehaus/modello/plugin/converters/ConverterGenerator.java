@@ -108,7 +108,10 @@ public class ConverterGenerator
         Version fromVersion = getGeneratedVersion();
         String packageName = objectModel.getDefaultPackageName( true, fromVersion ) + ".convert";
 
-        String jDoc = "Converts from version " + fromVersion + " to version " + toVersion + " of the model.";
+        Version effectiveToVersion = ( toVersion == null ) ? fromVersion : toVersion;
+        String jDoc = "Converts from version " + fromVersion + " (with version in package name) to version "
+            + effectiveToVersion + " (with" + ( toVersion != null ? "" : "out" )
+            + " version in package name) of the model.";
 
         JInterface conversionInterface = new JInterface( "VersionConverter" );
         conversionInterface.getJDocComment().setComment( jDoc );

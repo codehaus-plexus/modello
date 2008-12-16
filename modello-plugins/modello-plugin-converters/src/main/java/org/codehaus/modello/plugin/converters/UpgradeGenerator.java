@@ -91,7 +91,8 @@ public class UpgradeGenerator
 
         String packageName = objectModel.getDefaultPackageName( true, toVersion ) + ".upgrade";
 
-        String jDoc = "Converts from version " + fromVersion + " to version " + toVersion + " of the model.";
+        String jDoc = "Converts from version " + fromVersion + " (with version in package name) to version "
+            + toVersion + " (with" + ( toPackagedVersion ? "" : "out" ) + " version in package name) of the model.";
 
         JInterface conversionInterface = new JInterface( "VersionUpgrade" );
         conversionInterface.getJDocComment().setComment( jDoc );
