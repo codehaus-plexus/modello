@@ -5,5 +5,10 @@
       <role-hint>converters</role-hint>
       <implementation>org.codehaus.modello.plugin.converters.ConverterGenerator</implementation>
     </component>
+    <component>
+      <role>org.codehaus.modello.plugin.ModelloGenerator</role>
+      <role-hint>upgrade</role-hint>
+      <implementation>org.codehaus.modello.plugin.converters.UpgradeGenerator</implementation>
+    </component>
   </components>
 </component-set>
