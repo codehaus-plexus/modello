@@ -4,6 +4,8 @@
    xsi:schemaLocation="http://modello.codehaus.org/FEATURES http://modello.codehaus.org/features-1.0.0.xsd">
   <versionField>1.0.0</versionField>
   <!--required></required--><!-- TODO: this field is marked required but not set in the XML, should fail... -->
+  <identifier>id</identifier>
+  <identifierPart2><id>reference</id></identifierPart2>
 
   <simpleTypes>
     <primitiveBoolean>false</primitiveBoolean>
@@ -70,7 +72,7 @@
     <xmlListStyleFlat><id>flat second</id></xmlListStyleFlat>
     <xmlListStyleFlat><id>flat third</id></xmlListStyleFlat>
 
-    <!-- TODO: fix inconsistency between xsd plugin, which does not accept the following, and other XML plugins 
+    <!-- TODO: fix inconsistency between xsd plugin, which does not accept the following, and other XML plugins
     <xmlAssociationTagNames>
       <association><id>first</id></association>
       <association><id>second</id></association>

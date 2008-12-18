@@ -53,6 +53,24 @@
           <type>String</type>
         </field>
         <field>
+          <name>identifier</name>
+          <version>1.0.0+</version>
+          <description><![CDATA[<field><identifier>true</identifier></field>: a field taking part in instance identifier.
+            This field is used to generate <code>toString()</code>, <code>hashCode()</code> and <code>equals()</code>
+            methods.]]></description>
+          <identifier>true</identifier>
+          <type>String</type>
+        </field>
+        <field>
+          <name>identifierPart2</name>
+          <version>1.0.0+</version>
+          <description>Multiple fields can be participate in an identifier, either simple types or complex ones.</description>
+          <identifier>true</identifier>
+          <association>
+            <type>Reference</type>
+          </association>
+        </field>
+        <field>
           <name>simpleTypes</name>
           <version>1.0.0+</version>
           <association>
@@ -315,7 +333,7 @@
           </association>
         </field>
         <!--
-         - class features: java.enabled="false" 
+         - class features: java.enabled="false"
          - association features: java.generate-add="false" java.generate-remove="false", java.generate-break="false" java.generate-create="false", java.use-interface="interfaceName", java.init="lazy|constructor|field"
          - field features: java.adder="false", java.getter="false", java.setter="false" -->
       </fields>
@@ -576,6 +594,7 @@
           <alias>key</alias>
           <version>1.0.0+</version>
           <type>String</type>
+          <identifier>true</identifier>
         </field>
       </fields>
     </class>
