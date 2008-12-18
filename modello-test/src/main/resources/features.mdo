@@ -49,7 +49,7 @@
           <name>required</name>
           <version>1.0.0+</version>
           <required>true</required>
-          <description>Test of a required field.</description>
+          <description><![CDATA[<field><required>true</required></field>: Test of a required field.]]></description>
           <type>String</type>
         </field>
         <field>
@@ -80,7 +80,7 @@
         <field>
           <name>associationFeatures</name>
           <version>1.0.0+</version>
-          <description>Test of a association features.</description>
+          <description>Test of association features.</description>
           <association>
             <type>AssociationFeatures</type>
           </association>
