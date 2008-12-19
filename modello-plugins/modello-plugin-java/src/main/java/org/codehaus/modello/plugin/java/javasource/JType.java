@@ -75,14 +75,14 @@ package org.codehaus.modello.plugin.java.javasource;
 public class JType
 {
 
-    public static final JType Boolean = new JType( "boolean" );
-    public static final JType Byte = new JType( "byte" );
-    public static final JType Char = new JType( "char" );
-    public static final JType Double = new JType( "double" );
-    public static final JType Float = new JType( "float" );
-    public static final JType Int = new JType( "int" );
-    public static final JType Long = new JType( "long" );
-    public static final JType Short = new JType( "short" );
+    public static final JType BOOLEAN = new JType( "boolean" );
+    public static final JType BYTE = new JType( "byte" );
+    public static final JType CHAR = new JType( "char" );
+    public static final JType DOUBLE = new JType( "double" );
+    public static final JType FLOAT = new JType( "float" );
+    public static final JType INT = new JType( "int" );
+    public static final JType LONG = new JType( "long" );
+    public static final JType SHORT = new JType( "short" );
 
     private String name = null;
 
@@ -161,14 +161,14 @@ public class JType
      **/
     public boolean isPrimitive()
     {
-        return ( ( this == Boolean ) ||
-            ( this == Byte ) ||
-            ( this == Char ) ||
-            ( this == Double ) ||
-            ( this == Float ) ||
-            ( this == Int ) ||
-            ( this == Long ) ||
-            ( this == Short ) );
+        return ( ( this == BOOLEAN ) ||
+            ( this == BYTE ) ||
+            ( this == CHAR ) ||
+            ( this == DOUBLE ) ||
+            ( this == FLOAT ) ||
+            ( this == INT ) ||
+            ( this == LONG ) ||
+            ( this == SHORT ) );
     } //-- isPrimitive
 
     /**

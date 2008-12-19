@@ -110,7 +110,7 @@ public class StaxWriterGenerator
 
         addModelImports( jClass, null );
 
-        jClass.addField( new JField( JType.Int, "curId" ) );
+        jClass.addField( new JField( JType.INT, "curId" ) );
         jClass.addField( new JField( new JType( "java.util.Map" ), "idMap" ) );
         JConstructor constructor = new JConstructor( jClass );
         constructor.getSourceCode().add( "idMap = new java.util.HashMap();" );

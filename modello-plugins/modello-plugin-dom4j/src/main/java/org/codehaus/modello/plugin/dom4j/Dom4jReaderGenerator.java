@@ -125,7 +125,7 @@ public class Dom4jReaderGenerator
 
         unmarshall.addParameter( new JParameter( new JClass( "Reader" ), "reader" ) );
 
-        unmarshall.addParameter( new JParameter( JType.Boolean, "strict" ) );
+        unmarshall.addParameter( new JParameter( JType.BOOLEAN, "strict" ) );
 
         unmarshall.addException( new JClass( "IOException" ) );
 
@@ -162,7 +162,7 @@ public class Dom4jReaderGenerator
 
         unmarshall.addParameter( new JParameter( new JClass( "URL" ), "url" ) );
 
-        unmarshall.addParameter( new JParameter( JType.Boolean, "strict" ) );
+        unmarshall.addParameter( new JParameter( JType.BOOLEAN, "strict" ) );
 
         unmarshall.addException( new JClass( "IOException" ) );
 
@@ -264,7 +264,7 @@ public class Dom4jReaderGenerator
 
         unmarshall.addParameter( new JParameter( new JClass( "Element" ), "element" ) );
 
-        unmarshall.addParameter( new JParameter( JType.Boolean, "strict" ) );
+        unmarshall.addParameter( new JParameter( JType.BOOLEAN, "strict" ) );
 
         unmarshall.addParameter( new JParameter( new JClass( "String" ), "encoding" ) );
 
@@ -972,7 +972,7 @@ public class Dom4jReaderGenerator
 */
         // --------------------------------------------------------------------
 
-        method = new JMethod( JType.Boolean, "getBooleanValue" );
+        method = new JMethod( JType.BOOLEAN, "getBooleanValue" );
         method.getModifiers().makePrivate();
 
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
@@ -998,7 +998,7 @@ public class Dom4jReaderGenerator
 
         // --------------------------------------------------------------------
 
-        method = new JMethod( JType.Char, "getCharacterValue" );
+        method = new JMethod( JType.CHAR, "getCharacterValue" );
         method.getModifiers().makePrivate();
 
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
@@ -1024,12 +1024,12 @@ public class Dom4jReaderGenerator
 
         // --------------------------------------------------------------------
 
-        method = new JMethod( JType.Int, "getIntegerValue" );
+        method = new JMethod( JType.INT, "getIntegerValue" );
         method.getModifiers().makePrivate();
 
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
         method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
-        method.addParameter( new JParameter( JClass.Boolean, "strict" ) );
+        method.addParameter( new JParameter( JClass.BOOLEAN, "strict" ) );
         method.addException( new JClass( "DocumentException" ) );
 
         sc = method.getSourceCode();
@@ -1040,12 +1040,12 @@ public class Dom4jReaderGenerator
 
         // --------------------------------------------------------------------
 
-        method = new JMethod( JType.Short, "getShortValue" );
+        method = new JMethod( JType.SHORT, "getShortValue" );
         method.getModifiers().makePrivate();
 
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
         method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
-        method.addParameter( new JParameter( JClass.Boolean, "strict" ) );
+        method.addParameter( new JParameter( JClass.BOOLEAN, "strict" ) );
         method.addException( new JClass( "DocumentException" ) );
 
         sc = method.getSourceCode();
@@ -1056,12 +1056,12 @@ public class Dom4jReaderGenerator
 
         // --------------------------------------------------------------------
 
-        method = new JMethod( JType.Byte, "getByteValue" );
+        method = new JMethod( JType.BYTE, "getByteValue" );
         method.getModifiers().makePrivate();
 
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
         method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
-        method.addParameter( new JParameter( JClass.Boolean, "strict" ) );
+        method.addParameter( new JParameter( JClass.BOOLEAN, "strict" ) );
         method.addException( new JClass( "DocumentException" ) );
 
         sc = method.getSourceCode();
@@ -1072,12 +1072,12 @@ public class Dom4jReaderGenerator
 
         // --------------------------------------------------------------------
 
-        method = new JMethod( JType.Long, "getLongValue" );
+        method = new JMethod( JType.LONG, "getLongValue" );
         method.getModifiers().makePrivate();
 
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
         method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
-        method.addParameter( new JParameter( JClass.Boolean, "strict" ) );
+        method.addParameter( new JParameter( JClass.BOOLEAN, "strict" ) );
         method.addException( new JClass( "DocumentException" ) );
 
         sc = method.getSourceCode();
@@ -1088,12 +1088,12 @@ public class Dom4jReaderGenerator
 
         // --------------------------------------------------------------------
 
-        method = new JMethod( JType.Float, "getFloatValue" );
+        method = new JMethod( JType.FLOAT, "getFloatValue" );
         method.getModifiers().makePrivate();
 
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
         method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
-        method.addParameter( new JParameter( JClass.Boolean, "strict" ) );
+        method.addParameter( new JParameter( JClass.BOOLEAN, "strict" ) );
         method.addException( new JClass( "DocumentException" ) );
 
         sc = method.getSourceCode();
@@ -1104,12 +1104,12 @@ public class Dom4jReaderGenerator
 
         // --------------------------------------------------------------------
 
-        method = new JMethod( JType.Double, "getDoubleValue" );
+        method = new JMethod( JType.DOUBLE, "getDoubleValue" );
         method.getModifiers().makePrivate();
 
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
         method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
-        method.addParameter( new JParameter( JClass.Boolean, "strict" ) );
+        method.addParameter( new JParameter( JClass.BOOLEAN, "strict" ) );
         method.addException( new JClass( "DocumentException" ) );
 
         sc = method.getSourceCode();

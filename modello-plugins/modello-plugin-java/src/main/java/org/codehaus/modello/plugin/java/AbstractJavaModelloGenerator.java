@@ -49,7 +49,7 @@ public abstract class AbstractJavaModelloGenerator
 {
     /**
      * Create a new java source file writer, with configured encoding.
-     * 
+     *
      * @param packageName the package of the source file to create
      * @param className the class of the source file to create
      * @return a JSourceWriter with configured encoding

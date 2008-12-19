@@ -108,7 +108,7 @@ public class Xpp3ReaderGenerator
         // ----------------------------------------------------------------------
 
         // The Field
-        JField addDefaultEntities = new JField( JType.Boolean, "addDefaultEntities" );
+        JField addDefaultEntities = new JField( JType.BOOLEAN, "addDefaultEntities" );
 
         addDefaultEntities.setComment(
             "If set the parser will be loaded with all single characters from the XHTML specification.\n" +
@@ -123,7 +123,7 @@ public class Xpp3ReaderGenerator
         // The setter
         JMethod addDefaultEntitiesSetter = new JMethod( null, "setAddDefaultEntities" );
 
-        addDefaultEntitiesSetter.addParameter( new JParameter( JType.Boolean, "addDefaultEntities" ) );
+        addDefaultEntitiesSetter.addParameter( new JParameter( JType.BOOLEAN, "addDefaultEntities" ) );
 
         addDefaultEntitiesSetter.setSourceCode( "this.addDefaultEntities = addDefaultEntities;" );
 
@@ -132,7 +132,7 @@ public class Xpp3ReaderGenerator
         jClass.addMethod( addDefaultEntitiesSetter );
 
         // The getter
-        JMethod addDefaultEntitiesGetter = new JMethod( JType.Boolean, "getAddDefaultEntities" );
+        JMethod addDefaultEntitiesGetter = new JMethod( JType.BOOLEAN, "getAddDefaultEntities" );
 
         addDefaultEntitiesGetter.setComment( "Returns the state of the \"add default entities\" flag." );
 
@@ -151,7 +151,7 @@ public class Xpp3ReaderGenerator
 
         unmarshall.addParameter( new JParameter( new JClass( "Reader" ), "reader" ) );
 
-        unmarshall.addParameter( new JParameter( JClass.Boolean, "strict" ) );
+        unmarshall.addParameter( new JParameter( JClass.BOOLEAN, "strict" ) );
 
         unmarshall.addException( new JClass( "IOException" ) );
         unmarshall.addException( new JClass( "XmlPullParserException" ) );
@@ -197,7 +197,7 @@ public class Xpp3ReaderGenerator
 
         unmarshall.addParameter( new JParameter( new JClass( "InputStream" ), "in" ) );
 
-        unmarshall.addParameter( new JParameter( JClass.Boolean, "strict" ) );
+        unmarshall.addParameter( new JParameter( JClass.BOOLEAN, "strict" ) );
 
         unmarshall.addException( new JClass( "IOException" ) );
         unmarshall.addException( new JClass( "XmlPullParserException" ) );
@@ -297,7 +297,7 @@ public class Xpp3ReaderGenerator
 
         unmarshall.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
 
-        unmarshall.addParameter( new JParameter( JClass.Boolean, "strict" ) );
+        unmarshall.addParameter( new JParameter( JClass.BOOLEAN, "strict" ) );
 
         unmarshall.addException( new JClass( "IOException" ) );
 
@@ -1236,7 +1236,7 @@ public class Xpp3ReaderGenerator
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
         method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
         method.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
-        method.addParameter( new JParameter( JClass.Boolean, "strict" ) );
+        method.addParameter( new JParameter( JClass.BOOLEAN, "strict" ) );
 
         sc = method.getSourceCode();
 
@@ -1269,7 +1269,7 @@ public class Xpp3ReaderGenerator
 
         // --------------------------------------------------------------------
 
-        method = new JMethod( JType.Boolean, "getBooleanValue" );
+        method = new JMethod( JType.BOOLEAN, "getBooleanValue" );
         method.addException( new JClass( "XmlPullParserException" ) );
         method.getModifiers().makePrivate();
 
@@ -1285,7 +1285,7 @@ public class Xpp3ReaderGenerator
 
         // --------------------------------------------------------------------
 
-        method = new JMethod( JType.Boolean, "getBooleanValue" );
+        method = new JMethod( JType.BOOLEAN, "getBooleanValue" );
         method.addException( new JClass( "XmlPullParserException" ) );
         method.getModifiers().makePrivate();
 
@@ -1326,7 +1326,7 @@ public class Xpp3ReaderGenerator
 
         // --------------------------------------------------------------------
 
-        method = new JMethod( JType.Char, "getCharacterValue" );
+        method = new JMethod( JType.CHAR, "getCharacterValue" );
         method.addException( new JClass( "XmlPullParserException" ) );
         method.getModifiers().makePrivate();
 
@@ -1354,14 +1354,14 @@ public class Xpp3ReaderGenerator
 
         // --------------------------------------------------------------------
 
-        method = new JMethod( JType.Int, "getIntegerValue" );
+        method = new JMethod( JType.INT, "getIntegerValue" );
         method.addException( new JClass( "XmlPullParserException" ) );
         method.getModifiers().makePrivate();
 
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
         method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
         method.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
-        method.addParameter( new JParameter( JClass.Boolean, "strict" ) );
+        method.addParameter( new JParameter( JClass.BOOLEAN, "strict" ) );
 
         sc = method.getSourceCode();
 
@@ -1371,14 +1371,14 @@ public class Xpp3ReaderGenerator
 
         // --------------------------------------------------------------------
 
-        method = new JMethod( JType.Short, "getShortValue" );
+        method = new JMethod( JType.SHORT, "getShortValue" );
         method.addException( new JClass( "XmlPullParserException" ) );
         method.getModifiers().makePrivate();
 
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
         method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
         method.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
-        method.addParameter( new JParameter( JClass.Boolean, "strict" ) );
+        method.addParameter( new JParameter( JClass.BOOLEAN, "strict" ) );
 
         sc = method.getSourceCode();
 
@@ -1388,14 +1388,14 @@ public class Xpp3ReaderGenerator
 
         // --------------------------------------------------------------------
 
-        method = new JMethod( JType.Byte, "getByteValue" );
+        method = new JMethod( JType.BYTE, "getByteValue" );
         method.addException( new JClass( "XmlPullParserException" ) );
         method.getModifiers().makePrivate();
 
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
         method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
         method.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
-        method.addParameter( new JParameter( JClass.Boolean, "strict" ) );
+        method.addParameter( new JParameter( JClass.BOOLEAN, "strict" ) );
 
         sc = method.getSourceCode();
 
@@ -1405,14 +1405,14 @@ public class Xpp3ReaderGenerator
 
         // --------------------------------------------------------------------
 
-        method = new JMethod( JType.Long, "getLongValue" );
+        method = new JMethod( JType.LONG, "getLongValue" );
         method.addException( new JClass( "XmlPullParserException" ) );
         method.getModifiers().makePrivate();
 
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
         method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
         method.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
-        method.addParameter( new JParameter( JClass.Boolean, "strict" ) );
+        method.addParameter( new JParameter( JClass.BOOLEAN, "strict" ) );
 
         sc = method.getSourceCode();
 
@@ -1422,14 +1422,14 @@ public class Xpp3ReaderGenerator
 
         // --------------------------------------------------------------------
 
-        method = new JMethod( JType.Float, "getFloatValue" );
+        method = new JMethod( JType.FLOAT, "getFloatValue" );
         method.addException( new JClass( "XmlPullParserException" ) );
         method.getModifiers().makePrivate();
 
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
         method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
         method.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
-        method.addParameter( new JParameter( JClass.Boolean, "strict" ) );
+        method.addParameter( new JParameter( JClass.BOOLEAN, "strict" ) );
 
         sc = method.getSourceCode();
 
@@ -1439,14 +1439,14 @@ public class Xpp3ReaderGenerator
 
         // --------------------------------------------------------------------
 
-        method = new JMethod( JType.Double, "getDoubleValue" );
+        method = new JMethod( JType.DOUBLE, "getDoubleValue" );
         method.addException( new JClass( "XmlPullParserException" ) );
         method.getModifiers().makePrivate();
 
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
         method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
         method.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
-        method.addParameter( new JParameter( JClass.Boolean, "strict" ) );
+        method.addParameter( new JParameter( JClass.BOOLEAN, "strict" ) );
 
         sc = method.getSourceCode();
 

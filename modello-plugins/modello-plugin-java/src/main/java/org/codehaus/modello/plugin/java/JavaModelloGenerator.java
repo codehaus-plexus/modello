@@ -256,7 +256,7 @@ public class JavaModelloGenerator
 
     private JMethod generateEquals( ModelClass modelClass )
     {
-        JMethod equals = new JMethod( JType.Boolean, "equals" );
+        JMethod equals = new JMethod( JType.BOOLEAN, "equals" );
 
         equals.addParameter( new JParameter( new JClass( "Object" ), "other" ) );
 
@@ -359,7 +359,7 @@ public class JavaModelloGenerator
 
     private JMethod generateHashCode( ModelClass modelClass )
     {
-        JMethod hashCode = new JMethod( JType.Int, "hashCode" );
+        JMethod hashCode = new JMethod( JType.INT, "hashCode" );
 
         List identifierFields = modelClass.getIdentifierFields( getGeneratedVersion() );
 
@@ -459,67 +459,67 @@ public class JavaModelloGenerator
 
         if ( modelField.getType().equals( "boolean" ) )
         {
-            type = JType.Boolean;
+            type = JType.BOOLEAN;
         }
         else if ( modelField.getType().equals( "boolean[]" ) )
         {
-            type = JType.Boolean.createArray();
+            type = JType.BOOLEAN.createArray();
         }
         else if ( modelField.getType().equals( "byte" ) )
         {
-            type = JType.Byte;
+            type = JType.BYTE;
         }
         else if ( modelField.getType().equals( "byte[]" ) )
         {
-            type = JType.Byte.createArray();
+            type = JType.BYTE.createArray();
         }
         else if ( modelField.getType().equals( "char" ) )
         {
-            type = JType.Char;
+            type = JType.CHAR;
         }
         else if ( modelField.getType().equals( "char[]" ) )
         {
-            type = JType.Char.createArray();
+            type = JType.CHAR.createArray();
         }
         else if ( modelField.getType().equals( "double" ) )
         {
-            type = JType.Double;
+            type = JType.DOUBLE;
         }
         else if ( modelField.getType().equals( "double[]" ) )
         {
-            type = JType.Double.createArray();
+            type = JType.DOUBLE.createArray();
         }
         else if ( modelField.getType().equals( "float" ) )
         {
-            type = JType.Float;
+            type = JType.FLOAT;
         }
         else if ( modelField.getType().equals( "float[]" ) )
         {
-            type = JType.Float.createArray();
+            type = JType.FLOAT.createArray();
         }
         else if ( modelField.getType().equals( "int" ) )
         {
-            type = JType.Int;
+            type = JType.INT;
         }
         else if ( modelField.getType().equals( "int[]" ) )
         {
-            type = JType.Int.createArray();
+            type = JType.INT.createArray();
         }
         else if ( modelField.getType().equals( "short" ) )
         {
-            type = JType.Short;
+            type = JType.SHORT;
         }
         else if ( modelField.getType().equals( "short[]" ) )
         {
-            type = JType.Short.createArray();
+            type = JType.SHORT.createArray();
         }
         else if ( modelField.getType().equals( "long" ) )
         {
-            type = JType.Long;
+            type = JType.LONG;
         }
         else if ( modelField.getType().equals( "long[]" ) )
         {
-            type = JType.Long.createArray();
+            type = JType.LONG.createArray();
         }
         else if ( modelField.getType().equals( "Date" ) )
         {
@@ -807,7 +807,7 @@ public class JavaModelloGenerator
         if ( !JavaAssociationMetadata.INIT_TYPES.contains( javaAssociationMetadata.getInitializationMode() ) )
         {
             throw new ModelloException( "The Java Modello Generator cannot use '"
-                + javaAssociationMetadata.getInitializationMode() + "' as a <association " + "java.init=\""
+                + javaAssociationMetadata.getInitializationMode() + "' as a <association java.init=\""
                 + javaAssociationMetadata.getInitializationMode() + "\"> "
                 + "value, the only the following are acceptable " + JavaAssociationMetadata.INIT_TYPES );
         }

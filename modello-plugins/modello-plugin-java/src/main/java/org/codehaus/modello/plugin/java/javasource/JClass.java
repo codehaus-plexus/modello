@@ -855,11 +855,11 @@ public class JClass extends JStructure
         JClass testClass = new JClass( "org.acme.Test" );
 
         testClass.addImport( "java.util.Vector" );
-        testClass.addMember( new JField( JType.Int, "x" ) );
+        testClass.addMember( new JField( JType.INT, "x" ) );
         JClass jcString = new JClass( "String" );
 
         JField field = null;
-        field = new JField( JType.Int, "_z" );
+        field = new JField( JType.INT, "_z" );
         field.getModifiers().setStatic( true );
         testClass.addField( field );
 
@@ -873,14 +873,14 @@ public class JClass extends JStructure
         JConstructor cons = testClass.createConstructor();
         cons.getSourceCode().add( "this.x = 6;" );
 
-        JMethod jMethod = new JMethod( JType.Int, "getX" );
+        JMethod jMethod = new JMethod( JType.INT, "getX" );
         jMethod.setSourceCode( "return this.x;" );
         testClass.addMethod( jMethod );
 
         //-- create inner-class
         JClass innerClass = testClass.createInnerClass( "Foo" );
         innerClass.addImport( "java.util.Hashtable" );
-        innerClass.addMember( new JField( JType.Int, "_type" ) );
+        innerClass.addMember( new JField( JType.INT, "_type" ) );
 
         field = new JField( jcString, "_name" );
         field.getModifiers().makePrivate();
