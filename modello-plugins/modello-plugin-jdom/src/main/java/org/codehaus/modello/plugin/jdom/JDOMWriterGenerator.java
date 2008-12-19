@@ -72,11 +72,10 @@ public class JDOMWriterGenerator
 
         JSourceWriter sourceWriter = newJSourceWriter( packageName, marshallerName );
 
-        JClass jClass = new JClass( marshallerName );
+        JClass jClass = new JClass( packageName + '.' + marshallerName );
         // -------------------------------------------------------------
         // imports now
         // -------------------------------------------------------------
-        jClass.setPackageName( packageName );
         jClass.addImport( "java.io.OutputStream" );
         jClass.addImport( "java.io.OutputStreamWriter" );
         jClass.addImport( "java.io.Writer" );

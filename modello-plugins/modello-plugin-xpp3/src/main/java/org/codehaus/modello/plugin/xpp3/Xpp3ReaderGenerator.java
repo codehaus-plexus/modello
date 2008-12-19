@@ -79,9 +79,7 @@ public class Xpp3ReaderGenerator
 
         JSourceWriter sourceWriter = newJSourceWriter( packageName, unmarshallerName );
 
-        JClass jClass = new JClass( unmarshallerName );
-
-        jClass.setPackageName( packageName );
+        JClass jClass = new JClass( packageName + '.' + unmarshallerName );
 
         jClass.addImport( "org.codehaus.plexus.util.ReaderFactory" );
 

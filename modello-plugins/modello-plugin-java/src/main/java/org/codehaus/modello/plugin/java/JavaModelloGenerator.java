@@ -87,9 +87,7 @@ public class JavaModelloGenerator
 
             JSourceWriter sourceWriter = newJSourceWriter( packageName, modelInterface.getName() );
 
-            JInterface jInterface = new JInterface( modelInterface.getName() );
-
-            jInterface.setPackageName( packageName );
+            JInterface jInterface = new JInterface( packageName + '.' + modelInterface.getName() );
 
             if ( modelInterface.getSuperInterface() != null )
             {
@@ -134,7 +132,7 @@ public class JavaModelloGenerator
 
             JSourceWriter sourceWriter = newJSourceWriter( packageName, modelClass.getName() );
 
-            JClass jClass = new JClass( modelClass.getName() );
+            JClass jClass = new JClass( packageName + '.' + modelClass.getName() );
 
             jClass.addImport( "java.util.Date" );
 
@@ -144,8 +142,6 @@ public class JavaModelloGenerator
             }
 
             addModelImports( jClass, modelClass );
-
-            jClass.setPackageName( packageName );
 
             jClass.getModifiers().setAbstract( javaClassMetadata.isAbstract() );
 

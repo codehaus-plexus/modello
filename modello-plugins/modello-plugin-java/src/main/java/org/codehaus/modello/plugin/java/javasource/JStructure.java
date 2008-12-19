@@ -554,7 +554,7 @@ abstract class JStructure extends JType
     public boolean isAbstract() {
         return modifiers.isAbstract();
     }
-    
+
     public static boolean isValidClassName( String name )
     {
 
@@ -815,6 +815,7 @@ abstract class JStructure extends JType
      * Allows changing the package name of this JStructure
      *
      * @param packageName the package name to use
+     * @deprecated removed in future version of javasource
      */
     public void setPackageName( String packageName )
     {

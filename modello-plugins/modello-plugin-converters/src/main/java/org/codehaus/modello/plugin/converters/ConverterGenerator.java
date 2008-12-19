@@ -113,13 +113,11 @@ public class ConverterGenerator
             + effectiveToVersion + " (with" + ( toVersion != null ? "" : "out" )
             + " version in package name) of the model.";
 
-        JInterface conversionInterface = new JInterface( "VersionConverter" );
+        JInterface conversionInterface = new JInterface( packageName + ".VersionConverter" );
         conversionInterface.getJDocComment().setComment( jDoc );
-        conversionInterface.setPackageName( packageName );
 
-        JClass basicConverterClass = new JClass( "BasicVersionConverter" );
+        JClass basicConverterClass = new JClass( packageName + ".BasicVersionConverter" );
         basicConverterClass.getJDocComment().setComment( jDoc );
-        basicConverterClass.setPackageName( packageName );
         basicConverterClass.addInterface( conversionInterface );
 
         VersionDefinition versionDefinition = objectModel.getVersionDefinition();
@@ -385,9 +383,8 @@ public class ConverterGenerator
 
         String jDoc = "Converts between the available versions of the model.";
 
-        JClass converterClass = new JClass( "ConverterTool" );
+        JClass converterClass = new JClass( packageName + ".ConverterTool" );
         converterClass.getJDocComment().setComment( jDoc );
-        converterClass.setPackageName( packageName );
 
         converterClass.addImport( "java.io.File" );
         converterClass.addImport( "java.io.IOException" );
@@ -402,7 +399,7 @@ public class ConverterGenerator
         }
         writeConvertMethod( converterClass, objectModel, basePackage, allVersions, null );
 
-        JSourceWriter classWriter = null; 
+        JSourceWriter classWriter = null;
         try
         {
             classWriter = newJSourceWriter( packageName, converterClass.getName( true ) );

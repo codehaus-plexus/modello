@@ -80,9 +80,7 @@ public class Dom4jWriterGenerator
 
         JSourceWriter sourceWriter = newJSourceWriter( packageName, marshallerName );
 
-        JClass jClass = new JClass( marshallerName );
-
-        jClass.setPackageName( packageName );
+        JClass jClass = new JClass( packageName + '.' + marshallerName );
 
         jClass.addImport( "java.io.Writer" );
 
