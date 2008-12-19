@@ -150,7 +150,8 @@ public class ModelDefault
              && ! CHECK_DEPRECATION.equalsIgnoreCase( key )
              && ! PACKAGE.equalsIgnoreCase( key ) )
         {
-            throw new ModelValidationException( "The key of default element must be 'Set', 'List', 'Map', 'Properties', 'checkDeprecation' or 'package', was '" + key + "'." );
+            throw new ModelValidationException( "The key of default element must be ' "+ SET +"', '" + LIST + "', '"
+                + MAP + "', '" + PROPERTIES + "', '" + CHECK_DEPRECATION + "' or 'package', was '" + key + "'." );
         }
     }
 
