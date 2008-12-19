@@ -53,6 +53,10 @@
     </dependency>
     <dependency>
       <groupId>org.codehaus.modello</groupId>
+      <artifactId>modello-plugin-java</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-plugin-jdom</artifactId>
       <scope>runtime</scope>
     </dependency>

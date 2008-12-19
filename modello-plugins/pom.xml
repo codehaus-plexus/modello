@@ -12,6 +12,7 @@
   <name>Modello Plugins</name>
 
   <modules>
+    <module>modello-plugin-java</module>
     <module>modello-plugin-converters</module>
     <module>modello-plugin-xml</module>
     <module>modello-plugin-xdoc</module>

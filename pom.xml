@@ -314,6 +314,11 @@
       </dependency>
       <dependency>
         <groupId>org.codehaus.modello</groupId>
+        <artifactId>modello-plugin-java</artifactId>
+        <version>1.0-beta-1-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>org.codehaus.modello</groupId>
         <artifactId>modello-plugin-xdoc</artifactId>
         <version>1.0-beta-1-SNAPSHOT</version>
       </dependency>
