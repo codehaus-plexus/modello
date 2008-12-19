@@ -283,12 +283,12 @@ public class JavaModelloGenerator
 
         JSourceCode sc = equals.getSourceCode();
 
-        sc.add( "if ( this == other)" );
+        sc.add( "if ( this == other )" );
         sc.add( "{" );
         sc.addIndented( "return true;" );
         sc.add( "}" );
         sc.add( "", (short) 0 );
-        sc.add( "if ( !(other instanceof " + modelClass.getName() + ") )" );
+        sc.add( "if ( !( other instanceof " + modelClass.getName() + " ) )" );
         sc.add( "{" );
         sc.addIndented( "return false;" );
         sc.add( "}" );
