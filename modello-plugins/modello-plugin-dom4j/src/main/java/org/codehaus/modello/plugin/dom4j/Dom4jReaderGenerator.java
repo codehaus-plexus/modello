@@ -72,18 +72,8 @@ public class Dom4jReaderGenerator
     {
         Model objectModel = getModel();
 
-        String packageName;
-
-        if ( isPackageWithVersion() )
-        {
-            packageName = objectModel.getDefaultPackageName( true, getGeneratedVersion() );
-        }
-        else
-        {
-            packageName = objectModel.getDefaultPackageName( false, null );
-        }
-
-        packageName += ".io.dom4j";
+        String packageName = objectModel.getDefaultPackageName( isPackageWithVersion(), getGeneratedVersion() )
+            + ".io.dom4j";
 
         String unmarshallerName = getFileName( "Dom4jReader" );
 
@@ -98,9 +88,9 @@ public class Dom4jReaderGenerator
         jClass.addImport( "java.io.Reader" );
 
         jClass.addImport( "java.net.URL" );
-        
+
         jClass.addImport( "java.util.Date" );
-        
+
         jClass.addImport( "java.util.Locale" );
 
         jClass.addImport( "java.text.DateFormat" );
@@ -163,7 +153,7 @@ public class Dom4jReaderGenerator
         unmarshall.addException( new JClass( "DocumentException" ) );
 
         sc = unmarshall.getSourceCode();
-        
+
         sc.add( "return read( reader, true );" );
 
         jClass.addMethod( unmarshall );
@@ -200,11 +190,11 @@ public class Dom4jReaderGenerator
         unmarshall.addException( new JClass( "DocumentException" ) );
 
         sc = unmarshall.getSourceCode();
-        
+
         sc.add( "return read( url, true );" );
 
         jClass.addMethod( unmarshall );
-        
+
         // ----------------------------------------------------------------------
         // Write the class parsers
         // ----------------------------------------------------------------------

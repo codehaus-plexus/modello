@@ -65,16 +65,8 @@ public class JDOMWriterGenerator
     {
         Model objectModel = getModel();
 
-        String packageName;
-        if ( isPackageWithVersion() )
-        {
-            packageName = objectModel.getDefaultPackageName( true, getGeneratedVersion() );
-        }
-        else
-        {
-            packageName = objectModel.getDefaultPackageName( false, null );
-        }
-        packageName = packageName + ".io.jdom";
+        String packageName= objectModel.getDefaultPackageName( isPackageWithVersion(), getGeneratedVersion() )
+            + ".io.jdom";
 
         String marshallerName = getFileName( "JDOMWriter" );
 
@@ -603,10 +595,10 @@ public class JDOMWriterGenerator
                 else
                 {
                     //MANY_MULTIPLICITY
-//                    
+//
 //                    type = association.getType();
 //                    String toType = association.getTo();
-//                    
+//
                     if ( ModelDefault.LIST.equals( type ) || ModelDefault.SET.equals( type ) )
                     {
 //                        type = association.getType();
@@ -758,7 +750,7 @@ public class JDOMWriterGenerator
 
         jClass.addMethod( toReturn );
     }
-    
+
     private void createIterateMethod2( String field, ModelClass toClass, String childFieldTagName, JClass jClass )
     {
         if ( jClass.getMethod( "iterate2" + capitalise( toClass.getName() ), 0 ) != null )
@@ -809,6 +801,6 @@ public class JDOMWriterGenerator
 
         jClass.addMethod( toReturn );
     }
-    
+
 
 }

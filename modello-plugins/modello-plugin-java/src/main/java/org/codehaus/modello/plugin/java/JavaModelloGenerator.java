@@ -83,16 +83,7 @@ public class JavaModelloGenerator
         {
             ModelInterface modelInterface = (ModelInterface) i.next();
 
-            String packageName;
-
-            if ( isPackageWithVersion() )
-            {
-                packageName = modelInterface.getPackageName( true, getGeneratedVersion() );
-            }
-            else
-            {
-                packageName = modelInterface.getPackageName( false, null );
-            }
+            String packageName = modelInterface.getPackageName( isPackageWithVersion(), getGeneratedVersion() );
 
             JSourceWriter sourceWriter = newJSourceWriter( packageName, modelInterface.getName() );
 
@@ -139,16 +130,7 @@ public class JavaModelloGenerator
                 continue;
             }
 
-            String packageName;
-
-            if ( isPackageWithVersion() )
-            {
-                packageName = modelClass.getPackageName( true, getGeneratedVersion() );
-            }
-            else
-            {
-                packageName = modelClass.getPackageName( false, null );
-            }
+            String packageName = modelClass.getPackageName( isPackageWithVersion(), getGeneratedVersion() );
 
             JSourceWriter sourceWriter = newJSourceWriter( packageName, modelClass.getName() );
 
@@ -165,10 +147,7 @@ public class JavaModelloGenerator
 
             jClass.setPackageName( packageName );
 
-            if ( javaClassMetadata.isAbstract() )
-            {
-                jClass.getModifiers().setAbstract( true );
-            }
+            jClass.getModifiers().setAbstract( javaClassMetadata.isAbstract() );
 
             if ( modelClass.getSuperClass() != null )
             {
@@ -712,13 +691,8 @@ public class JavaModelloGenerator
             JavaAssociationMetadata javaAssociationMetadata = (JavaAssociationMetadata) modelAssociation
                 .getAssociationMetadata( JavaAssociationMetadata.ID );
 
-            boolean isOneMultiplicity = false;
-
-            if ( isBidirectionalAssociation( modelAssociation )
-                 && ModelAssociation.ONE_MULTIPLICITY.equals( modelAssociation.getMultiplicity() ) )
-            {
-                isOneMultiplicity = true;
-            }
+            boolean isOneMultiplicity = isBidirectionalAssociation( modelAssociation )
+                 && ModelAssociation.ONE_MULTIPLICITY.equals( modelAssociation.getMultiplicity() );
 
             if ( isOneMultiplicity && javaAssociationMetadata.isGenerateBreak() )
             {
@@ -1195,12 +1169,9 @@ public class JavaModelloGenerator
             {
                 type = new JClass( javaAssociationMetadata.getInterfaceName() );
             }
-            else
+            else if ( useTo )
             {
-                if ( useTo )
-                {
-                    type = new JClass( modelAssociation.getTo() );
-                }
+                type = new JClass( modelAssociation.getTo() );
             }
         }
 

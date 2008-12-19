@@ -75,18 +75,8 @@ public class StaxWriterGenerator
     {
         Model objectModel = getModel();
 
-        String packageName;
-
-        if ( isPackageWithVersion() )
-        {
-            packageName = objectModel.getDefaultPackageName( true, getGeneratedVersion() );
-        }
-        else
-        {
-            packageName = objectModel.getDefaultPackageName( false, null );
-        }
-
-        packageName += ".io.stax";
+        String packageName = objectModel.getDefaultPackageName( isPackageWithVersion(), getGeneratedVersion() )
+            + ".io.stax";
 
         String marshallerName = getFileName( "StaxWriter" );
 

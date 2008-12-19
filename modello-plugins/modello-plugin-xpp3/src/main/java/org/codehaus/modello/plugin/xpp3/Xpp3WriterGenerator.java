@@ -71,18 +71,8 @@ public class Xpp3WriterGenerator
     {
         Model objectModel = getModel();
 
-        String packageName;
-
-        if ( isPackageWithVersion() )
-        {
-            packageName = objectModel.getDefaultPackageName( true, getGeneratedVersion() );
-        }
-        else
-        {
-            packageName = objectModel.getDefaultPackageName( false, null );
-        }
-
-        packageName += ".io.xpp3";
+        String packageName = objectModel.getDefaultPackageName( isPackageWithVersion(), getGeneratedVersion() )
+            + ".io.xpp3";
 
         String marshallerName = getFileName( "Xpp3Writer" );
 

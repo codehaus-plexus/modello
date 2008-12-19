@@ -87,18 +87,8 @@ public class StaxReaderGenerator
     {
         Model objectModel = getModel();
 
-        String packageName;
-
-        if ( isPackageWithVersion() )
-        {
-            packageName = objectModel.getDefaultPackageName( true, getGeneratedVersion() );
-        }
-        else
-        {
-            packageName = objectModel.getDefaultPackageName( false, null );
-        }
-
-        packageName += ".io.stax";
+        String packageName = objectModel.getDefaultPackageName( isPackageWithVersion(), getGeneratedVersion() )
+            + ".io.stax";
 
         String unmarshallerName = getFileName( "StaxReader" );
 
@@ -271,9 +261,7 @@ public class StaxReaderGenerator
     {
         Model objectModel = getModel();
 
-        String packageName = objectModel.getDefaultPackageName( false, null );
-
-        packageName += ".io.stax";
+        String packageName = objectModel.getDefaultPackageName( false, null ) + ".io.stax";
 
         String unmarshallerName = getFileName( "StaxReaderDelegate" );
 

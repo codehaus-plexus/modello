@@ -73,18 +73,8 @@ public class Dom4jWriterGenerator
     {
         Model objectModel = getModel();
 
-        String packageName;
-
-        if ( isPackageWithVersion() )
-        {
-            packageName = objectModel.getDefaultPackageName( true, getGeneratedVersion() );
-        }
-        else
-        {
-            packageName = objectModel.getDefaultPackageName( false, null );
-        }
-
-        packageName += ".io.dom4j";
+        String packageName = objectModel.getDefaultPackageName( isPackageWithVersion(), getGeneratedVersion() )
+            + ".io.dom4j";
 
         String marshallerName = getFileName( "Dom4jWriter" );
 
