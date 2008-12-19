@@ -6,6 +6,10 @@
   <description>A model to test Modello features with every plugin and point to plugin specific features.</description>
 
   <defaults>
+    <!--
+     see modello-core org.codehaus.modello.model.ModelDefault class
+     available keys: checkDeprecation, package, java.util.List, java.util.Map, java.util.Properties, java.util.Set
+    -->
     <default>
       <key>package</key>
       <value>org.codehaus.modello.test.features</value>
