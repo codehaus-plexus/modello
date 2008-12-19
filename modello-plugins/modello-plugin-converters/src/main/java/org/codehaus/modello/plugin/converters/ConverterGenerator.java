@@ -156,7 +156,7 @@ public class ConverterGenerator
                 conversionInterface.addMethod( methodSig );
 
                 // Method from interface, delegates to converter with the given implementation of the target class
-                JMethod jMethod = new JMethod( new JType( targetClass ), methodName );
+                JMethod jMethod = new JMethod( methodName, new JType( targetClass ), null );
                 jMethod.addParameter( new JParameter( new JType( sourceClass ), parameterName ) );
                 basicConverterClass.addMethod( jMethod );
 
@@ -166,7 +166,7 @@ public class ConverterGenerator
             }
 
             // Actual conversion method, takes implementation as a parameter to facilitate being called as a superclass
-            JMethod jMethod = new JMethod( new JType( targetClass ), methodName );
+            JMethod jMethod = new JMethod( methodName, new JType( targetClass ), null );
             jMethod.addParameter( new JParameter( new JType( sourceClass ), parameterName ) );
             jMethod.addParameter( new JParameter( new JType( targetClass ), "value" ) );
             basicConverterClass.addMethod( jMethod );
@@ -422,7 +422,7 @@ public class ConverterGenerator
         {
             methodName += "_" + v.toString( "v", "_" );
         }
-        JMethod method = new JMethod( new JType( targetClass ), methodName );
+        JMethod method = new JMethod( methodName, new JType( targetClass ), null );
         method.addParameter( new JParameter( new JType( "File" ), "f" ) );
         method.addException( new JClass( "IOException" ) );
         method.addException( new JClass( "XMLStreamException" ) );

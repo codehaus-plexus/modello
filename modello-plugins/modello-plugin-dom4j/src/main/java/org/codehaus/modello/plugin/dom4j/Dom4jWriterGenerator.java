@@ -126,7 +126,7 @@ public class Dom4jWriterGenerator
 
         // Write the parse method which will do the unmarshalling.
 
-        JMethod marshall = new JMethod( null, "write" );
+        JMethod marshall = new JMethod( "write" );
 
         marshall.addParameter( new JParameter( new JClass( "Writer" ), "writer" ) );
 
@@ -174,7 +174,7 @@ public class Dom4jWriterGenerator
 
         String uncapClassName = uncapitalise( className );
 
-        JMethod marshall = new JMethod( null, "write" + className );
+        JMethod marshall = new JMethod( "write" + className );
 
         marshall.addParameter( new JParameter( new JClass( className ), uncapClassName ) );
 
@@ -501,7 +501,7 @@ public class Dom4jWriterGenerator
 
     private void writeHelpers( JClass jClass )
     {
-        JMethod method = new JMethod( null, "writeXpp3DomToElement" );
+        JMethod method = new JMethod( "writeXpp3DomToElement" );
 
         method.addParameter( new JParameter( new JClass( "Xpp3Dom" ), "xpp3Dom" ) );
 

@@ -132,7 +132,7 @@ public class StaxWriterGenerator
 
         // Write the parse method which will do the unmarshalling.
 
-        JMethod marshall = new JMethod( null, "write" );
+        JMethod marshall = new JMethod( "write" );
 
         marshall.addParameter( new JParameter( new JClass( "Writer" ), "writer" ) );
 
@@ -211,7 +211,7 @@ public class StaxWriterGenerator
 
         String uncapClassName = uncapitalise( className );
 
-        JMethod marshall = new JMethod( null, "write" + className );
+        JMethod marshall = new JMethod( "write" + className );
 
         marshall.addParameter( new JParameter( new JClass( className ), uncapClassName ) );
 

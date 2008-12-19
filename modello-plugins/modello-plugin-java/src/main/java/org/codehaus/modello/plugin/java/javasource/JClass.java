@@ -873,7 +873,7 @@ public class JClass extends JStructure
         JConstructor cons = testClass.createConstructor();
         cons.getSourceCode().add( "this.x = 6;" );
 
-        JMethod jMethod = new JMethod( JType.INT, "getX" );
+        JMethod jMethod = new JMethod( "getX", JType.INT, null );
         jMethod.setSourceCode( "return this.x;" );
         testClass.addMethod( jMethod );
 
@@ -890,7 +890,7 @@ public class JClass extends JStructure
         cons = innerClass.createConstructor();
         cons.getSourceCode().add( "_name = \"foo\";" );
 
-        jMethod = new JMethod( jcString, "getName" );
+        jMethod = new JMethod( "getName", jcString, null );
         jMethod.setSourceCode( "return _name;" );
         innerClass.addMethod( jMethod );
 

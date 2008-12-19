@@ -154,17 +154,17 @@ public class JDOMWriterGenerator
         JMethod inc = new JMethod( "increaseCount" );
         inc.getSourceCode().add( "currentIndex = currentIndex + 1;" );
         counter.addMethod( inc );
-        JMethod getter = new JMethod( new JType( "int" ), "getCurrentIndex" );
+        JMethod getter = new JMethod( "getCurrentIndex", new JType( "int" ), null );
         getter.getSourceCode().add( "return currentIndex;" );
         counter.addMethod( getter );
-        getter = new JMethod( new JType( "int" ), "getDepth" );
+        getter = new JMethod( "getDepth", new JType( "int" ), null );
         getter.getSourceCode().add( "return level;" );
         counter.addMethod( getter );
     }
 
     private JMethod generateWriteModel( String root, String rootElement )
     {
-        JMethod marshall = new JMethod( null, "write" );
+        JMethod marshall = new JMethod( "write" );
 
         marshall.addParameter( new JParameter( new JClass( root ), rootElement ) );
         marshall.addParameter( new JParameter( new JClass( "Document" ), "document" ) );
@@ -188,7 +188,7 @@ public class JDOMWriterGenerator
 
     private JMethod generateWriteModel2( String root, String rootElement )
     {
-        JMethod marshall = new JMethod( null, "write" );
+        JMethod marshall = new JMethod( "write" );
 
         marshall.addParameter( new JParameter( new JClass( root ), rootElement ) );
         marshall.addParameter( new JParameter( new JClass( "Document" ), "document" ) );
@@ -206,7 +206,7 @@ public class JDOMWriterGenerator
 
     private JMethod generateWriteModel3( String root, String rootElement )
     {
-        JMethod marshall = new JMethod( null, "write" );
+        JMethod marshall = new JMethod( "write" );
 
         marshall.addParameter( new JParameter( new JClass( root ), rootElement ) );
         marshall.addParameter( new JParameter( new JClass( "Document" ), "document" ) );
@@ -227,7 +227,7 @@ public class JDOMWriterGenerator
 
     private JMethod[] generateUtilityMethods()
     {
-        JMethod findRSElement = new JMethod( new JClass( "Element" ), "findAndReplaceSimpleElement" );
+        JMethod findRSElement = new JMethod( "findAndReplaceSimpleElement", new JClass( "Element" ), null );
         findRSElement.addParameter( new JParameter( new JClass( "Counter" ), "counter" ) );
         findRSElement.addParameter( new JParameter( new JClass( "Element" ), "parent" ) );
         findRSElement.addParameter( new JParameter( new JClass( "String" ), "name" ) );
@@ -253,7 +253,7 @@ public class JDOMWriterGenerator
         sc.add( "}" );
         sc.add( "return element;" );
 
-        JMethod updateElement = new JMethod( new JClass( "Element" ), "updateElement" );
+        JMethod updateElement = new JMethod( "updateElement", new JClass( "Element" ), null );
         updateElement.addParameter( new JParameter( new JClass( "Counter" ), "counter" ) );
         updateElement.addParameter( new JParameter( new JClass( "Element" ), "parent" ) );
         updateElement.addParameter( new JParameter( new JClass( "String" ), "name" ) );
@@ -292,7 +292,7 @@ public class JDOMWriterGenerator
         sc.add( "}" );
         sc.add( "return element;" );
 
-        JMethod insAtPref = new JMethod( null, "insertAtPreferredLocation" );
+        JMethod insAtPref = new JMethod( "insertAtPreferredLocation" );
         insAtPref.addParameter( new JParameter( new JClass( "Element" ), "parent" ) );
         insAtPref.addParameter( new JParameter( new JClass( "Element" ), "child" ) );
         insAtPref.addParameter( new JParameter( new JClass( "Counter" ), "counter" ) );
@@ -357,7 +357,7 @@ public class JDOMWriterGenerator
         sc.add( "parent.addContent(contentIndex, child);" );
         sc.add( "parent.addContent(contentIndex, lastText);" );
 
-        JMethod findRSProps = new JMethod( new JClass( "Element" ), "findAndReplaceProperties" );
+        JMethod findRSProps = new JMethod( "findAndReplaceProperties", new JClass( "Element" ), null );
         findRSProps.addParameter( new JParameter( new JClass( "Counter" ), "counter" ) );
         findRSProps.addParameter( new JParameter( new JClass( "Element" ), "parent" ) );
         findRSProps.addParameter( new JParameter( new JClass( "String" ), "name" ) );
@@ -391,7 +391,7 @@ public class JDOMWriterGenerator
         sc.add( "}" );
         sc.add( "return element;" );
 
-        JMethod findRSLists = new JMethod( new JClass( "Element" ), "findAndReplaceSimpleLists" );
+        JMethod findRSLists = new JMethod( "findAndReplaceSimpleLists", new JClass( "Element" ), null );
         findRSLists.addParameter( new JParameter( new JClass( "Counter" ), "counter" ) );
         findRSLists.addParameter( new JParameter( new JClass( "Element" ), "parent" ) );
         findRSLists.addParameter( new JParameter( new JClass( "java.util.Collection" ), "list" ) );
@@ -441,7 +441,7 @@ public class JDOMWriterGenerator
         sc.add( "}" );
         sc.add( "return element;" );
 
-        JMethod findRSDom = new JMethod( new JClass( "Element" ), "findAndReplaceXpp3DOM" );
+        JMethod findRSDom = new JMethod( "findAndReplaceXpp3DOM", new JClass( "Element" ), null );
         findRSDom.addParameter( new JParameter( new JClass( "Counter" ), "counter" ) );
         findRSDom.addParameter( new JParameter( new JClass( "Element" ), "parent" ) );
         findRSDom.addParameter( new JParameter( new JClass( "String" ), "name" ) );
@@ -535,7 +535,7 @@ public class JDOMWriterGenerator
             XmlFieldMetadata clazzMetadata = (XmlFieldMetadata) clazz.getMetadata( XmlFieldMetadata.ID );
             clazzTagName = clazzMetadata.getTagName();
         }
-        JMethod marshall = new JMethod( null, "update" + className );
+        JMethod marshall = new JMethod( "update" + className );
         marshall.addParameter( new JParameter( new JClass( className ), "value" ) );
         marshall.addParameter( new JParameter( new JClass( "String" ), "xmlTag" ) );
         marshall.addParameter( new JParameter( new JClass( "Counter" ), "counter" ) );
@@ -699,7 +699,7 @@ public class JDOMWriterGenerator
 //            System.out.println("method iterate" + capitalise(field) + " already exists");
             return;
         }
-        JMethod toReturn = new JMethod( null, "iterate" + capitalise( toClass.getName() ) );
+        JMethod toReturn = new JMethod( "iterate" + capitalise( toClass.getName() ) );
         toReturn.addParameter( new JParameter( new JClass( "Counter" ), "counter" ) );
         toReturn.addParameter( new JParameter( new JClass( "Element" ), "parent" ) );
         toReturn.addParameter( new JParameter( new JClass( "java.util.Collection" ), "list" ) );
@@ -757,7 +757,7 @@ public class JDOMWriterGenerator
 //            System.out.println("method iterate" + capitalise(field) + " already exists");
             return;
         }
-        JMethod toReturn = new JMethod( null, "iterate2" + capitalise( toClass.getName() ) );
+        JMethod toReturn = new JMethod( "iterate2" + capitalise( toClass.getName() ) );
         toReturn.addParameter( new JParameter( new JClass( "Counter" ), "counter" ) );
         toReturn.addParameter( new JParameter( new JClass( "Element" ), "parent" ) );
         toReturn.addParameter( new JParameter( new JClass( "java.util.Collection" ), "list" ) );

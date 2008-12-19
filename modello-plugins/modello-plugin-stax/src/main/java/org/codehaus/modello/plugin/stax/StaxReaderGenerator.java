@@ -144,7 +144,7 @@ public class StaxReaderGenerator
         }
 
         JClass returnType = new JClass( root.getName() );
-        JMethod method = new JMethod( returnType, "read" );
+        JMethod method = new JMethod( "read", returnType, null );
 
         method.addParameter( new JParameter( new JClass( "Reader" ), "reader" ) );
 
@@ -170,7 +170,7 @@ public class StaxReaderGenerator
 
         jClass.addMethod( method );
 
-        method = new JMethod( returnType, "read" );
+        method = new JMethod( "read", returnType, null );
 
         method.addParameter( new JParameter( new JClass( "Reader" ), "reader" ) );
 
@@ -182,7 +182,7 @@ public class StaxReaderGenerator
 
         jClass.addMethod( method );
 
-        method = new JMethod( returnType, "read" );
+        method = new JMethod( "read", returnType, null );
 
         method.addParameter( new JParameter( new JClass( "String" ), "filePath" ) );
 
@@ -210,7 +210,7 @@ public class StaxReaderGenerator
 
         jClass.addMethod( method );
 
-        method = new JMethod( returnType, "read" );
+        method = new JMethod( "read", returnType, null );
 
         method.addParameter( new JParameter( new JClass( "String" ), "filePath" ) );
 
@@ -276,7 +276,7 @@ public class StaxReaderGenerator
         jClass.addImport( "org.codehaus.plexus.util.IOUtil" );
         jClass.addImport( "org.codehaus.plexus.util.ReaderFactory" );
 
-        JMethod method = new JMethod( new JClass( "Object" ), "read" );
+        JMethod method = new JMethod( "read", new JClass( "Object" ), null );
 
         method.addParameter( new JParameter( new JClass( "File" ), "f" ) );
 
@@ -355,7 +355,7 @@ public class StaxReaderGenerator
         sc.unindent();
         sc.add( "}" );
 
-        method = new JMethod( new JClass( "Object" ), "read" );
+        method = new JMethod( "read", new JClass( "Object" ), null );
 
         method.addParameter( new JParameter( new JClass( "File" ), "f" ) );
 
@@ -385,7 +385,7 @@ public class StaxReaderGenerator
     {
         VersionDefinition versionDefinition = objectModel.getVersionDefinition();
 
-        JMethod method = new JMethod( new JClass( "String" ), "determineVersion" );
+        JMethod method = new JMethod( "determineVersion", new JClass( "String" ), null );
 
         method.addParameter( new JParameter( new JClass( "Reader" ), "reader" ) );
 
@@ -463,7 +463,7 @@ public class StaxReaderGenerator
 
     private static void writeFieldVersionGetMethod( ModelField field, JClass jClass )
     {
-        JMethod method = new JMethod( new JType( "String" ), "getVersionFromField" );
+        JMethod method = new JMethod( "getVersionFromField", new JType( "String" ), null );
         method.addParameter( new JParameter( new JType( "XMLStreamReader" ), "xmlStreamReader" ) );
         method.addException( new JClass( "XMLStreamException" ) );
         jClass.addMethod( method );
@@ -546,7 +546,7 @@ public class StaxReaderGenerator
 
     private static void writeNamespaceVersionGetMethod( String namespace, JClass jClass )
     {
-        JMethod method = new JMethod( new JType( "String" ), "getVersionFromRootNamespace" );
+        JMethod method = new JMethod( "getVersionFromRootNamespace", new JType( "String" ), null );
         method.addParameter( new JParameter( new JType( "XMLStreamReader" ), "xmlStreamReader" ) );
         method.addException( new JClass( "XMLStreamException" ) );
         jClass.addMethod( method );
@@ -626,7 +626,7 @@ public class StaxReaderGenerator
         String uncapClassName = uncapitalise( className );
 
         JClass returnType = new JClass( className );
-        JMethod unmarshall = new JMethod( returnType, "parse" + capClassName );
+        JMethod unmarshall = new JMethod( "parse" + capClassName, returnType, null );
 
         unmarshall.addParameter( new JParameter( new JClass( "String" ), "tagName" ) );
 
@@ -1588,7 +1588,7 @@ public class StaxReaderGenerator
 
     private void writeBuildDomMethod( JClass jClass )
     {
-        JMethod method = new JMethod( new JType( "Xpp3Dom" ), "buildDom" );
+        JMethod method = new JMethod( "buildDom", new JType( "Xpp3Dom" ), null );
         method.addParameter( new JParameter( new JType( "XMLStreamReader" ), "xmlStreamReader" ) );
         method.addException( new JClass( "XMLStreamException" ) );
 
@@ -1713,7 +1713,7 @@ public class StaxReaderGenerator
 
     private void writeHelpers( JClass jClass )
     {
-        JMethod method = new JMethod( new JClass( "String" ), "getTrimmedValue" );
+        JMethod method = new JMethod( "getTrimmedValue", new JClass( "String" ), null );
         method.getModifiers().makePrivate();
 
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
@@ -1738,7 +1738,7 @@ public class StaxReaderGenerator
 
         // --------------------------------------------------------------------
 
-        method = new JMethod( new JClass( "String" ), "getDefaultValue" );
+        method = new JMethod( "getDefaultValue", new JClass( "String" ), null );
         method.getModifiers().makePrivate();
 
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
@@ -1764,7 +1764,7 @@ public class StaxReaderGenerator
 
         // --------------------------------------------------------------------
 
-        method = new JMethod( new JClass( "String" ), "getRequiredAttributeValue" );
+        method = new JMethod( "getRequiredAttributeValue", new JClass( "String" ), null );
         method.addException( new JClass( "XMLStreamException" ) );
         method.getModifiers().makePrivate();
 
@@ -1804,7 +1804,7 @@ public class StaxReaderGenerator
 
         // --------------------------------------------------------------------
 
-        method = new JMethod( JType.BOOLEAN, "getBooleanValue" );
+        method = new JMethod( "getBooleanValue", JType.BOOLEAN, null );
         method.addException( new JClass( "XMLStreamException" ) );
         method.getModifiers().makePrivate();
 
@@ -1832,7 +1832,7 @@ public class StaxReaderGenerator
 
         // --------------------------------------------------------------------
 
-        method = new JMethod( JType.CHAR, "getCharacterValue" );
+        method = new JMethod( "getCharacterValue", JType.CHAR, null );
         method.addException( new JClass( "XMLStreamException" ) );
         method.getModifiers().makePrivate();
 
@@ -1860,7 +1860,7 @@ public class StaxReaderGenerator
 
         // --------------------------------------------------------------------
 
-        method = new JMethod( JType.INT, "getIntegerValue" );
+        method = new JMethod( "getIntegerValue", JType.INT, null );
         method.addException( new JClass( "XMLStreamException" ) );
         method.getModifiers().makePrivate();
 
@@ -1877,7 +1877,7 @@ public class StaxReaderGenerator
 
         // --------------------------------------------------------------------
 
-        method = new JMethod( JType.SHORT, "getShortValue" );
+        method = new JMethod( "getShortValue", JType.SHORT, null );
         method.addException( new JClass( "XMLStreamException" ) );
         method.getModifiers().makePrivate();
 
@@ -1894,7 +1894,7 @@ public class StaxReaderGenerator
 
         // --------------------------------------------------------------------
 
-        method = new JMethod( JType.BYTE, "getByteValue" );
+        method = new JMethod( "getByteValue", JType.BYTE, null );
         method.addException( new JClass( "XMLStreamException" ) );
         method.getModifiers().makePrivate();
 
@@ -1911,7 +1911,7 @@ public class StaxReaderGenerator
 
         // --------------------------------------------------------------------
 
-        method = new JMethod( JType.LONG, "getLongValue" );
+        method = new JMethod( "getLongValue", JType.LONG, null );
         method.addException( new JClass( "XMLStreamException" ) );
         method.getModifiers().makePrivate();
 
@@ -1928,7 +1928,7 @@ public class StaxReaderGenerator
 
         // --------------------------------------------------------------------
 
-        method = new JMethod( JType.FLOAT, "getFloatValue" );
+        method = new JMethod( "getFloatValue", JType.FLOAT, null );
         method.addException( new JClass( "XMLStreamException" ) );
         method.getModifiers().makePrivate();
 
@@ -1945,7 +1945,7 @@ public class StaxReaderGenerator
 
         // --------------------------------------------------------------------
 
-        method = new JMethod( JType.DOUBLE, "getDoubleValue" );
+        method = new JMethod( "getDoubleValue", JType.DOUBLE, null );
         method.addException( new JClass( "XMLStreamException" ) );
         method.getModifiers().makePrivate();
 
@@ -1962,7 +1962,7 @@ public class StaxReaderGenerator
 
         // --------------------------------------------------------------------
 
-        method = new JMethod( new JClass( "java.util.Date" ), "getDateValue" );
+        method = new JMethod( "getDateValue", new JClass( "java.util.Date" ), null );
         method.addException( new JClass( "XMLStreamException" ) );
         method.getModifiers().makePrivate();
 

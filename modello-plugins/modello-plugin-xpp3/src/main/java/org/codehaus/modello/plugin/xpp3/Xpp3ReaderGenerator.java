@@ -119,7 +119,7 @@ public class Xpp3ReaderGenerator
         jClass.addField( addDefaultEntities );
 
         // The setter
-        JMethod addDefaultEntitiesSetter = new JMethod( null, "setAddDefaultEntities" );
+        JMethod addDefaultEntitiesSetter = new JMethod( "setAddDefaultEntities" );
 
         addDefaultEntitiesSetter.addParameter( new JParameter( JType.BOOLEAN, "addDefaultEntities" ) );
 
@@ -130,7 +130,7 @@ public class Xpp3ReaderGenerator
         jClass.addMethod( addDefaultEntitiesSetter );
 
         // The getter
-        JMethod addDefaultEntitiesGetter = new JMethod( JType.BOOLEAN, "getAddDefaultEntities" );
+        JMethod addDefaultEntitiesGetter = new JMethod( "getAddDefaultEntities", JType.BOOLEAN, null );
 
         addDefaultEntitiesGetter.setComment( "Returns the state of the \"add default entities\" flag." );
 
@@ -144,7 +144,7 @@ public class Xpp3ReaderGenerator
 
         ModelClass root = objectModel.getClass( objectModel.getRoot( getGeneratedVersion() ), getGeneratedVersion() );
 
-        JMethod unmarshall = new JMethod( new JClass( root.getName() ), "read" );
+        JMethod unmarshall = new JMethod( "read", new JClass( root.getName() ), null );
         unmarshall.setComment( "@see ReaderFactory#newXmlReader" );
 
         unmarshall.addParameter( new JParameter( new JClass( "Reader" ), "reader" ) );
@@ -174,7 +174,7 @@ public class Xpp3ReaderGenerator
 
         jClass.addMethod( unmarshall );
 
-        unmarshall = new JMethod( new JClass( root.getName() ), "read" );
+        unmarshall = new JMethod( "read", new JClass( root.getName() ), null );
         unmarshall.setComment( "@see ReaderFactory#newXmlReader" );
 
         unmarshall.addParameter( new JParameter( new JClass( "Reader" ), "reader" ) );
@@ -191,7 +191,7 @@ public class Xpp3ReaderGenerator
         // Write the parse(InputStream) method which will do the unmarshalling.
         // ----------------------------------------------------------------------
 
-        unmarshall = new JMethod( new JClass( root.getName() ), "read" );
+        unmarshall = new JMethod( "read", new JClass( root.getName() ), null );
 
         unmarshall.addParameter( new JParameter( new JClass( "InputStream" ), "in" ) );
 
@@ -210,7 +210,7 @@ public class Xpp3ReaderGenerator
 
         jClass.addMethod( unmarshall );
 
-        unmarshall = new JMethod( new JClass( root.getName() ), "read" );
+        unmarshall = new JMethod( "read", new JClass( root.getName() ), null );
 
         unmarshall.addParameter( new JParameter( new JClass( "InputStream" ), "in" ) );
 
@@ -289,7 +289,7 @@ public class Xpp3ReaderGenerator
 
         String uncapClassName = uncapitalise( className );
 
-        JMethod unmarshall = new JMethod( new JClass( className ), "parse" + capClassName );
+        JMethod unmarshall = new JMethod( "parse" + capClassName, new JClass( className ), null );
 
         unmarshall.addParameter( new JParameter( new JClass( "String" ), "tagName" ) );
 
@@ -1202,7 +1202,7 @@ public class Xpp3ReaderGenerator
 
     private void writeHelpers( JClass jClass )
     {
-        JMethod method = new JMethod( new JClass( "String" ), "getTrimmedValue" );
+        JMethod method = new JMethod( "getTrimmedValue", new JClass( "String" ), null );
         method.getModifiers().makePrivate();
 
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
@@ -1227,7 +1227,7 @@ public class Xpp3ReaderGenerator
 
         // --------------------------------------------------------------------
 
-        method = new JMethod( new JClass( "String" ), "getRequiredAttributeValue" );
+        method = new JMethod( "getRequiredAttributeValue", new JClass( "String" ), null );
         method.addException( new JClass( "XmlPullParserException" ) );
         method.getModifiers().makePrivate();
 
@@ -1267,7 +1267,7 @@ public class Xpp3ReaderGenerator
 
         // --------------------------------------------------------------------
 
-        method = new JMethod( JType.BOOLEAN, "getBooleanValue" );
+        method = new JMethod( "getBooleanValue", JType.BOOLEAN, null );
         method.addException( new JClass( "XmlPullParserException" ) );
         method.getModifiers().makePrivate();
 
@@ -1283,7 +1283,7 @@ public class Xpp3ReaderGenerator
 
         // --------------------------------------------------------------------
 
-        method = new JMethod( JType.BOOLEAN, "getBooleanValue" );
+        method = new JMethod( "getBooleanValue", JType.BOOLEAN, null );
         method.addException( new JClass( "XmlPullParserException" ) );
         method.getModifiers().makePrivate();
 
@@ -1324,7 +1324,7 @@ public class Xpp3ReaderGenerator
 
         // --------------------------------------------------------------------
 
-        method = new JMethod( JType.CHAR, "getCharacterValue" );
+        method = new JMethod( "getCharacterValue", JType.CHAR, null );
         method.addException( new JClass( "XmlPullParserException" ) );
         method.getModifiers().makePrivate();
 
@@ -1352,7 +1352,7 @@ public class Xpp3ReaderGenerator
 
         // --------------------------------------------------------------------
 
-        method = new JMethod( JType.INT, "getIntegerValue" );
+        method = new JMethod( "getIntegerValue", JType.INT, null );
         method.addException( new JClass( "XmlPullParserException" ) );
         method.getModifiers().makePrivate();
 
@@ -1369,7 +1369,7 @@ public class Xpp3ReaderGenerator
 
         // --------------------------------------------------------------------
 
-        method = new JMethod( JType.SHORT, "getShortValue" );
+        method = new JMethod( "getShortValue", JType.SHORT, null );
         method.addException( new JClass( "XmlPullParserException" ) );
         method.getModifiers().makePrivate();
 
@@ -1386,7 +1386,7 @@ public class Xpp3ReaderGenerator
 
         // --------------------------------------------------------------------
 
-        method = new JMethod( JType.BYTE, "getByteValue" );
+        method = new JMethod( "getByteValue", JType.BYTE, null );
         method.addException( new JClass( "XmlPullParserException" ) );
         method.getModifiers().makePrivate();
 
@@ -1403,7 +1403,7 @@ public class Xpp3ReaderGenerator
 
         // --------------------------------------------------------------------
 
-        method = new JMethod( JType.LONG, "getLongValue" );
+        method = new JMethod( "getLongValue", JType.LONG, null );
         method.addException( new JClass( "XmlPullParserException" ) );
         method.getModifiers().makePrivate();
 
@@ -1420,7 +1420,7 @@ public class Xpp3ReaderGenerator
 
         // --------------------------------------------------------------------
 
-        method = new JMethod( JType.FLOAT, "getFloatValue" );
+        method = new JMethod( "getFloatValue", JType.FLOAT, null );
         method.addException( new JClass( "XmlPullParserException" ) );
         method.getModifiers().makePrivate();
 
@@ -1437,7 +1437,7 @@ public class Xpp3ReaderGenerator
 
         // --------------------------------------------------------------------
 
-        method = new JMethod( JType.DOUBLE, "getDoubleValue" );
+        method = new JMethod( "getDoubleValue", JType.DOUBLE, null );
         method.addException( new JClass( "XmlPullParserException" ) );
         method.getModifiers().makePrivate();
 
@@ -1454,7 +1454,7 @@ public class Xpp3ReaderGenerator
 
         // --------------------------------------------------------------------
 
-        method = new JMethod( new JClass( "java.util.Date" ), "getDateValue" );
+        method = new JMethod( "getDateValue", new JClass( "java.util.Date" ), null );
         method.addException( new JClass( "XmlPullParserException" ) );
         method.getModifiers().makePrivate();
 
@@ -1471,7 +1471,7 @@ public class Xpp3ReaderGenerator
 
         // --------------------------------------------------------------------
 
-        method = new JMethod( new JClass( "java.util.Date" ), "getDateValue" );
+        method = new JMethod( "getDateValue", new JClass( "java.util.Date" ), null );
         method.addException( new JClass( "XmlPullParserException" ) );
         method.getModifiers().makePrivate();
 

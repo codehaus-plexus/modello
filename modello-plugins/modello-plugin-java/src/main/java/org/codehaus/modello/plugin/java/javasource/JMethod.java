@@ -113,7 +113,7 @@ public class JMethod implements JMember
      **/
     public JMethod( String name )
     {
-        this( null, name );
+        this( name, null, null );
     } //-- JMethod
 
     /**
@@ -122,10 +122,25 @@ public class JMethod implements JMember
      *
      * @param name, the method name. Must not be null.
      * @param returnType the return type of the method. May be null.
+     * @deprecated removed in future version of javasource
      **/
     public JMethod( JType returnType, String name )
     {
+        this( name, returnType, null );
+    } //-- JMethod
 
+    /**
+     * Creates a new JMethod with the given name and returnType.
+     * For "void" return types, simply pass in null as the returnType.
+     *
+     * @param name, the method name. Must not be null.
+     * @param returnType the return type of the method. May be null.
+     * @param returnDoc Javadoc comment for the &#064;return annotation. If
+     *            null, a default (and mostly useless) javadoc comment will be
+     *            generated.
+     **/
+    public JMethod( final String name, final JType returnType, final String returnDoc )
+    {
         if ( ( name == null ) || ( name.length() == 0 ) )
         {
             String err = "The method name must not be null or zero-length";
@@ -141,10 +156,16 @@ public class JMethod implements JMember
         //-- create comment
         if ( returnType != null )
         {
-            jdc.addDescriptor( JDocDescriptor.createReturnDesc( returnType.getName() ) );
+            if ( returnDoc != null && returnDoc.length() > 0 )
+            {
+                jdc.addDescriptor( JDocDescriptor.createReturnDesc( returnDoc ) );
+            }
+            else
+            {
+                jdc.addDescriptor( JDocDescriptor.createReturnDesc( returnType.getLocalName() ) );
+            }
         }
-    } //-- JMethod
-
+    }
 
     /**
      * Adds the given Exception to this Method's throws clause.

@@ -252,7 +252,7 @@ public class JavaModelloGenerator
 
     private JMethod generateEquals( ModelClass modelClass )
     {
-        JMethod equals = new JMethod( JType.BOOLEAN, "equals" );
+        JMethod equals = new JMethod( "equals", JType.BOOLEAN, null );
 
         equals.addParameter( new JParameter( new JClass( "Object" ), "other" ) );
 
@@ -307,7 +307,7 @@ public class JavaModelloGenerator
 
     private JMethod generateToString( ModelClass modelClass )
     {
-        JMethod toString = new JMethod( new JType( String.class.getName() ), "toString" );
+        JMethod toString = new JMethod( "toString", new JType( String.class.getName() ), null );
 
         List identifierFields = modelClass.getIdentifierFields( getGeneratedVersion() );
 
@@ -355,7 +355,7 @@ public class JavaModelloGenerator
 
     private JMethod generateHashCode( ModelClass modelClass )
     {
-        JMethod hashCode = new JMethod( JType.INT, "hashCode" );
+        JMethod hashCode = new JMethod( "hashCode", JType.INT, null );
 
         List identifierFields = modelClass.getIdentifierFields( getGeneratedVersion() );
 
@@ -635,7 +635,7 @@ public class JavaModelloGenerator
             }
         }
 
-        JMethod getter = new JMethod( returnType, prefix + propertyName );
+        JMethod getter = new JMethod( prefix + propertyName, returnType, null );
 
         StringBuffer comment = new StringBuffer( "Get " );
         if ( StringUtils.isEmpty( modelField.getDescription() ) )
@@ -659,7 +659,7 @@ public class JavaModelloGenerator
     {
         String propertyName = capitalise( field.getName() );
 
-        JMethod setter = new JMethod( null, "set" + propertyName );
+        JMethod setter = new JMethod( "set" + propertyName );
 
         StringBuffer comment = new StringBuffer( "Set " );
         if ( StringUtils.isEmpty( modelField.getDescription() ) )
@@ -837,7 +837,7 @@ public class JavaModelloGenerator
             {
                 String propertyName = capitalise( jField.getName() );
 
-                JMethod getter = new JMethod( jField.getType(), "get" + propertyName );
+                JMethod getter = new JMethod( "get" + propertyName, jField.getType(), null );
 
                 JSourceCode sc = getter.getSourceCode();
 
@@ -895,7 +895,7 @@ public class JavaModelloGenerator
 
     private void createCreateAssociation( JClass jClass, ModelAssociation modelAssociation )
     {
-        JMethod createMethod = new JMethod( null, "create" + modelAssociation.getTo() + "Association" );
+        JMethod createMethod = new JMethod( "create" + modelAssociation.getTo() + "Association" );
 
         JavaAssociationMetadata javaAssociationMetadata =
             (JavaAssociationMetadata) modelAssociation.getAssociationMetadata( JavaAssociationMetadata.ID );
@@ -964,7 +964,7 @@ public class JavaModelloGenerator
     private void createBreakAssociation( JClass jClass, ModelAssociation modelAssociation )
     {
         JSourceCode sc;
-        JMethod breakMethod = new JMethod( null, "break" + modelAssociation.getTo() + "Association" );
+        JMethod breakMethod = new JMethod( "break" + modelAssociation.getTo() + "Association" );
 
         breakMethod.addParameter(
             new JParameter( new JClass( modelAssociation.getTo() ), uncapitalise( modelAssociation.getTo() ) ) );
@@ -1050,7 +1050,7 @@ public class JavaModelloGenerator
         if ( modelAssociation.getType().equals( ModelDefault.PROPERTIES )
              || modelAssociation.getType().equals( ModelDefault.MAP ) )
         {
-            JMethod adder = new JMethod( null, "add" + capitalise( singular( fieldName ) ) );
+            JMethod adder = new JMethod( "add" + capitalise( singular( fieldName ) ) );
 
             if ( modelAssociation.getType().equals( ModelDefault.MAP ) )
             {
@@ -1069,7 +1069,7 @@ public class JavaModelloGenerator
         }
         else
         {
-            JMethod adder = new JMethod( null, "add" + singular( capitalise( fieldName ) ) );
+            JMethod adder = new JMethod( "add" + singular( capitalise( fieldName ) ) );
 
             adder.addParameter( new JParameter( addType, parameterName ) );
 
@@ -1089,7 +1089,7 @@ public class JavaModelloGenerator
 
             jClass.addMethod( adder );
 
-            JMethod remover = new JMethod( null, "remove" + singular( capitalise( fieldName ) ) );
+            JMethod remover = new JMethod( "remove" + singular( capitalise( fieldName ) ) );
 
             remover.addParameter( new JParameter( addType, parameterName ) );
 

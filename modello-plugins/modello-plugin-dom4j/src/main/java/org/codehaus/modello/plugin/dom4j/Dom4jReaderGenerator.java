@@ -119,7 +119,7 @@ public class Dom4jReaderGenerator
 
         ModelClass root = objectModel.getClass( objectModel.getRoot( getGeneratedVersion() ), getGeneratedVersion() );
 
-        JMethod unmarshall = new JMethod( new JClass( root.getName() ), "read" );
+        JMethod unmarshall = new JMethod( "read", new JClass( root.getName() ), null );
 
         unmarshall.addParameter( new JParameter( new JClass( "Reader" ), "reader" ) );
 
@@ -142,7 +142,7 @@ public class Dom4jReaderGenerator
 
         jClass.addMethod( unmarshall );
 
-        unmarshall = new JMethod( new JClass( root.getName() ), "read" );
+        unmarshall = new JMethod( "read", new JClass( root.getName() ), null );
 
         unmarshall.addParameter( new JParameter( new JClass( "Reader" ), "reader" ) );
 
@@ -156,7 +156,7 @@ public class Dom4jReaderGenerator
 
         jClass.addMethod( unmarshall );
 
-        unmarshall = new JMethod( new JClass( root.getName() ), "read" );
+        unmarshall = new JMethod( "read", new JClass( root.getName() ), null );
 
         unmarshall.addParameter( new JParameter( new JClass( "URL" ), "url" ) );
 
@@ -179,7 +179,7 @@ public class Dom4jReaderGenerator
 
         jClass.addMethod( unmarshall );
 
-        unmarshall = new JMethod( new JClass( root.getName() ), "read" );
+        unmarshall = new JMethod( "read", new JClass( root.getName() ), null );
 
         unmarshall.addParameter( new JParameter( new JClass( "URL" ), "url" ) );
 
@@ -256,7 +256,7 @@ public class Dom4jReaderGenerator
 
         String uncapClassName = uncapitalise( className );
 
-        JMethod unmarshall = new JMethod( new JClass( className ), "parse" + capClassName );
+        JMethod unmarshall = new JMethod( "parse" + capClassName, new JClass( className ), null );
 
         unmarshall.addParameter( new JParameter( new JClass( "String" ), "tagName" ) );
 
@@ -904,7 +904,7 @@ public class Dom4jReaderGenerator
 
     private void writeHelpers( JClass jClass )
     {
-        JMethod method = new JMethod( new JClass( "String" ), "getTrimmedValue" );
+        JMethod method = new JMethod( "getTrimmedValue", new JClass( "String" ), null );
         method.getModifiers().makePrivate();
 
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
@@ -970,7 +970,7 @@ public class Dom4jReaderGenerator
 */
         // --------------------------------------------------------------------
 
-        method = new JMethod( JType.BOOLEAN, "getBooleanValue" );
+        method = new JMethod( "getBooleanValue", JType.BOOLEAN, null );
         method.getModifiers().makePrivate();
 
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
@@ -996,7 +996,7 @@ public class Dom4jReaderGenerator
 
         // --------------------------------------------------------------------
 
-        method = new JMethod( JType.CHAR, "getCharacterValue" );
+        method = new JMethod( "getCharacterValue", JType.CHAR, null );
         method.getModifiers().makePrivate();
 
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
@@ -1022,7 +1022,7 @@ public class Dom4jReaderGenerator
 
         // --------------------------------------------------------------------
 
-        method = new JMethod( JType.INT, "getIntegerValue" );
+        method = new JMethod( "getIntegerValue", JType.INT, null );
         method.getModifiers().makePrivate();
 
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
@@ -1038,7 +1038,7 @@ public class Dom4jReaderGenerator
 
         // --------------------------------------------------------------------
 
-        method = new JMethod( JType.SHORT, "getShortValue" );
+        method = new JMethod( "getShortValue", JType.SHORT, null );
         method.getModifiers().makePrivate();
 
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
@@ -1054,7 +1054,7 @@ public class Dom4jReaderGenerator
 
         // --------------------------------------------------------------------
 
-        method = new JMethod( JType.BYTE, "getByteValue" );
+        method = new JMethod( "getByteValue", JType.BYTE, null );
         method.getModifiers().makePrivate();
 
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
@@ -1070,7 +1070,7 @@ public class Dom4jReaderGenerator
 
         // --------------------------------------------------------------------
 
-        method = new JMethod( JType.LONG, "getLongValue" );
+        method = new JMethod( "getLongValue", JType.LONG, null );
         method.getModifiers().makePrivate();
 
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
@@ -1086,7 +1086,7 @@ public class Dom4jReaderGenerator
 
         // --------------------------------------------------------------------
 
-        method = new JMethod( JType.FLOAT, "getFloatValue" );
+        method = new JMethod( "getFloatValue", JType.FLOAT, null );
         method.getModifiers().makePrivate();
 
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
@@ -1102,7 +1102,7 @@ public class Dom4jReaderGenerator
 
         // --------------------------------------------------------------------
 
-        method = new JMethod( JType.DOUBLE, "getDoubleValue" );
+        method = new JMethod( "getDoubleValue", JType.DOUBLE, null );
         method.getModifiers().makePrivate();
 
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
@@ -1118,7 +1118,7 @@ public class Dom4jReaderGenerator
 
         // --------------------------------------------------------------------
 
-        method = new JMethod( new JClass( "java.util.Date" ), "getDateValue" );
+        method = new JMethod( "getDateValue", new JClass( "java.util.Date" ), null );
         method.getModifiers().makePrivate();
 
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
@@ -1192,7 +1192,7 @@ public class Dom4jReaderGenerator
 
         // --------------------------------------------------------------------
 
-        method = new JMethod( new JClass( "Xpp3Dom" ), "writeElementToXpp3Dom" );
+        method = new JMethod( "writeElementToXpp3Dom", new JClass( "Xpp3Dom" ), null );
         method.getModifiers().makePrivate();
 
         method.addParameter( new JParameter( new JClass( "Element" ), "element" ) );

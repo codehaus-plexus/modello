@@ -114,7 +114,7 @@ public class Xpp3WriterGenerator
 
         // Write the write method which will do the marshalling.
 
-        JMethod marshall = new JMethod( null, "write" );
+        JMethod marshall = new JMethod( "write" );
 
         marshall.addParameter( new JParameter( new JClass( "Writer" ), "writer" ) );
 
@@ -167,7 +167,7 @@ public class Xpp3WriterGenerator
 
         String uncapClassName = uncapitalise( className );
 
-        JMethod marshall = new JMethod( null, "write" + className );
+        JMethod marshall = new JMethod( "write" + className );
 
         marshall.addParameter( new JParameter( new JClass( className ), uncapClassName ) );
 
