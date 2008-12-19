@@ -219,29 +219,27 @@ public class JavaModelloGenerator
 
             if ( ( metadata != null ) && metadata.isRootElement() )
             {
-                StringBuffer encodingStuff = new StringBuffer();
+                JField modelEncoding = new JField( new JType( "String" ), "modelEncoding" );
+                modelEncoding.setInitString( "\"UTF-8\"" );
+                jClass.addField( modelEncoding );
 
-                encodingStuff.append( "\n    private String modelEncoding = \"UTF-8\";" );
-                encodingStuff.append( "\n" );
-                encodingStuff.append( "\n    /**" );
-                encodingStuff.append( "\n     * Set an encoding used for reading/writing the model." );
-                encodingStuff.append( "\n     *" );
-                encodingStuff.append( "\n     * @param modelEncoding the encoding used when reading/writing the model." );
-                encodingStuff.append( "\n     */" );
-                encodingStuff.append( "\n    public void setModelEncoding( String modelEncoding )" );
-                encodingStuff.append( "\n    {" );
-                encodingStuff.append( "\n        this.modelEncoding = modelEncoding;" );
-                encodingStuff.append( "\n    }" );
-                encodingStuff.append( "\n" );
-                encodingStuff.append( "\n    /**" );
-                encodingStuff.append( "\n     * @return the current encoding used when reading/writing this model." );
-                encodingStuff.append( "\n     */" );
-                encodingStuff.append( "\n    public String getModelEncoding()" );
-                encodingStuff.append( "\n    {" );
-                encodingStuff.append( "\n        return modelEncoding;" );
-                encodingStuff.append( "\n    }" );
+                // setModelEncoding(String) method
+                JMethod setModelEncoding = new JMethod( "setModelEncoding" );
+                setModelEncoding.addParameter( new JParameter( new JClass( "String" ), "modelEncoding" ) );
 
-                jClass.addSourceCode( encodingStuff.toString() );
+                setModelEncoding.getSourceCode().add( "this.modelEncoding = modelEncoding;" );
+
+                setModelEncoding.getJDocComment().setComment( "Set an encoding used for reading/writing the model." );
+
+                jClass.addMethod( setModelEncoding );
+
+                // getModelEncoding() method
+                JMethod getModelEncoding = new JMethod( "getModelEncoding", new JType( "String" ),
+                                                        "the current encoding used when reading/writing this model" );
+
+                getModelEncoding.getSourceCode().add( "return modelEncoding;" );
+
+                jClass.addMethod( getModelEncoding );
             }
 
             jClass.print( sourceWriter );
