@@ -82,6 +82,13 @@
           </association>
         </field>
         <field>
+          <name>arrays</name>
+          <version>1.0.0+</version>
+          <association>
+            <type>ArrayFeatures</type>
+          </association>
+        </field>
+        <field>
           <name>associationFeatures</name>
           <version>1.0.0+</version>
           <description>Test of association features.</description>
@@ -169,7 +176,6 @@
           <version>1.0.0+</version>
           <description><![CDATA[<code>float</code> primitive.]]></description>
           <type>float</type>
-          <defaultValue>0</defaultValue>
           <defaultValue>12.12</defaultValue>
         </field>
         <field>
@@ -255,6 +261,91 @@
           <description><![CDATA[<code>DOM</code> type.]]></description>
           <type>DOM</type>
         </field>
+      </fields>
+    </class>
+
+    <class>
+      <name>ArrayFeatures</name>
+      <version>1.0.0+</version>
+      <description><![CDATA[
+        <code>&lt;field&gt;&lt;type&gt;<i>chose a type</i>[]&lt;/type&gt;&lt;field&gt;</code>:
+        Test of arrays of every types supported (java plugin only).]]>
+      </description>
+      <fields>
+        <field>
+          <name>booleanArray</name>
+          <version>2.0.0+</version>
+          <description><![CDATA[<code>boolean[]</code>.]]></description>
+          <type>boolean[]</type>
+        </field>
+        <field>
+          <name>byteArray</name>
+          <version>2.0.0+</version>
+          <description><![CDATA[<code>byte[]</code>.]]></description>
+          <type>byte[]</type>
+        </field>
+        <field>
+          <name>charArray</name>
+          <version>2.0.0+</version>
+          <description><![CDATA[<code>char[]</code>.]]></description>
+          <type>char[]</type>
+        </field>
+        <field>
+          <name>shortArray</name>
+          <version>2.0.0+</version>
+          <description><![CDATA[<code>short[]</code>.]]></description>
+          <type>short[]</type>
+        </field>
+        <field>
+          <name>intArray</name>
+          <version>2.0.0+</version>
+          <description><![CDATA[<code>int[]</code>.]]></description>
+          <type>int[]</type>
+        </field>
+        <field>
+          <name>longArray</name>
+          <version>2.0.0+</version>
+          <description><![CDATA[<code>long[]</code>.]]></description>
+          <type>long[]</type>
+        </field>
+        <field>
+          <name>floatArray</name>
+          <version>2.0.0+</version>
+          <description><![CDATA[<code>float[]</code>.]]></description>
+          <type>float[]</type>
+        </field>
+        <field>
+          <name>doubleArray</name>
+          <version>2.0.0+</version>
+          <description><![CDATA[<code>double[]</code>.]]></description>
+          <type>double[]</type>
+        </field>
+        <!--field>
+          <name>stringArray</name>
+          <version>2.0.0+</version>
+          <description><![CDATA[<code>String[]</code>.]]></description>
+          <type>String[]</type>
+        </field-->
+        <field>
+          <name>dateArray</name>
+          <version>2.0.0+</version>
+          <description><![CDATA[<code>Date[]</code>.]]></description>
+          <type>Date[]</type>
+          <!-- <defaultValue>new Date()</defaultValue> TODO: makes xsd plugin fail... -->
+        </field>
+        <field>
+          <name>domArray</name>
+          <version>2.0.0+</version>
+          <description><![CDATA[<code>DOM[]</code>.]]></description>
+          <type>DOM[]</type>
+        </field>
+        <!-- not supported at all (even if JavaModelloGenerator.createField method has a case for it)
+        <field>
+          <name>referenceArray</name>
+          <version>2.0.0+</version>
+          <description><![CDATA[<code>Reference[]</code>.]]></description>
+          <type>Reference[]</type>
+        </field-->
       </fields>
     </class>
 
