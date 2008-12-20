@@ -320,18 +320,17 @@
           <description><![CDATA[<code>double[]</code>.]]></description>
           <type>double[]</type>
         </field>
-        <!--field>
+        <field>
           <name>stringArray</name>
           <version>2.0.0+</version>
           <description><![CDATA[<code>String[]</code>.]]></description>
           <type>String[]</type>
-        </field-->
+        </field>
         <field>
           <name>dateArray</name>
           <version>2.0.0+</version>
           <description><![CDATA[<code>Date[]</code>.]]></description>
           <type>Date[]</type>
-          <!-- <defaultValue>new Date()</defaultValue> TODO: makes xsd plugin fail... -->
         </field>
         <field>
           <name>domArray</name>

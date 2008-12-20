@@ -451,101 +451,67 @@ public class JavaModelloGenerator
     {
         JType type;
 
-        if ( modelField.getType().equals( "boolean" ) )
+        String baseType = modelField.getType();
+        if ( modelField.isArray() )
+        {
+            // remove [] at the end of the type
+            baseType = baseType.substring( 0, baseType.length() - 2 );
+        }
+
+        if ( baseType.equals( "boolean" ) )
         {
             type = JType.BOOLEAN;
         }
-        else if ( modelField.getType().equals( "boolean[]" ) )
-        {
-            type = JType.BOOLEAN.createArray();
-        }
-        else if ( modelField.getType().equals( "byte" ) )
+        else if ( baseType.equals( "byte" ) )
         {
             type = JType.BYTE;
         }
-        else if ( modelField.getType().equals( "byte[]" ) )
-        {
-            type = JType.BYTE.createArray();
-        }
-        else if ( modelField.getType().equals( "char" ) )
+        else if ( baseType.equals( "char" ) )
         {
             type = JType.CHAR;
         }
-        else if ( modelField.getType().equals( "char[]" ) )
-        {
-            type = JType.CHAR.createArray();
-        }
-        else if ( modelField.getType().equals( "double" ) )
+        else if ( baseType.equals( "double" ) )
         {
             type = JType.DOUBLE;
         }
-        else if ( modelField.getType().equals( "double[]" ) )
-        {
-            type = JType.DOUBLE.createArray();
-        }
-        else if ( modelField.getType().equals( "float" ) )
+        else if ( baseType.equals( "float" ) )
         {
             type = JType.FLOAT;
         }
-        else if ( modelField.getType().equals( "float[]" ) )
-        {
-            type = JType.FLOAT.createArray();
-        }
-        else if ( modelField.getType().equals( "int" ) )
+        else if ( baseType.equals( "int" ) )
         {
             type = JType.INT;
         }
-        else if ( modelField.getType().equals( "int[]" ) )
-        {
-            type = JType.INT.createArray();
-        }
-        else if ( modelField.getType().equals( "short" ) )
+        else if ( baseType.equals( "short" ) )
         {
             type = JType.SHORT;
         }
-        else if ( modelField.getType().equals( "short[]" ) )
-        {
-            type = JType.SHORT.createArray();
-        }
-        else if ( modelField.getType().equals( "long" ) )
+        else if ( baseType.equals( "long" ) )
         {
             type = JType.LONG;
         }
-        else if ( modelField.getType().equals( "long[]" ) )
+        else if ( baseType.equals( "Date" ) )
         {
-            type = JType.LONG.createArray();
-        }
-        else if ( modelField.getType().equals( "Date" ) )
-        {
-            // TODO: maybe DOM is not how to specify it in the model, but just Object and markup Xpp3Dom for the Xpp3Reader?
-            //   not usre how we'll treat it for the other sources, eg sql.
             type = new JClass( "java.util.Date" );
         }
-        else if ( modelField.getType().equals( "Date[]" ) )
-        {
-            type = new JClass( "java.util.Date" ).createArray();
-        }
-        else if ( modelField.getType().equals( "DOM" ) )
+        else if ( baseType.equals( "DOM" ) )
         {
             // TODO: maybe DOM is not how to specify it in the model, but just Object and markup Xpp3Dom for the Xpp3Reader?
-            //   not usre how we'll treat it for the other sources, eg sql.
+            //   not sure how we'll treat it for the other sources, eg sql.
             type = new JClass( "Object" );
         }
-        else if ( modelField.getType().equals( "DOM[]" ) )
-        {
-            type = new JClass( "Object" ).createArray();
-        }
-        else if ( modelField.isArray() )
-        {
-            type = new JClass( modelField.getType() ).createArray();
-        }
-        else if ( "Content".equals( modelField.getType() ) )
+        else if ( baseType.equals( "Content" ) )
         {
             type = new JClass( "String" );
         }
         else
         {
-            type = new JClass( modelField.getType() );
+            type = new JClass( baseType );
+        }
+
+        if ( modelField.isArray() )
+        {
+            type = type.createArray();
         }
 
         JField field = new JField( type, modelField.getName() );
