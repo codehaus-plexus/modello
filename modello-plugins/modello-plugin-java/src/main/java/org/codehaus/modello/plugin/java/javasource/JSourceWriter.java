@@ -372,15 +372,18 @@ public class JSourceWriter extends Writer
     {
         synchronized ( lock )
         {
-            ensureIndent();
-            try
+            if ( string.length() > 0 )
             {
-                out.write( string );
+                ensureIndent();
+                try
+                {
+                    out.write( string );
+                }
+                catch ( java.io.IOException ioe )
+                {
+                }
             }
-            catch ( java.io.IOException ioe )
-            {
-            }
-            ;
+
             linefeed();
             addIndentation = true;
         }

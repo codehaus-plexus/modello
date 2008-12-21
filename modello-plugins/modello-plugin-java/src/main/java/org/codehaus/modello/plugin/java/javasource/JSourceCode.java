@@ -314,6 +314,11 @@ class JCodeStatement
 
     public String toString()
     {
+        if ( value.length() == 0 )
+        {
+            return "";
+        }
+
         StringBuffer sb = new StringBuffer( indentSize + value.length() );
         for ( int i = 0; i < indentSize; i++ ) sb.append( ' ' );
         sb.append( value.toString() );
