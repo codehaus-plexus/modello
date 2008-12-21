@@ -46,8 +46,9 @@ public class ModelField
 
     private transient ModelClass modelClass;
 
-    private static final String[] PRIMITIVE_TYPES = new String[]{"boolean", "byte", "char", "short", "int", "long",
-        "float", "double", "String", "Boolean", "Date", "DOM", "Content"};
+    private static final String[] PRIMITIVE_TYPES =
+        new String[] { "boolean", "byte", "char", "short", "int", "long", "float", "double", "String", "Boolean",
+            "Date", "DOM", "Content" };
 
     public ModelField()
     {
@@ -247,15 +248,9 @@ public class ModelField
     public boolean isModelVersionField()
     {
         Model model = modelClass.getModel();
-        boolean isField = false;
         VersionDefinition versionDefinition = model.getVersionDefinition();
-        if ( versionDefinition != null && "field".equals( versionDefinition.getType() ) )
-        {
-            if ( versionDefinition.getValue().equals( getName() ) || versionDefinition.getValue().equals( alias ) )
-            {
-                isField = true;
-            }
-        }
-        return isField;
+
+        return ( versionDefinition != null ) && "field".equals( versionDefinition.getType() )
+            && ( versionDefinition.getValue().equals( getName() ) || versionDefinition.getValue().equals( alias ) );
     }
 }
