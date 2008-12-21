@@ -155,7 +155,7 @@ public class ModelAssociation
 
             setType( modelDefault.getKey() );
 
-            setDefaultValue( modelDefault.getValue() );
+            setDefaultValue( getDefaultValue( modelDefault ) );
         }
         else
         {
@@ -189,9 +189,26 @@ public class ModelAssociation
 
 //                    setType( modelDefault.getKey() );
 
-                    setDefaultValue( modelDefault.getValue() );
+                    setDefaultValue( getDefaultValue( modelDefault ) );
                 }
             }
         }
+    }
+
+    public boolean isGenericType()
+    {
+        return getType().equals( ModelDefault.LIST ) || getType().equals( ModelDefault.SET );
+    }
+
+    private String getDefaultValue( ModelDefault modelDefault )
+    {
+        String value = modelDefault.getValue();
+
+        if ( isGenericType() )
+        {
+            value = value.substring( 0, value.length() - 2 ) + "/*<" + getTo() + ">*/" + "()";
+        }
+
+        return value;
     }
 }

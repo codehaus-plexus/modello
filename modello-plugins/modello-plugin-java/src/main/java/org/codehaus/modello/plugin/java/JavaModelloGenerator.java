@@ -30,7 +30,9 @@ import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelDefault;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.ModelInterface;
+import org.codehaus.modello.plugin.java.javasource.JArrayType;
 import org.codehaus.modello.plugin.java.javasource.JClass;
+import org.codehaus.modello.plugin.java.javasource.JCollectionType;
 import org.codehaus.modello.plugin.java.javasource.JConstructor;
 import org.codehaus.modello.plugin.java.javasource.JField;
 import org.codehaus.modello.plugin.java.javasource.JInterface;
@@ -511,7 +513,7 @@ public class JavaModelloGenerator
 
         if ( modelField.isArray() )
         {
-            type = type.createArray();
+            type = new JArrayType( type, false );
         }
 
         JField field = new JField( type, modelField.getName() );
@@ -774,7 +776,15 @@ public class JavaModelloGenerator
 
         if ( ModelAssociation.MANY_MULTIPLICITY.equals( modelAssociation.getMultiplicity() ) )
         {
-            JType type = new JClass( modelAssociation.getType() );
+            JType type;
+            if ( modelAssociation.isGenericType() )
+            {
+                type = new JCollectionType( modelAssociation.getType(), new JClass( modelAssociation.getTo() ), false );
+            }
+            else
+            {
+                type = new JClass( modelAssociation.getType() );
+            }
 
             JField jField = new JField( type, modelAssociation.getName() );
 
@@ -1128,6 +1138,11 @@ public class JavaModelloGenerator
                  && ModelAssociation.ONE_MULTIPLICITY.equals( modelAssociation.getMultiplicity() ) )
             {
                 type = new JClass( javaAssociationMetadata.getInterfaceName() );
+            }
+            else if ( ModelAssociation.MANY_MULTIPLICITY.equals( modelAssociation.getMultiplicity() )
+                            && modelAssociation.isGenericType() )
+            {
+                type = new JCollectionType( modelAssociation.getType(), new JClass( modelAssociation.getTo() ), false );
             }
             else if ( useTo )
             {

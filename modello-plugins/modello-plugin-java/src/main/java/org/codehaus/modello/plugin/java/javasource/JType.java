@@ -107,6 +107,7 @@ public class JType
      * Creates a JType Object representing an array of the current
      * JType.
      * @return the new JType which is represents an array.
+     * @deprecated removed in javasource 1.3rc1, replaced by JArrayType
      **/
     public final JType createArray()
     {
