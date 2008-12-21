@@ -135,6 +135,7 @@ public class JSourceCode
      * @param the indentSize is the size of the indentation to use
      * when printing this JSourceCode
      * @see #print
+     * @deprecated this method is not here any mode in castor codegen 1.3rc1
      **/
     public void add( String statement, short indentSize )
     {

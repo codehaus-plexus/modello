@@ -157,7 +157,7 @@ public class StaxReaderGenerator
 
         sc.add( "XMLStreamReader xmlStreamReader = XMLInputFactory.newInstance().createXMLStreamReader( reader );" );
 
-        sc.add( "", (short) 0 );
+        sc.add( "" );
 
         sc.add( "String encoding = xmlStreamReader.getCharacterEncodingScheme();" );
 
@@ -197,7 +197,7 @@ public class StaxReaderGenerator
 
         sc.add( "XMLStreamReader xmlStreamReader = XMLInputFactory.newInstance().createXMLStreamReader( file.toURL().toExternalForm(), new FileInputStream(file) );" );
 
-        sc.add( "", (short) 0 );
+        sc.add( "" );
 
         sc.add( "String encoding = xmlStreamReader.getCharacterEncodingScheme();" );
 

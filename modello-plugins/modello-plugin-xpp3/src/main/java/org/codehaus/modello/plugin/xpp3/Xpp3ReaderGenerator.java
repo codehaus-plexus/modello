@@ -158,15 +158,15 @@ public class Xpp3ReaderGenerator
 
         sc.add( "XmlPullParser parser = new MXParser();" );
 
-        sc.add( "", (short) 0 );
+        sc.add( "" );
 
         sc.add( "parser.setInput( reader );" );
 
-        sc.add( "", (short) 0 );
+        sc.add( "" );
 
         writeParserInitialization( sc );
 
-        sc.add( "", (short) 0 );
+        sc.add( "" );
 
         sc.add( "parser.next();" );
 
@@ -204,7 +204,7 @@ public class Xpp3ReaderGenerator
 
         sc.add( "Reader reader = ReaderFactory.newXmlReader( in );" );
 
-        sc.add( "", (short) 0 );
+        sc.add( "" );
 
         sc.add( "return read( reader, strict );" );
 
@@ -221,7 +221,7 @@ public class Xpp3ReaderGenerator
 
         sc.add( "Reader reader = ReaderFactory.newXmlReader( in );" );
 
-        sc.add( "", (short) 0 );
+        sc.add( "" );
 
         sc.add( "return read( reader );" );
 
@@ -928,7 +928,7 @@ public class Xpp3ReaderGenerator
         sc.add( "// ----------------------------------------------------------------------" );
         sc.add( "// Latin 1 entities" );
         sc.add( "// ----------------------------------------------------------------------" );
-        sc.add( "", (short) 0 );
+        sc.add( "" );
         sc.add( "parser.defineEntityReplacementText( \"nbsp\", \"\\u00a0\" );" );
         sc.add( "parser.defineEntityReplacementText( \"iexcl\", \"\\u00a1\" );" );
         sc.add( "parser.defineEntityReplacementText( \"cent\", \"\\u00a2\" );" );
@@ -1025,11 +1025,11 @@ public class Xpp3ReaderGenerator
         sc.add( "parser.defineEntityReplacementText( \"yacute\", \"\\u00fd\" );" );
         sc.add( "parser.defineEntityReplacementText( \"thorn\", \"\\u00fe\" );" );
         sc.add( "parser.defineEntityReplacementText( \"yuml\", \"\\u00ff\" );" );
-        sc.add( "", (short) 0 );
+        sc.add( "" );
         sc.add( "// ----------------------------------------------------------------------" );
         sc.add( "// Special entities" );
         sc.add( "// ----------------------------------------------------------------------" );
-        sc.add( "", (short) 0 );
+        sc.add( "" );
         // These are required to be handled by the parser by the XML specification
 //        sc.add( "parser.defineEntityReplacementText( \"quot\", \"\\u0022\" );" );
 //        sc.add( "parser.defineEntityReplacementText( \"amp\", \"\\u0026\" );" );
@@ -1064,11 +1064,11 @@ public class Xpp3ReaderGenerator
         sc.add( "parser.defineEntityReplacementText( \"lsaquo\", \"\\u2039\" );" );
         sc.add( "parser.defineEntityReplacementText( \"rsaquo\", \"\\u203a\" );" );
         sc.add( "parser.defineEntityReplacementText( \"euro\", \"\\u20ac\" );" );
-        sc.add( "", (short) 0 );
+        sc.add( "" );
         sc.add( "// ----------------------------------------------------------------------" );
         sc.add( "// Symbol entities" );
         sc.add( "// ----------------------------------------------------------------------" );
-        sc.add( "", (short) 0 );
+        sc.add( "" );
         sc.add( "parser.defineEntityReplacementText( \"fnof\", \"\\u0192\" );" );
         sc.add( "parser.defineEntityReplacementText( \"Alpha\", \"\\u0391\" );" );
         sc.add( "parser.defineEntityReplacementText( \"Beta\", \"\\u0392\" );" );
@@ -1193,7 +1193,7 @@ public class Xpp3ReaderGenerator
         sc.add( "parser.defineEntityReplacementText( \"clubs\", \"\\u2663\" );" );
         sc.add( "parser.defineEntityReplacementText( \"hearts\", \"\\u2665\" );" );
         sc.add( "parser.defineEntityReplacementText( \"diams\", \"\\u2666\" );" );
-        sc.add( "", (short) 0 );
+        sc.add( "" );
 
         sc.unindent();
 
