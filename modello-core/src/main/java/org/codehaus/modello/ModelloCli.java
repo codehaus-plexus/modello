@@ -53,7 +53,7 @@ public class ModelloCli
     public static void parseArgumentsFromCommandLine( String[] args )
         throws Exception
     {
-        if ( args.length < 5 )
+        if ( args.length < 6 )
         {
             usage();
 
@@ -105,9 +105,22 @@ public class ModelloCli
 
         parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, packageWithVersion );
 
-        if ( args.length > 5 )
+        String useJava5 = args[ 5 ];
+
+        if ( StringUtils.isEmpty( useJava5 ) )
         {
-            parameters.setProperty( ModelloParameterConstants.ENCODING, args[5] );
+            System.err.println( "Missing required parameter: use Java 5" );
+
+            usage();
+
+            System.exit( 1 );
+        }
+
+        parameters.setProperty( ModelloParameterConstants.USE_JAVA5, useJava5 );
+
+        if ( args.length > 6 )
+        {
+            parameters.setProperty( ModelloParameterConstants.ENCODING, args[6] );
         }
     }
 
@@ -117,6 +130,7 @@ public class ModelloCli
 
     private static void usage()
     {
-        System.err.println( "Usage: modello <model> <outputType> <output directory> <modelVersion> <packageWithVersion> [<encoding>]" );
+        System.err.println( "Usage: modello <model> <outputType> <output directory> <modelVersion> <packageWithVersion>"
+                            + "<useJava5> [<encoding>]" );
     }
 }

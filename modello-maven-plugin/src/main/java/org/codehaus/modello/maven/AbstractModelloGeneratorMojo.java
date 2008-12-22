@@ -78,7 +78,7 @@ public abstract class AbstractModelloGeneratorMojo
 
     /**
      * The encoding to use when generating Java source files.
-     * 
+     *
      * @parameter expression="${encoding}" default-value="${project.build.sourceEncoding}"
      * @since 1.0-alpha-19
      */
@@ -115,6 +115,13 @@ public abstract class AbstractModelloGeneratorMojo
      */
     private List/*<String>*/ packagedVersions = Collections.EMPTY_LIST;
 
+    /**
+     * Generate Java 5 sources, with generic collections.
+     *
+     * @parameter expression="${useJava5}" default-value="false"
+     */
+    private boolean useJava5;
+
     // ----------------------------------------------------------------------
     // Overridables
     // ----------------------------------------------------------------------
@@ -127,7 +134,7 @@ public abstract class AbstractModelloGeneratorMojo
     {
         return true;
     }
-    
+
     protected boolean producesResources()
     {
         return false;
@@ -184,6 +191,8 @@ public abstract class AbstractModelloGeneratorMojo
 
         parameters.setProperty( ModelloParameterConstants.ALL_VERSIONS,
                                 StringUtils.join( packagedVersions.iterator(), "," ) );
+
+        parameters.setProperty( ModelloParameterConstants.USE_JAVA5, Boolean.toString( useJava5 ) );
 
         if ( encoding != null )
         {

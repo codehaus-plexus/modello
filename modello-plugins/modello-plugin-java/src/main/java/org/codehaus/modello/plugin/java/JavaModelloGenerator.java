@@ -513,7 +513,7 @@ public class JavaModelloGenerator
 
         if ( modelField.isArray() )
         {
-            type = new JArrayType( type, false );
+            type = new JArrayType( type, useJava5 );
         }
 
         JField field = new JField( type, modelField.getName() );
@@ -779,7 +779,8 @@ public class JavaModelloGenerator
             JType type;
             if ( modelAssociation.isGenericType() )
             {
-                type = new JCollectionType( modelAssociation.getType(), new JClass( modelAssociation.getTo() ), false );
+                type = new JCollectionType( modelAssociation.getType(), new JClass( modelAssociation.getTo() ),
+                                            useJava5 );
             }
             else
             {
@@ -796,13 +797,13 @@ public class JavaModelloGenerator
             if ( StringUtils.equals( javaAssociationMetadata.getInitializationMode(),
                                      JavaAssociationMetadata.FIELD_INIT ) )
             {
-                jField.setInitString( modelAssociation.getDefaultValue() );
+                jField.setInitString( getDefaultValue ( modelAssociation ) );
             }
 
             if ( StringUtils.equals( javaAssociationMetadata.getInitializationMode(),
                                      JavaAssociationMetadata.CONSTRUCTOR_INIT ) )
             {
-                jConstructorSource.add( "this." + jField.getName() + " = " + modelAssociation.getDefaultValue() + ";" );
+                jConstructorSource.add( "this." + jField.getName() + " = " + getDefaultValue ( modelAssociation ) + ";" );
             }
 
             jClass.addField( jField );
@@ -824,7 +825,7 @@ public class JavaModelloGenerator
 
                     sc.indent();
 
-                    sc.add( "this." + jField.getName() + " = " + modelAssociation.getDefaultValue() + ";" );
+                    sc.add( "this." + jField.getName() + " = " + getDefaultValue ( modelAssociation ) + ";" );
 
                     sc.unindent();
 
@@ -1142,7 +1143,8 @@ public class JavaModelloGenerator
             else if ( ModelAssociation.MANY_MULTIPLICITY.equals( modelAssociation.getMultiplicity() )
                             && modelAssociation.isGenericType() )
             {
-                type = new JCollectionType( modelAssociation.getType(), new JClass( modelAssociation.getTo() ), false );
+                type = new JCollectionType( modelAssociation.getType(), new JClass( modelAssociation.getTo() ),
+                                            useJava5 );
             }
             else if ( useTo )
             {

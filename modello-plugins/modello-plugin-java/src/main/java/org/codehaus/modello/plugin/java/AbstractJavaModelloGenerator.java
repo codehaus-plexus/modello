@@ -23,19 +23,24 @@ package org.codehaus.modello.plugin.java;
  */
 
 import org.codehaus.modello.ModelloException;
+import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.model.BaseElement;
+import org.codehaus.modello.model.Model;
+import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelInterface;
 import org.codehaus.modello.plugin.AbstractModelloGenerator;
 import org.codehaus.modello.plugin.java.JavaFieldMetadata;
 import org.codehaus.modello.plugin.java.javasource.JClass;
 import org.codehaus.modello.plugin.java.javasource.JSourceWriter;
+import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.WriterFactory;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Iterator;
+import java.util.Properties;
 
 /**
  * AbstractJavaModelloGenerator - similar in scope to {@link AbstractModelloGenerator} but with features that
@@ -47,6 +52,17 @@ import java.util.Iterator;
 public abstract class AbstractJavaModelloGenerator
     extends AbstractModelloGenerator
 {
+    protected boolean useJava5 = false;
+
+    protected void initialize( Model model, Properties parameters )
+        throws ModelloException
+    {
+        super.initialize( model, parameters );
+
+        useJava5 = Boolean.valueOf( getParameter( parameters,
+                                                  ModelloParameterConstants.USE_JAVA5, "false" ) ).booleanValue();
+    }
+
     /**
      * Create a new java source file writer, with configured encoding.
      *
@@ -131,5 +147,17 @@ public abstract class AbstractJavaModelloGenerator
     protected String getPrefix( JavaFieldMetadata javaFieldMetadata )
     {
         return javaFieldMetadata.isBooleanGetter() ? "is" : "get";
+    }
+
+    protected String getDefaultValue( ModelAssociation association )
+    {
+        String value = association.getDefaultValue();
+
+        if ( useJava5 )
+        {
+            value = StringUtils.replaceOnce( StringUtils.replaceOnce( value, "/*", "" ), "*/", "" );
+        }
+
+        return value;
     }
 }

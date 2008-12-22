@@ -39,15 +39,17 @@ public class ModelloParameterConstants
     public static final String ALL_VERSIONS = "modello.all.versions";
 
     public static final String FILENAME = "modello.output.filename";
-    
+
     public static final String FIRST_VERSION = "modello.first.version";
 
     public static final String ENCODING = "modello.output.encoding";
-    
+
+    public static final String USE_JAVA5 = "modello.output.useJava5";
+
     public static final String OUTPUT_XDOC_FILE_NAME = "modello.output.xdoc.file";
-    
+
     public static final String OUTPUT_XSD_FILE_NAME = "modello.output.xsd.file";
-    
+
     private ModelloParameterConstants()
     {
     }
