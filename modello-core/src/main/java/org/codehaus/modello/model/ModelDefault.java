@@ -39,7 +39,7 @@ public class ModelDefault
 
     public static final String LIST = "java.util.List";
 
-    public static final String LIST_VALUE = "new java.util.ArrayList()";
+    public static final String LIST_VALUE = "new java.util.ArrayList<?>()";
 
     public static final String MAP = "java.util.Map";
 
@@ -51,7 +51,7 @@ public class ModelDefault
 
     public static final String SET = "java.util.Set";
 
-    public static final String SET_VALUE = "new java.util.HashSet()";
+    public static final String SET_VALUE = "new java.util.HashSet<?>()";
 
     private String key;
 
