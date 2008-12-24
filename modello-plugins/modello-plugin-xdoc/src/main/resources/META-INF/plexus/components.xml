@@ -5,5 +5,11 @@
       <role-hint>xdoc</role-hint>
       <implementation>org.codehaus.modello.plugin.xdoc.XdocGenerator</implementation>
     </component>
+
+    <component>
+      <role>org.codehaus.modello.metadata.MetadataPlugin</role>
+      <role-hint>xdoc</role-hint>
+      <implementation>org.codehaus.modello.plugin.xdoc.metadata.XdocMetadataPlugin</implementation>
+    </component>
   </components>
 </component-set>

@@ -42,6 +42,7 @@ import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.Version;
 import org.codehaus.modello.model.VersionRange;
 import org.codehaus.modello.plugin.model.ModelClassMetadata;
+import org.codehaus.modello.plugin.xdoc.metadata.XdocFieldMetadata;
 import org.codehaus.modello.plugins.xml.AbstractXmlGenerator;
 import org.codehaus.modello.plugins.xml.XmlFieldMetadata;
 import org.codehaus.plexus.util.WriterFactory;
@@ -483,6 +484,13 @@ public class XdocGenerator
             {
                 ModelField f = (ModelField) iter.next();
 
+                XdocFieldMetadata xdocFieldMetadata = (XdocFieldMetadata) f.getMetadata( XdocFieldMetadata.ID );
+
+                if ( XdocFieldMetadata.BLANK.equals( xdocFieldMetadata.getSeparator() ) )
+                {
+                    sb.append( '\n' );
+                }
+
                 if ( isInnerAssociation( f ) && recursive )
                 {
                     ModelAssociation assoc = (ModelAssociation) f;
@@ -522,14 +530,12 @@ public class XdocGenerator
 
                         depth--;
                     }
-
                 }
                 else
                 {
                     appendSpacer( sb, depth + 1 );
 
                     sb.append( "&lt;" ).append( resolveFieldTagName( f ) ).append( "/&gt;\n" );
-
                 }
             }
 
@@ -586,12 +592,9 @@ public class XdocGenerator
                 {
                     tagName = fieldMetadata.getAssociationTagName();
                 }
-                else
+                else if ( fieldMetadata.getTagName() != null )
                 {
-                    if ( fieldMetadata.getTagName() != null )
-                    {
-                        tagName = fieldMetadata.getTagName();
-                    }
+                    tagName = fieldMetadata.getTagName();
                 }
             }
         }

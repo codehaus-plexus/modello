@@ -74,21 +74,21 @@
             <type>Reference</type>
           </association>
         </field>
-        <field>
+        <field xdoc.separator="blank">
           <name>simpleTypes</name>
           <version>1.0.0+</version>
           <association>
             <type>SimpleTypes</type>
           </association>
         </field>
-        <field>
+        <field xdoc.separator="blank">
           <name>arrays</name>
           <version>1.0.0+</version>
           <association>
             <type>ArrayFeatures</type>
           </association>
         </field>
-        <field>
+        <field xdoc.separator="blank">
           <name>associationFeatures</name>
           <version>1.0.0+</version>
           <description>Test of association features.</description>
@@ -96,18 +96,25 @@
             <type>AssociationFeatures</type>
           </association>
         </field>
-        <field>
+        <field xdoc.separator="blank">
           <name>javaFeatures</name>
           <version>1.0.0+</version>
           <association>
             <type>JavaFeatures</type>
           </association>
         </field>
-        <field>
+        <field xdoc.separator="blank">
           <name>xmlFeatures</name>
           <version>1.0.0+</version>
           <association>
             <type>XmlFeatures</type>
+          </association>
+        </field>
+        <field xdoc.separator="blank">
+          <name>xdocFeatures</name>
+          <version>1.0.0+</version>
+          <association>
+            <type>XdocFeatures</type>
           </association>
         </field>
       </fields>
@@ -672,6 +679,34 @@
       <fields>
         <field xml.attribute="true">
           <name>attribute</name>
+          <version>1.0.0+</version>
+          <type>String</type>
+        </field>
+      </fields>
+    </class>
+
+    <class>
+      <name>XdocFeatures</name>
+      <version>1.0.0+</version>
+      <description><![CDATA[Test of XDOC specific parameters: see
+        <a href="http://fisheye.codehaus.org/browse/modello/trunk/modello-plugins/modello-plugin-xdoc/src/main/java/org/codehaus/modello/plugin/xdoc/metadata/XdocMetadataPlugin.java?r=trunk">XdocMetadataPlugin</a>
+        class.]]>
+      </description>
+      <fields>
+        <field>
+          <name>field</name>
+          <version>1.0.0+</version>
+          <type>String</type>
+        </field>
+        <field xdoc.separator="none">
+          <name>xdocSeparatorNone</name>
+          <description><![CDATA[<code>&lt;field xdoc.separator="none"&gt;</code>.]]></description>
+          <version>1.0.0+</version>
+          <type>String</type>
+        </field>
+        <field xdoc.separator="blank">
+          <name>xdocSeparatorBlank</name>
+          <description><![CDATA[<code>&lt;field  xdoc.separator="blank"&gt;</code>.]]></description>
           <version>1.0.0+</version>
           <type>String</type>
         </field>
