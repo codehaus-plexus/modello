@@ -43,6 +43,7 @@ import org.codehaus.modello.plugin.java.javasource.JType;
 import org.codehaus.modello.plugins.xml.XmlAssociationMetadata;
 import org.codehaus.modello.plugins.xml.XmlClassMetadata;
 import org.codehaus.modello.plugins.xml.XmlFieldMetadata;
+import org.codehaus.plexus.util.StringUtils;
 
 /**
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
@@ -284,6 +285,7 @@ public class Xpp3ReaderGenerator
         String uncapClassName = uncapitalise( className );
 
         JMethod unmarshall = new JMethod( "parse" + capClassName, new JClass( className ), null );
+        unmarshall.getModifiers().makePrivate();
 
         unmarshall.addParameter( new JParameter( new JClass( "String" ), "tagName" ) );
         unmarshall.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
@@ -291,8 +293,6 @@ public class Xpp3ReaderGenerator
 
         unmarshall.addException( new JClass( "IOException" ) );
         unmarshall.addException( new JClass( "XmlPullParserException" ) );
-
-        unmarshall.getModifiers().makePrivate();
 
         JSourceCode sc = unmarshall.getSourceCode();
 
@@ -468,13 +468,18 @@ public class Xpp3ReaderGenerator
 
         String singularName = singular( field.getName() );
 
-        String optionalCheck = "";
-        if ( field.getAlias() != null && field.getAlias().length() > 0 )
+        String alias;
+        if ( StringUtils.isEmpty( field.getAlias() ) )
         {
-            optionalCheck = "|| parser.getName().equals( \"" + field.getAlias() + "\" ) ";
+            alias = "null";
+        }
+        else
+        {
+            alias = "\"" + field.getAlias() + "\"";
         }
 
-        String tagComparison = statement + " ( parser.getName().equals( \"" + tagName + "\" ) " + optionalCheck + ")";
+        String tagComparison =
+            statement + " ( checkFieldWithDuplicate( parser, \"" + tagName + "\", " + alias + ", parsed ) )";
 
         if ( field instanceof ModelAssociation )
         {
@@ -487,14 +492,8 @@ public class Xpp3ReaderGenerator
                 sc.add( tagComparison );
 
                 sc.add( "{" );
-                sc.indent();
-
-                addCodeToCheckIfParsed( sc, tagName );
-
-                sc.add( uncapClassName + ".set" + capFieldName + "( parse" + association.getTo() + "( \"" + tagName +
-                    "\", parser, strict ) );" );
-
-                sc.unindent();
+                sc.addIndented( uncapClassName + ".set" + capFieldName + "( parse" + association.getTo() + "( \""
+                                + tagName + "\", parser, strict ) );" );
                 sc.add( "}" );
             }
             else
@@ -511,8 +510,6 @@ public class Xpp3ReaderGenerator
 
                         sc.add( "{" );
                         sc.indent();
-
-                        addCodeToCheckIfParsed( sc, tagName );
 
                         sc.add( type + " " + associationName + " = " + association.getDefaultValue() + ";" );
 
@@ -605,8 +602,6 @@ public class Xpp3ReaderGenerator
                     sc.add( "{" );
                     sc.indent();
 
-                    addCodeToCheckIfParsed( sc, tagName );
-
                     XmlAssociationMetadata xmlAssociationMetadata =
                         (XmlAssociationMetadata) association.getAssociationMetadata( XmlAssociationMetadata.ID );
 
@@ -696,8 +691,6 @@ public class Xpp3ReaderGenerator
             sc.add( "{" );
             sc.indent();
 
-            addCodeToCheckIfParsed( sc, tagName );
-
             //ModelField
             writePrimitiveField( field, field.getType(), uncapClassName, "set" + capitalise( field.getName() ), sc,
                                  jClass );
@@ -705,18 +698,6 @@ public class Xpp3ReaderGenerator
             sc.unindent();
             sc.add( "}" );
         }
-    }
-
-    private void addCodeToCheckIfParsed( JSourceCode sc, String tagName )
-    {
-        sc.add( "if ( parsed.contains( \"" + tagName + "\" ) )" );
-
-        sc.add( "{" );
-        sc.addIndented(
-            "throw new XmlPullParserException( \"Duplicated tag: '\" + parser.getName() + \"'\", parser, null );" );
-        sc.add( "}" );
-
-        sc.add( "parsed.add( \"" + tagName + "\" );" );
     }
 
     private void writePrimitiveField( ModelField field, String type, String objectName, String setterName,
@@ -1389,6 +1370,38 @@ public class Xpp3ReaderGenerator
         sc.add( "}" );
 
         sc.add( "return null;" );
+
+        jClass.addMethod( method );
+
+        // --------------------------------------------------------------------
+
+        method = new JMethod( "checkFieldWithDuplicate", JType.BOOLEAN, null );
+        method.getModifiers().makePrivate();
+
+        method.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
+        method.addParameter( new JParameter( new JClass( "String" ), "tagName" ) );
+        method.addParameter( new JParameter( new JClass( "String" ), "alias" ) );
+        method.addParameter( new JParameter( new JClass( "java.util.Set" ), "parsed" ) );
+        method.addException( new JClass( "XmlPullParserException" ) );
+
+        sc = method.getSourceCode();
+
+        sc.add( "if ( !( parser.getName().equals( tagName ) || parser.getName().equals( alias ) ) )" );
+
+        sc.add( "{" );
+        sc.addIndented( "return false;" );
+        sc.add( "}" );
+
+        sc.add( "if ( parsed.contains( tagName ) )" );
+
+        sc.add( "{" );
+        sc.addIndented(
+            "throw new XmlPullParserException( \"Duplicated tag: '\" + tagName + \"'\", parser, null );" );
+        sc.add( "}" );
+
+        sc.add( "parsed.add( tagName );" );
+
+        sc.add( "return true;" );
 
         jClass.addMethod( method );
     }
