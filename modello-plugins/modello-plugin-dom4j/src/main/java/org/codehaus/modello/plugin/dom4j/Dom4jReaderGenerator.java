@@ -38,6 +38,7 @@ import org.codehaus.modello.plugin.java.javasource.JType;
 import org.codehaus.modello.plugins.xml.XmlAssociationMetadata;
 import org.codehaus.modello.plugins.xml.XmlClassMetadata;
 import org.codehaus.modello.plugins.xml.XmlFieldMetadata;
+import org.codehaus.plexus.util.StringUtils;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -381,14 +382,18 @@ public class Dom4jReaderGenerator
 
         String singularName = singular( field.getName() );
 
-        String optionalCheck = "";
-        if ( field.getAlias() != null && field.getAlias().length() > 0 )
+        String alias;
+        if ( StringUtils.isEmpty( field.getAlias() ) )
         {
-            optionalCheck = "|| childElement.getName().equals( \"" + field.getAlias() + "\" ) ";
+            alias = "null";
+        }
+        else
+        {
+            alias = "\"" + field.getAlias() + "\"";
         }
 
         String tagComparison =
-            statement + " ( childElement.getName().equals( \"" + tagName + "\" ) " + optionalCheck + ")";
+            statement + " ( checkFieldWithDuplicate( childElement, \"" + tagName + "\", " + alias + ", parsed ) )";
 
         if ( field instanceof ModelAssociation )
         {
@@ -401,14 +406,8 @@ public class Dom4jReaderGenerator
                 sc.add( tagComparison );
 
                 sc.add( "{" );
-                sc.indent();
-
-                addCodeToCheckIfParsed( sc, tagName );
-
-                sc.add( uncapClassName + ".set" + capFieldName + "( parse" + association.getTo() + "( \"" + tagName
-                    + "\", childElement, strict, encoding ) );" );
-
-                sc.unindent();
+                sc.addIndented( uncapClassName + ".set" + capFieldName + "( parse" + association.getTo() + "( \""
+                                + tagName + "\", childElement, strict, encoding ) );" );
                 sc.add( "}" );
             }
             else
@@ -425,8 +424,6 @@ public class Dom4jReaderGenerator
 
                         sc.add( "{" );
                         sc.indent();
-
-                        addCodeToCheckIfParsed( sc, tagName );
 
                         sc.add( type + " " + associationName + " = " + association.getDefaultValue() + ";" );
 
@@ -529,8 +526,6 @@ public class Dom4jReaderGenerator
 
                     sc.add( "{" );
                     sc.indent();
-
-                    addCodeToCheckIfParsed( sc, tagName );
 
                     XmlAssociationMetadata xmlAssociationMetadata =
                         (XmlAssociationMetadata) association.getAssociationMetadata( XmlAssociationMetadata.ID );
@@ -685,8 +680,6 @@ public class Dom4jReaderGenerator
             sc.add( "{" );
             sc.indent();
 
-            addCodeToCheckIfParsed( sc, tagName );
-
             //ModelField
             writePrimitiveField( field, field.getType(), uncapClassName, "set" + capitalise( field.getName() ), sc,
                                  jClass, "element", "childElement" );
@@ -694,17 +687,6 @@ public class Dom4jReaderGenerator
             sc.unindent();
             sc.add( "}" );
         }
-    }
-
-    private void addCodeToCheckIfParsed( JSourceCode sc, String tagName )
-    {
-        sc.add( "if ( parsed.contains( \"" + tagName + "\" ) )" );
-
-        sc.add( "{" );
-        sc.addIndented( "throw new DocumentException( \"Duplicated tag: '\" + element.getName() + \"'\" );" );
-        sc.add( "}" );
-
-        sc.add( "parsed.add( \"" + tagName + "\" );" );
     }
 
     private void writePrimitiveField( ModelField field, String type, String objectName, String setterName,
@@ -1027,6 +1009,38 @@ public class Dom4jReaderGenerator
         sc.add( "}" );
 
         sc.add( "return xpp3Dom;" );
+
+        jClass.addMethod( method );
+
+        // --------------------------------------------------------------------
+
+        method = new JMethod( "checkFieldWithDuplicate", JType.BOOLEAN, null );
+        method.getModifiers().makePrivate();
+
+        method.addParameter( new JParameter( new JClass( "Element" ), "element" ) );
+        method.addParameter( new JParameter( new JClass( "String" ), "tagName" ) );
+        method.addParameter( new JParameter( new JClass( "String" ), "alias" ) );
+        method.addParameter( new JParameter( new JClass( "java.util.Set" ), "parsed" ) );
+        method.addException( new JClass( "DocumentException" ) );
+
+        sc = method.getSourceCode();
+
+        sc.add( "if ( !( element.getName().equals( tagName ) || element.getName().equals( alias ) ) )" );
+
+        sc.add( "{" );
+        sc.addIndented( "return false;" );
+        sc.add( "}" );
+
+        sc.add( "if ( parsed.contains( tagName ) )" );
+
+        sc.add( "{" );
+        sc.addIndented(
+            "throw new DocumentException( \"Duplicated tag: '\" + tagName + \"'\" );" );
+        sc.add( "}" );
+
+        sc.add( "parsed.add( tagName );" );
+
+        sc.add( "return true;" );
 
         jClass.addMethod( method );
     }
