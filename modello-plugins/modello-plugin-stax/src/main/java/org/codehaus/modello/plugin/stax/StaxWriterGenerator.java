@@ -85,25 +85,15 @@ public class StaxWriterGenerator
         JClass jClass = new JClass( packageName + '.' + marshallerName );
 
         jClass.addImport( "java.io.InputStream" );
-
         jClass.addImport( "java.io.IOException" );
-
         jClass.addImport( "java.io.Writer" );
-
         jClass.addImport( "java.io.StringWriter" );
-
         jClass.addImport( "java.text.DateFormat" );
-
         jClass.addImport( "java.util.Iterator" );
-
         jClass.addImport( "java.util.Locale" );
-
         jClass.addImport( "java.util.jar.Manifest" );
-
         jClass.addImport( "javax.xml.stream.*" );
-
         jClass.addImport( "javanet.staxutils.IndentingXMLStreamWriter" );
-
         jClass.addImport( "org.codehaus.plexus.util.xml.Xpp3Dom" );
 
         addModelImports( jClass, null );
@@ -134,14 +124,11 @@ public class StaxWriterGenerator
 
         JMethod marshall = new JMethod( "write" );
 
-        marshall.addParameter( new JParameter( new JClass( "Writer" ), "writer" ) );
-
         String rootElementParameterName = uncapitalise( root );
-
+        marshall.addParameter( new JParameter( new JClass( "Writer" ), "writer" ) );
         marshall.addParameter( new JParameter( new JClass( root ), rootElementParameterName ) );
 
         marshall.addException( new JClass( "java.io.IOException" ) );
-
         marshall.addException( new JClass( "XMLStreamException" ) );
 
         JSourceCode sc = marshall.getSourceCode();
@@ -161,9 +148,7 @@ public class StaxWriterGenerator
 
         sc.add( "if ( factory.isPropertySupported( \"org.codehaus.stax2.automaticEmptyElements\" ) )" );
         sc.add( "{" );
-        sc.indent();
-        sc.add( "factory.setProperty( \"org.codehaus.stax2.automaticEmptyElements\", Boolean.FALSE );" );
-        sc.unindent();
+        sc.addIndented( "factory.setProperty( \"org.codehaus.stax2.automaticEmptyElements\", Boolean.FALSE );" );
         sc.add( "}" );
 
         sc.add(
@@ -171,9 +156,7 @@ public class StaxWriterGenerator
 
         sc.add( "if ( supportWindowsLineEndings )" );
         sc.add( "{" );
-        sc.indent();
-        sc.add( "serializer.setNewLine( serializer.getLineSeparator() );" );
-        sc.unindent();
+        sc.addIndented( "serializer.setNewLine( serializer.getLineSeparator() );" );
         sc.add( "}" );
 
         sc.add( "serializer.writeStartDocument( " + rootElementParameterName + ".getModelEncoding(), \"1.0\" );" );
@@ -212,25 +195,20 @@ public class StaxWriterGenerator
         String uncapClassName = uncapitalise( className );
 
         JMethod marshall = new JMethod( "write" + className );
+        marshall.getModifiers().makePrivate();
 
         marshall.addParameter( new JParameter( new JClass( className ), uncapClassName ) );
-
         marshall.addParameter( new JParameter( new JClass( "String" ), "tagName" ) );
-
         marshall.addParameter( new JParameter( new JClass( "XMLStreamWriter" ), "serializer" ) );
 
         marshall.addException( new JClass( "java.io.IOException" ) );
-
         marshall.addException( new JClass( "XMLStreamException" ) );
-
-        marshall.getModifiers().makePrivate();
 
         JSourceCode sc = marshall.getSourceCode();
 
         sc.add( "if ( " + uncapClassName + " != null )" );
 
         sc.add( "{" );
-
         sc.indent();
 
         XmlClassMetadata metadata = (XmlClassMetadata) modelClass.getMetadata( XmlClassMetadata.ID );
@@ -291,14 +269,8 @@ public class StaxWriterGenerator
                 sc.add( getValueChecker( type, value, field ) );
 
                 sc.add( "{" );
-
-                sc.indent();
-
-                sc.add( "serializer.writeAttribute( \"" + fieldTagName + "\", " +
+                sc.addIndented( "serializer.writeAttribute( \"" + fieldTagName + "\", " +
                     getValue( field.getType(), value, fieldMetadata ) + " );" );
-
-                sc.unindent();
-
                 sc.add( "}" );
             }
         }
@@ -380,7 +352,6 @@ public class StaxWriterGenerator
                         sc.add( getValueChecker( type, value, association ) );
 
                         sc.add( "{" );
-
                         sc.indent();
 
                         if ( wrappedList )
@@ -391,7 +362,6 @@ public class StaxWriterGenerator
                         sc.add( "for ( Iterator iter = " + value + ".iterator(); iter.hasNext(); )" );
 
                         sc.add( "{" );
-
                         sc.indent();
 
                         if ( isClassInModel( association.getTo(), modelClass.getModel() ) )
@@ -423,7 +393,6 @@ public class StaxWriterGenerator
                         }
 
                         sc.unindent();
-
                         sc.add( "}" );
 
                         if ( wrappedList )
@@ -432,7 +401,6 @@ public class StaxWriterGenerator
                         }
 
                         sc.unindent();
-
                         sc.add( "}" );
                     }
                     else
@@ -445,7 +413,6 @@ public class StaxWriterGenerator
                         sc.add( getValueChecker( type, value, field ) );
 
                         sc.add( "{" );
-
                         sc.indent();
 
                         if ( wrappedList )
@@ -456,7 +423,6 @@ public class StaxWriterGenerator
                         sc.add( "for ( Iterator iter = " + value + ".keySet().iterator(); iter.hasNext(); )" );
 
                         sc.add( "{" );
-
                         sc.indent();
 
                         sc.add( "String key = (String) iter.next();" );
@@ -482,7 +448,6 @@ public class StaxWriterGenerator
                         }
 
                         sc.unindent();
-
                         sc.add( "}" );
 
                         if ( wrappedList )
@@ -491,7 +456,6 @@ public class StaxWriterGenerator
                         }
 
                         sc.unindent();
-
                         sc.add( "}" );
                     }
                 }
@@ -501,7 +465,6 @@ public class StaxWriterGenerator
                 sc.add( getValueChecker( type, value, field ) );
 
                 sc.add( "{" );
-
                 sc.indent();
 
                 if ( "DOM".equals( field.getType() ) )
@@ -517,7 +480,6 @@ public class StaxWriterGenerator
                 }
 
                 sc.unindent();
-
                 sc.add( "}" );
             }
         }
@@ -525,7 +487,6 @@ public class StaxWriterGenerator
         sc.add( "serializer.writeEndElement();" );
 
         sc.unindent();
-
         sc.add( "}" );
 
         jClass.addMethod( marshall );
@@ -560,11 +521,7 @@ public class StaxWriterGenerator
         sc.add( "}" );
         sc.add( "else" );
         sc.add( "{" );
-        sc.indent();
-
-        sc.add( "serializer.writeAttribute( \"" + attributeName + "\", (String) idMap.get( " + value + " ) );" );
-
-        sc.unindent();
+        sc.addIndented( "serializer.writeAttribute( \"" + attributeName + "\", (String) idMap.get( " + value + " ) );" );
         sc.add( "}" );
     }
 
@@ -601,21 +558,13 @@ public class StaxWriterGenerator
         sc.add( "Xpp3Dom[] children = dom.getChildren();" );
         sc.add( "for ( int i = 0; i < children.length; i++ )" );
         sc.add( "{" );
-
-        sc.indent();
-        sc.add( "writeDom( children[i], serializer );" );
-        sc.unindent();
-
+        sc.addIndented( "writeDom( children[i], serializer );" );
         sc.add( "}" );
 
         sc.add( "String value = dom.getValue();" );
         sc.add( "if ( value != null )" );
         sc.add( "{" );
-
-        sc.indent();
-        sc.add( "serializer.writeCharacters( value );" );
-        sc.unindent();
-
+        sc.addIndented( "serializer.writeCharacters( value );" );
         sc.add( "}" );
 
         sc.add( "serializer.writeEndElement();" );
