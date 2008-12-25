@@ -81,15 +81,10 @@ public class Xpp3WriterGenerator
         JClass jClass = new JClass( packageName + '.' + marshallerName );
 
         jClass.addImport( "org.codehaus.plexus.util.xml.pull.XmlSerializer" );
-
         jClass.addImport( "org.codehaus.plexus.util.xml.pull.MXSerializer" );
-
         jClass.addImport( "java.io.Writer" );
-
         jClass.addImport( "java.text.DateFormat" );
-
         jClass.addImport( "java.util.Iterator" );
-
         jClass.addImport( "java.util.Locale" );
 
         jClass.addField( new JField( new JClass( "String" ), "NAMESPACE" ) );
@@ -116,10 +111,8 @@ public class Xpp3WriterGenerator
 
         JMethod marshall = new JMethod( "write" );
 
-        marshall.addParameter( new JParameter( new JClass( "Writer" ), "writer" ) );
-
         String rootElementParameterName = uncapitalise( root );
-
+        marshall.addParameter( new JParameter( new JClass( "Writer" ), "writer" ) );
         marshall.addParameter( new JParameter( new JClass( root ), rootElementParameterName ) );
 
         marshall.addException( new JClass( "java.io.IOException" ) );
@@ -170,9 +163,7 @@ public class Xpp3WriterGenerator
         JMethod marshall = new JMethod( "write" + className );
 
         marshall.addParameter( new JParameter( new JClass( className ), uncapClassName ) );
-
         marshall.addParameter( new JParameter( new JClass( "String" ), "tagName" ) );
-
         marshall.addParameter( new JParameter( new JClass( "XmlSerializer" ), "serializer" ) );
 
         marshall.addException( new JClass( "java.io.IOException" ) );
@@ -184,7 +175,6 @@ public class Xpp3WriterGenerator
         sc.add( "if ( " + uncapClassName + " != null )" );
 
         sc.add( "{" );
-
         sc.indent();
 
         sc.add( "serializer.startTag( NAMESPACE, tagName );" );
@@ -225,14 +215,8 @@ public class Xpp3WriterGenerator
                 sc.add( getValueChecker( type, value, field ) );
 
                 sc.add( "{" );
-
-                sc.indent();
-
-                sc.add( "serializer.attribute( NAMESPACE, \"" + fieldTagName + "\", " +
+                sc.addIndented( "serializer.attribute( NAMESPACE, \"" + fieldTagName + "\", " +
                     getValue( field.getType(), value, fieldMetadata ) + " );" );
-
-                sc.unindent();
-
                 sc.add( "}" );
             }
 
@@ -296,14 +280,8 @@ public class Xpp3WriterGenerator
                     sc.add( getValueChecker( type, value, association ) );
 
                     sc.add( "{" );
-
-                    sc.indent();
-
-                    sc.add( "write" + association.getTo() + "( (" + association.getTo() + ") " + value + ", \"" +
-                        fieldTagName + "\", serializer );" );
-
-                    sc.unindent();
-
+                    sc.addIndented( "write" + association.getTo() + "( (" + association.getTo() + ") " + value + ", \""
+                                    + fieldTagName + "\", serializer );" );
                     sc.add( "}" );
                 }
                 else
@@ -318,7 +296,6 @@ public class Xpp3WriterGenerator
                         sc.add( getValueChecker( type, value, association ) );
 
                         sc.add( "{" );
-
                         sc.indent();
 
                         if ( wrappedList )
@@ -329,7 +306,6 @@ public class Xpp3WriterGenerator
                         sc.add( "for ( Iterator iter = " + value + ".iterator(); iter.hasNext(); )" );
 
                         sc.add( "{" );
-
                         sc.indent();
 
                         if ( isClassInModel( association.getTo(), modelClass.getModel() ) )
@@ -349,7 +325,6 @@ public class Xpp3WriterGenerator
                         }
 
                         sc.unindent();
-
                         sc.add( "}" );
 
                         if ( wrappedList )
@@ -358,7 +333,6 @@ public class Xpp3WriterGenerator
                         }
 
                         sc.unindent();
-
                         sc.add( "}" );
                     }
                     else
@@ -371,7 +345,6 @@ public class Xpp3WriterGenerator
                         sc.add( getValueChecker( type, value, field ) );
 
                         sc.add( "{" );
-
                         sc.indent();
 
                         if ( wrappedList )
@@ -382,7 +355,6 @@ public class Xpp3WriterGenerator
                         sc.add( "for ( Iterator iter = " + value + ".keySet().iterator(); iter.hasNext(); )" );
 
                         sc.add( "{" );
-
                         sc.indent();
 
                         sc.add( "String key = (String) iter.next();" );
@@ -405,7 +377,6 @@ public class Xpp3WriterGenerator
                         }
 
                         sc.unindent();
-
                         sc.add( "}" );
 
                         if ( wrappedList )
@@ -414,7 +385,6 @@ public class Xpp3WriterGenerator
                         }
 
                         sc.unindent();
-
                         sc.add( "}" );
                     }
                 }
@@ -424,24 +394,18 @@ public class Xpp3WriterGenerator
                 sc.add( getValueChecker( type, value, field ) );
 
                 sc.add( "{" );
-
-                sc.indent();
-
                 if ( "DOM".equals( field.getType() ) )
                 {
                     jClass.addImport( "org.codehaus.plexus.util.xml.Xpp3Dom" );
 
-                    sc.add( "((Xpp3Dom) " + value + ").writeToSerializer( NAMESPACE, serializer );" );
+                    sc.addIndented( "((Xpp3Dom) " + value + ").writeToSerializer( NAMESPACE, serializer );" );
                 }
                 else
                 {
-                    sc.add( "serializer.startTag( NAMESPACE, " + "\"" + fieldTagName + "\" ).text( " +
-                        getValue( field.getType(), value, fieldMetadata ) + " ).endTag( NAMESPACE, " + "\"" +
-                        fieldTagName + "\" );" );
+                    sc.addIndented( "serializer.startTag( NAMESPACE, " + "\"" + fieldTagName + "\" ).text( "
+                        + getValue( field.getType(), value, fieldMetadata ) + " ).endTag( NAMESPACE, " + "\""
+                        + fieldTagName + "\" );" );
                 }
-
-                sc.unindent();
-
                 sc.add( "}" );
             }
         }
@@ -449,7 +413,6 @@ public class Xpp3WriterGenerator
         sc.add( "serializer.endTag( NAMESPACE, tagName );" );
 
         sc.unindent();
-
         sc.add( "}" );
 
         jClass.addMethod( marshall );
