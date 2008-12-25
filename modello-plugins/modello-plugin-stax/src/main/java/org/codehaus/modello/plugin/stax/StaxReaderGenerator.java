@@ -97,33 +97,19 @@ public class StaxReaderGenerator
         JClass jClass = new JClass( packageName + '.' + unmarshallerName );
 
         jClass.addImport( "java.io.IOException" );
-
         jClass.addImport( "java.io.Reader" );
-
         jClass.addImport( "java.io.File" );
-
         jClass.addImport( "java.io.FileInputStream" );
-
         jClass.addImport( "java.io.StringWriter" );
-
         jClass.addImport( "java.io.StringReader" );
-
         jClass.addImport( "java.io.ByteArrayInputStream" );
-
         jClass.addImport( "java.io.InputStreamReader" );
-
         jClass.addImport( "java.text.DateFormat" );
-
         jClass.addImport( "java.text.ParsePosition" );
-
         jClass.addImport( "java.util.regex.Matcher" );
-
         jClass.addImport( "java.util.regex.Pattern" );
-
         jClass.addImport( "java.util.Locale" );
-
         jClass.addImport( "javax.xml.stream.*" );
-
         jClass.addImport( "org.codehaus.plexus.util.xml.Xpp3Dom" );
 
         addModelImports( jClass, null );
@@ -147,7 +133,6 @@ public class StaxReaderGenerator
         JMethod method = new JMethod( "read", returnType, null );
 
         method.addParameter( new JParameter( new JClass( "Reader" ), "reader" ) );
-
         method.addParameter( new JParameter( JType.BOOLEAN, "strict" ) );
 
         method.addException( new JClass( "IOException" ) );
@@ -170,6 +155,8 @@ public class StaxReaderGenerator
 
         jClass.addMethod( method );
 
+        // ----------------------------------------------------------------------
+
         method = new JMethod( "read", returnType, null );
 
         method.addParameter( new JParameter( new JClass( "Reader" ), "reader" ) );
@@ -181,6 +168,8 @@ public class StaxReaderGenerator
         sc.add( "return read( reader, true );" );
 
         jClass.addMethod( method );
+
+        // ----------------------------------------------------------------------
 
         method = new JMethod( "read", returnType, null );
 
@@ -209,6 +198,8 @@ public class StaxReaderGenerator
         sc.add( "return value;" );
 
         jClass.addMethod( method );
+
+        // ----------------------------------------------------------------------
 
         method = new JMethod( "read", returnType, null );
 
@@ -294,19 +285,11 @@ public class StaxReaderGenerator
 
         sc.add( "try" );
         sc.add( "{" );
-        sc.indent();
-
-        sc.add( "modelVersion = determineVersion( reader );" );
-
-        sc.unindent();
+        sc.addIndented( "modelVersion = determineVersion( reader );" );
         sc.add( "}" );
         sc.add( "finally" );
         sc.add( "{" );
-        sc.indent();
-
-        sc.add( "IOUtil.close( reader );" );
-
-        sc.unindent();
+        sc.addIndented( "IOUtil.close( reader );" );
         sc.add( "}" );
 
         sc.add( "reader = ReaderFactory.newXmlReader( f );" );
@@ -323,12 +306,8 @@ public class StaxReaderGenerator
 
             sc.add( prefix + "if ( \"" + version + "\".equals( modelVersion ) )" );
             sc.add( "{" );
-            sc.indent();
-
-            sc.add( "return new " + getModel().getDefaultPackageName( true, new Version( version ) ) + ".io.stax." +
-                getFileName( "StaxReader" ) + "().read( reader, strict );" );
-
-            sc.unindent();
+            sc.addIndented( "return new " + getModel().getDefaultPackageName( true, new Version( version ) )
+                            + ".io.stax." + getFileName( "StaxReader" ) + "().read( reader, strict );" );
             sc.add( "}" );
 
             prefix = "else ";
@@ -336,24 +315,18 @@ public class StaxReaderGenerator
 
         sc.add( "else" );
         sc.add( "{" );
-        sc.indent();
-
-        sc.add(
+        sc.addIndented(
             "throw new XMLStreamException( \"Document version '\" + modelVersion + \"' has no corresponding reader.\" );" );
-
-        sc.unindent();
         sc.add( "}" );
 
         sc.unindent();
         sc.add( "}" );
         sc.add( "finally" );
         sc.add( "{" );
-        sc.indent();
-
-        sc.add( "IOUtil.close( reader );" );
-
-        sc.unindent();
+        sc.addIndented( "IOUtil.close( reader );" );
         sc.add( "}" );
+
+        // ----------------------------------------------------------------------
 
         method = new JMethod( "read", new JClass( "Object" ), null );
 
@@ -399,7 +372,6 @@ public class StaxReaderGenerator
         sc.add( "while ( xmlStreamReader.hasNext() )" );
 
         sc.add( "{" );
-
         sc.indent();
 
         sc.add( "int eventType = xmlStreamReader.next();" );
@@ -407,7 +379,6 @@ public class StaxReaderGenerator
         sc.add( "if ( eventType == XMLStreamConstants.START_ELEMENT )" );
 
         sc.add( "{" );
-
         sc.indent();
 
         ModelClass root = objectModel.getClass( objectModel.getRoot( getGeneratedVersion() ), getGeneratedVersion() );
@@ -449,11 +420,9 @@ public class StaxReaderGenerator
         }
 
         sc.unindent();
-
         sc.add( "}" );
 
         sc.unindent();
-
         sc.add( "}" );
 
         sc.add( "throw new XMLStreamException( \"Version not found in document\", xmlStreamReader.getLocation() );" );
@@ -484,60 +453,38 @@ public class StaxReaderGenerator
         sc.add( "while ( depth >= 0 )" );
 
         sc.add( "{" );
-
         sc.indent();
 
         sc.add( "int eventType = xmlStreamReader.next();" );
 
         sc.add( "if ( eventType == XMLStreamConstants.START_ELEMENT )" );
         sc.add( "{" );
-
         sc.indent();
 
         sc.add( "if ( depth == 0 && \"" + value + "\".equals( xmlStreamReader.getLocalName() ) )" );
         sc.add( "{" );
-
-        sc.indent();
-
-        sc.add( "return xmlStreamReader.getElementText();" );
-
-        sc.unindent();
-
+        sc.addIndented( "return xmlStreamReader.getElementText();" );
         sc.add( "}" );
 
         if ( field.getAlias() != null )
         {
             sc.add( "if ( depth == 0 && \"" + field.getAlias() + "\".equals( xmlStreamReader.getLocalName() ) )" );
             sc.add( "{" );
-
-            sc.indent();
-
-            sc.add( "return xmlStreamReader.getElementText();" );
-
-            sc.unindent();
-
+            sc.addIndented( "return xmlStreamReader.getElementText();" );
             sc.add( "}" );
         }
 
         sc.add( "depth++;" );
 
         sc.unindent();
-
         sc.add( "}" );
 
         sc.add( "if ( eventType == XMLStreamConstants.END_ELEMENT )" );
         sc.add( "{" );
-
-        sc.indent();
-
-        sc.add( "depth--;" );
-
-        sc.unindent();
-
+        sc.addIndented( "depth--;" );
         sc.add( "}" );
 
         sc.unindent();
-
         sc.add( "}" );
 
         sc.add( "throw new XMLStreamException( \"Field: '" + value +
@@ -558,14 +505,8 @@ public class StaxReaderGenerator
         sc.add( "if ( uri == null )" );
 
         sc.add( "{" );
-
-        sc.indent();
-
-        sc.add(
+        sc.addIndented(
             "throw new XMLStreamException( \"No namespace specified, but versionDefinition requires it\", xmlStreamReader.getLocation() );" );
-
-        sc.unindent();
-
         sc.add( "}" );
 
         int index = namespace.indexOf( "${version}" );
@@ -576,14 +517,8 @@ public class StaxReaderGenerator
         sc.add( "if ( !uri.startsWith( uriPrefix ) || !uri.endsWith( uriSuffix ) )" );
 
         sc.add( "{" );
-
-        sc.indent();
-
-        sc.add( "throw new XMLStreamException( \"Namespace URI: '\" + uri + \"' does not match pattern '" + namespace +
-            "'\", xmlStreamReader.getLocation() );" );
-
-        sc.unindent();
-
+        sc.addIndented( "throw new XMLStreamException( \"Namespace URI: '\" + uri + \"' does not match pattern '"
+                        + namespace + "'\", xmlStreamReader.getLocation() );" );
         sc.add( "}" );
 
         sc.add( "return uri.substring( uriPrefix.length(), uri.length() - uriSuffix.length() );" );
@@ -625,22 +560,16 @@ public class StaxReaderGenerator
 
         String uncapClassName = uncapitalise( className );
 
-        JClass returnType = new JClass( className );
-        JMethod unmarshall = new JMethod( "parse" + capClassName, returnType, null );
+        JMethod unmarshall = new JMethod( "parse" + capClassName, new JClass( className ), null );
+        unmarshall.getModifiers().makePrivate();
 
         unmarshall.addParameter( new JParameter( new JClass( "String" ), "tagName" ) );
-
         unmarshall.addParameter( new JParameter( new JClass( "XMLStreamReader" ), "xmlStreamReader" ) );
-
         unmarshall.addParameter( new JParameter( JType.BOOLEAN, "strict" ) );
-
         unmarshall.addParameter( new JParameter( new JClass( "String" ), "encoding" ) );
 
         unmarshall.addException( new JClass( "IOException" ) );
-
         unmarshall.addException( new JClass( "XMLStreamException" ) );
-
-        unmarshall.getModifiers().makePrivate();
 
         JSourceCode sc = unmarshall.getSourceCode();
 
@@ -660,7 +589,6 @@ public class StaxReaderGenerator
             sc.add( "while ( xmlStreamReader.hasNext() )" );
 
             sc.add( "{" );
-
             sc.indent();
 
             sc.add( "int eventType = xmlStreamReader.next();" );
@@ -677,21 +605,13 @@ public class StaxReaderGenerator
 
                 sc.add( "if ( " + instanceFieldName + " == null )" );
                 sc.add( "{" );
-                sc.indent();
-
-                sc.add( instanceFieldName + " = new java.util.HashMap();" );
-
-                sc.unindent();
+                sc.addIndented( instanceFieldName + " = new java.util.HashMap();" );
                 sc.add( "}" );
 
                 sc.add( "String v = xmlStreamReader.getAttributeValue( null, \"modello.id\" );" );
                 sc.add( "if ( v != null )" );
                 sc.add( "{" );
-                sc.indent();
-
-                sc.add( instanceFieldName + ".put( v, " + uncapClassName + " );" );
-
-                sc.unindent();
+                sc.addIndented( instanceFieldName + ".put( v, " + uncapClassName + " );" );
                 sc.add( "}" );
             }
 
@@ -699,7 +619,6 @@ public class StaxReaderGenerator
         }
 
         sc.add( "{" );
-
         sc.indent();
 
         String statement = "if";
@@ -709,7 +628,6 @@ public class StaxReaderGenerator
             sc.add( "if ( xmlStreamReader.getLocalName().equals( tagName ) )" );
 
             sc.add( "{" );
-
             sc.indent();
 
             VersionDefinition versionDefinition = modelClass.getModel().getVersionDefinition();
@@ -725,7 +643,6 @@ public class StaxReaderGenerator
             sc.add( "foundRoot = true;" );
 
             sc.unindent();
-
             sc.add( "}" );
 
             statement = "else if";
@@ -754,13 +671,7 @@ public class StaxReaderGenerator
                 sc.add( "else" );
 
                 sc.add( "{" );
-
-                sc.indent();
-
-                sc.add( "parser.nextText();" );
-
-                sc.unindent();
-
+                sc.addIndented( "parser.nextText();" );
                 sc.add( "}" );
             }
 */
@@ -770,27 +681,19 @@ public class StaxReaderGenerator
                 sc.add( "else" );
 
                 sc.add( "{" );
-
                 sc.indent();
             }
 
             sc.add( "if ( strict )" );
 
             sc.add( "{" );
-
-            sc.indent();
-
-            sc.add(
+            sc.addIndented(
                 "throw new XMLStreamException( \"Unrecognised tag: '\" + xmlStreamReader.getLocalName() + \"'\", xmlStreamReader.getLocation() );" );
-
-            sc.unindent();
-
             sc.add( "}" );
 
             if ( statement.startsWith( "else" ) )
             {
                 sc.unindent();
-
                 sc.add( "}" );
             }
         }
@@ -799,43 +702,31 @@ public class StaxReaderGenerator
             sc.add( "else" );
 
             sc.add( "{" );
-
             sc.indent();
 
             sc.add( "if ( foundRoot )" );
 
             sc.add( "{" );
-
             sc.indent();
 
             sc.add( "if ( strict )" );
 
             sc.add( "{" );
-
-            sc.indent();
-
-            sc.add(
+            sc.addIndented(
                 "throw new XMLStreamException( \"Unrecognised tag: '\" + xmlStreamReader.getLocalName() + \"'\", xmlStreamReader.getLocation() );" );
-
-            sc.unindent();
-
             sc.add( "}" );
 
             sc.unindent();
-
             sc.add( "}" );
 
             sc.unindent();
-
             sc.add( "}" );
 
             sc.unindent();
-
             sc.add( "}" );
         }
 
         sc.unindent();
-
         sc.add( "}" );
 
         // This must be last so that we guarantee the ID has been filled already
@@ -960,11 +851,7 @@ public class StaxReaderGenerator
 
                     sc.add( "if ( ref != null && !ref.equals( value.get" + capAssocName + "() ) )" );
                     sc.add( "{" );
-                    sc.indent();
-
-                    sc.add( "value.set" + capAssocName + "( ref );" );
-
-                    sc.unindent();
+                    sc.addIndented( "value.set" + capAssocName + "( ref );" );
                     sc.add( "}" );
                 }
                 else
@@ -977,11 +864,7 @@ public class StaxReaderGenerator
                     sc.add( to + " ref = (" + to + ") " + instanceFieldName + ".get( id );" );
                     sc.add( "if ( ref != null )" );
                     sc.add( "{" );
-                    sc.indent();
-
-                    sc.add( "value.get" + capAssocName + "().set( i, ref );" );
-
-                    sc.unindent();
+                    sc.addIndented( "value.get" + capAssocName + "().set( i, ref );" );
                     sc.add( "}" );
 
                     sc.unindent();
@@ -1007,11 +890,7 @@ public class StaxReaderGenerator
                     sc.add( "for ( java.util.Iterator i = value.get" + capitalise( association.getName() ) +
                         "().iterator(); i.hasNext(); )" );
                     sc.add( "{" );
-                    sc.indent();
-
-                    sc.add( "resolveReferences( (" + association.getTo() + ") i.next() );" );
-
-                    sc.unindent();
+                    sc.addIndented( "resolveReferences( (" + association.getTo() + ") i.next() );" );
                     sc.add( "}" );
                 }
             }
@@ -1091,7 +970,6 @@ public class StaxReaderGenerator
                 sc.add( tagComparison );
 
                 sc.add( "{" );
-
                 sc.indent();
 
                 addCodeToCheckIfParsed( sc, tagName );
@@ -1105,9 +983,7 @@ public class StaxReaderGenerator
                     // gobble the rest of the tag
                     sc.add( "while ( xmlStreamReader.getEventType() != XMLStreamConstants.END_ELEMENT )" );
                     sc.add( "{" );
-                    sc.indent();
-                    sc.add( "xmlStreamReader.next();" );
-                    sc.unindent();
+                    sc.addIndented( "xmlStreamReader.next();" );
                     sc.add( "}" );
                 }
                 else
@@ -1117,7 +993,6 @@ public class StaxReaderGenerator
                 }
 
                 sc.unindent();
-
                 sc.add( "}" );
             }
             else
@@ -1133,7 +1008,6 @@ public class StaxReaderGenerator
                         sc.add( tagComparison );
 
                         sc.add( "{" );
-
                         sc.indent();
 
                         addCodeToCheckIfParsed( sc, tagName );
@@ -1145,13 +1019,11 @@ public class StaxReaderGenerator
                         sc.add( "while ( xmlStreamReader.nextTag() == XMLStreamConstants.START_ELEMENT )" );
 
                         sc.add( "{" );
-
                         sc.indent();
 
                         sc.add( "if ( xmlStreamReader.getLocalName().equals( \"" + singularTagName + "\" ) )" );
 
                         sc.add( "{" );
-
                         sc.indent();
                     }
                     else
@@ -1160,7 +1032,6 @@ public class StaxReaderGenerator
                             statement + " ( xmlStreamReader.getLocalName().equals( \"" + singularTagName + "\" ) )" );
 
                         sc.add( "{" );
-
                         sc.indent();
 
                         sc.add( type + " " + associationName + " = " + uncapClassName + ".get" + capFieldName + "();" );
@@ -1168,7 +1039,6 @@ public class StaxReaderGenerator
                         sc.add( "if ( " + associationName + " == null )" );
 
                         sc.add( "{" );
-
                         sc.indent();
 
                         sc.add( associationName + " = " + association.getDefaultValue() + ";" );
@@ -1176,7 +1046,6 @@ public class StaxReaderGenerator
                         sc.add( uncapClassName + ".set" + capFieldName + "( " + associationName + " );" );
 
                         sc.unindent();
-
                         sc.add( "}" );
                     }
 
@@ -1212,35 +1081,25 @@ public class StaxReaderGenerator
                     if ( wrappedList )
                     {
                         sc.unindent();
-
                         sc.add( "}" );
 
                         sc.add( "else" );
 
                         sc.add( "{" );
-
-                        sc.indent();
-
-                        sc.add(
+                        sc.addIndented(
                             "throw new XMLStreamException( \"Unrecognised tag: '\" + xmlStreamReader.getLocalName() + \"'\", xmlStreamReader.getLocation() );" );
-
-                        sc.unindent();
-
                         sc.add( "}" );
 
                         sc.unindent();
-
                         sc.add( "}" );
 
                         sc.unindent();
-
                         sc.add( "}" );
                     }
                     else
                     {
 
                         sc.unindent();
-
                         sc.add( "}" );
                     }
                 }
@@ -1251,7 +1110,6 @@ public class StaxReaderGenerator
                     sc.add( tagComparison );
 
                     sc.add( "{" );
-
                     sc.indent();
 
                     addCodeToCheckIfParsed( sc, tagName );
@@ -1264,13 +1122,11 @@ public class StaxReaderGenerator
                         sc.add( "while ( xmlStreamReader.nextTag() == XMLStreamConstants.START_ELEMENT )" );
 
                         sc.add( "{" );
-
                         sc.indent();
 
                         sc.add( "if ( xmlStreamReader.getLocalName().equals( \"" + singularTagName + "\" ) )" );
 
                         sc.add( "{" );
-
                         sc.indent();
 
                         sc.add( "String key = null;" );
@@ -1282,66 +1138,38 @@ public class StaxReaderGenerator
                         sc.add( "while ( xmlStreamReader.nextTag() == XMLStreamConstants.START_ELEMENT )" );
 
                         sc.add( "{" );
-
                         sc.indent();
 
                         sc.add( "if ( xmlStreamReader.getLocalName().equals( \"key\" ) )" );
 
                         sc.add( "{" );
-
-                        sc.indent();
-
-                        sc.add( "key = xmlStreamReader.getElementText();" );
-
-                        sc.unindent();
-
+                        sc.addIndented( "key = xmlStreamReader.getElementText();" );
                         sc.add( "}" );
 
                         sc.add( "else if ( xmlStreamReader.getLocalName().equals( \"value\" ) )" );
 
                         sc.add( "{" );
-
-                        sc.indent();
-
-                        sc.add( "value = xmlStreamReader.getElementText()" );
-
-                        if ( fieldMetadata.isTrim() )
-                        {
-                            sc.add( ".trim()" );
-                        }
-
-                        sc.add( ";" );
-
-                        sc.unindent();
-
+                        sc.addIndented( "value = xmlStreamReader.getElementText()"
+                                        + ( fieldMetadata.isTrim() ? ".trim()" : "" ) + ";" );
                         sc.add( "}" );
 
                         sc.add( "else" );
 
                         sc.add( "{" );
-
-                        sc.indent();
-
-                        sc.add( "xmlStreamReader.getText();" );
-
-                        sc.unindent();
-
+                        sc.addIndented( "xmlStreamReader.getText();" );
                         sc.add( "}" );
 
                         sc.unindent();
-
                         sc.add( "}" );
 
                         sc.add( uncapClassName + ".add" + capitalise( singularName ) + "( key, value );" );
 
                         sc.unindent();
-
                         sc.add( "}" );
 
                         sc.add( "xmlStreamReader.next();" );
 
                         sc.unindent();
-
                         sc.add( "}" );
                     }
                     else
@@ -1351,29 +1179,20 @@ public class StaxReaderGenerator
                         sc.add( "while ( xmlStreamReader.nextTag() == XMLStreamConstants.START_ELEMENT )" );
 
                         sc.add( "{" );
-
                         sc.indent();
 
                         sc.add( "String key = xmlStreamReader.getLocalName();" );
 
-                        sc.add( "String value = xmlStreamReader.getElementText()" );
-
-                        if ( fieldMetadata.isTrim() )
-                        {
-                            sc.add( ".trim()" );
-                        }
-
-                        sc.add( ";" );
+                        sc.add( "String value = xmlStreamReader.getElementText()"
+                                + ( fieldMetadata.isTrim() ? ".trim()" : "" ) + ";" );
 
                         sc.add( uncapClassName + ".add" + capitalise( singularName ) + "( key, value );" );
 
                         sc.unindent();
-
                         sc.add( "}" );
                     }
 
                     sc.unindent();
-
                     sc.add( "}" );
                 }
             }
@@ -1383,7 +1202,6 @@ public class StaxReaderGenerator
             sc.add( tagComparison );
 
             sc.add( "{" );
-
             sc.indent();
 
             addCodeToCheckIfParsed( sc, tagName );
@@ -1399,7 +1217,6 @@ public class StaxReaderGenerator
             }
 
             sc.unindent();
-
             sc.add( "}" );
         }
     }
@@ -1422,11 +1239,7 @@ public class StaxReaderGenerator
         sc.add( "// This is a reference to an element elsewhere in the model" );
         sc.add( "if ( " + refFieldName + " == null )" );
         sc.add( "{" );
-        sc.indent();
-
-        sc.add( refFieldName + " = new java.util.HashMap();" );
-
-        sc.unindent();
+        sc.addIndented( refFieldName + " = new java.util.HashMap();" );
         sc.add( "}" );
 
         sc.add( "java.util.Map refs = (java.util.Map) " + refFieldName + ".get( " + referredFromClass + " );" );
@@ -1448,6 +1261,7 @@ public class StaxReaderGenerator
         {
             sc.add( "refs.put( \"" + association.getName() + ".\" + " + association.getName() + ".size(), value );" );
         }
+
         sc.unindent();
         sc.add( "}" );
     }
@@ -1458,13 +1272,9 @@ public class StaxReaderGenerator
 
         sc.add( "if ( !modelVersion.equals( \"" + getGeneratedVersion() + "\" ) )" );
         sc.add( "{" );
-        sc.indent();
-
-        sc.add(
-            "throw new XMLStreamException( \"Document model version of '\" + modelVersion + \"' doesn't match reader version of '" +
-                getGeneratedVersion() + "'\", xmlStreamReader.getLocation() );" );
-
-        sc.unindent();
+        sc.addIndented(
+            "throw new XMLStreamException( \"Document model version of '\" + modelVersion + \"' doesn't match reader "
+            + "version of '" + getGeneratedVersion() + "'\", xmlStreamReader.getLocation() );" );
         sc.add( "}" );
     }
 
@@ -1473,14 +1283,8 @@ public class StaxReaderGenerator
         sc.add( "if ( parsed.contains( \"" + tagName + "\" ) )" );
 
         sc.add( "{" );
-
-        sc.indent();
-
-        sc.add(
+        sc.addIndented(
             "throw new XMLStreamException( \"Duplicated tag: '\" + xmlStreamReader.getLocalName() + \"'\", xmlStreamReader.getLocation() );" );
-
-        sc.unindent();
-
         sc.add( "}" );
 
         sc.add( "parsed.add( \"" + tagName + "\" );" );
@@ -1626,15 +1430,11 @@ public class StaxReaderGenerator
 
         sc.add( "if ( xmlStreamReader.isEndElement() )" );
         sc.add( "{" );
-        sc.indent();
-        sc.add( "values.add( null );" );
-        sc.unindent();
+        sc.addIndented( "values.add( null );" );
         sc.add( "}" );
         sc.add( "else" );
         sc.add( "{" );
-        sc.indent();
-        sc.add( "values.add( new StringBuffer() );" );
-        sc.unindent();
+        sc.addIndented( "values.add( new StringBuffer() );" );
         sc.add( "}" );
 
         sc.add( "int attributesSize = xmlStreamReader.getAttributeCount();" );
@@ -1679,24 +1479,18 @@ public class StaxReaderGenerator
         sc.indent();
         sc.add( "if ( accumulatedValue == null )" );
         sc.add( "{" );
-        sc.indent();
-        sc.add( "finishedConfiguration.setValue( null );" );
-        sc.unindent();
+        sc.addIndented( "finishedConfiguration.setValue( null );" );
         sc.add( "}" );
         sc.add( "else" );
         sc.add( "{" );
-        sc.indent();
-        sc.add( "finishedConfiguration.setValue( accumulatedValue.toString() );" );
-        sc.unindent();
+        sc.addIndented( "finishedConfiguration.setValue( accumulatedValue.toString() );" );
         sc.add( "}" );
         sc.unindent();
         sc.add( "}" );
 
         sc.add( "if ( depth == 0 )" );
         sc.add( "{" );
-        sc.indent();
-        sc.add( "return finishedConfiguration;" );
-        sc.unindent();
+        sc.addIndented( "return finishedConfiguration;" );
         sc.add( "}" );
         sc.unindent();
         sc.add( "}" );
@@ -1723,13 +1517,7 @@ public class StaxReaderGenerator
         sc.add( "if ( s != null )" );
 
         sc.add( "{" );
-
-        sc.indent();
-
-        sc.add( "s = s.trim();" );
-
-        sc.unindent();
-
+        sc.addIndented( "s = s.trim();" );
         sc.add( "}" );
 
         sc.add( "return s;" );
@@ -1749,13 +1537,7 @@ public class StaxReaderGenerator
         sc.add( "if ( s == null )" );
 
         sc.add( "{" );
-
-        sc.indent();
-
-        sc.add( "s = v;" );
-
-        sc.unindent();
-
+        sc.addIndented( "s = v;" );
         sc.add( "}" );
 
         sc.add( "return s;" );
@@ -1778,24 +1560,16 @@ public class StaxReaderGenerator
         sc.add( "if ( s == null )" );
 
         sc.add( "{" );
-
         sc.indent();
 
         sc.add( "if ( strict )" );
 
         sc.add( "{" );
-
-        sc.indent();
-
-        sc.add(
+        sc.addIndented(
             "throw new XMLStreamException( \"Missing required value for attribute '\" + attribute + \"'\", xmlStreamReader.getLocation() );" );
-
-        sc.unindent();
-
         sc.add( "}" );
 
         sc.unindent();
-
         sc.add( "}" );
 
         sc.add( "return s;" );
@@ -1817,13 +1591,7 @@ public class StaxReaderGenerator
         sc.add( "if ( s != null )" );
 
         sc.add( "{" );
-
-        sc.indent();
-
-        sc.add( "return Boolean.valueOf( s ).booleanValue();" );
-
-        sc.unindent();
-
+        sc.addIndented( "return Boolean.valueOf( s ).booleanValue();" );
         sc.add( "}" );
 
         sc.add( "return false;" );
@@ -1845,13 +1613,7 @@ public class StaxReaderGenerator
         sc.add( "if ( s != null )" );
 
         sc.add( "{" );
-
-        sc.indent();
-
-        sc.add( "return s.charAt( 0 );" );
-
-        sc.unindent();
-
+        sc.addIndented( "return s.charAt( 0 );" );
         sc.add( "}" );
 
         sc.add( "return 0;" );
@@ -1977,55 +1739,35 @@ public class StaxReaderGenerator
         sc.add( "if ( s != null )" );
 
         sc.add( "{" );
-
         sc.indent();
 
         sc.add( "if ( dateFormat == null )" );
 
         sc.add( "{" );
-
-        sc.indent();
-
-        sc.add( "return new java.util.Date( Long.valueOf( s ).longValue() );" );
-
-        sc.unindent();
-
+        sc.addIndented( "return new java.util.Date( Long.valueOf( s ).longValue() );" );
         sc.add( "}" );
 
         sc.add( "else" );
 
         sc.add( "{" );
-
         sc.indent();
 
         sc.add( "DateFormat dateParser = new java.text.SimpleDateFormat( dateFormat, Locale.US );" );
 
         sc.add( "try" );
         sc.add( "{" );
-        sc.indent();
-
-        sc.add( "return dateParser.parse( s );" );
-
-        sc.unindent();
-
+        sc.addIndented( "return dateParser.parse( s );" );
         sc.add( "}" );
 
         sc.add( "catch ( java.text.ParseException e )" );
         sc.add( "{" );
-        sc.indent();
-
-        sc.add( "throw new XMLStreamException( e.getMessage() );" );
-
-        sc.unindent();
-
+        sc.addIndented( "throw new XMLStreamException( e.getMessage() );" );
         sc.add( "}" );
 
         sc.unindent();
-
         sc.add( "}" );
 
         sc.unindent();
-
         sc.add( "}" );
 
         sc.add( "return null;" );
@@ -2038,46 +1780,30 @@ public class StaxReaderGenerator
         sc.add( "if ( s != null )" );
 
         sc.add( "{" );
-
         sc.indent();
 
         sc.add( "try" );
 
         sc.add( "{" );
-
-        sc.indent();
-
-        sc.add( "return " + expression + ";" );
-
-        sc.unindent();
-
+        sc.addIndented( "return " + expression + ";" );
         sc.add( "}" );
 
         sc.add( "catch ( NumberFormatException e )" );
 
         sc.add( "{" );
-
         sc.indent();
 
         sc.add( "if ( strict )" );
 
         sc.add( "{" );
-
-        sc.indent();
-
-        sc.add( "throw new XMLStreamException( \"Unable to parse element '\" + attribute + \"', must be " + typeDesc +
-            " but was '\" + s + \"'\", xmlStreamReader.getLocation() );" );
-
-        sc.unindent();
-
+        sc.addIndented( "throw new XMLStreamException( \"Unable to parse element '\" + attribute + \"', must be "
+                        + typeDesc + " but was '\" + s + \"'\", xmlStreamReader.getLocation() );" );
         sc.add( "}" );
 
         sc.unindent();
-
         sc.add( "}" );
 
         sc.unindent();
-
         sc.add( "}" );
 
         sc.add( "return 0;" );
