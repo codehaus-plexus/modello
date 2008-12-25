@@ -897,97 +897,40 @@ public class Dom4jReaderGenerator
 
         // --------------------------------------------------------------------
 
-        method = new JMethod( "getIntegerValue", JType.INT, null );
-        method.getModifiers().makePrivate();
-
-        method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
-        method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
-        method.addParameter( new JParameter( JClass.BOOLEAN, "strict" ) );
-        method.addException( new JClass( "DocumentException" ) );
-
-        sc = method.getSourceCode();
-
-        convertNumericalType( sc, "Integer.valueOf( s ).intValue()", "an integer" );
+        method = convertNumericalType( "getIntegerValue", JType.INT, "Integer.valueOf( s ).intValue()", "an integer" );
 
         jClass.addMethod( method );
 
         // --------------------------------------------------------------------
 
-        method = new JMethod( "getShortValue", JType.SHORT, null );
-        method.getModifiers().makePrivate();
-
-        method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
-        method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
-        method.addParameter( new JParameter( JClass.BOOLEAN, "strict" ) );
-        method.addException( new JClass( "DocumentException" ) );
-
-        sc = method.getSourceCode();
-
-        convertNumericalType( sc, "Short.valueOf( s ).shortValue()", "a short integer" );
+        method = convertNumericalType( "getShortValue", JType.SHORT, "Short.valueOf( s ).shortValue()",
+                                       "a short integer" );
 
         jClass.addMethod( method );
 
         // --------------------------------------------------------------------
 
-        method = new JMethod( "getByteValue", JType.BYTE, null );
-        method.getModifiers().makePrivate();
-
-        method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
-        method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
-        method.addParameter( new JParameter( JClass.BOOLEAN, "strict" ) );
-        method.addException( new JClass( "DocumentException" ) );
-
-        sc = method.getSourceCode();
-
-        convertNumericalType( sc, "Byte.valueOf( s ).byteValue()", "a byte" );
+        method = convertNumericalType( "getByteValue", JType.BYTE, "Byte.valueOf( s ).byteValue()", "a byte" );
 
         jClass.addMethod( method );
 
         // --------------------------------------------------------------------
 
-        method = new JMethod( "getLongValue", JType.LONG, null );
-        method.getModifiers().makePrivate();
-
-        method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
-        method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
-        method.addParameter( new JParameter( JClass.BOOLEAN, "strict" ) );
-        method.addException( new JClass( "DocumentException" ) );
-
-        sc = method.getSourceCode();
-
-        convertNumericalType( sc, "Long.valueOf( s ).longValue()", "a long integer" );
+        method = convertNumericalType( "getLongValue", JType.LONG, "Long.valueOf( s ).longValue()", "a long integer" );
 
         jClass.addMethod( method );
 
         // --------------------------------------------------------------------
 
-        method = new JMethod( "getFloatValue", JType.FLOAT, null );
-        method.getModifiers().makePrivate();
-
-        method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
-        method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
-        method.addParameter( new JParameter( JClass.BOOLEAN, "strict" ) );
-        method.addException( new JClass( "DocumentException" ) );
-
-        sc = method.getSourceCode();
-
-        convertNumericalType( sc, "Float.valueOf( s ).floatValue()", "a floating point number" );
+        method = convertNumericalType( "getFloatValue", JType.FLOAT, "Float.valueOf( s ).floatValue()",
+                                       "a floating point number" );
 
         jClass.addMethod( method );
 
         // --------------------------------------------------------------------
 
-        method = new JMethod( "getDoubleValue", JType.DOUBLE, null );
-        method.getModifiers().makePrivate();
-
-        method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
-        method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
-        method.addParameter( new JParameter( JClass.BOOLEAN, "strict" ) );
-        method.addException( new JClass( "DocumentException" ) );
-
-        sc = method.getSourceCode();
-
-        convertNumericalType( sc, "Double.valueOf( s ).doubleValue()", "a floating point number" );
+        method = convertNumericalType( "getDoubleValue", JType.DOUBLE, "Double.valueOf( s ).doubleValue()",
+                                       "a floating point number" );
 
         jClass.addMethod( method );
 
@@ -1088,8 +1031,18 @@ public class Dom4jReaderGenerator
         jClass.addMethod( method );
     }
 
-    private void convertNumericalType( JSourceCode sc, String expression, String typeDesc )
+    private JMethod convertNumericalType( String methodName, JType returnType, String expression, String typeDesc )
     {
+        JMethod method = new JMethod( methodName, returnType, null );
+        method.addException( new JClass( "DocumentException" ) );
+        method.getModifiers().makePrivate();
+
+        method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
+        method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
+        method.addParameter( new JParameter( JClass.BOOLEAN, "strict" ) );
+
+        JSourceCode sc = method.getSourceCode();
+
         sc.add( "if ( s != null )" );
 
         sc.add( "{" );
@@ -1122,5 +1075,7 @@ public class Dom4jReaderGenerator
         sc.add( "}" );
 
         sc.add( "return 0;" );
+
+        return method;
     }
 }
