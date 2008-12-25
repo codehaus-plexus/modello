@@ -41,6 +41,7 @@ import org.codehaus.modello.plugin.java.javasource.JType;
 import org.codehaus.modello.plugins.xml.XmlAssociationMetadata;
 import org.codehaus.modello.plugins.xml.XmlClassMetadata;
 import org.codehaus.modello.plugins.xml.XmlFieldMetadata;
+import org.codehaus.plexus.util.StringUtils;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -950,14 +951,18 @@ public class StaxReaderGenerator
 
         String singularName = singular( field.getName() );
 
-        String optionalCheck = "";
-        if ( field.getAlias() != null && field.getAlias().length() > 0 )
+        String alias;
+        if ( StringUtils.isEmpty( field.getAlias() ) )
         {
-            optionalCheck = "|| xmlStreamReader.getLocalName().equals( \"" + field.getAlias() + "\" ) ";
+            alias = "null";
+        }
+        else
+        {
+            alias = "\"" + field.getAlias() + "\"";
         }
 
         String tagComparison =
-            statement + " ( xmlStreamReader.getLocalName().equals( \"" + tagName + "\" ) " + optionalCheck + ")";
+            statement + " ( checkFieldWithDuplicate( xmlStreamReader, \"" + tagName + "\", " + alias + ", parsed ) )";
 
         if ( field instanceof ModelAssociation )
         {
@@ -971,8 +976,6 @@ public class StaxReaderGenerator
 
                 sc.add( "{" );
                 sc.indent();
-
-                addCodeToCheckIfParsed( sc, tagName );
 
                 ModelField referenceIdentifierField = getReferenceIdentifierField( association );
 
@@ -1009,8 +1012,6 @@ public class StaxReaderGenerator
 
                         sc.add( "{" );
                         sc.indent();
-
-                        addCodeToCheckIfParsed( sc, tagName );
 
                         sc.add( type + " " + associationName + " = " + association.getDefaultValue() + ";" );
 
@@ -1112,8 +1113,6 @@ public class StaxReaderGenerator
                     sc.add( "{" );
                     sc.indent();
 
-                    addCodeToCheckIfParsed( sc, tagName );
-
                     XmlAssociationMetadata xmlAssociationMetadata =
                         (XmlAssociationMetadata) association.getAssociationMetadata( XmlAssociationMetadata.ID );
 
@@ -1204,8 +1203,6 @@ public class StaxReaderGenerator
             sc.add( "{" );
             sc.indent();
 
-            addCodeToCheckIfParsed( sc, tagName );
-
             //ModelField
             writePrimitiveField( field, field.getType(), uncapClassName, "set" + capitalise( field.getName() ), sc );
 
@@ -1276,18 +1273,6 @@ public class StaxReaderGenerator
             "throw new XMLStreamException( \"Document model version of '\" + modelVersion + \"' doesn't match reader "
             + "version of '" + getGeneratedVersion() + "'\", xmlStreamReader.getLocation() );" );
         sc.add( "}" );
-    }
-
-    private void addCodeToCheckIfParsed( JSourceCode sc, String tagName )
-    {
-        sc.add( "if ( parsed.contains( \"" + tagName + "\" ) )" );
-
-        sc.add( "{" );
-        sc.addIndented(
-            "throw new XMLStreamException( \"Duplicated tag: '\" + xmlStreamReader.getLocalName() + \"'\", xmlStreamReader.getLocation() );" );
-        sc.add( "}" );
-
-        sc.add( "parsed.add( \"" + tagName + "\" );" );
     }
 
     private void writePrimitiveField( ModelField field, String type, String objectName, String setterName,
@@ -1708,6 +1693,39 @@ public class StaxReaderGenerator
         sc.add( "}" );
 
         sc.add( "return null;" );
+
+        jClass.addMethod( method );
+
+        // --------------------------------------------------------------------
+
+        method = new JMethod( "checkFieldWithDuplicate", JType.BOOLEAN, null );
+        method.getModifiers().makePrivate();
+
+        method.addParameter( new JParameter( new JClass( "XMLStreamReader" ), "xmlStreamReader" ) );
+        method.addParameter( new JParameter( new JClass( "String" ), "tagName" ) );
+        method.addParameter( new JParameter( new JClass( "String" ), "alias" ) );
+        method.addParameter( new JParameter( new JClass( "java.util.Set" ), "parsed" ) );
+        method.addException( new JClass( "XMLStreamException" ) );
+
+        sc = method.getSourceCode();
+
+        sc.add( "if ( !( xmlStreamReader.getLocalName().equals( tagName ) ||"
+                + " xmlStreamReader.getLocalName().equals( alias ) ) )" );
+
+        sc.add( "{" );
+        sc.addIndented( "return false;" );
+        sc.add( "}" );
+
+        sc.add( "if ( parsed.contains( tagName ) )" );
+
+        sc.add( "{" );
+        sc.addIndented(
+            "throw new XMLStreamException( \"Duplicated tag: '\" + tagName + \"'\", xmlStreamReader.getLocation() );" );
+        sc.add( "}" );
+
+        sc.add( "parsed.add( tagName );" );
+
+        sc.add( "return true;" );
 
         jClass.addMethod( method );
     }
