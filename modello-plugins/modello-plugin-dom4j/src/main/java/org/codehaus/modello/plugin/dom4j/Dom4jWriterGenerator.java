@@ -83,27 +83,16 @@ public class Dom4jWriterGenerator
         JClass jClass = new JClass( packageName + '.' + marshallerName );
 
         jClass.addImport( "java.io.Writer" );
-
         jClass.addImport( "java.util.Arrays" );
-
         jClass.addImport( "java.util.Iterator" );
-
         jClass.addImport( "java.util.Locale" );
-
         jClass.addImport( "java.text.DateFormat" );
-
         jClass.addImport( "org.codehaus.plexus.util.xml.Xpp3Dom" );
-
         jClass.addImport( "org.dom4j.Document" );
-
         jClass.addImport( "org.dom4j.DocumentException" );
-
         jClass.addImport( "org.dom4j.DocumentFactory" );
-
         jClass.addImport( "org.dom4j.Element" );
-
         jClass.addImport( "org.dom4j.io.OutputFormat" );
-
         jClass.addImport( "org.dom4j.io.XMLWriter" );
 
         addModelImports( jClass, null );
@@ -129,7 +118,6 @@ public class Dom4jWriterGenerator
         JMethod marshall = new JMethod( "write" );
 
         marshall.addParameter( new JParameter( new JClass( "Writer" ), "writer" ) );
-
         marshall.addParameter( new JParameter( new JClass( root ), rootElement ) );
 
         marshall.addException( new JClass( "java.io.IOException" ) );
@@ -175,9 +163,9 @@ public class Dom4jWriterGenerator
         String uncapClassName = uncapitalise( className );
 
         JMethod marshall = new JMethod( "write" + className );
+        marshall.getModifiers().makePrivate();
 
         marshall.addParameter( new JParameter( new JClass( className ), uncapClassName ) );
-
         marshall.addParameter( new JParameter( new JClass( "String" ), "tagName" ) );
 
         ModelClassMetadata metadata = (ModelClassMetadata) modelClass.getMetadata( ModelClassMetadata.ID );
@@ -193,14 +181,11 @@ public class Dom4jWriterGenerator
 
         marshall.addException( new JClass( "java.io.IOException" ) );
 
-        marshall.getModifiers().makePrivate();
-
         JSourceCode sc = marshall.getSourceCode();
 
         sc.add( "if ( " + uncapClassName + " != null )" );
 
         sc.add( "{" );
-
         sc.indent();
 
         sc.add( "Element element = parentElement.addElement( tagName );" );
@@ -230,14 +215,8 @@ public class Dom4jWriterGenerator
                 sc.add( getValueChecker( type, value, field ) );
 
                 sc.add( "{" );
-
-                sc.indent();
-
-                sc.add( "element.addAttribute( \"" + fieldTagName + "\", "
-                        + getValue( field.getType(), value, fieldMetadata ) + " );" );
-
-                sc.unindent();
-
+                sc.addIndented( "element.addAttribute( \"" + fieldTagName + "\", "
+                                + getValue( field.getType(), value, fieldMetadata ) + " );" );
                 sc.add( "}" );
             }
         }
@@ -257,7 +236,6 @@ public class Dom4jWriterGenerator
         }
 
         sc.unindent();
-
         sc.add( "}" );
 
         jClass.addMethod( marshall );
@@ -298,13 +276,7 @@ public class Dom4jWriterGenerator
                 sc.add( getValueChecker( type, value, association ) );
 
                 sc.add( "{" );
-
-                sc.indent();
-
-                sc.add( "write" + association.getTo() + "( " + value + ", \"" + fieldTagName + "\", element );" );
-
-                sc.unindent();
-
+                sc.addIndented( "write" + association.getTo() + "( " + value + ", \"" + fieldTagName + "\", element );" );
                 sc.add( "}" );
             }
             else
@@ -319,7 +291,6 @@ public class Dom4jWriterGenerator
                     sc.add( getValueChecker( type, value, association ) );
 
                     sc.add( "{" );
-
                     sc.indent();
 
                     sc.add( "Element listElement = element;" );
@@ -332,7 +303,6 @@ public class Dom4jWriterGenerator
                     sc.add( "for ( Iterator iter = " + value + ".iterator(); iter.hasNext(); )" );
 
                     sc.add( "{" );
-
                     sc.indent();
 
                     if ( isClassInModel( association.getTo(), modelClass.getModel() ) )
@@ -351,11 +321,9 @@ public class Dom4jWriterGenerator
                     }
 
                     sc.unindent();
-
                     sc.add( "}" );
 
                     sc.unindent();
-
                     sc.add( "}" );
                 }
                 else
@@ -368,7 +336,6 @@ public class Dom4jWriterGenerator
                     sc.add( getValueChecker( type, value, field ) );
 
                     sc.add( "{" );
-
                     sc.indent();
 
                     sc.add( "Element listElement = element;" );
@@ -381,7 +348,6 @@ public class Dom4jWriterGenerator
                     sc.add( "for ( Iterator iter = " + value + ".keySet().iterator(); iter.hasNext(); )" );
 
                     sc.add( "{" );
-
                     sc.indent();
 
                     sc.add( "String key = (String) iter.next();" );
@@ -401,11 +367,9 @@ public class Dom4jWriterGenerator
                     }
 
                     sc.unindent();
-
                     sc.add( "}" );
 
                     sc.unindent();
-
                     sc.add( "}" );
                 }
             }
@@ -415,7 +379,6 @@ public class Dom4jWriterGenerator
             sc.add( getValueChecker( type, value, field ) );
 
             sc.add( "{" );
-
             sc.indent();
 
             if ( "DOM".equals( field.getType() ) )
@@ -429,7 +392,6 @@ public class Dom4jWriterGenerator
             }
 
             sc.unindent();
-
             sc.add( "}" );
         }
     }
@@ -504,7 +466,6 @@ public class Dom4jWriterGenerator
         JMethod method = new JMethod( "writeXpp3DomToElement" );
 
         method.addParameter( new JParameter( new JClass( "Xpp3Dom" ), "xpp3Dom" ) );
-
         method.addParameter( new JParameter( new JClass( "Element" ), "parentElement" ) );
 
         JSourceCode sc = method.getSourceCode();
@@ -513,11 +474,7 @@ public class Dom4jWriterGenerator
 
         sc.add( "if ( xpp3Dom.getValue() != null )" );
         sc.add( "{" );
-        sc.indent();
-
-        sc.add( "element.setText( xpp3Dom.getValue() );" );
-
-        sc.unindent();
+        sc.addIndented( "element.setText( xpp3Dom.getValue() );" );
         sc.add( "}" );
 
         sc.add( "for ( Iterator i = Arrays.asList( xpp3Dom.getAttributeNames() ).iterator(); i.hasNext(); )" );

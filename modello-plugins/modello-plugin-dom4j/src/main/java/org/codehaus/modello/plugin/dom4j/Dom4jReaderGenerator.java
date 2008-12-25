@@ -82,33 +82,19 @@ public class Dom4jReaderGenerator
         JClass jClass = new JClass( packageName + '.' + unmarshallerName );
 
         jClass.addImport( "java.io.IOException" );
-
         jClass.addImport( "java.io.Reader" );
-
         jClass.addImport( "java.net.URL" );
-
         jClass.addImport( "java.util.Date" );
-
         jClass.addImport( "java.util.Locale" );
-
         jClass.addImport( "java.text.DateFormat" );
-
         jClass.addImport( "java.text.ParsePosition" );
-
         jClass.addImport( "java.util.Iterator" );
-
         jClass.addImport( "org.codehaus.plexus.util.xml.Xpp3Dom" );
-
         jClass.addImport( "org.dom4j.Attribute" );
-
         jClass.addImport( "org.dom4j.Document" );
-
         jClass.addImport( "org.dom4j.DocumentException" );
-
         jClass.addImport( "org.dom4j.Element" );
-
         jClass.addImport( "org.dom4j.Node" );
-
         jClass.addImport( "org.dom4j.io.SAXReader" );
 
         addModelImports( jClass, null );
@@ -122,11 +108,9 @@ public class Dom4jReaderGenerator
         JMethod unmarshall = new JMethod( "read", new JClass( root.getName() ), null );
 
         unmarshall.addParameter( new JParameter( new JClass( "Reader" ), "reader" ) );
-
         unmarshall.addParameter( new JParameter( JType.BOOLEAN, "strict" ) );
 
         unmarshall.addException( new JClass( "IOException" ) );
-
         unmarshall.addException( new JClass( "DocumentException" ) );
 
         JSourceCode sc = unmarshall.getSourceCode();
@@ -142,12 +126,13 @@ public class Dom4jReaderGenerator
 
         jClass.addMethod( unmarshall );
 
+        // ----------------------------------------------------------------------
+
         unmarshall = new JMethod( "read", new JClass( root.getName() ), null );
 
         unmarshall.addParameter( new JParameter( new JClass( "Reader" ), "reader" ) );
 
         unmarshall.addException( new JClass( "IOException" ) );
-
         unmarshall.addException( new JClass( "DocumentException" ) );
 
         sc = unmarshall.getSourceCode();
@@ -156,14 +141,14 @@ public class Dom4jReaderGenerator
 
         jClass.addMethod( unmarshall );
 
+        // ----------------------------------------------------------------------
+
         unmarshall = new JMethod( "read", new JClass( root.getName() ), null );
 
         unmarshall.addParameter( new JParameter( new JClass( "URL" ), "url" ) );
-
         unmarshall.addParameter( new JParameter( JType.BOOLEAN, "strict" ) );
 
         unmarshall.addException( new JClass( "IOException" ) );
-
         unmarshall.addException( new JClass( "DocumentException" ) );
 
         sc = unmarshall.getSourceCode();
@@ -179,12 +164,13 @@ public class Dom4jReaderGenerator
 
         jClass.addMethod( unmarshall );
 
+        // ----------------------------------------------------------------------
+
         unmarshall = new JMethod( "read", new JClass( root.getName() ), null );
 
         unmarshall.addParameter( new JParameter( new JClass( "URL" ), "url" ) );
 
         unmarshall.addException( new JClass( "IOException" ) );
-
         unmarshall.addException( new JClass( "DocumentException" ) );
 
         sc = unmarshall.getSourceCode();
@@ -257,20 +243,15 @@ public class Dom4jReaderGenerator
         String uncapClassName = uncapitalise( className );
 
         JMethod unmarshall = new JMethod( "parse" + capClassName, new JClass( className ), null );
+        unmarshall.getModifiers().makePrivate();
 
         unmarshall.addParameter( new JParameter( new JClass( "String" ), "tagName" ) );
-
         unmarshall.addParameter( new JParameter( new JClass( "Element" ), "element" ) );
-
         unmarshall.addParameter( new JParameter( JType.BOOLEAN, "strict" ) );
-
         unmarshall.addParameter( new JParameter( new JClass( "String" ), "encoding" ) );
 
         unmarshall.addException( new JClass( "IOException" ) );
-
         unmarshall.addException( new JClass( "DocumentException" ) );
-
-        unmarshall.getModifiers().makePrivate();
 
         JSourceCode sc = unmarshall.getSourceCode();
 
@@ -300,12 +281,8 @@ public class Dom4jReaderGenerator
 
             sc.add( "if ( !element.getName().equals( tagName ) )" );
             sc.add( "{" );
-            sc.indent();
-
-            sc.add(
+            sc.addIndented(
                 "throw new DocumentException( \"Error parsing model: root element tag is '\" + element.getName() + \"' instead of '\" + tagName + \"'\" );" );
-
-            sc.unindent();
             sc.add( "}" );
 
             sc.unindent();
@@ -355,26 +332,18 @@ public class Dom4jReaderGenerator
             sc.add( "else" );
 
             sc.add( "{" );
-
             sc.indent();
         }
 
         sc.add( "if ( strict )" );
 
         sc.add( "{" );
-
-        sc.indent();
-
-        sc.add( "throw new DocumentException( \"Unrecognised tag: '\" + childElement.getName() + \"'\" );" );
-
-        sc.unindent();
-
+        sc.addIndented( "throw new DocumentException( \"Unrecognised tag: '\" + childElement.getName() + \"'\" );" );
         sc.add( "}" );
 
         if ( statement.startsWith( "else" ) )
         {
             sc.unindent();
-
             sc.add( "}" );
         }
 
@@ -432,7 +401,6 @@ public class Dom4jReaderGenerator
                 sc.add( tagComparison );
 
                 sc.add( "{" );
-
                 sc.indent();
 
                 addCodeToCheckIfParsed( sc, tagName );
@@ -441,7 +409,6 @@ public class Dom4jReaderGenerator
                     + "\", childElement, strict, encoding ) );" );
 
                 sc.unindent();
-
                 sc.add( "}" );
             }
             else
@@ -457,7 +424,6 @@ public class Dom4jReaderGenerator
                         sc.add( tagComparison );
 
                         sc.add( "{" );
-
                         sc.indent();
 
                         addCodeToCheckIfParsed( sc, tagName );
@@ -469,7 +435,6 @@ public class Dom4jReaderGenerator
                         sc.add( "for ( Iterator j = childElement.nodeIterator(); j.hasNext(); )" );
 
                         sc.add( "{" );
-
                         sc.indent();
 
                         sc.add( "Node n = (Node) j.next();" );
@@ -494,7 +459,6 @@ public class Dom4jReaderGenerator
                         sc.add( "if ( listElement.getName().equals( \"" + singularTagName + "\" ) )" );
 
                         sc.add( "{" );
-
                         sc.indent();
                     }
                     else
@@ -502,7 +466,6 @@ public class Dom4jReaderGenerator
                         sc.add( statement + " ( childElement.getName().equals( \"" + singularTagName + "\" ) )" );
 
                         sc.add( "{" );
-
                         sc.indent();
 
                         sc.add( "Element listElement = childElement;" );
@@ -512,7 +475,6 @@ public class Dom4jReaderGenerator
                         sc.add( "if ( " + associationName + " == null )" );
 
                         sc.add( "{" );
-
                         sc.indent();
 
                         sc.add( associationName + " = " + association.getDefaultValue() + ";" );
@@ -520,7 +482,6 @@ public class Dom4jReaderGenerator
                         sc.add( uncapClassName + ".set" + capFieldName + "( " + associationName + " );" );
 
                         sc.unindent();
-
                         sc.add( "}" );
                     }
 
@@ -538,35 +499,25 @@ public class Dom4jReaderGenerator
                     if ( wrappedList )
                     {
                         sc.unindent();
-
                         sc.add( "}" );
 
                         sc.add( "else" );
 
                         sc.add( "{" );
-
-                        sc.indent();
-
-                        sc.unindent();
-
                         sc.add( "}" );
 
                         sc.unindent();
-
                         sc.add( "}" );
 
                         sc.unindent();
-
                         sc.add( "}" );
 
                         sc.unindent();
-
                         sc.add( "}" );
                     }
                     else
                     {
                         sc.unindent();
-
                         sc.add( "}" );
                     }
                 }
@@ -577,7 +528,6 @@ public class Dom4jReaderGenerator
                     sc.add( tagComparison );
 
                     sc.add( "{" );
-
                     sc.indent();
 
                     addCodeToCheckIfParsed( sc, tagName );
@@ -590,7 +540,6 @@ public class Dom4jReaderGenerator
                         sc.add( "for ( Iterator j = childElement.nodeIterator(); j.hasNext(); )" );
 
                         sc.add( "{" );
-
                         sc.indent();
 
                         sc.add( "Node n = (Node) j.next();" );
@@ -615,7 +564,6 @@ public class Dom4jReaderGenerator
                         sc.add( "if ( listElement.getName().equals( \"" + singularTagName + "\" ) )" );
 
                         sc.add( "{" );
-
                         sc.indent();
 
                         sc.add( "String key = null;" );
@@ -627,7 +575,6 @@ public class Dom4jReaderGenerator
                         sc.add( "for ( Iterator k = listElement.nodeIterator(); k.hasNext(); )" );
 
                         sc.add( "{" );
-
                         sc.indent();
 
                         sc.add( "Node nd = (Node) k.next();" );
@@ -652,64 +599,36 @@ public class Dom4jReaderGenerator
                         sc.add( "if ( propertyElement.getName().equals( \"key\" ) )" );
 
                         sc.add( "{" );
-
-                        sc.indent();
-
-                        sc.add( "key = propertyElement.getText();" );
-
-                        sc.unindent();
-
+                        sc.addIndented( "key = propertyElement.getText();" );
                         sc.add( "}" );
 
                         sc.add( "else if ( propertyElement.getName().equals( \"value\" ) )" );
 
                         sc.add( "{" );
-
-                        sc.indent();
-
-                        sc.add( "value = propertyElement.getText()" );
-
-                        if ( fieldMetadata.isTrim() )
-                        {
-                            sc.add( ".trim()" );
-                        }
-
-                        sc.add( ";" );
-
-                        sc.unindent();
-
+                        sc.addIndented( "value = propertyElement.getText()"
+                                        + ( fieldMetadata.isTrim() ? ".trim()" : "" ) + ";" );
                         sc.add( "}" );
 
                         sc.add( "else" );
 
                         sc.add( "{" );
-
-                        sc.indent();
-
-                        sc.unindent();
-
                         sc.add( "}" );
 
                         sc.unindent();
-
                         sc.add( "}" );
 
                         sc.unindent();
-
                         sc.add( "}" );
 
                         sc.add( uncapClassName + ".add" + capitalise( singularName ) + "( key, value );" );
 
                         sc.unindent();
-
                         sc.add( "}" );
 
                         sc.unindent();
-
                         sc.add( "}" );
 
                         sc.unindent();
-
                         sc.add( "}" );
                     }
                     else
@@ -719,7 +638,6 @@ public class Dom4jReaderGenerator
                         sc.add( "for ( Iterator j = childElement.nodeIterator(); j.hasNext(); )" );
 
                         sc.add( "{" );
-
                         sc.indent();
 
                         sc.add( "Node n = (Node) j.next();" );
@@ -743,28 +661,19 @@ public class Dom4jReaderGenerator
 
                         sc.add( "String key = listElement.getName();" );
 
-                        sc.add( "String value = listElement.getText()" );
-
-                        if ( fieldMetadata.isTrim() )
-                        {
-                            sc.add( ".trim()" );
-                        }
-
-                        sc.add( ";" );
+                        sc.add( "String value = listElement.getText()"
+                                + ( fieldMetadata.isTrim() ? ".trim()" : "" ) + ";" );
 
                         sc.add( uncapClassName + ".add" + capitalise( singularName ) + "( key, value );" );
 
                         sc.unindent();
-
                         sc.add( "}" );
 
                         sc.unindent();
-
                         sc.add( "}" );
                     }
 
                     sc.unindent();
-
                     sc.add( "}" );
                 }
             }
@@ -774,7 +683,6 @@ public class Dom4jReaderGenerator
             sc.add( tagComparison );
 
             sc.add( "{" );
-
             sc.indent();
 
             addCodeToCheckIfParsed( sc, tagName );
@@ -784,7 +692,6 @@ public class Dom4jReaderGenerator
                                  jClass, "element", "childElement" );
 
             sc.unindent();
-
             sc.add( "}" );
         }
     }
@@ -794,13 +701,7 @@ public class Dom4jReaderGenerator
         sc.add( "if ( parsed.contains( \"" + tagName + "\" ) )" );
 
         sc.add( "{" );
-
-        sc.indent();
-
-        sc.add( "throw new DocumentException( \"Duplicated tag: '\" + element.getName() + \"'\" );" );
-
-        sc.unindent();
-
+        sc.addIndented( "throw new DocumentException( \"Duplicated tag: '\" + element.getName() + \"'\" );" );
         sc.add( "}" );
 
         sc.add( "parsed.add( \"" + tagName + "\" );" );
@@ -914,13 +815,7 @@ public class Dom4jReaderGenerator
         sc.add( "if ( s != null )" );
 
         sc.add( "{" );
-
-        sc.indent();
-
-        sc.add( "s = s.trim();" );
-
-        sc.unindent();
-
+        sc.addIndented( "s = s.trim();" );
         sc.add( "}" );
 
         sc.add( "return s;" );
@@ -944,24 +839,16 @@ public class Dom4jReaderGenerator
         sc.add( "if ( s == null )" );
 
         sc.add( "{" );
-
         sc.indent();
 
         sc.add( "if ( strict )" );
 
         sc.add( "{" );
-
-        sc.indent();
-
-        sc.add(
+        sc.addIndented(
             "throw new XmlPullParserException( \"Missing required value for attribute '\" + attribute + \"'\", parser, null );" );
-
-        sc.unindent();
-
         sc.add( "}" );
 
         sc.unindent();
-
         sc.add( "}" );
 
         sc.add( "return s;" );
@@ -981,13 +868,7 @@ public class Dom4jReaderGenerator
         sc.add( "if ( s != null )" );
 
         sc.add( "{" );
-
-        sc.indent();
-
-        sc.add( "return Boolean.valueOf( s ).booleanValue();" );
-
-        sc.unindent();
-
+        sc.addIndented( "return Boolean.valueOf( s ).booleanValue();" );
         sc.add( "}" );
 
         sc.add( "return false;" );
@@ -1007,13 +888,7 @@ public class Dom4jReaderGenerator
         sc.add( "if ( s != null )" );
 
         sc.add( "{" );
-
-        sc.indent();
-
-        sc.add( "return s.charAt( 0 );" );
-
-        sc.unindent();
-
+        sc.addIndented( "return s.charAt( 0 );" );
         sc.add( "}" );
 
         sc.add( "return 0;" );
@@ -1131,7 +1006,6 @@ public class Dom4jReaderGenerator
         sc.add( "if ( s != null )" );
 
         sc.add( "{" );
-
         sc.indent();
 
         sc.add( "DateFormat dateParser;" );
@@ -1139,7 +1013,6 @@ public class Dom4jReaderGenerator
         sc.add( "if ( dateFormat == null )" );
 
         sc.add( "{" );
-
         sc.indent();
 
         sc.add( "dateParser = DateFormat.getDateTimeInstance( DateFormat.FULL, DateFormat.FULL , Locale.US );" );
@@ -1147,43 +1020,25 @@ public class Dom4jReaderGenerator
         sc.add( "dateParser.setLenient( true );" );
 
         sc.unindent();
-
         sc.add( "}" );
 
         sc.add( "else" );
 
         sc.add( "{" );
-
-        sc.indent();
-
         sc.addIndented( "dateParser = new java.text.SimpleDateFormat( dateFormat, Locale.US );" );
-
-        sc.unindent();
-
         sc.add( "}" );
 
         sc.add( "try" );
         sc.add( "{" );
-        sc.indent();
-
-        sc.add( "return dateParser.parse( s );" );
-
-        sc.unindent();
-
+        sc.addIndented( "return dateParser.parse( s );" );
         sc.add( "}" );
 
         sc.add( "catch ( java.text.ParseException e )" );
         sc.add( "{" );
-        sc.indent();
-
-        sc.add( "throw new DocumentException( e.getMessage() );" );
-
-        sc.unindent();
-
+        sc.addIndented( "throw new DocumentException( e.getMessage() );" );
         sc.add( "}" );
 
         sc.unindent();
-
         sc.add( "}" );
 
         sc.add( "return null;" );
@@ -1203,11 +1058,7 @@ public class Dom4jReaderGenerator
 
         sc.add( "if ( element.elements().isEmpty() && element.getText() != null )" );
         sc.add( "{" );
-        sc.indent();
-
-        sc.add( "xpp3Dom.setValue( element.getText() );" );
-
-        sc.unindent();
+        sc.addIndented( "xpp3Dom.setValue( element.getText() );" );
         sc.add( "}" );
 
         sc.add( "for ( Iterator i = element.attributeIterator(); i.hasNext(); )" );
@@ -1242,38 +1093,24 @@ public class Dom4jReaderGenerator
         sc.add( "if ( s != null )" );
 
         sc.add( "{" );
-
         sc.indent();
 
         sc.add( "try" );
 
         sc.add( "{" );
-
-        sc.indent();
-
-        sc.add( "return " + expression + ";" );
-
-        sc.unindent();
-
+        sc.addIndented( "return " + expression + ";" );
         sc.add( "}" );
 
         sc.add( "catch ( NumberFormatException e )" );
 
         sc.add( "{" );
-
         sc.indent();
 
         sc.add( "if ( strict )" );
 
         sc.add( "{" );
-
-        sc.indent();
-
-        sc.add( "throw new DocumentException( \"Unable to parse element '\" + attribute + \"', must be " + typeDesc
-            + "\" );" );
-
-        sc.unindent();
-
+        sc.addIndented( "throw new DocumentException( \"Unable to parse element '\" + attribute + \"', must be "
+                        + typeDesc + "\" );" );
         sc.add( "}" );
 
         sc.unindent();
