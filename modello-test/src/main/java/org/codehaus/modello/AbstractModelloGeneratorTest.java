@@ -28,7 +28,6 @@ import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.repository.ArtifactRepositoryFactory;
 import org.apache.maven.artifact.repository.layout.ArtifactRepositoryLayout;
 import org.apache.maven.settings.MavenSettingsBuilder;
-import org.apache.maven.settings.Settings;
 import org.codehaus.modello.verifier.VerifierException;
 import org.codehaus.plexus.compiler.Compiler;
 import org.codehaus.plexus.compiler.CompilerConfiguration;
@@ -90,21 +89,14 @@ public abstract class AbstractModelloGeneratorTest
 
         assertTrue( getGeneratedSources().mkdirs() );
 
-        repositoryLayout = (ArtifactRepositoryLayout) container.lookup( ArtifactRepositoryLayout.ROLE, "default" );
-
+        repositoryLayout = (ArtifactRepositoryLayout) lookup( ArtifactRepositoryLayout.ROLE, "default" );
+        artifactFactory = (ArtifactFactory) lookup( ArtifactFactory.ROLE );
         settingsBuilder = (MavenSettingsBuilder) lookup( MavenSettingsBuilder.ROLE );
-
-        Settings settings = settingsBuilder.buildSettings();
-
-        String localRepo = settings.getLocalRepository();
-
         artifactRepositoryFactory = (ArtifactRepositoryFactory) lookup( ArtifactRepositoryFactory.ROLE );
 
+        String localRepo = settingsBuilder.buildSettings().getLocalRepository();
         String url = "file://" + localRepo;
-
         repository = artifactRepositoryFactory.createArtifactRepository( "local", url, repositoryLayout, null, null );
-
-        artifactFactory = (ArtifactFactory) lookup( ArtifactFactory.ROLE );
     }
 
     protected File getGeneratedSources()
@@ -129,7 +121,7 @@ public abstract class AbstractModelloGeneratorTest
 
         File dependencyFile = new File( repository.getBasedir(), repository.pathOf( artifact ) );
 
-        assertTrue( "Cant find dependency: " + dependencyFile.getAbsolutePath(), dependencyFile.isFile() );
+        assertTrue( "Can't find dependency: " + dependencyFile.getAbsolutePath(), dependencyFile.isFile() );
         return dependencyFile;
     }
 
