@@ -23,7 +23,7 @@
 
   <classes>
 
-    <class rootElement="true">
+    <class rootElement="true" xml.namespace="http://modello.codehaus.org/FEATURES" xml.schemaLocation="http://modello.codehaus.org/features-1.0.0.xsd">
       <name>Features</name>
       <version>1.0.0+</version>
       <!--
