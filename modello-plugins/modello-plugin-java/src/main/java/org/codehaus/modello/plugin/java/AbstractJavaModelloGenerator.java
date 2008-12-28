@@ -92,55 +92,47 @@ public abstract class AbstractJavaModelloGenerator
     protected void addModelImports( JClass jClass, BaseElement baseElem )
         throws ModelloException
     {
-        for ( Iterator i = getModel().getInterfaces( getGeneratedVersion() ).iterator(); i.hasNext(); )
+        String basePackageName = null;
+        if ( baseElem != null )
         {
-            ModelInterface modelInterface = (ModelInterface) i.next();
-
-            if ( baseElem != null && baseElem instanceof ModelInterface )
+            if ( baseElem instanceof ModelInterface )
             {
-                if ( modelInterface.equals( (ModelInterface) baseElem )
-                     || modelInterface.getPackageName( isPackageWithVersion(), getGeneratedVersion() ).equals(
-                        ( (ModelInterface) baseElem ).getPackageName( isPackageWithVersion(),
-                                                                      getGeneratedVersion() ) ) )
-                {
-                    continue;
-                }
+                basePackageName =
+                    ( (ModelInterface) baseElem ).getPackageName( isPackageWithVersion(), getGeneratedVersion() );
             }
-
-            if ( isPackageWithVersion() )
+            else if ( baseElem instanceof ModelClass )
             {
-                jClass.addImport(
-                    modelInterface.getPackageName( true, getGeneratedVersion() ) + "." + modelInterface.getName() );
-            }
-            else
-            {
-                jClass.addImport( modelInterface.getPackageName( false, null ) + "." + modelInterface.getName() );
+                basePackageName =
+                    ( (ModelClass) baseElem ).getPackageName( isPackageWithVersion(), getGeneratedVersion() );
             }
         }
 
+        // import interfaces
+        for ( Iterator i = getModel().getInterfaces( getGeneratedVersion() ).iterator(); i.hasNext(); )
+        {
+            ModelInterface modelInterface = (ModelInterface) i.next();
+            String packageName = modelInterface.getPackageName( isPackageWithVersion(), getGeneratedVersion() );
+
+            if ( packageName.equals( basePackageName ) )
+            {
+                continue;
+            }
+
+            jClass.addImport( packageName + '.' + modelInterface.getName() );
+        }
+
+        // import classes
         for ( Iterator i = getModel().getClasses( getGeneratedVersion() ).iterator(); i.hasNext(); )
         {
             ModelClass modelClass = (ModelClass) i.next();
+            String packageName = modelClass.getPackageName( isPackageWithVersion(), getGeneratedVersion() );
 
-            if ( baseElem != null && baseElem instanceof ModelClass )
+            if ( packageName.equals( basePackageName ) )
             {
-                if ( modelClass.equals( (ModelClass) baseElem )
-                     || modelClass.getPackageName( isPackageWithVersion(), getGeneratedVersion() ).equals(
-                        ( (ModelClass) baseElem ).getPackageName( isPackageWithVersion(), getGeneratedVersion() ) ) )
-                {
-                    continue;
-                }
+                continue;
             }
 
-            if ( isPackageWithVersion() )
-            {
-                jClass.addImport(
-                    modelClass.getPackageName( true, getGeneratedVersion() ) + "." + modelClass.getName() );
-            }
-            else
-            {
-                jClass.addImport( modelClass.getPackageName( false, null ) + "." + modelClass.getName() );
-            }
+            jClass.addImport( packageName + '.' + modelClass.getName() );
         }
     }
 
