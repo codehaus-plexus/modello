@@ -52,6 +52,27 @@
     </properties>
   </associationFeatures>
 
+  <javaFeatures>
+    <base baseAttribute="12">
+      <baseElement>12</baseElement>
+    </base>
+    <subClass subAttribute1="12" baseAttribute="12">
+      <subElement1>12</subElement1>
+      <baseElement>12</baseElement>
+    </subClass>
+    <subClass2 subAttribute2="12.12" subAttribute1="12" baseAttribute="12">
+      <subElement2>12.12</subElement2>
+      <subElement1>12</subElement1>
+      <baseElement>12</baseElement>
+    </subClass2>
+    <subClass3 subAttribute3="12.12" subAttribute2="12.12" subAttribute1="12" baseAttribute="12">
+      <subElement3>12.12</subElement3>
+      <subElement2>12.12</subElement2>
+      <subElement1>12</subElement1>
+      <baseElement>12</baseElement>
+    </subClass3>
+  </javaFeatures>
+
   <xmlFeatures tagNameAttribute="another value from XML file">
     <attributes
       primitiveBoolean="false"

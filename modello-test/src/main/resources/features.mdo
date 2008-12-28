@@ -433,6 +433,34 @@
             <type>JavaAbstractFeature</type>
           </association>
         </field>
+        <field>
+          <name>base</name>
+          <version>1.0.0+</version>
+          <association>
+            <type>BaseClass</type>
+          </association>
+        </field>
+        <field>
+          <name>subClass</name>
+          <version>1.0.0+</version>
+          <association>
+            <type>SubClassLevel1</type>
+          </association>
+        </field>
+        <field>
+          <name>subClass2</name>
+          <version>1.0.0+</version>
+          <association>
+            <type>SubClassLevel2</type>
+          </association>
+        </field>
+        <field>
+          <name>subClass3</name>
+          <version>1.0.0+</version>
+          <association>
+            <type>SubClassLevel3</type>
+          </association>
+        </field>
         <!--
          - class features: java.enabled="false"
          - association features: java.generate-add="false" java.generate-remove="false", java.generate-break="false" java.generate-create="false", java.use-interface="interfaceName", java.init="lazy|constructor|field"
@@ -450,6 +478,84 @@
       <name>JavaAbstractFeature</name>
       <version>2.0.0+</version>
       <description><![CDATA[<code>&lt;class java.abstract="true"&gt;</code>: a class generated in java as abstract.]]></description>
+    </class>
+
+    <class>
+      <name>BaseClass</name>
+      <version>1.0.0+</version>
+      <description>A base class, to be inherited.</description>
+      <fields>
+        <field>
+          <name>baseElement</name>
+          <type>int</type>
+          <version>1.0.0+</version>
+        </field>
+        <field xml.attribute="true">
+          <name>baseAttribute</name>
+          <type>int</type>
+          <version>1.0.0+</version>
+        </field>
+      </fields>
+    </class>
+
+    <class>
+      <name>SubClassLevel1</name>
+      <version>1.0.0+</version>
+      <superClass>BaseClass</superClass>
+      <description><![CDATA[<code>&lt;class&gt;&lt;superClass&gt;BaseClass&lt;/superClass&gt;&lt;/class&gt;</code>:
+       A class inheriting from BaseClass.]]></description>
+      <fields>
+        <field>
+          <name>subElement1</name>
+          <type>long</type>
+          <version>1.0.0+</version>
+        </field>
+        <field xml.attribute="true">
+          <name>subAttribute1</name>
+          <type>long</type>
+          <version>1.0.0+</version>
+        </field>
+      </fields>
+    </class>
+
+    <class>
+      <name>SubClassLevel2</name>
+      <version>1.0.0+</version>
+      <superClass>SubClassLevel1</superClass>
+      <description><![CDATA[<code>&lt;class&gt;&lt;superClass&gt;SubClassLevel1&lt;/superClass&gt;&lt;/class&gt;</code>:
+       A class inheriting from SubClassLevel1.]]></description>
+      <fields>
+        <field>
+          <name>subElement2</name>
+          <type>float</type>
+          <version>1.0.0+</version>
+        </field>
+        <field xml.attribute="true">
+          <name>subAttribute2</name>
+          <type>float</type>
+          <version>1.0.0+</version>
+        </field>
+      </fields>
+    </class>
+
+    <class>
+      <name>SubClassLevel3</name>
+      <version>1.0.0+</version>
+      <superClass>SubClassLevel2</superClass>
+      <description><![CDATA[<code>&lt;class&gt;&lt;superClass&gt;SubClassLevel2&lt;/superClass&gt;&lt;/class&gt;</code>:
+       A class inheriting from SubClassLevel2.]]></description>
+      <fields>
+        <field>
+          <name>subElement3</name>
+          <type>double</type>
+          <version>1.0.0+</version>
+        </field>
+        <field xml.attribute="true">
+          <name>subAttribute3</name>
+          <type>double</type>
+          <version>1.0.0+</version>
+        </field>
+      </fields>
     </class>
 
     <class xsd.compositor="sequence">
