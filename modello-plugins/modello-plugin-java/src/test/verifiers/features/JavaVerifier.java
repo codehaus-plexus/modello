@@ -23,8 +23,12 @@
 import org.codehaus.modello.verifier.Verifier;
 import org.codehaus.modello.verifier.VerifierException;
 
+import org.codehaus.modello.test.features.BaseClass;
 import org.codehaus.modello.test.features.InterfacesFeature;
 import org.codehaus.modello.test.features.JavaAbstractFeature;
+import org.codehaus.modello.test.features.SubClassLevel1;
+import org.codehaus.modello.test.features.SubClassLevel2;
+import org.codehaus.modello.test.features.SubClassLevel3;
 
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -56,6 +60,20 @@ public class JavaVerifier
         if ( !java.rmi.Remote.class.isAssignableFrom( InterfacesFeature.class ) )
         {
             throw new VerifierException( "InterfacesFeature should implement java.rmi.Remote" );
+        }
+
+        // superClass feature
+        if ( !BaseClass.class.isAssignableFrom( SubClassLevel1.class ) )
+        {
+            throw new VerifierException( "SubClassLevel1 should extend BaseClass" );
+        }
+        if ( !SubClassLevel1.class.isAssignableFrom( SubClassLevel2.class ) )
+        {
+            throw new VerifierException( "SubClassLevel2 should extend SubClassLevel1" );
+        }
+        if ( !SubClassLevel2.class.isAssignableFrom( SubClassLevel3.class ) )
+        {
+            throw new VerifierException( "SubClassLevel3 should extend SubClassLevel2" );
         }
     }
 }
