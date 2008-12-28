@@ -132,6 +132,14 @@ public abstract class AbstractJavaModelloGenerator
                 continue;
             }
 
+            JavaClassMetadata javaClassMetadata = (JavaClassMetadata) modelClass.getMetadata( JavaClassMetadata.ID );
+
+            if ( !javaClassMetadata.isEnabled() )
+            {
+                // Skip import of those classes that are not enabled for the java plugin.
+                continue;
+            }
+
             jClass.addImport( packageName + '.' + modelClass.getName() );
         }
     }

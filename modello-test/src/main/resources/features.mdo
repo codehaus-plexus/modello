@@ -441,6 +441,13 @@
           </association>
         </field>
         <field>
+          <name>packageName</name>
+          <version>1.0.0+</version>
+          <association>
+            <type>PackageNameFeature</type>
+          </association>
+        </field>
+        <field>
           <name>base</name>
           <version>1.0.0+</version>
           <association>
@@ -500,6 +507,23 @@
           <name>id</name>
           <type>String</type>
           <version>1.0.0+</version>
+        </field>
+      </fields>
+    </class>
+
+    <class>
+      <name>PackageNameFeature</name>
+      <version>1.0.0+</version>
+      <packageName>org.codehaus.modello.test.features.other</packageName>
+      <description><![CDATA[<code>&lt;class&gt;&lt;packageName&gt;<i>...</i>&lt;/packageName&gt;&lt;/class&gt;</code>:
+        A class generated in a package different from the default one.]]></description>
+      <fields>
+        <field>
+          <name>reference</name>
+          <version>1.0.0+</version>
+          <association>
+            <type>Reference</type>
+          </association>
         </field>
       </fields>
     </class>
