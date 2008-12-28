@@ -204,15 +204,11 @@ public class ModelField
             {
                 defaultValue = "false";
             }
-            if ( "float".equals( type ) )
-            {
-                defaultValue = "0.0f";
-            }
-            if ( "double".equals( type ) )
+            else if ( "float".equals( type ) || "double".equals( type ) )
             {
                 defaultValue = "0.0";
             }
-            if ( "int".equals( type ) || "long".equals( type ) || "char".equals( type ) || "short".equals( type )
+            else if ( "int".equals( type ) || "long".equals( type ) || "char".equals( type ) || "short".equals( type )
                  || "byte".equals( type ) )
             {
                 defaultValue = "0";
