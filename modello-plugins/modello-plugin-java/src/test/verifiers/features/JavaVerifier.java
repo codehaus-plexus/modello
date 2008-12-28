@@ -21,7 +21,12 @@
  */
 
 import org.codehaus.modello.verifier.Verifier;
+import org.codehaus.modello.verifier.VerifierException;
 
+import org.codehaus.modello.test.features.InterfacesFeature;
+import org.codehaus.modello.test.features.JavaAbstractFeature;
+
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,5 +37,25 @@ public class JavaVerifier
 {
     public void verify()
     {
+        verifyJavaFeatures();
+    }
+
+    public void verifyJavaFeatures()
+    {
+        // java.abstract feature
+        if ( !Modifier.isAbstract( JavaAbstractFeature.class.getModifiers() ) )
+        {
+            throw new VerifierException( "JavaAbstractFeature should be abstract" );
+        }
+
+        // interfaces feature
+        if ( !java.io.Serializable.class.isAssignableFrom( InterfacesFeature.class ) )
+        {
+            throw new VerifierException( "InterfacesFeature should implement java.io.Serializable" );
+        }
+        if ( !java.rmi.Remote.class.isAssignableFrom( InterfacesFeature.class ) )
+        {
+            throw new VerifierException( "InterfacesFeature should implement java.rmi.Remote" );
+        }
     }
 }

@@ -527,7 +527,7 @@
       <version>1.0.0+</version>
       <superClass>BaseClass</superClass>
       <interfaces>
-        <interface>java.io.Serializable</interface>
+        <interface>java.rmi.Remote</interface>
       </interfaces>
       <description><![CDATA[<code>&lt;class&gt;&lt;superClass&gt;BaseClass&lt;/superClass&gt;&lt;/class&gt;</code>:
        A class inheriting from BaseClass.]]></description>
