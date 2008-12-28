@@ -434,6 +434,13 @@
           </association>
         </field>
         <field>
+          <name>interfaces</name>
+          <version>1.0.0+</version>
+          <association>
+            <type>InterfacesFeature</type>
+          </association>
+        </field>
+        <field>
           <name>base</name>
           <version>1.0.0+</version>
           <association>
@@ -481,6 +488,23 @@
     </class>
 
     <class>
+      <name>InterfacesFeature</name>
+      <version>1.0.0+</version>
+      <description>.</description>
+      <interfaces>
+        <interface>java.io.Serializable</interface>
+        <interface>java.rmi.Remote</interface>
+      </interfaces>
+      <fields>
+        <field>
+          <name>id</name>
+          <type>String</type>
+          <version>1.0.0+</version>
+        </field>
+      </fields>
+    </class>
+
+    <class>
       <name>BaseClass</name>
       <version>1.0.0+</version>
       <description>A base class, to be inherited.</description>
@@ -502,6 +526,9 @@
       <name>SubClassLevel1</name>
       <version>1.0.0+</version>
       <superClass>BaseClass</superClass>
+      <interfaces>
+        <interface>java.io.Serializable</interface>
+      </interfaces>
       <description><![CDATA[<code>&lt;class&gt;&lt;superClass&gt;BaseClass&lt;/superClass&gt;&lt;/class&gt;</code>:
        A class inheriting from BaseClass.]]></description>
       <fields>
