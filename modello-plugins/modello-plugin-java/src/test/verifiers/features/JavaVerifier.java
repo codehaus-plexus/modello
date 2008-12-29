@@ -85,35 +85,31 @@ public class JavaVerifier
                            Modifier.isPublic( setter.getModifiers() ) );
     }
 
+    private void checkCommonFields( Class clazz )
+        throws NoSuchFieldException, NoSuchMethodException
+    {
+        checkField( clazz, Boolean.TYPE, "primitiveBoolean", "isPrimitiveBoolean", "setPrimitiveBoolean" );
+        checkField( clazz, Byte.TYPE, "primitiveByte", "getPrimitiveByte", "setPrimitiveByte" );
+        checkField( clazz, Character.TYPE, "primitiveChar", "getPrimitiveChar", "setPrimitiveChar" );
+        checkField( clazz, Short.TYPE, "primitiveShort", "getPrimitiveShort", "setPrimitiveShort" );
+        checkField( clazz, Integer.TYPE, "primitiveInt", "getPrimitiveInt", "setPrimitiveInt" );
+        checkField( clazz, Long.TYPE, "primitiveLong", "getPrimitiveLong", "setPrimitiveLong" );
+        checkField( clazz, Float.TYPE, "primitiveFloat", "getPrimitiveFloat", "setPrimitiveFloat" );
+        checkField( clazz, Double.TYPE, "primitiveDouble", "getPrimitiveDouble", "setPrimitiveDouble" );
+        checkField( clazz, Boolean.class, "objectBoolean", "isObjectBoolean", "setObjectBoolean" );
+        checkField( clazz, String.class, "objectString", "getObjectString", "setObjectString" );
+    }
+
     public void verifySimpleTypes()
         throws NoSuchFieldException, NoSuchMethodException
     {
-        checkField( SimpleTypes.class, Boolean.TYPE, "primitiveBoolean", "isPrimitiveBoolean", "setPrimitiveBoolean" );
-        checkField( SimpleTypes.class, Byte.TYPE, "primitiveByte", "getPrimitiveByte", "setPrimitiveByte" );
-        checkField( SimpleTypes.class, Character.TYPE, "primitiveChar", "getPrimitiveChar", "setPrimitiveChar" );
-        checkField( SimpleTypes.class, Short.TYPE, "primitiveShort", "getPrimitiveShort", "setPrimitiveShort" );
-        checkField( SimpleTypes.class, Integer.TYPE, "primitiveInt", "getPrimitiveInt", "setPrimitiveInt" );
-        checkField( SimpleTypes.class, Long.TYPE, "primitiveLong", "getPrimitiveLong", "setPrimitiveLong" );
-        checkField( SimpleTypes.class, Float.TYPE, "primitiveFloat", "getPrimitiveFloat", "setPrimitiveFloat" );
-        checkField( SimpleTypes.class, Double.TYPE, "primitiveDouble", "getPrimitiveDouble", "setPrimitiveDouble" );
-        checkField( SimpleTypes.class, Boolean.class, "objectBoolean", "isObjectBoolean", "setObjectBoolean" );
-        checkField( SimpleTypes.class, String.class, "objectString", "getObjectString", "setObjectString" );
+        checkCommonFields( SimpleTypes.class );
     }
 
     public void verifyXmlAttributes()
         throws NoSuchFieldException, NoSuchMethodException
     {
-        checkField( XmlAttributes.class, Boolean.TYPE, "primitiveBoolean", "isPrimitiveBoolean",
-                    "setPrimitiveBoolean" );
-        checkField( XmlAttributes.class, Byte.TYPE, "primitiveByte", "getPrimitiveByte", "setPrimitiveByte" );
-        checkField( XmlAttributes.class, Character.TYPE, "primitiveChar", "getPrimitiveChar", "setPrimitiveChar" );
-        checkField( XmlAttributes.class, Short.TYPE, "primitiveShort", "getPrimitiveShort", "setPrimitiveShort" );
-        checkField( XmlAttributes.class, Integer.TYPE, "primitiveInt", "getPrimitiveInt", "setPrimitiveInt" );
-        checkField( XmlAttributes.class, Long.TYPE, "primitiveLong", "getPrimitiveLong", "setPrimitiveLong" );
-        checkField( XmlAttributes.class, Float.TYPE, "primitiveFloat", "getPrimitiveFloat", "setPrimitiveFloat" );
-        checkField( XmlAttributes.class, Double.TYPE, "primitiveDouble", "getPrimitiveDouble", "setPrimitiveDouble" );
-        checkField( XmlAttributes.class, Boolean.class, "objectBoolean", "isObjectBoolean", "setObjectBoolean" );
-        checkField( XmlAttributes.class, String.class, "objectString", "getObjectString", "setObjectString" );
+        checkCommonFields( XmlAttributes.class );
         checkField( XmlAttributes.class, Date.class, "objectDate", "getObjectDate", "setObjectDate" );
     }
 
