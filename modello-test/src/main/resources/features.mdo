@@ -484,7 +484,7 @@
 
     <class java.enabled="false">
       <name>JavaEnabledFeature</name>
-      <version>2.0.0+</version>
+      <version>1.0.0+</version>
       <description><![CDATA[<code>&lt;class java.enabled="false"&gt;</code>: a class disabled for java generation.]]></description>
     </class>
 

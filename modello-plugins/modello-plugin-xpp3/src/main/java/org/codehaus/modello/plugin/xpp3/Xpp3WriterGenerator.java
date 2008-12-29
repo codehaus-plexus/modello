@@ -28,6 +28,7 @@ import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelDefault;
 import org.codehaus.modello.model.ModelField;
+import org.codehaus.modello.plugin.java.JavaClassMetadata;
 import org.codehaus.modello.plugin.java.JavaFieldMetadata;
 import org.codehaus.modello.plugin.java.javasource.JClass;
 import org.codehaus.modello.plugin.java.javasource.JField;
@@ -149,6 +150,14 @@ public class Xpp3WriterGenerator
         for ( Iterator i = objectModel.getClasses( getGeneratedVersion() ).iterator(); i.hasNext(); )
         {
             ModelClass clazz = (ModelClass) i.next();
+
+            JavaClassMetadata javaClassMetadata = (JavaClassMetadata) clazz.getMetadata( JavaClassMetadata.ID );
+
+            if ( !javaClassMetadata.isEnabled() )
+            {
+                // Skip import of those classes that are not enabled for the java plugin.
+                continue;
+            }
 
             writeClass( clazz, jClass );
         }

@@ -31,6 +31,7 @@ import org.codehaus.modello.model.ModelDefault;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.Version;
 import org.codehaus.modello.model.VersionDefinition;
+import org.codehaus.modello.plugin.java.JavaClassMetadata;
 import org.codehaus.modello.plugin.java.javasource.JClass;
 import org.codehaus.modello.plugin.java.javasource.JField;
 import org.codehaus.modello.plugin.java.javasource.JMethod;
@@ -547,6 +548,14 @@ public class StaxReaderGenerator
         for ( Iterator i = objectModel.getClasses( getGeneratedVersion() ).iterator(); i.hasNext(); )
         {
             ModelClass clazz = (ModelClass) i.next();
+
+            JavaClassMetadata javaClassMetadata = (JavaClassMetadata) clazz.getMetadata( JavaClassMetadata.ID );
+
+            if ( !javaClassMetadata.isEnabled() )
+            {
+                // Skip import of those classes that are not enabled for the java plugin.
+                continue;
+            }
 
             writeClassParser( clazz, jClass, root.getName().equals( clazz.getName() ) );
         }
