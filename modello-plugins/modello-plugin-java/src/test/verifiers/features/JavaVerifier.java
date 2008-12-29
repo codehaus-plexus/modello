@@ -30,15 +30,21 @@ import org.codehaus.modello.test.features.SimpleTypes;
 import org.codehaus.modello.test.features.SubClassLevel1;
 import org.codehaus.modello.test.features.SubClassLevel2;
 import org.codehaus.modello.test.features.SubClassLevel3;
+import org.codehaus.modello.test.features.XmlAttributes;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import junit.framework.Assert;
 
+/**
+ * @author Hervé Boutemy
+ * @version $Id$
+ */
 public class JavaVerifier
     extends Verifier
 {
@@ -47,6 +53,7 @@ public class JavaVerifier
         try
         {
             verifySimpleTypes();
+            verifyXmlAttributes();
         }
         catch ( NoSuchFieldException nsfe )
         {
@@ -60,36 +67,54 @@ public class JavaVerifier
         verifyJavaFeatures();
     }
 
-    private void checkField( Class clazz, String attributeName, String getterName, String setterName )
+    private void checkField( Class clazz, Class type, String attributeName, String getterName, String setterName )
         throws NoSuchFieldException, NoSuchMethodException
     {
-        Field field = SimpleTypes.class.getDeclaredField( attributeName );
-        Assert.assertEquals( attributeName + " attribute type", clazz, field.getType() );
+        Field field = clazz.getDeclaredField( attributeName );
+        Assert.assertEquals( attributeName + " attribute type", type, field.getType() );
         Assert.assertTrue( attributeName + " attribute should be private", Modifier.isPrivate( field.getModifiers() ) );
 
-        Method getter = SimpleTypes.class.getMethod( getterName, null );
+        Method getter = clazz.getMethod( getterName, null );
         Assert.assertNotNull( getterName + "() method", getter );
+        Assert.assertEquals( getterName + "() method return type", type, getter.getReturnType() );
         Assert.assertTrue( getterName + "() method should be public", Modifier.isPublic( getter.getModifiers() ) );
 
-        Method setter = SimpleTypes.class.getMethod( setterName, new Class[] { clazz } );
-        Assert.assertNotNull( setterName + "( " + clazz.getName() + " ) method", setter );
-        Assert.assertTrue( setterName + "( " + clazz.getName() + " ) method should be public",
+        Method setter = clazz.getMethod( setterName, new Class[] { type } );
+        Assert.assertNotNull( setterName + "( " + type.getName() + " ) method", setter );
+        Assert.assertTrue( setterName + "( " + type.getName() + " ) method should be public",
                            Modifier.isPublic( setter.getModifiers() ) );
     }
 
     public void verifySimpleTypes()
         throws NoSuchFieldException, NoSuchMethodException
     {
-        checkField( Boolean.TYPE, "primitiveBoolean", "isPrimitiveBoolean", "setPrimitiveBoolean" );
-        checkField( Byte.TYPE, "primitiveByte", "getPrimitiveByte", "setPrimitiveByte" );
-        checkField( Character.TYPE, "primitiveChar", "getPrimitiveChar", "setPrimitiveChar" );
-        checkField( Short.TYPE, "primitiveShort", "getPrimitiveShort", "setPrimitiveShort" );
-        checkField( Integer.TYPE, "primitiveInt", "getPrimitiveInt", "setPrimitiveInt" );
-        checkField( Long.TYPE, "primitiveLong", "getPrimitiveLong", "setPrimitiveLong" );
-        checkField( Float.TYPE, "primitiveFloat", "getPrimitiveFloat", "setPrimitiveFloat" );
-        checkField( Double.TYPE, "primitiveDouble", "getPrimitiveDouble", "setPrimitiveDouble" );
-        checkField( Boolean.class, "objectBoolean", "isObjectBoolean", "setObjectBoolean" );
-        checkField( String.class, "objectString", "getObjectString", "setObjectString" );
+        checkField( SimpleTypes.class, Boolean.TYPE, "primitiveBoolean", "isPrimitiveBoolean", "setPrimitiveBoolean" );
+        checkField( SimpleTypes.class, Byte.TYPE, "primitiveByte", "getPrimitiveByte", "setPrimitiveByte" );
+        checkField( SimpleTypes.class, Character.TYPE, "primitiveChar", "getPrimitiveChar", "setPrimitiveChar" );
+        checkField( SimpleTypes.class, Short.TYPE, "primitiveShort", "getPrimitiveShort", "setPrimitiveShort" );
+        checkField( SimpleTypes.class, Integer.TYPE, "primitiveInt", "getPrimitiveInt", "setPrimitiveInt" );
+        checkField( SimpleTypes.class, Long.TYPE, "primitiveLong", "getPrimitiveLong", "setPrimitiveLong" );
+        checkField( SimpleTypes.class, Float.TYPE, "primitiveFloat", "getPrimitiveFloat", "setPrimitiveFloat" );
+        checkField( SimpleTypes.class, Double.TYPE, "primitiveDouble", "getPrimitiveDouble", "setPrimitiveDouble" );
+        checkField( SimpleTypes.class, Boolean.class, "objectBoolean", "isObjectBoolean", "setObjectBoolean" );
+        checkField( SimpleTypes.class, String.class, "objectString", "getObjectString", "setObjectString" );
+    }
+
+    public void verifyXmlAttributes()
+        throws NoSuchFieldException, NoSuchMethodException
+    {
+        checkField( XmlAttributes.class, Boolean.TYPE, "primitiveBoolean", "isPrimitiveBoolean",
+                    "setPrimitiveBoolean" );
+        checkField( XmlAttributes.class, Byte.TYPE, "primitiveByte", "getPrimitiveByte", "setPrimitiveByte" );
+        checkField( XmlAttributes.class, Character.TYPE, "primitiveChar", "getPrimitiveChar", "setPrimitiveChar" );
+        checkField( XmlAttributes.class, Short.TYPE, "primitiveShort", "getPrimitiveShort", "setPrimitiveShort" );
+        checkField( XmlAttributes.class, Integer.TYPE, "primitiveInt", "getPrimitiveInt", "setPrimitiveInt" );
+        checkField( XmlAttributes.class, Long.TYPE, "primitiveLong", "getPrimitiveLong", "setPrimitiveLong" );
+        checkField( XmlAttributes.class, Float.TYPE, "primitiveFloat", "getPrimitiveFloat", "setPrimitiveFloat" );
+        checkField( XmlAttributes.class, Double.TYPE, "primitiveDouble", "getPrimitiveDouble", "setPrimitiveDouble" );
+        checkField( XmlAttributes.class, Boolean.class, "objectBoolean", "isObjectBoolean", "setObjectBoolean" );
+        checkField( XmlAttributes.class, String.class, "objectString", "getObjectString", "setObjectString" );
+        checkField( XmlAttributes.class, Date.class, "objectDate", "getObjectDate", "setObjectDate" );
     }
 
     public void verifyDefaultValues()
