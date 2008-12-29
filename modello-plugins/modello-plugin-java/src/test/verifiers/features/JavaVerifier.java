@@ -26,10 +26,13 @@ import org.codehaus.modello.verifier.VerifierException;
 import org.codehaus.modello.test.features.BaseClass;
 import org.codehaus.modello.test.features.InterfacesFeature;
 import org.codehaus.modello.test.features.JavaAbstractFeature;
+import org.codehaus.modello.test.features.SimpleTypes;
 import org.codehaus.modello.test.features.SubClassLevel1;
 import org.codehaus.modello.test.features.SubClassLevel2;
 import org.codehaus.modello.test.features.SubClassLevel3;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +44,67 @@ public class JavaVerifier
 {
     public void verify()
     {
+        try
+        {
+            verifySimpleTypes();
+        }
+        catch ( NoSuchFieldException nsfe )
+        {
+            throw new VerifierException( "field not found", nsfe );
+        }
+        catch ( NoSuchMethodException nsme )
+        {
+            throw new VerifierException( "method not found", nsme );
+        }
+        verifyDefaultValues();
         verifyJavaFeatures();
+    }
+
+    private void checkField( Class clazz, String attributeName, String getterName, String setterName )
+        throws NoSuchFieldException, NoSuchMethodException
+    {
+        Field field = SimpleTypes.class.getDeclaredField( attributeName );
+        Assert.assertEquals( attributeName + " attribute type", clazz, field.getType() );
+        Assert.assertTrue( attributeName + " attribute should be private", Modifier.isPrivate( field.getModifiers() ) );
+
+        Method getter = SimpleTypes.class.getMethod( getterName, null );
+        Assert.assertNotNull( getterName + "() method", getter );
+        Assert.assertTrue( getterName + "() method should be public", Modifier.isPublic( getter.getModifiers() ) );
+
+        Method setter = SimpleTypes.class.getMethod( setterName, new Class[] { clazz } );
+        Assert.assertNotNull( setterName + "( " + clazz.getName() + " ) method", setter );
+        Assert.assertTrue( setterName + "( " + clazz.getName() + " ) method should be public",
+                           Modifier.isPublic( setter.getModifiers() ) );
+    }
+
+    public void verifySimpleTypes()
+        throws NoSuchFieldException, NoSuchMethodException
+    {
+        checkField( Boolean.TYPE, "primitiveBoolean", "isPrimitiveBoolean", "setPrimitiveBoolean" );
+        checkField( Byte.TYPE, "primitiveByte", "getPrimitiveByte", "setPrimitiveByte" );
+        checkField( Character.TYPE, "primitiveChar", "getPrimitiveChar", "setPrimitiveChar" );
+        checkField( Short.TYPE, "primitiveShort", "getPrimitiveShort", "setPrimitiveShort" );
+        checkField( Integer.TYPE, "primitiveInt", "getPrimitiveInt", "setPrimitiveInt" );
+        checkField( Long.TYPE, "primitiveLong", "getPrimitiveLong", "setPrimitiveLong" );
+        checkField( Float.TYPE, "primitiveFloat", "getPrimitiveFloat", "setPrimitiveFloat" );
+        checkField( Double.TYPE, "primitiveDouble", "getPrimitiveDouble", "setPrimitiveDouble" );
+        checkField( Boolean.class, "objectBoolean", "isObjectBoolean", "setObjectBoolean" );
+        checkField( String.class, "objectString", "getObjectString", "setObjectString" );
+    }
+
+    public void verifyDefaultValues()
+    {
+        SimpleTypes simple = new SimpleTypes();
+        Assert.assertEquals( "primitiveBoolean", true, simple.isPrimitiveBoolean() );
+        Assert.assertEquals( "primitiveByte", 12, simple.getPrimitiveByte() );
+        Assert.assertEquals( "primitiveChar", 'H', simple.getPrimitiveChar() );
+        Assert.assertEquals( "primitiveShort", (short) 1212, simple.getPrimitiveShort() );
+        Assert.assertEquals( "primitiveInt", 121212, simple.getPrimitiveInt() );
+        Assert.assertEquals( "primitiveLong", 12121212, simple.getPrimitiveLong() );
+        Assert.assertEquals( "primitiveFloat", 12.12f, simple.getPrimitiveFloat(), 0f );
+        Assert.assertEquals( "primitiveDouble", 12.12, simple.getPrimitiveDouble(), 0 );
+        Assert.assertEquals( "objectBoolean", Boolean.FALSE, simple.isObjectBoolean() );
+        Assert.assertEquals( "objectString", "default value", simple.getObjectString() );
     }
 
     public void verifyJavaFeatures()
