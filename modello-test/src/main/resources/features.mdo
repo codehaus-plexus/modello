@@ -110,6 +110,13 @@
             <type>XmlFeatures</type>
           </association>
         </field>
+        <field>
+          <name>xmlFeaturesDefault</name>
+          <version>1.0.0+</version>
+          <association>
+            <type>XmlFeatures</type>
+          </association>
+        </field>
         <field xdoc.separator="blank">
           <name>xdocFeatures</name>
           <version>1.0.0+</version>

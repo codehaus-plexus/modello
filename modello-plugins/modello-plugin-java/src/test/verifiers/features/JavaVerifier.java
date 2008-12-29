@@ -35,6 +35,7 @@ import org.codehaus.modello.test.features.XmlAttributes;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -126,6 +127,18 @@ public class JavaVerifier
         Assert.assertEquals( "primitiveDouble", 12.12, simple.getPrimitiveDouble(), 0 );
         Assert.assertEquals( "objectBoolean", Boolean.FALSE, simple.isObjectBoolean() );
         Assert.assertEquals( "objectString", "default value", simple.getObjectString() );
+
+        XmlAttributes xmlAttributes = new XmlAttributes();
+        Assert.assertEquals( "primitiveBoolean", true, xmlAttributes.isPrimitiveBoolean() );
+        Assert.assertEquals( "primitiveByte", 12, xmlAttributes.getPrimitiveByte() );
+        Assert.assertEquals( "primitiveChar", 'H', xmlAttributes.getPrimitiveChar() );
+        Assert.assertEquals( "primitiveShort", (short) 1212, xmlAttributes.getPrimitiveShort() );
+        Assert.assertEquals( "primitiveInt", 121212, xmlAttributes.getPrimitiveInt() );
+        Assert.assertEquals( "primitiveLong", 12121212, xmlAttributes.getPrimitiveLong() );
+        Assert.assertEquals( "primitiveFloat", 12.12f, xmlAttributes.getPrimitiveFloat(), 0f );
+        Assert.assertEquals( "primitiveDouble", 12.12, xmlAttributes.getPrimitiveDouble(), 0 );
+        Assert.assertEquals( "objectBoolean", Boolean.FALSE, xmlAttributes.isObjectBoolean() );
+        Assert.assertEquals( "objectString", "default value", xmlAttributes.getObjectString() );
     }
 
     public void verifyJavaFeatures()

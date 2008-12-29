@@ -113,4 +113,6 @@
 
     <xsdFeatures attribute="one more value from XML file" />
   </xmlFeatures>
+  <xmlFeaturesDefault>
+  </xmlFeaturesDefault>
 </features>
