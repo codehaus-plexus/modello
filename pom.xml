@@ -31,25 +31,37 @@
       <name>Modello Announce List</name>
       <subscribe>http://xircles.codehaus.org/manage_email/announce@modello.codehaus.org</subscribe>
       <unsubscribe>http://xircles.codehaus.org/projects/modello/lists</unsubscribe>
-      <archive>http://archive.modello.codehaus.org/announce/</archive>
+      <archive>http://archive.codehaus.org/lists/org.codehaus.modello.announce</archive>
+      <otherArchives>
+        <otherArchive>http://markmail.org/list/org.codehaus.modello.announce</otherArchive>
+      </otherArchives>
     </mailingList>
     <mailingList>
       <name>Modello Developer List</name>
       <subscribe>http://xircles.codehaus.org/manage_email/dev@modello.codehaus.org</subscribe>
       <unsubscribe>http://xircles.codehaus.org/projects/modello/lists</unsubscribe>
-      <archive>http://archive.modello.codehaus.org/dev/</archive>
+      <archive>http://archive.codehaus.org/lists/org.codehaus.modello.dev</archive>
+      <otherArchives>
+        <otherArchive>http://markmail.org/list/org.codehaus.modello.dev</otherArchive>
+      </otherArchives>
     </mailingList>
     <mailingList>
       <name>Modello User List</name>
       <subscribe>http://xircles.codehaus.org/manage_email/user@modello.codehaus.org</subscribe>
       <unsubscribe>http://xircles.codehaus.org/projects/modello/lists</unsubscribe>
-      <archive>http://archive.modello.codehaus.org/user/</archive>
+      <archive>http://archive.codehaus.org/lists/org.codehaus.modello.user</archive>
+      <otherArchives>
+        <otherArchive>http://markmail.org/list/org.codehaus.modello.user</otherArchive>
+      </otherArchives>
     </mailingList>
     <mailingList>
       <name>Modello Commits List</name>
       <subscribe>http://xircles.codehaus.org/manage_email/scm@modello.codehaus.org</subscribe>
       <unsubscribe>http://xircles.codehaus.org/projects/modello/lists</unsubscribe>
-      <archive>http://archive.modello.codehaus.org/scm/</archive>
+      <archive>http://archive.codehaus.org/lists/org.codehaus.modello.scm</archive>
+      <otherArchives>
+        <otherArchive>http://markmail.org/list/org.codehaus.modello.scm</otherArchive>
+      </otherArchives>
      </mailingList>
   </mailingLists>
 
