@@ -81,6 +81,13 @@
             <type>SimpleTypes</type>
           </association>
         </field>
+        <field>
+          <name>defaultValues</name>
+          <version>1.0.0+</version>
+          <association>
+            <type>SimpleTypes</type>
+          </association>
+        </field>
         <field xdoc.separator="blank">
           <name>arrays</name>
           <version>1.0.0+</version>
@@ -105,13 +112,6 @@
         </field>
         <field xdoc.separator="blank">
           <name>xmlFeatures</name>
-          <version>1.0.0+</version>
-          <association>
-            <type>XmlFeatures</type>
-          </association>
-        </field>
-        <field>
-          <name>xmlFeaturesDefault</name>
           <version>1.0.0+</version>
           <association>
             <type>XmlFeatures</type>
@@ -631,6 +631,13 @@
             <type>XmlAttributes</type>
           </association>
         </field>
+        <!--field>
+          <name>attributesDefault</name>
+          <version>1.0.0+</version>
+          <association>
+            <type>XmlAttributes</type>
+          </association>
+        </field-->
         <field xml.tagName="tagName">
           <name>fieldName</name>
           <version>1.0.0+</version>

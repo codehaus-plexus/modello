@@ -28,6 +28,8 @@ import org.codehaus.modello.model.BaseElement;
 import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
+import org.codehaus.modello.model.ModelDefault;
+import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.ModelInterface;
 import org.codehaus.modello.plugin.AbstractModelloGenerator;
 import org.codehaus.modello.plugin.java.JavaFieldMetadata;
@@ -159,5 +161,54 @@ public abstract class AbstractJavaModelloGenerator
         }
 
         return value;
+    }
+
+    protected String getJavaDefaultValue( ModelField modelField )
+    {
+        if ( modelField.getType().equals( "String" ) )
+        {
+            return '"' + modelField.getDefaultValue() + '"';
+        }
+        else if ( modelField.getType().equals( "char" ) )
+        {
+            return '\'' + modelField.getDefaultValue() + '\'';
+        }
+        else if ( modelField.getType().equals( "long" ) )
+        {
+            return modelField.getDefaultValue() + 'L';
+        }
+        else if ( modelField.getType().equals( "float" ) )
+        {
+            return modelField.getDefaultValue() + 'f';
+        }
+        return modelField.getDefaultValue();
+    }
+
+    protected String getValueChecker( String type, String value, ModelField field )
+    {
+        String retVal;
+        if ( "boolean".equals( type ) || "double".equals( type ) || "float".equals( type ) || "int".equals( type )
+            || "long".equals( type ) || "short".equals( type ) || "byte".equals( type ) || "char".equals( type ) )
+        {
+            retVal = "if ( " + value + " != " + getJavaDefaultValue( field ) + " )";
+        }
+        else if ( ModelDefault.LIST.equals( type ) || ModelDefault.SET.equals( type )
+            || ModelDefault.MAP.equals( type ) || ModelDefault.PROPERTIES.equals( type ) )
+        {
+            retVal = "if ( " + value + " != null && " + value + ".size() > 0 )";
+        }
+        else if ( "String".equals( type ) && field.getDefaultValue() != null )
+        {
+            retVal = "if ( " + value + " != null && !" + value + ".equals( \"" + field.getDefaultValue() + "\" ) )";
+        }
+        else if ( "Date".equals( type ) && field.getDefaultValue() != null )
+        {
+            retVal = "if ( " + value + " != null && !" + value + ".equals( \"" + field.getDefaultValue() + "\" ) )";
+        }
+        else
+        {
+            retVal = "if ( " + value + " != null )";
+        }
+        return retVal;
     }
 }

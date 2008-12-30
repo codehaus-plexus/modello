@@ -95,6 +95,7 @@ public class Xpp3FeaturesVerifier
 
         if ( !diff.identical() )
         {
+            System.err.println( actualXml );
             throw new VerifierException( "writer result is not the same as original content: " + diff );
         }
     }

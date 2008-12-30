@@ -451,36 +451,4 @@ public class Xpp3WriterGenerator
         return textValue;
 
     }
-
-    private String getValueChecker( String type, String value, ModelField field )
-    {
-        String retVal;
-        if ( "boolean".equals( type ) || "double".equals( type ) || "float".equals( type ) || "int".equals( type ) ||
-            "long".equals( type ) || "short".equals( type ) || "byte".equals( type ) )
-        {
-            retVal = "if ( " + value + " != " + field.getDefaultValue() + " )";
-        }
-        else if ( "char".equals( type ) )
-        {
-            retVal = "if ( " + value + " != '" + field.getDefaultValue() + "' )";
-        }
-        else if ( ModelDefault.LIST.equals( type ) || ModelDefault.SET.equals( type ) ||
-            ModelDefault.MAP.equals( type ) || ModelDefault.PROPERTIES.equals( type ) )
-        {
-            retVal = "if ( " + value + " != null && " + value + ".size() > 0 )";
-        }
-        else if ( "String".equals( type ) && field.getDefaultValue() != null )
-        {
-            retVal = "if ( " + value + " != null && !" + value + ".equals( \"" + field.getDefaultValue() + "\" ) )";
-        }
-        else if ( "Date".equals( type ) && field.getDefaultValue() != null )
-        {
-            retVal = "if ( " + value + " != null && !" + value + ".equals( \"" + field.getDefaultValue() + "\" ) )";
-        }
-        else
-        {
-            retVal = "if ( " + value + " != null )";
-        }
-        return retVal;
-    }
 }

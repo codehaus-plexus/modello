@@ -643,7 +643,7 @@ public class JDOMWriterGenerator
                 else
                 {
                     sc.add( "findAndReplaceSimpleElement(innerCount, root,  \"" + fieldTagName + "\", "
-                        + getValueChecker( type, value, field ) + getValue( type, value ) + ", "
+                        + getJdomValueChecker( type, value, field ) + getValue( type, value ) + ", "
                         + ( field.getDefaultValue() != null ? ( "\"" + field.getDefaultValue() + "\"" ) : "null" )
                         + ");" );
                 }
@@ -668,21 +668,17 @@ public class JDOMWriterGenerator
         return textValue;
     }
 
-    private String getValueChecker( String type, String value, ModelField field )
+    private String getJdomValueChecker( String type, String value, ModelField field )
     {
         if ( "boolean".equals( type ) || "double".equals( type ) || "float".equals( type ) || "int".equals( type )
-            || "long".equals( type ) || "short".equals( type ) )
+            || "long".equals( type ) || "short".equals( type ) || "char".equals( type ) )
         {
-            return "" + value + " == " + field.getDefaultValue() + " ? null : ";
-        }
-        else if ( "char".equals( type ) )
-        {
-            return "" + value + " == '" + field.getDefaultValue() + "' ? null : ";
+            return value + " == " + getJavaDefaultValue( field ) + " ? null : ";
         }
         else if ( ModelDefault.LIST.equals( type ) || ModelDefault.SET.equals( type )
             || ModelDefault.MAP.equals( type ) || ModelDefault.PROPERTIES.equals( type ) )
         {
-            return "" + value + " == null || " + value + ".size() == 0 ? null : ";
+            return value + " == null || " + value + ".size() == 0 ? null : ";
 //        } else if ( "String".equals( type ) && field.getDefaultValue() != null ) {
 //            return "" + value + " == null || " + value + ".equals( \"" + field.getDefaultValue() + "\" ) ? null : ";
         }
