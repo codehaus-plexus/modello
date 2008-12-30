@@ -267,6 +267,7 @@ public class Dom4jReaderGenerator
 
         sc.add( className + " " + uncapClassName + " = new " + className + "();" );
 
+        // read all XML attributes first
         for ( Iterator i = modelClass.getAllFields( getGeneratedVersion(), true ).iterator(); i.hasNext(); )
         {
             ModelField field = (ModelField) i.next();
@@ -275,8 +276,21 @@ public class Dom4jReaderGenerator
 
             if ( fieldMetadata.isAttribute() )
             {
+                String tagName = fieldMetadata.getTagName();
+                if ( tagName == null )
+                {
+                    tagName = field.getName();
+                }
+
+                sc.add( "if ( element.attributeValue( \"" + tagName + "\" ) != null  )");
+                sc.add(  "{" );
+                sc.indent();
+
                 writePrimitiveField( field, field.getType(), uncapClassName, "set" + capitalise( field.getName() ), sc,
                                      jClass, "element", "childElement" );
+
+                sc.unindent();
+                sc.add( "}" );
             }
         }
 

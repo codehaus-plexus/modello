@@ -631,13 +631,13 @@
             <type>XmlAttributes</type>
           </association>
         </field>
-        <!--field>
+        <field>
           <name>attributesDefault</name>
           <version>1.0.0+</version>
           <association>
             <type>XmlAttributes</type>
           </association>
-        </field-->
+        </field>
         <field xml.tagName="tagName">
           <name>fieldName</name>
           <version>1.0.0+</version>

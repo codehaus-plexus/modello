@@ -87,7 +87,7 @@
       objectString="String value from XML file"
       objectDate="2012-12-24T22:12:12.012"
     ></attributes>
-    <!--attributesDefault></attributesDefault-->
+    <attributesDefault></attributesDefault>
     <tagName>value from XML file</tagName>
     <dateXmlFormat>2012-12-24T22:12:12.012</dateXmlFormat>
 

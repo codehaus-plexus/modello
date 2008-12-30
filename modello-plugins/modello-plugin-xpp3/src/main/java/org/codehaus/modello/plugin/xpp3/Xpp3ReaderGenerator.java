@@ -308,6 +308,7 @@ public class Xpp3ReaderGenerator
 
         ModelField contentField = null;
 
+        // read all XML attributes first
         for ( Iterator i = modelClass.getAllFields( getGeneratedVersion(), true ).iterator(); i.hasNext(); )
         {
             ModelField field = (ModelField) i.next();
@@ -316,8 +317,21 @@ public class Xpp3ReaderGenerator
 
             if ( fieldMetadata.isAttribute() )
             {
+                String tagName = fieldMetadata.getTagName();
+                if ( tagName == null )
+                {
+                    tagName = field.getName();
+                }
+
+                sc.add( "if ( parser.getAttributeValue( \"\", \"" + tagName + "\" ) != null  )");
+                sc.add(  "{" );
+                sc.indent();
+
                 writePrimitiveField( field, field.getType(), uncapClassName, "set" + capitalise( field.getName() ), sc,
                                      jClass );
+
+                sc.unindent();
+                sc.add( "}" );
             }
             // TODO check if we have already one with this type and throws Exception
             if ( "Content".equals( field.getType() ) )
