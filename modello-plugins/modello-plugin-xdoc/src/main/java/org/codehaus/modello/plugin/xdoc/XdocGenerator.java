@@ -224,7 +224,7 @@ public class XdocGenerator
         {
             w.startElement( "p" );
             w.startElement( "b" );
-            w.writeText( "Element Content : " );
+            w.writeText( "Element Content: " );
             w.writeMarkup( contentField.getDescription() );
             w.endElement();
             w.endElement();
@@ -380,7 +380,7 @@ public class XdocGenerator
 
             if ( flatAssociation )
             {
-                w.writeMarkup( "<b>List</b>  " );
+                w.writeMarkup( "<b>List</b> " );
             }
 
             if ( f.getDescription() != null )
@@ -465,12 +465,12 @@ public class XdocGenerator
             {
                 ModelField f = (ModelField) iter.next();
 
-                sb.append( " " );
+                sb.append( ' ' );
 
                 sb.append( resolveFieldTagName( f ) ).append( "=.." );
             }
 
-            sb.append( " " );
+            sb.append( ' ' );
 
             fields.removeAll( attributeFields );
 
