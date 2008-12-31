@@ -49,33 +49,34 @@ import java.util.Map;
  */
 public class ModelReader
 {
-    private Map modelAttributes = new HashMap();
-    
-    private Map classAttributes = new HashMap();
+    private Map/*<String, String>*/ modelAttributes = new HashMap();
 
-    private Map fieldAttributes = new HashMap();
+    private Map/*<String, Map<String, String>>*/ classAttributes = new HashMap();
 
-    private Map associationAttributes = new HashMap();
+    private Map/*<String, Map<String, String>>*/ fieldAttributes = new HashMap();
 
-    public Map getAttributesForModel()
+    private Map/*<String, Map<String, String>>*/ associationAttributes = new HashMap();
+
+    public Map/*<String, String>*/ getAttributesForModel()
     {
         return (Map) modelAttributes;
     }
 
-    public Map getAttributesForClass( ModelClass modelClass )
+    public Map/*<String, String>*/ getAttributesForClass( ModelClass modelClass )
     {
         return (Map) classAttributes.get( modelClass.getName() );
     }
 
-    public Map getAttributesForField( ModelField modelField )
+    public Map/*<String, String>*/ getAttributesForField( ModelField modelField )
     {
-        return (Map) fieldAttributes.get( modelField.getModelClass().getName() + ":" + modelField.getName() + ":" + modelField.getVersionRange() );
+        return (Map) fieldAttributes.get( modelField.getModelClass().getName() + ':' + modelField.getName() + ':'
+                                          + modelField.getVersionRange() );
     }
 
-    public Map getAttributesForAssociation( ModelAssociation modelAssociation )
+    public Map/*<String, String>*/ getAttributesForAssociation( ModelAssociation modelAssociation )
     {
-        return (Map) associationAttributes.get(
-            modelAssociation.getModelClass().getName() + ":" + modelAssociation.getName() + ":" + modelAssociation.getVersionRange() );
+        return (Map) associationAttributes.get( modelAssociation.getModelClass().getName() + ':'
+            + modelAssociation.getName() + ':' + modelAssociation.getVersionRange() );
     }
 
     public Model loadModel( Reader reader )
@@ -107,7 +108,7 @@ public class ModelReader
         throws XmlPullParserException, IOException
     {
         int eventType = parser.getEventType();
-        
+
         while ( eventType != XmlPullParser.END_DOCUMENT )
         {
             if ( eventType == XmlPullParser.START_TAG )
@@ -259,7 +260,7 @@ public class ModelReader
             {
                 ModelClass modelClass = new ModelClass();
 
-                Map attributes = getAttributes( parser );
+                Map/*<String, String>*/ attributes = getAttributes( parser );
 
                 while ( parser.nextTag() == XmlPullParser.START_TAG )
                 {
@@ -545,7 +546,7 @@ public class ModelReader
         return true;
     }
 
-    private Map getAttributes( XmlPullParser parser )
+    private Map/*<String, String>*/ getAttributes( XmlPullParser parser )
     {
         Map attributes = new HashMap();
 
