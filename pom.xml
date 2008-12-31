@@ -468,7 +468,7 @@
       </build>
     </profile>
     <profile>
-      <id>reporting</id>
+      <id>model</id><!-- to generate model xsd and xdoc: mvn -N -P model site -->
       <build>
         <plugins>
           <plugin>
@@ -502,6 +502,9 @@
           </plugin>
         </plugins>
       </build>
+    </profile>
+    <profile>
+      <id>reporting</id>
       <reporting>
         <plugins>
           <plugin>
