@@ -22,9 +22,12 @@ package org.codehaus.modello.model;
  * SOFTWARE.
  */
 
-
-
 /**
+ * A version range. Can be of 3 forms:<ul>
+ * <li><code>x.y.z</code>: a range of only one precise version,</li>
+ * <li><code>x.y.z<b>+</b></code>: a range starting form a precise version (included), without upper limit,</li>
+ * <li><code>x.y.z<b>/</b>i.j.k</code>: a range from one version to another (both included).</li>
+ * </ul>
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
  * @version $Id$
  */
@@ -63,7 +66,7 @@ public class VersionRange
     public VersionRange( Version version )
     {
         fromVersion = version;
-        
+
         toVersion = version;
     }
 
