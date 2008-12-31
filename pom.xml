@@ -469,6 +469,39 @@
     </profile>
     <profile>
       <id>reporting</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.modello</groupId>
+            <artifactId>modello-maven-plugin</artifactId>
+            <configuration>
+              <models>
+                <model>src/main/mdo/modello.mdo</model>
+              </models>
+              <version>1.0.0</version>
+            </configuration>
+            <executions>
+              <execution>
+                <id>xdoc</id>
+                <phase>pre-site</phase>
+                <goals>
+                  <goal>xdoc</goal>
+                </goals>
+              </execution>
+              <execution>
+                <id>xsd</id>
+                <phase>pre-site</phase>
+                <goals>
+                  <goal>xsd</goal>
+                </goals>
+                <configuration>
+                  <outputDirectory>${basedir}/target/generated-site/resources/xsd</outputDirectory>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
       <reporting>
         <plugins>
           <plugin>

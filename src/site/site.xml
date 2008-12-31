@@ -26,6 +26,12 @@
       <item name="Modello" href="http://modello.codehaus.org/" />
     </breadcrumbs>
 
+    <menu name="Documentation">
+      <item name="Wiki" href="http://modello.codehaus.org/" />
+      <item name="Modello model" href="modello.html" />
+      <item name="Maven plugin" href="modello-maven-plugin/" />
+    </menu>
+
     <menu ref="modules" />
 
     <!-- Menus that every project will inherit -->

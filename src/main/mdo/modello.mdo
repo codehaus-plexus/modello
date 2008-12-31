@@ -1,0 +1,625 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<model xsd.namespace="http://modello.codehaus.org/MODELLO" xsd.target-namespace="http://modello.codehaus.org/MODELLO">
+  <id>modello</id>
+  <name>Modello</name>
+  <description>
+    <![CDATA[
+    <p>This is a reference for the Modello descriptor used to describe a model with Modello.</p>
+    <p>An XSD is available at
+    <a href="http://modello.codehaus.org/xsd/modello-1.0.0.xsd">http://modello.codehaus.org/xsd/modello-1.0.0.xsd</a>.
+    </p>
+    ]]>
+  </description>
+
+  <defaults>
+    <default>
+      <key>package</key>
+      <value>org.codehaus.modello.model.self</value>
+    </default>
+  </defaults>
+
+  <classes>
+    <class java.abstract="true" xml.namespace="http://modello.codehaus.org/MODELLO" xml.schemaLocation="http://modello.codehaus.org/xsd/modello-${version}.xsd">
+      <name>BaseElement</name>
+      <description>
+        Common attributes for most of the elements.
+      </description>
+      <version>1.0.0</version>
+      <fields>
+        <field>
+          <name>name</name>
+          <version>1.0.0</version>
+          <type>String</type>
+          <description>The name of the element.</description>
+        </field>
+        <field>
+          <name>description</name>
+          <version>1.0.0</version>
+          <type>String</type>
+          <description>
+            A user-level description of the element.
+          </description>
+        </field>
+        <field>
+          <name>comment</name>
+          <version>1.0.0</version>
+          <type>String</type>
+          <description>
+            A private comment about the element.
+          </description>
+        </field>
+        <field xml.tagName="version">
+          <name>versionRange</name>
+          <version>1.0.0</version>
+          <type>String</type>
+          <description>
+            The versions related to this element.
+          </description>
+        </field>
+        <!-- this field is available in BaseElement class, but not read in ModelReader: should be removed?
+        <field>
+          <name>deprecatedVersion</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field-->
+      </fields>
+    </class>
+
+    <class rootElement="true">
+      <name>Model</name>
+      <description>
+        Root tag for the description of a model.
+      </description>
+      <version>1.0.0</version>
+      <superClass>BaseElement</superClass>
+      <fields>
+        <field xml.attribute="true" xml.tagName="xsd.namespace">
+          <name>namespace</name>
+          <version>1.0.0</version>
+          <type>String</type>
+          <description>
+            The namespace to use when generating XSD.
+          </description>
+          <comment>see org.codehaus.modello.plugins.xsd.metadata.XsdMetadataPlugin</comment>
+        </field>
+        <field xml.attribute="true" xml.tagName="xsd.target-namespace">
+          <name>targetNamespace</name>
+          <version>1.0.0</version>
+          <type>String</type>
+          <description>
+            The targetNamespace to use when generating XSD.
+          </description>
+          <comment>see org.codehaus.modello.plugins.xsd.metadata.XsdMetadataPlugin</comment>
+        </field>
+        <field>
+          <name>id</name>
+          <version>1.0.0</version>
+          <required>true</required>
+          <type>String</type>
+          <description>Unique identifier of this model.</description>
+        </field>
+        <field>
+          <name>defaults</name>
+          <version>1.0.0</version>
+          <association>
+            <type>ModelDefault</type>
+            <multiplicity>*</multiplicity>
+          </association>
+          <description>
+            List of defaults settings for properties of this model.
+          </description>
+        </field>
+        <field>
+          <name>versionDefinition</name>
+          <version>1.0.0</version>
+          <association>
+            <type>VersionDefinition</type>
+          </association>
+        </field>
+        <field xdoc.separator="blank">
+          <name>interfaces</name>
+          <version>1.0.0</version>
+          <association>
+            <type>ModelInterface</type>
+            <multiplicity>*</multiplicity>
+          </association>
+          <description>
+            List of interfaces provided by the model.
+          </description>
+        </field>
+        <field xdoc.separator="blank" xml.associationTagName="class">
+          <name>classes</name>
+          <version>1.0.0</version>
+          <required>true</required>
+          <association>
+            <type>ModelClass</type>
+            <multiplicity>*</multiplicity>
+          </association>
+          <description>
+            List of classes provided by the model.
+          </description>
+        </field>
+      </fields>
+    </class>
+
+    <class>
+      <name>ModelDefault</name>
+      <version>1.0.0</version>
+      <description>
+        A default setting for some of the property of this model.
+      </description>
+      <fields>
+        <field>
+          <name>key</name>
+          <version>1.0.0</version>
+          <required>true</required>
+          <type>String</type>
+          <description><![CDATA[The key to this property. Can be one of: <code>checkDeprecation</code>,
+           <code>package</code>, <code>java.util.List</code>, <code>java.util.Map</code>,
+           <code>java.util.Properties</code>, <code>java.util.Set</code>.]]></description>
+        </field>
+        <field>
+          <name>value</name>
+          <version>1.0.0</version>
+          <required>true</required>
+          <type>String</type>
+          <description>The value of this property.</description>
+        </field>
+      </fields>
+    </class>
+
+    <class>
+      <name>VersionDefinition</name>
+      <version>1.0.0</version>
+      <fields>
+        <field>
+          <name>type</name>
+          <version>1.0.0</version>
+          <required>true</required>
+          <type>String</type>
+          <description><![CDATA[The type of model version definition recognition. Can be one of: <code>field</code>,
+            <code>namespace</code>.]]></description>
+        </field>
+        <field>
+          <name>value</name>
+          <version>1.0.0</version>
+          <type>String</type>
+          <description><![CDATA[If type is <code>field</code>, the name of the field containing the model
+            version.]]></description>
+        </field>
+      </fields>
+    </class>
+
+    <class>
+      <name>ModelInterface</name>
+      <version>1.0.0</version>
+      <description>An interface provided by the model.</description>
+      <superClass>BaseElement</superClass>
+      <fields>
+        <field>
+          <name>superInterface</name>
+          <version>1.0.0</version>
+          <type>String</type>
+          <description>
+            The name of the super interface for this interface.
+          </description>
+        </field>
+        <field>
+          <name>packageName</name>
+          <version>1.0.0</version>
+          <type>String</type>
+          <description>
+            The destination package name for this interface.
+          </description>
+        </field>
+        <field>
+          <name>codeSegments</name>
+          <version>1.0.0</version>
+          <association>
+            <type>CodeSegment</type>
+            <multiplicity>*</multiplicity>
+          </association>
+          <description>
+            List of code segments appended to this interface.
+          </description>
+        </field>
+      </fields>
+    </class>
+
+    <class>
+      <name>CodeSegment</name>
+      <version>1.0.0</version>
+      <description>
+        A segment of code to be appended to this element.
+      </description>
+      <superClass>BaseElement</superClass>
+      <fields>
+        <field>
+          <name>code</name>
+          <version>1.0.0</version>
+          <type>String</type>
+          <description>The code bloc.</description>
+        </field>
+      </fields>
+    </class>
+
+    <class>
+      <name>ModelClass</name>
+      <version>1.0.0</version>
+      <description>A class for this model.</description>
+      <superClass>BaseElement</superClass>
+      <fields>
+        <field xml.attribute="true">
+          <name>rootElement</name>
+          <version>1.0.0</version>
+          <type>boolean</type>
+          <description>
+            Indicates that this class is the root of the model (only one class in a model can have this attribute set
+            to true).
+          </description>
+          <comment>see org.codehaus.modello.plugin.model.ModelMetadataPlugin</comment>
+        </field>
+        <field xml.attribute="true" xml.tagName="xml.tagName">
+          <name>tagName</name>
+          <version>1.0.0</version>
+          <type>String</type>
+          <description>
+            Define a tag name to be used in XML content, which can be different from the class name.
+          </description>
+          <comment>see org.codehaus.modello.plugin.model.ModelMetadataPlugin</comment>
+        </field>
+        <field xml.attribute="true" xml.tagName="java.enabled">
+          <name>enabled</name>
+          <version>1.0.0</version>
+          <type>boolean</type>
+          <defaultValue>true</defaultValue>
+          <description>
+            Enable or disable generation of a java source for this class in the model.
+          </description>
+          <comment>see org.codehaus.modello.plugin.java.JavaMetadataPlugin</comment>
+        </field>
+        <field xml.attribute="true" xml.tagName="java.abstract">
+          <name>abstractMode</name>
+          <version>1.0.0</version>
+          <type>boolean</type>
+          <description>
+            Mark this class as abstract.
+          </description>
+          <comment>see org.codehaus.modello.plugin.java.JavaMetadataPlugin</comment>
+        </field>
+        <field xml.attribute="true" xml.tagName="xml.namespace">
+          <name>namespace</name>
+          <version>1.0.0</version>
+          <type>String</type>
+          <description>
+            The namespace to use when generating XML content.
+          </description>
+          <comment>see org.codehaus.modello.plugins.xml.XmlMetadataPlugin</comment>
+        </field>
+        <field xml.attribute="true" xml.tagName="xml.schemaLocation">
+          <name>schemaLocation</name>
+          <version>1.0.0</version>
+          <type>String</type>
+          <description>
+            The schemaLocation to use when generating XML content.
+          </description>
+          <comment>see org.codehaus.modello.plugins.xml.XmlMetadataPlugin</comment>
+        </field>
+        <field xml.attribute="true" xml.tagName="xsd.compositor">
+          <name>compositor</name>
+          <version>1.0.0</version>
+          <type>String</type>
+          <defaultValue>all</defaultValue>
+          <description><![CDATA[
+            Can be one of : <code>all</code>, <code>sequence</code>.]]>
+          </description>
+          <comment>see org.codehaus.modello.plugins.xsd.metadata.XsdMetadataPlugin</comment>
+        </field>
+        <field>
+          <name>interfaces</name>
+          <version>1.0.0</version>
+          <association>
+            <type>String</type>
+            <multiplicity>*</multiplicity>
+          </association>
+          <description>
+            A set of interfaces implemented by this class.
+          </description>
+        </field>
+        <field>
+          <name>superClass</name>
+          <version>1.0.0</version>
+          <type>String</type>
+          <description>
+            The name of the super class for this class.
+          </description>
+        </field>
+        <field>
+          <name>packageName</name>
+          <version>1.0.0</version>
+          <type>String</type>
+          <description>
+            The destination package name for this class.
+          </description>
+        </field>
+        <field>
+          <name>fields</name>
+          <version>1.0.0</version>
+          <association>
+            <type>ModelField</type>
+            <multiplicity>*</multiplicity>
+          </association>
+          <description>
+            Fields available in this class.
+          </description>
+        </field>
+        <field>
+          <name>codeSegments</name>
+          <version>1.0.0</version>
+          <association>
+            <type>CodeSegment</type>
+            <multiplicity>*</multiplicity>
+          </association>
+          <description>
+            List of code segments appended to this class.
+          </description>
+        </field>
+      </fields>
+    </class>
+
+    <class>
+      <name>ModelField</name>
+      <version>1.0.0</version>
+      <description>
+        A field to be defined in a class.
+      </description>
+      <superClass>BaseElement</superClass>
+      <fields>
+        <field xml.attribute="true" xml.tagName="java.adder">
+          <name>adder</name>
+          <version>1.0.0</version>
+          <type>boolean</type>
+          <defaultValue>true</defaultValue>
+          <description>
+            Generate an addXXX(...) method for this field (only for many multiplicity association).
+          </description>
+          <comment>see org.codehaus.modello.plugin.java.JavaMetadataPlugin</comment>
+        </field>
+        <field xml.attribute="true" xml.tagName="java.getter">
+          <name>getter</name>
+          <version>1.0.0</version>
+          <type>boolean</type>
+          <defaultValue>true</defaultValue>
+          <description>
+            Generate a getter method for this field.
+          </description>
+          <comment>see org.codehaus.modello.plugin.java.JavaMetadataPlugin</comment>
+        </field>
+        <field xml.attribute="true" xml.tagName="java.setter">
+          <name>setter</name>
+          <version>1.0.0</version>
+          <type>boolean</type>
+          <defaultValue>true</defaultValue>
+          <description>
+            Generate a setter method for this field.
+          </description>
+          <comment>see org.codehaus.modello.plugin.java.JavaMetadataPlugin</comment>
+        </field>
+        <field xml.attribute="true" xml.tagName="xdoc.separator">
+          <name>separator</name>
+          <version>1.0.0</version>
+          <type>String</type>
+          <description><![CDATA[
+            Can be one of : <code>blank</code>.]]>
+          </description>
+          <comment>see org.codehaus.modello.plugin.java.JavaMetadataPlugin</comment>
+        </field>
+        <field xml.attribute="true" xml.tagName="xml.attribute">
+          <name>attribute</name>
+          <version>1.0.0</version>
+          <type>boolean</type>
+          <description>
+            Consider this field as an XML attribute instead of an element.
+          </description>
+          <comment>see org.codehaus.modello.plugins.xml.XmlMetadataPlugin</comment>
+        </field>
+        <field xml.attribute="true" xml.tagName="xml.trim">
+          <name>trim</name>
+          <version>1.0.0</version>
+          <type>boolean</type>
+          <defaultValue>true</defaultValue>
+          <description>
+            Trim the content when reading.
+          </description>
+          <comment>see org.codehaus.modello.plugins.xml.XmlMetadataPlugin</comment>
+        </field>
+        <field xml.attribute="true" xml.tagName="xml.tagName">
+          <name>tagName</name>
+          <version>1.0.0</version>
+          <type>String</type>
+          <description>
+            Define a tag name to be used in XML content, which can be different from the field name.
+          </description>
+          <comment>see org.codehaus.modello.plugins.xml.XmlMetadataPlugin</comment>
+        </field>
+        <field xml.attribute="true" xml.tagName="xml.associationTagName">
+          <name>associationTagName</name>
+          <version>1.0.0</version>
+          <type>String</type>
+          <description>
+            Define a tag name to be used for each element inside a multiple association.
+          </description>
+          <comment>see org.codehaus.modello.plugins.xml.XmlMetadataPlugin</comment>
+        </field>
+        <field xml.attribute="true" xml.tagName="xml.listStyle">
+          <name>listStyle</name>
+          <version>1.0.0</version>
+          <type>String</type>
+          <defaultValue>wrapped</defaultValue>
+          <description><![CDATA[
+            Can be one of : <code>flat</code>, <code>wrapped</code>.]]>
+          </description>
+          <comment>see org.codehaus.modello.plugins.xml.XmlMetadataPlugin</comment>
+        </field>
+        <field xml.attribute="true" xml.tagName="xml.format">
+          <name>format</name>
+          <version>1.0.0</version>
+          <type>String</type>
+          <description>
+            The date format to use when parsing/writing a date (see java SimpleDateFormat).
+          </description>
+          <comment>see org.codehaus.modello.plugins.xml.XmlMetadataPlugin</comment>
+        </field>
+        <field>
+          <name>alias</name>
+          <version>1.0.0</version>
+          <type>String</type>
+          <description>
+            Alias name for this field (a parser should allow for this name instead of the given name).
+          </description>
+        </field>
+        <field>
+          <name>type</name>
+          <version>1.0.0</version>
+          <required>true</required>
+          <type>String</type>
+          <description><![CDATA[
+            Simple type for this field (or array of such type). Can be one of : <code>boolean</code>, <code>byte</code>,
+            <code>char</code>, <code>short</code>, <code>int</code>, <code>long</code>, <code>float</code>,
+            <code>double</code>, <code>String</code>, <code>Boolean</code>, <code>Date</code>, <code>DOM</code>.]]>
+          </description>
+        </field>
+        <field>
+          <name>defaultValue</name>
+          <version>1.0.0</version>
+          <type>String</type>
+          <description>The default value for this field.</description>
+        </field>
+        <field>
+          <name>typeValidator</name>
+          <version>1.0.0</version>
+          <type>String</type>
+          <description>
+            <![CDATA[<i>Unused as far as I could see</i>]]>
+          </description>
+        </field>
+        <field>
+          <name>required</name>
+          <version>1.0.0</version>
+          <type>boolean</type>
+          <description>
+            Wheter this field is required in model or not.
+          </description>
+        </field>
+        <field>
+          <name>identifier</name>
+          <version>1.0.0</version>
+          <type>boolean</type>
+          <description>
+            Whether this field is part of the identification of the object or not.
+          </description>
+        </field>
+        <field>
+          <name>association</name>
+          <version>1.0.0</version>
+          <association>
+            <type>ModelAssociation</type>
+          </association>
+          <description>
+            An association allows to map a field to a complex type
+            and/or to map a field to a many-multiplicity element.
+          </description>
+        </field>
+      </fields>
+    </class>
+
+    <class>
+      <name>ModelAssociation</name>
+      <version>1.0.0</version>
+      <description>
+        An association allows for mapping of a field to a complex type,
+        or to a many-multiplicity field.
+      </description>
+      <fields>
+        <field xml.attribute="true" xml.tagName="java.generate-add">
+          <name>generateAdd</name>
+          <version>1.0.0</version>
+          <type>boolean</type>
+          <defaultValue>true</defaultValue>
+          <comment>see org.codehaus.modello.plugin.java.JavaMetadataPlugin</comment>
+        </field>
+        <field xml.attribute="true" xml.tagName="java.generate-remove">
+          <name>generateRemove</name>
+          <version>1.0.0</version>
+          <type>boolean</type>
+          <defaultValue>true</defaultValue>
+          <comment>see org.codehaus.modello.plugin.java.JavaMetadataPlugin</comment>
+        </field>
+        <field xml.attribute="true" xml.tagName="java.generate-break">
+          <name>generateBreak</name>
+          <version>1.0.0</version>
+          <type>boolean</type>
+          <defaultValue>true</defaultValue>
+          <comment>see org.codehaus.modello.plugin.java.JavaMetadataPlugin</comment>
+        </field>
+        <field xml.attribute="true" xml.tagName="java.generate-create">
+          <name>generateCreate</name>
+          <version>1.0.0</version>
+          <type>boolean</type>
+          <defaultValue>true</defaultValue>
+          <comment>see org.codehaus.modello.plugin.java.JavaMetadataPlugin</comment>
+        </field>
+        <field xml.attribute="true" xml.tagName="java.use-interface">
+          <name>interfaceName</name>
+          <version>1.0.0</version>
+          <type>String</type>
+          <comment>see org.codehaus.modello.plugin.java.JavaMetadataPlugin</comment>
+        </field>
+        <field xml.attribute="true" xml.tagName="java.init">
+          <name>initializationMode</name>
+          <version>1.0.0</version>
+          <type>String</type>
+          <defaultValue>lazy</defaultValue>
+          <description><![CDATA[
+            Can be one of : <code>lazy</code>, <code>constructor</code>, <code>field</code>.]]>
+          </description>
+          <comment>see org.codehaus.modello.plugin.java.JavaMetadataPlugin</comment>
+        </field>
+        <field xml.attribute="true" xml.tagName="xml.mapStyle">
+          <name>mapStyle</name>
+          <version>1.0.0</version>
+          <type>String</type>
+          <defaultValue>inline</defaultValue>
+          <description><![CDATA[
+            Can be one of : <code>inline</code>, <code>explode</code>.]]>
+          </description>
+          <comment>see org.codehaus.modello.plugins.xml.XmlMetadataPlugin</comment>
+        </field>
+        <field xml.attribute="true" xml.tagName="xml.reference">
+          <name>reference</name>
+          <version>1.0.0</version>
+          <type>boolean</type>
+          <comment>see org.codehaus.modello.plugins.xml.XmlMetadataPlugin</comment>
+        </field>
+        <field xml.tagName="type">
+          <name>to</name>
+          <version>1.0.0</version>
+          <required>true</required>
+          <type>String</type>
+        </field>
+        <field>
+          <name>multiplicity</name>
+          <version>1.0.0</version>
+          <type>String</type>
+          <description>
+            Can be 1 if only one such child is allowed, or * if any
+            number (0 to infinity) is allowed.
+          </description>
+          <defaultValue>1</defaultValue>
+        </field>
+      </fields>
+    </class>
+  </classes>
+</model>
+
