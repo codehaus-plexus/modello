@@ -665,10 +665,11 @@
             <multiplicity>*</multiplicity>
           </association>
         </field>
-        <field xml.associationTagName="associations">
+        <field xml.associationTagName="association">
           <name>xmlAssociationTagNames</name>
           <version>1.0.0+</version>
-          <description><![CDATA[<code>&lt;field xml.associationTagName="<i>associations</i>"&gt;</code>: a list with an XML name different from the field name.]]></description>
+          <description><![CDATA[<code>&lt;field xml.associationTagName="<i>association</i>"&gt;</code>:
+            a list with an XML name different from calculated singular of tag name.]]></description>
           <association>
             <type>Reference</type>
             <multiplicity>*</multiplicity>
