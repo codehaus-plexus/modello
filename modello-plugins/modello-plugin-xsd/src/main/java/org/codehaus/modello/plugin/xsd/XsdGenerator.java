@@ -296,7 +296,7 @@ public class XsdGenerator
                                 w.addAttribute( "name", resolveFieldTagName( field ) );
                                 writeFieldDocumentation( w, field );
 
-                                writeListElement( w, field, fieldModelClass.getName() );
+                                writeListElement( w, fieldMetadata, field, fieldModelClass.getName() );
                             }
                             else
                             {
@@ -349,7 +349,8 @@ public class XsdGenerator
                         if ( List.class.getName().equals( field.getType() ) )
                         {
                             writeFieldDocumentation( w, field );
-                            writeListElement( w, field, getXsdType( "String" ) );
+                            XmlFieldMetadata fieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
+                            writeListElement( w, fieldMetadata, field, getXsdType( "String" ) );
                         }
                         else if ( Properties.class.getName().equals( field.getType() ) || "DOM".equals( field.getType() ) )
                         {
@@ -488,14 +489,28 @@ public class XsdGenerator
         w.endElement();
     }
 
-    private void writeListElement( XMLWriter w, ModelField field, String type )
+    private void writeListElement( XMLWriter w, XmlFieldMetadata fieldMetadata, ModelField field, String type )
     {
+        String tagName = fieldMetadata.getTagName();
+
+        if ( tagName == null )
+        {
+            tagName = field.getName();
+        }
+
+        String singularTagName = fieldMetadata.getAssociationTagName();
+
+        if ( singularTagName == null )
+        {
+            singularTagName = singular( tagName );
+        }
+
         w.startElement( "xs:complexType" );
 
         w.startElement( "xs:sequence" );
 
         w.startElement( "xs:element" );
-        w.addAttribute( "name", singular( field.getName() ) );
+        w.addAttribute( "name", singularTagName );
         w.addAttribute( "minOccurs", "0" );
         w.addAttribute( "maxOccurs", "unbounded" );
         w.addAttribute( "type", type );
