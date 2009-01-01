@@ -41,36 +41,37 @@ public class ModelloXsdMojo
     extends AbstractModelloGeneratorMojo
 {
     /**
-     * The output directory of the generated XML Schema.
+     * The output directory of the generated XML Schema. Hint: if you want to publish the schema automatically with
+     * the site, configure this parameter to <code>${basedir}/target/generated-site/resources/xsd</code>.
      *
      * @parameter expression="${basedir}/target/generated-site/xsd"
      *
      * @required
      */
     private File outputDirectory;
-    
+
     /**
-     * 
-     * @parameter 
-     * 
+     *
+     * @parameter
+     *
      * @since 1.0-alpha-21
      */
-    private String xsdFileName;    
+    private String xsdFileName;
 
     protected String getGeneratorType()
     {
         return "xsd";
     }
-    
+
     protected void customizeParameters( Properties parameters )
     {
         super.customizeParameters( parameters );
-       
+
         if ( xsdFileName != null )
         {
             parameters.put( ModelloParameterConstants.OUTPUT_XSD_FILE_NAME, xsdFileName );
         }
-    }    
+    }
 
     protected boolean producesCompilableResult()
     {
