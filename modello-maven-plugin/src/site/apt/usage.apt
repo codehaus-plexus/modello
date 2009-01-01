@@ -38,11 +38,20 @@ Usage
             <goals>
               <goal>java</goal>
               <goal>xpp3-reader</goal>
-              <goal>xsd</goal>
             </goals>
           </execution>
           <execution>
-            <id>myModel-site</id>
+            <id>myModel-site-xsd</id>
+            <phase>pre-site</phase>
+            <goals>
+              <goal>xsd</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${basedir}/target/generated-site/resources/xsd</outputDirectory>
+            </configuration>
+          </execution>
+          <execution>
+            <id>myModel-site-doc</id>
             <phase>pre-site</phase>
             <goals>
               <goal>xdoc</goal>
@@ -57,16 +66,20 @@ Usage
 </project>
 +---+
 
-  This configuration will take into account the model described in the file <<src/main/mdo/myModel.mdo>> in version 1.0.0. It will execute the following goals in the <<generate-source>> phase :
+  This configuration will take into account the model described in the file <<src/main/mdo/myModel.mdo>> in version 1.0.0. It will execute the following goals in the <<generate-source>> phase:
 
-  * {{{java-mojo.html}java}} which will generate Java beans from the model.
+  * {{{java-mojo.html}java}} which will generate Java beans from the model,
 
   * {{{xpp3-reader-mojo.html}xpp3-reader}} which will create an XPP reader for the model.
-
-  * {{{xsd-mojo.html}xsd}} which will generate an XML Schema for our model (this could arguably go to the <generate-site> execution).
 
   []
 
   The generated Java sources will be located in the <<<target/generated-sources/modello>>> folder (or in the folder set by the <<outputDirectory>> parameter), which will be added as a source folder to the project build cycle.
 
-  During the <<pre-site>> phase, an xdoc documentation of the model will be generated in the <<</target/generated-site/xdoc>>> folder (or in the folder set by the <<outputDirectory>> parameter), which will in turn be processed to output in the standard site, during the <<site>> phase.
+  During the <<pre-site>> phase, it will execute the following goals:
+
+  * {{{xdoc-mojo.html}xdoc}} which will generate a documentation of the model in the <<</target/generated-site/xdoc>>> folder, which will in turn be processed to output in the standard site, during the <<site>> phase,
+
+  * {{{xsd-mojo.html}xsd}} which will generate an XML Schema for our model in the <<</target/generated-site/resrouces/xsdc>>> folder (set by the <<outputDirectory>> parameter), which will in turn be copied in the standard site, during the <<site>> phase.
+
+  []
