@@ -95,13 +95,11 @@
     <xmlListStyleFlat><id>flat second</id></xmlListStyleFlat>
     <xmlListStyleFlat><id>flat third</id></xmlListStyleFlat>
 
-    <!-- TODO: fix inconsistency between xsd plugin, which does not accept the following, and other XML plugins
     <xmlAssociationTagNames>
       <association><id>first</id></association>
       <association><id>second</id></association>
       <association><id>third</id></association>
     </xmlAssociationTagNames>
-    -->
 
     <explodeProperties>
       <explodeProperty>
