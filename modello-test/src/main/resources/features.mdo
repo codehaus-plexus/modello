@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 
-<model xsd.namespace="http://modello.codehaus.org/FEATURES" xsd.target-namespace="http://modello.codehaus.org/FEATURES">
+<model xmlns="http://modello.codehaus.org/MODELLO" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://modello.codehaus.org/MODELLO http://modello.codehaus.org/xsd/modello-1.0.0.xsd"
+  xsd.namespace="http://modello.codehaus.org/FEATURES" xsd.target-namespace="http://modello.codehaus.org/FEATURES">
   <id>features</id>
   <name>ModelloFeaturesTest</name>
   <description>A model to test Modello features with every plugin and point to plugin specific features.</description>
@@ -759,7 +761,6 @@
           <version>1.0.0+</version>
           <description><![CDATA[<code>float</code> primitive.]]></description>
           <type>float</type>
-          <defaultValue>0</defaultValue>
           <defaultValue>12.12</defaultValue>
         </field>
         <field xml.attribute="true">

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<model xsd.namespace="http://modello.codehaus.org/MODELLO" xsd.target-namespace="http://modello.codehaus.org/MODELLO">
+<model xmlns="http://modello.codehaus.org/MODELLO" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://modello.codehaus.org/MODELLO http://modello.codehaus.org/xsd/modello-1.0.0.xsd"
+  xsd.namespace="http://modello.codehaus.org/MODELLO" xsd.target-namespace="http://modello.codehaus.org/MODELLO">
   <id>modello</id>
   <name>Modello</name>
   <description>

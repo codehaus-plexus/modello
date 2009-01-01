@@ -38,15 +38,18 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 /**
+ * Check that features.mdo (which tries to be the most complete model) can be checked against XSD generated from
+ * Modello model modello.mdo.
+ *
  * @author Hervé Boutemy
  * @version $Id$
  */
-public class FeaturesXsdGeneratorTest
+public class ModelloXsdGeneratorTest
     extends AbstractModelloGeneratorTest
 {
-    public FeaturesXsdGeneratorTest()
+    public ModelloXsdGeneratorTest()
     {
-        super( "features" );
+        super( "modello" );
     }
 
     private File generatedSources;
@@ -67,7 +70,7 @@ public class FeaturesXsdGeneratorTest
         parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString( false ) );
         parameters.setProperty( ModelloParameterConstants.VERSION, "1.0.0" );
 
-        Model model = modello.loadModel( getModelResource( "/features.mdo" ) );
+        Model model = modello.loadModel( getTestFile( "../../src/main/mdo/modello.mdo" ) );
 
         modello.generate( model, "xsd", parameters );
 
@@ -88,19 +91,13 @@ public class FeaturesXsdGeneratorTest
         saxParser.setProperty( "http://java.sun.com/xml/jaxp/properties/schemaLanguage",
                                "http://www.w3.org/2001/XMLSchema" );
         saxParser.setProperty( "http://java.sun.com/xml/jaxp/properties/schemaSource",
-                               new File( generatedSources, "features-1.0.0.xsd" ) );
+                               new File( generatedSources, "modello-1.0.0.xsd" ) );
 
-        saxParser.parse( getClass().getResourceAsStream( "/features.xml" ), new Handler() );
+        // first self-test: validate Modello model with xsd generated from it
+        saxParser.parse( getTestFile( "../../src/main/mdo/modello.mdo" ), new Handler() );
 
-        try
-        {
-            saxParser.parse( getClass().getResourceAsStream( "/features-invalid.xml" ), new Handler() );
-            fail( "parsing of features-invalid.xml should have failed" );
-        }
-        catch ( SAXParseException e )
-        {
-            // ok, expected exception
-        }
+        // then features.mdo
+        saxParser.parse( getClass().getResourceAsStream( "/features.mdo" ), new Handler() );
     }
 
     private static class Handler
