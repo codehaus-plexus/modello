@@ -281,6 +281,10 @@
       <plugin>
         <artifactId>maven-project-info-reports-plugin</artifactId>
         <version>2.1</version>
+        <configuration>
+          <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
+          <offline>true</offline>
+        </configuration>
       </plugin>
     </plugins>
   </reporting>
