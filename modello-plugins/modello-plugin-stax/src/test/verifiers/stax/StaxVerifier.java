@@ -53,7 +53,7 @@ import javax.xml.stream.XMLStreamException;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id: Xpp3Verifier.java 675 2006-11-16 10:58:59Z brett $
+ * @version $Id$
  */
 public class StaxVerifier
     extends Verifier

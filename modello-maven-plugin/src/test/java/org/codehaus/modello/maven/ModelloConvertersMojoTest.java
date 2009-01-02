@@ -31,7 +31,7 @@ import java.util.Arrays;
 
 /**
  * @author <a href="mailto:brett@apache.org">Brett Porter</a>
- * @version $Id: ModelloJavaMojoTest.java 439 2005-07-18 06:44:32Z brett $
+ * @version $Id$
  */
 public class ModelloConvertersMojoTest
     extends PlexusTestCase

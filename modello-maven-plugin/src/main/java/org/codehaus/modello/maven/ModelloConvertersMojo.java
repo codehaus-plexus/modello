@@ -6,7 +6,7 @@ import java.io.File;
  * Creates classes that can convert between different versions of the model.
  *
  * @author <a href="mailto:brett@apache.org">Brett Porter</a>
- * @version $Id: ModelloJavaMojo.java 669 2006-11-13 19:01:03Z dennisl $
+ * @version $Id$
  * @goal converters
  * @phase generate-sources
  */

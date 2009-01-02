@@ -39,7 +39,7 @@ import java.util.Set;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id: AbstractStaxGenerator.java 139 2004-09-27 08:02:35Z evenisse $
+ * @version $Id$
  */
 public abstract class AbstractStaxGenerator
     extends AbstractJavaModelloGenerator

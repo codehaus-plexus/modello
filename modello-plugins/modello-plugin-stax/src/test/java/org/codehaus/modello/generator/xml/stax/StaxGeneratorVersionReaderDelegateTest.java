@@ -27,7 +27,7 @@ import org.codehaus.plexus.component.repository.exception.ComponentLookupExcepti
 import org.codehaus.plexus.util.ReaderFactory;
 
 /**
- * @version $Id: StaxGeneratorTest.java 675 2006-11-16 10:58:59Z brett $
+ * @version $Id$
  */
 public class StaxGeneratorVersionReaderDelegateTest
     extends AbstractStaxGeneratorTestCase

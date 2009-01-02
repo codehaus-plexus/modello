@@ -6,7 +6,7 @@ import java.io.File;
  * Creates an StAX writer from the model.
  *
  * @author <a href="mailto:brett@apache.org">Brett Porter</a>
- * @version $Id: ModelloXpp3WriterMojo.java 669 2006-11-13 19:01:03Z dennisl $
+ * @version $Id$
  * @goal stax-writer
  * @phase generate-sources
  */

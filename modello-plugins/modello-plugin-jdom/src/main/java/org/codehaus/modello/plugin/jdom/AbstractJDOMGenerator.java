@@ -27,7 +27,7 @@ import org.codehaus.modello.plugin.java.AbstractJavaModelloGenerator;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id: AbstractXpp3Generator.java 139 2004-09-27 08:02:35Z evenisse $
+ * @version $Id$
  */
 public abstract class AbstractJDOMGenerator
     extends AbstractJavaModelloGenerator

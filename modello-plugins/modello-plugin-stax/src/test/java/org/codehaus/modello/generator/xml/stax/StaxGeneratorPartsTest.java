@@ -31,7 +31,7 @@ import org.codehaus.plexus.util.ReaderFactory;
 import java.util.List;
 
 /**
- * @version $Id: StaxGeneratorTest.java 675 2006-11-16 10:58:59Z brett $
+ * @version $Id$
  */
 public class StaxGeneratorPartsTest
     extends AbstractStaxGeneratorTestCase

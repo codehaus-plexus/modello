@@ -6,7 +6,7 @@ import java.io.File;
  * Creates an StAX reader from the model.
  *
  * @author <a href="mailto:brett@apache.org">Brett Porter</a>
- * @version $Id: ModelloXpp3ReaderMojo.java 669 2006-11-13 19:01:03Z dennisl $
+ * @version $Id$
  * @goal stax-reader
  * @phase generate-sources
  */

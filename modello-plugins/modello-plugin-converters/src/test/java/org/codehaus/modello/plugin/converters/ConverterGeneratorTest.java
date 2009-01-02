@@ -34,7 +34,7 @@ import java.io.File;
 import java.util.Properties;
 
 /**
- * @version $Id: JavaGeneratorTest.java 555 2006-01-29 21:38:08Z jvanzyl $
+ * @version $Id$
  */
 public class ConverterGeneratorTest
     extends AbstractModelloGeneratorTest

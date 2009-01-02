@@ -54,7 +54,7 @@ import java.util.Properties;
 /**
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
- * @version $Id: StaxReaderGenerator.java 674 2006-11-15 08:19:45Z brett $
+ * @version $Id$
  */
 public class StaxReaderGenerator
     extends AbstractStaxGenerator

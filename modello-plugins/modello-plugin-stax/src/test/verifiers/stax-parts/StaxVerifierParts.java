@@ -41,7 +41,7 @@ import java.io.StringWriter;
 import javax.xml.stream.XMLStreamException;
 
 /**
- * @version $Id: Xpp3Verifier.java 675 2006-11-16 10:58:59Z brett $
+ * @version $Id$
  */
 public class StaxVerifierParts
     extends Verifier
