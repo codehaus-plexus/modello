@@ -35,10 +35,6 @@ public class XmlClassMetadata
 
     private String tagName;
 
-    private String namespace;
-
-    private String schemaLocation;
-
     public String getTagName()
     {
         return tagName;
@@ -47,25 +43,5 @@ public class XmlClassMetadata
     public void setTagName( String tagName )
     {
         this.tagName = tagName;
-    }
-
-    public String getNamespace()
-    {
-        return namespace;
-    }
-
-    public void setNamespace( String namespace )
-    {
-        this.namespace = namespace;
-    }
-
-    public String getSchemaLocation()
-    {
-        return schemaLocation;
-    }
-
-    public void setSchemaLocation( String schemaLocation )
-    {
-        this.schemaLocation = schemaLocation;
     }
 }

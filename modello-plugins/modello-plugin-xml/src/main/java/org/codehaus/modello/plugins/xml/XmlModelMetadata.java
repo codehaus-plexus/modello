@@ -32,4 +32,28 @@ public class XmlModelMetadata
     implements ModelMetadata
 {
     public static final String ID = XmlModelMetadata.class.getName();
+
+    private String namespace;
+
+    private String schemaLocation;
+
+    public String getNamespace()
+    {
+        return namespace;
+    }
+
+    public void setNamespace( String namespace )
+    {
+        this.namespace = namespace;
+    }
+
+    public String getSchemaLocation()
+    {
+        return schemaLocation;
+    }
+
+    public void setSchemaLocation( String schemaLocation )
+    {
+        this.schemaLocation = schemaLocation;
+    }
 }

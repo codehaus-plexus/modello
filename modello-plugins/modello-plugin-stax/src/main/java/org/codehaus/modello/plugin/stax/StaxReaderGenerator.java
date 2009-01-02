@@ -42,6 +42,7 @@ import org.codehaus.modello.plugin.java.javasource.JType;
 import org.codehaus.modello.plugins.xml.XmlAssociationMetadata;
 import org.codehaus.modello.plugins.xml.XmlClassMetadata;
 import org.codehaus.modello.plugins.xml.XmlFieldMetadata;
+import org.codehaus.modello.plugins.xml.XmlModelMetadata;
 import org.codehaus.plexus.util.StringUtils;
 
 import java.io.IOException;
@@ -383,10 +384,9 @@ public class StaxReaderGenerator
         sc.add( "{" );
         sc.indent();
 
-        ModelClass root = objectModel.getClass( objectModel.getRoot( getGeneratedVersion() ), getGeneratedVersion() );
         if ( "namespace".equals( versionDefinition.getType() ) )
         {
-            XmlClassMetadata metadata = (XmlClassMetadata) root.getMetadata( XmlClassMetadata.ID );
+            XmlModelMetadata metadata = (XmlModelMetadata) objectModel.getMetadata( XmlModelMetadata.ID );
 
             String namespace = metadata.getNamespace();
             if ( namespace == null || namespace.indexOf( "${version}" ) < 0 )
@@ -402,6 +402,8 @@ public class StaxReaderGenerator
         else
         {
             String value = versionDefinition.getValue();
+
+            ModelClass root = objectModel.getClass( objectModel.getRoot( getGeneratedVersion() ), getGeneratedVersion() );
             ModelField field = root.getField( value, getGeneratedVersion() );
 
             if ( field == null )

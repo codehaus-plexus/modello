@@ -2,6 +2,7 @@
 
 <model xmlns="http://modello.codehaus.org/MODELLO" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://modello.codehaus.org/MODELLO http://modello.codehaus.org/xsd/modello-1.0.0.xsd"
+  xml.namespace="http://modello.codehaus.org/FEATURES" xml.schemaLocation="http://modello.codehaus.org/features-${version}.xsd"
   xsd.namespace="http://modello.codehaus.org/FEATURES" xsd.target-namespace="http://modello.codehaus.org/FEATURES">
   <id>features</id>
   <name>ModelloFeaturesTest</name>
@@ -25,7 +26,7 @@
 
   <classes>
 
-    <class rootElement="true" xml.namespace="http://modello.codehaus.org/FEATURES" xml.schemaLocation="http://modello.codehaus.org/features-${version}.xsd">
+    <class rootElement="true">
       <name>Features</name>
       <version>1.0.0+</version>
       <!--

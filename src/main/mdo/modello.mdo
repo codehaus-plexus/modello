@@ -2,6 +2,7 @@
 
 <model xmlns="http://modello.codehaus.org/MODELLO" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://modello.codehaus.org/MODELLO http://modello.codehaus.org/xsd/modello-1.0.0.xsd"
+  xml.namespace="http://modello.codehaus.org/MODELLO" xml.schemaLocation="http://modello.codehaus.org/xsd/modello-${version}.xsd"
   xsd.namespace="http://modello.codehaus.org/MODELLO" xsd.target-namespace="http://modello.codehaus.org/MODELLO">
   <id>modello</id>
   <name>Modello</name>
@@ -22,7 +23,7 @@
   </defaults>
 
   <classes>
-    <class java.abstract="true" xml.namespace="http://modello.codehaus.org/MODELLO" xml.schemaLocation="http://modello.codehaus.org/xsd/modello-${version}.xsd">
+    <class java.abstract="true">
       <name>BaseElement</name>
       <description>
         Common attributes for most of the elements.
@@ -76,8 +77,28 @@
       <version>1.0.0</version>
       <superClass>BaseElement</superClass>
       <fields>
-        <field xml.attribute="true" xml.tagName="xsd.namespace">
+        <field xml.attribute="true" xml.tagName="xml.namespace">
           <name>namespace</name>
+          <version>1.0.0</version>
+          <type>String</type>
+          <description>
+            The namespace to use when generating XML content. Before Modello 1.0-beta-1, this attribute was in class
+            element.
+          </description>
+          <comment>see org.codehaus.modello.plugins.xml.XmlMetadataPlugin</comment>
+        </field>
+        <field xml.attribute="true" xml.tagName="xml.schemaLocation">
+          <name>schemaLocation</name>
+          <version>1.0.0</version>
+          <type>String</type>
+          <description>
+            The schemaLocation to use when generating XML content. Before Modello 1.0-beta-1, this attribute was in
+            class element.
+          </description>
+          <comment>see org.codehaus.modello.plugins.xml.XmlMetadataPlugin</comment>
+        </field>
+        <field xml.attribute="true" xml.tagName="xsd.namespace">
+          <name>xsdNamespace</name>
           <version>1.0.0</version>
           <type>String</type>
           <description>
@@ -86,7 +107,7 @@
           <comment>see org.codehaus.modello.plugins.xsd.metadata.XsdMetadataPlugin</comment>
         </field>
         <field xml.attribute="true" xml.tagName="xsd.target-namespace">
-          <name>targetNamespace</name>
+          <name>xsdTargetNamespace</name>
           <version>1.0.0</version>
           <type>String</type>
           <description>
@@ -289,24 +310,6 @@
             Mark this class as abstract.
           </description>
           <comment>see org.codehaus.modello.plugin.java.JavaMetadataPlugin</comment>
-        </field>
-        <field xml.attribute="true" xml.tagName="xml.namespace">
-          <name>namespace</name>
-          <version>1.0.0</version>
-          <type>String</type>
-          <description>
-            The namespace to use when generating XML content.
-          </description>
-          <comment>see org.codehaus.modello.plugins.xml.XmlMetadataPlugin</comment>
-        </field>
-        <field xml.attribute="true" xml.tagName="xml.schemaLocation">
-          <name>schemaLocation</name>
-          <version>1.0.0</version>
-          <type>String</type>
-          <description>
-            The schemaLocation to use when generating XML content.
-          </description>
-          <comment>see org.codehaus.modello.plugins.xml.XmlMetadataPlugin</comment>
         </field>
         <field xml.attribute="true" xml.tagName="xsd.compositor">
           <name>compositor</name>

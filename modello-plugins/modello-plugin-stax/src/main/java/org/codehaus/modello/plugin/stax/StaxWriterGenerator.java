@@ -40,8 +40,8 @@ import org.codehaus.modello.plugin.java.javasource.JSourceWriter;
 import org.codehaus.modello.plugin.java.javasource.JType;
 import org.codehaus.modello.plugin.model.ModelClassMetadata;
 import org.codehaus.modello.plugins.xml.XmlAssociationMetadata;
-import org.codehaus.modello.plugins.xml.XmlClassMetadata;
 import org.codehaus.modello.plugins.xml.XmlFieldMetadata;
+import org.codehaus.modello.plugins.xml.XmlModelMetadata;
 import org.codehaus.plexus.util.StringUtils;
 
 import java.io.IOException;
@@ -220,9 +220,13 @@ public class StaxWriterGenerator
         sc.add( "{" );
         sc.indent();
 
-        XmlClassMetadata metadata = (XmlClassMetadata) modelClass.getMetadata( XmlClassMetadata.ID );
+        ModelClassMetadata modelMetadata = (ModelClassMetadata) modelClass.getMetadata( ModelClassMetadata.ID );
+
         String namespace = null;
-        if ( metadata.getNamespace() != null )
+        XmlModelMetadata metadata = (XmlModelMetadata) modelClass.getModel().getMetadata( XmlModelMetadata.ID );
+
+        // add namespace information for root element only
+        if ( modelMetadata.isRootElement() && ( metadata.getNamespace() != null ) )
         {
             namespace = StringUtils.replace( metadata.getNamespace(), "${version}", getGeneratedVersion().toString() );
             sc.add( "serializer.setDefaultNamespace( \"" + namespace + "\" );" );

@@ -52,7 +52,13 @@ public class XmlMetadataPlugin
 
     public ModelMetadata getModelMetadata( Model model, Map data )
     {
-        return new XmlModelMetadata();
+        XmlModelMetadata metadata = new XmlModelMetadata();
+
+        metadata.setNamespace( nullIfEmpty( data.get( "xml.namespace" ) ) );
+
+        metadata.setSchemaLocation( nullIfEmpty( data.get( "xml.schemaLocation" ) ) );
+
+        return metadata;
     }
 
     public ClassMetadata getClassMetadata( ModelClass clazz, Map data )
@@ -60,10 +66,6 @@ public class XmlMetadataPlugin
         XmlClassMetadata metadata = new XmlClassMetadata();
 
         metadata.setTagName( getTagName( data ) );
-
-        metadata.setNamespace( nullIfEmpty( data.get( "xml.namespace" ) ) );
-
-        metadata.setSchemaLocation( nullIfEmpty( data.get( "xml.schemaLocation" ) ) );
 
         return metadata;
     }

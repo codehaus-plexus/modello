@@ -74,13 +74,11 @@ public class DefaultModelloCore
         return metadataPluginManager;
     }
 
-
-
     public Model loadModel( File file )
         throws IOException, ModelloException, ModelValidationException
     {
         Reader reader = null;
-        
+
         try
         {
             reader = ReaderFactory.newXmlReader( file );
@@ -90,23 +88,62 @@ public class DefaultModelloCore
         {
             IOUtil.close( reader );
         }
-    }    
+    }
 
     public Model loadModel( Reader reader )
         throws ModelloException, ModelValidationException
     {
-        Model model;
-
         ModelReader modelReader = new ModelReader();
+        Model model = modelReader.loadModel( reader );
 
-        model = modelReader.loadModel( reader );
+        // update attributes moved from root class to model for compatibility
+        Map modelAttributes = modelReader.getAttributesForModel();
+        for ( Iterator classes = model.getAllClasses().iterator(); classes.hasNext(); )
+        {
+            ModelClass clazz = (ModelClass) classes.next();
+            Map attributes = modelReader.getAttributesForClass( clazz );
+
+            if ( "true".equals( attributes.get( "rootElement" ) ) )
+            {
+                if ( attributes.containsKey( "xml.namespace" ) )
+                {
+                    getLogger().warn( "attribute 'xml.namespace' for class element is deprecated: it should be moved "
+                                      + "to model element" );
+
+                    modelAttributes.put( "xml.namespace", attributes.get( "xml.namespace" ) );
+                    attributes.remove( "xml.namespace" );
+                }
+
+                if ( attributes.containsKey( "xml.schemaLocation" ) )
+                {
+                    getLogger().warn( "attribute 'xml.schemaLocation' for class element is deprecated: it should be "
+                                      + "moved to model element" );
+
+                    modelAttributes.put( "xml.schemaLocation", attributes.get( "xml.schemaLocation" ) );
+                    attributes.remove( "xml.schemaLocation" );
+                }
+
+                break;
+            }
+        }
 
         model.initialize();
 
-        // ----------------------------------------------------------------------
-        // Handle Metadata
-        // ----------------------------------------------------------------------
+        handlePluginsMetadata( modelReader, model );
 
+        validate( model );
+
+        return model;
+    }
+
+    /**
+     * Handle Plugins Metadata.
+     *
+     * @throws ModelloException
+     */
+    private void handlePluginsMetadata( ModelReader modelReader, Model model )
+        throws ModelloException
+    {
         for ( Iterator plugins = metadataPluginManager.getPluginsIterator(); plugins.hasNext(); )
         {
             MetadataPlugin plugin = (MetadataPlugin) plugins.next();
@@ -210,11 +247,16 @@ public class DefaultModelloCore
                 }
             }
         }
+    }
 
-        // ----------------------------------------------------------------------
-        // Validate the entire model
-        // ----------------------------------------------------------------------
-
+    /**
+     * Validate the entire model.
+     *
+     * @throws ModelValidationException
+     */
+    private void validate( Model model )
+        throws ModelValidationException
+    {
         model.validate();
 
         for ( Iterator defaults = model.getDefaults().iterator(); defaults.hasNext(); )
@@ -260,8 +302,6 @@ public class DefaultModelloCore
                 codeSegment.validate();
             }
         }
-
-        return model;
     }
 
     public void saveModel( Model model, Writer writer )
