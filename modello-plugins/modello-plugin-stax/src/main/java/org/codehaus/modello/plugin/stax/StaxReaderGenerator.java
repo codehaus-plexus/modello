@@ -149,8 +149,8 @@ public class StaxReaderGenerator
 
         sc.add( "String encoding = xmlStreamReader.getCharacterEncodingScheme();" );
 
-        sc.add( returnType + " value = parse" + root.getName() + "( \"" + getTagName( root ) +
-            "\", xmlStreamReader, strict, encoding );" );
+        sc.add( returnType + " value = parse" + root.getName() + "( \"" + getTagName( root )
+            + "\", xmlStreamReader, strict, encoding );" );
 
         sc.add( "resolveReferences( value );" );
 
@@ -187,14 +187,15 @@ public class StaxReaderGenerator
 
         sc.add( "File file = new File(filePath);" );
 
-        sc.add( "XMLStreamReader xmlStreamReader = XMLInputFactory.newInstance().createXMLStreamReader( file.toURL().toExternalForm(), new FileInputStream(file) );" );
+        sc.add( "XMLStreamReader xmlStreamReader = XMLInputFactory.newInstance().createXMLStreamReader( "
+                + "file.toURL().toExternalForm(), new FileInputStream(file) );" );
 
         sc.add( "" );
 
         sc.add( "String encoding = xmlStreamReader.getCharacterEncodingScheme();" );
 
-        sc.add( returnType + " value = parse" + root.getName() + "( \"" + getTagName( root ) +
-            "\", xmlStreamReader, strict, encoding );" );
+        sc.add( returnType + " value = parse" + root.getName() + "( \"" + getTagName( root )
+            + "\", xmlStreamReader, strict, encoding );" );
 
         sc.add( "resolveReferences( value );" );
 
@@ -216,7 +217,7 @@ public class StaxReaderGenerator
 
         jClass.addMethod( method );
 
-        // Determine the version. Currently, it causes the document to be reparsed, but could be made more effecient in
+        // Determine the version. Currently, it causes the document to be reparsed, but could be made more efficient in
         // future by buffering the read XML and piping that into any consequent read method.
 
         VersionDefinition versionDefinition = objectModel.getVersionDefinition();
@@ -318,8 +319,8 @@ public class StaxReaderGenerator
 
         sc.add( "else" );
         sc.add( "{" );
-        sc.addIndented(
-            "throw new XMLStreamException( \"Document version '\" + modelVersion + \"' has no corresponding reader.\" );" );
+        sc.addIndented( "throw new XMLStreamException( \"Document version '\" + modelVersion + \"' has no "
+                        + "corresponding reader.\" );" );
         sc.add( "}" );
 
         sc.unindent();
@@ -391,8 +392,8 @@ public class StaxReaderGenerator
             String namespace = metadata.getNamespace();
             if ( namespace == null || namespace.indexOf( "${version}" ) < 0 )
             {
-                throw new ModelloException(
-                    "versionDefinition is namespace, but the model does not declare xml.namespace on the root element" );
+                throw new ModelloException( "versionDefinition is namespace, but the model does not declare "
+                                            + "xml.namespace on the root element" );
             }
 
             sc.add( "return getVersionFromRootNamespace( xmlStreamReader );" );
@@ -403,14 +404,14 @@ public class StaxReaderGenerator
         {
             String value = versionDefinition.getValue();
 
-            ModelClass root = objectModel.getClass( objectModel.getRoot( getGeneratedVersion() ), getGeneratedVersion() );
+            ModelClass root = objectModel.getClass( objectModel.getRoot( getGeneratedVersion() ),
+                                                    getGeneratedVersion() );
             ModelField field = root.getField( value, getGeneratedVersion() );
 
             if ( field == null )
             {
-                throw new ModelloException(
-                    "versionDefinition is field, but the model root element does not declare a field '" + value +
-                        "'." );
+                throw new ModelloException( "versionDefinition is field, but the model root element does not declare a "
+                                            + "field '" + value + "'." );
             }
 
             if ( !"String".equals( field.getType() ) )
@@ -491,8 +492,8 @@ public class StaxReaderGenerator
         sc.unindent();
         sc.add( "}" );
 
-        sc.add( "throw new XMLStreamException( \"Field: '" + value +
-            "' does not exist in the document.\", xmlStreamReader.getLocation() );" );
+        sc.add( "throw new XMLStreamException( \"Field: '" + value
+                + "' does not exist in the document.\", xmlStreamReader.getLocation() );" );
     }
 
     private static void writeNamespaceVersionGetMethod( String namespace, JClass jClass )
@@ -509,8 +510,8 @@ public class StaxReaderGenerator
         sc.add( "if ( uri == null )" );
 
         sc.add( "{" );
-        sc.addIndented(
-            "throw new XMLStreamException( \"No namespace specified, but versionDefinition requires it\", xmlStreamReader.getLocation() );" );
+        sc.addIndented( "throw new XMLStreamException( \"No namespace specified, but versionDefinition requires it\", "
+                        + "xmlStreamReader.getLocation() );" );
         sc.add( "}" );
 
         int index = namespace.indexOf( "${version}" );
@@ -585,7 +586,7 @@ public class StaxReaderGenerator
 
         JSourceCode sc = unmarshall.getSourceCode();
 
-        sc.add( className + " " + uncapClassName + " = new " + className + "();" );
+        sc.add( className + ' ' + uncapClassName + " = new " + className + "();" );
 
         sc.add( "java.util.Set parsed = new java.util.HashSet();" );
 
@@ -699,8 +700,8 @@ public class StaxReaderGenerator
             sc.add( "if ( strict )" );
 
             sc.add( "{" );
-            sc.addIndented(
-                "throw new XMLStreamException( \"Unrecognised tag: '\" + xmlStreamReader.getLocalName() + \"'\", xmlStreamReader.getLocation() );" );
+            sc.addIndented( "throw new XMLStreamException( \"Unrecognised tag: '\" + xmlStreamReader.getLocalName() + "
+                            + "\"'\", xmlStreamReader.getLocation() );" );
             sc.add( "}" );
 
             if ( statement.startsWith( "else" ) )
@@ -724,8 +725,8 @@ public class StaxReaderGenerator
             sc.add( "if ( strict )" );
 
             sc.add( "{" );
-            sc.addIndented(
-                "throw new XMLStreamException( \"Unrecognised tag: '\" + xmlStreamReader.getLocalName() + \"'\", xmlStreamReader.getLocation() );" );
+            sc.addIndented( "throw new XMLStreamException( \"Unrecognised tag: '\" + xmlStreamReader.getLocalName() + "
+                            + "\"'\", xmlStreamReader.getLocation() );" );
             sc.add( "}" );
 
             sc.unindent();
@@ -803,7 +804,7 @@ public class StaxReaderGenerator
             }
         }
 
-        // propogate the flag up
+        // propagate the flag up
         for ( Iterator i = value.getChildren().iterator(); i.hasNext(); )
         {
             GeneratorNode child = (GeneratorNode) i.next();
@@ -899,8 +900,8 @@ public class StaxReaderGenerator
                 }
                 else
                 {
-                    sc.add( "for ( java.util.Iterator i = value.get" + capitalise( association.getName() ) +
-                        "().iterator(); i.hasNext(); )" );
+                    sc.add( "for ( java.util.Iterator i = value.get" + capitalise( association.getName() )
+                            + "().iterator(); i.hasNext(); )" );
                     sc.add( "{" );
                     sc.addIndented( "resolveReferences( (" + association.getTo() + ") i.next() );" );
                     sc.add( "}" );
@@ -1002,8 +1003,8 @@ public class StaxReaderGenerator
                 }
                 else
                 {
-                    sc.add( uncapClassName + ".set" + capFieldName + "( parse" + association.getTo() + "( \"" +
-                        tagName + "\", xmlStreamReader, strict, encoding ) );" );
+                    sc.add( uncapClassName + ".set" + capFieldName + "( parse" + association.getTo() + "( \"" + tagName
+                            + "\", xmlStreamReader, strict, encoding ) );" );
                 }
 
                 sc.unindent();
@@ -1075,14 +1076,14 @@ public class StaxReaderGenerator
                             // HACK: the addXXX method will cause an OOME when compiling a self-referencing class, so we
                             //  just add it to the array. This could disrupt the links if you are using break/create
                             //  constraints in modello.
-                            sc.add( associationName + ".add( parse" + association.getTo() + "( \"" + singularTagName +
-                                "\", xmlStreamReader, strict, encoding ) );" );
+                            sc.add( associationName + ".add( parse" + association.getTo() + "( \"" + singularTagName
+                                    + "\", xmlStreamReader, strict, encoding ) );" );
                         }
                         else
                         {
-                            sc.add( uncapClassName + ".add" + capitalise( singular( associationName ) ) + "( parse" +
-                                association.getTo() + "( \"" + singularTagName +
-                                "\", xmlStreamReader, strict, encoding ) );" );
+                            sc.add( uncapClassName + ".add" + capitalise( singular( associationName ) ) + "( parse"
+                                    + association.getTo() + "( \"" + singularTagName
+                                    + "\", xmlStreamReader, strict, encoding ) );" );
                         }
                     }
                     else
@@ -1098,8 +1099,8 @@ public class StaxReaderGenerator
                         sc.add( "else" );
 
                         sc.add( "{" );
-                        sc.addIndented(
-                            "throw new XMLStreamException( \"Unrecognised tag: '\" + xmlStreamReader.getLocalName() + \"'\", xmlStreamReader.getLocation() );" );
+                        sc.addIndented( "throw new XMLStreamException( \"Unrecognised tag: '\" + "
+                                        + "xmlStreamReader.getLocalName() + \"'\", xmlStreamReader.getLocation() );" );
                         sc.add( "}" );
 
                         sc.unindent();
@@ -1143,7 +1144,7 @@ public class StaxReaderGenerator
 
                         sc.add( "String value = null;" );
 
-                        sc.add( "//" + xmlAssociationMetadata.getMapStyle() + " mode." );
+                        sc.add( "// " + xmlAssociationMetadata.getMapStyle() + " mode." );
 
                         sc.add( "while ( xmlStreamReader.nextTag() == XMLStreamConstants.START_ELEMENT )" );
 
@@ -1238,8 +1239,8 @@ public class StaxReaderGenerator
             jClass.addField( new JField( new JType( "java.util.Map" ), refFieldName ) );
         }
 
-        sc.add( "String value = xmlStreamReader.getAttributeValue( null, \"" + referenceIdentifierField.getName() +
-            "\" );" );
+        sc.add( "String value = xmlStreamReader.getAttributeValue( null, \"" + referenceIdentifierField.getName()
+                + "\" );" );
         sc.add( "if ( value != null )" );
         sc.add( "{" );
         sc.indent();
@@ -1326,43 +1327,43 @@ public class StaxReaderGenerator
 
         if ( "boolean".equals( type ) )
         {
-            sc.add( objectName + "." + setterName + "( getBooleanValue( " + parserGetter + ", \"" + tagName +
-                "\", xmlStreamReader ) );" );
+            sc.add( objectName + "." + setterName + "( getBooleanValue( " + parserGetter + ", \"" + tagName
+                + "\", xmlStreamReader ) );" );
         }
         else if ( "char".equals( type ) )
         {
-            sc.add( objectName + "." + setterName + "( getCharacterValue( " + parserGetter + ", \"" + tagName +
-                "\", xmlStreamReader ) );" );
+            sc.add( objectName + "." + setterName + "( getCharacterValue( " + parserGetter + ", \"" + tagName
+                + "\", xmlStreamReader ) );" );
         }
         else if ( "double".equals( type ) )
         {
-            sc.add( objectName + "." + setterName + "( getDoubleValue( " + parserGetter + ", \"" + tagName +
-                "\", xmlStreamReader, strict ) );" );
+            sc.add( objectName + "." + setterName + "( getDoubleValue( " + parserGetter + ", \"" + tagName
+                + "\", xmlStreamReader, strict ) );" );
         }
         else if ( "float".equals( type ) )
         {
-            sc.add( objectName + "." + setterName + "( getFloatValue( " + parserGetter + ", \"" + tagName +
-                "\", xmlStreamReader, strict ) );" );
+            sc.add( objectName + "." + setterName + "( getFloatValue( " + parserGetter + ", \"" + tagName
+                + "\", xmlStreamReader, strict ) );" );
         }
         else if ( "int".equals( type ) )
         {
-            sc.add( objectName + "." + setterName + "( getIntegerValue( " + parserGetter + ", \"" + tagName +
-                "\", xmlStreamReader, strict ) );" );
+            sc.add( objectName + "." + setterName + "( getIntegerValue( " + parserGetter + ", \"" + tagName
+                + "\", xmlStreamReader, strict ) );" );
         }
         else if ( "long".equals( type ) )
         {
-            sc.add( objectName + "." + setterName + "( getLongValue( " + parserGetter + ", \"" + tagName +
-                "\", xmlStreamReader, strict ) );" );
+            sc.add( objectName + "." + setterName + "( getLongValue( " + parserGetter + ", \"" + tagName
+                + "\", xmlStreamReader, strict ) );" );
         }
         else if ( "short".equals( type ) )
         {
-            sc.add( objectName + "." + setterName + "( getShortValue( " + parserGetter + ", \"" + tagName +
-                "\", xmlStreamReader, strict ) );" );
+            sc.add( objectName + "." + setterName + "( getShortValue( " + parserGetter + ", \"" + tagName
+                + "\", xmlStreamReader, strict ) );" );
         }
         else if ( "byte".equals( type ) )
         {
-            sc.add( objectName + "." + setterName + "( getByteValue( " + parserGetter + ", \"" + tagName +
-                "\", xmlStreamReader, strict ) );" );
+            sc.add( objectName + "." + setterName + "( getByteValue( " + parserGetter + ", \"" + tagName
+                + "\", xmlStreamReader, strict ) );" );
         }
         else if ( "String".equals( type ) || "Boolean".equals( type ) )
         {
@@ -1371,10 +1372,10 @@ public class StaxReaderGenerator
         }
         else if ( "Date".equals( type ) )
         {
-            sc.add( "String dateFormat = " +
-                ( fieldMetaData.getFormat() != null ? "\"" + fieldMetaData.getFormat() + "\"" : "null" ) + ";" );
-            sc.add( objectName + "." + setterName + "( getDateValue( " + parserGetter + ", \"" + tagName +
-                "\", dateFormat, xmlStreamReader ) );" );
+            sc.add( "String dateFormat = "
+                + ( fieldMetaData.getFormat() != null ? "\"" + fieldMetaData.getFormat() + "\"" : "null" ) + ";" );
+            sc.add( objectName + "." + setterName + "( getDateValue( " + parserGetter + ", \"" + tagName
+                + "\", dateFormat, xmlStreamReader ) );" );
         }
         else if ( "DOM".equals( type ) )
         {
@@ -1561,8 +1562,8 @@ public class StaxReaderGenerator
         sc.add( "if ( strict )" );
 
         sc.add( "{" );
-        sc.addIndented(
-            "throw new XMLStreamException( \"Missing required value for attribute '\" + attribute + \"'\", xmlStreamReader.getLocation() );" );
+        sc.addIndented( "throw new XMLStreamException( \"Missing required value for attribute '\" + attribute + \"'\", "
+                        + "xmlStreamReader.getLocation() );" );
         sc.add( "}" );
 
         sc.unindent();
