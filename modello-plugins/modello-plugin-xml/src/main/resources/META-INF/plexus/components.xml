@@ -3,7 +3,7 @@
     <component>
       <role>org.codehaus.modello.metadata.MetadataPlugin</role>
       <role-hint>xml</role-hint>
-      <implementation>org.codehaus.modello.plugins.xml.XmlMetadataPlugin</implementation>
+      <implementation>org.codehaus.modello.plugins.xml.metadata.XmlMetadataPlugin</implementation>
     </component>
   </components>
 </component-set>

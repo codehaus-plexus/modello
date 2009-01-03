@@ -2,7 +2,7 @@
   <plugins>
     <plugin>
       <id>xml</id>
-      <implementation>org.codehaus.modello.plugins.xml.XmlMetaDataPlugin</implementation>
+      <implementation>org.codehaus.modello.plugins.xml.metadata.XmlMetaDataPlugin</implementation>
     </plugin>
   </plugins>
 </plugin-set>
