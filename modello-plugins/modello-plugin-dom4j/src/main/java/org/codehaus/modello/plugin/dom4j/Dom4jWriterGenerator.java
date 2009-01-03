@@ -28,7 +28,6 @@ import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelDefault;
 import org.codehaus.modello.model.ModelField;
-import org.codehaus.modello.plugin.java.AbstractJavaModelloGenerator;
 import org.codehaus.modello.plugin.java.JavaClassMetadata;
 import org.codehaus.modello.plugin.java.JavaFieldMetadata;
 import org.codehaus.modello.plugin.java.javasource.JClass;
@@ -37,6 +36,7 @@ import org.codehaus.modello.plugin.java.javasource.JParameter;
 import org.codehaus.modello.plugin.java.javasource.JSourceCode;
 import org.codehaus.modello.plugin.java.javasource.JSourceWriter;
 import org.codehaus.modello.plugin.model.ModelClassMetadata;
+import org.codehaus.modello.plugins.xml.AbstractXmlJavaGenerator;
 import org.codehaus.modello.plugins.xml.XmlAssociationMetadata;
 import org.codehaus.modello.plugins.xml.XmlFieldMetadata;
 
@@ -52,7 +52,7 @@ import java.util.Properties;
  * @author <a href="mailto:brett@codehaus.org">Brett Porter</a>
  */
 public class Dom4jWriterGenerator
-    extends AbstractJavaModelloGenerator
+    extends AbstractXmlJavaGenerator
 {
     public void generate( Model model, Properties parameters )
         throws ModelloException
@@ -403,14 +403,6 @@ public class Dom4jWriterGenerator
             sc.unindent();
             sc.add( "}" );
         }
-    }
-
-    protected String getFileName( String suffix )
-        throws ModelloException
-    {
-        String name = getModel().getName();
-
-        return name + suffix;
     }
 
     private String getValue( String type, String initialValue, XmlFieldMetadata fieldMetadata )

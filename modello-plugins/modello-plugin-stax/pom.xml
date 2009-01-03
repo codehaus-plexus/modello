@@ -13,6 +13,10 @@
   <dependencies>
     <dependency>
       <groupId>org.codehaus.modello</groupId>
+      <artifactId>modello-plugin-xml</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-plugin-java</artifactId>
     </dependency>
     <dependency>
@@ -58,10 +62,6 @@
       <artifactId>wstx-asl</artifactId>
       <version>3.2.0</version>
       <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.codehaus.modello</groupId>
-      <artifactId>modello-plugin-xml</artifactId>
     </dependency>
 
     <!-- dependencies needed by FeaturesStaxGeneratorTest -->

@@ -27,7 +27,7 @@ import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
-import org.codehaus.modello.plugin.java.AbstractJavaModelloGenerator;
+import org.codehaus.modello.plugins.xml.AbstractXmlJavaGenerator;
 import org.codehaus.modello.plugins.xml.XmlAssociationMetadata;
 import org.codehaus.modello.plugins.xml.XmlFieldMetadata;
 
@@ -42,7 +42,7 @@ import java.util.Set;
  * @version $Id$
  */
 public abstract class AbstractStaxGenerator
-    extends AbstractJavaModelloGenerator
+    extends AbstractXmlJavaGenerator
 {
     private Set/*<ModelClass>*/ parts;
 
@@ -52,14 +52,6 @@ public abstract class AbstractStaxGenerator
         super.initialize( model, parameters );
 
         parts = null;
-    }
-
-    protected String getFileName( String suffix )
-        throws ModelloException
-    {
-        String name = getModel().getName();
-
-        return name + suffix;
     }
 
     protected ModelField getReferenceIdentifierField( ModelAssociation association )

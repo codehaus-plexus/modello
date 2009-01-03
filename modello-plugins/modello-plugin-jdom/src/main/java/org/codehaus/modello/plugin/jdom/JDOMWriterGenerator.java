@@ -584,7 +584,6 @@ public class JDOMWriterGenerator
             if ( field instanceof ModelAssociation )
             {
                 ModelAssociation association = (ModelAssociation) field;
-                String associationName = association.getName();
                 ModelClass toClass = association.getToClass();
                 if ( ModelAssociation.ONE_MULTIPLICITY.equals( association.getMultiplicity() ) )
                 {

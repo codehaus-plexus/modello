@@ -32,6 +32,9 @@ import org.codehaus.modello.plugin.AbstractModelloGenerator;
 import org.codehaus.plexus.util.StringUtils;
 
 /**
+ * Abstract class for plugins working on XML representation of the model, without having any need to generate
+ * Java code.
+ *
  * @author <a href="mailto:hboutemy@codehaus.org">Herv&eacute; Boutemy</a>
  * @version $Id$
  */
@@ -97,7 +100,7 @@ public abstract class AbstractXmlGenerator
 
         return attributeFields;
     }
-    
+
     protected boolean hasContentField( List /* ModelField */modelFields )
     {
         if ( modelFields == null )
@@ -114,7 +117,7 @@ public abstract class AbstractXmlGenerator
         }
         return false;
     }
-    
+
     protected ModelField getContentField( List /* ModelField */modelFields )
     {
         if ( modelFields == null )

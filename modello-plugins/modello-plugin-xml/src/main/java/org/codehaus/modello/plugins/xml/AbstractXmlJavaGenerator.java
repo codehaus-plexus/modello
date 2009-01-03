@@ -1,7 +1,7 @@
-package org.codehaus.modello.plugin.jdom;
+package org.codehaus.modello.plugins.xml;
 
 /*
- * Copyright (c) 2004, Jason van Zyl
+ * Copyright (c) 2004, Codehaus.org
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -22,13 +22,21 @@ package org.codehaus.modello.plugin.jdom;
  * SOFTWARE.
  */
 
-import org.codehaus.modello.plugins.xml.AbstractXmlJavaGenerator;
+import org.codehaus.modello.plugin.java.AbstractJavaModelloGenerator;
 
 /**
- * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
+ * Abstract class for plugins generating Java code for XML representation of the model.
+ *
+ * @author <a href="mailto:hboutemy@codehaus.org">Hervé Boutemy</a>
  * @version $Id$
  */
-public abstract class AbstractJDOMGenerator
-    extends AbstractXmlJavaGenerator
+public abstract class AbstractXmlJavaGenerator
+    extends AbstractJavaModelloGenerator
 {
+    protected String getFileName( String suffix )
+    {
+        String name = getModel().getName();
+
+        return name + suffix;
+    }
 }

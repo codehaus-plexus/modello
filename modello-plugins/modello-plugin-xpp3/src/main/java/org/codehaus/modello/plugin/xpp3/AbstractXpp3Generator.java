@@ -22,21 +22,13 @@ package org.codehaus.modello.plugin.xpp3;
  * SOFTWARE.
  */
 
-import org.codehaus.modello.ModelloException;
-import org.codehaus.modello.plugin.java.AbstractJavaModelloGenerator;
+import org.codehaus.modello.plugins.xml.AbstractXmlJavaGenerator;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
 public abstract class AbstractXpp3Generator
-    extends AbstractJavaModelloGenerator
+    extends AbstractXmlJavaGenerator
 {
-    protected String getFileName( String suffix )
-        throws ModelloException
-    {
-        String name = getModel().getName();
-
-        return name + suffix;
-    }
 }
