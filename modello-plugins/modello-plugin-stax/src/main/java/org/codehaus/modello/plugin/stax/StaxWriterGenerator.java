@@ -39,9 +39,9 @@ import org.codehaus.modello.plugin.java.javasource.JSourceCode;
 import org.codehaus.modello.plugin.java.javasource.JSourceWriter;
 import org.codehaus.modello.plugin.java.javasource.JType;
 import org.codehaus.modello.plugin.model.ModelClassMetadata;
-import org.codehaus.modello.plugins.xml.XmlAssociationMetadata;
-import org.codehaus.modello.plugins.xml.XmlFieldMetadata;
-import org.codehaus.modello.plugins.xml.XmlModelMetadata;
+import org.codehaus.modello.plugins.xml.metadata.XmlAssociationMetadata;
+import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
+import org.codehaus.modello.plugins.xml.metadata.XmlModelMetadata;
 import org.codehaus.plexus.util.StringUtils;
 
 import java.io.IOException;

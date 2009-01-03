@@ -31,7 +31,7 @@ import org.codehaus.modello.plugin.java.javasource.JParameter;
 import org.codehaus.modello.plugin.java.javasource.JSourceCode;
 import org.codehaus.modello.plugin.java.javasource.JSourceWriter;
 import org.codehaus.modello.plugin.java.javasource.JType;
-import org.codehaus.modello.plugins.xml.XmlFieldMetadata;
+import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
 
 import java.io.IOException;
 import java.util.ArrayList;

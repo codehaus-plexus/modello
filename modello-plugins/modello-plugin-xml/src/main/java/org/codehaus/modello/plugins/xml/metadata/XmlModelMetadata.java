@@ -1,4 +1,4 @@
-package org.codehaus.modello.plugins.xml;
+package org.codehaus.modello.plugins.xml.metadata;
 
 /*
  * Copyright (c) 2004, Codehaus.org
@@ -22,55 +22,38 @@ package org.codehaus.modello.plugins.xml;
  * SOFTWARE.
  */
 
-import org.codehaus.modello.metadata.AssociationMetadata;
+import org.codehaus.modello.metadata.ModelMetadata;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
-public class XmlAssociationMetadata
-    implements AssociationMetadata
+public class XmlModelMetadata
+    implements ModelMetadata
 {
-    public static final String ID = XmlAssociationMetadata.class.getName();
+    public static final String ID = XmlModelMetadata.class.getName();
 
-    public static final String EXPLODE_MODE = "explode";
+    private String namespace;
 
-    public static final String INLINE_MODE = "inline";
+    private String schemaLocation;
 
-    private String mapStyle = INLINE_MODE;
-
-    private boolean reference;
-
-    /**
-     * @return Returns the map style.
-     */
-    public String getMapStyle()
+    public String getNamespace()
     {
-        return mapStyle;
+        return namespace;
     }
 
-    /**
-     * @param mapStyle The map style (inline or explode).
-     */
-    public void setMapStyle( String mapStyle )
+    public void setNamespace( String namespace )
     {
-        if ( mapStyle == null )
-        {
-            this.mapStyle = INLINE_MODE;
-        }
-        else
-        {
-            this.mapStyle = mapStyle;
-        }
+        this.namespace = namespace;
     }
 
-    public boolean isReference()
+    public String getSchemaLocation()
     {
-        return reference;
+        return schemaLocation;
     }
 
-    public void setReference( boolean reference )
+    public void setSchemaLocation( String schemaLocation )
     {
-        this.reference = reference;
+        this.schemaLocation = schemaLocation;
     }
 }

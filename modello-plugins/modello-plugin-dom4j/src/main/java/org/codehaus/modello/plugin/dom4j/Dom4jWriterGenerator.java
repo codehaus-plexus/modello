@@ -37,8 +37,8 @@ import org.codehaus.modello.plugin.java.javasource.JSourceCode;
 import org.codehaus.modello.plugin.java.javasource.JSourceWriter;
 import org.codehaus.modello.plugin.model.ModelClassMetadata;
 import org.codehaus.modello.plugins.xml.AbstractXmlJavaGenerator;
-import org.codehaus.modello.plugins.xml.XmlAssociationMetadata;
-import org.codehaus.modello.plugins.xml.XmlFieldMetadata;
+import org.codehaus.modello.plugins.xml.metadata.XmlAssociationMetadata;
+import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
 
 import java.io.IOException;
 import java.util.Iterator;

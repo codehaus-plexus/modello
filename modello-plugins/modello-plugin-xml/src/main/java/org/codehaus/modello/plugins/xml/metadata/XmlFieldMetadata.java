@@ -1,4 +1,4 @@
-package org.codehaus.modello.plugins.xml;
+package org.codehaus.modello.plugins.xml.metadata;
 
 /*
  * Copyright (c) 2004, Codehaus.org

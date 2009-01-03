@@ -1,4 +1,4 @@
-package org.codehaus.modello.plugins.xml;
+package org.codehaus.modello.plugins.xml.metadata;
 
 /*
  * Copyright (c) 2004, Codehaus.org
@@ -22,26 +22,55 @@ package org.codehaus.modello.plugins.xml;
  * SOFTWARE.
  */
 
-import org.codehaus.modello.metadata.ClassMetadata;
+import org.codehaus.modello.metadata.AssociationMetadata;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
-public class XmlClassMetadata
-    implements ClassMetadata
+public class XmlAssociationMetadata
+    implements AssociationMetadata
 {
-    public static final String ID = XmlClassMetadata.class.getName();
+    public static final String ID = XmlAssociationMetadata.class.getName();
 
-    private String tagName;
+    public static final String EXPLODE_MODE = "explode";
 
-    public String getTagName()
+    public static final String INLINE_MODE = "inline";
+
+    private String mapStyle = INLINE_MODE;
+
+    private boolean reference;
+
+    /**
+     * @return Returns the map style.
+     */
+    public String getMapStyle()
     {
-        return tagName;
+        return mapStyle;
     }
 
-    public void setTagName( String tagName )
+    /**
+     * @param mapStyle The map style (inline or explode).
+     */
+    public void setMapStyle( String mapStyle )
     {
-        this.tagName = tagName;
+        if ( mapStyle == null )
+        {
+            this.mapStyle = INLINE_MODE;
+        }
+        else
+        {
+            this.mapStyle = mapStyle;
+        }
+    }
+
+    public boolean isReference()
+    {
+        return reference;
+    }
+
+    public void setReference( boolean reference )
+    {
+        this.reference = reference;
     }
 }

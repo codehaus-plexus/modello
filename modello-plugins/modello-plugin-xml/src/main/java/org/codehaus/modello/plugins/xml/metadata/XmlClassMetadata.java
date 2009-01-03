@@ -1,4 +1,4 @@
-package org.codehaus.modello.plugins.xml;
+package org.codehaus.modello.plugins.xml.metadata;
 
 /*
  * Copyright (c) 2004, Codehaus.org
@@ -22,38 +22,26 @@ package org.codehaus.modello.plugins.xml;
  * SOFTWARE.
  */
 
-import org.codehaus.modello.metadata.ModelMetadata;
+import org.codehaus.modello.metadata.ClassMetadata;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
-public class XmlModelMetadata
-    implements ModelMetadata
+public class XmlClassMetadata
+    implements ClassMetadata
 {
-    public static final String ID = XmlModelMetadata.class.getName();
+    public static final String ID = XmlClassMetadata.class.getName();
 
-    private String namespace;
+    private String tagName;
 
-    private String schemaLocation;
-
-    public String getNamespace()
+    public String getTagName()
     {
-        return namespace;
+        return tagName;
     }
 
-    public void setNamespace( String namespace )
+    public void setTagName( String tagName )
     {
-        this.namespace = namespace;
-    }
-
-    public String getSchemaLocation()
-    {
-        return schemaLocation;
-    }
-
-    public void setSchemaLocation( String schemaLocation )
-    {
-        this.schemaLocation = schemaLocation;
+        this.tagName = tagName;
     }
 }

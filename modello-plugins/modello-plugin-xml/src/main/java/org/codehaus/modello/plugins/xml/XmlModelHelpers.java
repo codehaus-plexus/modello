@@ -2,6 +2,7 @@ package org.codehaus.modello.plugins.xml;
 
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.plugin.AbstractModelloGenerator;
+import org.codehaus.modello.plugins.xml.metadata.XmlClassMetadata;
 
 /*
  * Copyright (c) 2004, Codehaus.org

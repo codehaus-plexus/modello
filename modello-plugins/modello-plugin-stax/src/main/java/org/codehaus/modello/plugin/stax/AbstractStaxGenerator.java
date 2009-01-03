@@ -28,8 +28,8 @@ import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.plugins.xml.AbstractXmlJavaGenerator;
-import org.codehaus.modello.plugins.xml.XmlAssociationMetadata;
-import org.codehaus.modello.plugins.xml.XmlFieldMetadata;
+import org.codehaus.modello.plugins.xml.metadata.XmlAssociationMetadata;
+import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
 
 import java.util.HashSet;
 import java.util.Iterator;
