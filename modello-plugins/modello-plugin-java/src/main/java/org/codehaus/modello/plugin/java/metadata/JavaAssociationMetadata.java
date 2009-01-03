@@ -1,4 +1,4 @@
-package org.codehaus.modello.plugin.java;
+package org.codehaus.modello.plugin.java.metadata;
 
 /*
  * Copyright (c) 2004, Codehaus.org

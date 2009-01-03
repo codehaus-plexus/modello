@@ -32,9 +32,10 @@ import org.codehaus.modello.model.ModelDefault;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.ModelInterface;
 import org.codehaus.modello.plugin.AbstractModelloGenerator;
-import org.codehaus.modello.plugin.java.JavaFieldMetadata;
 import org.codehaus.modello.plugin.java.javasource.JClass;
 import org.codehaus.modello.plugin.java.javasource.JSourceWriter;
+import org.codehaus.modello.plugin.java.metadata.JavaClassMetadata;
+import org.codehaus.modello.plugin.java.metadata.JavaFieldMetadata;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.WriterFactory;
 

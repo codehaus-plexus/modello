@@ -33,8 +33,6 @@ import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.Version;
 import org.codehaus.modello.model.VersionDefinition;
 import org.codehaus.modello.plugin.java.AbstractJavaModelloGenerator;
-import org.codehaus.modello.plugin.java.JavaClassMetadata;
-import org.codehaus.modello.plugin.java.JavaFieldMetadata;
 import org.codehaus.modello.plugin.java.javasource.JClass;
 import org.codehaus.modello.plugin.java.javasource.JInterface;
 import org.codehaus.modello.plugin.java.javasource.JMethod;
@@ -43,6 +41,8 @@ import org.codehaus.modello.plugin.java.javasource.JParameter;
 import org.codehaus.modello.plugin.java.javasource.JSourceCode;
 import org.codehaus.modello.plugin.java.javasource.JSourceWriter;
 import org.codehaus.modello.plugin.java.javasource.JType;
+import org.codehaus.modello.plugin.java.metadata.JavaClassMetadata;
+import org.codehaus.modello.plugin.java.metadata.JavaFieldMetadata;
 import org.codehaus.plexus.util.IOUtil;
 
 import java.io.IOException;

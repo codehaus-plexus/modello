@@ -9,7 +9,7 @@
     <component>
       <role>org.codehaus.modello.metadata.MetadataPlugin</role>
       <role-hint>java</role-hint>
-      <implementation>org.codehaus.modello.plugin.java.JavaMetadataPlugin</implementation>
+      <implementation>org.codehaus.modello.plugin.java.metadata.JavaMetadataPlugin</implementation>
     </component>
   </components>
 </component-set>

@@ -1,4 +1,4 @@
-package org.codehaus.modello.plugin.java;
+package org.codehaus.modello.plugin.java.metadata;
 
 /*
  * Copyright (c) 2004, Codehaus.org
@@ -22,14 +22,38 @@ package org.codehaus.modello.plugin.java;
  * SOFTWARE.
  */
 
-import org.codehaus.modello.metadata.ModelMetadata;
+import org.codehaus.modello.metadata.ClassMetadata;
 
 /**
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
  * @version $Id$
  */
-public class JavaModelMetadata
-    implements ModelMetadata
+public class JavaClassMetadata
+    implements ClassMetadata
 {
-    public static final String ID = JavaModelMetadata.class.getName();
+    public static final String ID = JavaClassMetadata.class.getName();
+
+    private boolean abstractMode;
+    
+    private boolean enabled;
+
+    public void setAbstract( boolean abstractMode )
+    {
+        this.abstractMode = abstractMode;
+    }
+
+    public boolean isAbstract()
+    {
+        return abstractMode;
+    }
+    
+    public boolean isEnabled()
+    {
+        return enabled;
+    }
+
+    public void setEnabled( boolean generate )
+    {
+        this.enabled = generate;
+    }
 }
