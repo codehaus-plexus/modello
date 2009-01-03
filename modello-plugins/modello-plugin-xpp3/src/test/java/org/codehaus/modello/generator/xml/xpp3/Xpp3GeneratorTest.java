@@ -53,10 +53,11 @@ public class Xpp3GeneratorTest
     public void testXpp3Generator()
         throws Throwable
     {
-        ModelloCore modello = (ModelloCore) container.lookup( ModelloCore.ROLE );
+        ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
 
         Model model = modello.loadModel( ReaderFactory.newXmlReader( getTestFile( "src/test/resources/maven.mdo" ) ) );
 
+        // check some elements read from the model
         List classesList = model.getClasses( new Version( "4.0.0" ) );
 
         assertEquals( 27, classesList.size() );
@@ -87,6 +88,7 @@ public class Xpp3GeneratorTest
 
         assertEquals( "builder", xml.getTagName() );
 
+        // now generate sources and test them
         File generatedSources = new File( getTestPath( "target/xpp3/sources" ) );
 
         File classes = new File( getTestPath( "target/xpp3/classes" ) );
@@ -100,22 +102,19 @@ public class Xpp3GeneratorTest
         classes.mkdirs();
 
         Properties parameters = new Properties();
-
         parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, generatedSources.getAbsolutePath() );
-
         parameters.setProperty( ModelloParameterConstants.VERSION, "4.0.0" );
-
         parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString( false ) );
 
         modello.generate( model, "java", parameters );
-
         modello.generate( model, "xpp3-writer", parameters );
-
         modello.generate( model, "xpp3-reader", parameters );
 
-        addDependency( "org.codehaus.modello", "modello-core", getModelloVersion() );
-
+        addDependency( "xmlunit", "xmlunit", "1.2" );
         compile( generatedSources, classes );
+
+        // TODO: see why without this, version system property is set to "2.4.1" value after verify
+        System.setProperty( "version", getModelloVersion() );
 
         verify( "org.codehaus.modello.generator.xml.xpp3.Xpp3Verifier", "xpp3" );
     }

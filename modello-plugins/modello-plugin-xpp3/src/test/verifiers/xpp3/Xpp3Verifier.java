@@ -37,9 +37,12 @@ import org.codehaus.modello.test.model.io.xpp3.MavenXpp3Writer;
 import org.codehaus.modello.verifier.Verifier;
 import org.codehaus.modello.verifier.VerifierException;
 import org.codehaus.plexus.util.FileUtils;
+import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.ReaderFactory;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
+import org.custommonkey.xmlunit.Diff;
+import org.custommonkey.xmlunit.XMLUnit;
 
 import java.io.File;
 import java.io.IOException;
@@ -79,9 +82,9 @@ public class Xpp3Verifier
         verifyReaderDuplicates();
 
         verifyReaderMissingTags_DefaultMode();
-        
+
         verifyReaderMissingTags_StrictMode();
-        
+
         verifyReaderMissingTags_NonStrictMode();
 
         verifyThrowingExceptionWithWrongRootElement();
@@ -189,7 +192,7 @@ public class Xpp3Verifier
     }
 
     public void verifyWriter()
-        throws IOException, XmlPullParserException
+        throws Exception
     {
         String expectedXml = FileUtils.fileRead( getTestFile( "src/test/verifiers/xpp3/expected.xml" ) );
 
@@ -332,7 +335,15 @@ public class Xpp3Verifier
 //
 //        System.err.println( actualXml );
 
-        Assert.assertEquals( expectedXml.trim(), actualXml.trim() );
+        XMLUnit.setIgnoreWhitespace( true );
+        XMLUnit.setIgnoreComments( true );
+        Diff diff = XMLUnit.compareXML( expectedXml.trim(), actualXml.trim() );
+
+        if ( !diff.identical() )
+        {
+            System.err.println( actualXml );
+            throw new VerifierException( "writer result is not the same as original content: " + diff );
+        }
 
         MavenXpp3Reader reader = new MavenXpp3Reader();
 
@@ -346,7 +357,13 @@ public class Xpp3Verifier
 
         writer.write( buffer, actual );
 
-        Assert.assertEquals( expectedXml.trim(), buffer.toString().trim() );
+        diff = XMLUnit.compareXML( expectedXml.trim(), buffer.toString().trim() );
+
+        if ( !diff.identical() )
+        {
+            System.err.println( actualXml );
+            throw new VerifierException( "re-writer result is not the same as original content: " + diff );
+        }
     }
 
     public void verifyReader()
