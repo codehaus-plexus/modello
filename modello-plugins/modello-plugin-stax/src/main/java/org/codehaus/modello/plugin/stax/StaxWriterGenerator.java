@@ -42,7 +42,6 @@ import org.codehaus.modello.plugin.model.ModelClassMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlAssociationMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlModelMetadata;
-import org.codehaus.plexus.util.StringUtils;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -218,7 +217,7 @@ public class StaxWriterGenerator
         // add namespace information for root element only
         if ( modelMetadata.isRootElement() && ( metadata.getNamespace() != null ) )
         {
-            namespace = StringUtils.replace( metadata.getNamespace(), "${version}", getGeneratedVersion().toString() );
+            namespace = metadata.getNamespace( getGeneratedVersion() );
             sc.add( "serializer.setDefaultNamespace( \"" + namespace + "\" );" );
         }
 
@@ -230,8 +229,7 @@ public class StaxWriterGenerator
 
             if ( metadata.getSchemaLocation() != null )
             {
-                String url =
-                    StringUtils.replace( metadata.getSchemaLocation(), "${version}", getGeneratedVersion().toString() );
+                String url = metadata.getSchemaLocation( getGeneratedVersion() );
 
                 sc.add( "serializer.setPrefix( \"xsi\", \"http://www.w3.org/2001/XMLSchema-instance\" );" );
                 sc.add( "serializer.writeNamespace( \"xsi\", \"http://www.w3.org/2001/XMLSchema-instance\" );" );

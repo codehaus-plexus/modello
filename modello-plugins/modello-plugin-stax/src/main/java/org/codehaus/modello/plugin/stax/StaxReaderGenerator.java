@@ -392,7 +392,7 @@ public class StaxReaderGenerator
             if ( namespace == null || namespace.indexOf( "${version}" ) < 0 )
             {
                 throw new ModelloException( "versionDefinition is namespace, but the model does not declare "
-                                            + "xml.namespace on the root element" );
+                                            + "xml.namespace on the model element" );
             }
 
             sc.add( "return getVersionFromRootNamespace( xmlStreamReader );" );

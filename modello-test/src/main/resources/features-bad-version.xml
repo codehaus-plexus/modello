@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<features xmlns="http://modello.codehaus.org/FEATURES" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   xsi:schemaLocation="http://modello.codehaus.org/FEATURES http://modello.codehaus.org/features-1.0.0.xsd">
+<features xmlns="http://modello.codehaus.org/FEATURES/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://modello.codehaus.org/FEATURES/1.0.0 http://modello.codehaus.org/features-1.0.0.xsd">
   <versionField>2.0.0</versionField><!-- intended bad value, should be 1.0.0 -->
 </features>

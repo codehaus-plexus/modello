@@ -17,9 +17,11 @@ package org.codehaus.modello.plugin.xsd.metadata;
  */
 
 import org.codehaus.modello.metadata.ModelMetadata;
+import org.codehaus.modello.model.Version;
+import org.codehaus.plexus.util.StringUtils;
 
 /**
- * XsdModelMetadata 
+ * XsdModelMetadata
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
@@ -50,5 +52,29 @@ public class XsdModelMetadata implements ModelMetadata
     public void setTargetNamespace( String targetNamespace )
     {
         this.targetNamespace = targetNamespace;
+    }
+
+    public String getNamespace( Version version )
+    {
+        String namespace = this.namespace;
+
+        if ( version != null )
+        {
+            namespace = StringUtils.replace( namespace, "${version}", version.toString() );
+        }
+
+        return namespace;
+    }
+
+    public String getTargetNamespace( Version version )
+    {
+        String targetNamespace = this.targetNamespace;
+
+        if ( version != null )
+        {
+            targetNamespace = StringUtils.replace( targetNamespace, "${version}", version.toString() );
+        }
+
+        return targetNamespace;
     }
 }

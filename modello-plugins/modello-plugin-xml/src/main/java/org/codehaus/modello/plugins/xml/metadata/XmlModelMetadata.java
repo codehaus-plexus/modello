@@ -23,6 +23,8 @@ package org.codehaus.modello.plugins.xml.metadata;
  */
 
 import org.codehaus.modello.metadata.ModelMetadata;
+import org.codehaus.modello.model.Version;
+import org.codehaus.plexus.util.StringUtils;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -55,5 +57,29 @@ public class XmlModelMetadata
     public void setSchemaLocation( String schemaLocation )
     {
         this.schemaLocation = schemaLocation;
+    }
+
+    public String getNamespace( Version version )
+    {
+        String namespace = this.namespace;
+
+        if ( version != null )
+        {
+            namespace = StringUtils.replace( namespace, "${version}", version.toString() );
+        }
+
+        return namespace;
+    }
+
+    public String getSchemaLocation( Version version )
+    {
+        String schemaLocation = this.schemaLocation;
+
+        if ( version != null )
+        {
+            schemaLocation = StringUtils.replace( schemaLocation, "${version}", version.toString() );
+        }
+
+        return schemaLocation;
     }
 }

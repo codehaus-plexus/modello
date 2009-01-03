@@ -108,7 +108,8 @@ public class XsdGenerator
             w.addAttribute( "xmlns:xs", "http://www.w3.org/2001/XMLSchema" );
             w.addAttribute( "elementFormDefault", "qualified" );
 
-            ModelClass root = objectModel.getClass( objectModel.getRoot( getGeneratedVersion() ), getGeneratedVersion() );
+            ModelClass root = objectModel.getClass( objectModel.getRoot( getGeneratedVersion() ),
+                                                    getGeneratedVersion() );
 
             XsdModelMetadata modelMetadata = (XsdModelMetadata) root.getModel().getMetadata( XsdModelMetadata.ID );
 
@@ -117,14 +118,14 @@ public class XsdGenerator
                 throw new ModelloException( "Cannot generate xsd without xmlns specification:"
                                             + " <model xsd.namespace='...'>" );
             }
-            w.addAttribute( "xmlns", modelMetadata.getNamespace() );
+            w.addAttribute( "xmlns", modelMetadata.getNamespace( getGeneratedVersion() ) );
 
             if ( StringUtils.isEmpty( modelMetadata.getTargetNamespace() ) )
             {
                 throw new ModelloException( "Cannot generate xsd without targetNamespace specification:"
                                             + " <model xsd.target-namespace='...'>" );
             }
-            w.addAttribute( "targetNamespace", modelMetadata.getTargetNamespace() );
+            w.addAttribute( "targetNamespace", modelMetadata.getTargetNamespace( getGeneratedVersion() ) );
 
             w.startElement( "xs:element" );
             String tagName = getTagName( root );
@@ -247,8 +248,8 @@ public class XsdGenerator
                     w.startElement( "xs:element" );
                 }
 
-                // Usually, would only do this if the field is not "required", but due to inheritence, it may be present,
-                // even if not here, so we need to let it slide
+                // Usually, would only do this if the field is not "required", but due to inheritance, it may be
+                // present, even if not here, so we need to let it slide
                 if ( !hasContentField )
                 {
                     w.addAttribute( "minOccurs", "0" );
@@ -288,7 +289,8 @@ public class XsdGenerator
 
                         if ( ModelAssociation.MANY_MULTIPLICITY.equals( association.getMultiplicity() ) )
                         {
-                            XmlFieldMetadata fieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
+                            XmlFieldMetadata fieldMetadata =
+                                (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
 
                             if ( XmlFieldMetadata.LIST_STYLE_WRAPPED.equals( fieldMetadata.getListStyle() ))
                             {
@@ -351,7 +353,8 @@ public class XsdGenerator
                             XmlFieldMetadata fieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
                             writeListElement( w, fieldMetadata, field, getXsdType( "String" ) );
                         }
-                        else if ( Properties.class.getName().equals( field.getType() ) || "DOM".equals( field.getType() ) )
+                        else if ( Properties.class.getName().equals( field.getType() )
+                                        || "DOM".equals( field.getType() ) )
                         {
                             writeFieldDocumentation( w, field );
                             writePropertiesElement( w );
@@ -362,8 +365,8 @@ public class XsdGenerator
                         }
                         else
                         {
-                            throw new IllegalStateException(
-                                "Non-association field of a non-primitive type '" + field.getType() + "' for '" + field.getName() + "'" );
+                            throw new IllegalStateException( "Non-association field of a non-primitive type '"
+                                                             + field.getType() + "' for '" + field.getName() + "'" );
                         }
                     }
                 }
@@ -548,5 +551,4 @@ public class XsdGenerator
             return null;
         }
     }
-
 }
