@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
-<model xmlns="http://modello.codehaus.org/MODELLO" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://modello.codehaus.org/MODELLO http://modello.codehaus.org/xsd/modello-1.0.0.xsd"
+<model xmlns="http://modello.codehaus.org/MODELLO/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://modello.codehaus.org/MODELLO/1.0.0 http://modello.codehaus.org/xsd/modello-1.0.0.xsd"
   xml.namespace="http://modello.codehaus.org/FEATURES/${version}"
   xml.schemaLocation="http://modello.codehaus.org/features-${version}.xsd"
   xsd.namespace="http://modello.codehaus.org/FEATURES/${version}"
