@@ -158,7 +158,7 @@ public abstract class AbstractModelloGeneratorTest
     {
         addDependency( "junit", "junit", "3.8.1" );
 
-        addDependency( "org.codehaus.plexus", "plexus-utils", "1.5.1" );
+        addDependency( "org.codehaus.plexus", "plexus-utils", "1.5.6" );
 
         addDependency( "org.codehaus.modello", "modello-test", getModelloVersion() );
 
@@ -190,8 +190,8 @@ public abstract class AbstractModelloGeneratorTest
         {
             CompilerError message = (CompilerError) it.next();
 
-            System.out.println( message.getFile() + "[" + message.getStartLine() + "," + message.getStartColumn() +
-                "]: " + message.getMessage() );
+            System.out.println( message.getFile() + "[" + message.getStartLine() + "," + message.getStartColumn()
+                                + "]: " + message.getMessage() );
         }
 
         assertEquals( "There was compilation errors.", 0, messages.size() );
