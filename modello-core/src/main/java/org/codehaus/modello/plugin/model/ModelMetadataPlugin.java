@@ -60,10 +60,6 @@ public class ModelMetadataPlugin
 
         metadata.setRootElement( Boolean.valueOf( rootElement ).booleanValue() );
 
-        String tagName = (String) data.get( "xml.tagName" );
-
-        metadata.setTagName( tagName );
-
         return metadata;
     }
 

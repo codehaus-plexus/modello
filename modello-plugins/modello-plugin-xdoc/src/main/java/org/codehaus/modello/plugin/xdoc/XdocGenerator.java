@@ -41,9 +41,9 @@ import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.Version;
 import org.codehaus.modello.model.VersionRange;
-import org.codehaus.modello.plugin.model.ModelClassMetadata;
 import org.codehaus.modello.plugin.xdoc.metadata.XdocFieldMetadata;
 import org.codehaus.modello.plugins.xml.AbstractXmlGenerator;
+import org.codehaus.modello.plugins.xml.XmlClassMetadata;
 import org.codehaus.modello.plugins.xml.XmlFieldMetadata;
 import org.codehaus.plexus.util.WriterFactory;
 import org.codehaus.plexus.util.xml.PrettyPrintXMLWriter;
@@ -559,7 +559,7 @@ public class XdocGenerator
      */
     private String resolveTagName( ModelClass modelClass, ModelAssociation association )
     {
-        ModelClassMetadata metadata = (ModelClassMetadata) modelClass.getMetadata( ModelClassMetadata.ID );
+        XmlClassMetadata metadata = (XmlClassMetadata) modelClass.getMetadata( XmlClassMetadata.ID );
 
         String tagName;
         if ( metadata == null || metadata.getTagName() == null )
