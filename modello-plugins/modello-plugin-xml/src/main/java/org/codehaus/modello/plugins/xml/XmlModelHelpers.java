@@ -1,5 +1,8 @@
 package org.codehaus.modello.plugins.xml;
 
+import org.codehaus.modello.model.ModelClass;
+import org.codehaus.modello.plugin.AbstractModelloGenerator;
+
 /*
  * Copyright (c) 2004, Codehaus.org
  *
@@ -22,27 +25,28 @@ package org.codehaus.modello.plugins.xml;
  * SOFTWARE.
  */
 
-import org.codehaus.modello.model.ModelClass;
-import org.codehaus.modello.plugin.java.AbstractJavaModelloGenerator;
-
 /**
- * Abstract class for plugins generating Java code for XML representation of the model.
+ * Helper methods to deal with XML representation of the model.
  *
  * @author <a href="mailto:hboutemy@codehaus.org">Hervé Boutemy</a>
  * @version $Id$
  */
-public abstract class AbstractXmlJavaGenerator
-    extends AbstractJavaModelloGenerator
+class XmlModelHelpers
 {
-    protected String getFileName( String suffix )
+    static String getTagName( ModelClass modelClass )
     {
-        String name = getModel().getName();
+        XmlClassMetadata metadata = (XmlClassMetadata) modelClass.getMetadata( XmlClassMetadata.ID );
 
-        return name + suffix;
+        String tagName;
+        if ( metadata == null || metadata.getTagName() == null )
+        {
+            tagName = AbstractModelloGenerator.uncapitalise( modelClass.getName() );
+        }
+        else
+        {
+            tagName = metadata.getTagName();
+        }
+        return tagName;
     }
 
-    protected String getTagName( ModelClass modelClass )
-    {
-        return XmlModelHelpers.getTagName( modelClass );
-    }
 }

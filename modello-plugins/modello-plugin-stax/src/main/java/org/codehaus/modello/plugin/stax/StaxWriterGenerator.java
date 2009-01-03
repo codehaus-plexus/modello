@@ -109,17 +109,7 @@ public class StaxWriterGenerator
 
         ModelClass rootClass = objectModel.getClass( root, getGeneratedVersion() );
 
-        ModelClassMetadata metadata = (ModelClassMetadata) rootClass.getMetadata( ModelClassMetadata.ID );
-
-        String rootElement;
-        if ( metadata == null || metadata.getTagName() == null )
-        {
-            rootElement = uncapitalise( root );
-        }
-        else
-        {
-            rootElement = metadata.getTagName();
-        }
+        String rootElement = getTagName( rootClass );
 
         // Write the parse method which will do the unmarshalling.
 

@@ -40,7 +40,6 @@ import org.codehaus.modello.plugin.java.javasource.JSourceCode;
 import org.codehaus.modello.plugin.java.javasource.JSourceWriter;
 import org.codehaus.modello.plugin.java.javasource.JType;
 import org.codehaus.modello.plugins.xml.XmlAssociationMetadata;
-import org.codehaus.modello.plugins.xml.XmlClassMetadata;
 import org.codehaus.modello.plugins.xml.XmlFieldMetadata;
 import org.codehaus.modello.plugins.xml.XmlModelMetadata;
 import org.codehaus.plexus.util.StringUtils;
@@ -527,20 +526,6 @@ public class StaxReaderGenerator
         sc.add( "}" );
 
         sc.add( "return uri.substring( uriPrefix.length(), uri.length() - uriSuffix.length() );" );
-    }
-
-    private String getTagName( ModelClass root )
-    {
-        XmlClassMetadata metadata = (XmlClassMetadata) root.getMetadata( XmlClassMetadata.ID );
-
-        String tagName = metadata.getTagName();
-
-        if ( tagName != null )
-        {
-            return tagName;
-        }
-
-        return uncapitalise( root.getName() );
     }
 
     private void writeAllClassesParser( Model objectModel, JClass jClass )

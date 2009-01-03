@@ -35,12 +35,17 @@ import org.codehaus.plexus.util.StringUtils;
  * Abstract class for plugins working on XML representation of the model, without having any need to generate
  * Java code.
  *
- * @author <a href="mailto:hboutemy@codehaus.org">Herv&eacute; Boutemy</a>
+ * @author <a href="mailto:hboutemy@codehaus.org">Hervé Boutemy</a>
  * @version $Id$
  */
 public abstract class AbstractXmlGenerator
     extends AbstractModelloGenerator
 {
+    protected String getTagName( ModelClass modelClass )
+    {
+        return XmlModelHelpers.getTagName( modelClass );
+    }
+
     /**
      * Compute the tagName of a given field. <br>
      * This method return the first child tag name created by this field.

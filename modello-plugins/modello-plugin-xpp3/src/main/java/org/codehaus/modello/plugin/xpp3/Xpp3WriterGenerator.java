@@ -36,7 +36,6 @@ import org.codehaus.modello.plugin.java.javasource.JMethod;
 import org.codehaus.modello.plugin.java.javasource.JParameter;
 import org.codehaus.modello.plugin.java.javasource.JSourceCode;
 import org.codehaus.modello.plugin.java.javasource.JSourceWriter;
-import org.codehaus.modello.plugin.model.ModelClassMetadata;
 import org.codehaus.modello.plugins.xml.XmlAssociationMetadata;
 import org.codehaus.modello.plugins.xml.XmlFieldMetadata;
 
@@ -96,17 +95,7 @@ public class Xpp3WriterGenerator
 
         ModelClass rootClass = objectModel.getClass( root, getGeneratedVersion() );
 
-        ModelClassMetadata metadata = (ModelClassMetadata) rootClass.getMetadata( ModelClassMetadata.ID );
-
-        String rootElement;
-        if ( metadata == null || metadata.getTagName() == null )
-        {
-            rootElement = uncapitalise( root );
-        }
-        else
-        {
-            rootElement = metadata.getTagName();
-        }
+        String rootElement = getTagName( rootClass );
 
         // Write the write method which will do the marshalling.
 

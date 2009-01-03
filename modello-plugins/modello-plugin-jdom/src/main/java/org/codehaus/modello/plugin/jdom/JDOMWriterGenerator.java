@@ -31,7 +31,6 @@ import org.codehaus.modello.plugin.java.javasource.JParameter;
 import org.codehaus.modello.plugin.java.javasource.JSourceCode;
 import org.codehaus.modello.plugin.java.javasource.JSourceWriter;
 import org.codehaus.modello.plugin.java.javasource.JType;
-import org.codehaus.modello.plugin.model.ModelClassMetadata;
 import org.codehaus.modello.plugins.xml.XmlFieldMetadata;
 
 import java.io.IOException;
@@ -110,18 +109,10 @@ public class JDOMWriterGenerator
         constCode.add( "lineSeparator = \"\\n\";" );
 
         String root = objectModel.getRoot( getGeneratedVersion() );
-        ModelClass rootClass = objectModel.getClass( root, getGeneratedVersion() );
-        ModelClassMetadata metadata = (ModelClassMetadata) rootClass.getMetadata( ModelClassMetadata.ID );
 
-        String rootElement;
-        if ( metadata == null || metadata.getTagName() == null )
-        {
-            rootElement = uncapitalise( root );
-        }
-        else
-        {
-            rootElement = metadata.getTagName();
-        }
+        ModelClass rootClass = objectModel.getClass( root, getGeneratedVersion() );
+
+        String rootElement = getTagName( rootClass );
 
         // the public global write method..
         jClass.addMethod( generateWriteModel( root, rootElement ) );

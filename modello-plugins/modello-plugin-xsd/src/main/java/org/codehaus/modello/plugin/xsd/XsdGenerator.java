@@ -28,7 +28,6 @@ import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
-import org.codehaus.modello.plugin.model.ModelClassMetadata;
 import org.codehaus.modello.plugin.xsd.metadata.XsdClassMetadata;
 import org.codehaus.modello.plugin.xsd.metadata.XsdModelMetadata;
 import org.codehaus.modello.plugins.xml.AbstractXmlGenerator;
@@ -434,22 +433,6 @@ public class XsdGenerator
                 writeComplexTypeDescriptor( w, objectModel, fieldModelClass, written );
             }
         }
-    }
-
-    private static String getTagName( ModelClass modelClass )
-    {
-        ModelClassMetadata metadata = (ModelClassMetadata) modelClass.getMetadata( ModelClassMetadata.ID );
-
-        String tagName;
-        if ( metadata == null || metadata.getTagName() == null )
-        {
-            tagName = uncapitalise( modelClass.getName() );
-        }
-        else
-        {
-            tagName = metadata.getTagName();
-        }
-        return tagName;
     }
 
     private static void writeCharElement( XMLWriter w )
