@@ -688,6 +688,16 @@
             <multiplicity>*</multiplicity>
           </association>
         </field>
+        <field xml.listStyle="flat" xml.associationTagName="association">
+          <name>xmlFlatAssociationTagNames</name>
+          <version>1.0.0+</version>
+          <description><![CDATA[<code>&lt;field xml.listStyle="flat" xml.associationTagName="<i>association</i>"&gt;</code>:
+            a flat list with an XML name different from calculated singular of tag name.]]></description>
+          <association>
+            <type>Reference</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
         <field>
           <name>explodeProperties</name>
           <version>1.0.0+</version>
@@ -708,6 +718,36 @@
             <multiplicity>*</multiplicity>
           </association>
         </field>
+        <!--field xml.listStyle="flat">
+          <name>flatExplodeProperties</name>
+          <version>1.0.0+</version>
+          <description><![CDATA[<code>&lt;type&gt;Properties&lt;/type&gt;&lt;association xml.mapStyle="explode"&gt;</code>.]]></description>
+          <type>Properties</type>
+          <association xml.mapStyle="explode">
+            <type>String</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+        <field xml.listStyle="flat">
+          <name>flatInlineProperties</name>
+          <version>1.0.0+</version>
+          <description><![CDATA[<code>&lt;type&gt;Properties&lt;/type&gt;&lt;association xml.mapStyle="inline"&gt;</code> (default).]]></description>
+          <type>Properties</type>
+          <association xml.mapStyle="inline">
+            <type>String</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+        <field xml.listStyle="flat" xml.associationTagName="property">
+          <name>flatAssociationExplodeProperties</name>
+          <version>1.0.0+</version>
+          <description><![CDATA[<code>&lt;type&gt;Properties&lt;/type&gt;&lt;association xml.mapStyle="explode"&gt;</code>.]]></description>
+          <type>Properties</type>
+          <association xml.mapStyle="explode">
+            <type>String</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field-->
         <field>
           <name>xsdFeatures</name>
           <version>1.0.0+</version>

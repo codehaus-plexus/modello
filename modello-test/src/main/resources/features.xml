@@ -101,6 +101,11 @@
       <association><id>third</id></association>
     </xmlAssociationTagNames>
 
+    <!-- xmlFlatAssociationTagNames -->
+    <association><id>flat first</id></association>
+    <association><id>flat second</id></association>
+    <association><id>flat third</id></association>
+
     <explodeProperties>
       <explodeProperty>
         <key>theKey</key>
@@ -110,6 +115,17 @@
     <inlineProperties>
       <theKey>theValue</theKey>
     </inlineProperties>
+
+    <!--flatExplodeProperty>
+      <key>theKey</key>
+      <value>theValue</value>
+    </flatExplodeProperty>
+    <theKey>theValue for a flat property</theKey>
+
+    <property>
+      <key>theKey</key>
+      <value>theValue</value>
+    </property-->
 
     <xsdFeatures attribute="one more value from XML file" />
   </xmlFeatures>
