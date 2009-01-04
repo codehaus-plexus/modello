@@ -83,28 +83,31 @@
           <name>namespace</name>
           <version>1.0.0</version>
           <type>String</type>
-          <description>
-            The namespace to use when generating XML content. Before Modello 1.0-beta-1, this attribute was in class
-            element.
+          <description><![CDATA[
+            The namespace to use when generating XML content. Since Modello 1.0-beta-1, this value can contain
+            <code>${version}</code> placeholder, which will be replaced by the model version during generation.
+            Before Modello 1.0-beta-1, this attribute was in class element.]]>
           </description>
-          <comment>see org.codehaus.modello.plugins.xml.XmlMetadataPlugin</comment>
+          <comment>see org.codehaus.modello.plugins.xml.metadata.XmlMetadataPlugin</comment>
         </field>
         <field xml.attribute="true" xml.tagName="xml.schemaLocation">
           <name>schemaLocation</name>
           <version>1.0.0</version>
           <type>String</type>
-          <description>
-            The schemaLocation to use when generating XML content. Before Modello 1.0-beta-1, this attribute was in
-            class element.
+          <description><![CDATA[
+            The schemaLocation to use when generating XML content. Since Modello 1.0-alpha-13, this value can contain
+            <code>${version}</code> placeholder, which will be replaced by the model version during generation.
+            Before Modello 1.0-beta-1, this attribute was in class element.]]>
           </description>
-          <comment>see org.codehaus.modello.plugins.xml.XmlMetadataPlugin</comment>
+          <comment>see org.codehaus.modello.plugins.xml.metadata.XmlMetadataPlugin</comment>
         </field>
         <field xml.attribute="true" xml.tagName="xsd.namespace">
           <name>xsdNamespace</name>
           <version>1.0.0</version>
           <type>String</type>
-          <description>
-            The namespace to use when generating XSD.
+          <description><![CDATA[
+            The namespace to use when generating XSD. Since Modello 1.0-beta-1, this value can contain
+            <code>${version}</code> placeholder, which will be replaced by the model version during generation.]]>
           </description>
           <comment>see org.codehaus.modello.plugins.xsd.metadata.XsdMetadataPlugin</comment>
         </field>
@@ -112,8 +115,9 @@
           <name>xsdTargetNamespace</name>
           <version>1.0.0</version>
           <type>String</type>
-          <description>
-            The targetNamespace to use when generating XSD.
+          <description><![CDATA[
+            The targetNamespace to use when generating XSD. Since Modello 1.0-beta-1, this value can contain
+            <code>${version}</code> placeholder, which will be replaced by the model version during generation.]]>
           </description>
           <comment>see org.codehaus.modello.plugins.xsd.metadata.XsdMetadataPlugin</comment>
         </field>
@@ -302,7 +306,7 @@
           <description>
             Enable or disable generation of a java source for this class in the model.
           </description>
-          <comment>see org.codehaus.modello.plugin.java.JavaMetadataPlugin</comment>
+          <comment>see org.codehaus.modello.plugin.java.metadata.JavaMetadataPlugin</comment>
         </field>
         <field xml.attribute="true" xml.tagName="java.abstract">
           <name>abstractMode</name>
@@ -311,7 +315,7 @@
           <description>
             Mark this class as abstract.
           </description>
-          <comment>see org.codehaus.modello.plugin.java.JavaMetadataPlugin</comment>
+          <comment>see org.codehaus.modello.plugin.java.metadata.JavaMetadataPlugin</comment>
         </field>
         <field xml.attribute="true" xml.tagName="xsd.compositor">
           <name>compositor</name>
@@ -391,7 +395,7 @@
           <description>
             Generate an addXXX(...) method for this field (only for many multiplicity association).
           </description>
-          <comment>see org.codehaus.modello.plugin.java.JavaMetadataPlugin</comment>
+          <comment>see org.codehaus.modello.plugin.java.metadata.JavaMetadataPlugin</comment>
         </field>
         <field xml.attribute="true" xml.tagName="java.getter">
           <name>getter</name>
@@ -401,7 +405,7 @@
           <description>
             Generate a getter method for this field.
           </description>
-          <comment>see org.codehaus.modello.plugin.java.JavaMetadataPlugin</comment>
+          <comment>see org.codehaus.modello.plugin.java.metadata.JavaMetadataPlugin</comment>
         </field>
         <field xml.attribute="true" xml.tagName="java.setter">
           <name>setter</name>
@@ -411,7 +415,7 @@
           <description>
             Generate a setter method for this field.
           </description>
-          <comment>see org.codehaus.modello.plugin.java.JavaMetadataPlugin</comment>
+          <comment>see org.codehaus.modello.plugin.java.metadata.JavaMetadataPlugin</comment>
         </field>
         <field xml.attribute="true" xml.tagName="xdoc.separator">
           <name>separator</name>
@@ -420,7 +424,7 @@
           <description><![CDATA[
             Can be one of : <code>blank</code>.]]>
           </description>
-          <comment>see org.codehaus.modello.plugin.java.JavaMetadataPlugin</comment>
+          <comment>see org.codehaus.modello.plugin.java.metadata.JavaMetadataPlugin</comment>
         </field>
         <field xml.attribute="true" xml.tagName="xml.attribute">
           <name>attribute</name>
@@ -429,7 +433,7 @@
           <description>
             Consider this field as an XML attribute instead of an element.
           </description>
-          <comment>see org.codehaus.modello.plugins.xml.XmlMetadataPlugin</comment>
+          <comment>see org.codehaus.modello.plugins.xml.metadata.XmlMetadataPlugin</comment>
         </field>
         <field xml.attribute="true" xml.tagName="xml.trim">
           <name>trim</name>
@@ -439,7 +443,7 @@
           <description>
             Trim the content when reading.
           </description>
-          <comment>see org.codehaus.modello.plugins.xml.XmlMetadataPlugin</comment>
+          <comment>see org.codehaus.modello.plugins.xml.metadata.XmlMetadataPlugin</comment>
         </field>
         <field xml.attribute="true" xml.tagName="xml.tagName">
           <name>tagName</name>
@@ -448,7 +452,7 @@
           <description>
             Define a tag name to be used in XML content, which can be different from the field name.
           </description>
-          <comment>see org.codehaus.modello.plugins.xml.XmlMetadataPlugin</comment>
+          <comment>see org.codehaus.modello.plugins.xml.metadata.XmlMetadataPlugin</comment>
         </field>
         <field xml.attribute="true" xml.tagName="xml.associationTagName">
           <name>associationTagName</name>
@@ -457,7 +461,7 @@
           <description>
             Define a tag name to be used for each element inside a multiple association.
           </description>
-          <comment>see org.codehaus.modello.plugins.xml.XmlMetadataPlugin</comment>
+          <comment>see org.codehaus.modello.plugins.xml.metadata.XmlMetadataPlugin</comment>
         </field>
         <field xml.attribute="true" xml.tagName="xml.listStyle">
           <name>listStyle</name>
@@ -467,7 +471,7 @@
           <description><![CDATA[
             Can be one of : <code>flat</code>, <code>wrapped</code>.]]>
           </description>
-          <comment>see org.codehaus.modello.plugins.xml.XmlMetadataPlugin</comment>
+          <comment>see org.codehaus.modello.plugins.xml.metadata.XmlMetadataPlugin</comment>
         </field>
         <field xml.attribute="true" xml.tagName="xml.format">
           <name>format</name>
@@ -476,7 +480,7 @@
           <description>
             The date format to use when parsing/writing a date (see java SimpleDateFormat).
           </description>
-          <comment>see org.codehaus.modello.plugins.xml.XmlMetadataPlugin</comment>
+          <comment>see org.codehaus.modello.plugins.xml.metadata.XmlMetadataPlugin</comment>
         </field>
         <field>
           <name>alias</name>
@@ -554,34 +558,34 @@
           <version>1.0.0</version>
           <type>boolean</type>
           <defaultValue>true</defaultValue>
-          <comment>see org.codehaus.modello.plugin.java.JavaMetadataPlugin</comment>
+          <comment>see org.codehaus.modello.plugin.java.metadata.JavaMetadataPlugin</comment>
         </field>
         <field xml.attribute="true" xml.tagName="java.generate-remove">
           <name>generateRemove</name>
           <version>1.0.0</version>
           <type>boolean</type>
           <defaultValue>true</defaultValue>
-          <comment>see org.codehaus.modello.plugin.java.JavaMetadataPlugin</comment>
+          <comment>see org.codehaus.modello.plugin.java.metadata.JavaMetadataPlugin</comment>
         </field>
         <field xml.attribute="true" xml.tagName="java.generate-break">
           <name>generateBreak</name>
           <version>1.0.0</version>
           <type>boolean</type>
           <defaultValue>true</defaultValue>
-          <comment>see org.codehaus.modello.plugin.java.JavaMetadataPlugin</comment>
+          <comment>see org.codehaus.modello.plugin.java.metadata.JavaMetadataPlugin</comment>
         </field>
         <field xml.attribute="true" xml.tagName="java.generate-create">
           <name>generateCreate</name>
           <version>1.0.0</version>
           <type>boolean</type>
           <defaultValue>true</defaultValue>
-          <comment>see org.codehaus.modello.plugin.java.JavaMetadataPlugin</comment>
+          <comment>see org.codehaus.modello.plugin.java.metadata.JavaMetadataPlugin</comment>
         </field>
         <field xml.attribute="true" xml.tagName="java.use-interface">
           <name>interfaceName</name>
           <version>1.0.0</version>
           <type>String</type>
-          <comment>see org.codehaus.modello.plugin.java.JavaMetadataPlugin</comment>
+          <comment>see org.codehaus.modello.plugin.java.metadata.JavaMetadataPlugin</comment>
         </field>
         <field xml.attribute="true" xml.tagName="java.init">
           <name>initializationMode</name>
@@ -591,7 +595,7 @@
           <description><![CDATA[
             Can be one of : <code>lazy</code>, <code>constructor</code>, <code>field</code>.]]>
           </description>
-          <comment>see org.codehaus.modello.plugin.java.JavaMetadataPlugin</comment>
+          <comment>see org.codehaus.modello.plugin.java.metadata.JavaMetadataPlugin</comment>
         </field>
         <field xml.attribute="true" xml.tagName="xml.mapStyle">
           <name>mapStyle</name>
@@ -601,13 +605,13 @@
           <description><![CDATA[
             Can be one of : <code>inline</code>, <code>explode</code>.]]>
           </description>
-          <comment>see org.codehaus.modello.plugins.xml.XmlMetadataPlugin</comment>
+          <comment>see org.codehaus.modello.plugins.xml.metadata.XmlMetadataPlugin</comment>
         </field>
         <field xml.attribute="true" xml.tagName="xml.reference">
           <name>reference</name>
           <version>1.0.0</version>
           <type>boolean</type>
-          <comment>see org.codehaus.modello.plugins.xml.XmlMetadataPlugin</comment>
+          <comment>see org.codehaus.modello.plugins.xml.metadata.XmlMetadataPlugin</comment>
         </field>
         <field xml.tagName="type">
           <name>to</name>
