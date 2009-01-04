@@ -67,7 +67,10 @@ package org.codehaus.modello.plugin.java.javasource;
  * SOFTWARE.
  */
 
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Vector;
 
 /**
@@ -503,12 +506,23 @@ public final class JInterface extends JStructure
             jsw.writeln( ';' );
         }
 
+        for ( Iterator iterator = sourceCodeEntries.iterator(); iterator.hasNext(); )
+        {
+            jsw.write( (String) iterator.next() );
+        }
+
         jsw.unindent();
         jsw.writeln( '}' );
         jsw.flush();
         jsw.close();
     } //-- printSource
 
+    private List sourceCodeEntries = new ArrayList();
+
+    public void addSourceCode( String sourceCode )
+    {
+        sourceCodeEntries.add( sourceCode );
+    }
 
     /**
      * Test drive method...to be removed or commented out

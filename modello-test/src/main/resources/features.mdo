@@ -920,14 +920,14 @@
       <name>SimpleInterface</name>
       <description>A simple interface definition.</description>
       <version>1.0.0+</version>
-      <!--codeSegments> this causes an infinite loop: see MODELLO-158
+      <codeSegments>
         <codeSegment>
           <version>1.0.0+</version>
           <code>
             public final static String CODE_SEGMENT = "freedom with codeSegment";
           </code>
         </codeSegment>
-      </codeSegments-->
+      </codeSegments>
     </interface>
 
     <interface>

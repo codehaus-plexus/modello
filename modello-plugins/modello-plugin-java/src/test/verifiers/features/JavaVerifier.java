@@ -26,11 +26,14 @@ import org.codehaus.modello.verifier.VerifierException;
 import org.codehaus.modello.test.features.BaseClass;
 import org.codehaus.modello.test.features.InterfacesFeature;
 import org.codehaus.modello.test.features.JavaAbstractFeature;
+import org.codehaus.modello.test.features.SimpleInterface;
 import org.codehaus.modello.test.features.SimpleTypes;
 import org.codehaus.modello.test.features.SubClassLevel1;
 import org.codehaus.modello.test.features.SubClassLevel2;
 import org.codehaus.modello.test.features.SubClassLevel3;
+import org.codehaus.modello.test.features.SubInterface;
 import org.codehaus.modello.test.features.XmlAttributes;
+import org.codehaus.modello.test.features.other.SubInterfaceInPackage;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -64,8 +67,10 @@ public class JavaVerifier
         {
             throw new VerifierException( "method not found", nsme );
         }
+
         verifyDefaultValues();
         verifyJavaFeatures();
+        verifyInterfaces();
     }
 
     private void checkField( Class clazz, Class type, String attributeName, String getterName, String setterName )
@@ -158,6 +163,14 @@ public class JavaVerifier
         {
             throw new VerifierException( "InterfacesFeature should implement java.rmi.Remote" );
         }
+        if ( !SubInterface.class.isAssignableFrom( InterfacesFeature.class ) )
+        {
+            throw new VerifierException( "InterfacesFeature should implement SubInterface" );
+        }
+        if ( !SubInterfaceInPackage.class.isAssignableFrom( InterfacesFeature.class ) )
+        {
+            throw new VerifierException( "InterfacesFeature should implement SubInterfaceInPackage" );
+        }
 
         // superClass feature
         if ( !BaseClass.class.isAssignableFrom( SubClassLevel1.class ) )
@@ -172,5 +185,25 @@ public class JavaVerifier
         {
             throw new VerifierException( "SubClassLevel3 should extend SubClassLevel2" );
         }
+    }
+
+    public void verifyInterfaces()
+    {
+        Assert.assertTrue( "SimpleInterface should be an interface", SimpleInterface.class.isInterface() );
+        Assert.assertTrue( "SubInterface should be an interface", SubInterface.class.isInterface() );
+        Assert.assertTrue( "SubInterfaceInPackage should be an interface", SubInterfaceInPackage.class.isInterface() );
+
+        // superInterface feature
+        if ( !SimpleInterface.class.isAssignableFrom( SubInterface.class ) )
+        {
+            throw new VerifierException( "SubInterface should extend SimpleInterface" );
+        }
+        if ( !SimpleInterface.class.isAssignableFrom( SubInterfaceInPackage.class ) )
+        {
+            throw new VerifierException( "SubInterfaceInPackage should extend SimpleInterface" );
+        }
+
+        // codeSegments
+        Assert.assertNotNull( "SimpleInterface.CODE_SEGMENT should be here", SimpleInterface.CODE_SEGMENT );
     }
 }

@@ -103,12 +103,9 @@ public class JavaModelloGenerator
             {
                 for ( Iterator iterator = modelInterface.getCodeSegments( getGeneratedVersion() ).iterator(); iterator.hasNext(); )
                 {
-                    //TODO : add this method to jInterface or remove
-                    // codeSegments and add method tag
+                    CodeSegment codeSegment = (CodeSegment) iterator.next();
 
-                    // CodeSegment codeSegment = (CodeSegment) iterator.next();
-
-                    //jInterface.addSourceCode( codeSegment.getCode() );
+                    jInterface.addSourceCode( codeSegment.getCode() );
                 }
             }
 
