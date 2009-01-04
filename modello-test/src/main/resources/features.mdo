@@ -137,6 +137,12 @@
             /* this text goes directly into generated code */
           </code>
         </codeSegment>
+        <codeSegment>
+          <version>1.0.0+</version>
+          <code>
+            public final static String CODE_SEGMENT = "freedom with codeSegment";
+          </code>
+        </codeSegment>
       </codeSegments>
     </class>
 
@@ -513,6 +519,8 @@
       <interfaces>
         <interface>java.io.Serializable</interface>
         <interface>java.rmi.Remote</interface>
+        <interface>SubInterface</interface>
+        <interface>org.codehaus.modello.test.features.other.SubInterfaceInPackage</interface>
       </interfaces>
       <fields>
         <field>
@@ -905,5 +913,38 @@
     </class>
 
   </classes>
+
+  <interfaces>
+
+    <interface>
+      <name>SimpleInterface</name>
+      <description>A simple interface definition.</description>
+      <version>1.0.0+</version>
+      <!--codeSegments> this causes an infinite loop: see MODELLO-158
+        <codeSegment>
+          <version>1.0.0+</version>
+          <code>
+            public final static String CODE_SEGMENT = "freedom with codeSegment";
+          </code>
+        </codeSegment>
+      </codeSegments-->
+    </interface>
+
+    <interface>
+      <name>SubInterface</name>
+      <superInterface>SimpleInterface</superInterface>
+      <description>An interface extending SimpleInterface.</description>
+      <version>1.0.0+</version>
+    </interface>
+
+    <interface>
+      <name>SubInterfaceInPackage</name>
+      <superInterface>org.codehaus.modello.test.features.SimpleInterface</superInterface>
+      <packageName>org.codehaus.modello.test.features.other</packageName>
+      <description>An interface extending SimpleInterface in a package different from default package.</description>
+      <version>1.0.0+</version>
+    </interface>
+
+  </interfaces>
 
 </model>
