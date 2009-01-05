@@ -10,6 +10,10 @@
   <groupId>org.codehaus.modello</groupId>
   <artifactId>modello-test</artifactId>
   <name>Modello Test Package</name>
+  <description>
+    Modello Test Package contains the basis to create Modello generator unit-tests, including a sample model to
+    test every plugins.
+  </description>
 
   <dependencies>
     <dependency>

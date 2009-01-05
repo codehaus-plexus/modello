@@ -9,6 +9,9 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>modello-plugin-xsd</artifactId>
   <name>Modello XSD Plugin</name>
+  <description>
+    Modello XSD Plugin generates an XML Schema from the model to be able to validate XML content.
+  </description>
 
   <dependencies>
     <dependency>

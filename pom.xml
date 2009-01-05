@@ -6,6 +6,12 @@
   <name>Modello</name>
   <version>1.0-beta-1-SNAPSHOT</version>
   <url>http://modello.codehaus.org/</url>
+  <description>
+    Modello is a framework for code generation from a simple model.
+    Modello generates code from a simple model format: based on a plugin architecture, various types of code and
+    descriptors can be generated from the single model, including Java POJOs, XML marshallers/unmarshallers, XSD
+    and documentation.
+  </description>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

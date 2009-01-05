@@ -9,6 +9,10 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>modello-plugin-xdoc</artifactId>
   <name>Modello XDOC Plugin</name>
+  <description>
+    Modello XDOC Plugin generates model documentation using xdoc markup to be included in a Maven-generated reporting
+    site.
+  </description>
 
   <dependencies>
     <dependency>

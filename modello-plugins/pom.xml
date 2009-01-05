@@ -10,6 +10,10 @@
   <artifactId>modello-plugins</artifactId>
   <packaging>pom</packaging>
   <name>Modello Plugins</name>
+  <description>
+    Modello Plugins is the main component containing every Modello plugins that are able to generate various types of
+    code and descriptors.
+  </description>
 
   <modules>
     <module>modello-plugin-java</module>

@@ -9,6 +9,10 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>modello-plugin-stax</artifactId>
   <name>Modello StAX Plugin</name>
+  <description>
+    Modello StAX Plugin generates XML readers and writers based on StAX API, plus reader delegates to be able to read
+    multiple model versions.
+  </description>
 
   <dependencies>
     <dependency>

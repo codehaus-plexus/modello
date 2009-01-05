@@ -10,6 +10,9 @@
   <groupId>org.codehaus.modello</groupId>
   <artifactId>modello-core</artifactId>
   <name>Modello Core</name>
+  <description>
+    Modello Core contains the basis for model description, reading, and plugins system.
+  </description>
 
   <dependencies>
     <dependency>

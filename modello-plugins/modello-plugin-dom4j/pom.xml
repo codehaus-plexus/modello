@@ -9,6 +9,9 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>modello-plugin-dom4j</artifactId>
   <name>Modello Dom4J Plugin</name>
+  <description>
+    Modello Dom4J Plugin generates XML readers and writers based on Dom4J API.
+  </description>
 
   <dependencies>
     <dependency>
