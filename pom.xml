@@ -122,7 +122,7 @@
       <timezone>-5</timezone>
     </developer>
     <developer>
-      <name>Arnaud Heritier</name>
+      <name>Arnaud Héritier</name>
       <email>aheritier@gmail.com</email>
       <roles>
         <role>Developer</role>
@@ -138,7 +138,7 @@
       <timezone>+1</timezone>
     </developer>
     <developer>
-      <name>Herve Boutemy</name>
+      <name>Hervé Boutemy</name>
       <email>hboutemy@codehaus.org</email>
       <roles>
         <role>Developer</role>
