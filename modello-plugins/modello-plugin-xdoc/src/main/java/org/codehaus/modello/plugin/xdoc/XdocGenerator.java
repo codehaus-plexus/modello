@@ -126,9 +126,7 @@ public class XdocGenerator
         w.startElement( "properties" );
 
         w.startElement( "title" );
-
         w.writeText( objectModel.getName() );
-
         w.endElement();
 
         w.endElement();
@@ -136,8 +134,6 @@ public class XdocGenerator
         // Body
 
         w.startElement( "body" );
-
-        // Descriptor with links
 
         w.startElement( "section" );
 
@@ -156,14 +152,12 @@ public class XdocGenerator
 
         w.endElement();
 
+        // XML representation of the model with links
         w.startElement( "source" );
 
-        StringBuffer sb = new StringBuffer();
-
         ModelClass root = objectModel.getClass( objectModel.getRoot( getGeneratedVersion() ), getGeneratedVersion() );
-        sb.append( getModelClassDescriptor( root, null, 0 ) );
 
-        w.writeMarkup( "\n" + sb );
+        w.writeMarkup( "\n" + getXmlDescriptor( root, null, 0 ) );
 
         w.endElement();
 
@@ -430,13 +424,13 @@ public class XdocGenerator
 
     }
 
-    private String getModelClassDescriptor( ModelClass modelClass, ModelAssociation association, int depth )
+    private String getXmlDescriptor( ModelClass modelClass, ModelAssociation association, int depth )
     {
-        return getModelClassDescriptor( modelClass, association, depth, true );
+        return getXmlDescriptor( modelClass, association, depth, true );
     }
 
     /**
-     * Build the pretty tree describing the model. This method is recursive.
+     * Build the pretty tree describing the XML representation of the model. This method is recursive.
      * @param modelClass the class we are printing the model
      * @param association the association we are coming from (can be <code>null</code>)
      * @param depth how deep we currently are (for spacers purpose)
@@ -444,7 +438,8 @@ public class XdocGenerator
      * @return the String representing the tree model
      * @throws ModelloRuntimeException
      */
-    private String getModelClassDescriptor( ModelClass modelClass, ModelAssociation association, int depth, boolean recursive )
+    private String getXmlDescriptor( ModelClass modelClass, ModelAssociation association, int depth,
+                                          boolean recursive )
         throws ModelloRuntimeException
     {
         StringBuffer sb = new StringBuffer();
@@ -515,11 +510,11 @@ public class XdocGenerator
                     if ( ( modelClass.getName().equals( fieldModelClass.getName() ) )
                         && ( modelClass.getPackageName().equals( fieldModelClass.getPackageName() ) ) )
                     {
-                        sb.append( getModelClassDescriptor( fieldModelClass, assoc, depth + 1, false ) );
+                        sb.append( getXmlDescriptor( fieldModelClass, assoc, depth + 1, false ) );
                     }
                     else
                     {
-                        sb.append( getModelClassDescriptor( fieldModelClass, assoc, depth + 1 ) );
+                        sb.append( getXmlDescriptor( fieldModelClass, assoc, depth + 1 ) );
                     }
 
                     if ( listStyleWrapped )
