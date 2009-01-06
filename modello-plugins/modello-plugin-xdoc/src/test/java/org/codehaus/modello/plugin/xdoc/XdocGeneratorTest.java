@@ -30,12 +30,19 @@ import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.Version;
 import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
+import org.codehaus.modello.verifier.VerifierException;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.ReaderFactory;
 
 import java.io.File;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import junit.framework.Assert;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -103,6 +110,7 @@ public class XdocGeneratorTest
         //addDependency( "modello", "modello-core", "1.0-SNAPSHOT" );
 
         //verify( "org.codehaus.modello.generator.xml.cdoc.XdocVerifier", "xdoc" );
+        checkInternalLinks( new File( generatedSources, "maven.xml" ) );
     }
 
     public void testFeaturesXdocGenerator()
@@ -120,5 +128,44 @@ public class XdocGeneratorTest
         Model model = modello.loadModel( getModelResource( "/features.mdo" ) );
 
         modello.generate( model, "xdoc", parameters );
+
+        checkInternalLinks( new File( generatedSources, "features.xml" ) );
+    }
+
+    /**
+     * Checks internal links in the xdoc content: for every 'a href="#xxx"' link, a 'a name="xxx"' must exist (or there
+     * is a problem in the generated content).
+     *
+     * @param xdoc
+     * @throws Exception
+     */
+    private void checkInternalLinks( File xdoc )
+        throws Exception
+    {
+        String content = FileUtils.fileRead( xdoc, "UTF-8" );
+
+        Set hrefs = new HashSet();
+        Pattern p = Pattern.compile( "<a href=\"#(class_[^\"]+)\"", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE );
+        Matcher m = p.matcher( content );
+        while ( m.find() )
+        {
+            hrefs.add( m.group( 1 ) );
+        }
+        Assert.assertTrue( "should find some '<a href=' links", hrefs.size() > 0 );
+
+        Set names = new HashSet();
+        p = Pattern.compile( "<a name=\"(class_[^\"]+)\"", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE );
+        m = p.matcher( content );
+        while ( m.find() )
+        {
+            names.add( m.group( 1 ) );
+        }
+        Assert.assertTrue( "should find some '<a name=' anchor definitions", names.size() > 0 );
+
+        hrefs.removeAll( names );
+        if ( hrefs.size() > 0 )
+        {
+            throw new VerifierException( "some internal hrefs in " + xdoc.getName() + " are not defined: " + hrefs );
+        }
     }
 }
