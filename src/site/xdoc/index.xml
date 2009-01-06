@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+
+<document>
+
+  <properties>
+    <title>Modello</title>
+    <author email="hboutemy_AT_apache_DOT_org">Hervé Boutemy</author>
+  </properties>
+
+  <body>
+
+    <section name="Modello">
+
+      <p>Modello is a framework for code generation from a simple model.
+    Modello generates code from a simple model format: based on a plugin architecture, various types of code and
+    descriptors can be generated from the single model, including Java POJOs, XML marshallers/unmarshallers, XSD
+    and documentation.</p>
+
+      <p>
+        <!-- workaround for DOXIA-227: usemap attribute is stripped (fixed in Doxia 1.1, was 1.0-beta-1) -->
+        <script type="text/javascript">
+          tag='<img src="modello-deps.png" width="730" height="326" border="0" usemap="#Modello_dependencies" />';
+          tag=tag.substring(0,tag.length-2)+' usemap=\'#Modello_dependencies\''+tag.substring(tag.length-2);
+          document.write(tag);
+        </script>
+        <map name="Modello_dependencies">
+          <area shape="rect" coords="252,294,374,325" href="modello-test/" />
+          <area shape="rect" coords="252,243,374,273" href="modello-core/" />
+          <area shape="rect" coords="189,188,311,218" href="modello-plugins/modello-plugin-java/" />
+          <area shape="rect" coords="317,188,440,219" href="modello-plugins/modello-plugin-xml/" />
+          <area shape="rect" coords="4,136,155,167" href="modello-plugins/modello-plugin-converters/" />
+          <area shape="rect" coords="472,136,594,167" href="modello-plugins/modello-plugin-xdoc/" />
+          <area shape="rect" coords="600,136,723,167" href="modello-plugins/modello-plugin-xsd/" />
+          <area shape="rect" coords="60,84,182,115" href="modello-plugins/modello-plugin-dom4j/" />
+          <area shape="rect" coords="188,84,311,115" href="modello-plugins/modello-plugin-jdom/" />
+          <area shape="rect" coords="317,84,439,115" href="modello-plugins/modello-plugin-stax/" />
+          <area shape="rect" coords="446,84,568,115" href="modello-plugins/modello-plugin-xpp3/" />
+          <area shape="rect" coords="1,76,729,228" href="modello-plugins/" />
+          <area shape="rect" coords="242,0,386,31" href="modello-maven-plugin/" />
+          <area shape="rect" coords="421,294,542,325" href="http://plexus.codehaus.org/" />
+          <area shape="rect" coords="416,34,576,64" href="http://maven.apache.org/ref/current/maven-plugin-api/" />
+          <area shape="rect" coords="582,34,705,64" href="http://maven.apache.org/ref/current/maven-project/" />
+        </map>
+      </p>
+
+    </section>
+
+  </body>
+
+</document>
