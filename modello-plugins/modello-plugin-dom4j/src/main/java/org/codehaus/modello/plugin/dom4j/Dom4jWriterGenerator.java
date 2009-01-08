@@ -423,6 +423,7 @@ public class Dom4jWriterGenerator
     private void writeHelpers( JClass jClass )
     {
         JMethod method = new JMethod( "writeXpp3DomToElement" );
+        method.getModifiers().makePrivate();
 
         method.addParameter( new JParameter( new JClass( "Xpp3Dom" ), "xpp3Dom" ) );
         method.addParameter( new JParameter( new JClass( "Element" ), "parentElement" ) );
