@@ -536,6 +536,7 @@ public class StaxWriterGenerator
     private void createWriteDomMethod( JClass jClass )
     {
         JMethod method = new JMethod( "writeDom" );
+        method.getModifiers().makePrivate();
 
         method.addParameter( new JParameter( new JType( "Xpp3Dom" ), "dom" ) );
         method.addParameter( new JParameter( new JType( "XMLStreamWriter" ), "serializer" ) );

@@ -362,6 +362,7 @@ public class StaxReaderGenerator
         VersionDefinition versionDefinition = objectModel.getVersionDefinition();
 
         JMethod method = new JMethod( "determineVersion", new JClass( "String" ), null );
+        method.getModifiers().makePrivate();
 
         method.addParameter( new JParameter( new JClass( "Reader" ), "reader" ) );
 
@@ -437,6 +438,7 @@ public class StaxReaderGenerator
     private static void writeFieldVersionGetMethod( ModelField field, JClass jClass )
     {
         JMethod method = new JMethod( "getVersionFromField", new JType( "String" ), null );
+        method.getModifiers().makePrivate();
         method.addParameter( new JParameter( new JType( "XMLStreamReader" ), "xmlStreamReader" ) );
         method.addException( new JClass( "XMLStreamException" ) );
         jClass.addMethod( method );
@@ -498,6 +500,7 @@ public class StaxReaderGenerator
     private static void writeNamespaceVersionGetMethod( String namespace, JClass jClass )
     {
         JMethod method = new JMethod( "getVersionFromRootNamespace", new JType( "String" ), null );
+        method.getModifiers().makePrivate();
         method.addParameter( new JParameter( new JType( "XMLStreamReader" ), "xmlStreamReader" ) );
         method.addException( new JClass( "XMLStreamException" ) );
         jClass.addMethod( method );
@@ -1375,6 +1378,7 @@ public class StaxReaderGenerator
     private void writeBuildDomMethod( JClass jClass )
     {
         JMethod method = new JMethod( "buildDom", new JType( "Xpp3Dom" ), null );
+        method.getModifiers().makePrivate();
         method.addParameter( new JParameter( new JType( "XMLStreamReader" ), "xmlStreamReader" ) );
         method.addException( new JClass( "XMLStreamException" ) );
 
