@@ -95,13 +95,12 @@ public class JDOMWriterGenerator
         jClass.addImport( "org.jdom.output.XMLOutputter" );
         jClass.addImport( "org.codehaus.plexus.util.xml.Xpp3Dom" );
 
-//        jClass.addImport( "" );
         addModelImports( jClass, null );
 
         jClass.addField( new JField( new JClass( "DefaultJDOMFactory" ), "factory" ) );
         jClass.addField( new JField( new JClass( "String" ), "lineSeparator" ) );
 
-        createConter( jClass );
+        createCounter( jClass );
 
         // constructor --
         JConstructor constructor = jClass.createConstructor();
@@ -127,28 +126,32 @@ public class JDOMWriterGenerator
         sourceWriter.close();
     }
 
-    private void createConter( final JClass jClass )
+    private void createCounter( final JClass jClass )
         throws IllegalArgumentException
     {
-        //inner counter class
+        // inner counter class
         JClass counter = jClass.createInnerClass( "Counter" );
         counter.getModifiers().setStatic( true );
+
         JField fld = new JField( new JType( "int" ), "currentIndex" );
         fld.setInitString( "0" );
         counter.addField( fld );
+
         fld = new JField( new JType( "int" ), "level" );
         counter.addField( fld );
 
         JConstructor constr =
-            counter.createConstructor( new JParameter[]{new JParameter( new JType( "int" ), "depthLevel" )} );
+            counter.createConstructor( new JParameter[] { new JParameter( new JType( "int" ), "depthLevel" ) } );
         constr.getSourceCode().append( "level = depthLevel;" );
 
         JMethod inc = new JMethod( "increaseCount" );
         inc.getSourceCode().add( "currentIndex = currentIndex + 1;" );
         counter.addMethod( inc );
+
         JMethod getter = new JMethod( "getCurrentIndex", new JType( "int" ), null );
         getter.getSourceCode().add( "return currentIndex;" );
         counter.addMethod( getter );
+
         getter = new JMethod( "getDepth", new JType( "int" ), null );
         getter.getSourceCode().add( "return level;" );
         counter.addMethod( getter );
@@ -166,13 +169,13 @@ public class JDOMWriterGenerator
         marshall.getJDocComment().appendComment( "\n@deprecated" );
 
         JSourceCode sc = marshall.getSourceCode();
-        sc.add( "update" + root + "(" + rootElement + ", \"" + rootElement
-            + "\", new Counter(0), document.getRootElement());" );
+        sc.add( "update" + root + "( " + rootElement + ", \"" + rootElement
+                + "\", new Counter( 0 ), document.getRootElement() );" );
         sc.add( "XMLOutputter outputter = new XMLOutputter();" );
-        sc.add( "outputter.setFormat(Format.getPrettyFormat()" );
-        sc.add( ".setIndent(\"    \")" );
-        sc.add( ".setLineSeparator(System.getProperty(\"line.separator\")));" );
-        sc.add( "outputter.output(document, stream);" );
+        sc.add( "outputter.setFormat( Format.getPrettyFormat()" );
+        sc.add( "    .setIndent( \"    \" )" );
+        sc.add( "    .setLineSeparator( System.getProperty( \"line.separator\" ) ) );" );
+        sc.add( "outputter.output( document, stream );" );
 
         return marshall;
 
@@ -189,9 +192,9 @@ public class JDOMWriterGenerator
 
         JSourceCode sc = marshall.getSourceCode();
         sc.add( "Format format = Format.getRawFormat()" );
-        sc.add( ".setEncoding(writer.getEncoding())" );
-        sc.add( ".setLineSeparator(System.getProperty(\"line.separator\"));" );
-        sc.add( "write(" + rootElement + ", document, writer, format);" );
+        sc.add( "    .setEncoding( writer.getEncoding() )" );
+        sc.add( "    .setLineSeparator( System.getProperty( \"line.separator\" ) );" );
+        sc.add( "write( " + rootElement + ", document, writer, format );" );
         return marshall;
 
     }
@@ -207,11 +210,11 @@ public class JDOMWriterGenerator
         marshall.addException( new JClass( "java.io.IOException" ) );
 
         JSourceCode sc = marshall.getSourceCode();
-        sc.add( "update" + root + "(" + rootElement + ", \"" + rootElement
-            + "\", new Counter(0), document.getRootElement());" );
+        sc.add( "update" + root + "( " + rootElement + ", \"" + rootElement
+            + "\", new Counter( 0 ), document.getRootElement() );" );
         sc.add( "XMLOutputter outputter = new XMLOutputter();" );
-        sc.add( "outputter.setFormat(jdomFormat);" );
-        sc.add( "outputter.output(document, writer);" );
+        sc.add( "outputter.setFormat( jdomFormat );" );
+        sc.add( "outputter.output( document, writer );" );
 
         return marshall;
 
@@ -228,20 +231,23 @@ public class JDOMWriterGenerator
 
         findRSElement.getModifiers().makeProtected();
         JSourceCode sc = findRSElement.getSourceCode();
-        sc.add( "if (defaultValue != null && text != null && defaultValue.equals(text)) {" );
+        sc.add( "if ( ( defaultValue != null ) && ( text != null ) && defaultValue.equals( text ) )" );
+        sc.add( "{" );
         sc.indent();
-        sc.add( "Element element =  parent.getChild(name, parent.getNamespace());" );
+        sc.add( "Element element =  parent.getChild( name, parent.getNamespace() );" );
         sc.add( "// if exist and is default value or if doesn't exist.. just keep the way it is.." );
-        sc.add( "if ((element != null && defaultValue.equals(element.getText())) || element == null) {" );
+        sc.add( "if ( ( element != null && defaultValue.equals( element.getText() ) ) || element == null )" );
+        sc.add( "{" );
         sc.addIndented( "return element;" );
         sc.add( "}" );
         sc.unindent();
         sc.add( "}" );
 
-        sc.add( "boolean shouldExist = text != null && text.trim().length() > 0;" );
-        sc.add( "Element element = updateElement(counter, parent, name, shouldExist);" );
-        sc.add( "if (shouldExist) {" );
-        sc.addIndented( "element.setText(text);" );
+        sc.add( "boolean shouldExist = ( text != null ) && ( text.trim().length() > 0 );" );
+        sc.add( "Element element = updateElement( counter, parent, name, shouldExist );" );
+        sc.add( "if ( shouldExist )" );
+        sc.add( "{" );
+        sc.addIndented( "element.setText( text );" );
         sc.add( "}" );
         sc.add( "return element;" );
 
@@ -252,34 +258,40 @@ public class JDOMWriterGenerator
         updateElement.addParameter( new JParameter( new JType( "boolean" ), "shouldExist" ) );
         updateElement.getModifiers().makeProtected();
         sc = updateElement.getSourceCode();
-        sc.add( "Element element =  parent.getChild(name, parent.getNamespace());" );
-        sc.add( "if (element != null && shouldExist) {" );
+        sc.add( "Element element =  parent.getChild( name, parent.getNamespace() );" );
+        sc.add( "if ( element != null && shouldExist )" );
+        sc.add( "{" );
         sc.addIndented( "counter.increaseCount();" );
         sc.add( "}" );
-        sc.add( "if (element == null && shouldExist) {" );
+        sc.add( "if ( element == null && shouldExist )" );
+        sc.add( "{" );
         sc.indent();
-        sc.add( "element = factory.element(name, parent.getNamespace());" );
-        sc.add( "insertAtPreferredLocation(parent, element, counter);" );
+        sc.add( "element = factory.element( name, parent.getNamespace() );" );
+        sc.add( "insertAtPreferredLocation( parent, element, counter );" );
         sc.add( "counter.increaseCount();" );
         sc.unindent();
         sc.add( "}" );
-        sc.add( "if (!shouldExist && element != null) {" );
+        sc.add( "if ( !shouldExist && element != null )" );
+        sc.add( "{" );
         sc.indent();
-        sc.add( "int index = parent.indexOf(element);" );
-        sc.add( "if (index > 0) {" );
+        sc.add( "int index = parent.indexOf( element );" );
+        sc.add( "if ( index > 0 )" );
+        sc.add( "{" );
         sc.indent();
-        sc.add( "Content previous = parent.getContent(index - 1);" );
-        sc.add( "if (previous instanceof Text) {" );
+        sc.add( "Content previous = parent.getContent( index - 1 );" );
+        sc.add( "if ( previous instanceof Text )" );
+        sc.add( "{" );
         sc.indent();
-        sc.add( "Text txt = (Text)previous;" );
-        sc.add( "if (txt.getTextTrim().length() == 0) {" );
-        sc.addIndented( "parent.removeContent(txt);" );
+        sc.add( "Text txt = (Text) previous;" );
+        sc.add( "if ( txt.getTextTrim().length() == 0 )" );
+        sc.add( "{" );
+        sc.addIndented( "parent.removeContent( txt );" );
         sc.add( "}" );
         sc.unindent();
         sc.add( "}" );
         sc.unindent();
         sc.add( "}" );
-        sc.add( "parent.removeContent(element);" );
+        sc.add( "parent.removeContent( element );" );
         sc.unindent();
         sc.add( "}" );
         sc.add( "return element;" );
@@ -295,59 +307,69 @@ public class JDOMWriterGenerator
         sc.add( "Iterator it = parent.getContent().iterator();" );
         sc.add( "Text lastText = null;" );
         sc.add( "int offset = 0;" );
-        sc.add( "while (it.hasNext() && elementCounter <= counter.getCurrentIndex()) {" );
+        sc.add( "while ( it.hasNext() && elementCounter <= counter.getCurrentIndex() )" );
+        sc.add( "{" );
         sc.indent();
         sc.add( "Object next = it.next();" );
         sc.add( "offset = offset + 1;" );
-        sc.add( "if (next instanceof Element) {" );
+        sc.add( "if ( next instanceof Element )" );
+        sc.add( "{" );
         sc.indent();
         sc.add( "elementCounter = elementCounter + 1;" );
         sc.add( "contentIndex = contentIndex + offset;" );
         sc.add( "offset = 0;" );
         sc.unindent();
         sc.add( "}" );
-        sc.add( "if (next instanceof Text && it.hasNext()) {" );
-        sc.addIndented( "lastText = (Text)next;" );
+        sc.add( "if ( next instanceof Text && it.hasNext() )" );
+        sc.add( "{" );
+        sc.addIndented( "lastText = (Text) next;" );
         sc.add( "}" );
         sc.unindent();
         sc.add( "}" );
-//        sc.add("if (lastText == null) {");
+//        sc.add("if ( lastText == null )" );
+//        sc.add( "{" );
 //        sc.indent();
-//        sc.add("int index = parent.getParentElement().indexOf(parent);");
-//        sc.add("if (index > 0) {");
+//        sc.add( "int index = parent.getParentElement().indexOf( parent );" );
+//        sc.add( "if ( index > 0 ) ");
+//        sc.add( "{" );
 //        sc.indent();
-//        sc.add("Content cont = parent.getParentElement().getContent( index  - 1);");
-//        sc.add("if (cont instanceof Text) {");
-//        sc.addIndented("lastText = (Text)cont;");
-//        sc.add("}");
+//        sc.add( "Content cont = parent.getParentElement().getContent( index  - 1 );" );
+//        sc.add( "if ( cont instanceof Text )" );
+//        sc.add( "{" );
+//        sc.addIndented( "lastText = (Text) cont;" );
+//        sc.add( "}" );
 //        sc.unindent();
-//        sc.add("}");
+//        sc.add( "}" );
 //        sc.unindent();
-//        sc.add("}");
+//        sc.add( "}" );
 
-        sc.add( "if (lastText != null && lastText.getTextTrim().length() == 0) {" );
-        sc.addIndented( "lastText = (Text)lastText.clone();" );
-        sc.add( "} else {" );
+        sc.add( "if ( lastText != null && lastText.getTextTrim().length() == 0 )" );
+        sc.add( "{" );
+        sc.addIndented( "lastText = (Text) lastText.clone();" );
+        sc.add( "}" );
+        sc.add( "else" );
+        sc.add( "{" );
         sc.indent();
         sc.add( "String starter = lineSeparator;" );
-        sc.add( "for (int i = 0; i < counter.getDepth(); i++) {" );
-        sc.indent();
-        sc.add( "starter = starter + \"    \"; //TODO make settable?" );
+        sc.add( "for ( int i = 0; i < counter.getDepth(); i++ )" );
+        sc.add( "{" );
+        sc.addIndented( "starter = starter + \"    \"; //TODO make settable?" );
+        sc.add( "}" );
+        sc.add( "lastText = factory.text( starter );" );
         sc.unindent();
         sc.add( "}" );
-        sc.add( "lastText = factory.text(starter);" );
-        sc.unindent();
-        sc.add( "}" );
-        sc.add( "if (parent.getContentSize() == 0) {" );
+        sc.add( "if ( parent.getContentSize() == 0 )" );
+        sc.add( "{" );
         sc.indent();
-        sc.add( "Text finalText = (Text)lastText.clone();" );
+        sc.add( "Text finalText = (Text) lastText.clone();" );
         sc.add(
-            "finalText.setText(finalText.getText().substring(0, finalText.getText().length() - \"    \".length()));" );
-        sc.add( "parent.addContent(contentIndex, finalText);" );
+            "finalText.setText( finalText.getText().substring( 0, finalText.getText().length() - \"    \".length() ) );"
+            );
+        sc.add( "parent.addContent( contentIndex, finalText );" );
         sc.unindent();
         sc.add( "}" );
-        sc.add( "parent.addContent(contentIndex, child);" );
-        sc.add( "parent.addContent(contentIndex, lastText);" );
+        sc.add( "parent.addContent( contentIndex, child );" );
+        sc.add( "parent.addContent( contentIndex, lastText );" );
 
         JMethod findRSProps = new JMethod( "findAndReplaceProperties", new JClass( "Element" ), null );
         findRSProps.addParameter( new JParameter( new JClass( "Counter" ), "counter" ) );
@@ -356,25 +378,29 @@ public class JDOMWriterGenerator
         findRSProps.addParameter( new JParameter( new JClass( "Map" ), "props" ) );
         findRSProps.getModifiers().makeProtected();
         sc = findRSProps.getSourceCode();
-        sc.add( "boolean shouldExist = props != null && ! props.isEmpty();" );
-        sc.add( "Element element = updateElement(counter, parent, name, shouldExist);" );
-        sc.add( "if (shouldExist) {" );
+        sc.add( "boolean shouldExist = ( props != null ) && ! props.isEmpty();" );
+        sc.add( "Element element = updateElement( counter, parent, name, shouldExist );" );
+        sc.add( "if ( shouldExist )" );
+        sc.add( "{" );
         sc.indent();
         sc.add( "Iterator it = props.keySet().iterator();" );
-        sc.add( "Counter innerCounter = new Counter(counter.getDepth() + 1);" );
-        sc.add( "while (it.hasNext()) {" );
+        sc.add( "Counter innerCounter = new Counter( counter.getDepth() + 1 );" );
+        sc.add( "while ( it.hasNext() )" );
+        sc.add( "{" );
         sc.indent();
         sc.add( "String key = (String) it.next();" );
-        sc.add( "findAndReplaceSimpleElement(innerCounter, element, key, (String)props.get(key), null);" );
+        sc.add( "findAndReplaceSimpleElement( innerCounter, element, key, (String) props.get( key ), null );" );
         sc.add( "}" );
         sc.unindent();
-        sc.add( "ArrayList lst = new ArrayList(props.keySet());" );
+        sc.add( "ArrayList lst = new ArrayList( props.keySet() );" );
         sc.add( "it = element.getChildren().iterator();" );
-        sc.add( "while (it.hasNext()) {" );
+        sc.add( "while ( it.hasNext() )" );
+        sc.add( "{" );
         sc.indent();
         sc.add( "Element elem = (Element) it.next();" );
         sc.add( "String key = elem.getName();" );
-        sc.add( "if (!lst.contains(key)) {" );
+        sc.add( "if ( !lst.contains( key ) )" );
+        sc.add( "{" );
         sc.addIndented( "it.remove();" );
         sc.add( "}" );
         sc.unindent();
@@ -391,37 +417,50 @@ public class JDOMWriterGenerator
         findRSLists.addParameter( new JParameter( new JClass( "String" ), "childName" ) );
         findRSLists.getModifiers().makeProtected();
         sc = findRSLists.getSourceCode();
-        sc.add( "boolean shouldExist = list != null && list.size() > 0;" );
-        sc.add( "Element element = updateElement(counter, parent, parentName, shouldExist);" );
-        sc.add( "if (shouldExist) {" );
+        sc.add( "boolean shouldExist = ( list != null ) && ( list.size() > 0 );" );
+        sc.add( "Element element = updateElement( counter, parent, parentName, shouldExist );" );
+        sc.add( "if ( shouldExist )" );
+        sc.add( "{" );
         sc.indent();
         sc.add( "Iterator it = list.iterator();" );
-        sc.add( "Iterator elIt = element.getChildren(childName, element.getNamespace()).iterator();" );
-        sc.add( "if (! elIt.hasNext()) elIt = null;" );
-        sc.add( "Counter innerCount = new Counter(counter.getDepth() + 1);" );
-        sc.add( "while (it.hasNext()) {" );
+        sc.add( "Iterator elIt = element.getChildren( childName, element.getNamespace() ).iterator();" );
+        sc.add( "if ( ! elIt.hasNext() )" );
+        sc.add( "{" );
+        sc.addIndented( " elIt = null;" );
+        sc.add( "}" );
+        sc.add( "Counter innerCount = new Counter( counter.getDepth() + 1 );" );
+        sc.add( "while ( it.hasNext() )" );
+        sc.add( "{" );
         sc.indent();
         sc.add( "String value = (String) it.next();" );
         sc.add( "Element el;" );
-        sc.add( "if (elIt != null && elIt.hasNext()) {" );
+        sc.add( "if ( elIt != null && elIt.hasNext() )" );
+        sc.add( "{" );
         sc.indent();
         sc.add( "el = (Element) elIt.next();" );
-        sc.add( "if (! elIt.hasNext()) elIt = null;" );
-        sc.unindent();
-        sc.add( "} else {" );
-        sc.indent();
-        sc.add( "el = factory.element(childName, element.getNamespace());" );
-        sc.add( "insertAtPreferredLocation(element, el, innerCount);" );
+        sc.add( "if ( ! elIt.hasNext() )" );
+        sc.add( "{" );
+        sc.addIndented( "elIt = null;" );
+        sc.add( "}" );
         sc.unindent();
         sc.add( "}" );
-        sc.add( "el.setText(value);" );
+        sc.add( "else" );
+        sc.add( "{" );
+        sc.indent();
+        sc.add( "el = factory.element( childName, element.getNamespace() );" );
+        sc.add( "insertAtPreferredLocation( element, el, innerCount );" );
+        sc.unindent();
+        sc.add( "}" );
+        sc.add( "el.setText( value );" );
         sc.add( "innerCount.increaseCount();" );
 
         sc.unindent();
         sc.add( "}" );
-        sc.add( "if (elIt != null) {" );
+        sc.add( "if ( elIt != null )" );
+        sc.add( "{" );
         sc.indent();
-        sc.add( "while (elIt.hasNext()) {" );
+        sc.add( "while ( elIt.hasNext() )" );
+        sc.add( "{" );
         sc.indent();
         sc.add( "elIt.next();" );
         sc.add( "elIt.remove();" );
@@ -440,10 +479,11 @@ public class JDOMWriterGenerator
         findRSDom.addParameter( new JParameter( new JClass( "Xpp3Dom" ), "dom" ) );
         findRSDom.getModifiers().makeProtected();
         sc = findRSDom.getSourceCode();
-        sc.add( "boolean shouldExist = dom != null && (dom.getChildCount() > 0 || dom.getValue() != null);" );
-        sc.add( "Element element = updateElement(counter, parent, name, shouldExist);" );
-        sc.add( "if (shouldExist) {" );
-        sc.addIndented( "replaceXpp3DOM(element, dom, new Counter(counter.getDepth() + 1));" );
+        sc.add( "boolean shouldExist = ( dom != null ) && ( dom.getChildCount() > 0 || dom.getValue() != null );" );
+        sc.add( "Element element = updateElement( counter, parent, name, shouldExist );" );
+        sc.add( "if ( shouldExist )" );
+        sc.add( "{" );
+        sc.addIndented( "replaceXpp3DOM( element, dom, new Counter( counter.getDepth() + 1 ) );" );
         sc.add( "}" );
         sc.add( "return element;" );
 
@@ -453,23 +493,28 @@ public class JDOMWriterGenerator
         findRSDom2.addParameter( new JParameter( new JClass( "Counter" ), "counter" ) );
         findRSDom2.getModifiers().makeProtected();
         sc = findRSDom2.getSourceCode();
-        sc.add( "if (parentDom.getChildCount() > 0) {" );
+        sc.add( "if ( parentDom.getChildCount() > 0 )" );
+        sc.add( "{" );
         sc.indent();
         sc.add( "Xpp3Dom[] childs = parentDom.getChildren();" );
         sc.add( "Collection domChilds = new ArrayList();" );
-        sc.add( "for (int i = 0; i < childs.length; i++) {" );
-        sc.addIndented( "domChilds.add(childs[i]);" );
+        sc.add( "for ( int i = 0; i < childs.length; i++ )" );
+        sc.add( "{" );
+        sc.addIndented( "domChilds.add( childs[i] );" );
         sc.add( "}" );
         sc.add( "ListIterator it = parent.getChildren().listIterator();" );
-        sc.add( "while (it.hasNext()) {" );
+        sc.add( "while ( it.hasNext() )" );
+        sc.add( "{" );
         sc.indent();
         sc.add( "Element elem = (Element) it.next();" );
         sc.add( "Iterator it2 = domChilds.iterator();" );
         sc.add( "Xpp3Dom corrDom = null;" );
-        sc.add( "while (it2.hasNext()) {" );
+        sc.add( "while ( it2.hasNext() )" );
+        sc.add( "{" );
         sc.indent();
-        sc.add( "Xpp3Dom dm = (Xpp3Dom)it2.next();" );
-        sc.add( "if (dm.getName().equals(elem.getName())) {" );
+        sc.add( "Xpp3Dom dm = (Xpp3Dom) it2.next();" );
+        sc.add( "if ( dm.getName().equals( elem.getName() ) )" );
+        sc.add( "{" );
         sc.indent();
         sc.add( "corrDom = dm;" );
         sc.add( "break;" );
@@ -477,30 +522,36 @@ public class JDOMWriterGenerator
         sc.add( "}" );
         sc.unindent();
         sc.add( "}" );
-        sc.add( "if (corrDom != null) {" );
+        sc.add( "if ( corrDom != null )" );
+        sc.add( "{" );
         sc.indent();
-        sc.add( "domChilds.remove(corrDom);" );
-        sc.add( "replaceXpp3DOM(elem, corrDom, new Counter(counter.getDepth() + 1));" );
+        sc.add( "domChilds.remove( corrDom );" );
+        sc.add( "replaceXpp3DOM( elem, corrDom, new Counter( counter.getDepth() + 1 ) );" );
         sc.add( "counter.increaseCount();" );
         sc.unindent();
-        sc.add( "} else {" );
+        sc.add( "}" );
+        sc.add( "else" );
+        sc.add( "{" );
         sc.addIndented( "it.remove();" );
         sc.add( "}" );
         sc.unindent();
         sc.add( "}" );
         sc.add( "Iterator it2 = domChilds.iterator();" );
-        sc.add( "while (it2.hasNext()) {" );
+        sc.add( "while ( it2.hasNext() )" );
+        sc.add( "{" );
         sc.indent();
         sc.add( "Xpp3Dom dm = (Xpp3Dom) it2.next();" );
-        sc.add( "Element elem = factory.element(dm.getName(), parent.getNamespace());" );
-        sc.add( "insertAtPreferredLocation(parent, elem, counter);" );
+        sc.add( "Element elem = factory.element( dm.getName(), parent.getNamespace() );" );
+        sc.add( "insertAtPreferredLocation( parent, elem, counter );" );
         sc.add( "counter.increaseCount();" );
-        sc.add( "replaceXpp3DOM(elem, dm, new Counter(counter.getDepth() + 1));" );
+        sc.add( "replaceXpp3DOM( elem, dm, new Counter( counter.getDepth() + 1 ) );" );
         sc.unindent();
         sc.add( "}" );
         sc.unindent();
-        sc.add( "} else if (parentDom.getValue() != null) {" );
-        sc.addIndented( "parent.setText(parentDom.getValue());" );
+        sc.add( "}" );
+        sc.add( " else if ( parentDom.getValue() != null )" );
+        sc.add( "{" );
+        sc.addIndented( "parent.setText( parentDom.getValue() );" );
         sc.add( "}" );
 
         return new JMethod[]{findRSElement, updateElement, insAtPref, findRSProps, findRSLists, findRSDom, findRSDom2};
@@ -553,12 +604,13 @@ public class JDOMWriterGenerator
         }
         else
         {
-            sc.add( "boolean shouldExist = value != null;" );
-            sc.add( "Element root = updateElement(counter, element, xmlTag, shouldExist);" );
-            sc.add( "if (shouldExist) {" );
+            sc.add( "boolean shouldExist = ( value != null );" );
+            sc.add( "Element root = updateElement( counter, element, xmlTag, shouldExist );" );
+            sc.add( "if ( shouldExist )" );
+            sc.add( "{" );
             sc.indent();
         }
-        sc.add( "Counter innerCount = new Counter(counter.getDepth() + 1);" );
+        sc.add( "Counter innerCount = new Counter( counter.getDepth() + 1 );" );
 
         for ( Iterator i = clazz.getAllFields( getGeneratedVersion(), true ).iterator(); i.hasNext(); )
         {
@@ -589,7 +641,7 @@ public class JDOMWriterGenerator
                 if ( ModelAssociation.ONE_MULTIPLICITY.equals( association.getMultiplicity() ) )
                 {
                     sc.add( "update" + capitalise( field.getType() ) + "( " + value + ", \"" + fieldTagName
-                        + "\", innerCount, root);" );
+                        + "\", innerCount, root );" );
                 }
                 else
                 {
@@ -606,14 +658,15 @@ public class JDOMWriterGenerator
                         {
                             if (wrappedList)
                             {
-                                sc.add( "iterate" + capitalise( toType ) + "(innerCount, root, " + value + ",\""
-                                    + field.getName() + "\",\"" + singular( fieldTagName ) + "\");" );
+                                sc.add( "iterate" + capitalise( toType ) + "( innerCount, root, " + value + ",\""
+                                    + field.getName() + "\",\"" + singular( fieldTagName ) + "\" );" );
                                 createIterateMethod( field.getName(), toClass, singular( fieldTagName ), jClass );
                             }
                             else
                             {
                                 //assume flat..
-                                sc.add( "iterate2" + capitalise( toType ) + "(innerCount, root, " + value + ",\"" + singular( fieldTagName ) + "\");" );
+                                sc.add( "iterate2" + capitalise( toType ) + "( innerCount, root, " + value + ", \""
+                                        + singular( fieldTagName ) + "\" );" );
                                 createIterateMethod2( field.getName(), toClass, singular( fieldTagName ), jClass );
                             }
                             alwaysExisting.add( toClass );
@@ -621,15 +674,15 @@ public class JDOMWriterGenerator
                         else
                         {
                             //list of strings?
-                            sc.add( "findAndReplaceSimpleLists(innerCount, root, " + value + ", \"" + fieldTagName
-                                + "\", \"" + singular( fieldTagName ) + "\");" );
+                            sc.add( "findAndReplaceSimpleLists( innerCount, root, " + value + ", \"" + fieldTagName
+                                + "\", \"" + singular( fieldTagName ) + "\" );" );
                         }
                     }
                     else
                     {
                         //Map or Properties
                         sc.add(
-                            "findAndReplaceProperties(innerCount, root,  \"" + fieldTagName + "\", " + value + ");" );
+                            "findAndReplaceProperties( innerCount, root,  \"" + fieldTagName + "\", " + value + " );" );
                     }
                 }
             }
@@ -638,14 +691,14 @@ public class JDOMWriterGenerator
                 if ( "DOM".equals( field.getType() ) )
                 {
                     sc.add(
-                        "findAndReplaceXpp3DOM(innerCount, root, \"" + fieldTagName + "\", (Xpp3Dom)" + value + ");" );
+                        "findAndReplaceXpp3DOM( innerCount, root, \"" + fieldTagName + "\", (Xpp3Dom) " + value + " );" );
                 }
                 else
                 {
-                    sc.add( "findAndReplaceSimpleElement(innerCount, root,  \"" + fieldTagName + "\", "
+                    sc.add( "findAndReplaceSimpleElement( innerCount, root,  \"" + fieldTagName + "\", "
                         + getJdomValueChecker( type, value, field ) + getValue( type, value ) + ", "
                         + ( field.getDefaultValue() != null ? ( "\"" + field.getDefaultValue() + "\"" ) : "null" )
-                        + ");" );
+                        + " );" );
                 }
             }
         }
@@ -703,36 +756,49 @@ public class JDOMWriterGenerator
         toReturn.addParameter( new JParameter( new JClass( "java.lang.String" ), "childTag" ) );
         toReturn.getModifiers().makeProtected();
         JSourceCode sc = toReturn.getSourceCode();
-        sc.add( "boolean shouldExist = list != null && list.size() > 0;" );
-        sc.add( "Element element = updateElement(counter, parent, parentTag, shouldExist);" );
-        sc.add( "if (shouldExist) {" );
+        sc.add( "boolean shouldExist = ( list != null ) && ( list.size() > 0 );" );
+        sc.add( "Element element = updateElement( counter, parent, parentTag, shouldExist );" );
+        sc.add( "if ( shouldExist )" );
+        sc.add( "{" );
         sc.indent();
         sc.add( "Iterator it = list.iterator();" );
-        sc.add( "Iterator elIt = element.getChildren(childTag, element.getNamespace()).iterator();" );
-        sc.add( "if (!elIt.hasNext()) elIt = null;" );
-        sc.add( "Counter innerCount = new Counter(counter.getDepth() + 1);" );
-        sc.add( "while (it.hasNext()) {" );
+        sc.add( "Iterator elIt = element.getChildren( childTag, element.getNamespace() ).iterator();" );
+        sc.add( "if ( !elIt.hasNext() )" );
+        sc.add( "{" );
+        sc.addIndented( "elIt = null;" );
+        sc.add( "}" );
+        sc.add( "Counter innerCount = new Counter( counter.getDepth() + 1 );" );
+        sc.add( "while ( it.hasNext() )" );
+        sc.add( "{" );
         sc.indent();
         sc.add( toClass.getName() + " value = (" + toClass.getName() + ") it.next();" );
         sc.add( "Element el;" );
-        sc.add( "if (elIt != null && elIt.hasNext()) {" );
+        sc.add( "if ( elIt != null && elIt.hasNext() )" );
+        sc.add( "{" );
         sc.indent();
         sc.add( "el = (Element) elIt.next();" );
-        sc.add( "if (! elIt.hasNext()) elIt = null;" );
-        sc.unindent();
-        sc.add( "} else {" );
-        sc.indent();
-        sc.add( "el = factory.element(childTag, element.getNamespace());" );
-        sc.add( "insertAtPreferredLocation(element, el, innerCount);" );
+        sc.add( "if ( ! elIt.hasNext() )" );
+        sc.add( "{" );
+        sc.addIndented( " elIt = null;" );
+        sc.add( "}" );
         sc.unindent();
         sc.add( "}" );
-        sc.add( "update" + toClass.getName() + "(value, childTag, innerCount, el);" );
+        sc.add( "else" );
+        sc.add( "{" );
+        sc.indent();
+        sc.add( "el = factory.element( childTag, element.getNamespace() );" );
+        sc.add( "insertAtPreferredLocation( element, el, innerCount );" );
+        sc.unindent();
+        sc.add( "}" );
+        sc.add( "update" + toClass.getName() + "( value, childTag, innerCount, el );" );
         sc.add( "innerCount.increaseCount();" );
         sc.unindent();
         sc.add( "}" );
-        sc.add( "if (elIt != null) {" );
+        sc.add( "if ( elIt != null )" );
+        sc.add( "{" );
         sc.indent();
-        sc.add( "while (elIt.hasNext()) {" );
+        sc.add( "while ( elIt.hasNext() )" );
+        sc.add( "{" );
         sc.indent();
         sc.add( "elIt.next();" );
         sc.add( "elIt.remove();" );
@@ -761,31 +827,43 @@ public class JDOMWriterGenerator
         toReturn.getModifiers().makeProtected();
         JSourceCode sc = toReturn.getSourceCode();
         sc.add( "Iterator it = list.iterator();" );
-        sc.add( "Iterator elIt = parent.getChildren(childTag, parent.getNamespace()).iterator();" );
-        sc.add( "if (!elIt.hasNext()) elIt = null;" );
-        sc.add( "Counter innerCount = new Counter(counter.getDepth() + 1);" );
-        sc.add( "while (it.hasNext()) {" );
+        sc.add( "Iterator elIt = parent.getChildren( childTag, parent.getNamespace() ).iterator();" );
+        sc.add( "if ( !elIt.hasNext() )" );
+        sc.add( "{" );
+        sc.addIndented( "elIt = null;" );
+        sc.add( "}" );
+        sc.add( "Counter innerCount = new Counter( counter.getDepth() + 1 );" );
+        sc.add( "while ( it.hasNext() )" );
+        sc.add( "{" );
         sc.indent();
         sc.add( toClass.getName() + " value = (" + toClass.getName() + ") it.next();" );
         sc.add( "Element el;" );
-        sc.add( "if (elIt != null && elIt.hasNext()) {" );
+        sc.add( "if ( elIt != null && elIt.hasNext() )" );
+        sc.add( "{" );
         sc.indent();
         sc.add( "el = (Element) elIt.next();" );
-        sc.add( "if (! elIt.hasNext()) elIt = null;" );
-        sc.unindent();
-        sc.add( "} else {" );
-        sc.indent();
-        sc.add( "el = factory.element(childTag, parent.getNamespace());" );
-        sc.add( "insertAtPreferredLocation(parent, el, innerCount);" );
+        sc.add( "if ( ! elIt.hasNext() )" );
+        sc.add( "{" );
+        sc.addIndented( "elIt = null;" );
+        sc.add( "}" );
         sc.unindent();
         sc.add( "}" );
-        sc.add( "update" + toClass.getName() + "(value, childTag, innerCount, el);" );
+        sc.add( "else" );
+        sc.add( "{" );
+        sc.indent();
+        sc.add( "el = factory.element( childTag, parent.getNamespace() );" );
+        sc.add( "insertAtPreferredLocation( parent, el, innerCount );" );
+        sc.unindent();
+        sc.add( "}" );
+        sc.add( "update" + toClass.getName() + "( value, childTag, innerCount, el );" );
         sc.add( "innerCount.increaseCount();" );
         sc.unindent();
         sc.add( "}" );
-        sc.add( "if (elIt != null) {" );
+        sc.add( "if ( elIt != null )" );
+        sc.add( "{" );
         sc.indent();
-        sc.add( "while (elIt.hasNext()) {" );
+        sc.add( "while ( elIt.hasNext() )" );
+        sc.add( "{" );
         sc.indent();
         sc.add( "elIt.next();" );
         sc.add( "elIt.remove();" );
