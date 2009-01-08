@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+
+<document>
+
+  <properties>
+    <title>Modello XPP3 Plugin</title>
+    <author email="hboutemy_AT_apache_DOT_org">Hervé Boutemy</author>
+  </properties>
+
+  <body>
+
+    <section name="Modello XPP3 Plugin">
+
+      <p>Modello XPP3 Plugin generates XML readers and writers based on XPP3 API (XML Pull Parser).</p>
+
+      <subsection name="xpp3-reader">
+      <p><code>xpp3-reader</code> generator creates
+        <code><i>my.model.package</i><b>.io.xpp3.</b><i>ModelName</i><b>Xpp3Reader</b></code> class with following
+        public methods:
+      </p>
+      <ul>
+        <li><code>public <i>RootClass</i> read( Reader reader, boolean strict )<br/>
+            &#160;&#160;&#160;&#160;throws IOException, XmlPullParserException</code></li>
+
+        <li><code>public <i>RootClass</i> read( Reader reader )<br/>
+            &#160;&#160;&#160;&#160;throws IOException, XmlPullParserException</code></li>
+
+        <li><code>public <i>RootClass</i> read( InputStream in, boolean strict )<br/>
+            &#160;&#160;&#160;&#160;throws IOException, XmlPullParserException</code></li>
+
+        <li><code>public <i>RootClass</i> read( InputStream in )<br/>
+            &#160;&#160;&#160;&#160;throws IOException, XmlPullParserException</code></li>
+
+        <li><code>public void setAddDefaultEntities( boolean addDefaultEntities )</code></li>
+        <li><code>public boolean getAddDefaultEntities()</code></li>
+      </ul>
+      </subsection>
+
+      <subsection name="xpp3-writer">
+      <p><code>xpp3-writer</code> generator creates
+        <code><i>my.model.package</i><b>.io.xpp3.</b><i>ModelName</i><b>Xpp3Writer</b></code> class with following
+        public methods:
+      </p>
+
+      <ul>
+        <li><code>public void write( Writer writer, <i>RootClass</i> root )<br/>
+            &#160;&#160;&#160;&#160;throws IOException</code></li>
+      </ul>
+      </subsection>
+
+    </section>
+
+  </body>
+
+</document>
