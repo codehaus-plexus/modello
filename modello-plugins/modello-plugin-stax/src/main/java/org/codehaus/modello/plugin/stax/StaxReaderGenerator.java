@@ -362,7 +362,6 @@ public class StaxReaderGenerator
         VersionDefinition versionDefinition = objectModel.getVersionDefinition();
 
         JMethod method = new JMethod( "determineVersion", new JClass( "String" ), null );
-        method.getModifiers().makePrivate();
 
         method.addParameter( new JParameter( new JClass( "Reader" ), "reader" ) );
 
