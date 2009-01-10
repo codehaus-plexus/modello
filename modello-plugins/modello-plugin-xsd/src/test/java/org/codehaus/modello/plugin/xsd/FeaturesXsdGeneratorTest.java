@@ -26,7 +26,6 @@ import org.codehaus.modello.AbstractModelloGeneratorTest;
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
-import org.codehaus.plexus.util.FileUtils;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -49,21 +48,13 @@ public class FeaturesXsdGeneratorTest
         super( "features" );
     }
 
-    private File generatedSources;
-
     public void testXsdGenerator()
         throws Throwable
     {
-        generatedSources = getTestFile( "target/" + getName() + "/xsd" );
-
-        FileUtils.deleteDirectory( generatedSources );
-
-        generatedSources.mkdirs();
-
         ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
 
         Properties parameters = new Properties();
-        parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, generatedSources.getAbsolutePath() );
+        parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, getOutputDirectory().getAbsolutePath() );
         parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString( false ) );
         parameters.setProperty( ModelloParameterConstants.VERSION, "1.0.0" );
 
@@ -88,7 +79,7 @@ public class FeaturesXsdGeneratorTest
         saxParser.setProperty( "http://java.sun.com/xml/jaxp/properties/schemaLanguage",
                                "http://www.w3.org/2001/XMLSchema" );
         saxParser.setProperty( "http://java.sun.com/xml/jaxp/properties/schemaSource",
-                               new File( generatedSources, "features-1.0.0.xsd" ) );
+                               new File( getOutputDirectory(), "features-1.0.0.xsd" ) );
 
         saxParser.parse( getClass().getResourceAsStream( "/features.xml" ), new Handler() );
 

@@ -22,14 +22,12 @@ package org.codehaus.modello.plugin.xsd;
  * SOFTWARE.
  */
 
-import java.io.File;
 import java.util.Properties;
 
 import org.codehaus.modello.AbstractModelloGeneratorTest;
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
-import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.ReaderFactory;
 
 /**
@@ -52,18 +50,9 @@ public class ChangesXsdGeneratorTest
         Model model = modello.loadModel( ReaderFactory.newXmlReader( getTestFile( "src/test/resources/changes.mdo" ) ) );
 
         // generate XSD file
-        File generatedSources = new File( getTestPath( "target/xsd-changes" ) );
-
-        FileUtils.deleteDirectory( generatedSources );
-
-        generatedSources.mkdirs();
-
         Properties parameters = new Properties();
-
-        parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, generatedSources.getAbsolutePath() );
-
+        parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, getOutputDirectory().getAbsolutePath() );
         parameters.setProperty( ModelloParameterConstants.VERSION, "1.0.0" );
-
         parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString( false ) );
 
         modello.generate( model, "xsd", parameters );

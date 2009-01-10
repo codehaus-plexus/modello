@@ -30,10 +30,8 @@ import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.Version;
 import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
-import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.ReaderFactory;
 
-import java.io.File;
 import java.util.List;
 import java.util.Properties;
 
@@ -88,18 +86,9 @@ public class XsdGeneratorTest
         assertEquals( "builder", xml.getTagName() );
 
         // generate XSD file
-        File generatedSources = new File( getTestPath( "target/xsd" ) );
-
-        FileUtils.deleteDirectory( generatedSources );
-
-        generatedSources.mkdirs();
-
         Properties parameters = new Properties();
-
-        parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, generatedSources.getAbsolutePath() );
-
+        parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, getOutputDirectory().getAbsolutePath() );
         parameters.setProperty( ModelloParameterConstants.VERSION, "4.0.0" );
-
         parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString( false ) );
 
         modello.generate( model, "xsd", parameters );

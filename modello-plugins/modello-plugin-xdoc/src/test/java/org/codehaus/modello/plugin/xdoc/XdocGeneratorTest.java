@@ -57,8 +57,20 @@ public class XdocGeneratorTest
         super( "xdoc" );
     }
 
-    public void testMavenXdocGenerator()
-        throws Throwable
+    protected File getOutputDirectory()
+    {
+        return getTestFile( "target/generated-site/xdoc" );
+    }
+
+    public void testXdocGenerator()
+        throws Exception
+    {
+        checkMavenXdocGenerator();
+        checkFeaturesXdocGenerator();
+    }
+
+    private void checkMavenXdocGenerator()
+        throws Exception
     {
         ModelloCore modello = (ModelloCore) container.lookup( ModelloCore.ROLE );
 
@@ -94,14 +106,8 @@ public class XdocGeneratorTest
 
         assertEquals( "builder", xml.getTagName() );
 
-        File generatedSources = getTestFile( "target/generated-site/xdoc" );
-
-        FileUtils.deleteDirectory( generatedSources );
-
-        generatedSources.mkdirs();
-
         Properties parameters = new Properties();
-        parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, generatedSources.getAbsolutePath() );
+        parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, getOutputDirectory().getAbsolutePath() );
         parameters.setProperty( ModelloParameterConstants.VERSION, "4.0.0" );
         parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString( false ) );
 
@@ -110,18 +116,16 @@ public class XdocGeneratorTest
         //addDependency( "modello", "modello-core", "1.0-SNAPSHOT" );
 
         //verify( "org.codehaus.modello.generator.xml.cdoc.XdocVerifier", "xdoc" );
-        checkInternalLinks( new File( generatedSources, "maven.xml" ) );
+        checkInternalLinks( "maven.xml" );
     }
 
-    public void testFeaturesXdocGenerator()
-        throws Throwable
+    public void checkFeaturesXdocGenerator()
+        throws Exception
     {
-        File generatedSources = getTestFile( "target/generated-site/xdoc" );
-
         ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
 
         Properties parameters = new Properties();
-        parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, generatedSources.getAbsolutePath() );
+        parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, getOutputDirectory().getAbsolutePath() );
         parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString( false ) );
         parameters.setProperty( ModelloParameterConstants.VERSION, "1.0.0" );
 
@@ -129,7 +133,7 @@ public class XdocGeneratorTest
 
         modello.generate( model, "xdoc", parameters );
 
-        checkInternalLinks( new File( generatedSources, "features.xml" ) );
+        checkInternalLinks( "features.xml" );
     }
 
     /**
@@ -139,10 +143,10 @@ public class XdocGeneratorTest
      * @param xdoc
      * @throws Exception
      */
-    private void checkInternalLinks( File xdoc )
+    private void checkInternalLinks( String filename )
         throws Exception
     {
-        String content = FileUtils.fileRead( xdoc, "UTF-8" );
+        String content = FileUtils.fileRead( new File( getOutputDirectory(), filename ), "UTF-8" );
 
         Set hrefs = new HashSet();
         Pattern p = Pattern.compile( "<a href=\"#(class_[^\"]+)\"", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE );
@@ -165,7 +169,7 @@ public class XdocGeneratorTest
         hrefs.removeAll( names );
         if ( hrefs.size() > 0 )
         {
-            throw new VerifierException( "some internal hrefs in " + xdoc.getName() + " are not defined: " + hrefs );
+            throw new VerifierException( "some internal hrefs in " + filename + " are not defined: " + hrefs );
         }
     }
 }
