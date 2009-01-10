@@ -57,7 +57,7 @@ import java.util.Properties;
  * @version $Id$
  */
 public abstract class AbstractModelloJavaGeneratorTest
-    extends AbstractModelloTest
+    extends AbstractModelloGeneratorTest
 {
     private List dependencies = new ArrayList();
 

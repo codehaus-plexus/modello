@@ -22,7 +22,7 @@ package org.codehaus.modello.plugin.xsd;
  * SOFTWARE.
  */
 
-import org.codehaus.modello.AbstractModelloTest;
+import org.codehaus.modello.AbstractModelloGeneratorTest;
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
@@ -45,7 +45,7 @@ import javax.xml.parsers.SAXParserFactory;
  * @version $Id$
  */
 public class ModelloXsdGeneratorTest
-    extends AbstractModelloTest
+    extends AbstractModelloGeneratorTest
 {
     public ModelloXsdGeneratorTest()
     {
