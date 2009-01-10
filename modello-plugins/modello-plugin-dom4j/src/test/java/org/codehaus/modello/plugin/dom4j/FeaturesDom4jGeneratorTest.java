@@ -43,27 +43,13 @@ public class FeaturesDom4jGeneratorTest
         super( "features" );
     }
 
-    private File generatedSources;
-
-    private File classes;
-
     public void testJavaGenerator()
         throws Throwable
     {
-        generatedSources = getTestFile( "target/" + getName() + "/sources" );
-
-        classes = getTestFile( "target/" + getName() + "/classes" );
-
-        FileUtils.deleteDirectory( generatedSources );
-
-        generatedSources.mkdirs();
-
-        classes.mkdirs();
-
         ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
 
         Properties parameters = new Properties();
-        parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, generatedSources.getAbsolutePath() );
+        parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, getOutputDirectory().getAbsolutePath() );
         parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString( false ) );
         parameters.setProperty( ModelloParameterConstants.VERSION, "1.0.0" );
 
@@ -75,7 +61,7 @@ public class FeaturesDom4jGeneratorTest
 
         addDependency( "dom4j", "dom4j", "1.6.1" );
         addDependency( "xmlunit", "xmlunit", "1.2" );
-        compile( generatedSources, classes );
+        compile( getOutputDirectory(), getOutputClasses() );
 
         verify( "org.codehaus.modello.generator.xml.dom4j.Dom4jFeaturesVerifier", getName() );
     }

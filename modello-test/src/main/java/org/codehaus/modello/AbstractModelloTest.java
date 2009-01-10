@@ -22,10 +22,12 @@ package org.codehaus.modello;
  * SOFTWARE.
  */
 
+import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
 
 import org.codehaus.plexus.PlexusTestCase;
+import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.ReaderFactory;
 
 /**
@@ -40,6 +42,21 @@ public class AbstractModelloTest
     protected AbstractModelloTest( String name )
     {
         this.name = name;
+    }
+
+    protected void setUp()
+        throws Exception
+    {
+        super.setUp();
+
+        FileUtils.deleteDirectory( getOutputDirectory() );
+
+        assertTrue( getOutputDirectory().mkdirs() );
+    }
+
+    protected File getOutputDirectory()
+    {
+        return getTestFile( "target/" + getName() );
     }
 
     public String getName()

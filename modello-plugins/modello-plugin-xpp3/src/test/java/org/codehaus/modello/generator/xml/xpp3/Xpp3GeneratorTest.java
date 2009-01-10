@@ -30,10 +30,8 @@ import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.Version;
 import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
-import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.ReaderFactory;
 
-import java.io.File;
 import java.util.List;
 import java.util.Properties;
 
@@ -89,20 +87,8 @@ public class Xpp3GeneratorTest
         assertEquals( "builder", xml.getTagName() );
 
         // now generate sources and test them
-        File generatedSources = new File( getTestPath( "target/xpp3/sources" ) );
-
-        File classes = new File( getTestPath( "target/xpp3/classes" ) );
-
-        FileUtils.deleteDirectory( generatedSources );
-
-        FileUtils.deleteDirectory( classes );
-
-        generatedSources.mkdirs();
-
-        classes.mkdirs();
-
         Properties parameters = new Properties();
-        parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, generatedSources.getAbsolutePath() );
+        parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, getOutputDirectory().getAbsolutePath() );
         parameters.setProperty( ModelloParameterConstants.VERSION, "4.0.0" );
         parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString( false ) );
 
@@ -111,7 +97,7 @@ public class Xpp3GeneratorTest
         modello.generate( model, "xpp3-reader", parameters );
 
         addDependency( "xmlunit", "xmlunit", "1.2" );
-        compile( generatedSources, classes );
+        compile( getOutputDirectory(), getOutputClasses() );
 
         // TODO: see why without this, version system property is set to "2.4.1" value after verify
         System.setProperty( "version", getModelloVersion() );

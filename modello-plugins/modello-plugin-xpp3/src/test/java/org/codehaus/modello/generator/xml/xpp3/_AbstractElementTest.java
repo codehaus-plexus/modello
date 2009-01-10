@@ -26,22 +26,8 @@ import org.codehaus.modello.AbstractModelloJavaGeneratorTest;
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
-import org.codehaus.modello.model.ModelClass;
-import org.codehaus.modello.model.ModelField;
-import org.codehaus.modello.model.Version;
-import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
-import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.ReaderFactory;
 
-import org.codehaus.plexus.compiler.Compiler;
-import org.codehaus.plexus.compiler.CompilerConfiguration;
-import org.codehaus.plexus.compiler.CompilerError;
-import org.codehaus.plexus.compiler.CompilerException;
-import org.codehaus.plexus.compiler.javac.JavacCompiler;
-
-import java.io.File;
-
-import java.util.List;
 import java.util.Properties;
 
 /**
@@ -64,32 +50,13 @@ public class _AbstractElementTest
 
         Model model = modello.loadModel( ReaderFactory.newXmlReader( getTestFile( "src/test/resources/abstract.mdo" ) ) );
 
-        List classesList = model.getClasses( new Version( "1.0.0" ) );
-
-        File generatedSources = new File( getTestPath( "target/abstracto/sources" ) );
-
-        File classes = new File( getTestPath( "target/abstracto/classes" ) );
-
-        FileUtils.deleteDirectory( generatedSources );
-
-        FileUtils.deleteDirectory( classes );
-
-        generatedSources.mkdirs();
-
-        classes.mkdirs();
-
         Properties parameters = new Properties();
-
-        parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, generatedSources.getAbsolutePath() );
-
+        parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, getOutputDirectory().getAbsolutePath() );
         parameters.setProperty( ModelloParameterConstants.VERSION, "1.0.0" );
-
         parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString( false ) );
 
         modello.generate( model, "java", parameters );
-
         modello.generate( model, "xpp3-writer", parameters );
-
         modello.generate( model, "xpp3-reader", parameters );
 
         //addDependency( "org.codehaus.modello", "modello-core", getModelloVersion() );

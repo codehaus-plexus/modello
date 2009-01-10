@@ -28,10 +28,8 @@ import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
 import org.codehaus.plexus.compiler.CompilerException;
-import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.StringUtils;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -62,20 +60,8 @@ public abstract class AbstractStaxGeneratorTestCase
     protected void verifyModel( Model model, String className, String[] versions )
         throws IOException, ModelloException, CompilerException
     {
-        File generatedSources = new File( getTestPath( "target/" + getName() + "/sources" ) );
-
-        File classes = new File( getTestPath( "target/" + getName() + "/classes" ) );
-
-        FileUtils.deleteDirectory( generatedSources );
-
-        FileUtils.deleteDirectory( classes );
-
-        generatedSources.mkdirs();
-
-        classes.mkdirs();
-
         Properties parameters = new Properties();
-        parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, generatedSources.getAbsolutePath() );
+        parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, getOutputDirectory().getAbsolutePath() );
         parameters.setProperty( ModelloParameterConstants.VERSION, "4.0.0" );
         parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString( false ) );
 
@@ -102,7 +88,7 @@ public abstract class AbstractStaxGeneratorTestCase
         addDependency( "stax", "stax-api", "1.0.1" );
         addDependency( "org.codehaus.woodstox", "wstx-asl", "3.2.0" );
 
-        compile( generatedSources, classes );
+        compile( getOutputDirectory(), getOutputClasses() );
 
         verify( className, getName() );
     }

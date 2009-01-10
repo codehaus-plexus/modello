@@ -30,9 +30,7 @@ import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.Version;
 import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
-import org.codehaus.plexus.util.FileUtils;
 
-import java.io.File;
 import java.util.List;
 import java.util.Properties;
 
@@ -86,20 +84,8 @@ public class Dom4jGeneratorTest
 
         assertEquals( "builder", xml.getTagName() );
 
-        File generatedSources = getTestFile( "target/dom4j/sources" );
-
-        File classes = getTestFile( "target/dom4j/classes" );
-
-        FileUtils.deleteDirectory( generatedSources );
-
-        FileUtils.deleteDirectory( classes );
-
-        generatedSources.mkdirs();
-
-        classes.mkdirs();
-
         Properties parameters = new Properties();
-        parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, generatedSources.getAbsolutePath() );
+        parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, getOutputDirectory().getAbsolutePath() );
         parameters.setProperty( ModelloParameterConstants.VERSION, "4.0.0" );
         parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString( false ) );
 
@@ -110,7 +96,7 @@ public class Dom4jGeneratorTest
         addDependency( "org.codehaus.modello", "modello-core", getModelloVersion() );
         addDependency( "dom4j", "dom4j", "1.6.1" );
 
-        compile( generatedSources, classes );
+        compile( getOutputDirectory(), getOutputClasses() );
 
         verify( "org.codehaus.modello.generator.xml.dom4j.Dom4jVerifier", "dom4j" );
     }

@@ -85,9 +85,9 @@ public abstract class AbstractModelloJavaGeneratorTest
     {
         super.setUp();
 
-        FileUtils.deleteDirectory( getGeneratedSources() );
+        FileUtils.deleteDirectory( getOutputClasses() );
 
-        assertTrue( getGeneratedSources().mkdirs() );
+        assertTrue( getOutputClasses().mkdirs() );
 
         repositoryLayout = (ArtifactRepositoryLayout) lookup( ArtifactRepositoryLayout.ROLE, "default" );
         artifactFactory = (ArtifactFactory) lookup( ArtifactFactory.ROLE );
@@ -99,9 +99,14 @@ public abstract class AbstractModelloJavaGeneratorTest
         repository = artifactRepositoryFactory.createArtifactRepository( "local", url, repositoryLayout, null, null );
     }
 
-    protected File getGeneratedSources()
+    protected File getOutputDirectory()
     {
-        return getTestFile( "target/" + getName() );
+        return getTestFile( "target/" + getName() + "/sources" );
+    }
+
+    protected File getOutputClasses()
+    {
+        return getTestFile( "target/" + getName() + "/classes" );
     }
 
     public void addDependency( String groupId, String artifactId, String version )
@@ -152,15 +157,11 @@ public abstract class AbstractModelloJavaGeneratorTest
         throws IOException, CompilerException
     {
         addDependency( "junit", "junit", "3.8.1" );
-
         addDependency( "org.codehaus.plexus", "plexus-utils", "1.5.6" );
-
         addDependency( "org.codehaus.modello", "modello-test", getModelloVersion() );
 
         String[] classPathElements = new String[dependencies.size() + 2];
-
         classPathElements[0] = getTestPath( "target/classes" );
-
         classPathElements[1] = getTestPath( "target/test-classes" );
 
         for ( int i = 0; i < dependencies.size(); i++ )
@@ -169,7 +170,7 @@ public abstract class AbstractModelloJavaGeneratorTest
         }
 
         String[] sourceDirectories =
-            new String[]{getTestPath( "src/test/verifiers/" + getName() ), generatedSources.getAbsolutePath()};
+            new String[] { getTestPath( "src/test/verifiers/" + getName() ), generatedSources.getAbsolutePath() };
 
         Compiler compiler = new JavacCompiler();
 
@@ -195,7 +196,7 @@ public abstract class AbstractModelloJavaGeneratorTest
     protected void verify( String className, String testName )
         throws MalformedURLException
     {
-        addClassPathFile( getTestFile( "target/" + getName() + "/classes" ) );
+        addClassPathFile( getOutputClasses() );
 
         addClassPathFile( getTestFile( "target/classes" ) );
 
@@ -255,7 +256,7 @@ public abstract class AbstractModelloJavaGeneratorTest
 
     protected void assertGeneratedFileExists( String filename )
     {
-        File file = new File( getGeneratedSources(), filename );
+        File file = new File( getOutputDirectory(), filename );
 
         assertTrue( "Missing generated file: " + file.getAbsolutePath(), file.canRead() );
 

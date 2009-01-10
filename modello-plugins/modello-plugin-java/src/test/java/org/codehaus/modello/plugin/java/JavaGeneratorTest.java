@@ -26,10 +26,8 @@ import org.codehaus.modello.AbstractModelloJavaGeneratorTest;
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
-import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.ReaderFactory;
 
-import java.io.File;
 import java.util.Properties;
 
 /**
@@ -46,38 +44,21 @@ public class JavaGeneratorTest
         super( "java" );
     }
 
-    private File generatedSources;
-
-    private File classes;
-
     public void testJavaGenerator()
         throws Throwable
     {
-        generatedSources = getTestFile( "target/" + getName() + "/sources" );
-
-        classes = getTestFile( "target/" + getName() + "/classes" );
-
-        FileUtils.deleteDirectory( generatedSources );
-
-        generatedSources.mkdirs();
-
-        classes.mkdirs();
-
         ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
 
         Properties parameters = new Properties();
-
-        parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, generatedSources.getAbsolutePath() );
-
+        parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, getOutputDirectory().getAbsolutePath() );
         parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString( false ) );
-
         parameters.setProperty( ModelloParameterConstants.VERSION, "4.0.0" );
 
         Model model = modello.loadModel( ReaderFactory.newXmlReader( getTestFile( modelFile ) ) );
 
         modello.generate( model, "java", parameters );
 
-        compile( generatedSources, classes );
+        compile( getOutputDirectory(), getOutputClasses() );
 
         verify( "JavaVerifier", "java" );
     }
