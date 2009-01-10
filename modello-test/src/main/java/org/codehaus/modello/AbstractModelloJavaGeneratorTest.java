@@ -51,10 +51,12 @@ import java.util.List;
 import java.util.Properties;
 
 /**
+ * Base class for unit-tests of Modello plugins that generate java code.
+ *
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
-public abstract class AbstractModelloGeneratorTest
+public abstract class AbstractModelloJavaGeneratorTest
     extends AbstractModelloTest
 {
     private List dependencies = new ArrayList();
@@ -73,7 +75,7 @@ public abstract class AbstractModelloGeneratorTest
 
     private List classPathElements = new ArrayList();
 
-    protected AbstractModelloGeneratorTest( String name )
+    protected AbstractModelloJavaGeneratorTest( String name )
     {
         super( name );
     }

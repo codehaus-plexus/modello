@@ -22,7 +22,7 @@ package org.codehaus.modello.generator.xml.stax;
  * SOFTWARE.
  */
 
-import org.codehaus.modello.AbstractModelloGeneratorTest;
+import org.codehaus.modello.AbstractModelloJavaGeneratorTest;
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
@@ -36,7 +36,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 public abstract class AbstractStaxGeneratorTestCase
-    extends AbstractModelloGeneratorTest
+    extends AbstractModelloJavaGeneratorTest
 {
     protected ModelloCore modello;
 

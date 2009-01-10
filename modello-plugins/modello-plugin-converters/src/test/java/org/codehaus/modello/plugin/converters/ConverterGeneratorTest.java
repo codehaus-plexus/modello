@@ -22,7 +22,7 @@ package org.codehaus.modello.plugin.converters;
  * SOFTWARE.
  */
 
-import org.codehaus.modello.AbstractModelloGeneratorTest;
+import org.codehaus.modello.AbstractModelloJavaGeneratorTest;
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
@@ -37,7 +37,7 @@ import java.util.Properties;
  * @version $Id$
  */
 public class ConverterGeneratorTest
-    extends AbstractModelloGeneratorTest
+    extends AbstractModelloJavaGeneratorTest
 {
     private String modelFile = "src/test/resources/models/maven.mdo";
 

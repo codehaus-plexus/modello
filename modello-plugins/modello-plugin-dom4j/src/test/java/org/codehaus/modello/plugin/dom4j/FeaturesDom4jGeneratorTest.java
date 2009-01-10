@@ -22,7 +22,7 @@ package org.codehaus.modello.plugin.dom4j;
  * SOFTWARE.
  */
 
-import org.codehaus.modello.AbstractModelloGeneratorTest;
+import org.codehaus.modello.AbstractModelloJavaGeneratorTest;
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
@@ -36,7 +36,7 @@ import java.util.Properties;
  * @version $Id$
  */
 public class FeaturesDom4jGeneratorTest
-    extends AbstractModelloGeneratorTest
+    extends AbstractModelloJavaGeneratorTest
 {
     public FeaturesDom4jGeneratorTest()
     {

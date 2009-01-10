@@ -16,7 +16,7 @@ package org.codehaus.modello.plugin.java;
  * limitations under the License.
  */
 
-import org.codehaus.modello.AbstractModelloGeneratorTest;
+import org.codehaus.modello.AbstractModelloJavaGeneratorTest;
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
@@ -33,7 +33,7 @@ import java.util.Properties;
  * @version $Id$
  */
 public class BiDirectionalOverrideJavaGeneratorTest
-    extends AbstractModelloGeneratorTest
+    extends AbstractModelloJavaGeneratorTest
 {
     private String modelFile = "src/test/resources/models/bidirectional-override.mdo";
 
