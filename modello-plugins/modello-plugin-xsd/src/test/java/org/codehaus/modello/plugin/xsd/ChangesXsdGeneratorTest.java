@@ -25,7 +25,7 @@ package org.codehaus.modello.plugin.xsd;
 import java.io.File;
 import java.util.Properties;
 
-import org.codehaus.modello.AbstractModelloGeneratorTest;
+import org.codehaus.modello.AbstractModelloTest;
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
@@ -37,7 +37,7 @@ import org.codehaus.plexus.util.ReaderFactory;
  * @version $Id$
  */
 public class ChangesXsdGeneratorTest
-    extends AbstractModelloGeneratorTest
+    extends AbstractModelloTest
 {
     public ChangesXsdGeneratorTest()
     {

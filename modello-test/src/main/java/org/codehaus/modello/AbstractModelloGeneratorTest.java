@@ -59,8 +59,6 @@ public abstract class AbstractModelloGeneratorTest
 {
     private List dependencies = new ArrayList();
 
-    private String name;
-
     private List urls = new ArrayList();
 
     private ArtifactRepository repository;
@@ -77,7 +75,7 @@ public abstract class AbstractModelloGeneratorTest
 
     protected AbstractModelloGeneratorTest( String name )
     {
-        this.name = name;
+        super( name );
     }
 
     protected void setUp()
@@ -123,11 +121,6 @@ public abstract class AbstractModelloGeneratorTest
 
         assertTrue( "Can't find dependency: " + dependencyFile.getAbsolutePath(), dependencyFile.isFile() );
         return dependencyFile;
-    }
-
-    public String getName()
-    {
-        return name;
     }
 
     public List getClasspath()

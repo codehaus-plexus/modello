@@ -22,7 +22,7 @@ package org.codehaus.modello.plugin.xdoc;
  * SOFTWARE.
  */
 
-import org.codehaus.modello.AbstractModelloGeneratorTest;
+import org.codehaus.modello.AbstractModelloTest;
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
@@ -49,7 +49,7 @@ import junit.framework.Assert;
  * @version $Id$
  */
 public class XdocGeneratorTest
-    extends AbstractModelloGeneratorTest
+    extends AbstractModelloTest
 
 {
     public XdocGeneratorTest()

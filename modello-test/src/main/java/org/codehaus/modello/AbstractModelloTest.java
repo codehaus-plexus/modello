@@ -35,6 +35,18 @@ import org.codehaus.plexus.util.ReaderFactory;
 public class AbstractModelloTest
     extends PlexusTestCase
 {
+    private String name;
+
+    protected AbstractModelloTest( String name )
+    {
+        this.name = name;
+    }
+
+    public String getName()
+    {
+        return name;
+    }
+
     protected Reader getModelResource( String name )
         throws IOException
     {
