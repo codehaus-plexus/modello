@@ -520,7 +520,7 @@
         <interface>java.io.Serializable</interface>
         <interface>java.rmi.Remote</interface>
         <interface>SubInterface</interface>
-        <interface>org.codehaus.modello.test.features.other.SubInterfaceInPackage</interface>
+        <interface>SubInterfaceInPackage</interface>
       </interfaces>
       <fields>
         <field>
@@ -979,7 +979,7 @@
 
     <interface>
       <name>SubInterfaceInPackage</name>
-      <superInterface>org.codehaus.modello.test.features.SimpleInterface</superInterface>
+      <superInterface>SimpleInterface</superInterface>
       <packageName>org.codehaus.modello.test.features.other</packageName>
       <description>An interface extending SimpleInterface in a package different from default package.</description>
       <version>1.0.0+</version>

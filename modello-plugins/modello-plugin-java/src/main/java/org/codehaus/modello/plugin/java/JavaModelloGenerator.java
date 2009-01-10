@@ -23,6 +23,7 @@ package org.codehaus.modello.plugin.java;
  */
 
 import org.codehaus.modello.ModelloException;
+import org.codehaus.modello.ModelloRuntimeException;
 import org.codehaus.modello.model.CodeSegment;
 import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelAssociation;
@@ -96,6 +97,24 @@ public class JavaModelloGenerator
 
             if ( modelInterface.getSuperInterface() != null )
             {
+                // check if we need an import: if it is a generated superInterface in another package
+                try
+                {
+                    ModelInterface superInterface = objectModel.getInterface( modelInterface.getSuperInterface(),
+                                                                              getGeneratedVersion() );
+                    String superPackageName = superInterface.getPackageName( isPackageWithVersion(),
+                                                                             getGeneratedVersion() );
+
+                    if ( ! packageName.equals( superPackageName ) )
+                    {
+                        jInterface.addImport( superPackageName + '.' + superInterface.getName() );
+                    }
+                }
+                catch ( ModelloRuntimeException mre )
+                {
+                    // no problem if the interface does not exist in the model, it can be in the jdk
+                }
+
                 jInterface.addInterface( modelInterface.getSuperInterface() );
             }
 
