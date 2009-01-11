@@ -58,13 +58,13 @@ public abstract class AbstractXmlGenerator
      */
     protected String resolveFieldTagName( ModelField field )
     {
-        XmlFieldMetadata metadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
+        XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
 
         String tagName = uncapitalise( field.getName() );
 
-        if ( metadata != null && StringUtils.isNotEmpty( metadata.getTagName() ) )
+        if ( xmlFieldMetadata != null && StringUtils.isNotEmpty( xmlFieldMetadata.getTagName() ) )
         {
-            tagName = metadata.getTagName();
+            tagName = xmlFieldMetadata.getTagName();
         }
 
         return tagName;
@@ -86,8 +86,8 @@ public abstract class AbstractXmlGenerator
             for (Iterator allFieldsIt = allFields.iterator(); allFieldsIt.hasNext(); )
             {
                 ModelField field = (ModelField) allFieldsIt.next();
-                XmlFieldMetadata fieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
-                if ( fieldMetadata.isAttribute() )
+                XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
+                if ( xmlFieldMetadata.isAttribute() )
                 {
                     attributeFields.add( field );
                 }

@@ -264,10 +264,11 @@ public class Xpp3ReaderGenerator
 
     private void writeClassParser( ModelClass modelClass, JClass jClass, boolean rootElement )
     {
-        JavaClassMetadata md = (JavaClassMetadata) modelClass.getMetadata(JavaClassMetadata.class.getName());
+        JavaClassMetadata javaClassMetadata =
+            (JavaClassMetadata) modelClass.getMetadata( JavaClassMetadata.class.getName() );
 
         // Skip abstract classes, no way to parse them out into objects
-        if (md.isAbstract()) {
+        if (javaClassMetadata.isAbstract()) {
             return;
         }
 
@@ -298,11 +299,11 @@ public class Xpp3ReaderGenerator
         {
             ModelField field = (ModelField) i.next();
 
-            XmlFieldMetadata fieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
+            XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
 
-            if ( fieldMetadata.isAttribute() )
+            if ( xmlFieldMetadata.isAttribute() )
             {
-                String tagName = fieldMetadata.getTagName();
+                String tagName = xmlFieldMetadata.getTagName();
                 if ( tagName == null )
                 {
                     tagName = field.getName();
@@ -374,11 +375,11 @@ public class Xpp3ReaderGenerator
         {
             ModelField field = (ModelField) i.next();
 
-            XmlFieldMetadata fieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
+            XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
 
-            if ( !fieldMetadata.isAttribute() )
+            if ( !xmlFieldMetadata.isAttribute() )
             {
-                processField( fieldMetadata, field, statement, sc, uncapClassName, modelClass, jClass );
+                processField( xmlFieldMetadata, field, statement, sc, uncapClassName, modelClass, jClass );
 
                 statement = "else if";
             }
@@ -452,24 +453,24 @@ public class Xpp3ReaderGenerator
         jClass.addMethod( unmarshall );
     }
 
-    private void processField( XmlFieldMetadata fieldMetadata, ModelField field, String statement, JSourceCode sc,
+    private void processField( XmlFieldMetadata xmlFieldMetadata, ModelField field, String statement, JSourceCode sc,
                                String uncapClassName, ModelClass modelClass, JClass jClass )
     {
-        String tagName = fieldMetadata.getTagName();
+        String tagName = xmlFieldMetadata.getTagName();
 
         if ( tagName == null )
         {
             tagName = field.getName();
         }
 
-        String singularTagName = fieldMetadata.getAssociationTagName();
+        String singularTagName = xmlFieldMetadata.getAssociationTagName();
 
         if ( singularTagName == null )
         {
             singularTagName = singular( tagName );
         }
 
-        boolean wrappedList = XmlFieldMetadata.LIST_STYLE_WRAPPED.equals( fieldMetadata.getListStyle() );
+        boolean wrappedList = XmlFieldMetadata.LIST_STYLE_WRAPPED.equals( xmlFieldMetadata.getListStyle() );
 
         String capFieldName = capitalise( field.getName() );
 
@@ -645,7 +646,7 @@ public class Xpp3ReaderGenerator
 
                         sc.add( "{" );
                         sc.addIndented( "value = parser.nextText()"
-                                        + ( fieldMetadata.isTrim() ? ".trim()" : "" ) + ";" );
+                                        + ( xmlFieldMetadata.isTrim() ? ".trim()" : "" ) + ";" );
                         sc.add( "}" );
 
                         sc.add( "else" );
@@ -678,7 +679,7 @@ public class Xpp3ReaderGenerator
 
                         sc.add( "String key = parser.getName();" );
 
-                        sc.add( "String value = parser.nextText()" + ( fieldMetadata.isTrim() ? ".trim()" : "" ) + ";" );
+                        sc.add( "String value = parser.nextText()" + ( xmlFieldMetadata.isTrim() ? ".trim()" : "" ) + ";" );
 
                         sc.add( uncapClassName + ".add" + capitalise( singularName ) + "( key, value );" );
 
@@ -710,9 +711,9 @@ public class Xpp3ReaderGenerator
     private void writePrimitiveField( ModelField field, String type, String objectName, String setterName,
                                       JSourceCode sc, JClass jClass )
     {
-        XmlFieldMetadata fieldMetaData = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
+        XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
 
-        String tagName = fieldMetaData.getTagName();
+        String tagName = xmlFieldMetadata.getTagName();
 
         String parserGetter;
 
@@ -721,7 +722,7 @@ public class Xpp3ReaderGenerator
             tagName = field.getName();
         }
 
-        if ( fieldMetaData.isAttribute() )
+        if ( xmlFieldMetadata.isAttribute() )
         {
             parserGetter = "parser.getAttributeValue( \"\", \"" + tagName + "\" )";
         }
@@ -731,13 +732,13 @@ public class Xpp3ReaderGenerator
         }
 
 /* TODO: this and a default
-        if ( fieldMetaData.isRequired() )
+        if ( xmlFieldMetadata.isRequired() )
         {
             parserGetter = "getRequiredAttributeValue( " + parserGetter + ", \"" + tagName + "\", parser, strict )";
         }
 */
 
-        if ( fieldMetaData.isTrim() )
+        if ( xmlFieldMetadata.isTrim() )
         {
             parserGetter = "getTrimmedValue( " + parserGetter + " )";
         }
@@ -790,7 +791,7 @@ public class Xpp3ReaderGenerator
         else if ( "Date".equals( type ) )
         {
             sc.add( "String dateFormat = " +
-                ( fieldMetaData.getFormat() != null ? "\"" + fieldMetaData.getFormat() + "\"" : "null" ) + ";" );
+                ( xmlFieldMetadata.getFormat() != null ? "\"" + xmlFieldMetadata.getFormat() + "\"" : "null" ) + ";" );
             sc.add( objectName + "." + setterName + "( getDateValue( " + parserGetter + ", \"" + tagName +
                 "\", dateFormat, parser ) );" );
         }

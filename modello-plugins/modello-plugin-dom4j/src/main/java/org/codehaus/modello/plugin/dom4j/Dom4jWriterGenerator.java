@@ -194,11 +194,11 @@ public class Dom4jWriterGenerator
         {
             ModelField field = (ModelField) i.next();
 
-            XmlFieldMetadata fieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
+            XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
 
             JavaFieldMetadata javaFieldMetadata = (JavaFieldMetadata) field.getMetadata( JavaFieldMetadata.ID );
 
-            String fieldTagName = fieldMetadata.getTagName();
+            String fieldTagName = xmlFieldMetadata.getTagName();
 
             if ( fieldTagName == null )
             {
@@ -209,13 +209,13 @@ public class Dom4jWriterGenerator
 
             String value = uncapClassName + "." + getPrefix( javaFieldMetadata ) + capitalise( field.getName() ) + "()";
 
-            if ( fieldMetadata.isAttribute() )
+            if ( xmlFieldMetadata.isAttribute() )
             {
                 sc.add( getValueChecker( type, value, field ) );
 
                 sc.add( "{" );
                 sc.addIndented( "element.addAttribute( \"" + fieldTagName + "\", "
-                                + getValue( field.getType(), value, fieldMetadata ) + " );" );
+                                + getValue( field.getType(), value, xmlFieldMetadata ) + " );" );
                 sc.add( "}" );
             }
         }
@@ -226,11 +226,11 @@ public class Dom4jWriterGenerator
         {
             ModelField field = (ModelField) fieldIterator.next();
 
-            XmlFieldMetadata fieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
+            XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
 
-            if ( !fieldMetadata.isAttribute() )
+            if ( !xmlFieldMetadata.isAttribute() )
             {
-                processField( field, fieldMetadata, uncapClassName, sc, modelClass, jClass );
+                processField( field, xmlFieldMetadata, uncapClassName, sc, modelClass, jClass );
             }
         }
 
@@ -240,25 +240,25 @@ public class Dom4jWriterGenerator
         jClass.addMethod( marshall );
     }
 
-    private void processField( ModelField field, XmlFieldMetadata fieldMetadata, String uncapClassName, JSourceCode sc,
-                               ModelClass modelClass, JClass jClass )
+    private void processField( ModelField field, XmlFieldMetadata xmlFieldMetadata, String uncapClassName,
+                               JSourceCode sc, ModelClass modelClass, JClass jClass )
     {
         JavaFieldMetadata javaFieldMetadata = (JavaFieldMetadata) field.getMetadata( JavaFieldMetadata.ID );
 
-        String fieldTagName = fieldMetadata.getTagName();
+        String fieldTagName = xmlFieldMetadata.getTagName();
 
         if ( fieldTagName == null )
         {
             fieldTagName = field.getName();
         }
 
-        String singularTagName = fieldMetadata.getAssociationTagName();
+        String singularTagName = xmlFieldMetadata.getAssociationTagName();
         if ( singularTagName == null )
         {
             singularTagName = singular( fieldTagName );
         }
 
-        boolean wrappedList = XmlFieldMetadata.LIST_STYLE_WRAPPED.equals( fieldMetadata.getListStyle() );
+        boolean wrappedList = XmlFieldMetadata.LIST_STYLE_WRAPPED.equals( xmlFieldMetadata.getListStyle() );
 
         String type = field.getType();
 
@@ -387,7 +387,7 @@ public class Dom4jWriterGenerator
             else
             {
                 sc.add( "element.addElement( \"" + fieldTagName + "\" ).setText( "
-                    + getValue( field.getType(), value, fieldMetadata ) + " );" );
+                    + getValue( field.getType(), value, xmlFieldMetadata ) + " );" );
             }
 
             sc.unindent();
@@ -395,20 +395,20 @@ public class Dom4jWriterGenerator
         }
     }
 
-    private String getValue( String type, String initialValue, XmlFieldMetadata fieldMetadata )
+    private String getValue( String type, String initialValue, XmlFieldMetadata xmlFieldMetadata )
     {
         String textValue = initialValue;
 
         if ( "Date".equals( type ) )
         {
-            if ( fieldMetadata.getFormat() == null )
+            if ( xmlFieldMetadata.getFormat() == null )
             {
                 textValue = "DateFormat.getDateTimeInstance( DateFormat.FULL, DateFormat.FULL , Locale.US ).format( "
                     + textValue + " )";
             }
             else
             {
-                textValue = "new java.text.SimpleDateFormat( \"" + fieldMetadata.getFormat() +
+                textValue = "new java.text.SimpleDateFormat( \"" + xmlFieldMetadata.getFormat() +
                     "\", Locale.US ).format( " + textValue + " )";
             }
         }

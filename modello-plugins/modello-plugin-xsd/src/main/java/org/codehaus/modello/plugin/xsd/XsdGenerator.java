@@ -112,38 +112,38 @@ public class XsdGenerator
             ModelClass root = objectModel.getClass( objectModel.getRoot( getGeneratedVersion() ),
                                                     getGeneratedVersion() );
 
-            XmlModelMetadata modelXmlMetadata = (XmlModelMetadata) root.getModel().getMetadata( XmlModelMetadata.ID );
+            XmlModelMetadata xmlModelMetadata = (XmlModelMetadata) root.getModel().getMetadata( XmlModelMetadata.ID );
 
-            XsdModelMetadata modelXsdMetadata = (XsdModelMetadata) root.getModel().getMetadata( XsdModelMetadata.ID );
+            XsdModelMetadata xsdModelMetadata = (XsdModelMetadata) root.getModel().getMetadata( XsdModelMetadata.ID );
 
             String namespace;
-            if ( StringUtils.isNotEmpty( modelXsdMetadata.getNamespace() ) )
+            if ( StringUtils.isNotEmpty( xsdModelMetadata.getNamespace() ) )
             {
-                namespace = modelXsdMetadata.getNamespace( getGeneratedVersion() );
+                namespace = xsdModelMetadata.getNamespace( getGeneratedVersion() );
             }
             else
             {
                 // xsd.namespace is not set, try using xml.namespace
-                if ( StringUtils.isEmpty( modelXmlMetadata.getNamespace() ) )
+                if ( StringUtils.isEmpty( xmlModelMetadata.getNamespace() ) )
                 {
                     throw new ModelloException( "Cannot generate xsd without xmlns specification:"
                                                 + " <model xml.namespace='...'> or <model xsd.namespace='...'>" );
                 }
 
-                namespace = modelXmlMetadata.getNamespace( getGeneratedVersion() );
+                namespace = xmlModelMetadata.getNamespace( getGeneratedVersion() );
             }
 
             w.addAttribute( "xmlns", namespace );
 
             String targetNamespace;
-            if ( modelXsdMetadata.getTargetNamespace() == null )
+            if ( xsdModelMetadata.getTargetNamespace() == null )
             {
                 // xsd.target-namespace not set, using namespace
                 targetNamespace = namespace;
             }
             else
             {
-                targetNamespace = modelXsdMetadata.getTargetNamespace( getGeneratedVersion() );
+                targetNamespace = xsdModelMetadata.getTargetNamespace( getGeneratedVersion() );
             }
 
             // add targetNamespace if attribute is not blank (specifically set to avoid a target namespace)
@@ -249,8 +249,8 @@ public class XsdGenerator
 
         if ( fields.size() > 0 )
         {
-            XsdClassMetadata metadata = (XsdClassMetadata) modelClass.getMetadata( XsdClassMetadata.ID );
-            boolean compositorAll = XsdClassMetadata.COMPOSITOR_ALL.equals( metadata.getCompositor() );
+            XsdClassMetadata xsdClassMetadata = (XsdClassMetadata) modelClass.getMetadata( XsdClassMetadata.ID );
+            boolean compositorAll = XsdClassMetadata.COMPOSITOR_ALL.equals( xsdClassMetadata.getCompositor() );
 
             if ( ( mixedContent ) || ( !hasContentField ) )
             {
@@ -314,15 +314,15 @@ public class XsdGenerator
 
                         if ( ModelAssociation.MANY_MULTIPLICITY.equals( association.getMultiplicity() ) )
                         {
-                            XmlFieldMetadata fieldMetadata =
+                            XmlFieldMetadata xmlFieldMetadata =
                                 (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
 
-                            if ( XmlFieldMetadata.LIST_STYLE_WRAPPED.equals( fieldMetadata.getListStyle() ))
+                            if ( XmlFieldMetadata.LIST_STYLE_WRAPPED.equals( xmlFieldMetadata.getListStyle() ))
                             {
                                 w.addAttribute( "name", resolveFieldTagName( field ) );
                                 writeFieldDocumentation( w, field );
 
-                                writeListElement( w, fieldMetadata, field, fieldModelClass.getName() );
+                                writeListElement( w, xmlFieldMetadata, field, fieldModelClass.getName() );
                             }
                             else
                             {
@@ -340,9 +340,9 @@ public class XsdGenerator
                                     w.addAttribute( "minOccurs", "0" );
                                 }
 
-                                if ( fieldMetadata != null && fieldMetadata.getAssociationTagName() != null )
+                                if ( xmlFieldMetadata != null && xmlFieldMetadata.getAssociationTagName() != null )
                                 {
-                                    w.addAttribute( "name", fieldMetadata.getAssociationTagName() );
+                                    w.addAttribute( "name", xmlFieldMetadata.getAssociationTagName() );
                                 }
                                 else
                                 {
@@ -375,8 +375,9 @@ public class XsdGenerator
                         if ( List.class.getName().equals( field.getType() ) )
                         {
                             writeFieldDocumentation( w, field );
-                            XmlFieldMetadata fieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
-                            writeListElement( w, fieldMetadata, field, getXsdType( "String" ) );
+                            XmlFieldMetadata xmlFieldMetadata =
+                                (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
+                            writeListElement( w, xmlFieldMetadata, field, getXsdType( "String" ) );
                         }
                         else if ( Properties.class.getName().equals( field.getType() )
                                         || "DOM".equals( field.getType() ) )
@@ -500,16 +501,16 @@ public class XsdGenerator
         w.endElement();
     }
 
-    private void writeListElement( XMLWriter w, XmlFieldMetadata fieldMetadata, ModelField field, String type )
+    private void writeListElement( XMLWriter w, XmlFieldMetadata xmlFieldMetadata, ModelField field, String type )
     {
-        String tagName = fieldMetadata.getTagName();
+        String tagName = xmlFieldMetadata.getTagName();
 
         if ( tagName == null )
         {
             tagName = field.getName();
         }
 
-        String singularTagName = fieldMetadata.getAssociationTagName();
+        String singularTagName = xmlFieldMetadata.getAssociationTagName();
 
         if ( singularTagName == null )
         {

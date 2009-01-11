@@ -386,9 +386,9 @@ public class StaxReaderGenerator
 
         if ( "namespace".equals( versionDefinition.getType() ) )
         {
-            XmlModelMetadata metadata = (XmlModelMetadata) objectModel.getMetadata( XmlModelMetadata.ID );
+            XmlModelMetadata xmlModelMetadata = (XmlModelMetadata) objectModel.getMetadata( XmlModelMetadata.ID );
 
-            String namespace = metadata.getNamespace();
+            String namespace = xmlModelMetadata.getNamespace();
             if ( namespace == null || namespace.indexOf( "${version}" ) < 0 )
             {
                 throw new ModelloException( "versionDefinition is namespace, but the model does not declare "
@@ -444,8 +444,8 @@ public class StaxReaderGenerator
 
         JSourceCode sc = method.getSourceCode();
 
-        XmlFieldMetadata metadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
-        String value = metadata.getTagName();
+        XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
+        String value = xmlFieldMetadata.getTagName();
         if ( value == null )
         {
             value = field.getName();
@@ -654,11 +654,11 @@ public class StaxReaderGenerator
         {
             ModelField field = (ModelField) i.next();
 
-            XmlFieldMetadata fieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
+            XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
 
-            if ( !fieldMetadata.isAttribute() )
+            if ( !xmlFieldMetadata.isAttribute() )
             {
-                processField( fieldMetadata, field, statement, sc, uncapClassName, modelClass, rootElement, jClass );
+                processField( xmlFieldMetadata, field, statement, sc, uncapClassName, modelClass, rootElement, jClass );
 
                 statement = "else if";
             }
@@ -916,9 +916,9 @@ public class StaxReaderGenerator
         {
             ModelField field = (ModelField) i.next();
 
-            XmlFieldMetadata fieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
+            XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
 
-            if ( fieldMetadata.isAttribute() )
+            if ( xmlFieldMetadata.isAttribute() )
             {
                 writePrimitiveField( field, field.getType(), uncapClassName, "set" + capitalise( field.getName() ),
                                      sc );
@@ -926,25 +926,25 @@ public class StaxReaderGenerator
         }
     }
 
-    private void processField( XmlFieldMetadata fieldMetadata, ModelField field, String statement, JSourceCode sc,
+    private void processField( XmlFieldMetadata xmlFieldMetadata, ModelField field, String statement, JSourceCode sc,
                                String uncapClassName, ModelClass modelClass, boolean rootElement, JClass jClass )
         throws ModelloException
     {
-        String tagName = fieldMetadata.getTagName();
+        String tagName = xmlFieldMetadata.getTagName();
 
         if ( tagName == null )
         {
             tagName = field.getName();
         }
 
-        String singularTagName = fieldMetadata.getAssociationTagName();
+        String singularTagName = xmlFieldMetadata.getAssociationTagName();
 
         if ( singularTagName == null )
         {
             singularTagName = singular( tagName );
         }
 
-        boolean wrappedList = XmlFieldMetadata.LIST_STYLE_WRAPPED.equals( fieldMetadata.getListStyle() );
+        boolean wrappedList = XmlFieldMetadata.LIST_STYLE_WRAPPED.equals( xmlFieldMetadata.getListStyle() );
 
         String capFieldName = capitalise( field.getName() );
 
@@ -1148,7 +1148,7 @@ public class StaxReaderGenerator
 
                         sc.add( "{" );
                         sc.addIndented( "value = xmlStreamReader.getElementText()"
-                                        + ( fieldMetadata.isTrim() ? ".trim()" : "" ) + ";" );
+                                        + ( xmlFieldMetadata.isTrim() ? ".trim()" : "" ) + ";" );
                         sc.add( "}" );
 
                         sc.add( "else" );
@@ -1182,7 +1182,7 @@ public class StaxReaderGenerator
                         sc.add( "String key = xmlStreamReader.getLocalName();" );
 
                         sc.add( "String value = xmlStreamReader.getElementText()"
-                                + ( fieldMetadata.isTrim() ? ".trim()" : "" ) + ";" );
+                                + ( xmlFieldMetadata.isTrim() ? ".trim()" : "" ) + ";" );
 
                         sc.add( uncapClassName + ".add" + capitalise( singularName ) + "( key, value );" );
 
@@ -1277,9 +1277,9 @@ public class StaxReaderGenerator
     private void writePrimitiveField( ModelField field, String type, String objectName, String setterName,
                                       JSourceCode sc )
     {
-        XmlFieldMetadata fieldMetaData = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
+        XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
 
-        String tagName = fieldMetaData.getTagName();
+        String tagName = xmlFieldMetadata.getTagName();
 
         if ( tagName == null )
         {
@@ -1287,7 +1287,7 @@ public class StaxReaderGenerator
         }
 
         String parserGetter;
-        if ( fieldMetaData.isAttribute() )
+        if ( xmlFieldMetadata.isAttribute() )
         {
             parserGetter = "xmlStreamReader.getAttributeValue( null, \"" + tagName + "\" )";
         }
@@ -1297,7 +1297,7 @@ public class StaxReaderGenerator
         }
 
 /* TODO:
-        if ( fieldMetaData.isRequired() )
+        if ( xmlFieldMetadata.isRequired() )
         {
             parserGetter = "getRequiredAttributeValue( " + parserGetter + ", \"" + tagName + "\", parser, strict, encoding )";
         }
@@ -1307,7 +1307,7 @@ public class StaxReaderGenerator
             parserGetter = "getDefaultValue( " + parserGetter + ", \"" + field.getDefaultValue() + "\" )";
         }
 
-        if ( fieldMetaData.isTrim() )
+        if ( xmlFieldMetadata.isTrim() )
         {
             parserGetter = "getTrimmedValue( " + parserGetter + " )";
         }
@@ -1360,7 +1360,7 @@ public class StaxReaderGenerator
         else if ( "Date".equals( type ) )
         {
             sc.add( "String dateFormat = "
-                + ( fieldMetaData.getFormat() != null ? "\"" + fieldMetaData.getFormat() + "\"" : "null" ) + ";" );
+                + ( xmlFieldMetadata.getFormat() != null ? "\"" + xmlFieldMetadata.getFormat() + "\"" : "null" ) + ";" );
             sc.add( objectName + "." + setterName + "( getDateValue( " + parserGetter + ", \"" + tagName
                 + "\", dateFormat, xmlStreamReader ) );" );
         }

@@ -312,7 +312,7 @@ public class XdocGenerator
                 continue;
             }
 
-            XmlFieldMetadata fieldMetadata = (XmlFieldMetadata) f.getMetadata( XmlFieldMetadata.ID );
+            XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) f.getMetadata( XmlFieldMetadata.ID );
 
             w.startElement( "tr" );
 
@@ -324,7 +324,7 @@ public class XdocGenerator
 
             if ( isInnerAssociation( f ) )
             {
-                flatAssociation = XmlFieldMetadata.LIST_STYLE_FLAT.equals( fieldMetadata.getListStyle() );
+                flatAssociation = XmlFieldMetadata.LIST_STYLE_FLAT.equals( xmlFieldMetadata.getListStyle() );
 
                 ModelAssociation assoc = (ModelAssociation) f;
 
@@ -335,9 +335,9 @@ public class XdocGenerator
 
                 if ( flatAssociation )
                 {
-                    if ( fieldMetadata.getTagName() != null )
+                    if ( xmlFieldMetadata.getTagName() != null )
                     {
-                        w.writeText( uncapitalise( fieldMetadata.getTagName() ) );
+                        w.writeText( uncapitalise( xmlFieldMetadata.getTagName() ) );
                     }
                     else
                     {
@@ -482,11 +482,11 @@ public class XdocGenerator
                 {
                     ModelAssociation assoc = (ModelAssociation) f;
 
-                    XmlFieldMetadata fieldMetadata = (XmlFieldMetadata) f.getMetadata( XmlFieldMetadata.ID );
+                    XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) f.getMetadata( XmlFieldMetadata.ID );
 
                     boolean listStyleWrapped =
                         ModelAssociation.MANY_MULTIPLICITY.equals( assoc.getMultiplicity() )
-                        && XmlFieldMetadata.LIST_STYLE_WRAPPED.equals( fieldMetadata.getListStyle() );
+                        && XmlFieldMetadata.LIST_STYLE_WRAPPED.equals( xmlFieldMetadata.getListStyle() );
 
                     if ( listStyleWrapped )
                     {
@@ -546,10 +546,10 @@ public class XdocGenerator
      */
     private String resolveTagName( ModelClass modelClass, ModelAssociation association )
     {
-        XmlClassMetadata metadata = (XmlClassMetadata) modelClass.getMetadata( XmlClassMetadata.ID );
+        XmlClassMetadata xmlClassMetadata = (XmlClassMetadata) modelClass.getMetadata( XmlClassMetadata.ID );
 
         String tagName;
-        if ( metadata == null || metadata.getTagName() == null )
+        if ( xmlClassMetadata == null || xmlClassMetadata.getTagName() == null )
         {
             if ( association == null )
             {
@@ -567,21 +567,21 @@ public class XdocGenerator
         }
         else
         {
-            tagName = metadata.getTagName();
+            tagName = xmlClassMetadata.getTagName();
         }
 
         if ( association != null )
         {
-            XmlFieldMetadata fieldMetadata = (XmlFieldMetadata) association.getMetadata( XmlFieldMetadata.ID );
-            if ( fieldMetadata != null )
+            XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) association.getMetadata( XmlFieldMetadata.ID );
+            if ( xmlFieldMetadata != null )
             {
-                if ( fieldMetadata.getAssociationTagName() != null )
+                if ( xmlFieldMetadata.getAssociationTagName() != null )
                 {
-                    tagName = fieldMetadata.getAssociationTagName();
+                    tagName = xmlFieldMetadata.getAssociationTagName();
                 }
-                else if ( fieldMetadata.getTagName() != null )
+                else if ( xmlFieldMetadata.getTagName() != null )
                 {
-                    tagName = fieldMetadata.getTagName();
+                    tagName = xmlFieldMetadata.getTagName();
                 }
             }
         }

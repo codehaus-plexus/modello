@@ -57,11 +57,11 @@ public abstract class AbstractStaxGenerator
     protected ModelField getReferenceIdentifierField( ModelAssociation association )
         throws ModelloException
     {
-        XmlAssociationMetadata assocMetadata =
+        XmlAssociationMetadata xmlAssocMetadata =
             (XmlAssociationMetadata) association.getAssociationMetadata( XmlAssociationMetadata.ID );
 
         ModelField referenceIdentifierField = null;
-        if ( assocMetadata.isReference() )
+        if ( xmlAssocMetadata.isReference() )
         {
             String associationName = association.getName();
 
@@ -104,10 +104,10 @@ public abstract class AbstractStaxGenerator
                     {
                         ModelAssociation assoc = (ModelAssociation) modelField;
 
-                        XmlAssociationMetadata assocMetadata =
+                        XmlAssociationMetadata xmlAssocMetadata =
                             (XmlAssociationMetadata) assoc.getAssociationMetadata( XmlAssociationMetadata.ID );
 
-                        if ( assocMetadata.isReference() )
+                        if ( xmlAssocMetadata.isReference() )
                         {
                             parts.add( assoc.getToClass() );
                         }
@@ -118,19 +118,19 @@ public abstract class AbstractStaxGenerator
         return parts.contains( modelClass );
     }
 
-    protected static String getValue( String type, String initialValue, XmlFieldMetadata fieldMetadata )
+    protected static String getValue( String type, String initialValue, XmlFieldMetadata xmlFieldMetadata )
     {
         String textValue = initialValue;
 
         if ( "Date".equals( type ) )
         {
-            if ( fieldMetadata.getFormat() == null )
+            if ( xmlFieldMetadata.getFormat() == null )
             {
                 textValue = "Long.toString( " + textValue + ".getTime() )";
             }
             else
             {
-                textValue = "new java.text.SimpleDateFormat( \"" + fieldMetadata.getFormat() +
+                textValue = "new java.text.SimpleDateFormat( \"" + xmlFieldMetadata.getFormat() +
                     "\", Locale.US ).format( " + textValue + " )";
             }
         }

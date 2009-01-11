@@ -209,15 +209,15 @@ public class StaxWriterGenerator
         sc.add( "{" );
         sc.indent();
 
-        ModelClassMetadata modelMetadata = (ModelClassMetadata) modelClass.getMetadata( ModelClassMetadata.ID );
+        ModelClassMetadata classMetadata = (ModelClassMetadata) modelClass.getMetadata( ModelClassMetadata.ID );
 
         String namespace = null;
-        XmlModelMetadata metadata = (XmlModelMetadata) modelClass.getModel().getMetadata( XmlModelMetadata.ID );
+        XmlModelMetadata xmlModelMetadata = (XmlModelMetadata) modelClass.getModel().getMetadata( XmlModelMetadata.ID );
 
         // add namespace information for root element only
-        if ( modelMetadata.isRootElement() && ( metadata.getNamespace() != null ) )
+        if ( classMetadata.isRootElement() && ( xmlModelMetadata.getNamespace() != null ) )
         {
-            namespace = metadata.getNamespace( getGeneratedVersion() );
+            namespace = xmlModelMetadata.getNamespace( getGeneratedVersion() );
             sc.add( "serializer.setDefaultNamespace( \"" + namespace + "\" );" );
         }
 
@@ -227,9 +227,9 @@ public class StaxWriterGenerator
         {
             sc.add( "serializer.writeDefaultNamespace( \"" + namespace + "\" );" );
 
-            if ( metadata.getSchemaLocation() != null )
+            if ( xmlModelMetadata.getSchemaLocation() != null )
             {
-                String url = metadata.getSchemaLocation( getGeneratedVersion() );
+                String url = xmlModelMetadata.getSchemaLocation( getGeneratedVersion() );
 
                 sc.add( "serializer.setPrefix( \"xsi\", \"http://www.w3.org/2001/XMLSchema-instance\" );" );
                 sc.add( "serializer.writeNamespace( \"xsi\", \"http://www.w3.org/2001/XMLSchema-instance\" );" );
@@ -252,9 +252,9 @@ public class StaxWriterGenerator
         {
             ModelField field = (ModelField) i.next();
 
-            XmlFieldMetadata fieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
+            XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
 
-            String fieldTagName = fieldMetadata.getTagName();
+            String fieldTagName = xmlFieldMetadata.getTagName();
 
             if ( fieldTagName == null )
             {
@@ -265,13 +265,13 @@ public class StaxWriterGenerator
 
             String value = getFieldValue( uncapClassName, field );
 
-            if ( fieldMetadata.isAttribute() )
+            if ( xmlFieldMetadata.isAttribute() )
             {
                 sc.add( getValueChecker( type, value, field ) );
 
                 sc.add( "{" );
                 sc.addIndented( "serializer.writeAttribute( \"" + fieldTagName + "\", " +
-                    getValue( field.getType(), value, fieldMetadata ) + " );" );
+                    getValue( field.getType(), value, xmlFieldMetadata ) + " );" );
                 sc.add( "}" );
             }
         }
@@ -282,28 +282,28 @@ public class StaxWriterGenerator
         {
             ModelField field = (ModelField) fieldIterator.next();
 
-            XmlFieldMetadata fieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
+            XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
 
-            String fieldTagName = fieldMetadata.getTagName();
+            String fieldTagName = xmlFieldMetadata.getTagName();
 
             if ( fieldTagName == null )
             {
                 fieldTagName = field.getName();
             }
 
-            String singularTagName = fieldMetadata.getAssociationTagName();
+            String singularTagName = xmlFieldMetadata.getAssociationTagName();
             if ( singularTagName == null )
             {
                 singularTagName = singular( fieldTagName );
             }
 
-            boolean wrappedList = XmlFieldMetadata.LIST_STYLE_WRAPPED.equals( fieldMetadata.getListStyle() );
+            boolean wrappedList = XmlFieldMetadata.LIST_STYLE_WRAPPED.equals( xmlFieldMetadata.getListStyle() );
 
             String type = field.getType();
 
             String value = getFieldValue( uncapClassName, field );
 
-            if ( fieldMetadata.isAttribute() )
+            if ( xmlFieldMetadata.isAttribute() )
             {
                 continue;
             }
@@ -476,7 +476,7 @@ public class StaxWriterGenerator
                 {
                     sc.add( "serializer.writeStartElement( " + "\"" + fieldTagName + "\" );" );
                     sc.add(
-                        "serializer.writeCharacters( " + getValue( field.getType(), value, fieldMetadata ) + " );" );
+                        "serializer.writeCharacters( " + getValue( field.getType(), value, xmlFieldMetadata ) + " );" );
                     sc.add( "serializer.writeEndElement();" );
                 }
 

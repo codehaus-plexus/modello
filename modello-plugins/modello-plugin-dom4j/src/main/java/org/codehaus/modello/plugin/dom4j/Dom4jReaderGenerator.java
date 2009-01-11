@@ -249,11 +249,11 @@ public class Dom4jReaderGenerator
         {
             ModelField field = (ModelField) i.next();
 
-            XmlFieldMetadata fieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
+            XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
 
-            if ( fieldMetadata.isAttribute() )
+            if ( xmlFieldMetadata.isAttribute() )
             {
-                String tagName = fieldMetadata.getTagName();
+                String tagName = xmlFieldMetadata.getTagName();
                 if ( tagName == null )
                 {
                     tagName = field.getName();
@@ -318,11 +318,11 @@ public class Dom4jReaderGenerator
         {
             ModelField field = (ModelField) i.next();
 
-            XmlFieldMetadata fieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
+            XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
 
-            if ( !fieldMetadata.isAttribute() )
+            if ( !xmlFieldMetadata.isAttribute() )
             {
-                processField( fieldMetadata, field, statement, sc, uncapClassName, modelClass, jClass );
+                processField( xmlFieldMetadata, field, statement, sc, uncapClassName, modelClass, jClass );
 
                 statement = "else if";
             }
@@ -359,24 +359,24 @@ public class Dom4jReaderGenerator
         jClass.addMethod( unmarshall );
     }
 
-    private void processField( XmlFieldMetadata fieldMetadata, ModelField field, String statement, JSourceCode sc,
+    private void processField( XmlFieldMetadata xmlFieldMetadata, ModelField field, String statement, JSourceCode sc,
                                String uncapClassName, ModelClass modelClass, JClass jClass )
     {
-        String tagName = fieldMetadata.getTagName();
+        String tagName = xmlFieldMetadata.getTagName();
 
         if ( tagName == null )
         {
             tagName = field.getName();
         }
 
-        String singularTagName = fieldMetadata.getAssociationTagName();
+        String singularTagName = xmlFieldMetadata.getAssociationTagName();
 
         if ( singularTagName == null )
         {
             singularTagName = singular( tagName );
         }
 
-        boolean wrappedList = XmlFieldMetadata.LIST_STYLE_WRAPPED.equals( fieldMetadata.getListStyle() );
+        boolean wrappedList = XmlFieldMetadata.LIST_STYLE_WRAPPED.equals( xmlFieldMetadata.getListStyle() );
 
         String capFieldName = capitalise( field.getName() );
 
@@ -601,7 +601,7 @@ public class Dom4jReaderGenerator
 
                         sc.add( "{" );
                         sc.addIndented( "value = propertyElement.getText()"
-                                        + ( fieldMetadata.isTrim() ? ".trim()" : "" ) + ";" );
+                                        + ( xmlFieldMetadata.isTrim() ? ".trim()" : "" ) + ";" );
                         sc.add( "}" );
 
                         sc.add( "else" );
@@ -657,7 +657,7 @@ public class Dom4jReaderGenerator
                         sc.add( "String key = listElement.getName();" );
 
                         sc.add( "String value = listElement.getText()"
-                                + ( fieldMetadata.isTrim() ? ".trim()" : "" ) + ";" );
+                                + ( xmlFieldMetadata.isTrim() ? ".trim()" : "" ) + ";" );
 
                         sc.add( uncapClassName + ".add" + capitalise( singularName ) + "( key, value );" );
 
@@ -692,9 +692,9 @@ public class Dom4jReaderGenerator
     private void writePrimitiveField( ModelField field, String type, String objectName, String setterName,
                                       JSourceCode sc, JClass jClass, String parentElementName, String childElementName )
     {
-        XmlFieldMetadata fieldMetaData = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
+        XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
 
-        String tagName = fieldMetaData.getTagName();
+        String tagName = xmlFieldMetadata.getTagName();
 
         if ( tagName == null )
         {
@@ -702,7 +702,7 @@ public class Dom4jReaderGenerator
         }
 
         String parserGetter;
-        if ( fieldMetaData.isAttribute() )
+        if ( xmlFieldMetadata.isAttribute() )
         {
             parserGetter = parentElementName + ".attributeValue( \"" + tagName + "\" )";
         }
@@ -718,7 +718,7 @@ public class Dom4jReaderGenerator
 //        }
 //
 
-        if ( fieldMetaData.isTrim() )
+        if ( xmlFieldMetadata.isTrim() )
         {
             parserGetter = "getTrimmedValue( " + parserGetter + " )";
         }
@@ -771,7 +771,7 @@ public class Dom4jReaderGenerator
         else if ( "Date".equals( type ) )
         {
             sc.add( "String dateFormat = " +
-                    ( fieldMetaData.getFormat() != null ? "\"" + fieldMetaData.getFormat() + "\"" : "null" ) + ";" );
+                    ( xmlFieldMetadata.getFormat() != null ? "\"" + xmlFieldMetadata.getFormat() + "\"" : "null" ) + ";" );
                 sc.add( objectName + "." + setterName + "( getDateValue( " + parserGetter + ", \"" + tagName +
                     "\", dateFormat ) );" );
         }

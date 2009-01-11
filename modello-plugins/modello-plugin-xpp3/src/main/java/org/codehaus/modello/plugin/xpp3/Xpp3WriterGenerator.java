@@ -186,11 +186,11 @@ public class Xpp3WriterGenerator
         {
             ModelField field = (ModelField) i.next();
 
-            XmlFieldMetadata fieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
+            XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
 
             JavaFieldMetadata javaFieldMetadata = (JavaFieldMetadata) field.getMetadata( JavaFieldMetadata.ID );
 
-            String fieldTagName = fieldMetadata.getTagName();
+            String fieldTagName = xmlFieldMetadata.getTagName();
 
             if ( fieldTagName == null )
             {
@@ -208,13 +208,13 @@ public class Xpp3WriterGenerator
                 continue;
             }
 
-            if ( fieldMetadata.isAttribute() )
+            if ( xmlFieldMetadata.isAttribute() )
             {
                 sc.add( getValueChecker( type, value, field ) );
 
                 sc.add( "{" );
                 sc.addIndented( "serializer.attribute( NAMESPACE, \"" + fieldTagName + "\", " +
-                    getValue( field.getType(), value, fieldMetadata ) + " );" );
+                    getValue( field.getType(), value, xmlFieldMetadata ) + " );" );
                 sc.add( "}" );
             }
 
@@ -222,8 +222,8 @@ public class Xpp3WriterGenerator
 
         if ( contentField != null )
         {
-            XmlFieldMetadata fieldMetadata = (XmlFieldMetadata) contentField.getMetadata( XmlFieldMetadata.ID );
-            sc.add( "serializer.text( " + getValue( contentField.getType(), contentValue, fieldMetadata ) + ");" );
+            XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) contentField.getMetadata( XmlFieldMetadata.ID );
+            sc.add( "serializer.text( " + getValue( contentField.getType(), contentValue, xmlFieldMetadata ) + ");" );
         }
 
         // XML tags
@@ -239,30 +239,30 @@ public class Xpp3WriterGenerator
                 continue;
             }
 
-            XmlFieldMetadata fieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
+            XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
 
             JavaFieldMetadata javaFieldMetadata = (JavaFieldMetadata) field.getMetadata( JavaFieldMetadata.ID );
 
-            String fieldTagName = fieldMetadata.getTagName();
+            String fieldTagName = xmlFieldMetadata.getTagName();
 
             if ( fieldTagName == null )
             {
                 fieldTagName = field.getName();
             }
 
-            String singularTagName = fieldMetadata.getAssociationTagName();
+            String singularTagName = xmlFieldMetadata.getAssociationTagName();
             if ( singularTagName == null )
             {
                 singularTagName = singular( fieldTagName );
             }
 
-            boolean wrappedList = XmlFieldMetadata.LIST_STYLE_WRAPPED.equals( fieldMetadata.getListStyle() );
+            boolean wrappedList = XmlFieldMetadata.LIST_STYLE_WRAPPED.equals( xmlFieldMetadata.getListStyle() );
 
             String type = field.getType();
 
             String value = uncapClassName + "." + getPrefix( javaFieldMetadata ) + capitalise( field.getName() ) + "()";
 
-            if ( fieldMetadata.isAttribute() )
+            if ( xmlFieldMetadata.isAttribute() )
             {
                 continue;
             }
@@ -401,7 +401,7 @@ public class Xpp3WriterGenerator
                 else
                 {
                     sc.addIndented( "serializer.startTag( NAMESPACE, " + "\"" + fieldTagName + "\" ).text( "
-                        + getValue( field.getType(), value, fieldMetadata ) + " ).endTag( NAMESPACE, " + "\""
+                        + getValue( field.getType(), value, xmlFieldMetadata ) + " ).endTag( NAMESPACE, " + "\""
                         + fieldTagName + "\" );" );
                 }
                 sc.add( "}" );
@@ -416,19 +416,19 @@ public class Xpp3WriterGenerator
         jClass.addMethod( marshall );
     }
 
-    private String getValue( String type, String initialValue, XmlFieldMetadata fieldMetadata )
+    private String getValue( String type, String initialValue, XmlFieldMetadata xmlFieldMetadata )
     {
         String textValue = initialValue;
 
         if ( "Date".equals( type ) )
         {
-            if ( fieldMetadata.getFormat() == null )
+            if ( xmlFieldMetadata.getFormat() == null )
             {
                 textValue = "Long.toString( " + textValue + ".getTime() )";
             }
             else
             {
-                textValue = "new java.text.SimpleDateFormat( \"" + fieldMetadata.getFormat() +
+                textValue = "new java.text.SimpleDateFormat( \"" + xmlFieldMetadata.getFormat() +
                     "\", Locale.US ).format( " + textValue + " )";
             }
         }

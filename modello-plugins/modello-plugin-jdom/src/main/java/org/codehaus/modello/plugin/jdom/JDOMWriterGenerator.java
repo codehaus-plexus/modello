@@ -615,22 +615,22 @@ public class JDOMWriterGenerator
         for ( Iterator i = clazz.getAllFields( getGeneratedVersion(), true ).iterator(); i.hasNext(); )
         {
             ModelField field = (ModelField) i.next();
-            XmlFieldMetadata fieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
+            XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
             JavaFieldMetadata javaFieldMetadata = (JavaFieldMetadata) field.getMetadata( JavaFieldMetadata.ID );
-            String fieldTagName = fieldMetadata.getTagName();
+            String fieldTagName = xmlFieldMetadata.getTagName();
             if ( fieldTagName == null )
             {
                 fieldTagName = field.getName();
             }
-            String singularTagName = fieldMetadata.getAssociationTagName();
+            String singularTagName = xmlFieldMetadata.getAssociationTagName();
             if ( singularTagName == null )
             {
                 singularTagName = singular( fieldTagName );
             }
-            boolean wrappedList = XmlFieldMetadata.LIST_STYLE_WRAPPED.equals( fieldMetadata.getListStyle() );
+            boolean wrappedList = XmlFieldMetadata.LIST_STYLE_WRAPPED.equals( xmlFieldMetadata.getListStyle() );
             String type = field.getType();
             String value = "value." + getPrefix( javaFieldMetadata ) + capitalise( field.getName() ) + "()";
-            if ( fieldMetadata.isAttribute() )
+            if ( xmlFieldMetadata.isAttribute() )
             {
                 continue;
             }

@@ -36,16 +36,16 @@ class XmlModelHelpers
 {
     static String getTagName( ModelClass modelClass )
     {
-        XmlClassMetadata metadata = (XmlClassMetadata) modelClass.getMetadata( XmlClassMetadata.ID );
+        XmlClassMetadata xmlClassMetadata = (XmlClassMetadata) modelClass.getMetadata( XmlClassMetadata.ID );
 
         String tagName;
-        if ( metadata == null || metadata.getTagName() == null )
+        if ( xmlClassMetadata == null || xmlClassMetadata.getTagName() == null )
         {
             tagName = AbstractModelloGenerator.uncapitalise( modelClass.getName() );
         }
         else
         {
-            tagName = metadata.getTagName();
+            tagName = xmlClassMetadata.getTagName();
         }
         return tagName;
     }
