@@ -81,12 +81,6 @@ public class Xpp3FeaturesVerifier
         writer.write( buffer, features );
 
         String actualXml = buffer.toString();
-        // workaround for MODELLO-101
-        actualXml =
-            actualXml.replaceFirst( "<features>", "<features xmlns=\"http://modello.codehaus.org/FEATURES/1.0.0\" "
-                + "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" "
-                + "xsi:schemaLocation=\"http://modello.codehaus.org/FEATURES/1.0.0 "
-                + "http://modello.codehaus.org/features-1.0.0.xsd\">" );
 
         // alias is rendered as default field name => must be reverted here to let the test pass
         actualXml = actualXml.replaceFirst( "<id>alias</id>", "<key>alias</key>" );

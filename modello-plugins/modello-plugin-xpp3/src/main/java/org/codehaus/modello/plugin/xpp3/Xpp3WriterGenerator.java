@@ -36,8 +36,10 @@ import org.codehaus.modello.plugin.java.javasource.JSourceCode;
 import org.codehaus.modello.plugin.java.javasource.JSourceWriter;
 import org.codehaus.modello.plugin.java.metadata.JavaClassMetadata;
 import org.codehaus.modello.plugin.java.metadata.JavaFieldMetadata;
+import org.codehaus.modello.plugin.model.ModelClassMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlAssociationMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
+import org.codehaus.modello.plugins.xml.metadata.XmlModelMetadata;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -87,7 +89,11 @@ public class Xpp3WriterGenerator
         jClass.addImport( "java.util.Iterator" );
         jClass.addImport( "java.util.Locale" );
 
-        jClass.addField( new JField( new JClass( "String" ), "NAMESPACE" ) );
+        JField namespaceField = new JField( new JClass( "String" ), "NAMESPACE" );
+        namespaceField.getModifiers().setFinal( true );
+        namespaceField.getModifiers().setStatic( true );
+        namespaceField.setInitString( "null" );
+        jClass.addField( namespaceField );
 
         addModelImports( jClass, null );
 
@@ -175,7 +181,32 @@ public class Xpp3WriterGenerator
         sc.add( "{" );
         sc.indent();
 
-        sc.add( "serializer.startTag( NAMESPACE, tagName );" );
+        ModelClassMetadata classMetadata = (ModelClassMetadata) modelClass.getMetadata( ModelClassMetadata.ID );
+
+        String namespace = null;
+        XmlModelMetadata xmlModelMetadata = (XmlModelMetadata) modelClass.getModel().getMetadata( XmlModelMetadata.ID );
+
+        // add namespace information for root element only
+        if ( classMetadata.isRootElement() && ( xmlModelMetadata.getNamespace() != null ) )
+        {
+            namespace = xmlModelMetadata.getNamespace( getGeneratedVersion() );
+            sc.add( "serializer.setPrefix( \"\", \"" + namespace + "\" );" );
+        }
+
+        if ( ( namespace != null ) && ( xmlModelMetadata.getSchemaLocation() != null ) )
+        {
+            String url = xmlModelMetadata.getSchemaLocation( getGeneratedVersion() );
+
+            sc.add( "serializer.setPrefix( \"xsi\", \"http://www.w3.org/2001/XMLSchema-instance\" );" );
+
+            sc.add( "serializer.startTag( NAMESPACE, tagName );" );
+
+            sc.add( "serializer.attribute( \"\", \"xsi:schemaLocation\", \"" + namespace + " " + url + "\" );" );
+        }
+        else
+        {
+            sc.add( "serializer.startTag( NAMESPACE, tagName );" );
+        }
 
         ModelField contentField = null;
 
