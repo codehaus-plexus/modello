@@ -104,8 +104,10 @@
           <version>1.0.0</version>
           <type>String</type>
           <description><![CDATA[
-            The namespace to use when generating XSD. Since Modello 1.0-beta-1, this value can contain
-            <code>${version}</code> placeholder, which will be replaced by the model version during generation.]]>
+            The namespace to use when generating XSD. Since Modello 1.0-beta-1: <ul>
+            <li>if this value is not set, <code>xml.namespace</code> is used instead,</li>
+            <li>this value can contain <code>${version}</code> placeholder, which will be replaced by the model version
+            during generation.</li></ul>]]>
           </description>
           <comment>see org.codehaus.modello.plugins.xsd.metadata.XsdMetadataPlugin</comment>
         </field>
@@ -114,8 +116,10 @@
           <version>1.0.0</version>
           <type>String</type>
           <description><![CDATA[
-            The targetNamespace to use when generating XSD. Since Modello 1.0-beta-1, this value can contain
-            <code>${version}</code> placeholder, which will be replaced by the model version during generation.]]>
+            The targetNamespace to use when generating XSD. Since Modello 1.0-beta-1<ul>
+            <li>if this value is not set, <code>xml.namespace</code> or <code>xsd.namespace</code> is used instead,</li>
+            <li>this value can contain <code>${version}</code> placeholder, which will be replaced by the model version
+            during generation.</li></ul>]]>
           </description>
           <comment>see org.codehaus.modello.plugins.xsd.metadata.XsdMetadataPlugin</comment>
         </field>
