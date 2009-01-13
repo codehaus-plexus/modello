@@ -39,6 +39,7 @@ import org.codehaus.modello.plugin.model.ModelClassMetadata;
 import org.codehaus.modello.plugins.xml.AbstractXmlJavaGenerator;
 import org.codehaus.modello.plugins.xml.metadata.XmlAssociationMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
+import org.codehaus.modello.plugins.xml.metadata.XmlModelMetadata;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -167,9 +168,9 @@ public class Dom4jWriterGenerator
         marshall.addParameter( new JParameter( new JClass( className ), uncapClassName ) );
         marshall.addParameter( new JParameter( new JClass( "String" ), "tagName" ) );
 
-        ModelClassMetadata metadata = (ModelClassMetadata) modelClass.getMetadata( ModelClassMetadata.ID );
+        ModelClassMetadata classMetadata = (ModelClassMetadata) modelClass.getMetadata( ModelClassMetadata.ID );
 
-        if ( metadata.isRootElement() )
+        if ( classMetadata.isRootElement() )
         {
             marshall.addParameter( new JParameter( new JClass( "Document" ), "parentElement" ) );
         }
@@ -187,7 +188,27 @@ public class Dom4jWriterGenerator
         sc.add( "{" );
         sc.indent();
 
-        sc.add( "Element element = parentElement.addElement( tagName );" );
+        XmlModelMetadata xmlModelMetadata = (XmlModelMetadata) modelClass.getModel().getMetadata( XmlModelMetadata.ID );
+
+        // add namespace information for root element only
+        if ( classMetadata.isRootElement() && ( xmlModelMetadata.getNamespace() != null ) )
+        {
+            String namespace = xmlModelMetadata.getNamespace( getGeneratedVersion() );
+            sc.add( "Element element = parentElement.addElement( tagName, \"" + namespace + "\" );" );
+
+            if ( xmlModelMetadata.getSchemaLocation() != null )
+            {
+                String url = xmlModelMetadata.getSchemaLocation( getGeneratedVersion() );
+
+                sc.add( "element.addAttribute( \"xmlns:xsi\", \"http://www.w3.org/2001/XMLSchema-instance\" );" );
+                sc.add(
+                    "element.addAttribute( \"xsi:schemaLocation\", \"" + namespace + " " + url + "\" );" );
+            }
+        }
+        else
+        {
+            sc.add( "Element element = parentElement.addElement( tagName );" );
+        }
 
         // XML attributes
         for ( Iterator i = modelClass.getAllFields( getGeneratedVersion(), true ).iterator(); i.hasNext(); )
