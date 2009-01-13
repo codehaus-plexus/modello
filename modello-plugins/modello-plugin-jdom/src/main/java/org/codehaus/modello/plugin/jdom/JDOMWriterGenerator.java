@@ -390,8 +390,8 @@ public class JDOMWriterGenerator
         sc.indent();
         sc.add( "String key = (String) it.next();" );
         sc.add( "findAndReplaceSimpleElement( innerCounter, element, key, (String) props.get( key ), null );" );
-        sc.add( "}" );
         sc.unindent();
+        sc.add( "}" );
         sc.add( "ArrayList lst = new ArrayList( props.keySet() );" );
         sc.add( "it = element.getChildren().iterator();" );
         sc.add( "while ( it.hasNext() )" );
@@ -695,7 +695,7 @@ public class JDOMWriterGenerator
                 }
                 else
                 {
-                    sc.add( "findAndReplaceSimpleElement( innerCount, root,  \"" + fieldTagName + "\", "
+                    sc.add( "findAndReplaceSimpleElement( innerCount, root, \"" + fieldTagName + "\", "
                         + getJdomValueChecker( type, value, field ) + getValue( type, value ) + ", "
                         + ( field.getDefaultValue() != null ? ( "\"" + field.getDefaultValue() + "\"" ) : "null" )
                         + " );" );
@@ -724,7 +724,7 @@ public class JDOMWriterGenerator
     private String getJdomValueChecker( String type, String value, ModelField field )
     {
         if ( "boolean".equals( type ) || "double".equals( type ) || "float".equals( type ) || "int".equals( type )
-            || "long".equals( type ) || "short".equals( type ) || "char".equals( type ) )
+            || "long".equals( type ) || "short".equals( type ) || "byte".equals( type ) || "char".equals( type ) )
         {
             return value + " == " + getJavaDefaultValue( field ) + " ? null : ";
         }
