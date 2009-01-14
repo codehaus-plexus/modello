@@ -24,6 +24,8 @@ package org.codehaus.modello.plugins.xml;
 
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.plugin.java.AbstractJavaModelloGenerator;
+import org.codehaus.modello.plugin.java.javasource.JSourceCode;
+import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
 
 /**
  * Abstract class for plugins generating Java code for XML representation of the model.
@@ -44,5 +46,63 @@ public abstract class AbstractXmlJavaGenerator
     protected String getTagName( ModelClass modelClass )
     {
         return XmlModelHelpers.getTagName( modelClass );
+    }
+
+    protected String getValue( String type, String initialValue, XmlFieldMetadata xmlFieldMetadata )
+    {
+        String textValue = initialValue;
+
+        if ( "Date".equals( type ) )
+        {
+            String dateFormat = xmlFieldMetadata.getFormat();
+            if ( xmlFieldMetadata.getFormat() == null )
+            {
+                dateFormat = DEFAULT_DATE_FORMAT;
+            }
+            textValue =
+                "new java.text.SimpleDateFormat( \"" + dateFormat + "\", Locale.US ).format( " + textValue + " )";
+        }
+        else if ( !"String".equals( type ) )
+        {
+            textValue = "String.valueOf( " + textValue + " )";
+        }
+
+        return textValue;
+    }
+
+    protected void writeDateParsingHelper( JSourceCode sc, String exception )
+    {
+        sc.add( "if ( s != null )" );
+
+        sc.add( "{" );
+        sc.indent();
+
+        sc.add( "String effectiveDateFormat = dateFormat;" );
+
+        sc.add( "if ( dateFormat == null )" );
+
+        sc.add( "{" );
+        sc.addIndented( "effectiveDateFormat = \"" + DEFAULT_DATE_FORMAT + "\";" );
+        sc.add( "}" );
+
+        sc.add( "try" );
+        sc.add( "{" );
+        sc.indent();
+
+        sc.add( "DateFormat dateParser = new java.text.SimpleDateFormat( effectiveDateFormat, Locale.US );" );
+        sc.add( "return dateParser.parse( s );" );
+
+        sc.unindent();
+        sc.add( "}" );
+
+        sc.add( "catch ( java.text.ParseException e )" );
+        sc.add( "{" );
+        sc.addIndented( "throw " + exception + ";" );
+        sc.add( "}" );
+
+        sc.unindent();
+        sc.add( "}" );
+
+        sc.add( "return null;" );
     }
 }

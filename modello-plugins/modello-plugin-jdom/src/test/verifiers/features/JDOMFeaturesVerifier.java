@@ -73,14 +73,11 @@ public class JDOMFeaturesVerifier
 
         StringWriter buffer = new StringWriter();
 
-        // workaround for MODELLO-126
-        features.getSimpleTypes().setObjectDate( null );
-
         Document doc = new Document( new Element( "features" ) );
         writer.write( features, doc, buffer, Format.getRawFormat() );
 
         String actualXml = buffer.toString();
-        // workaround for MODELLO-149
+        // workaround for MODELLO-...
         actualXml =
             actualXml.replaceFirst( "<features>", "<features xmlns=\"http://modello.codehaus.org/FEATURES/1.0.0\" "
                 + "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" "

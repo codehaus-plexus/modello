@@ -469,6 +469,7 @@ public class JavaModelloGenerator
     }
 
     private JField createField( ModelField modelField )
+        throws ModelloException
     {
         JType type;
 
@@ -556,6 +557,7 @@ public class JavaModelloGenerator
     }
 
     private void createField( JClass jClass, ModelField modelField )
+        throws ModelloException
     {
         JavaFieldMetadata javaFieldMetadata = (JavaFieldMetadata) modelField.getMetadata( JavaFieldMetadata.ID );
 
@@ -622,6 +624,7 @@ public class JavaModelloGenerator
     }
 
     private JMethod createSetter( JField field, ModelField modelField )
+        throws ModelloException
     {
         String propertyName = capitalise( field.getName() );
 
@@ -713,6 +716,7 @@ public class JavaModelloGenerator
     }
 
     private void createClassCastAssertion( JSourceCode sc, ModelField modelField, String crudModifier )
+        throws ModelloException
     {
         String propertyName = capitalise( modelField.getName() );
 
@@ -995,6 +999,7 @@ public class JavaModelloGenerator
     }
 
     private void createAdder( ModelAssociation modelAssociation, JClass jClass )
+        throws ModelloException
     {
         String fieldName = modelAssociation.getName();
 
@@ -1125,6 +1130,7 @@ public class JavaModelloGenerator
     }
 
     private JType getDesiredType( ModelField modelField, boolean useTo )
+        throws ModelloException
     {
         JField field = createField( modelField );
         JType type = field.getType();

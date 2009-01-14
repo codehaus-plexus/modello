@@ -139,6 +139,7 @@ public class Dom4jWriterGenerator
     }
 
     private void writeAllClasses( Model objectModel, JClass jClass )
+        throws ModelloException
     {
         for ( Iterator i = objectModel.getClasses( getGeneratedVersion() ).iterator(); i.hasNext(); )
         {
@@ -157,6 +158,7 @@ public class Dom4jWriterGenerator
     }
 
     private void writeClass( ModelClass modelClass, JClass jClass )
+        throws ModelloException
     {
         String className = modelClass.getName();
 
@@ -263,6 +265,7 @@ public class Dom4jWriterGenerator
 
     private void processField( ModelField field, XmlFieldMetadata xmlFieldMetadata, String uncapClassName,
                                JSourceCode sc, ModelClass modelClass, JClass jClass )
+        throws ModelloException
     {
         JavaFieldMetadata javaFieldMetadata = (JavaFieldMetadata) field.getMetadata( JavaFieldMetadata.ID );
 
@@ -414,31 +417,6 @@ public class Dom4jWriterGenerator
             sc.unindent();
             sc.add( "}" );
         }
-    }
-
-    private String getValue( String type, String initialValue, XmlFieldMetadata xmlFieldMetadata )
-    {
-        String textValue = initialValue;
-
-        if ( "Date".equals( type ) )
-        {
-            if ( xmlFieldMetadata.getFormat() == null )
-            {
-                textValue = "DateFormat.getDateTimeInstance( DateFormat.FULL, DateFormat.FULL , Locale.US ).format( "
-                    + textValue + " )";
-            }
-            else
-            {
-                textValue = "new java.text.SimpleDateFormat( \"" + xmlFieldMetadata.getFormat() +
-                    "\", Locale.US ).format( " + textValue + " )";
-            }
-        }
-        else if ( !"String".equals( type ) )
-        {
-            textValue = "String.valueOf( " + textValue + " )";
-        }
-
-        return textValue;
     }
 
     private void writeHelpers( JClass jClass )

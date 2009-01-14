@@ -276,7 +276,7 @@
           <version>1.0.0+</version>
           <description><![CDATA[<code>Date</code> class.]]></description>
           <type>Date</type>
-          <!-- <defaultValue>new Date()</defaultValue> TODO: makes xsd plugin fail... -->
+          <defaultValue>2012-12-24T22:12:12.012</defaultValue>
         </field>
         <field>
           <name>dom</name>
@@ -661,7 +661,7 @@
           <description><![CDATA[<code>&lt;field xml.attribute="true" xml.tagName="<i>tagName</i>"&gt;</code>]]></description>
           <type>String</type>
         </field>
-        <field xml.format="yyyy-MM-dd'T'HH:mm:ss.SSS">
+        <field xml.format="yyyy-MM-dd'T'HH:mm:ss">
           <name>dateXmlFormat</name>
           <version>1.0.0+</version>
           <description><![CDATA[<code>&lt;field xml.format="<i>SimpleDateFormat specification</i>"&gt;</code>: a Date field with a specified format.]]></description>
@@ -882,7 +882,7 @@
           <type>String</type>
           <defaultValue>default value</defaultValue>
         </field>
-        <field xml.attribute="true" xml.format="yyyy-MM-dd'T'HH:mm:ss.SSS">
+        <field xml.attribute="true">
           <name>objectDate</name>
           <version>1.0.0+</version>
           <description><![CDATA[<code>Date</code> class.]]></description>

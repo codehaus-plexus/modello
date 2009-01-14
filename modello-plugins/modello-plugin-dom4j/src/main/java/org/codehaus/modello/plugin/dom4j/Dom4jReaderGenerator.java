@@ -926,47 +926,7 @@ public class Dom4jReaderGenerator
         method.addParameter( new JParameter( new JClass( "String" ), "dateFormat" ) );
         method.addException( new JClass( "DocumentException" ) );
 
-        sc = method.getSourceCode();
-
-        sc.add( "if ( s != null )" );
-
-        sc.add( "{" );
-        sc.indent();
-
-        sc.add( "DateFormat dateParser;" );
-
-        sc.add( "if ( dateFormat == null )" );
-
-        sc.add( "{" );
-        sc.indent();
-
-        sc.add( "dateParser = DateFormat.getDateTimeInstance( DateFormat.FULL, DateFormat.FULL , Locale.US );" );
-
-        sc.add( "dateParser.setLenient( true );" );
-
-        sc.unindent();
-        sc.add( "}" );
-
-        sc.add( "else" );
-
-        sc.add( "{" );
-        sc.addIndented( "dateParser = new java.text.SimpleDateFormat( dateFormat, Locale.US );" );
-        sc.add( "}" );
-
-        sc.add( "try" );
-        sc.add( "{" );
-        sc.addIndented( "return dateParser.parse( s );" );
-        sc.add( "}" );
-
-        sc.add( "catch ( java.text.ParseException e )" );
-        sc.add( "{" );
-        sc.addIndented( "throw new DocumentException( e.getMessage() );" );
-        sc.add( "}" );
-
-        sc.unindent();
-        sc.add( "}" );
-
-        sc.add( "return null;" );
+        writeDateParsingHelper( method.getSourceCode(), "new DocumentException( e.getMessage() )" );
 
         jClass.addMethod( method );
 

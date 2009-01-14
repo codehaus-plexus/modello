@@ -75,9 +75,6 @@ public class Dom4jFeaturesVerifier
 
         StringWriter buffer = new StringWriter();
 
-        // workaround for MODELLO-126
-        features.getSimpleTypes().setObjectDate( null );
-
         writer.write( buffer, features );
 
         String actualXml = buffer.toString();

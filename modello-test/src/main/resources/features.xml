@@ -17,10 +17,7 @@
     <primitiveFloat>-7.7</primitiveFloat>
     <primitiveDouble>-7.7</primitiveDouble>
     <objectString>String value from XML file</objectString>
-    <!-- TODO: MODELLO-126 inconsistent Date parsing features
-      <objectDate>1227991027743</objectDate> for XPP3
-      <objectDate>Saturday, November 29, 2008 9:37:07 PM GMT+01:00</objectDate> for dom4j
-    -->
+    <objectDate>2007-07-21T21:07:07.007</objectDate>
     <dom>
       <foo>bar</foo>
       <bar att1="value">baz</bar>
@@ -89,7 +86,7 @@
     ></attributes>
     <attributesDefault></attributesDefault>
     <tagName>value from XML file</tagName>
-    <dateXmlFormat>2012-12-24T22:12:12.012</dateXmlFormat>
+    <dateXmlFormat>2012-12-24T22:12:12</dateXmlFormat>
 
     <xmlListStyleFlat><id>flat first</id></xmlListStyleFlat>
     <xmlListStyleFlat><id>flat second</id></xmlListStyleFlat>

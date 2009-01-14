@@ -141,6 +141,7 @@ public class Xpp3WriterGenerator
     }
 
     private void writeAllClasses( Model objectModel, JClass jClass )
+        throws ModelloException
     {
         for ( Iterator i = objectModel.getClasses( getGeneratedVersion() ).iterator(); i.hasNext(); )
         {
@@ -159,6 +160,7 @@ public class Xpp3WriterGenerator
     }
 
     private void writeClass( ModelClass modelClass, JClass jClass )
+        throws ModelloException
     {
         String className = modelClass.getName();
 
@@ -445,30 +447,5 @@ public class Xpp3WriterGenerator
         sc.add( "}" );
 
         jClass.addMethod( marshall );
-    }
-
-    private String getValue( String type, String initialValue, XmlFieldMetadata xmlFieldMetadata )
-    {
-        String textValue = initialValue;
-
-        if ( "Date".equals( type ) )
-        {
-            if ( xmlFieldMetadata.getFormat() == null )
-            {
-                textValue = "Long.toString( " + textValue + ".getTime() )";
-            }
-            else
-            {
-                textValue = "new java.text.SimpleDateFormat( \"" + xmlFieldMetadata.getFormat() +
-                    "\", Locale.US ).format( " + textValue + " )";
-            }
-        }
-        else if ( !"String".equals( type ) )
-        {
-            textValue = "String.valueOf( " + textValue + " )";
-        }
-
-        return textValue;
-
     }
 }

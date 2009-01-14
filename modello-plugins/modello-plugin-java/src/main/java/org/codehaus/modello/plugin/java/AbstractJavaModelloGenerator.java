@@ -42,7 +42,12 @@ import org.codehaus.plexus.util.WriterFactory;
 import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Properties;
 
 /**
@@ -75,7 +80,7 @@ public abstract class AbstractJavaModelloGenerator
      * @throws IOException
      */
     protected JSourceWriter newJSourceWriter( String packageName, String className )
-    throws IOException
+        throws IOException
     {
         String directory = packageName.replace( '.', File.separatorChar );
 
@@ -164,7 +169,10 @@ public abstract class AbstractJavaModelloGenerator
         return value;
     }
 
+    protected final static String DEFAULT_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS";
+
     protected String getJavaDefaultValue( ModelField modelField )
+        throws ModelloException
     {
         if ( modelField.getType().equals( "String" ) )
         {
@@ -182,10 +190,24 @@ public abstract class AbstractJavaModelloGenerator
         {
             return modelField.getDefaultValue() + 'f';
         }
+        else if ( modelField.getType().equals( "Date" ) )
+        {
+            DateFormat format = new SimpleDateFormat( DEFAULT_DATE_FORMAT, Locale.US );
+            try
+            {
+                Date date = format.parse( modelField.getDefaultValue() );
+                return "new java.util.Date( " + date.getTime() + "L )";
+            }
+            catch ( ParseException pe )
+            {
+                throw new ModelloException( "Unparseable default date: " + modelField.getDefaultValue(), pe );
+            }
+        }
         return modelField.getDefaultValue();
     }
 
     protected String getValueChecker( String type, String value, ModelField field )
+        throws ModelloException
     {
         String retVal;
         if ( "boolean".equals( type ) || "double".equals( type ) || "float".equals( type ) || "int".equals( type )
@@ -196,15 +218,15 @@ public abstract class AbstractJavaModelloGenerator
         else if ( ModelDefault.LIST.equals( type ) || ModelDefault.SET.equals( type )
             || ModelDefault.MAP.equals( type ) || ModelDefault.PROPERTIES.equals( type ) )
         {
-            retVal = "if ( " + value + " != null && " + value + ".size() > 0 )";
+            retVal = "if ( ( " + value + " != null ) && ( " + value + ".size() > 0 ) )";
         }
         else if ( "String".equals( type ) && field.getDefaultValue() != null )
         {
-            retVal = "if ( " + value + " != null && !" + value + ".equals( \"" + field.getDefaultValue() + "\" ) )";
+            retVal = "if ( ( " + value + " != null ) && !" + value + ".equals( \"" + field.getDefaultValue() + "\" ) )";
         }
         else if ( "Date".equals( type ) && field.getDefaultValue() != null )
         {
-            retVal = "if ( " + value + " != null && !" + value + ".equals( \"" + field.getDefaultValue() + "\" ) )";
+            retVal = "if ( ( " + value + " != null ) && !" + value + ".equals( " + getJavaDefaultValue( field ) + " ) )";
         }
         else
         {

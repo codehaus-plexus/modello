@@ -1656,43 +1656,7 @@ public class StaxReaderGenerator
         method.addParameter( new JParameter( new JClass( "XMLStreamReader" ), "xmlStreamReader" ) );
         method.addException( new JClass( "XMLStreamException" ) );
 
-        sc = method.getSourceCode();
-
-        sc.add( "if ( s != null )" );
-
-        sc.add( "{" );
-        sc.indent();
-
-        sc.add( "if ( dateFormat == null )" );
-
-        sc.add( "{" );
-        sc.addIndented( "return new java.util.Date( Long.valueOf( s ).longValue() );" );
-        sc.add( "}" );
-
-        sc.add( "else" );
-
-        sc.add( "{" );
-        sc.indent();
-
-        sc.add( "DateFormat dateParser = new java.text.SimpleDateFormat( dateFormat, Locale.US );" );
-
-        sc.add( "try" );
-        sc.add( "{" );
-        sc.addIndented( "return dateParser.parse( s );" );
-        sc.add( "}" );
-
-        sc.add( "catch ( java.text.ParseException e )" );
-        sc.add( "{" );
-        sc.addIndented( "throw new XMLStreamException( e.getMessage() );" );
-        sc.add( "}" );
-
-        sc.unindent();
-        sc.add( "}" );
-
-        sc.unindent();
-        sc.add( "}" );
-
-        sc.add( "return null;" );
+        writeDateParsingHelper( method.getSourceCode(), "new XMLStreamException( e.getMessage() )" );
 
         jClass.addMethod( method );
 

@@ -29,7 +29,6 @@ import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.plugins.xml.AbstractXmlJavaGenerator;
 import org.codehaus.modello.plugins.xml.metadata.XmlAssociationMetadata;
-import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -116,30 +115,5 @@ public abstract class AbstractStaxGenerator
             }
         }
         return parts.contains( modelClass );
-    }
-
-    protected static String getValue( String type, String initialValue, XmlFieldMetadata xmlFieldMetadata )
-    {
-        String textValue = initialValue;
-
-        if ( "Date".equals( type ) )
-        {
-            if ( xmlFieldMetadata.getFormat() == null )
-            {
-                textValue = "Long.toString( " + textValue + ".getTime() )";
-            }
-            else
-            {
-                textValue = "new java.text.SimpleDateFormat( \"" + xmlFieldMetadata.getFormat() +
-                    "\", Locale.US ).format( " + textValue + " )";
-            }
-        }
-        else if ( !"String".equals( type ) )
-        {
-            textValue = "String.valueOf( " + textValue + " )";
-        }
-
-        return textValue;
-
     }
 }

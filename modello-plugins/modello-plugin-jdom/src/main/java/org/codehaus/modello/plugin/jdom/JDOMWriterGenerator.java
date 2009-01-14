@@ -79,17 +79,19 @@ public class JDOMWriterGenerator
         jClass.addImport( "java.io.OutputStream" );
         jClass.addImport( "java.io.OutputStreamWriter" );
         jClass.addImport( "java.io.Writer" );
+        jClass.addImport( "java.text.DateFormat" );
         jClass.addImport( "java.util.ArrayList" );
+        jClass.addImport( "java.util.Collection" );
         jClass.addImport( "java.util.Iterator" );
         jClass.addImport( "java.util.List" );
-        jClass.addImport( "java.util.Properties" );
-        jClass.addImport( "java.util.Map" );
-        jClass.addImport( "java.util.Collection" );
         jClass.addImport( "java.util.ListIterator" );
-        jClass.addImport( "org.jdom.DefaultJDOMFactory" );
+        jClass.addImport( "java.util.Locale" );
+        jClass.addImport( "java.util.Map" );
+        jClass.addImport( "java.util.Properties" );
         jClass.addImport( "org.jdom.Content" );
-        jClass.addImport( "org.jdom.Element" );
+        jClass.addImport( "org.jdom.DefaultJDOMFactory" );
         jClass.addImport( "org.jdom.Document" );
+        jClass.addImport( "org.jdom.Element" );
         jClass.addImport( "org.jdom.Text" );
         jClass.addImport( "org.jdom.output.Format" );
         jClass.addImport( "org.jdom.output.XMLOutputter" );
@@ -558,6 +560,7 @@ public class JDOMWriterGenerator
     }
 
     private void writeAllClasses( Model objectModel, JClass jClass, ModelClass rootClass )
+        throws ModelloException
     {
         ArrayList alwaysExistingElements = new ArrayList();
         alwaysExistingElements.add( rootClass );
@@ -578,6 +581,7 @@ public class JDOMWriterGenerator
     }
 
     private void updateClass( ModelClass clazz, JClass jClass, ArrayList alwaysExisting )
+        throws ModelloException
     {
         String className = clazz.getName();
         String uncapClassName = uncapitalise( className );
@@ -696,7 +700,7 @@ public class JDOMWriterGenerator
                 else
                 {
                     sc.add( "findAndReplaceSimpleElement( innerCount, root, \"" + fieldTagName + "\", "
-                        + getJdomValueChecker( type, value, field ) + getValue( type, value ) + ", "
+                        + getJdomValueChecker( type, value, field ) + getValue( type, value, xmlFieldMetadata ) + ", "
                         + ( field.getDefaultValue() != null ? ( "\"" + field.getDefaultValue() + "\"" ) : "null" )
                         + " );" );
                 }
@@ -710,18 +714,8 @@ public class JDOMWriterGenerator
         jClass.addMethod( marshall );
     }
 
-    private String getValue( String type, String initialValue )
-    {
-        String textValue = initialValue;
-
-        if ( !"String".equals( type ) )
-        {
-            textValue = "String.valueOf( " + textValue + " )";
-        }
-        return textValue;
-    }
-
     private String getJdomValueChecker( String type, String value, ModelField field )
+        throws ModelloException
     {
         if ( "boolean".equals( type ) || "double".equals( type ) || "float".equals( type ) || "int".equals( type )
             || "long".equals( type ) || "short".equals( type ) || "byte".equals( type ) || "char".equals( type ) )
@@ -735,9 +729,13 @@ public class JDOMWriterGenerator
 //        } else if ( "String".equals( type ) && field.getDefaultValue() != null ) {
 //            return "" + value + " == null || " + value + ".equals( \"" + field.getDefaultValue() + "\" ) ? null : ";
         }
+        else if ( "Date".equals( type ) && field.getDefaultValue() != null )
+        {
+            return "" + value + " == null || " + value + ".equals( " + getJavaDefaultValue( field ) + " ) ? null : ";
+        }
         else
         {
-            return "";
+            return value + " == null ? null : ";
         }
     }
 
