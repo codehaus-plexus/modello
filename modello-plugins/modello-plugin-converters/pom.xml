@@ -10,7 +10,7 @@
   <artifactId>modello-plugin-converters</artifactId>
   <name>Modello Model Version Converter Plugin</name>
   <description>
-    Modello Model Version Converter Plugin generates code to transform a model between multiple versions.
+    Modello Model Version Converter Plugin generates code to transform a model between two versions.
   </description>
 
   <dependencies>
