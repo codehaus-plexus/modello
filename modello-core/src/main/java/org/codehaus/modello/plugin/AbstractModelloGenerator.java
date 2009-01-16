@@ -28,6 +28,7 @@ import org.codehaus.modello.ModelloRuntimeException;
 import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
+import org.codehaus.modello.model.ModelDefault;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.Version;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
@@ -147,40 +148,12 @@ public abstract class AbstractModelloGenerator
 
     protected boolean isMap( String fieldType )
     {
-        if ( fieldType == null )
-        {
-            return false;
-        }
-
-        if ( fieldType.equals( "java.util.Map" ) )
-        {
-            return true;
-        }
-        else if ( fieldType.equals( "java.util.Properties" ) )
-        {
-            return true;
-        }
-
-        return false;
+        return ModelDefault.MAP.equals( fieldType ) || ModelDefault.PROPERTIES.equals( fieldType );
     }
 
     protected boolean isCollection( String fieldType )
     {
-        if ( fieldType == null )
-        {
-            return false;
-        }
-
-        if ( fieldType.equals( "java.util.List" ) )
-        {
-            return true;
-        }
-        else if ( fieldType.equals( "java.util.SortedSet" ) )
-        {
-            return true;
-        }
-
-        return false;
+        return ModelDefault.LIST.equals( fieldType ) || ModelDefault.SET.equals( fieldType );
     }
 
     protected String capitalise( String str )
