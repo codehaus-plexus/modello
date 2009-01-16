@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+  <mailingLists>
+    <mailingList>
+      <name>Mailing list</name>
+      <subscribe>Super Subscribe</subscribe>
+      <unsubscribe>Duper Unsubscribe</unsubscribe>
+      <archive>?ber Archive</archive>
+    </mailingList>
+  </mailingLists>

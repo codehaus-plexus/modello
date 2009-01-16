@@ -88,6 +88,7 @@ public class Xpp3Verifier
         verifyReaderMissingTags_NonStrictMode();
 
         verifyThrowingExceptionWithWrongRootElement();
+        verifyThrowingExceptionWithMissingRootElement();
 
         verifyThrowingExceptionWithWrongElement();
         verifyThrowingExceptionWithWrongElement2();
@@ -122,7 +123,32 @@ public class Xpp3Verifier
         }
         catch( XmlPullParserException e )
         {
-            Assert.assertTrue( e.getMessage().startsWith( "Unrecognised tag: 'wrongRoot'" ) );
+            Assert.assertTrue( e.getMessage().startsWith( "Expected root element 'mavenModel' but found" ) );
+        }
+
+        reader = ReaderFactory.newXmlReader( file );
+
+        // no failure if it is wrong but strict is off
+        modelReader.read( reader, false );
+    }
+
+    public void verifyThrowingExceptionWithMissingRootElement()
+        throws Exception
+    {
+        File file = new File( "src/test/verifiers/xpp3/model-with-missing-root-element.xml" );
+
+        Reader reader = ReaderFactory.newXmlReader( file );
+
+        MavenXpp3Reader modelReader = new MavenXpp3Reader();
+
+        try
+        {
+            modelReader.read( reader );
+            throw new VerifierException( "reading model-with-missing-root-element.xml with strict=true should fail." );
+        }
+        catch( XmlPullParserException e )
+        {
+            Assert.assertTrue( e.getMessage().startsWith( "Expected root element 'mavenModel' but found" ) );
         }
 
         reader = ReaderFactory.newXmlReader( file );

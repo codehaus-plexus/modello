@@ -268,7 +268,8 @@ public class Xpp3ReaderGenerator
             (JavaClassMetadata) modelClass.getMetadata( JavaClassMetadata.class.getName() );
 
         // Skip abstract classes, no way to parse them out into objects
-        if (javaClassMetadata.isAbstract()) {
+        if ( javaClassMetadata.isAbstract() )
+        {
             return;
         }
 
@@ -364,6 +365,13 @@ public class Xpp3ReaderGenerator
 
             sc.add( "{" );
             sc.addIndented( "foundRoot = true;" );
+            sc.add( "}" );
+
+            sc.add( "else if ( strict && ! foundRoot )" );
+
+            sc.add( "{" );
+            sc.addIndented( "throw new XmlPullParserException( \"Expected root element '\" + tagName + \"' but found "
+                            + "'\" + parser.getName() + \"'\", parser, null );" );
             sc.add( "}" );
 
             statement = "else if";
