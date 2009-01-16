@@ -38,11 +38,13 @@ import org.codehaus.modello.ModelloRuntimeException;
 import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
+import org.codehaus.modello.model.ModelDefault;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.Version;
 import org.codehaus.modello.model.VersionRange;
 import org.codehaus.modello.plugin.xdoc.metadata.XdocFieldMetadata;
 import org.codehaus.modello.plugins.xml.AbstractXmlGenerator;
+import org.codehaus.modello.plugins.xml.metadata.XmlAssociationMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlClassMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
 import org.codehaus.plexus.util.WriterFactory;
@@ -517,6 +519,33 @@ public class XdocGenerator
 
                         depth--;
                     }
+                }
+                else if ( ModelDefault.PROPERTIES.equals( f.getType() ) )
+                {
+                    String fieldTagName = resolveFieldTagName( f );
+
+                    ModelAssociation assoc = (ModelAssociation) f;
+                    XmlAssociationMetadata xmlAssociationMetadata =
+                        (XmlAssociationMetadata) assoc.getAssociationMetadata( XmlAssociationMetadata.ID );
+
+                    appendSpacer( sb, depth + 1 );
+                    sb.append( "&lt;" ).append( fieldTagName ).append( "&gt;\n" );
+
+                    if ( XmlAssociationMetadata.EXPLODE_MODE.equals( xmlAssociationMetadata.getMapStyle() ) )
+                    {
+                        appendSpacer( sb, depth + 2 );
+                        sb.append( "&lt;key/&gt;\n" );
+                        appendSpacer( sb, depth + 2 );
+                        sb.append( "&lt;value/&gt;\n" );
+                    }
+                    else
+                    {
+                        appendSpacer( sb, depth + 2 );
+                        sb.append( "&lt;<i>key</i>&gt;<i>value</i>&lt;/<i>key</i>&gt;\n" );
+                    }
+
+                    appendSpacer( sb, depth + 1 );
+                    sb.append( "&lt;" ).append( fieldTagName ).append( "/&gt;\n" );
                 }
                 else
                 {
