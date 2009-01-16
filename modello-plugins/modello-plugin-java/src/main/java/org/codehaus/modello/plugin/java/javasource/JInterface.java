@@ -405,36 +405,27 @@ public final class JInterface extends JStructure
 
         buffer.append( "interface " );
         buffer.append( getLocalName() );
-        buffer.append( ' ' );
+        jsw.writeln( buffer.toString() );
+        buffer.setLength( 0 );
+        jsw.indent();
+
         if ( getInterfaceCount() > 0 )
         {
             Enumeration e = getInterfaces();
-            boolean endl = false;
-            if ( getInterfaceCount() > 1 )
-            {
-                jsw.writeln( buffer.toString() );
-                buffer.setLength( 0 );
-                endl = true;
-            }
             buffer.append( "extends " );
             while ( e.hasMoreElements() )
             {
                 buffer.append( e.nextElement() );
                 if ( e.hasMoreElements() ) buffer.append( ", " );
             }
-            if ( endl )
-            {
-                jsw.writeln( buffer.toString() );
-                buffer.setLength( 0 );
-            }
-            else
-                buffer.append( ' ' );
+
+            jsw.writeln( buffer.toString() );
+            buffer.setLength( 0 );
         }
 
-        buffer.append( '{' );
-        jsw.writeln( buffer.toString() );
-        buffer.setLength( 0 );
-        jsw.writeln();
+        jsw.unindent();
+
+        jsw.writeln( '{' );
 
         jsw.indent();
 
@@ -508,7 +499,7 @@ public final class JInterface extends JStructure
 
         for ( Iterator iterator = sourceCodeEntries.iterator(); iterator.hasNext(); )
         {
-            jsw.write( (String) iterator.next() );
+            jsw.writeln( (String) iterator.next() );
         }
 
         jsw.unindent();
