@@ -394,8 +394,8 @@
           <version>1.0.0</version>
           <type>boolean</type>
           <defaultValue>true</defaultValue>
-          <description>
-            Generate an addXXX(...) method for this field (only for many multiplicity association).
+          <description><![CDATA[
+            Generate an <code>addXXX(...)</code> method for this field (only for many multiplicity association).]]>
           </description>
           <comment>see org.codehaus.modello.plugin.java.metadata.JavaMetadataPlugin</comment>
         </field>
@@ -461,7 +461,8 @@
           <version>1.0.0</version>
           <type>String</type>
           <description>
-            Define a tag name to be used for each element inside a multiple association.
+            Define a tag name to be used for every element inside a multiple association. By default, the name is
+            calculated as the singular of the field tag name.
           </description>
           <comment>see org.codehaus.modello.plugins.xml.metadata.XmlMetadataPlugin</comment>
         </field>
@@ -471,7 +472,14 @@
           <type>String</type>
           <defaultValue>wrapped</defaultValue>
           <description><![CDATA[
-            Can be one of : <code>flat</code>, <code>wrapped</code>.]]>
+            Can be one of : <code>wrapped</code>, <code>flat</code>. <code>wrapped</code> means that the list content
+            will be wrapped into an element, where <code>flat</code> doesn't add this wrapping element. Example:
+            <pre>&lt;wrappedElements&gt;
+  &lt;wrappedElement&gt;<i>element type content</i>&lt;/wrappedElement&gt;
+  ...
+&lt;wrappedElements&gt;
+&lt;flatElement&gt;<i>element type content</i>&lt;/flatElement&gt;
+...</pre>]]>
           </description>
           <comment>see org.codehaus.modello.plugins.xml.metadata.XmlMetadataPlugin</comment>
         </field>
@@ -605,7 +613,18 @@
           <type>String</type>
           <defaultValue>inline</defaultValue>
           <description><![CDATA[
-            Can be one of : <code>inline</code>, <code>explode</code>.]]>
+            Can be one of : <code>inline</code>, <code>explode</code>. Example:
+            <pre>&lt;inlineProperties&gt;
+  &lt;<i>the key</i>&gt;<i>the value</i>&lt;/<i>the key</i>&gt;
+  ...
+&lt;/inlineProperties&gt;
+&lt;explodeProperties&gt;
+  &lt;explodeProperty&gt;
+    &lt;key&gt;<i>the key</i>&lt;/key&gt;
+    &lt;value&gt;<i>the value</i>&lt;/value&gt;
+  &lt;/explodeProperty&gt;
+  ...
+&lt;/explodeProperties&gt;</pre>]]>
           </description>
           <comment>see org.codehaus.modello.plugins.xml.metadata.XmlMetadataPlugin</comment>
         </field>
