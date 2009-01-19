@@ -23,9 +23,12 @@
 import org.codehaus.modello.verifier.Verifier;
 import org.codehaus.modello.verifier.VerifierException;
 
+import org.codehaus.modello.test.features.AssociationFeatures;
 import org.codehaus.modello.test.features.BaseClass;
 import org.codehaus.modello.test.features.InterfacesFeature;
 import org.codehaus.modello.test.features.JavaAbstractFeature;
+import org.codehaus.modello.test.features.JavaFeatures;
+import org.codehaus.modello.test.features.Reference;
 import org.codehaus.modello.test.features.SimpleInterface;
 import org.codehaus.modello.test.features.SimpleTypes;
 import org.codehaus.modello.test.features.SubClassLevel1;
@@ -41,7 +44,9 @@ import java.lang.reflect.Modifier;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import junit.framework.Assert;
 
@@ -184,6 +189,44 @@ public class JavaVerifier
         if ( !SubClassLevel2.class.isAssignableFrom( SubClassLevel3.class ) )
         {
             throw new VerifierException( "SubClassLevel3 should extend SubClassLevel2" );
+        }
+
+        // methods for collections
+        AssociationFeatures association = new AssociationFeatures();
+        // add/remove for List
+        association.setListReferences( new ArrayList() );
+        List list = association.getListReferences();
+        association.addListReference( new Reference() );
+        association.removeListReference( new Reference() );
+        // add/remove for Set
+        association.setSetReferences( new HashSet() );
+        Set set = association.getSetReferences();
+        association.addSetReference( new Reference() );
+        association.removeSetReference( new Reference() );
+
+        // java.adder=false
+        JavaFeatures java = new JavaFeatures();
+        java.setJavaListNoAdd( new ArrayList() );
+        list = java.getJavaListNoAdd();
+        checkNoMethod( JavaFeatures.class, "addJavaListNoAdd", Reference.class );
+        checkNoMethod( JavaFeatures.class, "removeJavaListNoAdd", Reference.class );
+        java.setJavaSetNoAdd( new HashSet() );
+        set = java.getJavaSetNoAdd();
+        checkNoMethod( JavaFeatures.class, "addJavaSetNoAdd", Reference.class );
+        checkNoMethod( JavaFeatures.class, "removeJavaSetNoAdd", Reference.class );
+    }
+
+    private void checkNoMethod( Class clazz, String method, Class attribute )
+    {
+        try
+        {
+            clazz.getMethod( method, new Class[] { attribute } );
+            throw new VerifierException( clazz.getName() + " should not contain " + method + "( "
+                                         + attribute.getName() + " ) method." );
+        }
+        catch ( NoSuchMethodException nsme )
+        {
+            // ok, that's expected
         }
     }
 

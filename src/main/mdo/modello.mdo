@@ -395,7 +395,8 @@
           <type>boolean</type>
           <defaultValue>true</defaultValue>
           <description><![CDATA[
-            Generate an <code>addXXX(...)</code> method for this field (only for many multiplicity association).]]>
+            Generate <code>addXXX( <i>Type</i> )</code> and <code>removeXXX( <i>Type</i> )</code> methods for this field
+            (only for many multiplicity association).]]>
           </description>
           <comment>see org.codehaus.modello.plugin.java.metadata.JavaMetadataPlugin</comment>
         </field>
@@ -568,6 +569,9 @@
           <version>1.0.0</version>
           <type>boolean</type>
           <defaultValue>true</defaultValue>
+          <description><![CDATA[
+            Not used for the moment: see field's <code>java.adder</code> instead.]]>
+          </description>
           <comment>see org.codehaus.modello.plugin.java.metadata.JavaMetadataPlugin</comment>
         </field>
         <field xml.attribute="true" xml.tagName="java.generate-remove">
@@ -575,6 +579,9 @@
           <version>1.0.0</version>
           <type>boolean</type>
           <defaultValue>true</defaultValue>
+          <description><![CDATA[
+            Not used for the moment: remove method is generated with add.]]>
+          </description>
           <comment>see org.codehaus.modello.plugin.java.metadata.JavaMetadataPlugin</comment>
         </field>
         <field xml.attribute="true" xml.tagName="java.generate-break">

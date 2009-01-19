@@ -442,6 +442,23 @@
             <multiplicity>*</multiplicity>
           </association>
         </field-->
+        <field java.adder="false">
+          <name>javaListNoAdd</name>
+          <version>2.0.0+</version>
+          <association><!-- java.generate-add="false" -->
+            <type>Reference</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+        <field java.adder="false">
+          <name>javaSetNoAdd</name>
+          <version>2.0.0+</version>
+          <type>Set</type>
+          <association><!-- java.generate-add="false" -->
+            <type>Reference</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
         <field>
           <name>javaAbstract</name>
           <version>2.0.0+</version>
