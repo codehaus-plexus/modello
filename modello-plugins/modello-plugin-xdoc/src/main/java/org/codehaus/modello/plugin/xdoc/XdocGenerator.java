@@ -221,7 +221,14 @@ public class XdocGenerator
             w.startElement( "p" );
             w.startElement( "b" );
             w.writeText( "Element Content: " );
-            w.writeMarkup( contentField.getDescription() );
+            if ( contentField.getDescription() != null )
+            {
+                w.writeMarkup( contentField.getDescription() );
+            }
+            else
+            {
+                w.writeMarkup( "No description." );
+            }
             w.endElement();
             w.endElement();
         }
