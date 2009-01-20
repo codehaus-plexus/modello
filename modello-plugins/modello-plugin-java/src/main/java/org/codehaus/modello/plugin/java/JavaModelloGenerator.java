@@ -918,8 +918,8 @@ public class JavaModelloGenerator
 
             sc.add( "" );
 
-            sc.add( "if ( get" + capitalise( modelAssociation.getName() ) + "().contains("
-                    + uncapitalise( modelAssociation.getTo() ) + ") )" );
+            sc.add( "if ( " + modelAssociation.getName() + ".contains( "
+                    + uncapitalise( modelAssociation.getTo() ) + " ) )" );
 
             sc.add( "{" );
 
