@@ -12,6 +12,9 @@
     <p>An XSD is available at
     <a href="http://modello.codehaus.org/xsd/modello-1.0.0.xsd">http://modello.codehaus.org/xsd/modello-1.0.0.xsd</a>.
     </p>
+    <p><b>Warning</b>: this documentation and XML Schema are a <b>Work In Progress</b>, there may be minor changes in
+    the next weeks (January 2009, see Jira issues). If you start to use it, especially the Schema, be careful and check
+    when the final xsd will be published.</p>
     ]]>
   </description>
 
