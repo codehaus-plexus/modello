@@ -423,6 +423,82 @@
             <multiplicity>*</multiplicity>
           </association>
         </field>
+        <field>
+          <name>bidi</name>
+          <version>1.0.0+</version>
+          <association>
+            <type>Bidirectional</type>
+            <multiplicity>1</multiplicity>
+          </association>
+        </field>
+        <field>
+          <name>listOfBidis</name>
+          <version>1.0.0+</version>
+          <association>
+            <type>BidiInList</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+        <field>
+          <name>setOfBidis</name>
+          <version>1.0.0+</version>
+          <type>Set</type>
+          <association>
+            <type>BidiInSet</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+      </fields>
+    </class>
+
+    <class>
+      <name>Bidirectional</name>
+      <version>1.0.0+</version>
+      <description>
+        Test of a bidirectional association, ie an association that has a reference to its parent. Due to MODELLO-167,
+        the field creating an association back to AssociationFeatures is only in version 2.0.0 of the model, to avoid
+        the bug.
+      </description>
+      <fields>
+        <field>
+          <name>parent</name>
+          <version>2.0.0+</version>
+          <comment>This causes an OutOfMemory exception with xdoc plugin: see MODELLO-167</comment>
+          <association>
+            <type>AssociationFeatures</type>
+            <multiplicity>1</multiplicity>
+          </association>
+        </field>
+      </fields>
+    </class>
+
+    <class>
+      <name>BidiInList</name>
+      <version>1.0.0+</version>
+      <fields>
+        <field>
+          <name>parent</name>
+          <version>2.0.0+</version>
+          <association>
+            <type>AssociationFeatures</type>
+            <multiplicity>1</multiplicity>
+          </association>
+        </field>
+      </fields>
+    </class>
+
+    <class>
+      <name>BidiInSet</name>
+      <version>1.0.0+</version>
+      <fields>
+        <field>
+          <name>parent</name>
+          <version>2.0.0+</version>
+          <association>
+            <type>AssociationFeatures</type>
+            <multiplicity>1</multiplicity>
+          </association>
+        </field>
       </fields>
     </class>
 

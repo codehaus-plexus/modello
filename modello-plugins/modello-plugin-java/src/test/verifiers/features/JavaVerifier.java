@@ -25,6 +25,9 @@ import org.codehaus.modello.verifier.VerifierException;
 
 import org.codehaus.modello.test.features.AssociationFeatures;
 import org.codehaus.modello.test.features.BaseClass;
+import org.codehaus.modello.test.features.Bidirectional;
+import org.codehaus.modello.test.features.BidiInList;
+import org.codehaus.modello.test.features.BidiInSet;
 import org.codehaus.modello.test.features.InterfacesFeature;
 import org.codehaus.modello.test.features.JavaAbstractFeature;
 import org.codehaus.modello.test.features.JavaFeatures;
@@ -214,6 +217,36 @@ public class JavaVerifier
         set = java.getJavaSetNoAdd();
         checkNoMethod( JavaFeatures.class, "addJavaSetNoAdd", Reference.class );
         checkNoMethod( JavaFeatures.class, "removeJavaSetNoAdd", Reference.class );
+
+        // bidi
+        Bidirectional bidi = new Bidirectional();
+        association.setBidi( bidi );
+        Assert.assertEquals( "setting bidi in association should set the reverse association",
+                             association, bidi.getParent() );
+        bidi.setParent( null );
+        Assert.assertNull( "setting parent to null in bidi should remove value in association", association.getBidi() );
+
+        BidiInList bidiInList = new BidiInList();
+        association.addListOfBidi( bidiInList );
+        Assert.assertEquals( "setting bidi in many association should set the reverse association",
+                             association, bidiInList.getParent() );
+        bidiInList.setParent( null );
+        Assert.assertEquals( 0, association.getListOfBidis().size() );
+        bidiInList.setParent( association );
+        Assert.assertEquals( bidiInList, association.getListOfBidis().get( 0 ) );
+        association.removeListOfBidi( bidiInList );
+        Assert.assertEquals( 0, association.getListOfBidis().size() );
+
+        BidiInSet bidiInSet = new BidiInSet();
+        association.addSetOfBidi( bidiInSet );
+        Assert.assertEquals( "setting bidi in many association should set the reverse association",
+                             association, bidiInSet.getParent() );
+        bidiInSet.setParent( null );
+        Assert.assertEquals( 0, association.getSetOfBidis().size() );
+        bidiInSet.setParent( association );
+        Assert.assertEquals( bidiInSet, association.getSetOfBidis().iterator().next() );
+        association.removeSetOfBidi( bidiInSet );
+        Assert.assertEquals( 0, association.getSetOfBidis().size() );
     }
 
     private void checkNoMethod( Class clazz, String method, Class attribute )
