@@ -567,26 +567,6 @@
         or to a many-multiplicity field.
       </description>
       <fields>
-        <field xml.attribute="true" xml.tagName="java.generate-add">
-          <name>generateAdd</name>
-          <version>1.0.0</version>
-          <type>boolean</type>
-          <defaultValue>true</defaultValue>
-          <description><![CDATA[
-            Not used for the moment: see field's <code>java.adder</code> instead.]]>
-          </description>
-          <comment>see org.codehaus.modello.plugin.java.metadata.JavaMetadataPlugin</comment>
-        </field>
-        <field xml.attribute="true" xml.tagName="java.generate-remove">
-          <name>generateRemove</name>
-          <version>1.0.0</version>
-          <type>boolean</type>
-          <defaultValue>true</defaultValue>
-          <description><![CDATA[
-            Not used for the moment: remove method is generated with add.]]>
-          </description>
-          <comment>see org.codehaus.modello.plugin.java.metadata.JavaMetadataPlugin</comment>
-        </field>
         <field xml.attribute="true" xml.tagName="java.generate-break">
           <name>generateBreak</name>
           <version>1.0.0</version>

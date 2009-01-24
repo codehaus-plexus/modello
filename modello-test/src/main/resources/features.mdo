@@ -510,10 +510,10 @@
         class.]]>
       </description>
       <fields>
-        <!--field>
+        <!--field java.adder="false">
           <name>javaEnabled</name>
           <version>1.0.0+</version>
-          <association java.generate-add="false" java.generate-remove="false">
+          <association>
             <type>JavaEnabledFeature</type>
             <multiplicity>*</multiplicity>
           </association>
@@ -521,7 +521,7 @@
         <field java.adder="false">
           <name>javaListNoAdd</name>
           <version>2.0.0+</version>
-          <association><!-- java.generate-add="false" -->
+          <association>
             <type>Reference</type>
             <multiplicity>*</multiplicity>
           </association>
@@ -530,7 +530,7 @@
           <name>javaSetNoAdd</name>
           <version>2.0.0+</version>
           <type>Set</type>
-          <association><!-- java.generate-add="false" -->
+          <association>
             <type>Reference</type>
             <multiplicity>*</multiplicity>
           </association>
@@ -585,9 +585,8 @@
           </association>
         </field>
         <!--
-         - class features: java.enabled="false"
-         - association features: java.generate-add="false" java.generate-remove="false", java.generate-break="false" java.generate-create="false", java.use-interface="interfaceName", java.init="lazy|constructor|field"
-         - field features: java.adder="false", java.getter="false", java.setter="false" -->
+         - association features: java.generate-break="false" java.generate-create="false", java.use-interface="interfaceName", java.init="lazy|constructor|field"
+         - field features: java.getter="false", java.setter="false" -->
       </fields>
     </class>
 
