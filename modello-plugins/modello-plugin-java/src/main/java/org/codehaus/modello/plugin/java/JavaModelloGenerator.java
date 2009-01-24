@@ -848,7 +848,7 @@ public class JavaModelloGenerator
                 jClass.addMethod( createSetter( jField, modelAssociation ) );
             }
 
-            if ( javaFieldMetadata.isAdder() )
+            if ( javaAssociationMetadata.isAdder() )
             {
                 createAdder( modelAssociation, jClass );
             }

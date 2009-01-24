@@ -392,17 +392,6 @@
       </description>
       <superClass>BaseElement</superClass>
       <fields>
-        <field xml.attribute="true" xml.tagName="java.adder">
-          <name>adder</name>
-          <version>1.0.0</version>
-          <type>boolean</type>
-          <defaultValue>true</defaultValue>
-          <description><![CDATA[
-            Generate <code>addXXX( <i>Type</i> )</code> and <code>removeXXX( <i>Type</i> )</code> methods for this field
-            (only for many multiplicity association).]]>
-          </description>
-          <comment>see org.codehaus.modello.plugin.java.metadata.JavaMetadataPlugin</comment>
-        </field>
         <field xml.attribute="true" xml.tagName="java.getter">
           <name>getter</name>
           <version>1.0.0</version>
@@ -567,6 +556,17 @@
         or to a many-multiplicity field.
       </description>
       <fields>
+        <field xml.attribute="true" xml.tagName="java.adder">
+          <name>adder</name>
+          <version>1.0.0</version>
+          <type>boolean</type>
+          <defaultValue>true</defaultValue>
+          <description><![CDATA[
+            Generate <code>addXXX( <i>Type</i> )</code> and <code>removeXXX( <i>Type</i> )</code> methods for this field
+            (only for many multiplicity association).]]>
+          </description>
+          <comment>see org.codehaus.modello.plugin.java.metadata.JavaMetadataPlugin</comment>
+        </field>
         <field xml.attribute="true" xml.tagName="java.generate-break">
           <name>generateBreak</name>
           <version>1.0.0</version>

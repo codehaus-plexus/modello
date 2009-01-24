@@ -100,28 +100,47 @@ public class DefaultModelloCore
         }
     }
 
+    private void upgradeModelloModel( ModelReader modelReader, Model model )
+    {
+        Map modelAttributes = modelReader.getAttributesForModel();
+        for ( Iterator classes = model.getAllClasses().iterator(); classes.hasNext(); )
+        {
+            ModelClass clazz = (ModelClass) classes.next();
+            Map classAttributes = modelReader.getAttributesForClass( clazz );
+
+            // attributes moved from root class to model
+            upgradeModifiedAttribute( "xml.namespace", classAttributes, modelAttributes,
+                "attribute 'xml.namespace' for class element is deprecated: it should be moved to model element" );
+
+            upgradeModifiedAttribute( "xml.schemaLocation", classAttributes, modelAttributes,
+                "attribute 'xml.schemaLocation' for class element is deprecated: it should be moved to model element" );
+
+            for ( Iterator fields = clazz.getAllFields().iterator(); fields.hasNext(); )
+            {
+                ModelField field = (ModelField) fields.next();
+
+                if ( field instanceof ModelAssociation )
+                {
+                    Map fieldAttributes = modelReader.getAttributesForField( field );
+                    Map associationAttributes = modelReader.getAttributesForAssociation( (ModelAssociation)field );
+
+                    upgradeModifiedAttribute( "java.adder", fieldAttributes, associationAttributes,
+                        "attribute 'java.adder' for field element is deprecated: it should be moved to association" );
+                }
+            }
+        }
+    }
+
     public Model loadModel( Reader reader )
         throws ModelloException, ModelValidationException
     {
         ModelReader modelReader = new ModelReader();
         Model model = modelReader.loadModel( reader );
 
-        // keep backward compatibility with Modello attributes model changes
-        Map modelAttributes = modelReader.getAttributesForModel();
-        for ( Iterator classes = model.getAllClasses().iterator(); classes.hasNext(); )
-        {
-            ModelClass clazz = (ModelClass) classes.next();
-            Map attributes = modelReader.getAttributesForClass( clazz );
-
-            // attributes moved from root class to model
-            upgradeModifiedAttribute( "xml.namespace", attributes, modelAttributes,
-                "attribute 'xml.namespace' for class element is deprecated: it should be moved to model element" );
-
-            upgradeModifiedAttribute( "xml.schemaLocation", attributes, modelAttributes,
-                "attribute 'xml.schemaLocation' for class element is deprecated: it should be moved to model element" );
-        }
-
         model.initialize();
+
+        // keep backward compatibility with Modello attributes model changes
+        upgradeModelloModel( modelReader, model );
 
         handlePluginsMetadata( modelReader, model );
 

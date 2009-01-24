@@ -50,6 +50,8 @@ public class JavaAssociationMetadata
         INIT_TYPES.add( FIELD_INIT );
     }
 
+    private boolean adder = true;
+
     private boolean generateBreak;
 
     private boolean generateCreate;
@@ -57,6 +59,16 @@ public class JavaAssociationMetadata
     private String interfaceName;
 
     private String initializationMode;
+
+    public boolean isAdder()
+    {
+        return adder;
+    }
+
+    public void setAdder( boolean adder )
+    {
+        this.adder = adder;
+    }
 
     public boolean isGenerateBreak()
     {

@@ -68,8 +68,6 @@ public class JavaMetadataPlugin
     {
         JavaFieldMetadata metadata = new JavaFieldMetadata();
 
-        metadata.setAdder( getBoolean( data, "java.adder", true ) );
-
         metadata.setSetter( getBoolean( data, "java.getter", true ) );
 
         String fieldType = field.getType();
@@ -83,6 +81,8 @@ public class JavaMetadataPlugin
     public AssociationMetadata getAssociationMetadata( ModelAssociation association, Map data )
     {
         JavaAssociationMetadata metadata = new JavaAssociationMetadata();
+
+        metadata.setAdder( getBoolean( data, "java.adder", true ) );
 
         metadata.setGenerateBreak( getBoolean( data, "java.generate-break", true ) );
         metadata.setGenerateCreate( getBoolean( data, "java.generate-create", true ) );

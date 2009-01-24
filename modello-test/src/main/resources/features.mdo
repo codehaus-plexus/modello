@@ -510,27 +510,27 @@
         class.]]>
       </description>
       <fields>
-        <!--field java.adder="false">
+        <!--field>
           <name>javaEnabled</name>
           <version>1.0.0+</version>
-          <association>
+          <association java.adder="false">
             <type>JavaEnabledFeature</type>
             <multiplicity>*</multiplicity>
           </association>
         </field-->
-        <field java.adder="false">
+        <field>
           <name>javaListNoAdd</name>
           <version>2.0.0+</version>
-          <association>
+          <association java.adder="false">
             <type>Reference</type>
             <multiplicity>*</multiplicity>
           </association>
         </field>
-        <field java.adder="false">
+        <field>
           <name>javaSetNoAdd</name>
           <version>2.0.0+</version>
           <type>Set</type>
-          <association>
+          <association java.adder="false">
             <type>Reference</type>
             <multiplicity>*</multiplicity>
           </association>

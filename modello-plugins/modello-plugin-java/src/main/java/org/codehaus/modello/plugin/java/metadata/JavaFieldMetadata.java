@@ -33,23 +33,11 @@ public class JavaFieldMetadata
 {
     public static final String ID = JavaFieldMetadata.class.getName();
 
-    private boolean adder = true;
-
     private boolean getter = true;
 
     private boolean booleanGetter = false;
 
     private boolean setter = true;
-
-    public boolean isAdder()
-    {
-        return adder;
-    }
-
-    public void setAdder( boolean adder )
-    {
-        this.adder = adder;
-    }
 
     public boolean isGetter()
     {
