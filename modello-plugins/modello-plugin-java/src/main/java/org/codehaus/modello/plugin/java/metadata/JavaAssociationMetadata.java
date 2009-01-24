@@ -39,9 +39,9 @@ public class JavaAssociationMetadata
     public static final String LAZY_INIT = "lazy";
     public static final String CONSTRUCTOR_INIT = "constructor";
     public static final String FIELD_INIT = "field";
-    
+
     public final static List INIT_TYPES;
-    
+
     static
     {
         INIT_TYPES = new ArrayList();
@@ -49,28 +49,14 @@ public class JavaAssociationMetadata
         INIT_TYPES.add( CONSTRUCTOR_INIT );
         INIT_TYPES.add( FIELD_INIT );
     }
-    
-    private boolean generateAdd;
-
-    private boolean generateRemove;
 
     private boolean generateBreak;
 
     private boolean generateCreate;
-    
+
     private String interfaceName;
-    
+
     private String initializationMode;
-
-    public boolean isGenerateAdd()
-    {
-        return generateAdd;
-    }
-
-    public void setGenerateAdd( boolean generateAdd )
-    {
-        this.generateAdd = generateAdd;
-    }
 
     public boolean isGenerateBreak()
     {
@@ -80,16 +66,6 @@ public class JavaAssociationMetadata
     public void setGenerateBreak( boolean generateBreak )
     {
         this.generateBreak = generateBreak;
-    }
-
-    public boolean isGenerateRemove()
-    {
-        return generateRemove;
-    }
-
-    public void setGenerateRemove( boolean generateRemove )
-    {
-        this.generateRemove = generateRemove;
     }
 
     public boolean isGenerateCreate()
@@ -111,7 +87,7 @@ public class JavaAssociationMetadata
     {
         this.interfaceName = interfaceName;
     }
-    
+
     public String getInitializationMode()
     {
         return initializationMode;

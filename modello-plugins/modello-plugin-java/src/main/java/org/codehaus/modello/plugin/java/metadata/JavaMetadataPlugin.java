@@ -108,8 +108,6 @@ public class JavaMetadataPlugin
     {
         JavaAssociationMetadata metadata = new JavaAssociationMetadata();
 
-        metadata.setGenerateAdd( getBoolean( data, "java.generate-add", true ) );
-        metadata.setGenerateRemove( getBoolean( data, "java.generate-remove", true ) );
         metadata.setGenerateBreak( getBoolean( data, "java.generate-break", true ) );
         metadata.setGenerateCreate( getBoolean( data, "java.generate-create", true ) );
 
@@ -119,11 +117,11 @@ public class JavaMetadataPlugin
         {
             metadata.setInterfaceName( interfaceName );
         }
-        
+
         String initMode = (String) data.get( "java.init" );
-        // default to lazy. (for backwards compatibilty reasons)
+        // default to lazy. (for backwards compatibility reasons)
         metadata.setInitializationMode( JavaAssociationMetadata.LAZY_INIT );
-        
+
         if ( StringUtils.isNotEmpty( initMode ) )
         {
             metadata.setInitializationMode( initMode );
