@@ -107,6 +107,13 @@ public class JavaAssociationMetadata
 
     public void setInitializationMode( String initializationMode )
     {
-        this.initializationMode = initializationMode;
+        if ( initializationMode == null )
+        {
+            this.initializationMode = LAZY_INIT;
+        }
+        else
+        {
+            this.initializationMode = initializationMode;
+        }
     }
 }

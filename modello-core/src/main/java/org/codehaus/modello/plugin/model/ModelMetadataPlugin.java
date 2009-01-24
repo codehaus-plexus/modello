@@ -56,9 +56,7 @@ public class ModelMetadataPlugin
     {
         ModelClassMetadata metadata = new ModelClassMetadata();
 
-        String rootElement = (String) data.get( "rootElement" );
-
-        metadata.setRootElement( Boolean.valueOf( rootElement ).booleanValue() );
+        metadata.setRootElement( getBoolean( data, "rootElement", false ) );
 
         return metadata;
     }

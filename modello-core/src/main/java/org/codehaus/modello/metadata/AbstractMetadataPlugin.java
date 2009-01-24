@@ -84,4 +84,11 @@ public abstract class AbstractMetadataPlugin
 
         return Boolean.valueOf( value ).booleanValue();
     }
+
+    protected String getString( Map data, String key )
+    {
+        String value = (String) data.get( key );
+
+        return StringUtils.isEmpty( value ) ? null : value;
+    }
 }

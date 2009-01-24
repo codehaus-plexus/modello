@@ -26,22 +26,22 @@ import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
-import org.codehaus.plexus.util.StringUtils;
 
 import java.util.Map;
 
 /**
- * XsdMetadataPlugin 
+ * XsdMetadataPlugin
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
  */
-public class XsdMetadataPlugin extends AbstractMetadataPlugin
+public class XsdMetadataPlugin
+    extends AbstractMetadataPlugin
 {
     public static final String NAMESPACE = "xsd.namespace";
 
     public static final String TARGET_NAMESPACE = "xsd.target-namespace";
-    
+
     public static final String COMPOSITOR = "xsd.compositor";
 
     public AssociationMetadata getAssociationMetadata( ModelAssociation association, Map data ) throws ModelloException
@@ -52,13 +52,8 @@ public class XsdMetadataPlugin extends AbstractMetadataPlugin
     public ClassMetadata getClassMetadata( ModelClass clazz, Map data ) throws ModelloException
     {
         XsdClassMetadata metadata = new XsdClassMetadata();
-        
-        String compositor = (String) data.get( COMPOSITOR );
 
-        if ( StringUtils.isNotEmpty( compositor ) )
-        {
-            metadata.setCompositor( compositor );
-        }
+        metadata.setCompositor( getString( data, COMPOSITOR ) );
 
         return metadata;
     }
@@ -72,19 +67,9 @@ public class XsdMetadataPlugin extends AbstractMetadataPlugin
     {
         XsdModelMetadata metadata = new XsdModelMetadata();
 
-        String namespace = (String) data.get( NAMESPACE );
+        metadata.setNamespace( getString( data, NAMESPACE ) );
 
-        if ( StringUtils.isNotEmpty( namespace ) )
-        {
-            metadata.setNamespace( namespace );
-        }
-
-        String targetNamespace = (String) data.get( TARGET_NAMESPACE );
-
-        if ( StringUtils.isNotEmpty( targetNamespace ) )
-        {
-            metadata.setTargetNamespace( targetNamespace );
-        }
+        metadata.setTargetNamespace( getString( data, TARGET_NAMESPACE ) );
 
         return metadata;
     }

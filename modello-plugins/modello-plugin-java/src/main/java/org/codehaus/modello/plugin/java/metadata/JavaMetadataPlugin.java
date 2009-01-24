@@ -32,7 +32,6 @@ import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
-import org.codehaus.plexus.util.StringUtils;
 
 import java.util.Map;
 
@@ -87,21 +86,9 @@ public class JavaMetadataPlugin
         metadata.setGenerateBreak( getBoolean( data, "java.generate-break", true ) );
         metadata.setGenerateCreate( getBoolean( data, "java.generate-create", true ) );
 
-        String interfaceName = (String) data.get( "java.use-interface" );
+        metadata.setInterfaceName( getString( data, "java.use-interface" ) );
 
-        if ( StringUtils.isNotEmpty( interfaceName ) )
-        {
-            metadata.setInterfaceName( interfaceName );
-        }
-
-        String initMode = (String) data.get( "java.init" );
-        // default to lazy. (for backwards compatibility reasons)
-        metadata.setInitializationMode( JavaAssociationMetadata.LAZY_INIT );
-
-        if ( StringUtils.isNotEmpty( initMode ) )
-        {
-            metadata.setInitializationMode( initMode );
-        }
+        metadata.setInitializationMode( getString( data, "java.init" ) );
 
         return metadata;
     }

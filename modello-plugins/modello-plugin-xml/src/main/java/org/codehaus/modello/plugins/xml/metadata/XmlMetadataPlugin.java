@@ -32,7 +32,6 @@ import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
-import org.codehaus.plexus.util.StringUtils;
 
 import java.util.Collections;
 import java.util.Map;
@@ -54,9 +53,9 @@ public class XmlMetadataPlugin
     {
         XmlModelMetadata metadata = new XmlModelMetadata();
 
-        metadata.setNamespace( nullIfEmpty( data.get( "xml.namespace" ) ) );
+        metadata.setNamespace( getString(  data, "xml.namespace" ) );
 
-        metadata.setSchemaLocation( nullIfEmpty( data.get( "xml.schemaLocation" ) ) );
+        metadata.setSchemaLocation( getString( data, "xml.schemaLocation" ) );
 
         return metadata;
     }
@@ -74,30 +73,17 @@ public class XmlMetadataPlugin
     {
         XmlFieldMetadata metadata = new XmlFieldMetadata();
 
-        String attribute = (String) data.get( "xml.attribute" );
+        metadata.setAttribute( getBoolean( data, "xml.attribute", false ) );
 
-        metadata.setAttribute( Boolean.valueOf( attribute ).booleanValue() );
-
-        String trim = (String) data.get( "xml.trim" );
-
-        if ( trim != null )
-        {
-            metadata.setTrim( Boolean.valueOf( trim ).booleanValue() );
-        }
+        metadata.setTrim( getBoolean( data, "xml.trim", true ) );
 
         metadata.setTagName( getTagName( data ) );
 
-        String associationTagName = (String) data.get( "xml.associationTagName" );
+        metadata.setAssociationTagName( getString( data, "xml.associationTagName" ) );
 
-        metadata.setAssociationTagName( associationTagName );
+        metadata.setListStyle( getString( data, "xml.listStyle" ) );
 
-        String listStyle = (String) data.get( "xml.listStyle" );
-
-        metadata.setListStyle( listStyle );
-
-        String format = (String) data.get( "xml.format" );
-
-        metadata.setFormat( format );
+        metadata.setFormat( getString( data, "xml.format" ) );
 
         return metadata;
     }
@@ -106,16 +92,9 @@ public class XmlMetadataPlugin
     {
         XmlAssociationMetadata metadata = new XmlAssociationMetadata();
 
-        String mapStyle = (String) data.get( "xml.mapStyle" );
+        metadata.setMapStyle( getString( data, "xml.mapStyle" ) );
 
-        metadata.setMapStyle( mapStyle );
-
-        String reference = (String) data.get( "xml.reference" );
-
-        if ( reference != null )
-        {
-            metadata.setReference( Boolean.valueOf( reference ).booleanValue() );
-        }
+        metadata.setReference( getBoolean( data, "xml.reference", false ) );
 
         return metadata;
     }
@@ -135,11 +114,6 @@ public class XmlMetadataPlugin
 
     private String getTagName( Map data )
     {
-        return nullIfEmpty( data.get( "xml.tagName" ) );
-    }
-
-    private String nullIfEmpty( Object str )
-    {
-        return StringUtils.isEmpty( (String) str ) ? null : (String) str;
+        return getString( data, "xml.tagName" );
     }
 }

@@ -60,7 +60,7 @@ public class XdocMetadataPlugin
     {
         XdocFieldMetadata metadata = new XdocFieldMetadata();
 
-        metadata.setSeparator( (String) data.get( "xdoc.separator" ) );
+        metadata.setSeparator( getString( data, "xdoc.separator" ) );
 
         return metadata;
     }
