@@ -43,6 +43,8 @@ public class ModelMetadataPlugin
     extends AbstractMetadataPlugin
     implements MetadataPlugin
 {
+    public static final String ROOT_ELEMENT = "rootElement";
+
     // ----------------------------------------------------------------------
     // Map to Metadata
     // ----------------------------------------------------------------------
@@ -56,7 +58,7 @@ public class ModelMetadataPlugin
     {
         ModelClassMetadata metadata = new ModelClassMetadata();
 
-        metadata.setRootElement( getBoolean( data, "rootElement", false ) );
+        metadata.setRootElement( getBoolean( data, ROOT_ELEMENT, false ) );
 
         return metadata;
     }

@@ -45,6 +45,26 @@ public class XmlMetadataPlugin
     extends AbstractMetadataPlugin
     implements MetadataPlugin
 {
+    public static final String XML_ASSOCIATION_TAG_NAME = "xml.associationTagName";
+
+    public static final String XML_ATTRIBUTE = "xml.attribute";
+
+    public static final String XML_FORMAT = "xml.format";
+
+    public static final String XML_LIST_STYLE = "xml.listStyle";
+
+    public static final String XML_MAP_STYLE = "xml.mapStyle";
+
+    public static final String XML_NAMESPACE = "xml.namespace";
+
+    public static final String XML_REFERENCE = "xml.reference";
+
+    public static final String XML_SCHEMA_LOCATION = "xml.schemaLocation";
+
+    public static final String XML_TAG_NAME = "xml.tagName";
+
+    public static final String XML_TRIM = "xml.trim";
+
     // ----------------------------------------------------------------------
     // Map to Metadata
     // ----------------------------------------------------------------------
@@ -53,9 +73,9 @@ public class XmlMetadataPlugin
     {
         XmlModelMetadata metadata = new XmlModelMetadata();
 
-        metadata.setNamespace( getString(  data, "xml.namespace" ) );
+        metadata.setNamespace( getString( data, XML_NAMESPACE ) );
 
-        metadata.setSchemaLocation( getString( data, "xml.schemaLocation" ) );
+        metadata.setSchemaLocation( getString( data, XML_SCHEMA_LOCATION ) );
 
         return metadata;
     }
@@ -64,7 +84,7 @@ public class XmlMetadataPlugin
     {
         XmlClassMetadata metadata = new XmlClassMetadata();
 
-        metadata.setTagName( getTagName( data ) );
+        metadata.setTagName( getString( data, XML_TAG_NAME ) );
 
         return metadata;
     }
@@ -73,17 +93,17 @@ public class XmlMetadataPlugin
     {
         XmlFieldMetadata metadata = new XmlFieldMetadata();
 
-        metadata.setAttribute( getBoolean( data, "xml.attribute", false ) );
+        metadata.setAttribute( getBoolean( data, XML_ATTRIBUTE, false ) );
 
-        metadata.setTrim( getBoolean( data, "xml.trim", true ) );
+        metadata.setTrim( getBoolean( data, XML_TRIM, true ) );
 
-        metadata.setTagName( getTagName( data ) );
+        metadata.setTagName( getString( data, XML_TAG_NAME ) );
 
-        metadata.setAssociationTagName( getString( data, "xml.associationTagName" ) );
+        metadata.setAssociationTagName( getString( data, XML_ASSOCIATION_TAG_NAME ) );
 
-        metadata.setListStyle( getString( data, "xml.listStyle" ) );
+        metadata.setListStyle( getString( data, XML_LIST_STYLE ) );
 
-        metadata.setFormat( getString( data, "xml.format" ) );
+        metadata.setFormat( getString( data, XML_FORMAT ) );
 
         return metadata;
     }
@@ -92,9 +112,9 @@ public class XmlMetadataPlugin
     {
         XmlAssociationMetadata metadata = new XmlAssociationMetadata();
 
-        metadata.setMapStyle( getString( data, "xml.mapStyle" ) );
+        metadata.setMapStyle( getString( data, XML_MAP_STYLE ) );
 
-        metadata.setReference( getBoolean( data, "xml.reference", false ) );
+        metadata.setReference( getBoolean( data, XML_REFERENCE, false ) );
 
         return metadata;
     }
@@ -106,14 +126,5 @@ public class XmlMetadataPlugin
     public Map getFieldMap( ModelField field, FieldMetadata metadata )
     {
         return Collections.EMPTY_MAP;
-    }
-
-    // ----------------------------------------------------------------------
-    //
-    // ----------------------------------------------------------------------
-
-    private String getTagName( Map data )
-    {
-        return getString( data, "xml.tagName" );
     }
 }

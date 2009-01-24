@@ -44,6 +44,8 @@ public class XdocMetadataPlugin
     extends AbstractMetadataPlugin
     implements MetadataPlugin
 {
+    public static final String XDOC_SEPARATOR = "xdoc.separator";
+
     public ClassMetadata getClassMetadata( ModelClass clazz, Map data )
     {
         return new XdocClassMetadata();
@@ -60,7 +62,7 @@ public class XdocMetadataPlugin
     {
         XdocFieldMetadata metadata = new XdocFieldMetadata();
 
-        metadata.setSeparator( getString( data, "xdoc.separator" ) );
+        metadata.setSeparator( getString( data, XDOC_SEPARATOR ) );
 
         return metadata;
     }

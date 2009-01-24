@@ -43,6 +43,24 @@ public class JavaMetadataPlugin
     extends AbstractMetadataPlugin
     implements MetadataPlugin
 {
+    public static final String JAVA_ABSTRACT = "java.abstract";
+
+    public static final String JAVA_ADDER = "java.adder";
+
+    public static final String JAVA_ENABLED = "java.enabled";
+
+    public static final String JAVA_GENERATE_BREAK = "java.generate-break";
+
+    public static final String JAVA_GENERATE_CREATE = "java.generate-create";
+
+    public static final String JAVA_GETTER = "java.getter";
+
+    public static final String JAVA_INIT = "java.init";
+
+    public static final String JAVA_SETTER = "java.setter";
+
+    public static final String JAVA_USE_INTERFACE = "java.use-interface";
+
     // ----------------------------------------------------------------------
     // Map to Metadata
     // ----------------------------------------------------------------------
@@ -56,9 +74,9 @@ public class JavaMetadataPlugin
     {
         JavaClassMetadata metadata = new JavaClassMetadata();
 
-        metadata.setEnabled( getBoolean( data, "java.enabled", true ) );
+        metadata.setEnabled( getBoolean( data, JAVA_ENABLED, true ) );
 
-        metadata.setAbstract( getBoolean( data, "java.abstract", false ) );
+        metadata.setAbstract( getBoolean( data, JAVA_ABSTRACT, false ) );
 
         return metadata;
     }
@@ -67,12 +85,12 @@ public class JavaMetadataPlugin
     {
         JavaFieldMetadata metadata = new JavaFieldMetadata();
 
-        metadata.setSetter( getBoolean( data, "java.getter", true ) );
+        metadata.setSetter( getBoolean( data, JAVA_GETTER, true ) );
 
         String fieldType = field.getType();
         metadata.setBooleanGetter( ( fieldType != null ) && fieldType.endsWith( "oolean" ) );
 
-        metadata.setSetter( getBoolean( data, "java.setter", true ) );
+        metadata.setSetter( getBoolean( data, JAVA_SETTER, true ) );
 
         return metadata;
     }
@@ -81,14 +99,14 @@ public class JavaMetadataPlugin
     {
         JavaAssociationMetadata metadata = new JavaAssociationMetadata();
 
-        metadata.setAdder( getBoolean( data, "java.adder", true ) );
+        metadata.setAdder( getBoolean( data, JAVA_ADDER, true ) );
 
-        metadata.setGenerateBreak( getBoolean( data, "java.generate-break", true ) );
-        metadata.setGenerateCreate( getBoolean( data, "java.generate-create", true ) );
+        metadata.setGenerateBreak( getBoolean( data, JAVA_GENERATE_BREAK, true ) );
+        metadata.setGenerateCreate( getBoolean( data, JAVA_GENERATE_CREATE, true ) );
 
-        metadata.setInterfaceName( getString( data, "java.use-interface" ) );
+        metadata.setInterfaceName( getString( data, JAVA_USE_INTERFACE ) );
 
-        metadata.setInitializationMode( getString( data, "java.init" ) );
+        metadata.setInitializationMode( getString( data, JAVA_INIT ) );
 
         return metadata;
     }
