@@ -90,41 +90,35 @@ public class DefaultModelloCore
         }
     }
 
+    private void upgradeModifiedAttribute( String name, Map from, Map to, String warn )
+    {
+        if ( from.containsKey( name ) )
+        {
+            getLogger().warn( warn );
+
+            to.put( name, from.remove( name ) );
+        }
+    }
+
     public Model loadModel( Reader reader )
         throws ModelloException, ModelValidationException
     {
         ModelReader modelReader = new ModelReader();
         Model model = modelReader.loadModel( reader );
 
-        // update attributes moved from root class to model for compatibility
+        // keep backward compatibility with Modello attributes model changes
         Map modelAttributes = modelReader.getAttributesForModel();
         for ( Iterator classes = model.getAllClasses().iterator(); classes.hasNext(); )
         {
             ModelClass clazz = (ModelClass) classes.next();
             Map attributes = modelReader.getAttributesForClass( clazz );
 
-            if ( "true".equals( attributes.get( "rootElement" ) ) )
-            {
-                if ( attributes.containsKey( "xml.namespace" ) )
-                {
-                    getLogger().warn( "attribute 'xml.namespace' for class element is deprecated: it should be moved "
-                                      + "to model element" );
+            // attributes moved from root class to model
+            upgradeModifiedAttribute( "xml.namespace", attributes, modelAttributes,
+                "attribute 'xml.namespace' for class element is deprecated: it should be moved to model element" );
 
-                    modelAttributes.put( "xml.namespace", attributes.get( "xml.namespace" ) );
-                    attributes.remove( "xml.namespace" );
-                }
-
-                if ( attributes.containsKey( "xml.schemaLocation" ) )
-                {
-                    getLogger().warn( "attribute 'xml.schemaLocation' for class element is deprecated: it should be "
-                                      + "moved to model element" );
-
-                    modelAttributes.put( "xml.schemaLocation", attributes.get( "xml.schemaLocation" ) );
-                    attributes.remove( "xml.schemaLocation" );
-                }
-
-                break;
-            }
+            upgradeModifiedAttribute( "xml.schemaLocation", attributes, modelAttributes,
+                "attribute 'xml.schemaLocation' for class element is deprecated: it should be moved to model element" );
         }
 
         model.initialize();
