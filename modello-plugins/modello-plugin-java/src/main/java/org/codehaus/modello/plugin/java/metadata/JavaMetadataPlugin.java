@@ -59,12 +59,7 @@ public class JavaMetadataPlugin
 
         metadata.setEnabled( getBoolean( data, "java.enabled", true ) );
 
-        String abstractMode = (String) data.get( "java.abstract" );
-
-        if ( abstractMode != null )
-        {
-            metadata.setAbstract( Boolean.valueOf( abstractMode ).booleanValue() );
-        }
+        metadata.setAbstract( getBoolean( data, "java.abstract", false ) );
 
         return metadata;
     }
@@ -73,33 +68,14 @@ public class JavaMetadataPlugin
     {
         JavaFieldMetadata metadata = new JavaFieldMetadata();
 
-        String adder = (String) data.get( "java.adder" );
+        metadata.setAdder( getBoolean( data, "java.adder", true ) );
 
-        if ( adder != null )
-        {
-            metadata.setAdder( Boolean.valueOf( adder ).booleanValue() );
-        }
-
-        String getter = (String) data.get( "java.getter" );
-
-        if ( getter != null )
-        {
-            Boolean isGetter = Boolean.valueOf( getter );
-            metadata.setGetter( isGetter.booleanValue() );
-        }
+        metadata.setSetter( getBoolean( data, "java.getter", true ) );
 
         String fieldType = field.getType();
-        if ( fieldType != null && fieldType.endsWith( "oolean" ) )
-        {
-            metadata.setBooleanGetter( true );
-        }
+        metadata.setBooleanGetter( ( fieldType != null ) && fieldType.endsWith( "oolean" ) );
 
-        String setter = (String) data.get( "java.setter" );
-
-        if ( setter != null )
-        {
-            metadata.setSetter( Boolean.valueOf( setter ).booleanValue() );
-        }
+        metadata.setSetter( getBoolean( data, "java.setter", true ) );
 
         return metadata;
     }
