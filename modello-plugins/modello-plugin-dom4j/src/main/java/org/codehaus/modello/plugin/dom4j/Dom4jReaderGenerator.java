@@ -369,13 +369,6 @@ public class Dom4jReaderGenerator
             tagName = field.getName();
         }
 
-        String singularTagName = xmlFieldMetadata.getAssociationTagName();
-
-        if ( singularTagName == null )
-        {
-            singularTagName = singular( tagName );
-        }
-
         boolean wrappedList = XmlFieldMetadata.LIST_STYLE_WRAPPED.equals( xmlFieldMetadata.getListStyle() );
 
         String capFieldName = capitalise( field.getName() );
@@ -413,6 +406,16 @@ public class Dom4jReaderGenerator
             else
             {
                 //MANY_MULTIPLICITY
+
+                XmlAssociationMetadata xmlAssociationMetadata =
+                    (XmlAssociationMetadata) association.getAssociationMetadata( XmlAssociationMetadata.ID );
+
+                String singularTagName = xmlAssociationMetadata.getTagName();
+
+                if ( singularTagName == null )
+                {
+                    singularTagName = singular( tagName );
+                }
 
                 String type = association.getType();
 
@@ -526,9 +529,6 @@ public class Dom4jReaderGenerator
 
                     sc.add( "{" );
                     sc.indent();
-
-                    XmlAssociationMetadata xmlAssociationMetadata =
-                        (XmlAssociationMetadata) association.getAssociationMetadata( XmlAssociationMetadata.ID );
 
                     if ( XmlAssociationMetadata.EXPLODE_MODE.equals( xmlAssociationMetadata.getMapStyle() ) )
                     {

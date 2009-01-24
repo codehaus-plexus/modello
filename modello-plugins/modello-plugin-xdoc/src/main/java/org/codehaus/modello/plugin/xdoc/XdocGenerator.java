@@ -609,11 +609,15 @@ public class XdocGenerator
         if ( association != null )
         {
             XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) association.getMetadata( XmlFieldMetadata.ID );
+
+            XmlAssociationMetadata xmlAssociationMetadata =
+                (XmlAssociationMetadata) association.getAssociationMetadata( XmlAssociationMetadata.ID );
+
             if ( xmlFieldMetadata != null )
             {
-                if ( xmlFieldMetadata.getAssociationTagName() != null )
+                if ( xmlAssociationMetadata.getTagName() != null )
                 {
-                    tagName = xmlFieldMetadata.getAssociationTagName();
+                    tagName = xmlAssociationMetadata.getTagName();
                 }
                 else if ( xmlFieldMetadata.getTagName() != null )
                 {

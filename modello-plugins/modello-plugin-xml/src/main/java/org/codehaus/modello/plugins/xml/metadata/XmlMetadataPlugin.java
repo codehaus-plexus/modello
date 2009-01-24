@@ -45,8 +45,6 @@ public class XmlMetadataPlugin
     extends AbstractMetadataPlugin
     implements MetadataPlugin
 {
-    public static final String XML_ASSOCIATION_TAG_NAME = "xml.associationTagName";
-
     public static final String XML_ATTRIBUTE = "xml.attribute";
 
     public static final String XML_FORMAT = "xml.format";
@@ -99,8 +97,6 @@ public class XmlMetadataPlugin
 
         metadata.setTagName( getString( data, XML_TAG_NAME ) );
 
-        metadata.setAssociationTagName( getString( data, XML_ASSOCIATION_TAG_NAME ) );
-
         metadata.setListStyle( getString( data, XML_LIST_STYLE ) );
 
         metadata.setFormat( getString( data, XML_FORMAT ) );
@@ -111,6 +107,8 @@ public class XmlMetadataPlugin
     public AssociationMetadata getAssociationMetadata( ModelAssociation association, Map data )
     {
         XmlAssociationMetadata metadata = new XmlAssociationMetadata();
+
+        metadata.setTagName( getString( data, XML_TAG_NAME ) );
 
         metadata.setMapStyle( getString( data, XML_MAP_STYLE ) );
 

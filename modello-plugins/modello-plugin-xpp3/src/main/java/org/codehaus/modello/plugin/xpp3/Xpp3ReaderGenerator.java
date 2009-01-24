@@ -464,18 +464,11 @@ public class Xpp3ReaderGenerator
     private void processField( XmlFieldMetadata xmlFieldMetadata, ModelField field, String statement, JSourceCode sc,
                                String uncapClassName, ModelClass modelClass, JClass jClass )
     {
-        String tagName = xmlFieldMetadata.getTagName();
+        String fieldTagName = xmlFieldMetadata.getTagName();
 
-        if ( tagName == null )
+        if ( fieldTagName == null )
         {
-            tagName = field.getName();
-        }
-
-        String singularTagName = xmlFieldMetadata.getAssociationTagName();
-
-        if ( singularTagName == null )
-        {
-            singularTagName = singular( tagName );
+            fieldTagName = field.getName();
         }
 
         boolean wrappedList = XmlFieldMetadata.LIST_STYLE_WRAPPED.equals( xmlFieldMetadata.getListStyle() );
@@ -495,7 +488,7 @@ public class Xpp3ReaderGenerator
         }
 
         String tagComparison =
-            statement + " ( checkFieldWithDuplicate( parser, \"" + tagName + "\", " + alias + ", parsed ) )";
+            statement + " ( checkFieldWithDuplicate( parser, \"" + fieldTagName + "\", " + alias + ", parsed ) )";
 
         if ( field instanceof ModelAssociation )
         {
@@ -509,12 +502,21 @@ public class Xpp3ReaderGenerator
 
                 sc.add( "{" );
                 sc.addIndented( uncapClassName + ".set" + capFieldName + "( parse" + association.getTo() + "( \""
-                                + tagName + "\", parser, strict ) );" );
+                                + fieldTagName + "\", parser, strict ) );" );
                 sc.add( "}" );
             }
             else
             {
                 //MANY_MULTIPLICITY
+
+                XmlAssociationMetadata xmlAssociationMetadata =
+                    (XmlAssociationMetadata) association.getAssociationMetadata( XmlAssociationMetadata.ID );
+
+                String singularTagName = xmlAssociationMetadata.getTagName();
+                if ( singularTagName == null )
+                {
+                    singularTagName = singular( fieldTagName );
+                }
 
                 String type = association.getType();
 
@@ -617,9 +619,6 @@ public class Xpp3ReaderGenerator
 
                     sc.add( "{" );
                     sc.indent();
-
-                    XmlAssociationMetadata xmlAssociationMetadata =
-                        (XmlAssociationMetadata) association.getAssociationMetadata( XmlAssociationMetadata.ID );
 
                     if ( XmlAssociationMetadata.EXPLODE_MODE.equals( xmlAssociationMetadata.getMapStyle() ) )
                     {

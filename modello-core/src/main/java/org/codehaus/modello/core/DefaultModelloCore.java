@@ -90,14 +90,19 @@ public class DefaultModelloCore
         }
     }
 
-    private void upgradeModifiedAttribute( String name, Map from, Map to, String warn )
+    private void upgradeModifiedAttribute( String name, Map from, String newName, Map to, String warn )
     {
         if ( from.containsKey( name ) )
         {
             getLogger().warn( warn );
 
-            to.put( name, from.remove( name ) );
+            to.put( newName, from.remove( name ) );
         }
+    }
+
+    private void upgradeModifiedAttribute( String name, Map from, Map to, String warn )
+    {
+        upgradeModifiedAttribute( name, from, name, to, warn );
     }
 
     private void upgradeModelloModel( ModelReader modelReader, Model model )
@@ -126,6 +131,10 @@ public class DefaultModelloCore
 
                     upgradeModifiedAttribute( "java.adder", fieldAttributes, associationAttributes,
                         "attribute 'java.adder' for field element is deprecated: it should be moved to association" );
+
+                    upgradeModifiedAttribute( "xml.associationTagName", fieldAttributes,
+                        "xml.tagName", associationAttributes, "attribute 'xml.associationTagName' for field element is "
+                        + "deprecated: use 'xml.tagName' in association instead" );
                 }
             }
         }

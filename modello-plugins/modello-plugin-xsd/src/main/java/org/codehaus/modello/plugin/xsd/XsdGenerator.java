@@ -31,6 +31,7 @@ import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.plugin.xsd.metadata.XsdClassMetadata;
 import org.codehaus.modello.plugin.xsd.metadata.XsdModelMetadata;
 import org.codehaus.modello.plugins.xml.AbstractXmlGenerator;
+import org.codehaus.modello.plugins.xml.metadata.XmlAssociationMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlModelMetadata;
 import org.codehaus.plexus.util.StringUtils;
@@ -317,12 +318,16 @@ public class XsdGenerator
                             XmlFieldMetadata xmlFieldMetadata =
                                 (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
 
+                            XmlAssociationMetadata xmlAssociationMetadata =
+                                (XmlAssociationMetadata) association.getAssociationMetadata( XmlAssociationMetadata.ID );
+
                             if ( XmlFieldMetadata.LIST_STYLE_WRAPPED.equals( xmlFieldMetadata.getListStyle() ))
                             {
                                 w.addAttribute( "name", resolveFieldTagName( field ) );
                                 writeFieldDocumentation( w, field );
 
-                                writeListElement( w, xmlFieldMetadata, field, fieldModelClass.getName() );
+                                writeListElement( w, xmlFieldMetadata, xmlAssociationMetadata, field,
+                                                  fieldModelClass.getName() );
                             }
                             else
                             {
@@ -340,9 +345,9 @@ public class XsdGenerator
                                     w.addAttribute( "minOccurs", "0" );
                                 }
 
-                                if ( xmlFieldMetadata != null && xmlFieldMetadata.getAssociationTagName() != null )
+                                if ( xmlAssociationMetadata != null && xmlAssociationMetadata.getTagName() != null )
                                 {
-                                    w.addAttribute( "name", xmlFieldMetadata.getAssociationTagName() );
+                                    w.addAttribute( "name", xmlAssociationMetadata.getTagName() );
                                 }
                                 else
                                 {
@@ -371,18 +376,24 @@ public class XsdGenerator
                     else
                     {
                         w.addAttribute( "name", resolveFieldTagName( field ) );
+                        writeFieldDocumentation( w, field );
 
                         if ( List.class.getName().equals( field.getType() ) )
                         {
-                            writeFieldDocumentation( w, field );
                             XmlFieldMetadata xmlFieldMetadata =
                                 (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
-                            writeListElement( w, xmlFieldMetadata, field, getXsdType( "String" ) );
+
+                            ModelAssociation association = (ModelAssociation) field;
+
+                            XmlAssociationMetadata xmlAssociationMetadata =
+                                (XmlAssociationMetadata) association.getAssociationMetadata( XmlAssociationMetadata.ID );
+
+                            writeListElement( w, xmlFieldMetadata, xmlAssociationMetadata, field,
+                                              getXsdType( "String" ) );
                         }
                         else if ( Properties.class.getName().equals( field.getType() )
                                         || "DOM".equals( field.getType() ) )
                         {
-                            writeFieldDocumentation( w, field );
                             writePropertiesElement( w );
                         }
                         else if ( "Content".equals( field.getType() ) )
@@ -501,7 +512,8 @@ public class XsdGenerator
         w.endElement();
     }
 
-    private void writeListElement( XMLWriter w, XmlFieldMetadata xmlFieldMetadata, ModelField field, String type )
+    private void writeListElement( XMLWriter w, XmlFieldMetadata xmlFieldMetadata,
+                                   XmlAssociationMetadata xmlAssociationMetadata, ModelField field, String type )
     {
         String tagName = xmlFieldMetadata.getTagName();
 
@@ -510,7 +522,7 @@ public class XsdGenerator
             tagName = field.getName();
         }
 
-        String singularTagName = xmlFieldMetadata.getAssociationTagName();
+        String singularTagName = xmlAssociationMetadata.getTagName();
 
         if ( singularTagName == null )
         {

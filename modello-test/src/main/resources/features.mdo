@@ -768,22 +768,22 @@
             <multiplicity>*</multiplicity>
           </association>
         </field>
-        <field xml.associationTagName="association">
+        <field>
           <name>xmlAssociationTagNames</name>
           <version>1.0.0+</version>
-          <description><![CDATA[<code>&lt;field xml.associationTagName="<i>association</i>"&gt;</code>:
+          <description><![CDATA[<code>&lt;field&gt;&lt;association xml.tagName="<i>association</i>"&gt;&lt;/field&gt;</code>:
             a list with an XML name different from calculated singular of tag name.]]></description>
-          <association>
+          <association xml.tagName="association">
             <type>Reference</type>
             <multiplicity>*</multiplicity>
           </association>
         </field>
-        <field xml.listStyle="flat" xml.associationTagName="association">
+        <field xml.listStyle="flat">
           <name>xmlFlatAssociationTagNames</name>
           <version>1.0.0+</version>
-          <description><![CDATA[<code>&lt;field xml.listStyle="flat" xml.associationTagName="<i>association</i>"&gt;</code>:
+          <description><![CDATA[<code>&lt;field xml.listStyle="flat"&gt;&lt;association xml.tagName="<i>association</i>"&gt;&lt;/field&gt;</code>:
             a flat list with an XML name different from calculated singular of tag name.]]></description>
-          <association>
+          <association xml.tagName="association">
             <type>Reference</type>
             <multiplicity>*</multiplicity>
           </association>
@@ -828,12 +828,12 @@
             <multiplicity>*</multiplicity>
           </association>
         </field>
-        <field xml.listStyle="flat" xml.associationTagName="property">
+        <field xml.listStyle="flat">
           <name>flatAssociationExplodeProperties</name>
           <version>1.0.0+</version>
           <description><![CDATA[<code>&lt;type&gt;Properties&lt;/type&gt;&lt;association xml.mapStyle="explode"&gt;</code>.]]></description>
           <type>Properties</type>
-          <association xml.mapStyle="explode">
+          <association xml.tagName="property" xml.mapStyle="explode">
             <type>String</type>
             <multiplicity>*</multiplicity>
           </association>

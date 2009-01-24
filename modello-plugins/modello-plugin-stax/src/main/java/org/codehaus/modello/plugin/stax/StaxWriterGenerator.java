@@ -291,12 +291,6 @@ public class StaxWriterGenerator
                 fieldTagName = field.getName();
             }
 
-            String singularTagName = xmlFieldMetadata.getAssociationTagName();
-            if ( singularTagName == null )
-            {
-                singularTagName = singular( fieldTagName );
-            }
-
             boolean wrappedList = XmlFieldMetadata.LIST_STYLE_WRAPPED.equals( xmlFieldMetadata.getListStyle() );
 
             String type = field.getType();
@@ -344,6 +338,15 @@ public class StaxWriterGenerator
                 else
                 {
                     //MANY_MULTIPLICITY
+
+                    XmlAssociationMetadata xmlAssociationMetadata =
+                        (XmlAssociationMetadata) association.getAssociationMetadata( XmlAssociationMetadata.ID );
+
+                    String singularTagName = xmlAssociationMetadata.getTagName();
+                    if ( singularTagName == null )
+                    {
+                        singularTagName = singular( fieldTagName );
+                    }
 
                     type = association.getType();
                     String toType = association.getTo();
@@ -407,9 +410,6 @@ public class StaxWriterGenerator
                     else
                     {
                         //Map or Properties
-
-                        XmlAssociationMetadata xmlAssociationMetadata =
-                            (XmlAssociationMetadata) association.getAssociationMetadata( XmlAssociationMetadata.ID );
 
                         sc.add( getValueChecker( type, value, field ) );
 

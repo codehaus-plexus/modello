@@ -32,6 +32,7 @@ import org.codehaus.modello.plugin.java.javasource.JSourceWriter;
 import org.codehaus.modello.plugin.java.javasource.JType;
 import org.codehaus.modello.plugin.java.metadata.JavaClassMetadata;
 import org.codehaus.modello.plugin.java.metadata.JavaFieldMetadata;
+import org.codehaus.modello.plugins.xml.metadata.XmlAssociationMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
 
 import java.io.IOException;
@@ -626,11 +627,7 @@ public class JDOMWriterGenerator
             {
                 fieldTagName = field.getName();
             }
-            String singularTagName = xmlFieldMetadata.getAssociationTagName();
-            if ( singularTagName == null )
-            {
-                singularTagName = singular( fieldTagName );
-            }
+
             boolean wrappedList = XmlFieldMetadata.LIST_STYLE_WRAPPED.equals( xmlFieldMetadata.getListStyle() );
             String type = field.getType();
             String value = "value." + getPrefix( javaFieldMetadata ) + capitalise( field.getName() ) + "()";
@@ -650,6 +647,16 @@ public class JDOMWriterGenerator
                 else
                 {
                     //MANY_MULTIPLICITY
+
+                    XmlAssociationMetadata xmlAssociationMetadata =
+                        (XmlAssociationMetadata) association.getAssociationMetadata( XmlAssociationMetadata.ID );
+
+                    String singularTagName = xmlAssociationMetadata.getTagName();
+                    if ( singularTagName == null )
+                    {
+                        singularTagName = singular( fieldTagName );
+                    }
+
 //
 //                    type = association.getType();
 //                    String toType = association.getTo();

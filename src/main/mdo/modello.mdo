@@ -162,11 +162,11 @@
             List of interfaces provided by the model.
           </description>
         </field>
-        <field xdoc.separator="blank" xml.associationTagName="class">
+        <field xdoc.separator="blank">
           <name>classes</name>
           <version>1.0.0</version>
           <required>true</required>
-          <association>
+          <association xml.tagName="class">
             <type>ModelClass</type>
             <multiplicity>*</multiplicity>
           </association>
@@ -449,16 +449,6 @@
           </description>
           <comment>see org.codehaus.modello.plugins.xml.metadata.XmlMetadataPlugin</comment>
         </field>
-        <field xml.attribute="true" xml.tagName="xml.associationTagName">
-          <name>associationTagName</name>
-          <version>1.0.0</version>
-          <type>String</type>
-          <description>
-            Define a tag name to be used for every element inside a multiple association. By default, the name is
-            calculated as the singular of the field tag name.
-          </description>
-          <comment>see org.codehaus.modello.plugins.xml.metadata.XmlMetadataPlugin</comment>
-        </field>
         <field xml.attribute="true" xml.tagName="xml.listStyle">
           <name>listStyle</name>
           <version>1.0.0</version>
@@ -596,6 +586,16 @@
             Can be one of : <code>lazy</code>, <code>constructor</code>, <code>field</code>.]]>
           </description>
           <comment>see org.codehaus.modello.plugin.java.metadata.JavaMetadataPlugin</comment>
+        </field>
+        <field xml.attribute="true" xml.tagName="xml.tagName">
+          <name>associationTagName</name>
+          <version>1.0.0</version>
+          <type>String</type>
+          <description>
+            Define a tag name to be used for every element inside a multiple association. By default, the name is
+            calculated as the singular of the field tag name.
+          </description>
+          <comment>see org.codehaus.modello.plugins.xml.metadata.XmlMetadataPlugin</comment>
         </field>
         <field xml.attribute="true" xml.tagName="xml.mapStyle">
           <name>mapStyle</name>

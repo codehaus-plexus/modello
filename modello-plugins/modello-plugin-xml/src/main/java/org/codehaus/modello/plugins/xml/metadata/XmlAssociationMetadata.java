@@ -37,9 +37,21 @@ public class XmlAssociationMetadata
 
     public static final String INLINE_MODE = "inline";
 
+    private String tagName;
+
     private String mapStyle = INLINE_MODE;
 
     private boolean reference;
+
+    public String getTagName()
+    {
+        return tagName;
+    }
+
+    public void setTagName( String tagName )
+    {
+        this.tagName = tagName;
+    }
 
     /**
      * @return Returns the map style.
