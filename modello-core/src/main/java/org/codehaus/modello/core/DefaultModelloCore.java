@@ -135,6 +135,10 @@ public class DefaultModelloCore
                     upgradeModifiedAttribute( "xml.associationTagName", fieldAttributes,
                         "xml.tagName", associationAttributes, "attribute 'xml.associationTagName' for field element is "
                         + "deprecated: use 'xml.tagName' in association instead" );
+
+                    upgradeModifiedAttribute( "xml.listStyle", fieldAttributes,
+                        "xml.itemsStyle", associationAttributes, "attribute 'xml.listStyle' for field element is "
+                        + "deprecated: use 'xml.itemsStyle' in association instead" );
                 }
             }
         }

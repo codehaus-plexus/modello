@@ -266,8 +266,6 @@ public class Dom4jWriterGenerator
 
         String fieldTagName = resolveTagName( field, xmlFieldMetadata );
 
-        boolean wrappedList = XmlFieldMetadata.LIST_STYLE_WRAPPED.equals( xmlFieldMetadata.getListStyle() );
-
         String type = field.getType();
 
         String value = uncapClassName + "." + getPrefix( javaFieldMetadata ) + capitalise( field.getName() ) + "()";
@@ -298,6 +296,8 @@ public class Dom4jWriterGenerator
                 type = association.getType();
                 String toType = association.getTo();
 
+                boolean wrappedItems = xmlAssociationMetadata.isWrappedItems();
+
                 if ( ModelDefault.LIST.equals( type ) || ModelDefault.SET.equals( type ) )
                 {
                     sc.add( getValueChecker( type, value, association ) );
@@ -307,7 +307,7 @@ public class Dom4jWriterGenerator
 
                     sc.add( "Element listElement = element;" );
 
-                    if ( wrappedList )
+                    if ( wrappedItems )
                     {
                         sc.add( "listElement = element.addElement( \"" + fieldTagName + "\" );" );
                     }
@@ -349,7 +349,7 @@ public class Dom4jWriterGenerator
 
                     sc.add( "Element listElement = element;" );
 
-                    if ( wrappedList )
+                    if ( wrappedItems )
                     {
                         sc.add( "listElement = element.addElement( \"" + fieldTagName + "\" );" );
                     }

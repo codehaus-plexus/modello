@@ -625,7 +625,6 @@ public class JDOMWriterGenerator
 
             String fieldTagName = resolveTagName( field, xmlFieldMetadata );
 
-            boolean wrappedList = XmlFieldMetadata.LIST_STYLE_WRAPPED.equals( xmlFieldMetadata.getListStyle() );
             String type = field.getType();
             String value = "value." + getPrefix( javaFieldMetadata ) + capitalise( field.getName() ) + "()";
             if ( xmlFieldMetadata.isAttribute() )
@@ -659,7 +658,7 @@ public class JDOMWriterGenerator
                         String toType = association.getTo();
                         if ( toClass != null )
                         {
-                            if (wrappedList)
+                            if ( xmlAssociationMetadata.isWrappedItems() )
                             {
                                 sc.add( "iterate" + capitalise( toType ) + "( innerCount, root, " + value + ",\""
                                     + field.getName() + "\",\"" + singular( fieldTagName ) + "\" );" );

@@ -49,7 +49,7 @@ public class XmlMetadataPlugin
 
     public static final String XML_FORMAT = "xml.format";
 
-    public static final String XML_LIST_STYLE = "xml.listStyle";
+    public static final String XML_ITEMS_STYLE = "xml.itemsStyle";
 
     public static final String XML_MAP_STYLE = "xml.mapStyle";
 
@@ -97,8 +97,6 @@ public class XmlMetadataPlugin
 
         metadata.setTagName( getString( data, XML_TAG_NAME ) );
 
-        metadata.setListStyle( getString( data, XML_LIST_STYLE ) );
-
         metadata.setFormat( getString( data, XML_FORMAT ) );
 
         return metadata;
@@ -109,6 +107,8 @@ public class XmlMetadataPlugin
         XmlAssociationMetadata metadata = new XmlAssociationMetadata();
 
         metadata.setTagName( getString( data, XML_TAG_NAME ) );
+
+        metadata.setItemsStyle( getString( data, XML_ITEMS_STYLE ) );
 
         metadata.setMapStyle( getString( data, XML_MAP_STYLE ) );
 

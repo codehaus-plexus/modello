@@ -273,8 +273,6 @@ public class Xpp3WriterGenerator
 
             String fieldTagName = resolveTagName( field, xmlFieldMetadata );
 
-            boolean wrappedList = XmlFieldMetadata.LIST_STYLE_WRAPPED.equals( xmlFieldMetadata.getListStyle() );
-
             String type = field.getType();
 
             String value = uncapClassName + "." + getPrefix( javaFieldMetadata ) + capitalise( field.getName() ) + "()";
@@ -311,6 +309,8 @@ public class Xpp3WriterGenerator
                     type = association.getType();
                     String toType = association.getTo();
 
+                    boolean wrappedItems = xmlAssociationMetadata.isWrappedItems();
+
                     if ( ModelDefault.LIST.equals( type ) || ModelDefault.SET.equals( type ) )
                     {
                         sc.add( getValueChecker( type, value, association ) );
@@ -318,7 +318,7 @@ public class Xpp3WriterGenerator
                         sc.add( "{" );
                         sc.indent();
 
-                        if ( wrappedList )
+                        if ( wrappedItems )
                         {
                             sc.add( "serializer.startTag( NAMESPACE, " + "\"" + fieldTagName + "\" );" );
                         }
@@ -347,7 +347,7 @@ public class Xpp3WriterGenerator
                         sc.unindent();
                         sc.add( "}" );
 
-                        if ( wrappedList )
+                        if ( wrappedItems )
                         {
                             sc.add( "serializer.endTag( NAMESPACE, " + "\"" + fieldTagName + "\" );" );
                         }
@@ -364,7 +364,7 @@ public class Xpp3WriterGenerator
                         sc.add( "{" );
                         sc.indent();
 
-                        if ( wrappedList )
+                        if ( wrappedItems )
                         {
                             sc.add( "serializer.startTag( NAMESPACE, " + "\"" + fieldTagName + "\" );" );
                         }
@@ -396,7 +396,7 @@ public class Xpp3WriterGenerator
                         sc.unindent();
                         sc.add( "}" );
 
-                        if ( wrappedList )
+                        if ( wrappedItems )
                         {
                             sc.add( "serializer.endTag( NAMESPACE, " + "\"" + fieldTagName + "\" );" );
                         }

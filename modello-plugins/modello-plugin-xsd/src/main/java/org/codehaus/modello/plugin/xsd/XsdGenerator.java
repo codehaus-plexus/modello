@@ -320,7 +320,7 @@ public class XsdGenerator
                             XmlAssociationMetadata xmlAssociationMetadata =
                                 (XmlAssociationMetadata) association.getAssociationMetadata( XmlAssociationMetadata.ID );
 
-                            if ( XmlFieldMetadata.LIST_STYLE_WRAPPED.equals( xmlFieldMetadata.getListStyle() ))
+                            if ( xmlAssociationMetadata.isWrappedItems() )
                             {
                                 w.addAttribute( "name", resolveTagName( field, xmlFieldMetadata ) );
                                 writeFieldDocumentation( w, field );

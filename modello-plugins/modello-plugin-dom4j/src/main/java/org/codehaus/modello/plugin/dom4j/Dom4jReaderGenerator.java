@@ -364,8 +364,6 @@ public class Dom4jReaderGenerator
     {
         String fieldTagName = resolveTagName( field, xmlFieldMetadata );
 
-        boolean wrappedList = XmlFieldMetadata.LIST_STYLE_WRAPPED.equals( xmlFieldMetadata.getListStyle() );
-
         String capFieldName = capitalise( field.getName() );
 
         String singularName = singular( field.getName() );
@@ -411,7 +409,9 @@ public class Dom4jReaderGenerator
 
                 if ( ModelDefault.LIST.equals( type ) || ModelDefault.SET.equals( type ) )
                 {
-                    if ( wrappedList )
+                    boolean wrappedItems = xmlAssociationMetadata.isWrappedItems();
+
+                    if ( wrappedItems )
                     {
                         sc.add( tagComparison );
 
@@ -486,7 +486,7 @@ public class Dom4jReaderGenerator
                                              "childElement", "listElement" );
                     }
 
-                    if ( wrappedList )
+                    if ( wrappedItems )
                     {
                         sc.unindent();
                         sc.add( "}" );

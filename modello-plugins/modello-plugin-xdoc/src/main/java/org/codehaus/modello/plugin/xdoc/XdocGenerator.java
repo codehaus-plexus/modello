@@ -333,8 +333,6 @@ public class XdocGenerator
 
             if ( isInnerAssociation( f ) )
             {
-                flatAssociation = XmlFieldMetadata.LIST_STYLE_FLAT.equals( xmlFieldMetadata.getListStyle() );
-
                 ModelAssociation assoc = (ModelAssociation) f;
 
                 ModelClass associationModelClass = getModel().getClass( assoc.getTo(), getGeneratedVersion() );
@@ -495,10 +493,15 @@ public class XdocGenerator
                 {
                     ModelAssociation assoc = (ModelAssociation) f;
 
-                    boolean listStyleWrapped = assoc.isManyMultiplicity()
-                        && XmlFieldMetadata.LIST_STYLE_WRAPPED.equals( xmlFieldMetadata.getListStyle() );
+                    boolean wrappedItems = false;
+                    if ( assoc.isManyMultiplicity() )
+                    {
+                        XmlAssociationMetadata xmlAssociationMetadata =
+                            (XmlAssociationMetadata) assoc.getAssociationMetadata( XmlAssociationMetadata.ID );
+                        wrappedItems = xmlAssociationMetadata.isWrappedItems();
+                    }
 
-                    if ( listStyleWrapped )
+                    if ( wrappedItems )
                     {
                         depth++;
 
@@ -519,7 +522,7 @@ public class XdocGenerator
                         sb.append( getXmlDescriptor( fieldModelClass, assoc, depth + 1 ) );
                     }
 
-                    if ( listStyleWrapped )
+                    if ( wrappedItems )
                     {
                         appendSpacer( sb, depth );
 

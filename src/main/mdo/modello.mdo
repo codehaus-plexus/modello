@@ -449,23 +449,6 @@
           </description>
           <comment>see org.codehaus.modello.plugins.xml.metadata.XmlMetadataPlugin</comment>
         </field>
-        <field xml.attribute="true" xml.tagName="xml.listStyle">
-          <name>listStyle</name>
-          <version>1.0.0</version>
-          <type>String</type>
-          <defaultValue>wrapped</defaultValue>
-          <description><![CDATA[
-            Can be one of : <code>wrapped</code>, <code>flat</code>. <code>wrapped</code> means that the list content
-            will be wrapped into an element, where <code>flat</code> doesn't add this wrapping element. Example:
-            <pre>&lt;wrappedElements&gt;
-  &lt;wrappedElement&gt;<i>element type content</i>&lt;/wrappedElement&gt;
-  ...
-&lt;wrappedElements&gt;
-&lt;flatElement&gt;<i>element type content</i>&lt;/flatElement&gt;
-...</pre>]]>
-          </description>
-          <comment>see org.codehaus.modello.plugins.xml.metadata.XmlMetadataPlugin</comment>
-        </field>
         <field xml.attribute="true" xml.tagName="xml.format">
           <name>format</name>
           <version>1.0.0</version>
@@ -594,6 +577,23 @@
           <description>
             Define a tag name to be used for every element inside a multiple association. By default, the name is
             calculated as the singular of the field tag name.
+          </description>
+          <comment>see org.codehaus.modello.plugins.xml.metadata.XmlMetadataPlugin</comment>
+        </field>
+        <field xml.attribute="true" xml.tagName="xml.itemsStyle">
+          <name>itemsStyle</name>
+          <version>1.0.0</version>
+          <type>String</type>
+          <defaultValue>wrapped</defaultValue>
+          <description><![CDATA[
+            Can be one of : <code>wrapped</code>, <code>flat</code>. <code>wrapped</code> means that the content items
+            will be wrapped into an element, where <code>flat</code> doesn't add this wrapping element. Example:
+            <pre>&lt;wrappedElements&gt;
+  &lt;wrappedElement&gt;<i>element type content</i>&lt;/wrappedElement&gt;
+  ...
+&lt;wrappedElements&gt;
+&lt;flatElement&gt;<i>element type content</i>&lt;/flatElement&gt;
+...</pre>]]>
           </description>
           <comment>see org.codehaus.modello.plugins.xml.metadata.XmlMetadataPlugin</comment>
         </field>

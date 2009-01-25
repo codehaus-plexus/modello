@@ -466,8 +466,6 @@ public class Xpp3ReaderGenerator
     {
         String fieldTagName = resolveTagName( field, xmlFieldMetadata );
 
-        boolean wrappedList = XmlFieldMetadata.LIST_STYLE_WRAPPED.equals( xmlFieldMetadata.getListStyle() );
-
         String capFieldName = capitalise( field.getName() );
 
         String singularName = singular( field.getName() );
@@ -513,7 +511,9 @@ public class Xpp3ReaderGenerator
 
                 if ( ModelDefault.LIST.equals( type ) || ModelDefault.SET.equals( type ) )
                 {
-                    if ( wrappedList )
+                    boolean wrappedItems = xmlAssociationMetadata.isWrappedItems();
+
+                    if ( wrappedItems )
                     {
                         sc.add( tagComparison );
 
@@ -566,7 +566,7 @@ public class Xpp3ReaderGenerator
                         writePrimitiveField( association, association.getTo(), associationName, "add", sc, jClass );
                     }
 
-                    if ( wrappedList )
+                    if ( wrappedItems )
                     {
                         sc.unindent();
                         sc.add( "}" );

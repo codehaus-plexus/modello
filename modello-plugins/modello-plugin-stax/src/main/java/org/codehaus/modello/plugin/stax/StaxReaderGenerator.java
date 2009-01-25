@@ -932,8 +932,6 @@ public class StaxReaderGenerator
     {
         String fieldTagName = resolveTagName( field, xmlFieldMetadata );
 
-        boolean wrappedList = XmlFieldMetadata.LIST_STYLE_WRAPPED.equals( xmlFieldMetadata.getListStyle() );
-
         String capFieldName = capitalise( field.getName() );
 
         String singularName = singular( field.getName() );
@@ -996,9 +994,11 @@ public class StaxReaderGenerator
 
                 String type = association.getType();
 
+                boolean wrappedItems = xmlAssociationMetadata.isWrappedItems();
+
                 if ( ModelDefault.LIST.equals( type ) || ModelDefault.SET.equals( type ) )
                 {
-                    if ( wrappedList )
+                    if ( wrappedItems )
                     {
                         sc.add( tagComparison );
 
@@ -1071,7 +1071,7 @@ public class StaxReaderGenerator
                         writePrimitiveField( association, association.getTo(), associationName, "add", sc );
                     }
 
-                    if ( wrappedList )
+                    if ( wrappedItems )
                     {
                         sc.unindent();
                         sc.add( "}" );

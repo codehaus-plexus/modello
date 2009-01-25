@@ -281,8 +281,6 @@ public class StaxWriterGenerator
 
             String fieldTagName = resolveTagName( field, xmlFieldMetadata );
 
-            boolean wrappedList = XmlFieldMetadata.LIST_STYLE_WRAPPED.equals( xmlFieldMetadata.getListStyle() );
-
             String type = field.getType();
 
             String value = getFieldValue( uncapClassName, field );
@@ -337,6 +335,8 @@ public class StaxWriterGenerator
                     type = association.getType();
                     String toType = association.getTo();
 
+                    boolean wrappedItems = xmlAssociationMetadata.isWrappedItems();
+
                     if ( ModelDefault.LIST.equals( type ) || ModelDefault.SET.equals( type ) )
                     {
                         sc.add( getValueChecker( type, value, association ) );
@@ -344,7 +344,7 @@ public class StaxWriterGenerator
                         sc.add( "{" );
                         sc.indent();
 
-                        if ( wrappedList )
+                        if ( wrappedItems )
                         {
                             sc.add( "serializer.writeStartElement( " + "\"" + fieldTagName + "\" );" );
                         }
@@ -385,7 +385,7 @@ public class StaxWriterGenerator
                         sc.unindent();
                         sc.add( "}" );
 
-                        if ( wrappedList )
+                        if ( wrappedItems )
                         {
                             sc.add( "serializer.writeEndElement();" );
                         }
@@ -402,7 +402,7 @@ public class StaxWriterGenerator
                         sc.add( "{" );
                         sc.indent();
 
-                        if ( wrappedList )
+                        if ( wrappedItems )
                         {
                             sc.add( "serializer.writeStartElement( " + "\"" + fieldTagName + "\" );" );
                         }
@@ -437,7 +437,7 @@ public class StaxWriterGenerator
                         sc.unindent();
                         sc.add( "}" );
 
-                        if ( wrappedList )
+                        if ( wrappedItems )
                         {
                             sc.add( "serializer.writeEndElement();" );
                         }

@@ -37,7 +37,13 @@ public class XmlAssociationMetadata
 
     public static final String INLINE_MODE = "inline";
 
+    public static final String ITEMS_STYLE_FLAT = "flat";
+
+    public static final String ITEMS_STYLE_WRAPPED = "wrapped";
+
     private String tagName;
+
+    private String itemsStyle = ITEMS_STYLE_WRAPPED;
 
     private String mapStyle = INLINE_MODE;
 
@@ -51,6 +57,34 @@ public class XmlAssociationMetadata
     public void setTagName( String tagName )
     {
         this.tagName = tagName;
+    }
+
+    public String getItemsStyle()
+    {
+        return itemsStyle;
+    }
+
+    public void setItemsStyle( String itemsStyle )
+    {
+        if ( ITEMS_STYLE_FLAT.equals( itemsStyle ) || ITEMS_STYLE_WRAPPED.equals( itemsStyle ) )
+        {
+            this.itemsStyle = itemsStyle;
+        }
+        else
+        {
+            // default
+            this.itemsStyle = ITEMS_STYLE_WRAPPED;
+        }
+    }
+
+    public boolean isFlatItems()
+    {
+        return ITEMS_STYLE_FLAT.equals( itemsStyle );
+    }
+
+    public boolean isWrappedItems()
+    {
+        return ITEMS_STYLE_WRAPPED.equals( itemsStyle );
     }
 
     /**
