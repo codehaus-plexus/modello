@@ -1,0 +1,235 @@
+  ------
+  Release Notes
+  ------
+  Hervé Boutemy
+  ------
+  2009-01-25
+  ------
+
+Modello
+
+* 1.0-alpha-22 Release Notes (2008-12-12)
+
+  The full list of changes can be found in our {{{http://jira.codehaus.org/secure/IssueNavigator.jspa?fixfor=14742&sorter/field=issuekey&sorter/order=DESC&reset=true}issue management system}}, and is reproduced below.
+
+** Bug
+
+    * [MODELLO-119] - [REGRESSION] strict flag doesn't fail on elements that aren't part of the model
+
+    * [MODELLO-125] - generated java source for method signatures don't follow coding style
+
+    * [MODELLO-127] - Dom4j plugin should support xml.format attribute
+
+    * [MODELLO-128] - add support for byte and short to xsd plugin
+
+    * [MODELLO-129] - xsd plugin does generate an invalid schema for Properties type
+
+    * [MODELLO-130] - Date support in xsd plugin is broken
+
+    * [MODELLO-132] - char default value not supported by java plugin
+
+    * [MODELLO-134] - fix byte type support
+
+    * [MODELLO-137] - default values not supported for float and long types
+
+** Improvement
+
+    * [MODELLO-121] - Add xsd support for Boolean attributes
+
+    * [MODELLO-124] - create a shared test model to check common features support in every plugin
+
+    * [MODELLO-133] - add char support in xsd plugin
+
+** Task
+
+    * [MODELLO-131] - remove modello modules relying on components being phased-out
+
+
+* 1.0-alpha-21 Release Notes (2008-08-06)
+
+  The full list of changes can be found in our {{{http://jira.codehaus.org/secure/IssueNavigator.jspa?fixfor=14469&sorter/field=issuekey&sorter/order=DESC&reset=true}issue management system}}, and is reproduced below.
+
+** Bug
+
+    * [MODELLO-114] - Generated xsd is wrong when multiplicity is 1
+
+    * [MODELLO-115] - Not possible to configure the file name for generated xdoc with the xdoc mojo
+
+    * [MODELLO-117] - Not possible to configure the file name for generated xsd with the xsd mojo
+
+** Improvement
+
+    * [MODELLO-116] - generated xdoc doesn't display attribute when the field is an attribute
+
+** New Feature
+
+    * [MODELLO-113] - Parsing xml element with attributes and a getter to the element content
+
+
+* 1.0-alpha-20 Release Notes (2008-07-25)
+
+  The full list of changes can be found in our {{{http://jira.codehaus.org/secure/IssueNavigator.jspa?fixfor=14466&sorter/field=issuekey&sorter/order=DESC&reset=true}issue management system}}, and is reproduced below.
+
+** Bug
+
+    * [MODELLO-112] - strict flag not considered for handling of invalid nested elements within an association list.
+
+
+* 1.0-alpha-19 Release Notes (2008-07-14)
+
+  The full list of changes can be found in our {{{http://jira.codehaus.org/secure/IssueNavigator.jspa?fixfor=14339&sorter/field=issuekey&sorter/order=DESC&reset=true}issue management system}}, and is reproduced below.
+
+** Bug
+
+    * [MODELLO-105] - Handle double and float types
+
+    * [MODELLO-107] - modello-maven-plugin don't close opened files
+
+    * [MODELLO-111] - Binary compatibility broken in generated XPP3 Reader classes
+
+** Improvement
+
+    * [MODELLO-94] - Added java.net repository
+
+** New Feature
+
+    * [MODELLO-109] - add an "encoding" parameter and use ${project.build.sourceEncoding} as default value
+
+** Task
+
+    * [MODELLO-110] - remove copy of plexus-utils' XML encoding support sources
+
+
+* 1.0-alpha-18 Release Notes (2008-01-15)
+
+  The full list of changes can be found in our {{{http://jira.codehaus.org/secure/IssueNavigator.jspa?fixfor=13717&sorter/field=issuekey&sorter/order=DESC&reset=true}issue management system}}, and is reproduced below.
+
+** Bug
+
+    * [MODELLO-68] - Strict parsing lists
+
+    * [MODELLO-72] - Generated code should be clean of warnings
+
+    * [MODELLO-83] - Improvements for the generated methods equals(...), hashCode(), toString()
+
+    * [MODELLO-86] - modello-plugin-converters fails test
+
+    * [MODELLO-87] - xml.tagName not used to generate xdoc and xsd
+
+    * [MODELLO-95] - AbstractModelloGenerator#singular( String name ) could throw NPE and return empty string
+
+    * [MODELLO-98] - Reader doesn't handle <defaultValue/>
+
+    * [MODELLO-99] - When a class is marked as abstract the xpp3 reader still wants to generate constructors for it...
+
+    * [MODELLO-108] - Generated JDOMWriter throws ConcurrentModificationException when updating Xpp3Dom objects
+
+** Improvement
+
+    * [MODELLO-45] - Generated java sources should not have javadoc where <description> was not specified.
+
+    * [MODELLO-49] - Support for xml.attribute and xml.listStyle="flat" is missing in xsd plugin
+
+    * [MODELLO-56] - Major modello-plugin-xdoc rewrite
+
+    * [MODELLO-66] - Create possibility to have the same set of executions for several models in modello-maven-plugin
+
+    * [MODELLO-100] - Add hyperlinks to associations in element descriptor table like it is done in model descriptor
+
+
+* 1.0-alpha-17 Release Notes (2007-07-30)
+
+  The full list of changes can be found in our {{{http://jira.codehaus.org/secure/IssueNavigator.jspa?fixfor=13637&sorter/field=issuekey&sorter/order=DESC&reset=true}issue management system}}, and is reproduced below.
+
+** Bug
+
+    * [MODELLO-92] - XML encoding support for *.mdo files
+
+    * [MODELLO-96] - Add more javadoc comments in the generated classes
+
+
+* 1.0-alpha-15 Release Notes (2007-03-23)
+
+  The full list of changes can be found in our {{{http://jira.codehaus.org/secure/IssueNavigator.jspa?fixfor=13272&sorter/field=issuekey&sorter/order=DESC&reset=true}issue management system}}, and is reproduced below.
+
+** Bug
+
+    * [MODELLO-46] - make namespace of generated xsd configurable
+
+    * [MODELLO-84] - Clean list in the registry before to rewrite it
+
+** Improvement
+
+    * [MODELLO-67] - Add option for JPOX mapping file to be in model package [Patch included]
+
+
+* 1.0-alpha-14 Release Notes (2007-02-20)
+
+  The full list of changes can be found in our {{{http://jira.codehaus.org/secure/IssueNavigator.jspa?fixfor=13068&sorter/field=issuekey&sorter/order=DESC&reset=true}issue management system}}, and is reproduced below.
+
+** Bug
+
+    * [MODELLO-69] - Validation of the top level element
+
+    * [MODELLO-74] - Test errors in modello-plugin-stax on Windows XP + Cygwin
+
+    * [MODELLO-75] - NPE in plexus init
+
+    * [MODELLO-76] - Can't build modello-maven-plugin
+
+    * [MODELLO-79] - Modello maven plugin doesn't compile with maven 2.0.x
+
+    * [MODELLO-80] - Plexus doesn't call initialise() method in DefaultVelocityComponent with maven-2.0.x
+
+    * [MODELLO-82] - No carriage return for the last curly bracket
+
+
+** New Feature
+
+    * [MODELLO-77] - Add a read method with a path to allow to resolve relative entities
+
+    * [MODELLO-78] - Show an optional column containing the model version in which an element was added
+
+** Task
+
+    * [MODELLO-58] - update modello's parent POM
+
+
+* 1.0-alpha-13 Release Notes (2006-12-07)
+
+  The full list of changes can be found in our {{{http://jira.codehaus.org/secure/IssueNavigator.jspa?fixfor=12956&sorter/field=issuekey&sorter/order=DESC&reset=true}issue management system}}, and is reproduced below.
+
+** Bug
+
+    * [MODELLO-53] - java.lang.StackOverflowError when generating an xdoc for a modello model
+
+    * [MODELLO-54] - Generate tag name instead of association tag name
+
+    * [MODELLO-73] - Xml output doesn't use OS line separator, so tests in continuum or plexus-security failed on windows
+
+** Improvement
+
+    * [MODELLO-47] - Create goal pages on the site that describes how to use the modello-maven-plugin
+
+    * [MODELLO-50] - [patch] Add support for the class/field/defaultValue element
+
+    * [MODELLO-65] - Add in the DOM4J reader an URL parameter (to allow to use relative entities in XML)
+
+
+* 1.0-alpha-11 Release Notes (2006-09-20)
+
+  The full list of changes can be found in our {{{http://jira.codehaus.org/secure/IssueNavigator.jspa?fixfor=12790&sorter/field=issuekey&sorter/order=DESC&reset=true}issue management system}}, and is reproduced below.
+
+** Bug
+
+    * [MODELLO-51] - Xpp3GeneratorTest failed for date format on french system
+
+    * [MODELLO-57] - Dom4jGeneratorTest failed for date format on french system
+
+    * [MODELLO-61] - [jdom-plugin] data loss when writing repository/pluginRepository in maven's settings.xml
+
+** Improvement
+
+    * [MODELLO-48] - Support for xml.attribute and xml.listStyle in generated xdoc
+
+    * [MODELLO-64] - Allow generating jpox package.jdo in different places than META-INF.
