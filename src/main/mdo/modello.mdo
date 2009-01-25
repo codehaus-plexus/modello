@@ -114,7 +114,7 @@
           </description>
           <comment>see org.codehaus.modello.plugins.xsd.metadata.XsdMetadataPlugin</comment>
         </field>
-        <field xml.attribute="true" xml.tagName="xsd.target-namespace">
+        <field xml.attribute="true" xml.tagName="xsd.targetNamespace">
           <name>xsdTargetNamespace</name>
           <version>1.0.0</version>
           <type>String</type>

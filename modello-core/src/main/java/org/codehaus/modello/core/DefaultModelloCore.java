@@ -110,6 +110,11 @@ public class DefaultModelloCore
     private void upgradeModelloModel( ModelReader modelReader, Model model )
     {
         Map modelAttributes = modelReader.getAttributesForModel();
+
+        upgradeModifiedAttribute( "xsd.target-namespace", modelAttributes, "xsd.targetNamespace", modelAttributes,
+                                  "attribute 'xsd.target-namespace' for model element is deprecated: "
+                                  + "it has been renamed to 'xsd.targetNamespace'" );
+
         for ( Iterator classes = model.getAllClasses().iterator(); classes.hasNext(); )
         {
             ModelClass clazz = (ModelClass) classes.next();

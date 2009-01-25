@@ -40,7 +40,7 @@ public class XsdMetadataPlugin
 {
     public static final String NAMESPACE = "xsd.namespace";
 
-    public static final String TARGET_NAMESPACE = "xsd.target-namespace";
+    public static final String TARGET_NAMESPACE = "xsd.targetNamespace";
 
     public static final String COMPOSITOR = "xsd.compositor";
 
