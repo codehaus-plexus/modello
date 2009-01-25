@@ -238,7 +238,7 @@ public class ConverterGenerator
                 {
                     ModelAssociation assoc = (ModelAssociation) modelField;
 
-                    if ( ModelAssociation.MANY_MULTIPLICITY.equals( assoc.getMultiplicity() ) )
+                    if ( assoc.isManyMultiplicity() )
                     {
                         String type = assoc.getType();
                         if ( ModelDefault.LIST.equals( type ) || ModelDefault.SET.equals( type ) )

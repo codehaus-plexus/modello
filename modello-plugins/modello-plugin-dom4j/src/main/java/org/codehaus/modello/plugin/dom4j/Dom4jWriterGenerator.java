@@ -278,7 +278,7 @@ public class Dom4jWriterGenerator
 
             String associationName = association.getName();
 
-            if ( ModelAssociation.ONE_MULTIPLICITY.equals( association.getMultiplicity() ) )
+            if ( association.isOneMultiplicity() )
             {
                 sc.add( getValueChecker( type, value, association ) );
 

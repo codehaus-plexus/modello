@@ -495,8 +495,7 @@ public class XdocGenerator
                 {
                     ModelAssociation assoc = (ModelAssociation) f;
 
-                    boolean listStyleWrapped =
-                        ModelAssociation.MANY_MULTIPLICITY.equals( assoc.getMultiplicity() )
+                    boolean listStyleWrapped = assoc.isManyMultiplicity()
                         && XmlFieldMetadata.LIST_STYLE_WRAPPED.equals( xmlFieldMetadata.getListStyle() );
 
                     if ( listStyleWrapped )
@@ -581,6 +580,7 @@ public class XdocGenerator
      * @param modelClass the class we are looking for the tag name
      * @param association the association where this class is used
      * @return the tag name to use
+     * @todo refactor to use resolveTagName helpers instead
      */
     private String resolveTagName( ModelClass modelClass, ModelAssociation association )
     {
@@ -597,7 +597,7 @@ public class XdocGenerator
             {
                 tagName = association.getName();
 
-                if ( ModelAssociation.MANY_MULTIPLICITY.equals( association.getMultiplicity() ) )
+                if ( association.isManyMultiplicity() )
                 {
                     tagName = singular( tagName );
                 }

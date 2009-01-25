@@ -315,7 +315,7 @@ public class XsdGenerator
 
                         toWrite.add( fieldModelClass );
 
-                        if ( ModelAssociation.MANY_MULTIPLICITY.equals( association.getMultiplicity() ) )
+                        if ( association.isManyMultiplicity() )
                         {
                             XmlAssociationMetadata xmlAssociationMetadata =
                                 (XmlAssociationMetadata) association.getAssociationMetadata( XmlAssociationMetadata.ID );

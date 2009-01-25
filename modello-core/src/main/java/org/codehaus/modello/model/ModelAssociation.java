@@ -95,6 +95,16 @@ public class ModelAssociation
         this.multiplicity = multiplicity;
     }
 
+    public boolean isManyMultiplicity()
+    {
+        return MANY_MULTIPLICITY.equals( multiplicity );
+    }
+
+    public boolean isOneMultiplicity()
+    {
+        return ONE_MULTIPLICITY.equals( multiplicity );
+    }
+
     /**
      * @return Returns the to ModelClass.
      */
@@ -160,7 +170,7 @@ public class ModelAssociation
         }
         else
         {
-            if ( !ONE_MULTIPLICITY.equals( multiplicity ) )
+            if ( isManyMultiplicity() )
             {
                 if ( getType().equalsIgnoreCase( "Set" ) )
                 {

@@ -841,7 +841,7 @@ public class StaxReaderGenerator
                 sc.indent();
 
                 String capAssocName = capitalise( association.getName() );
-                if ( ModelAssociation.ONE_MULTIPLICITY.equals( association.getMultiplicity() ) )
+                if ( association.isOneMultiplicity() )
                 {
                     sc.add( "String id = (String) refs.get( \"" + association.getName() + "\" );" );
                     sc.add( to + " ref = (" + to + ") " + instanceFieldName + ".get( id );" );
@@ -881,7 +881,7 @@ public class StaxReaderGenerator
             if ( child.isReferencableChildren() )
             {
                 ModelAssociation association = child.getAssociation();
-                if ( ModelAssociation.ONE_MULTIPLICITY.equals( association.getMultiplicity() ) )
+                if ( association.isOneMultiplicity() )
                 {
                     sc.add( "resolveReferences( value.get" + capitalise( association.getName() ) + "() );" );
                 }
@@ -957,7 +957,7 @@ public class StaxReaderGenerator
 
             String associationName = association.getName();
 
-            if ( ModelAssociation.ONE_MULTIPLICITY.equals( association.getMultiplicity() ) )
+            if ( association.isOneMultiplicity() )
             {
                 sc.add( tagComparison );
 
@@ -1239,7 +1239,7 @@ public class StaxReaderGenerator
         sc.unindent();
         sc.add( "}" );
 
-        if ( ModelAssociation.ONE_MULTIPLICITY.equals( association.getMultiplicity() ) )
+        if ( association.isOneMultiplicity() )
         {
             sc.add( "refs.put( \"" + association.getName() + "\", value );" );
         }

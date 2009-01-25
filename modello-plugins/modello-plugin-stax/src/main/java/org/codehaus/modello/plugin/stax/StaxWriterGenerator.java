@@ -300,7 +300,7 @@ public class StaxWriterGenerator
 
                 ModelField referenceIdentifierField = getReferenceIdentifierField( association );
 
-                if ( ModelAssociation.ONE_MULTIPLICITY.equals( association.getMultiplicity() ) )
+                if ( association.isOneMultiplicity() )
                 {
                     sc.add( getValueChecker( type, value, association ) );
                     sc.add( "{" );

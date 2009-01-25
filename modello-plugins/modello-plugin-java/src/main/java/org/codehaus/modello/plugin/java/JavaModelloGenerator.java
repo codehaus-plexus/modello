@@ -657,7 +657,7 @@ public class JavaModelloGenerator
                 .getAssociationMetadata( JavaAssociationMetadata.ID );
 
             boolean isOneMultiplicity = isBidirectionalAssociation( modelAssociation )
-                 && ModelAssociation.ONE_MULTIPLICITY.equals( modelAssociation.getMultiplicity() );
+                 && modelAssociation.isOneMultiplicity();
 
             if ( isOneMultiplicity && javaAssociationMetadata.isGenerateBreak() )
             {
@@ -680,7 +680,7 @@ public class JavaModelloGenerator
             String interfaceCast = "";
 
             if ( StringUtils.isNotEmpty( javaAssociationMetadata.getInterfaceName() )
-                 && ModelAssociation.ONE_MULTIPLICITY.equals( modelAssociation.getMultiplicity() ) )
+                 && modelAssociation.isOneMultiplicity() )
             {
                 interfaceCast = "(" + field.getType().getName() + ") ";
 
@@ -731,7 +731,7 @@ public class JavaModelloGenerator
                 .getAssociationMetadata( JavaAssociationMetadata.ID );
 
             if ( StringUtils.isNotEmpty( javaAssociationMetadata.getInterfaceName() )
-                 && ModelAssociation.ONE_MULTIPLICITY.equals( modelAssociation.getMultiplicity() ) )
+                 && modelAssociation.isOneMultiplicity() )
             {
                 type = new JClass( javaAssociationMetadata.getInterfaceName() );
             }
@@ -778,7 +778,7 @@ public class JavaModelloGenerator
                 + "value, the only the following are acceptable " + JavaAssociationMetadata.INIT_TYPES );
         }
 
-        if ( ModelAssociation.MANY_MULTIPLICITY.equals( modelAssociation.getMultiplicity() ) )
+        if ( modelAssociation.isManyMultiplicity() )
         {
             JType type;
             if ( modelAssociation.isGenericType() )
@@ -887,7 +887,7 @@ public class JavaModelloGenerator
 
         JSourceCode sc = createMethod.getSourceCode();
 
-        if ( ModelAssociation.ONE_MULTIPLICITY.equals( modelAssociation.getMultiplicity() ) )
+        if ( modelAssociation.isOneMultiplicity() )
         {
             if ( javaAssociationMetadata.isGenerateBreak() )
             {
@@ -953,7 +953,7 @@ public class JavaModelloGenerator
 
         sc = breakMethod.getSourceCode();
 
-        if ( ModelAssociation.ONE_MULTIPLICITY.equals( modelAssociation.getMultiplicity() ) )
+        if ( modelAssociation.isOneMultiplicity() )
         {
             sc.add(
                 "if ( this." + modelAssociation.getName() + " != " + uncapitalise( modelAssociation.getTo() ) + " )" );
@@ -1142,12 +1142,11 @@ public class JavaModelloGenerator
                 .getAssociationMetadata( JavaAssociationMetadata.ID );
 
             if ( StringUtils.isNotEmpty( javaAssociationMetadata.getInterfaceName() )
-                 && ModelAssociation.ONE_MULTIPLICITY.equals( modelAssociation.getMultiplicity() ) )
+                 && ! modelAssociation.isManyMultiplicity() )
             {
                 type = new JClass( javaAssociationMetadata.getInterfaceName() );
             }
-            else if ( ModelAssociation.MANY_MULTIPLICITY.equals( modelAssociation.getMultiplicity() )
-                            && modelAssociation.isGenericType() )
+            else if ( modelAssociation.isManyMultiplicity() && modelAssociation.isGenericType() )
             {
                 type = new JCollectionType( modelAssociation.getType(), new JClass( modelAssociation.getTo() ),
                                             useJava5 );

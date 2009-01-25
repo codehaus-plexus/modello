@@ -636,7 +636,7 @@ public class JDOMWriterGenerator
             {
                 ModelAssociation association = (ModelAssociation) field;
                 ModelClass toClass = association.getToClass();
-                if ( ModelAssociation.ONE_MULTIPLICITY.equals( association.getMultiplicity() ) )
+                if ( association.isOneMultiplicity() )
                 {
                     sc.add( "update" + capitalise( field.getType() ) + "( " + value + ", \"" + fieldTagName
                         + "\", innerCount, root );" );

@@ -389,7 +389,7 @@ public class Dom4jReaderGenerator
 
             String associationName = association.getName();
 
-            if ( ModelAssociation.ONE_MULTIPLICITY.equals( association.getMultiplicity() ) )
+            if ( association.isOneMultiplicity() )
             {
                 sc.add( tagComparison );
 
