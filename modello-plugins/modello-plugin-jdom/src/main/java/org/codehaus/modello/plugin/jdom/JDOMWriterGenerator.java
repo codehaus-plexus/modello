@@ -115,7 +115,7 @@ public class JDOMWriterGenerator
 
         ModelClass rootClass = objectModel.getClass( root, getGeneratedVersion() );
 
-        String rootElement = getTagName( rootClass );
+        String rootElement = resolveTagName( rootClass );
 
         // the public global write method..
         jClass.addMethod( generateWriteModel( root, rootElement ) );
@@ -622,11 +622,8 @@ public class JDOMWriterGenerator
             ModelField field = (ModelField) i.next();
             XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
             JavaFieldMetadata javaFieldMetadata = (JavaFieldMetadata) field.getMetadata( JavaFieldMetadata.ID );
-            String fieldTagName = xmlFieldMetadata.getTagName();
-            if ( fieldTagName == null )
-            {
-                fieldTagName = field.getName();
-            }
+
+            String fieldTagName = resolveTagName( field, xmlFieldMetadata );
 
             boolean wrappedList = XmlFieldMetadata.LIST_STYLE_WRAPPED.equals( xmlFieldMetadata.getListStyle() );
             String type = field.getType();
@@ -651,12 +648,7 @@ public class JDOMWriterGenerator
                     XmlAssociationMetadata xmlAssociationMetadata =
                         (XmlAssociationMetadata) association.getAssociationMetadata( XmlAssociationMetadata.ID );
 
-                    String valuesTagName = xmlAssociationMetadata.getTagName();
-                    if ( valuesTagName == null )
-                    {
-                        valuesTagName = singular( fieldTagName );
-                    }
-
+                    String valuesTagName = resolveTagName( fieldTagName, xmlAssociationMetadata );
 //
 //                    type = association.getType();
 //                    String toType = association.getTo();

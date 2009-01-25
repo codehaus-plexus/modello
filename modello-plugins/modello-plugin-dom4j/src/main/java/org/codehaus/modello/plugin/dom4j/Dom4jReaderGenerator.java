@@ -122,7 +122,7 @@ public class Dom4jReaderGenerator
 
         sc.add( "String encoding = document.getXMLEncoding();" );
 
-        sc.add( "return parse" + root.getName() + "( \"" + getTagName( root )
+        sc.add( "return parse" + root.getName() + "( \"" + resolveTagName( root )
             + "\", document.getRootElement(), strict, encoding );" );
 
         jClass.addMethod( unmarshall );
@@ -160,7 +160,7 @@ public class Dom4jReaderGenerator
 
         sc.add( "String encoding = document.getXMLEncoding();" );
 
-        sc.add( "return parse" + root.getName() + "( \"" + getTagName( root )
+        sc.add( "return parse" + root.getName() + "( \"" + resolveTagName( root )
             + "\", document.getRootElement(), strict, encoding );" );
 
         jClass.addMethod( unmarshall );
@@ -362,12 +362,7 @@ public class Dom4jReaderGenerator
     private void processField( XmlFieldMetadata xmlFieldMetadata, ModelField field, String statement, JSourceCode sc,
                                String uncapClassName, ModelClass modelClass, JClass jClass )
     {
-        String tagName = xmlFieldMetadata.getTagName();
-
-        if ( tagName == null )
-        {
-            tagName = field.getName();
-        }
+        String fieldTagName = resolveTagName( field, xmlFieldMetadata );
 
         boolean wrappedList = XmlFieldMetadata.LIST_STYLE_WRAPPED.equals( xmlFieldMetadata.getListStyle() );
 
@@ -386,7 +381,7 @@ public class Dom4jReaderGenerator
         }
 
         String tagComparison =
-            statement + " ( checkFieldWithDuplicate( childElement, \"" + tagName + "\", " + alias + ", parsed ) )";
+            statement + " ( checkFieldWithDuplicate( childElement, \"" + fieldTagName + "\", " + alias + ", parsed ) )";
 
         if ( field instanceof ModelAssociation )
         {
@@ -400,7 +395,7 @@ public class Dom4jReaderGenerator
 
                 sc.add( "{" );
                 sc.addIndented( uncapClassName + ".set" + capFieldName + "( parse" + association.getTo() + "( \""
-                                + tagName + "\", childElement, strict, encoding ) );" );
+                                + fieldTagName + "\", childElement, strict, encoding ) );" );
                 sc.add( "}" );
             }
             else
@@ -410,12 +405,7 @@ public class Dom4jReaderGenerator
                 XmlAssociationMetadata xmlAssociationMetadata =
                     (XmlAssociationMetadata) association.getAssociationMetadata( XmlAssociationMetadata.ID );
 
-                String valuesTagName = xmlAssociationMetadata.getTagName();
-
-                if ( valuesTagName == null )
-                {
-                    valuesTagName = singular( tagName );
-                }
+                String valuesTagName = resolveTagName( fieldTagName, xmlAssociationMetadata );
 
                 String type = association.getType();
 

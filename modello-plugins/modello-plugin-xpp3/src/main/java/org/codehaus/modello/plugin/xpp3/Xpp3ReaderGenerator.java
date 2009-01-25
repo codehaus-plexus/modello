@@ -161,7 +161,7 @@ public class Xpp3ReaderGenerator
 
         sc.add( "parser.next();" );
 
-        sc.add( "return parse" + root.getName() + "( \"" + getTagName( root ) + "\", parser, strict );" );
+        sc.add( "return parse" + root.getName() + "( \"" + resolveTagName( root ) + "\", parser, strict );" );
 
         jClass.addMethod( unmarshall );
 
@@ -464,12 +464,7 @@ public class Xpp3ReaderGenerator
     private void processField( XmlFieldMetadata xmlFieldMetadata, ModelField field, String statement, JSourceCode sc,
                                String uncapClassName, ModelClass modelClass, JClass jClass )
     {
-        String fieldTagName = xmlFieldMetadata.getTagName();
-
-        if ( fieldTagName == null )
-        {
-            fieldTagName = field.getName();
-        }
+        String fieldTagName = resolveTagName( field, xmlFieldMetadata );
 
         boolean wrappedList = XmlFieldMetadata.LIST_STYLE_WRAPPED.equals( xmlFieldMetadata.getListStyle() );
 
@@ -512,11 +507,7 @@ public class Xpp3ReaderGenerator
                 XmlAssociationMetadata xmlAssociationMetadata =
                     (XmlAssociationMetadata) association.getAssociationMetadata( XmlAssociationMetadata.ID );
 
-                String valuesTagName = xmlAssociationMetadata.getTagName();
-                if ( valuesTagName == null )
-                {
-                    valuesTagName = singular( fieldTagName );
-                }
+                String valuesTagName = resolveTagName( fieldTagName, xmlAssociationMetadata );
 
                 String type = association.getType();
 

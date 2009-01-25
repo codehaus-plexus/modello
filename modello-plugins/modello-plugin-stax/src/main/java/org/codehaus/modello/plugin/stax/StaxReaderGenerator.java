@@ -148,7 +148,7 @@ public class StaxReaderGenerator
 
         sc.add( "String encoding = xmlStreamReader.getCharacterEncodingScheme();" );
 
-        sc.add( returnType + " value = parse" + root.getName() + "( \"" + getTagName( root )
+        sc.add( returnType + " value = parse" + root.getName() + "( \"" + resolveTagName( root )
             + "\", xmlStreamReader, strict, encoding );" );
 
         sc.add( "resolveReferences( value );" );
@@ -193,7 +193,7 @@ public class StaxReaderGenerator
 
         sc.add( "String encoding = xmlStreamReader.getCharacterEncodingScheme();" );
 
-        sc.add( returnType + " value = parse" + root.getName() + "( \"" + getTagName( root )
+        sc.add( returnType + " value = parse" + root.getName() + "( \"" + resolveTagName( root )
             + "\", xmlStreamReader, strict, encoding );" );
 
         sc.add( "resolveReferences( value );" );
@@ -930,12 +930,7 @@ public class StaxReaderGenerator
                                String uncapClassName, ModelClass modelClass, boolean rootElement, JClass jClass )
         throws ModelloException
     {
-        String fieldTagName = xmlFieldMetadata.getTagName();
-
-        if ( fieldTagName == null )
-        {
-            fieldTagName = field.getName();
-        }
+        String fieldTagName = resolveTagName( field, xmlFieldMetadata );
 
         boolean wrappedList = XmlFieldMetadata.LIST_STYLE_WRAPPED.equals( xmlFieldMetadata.getListStyle() );
 
@@ -997,11 +992,7 @@ public class StaxReaderGenerator
                 XmlAssociationMetadata xmlAssociationMetadata =
                     (XmlAssociationMetadata) association.getAssociationMetadata( XmlAssociationMetadata.ID );
 
-                String valuesTagName = xmlAssociationMetadata.getTagName();
-                if ( valuesTagName == null )
-                {
-                    valuesTagName = singular( fieldTagName );
-                }
+                String valuesTagName = resolveTagName( fieldTagName, xmlAssociationMetadata );
 
                 String type = association.getType();
 

@@ -154,7 +154,7 @@ public class XsdGenerator
             }
 
             w.startElement( "xs:element" );
-            String tagName = getTagName( root );
+            String tagName = resolveTagName( root );
             w.addAttribute( "name", tagName );
             w.addAttribute( "type", root.getName() );
 
@@ -269,6 +269,8 @@ public class XsdGenerator
             {
                 ModelField field = (ModelField) j.next();
 
+                XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
+
                 if ( !hasContentField )
                 {
                     w.startElement( "xs:element" );
@@ -284,7 +286,7 @@ public class XsdGenerator
                 String xsdType = getXsdType( field.getType() );
                 if ( ( xsdType != null ) || "char".equals( field.getType() ) || "Char".equals( field.getType() ) )
                 {
-                    w.addAttribute( "name", resolveFieldTagName( field ) );
+                    w.addAttribute( "name", resolveTagName( field, xmlFieldMetadata ) );
                     if ( xsdType != null )
                     {
                         // schema built-in datatype
@@ -315,15 +317,12 @@ public class XsdGenerator
 
                         if ( ModelAssociation.MANY_MULTIPLICITY.equals( association.getMultiplicity() ) )
                         {
-                            XmlFieldMetadata xmlFieldMetadata =
-                                (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
-
                             XmlAssociationMetadata xmlAssociationMetadata =
                                 (XmlAssociationMetadata) association.getAssociationMetadata( XmlAssociationMetadata.ID );
 
                             if ( XmlFieldMetadata.LIST_STYLE_WRAPPED.equals( xmlFieldMetadata.getListStyle() ))
                             {
-                                w.addAttribute( "name", resolveFieldTagName( field ) );
+                                w.addAttribute( "name", resolveTagName( field, xmlFieldMetadata ) );
                                 writeFieldDocumentation( w, field );
 
                                 writeListElement( w, xmlFieldMetadata, xmlAssociationMetadata, field,
@@ -368,21 +367,18 @@ public class XsdGenerator
                         else
                         {
                             // not many multiplicity
-                            w.addAttribute( "name", resolveFieldTagName( field ) );
+                            w.addAttribute( "name", resolveTagName( field, xmlFieldMetadata ) );
                             w.addAttribute( "type", fieldModelClass.getName() );
                             writeFieldDocumentation( w, field );
                         }
                     }
                     else
                     {
-                        w.addAttribute( "name", resolveFieldTagName( field ) );
+                        w.addAttribute( "name", resolveTagName( field, xmlFieldMetadata ) );
                         writeFieldDocumentation( w, field );
 
                         if ( List.class.getName().equals( field.getType() ) )
                         {
-                            XmlFieldMetadata xmlFieldMetadata =
-                                (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
-
                             ModelAssociation association = (ModelAssociation) field;
 
                             XmlAssociationMetadata xmlAssociationMetadata =
@@ -422,11 +418,13 @@ public class XsdGenerator
         {
             ModelField field = (ModelField) j.next();
 
+            XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
+
             w.startElement( "xs:attribute" );
 
             String xsdType = getXsdType( field.getType() );
 
-            String tagName = resolveFieldTagName( field );
+            String tagName = resolveTagName( field, xmlFieldMetadata );
 
             w.addAttribute( "name", tagName );
 
@@ -515,19 +513,9 @@ public class XsdGenerator
     private void writeListElement( XMLWriter w, XmlFieldMetadata xmlFieldMetadata,
                                    XmlAssociationMetadata xmlAssociationMetadata, ModelField field, String type )
     {
-        String tagName = xmlFieldMetadata.getTagName();
+        String fieldTagName = resolveTagName( field, xmlFieldMetadata );
 
-        if ( tagName == null )
-        {
-            tagName = field.getName();
-        }
-
-        String valuesTagName = xmlAssociationMetadata.getTagName();
-
-        if ( valuesTagName == null )
-        {
-            valuesTagName = singular( tagName );
-        }
+        String valuesTagName = resolveTagName( fieldTagName, xmlAssociationMetadata );
 
         w.startElement( "xs:complexType" );
 

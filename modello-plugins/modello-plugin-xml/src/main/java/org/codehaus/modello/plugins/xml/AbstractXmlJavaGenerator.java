@@ -23,8 +23,10 @@ package org.codehaus.modello.plugins.xml;
  */
 
 import org.codehaus.modello.model.ModelClass;
+import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.plugin.java.AbstractJavaModelloGenerator;
 import org.codehaus.modello.plugin.java.javasource.JSourceCode;
+import org.codehaus.modello.plugins.xml.metadata.XmlAssociationMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
 
 /**
@@ -43,9 +45,39 @@ public abstract class AbstractXmlJavaGenerator
         return name + suffix;
     }
 
-    protected String getTagName( ModelClass modelClass )
+    /**
+     * Resolve XML tag name for a class. Note: only root class needs such a resolution.
+     *
+     * @param modelClass the model class
+     * @return the XML tag name for the class
+     */
+    protected String resolveTagName( ModelClass modelClass )
     {
-        return XmlModelHelpers.getTagName( modelClass );
+        return XmlModelHelpers.resolveTagName( modelClass );
+    }
+
+    /**
+     * Resolve XML tag name for a field.
+     *
+     * @param modelField the model field
+     * @param xmlFieldMetadata the XML metadata of the field
+     * @return the XML tag name for the field
+     */
+    protected String resolveTagName( ModelField modelField, XmlFieldMetadata xmlFieldMetadata )
+    {
+        return XmlModelHelpers.resolveTagName( modelField, xmlFieldMetadata );
+    }
+
+    /**
+     * Resolve XML tag name for an item in an association with many multiplicity.
+     *
+     * @param fieldTagName the XML tag name of the field containing the association
+     * @param xmlAssociationMetadata the XML metadata of the association
+     * @return the XML tag name for items
+     */
+    protected String resolveTagName( String fieldTagName, XmlAssociationMetadata xmlAssociationMetadata )
+    {
+        return XmlModelHelpers.resolveTagName( fieldTagName, xmlAssociationMetadata );
     }
 
     protected String getValue( String type, String initialValue, XmlFieldMetadata xmlFieldMetadata )

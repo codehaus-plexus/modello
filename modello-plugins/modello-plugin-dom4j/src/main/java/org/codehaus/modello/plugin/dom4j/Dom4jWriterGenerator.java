@@ -103,7 +103,7 @@ public class Dom4jWriterGenerator
 
         ModelClass rootClass = objectModel.getClass( root, getGeneratedVersion() );
 
-        String rootElement = getTagName( rootClass );
+        String rootElement = resolveTagName( rootClass );
 
         // Write the parse method which will do the unmarshalling.
 
@@ -221,12 +221,7 @@ public class Dom4jWriterGenerator
 
             JavaFieldMetadata javaFieldMetadata = (JavaFieldMetadata) field.getMetadata( JavaFieldMetadata.ID );
 
-            String fieldTagName = xmlFieldMetadata.getTagName();
-
-            if ( fieldTagName == null )
-            {
-                fieldTagName = field.getName();
-            }
+            String fieldTagName = resolveTagName( field, xmlFieldMetadata );
 
             String type = field.getType();
 
@@ -269,12 +264,7 @@ public class Dom4jWriterGenerator
     {
         JavaFieldMetadata javaFieldMetadata = (JavaFieldMetadata) field.getMetadata( JavaFieldMetadata.ID );
 
-        String fieldTagName = xmlFieldMetadata.getTagName();
-
-        if ( fieldTagName == null )
-        {
-            fieldTagName = field.getName();
-        }
+        String fieldTagName = resolveTagName( field, xmlFieldMetadata );
 
         boolean wrappedList = XmlFieldMetadata.LIST_STYLE_WRAPPED.equals( xmlFieldMetadata.getListStyle() );
 
@@ -303,11 +293,7 @@ public class Dom4jWriterGenerator
                 XmlAssociationMetadata xmlAssociationMetadata =
                     (XmlAssociationMetadata) association.getAssociationMetadata( XmlAssociationMetadata.ID );
 
-                String valuesTagName = xmlAssociationMetadata.getTagName();
-                if ( valuesTagName == null )
-                {
-                    valuesTagName = singular( fieldTagName );
-                }
+                String valuesTagName = resolveTagName( fieldTagName, xmlAssociationMetadata );
 
                 type = association.getType();
                 String toType = association.getTo();

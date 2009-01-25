@@ -1,8 +1,11 @@
 package org.codehaus.modello.plugins.xml;
 
 import org.codehaus.modello.model.ModelClass;
+import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.plugin.AbstractModelloGenerator;
+import org.codehaus.modello.plugins.xml.metadata.XmlAssociationMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlClassMetadata;
+import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
 
 /*
  * Copyright (c) 2004, Codehaus.org
@@ -34,20 +37,70 @@ import org.codehaus.modello.plugins.xml.metadata.XmlClassMetadata;
  */
 class XmlModelHelpers
 {
-    static String getTagName( ModelClass modelClass )
+    /**
+     * Resolve XML tag name for a class. Note: only root class needs such a resolution.
+     *
+     * @param modelClass the model class
+     * @return the XML tag name for the class
+     */
+    static String resolveTagName( ModelClass modelClass )
     {
         XmlClassMetadata xmlClassMetadata = (XmlClassMetadata) modelClass.getMetadata( XmlClassMetadata.ID );
 
         String tagName;
-        if ( xmlClassMetadata == null || xmlClassMetadata.getTagName() == null )
+        if ( ( xmlClassMetadata == null ) || ( xmlClassMetadata.getTagName() == null ) )
         {
             tagName = AbstractModelloGenerator.uncapitalise( modelClass.getName() );
         }
         else
         {
+            // tag name is overridden by xml.tagName attribute
             tagName = xmlClassMetadata.getTagName();
         }
         return tagName;
     }
 
+    /**
+     * Resolve XML tag name for a field.
+     *
+     * @param modelField the model field
+     * @param xmlFieldMetadata the XML metadata of the field
+     * @return the XML tag name for the field
+     */
+    static String resolveTagName( ModelField modelField, XmlFieldMetadata xmlFieldMetadata )
+    {
+        String tagName;
+        if ( ( xmlFieldMetadata == null ) || ( xmlFieldMetadata.getTagName() == null ) )
+        {
+            tagName = modelField.getName();
+        }
+        else
+        {
+            // tag name is overridden by xml.tagName attribute
+            tagName = xmlFieldMetadata.getTagName();
+        }
+        return tagName;
+    }
+
+    /**
+     * Resolve XML tag name for an item in an association with many multiplicity.
+     *
+     * @param fieldTagName the XML tag name of the field containing the association
+     * @param xmlAssociationMetadata the XML metadata of the association
+     * @return the XML tag name for items
+     */
+    static String resolveTagName( String fieldTagName, XmlAssociationMetadata xmlAssociationMetadata )
+    {
+        String tagName;
+        if ( ( xmlAssociationMetadata == null ) || ( xmlAssociationMetadata.getTagName() == null ) )
+        {
+            tagName = AbstractModelloGenerator.singular( fieldTagName );
+        }
+        else
+        {
+            // tag name is overridden by xml.tagName attribute
+            tagName = xmlAssociationMetadata.getTagName();
+        }
+        return tagName;
+    }
 }

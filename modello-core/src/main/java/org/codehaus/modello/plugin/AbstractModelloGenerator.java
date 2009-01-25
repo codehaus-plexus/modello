@@ -169,7 +169,7 @@ public abstract class AbstractModelloGenerator
             .toString();
     }
 
-    protected String singular( String name )
+    public static String singular( String name )
     {
         if ( StringUtils.isEmpty( name ) )
         {

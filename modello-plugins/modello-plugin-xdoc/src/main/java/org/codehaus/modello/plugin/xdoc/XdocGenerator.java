@@ -362,7 +362,7 @@ public class XdocGenerator
             }
             else
             {
-                w.writeText( resolveFieldTagName( f ) );
+                w.writeText( resolveTagName( f, xmlFieldMetadata ) );
             }
 
             w.endElement();
@@ -461,9 +461,11 @@ public class XdocGenerator
             {
                 ModelField f = (ModelField) iter.next();
 
+                XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) f.getMetadata( XmlFieldMetadata.ID );
+
                 sb.append( ' ' );
 
-                sb.append( resolveFieldTagName( f ) ).append( "=.." );
+                sb.append( resolveTagName( f, xmlFieldMetadata ) ).append( "=.." );
             }
 
             sb.append( ' ' );
@@ -480,6 +482,8 @@ public class XdocGenerator
             {
                 ModelField f = (ModelField) iter.next();
 
+                XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) f.getMetadata( XmlFieldMetadata.ID );
+
                 XdocFieldMetadata xdocFieldMetadata = (XdocFieldMetadata) f.getMetadata( XdocFieldMetadata.ID );
 
                 if ( XdocFieldMetadata.BLANK.equals( xdocFieldMetadata.getSeparator() ) )
@@ -490,8 +494,6 @@ public class XdocGenerator
                 if ( isInnerAssociation( f ) && recursive )
                 {
                     ModelAssociation assoc = (ModelAssociation) f;
-
-                    XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) f.getMetadata( XmlFieldMetadata.ID );
 
                     boolean listStyleWrapped =
                         ModelAssociation.MANY_MULTIPLICITY.equals( assoc.getMultiplicity() )
@@ -529,7 +531,7 @@ public class XdocGenerator
                 }
                 else if ( ModelDefault.PROPERTIES.equals( f.getType() ) )
                 {
-                    String fieldTagName = resolveFieldTagName( f );
+                    String fieldTagName = resolveTagName( f, xmlFieldMetadata );
 
                     ModelAssociation assoc = (ModelAssociation) f;
                     XmlAssociationMetadata xmlAssociationMetadata =
@@ -558,7 +560,7 @@ public class XdocGenerator
                 {
                     appendSpacer( sb, depth + 1 );
 
-                    sb.append( "&lt;" ).append( resolveFieldTagName( f ) ).append( "/&gt;\n" );
+                    sb.append( "&lt;" ).append( resolveTagName( f, xmlFieldMetadata ) ).append( "/&gt;\n" );
                 }
             }
 

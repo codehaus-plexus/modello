@@ -29,8 +29,8 @@ import java.util.List;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.plugin.AbstractModelloGenerator;
+import org.codehaus.modello.plugins.xml.metadata.XmlAssociationMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
-import org.codehaus.plexus.util.StringUtils;
 
 /**
  * Abstract class for plugins working on XML representation of the model, without having any need to generate
@@ -42,32 +42,39 @@ import org.codehaus.plexus.util.StringUtils;
 public abstract class AbstractXmlGenerator
     extends AbstractModelloGenerator
 {
-    protected String getTagName( ModelClass modelClass )
+    /**
+     * Resolve XML tag name for a class. Note: only root class needs such a resolution.
+     *
+     * @param modelClass the model class
+     * @return the XML tag name for the class
+     */
+    protected String resolveTagName( ModelClass modelClass )
     {
-        return XmlModelHelpers.getTagName( modelClass );
+        return XmlModelHelpers.resolveTagName( modelClass );
     }
 
     /**
-     * Compute the tagName of a given field. <br>
-     * This method return the first child tag name created by this field.
-     * This means that for a association with multiplicity * and listStyle to
-     * wrapped (which is the default), this method will return the plural tagName,
-     * while for a listStyle of flat, it will return the singular tagName.
-     * @param field the field we are looking for the tag name.
-     * @return the tag name to use
+     * Resolve XML tag name for a field.
+     *
+     * @param modelField the model field
+     * @param xmlFieldMetadata the XML metadata of the field
+     * @return the XML tag name for the field
      */
-    protected String resolveFieldTagName( ModelField field )
+    protected String resolveTagName( ModelField modelField, XmlFieldMetadata xmlFieldMetadata )
     {
-        XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
+        return XmlModelHelpers.resolveTagName( modelField, xmlFieldMetadata );
+    }
 
-        String tagName = uncapitalise( field.getName() );
-
-        if ( xmlFieldMetadata != null && StringUtils.isNotEmpty( xmlFieldMetadata.getTagName() ) )
-        {
-            tagName = xmlFieldMetadata.getTagName();
-        }
-
-        return tagName;
+    /**
+     * Resolve XML tag name for an item in an association with many multiplicity.
+     *
+     * @param fieldTagName the XML tag name of the field containing the association
+     * @param xmlAssociationMetadata the XML metadata of the association
+     * @return the XML tag name for items
+     */
+    protected String resolveTagName( String fieldTagName, XmlAssociationMetadata xmlAssociationMetadata )
+    {
+        return XmlModelHelpers.resolveTagName( fieldTagName, xmlAssociationMetadata );
     }
 
     /**
@@ -107,24 +114,12 @@ public abstract class AbstractXmlGenerator
         return attributeFields;
     }
 
-    protected boolean hasContentField( List /* ModelField */modelFields )
+    protected boolean hasContentField( List/*<ModelField>*/ modelFields )
     {
-        if ( modelFields == null )
-        {
-            return false;
-        }
-        for ( Iterator j = modelFields.iterator(); j.hasNext(); )
-        {
-            ModelField field = (ModelField) j.next();
-            if ( "Content".equals( field.getType() ) )
-            {
-                return true;
-            }
-        }
-        return false;
+        return ( getContentField( modelFields ) != null );
     }
 
-    protected ModelField getContentField( List /* ModelField */modelFields )
+    protected ModelField getContentField( List/*<ModelField>*/ modelFields )
     {
         if ( modelFields == null )
         {
