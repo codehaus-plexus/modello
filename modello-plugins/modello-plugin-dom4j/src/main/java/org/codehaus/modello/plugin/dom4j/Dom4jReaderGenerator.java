@@ -410,11 +410,11 @@ public class Dom4jReaderGenerator
                 XmlAssociationMetadata xmlAssociationMetadata =
                     (XmlAssociationMetadata) association.getAssociationMetadata( XmlAssociationMetadata.ID );
 
-                String singularTagName = xmlAssociationMetadata.getTagName();
+                String valuesTagName = xmlAssociationMetadata.getTagName();
 
-                if ( singularTagName == null )
+                if ( valuesTagName == null )
                 {
-                    singularTagName = singular( tagName );
+                    valuesTagName = singular( tagName );
                 }
 
                 String type = association.getType();
@@ -456,14 +456,14 @@ public class Dom4jReaderGenerator
 
                         sc.add( "Element listElement = (Element) n;" );
 
-                        sc.add( "if ( listElement.getName().equals( \"" + singularTagName + "\" ) )" );
+                        sc.add( "if ( listElement.getName().equals( \"" + valuesTagName + "\" ) )" );
 
                         sc.add( "{" );
                         sc.indent();
                     }
                     else
                     {
-                        sc.add( statement + " ( childElement.getName().equals( \"" + singularTagName + "\" ) )" );
+                        sc.add( statement + " ( childElement.getName().equals( \"" + valuesTagName + "\" ) )" );
 
                         sc.add( "{" );
                         sc.indent();
@@ -487,7 +487,7 @@ public class Dom4jReaderGenerator
 
                     if ( isClassInModel( association.getTo(), modelClass.getModel() ) )
                     {
-                        sc.add( associationName + ".add( parse" + association.getTo() + "( \"" + singularTagName
+                        sc.add( associationName + ".add( parse" + association.getTo() + "( \"" + valuesTagName
                             + "\", listElement, strict, encoding ) );" );
                     }
                     else
@@ -556,7 +556,7 @@ public class Dom4jReaderGenerator
 
                         sc.add( "Element listElement = (Element) n;" );
 
-                        sc.add( "if ( listElement.getName().equals( \"" + singularTagName + "\" ) )" );
+                        sc.add( "if ( listElement.getName().equals( \"" + valuesTagName + "\" ) )" );
 
                         sc.add( "{" );
                         sc.indent();

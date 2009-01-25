@@ -303,10 +303,10 @@ public class Dom4jWriterGenerator
                 XmlAssociationMetadata xmlAssociationMetadata =
                     (XmlAssociationMetadata) association.getAssociationMetadata( XmlAssociationMetadata.ID );
 
-                String singularTagName = xmlAssociationMetadata.getTagName();
-                if ( singularTagName == null )
+                String valuesTagName = xmlAssociationMetadata.getTagName();
+                if ( valuesTagName == null )
                 {
-                    singularTagName = singular( fieldTagName );
+                    valuesTagName = singular( fieldTagName );
                 }
 
                 type = association.getType();
@@ -335,14 +335,14 @@ public class Dom4jWriterGenerator
                     {
                         sc.add( toType + " o = (" + toType + ") iter.next();" );
 
-                        sc.add( "write" + toType + "( o, \"" + singularTagName + "\", listElement );" );
+                        sc.add( "write" + toType + "( o, \"" + valuesTagName + "\", listElement );" );
                     }
                     else
                     {
                         sc.add( toType + " " + singular( uncapitalise( field.getName() ) ) + " = (" + toType
                             + ") iter.next();" );
 
-                        sc.add( "listElement.addElement( \"" + singularTagName + "\" ).setText( "
+                        sc.add( "listElement.addElement( \"" + valuesTagName + "\" ).setText( "
                             + singular( uncapitalise( field.getName() ) ) + " );" );
                     }
 

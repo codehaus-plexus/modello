@@ -651,10 +651,10 @@ public class JDOMWriterGenerator
                     XmlAssociationMetadata xmlAssociationMetadata =
                         (XmlAssociationMetadata) association.getAssociationMetadata( XmlAssociationMetadata.ID );
 
-                    String singularTagName = xmlAssociationMetadata.getTagName();
-                    if ( singularTagName == null )
+                    String valuesTagName = xmlAssociationMetadata.getTagName();
+                    if ( valuesTagName == null )
                     {
-                        singularTagName = singular( fieldTagName );
+                        valuesTagName = singular( fieldTagName );
                     }
 
 //

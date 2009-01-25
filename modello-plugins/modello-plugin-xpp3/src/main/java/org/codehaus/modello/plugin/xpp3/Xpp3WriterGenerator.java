@@ -316,10 +316,10 @@ public class Xpp3WriterGenerator
                     XmlAssociationMetadata xmlAssociationMetadata =
                         (XmlAssociationMetadata) association.getAssociationMetadata( XmlAssociationMetadata.ID );
 
-                    String singularTagName = xmlAssociationMetadata.getTagName();
-                    if ( singularTagName == null )
+                    String valuesTagName = xmlAssociationMetadata.getTagName();
+                    if ( valuesTagName == null )
                     {
-                        singularTagName = singular( fieldTagName );
+                        valuesTagName = singular( fieldTagName );
                     }
 
                     type = association.getType();
@@ -346,16 +346,16 @@ public class Xpp3WriterGenerator
                         {
                             sc.add( toType + " o = (" + toType + ") iter.next();" );
 
-                            sc.add( "write" + toType + "( o, \"" + singularTagName + "\", serializer );" );
+                            sc.add( "write" + toType + "( o, \"" + valuesTagName + "\", serializer );" );
                         }
                         else
                         {
                             sc.add( toType + " " + singular( uncapitalise( field.getName() ) ) + " = (" + toType +
                                 ") iter.next();" );
 
-                            sc.add( "serializer.startTag( NAMESPACE, " + "\"" + singularTagName + "\" ).text( " +
+                            sc.add( "serializer.startTag( NAMESPACE, " + "\"" + valuesTagName + "\" ).text( " +
                                 singular( uncapitalise( field.getName() ) ) + " ).endTag( NAMESPACE, " + "\"" +
-                                singularTagName + "\" );" );
+                                valuesTagName + "\" );" );
                         }
 
                         sc.unindent();

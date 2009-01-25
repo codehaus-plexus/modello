@@ -522,11 +522,11 @@ public class XsdGenerator
             tagName = field.getName();
         }
 
-        String singularTagName = xmlAssociationMetadata.getTagName();
+        String valuesTagName = xmlAssociationMetadata.getTagName();
 
-        if ( singularTagName == null )
+        if ( valuesTagName == null )
         {
-            singularTagName = singular( tagName );
+            valuesTagName = singular( tagName );
         }
 
         w.startElement( "xs:complexType" );
@@ -534,7 +534,7 @@ public class XsdGenerator
         w.startElement( "xs:sequence" );
 
         w.startElement( "xs:element" );
-        w.addAttribute( "name", singularTagName );
+        w.addAttribute( "name", valuesTagName );
         w.addAttribute( "minOccurs", "0" );
         w.addAttribute( "maxOccurs", "unbounded" );
         w.addAttribute( "type", type );

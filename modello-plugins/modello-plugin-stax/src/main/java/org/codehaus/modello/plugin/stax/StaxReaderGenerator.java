@@ -997,10 +997,10 @@ public class StaxReaderGenerator
                 XmlAssociationMetadata xmlAssociationMetadata =
                     (XmlAssociationMetadata) association.getAssociationMetadata( XmlAssociationMetadata.ID );
 
-                String singularTagName = xmlAssociationMetadata.getTagName();
-                if ( singularTagName == null )
+                String valuesTagName = xmlAssociationMetadata.getTagName();
+                if ( valuesTagName == null )
                 {
-                    singularTagName = singular( fieldTagName );
+                    valuesTagName = singular( fieldTagName );
                 }
 
                 String type = association.getType();
@@ -1023,7 +1023,7 @@ public class StaxReaderGenerator
                         sc.add( "{" );
                         sc.indent();
 
-                        sc.add( "if ( xmlStreamReader.getLocalName().equals( \"" + singularTagName + "\" ) )" );
+                        sc.add( "if ( xmlStreamReader.getLocalName().equals( \"" + valuesTagName + "\" ) )" );
 
                         sc.add( "{" );
                         sc.indent();
@@ -1031,7 +1031,7 @@ public class StaxReaderGenerator
                     else
                     {
                         sc.add(
-                            statement + " ( xmlStreamReader.getLocalName().equals( \"" + singularTagName + "\" ) )" );
+                            statement + " ( xmlStreamReader.getLocalName().equals( \"" + valuesTagName + "\" ) )" );
 
                         sc.add( "{" );
                         sc.indent();
@@ -1065,13 +1065,13 @@ public class StaxReaderGenerator
                             // HACK: the addXXX method will cause an OOME when compiling a self-referencing class, so we
                             //  just add it to the array. This could disrupt the links if you are using break/create
                             //  constraints in modello.
-                            sc.add( associationName + ".add( parse" + association.getTo() + "( \"" + singularTagName
+                            sc.add( associationName + ".add( parse" + association.getTo() + "( \"" + valuesTagName
                                     + "\", xmlStreamReader, strict, encoding ) );" );
                         }
                         else
                         {
                             sc.add( uncapClassName + ".add" + capitalise( singular( associationName ) ) + "( parse"
-                                    + association.getTo() + "( \"" + singularTagName
+                                    + association.getTo() + "( \"" + valuesTagName
                                     + "\", xmlStreamReader, strict, encoding ) );" );
                         }
                     }
@@ -1121,7 +1121,7 @@ public class StaxReaderGenerator
                         sc.add( "{" );
                         sc.indent();
 
-                        sc.add( "if ( xmlStreamReader.getLocalName().equals( \"" + singularTagName + "\" ) )" );
+                        sc.add( "if ( xmlStreamReader.getLocalName().equals( \"" + valuesTagName + "\" ) )" );
 
                         sc.add( "{" );
                         sc.indent();

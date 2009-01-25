@@ -512,10 +512,10 @@ public class Xpp3ReaderGenerator
                 XmlAssociationMetadata xmlAssociationMetadata =
                     (XmlAssociationMetadata) association.getAssociationMetadata( XmlAssociationMetadata.ID );
 
-                String singularTagName = xmlAssociationMetadata.getTagName();
-                if ( singularTagName == null )
+                String valuesTagName = xmlAssociationMetadata.getTagName();
+                if ( valuesTagName == null )
                 {
-                    singularTagName = singular( fieldTagName );
+                    valuesTagName = singular( fieldTagName );
                 }
 
                 String type = association.getType();
@@ -538,14 +538,14 @@ public class Xpp3ReaderGenerator
                         sc.add( "{" );
                         sc.indent();
 
-                        sc.add( "if ( parser.getName().equals( \"" + singularTagName + "\" ) )" );
+                        sc.add( "if ( parser.getName().equals( \"" + valuesTagName + "\" ) )" );
 
                         sc.add( "{" );
                         sc.indent();
                     }
                     else
                     {
-                        sc.add( statement + " ( parser.getName().equals( \"" + singularTagName + "\" ) )" );
+                        sc.add( statement + " ( parser.getName().equals( \"" + valuesTagName + "\" ) )" );
 
                         sc.add( "{" );
                         sc.indent();
@@ -567,7 +567,7 @@ public class Xpp3ReaderGenerator
 
                     if ( isClassInModel( association.getTo(), modelClass.getModel() ) )
                     {
-                        sc.add( associationName + ".add( parse" + association.getTo() + "( \"" + singularTagName +
+                        sc.add( associationName + ".add( parse" + association.getTo() + "( \"" + valuesTagName +
                             "\", parser, strict ) );" );
                     }
                     else
@@ -627,7 +627,7 @@ public class Xpp3ReaderGenerator
                         sc.add( "{" );
                         sc.indent();
 
-                        sc.add( "if ( parser.getName().equals( \"" + singularTagName + "\" ) )" );
+                        sc.add( "if ( parser.getName().equals( \"" + valuesTagName + "\" ) )" );
 
                         sc.add( "{" );
                         sc.indent();

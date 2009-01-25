@@ -342,10 +342,10 @@ public class StaxWriterGenerator
                     XmlAssociationMetadata xmlAssociationMetadata =
                         (XmlAssociationMetadata) association.getAssociationMetadata( XmlAssociationMetadata.ID );
 
-                    String singularTagName = xmlAssociationMetadata.getTagName();
-                    if ( singularTagName == null )
+                    String valuesTagName = xmlAssociationMetadata.getTagName();
+                    if ( valuesTagName == null )
                     {
-                        singularTagName = singular( fieldTagName );
+                        valuesTagName = singular( fieldTagName );
                     }
 
                     type = association.getType();
@@ -374,7 +374,7 @@ public class StaxWriterGenerator
 
                             if ( referenceIdentifierField != null )
                             {
-                                sc.add( "serializer.writeStartElement( \"" + singularTagName + "\" );" );
+                                sc.add( "serializer.writeStartElement( \"" + valuesTagName + "\" );" );
 
                                 writeElementAttribute( sc, referenceIdentifierField, "o" );
 
@@ -382,7 +382,7 @@ public class StaxWriterGenerator
                             }
                             else
                             {
-                                sc.add( "write" + toType + "( o, \"" + singularTagName + "\", serializer );" );
+                                sc.add( "write" + toType + "( o, \"" + valuesTagName + "\", serializer );" );
                             }
                         }
                         else
@@ -390,7 +390,7 @@ public class StaxWriterGenerator
                             sc.add( toType + " " + singular( uncapitalise( field.getName() ) ) + " = (" + toType +
                                 ") iter.next();" );
 
-                            sc.add( "serializer.writeStartElement( " + "\"" + singularTagName + "\" );" );
+                            sc.add( "serializer.writeStartElement( " + "\"" + valuesTagName + "\" );" );
                             sc.add(
                                 "serializer.writeCharacters( " + singular( uncapitalise( field.getName() ) ) + " );" );
                             sc.add( "serializer.writeEndElement();" );
