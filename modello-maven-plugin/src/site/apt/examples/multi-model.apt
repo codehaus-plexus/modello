@@ -24,7 +24,7 @@ Processing multiple Modello models.
         <artifactId>modello-maven-plugin</artifactId>
         <executions>
           <execution>
-            <id>descriptor</id>
+            <id>mdo</id>
             <phase>generate-sources</phase>
             <goals>
               <goal>xpp3-reader</goal>
@@ -35,28 +35,13 @@ Processing multiple Modello models.
             <configuration>
               <models>
                 <model>src/main/mdo/descriptor.mdo</model>
-              <models>
-              <version>1.0.0</version>
-            </configuration>
-          </execution>
-          <execution>
-            <id>component</id>
-            <phase>generate-sources</phase>
-            <goals>
-              <goal>xpp3-reader</goal>
-              <goal>xpp3-writer</goal>
-              <goal>java</goal>
-              <goal>xsd</goal>
-            </goals>
-            <configuration>
-              <models>
                 <model>src/main/mdo/component.mdo</model>
-              </models>
+              <models>
               <version>1.0.0</version>
             </configuration>
           </execution>
           <execution>
-            <id>descriptor-site</id>
+            <id>mdo-site</id>
             <phase>pre-site</phase>
             <goals>
               <goal>xdoc</goal>
@@ -65,21 +50,8 @@ Processing multiple Modello models.
             <configuration>
               <models>
                 <model>src/main/mdo/descriptor.mdo</model>
-              </models>
-              <version>1.0.0</version>
-            </configuration>
-          </execution>
-          <execution>
-            <id>component-site</id>
-            <phase>pre-site</phase>
-            <goals>
-              <goal>xdoc</goal>
-              <goal>xsd</goal>
-            </goals>
-            <configuration>
-              <models>
                 <model>src/main/mdo/component.mdo</model>
-              <models>
+              </models>
               <version>1.0.0</version>
             </configuration>
           </execution>
