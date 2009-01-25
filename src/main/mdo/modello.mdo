@@ -483,14 +483,14 @@
           <type>String</type>
           <description>The default value for this field.</description>
         </field>
-        <field>
+        <!--field>
           <name>typeValidator</name>
           <version>1.0.0</version>
           <type>String</type>
           <description>
             <![CDATA[<i>Unused as far as I could see</i>]]>
           </description>
-        </field>
+        </field-->
         <field>
           <name>required</name>
           <version>1.0.0</version>
