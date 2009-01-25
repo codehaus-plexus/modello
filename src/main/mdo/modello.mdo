@@ -59,9 +59,10 @@
           <name>versionRange</name>
           <version>1.0.0</version>
           <type>String</type>
-          <description>
+          <description><![CDATA[
             The versions related to this element.
-            Examples: <code>1.0.0</code> (a precise version), <code>1.0.0+</code> (a version or higher), <code>1.0.0/2.0.0</code> (a version range).
+            Examples: <code>1.0.0</code> (a precise version), <code>1.0.0+</code> (a version or higher),
+            <code>1.0.0/2.0.0</code> (a version range).]]>
           </description>
         </field>
         <!-- this field is available in BaseElement class, but not read in ModelReader: should be removed?
