@@ -1105,7 +1105,7 @@ public class StaxReaderGenerator
                     sc.add( "{" );
                     sc.indent();
 
-                    if ( XmlAssociationMetadata.EXPLODE_MODE.equals( xmlAssociationMetadata.getMapStyle() ) )
+                    if ( xmlAssociationMetadata.isMapExplode() )
                     {
                         sc.add( "while ( xmlStreamReader.nextTag() == XMLStreamConstants.START_ELEMENT )" );
 

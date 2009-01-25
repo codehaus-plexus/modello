@@ -110,6 +110,16 @@ public class XmlAssociationMetadata
         }
     }
 
+    public boolean isMapInline()
+    {
+        return INLINE_MODE.equals( mapStyle );
+    }
+
+    public boolean isMapExplode()
+    {
+        return EXPLODE_MODE.equals( mapStyle );
+    }
+
     public boolean isReference()
     {
         return reference;

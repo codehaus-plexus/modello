@@ -378,7 +378,7 @@ public class Xpp3WriterGenerator
 
                         sc.add( "String value = (String) " + value + ".get( key );" );
 
-                        if ( XmlAssociationMetadata.EXPLODE_MODE.equals( xmlAssociationMetadata.getMapStyle() ) )
+                        if ( xmlAssociationMetadata.isMapExplode() )
                         {
                             sc.add( "serializer.startTag( NAMESPACE, \"" + singular( associationName ) + "\" );" );
                             sc.add(

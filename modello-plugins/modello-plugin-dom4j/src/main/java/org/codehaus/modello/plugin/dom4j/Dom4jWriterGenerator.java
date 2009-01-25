@@ -363,7 +363,7 @@ public class Dom4jWriterGenerator
 
                     sc.add( "String value = (String) " + value + ".get( key );" );
 
-                    if ( XmlAssociationMetadata.EXPLODE_MODE.equals( xmlAssociationMetadata.getMapStyle() ) )
+                    if ( xmlAssociationMetadata.isMapExplode() )
                     {
                         sc.add( "Element assocElement = listElement.addElement( \"" + singular( associationName )
                             + "\" );" );

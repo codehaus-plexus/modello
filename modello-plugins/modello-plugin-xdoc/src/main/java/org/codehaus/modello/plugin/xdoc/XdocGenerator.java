@@ -542,7 +542,7 @@ public class XdocGenerator
                     appendSpacer( sb, depth + 1 );
                     sb.append( "&lt;" ).append( fieldTagName ).append( "&gt;\n" );
 
-                    if ( XmlAssociationMetadata.EXPLODE_MODE.equals( xmlAssociationMetadata.getMapStyle() ) )
+                    if ( xmlAssociationMetadata.isMapExplode() )
                     {
                         appendSpacer( sb, depth + 2 );
                         sb.append( "&lt;key/&gt;\n" );

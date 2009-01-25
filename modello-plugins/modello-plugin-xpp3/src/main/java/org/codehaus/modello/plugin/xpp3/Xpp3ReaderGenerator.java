@@ -611,7 +611,7 @@ public class Xpp3ReaderGenerator
                     sc.add( "{" );
                     sc.indent();
 
-                    if ( XmlAssociationMetadata.EXPLODE_MODE.equals( xmlAssociationMetadata.getMapStyle() ) )
+                    if ( xmlAssociationMetadata.isMapExplode() )
                     {
                         sc.add( "while ( parser.nextTag() == XmlPullParser.START_TAG )" );
 

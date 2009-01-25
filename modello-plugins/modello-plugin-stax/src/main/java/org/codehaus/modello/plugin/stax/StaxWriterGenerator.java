@@ -416,7 +416,7 @@ public class StaxWriterGenerator
 
                         sc.add( "String value = (String) " + value + ".get( key );" );
 
-                        if ( XmlAssociationMetadata.EXPLODE_MODE.equals( xmlAssociationMetadata.getMapStyle() ) )
+                        if ( xmlAssociationMetadata.isMapExplode() )
                         {
                             sc.add( "serializer.writeStartElement( \"" + singular( associationName ) + "\" );" );
                             sc.add( "serializer.writeStartElement( \"key\" );" );

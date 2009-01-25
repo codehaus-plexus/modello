@@ -520,7 +520,7 @@ public class Dom4jReaderGenerator
                     sc.add( "{" );
                     sc.indent();
 
-                    if ( XmlAssociationMetadata.EXPLODE_MODE.equals( xmlAssociationMetadata.getMapStyle() ) )
+                    if ( xmlAssociationMetadata.isMapExplode() )
                     {
                         sc.add( "for ( Iterator j = childElement.nodeIterator(); j.hasNext(); )" );
 
