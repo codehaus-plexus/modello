@@ -12,7 +12,7 @@
     <section name="Modello">
 
       <p>Modello is a framework for code generation from a simple model.
-    Modello generates code from a simple model format: based on a plugin architecture, various types of code and
+    Modello generates code from a <a href="modello.html">simple model format</a>: based on a plugin architecture, various types of code and
     descriptors can be generated from the single model, including Java POJOs, XML marshallers/unmarshallers, XSD
     and documentation.</p>
 
