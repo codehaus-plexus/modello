@@ -1,29 +1,35 @@
 <?xml version="1.0"?>
+
 <faqs id="FAQ" title="Frequently Asked Questions">
+
   <part id="General">
+
     <faq id="question1">
       <question>Where can I find documentation about Modello?</question>
       <answer>
         <p>
-          Most documentation for Modello is under construction right now.
           A good starting place to get some insight into Modello is <a href='http://docs.codehaus.org/display/MODELLO/Home'>Modello's
           wiki</a>.
         </p>
+        <p><a href='http://modello.codehaus.org/modello.html'>Modello model descriptor</a> is described and documented with Modello.</p>
       </answer>
     </faq>
+
     <faq id="question2">
       <question>Is Modello really used anywhere?</question>
       <answer>
         <p>
-          Modello is used extensivly in Maven. You can find examples of models:
+          Modello is used extensively in Maven. You can find examples of models:
           <ul>
-            <li><a href='http://maven.apache.org/ref/2.0.4/maven-model/maven.html'>Maven's POM</a> : you can see the <a href='http://svn.apache.org/viewvc/maven/components/tags/maven-2.0.4/maven-model/maven.mdo?view=markup'>mdo file for this model</a></li>
-            <li><a href='http://maven.apache.org/ref/2.0.4/maven-settings/settings.html'>Maven's settings</a> : you can see the <a href='http://svn.apache.org/viewvc/maven/components/tags/maven-2.0.4/maven-settings/settings.mdo?view=markup'>mdo file for this model</a></li>
-            <li><a href='http://maven.apache.org/plugins/maven-assembly-plugin/'>Maven assembly plugin</a> : Uses both a <a href='http://svn.apache.org/viewvc/maven/plugins/trunk/maven-assembly-plugin/src/main/mdo/descriptor.mdo?view=markup'>descriptor model</a> and a <a href='http://svn.apache.org/viewvc/maven/plugins/trunk/maven-assembly-plugin/src/main/mdo/component.mdo?view=markup'>component model</a>.</li>
-            <li><a href='http://svn.apache.org/viewvc/maven/doxia/trunk/doxia-decoration-model/src/main/mdo/decoration.mdo?view=markup'>Doxia Decoration model</a>, aka site.xml model.</li>
+            <li><a href='http://maven.apache.org/ref/2.0.9/maven-model/maven.html'>Maven's POM</a>: you can see the <a href='http://svn.apache.org/viewvc/maven/components/tags/maven-2.0.9/maven-model/src/main/mdo/maven.mdo?view=markup'>mdo file for this model</a></li>
+            <li><a href='http://maven.apache.org/ref/2.0.9/maven-settings/settings.html'>Maven's settings</a>: you can see the <a href='http://svn.apache.org/viewvc/maven/components/tags/maven-2.0.9/maven-settings/src/main/mdo/settings.mdo?view=markup'>mdo file for this model</a></li>
+            <li><a href='http://maven.apache.org/plugins/maven-assembly-plugin/'>Maven assembly plugin</a>: uses both a <a href='http://svn.apache.org/viewvc/maven/plugins/trunk/maven-assembly-plugin/src/main/mdo/descriptor.mdo?view=markup'>descriptor model</a> and a <a href='http://svn.apache.org/viewvc/maven/plugins/trunk/maven-assembly-plugin/src/main/mdo/component.mdo?view=markup'>component model</a>.</li>
+            <li><a href='http://svn.apache.org/viewvc/maven/doxia/doxia-sitetools/trunk/doxia-decoration-model/src/main/mdo/decoration.mdo?view=markup'>Doxia Decoration model</a>, aka <code>site.xml</code> model.</li>
           </ul>
         </p>
       </answer>
     </faq>
+
   </part>
+
 </faqs>
