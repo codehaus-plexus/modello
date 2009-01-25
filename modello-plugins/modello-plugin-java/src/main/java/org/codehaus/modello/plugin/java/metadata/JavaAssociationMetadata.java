@@ -52,9 +52,7 @@ public class JavaAssociationMetadata
 
     private boolean adder = true;
 
-    private boolean generateBreak;
-
-    private boolean generateCreate;
+    private boolean bidi;
 
     private String interfaceName;
 
@@ -70,24 +68,14 @@ public class JavaAssociationMetadata
         this.adder = adder;
     }
 
-    public boolean isGenerateBreak()
+    public boolean isBidi()
     {
-        return generateBreak;
+        return bidi;
     }
 
-    public void setGenerateBreak( boolean generateBreak )
+    public void setBidi( boolean bidi )
     {
-        this.generateBreak = generateBreak;
-    }
-
-    public boolean isGenerateCreate()
-    {
-        return generateCreate;
-    }
-
-    public void setGenerateCreate( boolean genreateCreate )
-    {
-        this.generateCreate = genreateCreate;
+        this.bidi = bidi;
     }
 
     public String getInterfaceName()

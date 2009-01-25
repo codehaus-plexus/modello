@@ -47,11 +47,9 @@ public class JavaMetadataPlugin
 
     public static final String JAVA_ADDER = "java.adder";
 
+    public static final String JAVA_BIDI = "java.bidi";
+
     public static final String JAVA_ENABLED = "java.enabled";
-
-    public static final String JAVA_GENERATE_BREAK = "java.generate-break";
-
-    public static final String JAVA_GENERATE_CREATE = "java.generate-create";
 
     public static final String JAVA_GETTER = "java.getter";
 
@@ -101,8 +99,7 @@ public class JavaMetadataPlugin
 
         metadata.setAdder( getBoolean( data, JAVA_ADDER, true ) );
 
-        metadata.setGenerateBreak( getBoolean( data, JAVA_GENERATE_BREAK, true ) );
-        metadata.setGenerateCreate( getBoolean( data, JAVA_GENERATE_CREATE, true ) );
+        metadata.setBidi( getBoolean( data, JAVA_BIDI, true ) );
 
         metadata.setInterfaceName( getString( data, JAVA_USE_INTERFACE ) );
 

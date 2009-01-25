@@ -659,7 +659,7 @@ public class JavaModelloGenerator
             boolean isOneMultiplicity = isBidirectionalAssociation( modelAssociation )
                  && modelAssociation.isOneMultiplicity();
 
-            if ( isOneMultiplicity && javaAssociationMetadata.isGenerateBreak() )
+            if ( isOneMultiplicity && javaAssociationMetadata.isBidi() )
             {
                 sc.add( "if ( this." + field.getName() + " != null )" );
 
@@ -689,7 +689,7 @@ public class JavaModelloGenerator
 
             sc.add( "this." + field.getName() + " = " + interfaceCast + field.getName() + ";" );
 
-            if ( isOneMultiplicity && javaAssociationMetadata.isGenerateCreate() )
+            if ( isOneMultiplicity && javaAssociationMetadata.isBidi() )
             {
                 sc.add( "" );
 
@@ -860,12 +860,12 @@ public class JavaModelloGenerator
 
         if ( isBidirectionalAssociation( modelAssociation ) )
         {
-            if ( javaAssociationMetadata.isGenerateCreate() )
+            if ( javaAssociationMetadata.isBidi() )
             {
                 createCreateAssociation( jClass, modelAssociation );
             }
 
-            if ( javaAssociationMetadata.isGenerateBreak() )
+            if ( javaAssociationMetadata.isBidi() )
             {
                 createBreakAssociation( jClass, modelAssociation );
             }
@@ -889,7 +889,7 @@ public class JavaModelloGenerator
 
         if ( modelAssociation.isOneMultiplicity() )
         {
-            if ( javaAssociationMetadata.isGenerateBreak() )
+            if ( javaAssociationMetadata.isBidi() )
             {
                 sc.add( "if ( this." + modelAssociation.getName() + " != null )" );
 
@@ -1058,7 +1058,7 @@ public class JavaModelloGenerator
             adder.getSourceCode().add(
                 "get" + capitalise( fieldName ) + "().add( " + implementationParameterName + " );" );
 
-            if ( bidirectionalAssociation && javaAssociationMetadata.isGenerateCreate() )
+            if ( bidirectionalAssociation && javaAssociationMetadata.isBidi() )
             {
                 // TODO: remove after tested
 //                adder.addException( new JClass( "Exception" ) );
@@ -1075,7 +1075,7 @@ public class JavaModelloGenerator
 
             createClassCastAssertion( remover.getSourceCode(), modelAssociation, "remove" );
 
-            if ( bidirectionalAssociation && javaAssociationMetadata.isGenerateBreak() )
+            if ( bidirectionalAssociation && javaAssociationMetadata.isBidi() )
             {
                 // TODO: remove after tested
 //                remover.addException( new JClass( "Exception" ) );

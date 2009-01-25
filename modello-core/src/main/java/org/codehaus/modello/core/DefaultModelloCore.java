@@ -139,6 +139,14 @@ public class DefaultModelloCore
                     upgradeModifiedAttribute( "java.adder", fieldAttributes, associationAttributes,
                         "attribute 'java.adder' for field element is deprecated: it should be moved to association" );
 
+                    upgradeModifiedAttribute( "java.generate-create", associationAttributes,
+                        "java.bidi", associationAttributes, "attribute 'java.generate-create' for association "
+                        + "element is deprecated: it has been renamed to 'java.bidi'" );
+
+                    upgradeModifiedAttribute( "java.generate-break", associationAttributes,
+                        "java.bidi", associationAttributes, "attribute 'java.generate-break' for association "
+                        + "element is deprecated: it has been renamed to 'java.bidi'" );
+
                     upgradeModifiedAttribute( "java.use-interface", associationAttributes,
                         "java.useInterface", associationAttributes, "attribute 'xml.use-interface' for association "
                         + "element is deprecated: it has been renamed to 'xml.useInterface'" );

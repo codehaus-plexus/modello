@@ -535,23 +535,23 @@
           <type>boolean</type>
           <defaultValue>true</defaultValue>
           <description><![CDATA[
-            Generate <code>addXXX( <i>Type</i> )</code> and <code>removeXXX( <i>Type</i> )</code> methods for this field
+            Generate <code>add<i>FieldName</i>( <i>Type</i> )</code> and
+            <code>remove<i>FieldName</i>( <i>Type</i> )</code> methods for this field
             (only for many multiplicity association).]]>
           </description>
           <comment>see org.codehaus.modello.plugin.java.metadata.JavaMetadataPlugin</comment>
         </field>
-        <field xml.attribute="true" xml.tagName="java.generate-break">
-          <name>generateBreak</name>
+        <field xml.attribute="true" xml.tagName="java.bidi">
+          <name>bidi</name>
           <version>1.0.0</version>
           <type>boolean</type>
           <defaultValue>true</defaultValue>
-          <comment>see org.codehaus.modello.plugin.java.metadata.JavaMetadataPlugin</comment>
-        </field>
-        <field xml.attribute="true" xml.tagName="java.generate-create">
-          <name>generateCreate</name>
-          <version>1.0.0</version>
-          <type>boolean</type>
-          <defaultValue>true</defaultValue>
+          <description><![CDATA[
+            Generate <code>create<i>Type</i>Association( <i>Type</i> )</code> and
+            <code>break<i>Type</i>Association( <i>Type</i> )</code> methods for this field
+            (only for a bi-directional association: each class of the association has an association to the other,
+            either one or many multiplicity).]]>
+          </description>
           <comment>see org.codehaus.modello.plugin.java.metadata.JavaMetadataPlugin</comment>
         </field>
         <field xml.attribute="true" xml.tagName="java.useInterface">
