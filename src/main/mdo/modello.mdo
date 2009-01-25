@@ -554,10 +554,14 @@
           <defaultValue>true</defaultValue>
           <comment>see org.codehaus.modello.plugin.java.metadata.JavaMetadataPlugin</comment>
         </field>
-        <field xml.attribute="true" xml.tagName="java.use-interface">
+        <field xml.attribute="true" xml.tagName="java.useInterface">
           <name>interfaceName</name>
           <version>1.0.0</version>
           <type>String</type>
+          <description><![CDATA[
+            Use specified interface in generated methods signatures (<code>add</code>, <code>remove</code>,
+            <code>createAssociation</code> and <code>breakAssociation</code>).]]>
+          </description>
           <comment>see org.codehaus.modello.plugin.java.metadata.JavaMetadataPlugin</comment>
         </field>
         <field xml.attribute="true" xml.tagName="java.init">

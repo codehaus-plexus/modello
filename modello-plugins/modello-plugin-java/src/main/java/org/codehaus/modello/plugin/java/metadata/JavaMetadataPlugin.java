@@ -59,7 +59,7 @@ public class JavaMetadataPlugin
 
     public static final String JAVA_SETTER = "java.setter";
 
-    public static final String JAVA_USE_INTERFACE = "java.use-interface";
+    public static final String JAVA_USE_INTERFACE = "java.useInterface";
 
     // ----------------------------------------------------------------------
     // Map to Metadata

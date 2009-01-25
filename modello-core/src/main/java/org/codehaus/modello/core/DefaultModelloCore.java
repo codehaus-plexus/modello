@@ -92,11 +92,13 @@ public class DefaultModelloCore
 
     private void upgradeModifiedAttribute( String name, Map from, String newName, Map to, String warn )
     {
-        if ( from.containsKey( name ) )
+        Object value = from.remove( name );
+
+        if ( value != null )
         {
             getLogger().warn( warn );
 
-            to.put( newName, from.remove( name ) );
+            to.put( newName, value );
         }
     }
 
@@ -131,6 +133,10 @@ public class DefaultModelloCore
 
                     upgradeModifiedAttribute( "java.adder", fieldAttributes, associationAttributes,
                         "attribute 'java.adder' for field element is deprecated: it should be moved to association" );
+
+                    upgradeModifiedAttribute( "java.use-interface", associationAttributes,
+                        "java.useInterface", associationAttributes, "attribute 'xml.use-interface' for association "
+                        + "element is deprecated: it has been renamed to 'xml.useInterface'" );
 
                     upgradeModifiedAttribute( "xml.associationTagName", fieldAttributes,
                         "xml.tagName", associationAttributes, "attribute 'xml.associationTagName' for field element is "

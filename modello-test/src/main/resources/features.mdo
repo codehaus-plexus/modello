@@ -585,7 +585,7 @@
           </association>
         </field>
         <!--
-         - association features: java.generate-break="false" java.generate-create="false", java.use-interface="interfaceName", java.init="lazy|constructor|field"
+         - association features: java.generate-break="false" java.generate-create="false", java.useInterface="interfaceName", java.init="lazy|constructor|field"
          - field features: java.getter="false", java.setter="false" -->
       </fields>
     </class>
