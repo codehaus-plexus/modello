@@ -603,7 +603,8 @@ public class JDOMWriterGenerator
             clazzTagName = uncapClassName;
         }
         JSourceCode sc = marshall.getSourceCode();
-        if ( alwaysExisting.contains( clazz ) )
+        boolean shouldExist = alwaysExisting.contains( clazz );
+        if ( shouldExist )
         {
             sc.add( "Element root = element;" );
         }
@@ -704,7 +705,7 @@ public class JDOMWriterGenerator
                 }
             }
         }
-        if ( !alwaysExisting.contains( clazz ) )
+        if ( !shouldExist )
         {
             sc.unindent();
             sc.add( "}" );
