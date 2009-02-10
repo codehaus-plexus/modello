@@ -80,6 +80,10 @@
       <artifactId>modello-plugin-xsd</artifactId>
       <scope>runtime</scope>
     </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-build-api</artifactId>
+    </dependency>
   </dependencies>
 
   <build>

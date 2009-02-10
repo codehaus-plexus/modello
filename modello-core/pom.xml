@@ -24,6 +24,10 @@
       <artifactId>modello-test</artifactId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-build-api</artifactId>
+    </dependency>
   </dependencies>
 
   <build>

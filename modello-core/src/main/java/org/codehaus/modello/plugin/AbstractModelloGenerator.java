@@ -22,6 +22,11 @@ package org.codehaus.modello.plugin;
  * SOFTWARE.
  */
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
+
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.ModelloRuntimeException;
@@ -31,13 +36,15 @@ import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelDefault;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.Version;
+import org.codehaus.plexus.PlexusConstants;
+import org.codehaus.plexus.PlexusContainer;
+import org.codehaus.plexus.build.incremental.BuildContext;
+import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
+import org.codehaus.plexus.context.Context;
+import org.codehaus.plexus.context.ContextException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
+import org.codehaus.plexus.personality.plexus.lifecycle.phase.Contextualizable;
 import org.codehaus.plexus.util.StringUtils;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
 
 /**
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
@@ -46,7 +53,7 @@ import java.util.Properties;
  */
 public abstract class AbstractModelloGenerator
     extends AbstractLogEnabled
-    implements ModelloGenerator
+    implements ModelloGenerator, Contextualizable
 {
     private Model model;
 
@@ -57,6 +64,8 @@ public abstract class AbstractModelloGenerator
     private boolean packageWithVersion;
 
     private String encoding;
+
+    private BuildContext buildContext;
 
     protected void initialize( Model model, Properties parameters )
         throws ModelloException
@@ -248,5 +257,25 @@ public abstract class AbstractModelloGenerator
         }
 
         return value;
+    }
+
+    public void contextualize( Context ctx ) 
+        throws ContextException 
+    {
+        PlexusContainer plexus = (PlexusContainer) ctx.get( PlexusConstants.PLEXUS_KEY );
+
+        try 
+        {
+            buildContext = (BuildContext) plexus.lookup( BuildContext.class.getName() );
+        } 
+        catch( ComponentLookupException e ) 
+        {
+            throw new ContextException( "Unable to lookup required component", e );
+        }
+    }
+
+    protected BuildContext getBuildContext()
+    {
+        return buildContext;
     }
 }

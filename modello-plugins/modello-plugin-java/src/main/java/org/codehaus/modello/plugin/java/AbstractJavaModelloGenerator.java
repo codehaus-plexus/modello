@@ -22,6 +22,18 @@ package org.codehaus.modello.plugin.java;
  * SOFTWARE.
  */
 
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.Writer;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.Locale;
+import java.util.Properties;
+
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.model.BaseElement;
@@ -38,17 +50,6 @@ import org.codehaus.modello.plugin.java.metadata.JavaClassMetadata;
 import org.codehaus.modello.plugin.java.metadata.JavaFieldMetadata;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.WriterFactory;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.Writer;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.Locale;
-import java.util.Properties;
 
 /**
  * AbstractJavaModelloGenerator - similar in scope to {@link AbstractModelloGenerator} but with features that
@@ -91,8 +92,10 @@ public abstract class AbstractJavaModelloGenerator
             f.getParentFile().mkdirs();
         }
 
-        Writer writer = ( getEncoding() == null ) ? WriterFactory.newPlatformWriter( f )
-                        : WriterFactory.newWriter( f, getEncoding() );
+        OutputStream os = getBuildContext().newFileOutputStream( f );
+
+        Writer writer = ( getEncoding() == null ) ? WriterFactory.newPlatformWriter( os )
+                        : WriterFactory.newWriter( os, getEncoding() );
 
         return new JSourceWriter( writer );
     }

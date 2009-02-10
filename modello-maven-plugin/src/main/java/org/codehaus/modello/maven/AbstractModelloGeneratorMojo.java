@@ -22,6 +22,14 @@ package org.codehaus.modello.maven;
  * SOFTWARE.
  */
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Properties;
+
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -31,15 +39,8 @@ import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelValidationException;
+import org.codehaus.plexus.build.incremental.BuildContext;
 import org.codehaus.plexus.util.StringUtils;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Properties;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -121,6 +122,9 @@ public abstract class AbstractModelloGeneratorMojo
      * @parameter expression="${useJava5}" default-value="false"
      */
     private boolean useJava5;
+
+    /** @component */
+    private BuildContext buildContext;
 
     // ----------------------------------------------------------------------
     // Overridables
@@ -243,6 +247,12 @@ public abstract class AbstractModelloGeneratorMojo
     private void doExecute( String modelStr, String outputDirectory, Properties parameters )
         throws IOException, ModelloException, ModelValidationException
     {
+        if ( !buildContext.hasDelta( modelStr ) )
+        {
+            getLog().debug( "Skipping unchanged model: " + modelStr );
+            return;
+        }
+
         getLog().info( "Working on model: " + modelStr );
 
         Model model = modelloCore.loadModel( new File( basedir, modelStr ) );
@@ -318,6 +328,11 @@ public abstract class AbstractModelloGeneratorMojo
     public void setModelloCore( ModelloCore modelloCore )
     {
         this.modelloCore = modelloCore;
+    }
+
+    public void setBuildContext( BuildContext context )
+    {
+        this.buildContext = context;
     }
 
     public MavenProject getProject()

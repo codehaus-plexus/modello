@@ -157,7 +157,7 @@ public abstract class AbstractModelloJavaGeneratorTest
         throws IOException, CompilerException
     {
         addDependency( "junit", "junit", "3.8.1" );
-        addDependency( "org.codehaus.plexus", "plexus-utils", "1.5.7" ); // version must be the same as in pom.xml
+        addDependency( "org.codehaus.plexus", "plexus-utils", "1.5.8" ); // version must be the same as in pom.xml
         addDependency( "org.codehaus.modello", "modello-test", getModelloVersion() );
 
         String[] classPathElements = new String[dependencies.size() + 2];

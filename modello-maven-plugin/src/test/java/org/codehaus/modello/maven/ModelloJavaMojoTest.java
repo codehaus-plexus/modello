@@ -24,6 +24,7 @@ package org.codehaus.modello.maven;
 
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.plexus.PlexusTestCase;
+import org.codehaus.plexus.build.incremental.BuildContext;
 import org.codehaus.plexus.util.FileUtils;
 
 import java.io.File;
@@ -40,6 +41,8 @@ public class ModelloJavaMojoTest
         throws Exception
     {
         ModelloCore modelloCore = (ModelloCore) lookup( ModelloCore.ROLE );
+
+        BuildContext buildContext = (BuildContext) lookup( BuildContext.class );
 
         ModelloJavaMojo mojo = new ModelloJavaMojo();
 
@@ -64,6 +67,8 @@ public class ModelloJavaMojoTest
         mojo.setPackagedVersions( Arrays.asList( new String[] { "0.9.0", "1.0.0" } ) );
 
         mojo.setModelloCore( modelloCore );
+        
+        mojo.setBuildContext( buildContext );
 
         mojo.execute();
 
