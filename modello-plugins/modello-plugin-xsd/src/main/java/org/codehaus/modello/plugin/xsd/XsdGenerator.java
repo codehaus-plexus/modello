@@ -284,6 +284,12 @@ public class XsdGenerator
                 }
 
                 String xsdType = getXsdType( field.getType() );
+
+                if ( "Date".equals( field.getType() ) && "long".equals( xmlFieldMetadata.getFormat() ) )
+                {
+                    xsdType = getXsdType( "long" );
+                }
+
                 if ( ( xsdType != null ) || "char".equals( field.getType() ) || "Char".equals( field.getType() ) )
                 {
                     w.addAttribute( "name", resolveTagName( field, xmlFieldMetadata ) );

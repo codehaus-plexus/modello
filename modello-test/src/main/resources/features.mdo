@@ -759,6 +759,12 @@
           <description><![CDATA[<code>&lt;field xml.format="<i>SimpleDateFormat specification</i>"&gt;</code>: a Date field with a specified format.]]></description>
           <type>Date</type>
         </field>
+        <field xml.format="long">
+          <name>dateLong</name>
+          <version>1.0.0+</version>
+          <description><![CDATA[<code>&lt;field xml.format="long"&gt;</code>: a Date field as a long value in XML.]]></description>
+          <type>Date</type>
+        </field>
         <field>
           <name>xmlItemsStyleFlats</name>
           <version>1.0.0+</version>

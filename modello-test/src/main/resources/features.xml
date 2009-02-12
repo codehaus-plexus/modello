@@ -87,6 +87,7 @@
     <attributesDefault></attributesDefault>
     <tagName>value from XML file</tagName>
     <dateXmlFormat>2012-12-24T22:12:12</dateXmlFormat>
+    <dateLong>121212121212</dateLong>
 
     <xmlItemsStyleFlat><id>flat first</id></xmlItemsStyleFlat>
     <xmlItemsStyleFlat><id>flat second</id></xmlItemsStyleFlat>

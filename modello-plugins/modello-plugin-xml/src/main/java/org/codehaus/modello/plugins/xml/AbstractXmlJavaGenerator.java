@@ -91,8 +91,16 @@ public abstract class AbstractXmlJavaGenerator
             {
                 dateFormat = DEFAULT_DATE_FORMAT;
             }
-            textValue =
-                "new java.text.SimpleDateFormat( \"" + dateFormat + "\", Locale.US ).format( " + textValue + " )";
+
+            if ( "long".equals( dateFormat ) )
+            {
+                textValue = "String.valueOf( " + textValue + ".getTime() )";
+            }
+            else
+            {
+                textValue =
+                    "new java.text.SimpleDateFormat( \"" + dateFormat + "\", Locale.US ).format( " + textValue + " )";
+            }
         }
         else if ( !"String".equals( type ) )
         {
@@ -117,6 +125,33 @@ public abstract class AbstractXmlJavaGenerator
         sc.addIndented( "effectiveDateFormat = \"" + DEFAULT_DATE_FORMAT + "\";" );
         sc.add( "}" );
 
+        sc.add( "if ( \"long\".equals( effectiveDateFormat ) )" );
+
+        // parse date as a long
+        sc.add( "{" );
+        sc.indent();
+
+        sc.add( "try" );
+
+        sc.add( "{" );
+        sc.addIndented( "return new java.util.Date( Long.parseLong( s ) );" );
+        sc.add( "}" );
+
+        sc.add( "catch ( NumberFormatException e )" );
+
+        sc.add( "{" );
+        sc.addIndented( "throw " + exception + ";" );
+        sc.add( "}" );
+
+        sc.unindent();
+        sc.add( "}" );
+
+        sc.add( "else" );
+
+        // parse date as a SimpleDateFormat expression
+        sc.add( "{" );
+        sc.indent();
+
         sc.add( "try" );
         sc.add( "{" );
         sc.indent();
@@ -130,6 +165,9 @@ public abstract class AbstractXmlJavaGenerator
         sc.add( "catch ( java.text.ParseException e )" );
         sc.add( "{" );
         sc.addIndented( "throw " + exception + ";" );
+        sc.add( "}" );
+
+        sc.unindent();
         sc.add( "}" );
 
         sc.unindent();
