@@ -343,6 +343,10 @@ public class XdocGenerator
             {
                 ModelAssociation assoc = (ModelAssociation) f;
 
+                XmlAssociationMetadata xmlAssociationMetadata =
+                    (XmlAssociationMetadata) assoc.getAssociationMetadata( XmlAssociationMetadata.ID );
+                flatAssociation = xmlAssociationMetadata.isFlatItems();
+
                 ModelClass associationModelClass = getModel().getClass( assoc.getTo(), getGeneratedVersion() );
 
                 w.startElement( "a" );
