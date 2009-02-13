@@ -345,23 +345,19 @@ public class XdocGenerator
 
                 XmlAssociationMetadata xmlAssociationMetadata =
                     (XmlAssociationMetadata) assoc.getAssociationMetadata( XmlAssociationMetadata.ID );
+
                 flatAssociation = xmlAssociationMetadata.isFlatItems();
 
                 ModelClass associationModelClass = getModel().getClass( assoc.getTo(), getGeneratedVersion() );
 
+                String tagName = resolveTagName( associationModelClass, assoc );
+
                 w.startElement( "a" );
-                w.addAttribute( "href", "#class_" + resolveTagName( associationModelClass, assoc ) );
+                w.addAttribute( "href", "#class_" + tagName );
 
                 if ( flatAssociation )
                 {
-                    if ( xmlFieldMetadata.getTagName() != null )
-                    {
-                        w.writeText( uncapitalise( xmlFieldMetadata.getTagName() ) );
-                    }
-                    else
-                    {
-                        w.writeText( uncapitalise( associationModelClass.getName() ) );
-                    }
+                    w.writeText( tagName );
                 }
                 else
                 {
