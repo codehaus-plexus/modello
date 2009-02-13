@@ -39,7 +39,7 @@ import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelValidationException;
-import org.codehaus.plexus.build.incremental.BuildContext;
+import org.sonatype.plexus.build.incremental.BuildContext;
 import org.codehaus.plexus.util.StringUtils;
 
 /**

@@ -24,7 +24,7 @@ package org.codehaus.modello.maven;
 
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.plexus.PlexusTestCase;
-import org.codehaus.plexus.build.incremental.BuildContext;
+import org.sonatype.plexus.build.incremental.BuildContext;
 import org.codehaus.plexus.util.FileUtils;
 
 import java.io.File;
