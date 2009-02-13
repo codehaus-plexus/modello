@@ -295,6 +295,12 @@ public class XdocGenerator
 
         w.startElement( "th" );
 
+        w.writeText( "Type" );
+
+        w.endElement();
+
+        w.startElement( "th" );
+
         w.writeText( "Description" );
 
         w.endElement();
@@ -324,6 +330,8 @@ public class XdocGenerator
             XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) f.getMetadata( XmlFieldMetadata.ID );
 
             w.startElement( "tr" );
+
+            // Element/Attribute column
 
             w.startElement( "td" );
 
@@ -363,11 +371,44 @@ public class XdocGenerator
                 w.writeText( resolveTagName( f, xmlFieldMetadata ) );
             }
 
-            w.endElement();
+            w.endElement(); // code
 
-            w.endElement();
+            w.endElement(); // td
 
-            // Description
+            // Type column
+
+            w.startElement( "td" );
+
+            w.startElement( "code" );
+
+            if ( f instanceof ModelAssociation )
+            {
+                ModelAssociation assoc = (ModelAssociation) f;
+
+                if ( assoc.isOneMultiplicity() )
+                {
+                    w.writeText( assoc.getTo() );
+                }
+                else
+                {
+                    w.writeText( assoc.getType().substring( "java.util.".length() ) );
+
+                    if ( assoc.isGenericType() )
+                    {
+                        w.writeText( "<" + assoc.getTo() + ">" );
+                    }
+                }
+            }
+            else
+            {
+                w.writeText( f.getType() );
+            }
+
+            w.endElement(); // code
+
+            w.endElement(); // td
+
+            // Description column
 
             w.startElement( "td" );
 
@@ -398,7 +439,7 @@ public class XdocGenerator
 
             w.endElement();
 
-            // Since
+            // Since column
 
             if ( showSinceColumn )
             {
