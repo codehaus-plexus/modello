@@ -29,6 +29,8 @@ package org.codehaus.modello.verifier;
 public class WrongReturnTypeVerifierException
     extends RuntimeException
 {
+    private static final long serialVersionUID = -5836633455311481511L;
+
     private String className;
 
     private String fieldName;

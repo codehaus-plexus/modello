@@ -29,6 +29,8 @@ package org.codehaus.modello.verifier;
 public class NotEqualsVerifierException
     extends RuntimeException
 {
+    private static final long serialVersionUID = -2549591417917951096L;
+
     private String className;
 
     private String fieldName;

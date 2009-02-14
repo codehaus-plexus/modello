@@ -26,9 +26,7 @@ import org.codehaus.modello.AbstractModelloJavaGeneratorTest;
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
-import org.codehaus.plexus.util.FileUtils;
 
-import java.io.File;
 import java.util.Properties;
 
 /**

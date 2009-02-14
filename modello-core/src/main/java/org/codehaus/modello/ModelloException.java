@@ -29,6 +29,8 @@ package org.codehaus.modello;
 public class ModelloException
     extends Exception
 {
+    private static final long serialVersionUID = -8746896773615188345L;
+
     public ModelloException( String msg )
     {
         super( msg );

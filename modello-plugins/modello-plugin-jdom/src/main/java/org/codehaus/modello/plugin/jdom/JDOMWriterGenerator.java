@@ -648,7 +648,7 @@ public class JDOMWriterGenerator
                     XmlAssociationMetadata xmlAssociationMetadata =
                         (XmlAssociationMetadata) association.getAssociationMetadata( XmlAssociationMetadata.ID );
 
-                    String valuesTagName = resolveTagName( fieldTagName, xmlAssociationMetadata );
+                    //String valuesTagName = resolveTagName( fieldTagName, xmlAssociationMetadata );
 //
 //                    type = association.getType();
 //                    String toType = association.getTo();

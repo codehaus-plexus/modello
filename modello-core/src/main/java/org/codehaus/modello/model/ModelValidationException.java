@@ -29,6 +29,8 @@ package org.codehaus.modello.model;
 public class ModelValidationException
     extends Exception
 {
+    private static final long serialVersionUID = -8146274663701861789L;
+
     public ModelValidationException( String msg )
     {
         super( msg );

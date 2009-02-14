@@ -29,6 +29,8 @@ package org.codehaus.modello.verifier;
 public class VerifierException
     extends RuntimeException
 {
+    private static final long serialVersionUID = 104760798383307575L;
+
     public VerifierException( String msg )
     {
         super( msg );
