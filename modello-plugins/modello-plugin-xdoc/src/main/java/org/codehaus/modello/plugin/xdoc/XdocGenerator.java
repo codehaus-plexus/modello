@@ -514,6 +514,8 @@ public class XdocGenerator
                     sb.append( '\n' );
                 }
 
+                String fieldTagName = resolveTagName( f, xmlFieldMetadata );
+
                 if ( isInnerAssociation( f ) && recursive )
                 {
                     ModelAssociation assoc = (ModelAssociation) f;
@@ -532,7 +534,7 @@ public class XdocGenerator
 
                         appendSpacer( sb, depth );
 
-                        sb.append( "&lt;" ).append( uncapitalise( assoc.getName() ) ).append( "&gt;\n" );
+                        sb.append( "&lt;" ).append( fieldTagName ).append( "&gt;\n" );
                     }
 
                     ModelClass fieldModelClass = getModel().getClass( assoc.getTo(), getGeneratedVersion() );
@@ -545,15 +547,13 @@ public class XdocGenerator
                     {
                         appendSpacer( sb, depth );
 
-                        sb.append( "&lt;/" ).append( uncapitalise( assoc.getName() ) ).append( "&gt;\n" );
+                        sb.append( "&lt;/" ).append( fieldTagName ).append( "&gt;\n" );
 
                         depth--;
                     }
                 }
                 else if ( ModelDefault.PROPERTIES.equals( f.getType() ) )
                 {
-                    String fieldTagName = resolveTagName( f, xmlFieldMetadata );
-
                     ModelAssociation assoc = (ModelAssociation) f;
                     XmlAssociationMetadata xmlAssociationMetadata =
                         (XmlAssociationMetadata) assoc.getAssociationMetadata( XmlAssociationMetadata.ID );
@@ -581,7 +581,7 @@ public class XdocGenerator
                 {
                     appendSpacer( sb, depth + 1 );
 
-                    sb.append( "&lt;" ).append( resolveTagName( f, xmlFieldMetadata ) ).append( "/&gt;\n" );
+                    sb.append( "&lt;" ).append( fieldTagName ).append( "/&gt;\n" );
                 }
             }
 
