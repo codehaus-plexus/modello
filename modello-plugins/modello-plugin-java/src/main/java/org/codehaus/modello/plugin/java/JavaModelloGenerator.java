@@ -155,8 +155,6 @@ public class JavaModelloGenerator
 
             JClass jClass = new JClass( packageName + '.' + modelClass.getName() );
 
-            jClass.addImport( "java.util.Date" );
-
             if ( StringUtils.isNotEmpty( modelClass.getDescription() ) )
             {
                 jClass.getJDocComment().setComment( appendPeriod( modelClass.getDescription() ) );
