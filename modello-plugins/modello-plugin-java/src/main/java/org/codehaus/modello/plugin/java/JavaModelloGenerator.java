@@ -612,7 +612,7 @@ public class JavaModelloGenerator
         }
         else
         {
-            comment.append( StringUtils.lowercaseFirstLetter( modelField.getDescription() ) );
+            comment.append( StringUtils.lowercaseFirstLetter( modelField.getDescription().trim() ) );
         }
         getter.getJDocComment().setComment( appendPeriod( comment.toString() ) );
 
@@ -637,7 +637,7 @@ public class JavaModelloGenerator
         }
         else
         {
-            comment.append( StringUtils.lowercaseFirstLetter( modelField.getDescription() ) );
+            comment.append( StringUtils.lowercaseFirstLetter( modelField.getDescription().trim() ) );
         }
         setter.getJDocComment().setComment( appendPeriod( comment.toString() ) );
 
