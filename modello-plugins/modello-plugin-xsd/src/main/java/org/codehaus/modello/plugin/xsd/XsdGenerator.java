@@ -271,6 +271,8 @@ public class XsdGenerator
 
                 XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
 
+                String fieldTagName = resolveTagName( field, xmlFieldMetadata );
+
                 if ( !hasContentField )
                 {
                     w.startElement( "xs:element" );
@@ -292,7 +294,7 @@ public class XsdGenerator
 
                 if ( ( xsdType != null ) || "char".equals( field.getType() ) || "Char".equals( field.getType() ) )
                 {
-                    w.addAttribute( "name", resolveTagName( field, xmlFieldMetadata ) );
+                    w.addAttribute( "name", fieldTagName );
                     if ( xsdType != null )
                     {
                         // schema built-in datatype
@@ -328,7 +330,7 @@ public class XsdGenerator
 
                             if ( xmlAssociationMetadata.isWrappedItems() )
                             {
-                                w.addAttribute( "name", resolveTagName( field, xmlFieldMetadata ) );
+                                w.addAttribute( "name", fieldTagName );
                                 writeFieldDocumentation( w, field );
 
                                 writeListElement( w, xmlFieldMetadata, xmlAssociationMetadata, field,
@@ -350,14 +352,7 @@ public class XsdGenerator
                                     w.addAttribute( "minOccurs", "0" );
                                 }
 
-                                if ( xmlAssociationMetadata != null && xmlAssociationMetadata.getTagName() != null )
-                                {
-                                    w.addAttribute( "name", xmlAssociationMetadata.getTagName() );
-                                }
-                                else
-                                {
-                                    w.addAttribute( "name", singular( association.getName() ) );
-                                }
+                                w.addAttribute( "name", resolveTagName( fieldTagName, xmlAssociationMetadata ) );
 
                                 w.addAttribute( "type", fieldModelClass.getName() );
                                 w.addAttribute( "maxOccurs", "unbounded" );
@@ -373,14 +368,14 @@ public class XsdGenerator
                         else
                         {
                             // not many multiplicity
-                            w.addAttribute( "name", resolveTagName( field, xmlFieldMetadata ) );
+                            w.addAttribute( "name", fieldTagName );
                             w.addAttribute( "type", fieldModelClass.getName() );
                             writeFieldDocumentation( w, field );
                         }
                     }
                     else
                     {
-                        w.addAttribute( "name", resolveTagName( field, xmlFieldMetadata ) );
+                        w.addAttribute( "name", fieldTagName );
                         writeFieldDocumentation( w, field );
 
                         if ( List.class.getName().equals( field.getType() ) )
