@@ -35,6 +35,7 @@ import java.util.Set;
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.ModelloRuntimeException;
+import org.codehaus.modello.model.BaseElement;
 import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
@@ -143,14 +144,7 @@ public class XdocGenerator
 
         w.startElement( "p" );
 
-        if ( objectModel.getDescription() != null )
-        {
-            w.writeMarkup( objectModel.getDescription() );
-        }
-        else
-        {
-            w.writeText( "No description." );
-        }
+        w.writeMarkup( getDescription( objectModel ) );
 
         w.endElement();
 
@@ -178,8 +172,7 @@ public class XdocGenerator
         writer.close();
     }
 
-    private void writeElementDescriptor( XMLWriter w, ModelClass modelClass, ModelAssociation association,
-                                         Set written )
+    private void writeElementDescriptor( XMLWriter w, ModelClass modelClass, ModelAssociation association, Set written )
     {
         writeElementDescriptor( w, modelClass, association, written, true );
     }
@@ -203,14 +196,7 @@ public class XdocGenerator
 
         w.startElement( "p" );
 
-        if ( modelClass.getDescription() != null )
-        {
-            w.writeMarkup( modelClass.getDescription() );
-        }
-        else
-        {
-            w.writeMarkup( "No description." );
-        }
+        w.writeMarkup( getDescription( modelClass ) );
 
         w.endElement();
 
@@ -221,14 +207,7 @@ public class XdocGenerator
             w.startElement( "p" );
             w.startElement( "b" );
             w.writeText( "Element Content: " );
-            if ( contentField.getDescription() != null )
-            {
-                w.writeMarkup( contentField.getDescription() );
-            }
-            else
-            {
-                w.writeMarkup( "No description." );
-            }
+            w.writeMarkup( getDescription( contentField ) );
             w.endElement();
             w.endElement();
         }
@@ -251,15 +230,10 @@ public class XdocGenerator
 
                 if ( !written.contains( f.getName() ) )
                 {
-                    if ( ( modelClass.getName().equals( fieldModelClass.getName() ) )
-                        && ( modelClass.getPackageName().equals( fieldModelClass.getPackageName() ) ) )
-                    {
-                        writeElementDescriptor( w, fieldModelClass, assoc, written, false );
-                    }
-                    else
-                    {
-                        writeElementDescriptor( w, fieldModelClass, assoc, written );
-                    }
+                    boolean selfAssociation = modelClass.getName().equals( fieldModelClass.getName() )
+                        && modelClass.getPackageName().equals( fieldModelClass.getPackageName() );
+
+                    writeElementDescriptor( w, fieldModelClass, assoc, written, !selfAssociation );
                 }
             }
         }
@@ -277,7 +251,7 @@ public class XdocGenerator
         // skip if only one field and Content type
         if ( fields.size() == 1 )
         {
-            if ( "Content".equals( (( ModelField ) fields.get( 0 )).getType() ) )
+            if ( "Content".equals( ( (ModelField) fields.get( 0 ) ).getType() ) )
             {
                 return;
             }
@@ -417,14 +391,7 @@ public class XdocGenerator
                 w.writeMarkup( "<b>List</b> " );
             }
 
-            if ( f.getDescription() != null )
-            {
-                w.writeMarkup( f.getDescription() );
-            }
-            else
-            {
-                w.writeText( "No description." );
-            }
+            w.writeMarkup( getDescription( f ) );
 
             // Write the default value, if it exists.
             // But only for fields that are not a ModelAssociation
@@ -478,8 +445,7 @@ public class XdocGenerator
      * @return the String representing the tree model
      * @throws ModelloRuntimeException
      */
-    private String getXmlDescriptor( ModelClass modelClass, ModelAssociation association, int depth,
-                                          boolean recursive )
+    private String getXmlDescriptor( ModelClass modelClass, ModelAssociation association, int depth, boolean recursive )
         throws ModelloRuntimeException
     {
         StringBuffer sb = new StringBuffer();
@@ -553,15 +519,9 @@ public class XdocGenerator
 
                     ModelClass fieldModelClass = getModel().getClass( assoc.getTo(), getGeneratedVersion() );
 
-                    if ( ( modelClass.getName().equals( fieldModelClass.getName() ) )
-                        && ( modelClass.getPackageName().equals( fieldModelClass.getPackageName() ) ) )
-                    {
-                        sb.append( getXmlDescriptor( fieldModelClass, assoc, depth + 1, false ) );
-                    }
-                    else
-                    {
-                        sb.append( getXmlDescriptor( fieldModelClass, assoc, depth + 1 ) );
-                    }
+                    boolean selfAssociation = modelClass.getName().equals( fieldModelClass.getName() )
+                        && modelClass.getPackageName().equals( fieldModelClass.getPackageName() );
+                    sb.append( getXmlDescriptor( fieldModelClass, assoc, depth + 1, !selfAssociation ) );
 
                     if ( wrappedItems )
                     {
@@ -686,5 +646,10 @@ public class XdocGenerator
         {
             sb.append( "  " );
         }
+    }
+
+    private static String getDescription( BaseElement element )
+    {
+        return ( element.getDescription() == null ) ? "No description." : element.getDescription();
     }
 }
