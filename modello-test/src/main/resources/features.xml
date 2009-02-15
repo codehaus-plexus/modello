@@ -99,6 +99,18 @@
       <association><id>third</id></association>
     </xmlAssociationTagNames>
 
+    <fieldTagNames>
+      <fieldTagName><id>first</id></fieldTagName>
+      <fieldTagName><id>second</id></fieldTagName>
+      <fieldTagName><id>third</id></fieldTagName>
+    </fieldTagNames>
+
+    <fieldTagName>
+      <association><id>first</id></association>
+      <association><id>second</id></association>
+      <association><id>third</id></association>
+    </fieldTagName>
+
     <!-- xmlFlatAssociationTagNames -->
     <association><id>flat first</id></association>
     <association><id>flat second</id></association>

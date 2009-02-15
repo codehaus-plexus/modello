@@ -307,42 +307,60 @@ public class XdocGenerator
 
             // Element/Attribute column
 
+            String tagName = resolveTagName( f, xmlFieldMetadata );
+
             w.startElement( "td" );
 
             w.startElement( "code" );
 
-            boolean flatAssociation = false;
+            boolean manyAssociation = false;
 
-            if ( isInnerAssociation( f ) )
+            if ( f instanceof ModelAssociation )
             {
                 ModelAssociation assoc = (ModelAssociation) f;
 
                 XmlAssociationMetadata xmlAssociationMetadata =
                     (XmlAssociationMetadata) assoc.getAssociationMetadata( XmlAssociationMetadata.ID );
 
-                flatAssociation = xmlAssociationMetadata.isFlatItems();
+                manyAssociation = assoc.isManyMultiplicity();
 
-                ModelClass associationModelClass = getModel().getClass( assoc.getTo(), getGeneratedVersion() );
+                String itemTagName = manyAssociation ? resolveTagName( tagName, xmlAssociationMetadata ) : tagName;
 
-                String tagName = resolveTagName( associationModelClass, assoc );
-
-                w.startElement( "a" );
-                w.addAttribute( "href", "#class_" + tagName );
-
-                if ( flatAssociation )
+                if ( manyAssociation && xmlAssociationMetadata.isWrappedItems() )
                 {
                     w.writeText( tagName );
+                    w.writeMarkup( "/" );
+                }
+                if ( isInnerAssociation( f ) )
+                {
+                    w.startElement( "a" );
+                    w.addAttribute( "href", "#class_" + itemTagName );
+                    w.writeText( itemTagName );
+                    w.endElement();
+                }
+                else if ( ModelDefault.PROPERTIES.equals( f.getType() ) )
+                {
+                    if ( xmlAssociationMetadata.isMapExplode() )
+                    {
+                        w.writeText( "(key,value)" );
+                    }
+                    else
+                    {
+                        w.writeMarkup( "<i>key</i>=<i>value</i>" );
+                    }
                 }
                 else
                 {
-                    w.writeText( f.getName() );
+                    w.writeText( itemTagName );
                 }
-
-                w.endElement();
+                if (manyAssociation )
+                {
+                    w.writeText( "*" );
+                }
             }
             else
             {
-                w.writeText( resolveTagName( f, xmlFieldMetadata ) );
+                w.writeText( tagName );
             }
 
             w.endElement(); // code
@@ -386,9 +404,9 @@ public class XdocGenerator
 
             w.startElement( "td" );
 
-            if ( flatAssociation )
+            if ( manyAssociation )
             {
-                w.writeMarkup( "<b>List</b> " );
+                w.writeMarkup( "<b>(Many)</b> " );
             }
 
             w.writeMarkup( getDescription( f ) );
@@ -628,6 +646,11 @@ public class XdocGenerator
                 else if ( xmlFieldMetadata.getTagName() != null )
                 {
                     tagName = xmlFieldMetadata.getTagName();
+
+                    if ( association.isManyMultiplicity() )
+                    {
+                        tagName = singular( tagName );
+                    }
                 }
             }
         }

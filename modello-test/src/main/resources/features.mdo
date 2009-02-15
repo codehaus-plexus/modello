@@ -784,6 +784,26 @@
             <multiplicity>*</multiplicity>
           </association>
         </field>
+        <field xml.tagName="fieldTagNames">
+          <name>xmlTagNameAssociation</name>
+          <version>1.0.0+</version>
+          <description><![CDATA[<code>&lt;field xml.tagName="fieldTagNames"&gt;&lt;association&gt;&lt;/field&gt;</code>:
+            a list with an XML name different from field name.]]></description>
+          <association>
+            <type>Reference</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+        <field xml.tagName="fieldTagName">
+          <name>xmlTagNameAssociationTagNames</name>
+          <version>1.0.0+</version>
+          <description><![CDATA[<code>&lt;field xml.tagName="fieldTagName"&gt;&lt;association xml.tagName="association"&gt;&lt;/field&gt;</code>:
+            a list with an XML name different from field name and an XML name different from calculated singular of tag name.]]></description>
+          <association xml.tagName="association">
+            <type>Reference</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
         <field>
           <name>xmlFlatAssociationTagNames</name>
           <version>1.0.0+</version>
