@@ -58,7 +58,7 @@ public abstract class AbstractModelloGenerator
     extends AbstractLogEnabled
     implements ModelloGenerator, Contextualizable
 {
-    private static final DateFormat DATE_FORMAT = new SimpleDateFormat( "yyyy/MM/dd HH:mm:ss" );
+    private static final DateFormat DATE_FORMAT = new SimpleDateFormat( "yyyy-MM-dd HH:mm:ss" );
 
     private Model model;
 
