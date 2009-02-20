@@ -182,9 +182,9 @@ public class XdocGenerator
     private void writeElementDescriptor( XMLWriter w, ModelClass modelClass, ModelAssociation association,
                                          Set written, boolean recursive )
     {
-        written.add( modelClass );
-
         String tagName = resolveTagName( modelClass, association );
+
+        written.add( tagName );
 
         w.startElement( "a" );
 
@@ -230,7 +230,7 @@ public class XdocGenerator
                 ModelAssociation assoc = (ModelAssociation) f;
                 ModelClass fieldModelClass = getModel().getClass( assoc.getTo(), getGeneratedVersion() );
 
-                if ( !written.contains( f.getName() ) )
+                if ( !written.contains( resolveTagName( fieldModelClass, assoc ) ) )
                 {
                     boolean selfAssociation = modelClass.getName().equals( fieldModelClass.getName() )
                         && modelClass.getPackageName().equals( fieldModelClass.getPackageName() );
@@ -461,6 +461,7 @@ public class XdocGenerator
      * @param modelClass the class we are printing the model
      * @param association the association we are coming from (can be <code>null</code>)
      * @param depth how deep we currently are (for spacers purpose)
+     * @param written what tag names have already been written
      * @param recursive are we still in recursive mode or not
      * @return the String representing the tree model
      * @throws ModelloRuntimeException
