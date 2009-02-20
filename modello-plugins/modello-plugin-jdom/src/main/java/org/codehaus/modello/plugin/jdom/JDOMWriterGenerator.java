@@ -74,6 +74,7 @@ public class JDOMWriterGenerator
         JSourceWriter sourceWriter = newJSourceWriter( packageName, marshallerName );
 
         JClass jClass = new JClass( packageName + '.' + marshallerName );
+        initHeader( jClass );
         // -------------------------------------------------------------
         // imports now
         // -------------------------------------------------------------

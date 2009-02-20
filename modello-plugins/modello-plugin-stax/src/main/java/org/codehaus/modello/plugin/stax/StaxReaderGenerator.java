@@ -97,6 +97,7 @@ public class StaxReaderGenerator
         JSourceWriter sourceWriter = newJSourceWriter( packageName, unmarshallerName );
 
         JClass jClass = new JClass( packageName + '.' + unmarshallerName );
+        initHeader( jClass );
 
         jClass.addImport( "java.io.IOException" );
         jClass.addImport( "java.io.Reader" );

@@ -105,6 +105,8 @@ public class XsdGenerator
 
             writer.write( "<?xml version=\"1.0\"?>\n" );
 
+            initHeader( w );
+
             // TODO: the writer should be knowledgeable of namespaces, but this works
             w.startElement( "xs:schema" );
             w.addAttribute( "xmlns:xs", "http://www.w3.org/2001/XMLSchema" );

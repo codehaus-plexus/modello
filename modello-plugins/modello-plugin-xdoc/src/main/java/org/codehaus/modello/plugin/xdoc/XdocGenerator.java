@@ -124,6 +124,8 @@ public class XdocGenerator
 
         writer.write( "<?xml version=\"1.0\"?>\n" );
 
+        initHeader( w );
+
         w.startElement( "document" );
 
         w.startElement( "properties" );

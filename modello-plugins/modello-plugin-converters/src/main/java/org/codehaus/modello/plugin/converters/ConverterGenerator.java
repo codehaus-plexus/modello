@@ -114,9 +114,11 @@ public class ConverterGenerator
             + " version in package name) of the model.";
 
         JInterface conversionInterface = new JInterface( packageName + ".VersionConverter" );
+        initHeader( conversionInterface );
         conversionInterface.getJDocComment().setComment( jDoc );
 
         JClass basicConverterClass = new JClass( packageName + ".BasicVersionConverter" );
+        initHeader( basicConverterClass );
         basicConverterClass.getJDocComment().setComment( jDoc );
         basicConverterClass.addInterface( conversionInterface );
 

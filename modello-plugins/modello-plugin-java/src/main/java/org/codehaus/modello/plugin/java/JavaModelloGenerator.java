@@ -95,6 +95,8 @@ public class JavaModelloGenerator
 
             JInterface jInterface = new JInterface( packageName + '.' + modelInterface.getName() );
 
+            initHeader( jInterface );
+
             if ( modelInterface.getSuperInterface() != null )
             {
                 // check if we need an import: if it is a generated superInterface in another package
@@ -154,6 +156,8 @@ public class JavaModelloGenerator
             JSourceWriter sourceWriter = newJSourceWriter( packageName, modelClass.getName() );
 
             JClass jClass = new JClass( packageName + '.' + modelClass.getName() );
+
+            initHeader( jClass );
 
             if ( StringUtils.isNotEmpty( modelClass.getDescription() ) )
             {

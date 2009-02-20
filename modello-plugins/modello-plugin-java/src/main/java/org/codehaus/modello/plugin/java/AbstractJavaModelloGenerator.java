@@ -45,6 +45,8 @@ import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.ModelInterface;
 import org.codehaus.modello.plugin.AbstractModelloGenerator;
 import org.codehaus.modello.plugin.java.javasource.JClass;
+import org.codehaus.modello.plugin.java.javasource.JComment;
+import org.codehaus.modello.plugin.java.javasource.JInterface;
 import org.codehaus.modello.plugin.java.javasource.JSourceWriter;
 import org.codehaus.modello.plugin.java.metadata.JavaClassMetadata;
 import org.codehaus.modello.plugin.java.metadata.JavaFieldMetadata;
@@ -98,6 +100,23 @@ public abstract class AbstractJavaModelloGenerator
                         : WriterFactory.newWriter( os, getEncoding() );
 
         return new JSourceWriter( writer );
+    }
+
+    private JComment getHeaderComment()
+    {
+        JComment comment = new JComment();
+        comment.setComment( getHeader() );
+        return comment;
+    }
+
+    protected void initHeader( JClass clazz )
+    {
+        clazz.setHeader( getHeaderComment() );
+    }
+
+    protected void initHeader( JInterface interfaze )
+    {
+        interfaze.setHeader( getHeaderComment() );
     }
 
     protected void addModelImports( JClass jClass, BaseElement baseElem )

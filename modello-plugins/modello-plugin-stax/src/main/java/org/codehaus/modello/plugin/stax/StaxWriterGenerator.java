@@ -83,6 +83,7 @@ public class StaxWriterGenerator
         JSourceWriter sourceWriter = newJSourceWriter( packageName, marshallerName );
 
         JClass jClass = new JClass( packageName + '.' + marshallerName );
+        initHeader( jClass );
 
         jClass.addImport( "java.io.InputStream" );
         jClass.addImport( "java.io.IOException" );

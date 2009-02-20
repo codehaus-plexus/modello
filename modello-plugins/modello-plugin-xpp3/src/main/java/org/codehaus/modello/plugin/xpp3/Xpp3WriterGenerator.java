@@ -81,6 +81,7 @@ public class Xpp3WriterGenerator
         JSourceWriter sourceWriter = newJSourceWriter( packageName, marshallerName );
 
         JClass jClass = new JClass( packageName + '.' + marshallerName );
+        initHeader( jClass );
 
         jClass.addImport( "org.codehaus.plexus.util.xml.pull.XmlSerializer" );
         jClass.addImport( "org.codehaus.plexus.util.xml.pull.MXSerializer" );

@@ -31,6 +31,8 @@ import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.plugin.AbstractModelloGenerator;
 import org.codehaus.modello.plugins.xml.metadata.XmlAssociationMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
+import org.codehaus.plexus.util.xml.XMLWriter;
+import org.codehaus.plexus.util.xml.XmlWriterUtil;
 
 /**
  * Abstract class for plugins working on XML representation of the model, without having any need to generate
@@ -42,6 +44,11 @@ import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
 public abstract class AbstractXmlGenerator
     extends AbstractModelloGenerator
 {
+    protected void initHeader( XMLWriter w )
+    {
+        XmlWriterUtil.writeComment( w, getHeader() );
+    }
+
     /**
      * Resolve XML tag name for a class. Note: only root class needs such a resolution.
      *
