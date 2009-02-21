@@ -155,13 +155,13 @@ public class XdocGenerator
 
         ModelClass root = objectModel.getClass( objectModel.getRoot( getGeneratedVersion() ), getGeneratedVersion() );
 
-        w.writeMarkup( "\n" + getXmlDescriptor( root, null, 0 ) );
+        w.writeMarkup( "\n" + getXmlDescriptor( root ) );
 
         w.endElement();
 
         // Element descriptors
         // Traverse from root so "abstract" models aren't included
-        writeElementDescriptor( w, root, null, new HashSet() );
+        writeElementDescriptor( w, root );
 
         w.endElement();
 
@@ -179,9 +179,9 @@ public class XdocGenerator
         return "class_" + tagName ;
     }
 
-    private void writeElementDescriptor( XMLWriter w, ModelClass modelClass, ModelAssociation association, Set written )
+    private void writeElementDescriptor( XMLWriter w, ModelClass modelClass )
     {
-        writeElementDescriptor( w, modelClass, association, written, true );
+        writeElementDescriptor( w, modelClass, null, new HashSet(), true );
     }
 
     private void writeElementDescriptor( XMLWriter w, ModelClass modelClass, ModelAssociation association,
@@ -456,9 +456,9 @@ public class XdocGenerator
 
     }
 
-    private String getXmlDescriptor( ModelClass modelClass, ModelAssociation association, int depth )
+    private String getXmlDescriptor( ModelClass modelClass )
     {
-        return getXmlDescriptor( modelClass, association, depth, true );
+        return getXmlDescriptor( modelClass, null, 0, true );
     }
 
     /**
