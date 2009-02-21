@@ -174,6 +174,11 @@ public class XdocGenerator
         writer.close();
     }
 
+    private String getAnchorName( String tagName )
+    {
+        return "class_" + tagName ;
+    }
+
     private void writeElementDescriptor( XMLWriter w, ModelClass modelClass, ModelAssociation association, Set written )
     {
         writeElementDescriptor( w, modelClass, association, written, true );
@@ -188,7 +193,7 @@ public class XdocGenerator
 
         w.startElement( "a" );
 
-        w.addAttribute( "name", "class_" + tagName );
+        w.addAttribute( "name", getAnchorName( tagName ) );
 
         w.endElement();
 
@@ -336,7 +341,7 @@ public class XdocGenerator
                 if ( isInnerAssociation( f ) )
                 {
                     w.startElement( "a" );
-                    w.addAttribute( "href", "#class_" + itemTagName );
+                    w.addAttribute( "href", "#" + getAnchorName( itemTagName ) );
                     w.writeText( itemTagName );
                     w.endElement();
                 }
@@ -474,7 +479,9 @@ public class XdocGenerator
         appendSpacer( sb, depth );
 
         String tagName = resolveTagName( modelClass, association );
-        sb.append( "&lt;<a href=\"#class_" ).append( tagName ).append( "\">" ).append( tagName ).append( "</a>" );
+
+        sb.append( "&lt;<a href=\"#" ).append( getAnchorName( tagName ) ).append( "\">" );
+        sb.append( tagName ).append( "</a>" );
 
         List fields = getFieldsForClass( modelClass );
 
