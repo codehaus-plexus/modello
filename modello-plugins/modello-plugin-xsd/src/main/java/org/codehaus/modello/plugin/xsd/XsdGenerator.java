@@ -266,7 +266,7 @@ public class XsdGenerator
                     w.startElement( "xs:sequence" );
                 }
             }
-
+            boolean firstElement = true;
             for ( Iterator j = fields.iterator(); j.hasNext(); )
             {
                 ModelField field = (ModelField) j.next();
@@ -375,9 +375,12 @@ public class XsdGenerator
                             writeFieldDocumentation( w, field );
                         }
                     }
-                    else
+                    else // not inner association
                     {
-                        w.addAttribute( "name", fieldTagName );
+                        if (! "Content".equals( field.getType() ) )
+                        {
+                            w.addAttribute( "name", fieldTagName );
+                        }
                         writeFieldDocumentation( w, field );
 
                         if ( List.class.getName().equals( field.getType() ) )
@@ -410,7 +413,8 @@ public class XsdGenerator
                 {
                     w.endElement();
                 }
-            }
+                firstElement = false;
+            }// end fields iterator
             if ( !hasContentField || mixedContent )
             {
                 w.endElement(); // xs:all or xs:sequence
