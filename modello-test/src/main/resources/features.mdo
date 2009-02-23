@@ -284,6 +284,33 @@
           <description><![CDATA[<code>DOM</code> type.]]></description>
           <type>DOM</type>
         </field>
+        <field>
+          <name>content</name>
+          <version>1.0.0+</version>
+          <description><![CDATA[<code>Content</code> type: in fact, an association to a class with attributes and
+          one <code>Content</code> field.]]></description>
+          <association>
+            <type>ContentTest</type>
+            <multiplicity>1</multiplicity>
+          </association>
+        </field>
+      </fields>
+    </class>
+
+    <class>
+      <name>ContentTest</name>
+      <version>1.0.0+</version>
+      <fields>
+        <field>
+          <name>content</name>
+          <version>2.0.0+</version><!-- MODELLO-185: not supported by dom4j, jdom, stax and xdoc plugins -->
+          <type>Content</type>
+        </field>
+        <field xml.attribute="true">
+          <name>attr</name>
+          <version>1.0.0+</version>
+          <type>String</type>
+        </field>
       </fields>
     </class>
 
