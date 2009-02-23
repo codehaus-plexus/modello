@@ -266,7 +266,6 @@ public class XsdGenerator
                     w.startElement( "xs:sequence" );
                 }
             }
-            boolean firstElement = true;
             for ( Iterator j = fields.iterator(); j.hasNext(); )
             {
                 ModelField field = (ModelField) j.next();
@@ -413,7 +412,6 @@ public class XsdGenerator
                 {
                     w.endElement();
                 }
-                firstElement = false;
             }// end fields iterator
             if ( !hasContentField || mixedContent )
             {
