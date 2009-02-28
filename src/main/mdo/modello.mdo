@@ -472,7 +472,8 @@
           <description><![CDATA[
             Simple type for this field (or array of such type). Can be one of : <code>boolean</code>, <code>byte</code>,
             <code>char</code>, <code>short</code>, <code>int</code>, <code>long</code>, <code>float</code>,
-            <code>double</code>, <code>String</code>, <code>Boolean</code>, <code>Date</code>, <code>DOM</code>.]]>
+            <code>double</code>, <code>String</code>, <code>Boolean</code>, <code>Date</code>, <code>DOM</code>,
+            <code>Content</code>.]]>
           </description>
         </field>
         <field>
@@ -494,7 +495,7 @@
           <version>1.0.0</version>
           <type>boolean</type>
           <description>
-            Wheter this field is required in model or not.
+            Whether this field is required in model or not.
           </description>
         </field>
         <field>
