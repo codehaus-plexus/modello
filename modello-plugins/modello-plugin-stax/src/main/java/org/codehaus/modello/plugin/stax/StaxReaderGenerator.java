@@ -65,7 +65,7 @@ public class StaxReaderGenerator
 
         try
         {
-            generateStaxReaders();
+            generateStaxReader();
 
             VersionDefinition versionDefinition = model.getVersionDefinition();
             if ( versionDefinition != null )
@@ -84,7 +84,14 @@ public class StaxReaderGenerator
         }
     }
 
-    private void generateStaxReaders()
+    /**
+     * Generate a StAX reader, a <code><i>ModelName</i>StaxReader</code> class in <code>io.stax</code> sub-package
+     * with <code>public <i>RootClass</i> read( ... )</code> methods.
+     *
+     * @throws ModelloException
+     * @throws IOException
+     */
+    private void generateStaxReader()
         throws ModelloException, IOException
     {
         Model objectModel = getModel();
@@ -531,6 +538,14 @@ public class StaxReaderGenerator
         sc.add( "return uri.substring( uriPrefix.length(), uri.length() - uriSuffix.length() );" );
     }
 
+    /**
+     * Write code to parse every classes from a model.
+     *
+     * @param objectModel the model
+     * @param jClass the generated class source file
+     * @throws ModelloException
+     * @see {@link #writeClassParser(ModelClass, JClass, boolean)}
+     */
     private void writeAllClassesParser( Model objectModel, JClass jClass )
         throws ModelloException
     {
@@ -552,6 +567,14 @@ public class StaxReaderGenerator
         }
     }
 
+    /**
+     * Write a <code>private <i>ClassName</i> parse<i>ClassName</i>( ... )</code> method to parse a class from a model.
+     *
+     * @param modelClass the model class
+     * @param jClass the generated class source file
+     * @param rootElement is this class the root from the model?
+     * @throws ModelloException
+     */
     private void writeClassParser( ModelClass modelClass, JClass jClass, boolean rootElement )
         throws ModelloException
     {
@@ -622,7 +645,7 @@ public class StaxReaderGenerator
         sc.add( "{" );
         sc.indent();
 
-        String statement = "if";
+        boolean addElse = false;
 
         if ( rootElement )
         {
@@ -646,10 +669,10 @@ public class StaxReaderGenerator
             sc.unindent();
             sc.add( "}" );
 
-            statement = "else if";
+            addElse = true;
         }
 
-        //Write other fields
+        // Write other fields
 
         for ( Iterator i = modelClass.getAllFields( getGeneratedVersion(), true ).iterator(); i.hasNext(); )
         {
@@ -659,9 +682,9 @@ public class StaxReaderGenerator
 
             if ( !xmlFieldMetadata.isAttribute() )
             {
-                processField( xmlFieldMetadata, field, statement, sc, uncapClassName, modelClass, rootElement, jClass );
+                processField( modelClass, field, xmlFieldMetadata, addElse, sc, uncapClassName, rootElement, jClass );
 
-                statement = "else if";
+                addElse = true;
             }
         }
         if ( !rootElement )
@@ -677,7 +700,7 @@ public class StaxReaderGenerator
             }
 */
 
-            if ( statement.startsWith( "else" ) )
+            if ( addElse )
             {
                 sc.add( "else" );
 
@@ -692,14 +715,14 @@ public class StaxReaderGenerator
                             + "\"'\", xmlStreamReader.getLocation() );" );
             sc.add( "}" );
 
-            if ( statement.startsWith( "else" ) )
+            if ( addElse )
             {
                 sc.unindent();
                 sc.add( "}" );
             }
         }
         else
-        {
+        { // rootElement == true
             sc.add( "else" );
 
             sc.add( "{" );
@@ -741,7 +764,7 @@ public class StaxReaderGenerator
 
                 String v = uncapClassName + ".get" + capitalise( field.getName() ) + "()";
                 v = getValue( field.getType(), v, (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID ) );
-                sc.add( instanceFieldName + ".put( " + v + ", " + uncapClassName + ");" );
+                sc.add( instanceFieldName + ".put( " + v + ", " + uncapClassName + " );" );
             }
         }
 
@@ -910,6 +933,14 @@ public class StaxReaderGenerator
         return uncapitalise( to ) + "Instances";
     }
 
+    /**
+     * Add code to parse fields of a model class that are XML attributes.
+     *
+     * @param modelClass the model class
+     * @param uncapClassName
+     * @param sc the source code to add to
+     * @throws ModelloException
+     */
     private void writeAttributes( ModelClass modelClass, String uncapClassName, JSourceCode sc )
         throws ModelloException
     {
@@ -927,8 +958,21 @@ public class StaxReaderGenerator
         }
     }
 
-    private void processField( XmlFieldMetadata xmlFieldMetadata, ModelField field, String statement, JSourceCode sc,
-                               String uncapClassName, ModelClass modelClass, boolean rootElement, JClass jClass )
+    /**
+     * Generate code to process a field represented as an XML element.
+     *
+     * @param modelClass the model class being processed
+     * @param field the field to process
+     * @param xmlFieldMetadata its XML metadata
+     * @param addElse add an <code>else</code> statement before generating a new <code>if</code>
+     * @param sc the method source code to add to
+     * @param objectName the object name in the source
+     * @param rootElement is the enclosing model class the root class (for model version field handling)
+     * @param jClass the generated class source file
+     * @throws ModelloException
+     */
+    private void processField( ModelClass modelClass, ModelField field, XmlFieldMetadata xmlFieldMetadata,
+                               boolean addElse, JSourceCode sc, String objectName, boolean rootElement, JClass jClass )
         throws ModelloException
     {
         String fieldTagName = resolveTagName( field, xmlFieldMetadata );
@@ -947,11 +991,31 @@ public class StaxReaderGenerator
             alias = "\"" + field.getAlias() + "\"";
         }
 
-        String tagComparison =
-            statement + " ( checkFieldWithDuplicate( xmlStreamReader, \"" + fieldTagName + "\", " + alias + ", parsed ) )";
+        String tagComparison = ( addElse ? "else " : "" )
+            + "if ( checkFieldWithDuplicate( xmlStreamReader, \"" + fieldTagName + "\", " + alias + ", parsed ) )";
 
-        if ( field instanceof ModelAssociation )
+        if ( !( field instanceof ModelAssociation ) )
         {
+            sc.add( tagComparison );
+
+            sc.add( "{" );
+            sc.indent();
+
+            //ModelField
+            writePrimitiveField( field, field.getType(), objectName, "set" + capFieldName, sc );
+
+            if ( rootElement && field.isModelVersionField() )
+            {
+                sc.add( "String modelVersion = " + objectName + ".get" + capFieldName + "();" );
+
+                writeModelVersionCheck( sc );
+            }
+
+            sc.unindent();
+            sc.add( "}" );
+        }
+        else
+        { // model association
             ModelAssociation association = (ModelAssociation) field;
 
             String associationName = association.getName();
@@ -967,7 +1031,7 @@ public class StaxReaderGenerator
 
                 if ( referenceIdentifierField != null )
                 {
-                    addCodeToAddReferences( association, jClass, sc, referenceIdentifierField, uncapClassName );
+                    addCodeToAddReferences( association, jClass, sc, referenceIdentifierField, objectName );
 
                     // gobble the rest of the tag
                     sc.add( "while ( xmlStreamReader.getEventType() != XMLStreamConstants.END_ELEMENT )" );
@@ -977,7 +1041,7 @@ public class StaxReaderGenerator
                 }
                 else
                 {
-                    sc.add( uncapClassName + ".set" + capFieldName + "( parse" + association.getTo() + "( \"" + fieldTagName
+                    sc.add( objectName + ".set" + capFieldName + "( parse" + association.getTo() + "( \"" + fieldTagName
                             + "\", xmlStreamReader, strict, encoding ) );" );
                 }
 
@@ -1008,7 +1072,7 @@ public class StaxReaderGenerator
 
                         sc.add( type + " " + associationName + " = " + association.getDefaultValue() + ";" );
 
-                        sc.add( uncapClassName + ".set" + capFieldName + "( " + associationName + " );" );
+                        sc.add( objectName + ".set" + capFieldName + "( " + associationName + " );" );
 
                         sc.add( "while ( xmlStreamReader.nextTag() == XMLStreamConstants.START_ELEMENT )" );
 
@@ -1022,13 +1086,13 @@ public class StaxReaderGenerator
                     }
                     else
                     {
-                        sc.add(
-                            statement + " ( xmlStreamReader.getLocalName().equals( \"" + valuesTagName + "\" ) )" );
+                        sc.add( ( addElse ? "else " : "" )
+                            + "if ( xmlStreamReader.getLocalName().equals( \"" + valuesTagName + "\" ) )" );
 
                         sc.add( "{" );
                         sc.indent();
 
-                        sc.add( type + " " + associationName + " = " + uncapClassName + ".get" + capFieldName + "();" );
+                        sc.add( type + " " + associationName + " = " + objectName + ".get" + capFieldName + "();" );
 
                         sc.add( "if ( " + associationName + " == null )" );
 
@@ -1037,7 +1101,7 @@ public class StaxReaderGenerator
 
                         sc.add( associationName + " = " + association.getDefaultValue() + ";" );
 
-                        sc.add( uncapClassName + ".set" + capFieldName + "( " + associationName + " );" );
+                        sc.add( objectName + ".set" + capFieldName + "( " + associationName + " );" );
 
                         sc.unindent();
                         sc.add( "}" );
@@ -1049,7 +1113,7 @@ public class StaxReaderGenerator
 
                         if ( referenceIdentifierField != null )
                         {
-                            addCodeToAddReferences( association, jClass, sc, referenceIdentifierField, uncapClassName );
+                            addCodeToAddReferences( association, jClass, sc, referenceIdentifierField, objectName );
                         }
 
                         if ( association.getTo().equals( modelClass.getName() ) )
@@ -1062,7 +1126,7 @@ public class StaxReaderGenerator
                         }
                         else
                         {
-                            sc.add( uncapClassName + ".add" + capitalise( singular( associationName ) ) + "( parse"
+                            sc.add( objectName + ".add" + capitalise( singular( associationName ) ) + "( parse"
                                     + association.getTo() + "( \"" + valuesTagName
                                     + "\", xmlStreamReader, strict, encoding ) );" );
                         }
@@ -1151,7 +1215,7 @@ public class StaxReaderGenerator
                         sc.unindent();
                         sc.add( "}" );
 
-                        sc.add( uncapClassName + ".add" + capitalise( singularName ) + "( key, value );" );
+                        sc.add( objectName + ".add" + capitalise( singularName ) + "( key, value );" );
 
                         sc.unindent();
                         sc.add( "}" );
@@ -1175,7 +1239,7 @@ public class StaxReaderGenerator
                         sc.add( "String value = xmlStreamReader.getElementText()"
                                 + ( xmlFieldMetadata.isTrim() ? ".trim()" : "" ) + ";" );
 
-                        sc.add( uncapClassName + ".add" + capitalise( singularName ) + "( key, value );" );
+                        sc.add( objectName + ".add" + capitalise( singularName ) + "( key, value );" );
 
                         sc.unindent();
                         sc.add( "}" );
@@ -1185,26 +1249,6 @@ public class StaxReaderGenerator
                     sc.add( "}" );
                 }
             }
-        }
-        else
-        {
-            sc.add( tagComparison );
-
-            sc.add( "{" );
-            sc.indent();
-
-            //ModelField
-            writePrimitiveField( field, field.getType(), uncapClassName, "set" + capitalise( field.getName() ), sc );
-
-            if ( rootElement && field.isModelVersionField() )
-            {
-                sc.add( "String modelVersion = " + uncapClassName + ".get" + capitalise( field.getName() ) + "();" );
-
-                writeModelVersionCheck( sc );
-            }
-
-            sc.unindent();
-            sc.add( "}" );
         }
     }
 
@@ -1265,17 +1309,22 @@ public class StaxReaderGenerator
         sc.add( "}" );
     }
 
+    /**
+     * Write code to set a primitive field with a value got from the parser, with appropriate default value, trimming
+     * and required check logic.
+     *
+     * @param field the model field to set (either XML attribute or element)
+     * @param type the type of the value read from XML
+     * @param objectName the object name in source
+     * @param setterName the setter method name
+     * @param sc the source code to add to
+     */
     private void writePrimitiveField( ModelField field, String type, String objectName, String setterName,
                                       JSourceCode sc )
     {
         XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
 
-        String tagName = xmlFieldMetadata.getTagName();
-
-        if ( tagName == null )
-        {
-            tagName = field.getName();
-        }
+        String tagName = resolveTagName( field, xmlFieldMetadata);
 
         String parserGetter;
         if ( xmlFieldMetadata.isAttribute() )
