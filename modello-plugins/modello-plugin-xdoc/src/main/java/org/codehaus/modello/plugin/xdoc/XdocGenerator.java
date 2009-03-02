@@ -280,12 +280,6 @@ public class XdocGenerator
 
         w.endElement();
 
-        w.startElement( "th" );
-
-        w.writeText( "Description" );
-
-        w.endElement();
-
         boolean showSinceColumn = version.greaterThan( firstVersion );
 
         if ( showSinceColumn )
@@ -296,6 +290,12 @@ public class XdocGenerator
 
             w.endElement();
         }
+
+        w.startElement( "th" );
+
+        w.writeText( "Description" );
+
+        w.endElement();
 
         w.endElement();
 
@@ -407,6 +407,24 @@ public class XdocGenerator
 
             w.endElement(); // td
 
+            // Since column
+
+            if ( showSinceColumn )
+            {
+                w.startElement( "td" );
+
+                if ( f.getVersionRange() != null )
+                {
+                    Version fromVersion = f.getVersionRange().getFromVersion();
+                    if ( fromVersion != null && fromVersion.greaterThan( firstVersion ) )
+                    {
+                        w.writeMarkup( fromVersion.toString() );
+                    }
+                }
+
+                w.endElement();
+            }
+
             // Description column
 
             w.startElement( "td" );
@@ -430,24 +448,6 @@ public class XdocGenerator
             }
 
             w.endElement();
-
-            // Since column
-
-            if ( showSinceColumn )
-            {
-                w.startElement( "td" );
-
-                if ( f.getVersionRange() != null )
-                {
-                    Version fromVersion = f.getVersionRange().getFromVersion();
-                    if ( fromVersion != null && fromVersion.greaterThan( firstVersion ) )
-                    {
-                        w.writeMarkup( fromVersion.toString() );
-                    }
-                }
-
-                w.endElement();
-            }
 
             w.endElement();
         }
