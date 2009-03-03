@@ -682,7 +682,7 @@ public class StaxReaderGenerator
 
             if ( !xmlFieldMetadata.isAttribute() )
             {
-                processField( modelClass, field, xmlFieldMetadata, addElse, sc, uncapClassName, rootElement, jClass );
+                processField( field, xmlFieldMetadata, addElse, sc, uncapClassName, rootElement, jClass );
 
                 addElse = true;
             }
@@ -961,7 +961,6 @@ public class StaxReaderGenerator
     /**
      * Generate code to process a field represented as an XML element.
      *
-     * @param modelClass the model class being processed
      * @param field the field to process
      * @param xmlFieldMetadata its XML metadata
      * @param addElse add an <code>else</code> statement before generating a new <code>if</code>
@@ -971,8 +970,8 @@ public class StaxReaderGenerator
      * @param jClass the generated class source file
      * @throws ModelloException
      */
-    private void processField( ModelClass modelClass, ModelField field, XmlFieldMetadata xmlFieldMetadata,
-                               boolean addElse, JSourceCode sc, String objectName, boolean rootElement, JClass jClass )
+    private void processField( ModelField field, XmlFieldMetadata xmlFieldMetadata, boolean addElse, JSourceCode sc,
+                               String objectName, boolean rootElement, JClass jClass )
         throws ModelloException
     {
         String fieldTagName = resolveTagName( field, xmlFieldMetadata );
@@ -1107,7 +1106,7 @@ public class StaxReaderGenerator
                         sc.add( "}" );
                     }
 
-                    if ( isClassInModel( association.getTo(), modelClass.getModel() ) )
+                    if ( isClassInModel( association.getTo(), field.getModelClass().getModel() ) )
                     {
                         ModelField referenceIdentifierField = getReferenceIdentifierField( association );
 
@@ -1116,7 +1115,7 @@ public class StaxReaderGenerator
                             addCodeToAddReferences( association, jClass, sc, referenceIdentifierField, objectName );
                         }
 
-                        if ( association.getTo().equals( modelClass.getName() ) )
+                        if ( association.getTo().equals( field.getModelClass().getName() ) )
                         {
                             // HACK: the addXXX method will cause an OOME when compiling a self-referencing class, so we
                             //  just add it to the array. This could disrupt the links if you are using break/create
