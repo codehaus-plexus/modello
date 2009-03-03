@@ -127,6 +127,13 @@
             <type>XdocFeatures</type>
           </association>
         </field>
+        <field>
+          <name>node</name>
+          <version>1.0.0+</version>
+          <association>
+            <type>Node</type>
+          </association>
+        </field>
       </fields>
       <codeSegments>
         <codeSegment>
@@ -482,15 +489,12 @@
       <name>Bidirectional</name>
       <version>1.0.0+</version>
       <description>
-        Test of a bidirectional association, ie an association that has a reference to its parent. Due to MODELLO-167,
-        the field creating an association back to AssociationFeatures is only in version 2.0.0 of the model, to avoid
-        the bug.
+        Test of a bidirectional association, ie an association that has a reference to its parent.
       </description>
       <fields>
         <field>
           <name>parent</name>
-          <version>2.0.0+</version>
-          <comment>This causes an OutOfMemory exception with xdoc plugin: see MODELLO-167</comment>
+          <version>1.0.0+</version>
           <association>
             <type>AssociationFeatures</type>
             <multiplicity>1</multiplicity>
@@ -505,7 +509,7 @@
       <fields>
         <field>
           <name>parent</name>
-          <version>2.0.0+</version>
+          <version>1.0.0+</version>
           <association>
             <type>AssociationFeatures</type>
             <multiplicity>1</multiplicity>
@@ -520,7 +524,7 @@
       <fields>
         <field>
           <name>parent</name>
-          <version>2.0.0+</version>
+          <version>1.0.0+</version>
           <association>
             <type>AssociationFeatures</type>
             <multiplicity>1</multiplicity>
@@ -1091,6 +1095,25 @@
           <version>1.0.0+</version>
           <type>String</type>
           <identifier>true</identifier>
+        </field>
+      </fields>
+    </class>
+
+    <class>
+      <name>Node</name>
+      <version>1.0.0+</version>
+      <fields>
+        <field>
+          <name>value</name>
+          <version>1.0.0+</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>child</name>
+          <version>1.0.0+</version>
+          <association>
+            <type>Node</type>
+          </association>
         </field>
       </fields>
     </class>

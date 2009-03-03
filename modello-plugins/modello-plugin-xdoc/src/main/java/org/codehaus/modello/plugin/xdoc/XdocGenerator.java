@@ -31,6 +31,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
+import java.util.Stack;
 
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.ModelloParameterConstants;
@@ -181,13 +182,21 @@ public class XdocGenerator
 
     private void writeElementDescriptor( XMLWriter w, ModelClass modelClass )
     {
-        writeElementDescriptor( w, modelClass, null, new HashSet(), true );
+        writeElementDescriptor( w, modelClass, null, new HashSet() );
     }
 
     private void writeElementDescriptor( XMLWriter w, ModelClass modelClass, ModelAssociation association,
-                                         Set written, boolean recursive )
+                                         Set written )
     {
         String tagName = resolveTagName( modelClass, association );
+
+        String id = tagName + '/' + modelClass.getPackageName() + '.' + modelClass.getName();
+        if ( written.contains( id ) )
+        {
+            // tag already written for this model class
+            return;
+        }
+        written.add( id );
 
         written.add( tagName );
 
@@ -230,17 +239,14 @@ public class XdocGenerator
         {
             ModelField f = (ModelField) iter.next();
 
-            if ( isInnerAssociation( f ) && recursive )
+            if ( isInnerAssociation( f ) )
             {
                 ModelAssociation assoc = (ModelAssociation) f;
                 ModelClass fieldModelClass = getModel().getClass( assoc.getTo(), getGeneratedVersion() );
 
                 if ( !written.contains( resolveTagName( fieldModelClass, assoc ) ) )
                 {
-                    boolean selfAssociation = modelClass.getName().equals( fieldModelClass.getName() )
-                        && modelClass.getPackageName().equals( fieldModelClass.getPackageName() );
-
-                    writeElementDescriptor( w, fieldModelClass, assoc, written, !selfAssociation );
+                    writeElementDescriptor( w, fieldModelClass, assoc, written );
                 }
             }
         }
@@ -458,7 +464,7 @@ public class XdocGenerator
 
     private String getXmlDescriptor( ModelClass modelClass )
     {
-        return getXmlDescriptor( modelClass, null, 0, true );
+        return getXmlDescriptor( modelClass, null, new Stack() );
     }
 
     /**
@@ -471,17 +477,25 @@ public class XdocGenerator
      * @return the String representing the tree model
      * @throws ModelloRuntimeException
      */
-    private String getXmlDescriptor( ModelClass modelClass, ModelAssociation association, int depth, boolean recursive )
+    private String getXmlDescriptor( ModelClass modelClass, ModelAssociation association, Stack stack )
         throws ModelloRuntimeException
     {
         StringBuffer sb = new StringBuffer();
 
-        appendSpacer( sb, depth );
+        appendSpacer( sb, stack.size() );
 
         String tagName = resolveTagName( modelClass, association );
 
         sb.append( "&lt;<a href=\"#" ).append( getAnchorName( tagName ) ).append( "\">" );
         sb.append( tagName ).append( "</a>" );
+
+        String id = tagName + '/' + modelClass.getPackageName() + '.' + modelClass.getName();
+        if ( stack.contains( id ) )
+        {
+            // recursion detected
+            sb.append( "&gt;...recursion...&lt;" ).append( tagName ).append( "&gt;\n" );
+            return sb.toString();
+        }
 
         List fields = getFieldsForClass( modelClass );
 
@@ -507,9 +521,15 @@ public class XdocGenerator
 
         }
 
-        if ( fields.size() > 0 )
+        if ( fields.size() == 0 )
+        {
+            sb.append( "/&gt;\n" );
+        }
+        else
         {
             sb.append( "&gt;\n" );
+
+            stack.push( id );
 
             for ( Iterator iter = fields.iterator(); iter.hasNext(); )
             {
@@ -526,7 +546,7 @@ public class XdocGenerator
 
                 String fieldTagName = resolveTagName( f, xmlFieldMetadata );
 
-                if ( isInnerAssociation( f ) && recursive )
+                if ( isInnerAssociation( f ) )
                 {
                     ModelAssociation assoc = (ModelAssociation) f;
 
@@ -540,26 +560,24 @@ public class XdocGenerator
 
                     if ( wrappedItems )
                     {
-                        depth++;
-
-                        appendSpacer( sb, depth );
+                        appendSpacer( sb, stack.size() );
 
                         sb.append( "&lt;" ).append( fieldTagName ).append( "&gt;\n" );
+
+                        stack.push( fieldTagName );
                     }
 
                     ModelClass fieldModelClass = getModel().getClass( assoc.getTo(), getGeneratedVersion() );
 
-                    boolean selfAssociation = modelClass.getName().equals( fieldModelClass.getName() )
-                        && modelClass.getPackageName().equals( fieldModelClass.getPackageName() );
-                    sb.append( getXmlDescriptor( fieldModelClass, assoc, depth + 1, !selfAssociation ) );
+                    sb.append( getXmlDescriptor( fieldModelClass, assoc, stack ) );
 
                     if ( wrappedItems )
                     {
-                        appendSpacer( sb, depth );
+                        stack.pop();
+
+                        appendSpacer( sb, stack.size() );
 
                         sb.append( "&lt;/" ).append( fieldTagName ).append( "&gt;\n" );
-
-                        depth--;
                     }
                 }
                 else if ( ModelDefault.PROPERTIES.equals( f.getType() ) )
@@ -568,40 +586,38 @@ public class XdocGenerator
                     XmlAssociationMetadata xmlAssociationMetadata =
                         (XmlAssociationMetadata) assoc.getAssociationMetadata( XmlAssociationMetadata.ID );
 
-                    appendSpacer( sb, depth + 1 );
+                    appendSpacer( sb, stack.size() );
                     sb.append( "&lt;" ).append( fieldTagName ).append( "&gt;\n" );
 
                     if ( xmlAssociationMetadata.isMapExplode() )
                     {
-                        appendSpacer( sb, depth + 2 );
+                        appendSpacer( sb, stack.size() + 1 );
                         sb.append( "&lt;key/&gt;\n" );
-                        appendSpacer( sb, depth + 2 );
+                        appendSpacer( sb, stack.size() + 1 );
                         sb.append( "&lt;value/&gt;\n" );
                     }
                     else
                     {
-                        appendSpacer( sb, depth + 2 );
+                        appendSpacer( sb, stack.size() + 1 );
                         sb.append( "&lt;<i>key</i>&gt;<i>value</i>&lt;/<i>key</i>&gt;\n" );
                     }
 
-                    appendSpacer( sb, depth + 1 );
+                    appendSpacer( sb, stack.size() );
                     sb.append( "&lt;" ).append( fieldTagName ).append( "/&gt;\n" );
                 }
                 else
                 {
-                    appendSpacer( sb, depth + 1 );
+                    appendSpacer( sb, stack.size() );
 
                     sb.append( "&lt;" ).append( fieldTagName ).append( "/&gt;\n" );
                 }
             }
 
-            appendSpacer( sb, depth );
+            stack.pop();
+
+            appendSpacer( sb, stack.size() );
 
             sb.append( "&lt;/" ).append( tagName ).append( "&gt;\n" );
-        }
-        else
-        {
-            sb.append( "/&gt;\n" );
         }
 
         return sb.toString();
