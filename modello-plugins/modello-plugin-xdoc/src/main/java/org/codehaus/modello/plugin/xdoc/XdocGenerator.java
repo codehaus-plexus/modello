@@ -440,7 +440,7 @@ public class XdocGenerator
             // But only for fields that are not a ModelAssociation
             if ( f.getDefaultValue() != null && !( f instanceof ModelAssociation ) )
             {
-                w.writeText( " The default value is " );
+                w.writeMarkup( "<br/><strong>Default value is</strong>: " );
                 w.startElement( "code" );
                 w.writeText( f.getDefaultValue() );
                 w.endElement();
