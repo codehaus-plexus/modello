@@ -131,7 +131,7 @@
           <name>node</name>
           <version>1.0.0+</version>
           <association>
-            <type>Node</type>
+            <type>NodeItem</type>
           </association>
         </field>
       </fields>
@@ -1100,7 +1100,7 @@
     </class>
 
     <class>
-      <name>Node</name>
+      <name>NodeItem</name>
       <version>1.0.0+</version>
       <fields>
         <field>
@@ -1112,7 +1112,7 @@
           <name>child</name>
           <version>1.0.0+</version>
           <association>
-            <type>Node</type>
+            <type>NodeItem</type>
           </association>
         </field>
       </fields>
