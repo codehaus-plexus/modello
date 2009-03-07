@@ -131,9 +131,7 @@ public class XdocGenerator
 
         w.startElement( "properties" );
 
-        w.startElement( "title" );
-        w.writeText( objectModel.getName() );
-        w.endElement();
+        writeTextElement( w, "title", objectModel.getName() );
 
         w.endElement();
 
@@ -145,24 +143,16 @@ public class XdocGenerator
 
         w.addAttribute( "name", objectModel.getName() );
 
-        w.startElement( "p" );
-
-        w.writeMarkup( getDescription( objectModel ) );
-
-        w.endElement();
+        writeMarkupElement( w, "p", getDescription( objectModel ) );
 
         // XML representation of the model with links
-        w.startElement( "source" );
-
         ModelClass root = objectModel.getClass( objectModel.getRoot( getGeneratedVersion() ), getGeneratedVersion() );
 
-        w.writeMarkup( "\n" + getXmlDescriptor( root ) );
-
-        w.endElement();
+        writeMarkupElement( w, "source", "\n" + getModelXmlDescriptor( root ) );
 
         // Element descriptors
         // Traverse from root so "abstract" models aren't included
-        writeElementDescriptor( w, root );
+        writeModelDescriptor( w, root );
 
         w.endElement();
 
@@ -175,25 +165,44 @@ public class XdocGenerator
         writer.close();
     }
 
+    /**
+     * Get the anchor name by which model classes can be accessed in the generated xdoc/html file.
+     *
+     * @param tagName the name of the XML tag of the model class
+     * @return the corresponding anchor name
+     */
     private String getAnchorName( String tagName )
     {
         return "class_" + tagName ;
     }
 
-    private void writeElementDescriptor( XMLWriter w, ModelClass modelClass )
+    /**
+     * Write description of the whole model.
+     *
+     * @param w the output writer
+     * @param rootModelClass the root class of the model
+     */
+    private void writeModelDescriptor( XMLWriter w, ModelClass rootModelClass )
     {
-        writeElementDescriptor( w, modelClass, null, new HashSet() );
+        writeElementDescriptor( w, rootModelClass, null, new HashSet() );
     }
 
-    private void writeElementDescriptor( XMLWriter w, ModelClass modelClass, ModelAssociation association,
-                                         Set written )
+    /**
+     * Write description of an element of the XML representation of the model. This method is recursive.
+     *
+     * @param w the output writer
+     * @param modelClass the mode class to describe
+     * @param association the association we are coming from (can be <code>null</code>)
+     * @param written set of data already written
+     */
+    private void writeElementDescriptor( XMLWriter w, ModelClass modelClass, ModelAssociation association, Set written )
     {
         String tagName = resolveTagName( modelClass, association );
 
         String id = tagName + '/' + modelClass.getPackageName() + '.' + modelClass.getName();
         if ( written.contains( id ) )
         {
-            // tag already written for this model class
+            // tag already written for this model class accessed as this tag name
             return;
         }
         written.add( id );
@@ -210,32 +219,34 @@ public class XdocGenerator
 
         w.addAttribute( "name", tagName );
 
-        w.startElement( "p" );
-
-        w.writeMarkup( getDescription( modelClass ) );
-
-        w.endElement();
+        writeMarkupElement( w, "p", getDescription( modelClass ) );
 
         ModelField contentField = getContentField( getFieldsForClass( modelClass ) );
 
-        if (contentField != null)
+        if ( contentField != null )
         {
+            // this model class has a Content field
             w.startElement( "p" );
-            w.startElement( "b" );
-            w.writeText( "Element Content: " );
+
+            writeTextElement( w, "b", "Element Content: " );
+
             w.writeMarkup( getDescription( contentField ) );
-            w.endElement();
+
             w.endElement();
         }
+
         List attributeFields = new ArrayList( getAttributeFieldsForClass( modelClass ) );
+
         List elementFields = new ArrayList( getFieldsForClass( modelClass ) );
         elementFields.removeAll( attributeFields );
-        generateFieldsTable( w, elementFields, true );
-        generateFieldsTable( w, attributeFields, false );
+
+        writeFieldsTable( w, elementFields, true ); // write elements
+        writeFieldsTable( w, attributeFields, false ); // write attributes
 
         w.endElement();
 
-        for ( Iterator iter = getFieldsForClass( modelClass ).iterator(); iter.hasNext(); )
+        // check every fields that are inner associations to write their element descriptor
+        for ( Iterator iter = elementFields.iterator(); iter.hasNext(); )
         {
             ModelField f = (ModelField) iter.next();
 
@@ -252,58 +263,46 @@ public class XdocGenerator
         }
     }
 
-    private void generateFieldsTable( XMLWriter w, List fields, boolean elementFields )
+    /**
+     * Write a table containing model fields description.
+     *
+     * @param w the output writer
+     * @param fields the fields to add in the table
+     * @param elementFields <code>true</code> if fields are elements, <code>false</code> if fields are attributes
+     */
+    private void writeFieldsTable( XMLWriter w, List fields, boolean elementFields )
     {
-
         if ( fields == null || fields.isEmpty() )
         {
             // skip empty table
             return;
         }
 
-        // skip if only one field and Content type
-        if ( fields.size() == 1 )
+        // skip if only one element field with type == "Content"
+        if ( elementFields && ( fields.size() == 1 )
+             && ( "Content".equals( ( (ModelField) fields.get( 0 ) ).getType() ) ) )
         {
-            if ( "Content".equals( ( (ModelField) fields.get( 0 ) ).getType() ) )
-            {
-                return;
-            }
+            return;
         }
 
         w.startElement( "table" );
 
         w.startElement( "tr" );
 
-        w.startElement( "th" );
+        writeTextElement( w, "th", elementFields ? "Element" : "Attribute" );
 
-        w.writeText( elementFields ? "Element" : "Attribute" );
-
-        w.endElement();
-
-        w.startElement( "th" );
-
-        w.writeText( "Type" );
-
-        w.endElement();
+        writeTextElement( w, "th", "Type" );
 
         boolean showSinceColumn = version.greaterThan( firstVersion );
 
         if ( showSinceColumn )
         {
-            w.startElement( "th" );
-
-            w.writeText( "Since" );
-
-            w.endElement();
+            writeTextElement( w, "th", "Since" );
         }
 
-        w.startElement( "th" );
+        writeTextElement( w, "th", "Description" );
 
-        w.writeText( "Description" );
-
-        w.endElement();
-
-        w.endElement();
+        w.endElement(); // tr
 
         for ( Iterator j = fields.iterator(); j.hasNext(); )
         {
@@ -447,37 +446,42 @@ public class XdocGenerator
             if ( f.getDefaultValue() != null && !( f instanceof ModelAssociation ) )
             {
                 w.writeMarkup( "<br/><strong>Default value is</strong>: " );
-                w.startElement( "code" );
-                w.writeText( f.getDefaultValue() );
-                w.endElement();
+
+                writeTextElement( w, "code", f.getDefaultValue() );
+
                 w.writeText( "." );
             }
 
-            w.endElement();
+            w.endElement(); // td
 
-            w.endElement();
+            w.endElement(); // tr
         }
 
-        w.endElement();
+        w.endElement(); // table
 
-    }
-
-    private String getXmlDescriptor( ModelClass modelClass )
-    {
-        return getXmlDescriptor( modelClass, null, new Stack() );
     }
 
     /**
-     * Build the pretty tree describing the XML representation of the model. This method is recursive.
+     * Build the pretty tree describing the XML representation of the model.
+     *
+     * @param rootModelClass the model root class
+     * @return the String representing the tree model
+     */
+    private String getModelXmlDescriptor( ModelClass rootModelClass )
+    {
+        return getElementXmlDescriptor( rootModelClass, null, new Stack() );
+    }
+
+    /**
+     * Build the pretty tree describing the XML representation of an element of the model. This method is recursive.
+     *
      * @param modelClass the class we are printing the model
      * @param association the association we are coming from (can be <code>null</code>)
-     * @param depth how deep we currently are (for spacers purpose)
-     * @param written what tag names have already been written
-     * @param recursive are we still in recursive mode or not
+     * @param stack the stack of elements that have been traversed to come to the current one
      * @return the String representing the tree model
      * @throws ModelloRuntimeException
      */
-    private String getXmlDescriptor( ModelClass modelClass, ModelAssociation association, Stack stack )
+    private String getElementXmlDescriptor( ModelClass modelClass, ModelAssociation association, Stack stack )
         throws ModelloRuntimeException
     {
         StringBuffer sb = new StringBuffer();
@@ -569,7 +573,7 @@ public class XdocGenerator
 
                     ModelClass fieldModelClass = getModel().getClass( assoc.getTo(), getGeneratedVersion() );
 
-                    sb.append( getXmlDescriptor( fieldModelClass, assoc, stack ) );
+                    sb.append( getElementXmlDescriptor( fieldModelClass, assoc, stack ) );
 
                     if ( wrappedItems )
                     {
@@ -700,5 +704,19 @@ public class XdocGenerator
     private static String getDescription( BaseElement element )
     {
         return ( element.getDescription() == null ) ? "No description." : element.getDescription();
+    }
+
+    private static void writeTextElement( XMLWriter w, String name, String text )
+    {
+        w.startElement( name );
+        w.writeText( text );
+        w.endElement();
+    }
+
+    private static void writeMarkupElement( XMLWriter w, String name, String markup )
+    {
+        w.startElement( name );
+        w.writeMarkup( markup );
+        w.endElement();
     }
 }
