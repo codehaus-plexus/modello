@@ -140,4 +140,17 @@
 
     <xsdFeatures attribute="one more value from XML file" />
   </xmlFeatures>
+
+  <!--node>
+    <value>1</value>
+    <child>
+      <value>2</value>
+      <child>
+        <value>3</value>
+        <child>
+          <value>4</value>
+        </child>
+      </child>
+    </child>
+  </node-->
 </features>

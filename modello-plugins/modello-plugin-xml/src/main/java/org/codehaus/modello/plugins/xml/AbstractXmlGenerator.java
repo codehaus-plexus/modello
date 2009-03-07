@@ -126,6 +126,12 @@ public abstract class AbstractXmlGenerator
         return ( getContentField( modelFields ) != null );
     }
 
+    /**
+     * Get the field which type is <code>Content</code> if any.
+     *
+     * @param modelFields the fields to check
+     * @return the field, or <code>null</code> if no field is <code>Content</code>
+     */
     protected ModelField getContentField( List/*<ModelField>*/ modelFields )
     {
         if ( modelFields == null )

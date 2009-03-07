@@ -279,8 +279,7 @@ public class XdocGenerator
         }
 
         // skip if only one element field with type == "Content"
-        if ( elementFields && ( fields.size() == 1 )
-             && ( "Content".equals( ( (ModelField) fields.get( 0 ) ).getType() ) ) )
+        if ( elementFields && ( fields.size() == 1 ) && ( getContentField( fields ) != null ) )
         {
             return;
         }
@@ -501,8 +500,6 @@ public class XdocGenerator
             return sb.toString();
         }
 
-        List fields = getFieldsForClass( modelClass );
-
         List attributeFields = getAttributeFieldsForClass( modelClass );
 
         if ( attributeFields.size() > 0 )
@@ -521,11 +518,12 @@ public class XdocGenerator
 
             sb.append( ' ' );
 
-            fields.removeAll( attributeFields );
-
         }
 
-        if ( fields.size() == 0 )
+        List fields = getFieldsForClass( modelClass );
+        fields.removeAll( attributeFields );
+
+        if ( ( fields.size() == 0 ) || ( ( fields.size() == 1 ) && ( getContentField( fields ) != null ) ) )
         {
             sb.append( "/&gt;\n" );
         }

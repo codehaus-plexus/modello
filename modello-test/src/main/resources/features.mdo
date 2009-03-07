@@ -31,7 +31,8 @@
       <version>1.0.0+</version>
       <!--
         1.0.0: features supported by every plugin,
-        2.0.0: features supported by java plugin but there are problems with some other plugins
+        1.5.0: features supported by java and xdoc plugin but there are problems with some other plugins
+        2.0.0: features supported by java plugin but there are problems with some other plugins including xdoc
       -->
       <fields>
         <field>
@@ -306,15 +307,19 @@
 
     <class>
       <name>ContentTest</name>
+      <description><![CDATA[A model class that has only XMl attributes fields and exactly one field with
+        <code>Content</code> type.]]></description>
       <version>1.0.0+</version>
       <fields>
         <field>
           <name>content</name>
-          <version>2.0.0+</version><!-- MODELLO-185: not supported by dom4j, jdom, stax and xdoc plugins -->
+          <description><![CDATA[The field of the class with <code>Content</code> type.]]></description>
+          <version>1.5.0+</version><!-- MODELLO-185: not supported by dom4j, jdom and stax plugins -->
           <type>Content</type>
         </field>
         <field xml.attribute="true">
           <name>attr</name>
+          <description>An XML attribute.</description>
           <version>1.0.0+</version>
           <type>String</type>
         </field>
