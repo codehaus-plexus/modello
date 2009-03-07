@@ -404,7 +404,8 @@ public class XsdGenerator
                         else
                         {
                             throw new IllegalStateException( "Non-association field of a non-primitive type '"
-                                                             + field.getType() + "' for '" + field.getName() + "'" );
+                                + field.getType() + "' for '" + field.getName() + "' in '"
+                                + modelClass.getName() + "' model class" );
                         }
                     }
                 }
@@ -452,7 +453,7 @@ public class XsdGenerator
             else if ( xsdType == null )
             {
                 throw new IllegalStateException( "Attribute field of a non-primitive type '" + field.getType()
-                    + "' for '" + field.getName() + "'" );
+                    + "' for '" + field.getName() + "' in '" + modelClass.getName() + "' model class" );
             }
 
             w.endElement();
