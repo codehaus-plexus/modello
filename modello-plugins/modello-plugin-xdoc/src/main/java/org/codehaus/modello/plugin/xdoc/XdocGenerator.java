@@ -240,8 +240,8 @@ public class XdocGenerator
         List elementFields = new ArrayList( getFieldsForClass( modelClass ) );
         elementFields.removeAll( attributeFields );
 
-        writeFieldsTable( w, elementFields, true ); // write elements
         writeFieldsTable( w, attributeFields, false ); // write attributes
+        writeFieldsTable( w, elementFields, true ); // write elements
 
         w.endElement();
 
