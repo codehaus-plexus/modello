@@ -3,10 +3,48 @@
   ------
   Hervé Boutemy
   ------
-  2009-01-29
+  2009-03-09
   ------
 
 Modello
+
+* 1.0.1 Release Notes (2009-03-09)
+
+  The full list of changes can be found in our {{{http://jira.codehaus.org/secure/IssueNavigator.jspa?fixfor=14892&sorter/field=issuekey&sorter/order=DESC&reset=true}issue management system}}, and is reproduced below.
+
+** Bug
+
+    * [MODELLO-167] - bi-directional association makes an OutOfMemoryException with xdoc plugin
+
+    * [MODELLO-172] - Add timestamp and the generator in the generated files
+
+    * [MODELLO-174] - Wrong XDoc for flat lists
+
+    * [MODELLO-184] - Generated XSD is invalid for a field with "Content" type
+
+    * [MODELLO-187] - add Content type support to xdoc plugin
+
+** Improvement
+
+    * [MODELLO-173] - Ignore leading/trailing whitespace of field descriptions when generating accessor comments
+
+    * [MODELLO-177] - running modello generation during IDE incremental build
+
+    * [MODELLO-178] - add xml.format="long" option to read/write a date field as a long value
+
+** New Feature
+
+    * [MODELLO-179] - add a type column in xdoc to describe fields types
+
+** Task
+
+    * [MODELLO-182] - Make tests respect maven.repo.local
+
+
+** Wish
+
+    * [MODELLO-180] - Avoid unused imports
+
 
 * 1.0 Release Notes (2009-01-29)
 
