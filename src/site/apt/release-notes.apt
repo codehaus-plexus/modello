@@ -16,8 +16,6 @@ Modello
 
     * [MODELLO-167] - bi-directional association makes an OutOfMemoryException with xdoc plugin
 
-    * [MODELLO-172] - Add timestamp and the generator in the generated files
-
     * [MODELLO-174] - Wrong XDoc for flat lists
 
     * [MODELLO-184] - Generated XSD is invalid for a field with "Content" type
@@ -25,6 +23,8 @@ Modello
     * [MODELLO-187] - add Content type support to xdoc plugin
 
 ** Improvement
+
+    * [MODELLO-172] - Add timestamp and the generator in the generated files
 
     * [MODELLO-173] - Ignore leading/trailing whitespace of field descriptions when generating accessor comments
 
