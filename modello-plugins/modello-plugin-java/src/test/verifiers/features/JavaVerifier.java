@@ -20,6 +20,7 @@
  * SOFTWARE.
  */
 
+import org.codehaus.modello.OrderedProperties;
 import org.codehaus.modello.verifier.Verifier;
 import org.codehaus.modello.verifier.VerifierException;
 
@@ -39,6 +40,7 @@ import org.codehaus.modello.test.features.SubClassLevel2;
 import org.codehaus.modello.test.features.SubClassLevel3;
 import org.codehaus.modello.test.features.SubInterface;
 import org.codehaus.modello.test.features.XmlAttributes;
+import org.codehaus.modello.test.features.XmlFeatures;
 import org.codehaus.modello.test.features.other.SubInterfaceInPackage;
 
 import java.lang.reflect.Field;
@@ -79,6 +81,8 @@ public class JavaVerifier
         verifyDefaultValues();
         verifyJavaFeatures();
         verifyInterfaces();
+
+        verifyMisc();
     }
 
     /**
@@ -321,5 +325,17 @@ public class JavaVerifier
 
         // codeSegments
         Assert.assertNotNull( "SimpleInterface.CODE_SEGMENT should be here", SimpleInterface.CODE_SEGMENT );
+    }
+
+    /**
+     * Verify misc aspects of the generated classes.
+     */
+    public void verifyMisc()
+    {
+        // <default><key>java.util.Properties</key><value>new org.codehaus.modello.OrderedProperties()</value></default>
+        if (! ( new XmlFeatures().getExplodeProperties() instanceof OrderedProperties ) )
+        {
+            throw new VerifierException( "java.util.Properties model default value was ignored" );
+        }
     }
 }

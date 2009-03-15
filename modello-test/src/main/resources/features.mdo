@@ -17,6 +17,10 @@
       <key>package</key>
       <value>org.codehaus.modello.test.features</value>
     </default>
+    <default><!-- to ensure elements order when writing back features.xml -->
+      <key>java.util.Properties</key>
+      <value>new org.codehaus.modello.OrderedProperties()</value>
+    </default>
   </defaults>
 
   <versionDefinition><!-- feature really supported by StAX plugin only, which checks version of the document when parsing it -->

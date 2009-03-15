@@ -119,11 +119,21 @@
 
     <explodeProperties>
       <explodeProperty>
+        <key>aKey</key>
+        <value>aValue</value>
+      </explodeProperty>
+      <explodeProperty>
+        <key>key</key>
+        <value>value</value>
+      </explodeProperty>
+      <explodeProperty>
         <key>theKey</key>
         <value>theValue</value>
       </explodeProperty>
     </explodeProperties>
     <inlineProperties>
+      <aKey>aValue</aKey>
+      <key>value</key>
       <theKey>theValue</theKey>
     </inlineProperties>
 
