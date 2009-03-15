@@ -81,7 +81,18 @@ public class JavaVerifier
         verifyInterfaces();
     }
 
-    private void checkField( Class clazz, Class type, String attributeName, String getterName, String setterName )
+    /**
+     * Check that a field has been propertly declared with public accessors.
+     *
+     * @param clazz the class that should contain the field
+     * @param attributeName the field's attribute name
+     * @param type the field expected type
+     * @param getterName the expected getter method name
+     * @param setterName the expected setter method name
+     * @throws NoSuchFieldException
+     * @throws NoSuchMethodException
+     */
+    private void checkField( Class clazz, String attributeName, Class type, String getterName, String setterName )
         throws NoSuchFieldException, NoSuchMethodException
     {
         Field field = clazz.getDeclaredField( attributeName );
@@ -99,59 +110,81 @@ public class JavaVerifier
                            Modifier.isPublic( setter.getModifiers() ) );
     }
 
+    /**
+     * Check fields declaration common to SimpleTypes and XmlAttributes classes.
+     *
+     * @param clazz the actuel class to check
+     * @throws NoSuchFieldException
+     * @throws NoSuchMethodException
+     */
     private void checkCommonFields( Class clazz )
         throws NoSuchFieldException, NoSuchMethodException
     {
-        checkField( clazz, Boolean.TYPE, "primitiveBoolean", "isPrimitiveBoolean", "setPrimitiveBoolean" );
-        checkField( clazz, Byte.TYPE, "primitiveByte", "getPrimitiveByte", "setPrimitiveByte" );
-        checkField( clazz, Character.TYPE, "primitiveChar", "getPrimitiveChar", "setPrimitiveChar" );
-        checkField( clazz, Short.TYPE, "primitiveShort", "getPrimitiveShort", "setPrimitiveShort" );
-        checkField( clazz, Integer.TYPE, "primitiveInt", "getPrimitiveInt", "setPrimitiveInt" );
-        checkField( clazz, Long.TYPE, "primitiveLong", "getPrimitiveLong", "setPrimitiveLong" );
-        checkField( clazz, Float.TYPE, "primitiveFloat", "getPrimitiveFloat", "setPrimitiveFloat" );
-        checkField( clazz, Double.TYPE, "primitiveDouble", "getPrimitiveDouble", "setPrimitiveDouble" );
-        checkField( clazz, Boolean.class, "objectBoolean", "isObjectBoolean", "setObjectBoolean" );
-        checkField( clazz, String.class, "objectString", "getObjectString", "setObjectString" );
+        checkField( clazz, "primitiveBoolean", Boolean.TYPE  , "isPrimitiveBoolean", "setPrimitiveBoolean" );
+        checkField( clazz, "primitiveByte"   , Byte.TYPE     , "getPrimitiveByte"  , "setPrimitiveByte" );
+        checkField( clazz, "primitiveChar"   , Character.TYPE, "getPrimitiveChar"  , "setPrimitiveChar" );
+        checkField( clazz, "primitiveShort"  , Short.TYPE    , "getPrimitiveShort" , "setPrimitiveShort" );
+        checkField( clazz, "primitiveInt"    , Integer.TYPE  , "getPrimitiveInt"   , "setPrimitiveInt" );
+        checkField( clazz, "primitiveLong"   , Long.TYPE     , "getPrimitiveLong"  , "setPrimitiveLong" );
+        checkField( clazz, "primitiveFloat"  , Float.TYPE    , "getPrimitiveFloat" , "setPrimitiveFloat" );
+        checkField( clazz, "primitiveDouble" , Double.TYPE   , "getPrimitiveDouble", "setPrimitiveDouble" );
+        checkField( clazz, "objectBoolean"   , Boolean.class , "isObjectBoolean"   , "setObjectBoolean" );
+        checkField( clazz, "objectString"    , String.class  , "getObjectString"   , "setObjectString" );
+        checkField( clazz, "objectDate"      , Date.class    , "getObjectDate"     , "setObjectDate" );
     }
 
+    /**
+     * Verify SimpleTypes generated class.
+     *
+     * @throws NoSuchFieldException
+     * @throws NoSuchMethodException
+     */
     public void verifySimpleTypes()
         throws NoSuchFieldException, NoSuchMethodException
     {
         checkCommonFields( SimpleTypes.class );
     }
 
+    /**
+     * Verify XmlAttributes generated class.
+     *
+     * @throws NoSuchFieldException
+     * @throws NoSuchMethodException
+     */
     public void verifyXmlAttributes()
         throws NoSuchFieldException, NoSuchMethodException
     {
         checkCommonFields( XmlAttributes.class );
-        checkField( XmlAttributes.class, Date.class, "objectDate", "getObjectDate", "setObjectDate" );
     }
 
+    /**
+     * Verify default values.
+     */
     public void verifyDefaultValues()
     {
         SimpleTypes simple = new SimpleTypes();
-        Assert.assertEquals( "primitiveBoolean", true, simple.isPrimitiveBoolean() );
-        Assert.assertEquals( "primitiveByte", 12, simple.getPrimitiveByte() );
-        Assert.assertEquals( "primitiveChar", 'H', simple.getPrimitiveChar() );
-        Assert.assertEquals( "primitiveShort", (short) 1212, simple.getPrimitiveShort() );
-        Assert.assertEquals( "primitiveInt", 121212, simple.getPrimitiveInt() );
-        Assert.assertEquals( "primitiveLong", 12121212, simple.getPrimitiveLong() );
-        Assert.assertEquals( "primitiveFloat", 12.12f, simple.getPrimitiveFloat(), 0f );
-        Assert.assertEquals( "primitiveDouble", 12.12, simple.getPrimitiveDouble(), 0 );
-        Assert.assertEquals( "objectBoolean", Boolean.FALSE, simple.isObjectBoolean() );
-        Assert.assertEquals( "objectString", "default value", simple.getObjectString() );
+        Assert.assertEquals( "primitiveBoolean", true           , simple.isPrimitiveBoolean() );
+        Assert.assertEquals( "primitiveByte"   , 12             , simple.getPrimitiveByte() );
+        Assert.assertEquals( "primitiveChar"   , 'H'            , simple.getPrimitiveChar() );
+        Assert.assertEquals( "primitiveShort"  , (short) 1212   , simple.getPrimitiveShort() );
+        Assert.assertEquals( "primitiveInt"    , 121212         , simple.getPrimitiveInt() );
+        Assert.assertEquals( "primitiveLong"   , 12121212       , simple.getPrimitiveLong() );
+        Assert.assertEquals( "primitiveFloat"  , 12.12f         , simple.getPrimitiveFloat(), 0f );
+        Assert.assertEquals( "primitiveDouble" , 12.12          , simple.getPrimitiveDouble(), 0 );
+        Assert.assertEquals( "objectBoolean"   , Boolean.FALSE  , simple.isObjectBoolean() );
+        Assert.assertEquals( "objectString"    , "default value", simple.getObjectString() );
 
         XmlAttributes xmlAttributes = new XmlAttributes();
-        Assert.assertEquals( "primitiveBoolean", true, xmlAttributes.isPrimitiveBoolean() );
-        Assert.assertEquals( "primitiveByte", 12, xmlAttributes.getPrimitiveByte() );
-        Assert.assertEquals( "primitiveChar", 'H', xmlAttributes.getPrimitiveChar() );
-        Assert.assertEquals( "primitiveShort", (short) 1212, xmlAttributes.getPrimitiveShort() );
-        Assert.assertEquals( "primitiveInt", 121212, xmlAttributes.getPrimitiveInt() );
-        Assert.assertEquals( "primitiveLong", 12121212, xmlAttributes.getPrimitiveLong() );
-        Assert.assertEquals( "primitiveFloat", 12.12f, xmlAttributes.getPrimitiveFloat(), 0f );
-        Assert.assertEquals( "primitiveDouble", 12.12, xmlAttributes.getPrimitiveDouble(), 0 );
-        Assert.assertEquals( "objectBoolean", Boolean.FALSE, xmlAttributes.isObjectBoolean() );
-        Assert.assertEquals( "objectString", "default value", xmlAttributes.getObjectString() );
+        Assert.assertEquals( "primitiveBoolean", true           , xmlAttributes.isPrimitiveBoolean() );
+        Assert.assertEquals( "primitiveByte"   , 12             , xmlAttributes.getPrimitiveByte() );
+        Assert.assertEquals( "primitiveChar"   , 'H'            , xmlAttributes.getPrimitiveChar() );
+        Assert.assertEquals( "primitiveShort"  , (short) 1212   , xmlAttributes.getPrimitiveShort() );
+        Assert.assertEquals( "primitiveInt"    , 121212         , xmlAttributes.getPrimitiveInt() );
+        Assert.assertEquals( "primitiveLong"   , 12121212       , xmlAttributes.getPrimitiveLong() );
+        Assert.assertEquals( "primitiveFloat"  , 12.12f         , xmlAttributes.getPrimitiveFloat(), 0f );
+        Assert.assertEquals( "primitiveDouble" , 12.12          , xmlAttributes.getPrimitiveDouble(), 0 );
+        Assert.assertEquals( "objectBoolean"   , Boolean.FALSE  , xmlAttributes.isObjectBoolean() );
+        Assert.assertEquals( "objectString"    , "default value", xmlAttributes.getObjectString() );
     }
 
     public void verifyJavaFeatures()
@@ -249,6 +282,13 @@ public class JavaVerifier
         Assert.assertEquals( 0, association.getSetOfBidis().size() );
     }
 
+    /**
+     * Check that a method doesn't exist.
+     *
+     * @param clazz the class to check
+     * @param method the method name that shouldn't exist
+     * @param attribute the method attribute type
+     */
     private void checkNoMethod( Class clazz, String method, Class attribute )
     {
         try
