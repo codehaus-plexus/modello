@@ -242,8 +242,8 @@ public class Xpp3WriterGenerator
                 sc.add( getValueChecker( type, value, field ) );
 
                 sc.add( "{" );
-                sc.addIndented( "serializer.attribute( NAMESPACE, \"" + fieldTagName + "\", " +
-                    getValue( field.getType(), value, xmlFieldMetadata ) + " );" );
+                sc.addIndented( "serializer.attribute( NAMESPACE, \"" + fieldTagName + "\", "
+                                + getValue( field.getType(), value, xmlFieldMetadata ) + " );" );
                 sc.add( "}" );
             }
 
@@ -252,7 +252,7 @@ public class Xpp3WriterGenerator
         if ( contentField != null )
         {
             XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) contentField.getMetadata( XmlFieldMetadata.ID );
-            sc.add( "serializer.text( " + getValue( contentField.getType(), contentValue, xmlFieldMetadata ) + ");" );
+            sc.add( "serializer.text( " + getValue( contentField.getType(), contentValue, xmlFieldMetadata ) + " );" );
         }
 
         // XML tags

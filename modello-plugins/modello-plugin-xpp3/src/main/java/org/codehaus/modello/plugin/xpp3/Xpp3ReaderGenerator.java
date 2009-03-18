@@ -328,134 +328,135 @@ public class Xpp3ReaderGenerator
             }
         }
 
-        if (contentField != null)
+        if ( contentField != null )
         {
-            sc.add( "parser.next();" );
-            sc.add( uncapClassName + ".set" + capitalise( contentField.getName() )
-                + "( getTrimmedValue( parser.getText() ) ); " );
+            writePrimitiveField( contentField, contentField.getType(), uncapClassName,
+                                 "set" + capitalise( contentField.getName() ), sc, jClass );
         }
-
-        sc.add( "java.util.Set parsed = new java.util.HashSet();" );
-
-        if ( rootElement )
+        else
         {
-            sc.add( "int eventType = parser.getEventType();" );
+            sc.add( "java.util.Set parsed = new java.util.HashSet();" );
 
-            sc.add( "boolean foundRoot = false;" );
+            if ( rootElement )
+            {
+                sc.add( "int eventType = parser.getEventType();" );
 
-            sc.add( "while ( eventType != XmlPullParser.END_DOCUMENT )" );
+                sc.add( "boolean foundRoot = false;" );
+
+                sc.add( "while ( eventType != XmlPullParser.END_DOCUMENT )" );
+
+                sc.add( "{" );
+                sc.indent();
+
+                sc.add( "if ( eventType == XmlPullParser.START_TAG )" );
+            }
+            else
+            {
+                sc.add( "while ( parser.nextTag() == XmlPullParser.START_TAG )" );
+            }
 
             sc.add( "{" );
             sc.indent();
 
-            sc.add( "if ( eventType == XmlPullParser.START_TAG )" );
-        }
-        else
-        {
-            sc.add( "while ( parser.nextTag() == XmlPullParser.START_TAG )" );
-        }
+            String statement = "if";
 
-        sc.add( "{" );
-        sc.indent();
-
-        String statement = "if";
-
-        if ( rootElement )
-        {
-            sc.add( "if ( parser.getName().equals( tagName ) )" );
-
-            sc.add( "{" );
-            sc.addIndented( "foundRoot = true;" );
-            sc.add( "}" );
-
-            sc.add( "else if ( strict && ! foundRoot )" );
-
-            sc.add( "{" );
-            sc.addIndented( "throw new XmlPullParserException( \"Expected root element '\" + tagName + \"' but found "
-                            + "'\" + parser.getName() + \"'\", parser, null );" );
-            sc.add( "}" );
-
-            statement = "else if";
-        }
-
-        //Write other fields
-
-        for ( Iterator i = modelClass.getAllFields( getGeneratedVersion(), true ).iterator(); i.hasNext(); )
-        {
-            ModelField field = (ModelField) i.next();
-
-            XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
-
-            if ( !xmlFieldMetadata.isAttribute() )
+            if ( rootElement )
             {
-                processField( xmlFieldMetadata, field, statement, sc, uncapClassName, modelClass, jClass );
+                sc.add( "if ( parser.getName().equals( tagName ) )" );
+
+                sc.add( "{" );
+                sc.addIndented( "foundRoot = true;" );
+                sc.add( "}" );
+
+                sc.add( "else if ( strict && ! foundRoot )" );
+
+                sc.add( "{" );
+                sc.addIndented( "throw new XmlPullParserException( \"Expected root element '\" + tagName + \"' but "
+                                + "found '\" + parser.getName() + \"'\", parser, null );" );
+                sc.add( "}" );
 
                 statement = "else if";
             }
-        }
-        if ( !rootElement )
-        {
-/*
-            if ( modelClass.getFields( getGeneratedVersion() ).size() > 0 )
+
+            //Write other fields
+
+            for ( Iterator i = modelClass.getAllFields( getGeneratedVersion(), true ).iterator(); i.hasNext(); )
             {
-                sc.add( "else" );
+                ModelField field = (ModelField) i.next();
+
+                XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
+
+                if ( !xmlFieldMetadata.isAttribute() )
+                {
+                    processField( xmlFieldMetadata, field, statement, sc, uncapClassName, modelClass, jClass );
+
+                    statement = "else if";
+                }
+            }
+            if ( !rootElement )
+            {
+                /*
+                if ( modelClass.getFields( getGeneratedVersion() ).size() > 0 )
+                {
+                    sc.add( "else" );
+
+                    sc.add( "{" );
+                    sc.addIndented( "parser.nextText();" );
+                    sc.add( "}" );
+                }
+                 */
+
+                if ( statement.startsWith( "else" ) )
+                {
+                    sc.add( "else" );
+
+                    sc.add( "{" );
+                    sc.indent();
+                }
+
+                sc.add( "if ( strict )" );
 
                 sc.add( "{" );
-                sc.addIndented( "parser.nextText();" );
+                sc.addIndented(
+                    "throw new XmlPullParserException( \"Unrecognised tag: '\" + parser.getName() + \"'\", parser, null );" );
                 sc.add( "}" );
-            }
-*/
 
-            if ( statement.startsWith( "else" ) )
-            {
                 sc.add( "else" );
 
                 sc.add( "{" );
                 sc.indent();
-            }
 
-            sc.add( "if ( strict )" );
+                sc.add( "// swallow up to end tag since this is not valid" );
 
-            sc.add( "{" );
-            sc.addIndented(
-                "throw new XmlPullParserException( \"Unrecognised tag: '\" + parser.getName() + \"'\", parser, null );" );
-            sc.add( "}" );
+                sc.add( "while ( parser.next() != XmlPullParser.END_TAG ) {}" );
 
-            sc.add( "else" );
-
-            sc.add( "{" );
-            sc.indent();
-
-            sc.add( "// swallow up to end tag since this is not valid" );
-
-            sc.add( "while ( parser.next() != XmlPullParser.END_TAG ) {}" );
-
-            sc.unindent();
-            sc.add( "}" );
-
-            if ( statement.startsWith( "else" ) )
-            {
                 sc.unindent();
                 sc.add( "}" );
-            }
-        }
-        else
-        {
-            sc.add( "else if ( strict )" );
 
-            sc.add( "{" );
-            sc.addIndented(
-                "throw new XmlPullParserException( \"Unrecognised tag: '\" + parser.getName() + \"'\", parser, null );" );
-            sc.add( "}" );
+                if ( statement.startsWith( "else" ) )
+                {
+                    sc.unindent();
+                    sc.add( "}" );
+                }
+            }
+            else
+            {
+                sc.add( "else if ( strict )" );
+
+                sc.add( "{" );
+                sc.addIndented(
+                    "throw new XmlPullParserException( \"Unrecognised tag: '\" + parser.getName() + \"'\", parser, null );" );
+                sc.add( "}" );
+
+                sc.unindent();
+                sc.add( "}" );
+
+                sc.add( "eventType = parser.next();" );
+            }
 
             sc.unindent();
             sc.add( "}" );
-
-            sc.add( "eventType = parser.next();" );
         }
-
-        sc.unindent();
-        sc.add( "}" );
 
         sc.add( "return " + uncapClassName + ";" );
 
@@ -484,7 +485,21 @@ public class Xpp3ReaderGenerator
         String tagComparison =
             statement + " ( checkFieldWithDuplicate( parser, \"" + fieldTagName + "\", " + alias + ", parsed ) )";
 
-        if ( field instanceof ModelAssociation )
+        if ( !( field instanceof ModelAssociation ) )
+        {
+            //ModelField
+            sc.add( tagComparison );
+
+            sc.add( "{" );
+            sc.indent();
+
+            writePrimitiveField( field, field.getType(), uncapClassName, "set" + capitalise( field.getName() ), sc,
+                                 jClass );
+
+            sc.unindent();
+            sc.add( "}" );
+        }
+        else
         {
             ModelAssociation association = (ModelAssociation) field;
 
@@ -559,8 +574,8 @@ public class Xpp3ReaderGenerator
 
                     if ( isClassInModel( association.getTo(), modelClass.getModel() ) )
                     {
-                        sc.add( associationName + ".add( parse" + association.getTo() + "( \"" + valuesTagName +
-                            "\", parser, strict ) );" );
+                        sc.add( associationName + ".add( parse" + association.getTo() + "( \"" + valuesTagName
+                                + "\", parser, strict ) );" );
                     }
                     else
                     {
@@ -644,8 +659,8 @@ public class Xpp3ReaderGenerator
                         sc.add( "else if ( parser.getName().equals( \"value\" ) )" );
 
                         sc.add( "{" );
-                        sc.addIndented( "value = parser.nextText()"
-                                        + ( xmlFieldMetadata.isTrim() ? ".trim()" : "" ) + ";" );
+                        sc.addIndented( "value = parser.nextText()" + ( xmlFieldMetadata.isTrim() ? ".trim()" : "" )
+                                        + ";" );
                         sc.add( "}" );
 
                         sc.add( "else" );
@@ -678,7 +693,8 @@ public class Xpp3ReaderGenerator
 
                         sc.add( "String key = parser.getName();" );
 
-                        sc.add( "String value = parser.nextText()" + ( xmlFieldMetadata.isTrim() ? ".trim()" : "" ) + ";" );
+                        sc.add( "String value = parser.nextText()" + ( xmlFieldMetadata.isTrim() ? ".trim()" : "" )
+                                + ";" );
 
                         sc.add( uncapClassName + ".add" + capitalise( singularName ) + "( key, value );" );
 
@@ -690,20 +706,6 @@ public class Xpp3ReaderGenerator
                     sc.add( "}" );
                 }
             }
-        }
-        else
-        {
-            sc.add( tagComparison );
-
-            sc.add( "{" );
-            sc.indent();
-
-            //ModelField
-            writePrimitiveField( field, field.getType(), uncapClassName, "set" + capitalise( field.getName() ), sc,
-                                 jClass );
-
-            sc.unindent();
-            sc.add( "}" );
         }
     }
 
@@ -782,7 +784,7 @@ public class Xpp3ReaderGenerator
             sc.add( objectName + "." + setterName + "( getByteValue( " + parserGetter + ", \"" + tagName +
                 "\", parser, strict ) );" );
         }
-        else if ( "String".equals( type ) || "Boolean".equals( type ) )
+        else if ( "String".equals( type ) || "Boolean".equals( type ) || "Content".equals( type ) )
         {
             // TODO: other Primitive types
             sc.add( objectName + "." + setterName + "( " + parserGetter + " );" );
@@ -799,10 +801,6 @@ public class Xpp3ReaderGenerator
             jClass.addImport( "org.codehaus.plexus.util.xml.Xpp3DomBuilder" );
 
             sc.add( objectName + "." + setterName + "( Xpp3DomBuilder.build( parser ) );" );
-        }
-        else if ("Content".equals( type ))
-        {
-            //skip this
         }
         else
         {
