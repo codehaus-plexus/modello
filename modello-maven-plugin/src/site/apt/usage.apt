@@ -80,6 +80,6 @@ Usage
 
   * {{{xdoc-mojo.html}xdoc}} which will generate a documentation of the model in the <<</target/generated-site/xdoc>>> folder, which will in turn be processed to output in the standard site, during the <<site>> phase,
 
-  * {{{xsd-mojo.html}xsd}} which will generate an XML Schema for our model in the <<</target/generated-site/resrouces/xsdc>>> folder (set by the <<outputDirectory>> parameter), which will in turn be copied in the standard site, during the <<site>> phase.
+  * {{{xsd-mojo.html}xsd}} which will generate an XML Schema for our model in the <<</target/generated-site/resources/xsd>>> folder (set by the <<outputDirectory>> parameter), which will in turn be copied in the standard site, during the <<site>> phase.
 
   []
