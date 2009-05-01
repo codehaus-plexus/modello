@@ -161,5 +161,7 @@ public class Dom4jFeaturesVerifier
         features = reader.read( getClass().getResource( "/features-Latin-15.xml" ) );
         // Dom4J's Document.getXMLEncoding() does not work: encoding used by the document is not stored...
         //assertEquals( "modelEncoding", "ISO-8859-15", features.getModelEncoding() );
+
+        // encoding is not set when reading file, not useful to check whether it is written back...
     }
 }

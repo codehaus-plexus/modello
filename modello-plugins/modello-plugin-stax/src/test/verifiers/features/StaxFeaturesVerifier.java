@@ -87,8 +87,6 @@ public class StaxFeaturesVerifier
         // alias is rendered as default field name => must be reverted here to let the test pass
         actualXml = actualXml.replaceFirst( "<id>alias</id>", "<key>alias</key>" );
 
-        assertTrue( actualXml.substring( 0, 38 ), actualXml.startsWith( "<?xml version='1.0'?>" ) );
-
         XMLUnit.setIgnoreWhitespace( true );
         XMLUnit.setIgnoreComments( true );
         Diff diff = XMLUnit.compareXML( initialXml, actualXml );
@@ -148,18 +146,34 @@ public class StaxFeaturesVerifier
         }
     }
 
-    public void verifyEncoding()
+    private void checkEncoding( String resource, String encoding )
         throws Exception
     {
         ModelloFeaturesTestStaxReader reader = new ModelloFeaturesTestStaxReader();
 
-        Features features = reader.read( getXmlResourceReader( "/features.xml" ) );
-        assertEquals( "modelEncoding", null, features.getModelEncoding() );
+        Features features = reader.read( getXmlResourceReader( resource ) );
+        assertEquals( "modelEncoding", encoding, features.getModelEncoding() );
 
-        features = reader.read( getXmlResourceReader( "/features-UTF-8.xml" ) );
-        assertEquals( "modelEncoding", "UTF-8", features.getModelEncoding() );
+        ModelloFeaturesTestStaxWriter writer = new ModelloFeaturesTestStaxWriter();
+        StringWriter buffer = new StringWriter();
+        writer.write( buffer, features );
+        String xmlHeader = buffer.toString().substring( 0, 44 );
 
-        features = reader.read( getXmlResourceReader( "/features-Latin-15.xml" ) );
-        assertEquals( "modelEncoding", "ISO-8859-15", features.getModelEncoding() );
+        if ( encoding == null )
+        {
+            assertTrue( xmlHeader, xmlHeader.startsWith( "<?xml version='1.0'?>" ) );
+        }
+        else
+        {
+            assertTrue( xmlHeader, xmlHeader.startsWith( "<?xml version='1.0' encoding='" + encoding + "'?>" ) );
+        }
+    }
+
+    public void verifyEncoding()
+        throws Exception
+    {
+        checkEncoding( "/features.xml", null );
+        checkEncoding( "/features-UTF-8.xml", "UTF-8" );
+        checkEncoding( "/features-Latin-15.xml", "ISO-8859-15" );
     }
 }
