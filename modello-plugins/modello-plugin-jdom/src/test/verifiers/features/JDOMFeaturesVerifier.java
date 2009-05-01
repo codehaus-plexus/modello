@@ -61,6 +61,7 @@ public class JDOMFeaturesVerifier
     private Features read()
         throws Exception
     {
+        // no JDOM reader: using Dom4j reader instead...
         ModelloFeaturesTestDom4jReader reader = new ModelloFeaturesTestDom4jReader();
 
         return reader.read( getClass().getResource( "/features.xml" ) );
@@ -88,6 +89,8 @@ public class JDOMFeaturesVerifier
 
         // alias is rendered as default field name => must be reverted here to let the test pass
         actualXml = actualXml.replaceFirst( "<id>alias</id>", "<key>alias</key>" );
+
+        //assertTrue( actualXml.substring( 0, 38 ), actualXml.startsWith( "<?xml version=\"1.0\"?>" ) );
 
         XMLUnit.setIgnoreWhitespace( true );
         XMLUnit.setIgnoreComments( true );

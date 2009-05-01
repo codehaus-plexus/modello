@@ -28,9 +28,12 @@ import java.io.Reader;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import junit.framework.Assert;
+
 import org.codehaus.plexus.util.ReaderFactory;
 
 public abstract class Verifier
+extends Assert
 {
     public static void assertField( String className, String fieldName, Object expected, Object actual )
     {

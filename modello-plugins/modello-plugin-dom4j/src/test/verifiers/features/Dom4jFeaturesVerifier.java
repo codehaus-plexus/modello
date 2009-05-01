@@ -58,6 +58,8 @@ public class Dom4jFeaturesVerifier
         verifyBadVersion();
 
         verifyWrongElement();
+
+        verifyEncoding();
     }
 
     public Features verifyReader()
@@ -82,6 +84,8 @@ public class Dom4jFeaturesVerifier
 
         // alias is rendered as default field name => must be reverted here to let the test pass
         actualXml = actualXml.replaceFirst( "<id>alias</id>", "<key>alias</key>" );
+
+        //assertTrue( actualXml.substring( 0, 38 ), actualXml.startsWith( "<?xml version=\"1.0\"?>" ) );
 
         XMLUnit.setIgnoreWhitespace( true );
         XMLUnit.setIgnoreComments( true );
@@ -141,5 +145,21 @@ public class Dom4jFeaturesVerifier
                                              + " strict option: \"" + de.getMessage() + "\"", de );
             }
         }
+    }
+
+    public void verifyEncoding()
+        throws Exception
+    {
+        ModelloFeaturesTestDom4jReader reader = new ModelloFeaturesTestDom4jReader();
+
+        Features features = reader.read( getClass().getResource( "/features.xml" ) );
+        assertEquals( "modelEncoding", null, features.getModelEncoding() );
+
+        features = reader.read( getClass().getResource( "/features-UTF-8.xml" ) );
+        //assertEquals( "modelEncoding", "UTF-8", features.getModelEncoding() );
+
+        features = reader.read( getClass().getResource( "/features-Latin-15.xml" ) );
+        // Dom4J's Document.getXMLEncoding() does not work: encoding used by the document is not stored...
+        //assertEquals( "modelEncoding", "ISO-8859-15", features.getModelEncoding() );
     }
 }

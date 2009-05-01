@@ -60,6 +60,8 @@ public class StaxFeaturesVerifier
         verifyBadVersion();
 
         verifyWrongElement();
+
+        verifyEncoding();
     }
 
     public Features verifyReader()
@@ -84,6 +86,8 @@ public class StaxFeaturesVerifier
 
         // alias is rendered as default field name => must be reverted here to let the test pass
         actualXml = actualXml.replaceFirst( "<id>alias</id>", "<key>alias</key>" );
+
+        assertTrue( actualXml.substring( 0, 38 ), actualXml.startsWith( "<?xml version='1.0'?>" ) );
 
         XMLUnit.setIgnoreWhitespace( true );
         XMLUnit.setIgnoreComments( true );
@@ -142,5 +146,20 @@ public class StaxFeaturesVerifier
                                              + " strict option: \"" + xse.getMessage() + "\"", xse );
             }
         }
+    }
+
+    public void verifyEncoding()
+        throws Exception
+    {
+        ModelloFeaturesTestStaxReader reader = new ModelloFeaturesTestStaxReader();
+
+        Features features = reader.read( getXmlResourceReader( "/features.xml" ) );
+        assertEquals( "modelEncoding", null, features.getModelEncoding() );
+
+        features = reader.read( getXmlResourceReader( "/features-UTF-8.xml" ) );
+        assertEquals( "modelEncoding", "UTF-8", features.getModelEncoding() );
+
+        features = reader.read( getXmlResourceReader( "/features-Latin-15.xml" ) );
+        assertEquals( "modelEncoding", "ISO-8859-15", features.getModelEncoding() );
     }
 }

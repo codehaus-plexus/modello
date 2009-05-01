@@ -343,6 +343,8 @@ public class Xpp3ReaderGenerator
 
                 sc.add( "boolean foundRoot = false;" );
 
+                sc.add( uncapClassName + ".setModelEncoding( parser.getInputEncoding() );" );
+
                 sc.add( "while ( eventType != XmlPullParser.END_DOCUMENT )" );
 
                 sc.add( "{" );
