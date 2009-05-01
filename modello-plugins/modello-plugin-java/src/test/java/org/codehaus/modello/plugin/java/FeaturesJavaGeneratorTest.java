@@ -51,7 +51,7 @@ public class FeaturesJavaGeneratorTest
         parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString( false ) );
         parameters.setProperty( ModelloParameterConstants.VERSION, "2.0.0" );
 
-        Model model = modello.loadModel( getModelResource( "/features.mdo" ) );
+        Model model = modello.loadModel( getXmlResourceReader( "/features.mdo" ) );
 
         modello.generate( model, "java", parameters );
 

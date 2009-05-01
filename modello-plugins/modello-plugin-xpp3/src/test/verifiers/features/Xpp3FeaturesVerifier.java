@@ -77,6 +77,7 @@ public class Xpp3FeaturesVerifier
 
         writer.write( buffer, features );
 
+        String initialXml = IOUtil.toString( getXmlResourceReader( "/features.xml" ) );
         String actualXml = buffer.toString();
 
         // alias is rendered as default field name => must be reverted here to let the test pass
@@ -84,8 +85,7 @@ public class Xpp3FeaturesVerifier
 
         XMLUnit.setIgnoreWhitespace( true );
         XMLUnit.setIgnoreComments( true );
-        Diff diff = XMLUnit.compareXML( IOUtil.toString( getClass().getResourceAsStream( "/features.xml" ), "UTF-8" ),
-                                        actualXml );
+        Diff diff = XMLUnit.compareXML( initialXml, actualXml );
 
         if ( !diff.identical() )
         {

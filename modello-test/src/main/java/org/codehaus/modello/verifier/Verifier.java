@@ -23,8 +23,12 @@ package org.codehaus.modello.verifier;
  */
 
 import java.io.File;
+import java.io.IOException;
+import java.io.Reader;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+
+import org.codehaus.plexus.util.ReaderFactory;
 
 public abstract class Verifier
 {
@@ -152,5 +156,11 @@ public abstract class Verifier
         String basedir = System.getProperty( "basedir", new File( "" ).getAbsolutePath() );
 
         return new File( basedir, name ).getAbsolutePath();
+    }
+
+    protected Reader getXmlResourceReader( String name )
+        throws IOException
+    {
+        return ReaderFactory.newXmlReader( getClass().getResourceAsStream( name ) );
     }
 }

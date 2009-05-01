@@ -67,7 +67,7 @@ public class StaxFeaturesVerifier
     {
         ModelloFeaturesTestStaxReader reader = new ModelloFeaturesTestStaxReader();
 
-        return reader.read( new InputStreamReader( getClass().getResourceAsStream( "/features.xml" ), "UTF-8" ) );
+        return reader.read( getXmlResourceReader( "/features.xml" ) );
     }
 
     public void verifyWriter( Features features )
@@ -79,6 +79,7 @@ public class StaxFeaturesVerifier
 
         writer.write( buffer, features );
 
+        String initialXml = IOUtil.toString( getXmlResourceReader( "/features.xml" ) );
         String actualXml = buffer.toString();
 
         // alias is rendered as default field name => must be reverted here to let the test pass
@@ -86,7 +87,7 @@ public class StaxFeaturesVerifier
 
         XMLUnit.setIgnoreWhitespace( true );
         XMLUnit.setIgnoreComments( true );
-        Diff diff = XMLUnit.compareXML( IOUtil.toString( getClass().getResourceAsStream( "/features.xml" ), "UTF-8" ), actualXml );
+        Diff diff = XMLUnit.compareXML( initialXml, actualXml );
 
         if ( !diff.identical() )
         {
@@ -102,7 +103,7 @@ public class StaxFeaturesVerifier
 
         try
         {
-            reader.read( new InputStreamReader( getClass().getResourceAsStream( "/features-bad-version.xml" ), "UTF-8" ) );
+            reader.read( getXmlResourceReader( "/features-bad-version.xml" ) );
 
             throw new VerifierException( "Reading a document with a version different from the version of the parser should fail." );
         }
@@ -123,12 +124,12 @@ public class StaxFeaturesVerifier
         ModelloFeaturesTestStaxReader reader = new ModelloFeaturesTestStaxReader();
 
         // reading with strict=false should accept unknown element
-        reader.read( new InputStreamReader( getClass().getResourceAsStream( "/features-wrong-element.xml" ), "UTF-8" ), false );
+        reader.read( getXmlResourceReader( "/features-wrong-element.xml" ), false );
 
         // by default, strict=true: reading should not accept unknown element
         try
         {
-            reader.read( new InputStreamReader( getClass().getResourceAsStream( "/features-wrong-element.xml" ), "UTF-8" ) );
+            reader.read( getXmlResourceReader( "/features-wrong-element.xml" ) );
 
             throw new VerifierException( "Reading a document with an unknown element under strict option should fail." );
         }

@@ -76,7 +76,9 @@ public class JDOMFeaturesVerifier
         Document doc = new Document( new Element( "features" ) );
         writer.write( features, doc, buffer, Format.getRawFormat() );
 
+        String initialXml = IOUtil.toString( getXmlResourceReader( "/features.xml" ) );
         String actualXml = buffer.toString();
+
         // workaround for MODELLO-...
         actualXml =
             actualXml.replaceFirst( "<features>", "<features xmlns=\"http://modello.codehaus.org/FEATURES/1.0.0\" "
@@ -89,7 +91,7 @@ public class JDOMFeaturesVerifier
 
         XMLUnit.setIgnoreWhitespace( true );
         XMLUnit.setIgnoreComments( true );
-        Diff diff = XMLUnit.compareXML( IOUtil.toString( getClass().getResourceAsStream( "/features.xml" ), "UTF-8" ), actualXml );
+        Diff diff = XMLUnit.compareXML( initialXml, actualXml );
 
         if ( !diff.identical() )
         {

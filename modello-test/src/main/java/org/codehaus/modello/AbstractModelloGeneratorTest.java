@@ -66,7 +66,7 @@ public abstract class AbstractModelloGeneratorTest
         return name;
     }
 
-    protected Reader getModelResource( String name )
+    protected Reader getXmlResourceReader( String name )
         throws IOException
     {
         return ReaderFactory.newXmlReader( getClass().getResourceAsStream( name ) );

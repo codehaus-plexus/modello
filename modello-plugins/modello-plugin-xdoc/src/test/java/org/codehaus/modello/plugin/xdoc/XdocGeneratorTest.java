@@ -129,7 +129,7 @@ public class XdocGeneratorTest
         parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString( false ) );
         parameters.setProperty( ModelloParameterConstants.VERSION, "1.5.0" );
 
-        Model model = modello.loadModel( getModelResource( "/features.mdo" ) );
+        Model model = modello.loadModel( getXmlResourceReader( "/features.mdo" ) );
 
         modello.generate( model, "xdoc", parameters );
 

@@ -53,7 +53,7 @@ public class FeaturesVersionJavaGeneratorTest
         parameters.setProperty( ModelloParameterConstants.ALL_VERSIONS, ALL_VERSIONS );
         parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString( true ) );
 
-        Model model = modello.loadModel( getModelResource( "/features.mdo" ) );
+        Model model = modello.loadModel( getXmlResourceReader( "/features.mdo" ) );
 
         String[] versions = ALL_VERSIONS.split( "," );
 
