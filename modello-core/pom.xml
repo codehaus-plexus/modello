@@ -16,6 +16,10 @@
 
   <dependencies>
     <dependency>
+      <groupId>org.sonatype.plexus</groupId>
+      <artifactId>plexus-build-api</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-container-default</artifactId>
     </dependency>
@@ -23,10 +27,6 @@
       <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-test</artifactId>
       <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.sonatype.plexus</groupId>
-      <artifactId>plexus-build-api</artifactId>
     </dependency>
   </dependencies>
 
