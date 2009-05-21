@@ -1,4 +1,7 @@
-<model>
+<?xml version="1.0"?>
+
+<model xmlns="http://modello.codehaus.org/MODELLO/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://modello.codehaus.org/MODELLO/1.0.0 http://modello.codehaus.org/xsd/modello-1.0.0.xsd">
   <id>maven-java-mojo-test-model</id>
   <name>Modello Java Mojo Test Model</name>
   <root>Model</root>
@@ -9,7 +12,7 @@
     </default>
   </defaults>
   <classes>
-    <class>
+    <class rootElement="true">
       <name>Model</name>
       <version>0.9.0+</version>
       <fields>
