@@ -379,6 +379,10 @@ public class ConverterGenerator
         throws ModelloException, IOException
     {
         Model objectModel = getModel();
+        String root = objectModel.getRoot( getGeneratedVersion() );
+
+        ModelClass rootClass = objectModel.getClass( root, getGeneratedVersion() );
+
 
         String basePackage = objectModel.getDefaultPackageName( false, null );
         String packageName = basePackage + ".convert";
@@ -397,9 +401,9 @@ public class ConverterGenerator
         {
             Version v = (Version) i.next();
 
-            writeConvertMethod( converterClass, objectModel, basePackage, allVersions, v );
+            writeConvertMethod( converterClass, objectModel, basePackage, allVersions, v, rootClass );
         }
-        writeConvertMethod( converterClass, objectModel, basePackage, allVersions, null );
+        writeConvertMethod( converterClass, objectModel, basePackage, allVersions, null, rootClass );
 
         JSourceWriter classWriter = null;
         try
@@ -414,10 +418,13 @@ public class ConverterGenerator
     }
 
     private static void writeConvertMethod( JClass converterClass, Model objectModel, String basePackage,
-                                            List allVersions, Version v )
+                                            List allVersions, Version v, ModelClass rootClass )
     {
+        String modelName = objectModel.getName();
+        String rootClassName = rootClass.getName();
+
         String targetPackage = objectModel.getDefaultPackageName( v != null, v );
-        String targetClass = targetPackage + ".Model"; /// TODO! hack
+        String targetClass = targetPackage + "." + rootClassName;
 
         String methodName = "convertFromFile";
         if ( v != null )
@@ -432,9 +439,8 @@ public class ConverterGenerator
 
         JSourceCode sc = method.getSourceCode();
 
-        // TODO: hack!
-        sc.add( basePackage + ".io.stax.MavenStaxReaderDelegate reader = new " + basePackage +
-            ".io.stax.MavenStaxReaderDelegate();" );
+        sc.add( basePackage + ".io.stax." + modelName + "StaxReaderDelegate reader = new " + basePackage +
+            ".io.stax." + modelName + "StaxReaderDelegate();" );
 
         sc.add( "Object value = reader.read( f );" );
 
@@ -442,9 +448,8 @@ public class ConverterGenerator
         for ( Iterator j = allVersions.iterator(); j.hasNext(); )
         {
             Version sourceVersion = (Version) j.next();
-            // TODO! class name hack
             String sourcePackage = objectModel.getDefaultPackageName( true, sourceVersion );
-            String sourceClass = sourcePackage + ".Model";
+            String sourceClass = sourcePackage + "." + rootClassName;
             sc.add( prefix + "if ( value instanceof " + sourceClass + " )" );
             sc.add( "{" );
             sc.indent();
@@ -473,10 +478,9 @@ public class ConverterGenerator
 
                 // TODO: need to be able to specify converter class implementation
                 String p = objectModel.getDefaultPackageName( true, targetVersion );
-                // TODO! class name hack
-                String c = p + ".Model";
-                // TODO! method name hack
-                sc.add( "value = new " + p + ".convert.BasicVersionConverter().convertModel( (" + c + ") value );" );
+                String c = p + "." + rootClassName;
+                sc.add( "value = new " + p + ".convert.BasicVersionConverter().convert" + rootClassName
+                    + "( (" + c + ") value );" );
             }
 
             sc.unindent();
