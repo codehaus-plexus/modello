@@ -29,6 +29,7 @@ import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
 import org.codehaus.plexus.util.ReaderFactory;
 
+import java.io.Reader;
 import java.util.Properties;
 
 /**
@@ -37,7 +38,7 @@ import java.util.Properties;
 public class ConverterGeneratorTest
     extends AbstractModelloJavaGeneratorTest
 {
-    private String modelFile = "src/test/resources/models/maven.mdo";
+    private static final String MAVEN_MODEL_FILE = "src/test/resources/models/maven.mdo";
 
     public ConverterGeneratorTest()
     {
@@ -47,18 +48,7 @@ public class ConverterGeneratorTest
     public void testConverterGenerator()
         throws Throwable
     {
-        ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
-
-        Properties parameters = new Properties();
-        parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, getOutputDirectory().getAbsolutePath() );
-        parameters.setProperty( ModelloParameterConstants.ALL_VERSIONS, "3.0.0,4.0.0" );
-
-        Model model = modello.loadModel( ReaderFactory.newXmlReader( getTestFile( modelFile ) ) );
-
-        generateClasses( parameters, modello, model, "java" );
-        generateClasses( parameters, modello, model, "stax-reader" );
-        generateClasses( parameters, modello, model, "stax-writer" );
-        generateClasses( parameters, modello, model, "converters" );
+        generateConverterClasses( ReaderFactory.newXmlReader( getTestFile( MAVEN_MODEL_FILE ) ), "3.0.0", "4.0.0" );
 
         addDependency( "stax", "stax-api", "1.0.1" );
         addDependency( "net.java.dev.stax-utils", "stax-utils", "20060502" );
@@ -69,19 +59,37 @@ public class ConverterGeneratorTest
         verify( "ConvertersVerifier", "converters" );
     }
 
-    private void generateClasses( Properties parameters, ModelloCore modello, Model model, String t )
+    private void generateConverterClasses( Reader modelReader, String fromVersion, String toVersion )
+        throws Throwable
+    {
+        ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
+
+        Properties parameters = new Properties();
+        parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, getOutputDirectory().getAbsolutePath() );
+        parameters.setProperty( ModelloParameterConstants.ALL_VERSIONS, fromVersion + "," + toVersion );
+
+        Model model = modello.loadModel( modelReader );
+
+        generateClasses( parameters, modello, model, fromVersion, toVersion, "java" );
+        generateClasses( parameters, modello, model, fromVersion, toVersion, "stax-reader" );
+        generateClasses( parameters, modello, model, fromVersion, toVersion, "stax-writer" );
+        generateClasses( parameters, modello, model, fromVersion, toVersion, "converters" );
+    }
+
+    private void generateClasses( Properties parameters, ModelloCore modello, Model model, String fromVersion,
+                                  String toVersion, String outputType )
         throws ModelloException
     {
         parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString( false ) );
-        parameters.setProperty( ModelloParameterConstants.VERSION, "4.0.0" );
-        modello.generate( model, t, parameters );
+        parameters.setProperty( ModelloParameterConstants.VERSION, toVersion );
+        modello.generate( model, outputType, parameters );
 
         parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString( true ) );
-        parameters.setProperty( ModelloParameterConstants.VERSION, "3.0.0" );
-        modello.generate( model, t, parameters );
+        parameters.setProperty( ModelloParameterConstants.VERSION, fromVersion );
+        modello.generate( model, outputType, parameters );
 
         parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString( true ) );
-        parameters.setProperty( ModelloParameterConstants.VERSION, "4.0.0" );
-        modello.generate( model, t, parameters );
+        parameters.setProperty( ModelloParameterConstants.VERSION, toVersion );
+        modello.generate( model, outputType, parameters );
     }
 }
