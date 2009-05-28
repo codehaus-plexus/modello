@@ -341,7 +341,14 @@ public class JavaModelloGenerator
             return toString;
         }
 
-        sc.add( "StringBuffer buf = new StringBuffer();" );
+        if ( useJava5 )
+        {
+            sc.add( "StringBuilder buf = new StringBuilder( 128 );" );
+        }
+        else
+        {
+            sc.add( "StringBuffer buf = new StringBuffer( 128 );" );
+        }
 
         sc.add( "" );
 
