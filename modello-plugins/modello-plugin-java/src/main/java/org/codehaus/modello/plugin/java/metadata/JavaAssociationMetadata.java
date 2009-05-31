@@ -50,6 +50,18 @@ public class JavaAssociationMetadata
         INIT_TYPES.add( FIELD_INIT );
     }
 
+    public static final String CLONE_SHALLOW = "shallow";
+    public static final String CLONE_DEEP = "deep";
+
+    public final static List CLONE_MODES;
+
+    static
+    {
+        CLONE_MODES = new ArrayList();
+        CLONE_MODES.add( CLONE_SHALLOW );
+        CLONE_MODES.add( CLONE_DEEP );
+    }
+
     private boolean adder = true;
 
     private boolean bidi;
@@ -57,6 +69,8 @@ public class JavaAssociationMetadata
     private String interfaceName;
 
     private String initializationMode;
+
+    private String cloneMode;
 
     public boolean isAdder()
     {
@@ -104,4 +118,15 @@ public class JavaAssociationMetadata
             this.initializationMode = initializationMode;
         }
     }
+
+    public String getCloneMode()
+    {
+        return cloneMode;
+    }
+
+    public void setCloneMode( String cloneMode )
+    {
+        this.cloneMode = cloneMode;
+    }
+
 }

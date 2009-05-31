@@ -59,6 +59,8 @@ public class JavaMetadataPlugin
 
     public static final String JAVA_USE_INTERFACE = "java.useInterface";
 
+    public static final String JAVA_CLONE = "java.clone";
+
     // ----------------------------------------------------------------------
     // Map to Metadata
     // ----------------------------------------------------------------------
@@ -75,6 +77,8 @@ public class JavaMetadataPlugin
         metadata.setEnabled( getBoolean( data, JAVA_ENABLED, true ) );
 
         metadata.setAbstract( getBoolean( data, JAVA_ABSTRACT, false ) );
+
+        metadata.setCloneMode( getString( data, JAVA_CLONE ) );
 
         return metadata;
     }
@@ -104,6 +108,8 @@ public class JavaMetadataPlugin
         metadata.setInterfaceName( getString( data, JAVA_USE_INTERFACE ) );
 
         metadata.setInitializationMode( getString( data, JAVA_INIT ) );
+
+        metadata.setCloneMode( getString( data, JAVA_CLONE ) );
 
         return metadata;
     }
