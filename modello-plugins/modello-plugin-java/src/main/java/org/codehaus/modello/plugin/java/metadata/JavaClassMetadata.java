@@ -56,6 +56,8 @@ public class JavaClassMetadata
 
     private String cloneMode;
 
+    private String cloneHook;
+
     public void setAbstract( boolean abstractMode )
     {
         this.abstractMode = abstractMode;
@@ -84,6 +86,16 @@ public class JavaClassMetadata
     public void setCloneMode( String cloneMode )
     {
         this.cloneMode = cloneMode;
+    }
+
+    public String getCloneHook()
+    {
+        return cloneHook;
+    }
+
+    public void setCloneHook( String cloneHook )
+    {
+        this.cloneHook = cloneHook;
     }
 
 }

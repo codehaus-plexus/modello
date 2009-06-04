@@ -454,9 +454,9 @@ public class JavaModelloGenerator
             returnType = new JClass( "Object" );
         }
 
-        JMethod clone = new JMethod( "clone", returnType, null );
+        JMethod cloneMethod = new JMethod( "clone", returnType, null );
 
-        JSourceCode sc = clone.getSourceCode();
+        JSourceCode sc = cloneMethod.getSourceCode();
 
         sc.add( "try" );
         sc.add( "{" );
@@ -562,6 +562,19 @@ public class JavaModelloGenerator
             }
         }
 
+        String cloneHook = getCloneHook( modelClass );
+
+        if ( StringUtils.isNotEmpty( cloneHook ) && !"false".equalsIgnoreCase( cloneHook ) )
+        {
+            if ( "true".equalsIgnoreCase( cloneHook ) )
+            {
+                cloneHook = "cloneHook";
+            }
+
+            sc.add( cloneHook + "( copy );" );
+            sc.add( "" );
+        }
+
         sc.add( "return copy;" );
 
         sc.unindent();
@@ -575,7 +588,7 @@ public class JavaModelloGenerator
         sc.unindent();
         sc.add( "}" );
 
-        return new JMethod[] { clone };
+        return new JMethod[] { cloneMethod };
     }
 
     private String getCloneMode( ModelClass modelClass )
@@ -636,6 +649,14 @@ public class JavaModelloGenerator
         }
 
         return cloneModeAssoc;
+    }
+
+    private String getCloneHook( ModelClass modelClass )
+        throws ModelloException
+    {
+        JavaClassMetadata javaClassMetadata = (JavaClassMetadata) modelClass.getMetadata( JavaClassMetadata.ID );
+
+        return javaClassMetadata.getCloneHook();
     }
 
     /**

@@ -61,6 +61,8 @@ public class JavaMetadataPlugin
 
     public static final String JAVA_CLONE = "java.clone";
 
+    public static final String JAVA_CLONE_HOOK = "java.clone.hook";
+
     // ----------------------------------------------------------------------
     // Map to Metadata
     // ----------------------------------------------------------------------
@@ -79,6 +81,8 @@ public class JavaMetadataPlugin
         metadata.setAbstract( getBoolean( data, JAVA_ABSTRACT, false ) );
 
         metadata.setCloneMode( getString( data, JAVA_CLONE ) );
+
+        metadata.setCloneHook( getString( data, JAVA_CLONE_HOOK ) );
 
         return metadata;
     }
