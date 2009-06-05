@@ -483,6 +483,14 @@ public class JavaModelloGenerator
                 sc.add( "}" );
                 sc.add( "" );
             }
+            else if ( "Date".equalsIgnoreCase( modelField.getType() ) || "java.util.Date".equals( modelField.getType() ) )
+            {
+                sc.add( "if ( " + thisField + " != null )" );
+                sc.add( "{" );
+                sc.addIndented( copyField + " = (java.util.Date) " + thisField + ".clone();" );
+                sc.add( "}" );
+                sc.add( "" );
+            }
             else if ( ModelDefault.PROPERTIES.equals( modelField.getType() ) )
             {
                 sc.add( "if ( " + thisField + " != null )" );
