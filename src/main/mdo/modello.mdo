@@ -27,17 +27,17 @@
       <description>
         Common attributes for most of the elements.
       </description>
-      <version>1.0.0</version>
+      <version>1.0.0+</version>
       <fields>
         <field>
           <name>name</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <type>String</type>
           <description>The name of the element.</description>
         </field>
         <field>
           <name>description</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <type>String</type>
           <description>
             A user-level description of the element.
@@ -45,7 +45,7 @@
         </field>
         <field>
           <name>comment</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <type>String</type>
           <description>
             A private comment about the element.
@@ -53,7 +53,7 @@
         </field>
         <field xml.tagName="version">
           <name>versionRange</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <type>String</type>
           <description><![CDATA[
             The versions related to this element.
@@ -64,7 +64,7 @@
         <!-- this field is available in BaseElement class, but not read in ModelReader: should be removed?
         <field>
           <name>deprecatedVersion</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <type>String</type>
         </field-->
       </fields>
@@ -75,12 +75,12 @@
       <description>
         Root tag for the description of a model.
       </description>
-      <version>1.0.0</version>
+      <version>1.0.0+</version>
       <superClass>BaseElement</superClass>
       <fields>
         <field xml.attribute="true" xml.tagName="xml.namespace">
           <name>namespace</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <type>String</type>
           <description><![CDATA[
             The namespace to use when generating XML content. Since Modello 1.0, this value can contain
@@ -91,7 +91,7 @@
         </field>
         <field xml.attribute="true" xml.tagName="xml.schemaLocation">
           <name>schemaLocation</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <type>String</type>
           <description><![CDATA[
             The schemaLocation to use when generating XML content. Since Modello 1.0-alpha-13, this value can contain
@@ -102,7 +102,7 @@
         </field>
         <field xml.attribute="true" xml.tagName="xsd.namespace">
           <name>xsdNamespace</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <type>String</type>
           <description><![CDATA[
             The namespace to use when generating XSD. Since Modello 1.0: <ul>
@@ -114,7 +114,7 @@
         </field>
         <field xml.attribute="true" xml.tagName="xsd.targetNamespace">
           <name>xsdTargetNamespace</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <type>String</type>
           <description><![CDATA[
             The targetNamespace to use when generating XSD. Since Modello 1.0<ul>
@@ -126,14 +126,14 @@
         </field>
         <field>
           <name>id</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <required>true</required>
           <type>String</type>
           <description>Unique identifier of this model.</description>
         </field>
         <field>
           <name>defaults</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <association>
             <type>ModelDefault</type>
             <multiplicity>*</multiplicity>
@@ -144,14 +144,14 @@
         </field>
         <field>
           <name>versionDefinition</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <association>
             <type>VersionDefinition</type>
           </association>
         </field>
         <field xdoc.separator="blank">
           <name>interfaces</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <association>
             <type>ModelInterface</type>
             <multiplicity>*</multiplicity>
@@ -162,7 +162,7 @@
         </field>
         <field xdoc.separator="blank">
           <name>classes</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <required>true</required>
           <association xml.tagName="class">
             <type>ModelClass</type>
@@ -177,14 +177,14 @@
 
     <class>
       <name>ModelDefault</name>
-      <version>1.0.0</version>
+      <version>1.0.0+</version>
       <description>
         A default setting for some of the property of this model.
       </description>
       <fields>
         <field>
           <name>key</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <required>true</required>
           <type>String</type>
           <description><![CDATA[The key to this property. Can be one of: <code>checkDeprecation</code>,
@@ -193,7 +193,7 @@
         </field>
         <field>
           <name>value</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <required>true</required>
           <type>String</type>
           <description>The value of this property.</description>
@@ -203,11 +203,11 @@
 
     <class>
       <name>VersionDefinition</name>
-      <version>1.0.0</version>
+      <version>1.0.0+</version>
       <fields>
         <field>
           <name>type</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <required>true</required>
           <type>String</type>
           <description><![CDATA[The type of model version definition recognition. Can be one of: <code>field</code>,
@@ -215,7 +215,7 @@
         </field>
         <field>
           <name>value</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <type>String</type>
           <description><![CDATA[If type is <code>field</code>, the name of the field containing the model
             version.]]></description>
@@ -225,13 +225,13 @@
 
     <class>
       <name>ModelInterface</name>
-      <version>1.0.0</version>
+      <version>1.0.0+</version>
       <description>An interface provided by the model.</description>
       <superClass>BaseElement</superClass>
       <fields>
         <field>
           <name>superInterface</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <type>String</type>
           <description>
             The name of the super interface for this interface.
@@ -239,7 +239,7 @@
         </field>
         <field>
           <name>packageName</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <type>String</type>
           <description>
             The destination package name for this interface.
@@ -247,7 +247,7 @@
         </field>
         <field>
           <name>codeSegments</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <association>
             <type>CodeSegment</type>
             <multiplicity>*</multiplicity>
@@ -261,7 +261,7 @@
 
     <class>
       <name>CodeSegment</name>
-      <version>1.0.0</version>
+      <version>1.0.0+</version>
       <description>
         A segment of code to be appended to this element.
       </description>
@@ -269,7 +269,7 @@
       <fields>
         <field>
           <name>code</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <type>String</type>
           <description>The code block.</description>
         </field>
@@ -278,13 +278,13 @@
 
     <class>
       <name>ModelClass</name>
-      <version>1.0.0</version>
+      <version>1.0.0+</version>
       <description>A class for this model.</description>
       <superClass>BaseElement</superClass>
       <fields>
         <field xml.attribute="true">
           <name>rootElement</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <type>boolean</type>
           <description>
             Indicates that this class is the root of the model (only one class in a model can have this attribute set
@@ -294,7 +294,7 @@
         </field>
         <field xml.attribute="true" xml.tagName="xml.tagName">
           <name>tagName</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <type>String</type>
           <description>
             Define a tag name to be used in XML content, which can be different from the class name.
@@ -303,7 +303,7 @@
         </field>
         <field xml.attribute="true" xml.tagName="java.enabled">
           <name>enabled</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <type>boolean</type>
           <defaultValue>true</defaultValue>
           <description>
@@ -313,16 +313,42 @@
         </field>
         <field xml.attribute="true" xml.tagName="java.abstract">
           <name>abstractMode</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <type>boolean</type>
           <description>
             Mark this class as abstract.
           </description>
           <comment>see org.codehaus.modello.plugin.java.metadata.JavaMetadataPlugin</comment>
         </field>
+        <field xml.attribute="true" xml.tagName="java.clone">
+          <name>javaClone</name>
+          <version>1.0.1+</version>
+          <type>String</type>
+          <description><![CDATA[
+            Controls the generation of a <code>clone()</code> method for this class. Allowed values are
+            <code>none</code>, <code>shallow</code> and <code>deep</code>. The value is inherited from super classes
+            and defaults to <code>none</code> if no super class declares otherwise.]]>
+          </description>
+          <comment>see org.codehaus.modello.plugin.java.metadata.JavaMetadataPlugin</comment>
+        </field>
+        <field xml.attribute="true" xml.tagName="java.clone.hook">
+          <name>javaCloneHook</name>
+          <version>1.0.1+</version>
+          <type>String</type>
+          <description><![CDATA[
+            Enables the usage of a custom hook method that will be called from the generated <code>clone()</code> method.
+            The value of this attribute specifies the simple name of the hook method which is assumed to be provided as
+            part of some code segment. For convenience, the boolean literal <code>true</code> can also be given to use
+            the default method name <code>cloneHook</code>. The hook method itself must have a single parameter whose
+            type matches this class in order to receive the cloned object for further manipulation before completion of
+            the clone operation. Besides, the hook method must not have a return value and must not throw a checked
+            exception.]]>
+          </description>
+          <comment>see org.codehaus.modello.plugin.java.metadata.JavaMetadataPlugin</comment>
+        </field>
         <field xml.attribute="true" xml.tagName="xsd.compositor">
           <name>compositor</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <type>String</type>
           <defaultValue>all</defaultValue>
           <description><![CDATA[
@@ -332,7 +358,7 @@
         </field>
         <field>
           <name>interfaces</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <association>
             <type>String</type>
             <multiplicity>*</multiplicity>
@@ -343,7 +369,7 @@
         </field>
         <field>
           <name>superClass</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <type>String</type>
           <description>
             The name of the super class for this class.
@@ -351,7 +377,7 @@
         </field>
         <field>
           <name>packageName</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <type>String</type>
           <description>
             The destination package name for this class.
@@ -359,7 +385,7 @@
         </field>
         <field>
           <name>fields</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <association>
             <type>ModelField</type>
             <multiplicity>*</multiplicity>
@@ -370,7 +396,7 @@
         </field>
         <field>
           <name>codeSegments</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <association>
             <type>CodeSegment</type>
             <multiplicity>*</multiplicity>
@@ -384,7 +410,7 @@
 
     <class>
       <name>ModelField</name>
-      <version>1.0.0</version>
+      <version>1.0.0+</version>
       <description>
         A field to be defined in a class.
       </description>
@@ -392,7 +418,7 @@
       <fields>
         <field xml.attribute="true" xml.tagName="java.getter">
           <name>getter</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <type>boolean</type>
           <defaultValue>true</defaultValue>
           <description>
@@ -402,7 +428,7 @@
         </field>
         <field xml.attribute="true" xml.tagName="java.setter">
           <name>setter</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <type>boolean</type>
           <defaultValue>true</defaultValue>
           <description>
@@ -412,7 +438,7 @@
         </field>
         <field xml.attribute="true" xml.tagName="xdoc.separator">
           <name>separator</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <type>String</type>
           <description><![CDATA[
             Can be one of : <code>blank</code>.]]>
@@ -421,7 +447,7 @@
         </field>
         <field xml.attribute="true" xml.tagName="xml.attribute">
           <name>attribute</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <type>boolean</type>
           <description>
             Consider this field as an XML attribute instead of an element.
@@ -430,7 +456,7 @@
         </field>
         <field xml.attribute="true" xml.tagName="xml.trim">
           <name>trim</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <type>boolean</type>
           <defaultValue>true</defaultValue>
           <description>
@@ -440,7 +466,7 @@
         </field>
         <field xml.attribute="true" xml.tagName="xml.tagName">
           <name>tagName</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <type>String</type>
           <description>
             Define a tag name to be used in XML content, which can be different from the field name.
@@ -449,7 +475,7 @@
         </field>
         <field xml.attribute="true" xml.tagName="xml.format">
           <name>format</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <type>String</type>
           <description>
             The date format to use when parsing/writing a date (see java SimpleDateFormat).
@@ -458,7 +484,7 @@
         </field>
         <field>
           <name>alias</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <type>String</type>
           <description>
             Alias name for this field (a parser should allow for this name instead of the given name).
@@ -466,7 +492,7 @@
         </field>
         <field>
           <name>type</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <required>true</required>
           <type>String</type>
           <description><![CDATA[
@@ -478,13 +504,13 @@
         </field>
         <field>
           <name>defaultValue</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <type>String</type>
           <description>The default value for this field.</description>
         </field>
         <!--field>
           <name>typeValidator</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <type>String</type>
           <description>
             <![CDATA[<i>Unused as far as I could see</i>]]>
@@ -492,7 +518,7 @@
         </field-->
         <field>
           <name>required</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <type>boolean</type>
           <description>
             Whether this field is required in model or not.
@@ -500,7 +526,7 @@
         </field>
         <field>
           <name>identifier</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <type>boolean</type>
           <description>
             Whether this field is part of the identification of the object or not.
@@ -508,7 +534,7 @@
         </field>
         <field>
           <name>association</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <association>
             <type>ModelAssociation</type>
           </association>
@@ -522,7 +548,7 @@
 
     <class>
       <name>ModelAssociation</name>
-      <version>1.0.0</version>
+      <version>1.0.0+</version>
       <description>
         An association allows for mapping of a field to a complex type,
         or to a many-multiplicity field.
@@ -530,7 +556,7 @@
       <fields>
         <field xml.attribute="true" xml.tagName="java.adder">
           <name>adder</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <type>boolean</type>
           <defaultValue>true</defaultValue>
           <description><![CDATA[
@@ -542,7 +568,7 @@
         </field>
         <field xml.attribute="true" xml.tagName="java.bidi">
           <name>bidi</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <type>boolean</type>
           <defaultValue>true</defaultValue>
           <description><![CDATA[
@@ -555,7 +581,7 @@
         </field>
         <field xml.attribute="true" xml.tagName="java.useInterface">
           <name>interfaceName</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <type>String</type>
           <description><![CDATA[
             Use specified interface in generated methods signatures (<code>add</code>, <code>remove</code>,
@@ -565,7 +591,7 @@
         </field>
         <field xml.attribute="true" xml.tagName="java.init">
           <name>initializationMode</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <type>String</type>
           <defaultValue>lazy</defaultValue>
           <description><![CDATA[
@@ -573,9 +599,19 @@
           </description>
           <comment>see org.codehaus.modello.plugin.java.metadata.JavaMetadataPlugin</comment>
         </field>
+        <field xml.attribute="true" xml.tagName="java.clone">
+          <name>javaClone</name>
+          <version>1.0.1+</version>
+          <type>String</type>
+          <description><![CDATA[
+            Allows to override the clone mode for this assocation. Allowed values are <code>shallow</code> and
+            <code>deep</code>. If the value is not specified, the clone mode of the container class will be used.]]>
+          </description>
+          <comment>see org.codehaus.modello.plugin.java.metadata.JavaMetadataPlugin</comment>
+        </field>
         <field xml.attribute="true" xml.tagName="xml.tagName">
           <name>associationTagName</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <type>String</type>
           <description>
             Define a tag name to be used for every element inside a multiple association. By default, the name is
@@ -585,7 +621,7 @@
         </field>
         <field xml.attribute="true" xml.tagName="xml.itemsStyle">
           <name>itemsStyle</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <type>String</type>
           <defaultValue>wrapped</defaultValue>
           <description><![CDATA[
@@ -602,7 +638,7 @@
         </field>
         <field xml.attribute="true" xml.tagName="xml.mapStyle">
           <name>mapStyle</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <type>String</type>
           <defaultValue>inline</defaultValue>
           <description><![CDATA[
@@ -623,19 +659,19 @@
         </field>
         <field xml.attribute="true" xml.tagName="xml.reference">
           <name>reference</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <type>boolean</type>
           <comment>see org.codehaus.modello.plugins.xml.metadata.XmlMetadataPlugin</comment>
         </field>
         <field xml.tagName="type">
           <name>to</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <required>true</required>
           <type>String</type>
         </field>
         <field>
           <name>multiplicity</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <type>String</type>
           <description>
             Can be 1 if only one such child is allowed, or * if any
