@@ -38,8 +38,10 @@ public class CloneTest
         orig.setSomeDom( new Xpp3Dom( "test" ) );
         orig.addSomeStringList( "string" );
         orig.addSomeStringSet( "string" );
+        orig.setDeepThingy( new Thingy() );
         orig.addDeepThingyList( new Thingy() );
         orig.addDeepThingySet( new Thingy() );
+        orig.setShallowThingy( new Thingy() );
         orig.addShallowThingyList( new Thingy() );
         orig.addShallowThingySet( new Thingy() );
         orig.addSomeProperty( "key", "value" );
@@ -70,11 +72,13 @@ public class CloneTest
         assertEquals( orig.getSomeStringSet(), copy.getSomeStringSet() );
         assertNotSame( orig.getSomeStringSet(), copy.getSomeStringSet() );
 
+        assertNotSame( orig.getDeepThingy(), copy.getDeepThingy() );
         assertNotSame( orig.getDeepThingyList(), copy.getDeepThingyList() );
         assertNotSame( orig.getDeepThingyList().iterator().next(), copy.getDeepThingyList().iterator().next() );
         assertNotSame( orig.getDeepThingySet(), copy.getDeepThingySet() );
         assertNotSame( orig.getDeepThingySet().iterator().next(), copy.getDeepThingySet().iterator().next() );
 
+        assertSame( orig.getShallowThingy(), copy.getShallowThingy() );
         assertNotSame( orig.getShallowThingyList(), copy.getShallowThingyList() );
         assertSame( orig.getShallowThingyList().iterator().next(), copy.getShallowThingyList().iterator().next() );
         assertNotSame( orig.getShallowThingySet(), copy.getShallowThingySet() );

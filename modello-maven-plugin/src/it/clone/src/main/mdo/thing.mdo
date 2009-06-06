@@ -123,6 +123,14 @@ under the License.
         </field>
         <!-- associations to complex types with deep clone (as per class clone mode) -->
         <field>
+          <name>deepThingy</name>
+          <version>1.0.0</version>
+          <association>
+            <type>Thingy</type>
+            <multiplicity>1</multiplicity>
+          </association>
+        </field>
+        <field>
           <name>deepThingyList</name>
           <version>1.0.0</version>
           <type>List</type>
@@ -141,6 +149,14 @@ under the License.
           </association>
         </field>
         <!-- associations to complex types with shallow clone (as per override of clone mode) -->
+        <field>
+          <name>shallowThingy</name>
+          <version>1.0.0</version>
+          <association java.clone="shallow">
+            <type>Thingy</type>
+            <multiplicity>1</multiplicity>
+          </association>
+        </field>
         <field>
           <name>shallowThingyList</name>
           <version>1.0.0</version>
