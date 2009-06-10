@@ -5,7 +5,7 @@ import java.io.File;
 /**
  * Creates a DOM4J writer from the model.
  *
- * @version $Id:$
+ * @version $Id$
  * @goal dom4j-writer
  * @phase generate-sources
  */
