@@ -26,7 +26,7 @@ import org.codehaus.modello.verifier.VerifierException;
 import junit.framework.Assert;
 
 /**
- * @author Hervé Boutemy
+ * @author Herve Boutemy
  * @version $Id$
  */
 public class JavaVerifier

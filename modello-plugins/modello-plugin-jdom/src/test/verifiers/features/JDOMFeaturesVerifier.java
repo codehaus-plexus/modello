@@ -44,7 +44,7 @@ import java.io.StringReader;
 import java.io.StringWriter;
 
 /**
- * @author Hervé Boutemy
+ * @author Herve Boutemy
  * @version $Id$
  */
 public class JDOMFeaturesVerifier

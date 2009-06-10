@@ -56,7 +56,7 @@ import java.util.Set;
 import junit.framework.Assert;
 
 /**
- * @author Hervé Boutemy
+ * @author Herve Boutemy
  * @version $Id$
  */
 public class JavaVerifier
