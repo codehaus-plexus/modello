@@ -41,11 +41,14 @@
     <setReferences>
       <setReference><id>first</id></setReference>
     </setReferences>
-    <stringReferences>
-      <stringReference>first</stringReference>
-      <stringReference>second</stringReference>
-      <stringReference>third</stringReference>
-    </stringReferences>
+    <listStrings>
+      <listString>first</listString>
+      <listString>second</listString>
+      <listString>third</listString>
+    </listStrings>
+    <setStrings>
+      <setString>first</setString>
+    </setStrings>
     <properties>
       <theKey>theValue</theKey>
     </properties>

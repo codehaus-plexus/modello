@@ -382,7 +382,8 @@ public class XsdGenerator
                         }
                         writeFieldDocumentation( w, field );
 
-                        if ( List.class.getName().equals( field.getType() ) )
+                        if ( List.class.getName().equals( field.getType() )
+                            || Set.class.getName().equals( field.getType() ) )
                         {
                             ModelAssociation association = (ModelAssociation) field;
 
