@@ -1062,6 +1062,13 @@
           <description><![CDATA[<code>Date</code> class.]]></description>
           <type>Date</type>
         </field>
+        <field xml.attribute="true" xml.tagName="tagName">
+          <name>attribute</name>
+          <version>1.0.0+</version>
+          <description><![CDATA[<code>&lt;field xml.attribute="true" xml.tagName="tagName"&gt;</code>.]]></description>
+          <type>String</type>
+          <defaultValue>default</defaultValue>
+        </field>
       </fields>
     </class>
 
