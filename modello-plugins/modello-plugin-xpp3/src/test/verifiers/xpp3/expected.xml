@@ -66,4 +66,6 @@
     </sourceModifications>
     <unitTest />
   </builder>
+
+  <content attr="attribute">content value</content>
 </mavenModel>

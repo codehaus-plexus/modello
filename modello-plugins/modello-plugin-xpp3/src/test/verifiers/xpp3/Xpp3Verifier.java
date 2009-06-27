@@ -25,6 +25,7 @@ package org.codehaus.modello.generator.xml.xpp3;
 import junit.framework.Assert;
 import org.codehaus.modello.test.model.Build;
 import org.codehaus.modello.test.model.Component;
+import org.codehaus.modello.test.model.ContentTest;
 import org.codehaus.modello.test.model.Local;
 import org.codehaus.modello.test.model.MailingList;
 import org.codehaus.modello.test.model.Model;
@@ -344,6 +345,11 @@ public class Xpp3Verifier
         repository = new Repository();
         repository.setId( "bar" );
         expected.addRepository( repository );
+        
+        ContentTest content = new ContentTest();
+        content.setContent( "content value" );
+        content.setAttr( "attribute" );
+        expected.setContent( content );
 
         // ----------------------------------------------------------------------
         // Write out the model

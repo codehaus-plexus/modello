@@ -58,7 +58,7 @@ public class Xpp3GeneratorTest
         // check some elements read from the model
         List classesList = model.getClasses( new Version( "4.0.0" ) );
 
-        assertEquals( 27, classesList.size() );
+        assertEquals( 28, classesList.size() );
 
         ModelClass clazz = (ModelClass) classesList.get( 0 );
 

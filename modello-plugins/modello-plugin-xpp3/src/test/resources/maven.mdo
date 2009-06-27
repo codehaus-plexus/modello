@@ -466,6 +466,16 @@
             <multiplicity>*</multiplicity>
           </association>
         </field>
+        <field>
+          <name>content</name>
+          <version>1.0.0+</version>
+          <description><![CDATA[<code>Content</code> type: in fact, an association to a class with attributes and
+          one <code>Content</code> field.]]></description>
+          <association>
+            <type>ContentTest</type>
+            <multiplicity>1</multiplicity>
+          </association>
+        </field>
       </fields>
       <!-- We need this because we can't use package as a field name. -->
       <!-- @todo this means it is undocumented. Should we instead provide an optional field name so package can be mapped to the field packageName? -->
@@ -1746,6 +1756,27 @@
             <type>String</type>
             <multiplicity>*</multiplicity>
           </association>
+        </field>
+      </fields>
+    </class>
+
+    <class>
+      <name>ContentTest</name>
+      <description><![CDATA[A model class that has only XMl attributes fields and exactly one field with
+        <code>Content</code> type.]]></description>
+      <version>1.0.0+</version>
+      <fields>
+        <field>
+          <name>content</name>
+          <description><![CDATA[The field of the class with <code>Content</code> type.]]></description>
+          <version>1.5.0+</version>
+          <type>Content</type>
+        </field>
+        <field xml.attribute="true">
+          <name>attr</name>
+          <description>An XML attribute.</description>
+          <version>1.0.0+</version>
+          <type>String</type>
         </field>
       </fields>
     </class>
