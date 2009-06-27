@@ -716,15 +716,9 @@ public class Xpp3ReaderGenerator
     {
         XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
 
-        String tagName = xmlFieldMetadata.getTagName();
-
+        String tagName = resolveTagName( field, xmlFieldMetadata);
+        
         String parserGetter;
-
-        if ( tagName == null )
-        {
-            tagName = field.getName();
-        }
-
         if ( xmlFieldMetadata.isAttribute() )
         {
             parserGetter = "parser.getAttributeValue( \"\", \"" + tagName + "\" )";

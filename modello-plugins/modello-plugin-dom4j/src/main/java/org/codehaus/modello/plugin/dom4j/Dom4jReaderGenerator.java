@@ -685,12 +685,7 @@ public class Dom4jReaderGenerator
     {
         XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
 
-        String tagName = xmlFieldMetadata.getTagName();
-
-        if ( tagName == null )
-        {
-            tagName = field.getName();
-        }
+        String tagName = resolveTagName( field, xmlFieldMetadata);
 
         String parserGetter;
         if ( xmlFieldMetadata.isAttribute() )
