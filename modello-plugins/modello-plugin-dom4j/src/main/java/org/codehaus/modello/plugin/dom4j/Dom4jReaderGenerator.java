@@ -313,7 +313,7 @@ public class Dom4jReaderGenerator
 
         sc.add( "Element childElement = (Element) node;" );
 
-        String statement = "if";
+        boolean addElse = false;
 
         for ( Iterator i = modelClass.getAllFields( getGeneratedVersion(), true ).iterator(); i.hasNext(); )
         {
@@ -323,13 +323,13 @@ public class Dom4jReaderGenerator
 
             if ( !xmlFieldMetadata.isAttribute() )
             {
-                processField( xmlFieldMetadata, field, statement, sc, uncapClassName, modelClass, jClass );
+                processField( field, xmlFieldMetadata, addElse, sc, uncapClassName, jClass );
 
-                statement = "else if";
+                addElse = true;
             }
         }
 
-        if ( statement.startsWith( "else" ) )
+        if ( addElse )
         {
             sc.add( "else" );
 
@@ -343,7 +343,7 @@ public class Dom4jReaderGenerator
         sc.addIndented( "throw new DocumentException( \"Unrecognised tag: '\" + childElement.getName() + \"'\" );" );
         sc.add( "}" );
 
-        if ( statement.startsWith( "else" ) )
+        if ( addElse )
         {
             sc.unindent();
             sc.add( "}" );
@@ -360,8 +360,18 @@ public class Dom4jReaderGenerator
         jClass.addMethod( unmarshall );
     }
 
-    private void processField( XmlFieldMetadata xmlFieldMetadata, ModelField field, String statement, JSourceCode sc,
-                               String uncapClassName, ModelClass modelClass, JClass jClass )
+    /**
+     * Generate code to process a field represented as an XML element.
+     *
+     * @param field the field to process
+     * @param xmlFieldMetadata its XML metadata
+     * @param addElse add an <code>else</code> statement before generating a new <code>if</code>
+     * @param sc the method source code to add to
+     * @param objectName the object name in the source
+     * @param jClass the generated class source file
+     */
+    private void processField( ModelField field, XmlFieldMetadata xmlFieldMetadata, boolean addElse, JSourceCode sc,
+                               String objectName, JClass jClass )
     {
         String fieldTagName = resolveTagName( field, xmlFieldMetadata );
 
@@ -379,8 +389,8 @@ public class Dom4jReaderGenerator
             alias = "\"" + field.getAlias() + "\"";
         }
 
-        String tagComparison =
-            statement + " ( checkFieldWithDuplicate( childElement, \"" + fieldTagName + "\", " + alias + ", parsed ) )";
+        String tagComparison = ( addElse ? "else " : "" )
+            + "if ( checkFieldWithDuplicate( childElement, \"" + fieldTagName + "\", " + alias + ", parsed ) )";
 
         if ( field instanceof ModelAssociation )
         {
@@ -393,7 +403,7 @@ public class Dom4jReaderGenerator
                 sc.add( tagComparison );
 
                 sc.add( "{" );
-                sc.addIndented( uncapClassName + ".set" + capFieldName + "( parse" + association.getTo() + "( \""
+                sc.addIndented( objectName + ".set" + capFieldName + "( parse" + association.getTo() + "( \""
                                 + fieldTagName + "\", childElement, strict, encoding ) );" );
                 sc.add( "}" );
             }
@@ -421,7 +431,7 @@ public class Dom4jReaderGenerator
 
                         sc.add( type + " " + associationName + " = " + association.getDefaultValue() + ";" );
 
-                        sc.add( uncapClassName + ".set" + capFieldName + "( " + associationName + " );" );
+                        sc.add( objectName + ".set" + capFieldName + "( " + associationName + " );" );
 
                         sc.add( "for ( Iterator j = childElement.nodeIterator(); j.hasNext(); )" );
 
@@ -454,14 +464,15 @@ public class Dom4jReaderGenerator
                     }
                     else
                     {
-                        sc.add( statement + " ( childElement.getName().equals( \"" + valuesTagName + "\" ) )" );
+                        sc.add( ( addElse ? "else " : "" )
+                            + "if ( childElement.getName().equals( \"" + valuesTagName + "\" ) )" );
 
                         sc.add( "{" );
                         sc.indent();
 
                         sc.add( "Element listElement = childElement;" );
 
-                        sc.add( type + " " + associationName + " = " + uncapClassName + ".get" + capFieldName + "();" );
+                        sc.add( type + " " + associationName + " = " + objectName + ".get" + capFieldName + "();" );
 
                         sc.add( "if ( " + associationName + " == null )" );
 
@@ -470,13 +481,13 @@ public class Dom4jReaderGenerator
 
                         sc.add( associationName + " = " + association.getDefaultValue() + ";" );
 
-                        sc.add( uncapClassName + ".set" + capFieldName + "( " + associationName + " );" );
+                        sc.add( objectName + ".set" + capFieldName + "( " + associationName + " );" );
 
                         sc.unindent();
                         sc.add( "}" );
                     }
 
-                    if ( isClassInModel( association.getTo(), modelClass.getModel() ) )
+                    if ( isClassInModel( association.getTo(), field.getModelClass().getModel() ) )
                     {
                         sc.add( associationName + ".add( parse" + association.getTo() + "( \"" + valuesTagName
                             + "\", listElement, strict, encoding ) );" );
@@ -606,7 +617,7 @@ public class Dom4jReaderGenerator
                         sc.unindent();
                         sc.add( "}" );
 
-                        sc.add( uncapClassName + ".add" + capitalise( singularName ) + "( key, value );" );
+                        sc.add( objectName + ".add" + capitalise( singularName ) + "( key, value );" );
 
                         sc.unindent();
                         sc.add( "}" );
@@ -650,7 +661,7 @@ public class Dom4jReaderGenerator
                         sc.add( "String value = listElement.getText()"
                                 + ( xmlFieldMetadata.isTrim() ? ".trim()" : "" ) + ";" );
 
-                        sc.add( uncapClassName + ".add" + capitalise( singularName ) + "( key, value );" );
+                        sc.add( objectName + ".add" + capitalise( singularName ) + "( key, value );" );
 
                         sc.unindent();
                         sc.add( "}" );
@@ -672,7 +683,7 @@ public class Dom4jReaderGenerator
             sc.indent();
 
             //ModelField
-            writePrimitiveField( field, field.getType(), uncapClassName, "set" + capitalise( field.getName() ), sc,
+            writePrimitiveField( field, field.getType(), objectName, "set" + capitalise( field.getName() ), sc,
                                  jClass, "element", "childElement" );
 
             sc.unindent();
