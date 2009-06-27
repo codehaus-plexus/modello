@@ -22,6 +22,9 @@ package org.codehaus.modello.plugin.java.metadata;
  * SOFTWARE.
  */
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.codehaus.modello.metadata.ClassMetadata;
 
 /**
@@ -33,9 +36,27 @@ public class JavaClassMetadata
 {
     public static final String ID = JavaClassMetadata.class.getName();
 
+    public static final String CLONE_NONE = "none";
+    public static final String CLONE_SHALLOW = "shallow";
+    public static final String CLONE_DEEP = "deep";
+
+    public final static List CLONE_MODES;
+
+    static
+    {
+        CLONE_MODES = new ArrayList();
+        CLONE_MODES.add( CLONE_NONE );
+        CLONE_MODES.add( CLONE_SHALLOW );
+        CLONE_MODES.add( CLONE_DEEP );
+    }
+
     private boolean abstractMode;
     
     private boolean enabled;
+
+    private String cloneMode;
+
+    private String cloneHook;
 
     public void setAbstract( boolean abstractMode )
     {
@@ -56,4 +77,25 @@ public class JavaClassMetadata
     {
         this.enabled = generate;
     }
+
+    public String getCloneMode()
+    {
+        return cloneMode;
+    }
+
+    public void setCloneMode( String cloneMode )
+    {
+        this.cloneMode = cloneMode;
+    }
+
+    public String getCloneHook()
+    {
+        return cloneHook;
+    }
+
+    public void setCloneHook( String cloneHook )
+    {
+        this.cloneHook = cloneHook;
+    }
+
 }

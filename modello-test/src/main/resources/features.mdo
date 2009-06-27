@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
-<model xmlns="http://modello.codehaus.org/MODELLO/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://modello.codehaus.org/MODELLO/1.0.0 http://modello.codehaus.org/xsd/modello-1.0.0.xsd"
+<model xmlns="http://modello.codehaus.org/MODELLO/1.1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://modello.codehaus.org/MODELLO/1.1.0 http://modello.codehaus.org/xsd/modello-1.1.0.xsd"
   xml.namespace="http://modello.codehaus.org/FEATURES/${version}"
   xml.schemaLocation="http://modello.codehaus.org/features-${version}.xsd">
   <id>features</id>
@@ -137,6 +137,13 @@
           <version>1.0.0+</version>
           <association>
             <type>NodeItem</type>
+          </association>
+        </field>
+        <field>
+          <name>cloneable</name>
+          <version>1.0.0+</version>
+          <association>
+            <type>Thing</type>
           </association>
         </field>
       </fields>
@@ -1136,6 +1143,178 @@
       </fields>
     </class>
 
+    <class java.clone="deep">
+      <!-- test inheritance of clone mode -->
+      <name>SuperThing</name>
+      <version>1.0.0+</version>
+    </class>
+    <class java.clone.hook="cloneCustomFields">
+      <name>Thing</name>
+      <superClass>SuperThing</superClass>
+      <version>1.0.0+</version>
+      <fields>
+        <!-- various simple types -->
+        <field>
+          <name>someBoolean</name>
+          <version>1.0.0+</version>
+          <type>boolean</type>
+        </field>
+        <field>
+          <name>someChar</name>
+          <version>1.0.0+</version>
+          <type>char</type>
+        </field>
+        <field>
+          <name>someByte</name>
+          <version>1.0.0+</version>
+          <type>byte</type>
+        </field>
+        <field>
+          <name>someShort</name>
+          <version>1.0.0+</version>
+          <type>short</type>
+        </field>
+        <field>
+          <name>someInt</name>
+          <version>1.0.0+</version>
+          <type>int</type>
+        </field>
+        <field>
+          <name>someLong</name>
+          <version>1.0.0+</version>
+          <type>long</type>
+        </field>
+        <field>
+          <name>someFloat</name>
+          <version>1.0.0+</version>
+          <type>float</type>
+        </field>
+        <field>
+          <name>someDouble</name>
+          <version>1.0.0+</version>
+          <type>double</type>
+        </field>
+        <field>
+          <name>someString</name>
+          <version>1.0.0+</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>someDate</name>
+          <version>1.0.0+</version>
+          <type>Date</type>
+        </field>
+        <field>
+          <name>someDom</name>
+          <version>1.0.0+</version>
+          <type>DOM</type>
+        </field>
+        <!-- associations to simple types -->
+        <field>
+          <name>someProperties</name>
+          <version>1.0.0+</version>
+          <type>Properties</type>
+          <association xml.mapStyle="inline">
+            <type>String</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+        <field>
+          <name>someStringList</name>
+          <version>1.0.0+</version>
+          <type>List</type>
+          <association>
+            <type>String</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+        <field>
+          <name>someStringSet</name>
+          <version>1.0.0+</version>
+          <type>Set</type>
+          <association>
+            <type>String</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+        <!-- associations to complex types with deep clone (as per class clone mode) -->
+        <field>
+          <name>deepThingy</name>
+          <version>1.0.0+</version>
+          <association>
+            <type>Thingy</type>
+            <multiplicity>1</multiplicity>
+          </association>
+        </field>
+        <field>
+          <name>deepThingyList</name>
+          <version>1.0.0+</version>
+          <type>List</type>
+          <association>
+            <type>Thingy</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+        <field>
+          <name>deepThingySet</name>
+          <version>1.0.0+</version>
+          <type>Set</type>
+          <association>
+            <type>Thingy</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+        <!-- associations to complex types with shallow clone (as per override of clone mode) -->
+        <field>
+          <name>shallowThingy</name>
+          <version>1.0.0+</version>
+          <association java.clone="shallow">
+            <type>Thingy</type>
+            <multiplicity>1</multiplicity>
+          </association>
+        </field>
+        <field>
+          <name>shallowThingyList</name>
+          <version>1.0.0+</version>
+          <type>List</type>
+          <association java.clone="shallow">
+            <type>Thingy</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+        <field>
+          <name>shallowThingySet</name>
+          <version>1.0.0+</version>
+          <type>Set</type>
+          <association java.clone="shallow">
+            <type>Thingy</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+      </fields>
+      <codeSegments>
+        <codeSegment>
+          <version>1.0.0+</version>
+          <code><![CDATA[
+    public java.util.Properties customProperties = new java.util.Properties();
+
+    private void cloneCustomFields( Thing copy )
+    {
+        if ( this.customProperties != null )
+        {
+            copy.customProperties = (java.util.Properties) this.customProperties.clone();
+        }
+    }          
+            ]]>
+          </code>
+        </codeSegment>
+      </codeSegments>
+    </class>
+    <class java.clone.hook="false">
+      <name>Thingy</name>
+      <superClass>SuperThing</superClass>
+      <version>1.0.0+</version>
+    </class>
   </classes>
 
   <interfaces>

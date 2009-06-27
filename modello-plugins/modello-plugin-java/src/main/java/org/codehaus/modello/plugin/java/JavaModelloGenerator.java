@@ -50,6 +50,9 @@ import org.codehaus.plexus.util.StringUtils;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
@@ -61,6 +64,11 @@ import java.util.Properties;
 public class JavaModelloGenerator
     extends AbstractJavaModelloGenerator
 {
+    
+    private Collection immutableTypes =
+        new HashSet( Arrays.asList( new String[] { "boolean", "Boolean", "byte", "Byte", "char", "Character", "short",
+            "Short", "int", "Integer", "long", "Long", "float", "Float", "double", "Double", "String" } ) );
+
     public void generate( Model model, Properties parameters )
         throws ModelloException
     {
@@ -225,6 +233,13 @@ public class JavaModelloGenerator
                 JMethod toString = generateToString( modelClass );
 
                 jClass.addMethod( toString );
+            }
+
+            JMethod[] cloneMethods = generateClone( modelClass );
+            if ( cloneMethods.length > 0 )
+            {
+                jClass.addInterface( Cloneable.class.getName() );
+                jClass.addMethods( cloneMethods );
             }
 
             if ( modelClass.getCodeSegments( getGeneratedVersion() ) != null )
@@ -417,6 +432,239 @@ public class JavaModelloGenerator
         sc.add( "return result;" );
 
         return hashCode;
+    }
+
+    private JMethod[] generateClone( ModelClass modelClass )
+        throws ModelloException
+    {
+        String cloneModeClass = getCloneMode( modelClass );
+
+        if ( JavaClassMetadata.CLONE_NONE.equals( cloneModeClass ) )
+        {
+            return new JMethod[0];
+        }
+
+        JType returnType;
+        if ( useJava5 )
+        {
+            returnType = new JClass( modelClass.getName() );
+        }
+        else
+        {
+            returnType = new JClass( "Object" );
+        }
+
+        JMethod cloneMethod = new JMethod( "clone", returnType, null );
+
+        JSourceCode sc = cloneMethod.getSourceCode();
+
+        sc.add( "try" );
+        sc.add( "{" );
+        sc.indent();
+
+        sc.add( modelClass.getName() + " copy = (" + modelClass.getName() + ") super.clone();" );
+
+        sc.add( "" );
+
+        for ( Iterator j = modelClass.getFields( getGeneratedVersion() ).iterator(); j.hasNext(); )
+        {
+            ModelField modelField = (ModelField) j.next();
+
+            String thisField = "this." + modelField.getName();
+            String copyField = "copy." + modelField.getName();
+
+            if ( "DOM".equals( modelField.getType() ) )
+            {
+                sc.add( "if ( " + thisField + " != null )" );
+                sc.add( "{" );
+                sc.addIndented( copyField
+                    + " = new org.codehaus.plexus.util.xml.Xpp3Dom( (org.codehaus.plexus.util.xml.Xpp3Dom) "
+                    + thisField + " );" );
+                sc.add( "}" );
+                sc.add( "" );
+            }
+            else if ( "Date".equalsIgnoreCase( modelField.getType() ) || "java.util.Date".equals( modelField.getType() ) )
+            {
+                sc.add( "if ( " + thisField + " != null )" );
+                sc.add( "{" );
+                sc.addIndented( copyField + " = (java.util.Date) " + thisField + ".clone();" );
+                sc.add( "}" );
+                sc.add( "" );
+            }
+            else if ( ModelDefault.PROPERTIES.equals( modelField.getType() ) )
+            {
+                sc.add( "if ( " + thisField + " != null )" );
+                sc.add( "{" );
+                sc.addIndented( copyField + " = (" + ModelDefault.PROPERTIES + ") " + thisField + ".clone();" );
+                sc.add( "}" );
+                sc.add( "" );
+            }
+            else if ( modelField instanceof ModelAssociation )
+            {
+                ModelAssociation modelAssociation = (ModelAssociation) modelField;
+
+                String cloneModeAssoc = getCloneMode( modelAssociation, cloneModeClass );
+
+                boolean deepClone =
+                    JavaAssociationMetadata.CLONE_DEEP.equals( cloneModeAssoc )
+                        && !immutableTypes.contains( modelAssociation.getTo() );
+
+                if ( modelAssociation.isOneMultiplicity() )
+                {
+                    if ( deepClone )
+                    {
+                        sc.add( "if ( " + thisField + " != null )" );
+                        sc.add( "{" );
+                        sc.addIndented( copyField + " = (" + modelAssociation.getTo() + ") " + thisField + ".clone();" );
+                        sc.add( "}" );
+                        sc.add( "" );
+                    }
+                }
+                else
+                {
+                    sc.add( "if ( " + thisField + " != null )" );
+                    sc.add( "{" );
+                    sc.indent();
+                    sc.add( copyField + " = " + getDefaultValue( modelAssociation ) + ";" );
+
+                    if ( isCollection( modelField.getType() ) )
+                    {
+                        if ( deepClone )
+                        {
+                            if ( useJava5 )
+                            {
+                                sc.add( "for ( " + modelAssociation.getTo() + " item : " + thisField + " )" );
+                            }
+                            else
+                            {
+                                sc.add( "for ( java.util.Iterator it = " + thisField + ".iterator(); it.hasNext(); )" );
+                            }
+                            sc.add( "{" );
+                            sc.indent();
+                            if ( useJava5 )
+                            {
+                                sc.add( copyField + ".add( item.clone() );" );
+                            }
+                            else
+                            {
+                                sc.add( copyField + ".add( ( (" + modelAssociation.getTo() + ") it.next() ).clone() );" );
+                            }
+                            sc.unindent();
+                            sc.add( "}" );
+                        }
+                        else
+                        {
+                            sc.add( copyField + ".addAll( " + thisField + " );" );
+                        }
+                    }
+                    else if ( isMap( modelField.getType() ) )
+                    {
+                        sc.add( copyField + ".clear();" );
+                        sc.add( copyField + ".putAll( " + thisField + " );" );
+                    }
+
+                    sc.unindent();
+                    sc.add( "}" );
+                    sc.add( "" );
+                }
+            }
+        }
+
+        String cloneHook = getCloneHook( modelClass );
+
+        if ( StringUtils.isNotEmpty( cloneHook ) && !"false".equalsIgnoreCase( cloneHook ) )
+        {
+            if ( "true".equalsIgnoreCase( cloneHook ) )
+            {
+                cloneHook = "cloneHook";
+            }
+
+            sc.add( cloneHook + "( copy );" );
+            sc.add( "" );
+        }
+
+        sc.add( "return copy;" );
+
+        sc.unindent();
+        sc.add( "}" );
+        sc.add( "catch ( " + Exception.class.getName() + " ex )" );
+        sc.add( "{" );
+        sc.indent();
+        sc.add( "throw (" + RuntimeException.class.getName() + ") new " + UnsupportedOperationException.class.getName()
+            + "( getClass().getName()" );
+        sc.addIndented( "+ \" does not support clone()\" ).initCause( ex );" );
+        sc.unindent();
+        sc.add( "}" );
+
+        return new JMethod[] { cloneMethod };
+    }
+
+    private String getCloneMode( ModelClass modelClass )
+        throws ModelloException
+    {
+        String cloneMode = null;
+
+        for ( ModelClass currentClass = modelClass;; )
+        {
+            JavaClassMetadata javaClassMetadata = (JavaClassMetadata) currentClass.getMetadata( JavaClassMetadata.ID );
+
+            cloneMode = javaClassMetadata.getCloneMode();
+
+            if ( cloneMode != null )
+            {
+                break;
+            }
+
+            String superClass = currentClass.getSuperClass();
+            if ( StringUtils.isEmpty( superClass ) || !isClassInModel( superClass, getModel() ) )
+            {
+                break;
+            }
+
+            currentClass = getModel().getClass( superClass, getGeneratedVersion() );
+        }
+
+        if ( cloneMode == null )
+        {
+            cloneMode = JavaClassMetadata.CLONE_NONE;
+        }
+        else if ( !JavaClassMetadata.CLONE_MODES.contains( cloneMode ) )
+        {
+            throw new ModelloException( "The Java Modello Generator cannot use '" + cloneMode
+                + "' as a value for <class java.clone=\"...\">, " + "only the following values are acceptable "
+                + JavaClassMetadata.CLONE_MODES );
+        }
+
+        return cloneMode;
+    }
+
+    private String getCloneMode( ModelAssociation modelAssociation, String cloneModeClass )
+        throws ModelloException
+    {
+        JavaAssociationMetadata javaAssociationMetadata =
+            (JavaAssociationMetadata) modelAssociation.getAssociationMetadata( JavaAssociationMetadata.ID );
+
+        String cloneModeAssoc = javaAssociationMetadata.getCloneMode();
+        if ( cloneModeAssoc == null )
+        {
+            cloneModeAssoc = cloneModeClass;
+        }
+        else if ( !JavaAssociationMetadata.CLONE_MODES.contains( cloneModeAssoc ) )
+        {
+            throw new ModelloException( "The Java Modello Generator cannot use '" + cloneModeAssoc
+                + "' as a value for <association java.clone=\"...\">, " + "only the following values are acceptable "
+                + JavaAssociationMetadata.CLONE_MODES );
+        }
+
+        return cloneModeAssoc;
+    }
+
+    private String getCloneHook( ModelClass modelClass )
+        throws ModelloException
+    {
+        JavaClassMetadata javaClassMetadata = (JavaClassMetadata) modelClass.getMetadata( JavaClassMetadata.ID );
+
+        return javaClassMetadata.getCloneHook();
     }
 
     /**
