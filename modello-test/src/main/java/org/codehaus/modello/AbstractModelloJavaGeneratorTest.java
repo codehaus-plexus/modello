@@ -156,7 +156,13 @@ public abstract class AbstractModelloJavaGeneratorTest
     protected void compile( File generatedSources, File destinationDirectory )
         throws IOException, CompilerException
     {
-        addDependency( "junit", "junit", "3.8.1" );
+        compile( generatedSources, destinationDirectory, false );
+    }
+
+    protected void compile( File generatedSources, File destinationDirectory, boolean useJava5 )
+        throws IOException, CompilerException
+    {
+        addDependency( "junit", "junit", "3.8.2" );
         addDependency( "org.codehaus.plexus", "plexus-utils", "1.5.8" ); // version must be the same as in pom.xml
         addDependency( "org.codehaus.modello", "modello-test", getModelloVersion() );
 
@@ -179,6 +185,16 @@ public abstract class AbstractModelloJavaGeneratorTest
         configuration.setSourceLocations( Arrays.asList( sourceDirectories ) );
         configuration.setOutputLocation( destinationDirectory.getAbsolutePath() );
         configuration.setDebug( true );
+        if ( useJava5 )
+        {
+            configuration.setSourceVersion( "1.5" );
+            configuration.setTargetVersion( "1.5" );
+        }
+        else
+        {
+            configuration.setSourceVersion( "1.4" );
+            configuration.setTargetVersion( "1.4" );
+        }
 
         List messages = compiler.compile( configuration );
 

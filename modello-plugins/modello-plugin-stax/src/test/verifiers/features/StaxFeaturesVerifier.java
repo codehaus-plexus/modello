@@ -44,7 +44,7 @@ import java.io.StringWriter;
 import javax.xml.stream.XMLStreamException;
 
 /**
- * @author Hervé Boutemy
+ * @author Herve Boutemy
  * @version $Id$
  */
 public class StaxFeaturesVerifier

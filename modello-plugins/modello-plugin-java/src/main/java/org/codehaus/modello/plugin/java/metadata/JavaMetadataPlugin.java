@@ -91,7 +91,7 @@ public class JavaMetadataPlugin
     {
         JavaFieldMetadata metadata = new JavaFieldMetadata();
 
-        metadata.setSetter( getBoolean( data, JAVA_GETTER, true ) );
+        metadata.setGetter( getBoolean( data, JAVA_GETTER, true ) );
 
         String fieldType = field.getType();
         metadata.setBooleanGetter( ( fieldType != null ) && fieldType.endsWith( "oolean" ) );

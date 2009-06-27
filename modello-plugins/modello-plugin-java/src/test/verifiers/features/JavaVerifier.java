@@ -56,7 +56,7 @@ import java.util.Set;
 import junit.framework.Assert;
 
 /**
- * @author Hervé Boutemy
+ * @author Herve Boutemy
  * @version $Id$
  */
 public class JavaVerifier
@@ -103,7 +103,7 @@ public class JavaVerifier
         Assert.assertEquals( attributeName + " attribute type", type, field.getType() );
         Assert.assertTrue( attributeName + " attribute should be private", Modifier.isPrivate( field.getModifiers() ) );
 
-        Method getter = clazz.getMethod( getterName, null );
+        Method getter = clazz.getMethod( getterName, (Class[]) null );
         Assert.assertNotNull( getterName + "() method", getter );
         Assert.assertEquals( getterName + "() method return type", type, getter.getReturnType() );
         Assert.assertTrue( getterName + "() method should be public", Modifier.isPublic( getter.getModifiers() ) );
