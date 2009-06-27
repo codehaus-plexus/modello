@@ -305,11 +305,7 @@ public class Xpp3ReaderGenerator
 
             if ( xmlFieldMetadata.isAttribute() )
             {
-                String tagName = xmlFieldMetadata.getTagName();
-                if ( tagName == null )
-                {
-                    tagName = field.getName();
-                }
+                String tagName = resolveTagName( field, xmlFieldMetadata );
 
                 sc.add( "if ( parser.getAttributeValue( \"\", \"" + tagName + "\" ) != null  )");
                 sc.add(  "{" );
