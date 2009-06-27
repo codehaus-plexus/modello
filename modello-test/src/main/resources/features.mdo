@@ -441,8 +441,17 @@
           </association>
         </field>
         <field>
-          <name>stringReferences</name>
+          <name>listStrings</name>
           <version>1.0.0+</version>
+          <association>
+            <type>String</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+        <field>
+          <name>setStrings</name>
+          <version>1.0.0+</version>
+          <type>Set</type>
           <association>
             <type>String</type>
             <multiplicity>*</multiplicity>
