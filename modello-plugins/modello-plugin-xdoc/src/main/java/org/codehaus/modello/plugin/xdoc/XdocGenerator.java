@@ -279,7 +279,7 @@ public class XdocGenerator
         }
 
         // skip if only one element field with type == "Content"
-        if ( elementFields && ( fields.size() == 1 ) && ( getContentField( fields ) != null ) )
+        if ( elementFields && ( fields.size() == 1 ) && hasContentField( fields ) )
         {
             return;
         }
