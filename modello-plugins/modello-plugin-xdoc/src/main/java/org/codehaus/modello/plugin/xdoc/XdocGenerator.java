@@ -523,7 +523,7 @@ public class XdocGenerator
         List fields = getFieldsForClass( modelClass );
         fields.removeAll( attributeFields );
 
-        if ( ( fields.size() == 0 ) || ( ( fields.size() == 1 ) && ( getContentField( fields ) != null ) ) )
+        if ( ( fields.size() == 0 ) || ( ( fields.size() == 1 ) && hasContentField( fields ) ) )
         {
             sb.append( "/&gt;\n" );
         }
