@@ -1,5 +1,8 @@
 package org.codehaus.modello.plugins.xml;
 
+import java.util.Iterator;
+import java.util.List;
+
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.plugin.AbstractModelloGenerator;
@@ -102,5 +105,28 @@ class XmlModelHelpers
             tagName = xmlAssociationMetadata.getTagName();
         }
         return tagName;
+    }
+
+    /**
+     * Get the field which type is <code>Content</code> if any.
+     *
+     * @param modelFields the fields to check
+     * @return the field, or <code>null</code> if no field is <code>Content</code>
+     */
+    static ModelField getContentField( List/*<ModelField>*/ modelFields )
+    {
+        if ( modelFields == null )
+        {
+            return null;
+        }
+        for ( Iterator j = modelFields.iterator(); j.hasNext(); )
+        {
+            ModelField field = (ModelField) j.next();
+            if ( "Content".equals( field.getType() ) )
+            {
+                return field;
+            }
+        }
+        return null;
     }
 }

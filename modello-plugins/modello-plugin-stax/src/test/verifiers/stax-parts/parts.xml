@@ -97,4 +97,5 @@
     <dummyPointer modello.refid="2"></dummyPointer>
     <dummyPointer modello.refid="1"></dummyPointer>
   </dummyPointers>
+  <content attr="attribute">content value</content>
 </model>

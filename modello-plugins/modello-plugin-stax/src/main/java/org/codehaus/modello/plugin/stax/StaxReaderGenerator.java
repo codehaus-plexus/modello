@@ -50,6 +50,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
+import javax.naming.ldap.HasControls;
+
 /**
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
@@ -598,173 +600,185 @@ public class StaxReaderGenerator
         JSourceCode sc = unmarshall.getSourceCode();
 
         sc.add( className + ' ' + uncapClassName + " = new " + className + "();" );
-
-        sc.add( "java.util.Set parsed = new java.util.HashSet();" );
-
-        String instanceFieldName = getInstanceFieldName( className );
-
-        if ( rootElement )
+        
+        ModelField contentField = getContentField( modelClass.getAllFields( getGeneratedVersion(), true ) );
+        
+        if ( contentField != null )
         {
-            // encoding parameter is only used in root class
-            sc.add( uncapClassName + ".setModelEncoding( encoding );" );
+            writeAttributes( modelClass, uncapClassName, sc );
 
-            sc.add( "boolean foundRoot = false;" );
-
-            sc.add( "while ( xmlStreamReader.hasNext() )" );
-
-            sc.add( "{" );
-            sc.indent();
-
-            sc.add( "int eventType = xmlStreamReader.next();" );
-
-            sc.add( "if ( eventType == XMLStreamConstants.START_ELEMENT )" );
+            writePrimitiveField( contentField, contentField.getType(), uncapClassName,
+                                 "set" + capitalise( contentField.getName() ), sc );
         }
         else
         {
-            writeAttributes( modelClass, uncapClassName, sc );
-
-            if ( isAssociationPartToClass( modelClass ) )
+            sc.add( "java.util.Set parsed = new java.util.HashSet();" );
+    
+            String instanceFieldName = getInstanceFieldName( className );
+    
+            if ( rootElement )
             {
-                jClass.addField( new JField( new JType( "java.util.Map" ), instanceFieldName ) );
-
-                sc.add( "if ( " + instanceFieldName + " == null )" );
-                sc.add( "{" );
-                sc.addIndented( instanceFieldName + " = new java.util.HashMap();" );
-                sc.add( "}" );
-
-                sc.add( "String v = xmlStreamReader.getAttributeValue( null, \"modello.id\" );" );
-                sc.add( "if ( v != null )" );
-                sc.add( "{" );
-                sc.addIndented( instanceFieldName + ".put( v, " + uncapClassName + " );" );
-                sc.add( "}" );
-            }
-
-            sc.add( "while ( xmlStreamReader.nextTag() == XMLStreamConstants.START_ELEMENT )" );
-        }
-
-        sc.add( "{" );
-        sc.indent();
-
-        boolean addElse = false;
-
-        if ( rootElement )
-        {
-            sc.add( "if ( xmlStreamReader.getLocalName().equals( tagName ) )" );
-
-            sc.add( "{" );
-            sc.indent();
-
-            VersionDefinition versionDefinition = modelClass.getModel().getVersionDefinition();
-            if ( versionDefinition != null && "namespace".equals( versionDefinition.getType() ) )
-            {
-                sc.add( "String modelVersion = getVersionFromRootNamespace( xmlStreamReader );" );
-
-                writeModelVersionCheck( sc );
-            }
-
-            writeAttributes( modelClass, uncapClassName, sc );
-
-            sc.add( "foundRoot = true;" );
-
-            sc.unindent();
-            sc.add( "}" );
-
-            addElse = true;
-        }
-
-        // Write other fields
-
-        for ( Iterator i = modelClass.getAllFields( getGeneratedVersion(), true ).iterator(); i.hasNext(); )
-        {
-            ModelField field = (ModelField) i.next();
-
-            XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
-
-            if ( !xmlFieldMetadata.isAttribute() )
-            {
-                processField( field, xmlFieldMetadata, addElse, sc, uncapClassName, rootElement, jClass );
-
-                addElse = true;
-            }
-        }
-        if ( !rootElement )
-        {
-/*
-            if ( modelClass.getFields( getGeneratedVersion() ).size() > 0 )
-            {
-                sc.add( "else" );
-
-                sc.add( "{" );
-                sc.addIndented( "parser.nextText();" );
-                sc.add( "}" );
-            }
-*/
-
-            if ( addElse )
-            {
-                sc.add( "else" );
-
+                // encoding parameter is only used in root class
+                sc.add( uncapClassName + ".setModelEncoding( encoding );" );
+    
+                sc.add( "boolean foundRoot = false;" );
+    
+                sc.add( "while ( xmlStreamReader.hasNext() )" );
+    
                 sc.add( "{" );
                 sc.indent();
+    
+                sc.add( "int eventType = xmlStreamReader.next();" );
+    
+                sc.add( "if ( eventType == XMLStreamConstants.START_ELEMENT )" );
             }
-
-            sc.add( "if ( strict )" );
-
-            sc.add( "{" );
-            sc.addIndented( "throw new XMLStreamException( \"Unrecognised tag: '\" + xmlStreamReader.getLocalName() + "
-                            + "\"'\", xmlStreamReader.getLocation() );" );
-            sc.add( "}" );
-
-            if ( addElse )
+            else
             {
+                writeAttributes( modelClass, uncapClassName, sc );
+    
+                if ( isAssociationPartToClass( modelClass ) )
+                {
+                    jClass.addField( new JField( new JType( "java.util.Map" ), instanceFieldName ) );
+    
+                    sc.add( "if ( " + instanceFieldName + " == null )" );
+                    sc.add( "{" );
+                    sc.addIndented( instanceFieldName + " = new java.util.HashMap();" );
+                    sc.add( "}" );
+    
+                    sc.add( "String v = xmlStreamReader.getAttributeValue( null, \"modello.id\" );" );
+                    sc.add( "if ( v != null )" );
+                    sc.add( "{" );
+                    sc.addIndented( instanceFieldName + ".put( v, " + uncapClassName + " );" );
+                    sc.add( "}" );
+                }
+    
+                sc.add( "while ( xmlStreamReader.nextTag() == XMLStreamConstants.START_ELEMENT )" );
+            }
+    
+            sc.add( "{" );
+            sc.indent();
+    
+            boolean addElse = false;
+    
+            if ( rootElement )
+            {
+                sc.add( "if ( xmlStreamReader.getLocalName().equals( tagName ) )" );
+    
+                sc.add( "{" );
+                sc.indent();
+    
+                VersionDefinition versionDefinition = modelClass.getModel().getVersionDefinition();
+                if ( versionDefinition != null && "namespace".equals( versionDefinition.getType() ) )
+                {
+                    sc.add( "String modelVersion = getVersionFromRootNamespace( xmlStreamReader );" );
+    
+                    writeModelVersionCheck( sc );
+                }
+    
+                writeAttributes( modelClass, uncapClassName, sc );
+    
+                sc.add( "foundRoot = true;" );
+    
+                sc.unindent();
+                sc.add( "}" );
+    
+                addElse = true;
+            }
+    
+            // Write other fields
+    
+            for ( Iterator i = modelClass.getAllFields( getGeneratedVersion(), true ).iterator(); i.hasNext(); )
+            {
+                ModelField field = (ModelField) i.next();
+    
+                XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
+    
+                if ( !xmlFieldMetadata.isAttribute() )
+                {
+                    processField( field, xmlFieldMetadata, addElse, sc, uncapClassName, rootElement, jClass );
+    
+                    addElse = true;
+                }
+            }
+            if ( !rootElement )
+            {
+    /*
+                if ( modelClass.getFields( getGeneratedVersion() ).size() > 0 )
+                {
+                    sc.add( "else" );
+    
+                    sc.add( "{" );
+                    sc.addIndented( "parser.nextText();" );
+                    sc.add( "}" );
+                }
+    */
+    
+                if ( addElse )
+                {
+                    sc.add( "else" );
+    
+                    sc.add( "{" );
+                    sc.indent();
+                }
+    
+                sc.add( "if ( strict )" );
+    
+                sc.add( "{" );
+                sc.addIndented( "throw new XMLStreamException( \"Unrecognised tag: '\" + xmlStreamReader.getLocalName() + "
+                                + "\"'\", xmlStreamReader.getLocation() );" );
+                sc.add( "}" );
+    
+                if ( addElse )
+                {
+                    sc.unindent();
+                    sc.add( "}" );
+                }
+            }
+            else
+            { // rootElement == true
+                sc.add( "else" );
+    
+                sc.add( "{" );
+                sc.indent();
+    
+                sc.add( "if ( foundRoot )" );
+    
+                sc.add( "{" );
+                sc.indent();
+    
+                sc.add( "if ( strict )" );
+    
+                sc.add( "{" );
+                sc.addIndented( "throw new XMLStreamException( \"Unrecognised tag: '\" + xmlStreamReader.getLocalName() + "
+                                + "\"'\", xmlStreamReader.getLocation() );" );
+                sc.add( "}" );
+    
+                sc.unindent();
+                sc.add( "}" );
+    
+                sc.unindent();
+                sc.add( "}" );
+    
                 sc.unindent();
                 sc.add( "}" );
             }
-        }
-        else
-        { // rootElement == true
-            sc.add( "else" );
-
-            sc.add( "{" );
-            sc.indent();
-
-            sc.add( "if ( foundRoot )" );
-
-            sc.add( "{" );
-            sc.indent();
-
-            sc.add( "if ( strict )" );
-
-            sc.add( "{" );
-            sc.addIndented( "throw new XMLStreamException( \"Unrecognised tag: '\" + xmlStreamReader.getLocalName() + "
-                            + "\"'\", xmlStreamReader.getLocation() );" );
-            sc.add( "}" );
-
+    
             sc.unindent();
             sc.add( "}" );
 
-            sc.unindent();
-            sc.add( "}" );
-
-            sc.unindent();
-            sc.add( "}" );
-        }
-
-        sc.unindent();
-        sc.add( "}" );
-
-        // This must be last so that we guarantee the ID has been filled already
-        if ( isAssociationPartToClass( modelClass ) )
-        {
-            List identifierFields = modelClass.getIdentifierFields( getGeneratedVersion() );
-
-            if ( identifierFields.size() == 1 )
+            // This must be last so that we guarantee the ID has been filled already
+            if ( isAssociationPartToClass( modelClass ) )
             {
-                ModelField field = (ModelField) identifierFields.get( 0 );
-
-                String v = uncapClassName + ".get" + capitalise( field.getName() ) + "()";
-                v = getValue( field.getType(), v, (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID ) );
-                sc.add( instanceFieldName + ".put( " + v + ", " + uncapClassName + " );" );
+                List identifierFields = modelClass.getIdentifierFields( getGeneratedVersion() );
+    
+                if ( identifierFields.size() == 1 )
+                {
+                    ModelField field = (ModelField) identifierFields.get( 0 );
+    
+                    String v = uncapClassName + ".get" + capitalise( field.getName() ) + "()";
+                    v = getValue( field.getType(), v, (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID ) );
+                    sc.add( instanceFieldName + ".put( " + v + ", " + uncapClassName + " );" );
+                }
             }
         }
 
@@ -1391,7 +1405,7 @@ public class StaxReaderGenerator
             sc.add( objectName + "." + setterName + "( getByteValue( " + parserGetter + ", \"" + tagName
                 + "\", xmlStreamReader, strict ) );" );
         }
-        else if ( "String".equals( type ) || "Boolean".equals( type ) )
+        else if ( "String".equals( type ) || "Boolean".equals( type ) || "Content".equals( type ) )
         {
             // TODO: other Primitive types
             sc.add( objectName + "." + setterName + "( " + parserGetter + " );" );

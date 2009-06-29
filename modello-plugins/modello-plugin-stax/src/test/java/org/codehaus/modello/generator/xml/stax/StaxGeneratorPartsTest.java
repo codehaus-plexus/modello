@@ -49,7 +49,7 @@ public class StaxGeneratorPartsTest
 
         List classesList = model.getClasses( new Version( "4.0.0" ) );
 
-        assertEquals( 11, classesList.size() );
+        assertEquals( 12, classesList.size() );
 
         ModelClass clazz = (ModelClass) classesList.get( 0 );
 

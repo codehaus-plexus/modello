@@ -22,6 +22,8 @@ package org.codehaus.modello.plugins.xml;
  * SOFTWARE.
  */
 
+import java.util.List;
+
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.plugin.java.AbstractJavaModelloGenerator;
@@ -78,6 +80,17 @@ public abstract class AbstractXmlJavaGenerator
     protected String resolveTagName( String fieldTagName, XmlAssociationMetadata xmlAssociationMetadata )
     {
         return XmlModelHelpers.resolveTagName( fieldTagName, xmlAssociationMetadata );
+    }
+
+    /**
+     * Get the field which type is <code>Content</code> if any.
+     *
+     * @param modelFields the fields to check
+     * @return the field, or <code>null</code> if no field is <code>Content</code>
+     */
+    protected ModelField getContentField( List/*<ModelField>*/ modelFields )
+    {
+        return XmlModelHelpers.getContentField( modelFields );
     }
 
     protected String getValue( String type, String initialValue, XmlFieldMetadata xmlFieldMetadata )
