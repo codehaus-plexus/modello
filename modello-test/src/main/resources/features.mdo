@@ -640,8 +640,15 @@
             <type>SubClassLevel3</type>
           </association>
         </field>
+        <field>
+          <name>useInterface</name>
+          <version>1.0.0+</version>
+          <association java.useInterface="BaseClass">
+            <type>SubClassLevel1</type>
+          </association>
+        </field>
         <!--
-         - association features: java.bidi="false", java.useInterface="interfaceName", java.init="lazy|constructor|field"
+         - association features: java.bidi="false", java.init="lazy|constructor|field"
          - field features: java.getter="false", java.setter="false" -->
       </fields>
     </class>
