@@ -941,7 +941,7 @@ public class JavaModelloGenerator
             {
                 interfaceCast = "(" + field.getType().getName() + ") ";
 
-                createClassCastAssertion( sc, modelField, "set" );
+                createClassCastAssertion( sc, modelAssociation, "set" );
             }
 
             sc.add( "this." + field.getName() + " = " + interfaceCast + field.getName() + ";" );
@@ -972,31 +972,27 @@ public class JavaModelloGenerator
         return setter;
     }
 
-    private void createClassCastAssertion( JSourceCode sc, ModelField modelField, String crudModifier )
+    private void createClassCastAssertion( JSourceCode sc, ModelAssociation modelAssociation, String crudModifier )
         throws ModelloException
     {
-        String propertyName = capitalise( modelField.getName() );
+        String propertyName = capitalise( modelAssociation.getName() );
 
-        JField field = createField( modelField );
+        JField field = createField( modelAssociation );
         String fieldName = field.getName();
         JType type = field.getType();
 
-        if ( modelField instanceof ModelAssociation )
-        {
-            ModelAssociation modelAssociation = (ModelAssociation) modelField;
-            JavaAssociationMetadata javaAssociationMetadata = (JavaAssociationMetadata) modelAssociation
-                .getAssociationMetadata( JavaAssociationMetadata.ID );
+        JavaAssociationMetadata javaAssociationMetadata = (JavaAssociationMetadata) modelAssociation
+            .getAssociationMetadata( JavaAssociationMetadata.ID );
 
-            if ( StringUtils.isNotEmpty( javaAssociationMetadata.getInterfaceName() )
-                 && modelAssociation.isOneMultiplicity() )
-            {
-                type = new JClass( javaAssociationMetadata.getInterfaceName() );
-            }
-            else
-            {
-                fieldName = uncapitalise( modelAssociation.getTo() );
-                type = new JClass( modelAssociation.getTo() );
-            }
+        if ( StringUtils.isNotEmpty( javaAssociationMetadata.getInterfaceName() )
+             && modelAssociation.isOneMultiplicity() )
+        {
+            type = new JClass( javaAssociationMetadata.getInterfaceName() );
+        }
+        else
+        {
+            fieldName = uncapitalise( modelAssociation.getTo() );
+            type = new JClass( modelAssociation.getTo() );
         }
 
         String instanceName = type.getName();
@@ -1004,15 +1000,15 @@ public class JavaModelloGenerator
         // Add sane class cast exception message
         // When will sun ever fix this?
 
-        sc.add( "if ( !(" + fieldName + " instanceof " + instanceName + ") )" );
+        sc.add( "if ( !( " + fieldName + " instanceof " + instanceName + " ) )" );
 
         sc.add( "{" );
 
         sc.indent();
 
-        sc.add( "throw new ClassCastException( \"" + modelField.getModelClass().getName() + "." + crudModifier
-            + propertyName + "(" + fieldName + ") parameter must be instanceof \" + " + instanceName +
-            ".class.getName() );" );
+        sc.add( "throw new ClassCastException( \"" + modelAssociation.getModelClass().getName() + "." + crudModifier
+            + propertyName + "(" + fieldName + ") parameter must be instanceof \" + " + instanceName
+            + ".class.getName() );" );
 
         sc.unindent();
 
