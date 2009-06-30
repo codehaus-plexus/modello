@@ -1328,6 +1328,13 @@
       <name>Thingy</name>
       <superClass>SuperThing</superClass>
       <version>1.0.0+</version>
+      <fields>
+        <field>
+          <name>someContent</name>
+          <version>1.0.0+</version>
+          <type>Content</type>
+        </field>
+      </fields>
     </class>
   </classes>
 

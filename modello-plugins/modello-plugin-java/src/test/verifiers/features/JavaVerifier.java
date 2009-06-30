@@ -429,6 +429,16 @@ public class JavaVerifier
 
         assertEquals( orig.customProperties, copy.customProperties );
         assertNotSame( orig.customProperties, copy.customProperties );
+
+        Thingy orig2 = new Thingy();
+        orig2.setSomeContent( "content" );
+
+        Thingy copy2 = (Thingy) orig2.clone();
+
+        assertNotNull( copy2 );
+        assertNotSame( orig2, copy2 );
+
+        assertEquals( "content", copy2.getSomeContent() );
     }
 
 }

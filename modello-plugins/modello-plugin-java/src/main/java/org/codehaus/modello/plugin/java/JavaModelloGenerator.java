@@ -67,7 +67,7 @@ public class JavaModelloGenerator
     
     private Collection immutableTypes =
         new HashSet( Arrays.asList( new String[] { "boolean", "Boolean", "byte", "Byte", "char", "Character", "short",
-            "Short", "int", "Integer", "long", "Long", "float", "Float", "double", "Double", "String" } ) );
+            "Short", "int", "Integer", "long", "Long", "float", "Float", "double", "Double", "String", "Content" } ) );
 
     public void generate( Model model, Properties parameters )
         throws ModelloException
