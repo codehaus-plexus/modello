@@ -325,7 +325,7 @@
         <field>
           <name>content</name>
           <description><![CDATA[The field of the class with <code>Content</code> type.]]></description>
-          <version>1.5.0+</version><!-- MODELLO-185: not supported by dom4j, jdom and stax plugins -->
+          <version>1.0.0+</version>
           <type>Content</type>
         </field>
         <field xml.attribute="true">

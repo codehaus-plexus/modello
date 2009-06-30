@@ -25,7 +25,7 @@
         <el2>text</el2>
       </el1>
     </dom>
-    <!--content attr="attribute">content value</content--><!-- MODELLO-185 -->
+    <content attr="attribute">content value</content>
   </simpleTypes>
   <defaultValues></defaultValues>
 

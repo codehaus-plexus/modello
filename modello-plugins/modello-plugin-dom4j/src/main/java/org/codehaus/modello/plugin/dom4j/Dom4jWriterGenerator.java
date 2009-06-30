@@ -213,6 +213,10 @@ public class Dom4jWriterGenerator
             sc.add( "Element element = parentElement.addElement( tagName );" );
         }
 
+        ModelField contentField = null;
+
+        String contentValue = null;
+
         // XML attributes
         for ( Iterator i = modelClass.getAllFields( getGeneratedVersion(), true ).iterator(); i.hasNext(); )
         {
@@ -228,6 +232,13 @@ public class Dom4jWriterGenerator
 
             String value = uncapClassName + "." + getPrefix( javaFieldMetadata ) + capitalise( field.getName() ) + "()";
 
+            if ( "Content".equals( field.getType() ) )
+            {
+                contentField = field;
+                contentValue = value;
+                continue;
+            }
+
             if ( xmlFieldMetadata.isAttribute() )
             {
                 sc.add( getValueChecker( type, value, field ) );
@@ -239,11 +250,23 @@ public class Dom4jWriterGenerator
             }
         }
 
+        if ( contentField != null )
+        {
+            XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) contentField.getMetadata( XmlFieldMetadata.ID );
+            sc.add( "element.setText( " + getValue( contentField.getType(), contentValue, xmlFieldMetadata ) + " );" );
+        }
+
         // XML tags
         for ( Iterator fieldIterator = modelClass.getAllFields( getGeneratedVersion(), true ).iterator();
               fieldIterator.hasNext(); )
         {
             ModelField field = (ModelField) fieldIterator.next();
+
+            if ( "Content".equals( field.getType() ) )
+            {
+                // skip field with type Content
+                continue;
+            }
 
             XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
 

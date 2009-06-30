@@ -245,6 +245,8 @@ public class Dom4jReaderGenerator
 
         sc.add( className + " " + uncapClassName + " = new " + className + "();" );
 
+        ModelField contentField = null;
+
         // read all XML attributes first
         for ( Iterator i = modelClass.getAllFields( getGeneratedVersion(), true ).iterator(); i.hasNext(); )
         {
@@ -270,6 +272,11 @@ public class Dom4jReaderGenerator
                 sc.unindent();
                 sc.add( "}" );
             }
+            // TODO check if we have already one with this type and throws Exception
+            if ( "Content".equals( field.getType() ) )
+            {
+                contentField = field;
+            }
         }
 
         if ( rootElement )
@@ -291,69 +298,77 @@ public class Dom4jReaderGenerator
             sc.add( "}" );
         }
 
-        sc.add( "java.util.Set parsed = new java.util.HashSet();" );
-
-        sc.add( "for ( Iterator i = element.nodeIterator(); i.hasNext(); )" );
-        sc.add( "{" );
-        sc.indent();
-
-        sc.add( "Node node = (Node) i.next();" );
-
-        sc.add( "if ( node.getNodeType() != Node.ELEMENT_NODE )" );
-        sc.add( "{" );
-        sc.indent();
-
-        // TODO: attach to model in some way
-
-        sc.unindent();
-        sc.add( "}" );
-        sc.add( "else" );
-        sc.add( "{" );
-        sc.indent();
-
-        sc.add( "Element childElement = (Element) node;" );
-
-        boolean addElse = false;
-
-        for ( Iterator i = modelClass.getAllFields( getGeneratedVersion(), true ).iterator(); i.hasNext(); )
+        if ( contentField != null )
         {
-            ModelField field = (ModelField) i.next();
-
-            XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
-
-            if ( !xmlFieldMetadata.isAttribute() )
-            {
-                processField( field, xmlFieldMetadata, addElse, sc, uncapClassName, jClass );
-
-                addElse = true;
-            }
+            writePrimitiveField( contentField, contentField.getType(), uncapClassName,
+                                 "set" + capitalise( contentField.getName() ), sc, jClass, null, "element" );
         }
-
-        if ( addElse )
+        else
         {
-            sc.add( "else" );
-
+            sc.add( "java.util.Set parsed = new java.util.HashSet();" );
+    
+            sc.add( "for ( Iterator i = element.nodeIterator(); i.hasNext(); )" );
             sc.add( "{" );
             sc.indent();
-        }
-
-        sc.add( "if ( strict )" );
-
-        sc.add( "{" );
-        sc.addIndented( "throw new DocumentException( \"Unrecognised tag: '\" + childElement.getName() + \"'\" );" );
-        sc.add( "}" );
-
-        if ( addElse )
-        {
+    
+            sc.add( "Node node = (Node) i.next();" );
+    
+            sc.add( "if ( node.getNodeType() != Node.ELEMENT_NODE )" );
+            sc.add( "{" );
+            sc.indent();
+    
+            // TODO: attach to model in some way
+    
+            sc.unindent();
+            sc.add( "}" );
+            sc.add( "else" );
+            sc.add( "{" );
+            sc.indent();
+    
+            sc.add( "Element childElement = (Element) node;" );
+    
+            boolean addElse = false;
+    
+            for ( Iterator i = modelClass.getAllFields( getGeneratedVersion(), true ).iterator(); i.hasNext(); )
+            {
+                ModelField field = (ModelField) i.next();
+    
+                XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
+    
+                if ( !xmlFieldMetadata.isAttribute() )
+                {
+                    processField( field, xmlFieldMetadata, addElse, sc, uncapClassName, jClass );
+    
+                    addElse = true;
+                }
+            }
+    
+            if ( addElse )
+            {
+                sc.add( "else" );
+    
+                sc.add( "{" );
+                sc.indent();
+            }
+    
+            sc.add( "if ( strict )" );
+    
+            sc.add( "{" );
+            sc.addIndented( "throw new DocumentException( \"Unrecognised tag: '\" + childElement.getName() + \"'\" );" );
+            sc.add( "}" );
+    
+            if ( addElse )
+            {
+                sc.unindent();
+                sc.add( "}" );
+            }
+    
+            sc.unindent();
+            sc.add( "}" );
+    
             sc.unindent();
             sc.add( "}" );
         }
-
-        sc.unindent();
-        sc.add( "}" );
-
-        sc.unindent();
-        sc.add( "}" );
 
         sc.add( "return " + uncapClassName + ";" );
 
@@ -760,7 +775,7 @@ public class Dom4jReaderGenerator
             sc.add( objectName + "." + setterName + "( getByteValue( " + parserGetter + ", \"" + tagName
                 + "\", strict ) );" );
         }
-        else if ( "String".equals( type ) || "Boolean".equals( type ) )
+        else if ( "String".equals( type ) || "Boolean".equals( type ) || "Content".equals( type ) )
         {
             // TODO: other Primitive types
             sc.add( objectName + "." + setterName + "( " + parserGetter + " );" );
