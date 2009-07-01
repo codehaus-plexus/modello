@@ -642,8 +642,8 @@
         </field>
         <field>
           <name>useInterface</name>
-          <version>1.0.0+</version>
-          <association java.useInterface="BaseClass">
+          <version>1.5.0+</version>
+          <association java.useInterface="BaseClass"><!-- causes trouble with converter and dom4j plugins -->
             <type>SubClassLevel1</type>
           </association>
         </field>
