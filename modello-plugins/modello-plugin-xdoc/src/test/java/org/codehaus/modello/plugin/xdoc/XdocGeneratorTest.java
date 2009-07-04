@@ -134,6 +134,10 @@ public class XdocGeneratorTest
         modello.generate( model, "xdoc", parameters );
 
         checkInternalLinks( "features.xml" );
+
+        String content = FileUtils.fileRead( new File( getOutputDirectory(), "features.xml" ), "UTF-8" );
+
+        assertTrue( "Transient fields were erroneously documented", content.indexOf( "transientString" ) < 0 );
     }
 
     /**

@@ -55,6 +55,8 @@ public class StaxFeaturesVerifier
     {
         Features features = verifyReader();
 
+        features.getXmlFeatures().getXmlTransientFields().setTransientString( "NOT-TO-BE-WRITTEN" );
+
         verifyWriter( features );
 
         verifyBadVersion();

@@ -38,6 +38,7 @@ import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -619,7 +620,11 @@ public class JDOMWriterGenerator
         }
         sc.add( "Counter innerCount = new Counter( counter.getDepth() + 1 );" );
 
-        for ( Iterator i = clazz.getAllFields( getGeneratedVersion(), true ).iterator(); i.hasNext(); )
+        List modelFields = clazz.getAllFields( getGeneratedVersion(), true );
+
+        modelFields = getNonTransientFields( modelFields );
+
+        for ( Iterator i = modelFields.iterator(); i.hasNext(); )
         {
             ModelField field = (ModelField) i.next();
             XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );

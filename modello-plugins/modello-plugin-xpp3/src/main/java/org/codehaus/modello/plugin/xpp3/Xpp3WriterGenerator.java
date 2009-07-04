@@ -261,8 +261,7 @@ public class Xpp3WriterGenerator
         }
 
         // XML tags
-        for ( Iterator fieldIterator = modelFields.iterator();
-              fieldIterator.hasNext(); )
+        for ( Iterator fieldIterator = modelFields.iterator(); fieldIterator.hasNext(); )
         {
 
             ModelField field = (ModelField) fieldIterator.next();

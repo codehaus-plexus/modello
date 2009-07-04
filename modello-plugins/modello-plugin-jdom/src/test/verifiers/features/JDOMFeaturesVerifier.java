@@ -55,6 +55,8 @@ public class JDOMFeaturesVerifier
     {
         Features features = read();
 
+        features.getXmlFeatures().getXmlTransientFields().setTransientString( "NOT-TO-BE-WRITTEN" );
+
         verifyWriter( features );
     }
 

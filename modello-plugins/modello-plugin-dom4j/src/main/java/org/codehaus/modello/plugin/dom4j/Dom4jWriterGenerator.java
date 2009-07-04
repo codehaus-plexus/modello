@@ -43,6 +43,7 @@ import org.codehaus.modello.plugins.xml.metadata.XmlModelMetadata;
 
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -217,8 +218,12 @@ public class Dom4jWriterGenerator
 
         String contentValue = null;
 
+        List modelFields = modelClass.getAllFields( getGeneratedVersion(), true );
+
+        modelFields = getNonTransientFields( modelFields );
+
         // XML attributes
-        for ( Iterator i = modelClass.getAllFields( getGeneratedVersion(), true ).iterator(); i.hasNext(); )
+        for ( Iterator i = modelFields.iterator(); i.hasNext(); )
         {
             ModelField field = (ModelField) i.next();
 
@@ -257,8 +262,7 @@ public class Dom4jWriterGenerator
         }
 
         // XML tags
-        for ( Iterator fieldIterator = modelClass.getAllFields( getGeneratedVersion(), true ).iterator();
-              fieldIterator.hasNext(); )
+        for ( Iterator fieldIterator = modelFields.iterator(); fieldIterator.hasNext(); )
         {
             ModelField field = (ModelField) fieldIterator.next();
 

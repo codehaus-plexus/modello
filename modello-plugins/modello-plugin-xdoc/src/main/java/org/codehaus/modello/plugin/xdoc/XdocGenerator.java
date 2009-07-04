@@ -221,7 +221,7 @@ public class XdocGenerator
 
         writeMarkupElement( w, "p", getDescription( modelClass ) );
 
-        ModelField contentField = getContentField( getFieldsForClass( modelClass ) );
+        ModelField contentField = getContentField( getNonTransientFields( getFieldsForClass( modelClass ) ) );
 
         if ( contentField != null )
         {
@@ -237,8 +237,12 @@ public class XdocGenerator
 
         List attributeFields = new ArrayList( getAttributeFieldsForClass( modelClass ) );
 
+        attributeFields = getNonTransientFields( attributeFields );
+
         List elementFields = new ArrayList( getFieldsForClass( modelClass ) );
         elementFields.removeAll( attributeFields );
+
+        elementFields = getNonTransientFields( elementFields );
 
         writeFieldsTable( w, attributeFields, false ); // write attributes
         writeFieldsTable( w, elementFields, true ); // write elements
@@ -502,6 +506,8 @@ public class XdocGenerator
 
         List attributeFields = getAttributeFieldsForClass( modelClass );
 
+        attributeFields = getNonTransientFields( attributeFields );
+
         if ( attributeFields.size() > 0 )
         {
 
@@ -522,6 +528,8 @@ public class XdocGenerator
 
         List fields = getFieldsForClass( modelClass );
         fields.removeAll( attributeFields );
+
+        fields = getNonTransientFields( fields );
 
         if ( ( fields.size() == 0 ) || ( ( fields.size() == 1 ) && hasContentField( fields ) ) )
         {
