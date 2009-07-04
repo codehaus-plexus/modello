@@ -63,6 +63,8 @@ public class StaxFeaturesVerifier
 
         verifyWrongElement();
 
+        verifyTransientElement();
+
         verifyEncoding();
     }
 
@@ -145,6 +147,23 @@ public class StaxFeaturesVerifier
                 throw new VerifierException( "Unexpected failure when reading a document an unknown element under"
                                              + " strict option: \"" + xse.getMessage() + "\"", xse );
             }
+        }
+    }
+
+    public void verifyTransientElement()
+        throws Exception
+    {
+        ModelloFeaturesTestStaxReader reader = new ModelloFeaturesTestStaxReader();
+
+        try
+        {
+            reader.read( getXmlResourceReader( "/features-invalid-transient.xml" ) );
+
+            fail( "Transient fields should not be processed by parser." );
+        }
+        catch ( XMLStreamException e )
+        {
+            assertTrue( e.getMessage().indexOf( "transientString" ) >= 0 );
         }
     }
 

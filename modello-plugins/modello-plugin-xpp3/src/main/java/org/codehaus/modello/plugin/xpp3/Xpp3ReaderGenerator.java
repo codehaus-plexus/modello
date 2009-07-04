@@ -24,6 +24,7 @@ package org.codehaus.modello.plugin.xpp3;
 
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Properties;
 
 import org.codehaus.modello.ModelloException;
@@ -296,8 +297,12 @@ public class Xpp3ReaderGenerator
 
         ModelField contentField = null;
 
+        List modelFields = modelClass.getAllFields( getGeneratedVersion(), true );
+
+        modelFields = getNonTransientFields( modelFields );
+
         // read all XML attributes first
-        for ( Iterator i = modelClass.getAllFields( getGeneratedVersion(), true ).iterator(); i.hasNext(); )
+        for ( Iterator i = modelFields.iterator(); i.hasNext(); )
         {
             ModelField field = (ModelField) i.next();
 
@@ -378,7 +383,7 @@ public class Xpp3ReaderGenerator
 
             //Write other fields
 
-            for ( Iterator i = modelClass.getAllFields( getGeneratedVersion(), true ).iterator(); i.hasNext(); )
+            for ( Iterator i = modelFields.iterator(); i.hasNext(); )
             {
                 ModelField field = (ModelField) i.next();
 

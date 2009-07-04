@@ -4,7 +4,7 @@
    xsi:schemaLocation="http://modello.codehaus.org/FEATURES/1.0.0 http://modello.codehaus.org/features-1.0.0.xsd">
   <xmlFeatures>
     <xmlTransientFields>
-      <!-- transient fields should not be part of the schema -->
+      <!-- transient fields should not be part of the schema and should be rejected by parsers -->
       <transientString>FAILED</transientString>
     </xmlTransientFields>
   </xmlFeatures>

@@ -42,6 +42,7 @@ import org.codehaus.plexus.util.StringUtils;
 
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -247,8 +248,12 @@ public class Dom4jReaderGenerator
 
         ModelField contentField = null;
 
+        List modelFields = modelClass.getAllFields( getGeneratedVersion(), true );
+
+        modelFields = getNonTransientFields( modelFields );
+
         // read all XML attributes first
-        for ( Iterator i = modelClass.getAllFields( getGeneratedVersion(), true ).iterator(); i.hasNext(); )
+        for ( Iterator i = modelFields.iterator(); i.hasNext(); )
         {
             ModelField field = (ModelField) i.next();
 
@@ -329,7 +334,7 @@ public class Dom4jReaderGenerator
 
             boolean addElse = false;
 
-            for ( Iterator i = modelClass.getAllFields( getGeneratedVersion(), true ).iterator(); i.hasNext(); )
+            for ( Iterator i = modelFields.iterator(); i.hasNext(); )
             {
                 ModelField field = (ModelField) i.next();
 

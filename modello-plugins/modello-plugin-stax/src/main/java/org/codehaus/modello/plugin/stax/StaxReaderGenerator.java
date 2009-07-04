@@ -691,7 +691,7 @@ public class StaxReaderGenerator
 
                 XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
 
-                if ( !xmlFieldMetadata.isAttribute() )
+                if ( !xmlFieldMetadata.isAttribute() && !xmlFieldMetadata.isTransient() )
                 {
                     processField( field, xmlFieldMetadata, addElse, sc, uncapClassName, rootElement, jClass );
 
@@ -962,7 +962,7 @@ public class StaxReaderGenerator
 
             XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
 
-            if ( xmlFieldMetadata.isAttribute() )
+            if ( xmlFieldMetadata.isAttribute() && !xmlFieldMetadata.isTransient() )
             {
                 writePrimitiveField( field, field.getType(), uncapClassName, "set" + capitalise( field.getName() ),
                                      sc );

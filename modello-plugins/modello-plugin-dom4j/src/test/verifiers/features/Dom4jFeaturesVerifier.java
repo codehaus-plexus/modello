@@ -61,6 +61,8 @@ public class Dom4jFeaturesVerifier
 
         verifyWrongElement();
 
+        verifyTransientElement();
+
         verifyEncoding();
     }
 
@@ -146,6 +148,23 @@ public class Dom4jFeaturesVerifier
                 throw new VerifierException( "Unexpected failure when reading a document an unknown element under"
                                              + " strict option: \"" + de.getMessage() + "\"", de );
             }
+        }
+    }
+
+    public void verifyTransientElement()
+        throws Exception
+    {
+        ModelloFeaturesTestDom4jReader reader = new ModelloFeaturesTestDom4jReader();
+
+        try
+        {
+            reader.read( getClass().getResource( "/features-invalid-transient.xml" ) );
+
+            fail( "Transient fields should not be processed by parser." );
+        }
+        catch ( DocumentException e )
+        {
+            assertTrue( e.getMessage().indexOf( "transientString" ) >= 0 );
         }
     }
 

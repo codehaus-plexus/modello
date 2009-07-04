@@ -61,6 +61,8 @@ public class Xpp3FeaturesVerifier
 
         verifyWrongElement();
 
+        verifyTransientElement();
+
         verifyEncoding();
     }
 
@@ -144,6 +146,23 @@ public class Xpp3FeaturesVerifier
                 throw new VerifierException( "Unexpected failure when reading a document an unknown element under"
                                              + " strict option: \"" + xppe.getMessage() + "\"", xppe );
             }
+        }
+    }
+
+    public void verifyTransientElement()
+        throws Exception
+    {
+        ModelloFeaturesTestXpp3Reader reader = new ModelloFeaturesTestXpp3Reader();
+
+        try
+        {
+            reader.read( getClass().getResourceAsStream( "/features-invalid-transient.xml" ) );
+
+            fail( "Transient fields should not be processed by parser." );
+        }
+        catch ( XmlPullParserException e )
+        {
+            assertTrue( e.getMessage().indexOf( "transientString" ) >= 0 );
         }
     }
 
