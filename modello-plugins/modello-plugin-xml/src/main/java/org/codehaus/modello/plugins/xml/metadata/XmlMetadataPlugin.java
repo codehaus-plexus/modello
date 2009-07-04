@@ -47,6 +47,8 @@ public class XmlMetadataPlugin
 {
     public static final String XML_ATTRIBUTE = "xml.attribute";
 
+    static final String XML_CONTENT = "xml._content_"; // not published in Modello's model yet
+
     public static final String XML_FORMAT = "xml.format";
 
     public static final String XML_ITEMS_STYLE = "xml.itemsStyle";
@@ -94,6 +96,8 @@ public class XmlMetadataPlugin
         XmlFieldMetadata metadata = new XmlFieldMetadata();
 
         metadata.setAttribute( getBoolean( data, XML_ATTRIBUTE, false ) );
+
+        metadata.setContent( getBoolean( data, XML_CONTENT, false ) );
 
         metadata.setTrim( getBoolean( data, XML_TRIM, true ) );
 

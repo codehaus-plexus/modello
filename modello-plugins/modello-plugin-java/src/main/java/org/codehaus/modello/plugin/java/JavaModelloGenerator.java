@@ -64,10 +64,10 @@ import java.util.Properties;
 public class JavaModelloGenerator
     extends AbstractJavaModelloGenerator
 {
-    
+
     private Collection immutableTypes =
         new HashSet( Arrays.asList( new String[] { "boolean", "Boolean", "byte", "Byte", "char", "Character", "short",
-            "Short", "int", "Integer", "long", "Long", "float", "Float", "double", "Double", "String", "Content" } ) );
+            "Short", "int", "Integer", "long", "Long", "float", "Float", "double", "Double", "String" } ) );
 
     public void generate( Model model, Properties parameters )
         throws ModelloException
@@ -778,10 +778,6 @@ public class JavaModelloGenerator
             // TODO: maybe DOM is not how to specify it in the model, but just Object and markup Xpp3Dom for the Xpp3Reader?
             //   not sure how we'll treat it for the other sources, eg sql.
             type = new JClass( "Object" );
-        }
-        else if ( baseType.equals( "Content" ) )
-        {
-            type = new JClass( "String" );
         }
         else
         {

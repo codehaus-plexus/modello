@@ -278,7 +278,7 @@ public class XdocGenerator
             return;
         }
 
-        // skip if only one element field with type == "Content"
+        // skip if only one element field with xml.content == true
         if ( elementFields && ( fields.size() == 1 ) && hasContentField( fields ) )
         {
             return;
@@ -307,12 +307,12 @@ public class XdocGenerator
         {
             ModelField f = (ModelField) j.next();
 
-            if ( "Content".equals( f.getType() ) )
+            XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) f.getMetadata( XmlFieldMetadata.ID );
+
+            if ( xmlFieldMetadata.isContent() )
             {
                 continue;
             }
-
-            XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) f.getMetadata( XmlFieldMetadata.ID );
 
             w.startElement( "tr" );
 

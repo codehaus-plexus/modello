@@ -159,6 +159,14 @@ public class DefaultModelloCore
                         "xml.itemsStyle", associationAttributes, "attribute 'xml.listStyle' for field element is "
                         + "deprecated: use 'xml.itemsStyle' in association instead" );
                 }
+
+                if ( "Content".equals( field.getType() ) )
+                {
+                    // TODO : add a deprecation Warning
+                    field.setType( "String" );
+                    Map fieldAttributes = modelReader.getAttributesForField( field );
+                    fieldAttributes.put( "xml._content_", "true" );
+                }
             }
         }
     }

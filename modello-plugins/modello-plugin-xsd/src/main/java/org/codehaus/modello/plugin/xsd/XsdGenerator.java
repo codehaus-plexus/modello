@@ -279,12 +279,9 @@ public class XsdGenerator
                 if ( !hasContentField )
                 {
                     w.startElement( "xs:element" );
-                }
 
-                // Usually, would only do this if the field is not "required", but due to inheritance, it may be
-                // present, even if not here, so we need to let it slide
-                if ( !hasContentField )
-                {
+                    // Usually, would only do this if the field is not "required", but due to inheritance, it may be
+                    // present, even if not here, so we need to let it slide
                     w.addAttribute( "minOccurs", "0" );
                 }
 
@@ -295,9 +292,14 @@ public class XsdGenerator
                     xsdType = getXsdType( "long" );
                 }
 
-                if ( ( xsdType != null ) || "char".equals( field.getType() ) || "Char".equals( field.getType() ) )
+                if ( xmlFieldMetadata.isContent() )
+                {
+                    // nothing to add
+                }
+                else if ( ( xsdType != null ) || "char".equals( field.getType() ) || "Char".equals( field.getType() ) )
                 {
                     w.addAttribute( "name", fieldTagName );
+
                     if ( xsdType != null )
                     {
                         // schema built-in datatype
@@ -378,10 +380,8 @@ public class XsdGenerator
                     }
                     else // not inner association
                     {
-                        if (! "Content".equals( field.getType() ) )
-                        {
-                            w.addAttribute( "name", fieldTagName );
-                        }
+                        w.addAttribute( "name", fieldTagName );
+
                         writeFieldDocumentation( w, field );
 
                         if ( List.class.getName().equals( field.getType() )
@@ -399,10 +399,6 @@ public class XsdGenerator
                                         || "DOM".equals( field.getType() ) )
                         {
                             writePropertiesElement( w );
-                        }
-                        else if ( "Content".equals( field.getType() ) )
-                        {
-                            // skip this
                         }
                         else
                         {

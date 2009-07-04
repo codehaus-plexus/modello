@@ -48,7 +48,7 @@ public class ModelField
 
     private static final String[] PRIMITIVE_TYPES =
         new String[] { "boolean", "byte", "char", "short", "int", "long", "float", "double", "String", "Boolean",
-            "Date", "DOM", "Content" };
+            "Date", "DOM" };
 
     public ModelField()
     {

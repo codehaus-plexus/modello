@@ -23,6 +23,7 @@ package org.codehaus.modello.plugin.xsd;
  */
 
 import org.codehaus.modello.AbstractModelloGeneratorTest;
+import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
@@ -81,7 +82,14 @@ public class FeaturesXsdGeneratorTest
         saxParser.setProperty( "http://java.sun.com/xml/jaxp/properties/schemaSource",
                                new File( getOutputDirectory(), "features-1.0.0.xsd" ) );
 
+        try
+        {
         saxParser.parse( getClass().getResourceAsStream( "/features.xml" ), new Handler() );
+        }
+        catch ( SAXParseException e )
+        {
+            throw new ModelloException( "line " + e.getLineNumber() + " column " + e.getColumnNumber(), e );
+        }
 
         try
         {

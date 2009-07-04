@@ -235,7 +235,7 @@ public class Xpp3WriterGenerator
 
             String value = uncapClassName + "." + getPrefix( javaFieldMetadata ) + capitalise( field.getName() ) + "()";
 
-            if ( "Content".equals( field.getType() ) )
+            if ( xmlFieldMetadata.isContent() )
             {
                 contentField = field;
                 contentValue = value;
@@ -267,13 +267,13 @@ public class Xpp3WriterGenerator
 
             ModelField field = (ModelField) fieldIterator.next();
 
-            if ( "Content".equals( field.getType() ) )
+            XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
+
+            if ( xmlFieldMetadata.isContent() )
             {
                 // skip field with type Content
                 continue;
             }
-
-            XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
 
             JavaFieldMetadata javaFieldMetadata = (JavaFieldMetadata) field.getMetadata( JavaFieldMetadata.ID );
 

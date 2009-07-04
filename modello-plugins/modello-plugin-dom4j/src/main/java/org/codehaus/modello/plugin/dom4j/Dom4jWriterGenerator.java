@@ -232,7 +232,7 @@ public class Dom4jWriterGenerator
 
             String value = uncapClassName + "." + getPrefix( javaFieldMetadata ) + capitalise( field.getName() ) + "()";
 
-            if ( "Content".equals( field.getType() ) )
+            if ( xmlFieldMetadata.isContent() )
             {
                 contentField = field;
                 contentValue = value;
@@ -262,13 +262,13 @@ public class Dom4jWriterGenerator
         {
             ModelField field = (ModelField) fieldIterator.next();
 
-            if ( "Content".equals( field.getType() ) )
+            XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
+
+            if ( xmlFieldMetadata.isContent() )
             {
                 // skip field with type Content
                 continue;
             }
-
-            XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
 
             if ( !xmlFieldMetadata.isAttribute() )
             {

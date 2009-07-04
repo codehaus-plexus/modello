@@ -35,6 +35,8 @@ public class XmlFieldMetadata
 
     private boolean attribute;
 
+    private boolean content;
+
     private String tagName;
 
     private boolean trim = true;
@@ -77,6 +79,16 @@ public class XmlFieldMetadata
     public void setAttribute( boolean attribute )
     {
         this.attribute = attribute;
+    }
+
+    public boolean isContent()
+    {
+        return content;
+    }
+
+    public void setContent( boolean content )
+    {
+        this.content = content;
     }
 
     /**

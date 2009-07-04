@@ -318,7 +318,7 @@ public class Xpp3ReaderGenerator
                 sc.add( "}" );
             }
             // TODO check if we have already one with this type and throws Exception
-            if ( "Content".equals( field.getType() ) )
+            if ( xmlFieldMetadata.isContent() )
             {
                 contentField = field;
             }
@@ -724,7 +724,7 @@ public class Xpp3ReaderGenerator
         XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
 
         String tagName = resolveTagName( field, xmlFieldMetadata);
-        
+
         String parserGetter;
         if ( xmlFieldMetadata.isAttribute() )
         {
@@ -787,7 +787,7 @@ public class Xpp3ReaderGenerator
             sc.add( objectName + "." + setterName + "( getByteValue( " + parserGetter + ", \"" + tagName +
                 "\", parser, strict ) );" );
         }
-        else if ( "String".equals( type ) || "Boolean".equals( type ) || "Content".equals( type ) )
+        else if ( "String".equals( type ) || "Boolean".equals( type ) )
         {
             // TODO: other Primitive types
             sc.add( objectName + "." + setterName + "( " + parserGetter + " );" );
