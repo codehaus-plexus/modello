@@ -63,6 +63,8 @@ public class XmlMetadataPlugin
 
     public static final String XML_TRIM = "xml.trim";
 
+    public static final String XML_TRANSIENT = "xml.transient";
+
     // ----------------------------------------------------------------------
     // Map to Metadata
     // ----------------------------------------------------------------------
@@ -98,6 +100,8 @@ public class XmlMetadataPlugin
         metadata.setTagName( getString( data, XML_TAG_NAME ) );
 
         metadata.setFormat( getString( data, XML_FORMAT ) );
+
+        metadata.setTransient( getBoolean( data, XML_TRANSIENT, false ) );
 
         return metadata;
     }

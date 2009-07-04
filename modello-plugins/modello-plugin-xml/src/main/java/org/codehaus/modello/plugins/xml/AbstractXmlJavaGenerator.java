@@ -93,6 +93,18 @@ public abstract class AbstractXmlJavaGenerator
         return XmlModelHelpers.getContentField( modelFields );
     }
 
+    /**
+     * Gets all fields that are not marked as transient.
+     * 
+     * @param modelFields The collection of model fields from which to extract the non-transient fields, must not be
+     *            <code>null</code>.
+     * @return The list of non-transient fields, can be empty but never <code>null</code>.
+     */
+    protected List getNonTransientFields( List/*<ModelField>*/ modelFields )
+    {
+        return XmlModelHelpers.getNonTransientFields( modelFields );
+    }
+
     protected String getValue( String type, String initialValue, XmlFieldMetadata xmlFieldMetadata )
     {
         String textValue = initialValue;

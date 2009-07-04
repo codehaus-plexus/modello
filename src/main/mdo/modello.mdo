@@ -482,6 +482,17 @@
           </description>
           <comment>see org.codehaus.modello.plugins.xml.metadata.XmlMetadataPlugin</comment>
         </field>
+        <field xml.attribute="true" xml.tagName="xml.transient">
+          <name>transient</name>
+          <version>1.1.0+</version>
+          <type>boolean</type>
+          <defaultValue>false</defaultValue>
+          <description><![CDATA[
+            Whether this field should be excluded from parsers and writers. Fields marked as transient carry runtime
+            state that is not meant to be persisted into XML. <em>Since Modello 1.1</em>]]>
+          </description>
+          <comment>see org.codehaus.modello.plugins.xml.metadata.XmlMetadataPlugin</comment>
+        </field>
         <field>
           <name>alias</name>
           <version>1.0.0+</version>

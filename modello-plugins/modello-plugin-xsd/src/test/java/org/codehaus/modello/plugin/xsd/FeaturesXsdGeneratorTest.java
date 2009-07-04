@@ -91,6 +91,20 @@ public class FeaturesXsdGeneratorTest
         catch ( SAXParseException e )
         {
             // ok, expected exception
+            e.printStackTrace();
+            assertTrue( String.valueOf( e.getMessage() ).indexOf( "invalidElement" ) >= 0 );
+        }
+
+        try
+        {
+            saxParser.parse( getClass().getResourceAsStream( "/features-invalid-transient.xml" ), new Handler() );
+            fail( "XSD did not prohibit appearance of transient fields" );
+        }
+        catch ( SAXParseException e )
+        {
+            // ok, expected exception
+            e.printStackTrace();
+            assertTrue( String.valueOf( e.getMessage() ).indexOf( "transientString" ) >= 0 );
         }
     }
 

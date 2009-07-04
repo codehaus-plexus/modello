@@ -222,6 +222,8 @@ public class XsdGenerator
 
         List fields = getFieldsForClass( modelClass );
 
+        fields = getNonTransientFields( fields );
+
         boolean hasContentField = hasContentField( fields );
 
         List attributeFields = getAttributeFieldsForClass( modelClass );

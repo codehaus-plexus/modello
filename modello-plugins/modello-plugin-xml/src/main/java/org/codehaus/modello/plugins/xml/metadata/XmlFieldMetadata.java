@@ -41,6 +41,8 @@ public class XmlFieldMetadata
 
     private String format;
 
+    private boolean transientField;
+
     public String getFormat()
     {
         return format;
@@ -92,4 +94,15 @@ public class XmlFieldMetadata
     {
         this.tagName = tagName;
     }
+
+    public boolean isTransient()
+    {
+        return transientField;
+    }
+
+    public void setTransient( boolean transientField )
+    {
+        this.transientField = transientField;
+    }
+
 }

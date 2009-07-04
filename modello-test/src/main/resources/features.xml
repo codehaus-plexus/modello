@@ -152,6 +152,10 @@
       <value>theValue</value>
     </property-->
 
+    <xmlTransientFields>
+      <persistentField>PASSED</persistentField>
+    </xmlTransientFields>
+
     <xsdFeatures attribute="one more value from XML file" />
   </xmlFeatures>
 

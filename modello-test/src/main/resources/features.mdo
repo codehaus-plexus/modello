@@ -928,6 +928,13 @@
           </association>
         </field-->
         <field>
+          <name>xmlTransientFields</name>
+          <version>1.0.0+</version>
+          <association>
+            <type>XmlTransientFields</type>
+          </association>
+        </field>
+        <field>
           <name>xsdFeatures</name>
           <version>1.0.0+</version>
           <association>
@@ -1075,6 +1082,34 @@
           <description><![CDATA[<code>&lt;field xml.attribute="true" xml.tagName="tagName"&gt;</code>.]]></description>
           <type>String</type>
           <defaultValue>default</defaultValue>
+        </field>
+      </fields>
+    </class>
+
+    <class>
+      <name>XmlTransientFields</name>
+      <version>1.0.0+</version>
+      <description><![CDATA[<code>&lt;field xml.transient="true"&gt;</code>: fields marked as transient are ignored by
+      parsers and writers, they hold runtime state that should not be persisted.]]>
+      </description>
+      <fields>
+        <field xml.transient="false">
+          <name>persistentField</name>
+          <version>1.0.0+</version>
+          <type>String</type>
+        </field>
+        <field xml.transient="true">
+          <name>transientString</name>
+          <version>1.0.0+</version>
+          <type>String</type>
+        </field>
+        <field xml.transient="true">
+          <name>transientStringList</name>
+          <version>1.0.0+</version>
+          <association>
+            <type>String</type>
+            <multiplicity>*</multiplicity>
+          </association>
         </field>
       </fields>
     </class>
