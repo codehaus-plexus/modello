@@ -483,7 +483,7 @@
           <comment>see org.codehaus.modello.plugins.xml.metadata.XmlMetadataPlugin</comment>
         </field>
         <field xml.attribute="true" xml.tagName="xml.transient">
-          <name>transient</name>
+          <name>transientField</name>
           <version>1.1.0+</version>
           <type>boolean</type>
           <defaultValue>false</defaultValue>
