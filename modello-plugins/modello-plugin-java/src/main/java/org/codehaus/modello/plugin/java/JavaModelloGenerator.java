@@ -983,16 +983,11 @@ public class JavaModelloGenerator
 
         JField field = createField( modelAssociation );
         String fieldName = field.getName();
-        JType type = field.getType();
+        JType type  = new JClass( modelAssociation.getTo() );
 
-        if ( modelAssociation.isOneMultiplicity() )
-        {
-            type = new JClass( javaAssociationMetadata.getInterfaceName() );
-        }
-        else
+        if ( modelAssociation.isManyMultiplicity() )
         {
             fieldName = uncapitalise( modelAssociation.getTo() );
-            type = new JClass( modelAssociation.getTo() );
         }
 
         String instanceName = type.getName();
@@ -1007,7 +1002,7 @@ public class JavaModelloGenerator
         sc.indent();
 
         sc.add( "throw new ClassCastException( \"" + modelAssociation.getModelClass().getName() + "." + crudModifier
-            + propertyName + "(" + fieldName + ") parameter must be instanceof \" + " + instanceName
+            + propertyName + "( " + fieldName + " ) parameter must be instanceof \" + " + instanceName
             + ".class.getName() );" );
 
         sc.unindent();
