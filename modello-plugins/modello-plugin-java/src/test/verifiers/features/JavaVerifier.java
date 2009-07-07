@@ -72,6 +72,7 @@ public class JavaVerifier
         {
             verifySimpleTypes();
             verifyXmlAttributes();
+            verifyJavaFeatures();
         }
         catch ( NoSuchFieldException nsfe )
         {
@@ -83,7 +84,6 @@ public class JavaVerifier
         }
 
         verifyDefaultValues();
-        verifyJavaFeatures();
         verifyInterfaces();
 
         verifyMisc();
@@ -105,16 +105,36 @@ public class JavaVerifier
     private void checkField( Class clazz, String attributeName, Class type, String getterName, String setterName )
         throws NoSuchFieldException, NoSuchMethodException
     {
+        checkField( clazz, attributeName, type, getterName, setterName,
+                    type /* by default, accessors use same type as corresponding field */ );
+    }
+
+    /**
+     * Check that a field has been propertly declared with public accessors.
+     *
+     * @param clazz the class that should contain the field
+     * @param attributeName the field's attribute name
+     * @param type the field expected type
+     * @param getterName the expected getter method name
+     * @param setterName the expected setter method name
+     * @param getterAndSetterType the type expected in getter and setter methods
+     * @throws NoSuchFieldException
+     * @throws NoSuchMethodException
+     */
+    private void checkField( Class clazz, String attributeName, Class type, String getterName, String setterName,
+                             Class getterAndSetterType)
+        throws NoSuchFieldException, NoSuchMethodException
+    {
         Field field = clazz.getDeclaredField( attributeName );
         Assert.assertEquals( attributeName + " attribute type", type, field.getType() );
         Assert.assertTrue( attributeName + " attribute should be private", Modifier.isPrivate( field.getModifiers() ) );
 
         Method getter = clazz.getMethod( getterName, (Class[]) null );
         Assert.assertNotNull( getterName + "() method", getter );
-        Assert.assertEquals( getterName + "() method return type", type, getter.getReturnType() );
+        Assert.assertEquals( getterName + "() method return type", getterAndSetterType, getter.getReturnType() );
         Assert.assertTrue( getterName + "() method should be public", Modifier.isPublic( getter.getModifiers() ) );
 
-        Method setter = clazz.getMethod( setterName, new Class[] { type } );
+        Method setter = clazz.getMethod( setterName, new Class[] { getterAndSetterType } );
         Assert.assertNotNull( setterName + "( " + type.getName() + " ) method", setter );
         Assert.assertTrue( setterName + "( " + type.getName() + " ) method should be public",
                            Modifier.isPublic( setter.getModifiers() ) );
@@ -198,6 +218,7 @@ public class JavaVerifier
     }
 
     public void verifyJavaFeatures()
+        throws NoSuchFieldException, NoSuchMethodException
     {
         // java.abstract feature
         if ( !Modifier.isAbstract( JavaAbstractFeature.class.getModifiers() ) )
@@ -290,6 +311,10 @@ public class JavaVerifier
         Assert.assertEquals( bidiInSet, association.getSetOfBidis().iterator().next() );
         association.removeSetOfBidi( bidiInSet );
         Assert.assertEquals( 0, association.getSetOfBidis().size() );
+
+        // java.useInterface
+        checkField( JavaFeatures.class, "useInterface", SubClassLevel1.class, "getUseInterface", "setUseInterface",
+                    BaseClass.class);
     }
 
     /**
