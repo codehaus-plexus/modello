@@ -971,17 +971,21 @@ public class JavaModelloGenerator
     private void createClassCastAssertion( JSourceCode sc, ModelAssociation modelAssociation, String crudModifier )
         throws ModelloException
     {
+        JavaAssociationMetadata javaAssociationMetadata =
+            (JavaAssociationMetadata) modelAssociation.getAssociationMetadata( JavaAssociationMetadata.ID );
+
+        if ( StringUtils.isEmpty( javaAssociationMetadata.getInterfaceName() ) )
+        {
+            return; // java.useInterface feature not used, no class cast assertion needed
+        }
+
         String propertyName = capitalise( modelAssociation.getName() );
 
         JField field = createField( modelAssociation );
         String fieldName = field.getName();
         JType type = field.getType();
 
-        JavaAssociationMetadata javaAssociationMetadata = (JavaAssociationMetadata) modelAssociation
-            .getAssociationMetadata( JavaAssociationMetadata.ID );
-
-        if ( StringUtils.isNotEmpty( javaAssociationMetadata.getInterfaceName() )
-             && modelAssociation.isOneMultiplicity() )
+        if ( modelAssociation.isOneMultiplicity() )
         {
             type = new JClass( javaAssociationMetadata.getInterfaceName() );
         }

@@ -647,6 +647,15 @@
             <type>SubClassLevel1</type>
           </association>
         </field>
+        <field>
+          <name>listUseInterfaces</name>
+          <version>1.5.0+</version>
+          <type>List</type>
+          <association java.useInterface="BaseClass">
+            <type>SubClassLevel1</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
         <!--
          - association features: java.bidi="false", java.init="lazy|constructor|field"
          - field features: java.getter="false", java.setter="false" -->
@@ -1353,7 +1362,7 @@
         {
             copy.customProperties = (java.util.Properties) this.customProperties.clone();
         }
-    }          
+    }
             ]]>
           </code>
         </codeSegment>
