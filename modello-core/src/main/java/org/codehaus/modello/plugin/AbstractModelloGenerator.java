@@ -208,6 +208,10 @@ public abstract class AbstractModelloGenerator
         {
             return name.substring( 0, name.length() - 2 );
         }
+        else if ( name.endsWith( "xes" ) )
+        {
+            return name.substring( 0, name.length() - 2 );
+        }
         else if ( name.endsWith( "s" ) && ( name.length() != 1 ) )
         {
             return name.substring( 0, name.length() - 1 );
