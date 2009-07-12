@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <project>
   <bannerLeft>
@@ -17,7 +17,7 @@
     </menu>
 
     <menu name="Examples">
-      <item name="Multi model configuration" href="examples/multi-model.html" />
+      <item name="Multi Model Configuration" href="examples/multi-model.html" />
     </menu>
 
   </body>

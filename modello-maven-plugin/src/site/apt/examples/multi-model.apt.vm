@@ -6,7 +6,7 @@
  10 August 2006
  ------
 
-Processing multiple Modello models.
+Processing Multiple Modello Models
 
 * Configuring your pom.xml
 
@@ -22,6 +22,7 @@ Processing multiple Modello models.
       [...]
         <groupId>org.codehaus.modello</groupId>
         <artifactId>modello-maven-plugin</artifactId>
+        <version>${project.version}</version>
         <executions>
           <execution>
             <id>mdo</id>

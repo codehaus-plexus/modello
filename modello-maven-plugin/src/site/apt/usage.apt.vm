@@ -25,6 +25,7 @@ Usage
       <plugin>
         <groupId>org.codehaus.modello</groupId>
         <artifactId>modello-maven-plugin</artifactId>
+        <version>${project.version}</version>
         <configuration>
           <models>
             <model>src/main/mdo/myModel.mdo</model>
@@ -47,7 +48,7 @@ Usage
               <goal>xsd</goal>
             </goals>
             <configuration>
-              <outputDirectory>${basedir}/target/generated-site/resources/xsd</outputDirectory>
+              <outputDirectory>target/generated-site/resources/xsd</outputDirectory>
             </configuration>
           </execution>
           <execution>
@@ -66,7 +67,7 @@ Usage
 </project>
 +---+
 
-  This configuration will take into account the model described in the file <<src/main/mdo/myModel.mdo>> in version 1.0.0. It will execute the following goals in the <<generate-source>> phase:
+  This configuration will take into account the model described in the file <<<src/main/mdo/myModel.mdo>>> in version 1.0.0. It will execute the following goals in the <<<generate-source>>> phase:
 
   * {{{java-mojo.html}java}} which will generate Java beans from the model,
 
@@ -74,12 +75,12 @@ Usage
 
   []
 
-  The generated Java sources will be located in the <<<target/generated-sources/modello>>> folder (or in the folder set by the <<outputDirectory>> parameter), which will be added as a source folder to the project build cycle.
+  The generated Java sources will be located in the <<<target/generated-sources/modello>>> folder (or in the folder set by the <<<outputDirectory>>> parameter), which will be added as a source folder to the project build cycle.
 
-  During the <<pre-site>> phase, it will execute the following goals:
+  During the <<<pre-site>>> phase, it will execute the following goals:
 
-  * {{{xdoc-mojo.html}xdoc}} which will generate a documentation of the model in the <<</target/generated-site/xdoc>>> folder, which will in turn be processed to output in the standard site, during the <<site>> phase,
+  * {{{xdoc-mojo.html}xdoc}} which will generate a documentation of the model in the <<<target/generated-site/xdoc>>> folder, which will in turn be processed to output in the standard site, during the <<<site>>> phase,
 
-  * {{{xsd-mojo.html}xsd}} which will generate an XML Schema for our model in the <<</target/generated-site/resources/xsd>>> folder (set by the <<outputDirectory>> parameter), which will in turn be copied in the standard site, during the <<site>> phase.
+  * {{{xsd-mojo.html}xsd}} which will generate an XML Schema for our model in the <<<target/generated-site/resources/xsd>>> folder (set by the <<<outputDirectory>>> parameter), which will in turn be copied in the standard site, during the <<<site>>> phase.
 
   []

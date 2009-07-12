@@ -28,8 +28,8 @@
 
     <menu name="Documentation" inherit="bottom">
       <item name="Wiki" href="http://modello.codehaus.org/" />
-      <item name="Modello model" href="modello.html" />
-      <item name="Maven plugin" href="modello-maven-plugin/" />
+      <item name="Modello Model" href="modello.html" />
+      <item name="Maven Plugin" href="modello-maven-plugin/" />
       <item name="Release Notes" href="release-notes.html"/>
     </menu>
 
