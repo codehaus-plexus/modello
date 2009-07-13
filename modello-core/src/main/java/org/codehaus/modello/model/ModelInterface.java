@@ -22,40 +22,24 @@ package org.codehaus.modello.model;
  * SOFTWARE.
  */
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
 /**
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
  *
  * @version $Id$
  */
 public class ModelInterface
-    extends BaseElement
+    extends ModelType
 {
     private String superInterface;
 
-    private String packageName;
-
-    private List codeSegments;
-
-    private Model model;
-
-    private transient Map codeSegmentMap = new HashMap();
-
     public ModelInterface()
     {
-        super( true );
+        super();
     }
 
     public ModelInterface( Model model, String name )
     {
-        super( true, name );
-
-        this.model = model;
+        super( model, name );
     }
 
     public void setSuperInterface( String superInterface )
@@ -66,94 +50,6 @@ public class ModelInterface
     public String getSuperInterface()
     {
         return superInterface;
-    }
-
-    public String getPackageName( boolean withVersion, Version version )
-    {
-        String p;
-
-        if ( packageName != null )
-        {
-            p = packageName;
-        }
-        else
-        {
-            try
-            {
-                p = model.getDefault( ModelDefault.PACKAGE ).getValue();
-            }
-            catch ( Exception e )
-            {
-                p = ModelDefault.PACKAGE_VALUE;
-            }
-        }
-
-        if ( withVersion )
-        {
-            p += "." + version.toString( "v", "_" );
-        }
-
-        return p;
-    }
-
-    public void setPackageName( String packageName )
-    {
-        this.packageName = packageName;
-    }
-
-    public List getAllCodeSegments()
-    {
-        if ( codeSegments == null )
-        {
-            codeSegments = new ArrayList();
-        }
-
-        return codeSegments;
-    }
-
-    public List getCodeSegments( Version version )
-    {
-        return getCodeSegments( new VersionRange( version ) );
-    }
-
-    public List getCodeSegments( VersionRange versionRange )
-    {
-        ArrayList codeSegments = (ArrayList) getAllCodeSegments();
-
-        ArrayList codeSegmentsList = new ArrayList();
-
-        if ( codeSegments != null )
-        {
-            for ( Iterator i = codeSegments.iterator(); i.hasNext(); )
-            {
-                CodeSegment codeSegment = (CodeSegment) i.next();
-
-                if ( versionRange.getFromVersion().inside( codeSegment.getVersionRange() )
-                    && versionRange.getToVersion().inside( codeSegment.getVersionRange() ) )
-                {
-                    codeSegmentsList.add( codeSegment );
-                }
-            }
-        }
-
-        return codeSegmentsList;
-    }
-
-    public void addCodeSegment( CodeSegment codeSegment )
-    {
-        getAllCodeSegments().add( codeSegment );
-
-        codeSegmentMap.put( codeSegment.getName(), codeSegment );
-    }
-
-    public void initialize( Model model )
-    {
-        this.model = model;
-
-        if ( packageName == null )
-        {
-            packageName = model.getDefaultPackageName( false, null );
-        }
     }
 
     public void validateElement()

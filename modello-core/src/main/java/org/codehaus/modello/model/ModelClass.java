@@ -39,7 +39,7 @@ import java.util.Map;
  * @version $Id$
  */
 public class ModelClass
-    extends BaseElement
+    extends ModelType
 {
     private String superClass;
 
@@ -47,28 +47,18 @@ public class ModelClass
 
     private List interfaces;
 
-    private String packageName;
-
     private List fields;
-
-    private List codeSegments;
-
-    private transient Model model;
 
     private transient Map fieldMap = new HashMap();
 
-    private transient Map codeSegmentMap = new HashMap();
-
     public ModelClass()
     {
-        super( true );
+        super();
     }
 
     public ModelClass( Model model, String name )
     {
-        super( true, name );
-
-        this.model = model;
+        super( model, name );
     }
 
     public String getSuperClass()
@@ -79,11 +69,6 @@ public class ModelClass
     public void setSuperClass( String superClass )
     {
         this.superClass = superClass;
-    }
-
-    public Model getModel()
-    {
-        return model;
     }
 
     // ----------------------------------------------------------------------
@@ -113,48 +98,6 @@ public class ModelClass
         }
 
         getInterfaces().add( modelInterface );
-    }
-
-    // ----------------------------------------------------------------------
-    // Package name
-    // ----------------------------------------------------------------------
-
-    public String getPackageName()
-    {
-        return getPackageName( false, null );
-    }
-
-    public String getPackageName( boolean withVersion, Version version )
-    {
-        String p;
-
-        if ( packageName != null )
-        {
-            p = packageName;
-        }
-        else
-        {
-            try
-            {
-                p = model.getDefault( ModelDefault.PACKAGE ).getValue();
-            }
-            catch ( Exception e )
-            {
-                p = ModelDefault.PACKAGE_VALUE;
-            }
-        }
-
-        if ( withVersion )
-        {
-            p += "." + version.toString( "v", "_" );
-        }
-
-        return p;
-    }
-
-    public void setPackageName( String packageName )
-    {
-        this.packageName = packageName;
     }
 
     // ----------------------------------------------------------------------
@@ -251,7 +194,7 @@ public class ModelClass
 
         while ( c.hasSuperClass() && c.isInternalSuperClass() )
         {
-            ModelClass parent = model.getClass( c.getSuperClass(), getVersionRange() );
+            ModelClass parent = getModel().getClass( c.getSuperClass(), getVersionRange() );
 
             fields.addAll( parent.getAllFields() );
 
@@ -347,55 +290,6 @@ public class ModelClass
     }
 
     // ----------------------------------------------------------------------
-    // Code Segments
-    // ----------------------------------------------------------------------
-
-    public List getAllCodeSegments()
-    {
-        if ( codeSegments == null )
-        {
-            codeSegments = new ArrayList();
-        }
-
-        return codeSegments;
-    }
-
-    public List getCodeSegments( Version version )
-    {
-        return getCodeSegments( new VersionRange( version ) );
-    }
-
-    public List getCodeSegments( VersionRange versionRange )
-    {
-        ArrayList codeSegments = (ArrayList) getAllCodeSegments();
-
-        ArrayList codeSegmentsList = new ArrayList();
-
-        if ( codeSegments != null )
-        {
-            for ( Iterator i = codeSegments.iterator(); i.hasNext(); )
-            {
-                CodeSegment codeSegment = (CodeSegment) i.next();
-
-                if (  versionRange.getFromVersion().inside( codeSegment.getVersionRange() )
-                    && versionRange.getToVersion().inside( codeSegment.getVersionRange() ) )
-                {
-                    codeSegmentsList.add( codeSegment );
-                }
-            }
-        }
-
-        return codeSegmentsList;
-    }
-
-    public void addCodeSegment( CodeSegment codeSegment )
-    {
-        getAllCodeSegments().add( codeSegment );
-
-        codeSegmentMap.put( codeSegment.getName(), codeSegment );
-    }
-
-    // ----------------------------------------------------------------------
     //
     // ----------------------------------------------------------------------
 
@@ -416,12 +310,7 @@ public class ModelClass
 
     public void initialize( Model model )
     {
-        this.model = model;
-
-        if ( packageName == null )
-        {
-            packageName = model.getDefaultPackageName( false, null );
-        }
+        super.initialize( model );
 
         for ( Iterator it = getAllFields().iterator(); it.hasNext(); )
         {
@@ -450,7 +339,7 @@ public class ModelClass
         {
             try
             {
-                model.getClass( superClass, getVersionRange() );
+                getModel().getClass( superClass, getVersionRange() );
                 isInternalSuperClass = true;
             }
             catch ( ModelloRuntimeException e )
@@ -459,7 +348,7 @@ public class ModelClass
             }
         }
 
-        if ( model.getDefault( ModelDefault.CHECK_DEPRECATION ).getBoolean() )
+        if ( getModel().getDefault( ModelDefault.CHECK_DEPRECATION ).getBoolean() )
         {
             if ( ! Version.INFINITE.equals( getVersionRange().getToVersion() )
                  && getDeprecatedVersion() == null )
@@ -487,7 +376,7 @@ public class ModelClass
 
         ModelClass other = (ModelClass) o;
 
-        return packageName.equals( other.packageName );
+        return getPackageName().equals( other.getPackageName() );
 
     }
 
@@ -495,9 +384,9 @@ public class ModelClass
     {
         int hashCode = getName().hashCode();
 
-        if ( !StringUtils.isEmpty( packageName ) )
+        if ( !StringUtils.isEmpty( getPackageName() ) )
         {
-            hashCode += 37 * packageName.hashCode();
+            hashCode += 37 * getPackageName().hashCode();
         }
 
         return hashCode;
