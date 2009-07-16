@@ -321,6 +321,19 @@ public class Model
 
     public ModelInterface getInterface( String type, VersionRange versionRange )
     {
+        ModelInterface value = getModelInterface( type, versionRange );
+
+        if ( value != null )
+        {
+            return value;
+        }
+
+        throw new ModelloRuntimeException(
+            "There is no interface '" + type + "' in the version range '" + versionRange.toString() + "'." );
+    }
+
+    private ModelInterface getModelInterface( String type, VersionRange versionRange )
+    {
         ArrayList interfaceList = (ArrayList) interfaceMap.get( type );
 
         if ( interfaceList != null )
@@ -337,8 +350,7 @@ public class Model
             }
         }
 
-        throw new ModelloRuntimeException(
-            "There is no interface '" + type + "' in the version range '" + versionRange.toString() + "'." );
+        return null;
     }
 
     public void addInterface( ModelInterface modelInterface )
@@ -367,6 +379,31 @@ public class Model
         getAllInterfaces().add( modelInterface );
 
         ( (ArrayList) interfaceMap.get( modelInterface.getName() ) ).add( modelInterface );
+    }
+
+    public ModelType getType( String type, Version version )
+    {
+        return getType( type, new VersionRange( version ) );
+    }
+
+    public ModelType getType( String type, VersionRange versionRange )
+    {
+        ModelType value = getModelClass( type, versionRange );
+
+        if ( value != null )
+        {
+            return value;
+        }
+
+        value = getModelInterface( type, versionRange );
+
+        if ( value != null )
+        {
+            return value;
+        }
+
+        throw new ModelloRuntimeException(
+            "There is no class or interface '" + type + "' in the version range '" + versionRange.toString() + "'." );
     }
 
     public void initialize()

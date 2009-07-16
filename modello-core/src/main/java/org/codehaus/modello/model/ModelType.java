@@ -101,6 +101,10 @@ public abstract class ModelType
         return model;
     }
 
+    // ----------------------------------------------------------------------
+    // CodeSegment
+    // ----------------------------------------------------------------------
+
     public List getAllCodeSegments()
     {
         if ( codeSegments == null )
@@ -145,6 +149,123 @@ public abstract class ModelType
 
         codeSegmentMap.put( codeSegment.getName(), codeSegment );
     }
+
+    // ----------------------------------------------------------------------
+    // Field
+    // ----------------------------------------------------------------------
+
+    /**
+     * Returns the list of all fields in this class.
+     *
+     * It does not include the fields of super classes.
+     *
+     * @return Returns the list of all fields in this class. It does not include the
+     *         fields of super classes.
+     */
+    public abstract List getAllFields();
+
+    /**
+     * Returns all the fields in this class and all super classes if withInheritedField equals to true.
+     *
+     * @return Returns all the fields in this class and all super classes.
+     */
+    public abstract List getAllFields( boolean withInheritedField );
+
+    public abstract ModelField getField( String type, VersionRange versionRange );
+
+    /**
+     * Returns the list of all fields in this class for a specific version.
+     *
+     * It does not include the fields of super classes.
+     *
+     * @return Returns the list of all fields in this class. It does not include the
+     *         fields of super classes.
+     */
+    public List getFields( Version version )
+    {
+        ArrayList fieldList = new ArrayList();
+
+        for ( Iterator i = getAllFields().iterator(); i.hasNext(); )
+        {
+            ModelField currentField = (ModelField) i.next();
+
+            if ( version.inside( currentField.getVersionRange() ) )
+            {
+                fieldList.add( currentField );
+            }
+        }
+
+        return fieldList;
+    }
+
+    public List getAllFields( Version version, boolean withInheritedField )
+    {
+        ArrayList allFieldsList = new ArrayList();
+
+        ArrayList fieldList = new ArrayList();
+
+        for ( Iterator i = getAllFields( withInheritedField ).iterator(); i.hasNext(); )
+        {
+            ModelField currentField = (ModelField) i.next();
+
+            if ( version.inside( currentField.getVersionRange() ) )
+            {
+                allFieldsList.add( currentField );
+            }
+        }
+
+        for ( Iterator i = allFieldsList.iterator(); i.hasNext(); )
+        {
+            ModelField currentField = (ModelField) i.next();
+
+            if ( version.inside( currentField.getVersionRange() ) )
+            {
+                fieldList.add( currentField );
+            }
+        }
+
+        return fieldList;
+    }
+
+    public boolean hasField( String type, Version version )
+    {
+        try
+        {
+            getField( type, new VersionRange( version ) );
+
+            return true;
+        }
+        catch ( Exception e )
+        {
+            return false;
+        }
+    }
+
+    public ModelField getField( String type, Version version )
+    {
+        return getField( type, new VersionRange( version ) );
+    }
+
+    public List getIdentifierFields( Version version )
+    {
+        List identifierFields = new ArrayList();
+
+        for ( Iterator it = getFields( version ).iterator(); it.hasNext(); )
+        {
+            ModelField field = (ModelField) it.next();
+
+            if ( field.isIdentifier() )
+            {
+                identifierFields.add( field );
+            }
+        }
+
+        return identifierFields;
+    }
+
+    // ----------------------------------------------------------------------
+    //
+    // ----------------------------------------------------------------------
 
     public void initialize( Model model )
     {

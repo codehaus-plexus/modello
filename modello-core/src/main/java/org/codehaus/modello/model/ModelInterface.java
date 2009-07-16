@@ -1,5 +1,10 @@
 package org.codehaus.modello.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.codehaus.modello.ModelloRuntimeException;
+
 /*
  * Copyright (c) 2004, Codehaus.org
  *
@@ -50,6 +55,27 @@ public class ModelInterface
     public String getSuperInterface()
     {
         return superInterface;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public List getAllFields()
+    {
+        return new ArrayList();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public List getAllFields( boolean withInheritedField )
+    {
+        return new ArrayList();
+    }
+
+    public ModelField getField( String type, VersionRange versionRange )
+    {
+        throw new ModelloRuntimeException( "There are no field '" + type + "' in an interface." );
     }
 
     public void validateElement()
