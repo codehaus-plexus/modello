@@ -507,6 +507,14 @@
             <multiplicity>*</multiplicity>
           </association>
         </field>
+        <!--field> MODELLO-120
+          <name>listInterfaces</name>
+          <version>1.0.0+</version>
+          <association>
+            <type>SimpleInterface</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field-->
       </fields>
     </class>
 
