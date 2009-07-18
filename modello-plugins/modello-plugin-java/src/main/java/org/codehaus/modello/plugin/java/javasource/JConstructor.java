@@ -75,107 +75,59 @@ package org.codehaus.modello.plugin.java.javasource;
 public class JConstructor
 {
 
-
     /**
-
      * The set of modifiers for this JMethod
-
      **/
-
     private JModifiers modifiers = null;
 
-
     /**
-
      * List of parameters for this Constructor
-
      **/
-
     private JNamedMap params = null;
 
-
     /**
-
      * The Class in this JMember has been declared
-
      **/
-
     private JClass declaringClass = null;
-
 
     private JSourceCode sourceCode = null;
 
-
     /**
-
      * Creates a new method with the given name and returnType.
-
      * For "void" return types, simply pass in null as the returnType
-
      **/
-
     public JConstructor( JClass declaringClass )
     {
-
-
         this.declaringClass = declaringClass;
-
         this.modifiers = new JModifiers();
-
         this.params = new JNamedMap();
-
         this.sourceCode = new JSourceCode();
-
     }
 
-
     /**
-
      * Adds the given parameter to this Methods list of parameters
-
      * @param parameter the parameter to add to the this Methods
-
      * list of parameters.
-
      * @exception java.lang.IllegalArgumentException when a parameter already
-
      * exists for this Method with the same name as the new parameter
-
      **/
-
     public void addParameter( JParameter parameter )
-
         throws IllegalArgumentException
-
     {
-
-
         if ( parameter == null ) return;
-
         //-- check current params
-
         if ( params.get( parameter.getName() ) != null )
         {
-
             StringBuffer err = new StringBuffer();
-
             err.append( "A parameter already exists for the constructor, " );
-
             err.append( this.declaringClass.getName() );
-
             err.append( ", with the name: " );
-
             err.append( parameter.getName() );
-
             throw new IllegalArgumentException( err.toString() );
-
         }
 
-
         params.put( parameter.getName(), parameter );
-
     } //-- addParameter
-
 
     /**
      * Returns the class in which this JMember has been declared
@@ -204,8 +156,6 @@ public class JConstructor
      **/
     public JParameter[] getParameters()
     {
-
-
         JParameter[] jpArray = new JParameter[params.size()];
         for ( int i = 0; i < jpArray.length; i++ )
         {
@@ -254,7 +204,6 @@ public class JConstructor
         this.modifiers.setFinal( false );
     } //-- setModifiers
 
-
     public void setSourceCode( String sourceCode )
     {
         this.sourceCode = new JSourceCode( sourceCode );
@@ -264,7 +213,6 @@ public class JConstructor
     {
         this.sourceCode = sourceCode;
     } //-- setSourceCode
-
 
     public String toString()
     {

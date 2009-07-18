@@ -642,6 +642,3 @@ public class JSourceWriter extends Writer
     } //-- createTab
 
 } //-- JSourceWriter
-
-
-
