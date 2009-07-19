@@ -472,7 +472,7 @@ public class JClass extends JStructure
     } //-- getMethods
 
     /**
-     * Returns the first occurance of the method with the
+     * Returns the first occurrence of the method with the
      * given name, starting from the specified index.
      *
      * @param name the name of the method to look for
@@ -703,7 +703,7 @@ public class JClass extends JStructure
             jsw.writeln();
             jsw.writeln( "static" );
             jsw.writeln( "{" );
-            jsw.writeln( _staticInitializer.toString() );
+            _staticInitializer.print( jsw );
             jsw.writeln( "};" );
             jsw.writeln();
         }

@@ -41,6 +41,10 @@ public class JavaSourceTest
         field.getModifiers().makePrivate();
         testClass.addMember( field );
 
+        JType type = new JCollectionType( "java.util.List", new JType( "String" ), true );
+        field = new JField( type, "generics" );
+        testClass.addMember( field );
+
         //-- create constructor
         JConstructor cons = testClass.createConstructor();
         cons.getSourceCode().add( "this.x = 6;" );
@@ -104,6 +108,9 @@ public class JavaSourceTest
         testClass.addMethod( jMethod );
 
         unit.addClass( testClass );
+
+        JClass fooClass = new JClass( "Foo" );
+        unit.addClass( fooClass );
 
         unit.print( getOutputDirectory().toString(), null );
 
