@@ -55,6 +55,8 @@ public class JavaSourceTest
         field.getModifiers().makePrivate();
         innerClass.addMember( field );
 
+        testClass.createInnerClass( "Bar" );
+
         //-- create constructor
         cons = innerClass.createConstructor();
         cons.getSourceCode().add( "_name = \"foo\";" );

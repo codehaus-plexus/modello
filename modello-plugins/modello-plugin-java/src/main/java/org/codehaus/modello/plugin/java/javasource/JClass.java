@@ -757,8 +757,6 @@ public class JClass extends JStructure
             jsw.writeln();
         }
 
-        jsw.unindent();
-
         for ( Iterator iterator = sourceCodeEntries.iterator(); iterator.hasNext(); )
         {
             jsw.write( (String) iterator.next() );

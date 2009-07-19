@@ -189,7 +189,8 @@ public class JConstructor
             if ( i > 0 ) jsw.write( ", " );
             jsw.write( params.get( i ) );
         }
-        jsw.writeln( ") {" );
+        jsw.writeln( ')' );
+        jsw.writeln( '{' );
         //jsw.indent();
         sourceCode.print( jsw );
         //jsw.unindent();
