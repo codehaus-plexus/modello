@@ -850,7 +850,7 @@ public class JClass extends JStructure
     /**
      * Test drive method...to be removed or commented out
      **/
-    public static void main( String[] args )
+    /*public static void main( String[] args )
     {
         JClass testClass = new JClass( "org.acme.Test" );
 
@@ -896,7 +896,7 @@ public class JClass extends JStructure
 
         testClass.print();
     } //-- main
-    /* */
+    */
 
     final class JInnerClass extends JClass
     {
