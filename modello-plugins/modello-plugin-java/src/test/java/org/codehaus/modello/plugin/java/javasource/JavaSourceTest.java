@@ -23,6 +23,9 @@ public class JavaSourceTest
     {
         JClass testClass = new JClass( "org.acme.JClassTest" );
 
+        testClass.addSourceCode( "// source code" );
+        testClass.addSourceCode( "// source code 2" );
+
         testClass.addImport( "java.util.Vector" );
         testClass.addMember( new JField( JType.INT, "x" ) );
         JClass jcString = new JClass( "String" );
