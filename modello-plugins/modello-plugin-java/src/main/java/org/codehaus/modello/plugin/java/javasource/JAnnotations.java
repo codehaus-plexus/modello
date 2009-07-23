@@ -25,14 +25,13 @@ public class JAnnotations
     public String toString()
     {
         StringBuffer sb = new StringBuffer();
-        String lineSeparator = System.getProperty( "line.separator" );
         Iterator iterator = annotations.iterator();
         while ( iterator.hasNext() )
         {
             sb.append( iterator.next().toString() );
             if ( iterator.hasNext() )
             {
-                sb.append( lineSeparator );
+                sb.append( ' ' );
             }
         }
         return sb.toString();

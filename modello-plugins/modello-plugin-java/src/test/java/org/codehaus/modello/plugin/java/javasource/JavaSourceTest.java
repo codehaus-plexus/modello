@@ -63,6 +63,20 @@ public class JavaSourceTest
         jMethod.setSourceCode( "return this.x;" );
         testClass.addMethod( jMethod );
 
+        jMethod = new JMethod( "setX", null, null );
+        JParameter param = new JParameter( JType.INT, "x" );
+        jMethod.addParameter( param );
+        jMethod.setSourceCode( "this.x = x;" );
+        testClass.addMethod( jMethod );
+
+        jMethod = new JMethod( "checkParameterAnotation", JType.INT, null );
+        param = new JParameter( JType.LONG, "param" );
+        param.appendAnnotation( "@Test" );
+        param.appendAnnotation( "@Test2" );
+        jMethod.addParameter( param );
+        jMethod.setSourceCode( "return param;" );
+        testClass.addMethod( jMethod );
+
         //-- create inner-class
         JClass innerClass = testClass.createInnerClass( "Foo" );
         innerClass.appendAnnotation( "@Deprecated" );

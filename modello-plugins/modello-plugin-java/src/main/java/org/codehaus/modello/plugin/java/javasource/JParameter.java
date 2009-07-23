@@ -45,6 +45,8 @@
 
 package org.codehaus.modello.plugin.java.javasource;
 
+import java.util.Iterator;
+
 /*
  * Copyright (c) 2004, Codehaus.org
  *
@@ -84,6 +86,8 @@ public class JParameter
      * The name of this JParameter
      **/
     private String name = null;
+
+    private JAnnotations annotations = null;
 
     /**
      * Creates a new JParameter with the given type, and name
@@ -148,10 +152,44 @@ public class JParameter
      **/
     public String toString()
     {
-        StringBuffer sb = new StringBuffer( this.type.toString() );
+        StringBuffer sb = new StringBuffer();
+        if ( annotations != null )
+        {
+            sb.append( annotations.toString() );
+            sb.append( ' ' );
+        }
+        sb.append( this.type.toString() );
         sb.append( ' ' );
         sb.append( this.name );
         return sb.toString();
     } //-- toString
+
+    /**
+     * @return the annotations
+     */
+    public JAnnotations getAnnotations()
+    {
+        return annotations;
+    }
+
+    /**
+     * @param annotation the annotation to append
+     */
+    public void appendAnnotation( String annotation )
+    {
+        if ( annotations == null )
+        {
+            annotations = new JAnnotations();
+        }
+        annotations.appendAnnotation( annotation );
+    }
+
+    /**
+     * @param annotations the annotations to set
+     */
+    public void setAnnotations( JAnnotations annotations )
+    {
+        this.annotations = annotations;
+    }
 
 } //-- JParamater
