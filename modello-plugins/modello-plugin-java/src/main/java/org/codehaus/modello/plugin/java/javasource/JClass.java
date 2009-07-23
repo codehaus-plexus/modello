@@ -593,6 +593,9 @@ public class JClass extends JStructure
 
         getJDocComment().print( jsw );
 
+        JAnnotations annotations = getAnnotations();
+        if ( annotations != null ) annotations.print( jsw );
+
         //-- print class information
         //-- we need to add some JavaDoc API adding comments
 
@@ -667,6 +670,9 @@ public class JClass extends JStructure
             //-- print Java comment
             JDocComment comment = jField.getComment();
             if ( comment != null ) comment.print( jsw );
+
+            JAnnotations fieldAnnotations = jField.getAnnotations();
+            if ( fieldAnnotations != null ) fieldAnnotations.print( jsw );
 
             // -- print member
             jsw.write( jField.getModifiers().toString() );

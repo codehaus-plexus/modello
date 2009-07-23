@@ -91,6 +91,8 @@ public class JField implements JMember
 
     private String initString = null;
 
+    private JAnnotations annotations = null;
+
     /**
      * The Class in this JField has been declared
      **/
@@ -105,7 +107,7 @@ public class JField implements JMember
         this.modifiers.makePrivate();
         comment = new JDocComment();
         comment.appendComment( "Field " + name + "." );
-
+        annotations = new JAnnotations();
     } //-- JField
 
 
@@ -242,6 +244,34 @@ public class JField implements JMember
         sb.append( name );
         return sb.toString();
     } //-- toString
+
+    /**
+     * @return the annotations
+     */
+    public JAnnotations getAnnotations()
+    {
+        return annotations;
+    }
+
+    /**
+     * @param annotation the annotation to append
+     */
+    public void appendAnnotation( String annotation )
+    {
+        if ( annotations == null )
+        {
+            annotations = new JAnnotations();
+        }
+        annotations.appendAnnotation( annotation );
+    }
+
+    /**
+     * @param annotations the annotations to set
+     */
+    public void setAnnotations( JAnnotations annotations )
+    {
+        this.annotations = annotations;
+    }
 
 } //-- JField
 

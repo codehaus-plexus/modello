@@ -105,6 +105,10 @@ public class JMethod implements JMember
      **/
     private JMethodSignature _signature = null;
 
+    /**
+     * The annotation(s) for this method.
+     */
+    private JAnnotations annotations = null;
 
     /**
      * Creates a new JMethod with the given name and "void" return type.
@@ -360,6 +364,13 @@ public class JMethod implements JMember
         jdc.print( jsw );
 
         //--------------------/
+        // - Annotations     -/
+        //--------------------/
+
+        JAnnotations annotations = getAnnotations();
+        if ( annotations != null ) annotations.print( jsw );
+
+        //--------------------/
         //- Method Signature -/
         //--------------------/
 
@@ -423,5 +434,33 @@ public class JMethod implements JMember
     {
         return _signature.getParameterClassNames();
     } //-- getParameterClassNames
+
+    /**
+     * @return the annotations
+     */
+    public JAnnotations getAnnotations()
+    {
+        return annotations;
+    }
+
+    /**
+     * @param annotation the annotation to append
+     */
+    public void appendAnnotation( String annotation )
+    {
+        if ( annotations == null )
+        {
+            annotations = new JAnnotations();
+        }
+        annotations.appendAnnotation( annotation );
+    }
+
+    /**
+     * @param annotations the annotations to set
+     */
+    public void setAnnotations( JAnnotations annotations )
+    {
+        this.annotations = annotations;
+    }
 
 } //-- JMember

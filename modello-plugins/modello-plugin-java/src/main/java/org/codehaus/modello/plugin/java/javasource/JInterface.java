@@ -383,6 +383,9 @@ public final class JInterface extends JStructure
 
         getJDocComment().print( jsw );
 
+        JAnnotations annotations = getAnnotations();
+        if ( annotations != null ) annotations.print( jsw );
+
         //-- print class information
         //-- we need to add some JavaDoc API adding comments
 

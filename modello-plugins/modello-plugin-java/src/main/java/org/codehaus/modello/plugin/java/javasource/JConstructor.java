@@ -92,6 +92,8 @@ public class JConstructor
 
     private JSourceCode sourceCode = null;
 
+    private JAnnotations annotations = null;
+
     /**
      * Creates a new method with the given name and returnType.
      * For "void" return types, simply pass in null as the returnType
@@ -172,6 +174,8 @@ public class JConstructor
 
     public void print( JSourceWriter jsw )
     {
+        JAnnotations annotations = getAnnotations();
+        if ( annotations != null ) annotations.print( jsw );
 
         if ( modifiers.isPrivate() )
             jsw.write( "private" );
@@ -231,5 +235,33 @@ public class JConstructor
         sb.append( ')' );
         return sb.toString();
     } //-- toString
+
+    /**
+     * @return the annotations
+     */
+    public JAnnotations getAnnotations()
+    {
+        return annotations;
+    }
+
+    /**
+     * @param annotation the annotation to append
+     */
+    public void appendAnnotation( String annotation )
+    {
+        if ( annotations == null )
+        {
+            annotations = new JAnnotations();
+        }
+        annotations.appendAnnotation( annotation );
+    }
+
+    /**
+     * @param annotations the annotations to set
+     */
+    public void setAnnotations( JAnnotations annotations )
+    {
+        this.annotations = annotations;
+    }
 
 } //-- JConstructor

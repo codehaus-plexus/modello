@@ -134,6 +134,8 @@ abstract class JStructure extends JType
      */
     private String packageName = null;
 
+    private JAnnotations annotations = null;
+
     /**
      * Creates a new JStructure with the given name.
      *
@@ -551,7 +553,8 @@ abstract class JStructure extends JType
     } //-- removeImport
 
 
-    public boolean isAbstract() {
+    public boolean isAbstract()
+    {
         return modifiers.isAbstract();
     }
 
@@ -884,5 +887,33 @@ abstract class JStructure extends JType
         }
         return null;
     } //-- getPackageFromClassName
+
+    /**
+     * @return the annotations
+     */
+    public JAnnotations getAnnotations()
+    {
+        return annotations;
+    }
+
+    /**
+     * @param annotation the annotation to append
+     */
+    public void appendAnnotation( String annotation )
+    {
+        if ( annotations == null )
+        {
+            annotations = new JAnnotations();
+        }
+        annotations.appendAnnotation( annotation );
+    }
+
+    /**
+     * @param annotations the annotations to set
+     */
+    public void setAnnotations( JAnnotations annotations )
+    {
+        this.annotations = annotations;
+    }
 
 } //-- JStructure

@@ -96,5 +96,7 @@ interface JMember
      **/
     public String getName();
 
+    public JAnnotations getAnnotations();
+
 } //-- JMember
 

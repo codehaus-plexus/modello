@@ -27,11 +27,14 @@ public class JavaSourceTest
         testClass.addSourceCode( "// source code 2" );
 
         testClass.addImport( "java.util.Vector" );
+        testClass.appendAnnotation( "@SuppressWarnings( \"all\" )" );
+        testClass.appendAnnotation( "@Deprecated" );
         testClass.addMember( new JField( JType.INT, "x" ) );
         JClass jcString = new JClass( "String" );
 
         JField field = null;
         field = new JField( JType.INT, "_z" );
+        field.appendAnnotation( "@Deprecated" );
         field.getModifiers().setStatic( true );
         testClass.addField( field );
 
@@ -41,20 +44,28 @@ public class JavaSourceTest
         field.getModifiers().makePrivate();
         testClass.addMember( field );
 
-        JType type = new JCollectionType( "java.util.List", new JType( "String" ), true );
+        // generics test
+        JType type = new JCollectionType( "java.util.List", jcString, true );
         field = new JField( type, "generics" );
+        testClass.addMember( field );
+
+        type = new JCollectionType( "java.util.List", jcString, false );
+        field = new JField( type, "noGenerics" );
         testClass.addMember( field );
 
         //-- create constructor
         JConstructor cons = testClass.createConstructor();
+        cons.appendAnnotation( "@Deprecated" );
         cons.getSourceCode().add( "this.x = 6;" );
 
         JMethod jMethod = new JMethod( "getX", JType.INT, null );
+        jMethod.appendAnnotation( "@Deprecated" );
         jMethod.setSourceCode( "return this.x;" );
         testClass.addMethod( jMethod );
 
         //-- create inner-class
         JClass innerClass = testClass.createInnerClass( "Foo" );
+        innerClass.appendAnnotation( "@Deprecated" );
         innerClass.addImport( "java.util.Hashtable" );
         innerClass.addMember( new JField( JType.INT, "_type" ) );
 
