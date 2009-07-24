@@ -257,27 +257,11 @@ public class JavaModelloGenerator
 
             if ( ( metadata != null ) && metadata.isRootElement() )
             {
-                JField modelEncoding = new JField( new JType( "String" ), "modelEncoding" );
-                modelEncoding.setInitString( "\"UTF-8\"" );
-                jClass.addField( modelEncoding );
-
-                // setModelEncoding(String) method
-                JMethod setModelEncoding = new JMethod( "setModelEncoding" );
-                setModelEncoding.addParameter( new JParameter( new JClass( "String" ), "modelEncoding" ) );
-
-                setModelEncoding.getSourceCode().add( "this.modelEncoding = modelEncoding;" );
-
-                setModelEncoding.getJDocComment().setComment( "Set an encoding used for reading/writing the model." );
-
-                jClass.addMethod( setModelEncoding );
-
-                // getModelEncoding() method
-                JMethod getModelEncoding = new JMethod( "getModelEncoding", new JType( "String" ),
-                                                        "the current encoding used when reading/writing this model" );
-
-                getModelEncoding.getSourceCode().add( "return modelEncoding;" );
-
-                jClass.addMethod( getModelEncoding );
+                ModelField modelEncoding = new ModelField( modelClass, "modelEncoding" );
+                modelEncoding.setType( "String" );
+                modelEncoding.setDefaultValue( "UTF-8" );
+                modelEncoding.addMetadata( new JavaFieldMetadata() );
+                createField( jClass, modelEncoding );
             }
 
             jClass.print( sourceWriter );
