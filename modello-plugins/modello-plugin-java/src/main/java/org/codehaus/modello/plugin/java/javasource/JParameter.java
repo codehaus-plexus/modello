@@ -45,8 +45,6 @@
 
 package org.codehaus.modello.plugin.java.javasource;
 
-import java.util.Iterator;
-
 /*
  * Copyright (c) 2004, Codehaus.org
  *
