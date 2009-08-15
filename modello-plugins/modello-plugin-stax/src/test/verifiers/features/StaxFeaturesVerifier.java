@@ -116,11 +116,7 @@ public class StaxFeaturesVerifier
         catch ( XMLStreamException xse )
         {
             // expected failure
-            if ( xse.getMessage().indexOf( "Document model version of '2.0.0' doesn't match reader version of '1.0.0'" ) < 0 )
-            {
-                throw new VerifierException( "Unexpected failure when reading a document with a version different from"
-                                             + " the version of the parser: \"" + xse.getMessage() + "\"", xse );
-            }
+            checkExpectedFailure( xse, "Document model version of '2.0.0' doesn't match reader version of '1.0.0'" );
         }
     }
 
@@ -143,11 +139,7 @@ public class StaxFeaturesVerifier
         catch ( XMLStreamException xse )
         {
             // expected failure
-            if ( xse.getMessage().indexOf( "'invalidElement'" ) < 0 )
-            {
-                throw new VerifierException( "Unexpected failure when reading a document an unknown element under"
-                                             + " strict option: \"" + xse.getMessage() + "\"", xse );
-            }
+            checkExpectedFailure( xse, "'invalidElement'" );
         }
         try
         {
@@ -157,12 +149,7 @@ public class StaxFeaturesVerifier
         }
         catch ( XMLStreamException xse )
         {
-            // expected failure
-            if ( xse.getMessage().indexOf( "'invalidElement'" ) < 0 )
-            {
-                throw new VerifierException( "Unexpected failure when reading a document an unknown element under"
-                                             + " strict option: \"" + xse.getMessage() + "\"", xse );
-            }
+            checkExpectedFailure( xse, "'invalidElement'" );
         }
     }
 
@@ -179,7 +166,16 @@ public class StaxFeaturesVerifier
         }
         catch ( XMLStreamException e )
         {
-            assertTrue( e.getMessage().indexOf( "transientString" ) >= 0 );
+            checkExpectedFailure( e, "transientString" );
+        }
+    }
+
+    private void checkExpectedFailure( XMLStreamException xse, String expectedMessage )
+        throws VerifierException
+    {
+        if ( xse.getMessage().indexOf( expectedMessage ) < 0 )
+        {
+            throw new VerifierException( "Unexpected failure: \"" + xse.getMessage() + "\"", xse );
         }
     }
 
