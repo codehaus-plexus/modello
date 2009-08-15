@@ -116,12 +116,7 @@ public class Dom4jFeaturesVerifier
         }
         catch ( DocumentException de )
         {
-            // expected failure
-            if ( de.getMessage().indexOf( "Document model version of '2.0.0' doesn't match reader version of '1.0.0'" ) < 0 )
-            {
-                throw new VerifierException( "Unexpected failure when reading a document with a version different from"
-                                             + " the version of the parser: \"" + de.getMessage() + "\"", de );
-            }
+            checkExpectedFailure( de, "Document model version of '2.0.0' doesn't match reader version of '1.0.0'" );
         }
     }
 
@@ -142,12 +137,7 @@ public class Dom4jFeaturesVerifier
         }
         catch ( DocumentException de )
         {
-            // expected failure
-            if ( de.getMessage().indexOf( "'invalidElement'" ) < 0 )
-            {
-                throw new VerifierException( "Unexpected failure when reading a document an unknown element under"
-                                             + " strict option: \"" + de.getMessage() + "\"", de );
-            }
+            checkExpectedFailure( de, "'invalidElement'" );
         }
     }
 
@@ -164,7 +154,16 @@ public class Dom4jFeaturesVerifier
         }
         catch ( DocumentException e )
         {
-            assertTrue( e.getMessage().indexOf( "transientString" ) >= 0 );
+            checkExpectedFailure( e, "transientString" );
+        }
+    }
+
+    private void checkExpectedFailure( DocumentException de, String expectedMessage )
+        throws VerifierException
+    {
+        if ( de.getMessage().indexOf( expectedMessage ) < 0 )
+        {
+            throw new VerifierException( "Unexpected failure: \"" + de.getMessage() + "\"", de );
         }
     }
 
