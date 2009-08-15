@@ -127,11 +127,22 @@ public class Xpp3FeaturesVerifier
 
         // reading with strict=false should accept unknown element
         reader.read( getClass().getResourceAsStream( "/features-wrong-element.xml" ), false );
+        reader.read( getClass().getResourceAsStream( "/features-wrong-element2.xml" ), false );
 
         // by default, strict=true: reading should not accept unknown element
         try
         {
             reader.read( getClass().getResourceAsStream( "/features-wrong-element.xml" ) );
+
+            throw new VerifierException( "Reading a document with an unknown element under strict option should fail." );
+        }
+        catch ( XmlPullParserException xppe )
+        {
+            checkExpectedFailure( xppe, "'invalidElement'" );
+        }
+        try
+        {
+            reader.read( getClass().getResourceAsStream( "/features-wrong-element2.xml" ) );
 
             throw new VerifierException( "Reading a document with an unknown element under strict option should fail." );
         }
@@ -163,7 +174,7 @@ public class Xpp3FeaturesVerifier
     {
         if ( xppe.getMessage().indexOf( expectedMessage ) < 0 )
         {
-            throw new VerifierException( "Unexpected failure: \"" + xppe.getMessage() + "\"", xse );
+            throw new VerifierException( "Unexpected failure: \"" + xppe.getMessage() + "\"", xppe );
         }
     }
 
