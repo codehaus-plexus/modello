@@ -127,11 +127,22 @@ public class Dom4jFeaturesVerifier
 
         // reading with strict=false should accept unknown element
         reader.read( getClass().getResource( "/features-wrong-element.xml" ), false );
+        reader.read( getClass().getResource( "/features-wrong-element2.xml" ), false );
 
         // by default, strict=true: reading should not accept unknown element
         try
         {
             reader.read( getClass().getResource( "/features-wrong-element.xml" ) );
+
+            throw new VerifierException( "Reading a document with an unknown element under strict option should fail." );
+        }
+        catch ( DocumentException de )
+        {
+            checkExpectedFailure( de, "'invalidElement'" );
+        }
+        try
+        {
+            reader.read( getClass().getResource( "/features-wrong-element2.xml" ) );
 
             throw new VerifierException( "Reading a document with an unknown element under strict option should fail." );
         }
