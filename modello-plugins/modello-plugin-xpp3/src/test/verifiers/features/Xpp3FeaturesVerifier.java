@@ -41,6 +41,8 @@ import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.io.StringWriter;
 
+import javax.xml.stream.XMLStreamException;
+
 /**
  * @author Herve Boutemy
  * @version $Id$
@@ -114,12 +116,7 @@ public class Xpp3FeaturesVerifier
         }
         catch ( XmlPullParserException xppe )
         {
-            // expected failure
-            if ( xppe.getMessage().indexOf( "Document model version of '2.0.0' doesn't match reader version of '1.0.0'" ) < 0 )
-            {
-                throw new VerifierException( "Unexpected failure when reading a document with a version different from"
-                                             + " the version of the parser: \"" + xppe.getMessage() + "\"", xppe );
-            }
+            checkExpectedFailure( xppe, "Document model version of '2.0.0' doesn't match reader version of '1.0.0'" );
         }
     }
 
@@ -140,12 +137,7 @@ public class Xpp3FeaturesVerifier
         }
         catch ( XmlPullParserException xppe )
         {
-            // expected failure
-            if ( xppe.getMessage().indexOf( "'invalidElement'" ) < 0 )
-            {
-                throw new VerifierException( "Unexpected failure when reading a document an unknown element under"
-                                             + " strict option: \"" + xppe.getMessage() + "\"", xppe );
-            }
+            checkExpectedFailure( xppe, "'invalidElement'" );
         }
     }
 
@@ -162,7 +154,16 @@ public class Xpp3FeaturesVerifier
         }
         catch ( XmlPullParserException e )
         {
-            assertTrue( e.getMessage().indexOf( "transientString" ) >= 0 );
+            checkExpectedFailure( e, "transientString" );
+        }
+    }
+
+    private void checkExpectedFailure( XmlPullParserException xppe, String expectedMessage )
+        throws VerifierException
+    {
+        if ( xppe.getMessage().indexOf( expectedMessage ) < 0 )
+        {
+            throw new VerifierException( "Unexpected failure: \"" + xppe.getMessage() + "\"", xse );
         }
     }
 
