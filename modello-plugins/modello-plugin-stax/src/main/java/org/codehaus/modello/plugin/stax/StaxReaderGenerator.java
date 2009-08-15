@@ -726,6 +726,35 @@ public class StaxReaderGenerator
                                 + "\"'\", xmlStreamReader.getLocation() );" );
                 sc.add( "}" );
 
+                sc.add( "else" );
+
+                sc.add( "{" );
+                sc.indent();
+
+                sc.add( "int unrecognizedTagCount = 1;" );
+                sc.add( "while( unrecognizedTagCount != 0 )" );
+
+                sc.add( "{" );
+                sc.indent();
+
+                sc.add( "xmlStreamReader.next();" );
+                sc.add( "if ( xmlStreamReader.getEventType() == XMLStreamConstants.START_ELEMENT )" );
+
+                sc.add( "{" );
+                sc.addIndented( "unrecognizedTagCount++;" );
+                sc.add( "}" );
+
+                sc.add( "else if ( xmlStreamReader.getEventType() == XMLStreamConstants.END_ELEMENT )" );
+                sc.add( "{" );
+                sc.addIndented( "unrecognizedTagCount--;" );
+                sc.add( "}" );
+
+                sc.unindent();
+                sc.add( "}" );
+
+                sc.unindent();
+                sc.add( "}" );
+
                 if ( addElse )
                 {
                     sc.unindent();

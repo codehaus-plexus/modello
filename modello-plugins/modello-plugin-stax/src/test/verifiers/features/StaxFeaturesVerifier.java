@@ -131,11 +131,27 @@ public class StaxFeaturesVerifier
 
         // reading with strict=false should accept unknown element
         reader.read( getXmlResourceReader( "/features-wrong-element.xml" ), false );
+        reader.read( getXmlResourceReader( "/features-wrong-element2.xml" ), false );
 
         // by default, strict=true: reading should not accept unknown element
         try
         {
             reader.read( getXmlResourceReader( "/features-wrong-element.xml" ) );
+
+            throw new VerifierException( "Reading a document with an unknown element under strict option should fail." );
+        }
+        catch ( XMLStreamException xse )
+        {
+            // expected failure
+            if ( xse.getMessage().indexOf( "'invalidElement'" ) < 0 )
+            {
+                throw new VerifierException( "Unexpected failure when reading a document an unknown element under"
+                                             + " strict option: \"" + xse.getMessage() + "\"", xse );
+            }
+        }
+        try
+        {
+            reader.read( getXmlResourceReader( "/features-wrong-element2.xml" ) );
 
             throw new VerifierException( "Reading a document with an unknown element under strict option should fail." );
         }
