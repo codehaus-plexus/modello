@@ -41,8 +41,6 @@ import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.io.StringWriter;
 
-import javax.xml.stream.XMLStreamException;
-
 /**
  * @author Herve Boutemy
  * @version $Id$
