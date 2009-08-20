@@ -3,15 +3,49 @@
   ------
   Hervé Boutemy
   ------
-  2009-03-09
+  2009-08-21
   ------
 
 Modello
 
+* 1.1 Release Notes (2009-08-21)
+
+  The full list of changes can be found in our {{{http://jira.codehaus.org/secure/IssueNavigator.jspa?fixfor=14908&sorter/field=issuekey&sorter/order=DESC&reset=true}issue management system}}, and is reproduced below.
+  
+** Bug
+
+    * [MODELLO-200] - Not possible to read older version of xml file if there is an unrecognized tag even if "strict" is set to false
+
+    * [MODELLO-201] - XSD generator fails on field type Set<String>
+
+    * [MODELLO-207] - Transient feature does not allow generate self Model
+
+    * [MODELLO-208] - class cast assertion to wrong type in one multiplicity association setter when using java.useInterface
+
+** Improvement
+
+    * [MODELLO-181] - Add @SuppressWarnings to all generated sources if Java 5 is enabled
+
+    * [MODELLO-185] - add Content type support to stax plugin
+
+    * [MODELLO-203] - add Content type support to dom4j plugin
+
+    * [MODELLO-210] - Misspelling by AbstractModelloGenerator#singular(..) method
+
+** New Feature
+
+    * [MODELLO-191] - Add support to generate clone() methods
+
+    * [MODELLO-205] - Allow to exclude fields from parser/writer
+
+** Wish
+
+    * [MODELLO-165] - remove classCastAssertion
+
+
 * 1.0.2 Release Notes (2009-06-11)
 
   The full list of changes can be found in our {{{http://jira.codehaus.org/secure/IssueNavigator.jspa?fixfor=15080&sorter/field=issuekey&sorter/order=DESC&reset=true}issue management system}}, and is reproduced below.
-  
 
 ** Bug
 
@@ -26,6 +60,7 @@ Modello
 ** Improvement
 
     * [MODELLO-190] - Use StringBuilder for toString() when Java 1.5 is enabled  
+
 
 * 1.0.1 Release Notes (2009-03-09)
 
