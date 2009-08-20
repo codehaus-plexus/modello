@@ -510,6 +510,9 @@
                 <goals>
                   <goal>xdoc</goal>
                 </goals>
+                <configuration>
+                  <firstVersion>1.0.0</firstVersion>
+                </configuration>
               </execution>
               <execution>
                 <id>xsd</id>
