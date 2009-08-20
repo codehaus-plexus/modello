@@ -162,6 +162,14 @@
       </roles>
       <timezone>+1</timezone>
     </developer>
+    <developer>
+      <name>Benjamin Bentmann</name>
+      <email>bentmann@codehaus.org</email>
+      <roles>
+        <role>Developer</role>
+      </roles>
+      <timezone>+1</timezone>
+    </developer>
   </developers>
 
   <licenses>
