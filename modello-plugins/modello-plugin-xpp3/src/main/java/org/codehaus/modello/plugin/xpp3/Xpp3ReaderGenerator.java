@@ -82,6 +82,7 @@ public class Xpp3ReaderGenerator
 
         JClass jClass = new JClass( packageName + '.' + unmarshallerName );
         initHeader( jClass );
+        suppressAllWarnings( objectModel, jClass );
 
         jClass.addImport( "org.codehaus.plexus.util.ReaderFactory" );
         jClass.addImport( "org.codehaus.plexus.util.xml.pull.MXParser" );

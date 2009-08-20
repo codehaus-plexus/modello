@@ -48,8 +48,10 @@ import org.codehaus.modello.plugin.java.javasource.JClass;
 import org.codehaus.modello.plugin.java.javasource.JComment;
 import org.codehaus.modello.plugin.java.javasource.JInterface;
 import org.codehaus.modello.plugin.java.javasource.JSourceWriter;
+import org.codehaus.modello.plugin.java.javasource.JStructure;
 import org.codehaus.modello.plugin.java.metadata.JavaClassMetadata;
 import org.codehaus.modello.plugin.java.metadata.JavaFieldMetadata;
+import org.codehaus.modello.plugin.java.metadata.JavaModelMetadata;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.WriterFactory;
 
@@ -117,6 +119,16 @@ public abstract class AbstractJavaModelloGenerator
     protected void initHeader( JInterface interfaze )
     {
         interfaze.setHeader( getHeaderComment() );
+    }
+
+    protected void suppressAllWarnings( Model objectModel, JStructure structure )
+    {
+        JavaModelMetadata javaModelMetadata = (JavaModelMetadata) objectModel.getMetadata( JavaModelMetadata.ID );
+
+        if ( useJava5 && javaModelMetadata.isSuppressAllWarnings() )
+        {
+            structure.appendAnnotation( "@SuppressWarnings( \"all\" )" );
+        }
     }
 
     protected void addModelImports( JClass jClass, BaseElement baseElem )

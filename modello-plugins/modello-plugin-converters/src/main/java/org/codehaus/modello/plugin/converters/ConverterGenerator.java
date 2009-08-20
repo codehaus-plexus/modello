@@ -115,10 +115,12 @@ public class ConverterGenerator
 
         JInterface conversionInterface = new JInterface( packageName + ".VersionConverter" );
         initHeader( conversionInterface );
+        suppressAllWarnings( objectModel, conversionInterface );
         conversionInterface.getJDocComment().setComment( jDoc );
 
         JClass basicConverterClass = new JClass( packageName + ".BasicVersionConverter" );
         initHeader( basicConverterClass );
+        suppressAllWarnings( objectModel, basicConverterClass );
         basicConverterClass.getJDocComment().setComment( jDoc );
         basicConverterClass.addInterface( conversionInterface );
 
@@ -390,6 +392,8 @@ public class ConverterGenerator
         String jDoc = "Converts between the available versions of the model.";
 
         JClass converterClass = new JClass( packageName + ".ConverterTool" );
+        initHeader( converterClass );
+        suppressAllWarnings( objectModel, converterClass );
         converterClass.getJDocComment().setComment( jDoc );
 
         converterClass.addImport( "java.io.File" );

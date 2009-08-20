@@ -85,6 +85,7 @@ public class StaxWriterGenerator
 
         JClass jClass = new JClass( packageName + '.' + marshallerName );
         initHeader( jClass );
+        suppressAllWarnings( objectModel, jClass );
 
         jClass.addImport( "java.io.InputStream" );
         jClass.addImport( "java.io.IOException" );

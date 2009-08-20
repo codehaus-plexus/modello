@@ -45,6 +45,7 @@ import org.codehaus.modello.plugin.java.javasource.JType;
 import org.codehaus.modello.plugin.java.metadata.JavaAssociationMetadata;
 import org.codehaus.modello.plugin.java.metadata.JavaClassMetadata;
 import org.codehaus.modello.plugin.java.metadata.JavaFieldMetadata;
+import org.codehaus.modello.plugin.java.metadata.JavaModelMetadata;
 import org.codehaus.modello.plugin.model.ModelClassMetadata;
 import org.codehaus.plexus.util.StringUtils;
 
@@ -104,6 +105,8 @@ public class JavaModelloGenerator
             JInterface jInterface = new JInterface( packageName + '.' + modelInterface.getName() );
 
             initHeader( jInterface );
+
+            suppressAllWarnings( objectModel, jInterface );
 
             if ( modelInterface.getSuperInterface() != null )
             {
@@ -166,6 +169,8 @@ public class JavaModelloGenerator
             JClass jClass = new JClass( packageName + '.' + modelClass.getName() );
 
             initHeader( jClass );
+
+            suppressAllWarnings( objectModel, jClass );
 
             if ( StringUtils.isNotEmpty( modelClass.getDescription() ) )
             {

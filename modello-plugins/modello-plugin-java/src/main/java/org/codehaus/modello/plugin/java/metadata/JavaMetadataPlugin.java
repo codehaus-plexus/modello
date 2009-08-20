@@ -63,13 +63,19 @@ public class JavaMetadataPlugin
 
     public static final String JAVA_CLONE_HOOK = "java.clone.hook";
 
+    public static final String JAVA_SUPPRESS_ALL_WARNINGS = "java.suppressAllWarnings";
+
     // ----------------------------------------------------------------------
     // Map to Metadata
     // ----------------------------------------------------------------------
 
     public ModelMetadata getModelMetadata( Model model, Map data )
     {
-        return new JavaModelMetadata();
+        JavaModelMetadata metadata = new JavaModelMetadata();
+
+        metadata.setSuppressAllWarnings( getBoolean( data, JAVA_SUPPRESS_ALL_WARNINGS, true ) );
+
+        return metadata;
     }
 
     public ClassMetadata getClassMetadata( ModelClass clazz, Map data )

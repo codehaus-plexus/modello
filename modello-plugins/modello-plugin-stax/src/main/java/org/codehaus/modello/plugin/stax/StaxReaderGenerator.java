@@ -105,6 +105,7 @@ public class StaxReaderGenerator
 
         JClass jClass = new JClass( packageName + '.' + unmarshallerName );
         initHeader( jClass );
+        suppressAllWarnings( objectModel, jClass );
 
         jClass.addImport( "java.io.IOException" );
         jClass.addImport( "java.io.Reader" );

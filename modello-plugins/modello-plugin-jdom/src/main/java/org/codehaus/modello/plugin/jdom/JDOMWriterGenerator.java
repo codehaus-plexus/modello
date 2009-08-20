@@ -76,6 +76,8 @@ public class JDOMWriterGenerator
 
         JClass jClass = new JClass( packageName + '.' + marshallerName );
         initHeader( jClass );
+        suppressAllWarnings( objectModel, jClass );
+
         // -------------------------------------------------------------
         // imports now
         // -------------------------------------------------------------

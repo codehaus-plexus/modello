@@ -85,7 +85,7 @@ import org.codehaus.plexus.util.WriterFactory;
  * @author <a href="mailto:kvisco@intalio.com">Keith Visco</a>
  * @version $Revision$ $Date$
  */
-abstract class JStructure extends JType
+public abstract class JStructure extends JType
 {
 
     /**

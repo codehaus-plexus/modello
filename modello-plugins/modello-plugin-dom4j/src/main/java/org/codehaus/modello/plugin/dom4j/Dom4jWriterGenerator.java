@@ -85,6 +85,7 @@ public class Dom4jWriterGenerator
 
         JClass jClass = new JClass( packageName + '.' + marshallerName );
         initHeader( jClass );
+        suppressAllWarnings( objectModel, jClass );
 
         jClass.addImport( "java.io.Writer" );
         jClass.addImport( "java.util.Arrays" );
