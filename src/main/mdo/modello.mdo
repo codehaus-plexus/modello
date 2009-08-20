@@ -78,6 +78,16 @@
       <version>1.0.0+</version>
       <superClass>BaseElement</superClass>
       <fields>
+        <field xml.attribute="true" xml.tagName="java.suppressAllWarnings">
+          <name>suppressAllWarnings</name>
+          <version>1.1.0+</version>
+          <type>boolean</type>
+          <defaultValue>true</defaultValue>
+          <description><![CDATA[
+            Add <code>@SuppressWarnings( "all" )</code> to all generated sources if Java 5 is enabled.]]>
+          </description>
+          <comment>see org.codehaus.modello.plugins.java.metadata.JavaMetadataPlugin</comment>
+        </field>
         <field xml.attribute="true" xml.tagName="xml.namespace">
           <name>namespace</name>
           <version>1.0.0+</version>
