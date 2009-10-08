@@ -1,0 +1,34 @@
+<model>
+  <id>interface-association-test</id>
+  <name>InterfaceAssociationTest</name>
+
+  <defaults>
+    <default>
+      <key>package</key>
+      <value>org.codehaus.modello.ifaceassociation.package1</value>
+    </default>
+  </defaults>
+
+  <classes>
+    <class>
+      <name>Location</name>
+      <fields>
+        <field>
+          <name>persons</name>
+          <association java.useInterface="IPerson">
+            <type>Person</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+      </fields>
+    </class>
+
+    <class>
+      <name>Person</name>
+      <interfaces>
+        <interface>IPerson</interface>
+      </interfaces>
+    </class>
+  </classes>
+
+</model>

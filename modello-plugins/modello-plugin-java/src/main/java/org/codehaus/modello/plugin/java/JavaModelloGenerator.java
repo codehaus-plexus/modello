@@ -22,6 +22,15 @@ package org.codehaus.modello.plugin.java;
  * SOFTWARE.
  */
 
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Properties;
+
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.ModelloRuntimeException;
 import org.codehaus.modello.model.CodeSegment;
@@ -31,6 +40,7 @@ import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelDefault;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.ModelInterface;
+import org.codehaus.modello.model.ModelValidationException;
 import org.codehaus.modello.plugin.java.javasource.JArrayType;
 import org.codehaus.modello.plugin.java.javasource.JClass;
 import org.codehaus.modello.plugin.java.javasource.JCollectionType;
@@ -45,18 +55,8 @@ import org.codehaus.modello.plugin.java.javasource.JType;
 import org.codehaus.modello.plugin.java.metadata.JavaAssociationMetadata;
 import org.codehaus.modello.plugin.java.metadata.JavaClassMetadata;
 import org.codehaus.modello.plugin.java.metadata.JavaFieldMetadata;
-import org.codehaus.modello.plugin.java.metadata.JavaModelMetadata;
 import org.codehaus.modello.plugin.model.ModelClassMetadata;
 import org.codehaus.plexus.util.StringUtils;
-
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Properties;
 
 /**
  * @author <a href="mailto:jason@modello.org">Jason van Zyl </a>
@@ -1018,10 +1018,32 @@ public class JavaModelloGenerator
         if ( modelAssociation.isManyMultiplicity() )
         {
             JType type;
+            String defaultValue = getDefaultValue ( modelAssociation );
             if ( modelAssociation.isGenericType() )
             {
-                type = new JCollectionType( modelAssociation.getType(), new JClass( modelAssociation.getTo() ),
+                JType componentType = getComponentType( modelAssociation, javaAssociationMetadata );
+
+                type = new JCollectionType( modelAssociation.getType(), componentType,
                                             useJava5 );
+
+                ModelDefault modelDefault;
+                try
+                {
+                    modelDefault = getModel().getDefault( modelAssociation.getType() );
+                }
+                catch ( ModelValidationException e )
+                {
+                    // can't really happen
+                    throw new ModelloException( "The Java Modello Generator could not determine default implementation of " + modelAssociation.getType(), e );
+                }
+                if ( useJava5 )
+                {
+                    defaultValue = StringUtils.replace( modelDefault.getValue(), "<?>", "<" + componentType.getName() + ">" );
+                }
+                else
+                {
+                    defaultValue = StringUtils.replace( modelDefault.getValue(), "<?>", "/*<" + componentType.getName() + ">*/" );
+                }
             }
             else
             {
@@ -1038,13 +1060,13 @@ public class JavaModelloGenerator
             if ( StringUtils.equals( javaAssociationMetadata.getInitializationMode(),
                                      JavaAssociationMetadata.FIELD_INIT ) )
             {
-                jField.setInitString( getDefaultValue ( modelAssociation ) );
+                jField.setInitString( defaultValue );
             }
 
             if ( StringUtils.equals( javaAssociationMetadata.getInitializationMode(),
                                      JavaAssociationMetadata.CONSTRUCTOR_INIT ) )
             {
-                jConstructorSource.add( "this." + jField.getName() + " = " + getDefaultValue ( modelAssociation ) + ";" );
+                jConstructorSource.add( "this." + jField.getName() + " = " + defaultValue + ";" );
             }
 
             jClass.addField( jField );
@@ -1066,7 +1088,7 @@ public class JavaModelloGenerator
 
                     sc.indent();
 
-                    sc.add( "this." + jField.getName() + " = " + getDefaultValue ( modelAssociation ) + ";" );
+                    sc.add( "this." + jField.getName() + " = " + defaultValue + ";" );
 
                     sc.unindent();
 
@@ -1107,6 +1129,20 @@ public class JavaModelloGenerator
                 createBreakAssociation( jClass, modelAssociation );
             }
         }
+    }
+
+    private JType getComponentType( ModelAssociation modelAssociation, JavaAssociationMetadata javaAssociationMetadata )
+    {
+        JType componentType;
+        if ( javaAssociationMetadata.getInterfaceName() != null )
+        {
+            componentType = new JClass( javaAssociationMetadata.getInterfaceName() );
+        }
+        else
+        {
+            componentType = new JClass( modelAssociation.getTo() );
+        }
+        return componentType;
     }
 
     private void createCreateAssociation( JClass jClass, ModelAssociation modelAssociation )
@@ -1385,7 +1421,8 @@ public class JavaModelloGenerator
             }
             else if ( modelAssociation.isManyMultiplicity() && modelAssociation.isGenericType() )
             {
-                type = new JCollectionType( modelAssociation.getType(), new JClass( modelAssociation.getTo() ),
+                JType componentType = getComponentType( modelAssociation, javaAssociationMetadata );
+                type = new JCollectionType( modelAssociation.getType(), componentType,
                                             useJava5 );
             }
             else if ( useTo )
