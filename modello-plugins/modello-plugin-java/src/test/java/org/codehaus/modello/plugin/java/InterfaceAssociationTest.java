@@ -8,15 +8,15 @@ import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
 import org.codehaus.plexus.util.ReaderFactory;
 
-public class InterfaceAssocitationTest
+public class InterfaceAssociationTest
     extends AbstractModelloJavaGeneratorTest
 {
 
-    private String modelFile = "src/test/resources/models/interfaceAssocition.xml";
+    private String modelFile = "src/test/resources/models/interfaceAssociation.xml";
 
-    public InterfaceAssocitationTest()
+    public InterfaceAssociationTest()
     {
-        super( "interfaceAssocitationTest" );
+        super( "interfaceAssociationTest" );
     }
 
     public void testJavaGenerator()
