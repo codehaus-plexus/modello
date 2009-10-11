@@ -26,7 +26,6 @@ import org.codehaus.modello.AbstractModelloJavaGeneratorTest;
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
-import org.codehaus.plexus.util.ReaderFactory;
 
 import java.util.Properties;
 
@@ -48,7 +47,7 @@ public class _AbstractElementTest
     {
         ModelloCore modello = (ModelloCore) container.lookup( ModelloCore.ROLE );
 
-        Model model = modello.loadModel( ReaderFactory.newXmlReader( getTestFile( "src/test/resources/abstract.mdo" ) ) );
+        Model model = modello.loadModel( getTestFile( "src/test/resources/abstract.mdo" ) );
 
         Properties parameters = new Properties();
         parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, getOutputDirectory().getAbsolutePath() );

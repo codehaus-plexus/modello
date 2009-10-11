@@ -30,7 +30,6 @@ import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.Version;
 import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
-import org.codehaus.plexus.util.ReaderFactory;
 
 import java.util.List;
 import java.util.Properties;
@@ -53,7 +52,7 @@ public class Xpp3GeneratorTest
     {
         ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
 
-        Model model = modello.loadModel( ReaderFactory.newXmlReader( getTestFile( "src/test/resources/maven.mdo" ) ) );
+        Model model = modello.loadModel( getTestFile( "src/test/resources/maven.mdo" ) );
 
         // check some elements read from the model
         List classesList = model.getClasses( new Version( "4.0.0" ) );

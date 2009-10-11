@@ -28,7 +28,6 @@ import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.Version;
 import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
 import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
-import org.codehaus.plexus.util.ReaderFactory;
 
 import java.util.List;
 
@@ -49,7 +48,7 @@ public class StaxGeneratorTest
     public void testStaxGenerator()
         throws Throwable
     {
-        Model model = modello.loadModel( ReaderFactory.newXmlReader( getTestFile( "src/test/resources/maven.mdo" ) ) );
+        Model model = modello.loadModel( getTestFile( "src/test/resources/maven.mdo" ) );
 
         List classesList = model.getClasses( new Version( "4.0.0" ) );
 

@@ -28,7 +28,6 @@ import org.codehaus.modello.AbstractModelloGeneratorTest;
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
-import org.codehaus.plexus.util.ReaderFactory;
 
 /**
  * @author <a href="mailto:olamy@apache.org">Brett Porter</a>
@@ -47,7 +46,7 @@ public class ChangesXsdGeneratorTest
     {
         ModelloCore modello = (ModelloCore) container.lookup( ModelloCore.ROLE );
 
-        Model model = modello.loadModel( ReaderFactory.newXmlReader( getTestFile( "src/test/resources/changes.mdo" ) ) );
+        Model model = modello.loadModel( getTestFile( "src/test/resources/changes.mdo" ) );
 
         // generate XSD file
         Properties parameters = new Properties();

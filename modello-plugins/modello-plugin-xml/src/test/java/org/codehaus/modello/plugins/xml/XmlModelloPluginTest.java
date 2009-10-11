@@ -32,7 +32,6 @@ import org.codehaus.modello.model.Version;
 import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlMetadataPlugin;
 import org.codehaus.plexus.PlexusTestCase;
-import org.codehaus.plexus.util.ReaderFactory;
 
 import java.util.List;
 
@@ -58,7 +57,7 @@ public class XmlModelloPluginTest
     {
         ModelloCore modello = (ModelloCore) container.lookup( ModelloCore.ROLE );
 
-        Model model = modello.loadModel( ReaderFactory.newXmlReader( getTestFile( "src/test/resources/model.mdo" ) ) );
+        Model model = modello.loadModel( getTestFile( "src/test/resources/model.mdo" ) );
 
         List classes = model.getClasses( new Version( "4.0.0" ) );
 

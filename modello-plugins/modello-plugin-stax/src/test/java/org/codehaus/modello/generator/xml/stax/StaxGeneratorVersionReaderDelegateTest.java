@@ -24,7 +24,6 @@ package org.codehaus.modello.generator.xml.stax;
 
 import org.codehaus.modello.model.Model;
 import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
-import org.codehaus.plexus.util.ReaderFactory;
 
 /**
  * @version $Id$
@@ -42,7 +41,7 @@ public class StaxGeneratorVersionReaderDelegateTest
         throws Throwable
     {
         Model model =
-            modello.loadModel( ReaderFactory.newXmlReader( getTestFile( "src/test/resources/version-in-namespace.mdo" ) ) );
+            modello.loadModel( getTestFile( "src/test/resources/version-in-namespace.mdo" ) );
 
         verifyModel( model, "org.codehaus.modello.generator.xml.stax.StaxVerifierVersionReaderDelegate",
                      new String[]{"4.0.0", "4.0.1"} );

@@ -26,7 +26,6 @@ import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.Version;
 import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
-import org.codehaus.plexus.util.ReaderFactory;
 
 import java.util.List;
 
@@ -45,7 +44,7 @@ public class StaxGeneratorPartsTest
     public void testStaxReaderParts()
         throws Throwable
     {
-        Model model = modello.loadModel( ReaderFactory.newXmlReader( getTestFile( "src/test/resources/parts.mdo" ) ) );
+        Model model = modello.loadModel( getTestFile( "src/test/resources/parts.mdo" ) );
 
         List classesList = model.getClasses( new Version( "4.0.0" ) );
 

@@ -6,7 +6,6 @@ import org.codehaus.modello.AbstractModelloJavaGeneratorTest;
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
-import org.codehaus.plexus.util.ReaderFactory;
 
 public class InterfaceAssociationTest
     extends AbstractModelloJavaGeneratorTest
@@ -39,7 +38,7 @@ public class InterfaceAssociationTest
         parameters.setProperty( ModelloParameterConstants.USE_JAVA5, Boolean.toString( true ) );
         parameters.setProperty( ModelloParameterConstants.VERSION, "4.0.0" );
 
-        Model model = modello.loadModel( ReaderFactory.newXmlReader( getTestFile( modelFile ) ) );
+        Model model = modello.loadModel( getTestFile( modelFile ) );
 
         modello.generate( model, "java", parameters );
 

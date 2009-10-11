@@ -84,7 +84,7 @@ public class FeaturesXsdGeneratorTest
 
         try
         {
-        saxParser.parse( getClass().getResourceAsStream( "/features.xml" ), new Handler() );
+            saxParser.parse( getClass().getResourceAsStream( "/features.xml" ), new Handler() );
         }
         catch ( SAXParseException e )
         {

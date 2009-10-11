@@ -20,7 +20,6 @@ import org.codehaus.modello.AbstractModelloJavaGeneratorTest;
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
-import org.codehaus.plexus.util.ReaderFactory;
 
 import java.util.Properties;
 
@@ -50,7 +49,7 @@ public class BiDirectionalOverrideJavaGeneratorTest
         parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString( false ) );
         parameters.setProperty( ModelloParameterConstants.VERSION, "1.0.0" );
 
-        Model model = modello.loadModel( ReaderFactory.newXmlReader( getTestFile( modelFile ) ) );
+        Model model = modello.loadModel( getTestFile( modelFile ) );
 
         modello.generate( model, "java", parameters );
 

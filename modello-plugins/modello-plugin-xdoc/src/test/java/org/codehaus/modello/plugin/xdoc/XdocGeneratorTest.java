@@ -32,7 +32,6 @@ import org.codehaus.modello.model.Version;
 import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
 import org.codehaus.modello.verifier.VerifierException;
 import org.codehaus.plexus.util.FileUtils;
-import org.codehaus.plexus.util.ReaderFactory;
 
 import java.io.File;
 import java.util.HashSet;
@@ -74,7 +73,7 @@ public class XdocGeneratorTest
     {
         ModelloCore modello = (ModelloCore) container.lookup( ModelloCore.ROLE );
 
-        Model model = modello.loadModel( ReaderFactory.newXmlReader( getTestFile( "src/test/resources/maven.mdo" ) ) );
+        Model model = modello.loadModel( getTestFile( "src/test/resources/maven.mdo" ) );
 
         List classesList = model.getClasses( new Version( "4.0.0" ) );
 
