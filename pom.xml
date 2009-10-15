@@ -17,6 +17,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <maven.version>2.0.7</maven.version>
+    <modelloDistMgmtSnapshotsUrl>dav:https://dav.codehaus.org/snapshots.repository/modello/</modelloDistMgmtSnapshotsUrl>
   </properties>
 
   <issueManagement>
@@ -450,7 +451,7 @@
     <snapshotRepository>
       <id>codehaus.org</id>
       <name>Modello Development Repository</name>
-      <url>dav:https://dav.codehaus.org/snapshots.repository/modello/</url>
+      <url>${modelloDistMgmtSnapshotsUrl}</url>
     </snapshotRepository>
     <site>
       <id>codehaus.org</id>
