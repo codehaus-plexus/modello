@@ -20,6 +20,14 @@
             <multiplicity>*</multiplicity>
           </association>
         </field>
+        <field>
+          <name>relatives</name>
+          <type>Set</type>
+          <association java.useInterface="IPerson">
+            <type>Person</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
       </fields>
     </class>
 
