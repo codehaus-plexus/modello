@@ -11,7 +11,7 @@ public class InterfaceAssociationTest
     extends AbstractModelloJavaGeneratorTest
 {
 
-    private String modelFile = "src/test/resources/models/interfaceAssociation.xml";
+    private String modelFile = "src/test/resources/models/interfaceAssociation.mdo";
 
     public InterfaceAssociationTest()
     {
