@@ -28,6 +28,12 @@
             <multiplicity>*</multiplicity>
           </association>
         </field>
+        <field>
+          <name>mother</name>
+          <association java.useInterface="IPerson">
+            <type>Person</type>
+          </association>
+        </field>
       </fields>
     </class>
 

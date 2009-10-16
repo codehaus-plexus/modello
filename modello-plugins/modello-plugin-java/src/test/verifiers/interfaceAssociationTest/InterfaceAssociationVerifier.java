@@ -5,6 +5,7 @@ import org.codehaus.modello.ifaceassociation.package1.Person;
 import org.codehaus.modello.ifaceassociation.package1.Location;
 import org.codehaus.modello.verifier.Verifier;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -14,6 +15,7 @@ public class InterfaceAssociationVerifier
     extends Verifier
 {
     public void verify()
+        throws Exception
     {
         Location location = new Location();
 
@@ -36,5 +38,14 @@ public class InterfaceAssociationVerifier
         location.setRelatives( new HashSet<IPerson>( relatives ) );
 
         location.removeRelative( person );
+
+        // check IPerson mother attribute getter/setter
+        // FIXME one multiplicity with java.useInterface does not work
+        Field motherField = Location.class.getDeclaredField( "mother" );
+        /*Assert.assertEquals( "mother attribute type", IPerson.class, motherField.getType() );
+
+        IPerson mother = location.getMother();
+
+        location.setMother( mother );*/
     }
 }
