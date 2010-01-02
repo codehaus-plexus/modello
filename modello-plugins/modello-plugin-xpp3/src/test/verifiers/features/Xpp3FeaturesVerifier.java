@@ -61,6 +61,8 @@ public class Xpp3FeaturesVerifier
 
         verifyWrongElement();
 
+        verifyWrongAttribute();
+
         verifyTransientElement();
 
         verifyEncoding();
@@ -147,6 +149,27 @@ public class Xpp3FeaturesVerifier
         catch ( XmlPullParserException xppe )
         {
             checkExpectedFailure( xppe, "'invalidElement'" );
+        }
+    }
+
+    public void verifyWrongAttribute()
+        throws Exception
+    {
+        ModelloFeaturesTestXpp3Reader reader = new ModelloFeaturesTestXpp3Reader();
+
+        // reading with strict=false should accept unknown element
+        reader.read( getClass().getResourceAsStream( "/features-wrong-attribute.xml" ), false );
+
+        // by default, strict=true: reading should not accept unknown attribute
+        try
+        {
+            reader.read( getClass().getResourceAsStream( "/features-wrong-attribute.xml" ) );
+
+            throw new VerifierException( "Reading a document with an unknown attribute under strict option should fail." );
+        }
+        catch ( XmlPullParserException xppe )
+        {
+            checkExpectedFailure( xppe, "Unknown attribute 'invalidAttribute' for tag 'attributes'" );
         }
     }
 

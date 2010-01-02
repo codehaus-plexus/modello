@@ -299,37 +299,12 @@ public class Xpp3ReaderGenerator
         ModelField contentField = null;
 
         List modelFields = modelClass.getAllFields( getGeneratedVersion(), true );
-
         modelFields = getNonTransientFields( modelFields );
 
         // read all XML attributes first
-        for ( Iterator i = modelFields.iterator(); i.hasNext(); )
-        {
-            ModelField field = (ModelField) i.next();
+        contentField = writeClassAttributesParser( modelFields, uncapClassName, rootElement, sc, jClass );
 
-            XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
-
-            if ( xmlFieldMetadata.isAttribute() )
-            {
-                String tagName = resolveTagName( field, xmlFieldMetadata );
-
-                sc.add( "if ( parser.getAttributeValue( \"\", \"" + tagName + "\" ) != null  )");
-                sc.add(  "{" );
-                sc.indent();
-
-                writePrimitiveField( field, field.getType(), uncapClassName, "set" + capitalise( field.getName() ), sc,
-                                     jClass );
-
-                sc.unindent();
-                sc.add( "}" );
-            }
-            // TODO check if we have already one with this type and throws Exception
-            if ( xmlFieldMetadata.isContent() )
-            {
-                contentField = field;
-            }
-        }
-
+        // then read content, either content field or elements
         if ( contentField != null )
         {
             writePrimitiveField( contentField, contentField.getType(), uncapClassName,
@@ -465,6 +440,67 @@ public class Xpp3ReaderGenerator
         sc.add( "return " + uncapClassName + ";" );
 
         jClass.addMethod( unmarshall );
+    }
+
+    private ModelField writeClassAttributesParser( List modelFields, String objectName, boolean rootElement, JSourceCode sc, JClass jClass )
+    {
+        ModelField contentField = null;
+
+        sc.add( "for ( int i = parser.getAttributeCount() - 1; i >= 0; i-- )" );
+        sc.add( "{" );
+        sc.indent();
+        sc.add( "String name = parser.getAttributeName( i );" );
+        sc.add( "String value = parser.getAttributeValue( i );" );
+        sc.add( "" );
+
+        sc.add( "if ( name.indexOf( ':' ) >= 0 )" );
+        sc.add( "{" );
+        sc.add( "// just ignore attributes with non-default namespace (for example: xmlns:xsi)" );
+        sc.add( "}" );
+        if ( rootElement )
+        {
+            sc.add( "else if ( \"xmlns\".equals( name ) )" );
+            sc.add( "{" );
+            sc.add( "// ignore xmlns attribute in root class, which is a reserved attribute name" );
+            sc.add( "}" );
+        }
+
+        for ( Iterator i = modelFields.iterator(); i.hasNext(); )
+        {
+            ModelField field = (ModelField) i.next();
+
+            XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
+
+            if ( xmlFieldMetadata.isAttribute() )
+            {
+                String tagName = resolveTagName( field, xmlFieldMetadata );
+
+                sc.add( "else if ( \"" + tagName + "\".equals( name ) )");
+                sc.add(  "{" );
+                sc.indent();
+
+                writePrimitiveField( field, field.getType(), objectName, "set" + capitalise( field.getName() ), sc,
+                                     jClass );
+
+                sc.unindent();
+                sc.add( "}" );
+            }
+            // TODO check if we have already one with this type and throws Exception
+            if ( xmlFieldMetadata.isContent() )
+            {
+                contentField = field;
+            }
+        }
+        sc.add( "else if ( strict )" );
+
+        sc.add( "{" );
+        sc.addIndented( "throw new XmlPullParserException( \"Unknown attribute '\" + name + \"' for tag '\" + tagName + \"'\", parser, null );" );
+        sc.add( "}" );
+
+        sc.unindent();
+        sc.add( "}" );
+
+        return contentField;
     }
 
     /**
@@ -734,7 +770,7 @@ public class Xpp3ReaderGenerator
         String parserGetter;
         if ( xmlFieldMetadata.isAttribute() )
         {
-            parserGetter = "parser.getAttributeValue( \"\", \"" + tagName + "\" )";
+            parserGetter = "value"; // local variable created in the parsing block
         }
         else
         {
