@@ -1202,7 +1202,7 @@
         <field>
           <name>child</name>
           <version>1.0.0+</version>
-          <association>
+          <association java.bidi="false">
             <type>NodeItem</type>
           </association>
         </field>

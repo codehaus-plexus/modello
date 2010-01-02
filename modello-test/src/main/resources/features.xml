@@ -159,7 +159,7 @@
     <xsdFeatures attribute="one more value from XML file" />
   </xmlFeatures>
 
-  <!--node>
+  <node>
     <value>1</value>
     <child>
       <value>2</value>
@@ -170,5 +170,5 @@
         </child>
       </child>
     </child>
-  </node-->
+  </node>
 </features>
