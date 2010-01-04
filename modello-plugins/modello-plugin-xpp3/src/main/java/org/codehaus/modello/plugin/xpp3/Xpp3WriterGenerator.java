@@ -217,9 +217,7 @@ public class Xpp3WriterGenerator
 
         String contentValue = null;
 
-        List modelFields = modelClass.getAllFields( getGeneratedVersion(), true );
-
-        modelFields = getNonTransientFields( modelFields );
+        List modelFields = getFieldsForXml( modelClass, getGeneratedVersion() );
 
         // XML attributes
         for ( Iterator i = modelFields.iterator(); i.hasNext(); )

@@ -45,6 +45,8 @@ public class XmlFieldMetadata
 
     private boolean transientField;
 
+    private String insertParentFieldsUpTo;
+
     public String getFormat()
     {
         return format;
@@ -117,4 +119,13 @@ public class XmlFieldMetadata
         this.transientField = transientField;
     }
 
+    public String getInsertParentFieldsUpTo()
+    {
+        return insertParentFieldsUpTo;
+    }
+
+    public void setInsertParentFieldsUpTo( String insertParentFieldsUpTo )
+    {
+        this.insertParentFieldsUpTo = insertParentFieldsUpTo;
+    }
 }

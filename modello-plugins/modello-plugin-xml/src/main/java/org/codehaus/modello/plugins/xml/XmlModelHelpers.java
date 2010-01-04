@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
+import org.codehaus.modello.model.Version;
 import org.codehaus.modello.plugin.AbstractModelloGenerator;
 import org.codehaus.modello.plugins.xml.metadata.XmlAssociationMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlClassMetadata;
@@ -160,4 +161,86 @@ class XmlModelHelpers
         return nonTransientFields;
     }
 
+    /**
+     * Return the XML fields of this class, with proper XML order and no XML transient fields.
+     *
+     * @param modelClass current class
+     * @param version the version of the class to use
+     * @return the list of XML fields of this class
+     */
+    static List getFieldsForXml( ModelClass modelClass, Version version )
+    {
+        List/*<ModelClass>*/ classes = new ArrayList();
+
+        // get the full inheritance
+        while ( modelClass != null )
+        {
+            classes.add( modelClass );
+
+            String superClass = modelClass.getSuperClass();
+            if ( superClass != null )
+            {
+                modelClass = modelClass.getModel().getClass( superClass, version );
+            }
+            else
+            {
+                modelClass = null;
+            }
+        }
+
+        List fields = new ArrayList();
+
+        for ( int i = classes.size() - 1; i >= 0; i-- )
+        {
+            modelClass = (ModelClass) classes.get( i );
+
+            Iterator parentIter = fields.iterator();
+
+            fields = new ArrayList();
+
+            for ( Iterator it = modelClass.getFields( version ).iterator(); it.hasNext(); )
+            {
+                ModelField field = (ModelField) it.next();
+
+                XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
+
+                if ( xmlFieldMetadata.isTransient() )
+                {
+                    // just ignore xml.transient fields
+                    continue;
+                }
+
+                if ( xmlFieldMetadata.getInsertParentFieldsUpTo() != null )
+                {
+                    // insert fields from parent up to the specified field
+                    boolean found = false;
+
+                    while ( !found && parentIter.hasNext() )
+                    {
+                        ModelField parentField = (ModelField) parentIter.next();
+
+                        fields.add( parentField );
+
+                        found = parentField.getName().equals( xmlFieldMetadata.getInsertParentFieldsUpTo() );
+                    }
+
+                    if ( !found )
+                    {
+                        // interParentFieldsUpTo not found
+                        //TODO throw Exception
+                    }
+                }
+
+                fields.add( field );
+            }
+
+            // add every remaining fields from parent class
+            while ( parentIter.hasNext() )
+            {
+                fields.add( parentIter.next() );
+            }
+        }
+
+        return fields;
+    }
 }

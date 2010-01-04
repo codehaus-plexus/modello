@@ -156,6 +156,16 @@
       <persistentField>PASSED</persistentField>
     </xmlTransientFields>
 
+    <xmlFieldsOrder>
+      <field1>first</field1>
+      <field2>second</field2>
+      <field3>third</field3>
+      <field4>fourth</field4>
+      <field5>fifth</field5>
+      <field6>sixth</field6>
+      <field7>seventh</field7>
+    </xmlFieldsOrder>
+
     <xsdFeatures attribute="one more value from XML file" />
   </xmlFeatures>
 

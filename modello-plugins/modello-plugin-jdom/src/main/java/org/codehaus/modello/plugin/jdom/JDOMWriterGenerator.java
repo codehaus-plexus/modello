@@ -622,9 +622,7 @@ public class JDOMWriterGenerator
         }
         sc.add( "Counter innerCount = new Counter( counter.getDepth() + 1 );" );
 
-        List modelFields = clazz.getAllFields( getGeneratedVersion(), true );
-
-        modelFields = getNonTransientFields( modelFields );
+        List modelFields = getFieldsForXml( clazz, getGeneratedVersion() );
 
         for ( Iterator i = modelFields.iterator(); i.hasNext(); )
         {

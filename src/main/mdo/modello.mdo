@@ -503,6 +503,15 @@
           </description>
           <comment>see org.codehaus.modello.plugins.xml.metadata.XmlMetadataPlugin</comment>
         </field>
+        <field xml.attribute="true" xml.tagName="xml.insertParentFieldsUpTo">
+          <name>insertParentFieldsUpTo</name>
+          <version>1.2.0+</version>
+          <type>String</type>
+          <description><![CDATA[
+            Insert fields from parent class before this one in the XML representation of the class.]]>
+          </description>
+          <comment>see org.codehaus.modello.plugins.xml.metadata.XmlMetadataPlugin</comment>
+        </field>
         <field>
           <name>alias</name>
           <version>1.0.0+</version>

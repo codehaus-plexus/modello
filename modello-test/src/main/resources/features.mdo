@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
-<model xmlns="http://modello.codehaus.org/MODELLO/1.1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://modello.codehaus.org/MODELLO/1.1.0 http://modello.codehaus.org/xsd/modello-1.1.0.xsd"
+<model xmlns="http://modello.codehaus.org/MODELLO/1.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://modello.codehaus.org/MODELLO/1.2.0 http://modello.codehaus.org/xsd/modello-1.2.0.xsd"
   xml.namespace="http://modello.codehaus.org/FEATURES/${version}"
   xml.schemaLocation="http://modello.codehaus.org/features-${version}.xsd">
   <id>features</id>
@@ -952,6 +952,13 @@
           </association>
         </field>
         <field>
+          <name>xmlFieldsOrder</name>
+          <version>1.0.0+</version>
+          <association>
+            <type>XmlFieldsOrder</type>
+          </association>
+        </field>
+        <field>
           <name>xsdFeatures</name>
           <version>1.0.0+</version>
           <association>
@@ -1127,6 +1134,64 @@
             <type>String</type>
             <multiplicity>*</multiplicity>
           </association>
+        </field>
+      </fields>
+    </class>
+
+    <class>
+      <name>XmlFieldsOrder</name>
+      <superClass>XmlFieldsOrderParent</superClass>
+      <version>1.0.0+</version>
+      <description><![CDATA[<code>&lt;field xml.insertParentFieldsUpTo="xxx"&gt;</code>: insert parent fields.]]>
+      </description>
+      <fields>
+        <field>
+          <name>field1</name>
+          <version>1.0.0+</version>
+          <type>String</type>
+        </field>
+        <field xml.insertParentFieldsUpTo="field">
+          <name>field3</name>
+          <version>1.0.0+</version>
+          <type>String</type>
+        </field>
+        <field xml.insertParentFieldsUpTo="field5">
+          <name>field6</name>
+          <version>1.0.0+</version>
+          <type>String</type>
+        </field>
+      </fields>
+    </class>
+    <class>
+      <name>XmlFieldsOrderParent</name>
+      <superClass>XmlFieldsOrderParent2</superClass>
+      <version>1.0.0+</version>
+      <fields>
+        <field xml.insertParentFieldsUpTo="field">
+          <name>field4</name>
+          <version>1.0.0+</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>field5</name>
+          <version>1.0.0+</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>field7</name>
+          <version>1.0.0+</version>
+          <type>String</type>
+        </field>
+      </fields>
+    </class>
+    <class>
+      <name>XmlFieldsOrderParent2</name>
+      <version>1.0.0+</version>
+      <fields>
+        <field xml.tagName="field2">
+          <name>field</name>
+          <version>1.0.0+</version>
+          <type>String</type>
         </field>
       </fields>
     </class>

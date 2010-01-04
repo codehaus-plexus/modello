@@ -26,6 +26,7 @@ import java.util.List;
 
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
+import org.codehaus.modello.model.Version;
 import org.codehaus.modello.plugin.java.AbstractJavaModelloGenerator;
 import org.codehaus.modello.plugin.java.javasource.JSourceCode;
 import org.codehaus.modello.plugins.xml.metadata.XmlAssociationMetadata;
@@ -95,7 +96,7 @@ public abstract class AbstractXmlJavaGenerator
 
     /**
      * Gets all fields that are not marked as transient.
-     * 
+     *
      * @param modelFields The collection of model fields from which to extract the non-transient fields, must not be
      *            <code>null</code>.
      * @return The list of non-transient fields, can be empty but never <code>null</code>.
@@ -103,6 +104,18 @@ public abstract class AbstractXmlJavaGenerator
     protected List getNonTransientFields( List/*<ModelField>*/ modelFields )
     {
         return XmlModelHelpers.getNonTransientFields( modelFields );
+    }
+
+    /**
+     * Return the XML fields of this class, with proper XML order and no XML transient fields.
+     *
+     * @param modelClass current class
+     * @param version the version of the class to use
+     * @return the list of XML fields of this class
+     */
+    protected List getFieldsForXml( ModelClass modelClass, Version version )
+    {
+        return XmlModelHelpers.getFieldsForXml( modelClass, version );
     }
 
     protected String getValue( String type, String initialValue, XmlFieldMetadata xmlFieldMetadata )

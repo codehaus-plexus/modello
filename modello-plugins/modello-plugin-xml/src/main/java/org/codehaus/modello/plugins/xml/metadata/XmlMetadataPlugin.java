@@ -67,6 +67,8 @@ public class XmlMetadataPlugin
 
     public static final String XML_TRANSIENT = "xml.transient";
 
+    public static final String XML_INSERT_PARENT_FIELDS_UP_TO = "xml.insertParentFieldsUpTo";
+
     // ----------------------------------------------------------------------
     // Map to Metadata
     // ----------------------------------------------------------------------
@@ -106,6 +108,8 @@ public class XmlMetadataPlugin
         metadata.setFormat( getString( data, XML_FORMAT ) );
 
         metadata.setTransient( getBoolean( data, XML_TRANSIENT, false ) );
+
+        metadata.setInsertParentFieldsUpTo( getString( data, XML_INSERT_PARENT_FIELDS_UP_TO ) );
 
         return metadata;
     }

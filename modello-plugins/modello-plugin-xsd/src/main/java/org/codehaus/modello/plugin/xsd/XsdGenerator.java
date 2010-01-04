@@ -220,9 +220,7 @@ public class XsdGenerator
         w.startElement( "xs:complexType" );
         w.addAttribute( "name", modelClass.getName() );
 
-        List fields = getFieldsForClass( modelClass );
-
-        fields = getNonTransientFields( fields );
+        List fields = getFieldsForXml( modelClass, getGeneratedVersion() );
 
         boolean hasContentField = hasContentField( fields );
 
