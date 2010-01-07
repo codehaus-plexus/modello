@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.codehaus.modello.ModelloRuntimeException;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.Version;
@@ -227,7 +228,7 @@ class XmlModelHelpers
                     if ( !found )
                     {
                         // interParentFieldsUpTo not found
-                        //TODO throw Exception
+                        throw new ModelloRuntimeException( "parent field not found: class " + modelClass.getName() + " xml.insertParentFieldUpTo='" + xmlFieldMetadata.getInsertParentFieldsUpTo() + "'" );
                     }
                 }
 
