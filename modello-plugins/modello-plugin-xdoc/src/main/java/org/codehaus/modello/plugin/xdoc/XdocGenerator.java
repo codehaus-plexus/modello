@@ -236,7 +236,7 @@ public class XdocGenerator
             w.endElement();
         }
 
-        List attributeFields = getAttributeFieldsForClass( modelClass );
+        List attributeFields = getXmlAttributeFields( elementFields );
 
         elementFields.removeAll( attributeFields );
 
@@ -500,7 +500,9 @@ public class XdocGenerator
             return sb.toString();
         }
 
-        List attributeFields = getAttributeFieldsForClass( modelClass );
+        List fields = getFieldsForXml( modelClass, getGeneratedVersion() );
+
+        List attributeFields = getXmlAttributeFields( fields);
 
         if ( attributeFields.size() > 0 )
         {
@@ -520,7 +522,6 @@ public class XdocGenerator
 
         }
 
-        List fields = getFieldsForXml( modelClass, getGeneratedVersion() );
         fields.removeAll( attributeFields );
 
         if ( ( fields.size() == 0 ) || ( ( fields.size() == 1 ) && hasContentField( fields ) ) )

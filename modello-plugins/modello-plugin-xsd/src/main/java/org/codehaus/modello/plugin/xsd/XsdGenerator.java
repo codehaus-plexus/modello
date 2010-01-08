@@ -224,7 +224,7 @@ public class XsdGenerator
 
         boolean hasContentField = hasContentField( fields );
 
-        List attributeFields = getAttributeFieldsForClass( modelClass );
+        List attributeFields = getXmlAttributeFields( fields );
 
         fields.removeAll( attributeFields );
 

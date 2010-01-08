@@ -137,6 +137,32 @@ class XmlModelHelpers
     }
 
     /**
+     * Gets all fields that are not marked as XML attribute.
+     *
+     * @param modelFields The collection of model fields from which to extract the XML attributes, must not be
+     *            <code>null</code>.
+     * @return The list of XML attributes fields, can be empty but never <code>null</code>.
+     */
+    static List getXmlAttributeFields( List/*<ModelField>*/ modelFields )
+    {
+        List xmlAttributeFields = new ArrayList();
+
+        for ( Iterator it = modelFields.iterator(); it.hasNext(); )
+        {
+            ModelField field = (ModelField) it.next();
+
+            XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
+
+            if ( xmlFieldMetadata.isAttribute() )
+            {
+                xmlAttributeFields.add( field );
+            }
+        }
+
+        return xmlAttributeFields;
+    }
+
+    /**
      * Gets all fields that are not marked as transient.
      *
      * @param modelFields The collection of model fields from which to extract the non-transient fields, must not be

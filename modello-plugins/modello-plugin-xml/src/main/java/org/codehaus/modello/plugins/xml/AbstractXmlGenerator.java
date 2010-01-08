@@ -85,43 +85,6 @@ public abstract class AbstractXmlGenerator
         return XmlModelHelpers.resolveTagName( fieldTagName, xmlAssociationMetadata );
     }
 
-    /**
-     * Return the child attribute fields of this class.
-     * @param modelClass current class
-     * @return the list of attribute fields of this class
-     */
-    protected List getAttributeFieldsForClass( ModelClass modelClass )
-    {
-        List attributeFields = new ArrayList();
-
-        while ( modelClass != null )
-        {
-            List allFields = modelClass.getFields( getGeneratedVersion() );
-
-            for (Iterator allFieldsIt = allFields.iterator(); allFieldsIt.hasNext(); )
-            {
-                ModelField field = (ModelField) allFieldsIt.next();
-                XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
-                if ( xmlFieldMetadata.isAttribute() && !xmlFieldMetadata.isTransient() )
-                {
-                    attributeFields.add( field );
-                }
-            }
-
-            String superClass = modelClass.getSuperClass();
-            if ( superClass != null )
-            {
-                modelClass = getModel().getClass( superClass, getGeneratedVersion() );
-            }
-            else
-            {
-                modelClass = null;
-            }
-        }
-
-        return attributeFields;
-    }
-
     protected boolean hasContentField( List/*<ModelField>*/ modelFields )
     {
         return ( getContentField( modelFields ) != null );
@@ -136,6 +99,18 @@ public abstract class AbstractXmlGenerator
     protected ModelField getContentField( List/*<ModelField>*/ modelFields )
     {
         return XmlModelHelpers.getContentField( modelFields );
+    }
+
+    /**
+     * Gets all fields that are not marked as XML attribute.
+     *
+     * @param modelFields The collection of model fields from which to extract the XML attributes, must not be
+     *            <code>null</code>.
+     * @return The list of XML attributes fields, can be empty but never <code>null</code>.
+     */
+    protected List getXmlAttributeFields( List/*<ModelField>*/ modelFields )
+    {
+        return XmlModelHelpers.getXmlAttributeFields( modelFields );
     }
 
     /**
