@@ -133,13 +133,68 @@ public class Xpp3ReaderGenerator
 
         jClass.addMethod( addDefaultEntitiesGetter );
 
-        // ----------------------------------------------------------------------
-        // Write the parse(Reader) method which will do the unmarshalling.
-        // ----------------------------------------------------------------------
-
         ModelClass root = objectModel.getClass( objectModel.getRoot( getGeneratedVersion() ), getGeneratedVersion() );
 
+        // ----------------------------------------------------------------------
+        // Write the read(XmlPullParser,boolean) method which will do the unmarshalling.
+        // ----------------------------------------------------------------------
+
         JMethod unmarshall = new JMethod( "read", new JClass( root.getName() ), null );
+        unmarshall.getModifiers().makePrivate();
+
+        unmarshall.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
+        unmarshall.addParameter( new JParameter( JClass.BOOLEAN, "strict" ) );
+
+        unmarshall.addException( new JClass( "IOException" ) );
+        unmarshall.addException( new JClass( "XmlPullParserException" ) );
+
+        JSourceCode sc = unmarshall.getSourceCode();
+
+        String tagName = resolveTagName( root );
+
+        sc.add( "int eventType = parser.getEventType();" );
+
+        sc.add( "while ( eventType != XmlPullParser.END_DOCUMENT )" );
+
+        sc.add( "{" );
+        sc.indent();
+
+        sc.add( "if ( eventType == XmlPullParser.START_TAG )" );
+
+        sc.add( "{" );
+        sc.indent();
+
+        sc.add( "if ( strict && ! parser.getName().equals( \"" + tagName + "\" ) )" );
+
+        sc.add( "{" );
+        sc.addIndented( "throw new XmlPullParserException( \"Expected root element '" + tagName + "' but "
+                        + "found '\" + parser.getName() + \"'\", parser, null );" );
+        sc.add( "}" );
+
+        sc.add( root.getName() + ' ' + tagName + " = parse" + root.getName() + "( parser, strict );" );
+
+        sc.add( tagName + ".setModelEncoding( parser.getInputEncoding() );" );
+
+        sc.add( "return " + tagName + ';' );
+
+        sc.unindent();
+        sc.add( "}" );
+
+        sc.add( "eventType = parser.next();" );
+
+        sc.unindent();
+        sc.add( "}" );
+
+        sc.add( "throw new XmlPullParserException( \"Expected root element '" + tagName + "' but "
+                        + "found no element at all: invalid XML document\", parser, null );" );
+
+        jClass.addMethod( unmarshall );
+
+        // ----------------------------------------------------------------------
+        // Write the read(Reader[,boolean]) methods which will do the unmarshalling.
+        // ----------------------------------------------------------------------
+
+        unmarshall = new JMethod( "read", new JClass( root.getName() ), null );
         unmarshall.setComment( "@see ReaderFactory#newXmlReader" );
 
         unmarshall.addParameter( new JParameter( new JClass( "Reader" ), "reader" ) );
@@ -148,7 +203,7 @@ public class Xpp3ReaderGenerator
         unmarshall.addException( new JClass( "IOException" ) );
         unmarshall.addException( new JClass( "XmlPullParserException" ) );
 
-        JSourceCode sc = unmarshall.getSourceCode();
+        sc = unmarshall.getSourceCode();
 
         sc.add( "XmlPullParser parser = new MXParser();" );
 
@@ -162,9 +217,7 @@ public class Xpp3ReaderGenerator
 
         sc.add( "" );
 
-        sc.add( "parser.next();" );
-
-        sc.add( "return parse" + root.getName() + "( \"" + resolveTagName( root ) + "\", parser, strict );" );
+        sc.add( "return read( parser, strict );" );
 
         jClass.addMethod( unmarshall );
 
@@ -184,7 +237,7 @@ public class Xpp3ReaderGenerator
         jClass.addMethod( unmarshall );
 
         // ----------------------------------------------------------------------
-        // Write the parse(InputStream) method which will do the unmarshalling.
+        // Write the read(InputStream[,boolean]) methods which will do the unmarshalling.
         // ----------------------------------------------------------------------
 
         unmarshall = new JMethod( "read", new JClass( root.getName() ), null );
@@ -285,7 +338,6 @@ public class Xpp3ReaderGenerator
         JMethod unmarshall = new JMethod( "parse" + capClassName, new JClass( className ), null );
         unmarshall.getModifiers().makePrivate();
 
-        unmarshall.addParameter( new JParameter( new JClass( "String" ), "tagName" ) );
         unmarshall.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
         unmarshall.addParameter( new JParameter( JClass.BOOLEAN, "strict" ) );
 
@@ -294,6 +346,7 @@ public class Xpp3ReaderGenerator
 
         JSourceCode sc = unmarshall.getSourceCode();
 
+        sc.add( "String tagName = parser.getName();" );
         sc.add( className + " " + uncapClassName + " = new " + className + "();" );
 
         ModelField contentField = null;
@@ -312,52 +365,16 @@ public class Xpp3ReaderGenerator
         }
         else
         {
+            //Write other fields
+
             sc.add( "java.util.Set parsed = new java.util.HashSet();" );
 
-            if ( rootElement )
-            {
-                sc.add( "int eventType = parser.getEventType();" );
-
-                sc.add( "boolean foundRoot = false;" );
-
-                sc.add( uncapClassName + ".setModelEncoding( parser.getInputEncoding() );" );
-
-                sc.add( "while ( eventType != XmlPullParser.END_DOCUMENT )" );
-
-                sc.add( "{" );
-                sc.indent();
-
-                sc.add( "if ( eventType == XmlPullParser.START_TAG )" );
-            }
-            else
-            {
-                sc.add( "while ( parser.nextTag() == XmlPullParser.START_TAG )" );
-            }
+            sc.add( "while ( parser.nextTag() == XmlPullParser.START_TAG )" );
 
             sc.add( "{" );
             sc.indent();
 
             boolean addElse = false;
-
-            if ( rootElement )
-            {
-                sc.add( "if ( parser.getName().equals( tagName ) )" );
-
-                sc.add( "{" );
-                sc.addIndented( "foundRoot = true;" );
-                sc.add( "}" );
-
-                sc.add( "else if ( strict && ! foundRoot )" );
-
-                sc.add( "{" );
-                sc.addIndented( "throw new XmlPullParserException( \"Expected root element '\" + tagName + \"' but "
-                                + "found '\" + parser.getName() + \"'\", parser, null );" );
-                sc.add( "}" );
-
-                addElse = true;
-            }
-
-            //Write other fields
 
             for ( Iterator i = modelFields.iterator(); i.hasNext(); )
             {
@@ -372,65 +389,38 @@ public class Xpp3ReaderGenerator
                     addElse = true;
                 }
             }
-            if ( !rootElement )
+
+            if ( addElse )
             {
-                /*
-                if ( modelClass.getFields( getGeneratedVersion() ).size() > 0 )
-                {
-                    sc.add( "else" );
-
-                    sc.add( "{" );
-                    sc.addIndented( "parser.nextText();" );
-                    sc.add( "}" );
-                }
-                 */
-
-                if ( addElse )
-                {
-                    sc.add( "else" );
-
-                    sc.add( "{" );
-                    sc.indent();
-                }
-
-                sc.add( "if ( strict )" );
-
-                sc.add( "{" );
-                sc.addIndented(
-                    "throw new XmlPullParserException( \"Unrecognised tag: '\" + parser.getName() + \"'\", parser, null );" );
-                sc.add( "}" );
-
                 sc.add( "else" );
 
                 sc.add( "{" );
                 sc.indent();
-
-                sc.add( "// swallow up to end tag since this is not valid" );
-
-                sc.add( "while ( parser.next() != XmlPullParser.END_TAG ) {}" );
-
-                sc.unindent();
-                sc.add( "}" );
-
-                if ( addElse )
-                {
-                    sc.unindent();
-                    sc.add( "}" );
-                }
             }
-            else
+
+            sc.add( "if ( strict )" );
+
+            sc.add( "{" );
+            sc.addIndented(
+                "throw new XmlPullParserException( \"Unrecognised tag: '\" + parser.getName() + \"'\", parser, null );" );
+            sc.add( "}" );
+
+            sc.add( "else" );
+
+            sc.add( "{" );
+            sc.indent();
+
+            sc.add( "// swallow up to end tag since this is not valid" );
+
+            sc.add( "while ( parser.next() != XmlPullParser.END_TAG ) {}" );
+
+            sc.unindent();
+            sc.add( "}" );
+
+            if ( addElse )
             {
-                sc.add( "else if ( strict )" );
-
-                sc.add( "{" );
-                sc.addIndented(
-                    "throw new XmlPullParserException( \"Unrecognised tag: '\" + parser.getName() + \"'\", parser, null );" );
-                sc.add( "}" );
-
                 sc.unindent();
                 sc.add( "}" );
-
-                sc.add( "eventType = parser.next();" );
             }
 
             sc.unindent();
@@ -455,13 +445,13 @@ public class Xpp3ReaderGenerator
 
         sc.add( "if ( name.indexOf( ':' ) >= 0 )" );
         sc.add( "{" );
-        sc.add( "// just ignore attributes with non-default namespace (for example: xmlns:xsi)" );
+        sc.addIndented( "// just ignore attributes with non-default namespace (for example: xmlns:xsi)" );
         sc.add( "}" );
         if ( rootElement )
         {
             sc.add( "else if ( \"xmlns\".equals( name ) )" );
             sc.add( "{" );
-            sc.add( "// ignore xmlns attribute in root class, which is a reserved attribute name" );
+            sc.addIndented( "// ignore xmlns attribute in root class, which is a reserved attribute name" );
             sc.add( "}" );
         }
 
@@ -560,8 +550,7 @@ public class Xpp3ReaderGenerator
                 sc.add( tagComparison );
 
                 sc.add( "{" );
-                sc.addIndented( objectName + ".set" + capFieldName + "( parse" + association.getTo() + "( \""
-                                + fieldTagName + "\", parser, strict ) );" );
+                sc.addIndented( objectName + ".set" + capFieldName + "( parse" + association.getTo() + "( parser, strict ) );" );
                 sc.add( "}" );
             }
             else
@@ -625,8 +614,7 @@ public class Xpp3ReaderGenerator
 
                     if ( isClassInModel( association.getTo(), field.getModelClass().getModel() ) )
                     {
-                        sc.add( associationName + ".add( parse" + association.getTo() + "( \"" + valuesTagName
-                                + "\", parser, strict ) );" );
+                        sc.add( associationName + ".add( parse" + association.getTo() + "( parser, strict ) );" );
                     }
                     else
                     {
