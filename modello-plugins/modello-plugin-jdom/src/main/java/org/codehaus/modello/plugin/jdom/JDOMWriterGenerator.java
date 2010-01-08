@@ -592,23 +592,18 @@ public class JDOMWriterGenerator
         throws ModelloException
     {
         String className = clazz.getName();
+
+        String capClassName = capitalise( className );
+
         String uncapClassName = uncapitalise( className );
-        String clazzTagName = null;
-        if ( clazz.hasMetadata( XmlFieldMetadata.ID ) )
-        {
-            XmlFieldMetadata clazzMetadata = (XmlFieldMetadata) clazz.getMetadata( XmlFieldMetadata.ID );
-            clazzTagName = clazzMetadata.getTagName();
-        }
-        JMethod marshall = new JMethod( "update" + className );
-        marshall.addParameter( new JParameter( new JClass( className ), "value" ) );
+
+        JMethod marshall = new JMethod( "update" + capClassName );
+        marshall.addParameter( new JParameter( new JClass( className ), uncapClassName ) );
         marshall.addParameter( new JParameter( new JClass( "String" ), "xmlTag" ) );
         marshall.addParameter( new JParameter( new JClass( "Counter" ), "counter" ) );
         marshall.addParameter( new JParameter( new JClass( "Element" ), "element" ) );
         marshall.getModifiers().makeProtected();
-        if ( clazzTagName == null )
-        {
-            clazzTagName = uncapClassName;
-        }
+
         JSourceCode sc = marshall.getSourceCode();
         boolean shouldExist = alwaysExisting.contains( clazz );
         if ( shouldExist )
@@ -617,7 +612,7 @@ public class JDOMWriterGenerator
         }
         else
         {
-            sc.add( "boolean shouldExist = ( value != null );" );
+            sc.add( "boolean shouldExist = ( " + uncapClassName + " != null );" );
             sc.add( "Element root = updateElement( counter, element, xmlTag, shouldExist );" );
             sc.add( "if ( shouldExist )" );
             sc.add( "{" );
@@ -636,7 +631,7 @@ public class JDOMWriterGenerator
             String fieldTagName = resolveTagName( field, xmlFieldMetadata );
 
             String type = field.getType();
-            String value = "value." + getPrefix( javaFieldMetadata ) + capitalise( field.getName() ) + "()";
+            String value = uncapClassName + '.' + getPrefix( javaFieldMetadata ) + capitalise( field.getName() ) + "()";
             if ( xmlFieldMetadata.isAttribute() )
             {
                 continue;
