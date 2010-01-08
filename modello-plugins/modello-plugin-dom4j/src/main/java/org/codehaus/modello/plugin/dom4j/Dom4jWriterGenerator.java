@@ -175,14 +175,7 @@ public class Dom4jWriterGenerator
 
         ModelClassMetadata classMetadata = (ModelClassMetadata) modelClass.getMetadata( ModelClassMetadata.ID );
 
-        if ( classMetadata.isRootElement() )
-        {
-            marshall.addParameter( new JParameter( new JClass( "Document" ), "parentElement" ) );
-        }
-        else
-        {
-            marshall.addParameter( new JParameter( new JClass( "Element" ), "parentElement" ) );
-        }
+        marshall.addParameter( new JParameter( new JClass( "org.dom4j.Branch" ), "parentElement" ) );
 
         marshall.addException( new JClass( "java.io.IOException" ) );
 

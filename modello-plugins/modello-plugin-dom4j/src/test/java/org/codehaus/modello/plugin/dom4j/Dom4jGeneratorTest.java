@@ -93,7 +93,6 @@ public class Dom4jGeneratorTest
         modello.generate( model, "dom4j-writer", parameters );
         modello.generate( model, "dom4j-reader", parameters );
 
-        addDependency( "org.codehaus.modello", "modello-core", getModelloVersion() );
         addDependency( "dom4j", "dom4j", "1.6.1" );
 
         compile( getOutputDirectory(), getOutputClasses() );

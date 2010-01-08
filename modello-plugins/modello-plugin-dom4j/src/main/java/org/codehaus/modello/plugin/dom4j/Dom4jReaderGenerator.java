@@ -103,15 +103,17 @@ public class Dom4jReaderGenerator
 
         addModelImports( jClass, null );
 
-        // ----------------------------------------------------------------------
-        // Write the parse method which will do the unmarshalling.
-        // ----------------------------------------------------------------------
-
         ModelClass root = objectModel.getClass( objectModel.getRoot( getGeneratedVersion() ), getGeneratedVersion() );
+        JClass rootType = new JClass( root.getName() );
 
-        JMethod unmarshall = new JMethod( "read", new JClass( root.getName() ), null );
+        // ----------------------------------------------------------------------
+        // Write the read(XMLStreamReader,boolean) method which will do the unmarshalling.
+        // ----------------------------------------------------------------------
 
-        unmarshall.addParameter( new JParameter( new JClass( "Reader" ), "reader" ) );
+        JMethod unmarshall = new JMethod( "read", rootType, null );
+        unmarshall.getModifiers().makePrivate();
+
+        unmarshall.addParameter( new JParameter( new JClass( "Document" ), "document" ) );
         unmarshall.addParameter( new JParameter( JType.BOOLEAN, "strict" ) );
 
         unmarshall.addException( new JClass( "IOException" ) );
@@ -119,20 +121,44 @@ public class Dom4jReaderGenerator
 
         JSourceCode sc = unmarshall.getSourceCode();
 
+        String tagName = resolveTagName( root );
+
+        sc.add( "String encoding = document.getXMLEncoding();" );
+
+        sc.add( root.getName() + ' ' + tagName + " = parse" + root.getName() + "( \"" + resolveTagName( root )
+                + "\", document.getRootElement(), strict );" );
+
+        sc.add( tagName + ".setModelEncoding( encoding );" );
+
+        sc.add( "return " + tagName + ";" );
+
+        jClass.addMethod( unmarshall );
+
+        // ----------------------------------------------------------------------
+        // Write the read(Reader[,boolean]) methods which will do the unmarshalling.
+        // ----------------------------------------------------------------------
+
+        unmarshall = new JMethod( "read", rootType, null );
+
+        unmarshall.addParameter( new JParameter( new JClass( "Reader" ), "reader" ) );
+        unmarshall.addParameter( new JParameter( JType.BOOLEAN, "strict" ) );
+
+        unmarshall.addException( new JClass( "IOException" ) );
+        unmarshall.addException( new JClass( "DocumentException" ) );
+
+        sc = unmarshall.getSourceCode();
+
         sc.add( "SAXReader parser = new SAXReader();" );
 
         sc.add( "Document document = parser.read( reader );" );
 
-        sc.add( "String encoding = document.getXMLEncoding();" );
-
-        sc.add( "return parse" + root.getName() + "( \"" + resolveTagName( root )
-            + "\", document.getRootElement(), strict, encoding );" );
+        sc.add( "return read( document, strict );" );
 
         jClass.addMethod( unmarshall );
 
         // ----------------------------------------------------------------------
 
-        unmarshall = new JMethod( "read", new JClass( root.getName() ), null );
+        unmarshall = new JMethod( "read", rootType, null );
 
         unmarshall.addParameter( new JParameter( new JClass( "Reader" ), "reader" ) );
 
@@ -146,8 +172,10 @@ public class Dom4jReaderGenerator
         jClass.addMethod( unmarshall );
 
         // ----------------------------------------------------------------------
+        // Write the read(URL[,boolean]) methods which will do the unmarshalling.
+        // ----------------------------------------------------------------------
 
-        unmarshall = new JMethod( "read", new JClass( root.getName() ), null );
+        unmarshall = new JMethod( "read", rootType, null );
 
         unmarshall.addParameter( new JParameter( new JClass( "URL" ), "url" ) );
         unmarshall.addParameter( new JParameter( JType.BOOLEAN, "strict" ) );
@@ -161,16 +189,13 @@ public class Dom4jReaderGenerator
 
         sc.add( "Document document = parser.read( url );" );
 
-        sc.add( "String encoding = document.getXMLEncoding();" );
-
-        sc.add( "return parse" + root.getName() + "( \"" + resolveTagName( root )
-            + "\", document.getRootElement(), strict, encoding );" );
+        sc.add( "return read( document, strict );" );
 
         jClass.addMethod( unmarshall );
 
         // ----------------------------------------------------------------------
 
-        unmarshall = new JMethod( "read", new JClass( root.getName() ), null );
+        unmarshall = new JMethod( "read", rootType, null );
 
         unmarshall.addParameter( new JParameter( new JClass( "URL" ), "url" ) );
 
@@ -238,7 +263,6 @@ public class Dom4jReaderGenerator
         unmarshall.addParameter( new JParameter( new JClass( "String" ), "tagName" ) );
         unmarshall.addParameter( new JParameter( new JClass( "Element" ), "element" ) );
         unmarshall.addParameter( new JParameter( JType.BOOLEAN, "strict" ) );
-        unmarshall.addParameter( new JParameter( new JClass( "String" ), "encoding" ) );
 
         unmarshall.addException( new JClass( "IOException" ) );
         unmarshall.addException( new JClass( "DocumentException" ) );
@@ -287,9 +311,6 @@ public class Dom4jReaderGenerator
 
         if ( rootElement )
         {
-            // encoding parameter is only used in root class
-            sc.add( uncapClassName + ".setModelEncoding( encoding );" );
-
             sc.add( "if ( strict )" );
             sc.add( "{" );
             sc.indent();
@@ -425,7 +446,7 @@ public class Dom4jReaderGenerator
 
                 sc.add( "{" );
                 sc.addIndented( objectName + ".set" + capFieldName + "( parse" + association.getTo() + "( \""
-                                + fieldTagName + "\", childElement, strict, encoding ) );" );
+                                + fieldTagName + "\", childElement, strict ) );" );
                 sc.add( "}" );
             }
             else
@@ -511,7 +532,7 @@ public class Dom4jReaderGenerator
                     if ( isClassInModel( association.getTo(), field.getModelClass().getModel() ) )
                     {
                         sc.add( associationName + ".add( parse" + association.getTo() + "( \"" + valuesTagName
-                            + "\", listElement, strict, encoding ) );" );
+                            + "\", listElement, strict ) );" );
                     }
                     else
                     {
