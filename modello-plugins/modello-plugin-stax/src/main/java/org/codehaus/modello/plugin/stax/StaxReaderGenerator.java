@@ -126,10 +126,11 @@ public class StaxReaderGenerator
         addModelImports( jClass, null );
 
         // ----------------------------------------------------------------------
-        // Write the parse method which will do the unmarshalling.
+        // Write reference resolvers.
         // ----------------------------------------------------------------------
 
         ModelClass root = objectModel.getClass( objectModel.getRoot( getGeneratedVersion() ), getGeneratedVersion() );
+        JClass rootType = new JClass( root.getName() );
 
         GeneratorNode rootNode = findRequiredReferenceResolvers( root, null );
 
@@ -140,90 +141,111 @@ public class StaxReaderGenerator
             writeReferenceResolvers( node, jClass );
         }
 
-        JClass returnType = new JClass( root.getName() );
-        JMethod method = new JMethod( "read", returnType, null );
+        // ----------------------------------------------------------------------
+        // Write the read(XMLStreamReader,boolean) method which will do the unmarshalling.
+        // ----------------------------------------------------------------------
 
-        method.addParameter( new JParameter( new JClass( "Reader" ), "reader" ) );
-        method.addParameter( new JParameter( JType.BOOLEAN, "strict" ) );
+        JMethod unmarshall = new JMethod( "read", rootType, null );
+        unmarshall.getModifiers().makePrivate();
 
-        method.addException( new JClass( "IOException" ) );
-        method.addException( new JClass( "XMLStreamException" ) );
+        unmarshall.addParameter( new JParameter( new JClass( "XMLStreamReader" ), "xmlStreamReader" ) );
+        unmarshall.addParameter( new JParameter( JType.BOOLEAN, "strict" ) );
 
-        JSourceCode sc = method.getSourceCode();
+        unmarshall.addException( new JClass( "IOException" ) );
+        unmarshall.addException( new JClass( "XMLStreamException" ) );
+
+        JSourceCode sc = unmarshall.getSourceCode();
+
+        String tagName = resolveTagName( root );
+
+        sc.add( "String encoding = xmlStreamReader.getCharacterEncodingScheme();" );
+
+        sc.add( root.getName() + ' ' + tagName + " = parse" + root.getName() + "( \"" + resolveTagName( root )
+            + "\", xmlStreamReader, strict );" );
+
+        sc.add( tagName + ".setModelEncoding( encoding );" );
+
+        sc.add( "resolveReferences( " + tagName + " );" );
+
+        sc.add( "return " + tagName + ";" );
+
+        jClass.addMethod( unmarshall );
+
+        // ----------------------------------------------------------------------
+        // Write the read(Reader[,boolean]) methods which will do the unmarshalling.
+        // ----------------------------------------------------------------------
+
+        unmarshall = new JMethod( "read", rootType, null );
+
+        unmarshall.addParameter( new JParameter( new JClass( "Reader" ), "reader" ) );
+        unmarshall.addParameter( new JParameter( JType.BOOLEAN, "strict" ) );
+
+        unmarshall.addException( new JClass( "IOException" ) );
+        unmarshall.addException( new JClass( "XMLStreamException" ) );
+
+        sc = unmarshall.getSourceCode();
 
         sc.add( "XMLStreamReader xmlStreamReader = XMLInputFactory.newInstance().createXMLStreamReader( reader );" );
 
         sc.add( "" );
 
-        sc.add( "String encoding = xmlStreamReader.getCharacterEncodingScheme();" );
+        sc.add( "return read( xmlStreamReader, strict );" );
 
-        sc.add( returnType + " value = parse" + root.getName() + "( \"" + resolveTagName( root )
-            + "\", xmlStreamReader, strict, encoding );" );
-
-        sc.add( "resolveReferences( value );" );
-
-        sc.add( "return value;" );
-
-        jClass.addMethod( method );
+        jClass.addMethod( unmarshall );
 
         // ----------------------------------------------------------------------
 
-        method = new JMethod( "read", returnType, null );
+        unmarshall = new JMethod( "read", rootType, null );
 
-        method.addParameter( new JParameter( new JClass( "Reader" ), "reader" ) );
+        unmarshall.addParameter( new JParameter( new JClass( "Reader" ), "reader" ) );
 
-        method.addException( new JClass( "IOException" ) );
-        method.addException( new JClass( "XMLStreamException" ) );
+        unmarshall.addException( new JClass( "IOException" ) );
+        unmarshall.addException( new JClass( "XMLStreamException" ) );
 
-        sc = method.getSourceCode();
+        sc = unmarshall.getSourceCode();
         sc.add( "return read( reader, true );" );
 
-        jClass.addMethod( method );
+        jClass.addMethod( unmarshall );
 
         // ----------------------------------------------------------------------
+        // Write the read(String[,boolean]) methods which will do the unmarshalling.
+        // ----------------------------------------------------------------------
 
-        method = new JMethod( "read", returnType, null );
+        unmarshall = new JMethod( "read", rootType, null );
 
-        method.addParameter( new JParameter( new JClass( "String" ), "filePath" ) );
+        unmarshall.addParameter( new JParameter( new JClass( "String" ), "filePath" ) );
 
-        method.addParameter( new JParameter( JType.BOOLEAN, "strict" ) );
+        unmarshall.addParameter( new JParameter( JType.BOOLEAN, "strict" ) );
 
-        method.addException( new JClass( "IOException" ) );
-        method.addException( new JClass( "XMLStreamException" ) );
+        unmarshall.addException( new JClass( "IOException" ) );
+        unmarshall.addException( new JClass( "XMLStreamException" ) );
 
-        sc = method.getSourceCode();
+        sc = unmarshall.getSourceCode();
 
-        sc.add( "File file = new File(filePath);" );
+        sc.add( "File file = new File( filePath );" );
 
         sc.add( "XMLStreamReader xmlStreamReader = XMLInputFactory.newInstance().createXMLStreamReader( "
-                + "file.toURL().toExternalForm(), new FileInputStream(file) );" );
+                + "file.toURL().toExternalForm(), new FileInputStream( file ) );" );
 
         sc.add( "" );
 
-        sc.add( "String encoding = xmlStreamReader.getCharacterEncodingScheme();" );
+        sc.add( "return read( xmlStreamReader, strict );" );
 
-        sc.add( returnType + " value = parse" + root.getName() + "( \"" + resolveTagName( root )
-            + "\", xmlStreamReader, strict, encoding );" );
-
-        sc.add( "resolveReferences( value );" );
-
-        sc.add( "return value;" );
-
-        jClass.addMethod( method );
+        jClass.addMethod( unmarshall );
 
         // ----------------------------------------------------------------------
 
-        method = new JMethod( "read", returnType, null );
+        unmarshall = new JMethod( "read", rootType, null );
 
-        method.addParameter( new JParameter( new JClass( "String" ), "filePath" ) );
+        unmarshall.addParameter( new JParameter( new JClass( "String" ), "filePath" ) );
 
-        method.addException( new JClass( "IOException" ) );
-        method.addException( new JClass( "XMLStreamException" ) );
+        unmarshall.addException( new JClass( "IOException" ) );
+        unmarshall.addException( new JClass( "XMLStreamException" ) );
 
-        sc = method.getSourceCode();
+        sc = unmarshall.getSourceCode();
         sc.add( "return read( filePath, true );" );
 
-        jClass.addMethod( method );
+        jClass.addMethod( unmarshall );
 
         // Determine the version. Currently, it causes the document to be reparsed, but could be made more efficient in
         // future by buffering the read XML and piping that into any consequent read method.
@@ -591,7 +613,6 @@ public class StaxReaderGenerator
         unmarshall.addParameter( new JParameter( new JClass( "String" ), "tagName" ) );
         unmarshall.addParameter( new JParameter( new JClass( "XMLStreamReader" ), "xmlStreamReader" ) );
         unmarshall.addParameter( new JParameter( JType.BOOLEAN, "strict" ) );
-        unmarshall.addParameter( new JParameter( new JClass( "String" ), "encoding" ) );
 
         unmarshall.addException( new JClass( "IOException" ) );
         unmarshall.addException( new JClass( "XMLStreamException" ) );
@@ -617,9 +638,6 @@ public class StaxReaderGenerator
 
             if ( rootElement )
             {
-                // encoding parameter is only used in root class
-                sc.add( uncapClassName + ".setModelEncoding( encoding );" );
-
                 sc.add( "boolean foundRoot = false;" );
 
                 sc.add( "while ( xmlStreamReader.hasNext() )" );
@@ -1083,7 +1101,7 @@ public class StaxReaderGenerator
                 else
                 {
                     sc.add( objectName + ".set" + capFieldName + "( parse" + association.getTo() + "( \"" + fieldTagName
-                            + "\", xmlStreamReader, strict, encoding ) );" );
+                            + "\", xmlStreamReader, strict ) );" );
                 }
 
                 sc.unindent();
@@ -1163,13 +1181,13 @@ public class StaxReaderGenerator
                             //  just add it to the array. This could disrupt the links if you are using break/create
                             //  constraints in modello.
                             sc.add( associationName + ".add( parse" + association.getTo() + "( \"" + valuesTagName
-                                    + "\", xmlStreamReader, strict, encoding ) );" );
+                                    + "\", xmlStreamReader, strict ) );" );
                         }
                         else
                         {
                             sc.add( objectName + ".add" + capitalise( singular( associationName ) ) + "( parse"
                                     + association.getTo() + "( \"" + valuesTagName
-                                    + "\", xmlStreamReader, strict, encoding ) );" );
+                                    + "\", xmlStreamReader, strict ) );" );
                         }
                     }
                     else
@@ -1380,7 +1398,7 @@ public class StaxReaderGenerator
 /* TODO:
         if ( xmlFieldMetadata.isRequired() )
         {
-            parserGetter = "getRequiredAttributeValue( " + parserGetter + ", \"" + tagName + "\", parser, strict, encoding )";
+            parserGetter = "getRequiredAttributeValue( " + parserGetter + ", \"" + tagName + "\", parser, strict )";
         }
 */
         if ( field.getDefaultValue() != null )
