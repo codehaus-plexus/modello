@@ -134,12 +134,13 @@ public class Xpp3ReaderGenerator
         jClass.addMethod( addDefaultEntitiesGetter );
 
         ModelClass root = objectModel.getClass( objectModel.getRoot( getGeneratedVersion() ), getGeneratedVersion() );
+        JClass rootType = new JClass( root.getName() );
 
         // ----------------------------------------------------------------------
         // Write the read(XmlPullParser,boolean) method which will do the unmarshalling.
         // ----------------------------------------------------------------------
 
-        JMethod unmarshall = new JMethod( "read", new JClass( root.getName() ), null );
+        JMethod unmarshall = new JMethod( "read", rootType, null );
         unmarshall.getModifiers().makePrivate();
 
         unmarshall.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
@@ -194,7 +195,7 @@ public class Xpp3ReaderGenerator
         // Write the read(Reader[,boolean]) methods which will do the unmarshalling.
         // ----------------------------------------------------------------------
 
-        unmarshall = new JMethod( "read", new JClass( root.getName() ), null );
+        unmarshall = new JMethod( "read", rootType, null );
         unmarshall.setComment( "@see ReaderFactory#newXmlReader" );
 
         unmarshall.addParameter( new JParameter( new JClass( "Reader" ), "reader" ) );
@@ -223,7 +224,7 @@ public class Xpp3ReaderGenerator
 
         // ----------------------------------------------------------------------
 
-        unmarshall = new JMethod( "read", new JClass( root.getName() ), null );
+        unmarshall = new JMethod( "read", rootType, null );
         unmarshall.setComment( "@see ReaderFactory#newXmlReader" );
 
         unmarshall.addParameter( new JParameter( new JClass( "Reader" ), "reader" ) );
@@ -240,7 +241,7 @@ public class Xpp3ReaderGenerator
         // Write the read(InputStream[,boolean]) methods which will do the unmarshalling.
         // ----------------------------------------------------------------------
 
-        unmarshall = new JMethod( "read", new JClass( root.getName() ), null );
+        unmarshall = new JMethod( "read", rootType, null );
 
         unmarshall.addParameter( new JParameter( new JClass( "InputStream" ), "in" ) );
         unmarshall.addParameter( new JParameter( JClass.BOOLEAN, "strict" ) );
@@ -260,7 +261,7 @@ public class Xpp3ReaderGenerator
 
         // --------------------------------------------------------------------
 
-        unmarshall = new JMethod( "read", new JClass( root.getName() ), null );
+        unmarshall = new JMethod( "read", rootType, null );
 
         unmarshall.addParameter( new JParameter( new JClass( "InputStream" ), "in" ) );
 
