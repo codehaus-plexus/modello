@@ -266,19 +266,22 @@ public class JDOMWriterGenerator
         updateElement.getModifiers().makeProtected();
         sc = updateElement.getSourceCode();
         sc.add( "Element element =  parent.getChild( name, parent.getNamespace() );" );
-        sc.add( "if ( element != null && shouldExist )" );
+
+        sc.add( "if ( shouldExist )" );
         sc.add( "{" );
-        sc.addIndented( "counter.increaseCount();" );
-        sc.add( "}" );
-        sc.add( "if ( element == null && shouldExist )" );
+        sc.indent();
+        sc.add( "if ( element == null )" );
         sc.add( "{" );
         sc.indent();
         sc.add( "element = factory.element( name, parent.getNamespace() );" );
         sc.add( "insertAtPreferredLocation( parent, element, counter );" );
+        sc.unindent();
+        sc.add( "}" );
         sc.add( "counter.increaseCount();" );
         sc.unindent();
         sc.add( "}" );
-        sc.add( "if ( !shouldExist && element != null )" );
+
+        sc.add( "else if ( element != null )" );
         sc.add( "{" );
         sc.indent();
         sc.add( "int index = parent.indexOf( element );" );
