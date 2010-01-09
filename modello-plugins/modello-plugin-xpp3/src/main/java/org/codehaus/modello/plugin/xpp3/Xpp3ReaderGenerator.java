@@ -399,24 +399,7 @@ public class Xpp3ReaderGenerator
                 sc.indent();
             }
 
-            sc.add( "if ( strict )" );
-
-            sc.add( "{" );
-            sc.addIndented(
-                "throw new XmlPullParserException( \"Unrecognised tag: '\" + parser.getName() + \"'\", parser, null );" );
-            sc.add( "}" );
-
-            sc.add( "else" );
-
-            sc.add( "{" );
-            sc.indent();
-
-            sc.add( "// swallow up to end tag since this is not valid" );
-
-            sc.add( "while ( parser.next() != XmlPullParser.END_TAG ) {}" );
-
-            sc.unindent();
-            sc.add( "}" );
+            sc.add( "checkUnknownElement( parser, strict );" );
 
             if ( addElse )
             {
@@ -627,23 +610,10 @@ public class Xpp3ReaderGenerator
                         sc.unindent();
                         sc.add( "}" );
 
-                        sc.add( "else if ( strict )" );
-
-                        sc.add( "{" );
-                        sc.addIndented( "throw new XmlPullParserException( \"Unrecognised association: '\" + "
-                                        + "parser.getName() + \"'\", parser, null );" );
-                        sc.add( "}" );
-
                         sc.add( "else" );
 
                         sc.add( "{" );
-                        sc.indent();
-
-                        sc.add( "// swallow up to end tag since this is not valid" );
-
-                        sc.add( "while ( parser.next() != XmlPullParser.END_TAG ) {}" );
-
-                        sc.unindent();
+                        sc.addIndented( "checkUnknownElement( parser, strict );" );
                         sc.add( "}" );
 
                         sc.unindent();
@@ -1342,6 +1312,33 @@ public class Xpp3ReaderGenerator
         sc.add( "parsed.add( tagName );" );
 
         sc.add( "return true;" );
+
+        jClass.addMethod( method );
+
+        // --------------------------------------------------------------------
+
+        method = new JMethod( "checkUnknownElement", null, null );
+        method.getModifiers().makePrivate();
+
+        method.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
+        method.addParameter( new JParameter( JType.BOOLEAN, "strict" ) );
+        method.addException( new JClass( "XmlPullParserException" ) );
+        method.addException( new JClass( "IOException" ) );
+
+        sc = method.getSourceCode();
+
+        sc.add( "if ( strict )" );
+
+        sc.add( "{" );
+        sc.addIndented(
+            "throw new XmlPullParserException( \"Unrecognised tag: '\" + parser.getName() + \"'\", parser, null );" );
+        sc.add( "}" );
+
+        sc.add( "" );
+
+        sc.add( "// swallow up to end tag since this is not valid" );
+
+        sc.add( "while ( parser.next() != XmlPullParser.END_TAG ) {}" );
 
         jClass.addMethod( method );
     }
