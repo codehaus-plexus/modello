@@ -471,17 +471,8 @@ public class Dom4jReaderGenerator
 
                         sc.add( "Node n = (Node) j.next();" );
 
-                        sc.add( "if ( n.getNodeType() != Node.ELEMENT_NODE )" );
-
-                        sc.add( "{" );
-                        sc.indent();
-
-                        // TODO: track the whitespace in the model
-
-                        sc.unindent();
-                        sc.add( "}" );
-
-                        sc.add( "else" );
+                        sc.add( "if ( n.getNodeType() == Node.ELEMENT_NODE )" );
+                        // TODO: track the whitespace in the model (other NodeTypes)
 
                         sc.add( "{" );
                         sc.indent();
@@ -572,17 +563,8 @@ public class Dom4jReaderGenerator
 
                         sc.add( "Node n = (Node) j.next();" );
 
-                        sc.add( "if ( n.getNodeType() != Node.ELEMENT_NODE )" );
-
-                        sc.add( "{" );
-                        sc.indent();
-
-                        // TODO: track the whitespace in the model
-
-                        sc.unindent();
-                        sc.add( "}" );
-
-                        sc.add( "else" );
+                        sc.add( "if ( n.getNodeType() == Node.ELEMENT_NODE )" );
+                        // TODO: track the whitespace in the model (other NodeTypes)
 
                         sc.add( "{" );
                         sc.indent();
@@ -607,17 +589,8 @@ public class Dom4jReaderGenerator
 
                         sc.add( "Node nd = (Node) k.next();" );
 
-                        sc.add( "if ( nd.getNodeType() != Node.ELEMENT_NODE )" );
-
-                        sc.add( "{" );
-                        sc.indent();
-
-                        // TODO: track the whitespace in the model
-
-                        sc.unindent();
-                        sc.add( "}" );
-
-                        sc.add( "else" );
+                        sc.add( "if ( nd.getNodeType() == Node.ELEMENT_NODE )" );
+                        // TODO: track the whitespace in the model (other NodeTypes)
 
                         sc.add( "{" );
                         sc.indent();
@@ -670,17 +643,8 @@ public class Dom4jReaderGenerator
 
                         sc.add( "Node n = (Node) j.next();" );
 
-                        sc.add( "if ( n.getNodeType() != Node.ELEMENT_NODE )" );
-
-                        sc.add( "{" );
-                        sc.indent();
-
-                        // TODO: track the whitespace in the model
-
-                        sc.unindent();
-                        sc.add( "}" );
-
-                        sc.add( "else" );
+                        sc.add( "if ( n.getNodeType() == Node.ELEMENT_NODE )" );
+                        // TODO: track the whitespace in the model (other NodeTypes)
 
                         sc.add( "{" );
                         sc.indent();
