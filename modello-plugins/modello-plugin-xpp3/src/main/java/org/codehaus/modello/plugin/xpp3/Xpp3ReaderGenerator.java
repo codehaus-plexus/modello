@@ -465,10 +465,10 @@ public class Xpp3ReaderGenerator
                 contentField = field;
             }
         }
-        sc.add( "else if ( strict )" );
+        sc.add( "else" );
 
         sc.add( "{" );
-        sc.addIndented( "throw new XmlPullParserException( \"Unknown attribute '\" + name + \"' for tag '\" + tagName + \"'\", parser, null );" );
+        sc.addIndented( "checkUnknownAttribute( parser, name, tagName, strict );" );
         sc.add( "}" );
 
         sc.unindent();
@@ -1339,6 +1339,28 @@ public class Xpp3ReaderGenerator
         sc.add( "// swallow up to end tag since this is not valid" );
 
         sc.add( "while ( parser.next() != XmlPullParser.END_TAG ) {}" );
+
+        jClass.addMethod( method );
+
+        // --------------------------------------------------------------------
+
+        method = new JMethod( "checkUnknownAttribute", null, null );
+        method.getModifiers().makePrivate();
+
+        method.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
+        method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
+        method.addParameter( new JParameter( new JClass( "String" ), "tagName" ) );
+        method.addParameter( new JParameter( JType.BOOLEAN, "strict" ) );
+        method.addException( new JClass( "XmlPullParserException" ) );
+        method.addException( new JClass( "IOException" ) );
+
+        sc = method.getSourceCode();
+
+        sc.add( "if ( strict )" );
+
+        sc.add( "{" );
+        sc.addIndented( "throw new XmlPullParserException( \"Unknown attribute '\" + attribute + \"' for tag '\" + tagName + \"'\", parser, null );" );
+        sc.add( "}" );
 
         jClass.addMethod( method );
     }
