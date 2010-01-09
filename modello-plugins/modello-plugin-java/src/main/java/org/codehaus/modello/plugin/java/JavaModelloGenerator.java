@@ -40,7 +40,6 @@ import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelDefault;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.ModelInterface;
-import org.codehaus.modello.model.ModelValidationException;
 import org.codehaus.modello.plugin.java.javasource.JArrayType;
 import org.codehaus.modello.plugin.java.javasource.JClass;
 import org.codehaus.modello.plugin.java.javasource.JCollectionType;
@@ -1023,19 +1022,10 @@ public class JavaModelloGenerator
             {
                 JType componentType = getComponentType( modelAssociation, javaAssociationMetadata );
 
-                type = new JCollectionType( modelAssociation.getType(), componentType,
-                                            useJava5 );
+                type = new JCollectionType( modelAssociation.getType(), componentType, useJava5 );
 
-                ModelDefault modelDefault;
-                try
-                {
-                    modelDefault = getModel().getDefault( modelAssociation.getType() );
-                }
-                catch ( ModelValidationException e )
-                {
-                    // can't really happen
-                    throw new ModelloException( "The Java Modello Generator could not determine default implementation of " + modelAssociation.getType(), e );
-                }
+                ModelDefault modelDefault = getModel().getDefault( modelAssociation.getType() );
+
                 if ( useJava5 )
                 {
                     defaultValue = StringUtils.replace( modelDefault.getValue(), "<?>", "<" + componentType.getName() + ">" );
@@ -1422,8 +1412,7 @@ public class JavaModelloGenerator
             else if ( modelAssociation.isManyMultiplicity() && modelAssociation.isGenericType() )
             {
                 JType componentType = getComponentType( modelAssociation, javaAssociationMetadata );
-                type = new JCollectionType( modelAssociation.getType(), componentType,
-                                            useJava5 );
+                type = new JCollectionType( modelAssociation.getType(), componentType, useJava5 );
             }
             else if ( useTo )
             {

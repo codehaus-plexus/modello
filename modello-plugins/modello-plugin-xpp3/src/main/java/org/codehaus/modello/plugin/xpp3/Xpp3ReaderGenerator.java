@@ -1327,12 +1327,19 @@ public class Xpp3ReaderGenerator
 
         sc = method.getSourceCode();
 
-        sc.add( "if ( strict )" );
+        if ( strictXmlAttributes )
+        {
+            sc.add( "if ( strict )" );
 
-        sc.add( "{" );
-        sc.addIndented(
-            "throw new XmlPullParserException( \"Unrecognised tag: '\" + parser.getName() + \"'\", parser, null );" );
-        sc.add( "}" );
+            sc.add( "{" );
+            sc.addIndented(
+                "throw new XmlPullParserException( \"Unrecognised tag: '\" + parser.getName() + \"'\", parser, null );" );
+            sc.add( "}" );
+        }
+        else
+        {
+            sc.add( "// strictXmlAttributes = false for model: ignore unknown XML attribute, even if strict == true" );
+        }
 
         sc.add( "" );
 

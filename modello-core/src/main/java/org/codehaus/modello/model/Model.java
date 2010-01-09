@@ -243,13 +243,19 @@ public class Model
     }
 
     public ModelDefault getDefault( String key )
-        throws ModelValidationException
     {
         ModelDefault modelDefault = (ModelDefault) defaultMap.get( key );
 
         if ( modelDefault == null )
         {
-            modelDefault = ModelDefault.getDefault( key );
+            try
+            {
+                modelDefault = ModelDefault.getDefault( key );
+            }
+            catch ( ModelValidationException mve )
+            {
+                throw new ModelloRuntimeException( mve.getMessage(), mve);
+            }
         }
 
         return modelDefault;
@@ -269,16 +275,7 @@ public class Model
 
     public String getDefaultPackageName( boolean withVersion, Version version )
     {
-        String packageName;
-
-        try
-        {
-            packageName = getDefault( ModelDefault.PACKAGE ).getValue();
-        }
-        catch ( ModelValidationException mve )
-        {
-            packageName = ModelDefault.PACKAGE_VALUE;
-        }
+        String packageName = getDefault( ModelDefault.PACKAGE ).getValue();
 
         if ( withVersion )
         {

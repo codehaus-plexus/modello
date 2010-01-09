@@ -23,8 +23,12 @@ package org.codehaus.modello.plugins.xml;
  */
 
 import java.util.List;
+import java.util.Properties;
 
+import org.codehaus.modello.ModelloException;
+import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelClass;
+import org.codehaus.modello.model.ModelDefault;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.Version;
 import org.codehaus.modello.plugin.java.AbstractJavaModelloGenerator;
@@ -41,6 +45,16 @@ import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
 public abstract class AbstractXmlJavaGenerator
     extends AbstractJavaModelloGenerator
 {
+    protected boolean strictXmlAttributes;
+
+    protected void initialize( Model model, Properties parameters )
+        throws ModelloException
+    {
+        super.initialize( model, parameters );
+
+        strictXmlAttributes = model.getDefault( ModelDefault.STRICT_XML_ATTRIBUTES ).getBoolean();
+    }
+
     protected String getFileName( String suffix )
     {
         String name = getModel().getName();

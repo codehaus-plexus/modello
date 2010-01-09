@@ -199,7 +199,8 @@
           <type>String</type>
           <description><![CDATA[The key to this property. Can be one of: <code>checkDeprecation</code>,
            <code>package</code>, <code>java.util.List</code>, <code>java.util.Map</code>,
-           <code>java.util.Properties</code>, <code>java.util.Set</code>.]]></description>
+           <code>java.util.Properties</code>, <code>java.util.Set</code>,
+           <code>strictXmlAttributes</code>.]]></description>
         </field>
         <field>
           <name>value</name>
