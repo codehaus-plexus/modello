@@ -1721,7 +1721,7 @@ public class StaxReaderGenerator
         method.addParameter( new JParameter( new JClass( "XMLStreamReader" ), "xmlStreamReader" ) );
         method.addException( new JClass( "XMLStreamException" ) );
 
-        writeDateParsingHelper( method.getSourceCode(), "new XMLStreamException( e.getMessage() )" );
+        writeDateParsingHelper( method.getSourceCode(), "new XMLStreamException( e.getMessage(), xmlStreamReader.getLocation(), e )" );
 
         jClass.addMethod( method );
 
@@ -1824,7 +1824,7 @@ public class StaxReaderGenerator
         sc.addIndented( "return " + expression + ";" );
         sc.add( "}" );
 
-        sc.add( "catch ( NumberFormatException e )" );
+        sc.add( "catch ( NumberFormatException nfe )" );
 
         sc.add( "{" );
         sc.indent();
@@ -1833,7 +1833,7 @@ public class StaxReaderGenerator
 
         sc.add( "{" );
         sc.addIndented( "throw new XMLStreamException( \"Unable to parse element '\" + attribute + \"', must be "
-                        + typeDesc + " but was '\" + s + \"'\", xmlStreamReader.getLocation() );" );
+                        + typeDesc + " but was '\" + s + \"'\", xmlStreamReader.getLocation(), nfe );" );
         sc.add( "}" );
 
         sc.unindent();
