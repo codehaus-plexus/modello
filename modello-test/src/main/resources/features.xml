@@ -181,4 +181,14 @@
       </child>
     </child>
   </node>
+
+  <!--rootRecursion> MODELLO-226
+    <node><value>1</value></node>
+    <rootRecursion>
+      <node><value>2</value></node>
+      <rootRecursion>
+        <node><value>3</value></node>
+      </rootRecursion>
+    </rootRecursion>
+  </rootRecursion-->
 </features>

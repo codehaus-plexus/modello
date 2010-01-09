@@ -146,6 +146,13 @@
             <type>Thing</type>
           </association>
         </field>
+        <!--field>
+          <name>rootRecursion</name>
+          <version>1.0.0+</version>
+          <association>
+            <type>Features</type>
+          </association>
+        </field-->
       </fields>
       <codeSegments>
         <codeSegment>
