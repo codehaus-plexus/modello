@@ -918,7 +918,7 @@ public class Dom4jReaderGenerator
         method.addParameter( new JParameter( new JClass( "String" ), "dateFormat" ) );
         method.addException( new JClass( "DocumentException" ) );
 
-        writeDateParsingHelper( method.getSourceCode(), "new DocumentException( e.getMessage() )" );
+        writeDateParsingHelper( method.getSourceCode(), "new DocumentException( e.getMessage(), e )" );
 
         jClass.addMethod( method );
 
@@ -986,8 +986,7 @@ public class Dom4jReaderGenerator
         sc.add( "if ( parsed.contains( tagName ) )" );
 
         sc.add( "{" );
-        sc.addIndented(
-            "throw new DocumentException( \"Duplicated tag: '\" + tagName + \"'\" );" );
+        sc.addIndented( "throw new DocumentException( \"Duplicated tag: '\" + tagName + \"'\" );" );
         sc.add( "}" );
 
         sc.add( "parsed.add( tagName );" );
@@ -1039,7 +1038,7 @@ public class Dom4jReaderGenerator
         sc.addIndented( "return " + expression + ";" );
         sc.add( "}" );
 
-        sc.add( "catch ( NumberFormatException e )" );
+        sc.add( "catch ( NumberFormatException nfe )" );
 
         sc.add( "{" );
         sc.indent();
@@ -1048,7 +1047,7 @@ public class Dom4jReaderGenerator
 
         sc.add( "{" );
         sc.addIndented( "throw new DocumentException( \"Unable to parse element '\" + attribute + \"', must be "
-                        + typeDesc + "\" );" );
+                        + typeDesc + "\", nfe );" );
         sc.add( "}" );
 
         sc.unindent();
