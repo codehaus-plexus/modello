@@ -23,7 +23,8 @@ package org.codehaus.modello.model;
  */
 
 /**
- * Default values for models.
+ * Default values for a model, that can be overrided with <code>defaults</code> element of the model descriptor.
+ *
  * <table>
  * <tr><th>key</th><th>default value</th><th>usage</th></tr>
  * <tr><td><code>package</code></td>
