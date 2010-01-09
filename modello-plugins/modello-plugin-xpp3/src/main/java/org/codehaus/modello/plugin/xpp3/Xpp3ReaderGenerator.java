@@ -1279,7 +1279,7 @@ public class Xpp3ReaderGenerator
         method.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
         method.addException( new JClass( "XmlPullParserException" ) );
 
-        writeDateParsingHelper( method.getSourceCode(), "new XmlPullParserException( e.getMessage() )" );
+        writeDateParsingHelper( method.getSourceCode(), "new XmlPullParserException( e.getMessage(), parser, e )" );
 
         jClass.addMethod( method );
 
@@ -1367,7 +1367,7 @@ public class Xpp3ReaderGenerator
         sc.addIndented( "return " + expression + ";" );
         sc.add( "}" );
 
-        sc.add( "catch ( NumberFormatException e )" );
+        sc.add( "catch ( NumberFormatException nfe )" );
 
         sc.add( "{" );
         sc.indent();
@@ -1376,7 +1376,7 @@ public class Xpp3ReaderGenerator
 
         sc.add( "{" );
         sc.addIndented( "throw new XmlPullParserException( \"Unable to parse element '\" + attribute + \"', must be " +
-            typeDesc + "\", parser, null );" );
+            typeDesc + "\", parser, nfe );" );
         sc.add( "}" );
 
         sc.unindent();
