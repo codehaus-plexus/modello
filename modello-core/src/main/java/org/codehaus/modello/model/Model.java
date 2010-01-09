@@ -42,17 +42,17 @@ public class Model
 {
     private String id;
 
-    private List classes = new ArrayList();
+    private List/*<ModelClass>*/ classes = new ArrayList/*<ModelClass>*/();
 
-    private List defaults = new ArrayList();
+    private List/*<ModelDefault>*/ defaults = new ArrayList/*<ModelDefault>*/();
 
-    private List interfaces = new ArrayList();
+    private List/*<ModelInterface>*/ interfaces = new ArrayList/*<ModelInterface>*/();
 
-    private transient Map classMap = new HashMap();
+    private transient Map/*<String,List<ModelClass>>*/ classMap = new HashMap/*<String,List<ModelClass>>*/();
 
-    private transient Map defaultMap = new HashMap();
+    private transient Map/*<String,ModelDefault>*/ defaultMap = new HashMap/*<String,ModelDefault>*/();
 
-    private transient Map interfaceMap = new HashMap();
+    private transient Map/*<String,List<ModelInterface>>*/ interfaceMap = new HashMap/*<String,list<ModelInterface>>*/();
 
     private VersionDefinition versionDefinition;
 
@@ -142,9 +142,9 @@ public class Model
         return classes;
     }
 
-    public List getClasses( Version version )
+    public List/*<ModelClass>*/ getClasses( Version version )
     {
-        ArrayList classList = new ArrayList();
+        List classList = new ArrayList();
 
         for ( Iterator i = classes.iterator(); i.hasNext(); )
         {
@@ -209,7 +209,7 @@ public class Model
     {
         if ( classMap.containsKey( modelClass.getName() ) )
         {
-            ArrayList classList = (ArrayList) classMap.get( modelClass.getName() );
+            List classList = (List) classMap.get( modelClass.getName() );
 
             for ( Iterator i = classList.iterator(); i.hasNext(); )
             {
@@ -223,21 +223,21 @@ public class Model
         }
         else
         {
-            ArrayList classList = new ArrayList();
+            List classList = new ArrayList();
 
             classMap.put( modelClass.getName(), classList );
         }
 
         getAllClasses().add( modelClass );
 
-        ( (ArrayList) classMap.get( modelClass.getName() ) ).add( modelClass );
+        ( (List) classMap.get( modelClass.getName() ) ).add( modelClass );
     }
 
     // ----------------------------------------------------------------------
     // Defaults
     // ----------------------------------------------------------------------
 
-    public List getDefaults()
+    public List/*<ModelDefault>*/ getDefaults()
     {
         return defaults;
     }
@@ -299,7 +299,7 @@ public class Model
 
     public List getInterfaces( Version version )
     {
-        ArrayList interfaceList = new ArrayList();
+        List interfaceList = new ArrayList();
 
         for ( Iterator i = interfaces.iterator(); i.hasNext(); )
         {
@@ -334,7 +334,7 @@ public class Model
 
     private ModelInterface getModelInterface( String type, VersionRange versionRange )
     {
-        ArrayList interfaceList = (ArrayList) interfaceMap.get( type );
+        List interfaceList = (List) interfaceMap.get( type );
 
         if ( interfaceList != null )
         {
@@ -357,7 +357,7 @@ public class Model
     {
         if ( interfaceMap.containsKey( modelInterface.getName() ) )
         {
-            ArrayList interfaceList = (ArrayList) interfaceMap.get( modelInterface.getName() );
+            List interfaceList = (List) interfaceMap.get( modelInterface.getName() );
 
             for ( Iterator i = interfaceList.iterator(); i.hasNext(); )
             {
@@ -371,14 +371,14 @@ public class Model
         }
         else
         {
-            ArrayList interfaceList = new ArrayList();
+            List interfaceList = new ArrayList();
 
             interfaceMap.put( modelInterface.getName(), interfaceList );
         }
 
         getAllInterfaces().add( modelInterface );
 
-        ( (ArrayList) interfaceMap.get( modelInterface.getName() ) ).add( modelInterface );
+        ( (List) interfaceMap.get( modelInterface.getName() ) ).add( modelInterface );
     }
 
     public ModelType getType( String type, Version version )
