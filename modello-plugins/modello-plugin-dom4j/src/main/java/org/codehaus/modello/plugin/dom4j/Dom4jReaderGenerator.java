@@ -340,15 +340,8 @@ public class Dom4jReaderGenerator
 
             sc.add( "Node node = (Node) i.next();" );
 
-            sc.add( "if ( node.getNodeType() != Node.ELEMENT_NODE )" );
-            sc.add( "{" );
-            sc.indent();
-
-            // TODO: attach to model in some way
-
-            sc.unindent();
-            sc.add( "}" );
-            sc.add( "else" );
+            sc.add( "if ( node.getNodeType() == Node.ELEMENT_NODE )" );
+            // TODO: attach other NodeTypes to model in some way
             sc.add( "{" );
             sc.indent();
 
@@ -378,11 +371,7 @@ public class Dom4jReaderGenerator
                 sc.indent();
             }
 
-            sc.add( "if ( strict )" );
-
-            sc.add( "{" );
-            sc.addIndented( "throw new DocumentException( \"Unrecognised tag: '\" + childElement.getName() + \"'\" );" );
-            sc.add( "}" );
+            sc.add( "checkUnknownElement( childElement, strict );" );
 
             if ( addElse )
             {
@@ -1040,6 +1029,25 @@ public class Dom4jReaderGenerator
         sc.add( "parsed.add( tagName );" );
 
         sc.add( "return true;" );
+
+        jClass.addMethod( method );
+
+        // --------------------------------------------------------------------
+
+        method = new JMethod( "checkUnknownElement", null, null );
+        method.getModifiers().makePrivate();
+
+        method.addParameter( new JParameter( new JClass( "Element" ), "element" ) );
+        method.addParameter( new JParameter( JType.BOOLEAN, "strict" ) );
+        method.addException( new JClass( "DocumentException" ) );
+
+        sc = method.getSourceCode();
+
+        sc.add( "if ( strict )" );
+
+        sc.add( "{" );
+        sc.addIndented( "throw new DocumentException( \"Unrecognised tag: '\" + element.getName() + \"'\" );" );
+        sc.add( "}" );
 
         jClass.addMethod( method );
     }
