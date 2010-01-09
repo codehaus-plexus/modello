@@ -101,6 +101,8 @@ public class JDOMFeaturesVerifier
         if ( !diff.identical() )
         {
             System.err.println( actualXml );
+            System.err.println( "known features missing: MODELLO-161 = attributes, MODELLO-202 = Content type, "
+                                + "and much more: Properties, xml.tagName, ..." );
             /*throw*/ new VerifierException( "writer result is not the same as original content: " + diff )
                 .printStackTrace( System.err );
         }
