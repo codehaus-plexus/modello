@@ -738,41 +738,7 @@ public class StaxReaderGenerator
                     sc.indent();
                 }
 
-                sc.add( "if ( strict )" );
-
-                sc.add( "{" );
-                sc.addIndented( "throw new XMLStreamException( \"Unrecognised tag: '\" + xmlStreamReader.getLocalName() + "
-                                + "\"'\", xmlStreamReader.getLocation() );" );
-                sc.add( "}" );
-
-                sc.add( "else" );
-
-                sc.add( "{" );
-                sc.indent();
-
-                sc.add( "int unrecognizedTagCount = 1;" );
-                sc.add( "while( unrecognizedTagCount != 0 )" );
-
-                sc.add( "{" );
-                sc.indent();
-
-                sc.add( "xmlStreamReader.next();" );
-                sc.add( "if ( xmlStreamReader.getEventType() == XMLStreamConstants.START_ELEMENT )" );
-
-                sc.add( "{" );
-                sc.addIndented( "unrecognizedTagCount++;" );
-                sc.add( "}" );
-
-                sc.add( "else if ( xmlStreamReader.getEventType() == XMLStreamConstants.END_ELEMENT )" );
-                sc.add( "{" );
-                sc.addIndented( "unrecognizedTagCount--;" );
-                sc.add( "}" );
-
-                sc.unindent();
-                sc.add( "}" );
-
-                sc.unindent();
-                sc.add( "}" );
+                sc.add( "checkUnknownElement( xmlStreamReader, strict );" );
 
                 if ( addElse )
                 {
@@ -1789,6 +1755,47 @@ public class StaxReaderGenerator
         sc.add( "parsed.add( tagName );" );
 
         sc.add( "return true;" );
+
+        jClass.addMethod( method );
+
+        // --------------------------------------------------------------------
+
+        method = new JMethod( "checkUnknownElement", null, null );
+        method.getModifiers().makePrivate();
+
+        method.addParameter( new JParameter( new JClass( "XMLStreamReader" ), "xmlStreamReader" ) );
+        method.addParameter( new JParameter( JType.BOOLEAN, "strict" ) );
+        method.addException( new JClass( "XMLStreamException" ) );
+
+        sc = method.getSourceCode();
+
+        sc.add( "if ( strict )" );
+
+        sc.add( "{" );
+        sc.addIndented( "throw new XMLStreamException( \"Unrecognised tag: '\" + xmlStreamReader.getLocalName() + "
+                        + "\"'\", xmlStreamReader.getLocation() );" );
+        sc.add( "}" );
+
+        sc.add( "int unrecognizedTagCount = 1;" );
+        sc.add( "while( unrecognizedTagCount != 0 )" );
+
+        sc.add( "{" );
+        sc.indent();
+
+        sc.add( "xmlStreamReader.next();" );
+        sc.add( "if ( xmlStreamReader.getEventType() == XMLStreamConstants.START_ELEMENT )" );
+
+        sc.add( "{" );
+        sc.addIndented( "unrecognizedTagCount++;" );
+        sc.add( "}" );
+
+        sc.add( "else if ( xmlStreamReader.getEventType() == XMLStreamConstants.END_ELEMENT )" );
+        sc.add( "{" );
+        sc.addIndented( "unrecognizedTagCount--;" );
+        sc.add( "}" );
+
+        sc.unindent();
+        sc.add( "}" );
 
         jClass.addMethod( method );
     }
