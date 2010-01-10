@@ -1327,19 +1327,12 @@ public class Xpp3ReaderGenerator
 
         sc = method.getSourceCode();
 
-        if ( strictXmlAttributes )
-        {
-            sc.add( "if ( strict )" );
+        sc.add( "if ( strict )" );
 
-            sc.add( "{" );
-            sc.addIndented(
-                "throw new XmlPullParserException( \"Unrecognised tag: '\" + parser.getName() + \"'\", parser, null );" );
-            sc.add( "}" );
-        }
-        else
-        {
-            sc.add( "// strictXmlAttributes = false for model: ignore unknown XML attribute, even if strict == true" );
-        }
+        sc.add( "{" );
+        sc.addIndented(
+            "throw new XmlPullParserException( \"Unrecognised tag: '\" + parser.getName() + \"'\", parser, null );" );
+        sc.add( "}" );
 
         sc.add( "" );
 
@@ -1363,11 +1356,19 @@ public class Xpp3ReaderGenerator
 
         sc = method.getSourceCode();
 
-        sc.add( "if ( strict )" );
+        if ( strictXmlAttributes )
+        {
+            sc.add( "// strictXmlAttributes = true for model: if strict == true, not only elements are checked but attributes too" );
+            sc.add( "if ( strict )" );
 
-        sc.add( "{" );
-        sc.addIndented( "throw new XmlPullParserException( \"Unknown attribute '\" + attribute + \"' for tag '\" + tagName + \"'\", parser, null );" );
-        sc.add( "}" );
+            sc.add( "{" );
+            sc.addIndented( "throw new XmlPullParserException( \"Unknown attribute '\" + attribute + \"' for tag '\" + tagName + \"'\", parser, null );" );
+            sc.add( "}" );
+        }
+        else
+        {
+            sc.add( "// strictXmlAttributes = false for model: always ignore unknown XML attribute, even if strict == true" );
+        }
 
         jClass.addMethod( method );
     }
