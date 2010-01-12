@@ -181,11 +181,6 @@ public class Xpp3WriterGenerator
 
         JSourceCode sc = marshall.getSourceCode();
 
-        sc.add( "if ( " + uncapClassName + " != null )" );
-
-        sc.add( "{" );
-        sc.indent();
-
         ModelClassMetadata classMetadata = (ModelClassMetadata) modelClass.getMetadata( ModelClassMetadata.ID );
 
         String namespace = null;
@@ -432,9 +427,6 @@ public class Xpp3WriterGenerator
         }
 
         sc.add( "serializer.endTag( NAMESPACE, tagName );" );
-
-        sc.unindent();
-        sc.add( "}" );
 
         jClass.addMethod( marshall );
     }
