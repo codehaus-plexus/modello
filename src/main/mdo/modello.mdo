@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<model xmlns="http://modello.codehaus.org/MODELLO/1.1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://modello.codehaus.org/MODELLO/1.1.0 http://modello.codehaus.org/xsd/modello-1.1.0.xsd"
+<model xmlns="http://modello.codehaus.org/MODELLO/1.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://modello.codehaus.org/MODELLO/1.2.0 http://modello.codehaus.org/xsd/modello-1.2.0.xsd"
   xml.namespace="http://modello.codehaus.org/MODELLO/${version}"
   xml.schemaLocation="http://modello.codehaus.org/xsd/modello-${version}.xsd">
   <id>modello</id>
@@ -10,7 +10,7 @@
     <![CDATA[
     <p>This is a reference for the Modello descriptor used to describe a model with Modello.</p>
     <p>An XSD is available at
-    <a href="http://modello.codehaus.org/xsd/modello-1.1.0.xsd">http://modello.codehaus.org/xsd/modello-1.1.0.xsd</a>.
+    <a href="http://modello.codehaus.org/xsd/modello-1.2.0.xsd">http://modello.codehaus.org/xsd/modello-1.2.0.xsd</a>.
     </p>]]>
   </description>
 
@@ -51,7 +51,18 @@
             A private comment about the element.
           </description>
         </field>
-        <field xml.tagName="version">
+      </fields>
+    </class>
+
+    <class>
+      <name>VersionedElement</name>
+      <description>
+        An element with version information.
+      </description>
+      <version>1.0.0+</version>
+      <superClass>BaseElement</superClass>
+      <fields>
+        <field xml.tagName="version" xml.insertParentFieldsUpTo="name">
           <name>versionRange</name>
           <version>1.0.0+</version>
           <type>String</type>
@@ -141,7 +152,7 @@
           <type>String</type>
           <description>Unique identifier of this model.</description>
         </field>
-        <field>
+        <field xml.insertParentFieldsUpTo="comment" xdoc.separator="blank">
           <name>defaults</name>
           <version>1.0.0+</version>
           <association>
@@ -155,6 +166,7 @@
         <field>
           <name>versionDefinition</name>
           <version>1.0.0+</version>
+          <description>Information on model version recognition support.</description>
           <association>
             <type>VersionDefinition</type>
           </association>
@@ -238,9 +250,9 @@
       <name>ModelInterface</name>
       <version>1.0.0+</version>
       <description>An interface provided by the model.</description>
-      <superClass>BaseElement</superClass>
+      <superClass>VersionedElement</superClass>
       <fields>
-        <field>
+        <field xml.insertParentFieldsUpTo="versionRange">
           <name>superInterface</name>
           <version>1.0.0+</version>
           <type>String</type>
@@ -256,7 +268,7 @@
             The destination package name for this interface.
           </description>
         </field>
-        <field>
+        <field xml.insertParentFieldsUpTo="comment">
           <name>codeSegments</name>
           <version>1.0.0+</version>
           <association>
@@ -276,9 +288,9 @@
       <description>
         A segment of code to be appended to this element.
       </description>
-      <superClass>BaseElement</superClass>
+      <superClass>VersionedElement</superClass>
       <fields>
-        <field>
+        <field xml.insertParentFieldsUpTo="comment">
           <name>code</name>
           <version>1.0.0+</version>
           <type>String</type>
@@ -291,7 +303,7 @@
       <name>ModelClass</name>
       <version>1.0.0+</version>
       <description>A class for this model.</description>
-      <superClass>BaseElement</superClass>
+      <superClass>VersionedElement</superClass>
       <fields>
         <field xml.attribute="true">
           <name>rootElement</name>
@@ -367,6 +379,14 @@
           </description>
           <comment>see org.codehaus.modello.plugins.xsd.metadata.XsdMetadataPlugin</comment>
         </field>
+        <field xml.insertParentFieldsUpTo="versionRange">
+          <name>superClass</name>
+          <version>1.0.0+</version>
+          <type>String</type>
+          <description>
+            The name of the super class for this class.
+          </description>
+        </field>
         <field>
           <name>interfaces</name>
           <version>1.0.0+</version>
@@ -379,14 +399,6 @@
           </description>
         </field>
         <field>
-          <name>superClass</name>
-          <version>1.0.0+</version>
-          <type>String</type>
-          <description>
-            The name of the super class for this class.
-          </description>
-        </field>
-        <field>
           <name>packageName</name>
           <version>1.0.0+</version>
           <type>String</type>
@@ -394,7 +406,7 @@
             The destination package name for this class.
           </description>
         </field>
-        <field>
+        <field xml.insertParentFieldsUpTo="comment">
           <name>fields</name>
           <version>1.0.0+</version>
           <association>
@@ -425,7 +437,7 @@
       <description>
         A field to be defined in a class.
       </description>
-      <superClass>BaseElement</superClass>
+      <superClass>VersionedElement</superClass>
       <fields>
         <field xml.attribute="true" xml.tagName="java.getter">
           <name>getter</name>
@@ -513,7 +525,7 @@
           </description>
           <comment>see org.codehaus.modello.plugins.xml.metadata.XmlMetadataPlugin</comment>
         </field>
-        <field>
+        <field xml.insertParentFieldsUpTo="name">
           <name>alias</name>
           <version>1.0.0+</version>
           <type>String</type>
@@ -521,7 +533,7 @@
             Alias name for this field (a parser should allow for this name instead of the given name).
           </description>
         </field>
-        <field>
+        <field xml.insertParentFieldsUpTo="versionRange">
           <name>type</name>
           <version>1.0.0+</version>
           <required>true</required>
@@ -531,6 +543,17 @@
             <code>char</code>, <code>short</code>, <code>int</code>, <code>long</code>, <code>float</code>,
             <code>double</code>, <code>String</code>, <code>Boolean</code>, <code>Date</code>, <code>DOM</code>,
             <code>Content</code>.]]>
+          </description>
+        </field>
+        <field>
+          <name>association</name>
+          <version>1.0.0+</version>
+          <association>
+            <type>ModelAssociation</type>
+          </association>
+          <description>
+            An association allows to map a field to a complex type
+            and/or to map a field to a many-multiplicity element.
           </description>
         </field>
         <field>
@@ -561,17 +584,6 @@
           <type>boolean</type>
           <description>
             Whether this field is part of the identification of the object or not.
-          </description>
-        </field>
-        <field>
-          <name>association</name>
-          <version>1.0.0+</version>
-          <association>
-            <type>ModelAssociation</type>
-          </association>
-          <description>
-            An association allows to map a field to a complex type
-            and/or to map a field to a many-multiplicity element.
           </description>
         </field>
       </fields>
