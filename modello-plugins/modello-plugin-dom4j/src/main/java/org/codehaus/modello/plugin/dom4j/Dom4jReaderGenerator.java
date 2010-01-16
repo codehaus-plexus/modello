@@ -273,9 +273,7 @@ public class Dom4jReaderGenerator
 
         ModelField contentField = null;
 
-        List modelFields = modelClass.getAllFields( getGeneratedVersion(), true );
-
-        modelFields = getNonTransientFields( modelFields );
+        List modelFields = getFieldsForXml( modelClass, getGeneratedVersion() );
 
         // read all XML attributes first
         for ( Iterator i = modelFields.iterator(); i.hasNext(); )
