@@ -163,32 +163,6 @@ class XmlModelHelpers
     }
 
     /**
-     * Gets all fields that are not marked as transient.
-     *
-     * @param modelFields The collection of model fields from which to extract the non-transient fields, must not be
-     *            <code>null</code>.
-     * @return The list of non-transient fields, can be empty but never <code>null</code>.
-     */
-    static List getNonTransientFields( List/*<ModelField>*/ modelFields )
-    {
-        List nonTransientFields = new ArrayList();
-
-        for ( Iterator it = modelFields.iterator(); it.hasNext(); )
-        {
-            ModelField field = (ModelField) it.next();
-
-            XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
-
-            if ( !xmlFieldMetadata.isTransient() )
-            {
-                nonTransientFields.add( field );
-            }
-        }
-
-        return nonTransientFields;
-    }
-
-    /**
      * Return the XML fields of this class, with proper XML order and no XML transient fields.
      *
      * @param modelClass current class
