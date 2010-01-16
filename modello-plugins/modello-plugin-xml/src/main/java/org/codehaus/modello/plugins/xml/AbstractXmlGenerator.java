@@ -22,8 +22,6 @@ package org.codehaus.modello.plugins.xml;
  * SOFTWARE.
  */
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.codehaus.modello.model.ModelClass;
