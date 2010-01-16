@@ -352,8 +352,7 @@ public class Xpp3ReaderGenerator
 
         ModelField contentField = null;
 
-        List modelFields = modelClass.getAllFields( getGeneratedVersion(), true );
-        modelFields = getNonTransientFields( modelFields );
+        List modelFields = getFieldsForXml( modelClass, getGeneratedVersion() );
 
         // read all XML attributes first
         contentField = writeClassAttributesParser( modelFields, uncapClassName, rootElement, sc, jClass );
