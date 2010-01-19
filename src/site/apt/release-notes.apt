@@ -3,10 +3,29 @@
   ------
   Hervé Boutemy
   ------
-  2009-08-21
+  2010-01-19
   ------
 
 Modello
+
+* 1.2 Release Notes (2010-01-19)
+
+  The full list of changes can be found in our {{{http://jira.codehaus.org/secure/ReleaseNote.jspa?projectId=10510&version=15583}issue management system}}, and is reproduced below.
+
+** Bug
+
+    * [MODELLO-168] - Recursive descent fails for tree-like data model
+
+    * [MODELLO-176] - Strict mode does not detect problems when data fields are encoded as XML attributes
+
+    * [MODELLO-222] - java5 associations do not respect java.useInterface
+
+** Improvement
+
+    * [MODELLO-224] - XML representation of inherited fields: allow more flexibility than only append at end
+
+    * [MODELLO-229] - Improve Modello model documentation: fields order is counter intuitive
+
 
 * 1.1 Release Notes (2009-08-21)
 
