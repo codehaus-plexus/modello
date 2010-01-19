@@ -10,8 +10,8 @@ Modello
 
 * 1.1 Release Notes (2009-08-21)
 
-  The full list of changes can be found in our {{{http://jira.codehaus.org/secure/IssueNavigator.jspa?fixfor=14908&sorter/field=issuekey&sorter/order=DESC&reset=true}issue management system}}, and is reproduced below.
-  
+  The full list of changes can be found in our {{{http://jira.codehaus.org/secure/ReleaseNote.jspa?projectId=10510&version=14908}issue management system}}, and is reproduced below.
+
 ** Bug
 
     * [MODELLO-200] - Not possible to read older version of xml file if there is an unrecognized tag even if "strict" is set to false
@@ -45,26 +45,26 @@ Modello
 
 * 1.0.2 Release Notes (2009-06-11)
 
-  The full list of changes can be found in our {{{http://jira.codehaus.org/secure/IssueNavigator.jspa?fixfor=15080&sorter/field=issuekey&sorter/order=DESC&reset=true}issue management system}}, and is reproduced below.
+  The full list of changes can be found in our {{{http://jira.codehaus.org/secure/ReleaseNote.jspa?projectId=10510&version=15080}issue management system}}, and is reproduced below.
 
 ** Bug
 
     * [MODELLO-88] - converters goal generates wrong class names for continuum-model - won't compile
-    
+
     * [MODELLO-188] - Modello plugins are not available from ModelloCli or a standalone Modello instance
-     
+
     * [MODELLO-189] - Generated Xpp3Reader does not reconstruct modelEncoding
-    
+
     * [MODELLO-199] - java.getter attribute for field not initialize at all
 
 ** Improvement
 
-    * [MODELLO-190] - Use StringBuilder for toString() when Java 1.5 is enabled  
+    * [MODELLO-190] - Use StringBuilder for toString() when Java 1.5 is enabled
 
 
 * 1.0.1 Release Notes (2009-03-09)
 
-  The full list of changes can be found in our {{{http://jira.codehaus.org/secure/IssueNavigator.jspa?fixfor=14892&sorter/field=issuekey&sorter/order=DESC&reset=true}issue management system}}, and is reproduced below.
+  The full list of changes can be found in our {{{http://jira.codehaus.org/secure/ReleaseNote.jspa?projectId=10510&version=14892}issue management system}}, and is reproduced below.
 
 ** Bug
 
@@ -102,7 +102,7 @@ Modello
 
 * 1.0 Release Notes (2009-01-29)
 
-  The full list of changes can be found in our {{{http://jira.codehaus.org/secure/IssueNavigator.jspa?fixfor=13956&sorter/field=issuekey&sorter/order=DESC&reset=true}issue management system}}, and is reproduced below.
+  The full list of changes can be found in our {{{http://jira.codehaus.org/secure/ReleaseNote.jspa?projectId=10510&version=13956}issue management system}}, and is reproduced below.
 
 ** Bug
 
@@ -186,7 +186,7 @@ Modello
 
 * 1.0-alpha-22 Release Notes (2008-12-12)
 
-  The full list of changes can be found in our {{{http://jira.codehaus.org/secure/IssueNavigator.jspa?fixfor=14742&sorter/field=issuekey&sorter/order=DESC&reset=true}issue management system}}, and is reproduced below.
+  The full list of changes can be found in our {{{http://jira.codehaus.org/secure/ReleaseNote.jspa?projectId=10510&version=14742}issue management system}}, and is reproduced below.
 
 ** Bug
 
@@ -223,7 +223,7 @@ Modello
 
 * 1.0-alpha-21 Release Notes (2008-08-06)
 
-  The full list of changes can be found in our {{{http://jira.codehaus.org/secure/IssueNavigator.jspa?fixfor=14469&sorter/field=issuekey&sorter/order=DESC&reset=true}issue management system}}, and is reproduced below.
+  The full list of changes can be found in our {{{http://jira.codehaus.org/secure/ReleaseNote.jspa?projectId=10510&version=14469}issue management system}}, and is reproduced below.
 
 ** Bug
 
@@ -244,7 +244,7 @@ Modello
 
 * 1.0-alpha-20 Release Notes (2008-07-25)
 
-  The full list of changes can be found in our {{{http://jira.codehaus.org/secure/IssueNavigator.jspa?fixfor=14466&sorter/field=issuekey&sorter/order=DESC&reset=true}issue management system}}, and is reproduced below.
+  The full list of changes can be found in our {{{http://jira.codehaus.org/secure/ReleaseNote.jspa?projectId=10510&version=14466}issue management system}}, and is reproduced below.
 
 ** Bug
 
@@ -253,7 +253,7 @@ Modello
 
 * 1.0-alpha-19 Release Notes (2008-07-14)
 
-  The full list of changes can be found in our {{{http://jira.codehaus.org/secure/IssueNavigator.jspa?fixfor=14339&sorter/field=issuekey&sorter/order=DESC&reset=true}issue management system}}, and is reproduced below.
+  The full list of changes can be found in our {{{http://jira.codehaus.org/secure/ReleaseNote.jspa?projectId=10510&version=14339}issue management system}}, and is reproduced below.
 
 ** Bug
 
@@ -269,7 +269,7 @@ Modello
 
 ** New Feature
 
-    * [MODELLO-109] - add an "encoding" parameter and use ${project.build.sourceEncoding} as default value
+    * [MODELLO-109] - add an "encoding" parameter and use $\{project.build.sourceEncoding\} as default value
 
 ** Task
 
@@ -278,7 +278,7 @@ Modello
 
 * 1.0-alpha-18 Release Notes (2008-01-15)
 
-  The full list of changes can be found in our {{{http://jira.codehaus.org/secure/IssueNavigator.jspa?fixfor=13717&sorter/field=issuekey&sorter/order=DESC&reset=true}issue management system}}, and is reproduced below.
+  The full list of changes can be found in our {{{http://jira.codehaus.org/secure/ReleaseNote.jspa?projectId=10510&version=13717}issue management system}}, and is reproduced below.
 
 ** Bug
 
@@ -315,7 +315,7 @@ Modello
 
 * 1.0-alpha-17 Release Notes (2007-07-30)
 
-  The full list of changes can be found in our {{{http://jira.codehaus.org/secure/IssueNavigator.jspa?fixfor=13637&sorter/field=issuekey&sorter/order=DESC&reset=true}issue management system}}, and is reproduced below.
+  The full list of changes can be found in our {{{http://jira.codehaus.org/secure/ReleaseNote.jspa?projectId=10510&version=13637}issue management system}}, and is reproduced below.
 
 ** Bug
 
@@ -326,7 +326,7 @@ Modello
 
 * 1.0-alpha-15 Release Notes (2007-03-23)
 
-  The full list of changes can be found in our {{{http://jira.codehaus.org/secure/IssueNavigator.jspa?fixfor=13272&sorter/field=issuekey&sorter/order=DESC&reset=true}issue management system}}, and is reproduced below.
+  The full list of changes can be found in our {{{http://jira.codehaus.org/secure/ReleaseNote.jspa?projectId=10510&version=13272}issue management system}}, and is reproduced below.
 
 ** Bug
 
@@ -341,7 +341,7 @@ Modello
 
 * 1.0-alpha-14 Release Notes (2007-02-20)
 
-  The full list of changes can be found in our {{{http://jira.codehaus.org/secure/IssueNavigator.jspa?fixfor=13068&sorter/field=issuekey&sorter/order=DESC&reset=true}issue management system}}, and is reproduced below.
+  The full list of changes can be found in our {{{http://jira.codehaus.org/secure/ReleaseNote.jspa?projectId=10510&version=13068}issue management system}}, and is reproduced below.
 
 ** Bug
 
@@ -373,7 +373,7 @@ Modello
 
 * 1.0-alpha-13 Release Notes (2006-12-07)
 
-  The full list of changes can be found in our {{{http://jira.codehaus.org/secure/IssueNavigator.jspa?fixfor=12956&sorter/field=issuekey&sorter/order=DESC&reset=true}issue management system}}, and is reproduced below.
+  The full list of changes can be found in our {{{http://jira.codehaus.org/secure/ReleaseNote.jspa?projectId=10510&version=12956}issue management system}}, and is reproduced below.
 
 ** Bug
 
@@ -394,7 +394,7 @@ Modello
 
 * 1.0-alpha-11 Release Notes (2006-09-20)
 
-  The full list of changes can be found in our {{{http://jira.codehaus.org/secure/IssueNavigator.jspa?fixfor=12790&sorter/field=issuekey&sorter/order=DESC&reset=true}issue management system}}, and is reproduced below.
+  The full list of changes can be found in our {{{http://jira.codehaus.org/secure/ReleaseNote.jspa?projectId=10510&version=12790}issue management system}}, and is reproduced below.
 
 ** Bug
 
