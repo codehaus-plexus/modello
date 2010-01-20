@@ -1,78 +1,31 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
+
   <groupId>org.codehaus.modello</groupId>
   <artifactId>modello</artifactId>
-  <packaging>pom</packaging>
-  <name>Modello</name>
   <version>1.3-SNAPSHOT</version>
-  <url>http://modello.codehaus.org/</url>
+  <packaging>pom</packaging>
+
+  <name>Modello</name>
   <description>
     Modello is a framework for code generation from a simple model.
     Modello generates code from a simple model format: based on a plugin architecture, various types of code and
     descriptors can be generated from the single model, including Java POJOs, XML marshallers/unmarshallers, XSD
     and documentation.
   </description>
-
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <maven.version>2.0.7</maven.version>
-    <modelloDistMgmtSnapshotsUrl>dav:https://dav.codehaus.org/snapshots.repository/modello/</modelloDistMgmtSnapshotsUrl>
-  </properties>
-
-  <issueManagement>
-    <system>jira</system>
-    <url>http://jira.codehaus.org/browse/MODELLO</url>
-  </issueManagement>
-  <ciManagement>
-    <notifiers>
-      <notifier>
-        <type>mail</type>
-        <configuration>
-          <address>dev@modello.codehaus.org</address>
-        </configuration>
-      </notifier>
-    </notifiers>
-  </ciManagement>
+  <url>http://modello.codehaus.org/</url>
   <inceptionYear>2001</inceptionYear>
-  <mailingLists>
-    <mailingList>
-      <name>Modello Announce List</name>
-      <subscribe>http://xircles.codehaus.org/manage_email/announce@modello.codehaus.org</subscribe>
-      <unsubscribe>http://xircles.codehaus.org/projects/modello/lists</unsubscribe>
-      <archive>http://archive.codehaus.org/lists/org.codehaus.modello.announce</archive>
-      <otherArchives>
-        <otherArchive>http://markmail.org/list/org.codehaus.modello.announce</otherArchive>
-      </otherArchives>
-    </mailingList>
-    <mailingList>
-      <name>Modello Developer List</name>
-      <subscribe>http://xircles.codehaus.org/manage_email/dev@modello.codehaus.org</subscribe>
-      <unsubscribe>http://xircles.codehaus.org/projects/modello/lists</unsubscribe>
-      <archive>http://archive.codehaus.org/lists/org.codehaus.modello.dev</archive>
-      <otherArchives>
-        <otherArchive>http://markmail.org/list/org.codehaus.modello.dev</otherArchive>
-      </otherArchives>
-    </mailingList>
-    <mailingList>
-      <name>Modello User List</name>
-      <subscribe>http://xircles.codehaus.org/manage_email/user@modello.codehaus.org</subscribe>
-      <unsubscribe>http://xircles.codehaus.org/projects/modello/lists</unsubscribe>
-      <archive>http://archive.codehaus.org/lists/org.codehaus.modello.user</archive>
-      <otherArchives>
-        <otherArchive>http://markmail.org/list/org.codehaus.modello.user</otherArchive>
-      </otherArchives>
-    </mailingList>
-    <mailingList>
-      <name>Modello Commits List</name>
-      <subscribe>http://xircles.codehaus.org/manage_email/scm@modello.codehaus.org</subscribe>
-      <unsubscribe>http://xircles.codehaus.org/projects/modello/lists</unsubscribe>
-      <archive>http://archive.codehaus.org/lists/org.codehaus.modello.scm</archive>
-      <otherArchives>
-        <otherArchive>http://markmail.org/list/org.codehaus.modello.scm</otherArchive>
-      </otherArchives>
-     </mailingList>
-  </mailingLists>
+  <organization>
+    <name>Codehaus</name>
+    <url>http://www.codehaus.org/</url>
+  </organization>
+  <licenses>
+    <license>
+      <name>The MIT License</name>
+      <url>http://opensource.org/licenses/mit-license.php</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
 
   <developers>
     <developer>
@@ -173,22 +126,224 @@
     </developer>
   </developers>
 
-  <licenses>
-    <license>
-      <name>The MIT License</name>
-      <url>http://opensource.org/licenses/mit-license.php</url>
-      <distribution>repo</distribution>
-    </license>
-  </licenses>
+  <mailingLists>
+    <mailingList>
+      <name>Modello Announce List</name>
+      <subscribe>http://xircles.codehaus.org/manage_email/announce@modello.codehaus.org</subscribe>
+      <unsubscribe>http://xircles.codehaus.org/projects/modello/lists</unsubscribe>
+      <archive>http://archive.codehaus.org/lists/org.codehaus.modello.announce</archive>
+      <otherArchives>
+        <otherArchive>http://markmail.org/list/org.codehaus.modello.announce</otherArchive>
+      </otherArchives>
+    </mailingList>
+    <mailingList>
+      <name>Modello Developer List</name>
+      <subscribe>http://xircles.codehaus.org/manage_email/dev@modello.codehaus.org</subscribe>
+      <unsubscribe>http://xircles.codehaus.org/projects/modello/lists</unsubscribe>
+      <archive>http://archive.codehaus.org/lists/org.codehaus.modello.dev</archive>
+      <otherArchives>
+        <otherArchive>http://markmail.org/list/org.codehaus.modello.dev</otherArchive>
+      </otherArchives>
+    </mailingList>
+    <mailingList>
+      <name>Modello User List</name>
+      <subscribe>http://xircles.codehaus.org/manage_email/user@modello.codehaus.org</subscribe>
+      <unsubscribe>http://xircles.codehaus.org/projects/modello/lists</unsubscribe>
+      <archive>http://archive.codehaus.org/lists/org.codehaus.modello.user</archive>
+      <otherArchives>
+        <otherArchive>http://markmail.org/list/org.codehaus.modello.user</otherArchive>
+      </otherArchives>
+    </mailingList>
+    <mailingList>
+      <name>Modello Commits List</name>
+      <subscribe>http://xircles.codehaus.org/manage_email/scm@modello.codehaus.org</subscribe>
+      <unsubscribe>http://xircles.codehaus.org/projects/modello/lists</unsubscribe>
+      <archive>http://archive.codehaus.org/lists/org.codehaus.modello.scm</archive>
+      <otherArchives>
+        <otherArchive>http://markmail.org/list/org.codehaus.modello.scm</otherArchive>
+      </otherArchives>
+     </mailingList>
+  </mailingLists>
+
+  <modules>
+    <module>modello-maven-plugin</module>
+    <module>modello-core</module>
+    <module>modello-test</module>
+    <module>modello-plugins</module>
+  </modules>
+
   <scm>
     <connection>scm:svn:http://svn.codehaus.org/modello/trunk</connection>
     <developerConnection>scm:svn:https://svn.codehaus.org/modello/trunk</developerConnection>
     <url>http://svn.modello.codehaus.org/browse/modello/trunk</url>
   </scm>
-  <organization>
-    <name>Codehaus</name>
-    <url>http://www.codehaus.org/</url>
-  </organization>
+  <issueManagement>
+    <system>jira</system>
+    <url>http://jira.codehaus.org/browse/MODELLO</url>
+  </issueManagement>
+  <ciManagement>
+    <notifiers>
+      <notifier>
+        <type>mail</type>
+        <configuration>
+          <address>dev@modello.codehaus.org</address>
+        </configuration>
+      </notifier>
+    </notifiers>
+  </ciManagement>
+  <distributionManagement>
+    <repository>
+      <id>codehaus.org</id>
+      <name>Modello Repository</name>
+      <url>dav:https://dav.codehaus.org/repository/modello/</url>
+    </repository>
+    <snapshotRepository>
+      <id>codehaus.org</id>
+      <name>Modello Development Repository</name>
+      <url>${modelloDistMgmtSnapshotsUrl}</url>
+    </snapshotRepository>
+    <site>
+      <id>codehaus.org</id>
+      <url>dav:https://dav.codehaus.org/modello</url>
+    </site>
+  </distributionManagement>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <maven.version>2.0.7</maven.version>
+    <modelloDistMgmtSnapshotsUrl>dav:https://dav.codehaus.org/snapshots.repository/modello/</modelloDistMgmtSnapshotsUrl>
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.codehaus.modello</groupId>
+        <artifactId>modello-core</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.codehaus.modello</groupId>
+        <artifactId>modello-test</artifactId>
+        <version>${project.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.codehaus.modello</groupId>
+        <artifactId>modello-plugin-java</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.codehaus.modello</groupId>
+        <artifactId>modello-plugin-xdoc</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.codehaus.modello</groupId>
+        <artifactId>modello-plugin-converters</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.codehaus.modello</groupId>
+        <artifactId>modello-plugin-stax</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.codehaus.modello</groupId>
+        <artifactId>modello-plugin-xpp3</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.codehaus.modello</groupId>
+        <artifactId>modello-plugin-xml</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.codehaus.modello</groupId>
+        <artifactId>modello-plugin-xsd</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.codehaus.modello</groupId>
+        <artifactId>modello-plugin-dom4j</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.codehaus.modello</groupId>
+        <artifactId>modello-plugin-jdom</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.maven</groupId>
+        <artifactId>maven-settings</artifactId>
+        <version>${maven.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.maven</groupId>
+        <artifactId>maven-plugin-api</artifactId>
+        <version>${maven.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.maven</groupId>
+        <artifactId>maven-project</artifactId>
+        <version>${maven.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.maven</groupId>
+        <artifactId>maven-artifact</artifactId>
+        <version>${maven.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.maven</groupId>
+        <artifactId>maven-artifact-manager</artifactId>
+        <version>${maven.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.maven.wagon</groupId>
+        <artifactId>wagon-provider-api</artifactId>
+        <version>1.0-beta-2</version>
+      </dependency>
+      <dependency>
+        <groupId>org.codehaus.plexus</groupId>
+        <artifactId>plexus-container-default</artifactId>
+        <version>1.0-alpha-30</version>
+      </dependency>
+      <dependency>
+        <groupId>org.codehaus.plexus</groupId>
+        <artifactId>plexus-utils</artifactId>
+        <version>1.5.8</version><!-- version in AbstractModelloJavaGeneratorTest must be consistent -->
+      </dependency>
+      <dependency>
+        <groupId>org.codehaus.plexus</groupId>
+        <artifactId>plexus-velocity</artifactId>
+        <version>1.1.4</version>
+      </dependency>
+      <dependency>
+        <groupId>org.sonatype.plexus</groupId>
+        <artifactId>plexus-build-api</artifactId>
+        <version>0.0.3</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.2</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <repositories>
+    <repository>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <id>codehaus-snapshots</id>
+      <name>Codehaus Snapshot Development Repository</name>
+      <url>http://snapshots.repository.codehaus.org/</url>
+    </repository>
+  </repositories>
 
   <build>
     <plugins>
@@ -303,161 +458,6 @@
       </plugin>
     </plugins>
   </reporting>
-
-  <modules>
-    <module>modello-maven-plugin</module>
-    <module>modello-core</module>
-    <module>modello-test</module>
-    <module>modello-plugins</module>
-  </modules>
-
-  <repositories>
-    <repository>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-      <id>codehaus-snapshots</id>
-      <name>Codehaus Snapshot Development Repository</name>
-      <url>http://snapshots.repository.codehaus.org/</url>
-    </repository>
-  </repositories>
-
-  <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.2</version>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
-
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>org.codehaus.modello</groupId>
-        <artifactId>modello-core</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.codehaus.modello</groupId>
-        <artifactId>modello-test</artifactId>
-        <version>${project.version}</version>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.codehaus.modello</groupId>
-        <artifactId>modello-plugin-java</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.codehaus.modello</groupId>
-        <artifactId>modello-plugin-xdoc</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.codehaus.modello</groupId>
-        <artifactId>modello-plugin-converters</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.codehaus.modello</groupId>
-        <artifactId>modello-plugin-stax</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.codehaus.modello</groupId>
-        <artifactId>modello-plugin-xpp3</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.codehaus.modello</groupId>
-        <artifactId>modello-plugin-xml</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.codehaus.modello</groupId>
-        <artifactId>modello-plugin-xsd</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.codehaus.modello</groupId>
-        <artifactId>modello-plugin-dom4j</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.codehaus.modello</groupId>
-        <artifactId>modello-plugin-jdom</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.maven</groupId>
-        <artifactId>maven-settings</artifactId>
-        <version>${maven.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.maven</groupId>
-        <artifactId>maven-plugin-api</artifactId>
-        <version>${maven.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.maven</groupId>
-        <artifactId>maven-project</artifactId>
-        <version>${maven.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.maven</groupId>
-        <artifactId>maven-artifact</artifactId>
-        <version>${maven.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.maven</groupId>
-        <artifactId>maven-artifact-manager</artifactId>
-        <version>${maven.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.maven.wagon</groupId>
-        <artifactId>wagon-provider-api</artifactId>
-        <version>1.0-beta-2</version>
-      </dependency>
-      <dependency>
-        <groupId>org.codehaus.plexus</groupId>
-        <artifactId>plexus-container-default</artifactId>
-        <version>1.0-alpha-30</version>
-      </dependency>
-      <dependency>
-        <groupId>org.codehaus.plexus</groupId>
-        <artifactId>plexus-utils</artifactId>
-        <version>1.5.8</version><!-- version in AbstractModelloJavaGeneratorTest must be consistent -->
-      </dependency>
-      <dependency>
-        <groupId>org.codehaus.plexus</groupId>
-        <artifactId>plexus-velocity</artifactId>
-        <version>1.1.4</version>
-      </dependency>
-      <dependency>
-        <groupId>org.sonatype.plexus</groupId>
-        <artifactId>plexus-build-api</artifactId>
-        <version>0.0.3</version>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
-
-  <distributionManagement>
-    <repository>
-      <id>codehaus.org</id>
-      <name>Modello Repository</name>
-      <url>dav:https://dav.codehaus.org/repository/modello/</url>
-    </repository>
-    <snapshotRepository>
-      <id>codehaus.org</id>
-      <name>Modello Development Repository</name>
-      <url>${modelloDistMgmtSnapshotsUrl}</url>
-    </snapshotRepository>
-    <site>
-      <id>codehaus.org</id>
-      <url>dav:https://dav.codehaus.org/modello</url>
-    </site>
-  </distributionManagement>
 
   <profiles>
     <profile>
