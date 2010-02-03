@@ -51,6 +51,17 @@
             A private comment about the element.
           </description>
         </field>
+        <field>
+          <name>annotations</name>
+          <version>1.3.0+</version>
+          <association>
+            <type>String</type>
+            <multiplicity>*</multiplicity>
+          </association>
+          <description>
+            A list of annotations for the element.
+          </description>
+        </field>
       </fields>
     </class>
 

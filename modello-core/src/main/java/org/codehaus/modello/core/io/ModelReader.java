@@ -563,7 +563,7 @@ public class ModelReader
         return true;
     }
 
-    private Map/*<String, String>*/ getAttributes( XmlPullParser parser )
+    private Map/* <String, String> */getAttributes( XmlPullParser parser )
     {
         Map attributes = new HashMap();
 

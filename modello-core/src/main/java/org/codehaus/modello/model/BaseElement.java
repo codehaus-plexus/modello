@@ -31,14 +31,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This is the base class for all elements of the model.
- *
- * The name attribute is immutable because it's used as the key.
- *
+ * This is the base class for all elements of the model. The name attribute is immutable because it's used as the key.
+ * 
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
- *
  * @version $Id$
  */
 public abstract class BaseElement
@@ -147,7 +144,8 @@ public abstract class BaseElement
 
         if ( !type.isAssignableFrom( metadata.getClass() ) )
         {
-            throw new ModelloRuntimeException( "The metadata is not of the expected type. Key: '" + key + "', expected type: '" + type.getName() + "'." );
+            throw new ModelloRuntimeException( "The metadata is not of the expected type. Key: '" + key
+                + "', expected type: '" + type.getName() + "'." );
         }
 
         return metadata;

@@ -53,9 +53,9 @@ public class UsersJavaGeneratorTest
         throws Exception
     {
         super.setUp();
-        //TODO: Add this to genrate Java with annotations
-        //setSourceVersion( "1.5" );
-        //setTargetVersion( "1.5" );
+        // TODO: Add this to genrate Java with annotations
+        // setSourceVersion( "1.5" );
+        // setTargetVersion( "1.5" );
         addDependency( "javax.xml.bind", "jaxb-api", "2.1" );
         addDependency( "org.apache.geronimo.specs", "geronimo-jpa_2.0_spec", "1.0" );
     }
@@ -89,7 +89,7 @@ public class UsersJavaGeneratorTest
             e.printStackTrace();
             fail( e.getMessage() );
         }
-        
+
         FileInputStream inputStream = null;
         String groupClassText = "";
         try
@@ -101,8 +101,8 @@ public class UsersJavaGeneratorTest
         {
             IOUtil.close( inputStream );
         }
-        
+
         // we could check a little more robust then this.
-        assertTrue("class:\n"+ groupClassText, groupClassText.contains( "@javax.persistence.JoinColumn" ) );
+        assertTrue( "class:\n" + groupClassText, groupClassText.contains( "@javax.persistence.JoinColumn" ) );
     }
 }
