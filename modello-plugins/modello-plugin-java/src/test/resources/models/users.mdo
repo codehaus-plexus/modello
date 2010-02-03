@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model>
+  <version>1.0.0</version>
+  <name>untitledModel</name>
+  
+  <classes>
+    <class>
+      <name>Param</name>
+<!--      
+      <annotations>
+        <annotation>@javax.xml.bind.annotation.XmlRootElement</annotation>
+        <annotation>@javax.persistence.Entity</annotation>
+        <annotation>@javax.persistence.Table(name="params",uniqueConstraints={@UniqueConstraint(columnNames="param_id"),@UniqueConstraint(columnNames="param_name")})</annotation>
+      </annotations> 
+-->
+      <version>1.0.0</version>
+      <fields>
+        <field>
+          <name>id</name>
+          <type>int</type>
+          <annotations>
+            <annotation>@javax.persistence.Id</annotation>
+            <annotation>@javax.persistence.SequenceGenerator(name="param_seq", sequenceName="param_pk_seq")</annotation>
+            <annotation>@javax.persistence.GeneratedValue(strategy=javax.persistence.GenerationType.SEQUENCE, generator="param_seq")</annotation>
+            <annotation>@javax.persistence.Column(name="param_id")</annotation>
+          </annotations>
+          <version>1.0.0</version>
+        </field>
+        <field>
+          <name>name</name>
+          <type>String</type>
+          <annotations>
+            <annotation>@javax.persistence.Column(name="param_name")</annotation>
+          </annotations>
+          <version>1.0.0</version>
+        </field>
+        <field>
+          <name>value</name>
+          <type>String</type>
+          <annotations>
+            <annotation>@javax.persistence.Column(name="param_value")</annotation>
+          </annotations>
+          <version>1.0.0</version>
+        </field>
+      </fields>
+    </class>
+    <class>
+      <name>Group</name>
+<!--      
+      <annotations>
+        <annotation>@javax.xml.bind.annotation.XmlRootElement</annotation>
+        <annotation>@javax.persistence.Entity</annotation>
+        <annotation>@javax.persistence.Table(name="groups",uniqueConstraints={@UniqueConstraint(columnNames="group_id"),@UniqueConstraint(columnNames="group_name")})</annotation>
+      </annotations>
+-->
+      <version>1.0.0</version>
+      <fields>
+        <field>
+          <name>id</name>
+          <type>int</type>
+          <annotations>
+            <annotation>@javax.persistence.Id</annotation>
+            <annotation>@javax.persistence.SequenceGenerator(name="group_seq", sequenceName="group_pk_seq")</annotation>
+            <annotation>@javax.persistence.GeneratedValue(strategy=javax.persistence.GenerationType.SEQUENCE, generator="group_seq")</annotation>
+            <annotation>@javax.persistence.Column(name="group_id")</annotation>
+          </annotations>
+          <version>1.0.0</version>
+        </field>
+        <field>
+          <name>groupName</name>
+          <type>String</type>
+          <annotations>
+            <annotation>@javax.persistence.Column(name="group_name")</annotation>
+          </annotations>
+          <version>1.0.0</version>
+        </field>
+        <field>
+          <name>users</name>
+          <version>1.0.0</version>
+          <association>
+            <type>User</type>
+            <multiplicity>*</multiplicity>
+            <annotations>
+              <annotation>@javax.persistence.ManyToMany</annotation>
+              <annotation>@javax.persistence.JoinTable(name="users_group",joinColumns=@javax.persistence.JoinColumn(name="group_id", referencedColumnName="group_id"),inverseJoinColumns=@javax.persistence.JoinColumn(name="user_id", referencedColumnName="user_id"))</annotation>
+            </annotations>            
+          </association>
+        </field>
+      </fields>
+    </class>
+    <class>
+      <name>User</name>
+<!--      
+      <annotations>
+        <annotation>@javax.xml.bind.annotation.XmlRootElement</annotation>
+        <annotation>@javax.persistence.Entity</annotation>
+        <annotation>@javax.persistence.Table(name="users",uniqueConstraints={@UniqueConstraint(columnNames="user_id"),@UniqueConstraint(columnNames="login")})</annotation>
+      </annotations>
+-->      
+      <version>1.0.0</version>
+      <fields>
+        <field>
+          <name>id</name>
+          <type>int</type>
+          <annotations>
+            <annotation>@javax.persistence.Id</annotation>
+            <annotation>@javax.persistence.SequenceGenerator(name="user_seq", sequenceName="user_pk_seq")</annotation>
+            <annotation>@javax.persistence.GeneratedValue(strategy=javax.persistence.GenerationType.SEQUENCE, generator="user_seq")</annotation>
+            <annotation>@javax.persistence.Column(name="user_id")</annotation>
+          </annotations>
+          <version>1.0.0</version>
+        </field>
+        <field>
+          <name>login</name>
+          <type>String</type>
+          <annotations>
+            <annotation>@javax.persistence.Column(name="login")</annotation>
+          </annotations>
+          <version>1.0.0</version>
+        </field>
+        <field>
+          <name>password</name>
+          <type>String</type>
+          <annotations>
+            <annotation>@javax.persistence.Column(name="password")</annotation>
+          </annotations>
+          <version>1.0.0</version>
+        </field>
+        <field>
+          <name>email</name>
+          <type>String</type>
+          <annotations>
+            <annotation>@javax.persistence.Column(name="mail")</annotation>
+          </annotations>
+          <version>1.0.0</version>
+        </field>
+        <field>
+          <name>expirationDate</name>
+          <type>Date</type>
+          <annotations>
+            <annotation>@javax.persistence.Column(name="exp_date")</annotation>
+          </annotations>
+          <version>1.0.0</version>
+        </field>
+        <field>
+          <name>admin</name>
+          <type>boolean</type>
+          <annotations>
+            <annotation>@javax.persistence.Column(name="admin")</annotation>
+          </annotations>
+          <version>1.0.0</version>
+        </field>
+        <field>
+          <name>groups</name>
+          <version>1.0.0</version>
+          <association>
+            <type>Group</type>
+            <multiplicity>*</multiplicity>
+            <annotations>
+              <annotation>@javax.persistence.ManyToMany</annotation>
+              <annotation>@javax.persistence.JoinTable(name="users_group",inverseJoinColumns=@javax.persistence.JoinColumn(name="group_id", referencedColumnName="group_id"),joinColumns=@javax.persistence.JoinColumn(name="user_id", referencedColumnName="user_id"))</annotation>
+            </annotations>            
+          </association>
+        </field>
+      </fields>
+    </class>
+  </classes>
+</model>

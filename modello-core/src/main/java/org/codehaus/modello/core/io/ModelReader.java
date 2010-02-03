@@ -41,6 +41,8 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -504,6 +506,13 @@ public class ModelReader
                     {
                         codeSegment.setCode( parser.nextText() );
                     }
+                    else if ( parser.getName().equals( "annotations" )) {
+                    	List annotationsList = new ArrayList();
+                    	while (parser.nextTag() == XmlPullParser.START_TAG && "annotation".equals(parser.getName())) {
+                    		annotationsList.add(parser.nextText());
+                    	}                    	
+                    	codeSegment.setAnnotations(annotationsList);
+                    }
                     else
                     {
                         parser.nextText();
@@ -538,6 +547,14 @@ public class ModelReader
         {
             element.setComment( parser.nextText() );
         }
+        else if ( parser.getName().equals("annotations") )
+        {
+        	List annotationsList = new ArrayList();
+        	while (parser.nextTag() == XmlPullParser.START_TAG && "annotation".equals(parser.getName())) {
+        		annotationsList.add(parser.nextText());
+        	}
+        	element.setAnnotations( annotationsList );
+        }      
         else
         {
             return false;

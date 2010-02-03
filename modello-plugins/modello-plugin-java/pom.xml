@@ -19,6 +19,13 @@
       <artifactId>plexus-build-api</artifactId>
     </dependency>
 
+    <dependency>
+      <groupId>org.apache.geronimo.specs</groupId>
+      <artifactId>geronimo-jpa_2.0_spec</artifactId>
+      <version>1.0</version>
+      <scope>test</scope>
+    </dependency>
+
     <!--  Castor's component containing org.exolab.javasource -->
   	<!--dependency>
       <groupId>org.codehaus.castor</groupId>

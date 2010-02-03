@@ -27,6 +27,8 @@ import org.codehaus.modello.metadata.Metadata;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This is the base class for all elements of the model.
@@ -46,6 +48,8 @@ public abstract class BaseElement
     private String description;
 
     private String comment;
+
+    private List annotations = new ArrayList();
 
     private VersionRange versionRange = new VersionRange( "0.0.0+" );
 
@@ -213,5 +217,21 @@ public abstract class BaseElement
         }
 
         return name.hashCode() + versionRange.toString().hashCode();
+    }
+
+    /**
+     * @return the annotations
+     */
+    public List getAnnotations()
+    {
+        return annotations;
+    }
+
+    /**
+     * @param annotations the annotations to set
+     */
+    public void setAnnotations( List annotations )
+    {
+        this.annotations = annotations;
     }
 }
