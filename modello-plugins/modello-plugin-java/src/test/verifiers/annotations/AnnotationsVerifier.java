@@ -27,7 +27,7 @@ import java.util.List;
 
 import junit.framework.Assert;
 
-public class UsersVerifier
+public class AnnotationsVerifier
     extends Verifier
 {
     public void verify()
