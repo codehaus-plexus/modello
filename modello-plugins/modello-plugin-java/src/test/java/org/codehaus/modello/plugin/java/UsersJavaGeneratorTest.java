@@ -23,8 +23,6 @@ package org.codehaus.modello.plugin.java;
  */
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.Properties;
 
 import org.codehaus.modello.AbstractModelloJavaGeneratorTest;
@@ -32,11 +30,9 @@ import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
 import org.codehaus.plexus.util.FileUtils;
-import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.ReaderFactory;
 
 /**
- * @author <a href="mailto:vincent.siveton@gmail.com">Vincent Siveton</a>
  * @version $Id: TmpJavaGeneratorTest.java 1125 2009-01-10 20:29:32Z hboutemy $
  */
 public class UsersJavaGeneratorTest
@@ -53,7 +49,7 @@ public class UsersJavaGeneratorTest
         throws Exception
     {
         super.setUp();
-        // TODO: Add this to genrate Java with annotations
+        // TODO: Add this to generate Java with annotations
         // setSourceVersion( "1.5" );
         // setTargetVersion( "1.5" );
         addDependency( "javax.xml.bind", "jaxb-api", "2.1" );
@@ -79,28 +75,9 @@ public class UsersJavaGeneratorTest
 
         modello.generate( model, "java", parameters );
 
-        try
-        {
-            compile( getOutputDirectory(), getOutputClasses(), true );
-            assertTrue( true );
-        }
-        catch ( Exception e )
-        {
-            e.printStackTrace();
-            fail( e.getMessage() );
-        }
+        compile( getOutputDirectory(), getOutputClasses(), true );
 
-        FileInputStream inputStream = null;
-        String groupClassText = "";
-        try
-        {
-            inputStream = new FileInputStream( new File( getOutputDirectory().getAbsolutePath(), "model/Group.java" ) );
-            groupClassText = IOUtil.toString( inputStream );
-        }
-        finally
-        {
-            IOUtil.close( inputStream );
-        }
+        String groupClassText = FileUtils.fileRead( new File( getOutputDirectory(), "model/Group.java" ) );
 
         // we could check a little more robust then this.
         assertTrue( "class:\n" + groupClassText, groupClassText.indexOf( "@javax.persistence.JoinColumn" ) >= 0 );
