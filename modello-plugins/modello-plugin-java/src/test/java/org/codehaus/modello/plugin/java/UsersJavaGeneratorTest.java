@@ -103,6 +103,6 @@ public class UsersJavaGeneratorTest
         }
 
         // we could check a little more robust then this.
-        assertTrue( "class:\n" + groupClassText, groupClassText.contains( "@javax.persistence.JoinColumn" ) );
+        assertTrue( "class:\n" + groupClassText, groupClassText.indexOf( "@javax.persistence.JoinColumn" ) >= 0 );
     }
 }
