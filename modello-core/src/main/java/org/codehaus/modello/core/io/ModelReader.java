@@ -543,9 +543,12 @@ public class ModelReader
         else if ( parser.getName().equals( "annotations" ) )
         {
             List annotationsList = new ArrayList();
-            while ( parser.nextTag() == XmlPullParser.START_TAG && "annotation".equals( parser.getName() ) )
+            while ( parser.nextTag() == XmlPullParser.START_TAG )
             {
-                annotationsList.add( parser.nextText() );
+                if ( "annotation".equals( parser.getName() ) )
+                {
+                    annotationsList.add( parser.nextText() );
+                }
             }
             element.setAnnotations( annotationsList );
         }
