@@ -35,14 +35,14 @@ import org.codehaus.plexus.util.ReaderFactory;
 /**
  * @version $Id: TmpJavaGeneratorTest.java 1125 2009-01-10 20:29:32Z hboutemy $
  */
-public class UsersJavaGeneratorTest
+public class AnnotationsJavaGeneratorTest
     extends AbstractModelloJavaGeneratorTest
 {
-    private String modelFile = "src/test/resources/models/users.mdo";
+    private String modelFile = "src/test/resources/models/annotations.mdo";
 
-    public UsersJavaGeneratorTest()
+    public AnnotationsJavaGeneratorTest()
     {
-        super( "users" );
+        super( "annotations" );
     }
 
     public void setUp()
