@@ -165,7 +165,7 @@ public class Xpp3ReaderGenerator
         sc.add( "{" );
         sc.indent();
 
-        sc.add( "if ( strict && ! parser.getName().equals( \"" + tagName + "\" ) )" );
+        sc.add( "if ( strict && ! \"" + tagName + "\".equals( parser.getName() ) )" );
 
         sc.add( "{" );
         sc.addIndented( "throw new XmlPullParserException( \"Expected root element '" + tagName + "' but "
@@ -567,7 +567,7 @@ public class Xpp3ReaderGenerator
                         sc.add( "{" );
                         sc.indent();
 
-                        sc.add( "if ( parser.getName().equals( \"" + valuesTagName + "\" ) )" );
+                        sc.add( "if ( \"" + valuesTagName + "\".equals( parser.getName() ) )" );
 
                         sc.add( "{" );
                         sc.indent();
@@ -575,7 +575,7 @@ public class Xpp3ReaderGenerator
                     else
                     {
                         sc.add( ( addElse ? "else " : "" )
-                            + "if ( parser.getName().equals( \"" + valuesTagName + "\" ) )" );
+                            + "if ( \"" + valuesTagName + "\".equals( parser.getName() ) )" );
 
                         sc.add( "{" );
                         sc.indent();
@@ -643,7 +643,7 @@ public class Xpp3ReaderGenerator
                         sc.add( "{" );
                         sc.indent();
 
-                        sc.add( "if ( parser.getName().equals( \"" + valuesTagName + "\" ) )" );
+                        sc.add( "if ( \"" + valuesTagName + "\".equals( parser.getName() ) )" );
 
                         sc.add( "{" );
                         sc.indent();
@@ -659,13 +659,13 @@ public class Xpp3ReaderGenerator
                         sc.add( "{" );
                         sc.indent();
 
-                        sc.add( "if ( parser.getName().equals( \"key\" ) )" );
+                        sc.add( "if ( \"key\".equals( parser.getName() ) )" );
 
                         sc.add( "{" );
                         sc.addIndented( "key = parser.nextText();" );
                         sc.add( "}" );
 
-                        sc.add( "else if ( parser.getName().equals( \"value\" ) )" );
+                        sc.add( "else if ( \"value\".equals( parser.getName() ) )" );
 
                         sc.add( "{" );
                         sc.addIndented( "value = parser.nextText()" + ( xmlFieldMetadata.isTrim() ? ".trim()" : "" )
