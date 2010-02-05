@@ -49,11 +49,6 @@ public class UsersJavaGeneratorTest
         throws Exception
     {
         super.setUp();
-        // TODO: Add this to generate Java with annotations
-        // setSourceVersion( "1.5" );
-        // setTargetVersion( "1.5" );
-        addDependency( "javax.xml.bind", "jaxb-api", "2.1" );
-        addDependency( "org.apache.geronimo.specs", "geronimo-jpa_2.0_spec", "1.0" );
     }
 
     /**
@@ -64,6 +59,15 @@ public class UsersJavaGeneratorTest
     public void testJavaGeneratorWithUsers()
         throws Throwable
     {
+        String javaVersion = System.getProperty( "java.specification.version", "1.5" );
+
+        if ( "1.5".compareTo( javaVersion ) > 0 )
+        {
+            System.out.println( "Skipped Java 5 feature test, not supported by current test environment ("
+                + javaVersion + ")" );
+            return;
+        }
+
         ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
 
         Properties parameters = new Properties();
@@ -75,6 +79,8 @@ public class UsersJavaGeneratorTest
 
         modello.generate( model, "java", parameters );
 
+        addDependency( "javax.xml.bind", "jaxb-api", "2.1" );
+        addDependency( "org.apache.geronimo.specs", "geronimo-jpa_2.0_spec", "1.0" );
         compile( getOutputDirectory(), getOutputClasses(), true );
 
         String groupClassText = FileUtils.fileRead( new File( getOutputDirectory(), "model/Group.java" ) );

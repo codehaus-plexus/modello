@@ -140,7 +140,7 @@ public class JavaModelloGenerator
                 }
             }
 
-            if ( !modelInterface.getAnnotations().isEmpty() )
+            if ( useJava5 && !modelInterface.getAnnotations().isEmpty() )
             {
                 for ( Iterator iterator = modelInterface.getAnnotations().iterator(); iterator.hasNext(); )
                 {
@@ -202,7 +202,7 @@ public class JavaModelloGenerator
 
             jClass.addInterface( Serializable.class.getName() );
 
-            if ( !modelClass.getAnnotations().isEmpty() )
+            if ( useJava5 && !modelClass.getAnnotations().isEmpty() )
             {
                 for ( Iterator iterator = modelClass.getAnnotations().iterator(); iterator.hasNext(); )
                 {
@@ -810,7 +810,7 @@ public class JavaModelloGenerator
             field.setComment( appendPeriod( modelField.getDescription() ) );
         }
 
-        if ( !modelField.getAnnotations().isEmpty() )
+        if ( useJava5 && !modelField.getAnnotations().isEmpty() )
         {
             for ( Iterator iterator = modelField.getAnnotations().iterator(); iterator.hasNext(); )
             {
@@ -1073,7 +1073,7 @@ public class JavaModelloGenerator
                 jField.setComment( modelAssociation.getComment() );
             }
 
-            if ( !modelAssociation.getAnnotations().isEmpty() )
+            if ( useJava5 && !modelAssociation.getAnnotations().isEmpty() )
             {
                 for ( Iterator iterator = modelAssociation.getAnnotations().iterator(); iterator.hasNext(); )
                 {
