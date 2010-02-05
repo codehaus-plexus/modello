@@ -506,12 +506,14 @@ public class ModelReader
                     {
                         codeSegment.setCode( parser.nextText() );
                     }
-                    else if ( parser.getName().equals( "annotations" )) {
-                    	List annotationsList = new ArrayList();
-                    	while (parser.nextTag() == XmlPullParser.START_TAG && "annotation".equals(parser.getName())) {
-                    		annotationsList.add(parser.nextText());
-                    	}                    	
-                    	codeSegment.setAnnotations(annotationsList);
+                    else if ( parser.getName().equals( "annotations" ) )
+                    {
+                        List annotationsList = new ArrayList();
+                        while ( parser.nextTag() == XmlPullParser.START_TAG && "annotation".equals( parser.getName() ) )
+                        {
+                            annotationsList.add( parser.nextText() );
+                        }
+                        codeSegment.setAnnotations( annotationsList );
                     }
                     else
                     {
@@ -547,14 +549,15 @@ public class ModelReader
         {
             element.setComment( parser.nextText() );
         }
-        else if ( parser.getName().equals("annotations") )
+        else if ( parser.getName().equals( "annotations" ) )
         {
-        	List annotationsList = new ArrayList();
-        	while (parser.nextTag() == XmlPullParser.START_TAG && "annotation".equals(parser.getName())) {
-        		annotationsList.add(parser.nextText());
-        	}
-        	element.setAnnotations( annotationsList );
-        }      
+            List annotationsList = new ArrayList();
+            while ( parser.nextTag() == XmlPullParser.START_TAG && "annotation".equals( parser.getName() ) )
+            {
+                annotationsList.add( parser.nextText() );
+            }
+            element.setAnnotations( annotationsList );
+        }
         else
         {
             return false;

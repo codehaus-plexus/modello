@@ -143,7 +143,9 @@ public class JavaModelloGenerator
             if ( !modelInterface.getAnnotations().isEmpty() )
             {
                 for ( Iterator iterator = modelInterface.getAnnotations().iterator(); iterator.hasNext(); )
+                {
                     jInterface.appendAnnotation( iterator.next().toString() );
+                }
             }
 
             jInterface.print( sourceWriter );
@@ -203,7 +205,9 @@ public class JavaModelloGenerator
             if ( !modelClass.getAnnotations().isEmpty() )
             {
                 for ( Iterator iterator = modelClass.getAnnotations().iterator(); iterator.hasNext(); )
+                {
                     jClass.appendAnnotation( iterator.next().toString() );
+                }
             }
 
             JSourceCode jConstructorSource = new JSourceCode();
@@ -809,7 +813,9 @@ public class JavaModelloGenerator
         if ( !modelField.getAnnotations().isEmpty() )
         {
             for ( Iterator iterator = modelField.getAnnotations().iterator(); iterator.hasNext(); )
+            {
                 field.appendAnnotation( iterator.next().toString() );
+            }
         }
 
         return field;
@@ -1070,7 +1076,9 @@ public class JavaModelloGenerator
             if ( !modelAssociation.getAnnotations().isEmpty() )
             {
                 for ( Iterator iterator = modelAssociation.getAnnotations().iterator(); iterator.hasNext(); )
+                {
                     jField.appendAnnotation( iterator.next().toString() );
+                }
             }
 
             if ( StringUtils.equals( javaAssociationMetadata.getInitializationMode(),

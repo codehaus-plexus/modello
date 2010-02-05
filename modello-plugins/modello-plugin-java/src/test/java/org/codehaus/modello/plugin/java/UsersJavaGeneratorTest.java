@@ -62,7 +62,7 @@ public class UsersJavaGeneratorTest
 
     /**
      * MODELLO-83
-     * 
+     *
      * @throws Throwable
      */
     public void testJavaGeneratorWithUsers()
