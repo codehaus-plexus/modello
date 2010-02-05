@@ -384,7 +384,10 @@ public class StaxReaderGenerator
     private static void writeModelVersionHack( JSourceCode sc )
     {
         sc.add( "// legacy hack for pomVersion == 3" );
-        sc.add( "if ( modelVersion.equals( \"3\" ) ) modelVersion = \"3.0.0\";" );
+        sc.add( "if ( \"3\".equals( modelVersion ) )" );
+        sc.add( "{" );
+        sc.addIndented( "modelVersion = \"3.0.0\";" );
+        sc.add( "}" );
     }
 
     private void writeDetermineVersionMethod( JClass jClass, Model objectModel )
@@ -1104,7 +1107,7 @@ public class StaxReaderGenerator
                         sc.add( "{" );
                         sc.indent();
 
-                        sc.add( "if ( xmlStreamReader.getLocalName().equals( \"" + valuesTagName + "\" ) )" );
+                        sc.add( "if ( \"" + valuesTagName + "\".equals( xmlStreamReader.getLocalName() ) )" );
 
                         sc.add( "{" );
                         sc.indent();
@@ -1112,7 +1115,7 @@ public class StaxReaderGenerator
                     else
                     {
                         sc.add( ( addElse ? "else " : "" )
-                            + "if ( xmlStreamReader.getLocalName().equals( \"" + valuesTagName + "\" ) )" );
+                            + "if ( \"" + valuesTagName + "\".equals( xmlStreamReader.getLocalName() ) )" );
 
                         sc.add( "{" );
                         sc.indent();
@@ -1202,7 +1205,7 @@ public class StaxReaderGenerator
                         sc.add( "{" );
                         sc.indent();
 
-                        sc.add( "if ( xmlStreamReader.getLocalName().equals( \"" + valuesTagName + "\" ) )" );
+                        sc.add( "if ( \"" + valuesTagName + "\".equals( xmlStreamReader.getLocalName() ) )" );
 
                         sc.add( "{" );
                         sc.indent();
@@ -1218,13 +1221,13 @@ public class StaxReaderGenerator
                         sc.add( "{" );
                         sc.indent();
 
-                        sc.add( "if ( xmlStreamReader.getLocalName().equals( \"key\" ) )" );
+                        sc.add( "if ( \"key\".equals( xmlStreamReader.getLocalName() ) )" );
 
                         sc.add( "{" );
                         sc.addIndented( "key = xmlStreamReader.getElementText();" );
                         sc.add( "}" );
 
-                        sc.add( "else if ( xmlStreamReader.getLocalName().equals( \"value\" ) )" );
+                        sc.add( "else if ( \"value\".equals( xmlStreamReader.getLocalName() ) )" );
 
                         sc.add( "{" );
                         sc.addIndented( "value = xmlStreamReader.getElementText()"
@@ -1326,7 +1329,7 @@ public class StaxReaderGenerator
     {
         writeModelVersionHack( sc );
 
-        sc.add( "if ( !modelVersion.equals( \"" + getGeneratedVersion() + "\" ) )" );
+        sc.add( "if ( !\"" + getGeneratedVersion() + "\".equals( modelVersion ) )" );
         sc.add( "{" );
         sc.addIndented(
             "throw new XMLStreamException( \"Document model version of '\" + modelVersion + \"' doesn't match reader "

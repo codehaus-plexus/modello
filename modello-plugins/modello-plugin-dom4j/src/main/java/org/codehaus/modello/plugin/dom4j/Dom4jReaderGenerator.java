@@ -477,7 +477,7 @@ public class Dom4jReaderGenerator
 
                         sc.add( "Element listElement = (Element) n;" );
 
-                        sc.add( "if ( listElement.getName().equals( \"" + valuesTagName + "\" ) )" );
+                        sc.add( "if ( \"" + valuesTagName + "\".equals( listElement.getName() ) )" );
 
                         sc.add( "{" );
                         sc.indent();
@@ -485,7 +485,7 @@ public class Dom4jReaderGenerator
                     else
                     {
                         sc.add( ( addElse ? "else " : "" )
-                            + "if ( childElement.getName().equals( \"" + valuesTagName + "\" ) )" );
+                            + "if ( \"" + valuesTagName + "\".equals( childElement.getName() ) )" );
 
                         sc.add( "{" );
                         sc.indent();
@@ -569,7 +569,7 @@ public class Dom4jReaderGenerator
 
                         sc.add( "Element listElement = (Element) n;" );
 
-                        sc.add( "if ( listElement.getName().equals( \"" + valuesTagName + "\" ) )" );
+                        sc.add( "if ( \"" + valuesTagName + "\".equals( listElement.getName() ) )" );
 
                         sc.add( "{" );
                         sc.indent();
@@ -595,13 +595,13 @@ public class Dom4jReaderGenerator
 
                         sc.add( "Element propertyElement = (Element) nd;" );
 
-                        sc.add( "if ( propertyElement.getName().equals( \"key\" ) )" );
+                        sc.add( "if ( \"key\".equals( propertyElement.getName() ) )" );
 
                         sc.add( "{" );
                         sc.addIndented( "key = propertyElement.getText();" );
                         sc.add( "}" );
 
-                        sc.add( "else if ( propertyElement.getName().equals( \"value\" ) )" );
+                        sc.add( "else if ( \"value\".equals( propertyElement.getName() ) )" );
 
                         sc.add( "{" );
                         sc.addIndented( "value = propertyElement.getText()"
