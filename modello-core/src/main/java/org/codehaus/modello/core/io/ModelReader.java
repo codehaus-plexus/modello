@@ -506,15 +506,6 @@ public class ModelReader
                     {
                         codeSegment.setCode( parser.nextText() );
                     }
-                    else if ( parser.getName().equals( "annotations" ) )
-                    {
-                        List annotationsList = new ArrayList();
-                        while ( parser.nextTag() == XmlPullParser.START_TAG && "annotation".equals( parser.getName() ) )
-                        {
-                            annotationsList.add( parser.nextText() );
-                        }
-                        codeSegment.setAnnotations( annotationsList );
-                    }
                     else
                     {
                         parser.nextText();
