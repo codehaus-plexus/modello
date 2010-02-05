@@ -225,7 +225,7 @@ public abstract class JStructure extends JType
             //-- This may cause issues if the current package
             //-- defines any classes that have the same name
             //-- name as the java.lang package.
-            if ( pkgName.equals( "java.lang" ) ) return;
+            if ( "java.lang".equals( pkgName ) ) return;
 
             //-- for readabilty keep import list sorted, and make sure
             //-- we do not include more than one of the same import

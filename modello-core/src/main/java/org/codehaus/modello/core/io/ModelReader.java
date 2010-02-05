@@ -118,27 +118,27 @@ public class ModelReader
                 if ( parseBaseElement( model, parser ) )
                 {
                 }
-                else if ( parser.getName().equals( "id" ) )
+                else if ( "id".equals( parser.getName() ) )
                 {
                     model.setId( parser.nextText() );
                 }
-                else if ( parser.getName().equals( "defaults" ) )
+                else if ( "defaults".equals( parser.getName() ) )
                 {
                     parseDefaults( model, parser );
                 }
-                else if ( parser.getName().equals( "versionDefinition" ) )
+                else if ( "versionDefinition".equals( parser.getName() ) )
                 {
                     parseVersionDefinition( model, parser );
                 }
-                else if ( parser.getName().equals( "interfaces" ) )
+                else if ( "interfaces".equals( parser.getName() ) )
                 {
                     parseInterfaces( model, parser );
                 }
-                else if ( parser.getName().equals( "classes" ) )
+                else if ( "classes".equals( parser.getName() ) )
                 {
                     parseClasses( model, parser );
                 }
-                else if ( parser.getName().equals( "model" ) )
+                else if ( "model".equals( parser.getName() ) )
                 {
                     modelAttributes = getAttributes( parser );
                 }
@@ -156,17 +156,17 @@ public class ModelReader
     {
         while ( parser.nextTag() == XmlPullParser.START_TAG )
         {
-            if ( parser.getName().equals( "default" ) )
+            if ( "default".equals( parser.getName() ) )
             {
                 ModelDefault modelDefault = new ModelDefault();
 
                 while ( parser.nextTag() == XmlPullParser.START_TAG )
                 {
-                    if ( parser.getName().equals( "key" ) )
+                    if ( "key".equals( parser.getName() ) )
                     {
                         modelDefault.setKey( parser.nextText() );
                     }
-                    else if ( parser.getName().equals( "value" ) )
+                    else if ( "value".equals( parser.getName() ) )
                     {
                         modelDefault.setValue( parser.nextText() );
                     }
@@ -217,7 +217,7 @@ public class ModelReader
     {
         while ( parser.nextTag() == XmlPullParser.START_TAG )
         {
-            if ( parser.getName().equals( "interface" ) )
+            if ( "interface".equals( parser.getName() ) )
             {
                 ModelInterface modelInterface = new ModelInterface();
 
@@ -226,15 +226,15 @@ public class ModelReader
                     if ( parseBaseElement( modelInterface, parser ) )
                     {
                     }
-                    else if ( parser.getName().equals( "superInterface" ) )
+                    else if ( "superInterface".equals( parser.getName() ) )
                     {
                         modelInterface.setSuperInterface( parser.nextText() );
                     }
-                    else if ( parser.getName().equals( "packageName" ) )
+                    else if ( "packageName".equals( parser.getName() ) )
                     {
                         modelInterface.setPackageName( parser.nextText() );
                     }
-                    else if ( parser.getName().equals( "codeSegments" ) )
+                    else if ( "codeSegments".equals( parser.getName() ) )
                     {
                         parseCodeSegment( modelInterface, parser );
                     }
@@ -258,7 +258,7 @@ public class ModelReader
     {
         while ( parser.nextTag() == XmlPullParser.START_TAG )
         {
-            if ( parser.getName().equals( "class" ) )
+            if ( "class".equals( parser.getName() ) )
             {
                 ModelClass modelClass = new ModelClass();
 
@@ -269,23 +269,23 @@ public class ModelReader
                     if ( parseBaseElement( modelClass, parser ) )
                     {
                     }
-                    else if ( parser.getName().equals( "interfaces" ) )
+                    else if ( "interfaces".equals( parser.getName() ) )
                     {
                         parseClassInterfaces( modelClass, parser );
                     }
-                    else if ( parser.getName().equals( "superClass" ) )
+                    else if ( "superClass".equals( parser.getName() ) )
                     {
                         modelClass.setSuperClass( parser.nextText() );
                     }
-                    else if ( parser.getName().equals( "packageName" ) )
+                    else if ( "packageName".equals( parser.getName() ) )
                     {
                         modelClass.setPackageName( parser.nextText() );
                     }
-                    else if ( parser.getName().equals( "fields" ) )
+                    else if ( "fields".equals( parser.getName() ) )
                     {
                         parseFields( modelClass, parser );
                     }
-                    else if ( parser.getName().equals( "codeSegments" ) )
+                    else if ( "codeSegments".equals( parser.getName() ) )
                     {
                         parseCodeSegment( modelClass, parser );
                     }
@@ -310,7 +310,7 @@ public class ModelReader
     {
         while ( parser.nextTag() == XmlPullParser.START_TAG )
         {
-            if ( parser.getName().equals( "interface" ) )
+            if ( "interface".equals( parser.getName() ) )
             {
                 modelClass.addInterface( parser.nextText() );
             }
@@ -326,7 +326,7 @@ public class ModelReader
     {
         while ( parser.nextTag() == XmlPullParser.START_TAG )
         {
-            if ( parser.getName().equals( "field" ) )
+            if ( "field".equals( parser.getName() ) )
             {
                 ModelField modelField = new ModelField();
 
@@ -341,33 +341,33 @@ public class ModelReader
                     if ( parseBaseElement( modelField, parser ) )
                     {
                     }
-                    else if ( parser.getName().equals( "association" ) )
+                    else if ( "association".equals( parser.getName() ) )
                     {
                         aAttributes = getAttributes( parser );
 
                         modelAssociation = parseAssociation( parser );
                     }
-                    else if ( parser.getName().equals( "alias" ) )
+                    else if ( "alias".equals( parser.getName() ) )
                     {
                         modelField.setAlias( parser.nextText() );
                     }
-                    else if ( parser.getName().equals( "type" ) )
+                    else if ( "type".equals( parser.getName() ) )
                     {
                         modelField.setType( parser.nextText() );
                     }
-                    else if ( parser.getName().equals( "defaultValue" ) )
+                    else if ( "defaultValue".equals( parser.getName() ) )
                     {
                         modelField.setDefaultValue( parser.nextText() );
                     }
-                    else if ( parser.getName().equals( "typeValidator" ) )
+                    else if ( "typeValidator".equals( parser.getName() ) )
                     {
                         modelField.setTypeValidator( parser.nextText() );
                     }
-                    else if ( parser.getName().equals( "required" ) )
+                    else if ( "required".equals( parser.getName() ) )
                     {
                         modelField.setRequired( Boolean.valueOf( parser.nextText() ).booleanValue() );
                     }
-                    else if ( parser.getName().equals( "identifier" ) )
+                    else if ( "identifier".equals( parser.getName() ) )
                     {
                         modelField.setIdentifier( Boolean.valueOf( parser.nextText() ).booleanValue() );
                     }
@@ -438,11 +438,11 @@ public class ModelReader
             if ( parseBaseElement( modelAssociation, parser ) )
             {
             }
-            else if ( parser.getName().equals( "type" ) )
+            else if ( "type".equals( parser.getName() ) )
             {
                 modelAssociation.setTo( parser.nextText() );
             }
-            else if ( parser.getName().equals( "multiplicity" ) )
+            else if ( "multiplicity".equals( parser.getName() ) )
             {
                 modelAssociation.setMultiplicity( parser.nextText() );
             }
@@ -460,7 +460,7 @@ public class ModelReader
     {
         while ( parser.nextTag() == XmlPullParser.START_TAG )
         {
-            if ( parser.getName().equals( "codeSegment" ) )
+            if ( "codeSegment".equals( parser.getName() ) )
             {
                 CodeSegment codeSegment = new CodeSegment();
 
@@ -469,7 +469,7 @@ public class ModelReader
                     if ( parseBaseElement( codeSegment, parser ) )
                     {
                     }
-                    else if ( parser.getName().equals( "code" ) )
+                    else if ( "code".equals( parser.getName() ) )
                     {
                         codeSegment.setCode( parser.nextText() );
                     }
@@ -493,7 +493,7 @@ public class ModelReader
     {
         while ( parser.nextTag() == XmlPullParser.START_TAG )
         {
-            if ( parser.getName().equals( "codeSegment" ) )
+            if ( "codeSegment".equals( parser.getName() ) )
             {
                 CodeSegment codeSegment = new CodeSegment();
 
@@ -502,7 +502,7 @@ public class ModelReader
                     if ( parseBaseElement( codeSegment, parser ) )
                     {
                     }
-                    else if ( parser.getName().equals( "code" ) )
+                    else if ( "code".equals( parser.getName() ) )
                     {
                         codeSegment.setCode( parser.nextText() );
                     }
@@ -524,23 +524,23 @@ public class ModelReader
     private boolean parseBaseElement( BaseElement element, XmlPullParser parser )
         throws XmlPullParserException, IOException
     {
-        if ( parser.getName().equals( "name" ) )
+        if ( "name".equals( parser.getName() ) )
         {
             element.setName( parser.nextText() );
         }
-        else if ( parser.getName().equals( "description" ) )
+        else if ( "description".equals( parser.getName() ) )
         {
             element.setDescription( parser.nextText() );
         }
-        else if ( parser.getName().equals( "version" ) )
+        else if ( "version".equals( parser.getName() ) )
         {
             element.setVersionRange( new VersionRange( parser.nextText() ) );
         }
-        else if ( parser.getName().equals( "comment" ) )
+        else if ( "comment".equals( parser.getName() ) )
         {
             element.setComment( parser.nextText() );
         }
-        else if ( parser.getName().equals( "annotations" ) )
+        else if ( "annotations".equals( parser.getName() ) )
         {
             List annotationsList = new ArrayList();
             while ( parser.nextTag() == XmlPullParser.START_TAG )

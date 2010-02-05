@@ -208,23 +208,23 @@ public abstract class AbstractJavaModelloGenerator
     protected String getJavaDefaultValue( ModelField modelField )
         throws ModelloException
     {
-        if ( modelField.getType().equals( "String" ) )
+        if ( "String".equals( modelField.getType() ) )
         {
             return '"' + modelField.getDefaultValue() + '"';
         }
-        else if ( modelField.getType().equals( "char" ) )
+        else if ( "char".equals( modelField.getType() ) )
         {
             return '\'' + modelField.getDefaultValue() + '\'';
         }
-        else if ( modelField.getType().equals( "long" ) )
+        else if ( "long".equals( modelField.getType() ) )
         {
             return modelField.getDefaultValue() + 'L';
         }
-        else if ( modelField.getType().equals( "float" ) )
+        else if ( "float".equals( modelField.getType() ) )
         {
             return modelField.getDefaultValue() + 'f';
         }
-        else if ( modelField.getType().equals( "Date" ) )
+        else if ( "Date".equals( modelField.getType() ) )
         {
             DateFormat format = new SimpleDateFormat( DEFAULT_DATE_FORMAT, Locale.US );
             try

@@ -673,7 +673,7 @@ public class JavaModelloGenerator
     /**
      * Utility method that adds a period to the end of a string, if the last non-whitespace character of the string is
      * not a punctuation mark or an end-tag.
-     * 
+     *
      * @param string The string to work with
      * @return The string that came in but with a period at the end
      */
@@ -740,43 +740,43 @@ public class JavaModelloGenerator
             baseType = baseType.substring( 0, baseType.length() - 2 );
         }
 
-        if ( baseType.equals( "boolean" ) )
+        if ( "boolean".equals( baseType ) )
         {
             type = JType.BOOLEAN;
         }
-        else if ( baseType.equals( "byte" ) )
+        else if ( "byte".equals( baseType ) )
         {
             type = JType.BYTE;
         }
-        else if ( baseType.equals( "char" ) )
+        else if ( "char".equals( baseType ) )
         {
             type = JType.CHAR;
         }
-        else if ( baseType.equals( "double" ) )
+        else if ( "double".equals( baseType ) )
         {
             type = JType.DOUBLE;
         }
-        else if ( baseType.equals( "float" ) )
+        else if ( "float".equals( baseType ) )
         {
             type = JType.FLOAT;
         }
-        else if ( baseType.equals( "int" ) )
+        else if ( "int".equals( baseType ) )
         {
             type = JType.INT;
         }
-        else if ( baseType.equals( "short" ) )
+        else if ( "short".equals( baseType ) )
         {
             type = JType.SHORT;
         }
-        else if ( baseType.equals( "long" ) )
+        else if ( "long".equals( baseType ) )
         {
             type = JType.LONG;
         }
-        else if ( baseType.equals( "Date" ) )
+        else if ( "Date".equals( baseType ) )
         {
             type = new JClass( "java.util.Date" );
         }
-        else if ( baseType.equals( "DOM" ) )
+        else if ( "DOM".equals( baseType ) )
         {
             // TODO: maybe DOM is not how to specify it in the model, but just Object and markup Xpp3Dom for the
             // Xpp3Reader?

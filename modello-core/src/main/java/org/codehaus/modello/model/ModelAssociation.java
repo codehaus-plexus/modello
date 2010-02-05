@@ -134,7 +134,7 @@ public class ModelAssociation
             throw new ModelValidationException( "You must define the type of association." );
         }
 
-        if ( !to.equals( "String" ) )
+        if ( !"String".equals( to ) )
         {
             toClass = getModelClass().getModel().getClass( to, getVersionRange() );
 
@@ -149,12 +149,12 @@ public class ModelAssociation
             multiplicity = ONE_MULTIPLICITY;
         }
 
-        if ( multiplicity.equals( "n" ) || multiplicity.equals( "*" ) )
+        if ( "n".equals( multiplicity ) || "*".equals( multiplicity ) )
         {
             multiplicity = MANY_MULTIPLICITY;
         }
 
-        if ( !multiplicity.equals( ONE_MULTIPLICITY ) && !multiplicity.equals( MANY_MULTIPLICITY ) )
+        if ( !ONE_MULTIPLICITY.equals( multiplicity ) && !MANY_MULTIPLICITY.equals( multiplicity ) )
         {
             throw new ModelValidationException( "Association multiplicity '" + getName() + "' is incorrect: "
                                                 + "Possible values are '1', '*' or 'n'." );
@@ -172,19 +172,19 @@ public class ModelAssociation
         {
             if ( isManyMultiplicity() )
             {
-                if ( getType().equalsIgnoreCase( "Set" ) )
+                if ( "Set".equalsIgnoreCase( getType() ) )
                 {
                     setType( ModelDefault.SET );
                 }
-                else if ( getType().equalsIgnoreCase( "List" ) )
+                else if ( "List".equalsIgnoreCase( getType() ) )
                 {
                     setType( ModelDefault.LIST );
                 }
-                else if ( getType().equalsIgnoreCase( "Map" ) )
+                else if ( "Map".equalsIgnoreCase( getType() ) )
                 {
                     setType( ModelDefault.MAP );
                 }
-                else if ( getType().equalsIgnoreCase( "Properties" ) )
+                else if ( "Properties".equalsIgnoreCase( getType() ) )
                 {
                     setType( ModelDefault.PROPERTIES );
                 }

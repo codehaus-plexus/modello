@@ -171,17 +171,11 @@ public class ModelField
     {
         String type = getType();
 
-        // TODO: This should not happen
-        if ( type == null )
-        {
-            return false;
-        }
-
         for ( int i = 0; i < PRIMITIVE_TYPES.length; i++ )
         {
             String validType = PRIMITIVE_TYPES[i] + "[]";
 
-            if ( type.equals( validType ) )
+            if ( validType.equals( type ) )
             {
                 return true;
             }
