@@ -33,8 +33,11 @@ import junit.framework.Assert;
 import org.codehaus.plexus.util.ReaderFactory;
 
 public abstract class Verifier
-extends Assert
+    extends Assert
 {
+    public abstract void verify()
+        throws Throwable;
+
     public static void assertField( String className, String fieldName, Object expected, Object actual )
     {
         Method expectedMethod;
