@@ -279,6 +279,25 @@ public abstract class AbstractModelloJavaGeneratorTest
         assertTrue( "The generated file is empty.", file.length() > 0 );
     }
 
+    /**
+     * Check if a Java 5 feature test should be skipped, since it is not supported by current test environment.
+     *
+     * @return <code>true</code> if Java 5 is not available, then feature test should be skipped by caller
+     */
+    protected boolean skipJava5FeatureTest()
+    {
+        String javaVersion = System.getProperty( "java.specification.version", "1.5" );
+
+        if ( "1.5".compareTo( javaVersion ) > 0 )
+        {
+            System.out.println( "Skipped Java 5 feature test, not supported by current test environment ("
+                + javaVersion + ")" );
+            return true;
+        }
+
+        return false;
+    }
+
     protected List getClassPathElements()
     {
         return classPathElements;

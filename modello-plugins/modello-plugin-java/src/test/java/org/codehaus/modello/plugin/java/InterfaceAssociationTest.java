@@ -21,12 +21,8 @@ public class InterfaceAssociationTest
     public void testJavaGenerator()
         throws Throwable
     {
-        String javaVersion = System.getProperty( "java.specification.version", "1.5" );
-
-        if ( "1.5".compareTo( javaVersion ) > 0 )
+        if ( skipJava5FeatureTest() )
         {
-            System.out.println( "Skipped Java 5 feature test, not supported by current test environment ("
-                + javaVersion + ")" );
             return;
         }
 
