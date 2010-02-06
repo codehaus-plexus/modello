@@ -62,6 +62,6 @@ public class TmpJavaGeneratorTest
 
         modello.generate( model, "java", parameters );
 
-        compile( getOutputDirectory(), getOutputClasses() );
+        compileGeneratedSources();
     }
 }

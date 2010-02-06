@@ -153,15 +153,18 @@ public abstract class AbstractModelloJavaGeneratorTest
         return properties.getProperty( "version" );
     }
 
-    protected void compile( File generatedSources, File destinationDirectory )
+    protected void compileGeneratedSources()
         throws IOException, CompilerException
     {
-        compile( generatedSources, destinationDirectory, false );
+        compileGeneratedSources( false );
     }
 
-    protected void compile( File generatedSources, File destinationDirectory, boolean useJava5 )
+    protected void compileGeneratedSources( boolean useJava5 )
         throws IOException, CompilerException
     {
+        File generatedSources = getOutputDirectory();
+        File destinationDirectory = getOutputClasses();
+
         addDependency( "junit", "junit", "3.8.2" );
         addDependency( "org.codehaus.plexus", "plexus-utils", "1.5.8" ); // version must be the same as in pom.xml
         addDependency( "org.codehaus.modello", "modello-test", getModelloVersion() );
@@ -218,7 +221,7 @@ public abstract class AbstractModelloJavaGeneratorTest
         assertEquals( "There was compilation errors.", 0, messages.size() );
     }
 
-    protected void verify( String className, String testName )
+    protected void verifyGeneratedCode( String verifierClassName )
         throws MalformedURLException
     {
         addClassPathFile( getOutputClasses() );
@@ -234,7 +237,7 @@ public abstract class AbstractModelloJavaGeneratorTest
 
         try
         {
-            Class clazz = classLoader.loadClass( className );
+            Class clazz = classLoader.loadClass( verifierClassName );
 
             Method verify = clazz.getMethod( "verify", new Class[0] );
 

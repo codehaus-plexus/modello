@@ -58,8 +58,8 @@ public class FeaturesXpp3GeneratorTest
         modello.generate( model, "xpp3-reader", parameters );
 
         addDependency( "xmlunit", "xmlunit", "1.2" );
-        compile( getOutputDirectory(), getOutputClasses() );
+        compileGeneratedSources();
 
-        verify( "org.codehaus.modello.generator.xml.xpp3.Xpp3FeaturesVerifier", getName() );
+        verifyGeneratedCode( "org.codehaus.modello.generator.xml.xpp3.Xpp3FeaturesVerifier" );
     }
 }

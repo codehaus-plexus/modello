@@ -59,6 +59,6 @@ public class AnnotationsJava4GeneratorTest
 
         addDependency( "javax.xml.bind", "jaxb-api", "2.1" );
         addDependency( "org.apache.geronimo.specs", "geronimo-jpa_2.0_spec", "1.0" );
-        compile( getOutputDirectory(), getOutputClasses(), false );
+        compileGeneratedSources( false );
     }
 }

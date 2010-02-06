@@ -55,8 +55,8 @@ public class AssociationGeneratorTest
 
         modello.generate( model, "java", parameters );
 
-        compile( getOutputDirectory(), getOutputClasses() );
+        compileGeneratedSources();
 
-        verify( "OneToManyAssociationVerifier", "java" );
+        verifyGeneratedCode( "OneToManyAssociationVerifier" );
     }
 }

@@ -35,9 +35,9 @@ public class InterfaceAssociationTest
 
         modello.generate( model, "java", parameters );
 
-        compile( getOutputDirectory(), getOutputClasses(), true );
+        compileGeneratedSources( true );
 
-        verify( "InterfaceAssociationVerifier", "java" );
+        verifyGeneratedCode( "InterfaceAssociationVerifier" );
     }
 
 }

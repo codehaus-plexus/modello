@@ -53,9 +53,9 @@ public class ConverterGeneratorTest
         addDependency( "net.java.dev.stax-utils", "stax-utils", "20060502" );
         addDependency( "org.codehaus.woodstox", "wstx-asl", "3.2.0" );
 
-        compile( getOutputDirectory(), getOutputClasses() );
+        compileGeneratedSources();
 
-        verify( "ConvertersVerifier", "converters" );
+        verifyGeneratedCode( "ConvertersVerifier" );
     }
 
     private void generateConverterClasses( Reader modelReader, String fromVersion, String toVersion )

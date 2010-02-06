@@ -96,11 +96,11 @@ public class Xpp3GeneratorTest
         modello.generate( model, "xpp3-reader", parameters );
 
         addDependency( "xmlunit", "xmlunit", "1.2" );
-        compile( getOutputDirectory(), getOutputClasses() );
+        compileGeneratedSources();
 
         // TODO: see why without this, version system property is set to "2.4.1" value after verify
         System.setProperty( "version", getModelloVersion() );
 
-        verify( "org.codehaus.modello.generator.xml.xpp3.Xpp3Verifier", "xpp3" );
+        verifyGeneratedCode( "org.codehaus.modello.generator.xml.xpp3.Xpp3Verifier" );
     }
 }

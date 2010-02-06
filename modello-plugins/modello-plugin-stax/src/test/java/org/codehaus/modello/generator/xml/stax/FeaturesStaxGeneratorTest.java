@@ -62,11 +62,11 @@ public class FeaturesStaxGeneratorTest
         addDependency( "net.java.dev.stax-utils", "stax-utils", "20060502" );
         addDependency( "xmlunit", "xmlunit", "1.2" );
 
-        compile( getOutputDirectory(), getOutputClasses() );
+        compileGeneratedSources();
 
         // TODO: see why without this, version system property is set to "2.4.1" value after verify
         System.setProperty( "version", getModelloVersion() );
 
-        verify( "org.codehaus.modello.generator.xml.stax.StaxFeaturesVerifier", getName() );
+        verifyGeneratedCode( "org.codehaus.modello.generator.xml.stax.StaxFeaturesVerifier" );
     }
 }

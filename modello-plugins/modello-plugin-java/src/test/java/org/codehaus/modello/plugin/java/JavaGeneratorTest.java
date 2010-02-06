@@ -55,8 +55,8 @@ public class JavaGeneratorTest
 
         modello.generate( model, "java", parameters );
 
-        compile( getOutputDirectory(), getOutputClasses() );
+        compileGeneratedSources();
 
-        verify( "JavaVerifier", "java" );
+        verifyGeneratedCode( "JavaVerifier" );
     }
 }

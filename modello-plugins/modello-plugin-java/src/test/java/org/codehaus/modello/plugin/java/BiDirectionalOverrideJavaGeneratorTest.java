@@ -51,8 +51,8 @@ public class BiDirectionalOverrideJavaGeneratorTest
 
         modello.generate( model, "java", parameters );
 
-        compile( getOutputDirectory(), getOutputClasses() );
+        compileGeneratedSources();
 
-        verify( "JavaVerifier", getName() );
+        verifyGeneratedCode( "JavaVerifier" );
     }
 }

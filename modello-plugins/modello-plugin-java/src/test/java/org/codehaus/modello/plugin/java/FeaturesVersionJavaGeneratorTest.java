@@ -63,8 +63,8 @@ public class FeaturesVersionJavaGeneratorTest
             modello.generate( model, "java", parameters );
         }
 
-        compile( getOutputDirectory(), getOutputClasses() );
+        compileGeneratedSources();
 
-        verify( "JavaVerifier", "java" );
+        verifyGeneratedCode( "JavaVerifier" );
     }
 }

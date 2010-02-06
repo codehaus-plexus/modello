@@ -55,8 +55,8 @@ public class PackageVersionJavaTest
 
         modello.generate( model, "java", parameters );
 
-        compile( getOutputDirectory(), getOutputClasses() );
+        compileGeneratedSources();
 
-        verify( "PackageVersionVerifier", "java" );
+        verifyGeneratedCode( "PackageVersionVerifier" );
     }
 }

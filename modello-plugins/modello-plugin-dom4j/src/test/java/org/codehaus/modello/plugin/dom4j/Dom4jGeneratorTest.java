@@ -95,9 +95,9 @@ public class Dom4jGeneratorTest
 
         addDependency( "dom4j", "dom4j", "1.6.1" );
 
-        compile( getOutputDirectory(), getOutputClasses() );
+        compileGeneratedSources();
 
-        verify( "org.codehaus.modello.generator.xml.dom4j.Dom4jVerifier", "dom4j" );
+        verifyGeneratedCode( "org.codehaus.modello.generator.xml.dom4j.Dom4jVerifier" );
     }
 
 }

@@ -88,8 +88,8 @@ public abstract class AbstractStaxGeneratorTestCase
         addDependency( "stax", "stax-api", "1.0.1" );
         addDependency( "org.codehaus.woodstox", "wstx-asl", "3.2.0" );
 
-        compile( getOutputDirectory(), getOutputClasses() );
+        compileGeneratedSources();
 
-        verify( className, getName() );
+        verifyGeneratedCode( className );
     }
 }
