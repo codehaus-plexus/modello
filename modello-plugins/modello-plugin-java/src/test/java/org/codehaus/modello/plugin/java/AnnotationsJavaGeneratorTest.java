@@ -51,11 +51,6 @@ public class AnnotationsJavaGeneratorTest
         super.setUp();
     }
 
-    /**
-     * MODELLO-83
-     *
-     * @throws Throwable
-     */
     public void testJavaGeneratorWithUsers()
         throws Throwable
     {
