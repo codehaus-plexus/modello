@@ -175,8 +175,17 @@ public abstract class AbstractModelloJavaGeneratorTest
             classPathElements[i + 2] = ( (File) dependencies.get( i ) ).getAbsolutePath();
         }
 
-        String[] sourceDirectories =
-            new String[] { getTestPath( "src/test/verifiers/" + getName() ), generatedSources.getAbsolutePath() };
+        File verifierDirectory = getTestFile( "src/test/verifiers/" + getName() );
+        String[] sourceDirectories;
+        if ( verifierDirectory.canRead() )
+        {
+            sourceDirectories =
+                new String[] { verifierDirectory.getAbsolutePath(), generatedSources.getAbsolutePath() };
+        }
+        else
+        {
+            sourceDirectories = new String[] { generatedSources.getAbsolutePath() };
+        }
 
         Compiler compiler = new JavacCompiler();
 

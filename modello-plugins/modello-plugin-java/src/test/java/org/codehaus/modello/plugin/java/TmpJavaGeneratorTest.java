@@ -30,6 +30,9 @@ import org.codehaus.modello.model.Model;
 import java.util.Properties;
 
 /**
+ * MODELLO-83: check that <code>tmp</code> can be used as a field name without interference with generated code for
+ * <code>hashCode()</code>.
+ *
  * @author <a href="mailto:vincent.siveton@gmail.com">Vincent Siveton</a>
  * @version $Id$
  */
@@ -60,7 +63,5 @@ public class TmpJavaGeneratorTest
         modello.generate( model, "java", parameters );
 
         compile( getOutputDirectory(), getOutputClasses() );
-
-        verify( "TmpVerifier", "java" );
     }
 }
