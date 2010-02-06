@@ -10,9 +10,6 @@ import org.codehaus.modello.model.Model;
 public class InterfaceAssociationTest
     extends AbstractModelloJavaGeneratorTest
 {
-
-    private String modelFile = "src/test/resources/models/interfaceAssociation.mdo";
-
     public InterfaceAssociationTest()
     {
         super( "interfaceAssociationTest" );
@@ -28,13 +25,13 @@ public class InterfaceAssociationTest
 
         ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
 
+        Model model = modello.loadModel( getXmlResourceReader( "/models/interfaceAssociation.mdo" ) );
+
         Properties parameters = new Properties();
         parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, getOutputDirectory().getAbsolutePath() );
         parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString( false ) );
         parameters.setProperty( ModelloParameterConstants.USE_JAVA5, Boolean.toString( true ) );
         parameters.setProperty( ModelloParameterConstants.VERSION, "4.0.0" );
-
-        Model model = modello.loadModel( getTestFile( modelFile ) );
 
         modello.generate( model, "java", parameters );
 

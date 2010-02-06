@@ -73,7 +73,7 @@ public class XdocGeneratorTest
     {
         ModelloCore modello = (ModelloCore) container.lookup( ModelloCore.ROLE );
 
-        Model model = modello.loadModel( getTestFile( "src/test/resources/maven.mdo" ) );
+        Model model = modello.loadModel( getXmlResourceReader( "/maven.mdo" ) );
 
         List classesList = model.getClasses( new Version( "4.0.0" ) );
 
@@ -123,12 +123,12 @@ public class XdocGeneratorTest
     {
         ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
 
+        Model model = modello.loadModel( getXmlResourceReader( "/features.mdo" ) );
+
         Properties parameters = new Properties();
         parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, getOutputDirectory().getAbsolutePath() );
         parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString( false ) );
         parameters.setProperty( ModelloParameterConstants.VERSION, "1.5.0" );
-
-        Model model = modello.loadModel( getXmlResourceReader( "/features.mdo" ) );
 
         modello.generate( model, "xdoc", parameters );
 

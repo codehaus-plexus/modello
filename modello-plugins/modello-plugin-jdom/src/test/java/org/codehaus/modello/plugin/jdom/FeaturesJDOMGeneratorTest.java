@@ -46,12 +46,12 @@ public class FeaturesJDOMGeneratorTest
     {
         ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
 
+        Model model = modello.loadModel( getXmlResourceReader( "/features.mdo" ) );
+
         Properties parameters = new Properties();
         parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, getOutputDirectory().getAbsolutePath() );
         parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString( false ) );
         parameters.setProperty( ModelloParameterConstants.VERSION, "1.0.0" );
-
-        Model model = modello.loadModel( getXmlResourceReader( "/features.mdo" ) );
 
         modello.generate( model, "java", parameters );
         modello.generate( model, "dom4j-reader", parameters );

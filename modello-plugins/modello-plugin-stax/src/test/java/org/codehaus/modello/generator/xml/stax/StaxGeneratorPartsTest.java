@@ -44,7 +44,7 @@ public class StaxGeneratorPartsTest
     public void testStaxReaderParts()
         throws Throwable
     {
-        Model model = modello.loadModel( getTestFile( "src/test/resources/parts.mdo" ) );
+        Model model = modello.loadModel( getXmlResourceReader( "/parts.mdo" ) );
 
         List classesList = model.getClasses( new Version( "4.0.0" ) );
 

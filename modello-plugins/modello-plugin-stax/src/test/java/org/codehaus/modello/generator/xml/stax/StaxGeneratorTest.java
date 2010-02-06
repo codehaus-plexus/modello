@@ -48,7 +48,7 @@ public class StaxGeneratorTest
     public void testStaxGenerator()
         throws Throwable
     {
-        Model model = modello.loadModel( getTestFile( "src/test/resources/maven.mdo" ) );
+        Model model = modello.loadModel( getXmlResourceReader( "/maven.mdo" ) );
 
         List classesList = model.getClasses( new Version( "4.0.0" ) );
 

@@ -48,12 +48,12 @@ public class FeaturesVersionJavaGeneratorTest
     {
         ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
 
+        Model model = modello.loadModel( getXmlResourceReader( "/features.mdo" ) );
+
         Properties parameters = new Properties();
         parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, getOutputDirectory().getAbsolutePath() );
         parameters.setProperty( ModelloParameterConstants.ALL_VERSIONS, ALL_VERSIONS );
         parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString( true ) );
-
-        Model model = modello.loadModel( getXmlResourceReader( "/features.mdo" ) );
 
         String[] versions = ALL_VERSIONS.split( "," );
 

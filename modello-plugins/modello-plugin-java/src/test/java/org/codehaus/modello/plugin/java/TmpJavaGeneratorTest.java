@@ -36,8 +36,6 @@ import java.util.Properties;
 public class TmpJavaGeneratorTest
     extends AbstractModelloJavaGeneratorTest
 {
-    private String modelFile = "src/test/resources/models/tmp.mdo";
-
     public TmpJavaGeneratorTest()
     {
         super( "tmp" );
@@ -52,12 +50,12 @@ public class TmpJavaGeneratorTest
     {
         ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
 
+        Model model = modello.loadModel( getXmlResourceReader( "/models/tmp.mdo" ) );
+
         Properties parameters = new Properties();
         parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, getOutputDirectory().getAbsolutePath() );
         parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString( false ) );
         parameters.setProperty( ModelloParameterConstants.VERSION, "1.0.0" );
-
-        Model model = modello.loadModel( getTestFile( modelFile ) );
 
         modello.generate( model, "java", parameters );
 

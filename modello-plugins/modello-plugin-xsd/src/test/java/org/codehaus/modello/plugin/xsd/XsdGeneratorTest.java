@@ -51,7 +51,7 @@ public class XsdGeneratorTest
     {
         ModelloCore modello = (ModelloCore) container.lookup( ModelloCore.ROLE );
 
-        Model model = modello.loadModel( getTestFile( "src/test/resources/maven.mdo" ) );
+        Model model = modello.loadModel( getXmlResourceReader( "/maven.mdo" ) );
 
         // check misc. properties of the model loaded
         List classesList = model.getClasses( new Version( "4.0.0" ) );

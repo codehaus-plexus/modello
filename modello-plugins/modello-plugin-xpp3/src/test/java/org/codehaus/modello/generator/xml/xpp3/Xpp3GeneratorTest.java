@@ -52,7 +52,7 @@ public class Xpp3GeneratorTest
     {
         ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
 
-        Model model = modello.loadModel( getTestFile( "src/test/resources/maven.mdo" ) );
+        Model model = modello.loadModel( getXmlResourceReader( "/maven.mdo" ) );
 
         // check some elements read from the model
         List classesList = model.getClasses( new Version( "4.0.0" ) );

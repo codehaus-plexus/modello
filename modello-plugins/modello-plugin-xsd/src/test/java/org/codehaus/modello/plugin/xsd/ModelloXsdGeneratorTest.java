@@ -38,7 +38,7 @@ import javax.xml.parsers.SAXParserFactory;
 
 /**
  * Check that features.mdo (which tries to be the most complete model) can be checked against XSD generated from
- * Modello model modello.mdo.
+ * Modello model <code>modello.mdo</code>.
  *
  * @author Hervé Boutemy
  * @version $Id$

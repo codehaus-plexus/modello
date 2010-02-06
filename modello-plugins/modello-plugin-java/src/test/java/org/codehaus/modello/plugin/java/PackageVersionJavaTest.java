@@ -36,8 +36,6 @@ import java.util.Properties;
 public class PackageVersionJavaTest
     extends AbstractModelloJavaGeneratorTest
 {
-    private String modelFile = "src/test/resources/models/maven.mdo";
-
     public PackageVersionJavaTest()
     {
         super( "packageversion" );
@@ -48,12 +46,12 @@ public class PackageVersionJavaTest
     {
         ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
 
+        Model model = modello.loadModel( getXmlResourceReader( "/models/maven.mdo" ) );
+
         Properties parameters = new Properties();
         parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, getOutputDirectory().getAbsolutePath() );
         parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString( true ) );
         parameters.setProperty( ModelloParameterConstants.VERSION, "4.0.0" );
-
-        Model model = modello.loadModel( getTestFile( modelFile ) );
 
         modello.generate( model, "java", parameters );
 

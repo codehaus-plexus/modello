@@ -40,11 +40,10 @@ public class StaxGeneratorVersionReaderDelegateTest
     public void testStaxReaderVersionInField()
         throws Throwable
     {
-        Model model =
-            modello.loadModel( getTestFile( "src/test/resources/version-in-namespace.mdo" ) );
+        Model model = modello.loadModel( getXmlResourceReader( "/version-in-namespace.mdo" ) );
 
         verifyModel( model, "org.codehaus.modello.generator.xml.stax.StaxVerifierVersionReaderDelegate",
-                     new String[]{"4.0.0", "4.0.1"} );
+                     new String[] { "4.0.0", "4.0.1" } );
     }
 
 }

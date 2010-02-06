@@ -24,8 +24,7 @@ public class StaxGeneratorVersionInNamespaceTest
     public void testStaxReaderVersionInField()
         throws Throwable
     {
-        Model model =
-            modello.loadModel( getTestFile( "src/test/resources/version-in-namespace.mdo" ) );
+        Model model = modello.loadModel( getXmlResourceReader( "/version-in-namespace.mdo" ) );
 
         List classesList = model.getClasses( new Version( "4.0.0" ) );
 

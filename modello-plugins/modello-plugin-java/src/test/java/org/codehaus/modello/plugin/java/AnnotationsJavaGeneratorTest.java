@@ -30,7 +30,6 @@ import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
 import org.codehaus.plexus.util.FileUtils;
-import org.codehaus.plexus.util.ReaderFactory;
 
 /**
  * @version $Id: TmpJavaGeneratorTest.java 1125 2009-01-10 20:29:32Z hboutemy $
@@ -38,8 +37,6 @@ import org.codehaus.plexus.util.ReaderFactory;
 public class AnnotationsJavaGeneratorTest
     extends AbstractModelloJavaGeneratorTest
 {
-    private String modelFile = "src/test/resources/models/annotations.mdo";
-
     public AnnotationsJavaGeneratorTest()
     {
         super( "annotations" );
@@ -61,12 +58,13 @@ public class AnnotationsJavaGeneratorTest
 
         ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
 
+        Model model = modello.loadModel( getXmlResourceReader( "/models/annotations.mdo" ) );
+
         Properties parameters = new Properties();
         parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, getOutputDirectory().getAbsolutePath() );
         parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString( false ) );
         parameters.setProperty( ModelloParameterConstants.VERSION, "1.0.0" );
         parameters.setProperty( ModelloParameterConstants.USE_JAVA5, Boolean.toString( true ) );
-        Model model = modello.loadModel( ReaderFactory.newXmlReader( getTestFile( modelFile ) ) );
 
         modello.generate( model, "java", parameters );
 

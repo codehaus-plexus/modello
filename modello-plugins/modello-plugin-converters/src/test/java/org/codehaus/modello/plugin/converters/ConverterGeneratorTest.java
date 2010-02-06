@@ -27,7 +27,6 @@ import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
-import org.codehaus.plexus.util.ReaderFactory;
 
 import java.io.Reader;
 import java.util.Properties;
@@ -38,8 +37,6 @@ import java.util.Properties;
 public class ConverterGeneratorTest
     extends AbstractModelloJavaGeneratorTest
 {
-    private static final String MAVEN_MODEL_FILE = "src/test/resources/models/maven.mdo";
-
     public ConverterGeneratorTest()
     {
         super( "converters" );
@@ -48,7 +45,7 @@ public class ConverterGeneratorTest
     public void testConverterGenerator()
         throws Throwable
     {
-        generateConverterClasses( ReaderFactory.newXmlReader( getTestFile( MAVEN_MODEL_FILE ) ), "3.0.0", "4.0.0" );
+        generateConverterClasses( getXmlResourceReader( "/models/maven.mdo" ), "3.0.0", "4.0.0" );
 
         generateConverterClasses( getXmlResourceReader( "/features.mdo" ), "1.0.0", "1.1.0" );
 
@@ -66,11 +63,11 @@ public class ConverterGeneratorTest
     {
         ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
 
+        Model model = modello.loadModel( modelReader );
+
         Properties parameters = new Properties();
         parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, getOutputDirectory().getAbsolutePath() );
         parameters.setProperty( ModelloParameterConstants.ALL_VERSIONS, fromVersion + "," + toVersion );
-
-        Model model = modello.loadModel( modelReader );
 
         generateClasses( parameters, modello, model, fromVersion, toVersion, "java" );
         generateClasses( parameters, modello, model, fromVersion, toVersion, "stax-reader" );

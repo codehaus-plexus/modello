@@ -32,8 +32,6 @@ import java.util.Properties;
 public class BiDirectionalOverrideJavaGeneratorTest
     extends AbstractModelloJavaGeneratorTest
 {
-    private String modelFile = "src/test/resources/models/bidirectional-override.mdo";
-
     public BiDirectionalOverrideJavaGeneratorTest()
     {
         super( "bidirectional" );
@@ -44,12 +42,12 @@ public class BiDirectionalOverrideJavaGeneratorTest
     {
         ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
 
+        Model model = modello.loadModel( getXmlResourceReader( "/models/bidirectional-override.mdo" ) );
+
         Properties parameters = new Properties();
         parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, getOutputDirectory().getAbsolutePath() );
         parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString( false ) );
         parameters.setProperty( ModelloParameterConstants.VERSION, "1.0.0" );
-
-        Model model = modello.loadModel( getTestFile( modelFile ) );
 
         modello.generate( model, "java", parameters );
 

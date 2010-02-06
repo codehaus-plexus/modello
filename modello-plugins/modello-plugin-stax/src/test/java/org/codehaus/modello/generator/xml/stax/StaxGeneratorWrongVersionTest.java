@@ -24,7 +24,7 @@ public class StaxGeneratorWrongVersionTest
     public void testStaxReaderVersionInField()
         throws Throwable
     {
-        Model model = modello.loadModel( getTestFile( "src/test/resources/version-in-field.mdo" ) );
+        Model model = modello.loadModel( getXmlResourceReader( "/version-in-field.mdo" ) );
 
         List classesList = model.getClasses( new Version( "4.0.0" ) );
 

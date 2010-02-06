@@ -47,7 +47,7 @@ public class _AbstractElementTest
     {
         ModelloCore modello = (ModelloCore) container.lookup( ModelloCore.ROLE );
 
-        Model model = modello.loadModel( getTestFile( "src/test/resources/abstract.mdo" ) );
+        Model model = modello.loadModel( getXmlResourceReader( "/abstract.mdo" ) );
 
         Properties parameters = new Properties();
         parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, getOutputDirectory().getAbsolutePath() );
