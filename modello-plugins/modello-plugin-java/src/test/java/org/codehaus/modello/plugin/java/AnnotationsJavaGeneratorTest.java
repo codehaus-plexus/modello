@@ -51,7 +51,7 @@ public class AnnotationsJavaGeneratorTest
         super.setUp();
     }
 
-    public void testJavaGeneratorWithUsers()
+    public void testJavaGeneratorWithAnnotations()
         throws Throwable
     {
         if ( skipJava5FeatureTest() )
