@@ -25,6 +25,7 @@ package org.codehaus.modello;
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
+import java.util.Properties;
 
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.util.FileUtils;
@@ -64,6 +65,34 @@ public abstract class AbstractModelloGeneratorTest
     public String getName()
     {
         return name;
+    }
+
+    protected Properties getModelloParameters()
+    {
+        Properties parameters = new Properties();
+
+        parameters.setProperty( "modello.output.directory", getOutputDirectory().getAbsolutePath() );
+
+        return parameters;
+    }
+
+    protected Properties getModelloParameters( String version )
+    {
+        Properties parameters = getModelloParameters();
+
+        parameters.setProperty( "modello.package.with.version", Boolean.toString( false ) );
+        parameters.setProperty( "modello.version", version );
+
+        return parameters;
+    }
+
+    protected Properties getModelloParameters( String version, boolean useJava5 )
+    {
+        Properties parameters = getModelloParameters( version );
+
+        parameters.setProperty( "modello.output.useJava5", Boolean.toString( useJava5 ) );
+
+        return parameters;
     }
 
     protected Reader getXmlResourceReader( String name )

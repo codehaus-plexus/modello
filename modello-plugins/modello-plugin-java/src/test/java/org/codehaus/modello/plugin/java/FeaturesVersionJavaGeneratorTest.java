@@ -50,8 +50,7 @@ public class FeaturesVersionJavaGeneratorTest
 
         Model model = modello.loadModel( getXmlResourceReader( "/features.mdo" ) );
 
-        Properties parameters = new Properties();
-        parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, getOutputDirectory().getAbsolutePath() );
+        Properties parameters = getModelloParameters();
         parameters.setProperty( ModelloParameterConstants.ALL_VERSIONS, ALL_VERSIONS );
         parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString( true ) );
 

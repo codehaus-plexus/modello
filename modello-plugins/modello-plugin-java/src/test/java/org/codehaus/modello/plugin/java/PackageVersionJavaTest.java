@@ -48,10 +48,8 @@ public class PackageVersionJavaTest
 
         Model model = modello.loadModel( getXmlResourceReader( "/models/maven.mdo" ) );
 
-        Properties parameters = new Properties();
-        parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, getOutputDirectory().getAbsolutePath() );
+        Properties parameters = getModelloParameters( "4.0.0" );
         parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString( true ) );
-        parameters.setProperty( ModelloParameterConstants.VERSION, "4.0.0" );
 
         modello.generate( model, "java", parameters );
 

@@ -60,10 +60,7 @@ public abstract class AbstractStaxGeneratorTestCase
     protected void verifyModel( Model model, String className, String[] versions )
         throws IOException, ModelloException, CompilerException
     {
-        Properties parameters = new Properties();
-        parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, getOutputDirectory().getAbsolutePath() );
-        parameters.setProperty( ModelloParameterConstants.VERSION, "4.0.0" );
-        parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString( false ) );
+        Properties parameters = getModelloParameters( "4.0.0" );
 
         modello.generate( model, "java", parameters );
         modello.generate( model, "stax-writer", parameters );

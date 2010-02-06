@@ -25,7 +25,6 @@ package org.codehaus.modello.plugin.java;
 import java.util.Properties;
 
 import org.codehaus.modello.AbstractModelloJavaGeneratorTest;
-import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
 
@@ -49,11 +48,7 @@ public class AnnotationsJava4GeneratorTest
 
         Model model = modello.loadModel( getXmlResourceReader( "/models/annotations.mdo" ) );
 
-        Properties parameters = new Properties();
-        parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, getOutputDirectory().getAbsolutePath() );
-        parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString( false ) );
-        parameters.setProperty( ModelloParameterConstants.VERSION, "1.0.0" );
-        parameters.setProperty( ModelloParameterConstants.USE_JAVA5, Boolean.toString( false ) );
+        Properties parameters = getModelloParameters( "1.0.0", false );
 
         modello.generate( model, "java", parameters );
 

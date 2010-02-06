@@ -23,7 +23,6 @@ package org.codehaus.modello.plugin.xdoc;
  */
 
 import org.codehaus.modello.AbstractModelloGeneratorTest;
-import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelClass;
@@ -105,10 +104,7 @@ public class XdocGeneratorTest
 
         assertEquals( "builder", xml.getTagName() );
 
-        Properties parameters = new Properties();
-        parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, getOutputDirectory().getAbsolutePath() );
-        parameters.setProperty( ModelloParameterConstants.VERSION, "4.0.0" );
-        parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString( false ) );
+        Properties parameters = getModelloParameters( "4.0.0" );
 
         modello.generate( model, "xdoc", parameters );
 
@@ -125,10 +121,7 @@ public class XdocGeneratorTest
 
         Model model = modello.loadModel( getXmlResourceReader( "/features.mdo" ) );
 
-        Properties parameters = new Properties();
-        parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, getOutputDirectory().getAbsolutePath() );
-        parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString( false ) );
-        parameters.setProperty( ModelloParameterConstants.VERSION, "1.5.0" );
+        Properties parameters = getModelloParameters( "1.5.0" );
 
         modello.generate( model, "xdoc", parameters );
 

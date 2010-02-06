@@ -23,7 +23,6 @@ package org.codehaus.modello.plugin.java;
  */
 
 import org.codehaus.modello.AbstractModelloJavaGeneratorTest;
-import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
 
@@ -48,10 +47,7 @@ public class JavaGeneratorTest
 
         Model model = modello.loadModel( getXmlResourceReader( "/models/maven.mdo" ) );
 
-        Properties parameters = new Properties();
-        parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, getOutputDirectory().getAbsolutePath() );
-        parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString( false ) );
-        parameters.setProperty( ModelloParameterConstants.VERSION, "4.0.0" );
+        Properties parameters = getModelloParameters( "4.0.0" );
 
         modello.generate( model, "java", parameters );
 
