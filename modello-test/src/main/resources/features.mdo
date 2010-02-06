@@ -674,6 +674,7 @@
         <!--
          - association features: java.bidi="false", java.init="lazy|constructor|field"
          - field features: java.getter="false", java.setter="false" -->
+        <!-- TODO: MODELLO-214 add annotations -->
       </fields>
     </class>
 
