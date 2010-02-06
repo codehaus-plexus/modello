@@ -30,7 +30,6 @@ import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.Version;
 import org.codehaus.modello.model.VersionRange;
 import org.codehaus.plexus.PlexusTestCase;
-import org.codehaus.plexus.util.ReaderFactory;
 
 import java.util.List;
 
@@ -48,7 +47,7 @@ public class ModelReaderTest
     {
         ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
 
-        Model model = modello.loadModel( ReaderFactory.newXmlReader( getTestFile( "src/test/resources/models/simple.mdo" ) ) );
+        Model model = modello.loadModel( getTestFile( "src/test/resources/models/simple.mdo" ) );
 
         assertNotNull( model );
 
@@ -83,7 +82,7 @@ public class ModelReaderTest
     {
         ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
 
-        Model model = modello.loadModel( ReaderFactory.newXmlReader( getTestFile( "src/test/resources/models/association.mdo" ) ) );
+        Model model = modello.loadModel( getTestFile( "src/test/resources/models/association.mdo" ) );
 
         ModelField field = model.getClass( "Foo", new VersionRange( "1.0.0" ) ).getField( "bars", new VersionRange( "1.0.0" ) );
 
