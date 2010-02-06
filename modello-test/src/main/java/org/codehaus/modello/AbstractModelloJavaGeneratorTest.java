@@ -109,17 +109,17 @@ public abstract class AbstractModelloJavaGeneratorTest
         return getTestFile( "target/" + getName() + "/classes" );
     }
 
-    public void addDependency( String groupId, String artifactId, String version )
+    protected void addDependency( String groupId, String artifactId, String version )
         throws MalformedURLException
     {
-        File dependencyFile = getDepedencyFile( groupId, artifactId, version );
+        File dependencyFile = getDependencyFile( groupId, artifactId, version );
 
         dependencies.add( dependencyFile );
 
         addClassPathFile( dependencyFile );
     }
 
-    protected File getDepedencyFile( String groupId, String artifactId, String version )
+    protected File getDependencyFile( String groupId, String artifactId, String version )
     {
         Artifact artifact =
             artifactFactory.createArtifact( groupId, artifactId, version, Artifact.SCOPE_COMPILE, "jar" );
