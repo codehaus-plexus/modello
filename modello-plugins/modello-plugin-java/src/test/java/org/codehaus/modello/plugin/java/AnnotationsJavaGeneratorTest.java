@@ -42,12 +42,6 @@ public class AnnotationsJavaGeneratorTest
         super( "annotations" );
     }
 
-    public void setUp()
-        throws Exception
-    {
-        super.setUp();
-    }
-
     public void testJavaGeneratorWithAnnotations()
         throws Throwable
     {
