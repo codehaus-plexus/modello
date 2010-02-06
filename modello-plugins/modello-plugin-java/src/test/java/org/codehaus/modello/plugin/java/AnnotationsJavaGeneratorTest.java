@@ -70,5 +70,6 @@ public class AnnotationsJavaGeneratorTest
 
         // we could check a little more robust then this.
         assertTrue( "class:\n" + groupClassText, groupClassText.indexOf( "@javax.persistence.JoinColumn" ) >= 0 );
+        // TODO: add a check for every annotations places supported: class, interface, field, association (?)
     }
 }
