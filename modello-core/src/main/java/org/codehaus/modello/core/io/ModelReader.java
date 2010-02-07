@@ -395,6 +395,8 @@ public class ModelReader
 
                     modelAssociation.setComment( modelField.getComment() );
 
+                    modelAssociation.setAnnotations( modelField.getAnnotations() );
+
                     // model field fields
                     modelAssociation.setType( modelField.getType() );
 

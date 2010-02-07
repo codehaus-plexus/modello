@@ -63,8 +63,9 @@ public class AnnotationsJavaGeneratorTest
 
         String groupClassText = FileUtils.fileRead( new File( getOutputDirectory(), "model/Group.java" ) );
 
-        // we could check a little more robust then this.
-        assertTrue( "class:\n" + groupClassText, groupClassText.indexOf( "@javax.persistence.JoinColumn" ) >= 0 );
-        // TODO: add a check for every annotations places supported: class, interface, field, association (?)
+        // we could check a little more robust than this.
+        assertTrue( "Group.users: many multiplicity association field annotation",
+                    groupClassText.indexOf( "@javax.persistence.JoinColumn" ) >= 0 );
+        // TODO: add a check for every annotations places supported: class, interface, field, association field
     }
 }
