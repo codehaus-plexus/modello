@@ -37,7 +37,7 @@ public class FeaturesJava5GeneratorTest
 {
     public FeaturesJava5GeneratorTest()
     {
-        super( "features" );
+        super( "features-java5" );
     }
 
     public void testJavaGenerator()
@@ -56,7 +56,7 @@ public class FeaturesJava5GeneratorTest
 
         modello.generate( model, "java", parameters );
 
-        compileGeneratedSources( true );
+        compileGeneratedSources( "features", true );
 
         verifyGeneratedCode( "JavaVerifier" );
     }

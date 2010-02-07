@@ -156,10 +156,22 @@ public abstract class AbstractModelloJavaGeneratorTest
     protected void compileGeneratedSources()
         throws IOException, CompilerException
     {
-        compileGeneratedSources( false );
+        compileGeneratedSources( getName() );
     }
 
     protected void compileGeneratedSources( boolean useJava5 )
+        throws IOException, CompilerException
+    {
+        compileGeneratedSources( getName(), useJava5 );
+    }
+
+    protected void compileGeneratedSources( String verifierId )
+        throws IOException, CompilerException
+    {
+        compileGeneratedSources( verifierId, false );
+    }
+
+    protected void compileGeneratedSources( String verifierId, boolean useJava5 )
         throws IOException, CompilerException
     {
         File generatedSources = getOutputDirectory();
@@ -178,7 +190,7 @@ public abstract class AbstractModelloJavaGeneratorTest
             classPathElements[i + 2] = ( (File) dependencies.get( i ) ).getAbsolutePath();
         }
 
-        File verifierDirectory = getTestFile( "src/test/verifiers/" + getName() );
+        File verifierDirectory = getTestFile( "src/test/verifiers/" + verifierId );
         String[] sourceDirectories;
         if ( verifierDirectory.canRead() )
         {
