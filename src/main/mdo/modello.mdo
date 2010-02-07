@@ -36,18 +36,6 @@
           <description>The name of the element.</description>
         </field>
         <field>
-          <name>annotations</name>
-          <version>1.3.0+</version>
-          <association>
-            <type>String</type>
-            <multiplicity>*</multiplicity>
-          </association>
-          <description>
-            Java annotations for the element (inserted in generated sources for the model only if Java 5 source
-            generation feature is enabled).
-          </description>
-        </field>
-        <field>
           <name>description</name>
           <version>1.0.0+</version>
           <type>String</type>
@@ -90,6 +78,18 @@
           <version>1.0.0+</version>
           <type>String</type>
         </field-->
+        <field>
+          <name>annotations</name>
+          <version>1.3.0+</version>
+          <association>
+            <type>String</type>
+            <multiplicity>*</multiplicity>
+          </association>
+          <description>
+            Java annotations for the element (inserted in generated sources for the model only if Java 5 source
+            generation feature is enabled).
+          </description>
+        </field>
       </fields>
     </class>
 
