@@ -335,9 +335,40 @@
       <description>
         A segment of code to be appended to this element.
       </description>
-      <superClass>VersionedElement</superClass>
       <fields>
-        <field xml.insertParentFieldsUpTo="comment">
+        <field>
+          <name>name</name>
+          <version>1.0.0/1.2.9</version>
+          <type>String</type>
+          <description>The name of the element (unused).</description>
+        </field>
+        <field xml.tagName="version">
+          <name>versionRange</name>
+          <version>1.0.0+</version>
+          <type>String</type>
+          <description><![CDATA[
+            The versions related to this element.
+            Examples: <code>1.0.0</code> (a precise version), <code>1.0.0+</code> (a version or higher),
+            <code>1.0.0/2.0.0</code> (a version range).]]>
+          </description>
+        </field>
+        <field>
+          <name>description</name>
+          <version>1.0.0/1.2.9</version>
+          <type>String</type>
+          <description>
+            A user-level description of the element (unused).
+          </description>
+        </field>
+        <field>
+          <name>comment</name>
+          <version>1.0.0+</version>
+          <type>String</type>
+          <description>
+            A private comment about the element.
+          </description>
+        </field>
+        <field>
           <name>code</name>
           <version>1.0.0+</version>
           <type>String</type>
