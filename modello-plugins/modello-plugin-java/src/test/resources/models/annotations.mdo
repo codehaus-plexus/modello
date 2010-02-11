@@ -165,4 +165,14 @@
       </fields>
     </class>
   </classes>
+  
+  <interfaces>
+    <interface>
+      <name>SimpleInterface</name>
+      <version>1.0.0</version>
+      <annotations>
+        <annotation>@javax.xml.bind.annotation.XmlRootElement</annotation>
+      </annotations>
+    </interface>
+  </interfaces>
 </model>
