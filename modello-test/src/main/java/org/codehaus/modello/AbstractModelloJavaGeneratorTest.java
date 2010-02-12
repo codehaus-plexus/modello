@@ -168,7 +168,7 @@ public abstract class AbstractModelloJavaGeneratorTest
     protected void compileGeneratedSources( String verifierId )
         throws IOException, CompilerException
     {
-        compileGeneratedSources( verifierId, false );
+        compileGeneratedSources( verifierId, true );
     }
 
     protected void compileGeneratedSources( String verifierId, boolean useJava5 )

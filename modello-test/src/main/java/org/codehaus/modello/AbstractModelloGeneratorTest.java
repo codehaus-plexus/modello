@@ -78,18 +78,17 @@ public abstract class AbstractModelloGeneratorTest
 
     protected Properties getModelloParameters( String version )
     {
-        Properties parameters = getModelloParameters();
-
-        parameters.setProperty( "modello.package.with.version", Boolean.toString( false ) );
-        parameters.setProperty( "modello.version", version );
+        Properties parameters = getModelloParameters( version, true );
 
         return parameters;
     }
 
     protected Properties getModelloParameters( String version, boolean useJava5 )
     {
-        Properties parameters = getModelloParameters( version );
+        Properties parameters = getModelloParameters();
 
+        parameters.setProperty( "modello.package.with.version", Boolean.toString( false ) );
+        parameters.setProperty( "modello.version", version );
         parameters.setProperty( "modello.output.useJava5", Boolean.toString( useJava5 ) );
 
         return parameters;
