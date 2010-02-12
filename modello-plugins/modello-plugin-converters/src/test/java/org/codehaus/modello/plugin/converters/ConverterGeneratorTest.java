@@ -55,7 +55,7 @@ public class ConverterGeneratorTest
 
         compileGeneratedSources();
 
-        verifyGeneratedCode( "ConvertersVerifier" );
+        verifyCompiledGeneratedSources( "ConvertersVerifier" );
     }
 
     private void generateConverterClasses( Reader modelReader, String fromVersion, String toVersion )

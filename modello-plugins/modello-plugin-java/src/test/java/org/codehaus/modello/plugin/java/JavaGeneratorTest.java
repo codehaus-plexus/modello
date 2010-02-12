@@ -53,6 +53,6 @@ public class JavaGeneratorTest
 
         compileGeneratedSources();
 
-        verifyGeneratedCode( "JavaVerifier" );
+        verifyCompiledGeneratedSources( "JavaVerifier" );
     }
 }

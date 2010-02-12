@@ -53,6 +53,11 @@ import java.util.Properties;
 /**
  * Base class for unit-tests of Modello plugins that generate java code.
  *
+ * @see #compileGeneratedSources() compileGeneratedSources() method to compile generated sources
+ * @see #verifyCompiledGeneratedSources(String) verifyCompiledGeneratedSources(String) method to run a Verifier
+ * class against compiled generated code
+ * @see org.codehaus.modello.verifier.Verifier Verifier base class for verifiers
+ *
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
@@ -233,7 +238,13 @@ public abstract class AbstractModelloJavaGeneratorTest
         assertEquals( "There was compilation errors.", 0, messages.size() );
     }
 
-    protected void verifyGeneratedCode( String verifierClassName )
+    /**
+     * Run a verifier class in a classloader context where compiled generated sources are available
+     *
+     * @param verifierClassName the class name of the verifier class
+     * @throws MalformedURLException
+     */
+    protected void verifyCompiledGeneratedSources( String verifierClassName )
         throws MalformedURLException
     {
         addClassPathFile( getOutputClasses() );

@@ -49,6 +49,6 @@ public class BiDirectionalOverrideJavaGeneratorTest
 
         compileGeneratedSources();
 
-        verifyGeneratedCode( "JavaVerifier" );
+        verifyCompiledGeneratedSources( "JavaVerifier" );
     }
 }

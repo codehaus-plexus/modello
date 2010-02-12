@@ -97,6 +97,6 @@ public class Xpp3GeneratorTest
         // TODO: see why without this, version system property is set to "2.4.1" value after verify
         System.setProperty( "version", getModelloVersion() );
 
-        verifyGeneratedCode( "org.codehaus.modello.generator.xml.xpp3.Xpp3Verifier" );
+        verifyCompiledGeneratedSources( "org.codehaus.modello.generator.xml.xpp3.Xpp3Verifier" );
     }
 }

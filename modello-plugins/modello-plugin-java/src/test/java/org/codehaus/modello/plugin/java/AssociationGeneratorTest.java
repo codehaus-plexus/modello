@@ -53,6 +53,6 @@ public class AssociationGeneratorTest
 
         compileGeneratedSources();
 
-        verifyGeneratedCode( "OneToManyAssociationVerifier" );
+        verifyCompiledGeneratedSources( "OneToManyAssociationVerifier" );
     }
 }

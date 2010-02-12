@@ -64,6 +64,6 @@ public class FeaturesVersionJavaGeneratorTest
 
         compileGeneratedSources();
 
-        verifyGeneratedCode( "JavaVerifier" );
+        verifyCompiledGeneratedSources( "JavaVerifier" );
     }
 }

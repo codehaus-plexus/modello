@@ -58,6 +58,6 @@ public class FeaturesJDOMGeneratorTest
         addDependency( "xmlunit", "xmlunit", "1.2" );
         compileGeneratedSources();
 
-        verifyGeneratedCode( "org.codehaus.modello.generator.xml.jdom.JDOMFeaturesVerifier" );
+        verifyCompiledGeneratedSources( "org.codehaus.modello.generator.xml.jdom.JDOMFeaturesVerifier" );
     }
 }

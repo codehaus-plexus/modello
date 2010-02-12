@@ -63,6 +63,6 @@ public class FeaturesStaxGeneratorTest
         // TODO: see why without this, version system property is set to "2.4.1" value after verify
         System.setProperty( "version", getModelloVersion() );
 
-        verifyGeneratedCode( "org.codehaus.modello.generator.xml.stax.StaxFeaturesVerifier" );
+        verifyCompiledGeneratedSources( "org.codehaus.modello.generator.xml.stax.StaxFeaturesVerifier" );
     }
 }

@@ -56,6 +56,6 @@ public class FeaturesXpp3GeneratorTest
         addDependency( "xmlunit", "xmlunit", "1.2" );
         compileGeneratedSources();
 
-        verifyGeneratedCode( "org.codehaus.modello.generator.xml.xpp3.Xpp3FeaturesVerifier" );
+        verifyCompiledGeneratedSources( "org.codehaus.modello.generator.xml.xpp3.Xpp3FeaturesVerifier" );
     }
 }

@@ -87,6 +87,6 @@ public abstract class AbstractStaxGeneratorTestCase
 
         compileGeneratedSources();
 
-        verifyGeneratedCode( className );
+        verifyCompiledGeneratedSources( className );
     }
 }

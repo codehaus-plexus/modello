@@ -57,6 +57,6 @@ public class FeaturesDom4jGeneratorTest
         addDependency( "xmlunit", "xmlunit", "1.2" );
         compileGeneratedSources();
 
-        verifyGeneratedCode( "org.codehaus.modello.generator.xml.dom4j.Dom4jFeaturesVerifier" );
+        verifyCompiledGeneratedSources( "org.codehaus.modello.generator.xml.dom4j.Dom4jFeaturesVerifier" );
     }
 }

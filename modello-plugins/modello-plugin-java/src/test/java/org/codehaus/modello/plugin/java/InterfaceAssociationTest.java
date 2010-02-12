@@ -32,7 +32,7 @@ public class InterfaceAssociationTest
 
         compileGeneratedSources( true );
 
-        verifyGeneratedCode( "InterfaceAssociationVerifier" );
+        verifyCompiledGeneratedSources( "InterfaceAssociationVerifier" );
     }
 
 }

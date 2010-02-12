@@ -58,7 +58,7 @@ public class FeaturesJava5GeneratorTest
 
         compileGeneratedSources( "features", true );
 
-        verifyGeneratedCode( "JavaVerifier" );
+        verifyCompiledGeneratedSources( "JavaVerifier" );
     }
 
 }

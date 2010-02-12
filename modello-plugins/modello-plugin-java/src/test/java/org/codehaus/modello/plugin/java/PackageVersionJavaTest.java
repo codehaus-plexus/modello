@@ -55,6 +55,6 @@ public class PackageVersionJavaTest
 
         compileGeneratedSources();
 
-        verifyGeneratedCode( "PackageVersionVerifier" );
+        verifyCompiledGeneratedSources( "PackageVersionVerifier" );
     }
 }

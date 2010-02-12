@@ -93,7 +93,7 @@ public class Dom4jGeneratorTest
 
         compileGeneratedSources();
 
-        verifyGeneratedCode( "org.codehaus.modello.generator.xml.dom4j.Dom4jVerifier" );
+        verifyCompiledGeneratedSources( "org.codehaus.modello.generator.xml.dom4j.Dom4jVerifier" );
     }
 
 }
