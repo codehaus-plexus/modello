@@ -34,10 +34,9 @@
       <name>Features</name>
       <version>1.0.0+</version>
       <!--
-        1.0.0: features supported by every plugin,
-        1.5.0: features supported by java and xdoc plugin but there are problems with some other plugins
-        2.0.0: features supported by java plugin but there are problems with some other plugins including xdoc
-        3.0.0: annotation feature for the java plugin
+        1.0.0: main features, supported by every plugin,
+        1.5.0: features supported by java and xdoc plugin but causing problems with some other plugins
+        2.0.0: features supported by java plugin only but causing problems with some other plugins including xdoc
       -->
       <fields>
         <field>
@@ -672,6 +671,13 @@
             <multiplicity>*</multiplicity>
           </association>
         </field>
+        <field>
+          <name>annotation</name>
+          <version>1.0.0+</version>
+          <association>
+            <type>AnnotationTest</type>
+          </association>
+        </field>
         <!--
          - association features: java.bidi="false", java.init="lazy|constructor|field"
          - field features: java.getter="false", java.setter="false" -->
@@ -804,6 +810,24 @@
           <name>subAttribute3</name>
           <type>double</type>
           <version>1.0.0+</version>
+        </field>
+      </fields>
+    </class>
+
+    <class>
+      <name>AnnotationTest</name>
+      <version>1.0.0+</version>
+      <annotations>
+        <annotation>@Deprecated</annotation>
+      </annotations>
+      <fields>
+        <field>
+          <name>anyField</name>
+          <version>1.0.0+</version>
+          <type>String</type>
+          <annotations>
+            <annotation>@Deprecated</annotation>
+          </annotations>
         </field>
       </fields>
     </class>
@@ -1459,25 +1483,6 @@
           <name>someContent</name>
           <version>1.0.0+</version>
           <type>Content</type>
-        </field>
-      </fields>
-    </class>
-    
-    <class>
-      <name>AnnotationTest</name>
-      <version>3.0.0+</version>
-      <annotations>
-        <annotation>@javax.xml.bind.annotation.XmlRootElement</annotation>
-        <annotation>@javax.xml.bind.annotation.XmlAccessorType(javax.xml.bind.annotation.XmlAccessType.FIELD)</annotation>
-      </annotations>
-      <fields>
-        <field>
-          <name>anyField</name>
-          <version>3.0.0+</version>
-          <type>String</type>
-          <annotations>
-            <annotation>@javax.xml.bind.annotation.XmlElement( name = "any-field" )</annotation>
-          </annotations>   
         </field>
       </fields>
     </class>
