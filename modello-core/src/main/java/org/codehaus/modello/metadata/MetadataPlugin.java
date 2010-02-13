@@ -49,16 +49,4 @@ public interface MetadataPlugin
 
     AssociationMetadata getAssociationMetadata( ModelAssociation association, Map<String, String> data )
         throws ModelloException;
-
-    Map getModelMap( Model model, ModelMetadata metadata )
-        throws ModelloException;
-
-    Map getClassMap( ModelClass clazz, ClassMetadata metadata )
-        throws ModelloException;
-
-    Map getFieldMap( ModelField field, FieldMetadata metadata )
-        throws ModelloException;
-
-    Map getAssociationMap( ModelAssociation association, AssociationMetadata metadata )
-        throws ModelloException;
 }
