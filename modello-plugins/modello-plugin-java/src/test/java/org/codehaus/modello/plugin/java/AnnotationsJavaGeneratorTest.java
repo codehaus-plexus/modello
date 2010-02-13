@@ -24,8 +24,6 @@ package org.codehaus.modello.plugin.java;
 
 import java.io.File;
 import java.lang.annotation.Annotation;
-import java.lang.reflect.AnnotatedElement;
-import java.lang.reflect.Field;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Properties;
@@ -33,7 +31,6 @@ import java.util.Properties;
 import org.codehaus.modello.AbstractModelloJavaGeneratorTest;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
-import org.codehaus.plexus.util.FileUtils;
 
 /**
  * @version $Id: TmpJavaGeneratorTest.java 1125 2009-01-10 20:29:32Z hboutemy $
@@ -68,56 +65,60 @@ public class AnnotationsJavaGeneratorTest
 
         this.addClassPathFile( getOutputClasses() );
 
-        URL[] classpath = new URL[ this.getClassPathElements().size()];
-        
+        URL[] classpath = new URL[this.getClassPathElements().size()];
+
         for ( int ii = 0; ii < this.getClassPathElements().size(); ii++ )
         {
-            classpath[ii] = new File( this.getClassPathElements().get( ii ).toString()).toURI().toURL();
+            classpath[ii] = new File( this.getClassPathElements().get( ii ).toString() ).toURI().toURL();
         }
 
         ClassLoader oldCCL = Thread.currentThread().getContextClassLoader();
         URLClassLoader classLoader = URLClassLoader.newInstance( classpath, null );
         Thread.currentThread().setContextClassLoader( classLoader );
-        
+
         try
         {
             Class<?> groupClass = classLoader.loadClass( "model.Group" );
             assertNotNull( groupClass );
-            
-            this.verifyAnnotations( groupClass, groupClass.getAnnotations(), javax.xml.bind.annotation.XmlRootElement.class );
-            this.verifyAnnotations( groupClass, groupClass.getDeclaredField( "id" ).getAnnotations(), javax.persistence.Id.class, javax.persistence.SequenceGenerator.class, javax.persistence.GeneratedValue.class, javax.persistence.Column.class );
-            
+
+            this.verifyAnnotations( groupClass, groupClass.getAnnotations(),
+                                    javax.xml.bind.annotation.XmlRootElement.class );
+            this.verifyAnnotations( groupClass, groupClass.getDeclaredField( "id" ).getAnnotations(),
+                                    javax.persistence.Id.class, javax.persistence.SequenceGenerator.class,
+                                    javax.persistence.GeneratedValue.class, javax.persistence.Column.class );
+
             Class<?> simpleInterface = classLoader.loadClass( "model.SimpleInterface" );
             assertNotNull( simpleInterface );
-            this.verifyAnnotations( groupClass, groupClass.getAnnotations(), javax.xml.bind.annotation.XmlRootElement.class );
-            
+            this.verifyAnnotations( groupClass, groupClass.getAnnotations(),
+                                    javax.xml.bind.annotation.XmlRootElement.class );
+
         }
         finally
         {
             Thread.currentThread().setContextClassLoader( oldCCL );
         }
     }
-    
+
     private void verifyAnnotations( Class<?> classUnderTest, Annotation[] annotations, Class<?>... classes )
     {
         assertEquals( classes.length, annotations.length );
-        
+
         for ( Class<?> expectedClass : classes )
-        {   
+        {
             boolean found = false;
             for ( Annotation annotation : annotations )
-            {   
+            {
                 // using different classloaders, need check by name
-                if( expectedClass.getName().equals( annotation.annotationType().getName() ))
+                if ( expectedClass.getName().equals( annotation.annotationType().getName() ) )
                 {
                     found = true;
                     break;
                 }
             }
-            
-            if( !found )
+
+            if ( !found )
             {
-                fail( "Generated class: "+ classUnderTest + " is missing annotation: " + expectedClass );
+                fail( "Generated class: " + classUnderTest + " is missing annotation: " + expectedClass );
             }
         }
     }
