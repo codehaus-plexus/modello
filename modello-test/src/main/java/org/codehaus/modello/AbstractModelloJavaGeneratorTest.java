@@ -175,6 +175,7 @@ public abstract class AbstractModelloJavaGeneratorTest
         compileGeneratedSources( verifierId, true );
     }
 
+    @SuppressWarnings( "unchecked" )
     protected void compileGeneratedSources( String verifierId, boolean useJava5 )
         throws IOException, CompilerException
     {
