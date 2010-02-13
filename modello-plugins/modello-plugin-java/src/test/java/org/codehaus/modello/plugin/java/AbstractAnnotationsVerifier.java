@@ -22,43 +22,37 @@ package org.codehaus.modello.plugin.java;
  * SOFTWARE.
  */
 
-import java.util.Properties;
+import java.lang.annotation.Annotation;
 
-import org.codehaus.modello.AbstractModelloJavaGeneratorTest;
-import org.codehaus.modello.core.ModelloCore;
-import org.codehaus.modello.model.Model;
+import org.codehaus.modello.verifier.Verifier;
 
 /**
- * @version $Id: TmpJavaGeneratorTest.java 1125 2009-01-10 20:29:32Z hboutemy $
+ * @author Hervé Boutemy
+ * @version $Id$
  */
-public class AnnotationsJavaGeneratorTest
-    extends AbstractModelloJavaGeneratorTest
+public abstract class AbstractAnnotationsVerifier
+    extends Verifier
 {
-    public AnnotationsJavaGeneratorTest()
+    protected void assertAnnotations( String message, Annotation[] annotations, Class<?>... classes )
     {
-        super( "annotations" );
-    }
+        assertEquals( classes.length, annotations.length );
 
-    public void testJavaGeneratorWithAnnotations()
-        throws Throwable
-    {
-        if ( skipJava5FeatureTest() )
+        for ( Class<?> expectedClass : classes )
         {
-            return;
+            boolean found = false;
+            for ( Annotation annotation : annotations )
+            {
+                if ( expectedClass.equals( annotation.annotationType() ) )
+                {
+                    found = true;
+                    break;
+                }
+            }
+
+            if ( !found )
+            {
+                fail( message + " is missing annotation: " + expectedClass );
+            }
         }
-
-        ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
-
-        Model model = modello.loadModel( getXmlResourceReader( "/models/annotations.mdo" ) );
-
-        Properties parameters = getModelloParameters( "1.0.0", true );
-
-        modello.generate( model, "java", parameters );
-
-        addDependency( "javax.xml.bind", "jaxb-api", "2.1" );
-        addDependency( "org.apache.geronimo.specs", "geronimo-jpa_2.0_spec", "1.0" );
-        compileGeneratedSources( true );
-
-        verifyCompiledGeneratedSources( "AnnotationsVerifier" );
     }
 }
