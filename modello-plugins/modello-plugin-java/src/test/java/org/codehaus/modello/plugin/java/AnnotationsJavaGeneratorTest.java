@@ -56,7 +56,7 @@ public class AnnotationsJavaGeneratorTest
         modello.generate( model, "java", parameters );
 
         addDependency( "javax.xml.bind", "jaxb-api", "2.1" );
-        addDependency( "org.apache.geronimo.specs", "geronimo-jpa_2.0_spec", "1.0" );
+        addDependency( "javax.persistence", "persistence-api", "1.0" );
         compileGeneratedSources( true );
 
         verifyCompiledGeneratedSources( "AnnotationsVerifier" );
