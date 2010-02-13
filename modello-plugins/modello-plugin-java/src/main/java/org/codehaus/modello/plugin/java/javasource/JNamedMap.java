@@ -151,6 +151,7 @@ public class JNamedMap
      *
      * @return a Vector of names
      **/
+    @SuppressWarnings( "unchecked" )
     public Vector<String> getNames()
     {
         return (Vector<String>) names.clone();
@@ -161,6 +162,7 @@ public class JNamedMap
      *
      * @return a Vector of Objects
      **/
+    @SuppressWarnings( "unchecked" )
     public Vector<Object> getObjects()
     {
         return (Vector<Object>) objects.clone();

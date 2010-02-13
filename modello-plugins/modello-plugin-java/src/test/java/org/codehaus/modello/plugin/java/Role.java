@@ -20,7 +20,7 @@ import java.util.List;
 
 /**
  * Test Interface used by {@link JavaGeneratorTest#testBiDirectionalJavaGenerator()} to ensure that
- * interface overrides can be used. 
+ * interface overrides can be used.
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
@@ -28,18 +28,18 @@ import java.util.List;
 public interface Role
 {
     public String getName();
-    
+
     public void setName(String name);
-    
-    public void setRoles(List roles);
-    
-    public List getRoles();
-    
+
+    public void setRoles(List<Role> roles);
+
+    public List<Role> getRoles();
+
     public void addRole(Role role);
-    
+
     public void removeRole(Role role);
-    
+
     public void setPermission(Permission permission);
-    
+
     public Permission getPermission();
 }
