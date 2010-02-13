@@ -54,7 +54,7 @@ public class Xpp3GeneratorTest
         Model model = modello.loadModel( getXmlResourceReader( "/maven.mdo" ) );
 
         // check some elements read from the model
-        List classesList = model.getClasses( new Version( "4.0.0" ) );
+        List<ModelClass> classesList = model.getClasses( new Version( "4.0.0" ) );
 
         assertEquals( 28, classesList.size() );
 

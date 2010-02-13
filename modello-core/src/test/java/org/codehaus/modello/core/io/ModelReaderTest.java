@@ -62,7 +62,7 @@ public class ModelReaderTest
 
         assertEquals( "Boy", model.getRoot( new Version( "1.0.0" ) ) );
 
-        List classes = model.getAllClasses();
+        List<ModelClass> classes = model.getAllClasses();
 
         assertNotNull( classes );
 
@@ -119,7 +119,7 @@ public class ModelReaderTest
 
         assertEquals( "1.0.0", boy.getVersionRange().toString() );
 
-        List fields = boy.getFields( new Version( "1.0.0" ) );
+        List<ModelField> fields = boy.getFields( new Version( "1.0.0" ) );
 
         assertEquals( 2, fields.size() );
 
@@ -155,7 +155,7 @@ public class ModelReaderTest
 
         assertEquals( "1.0.0", girl.getVersionRange().toString() );
 
-        List fields = girl.getFields( new Version( "1.0.0" ) );
+        List<ModelField> fields = girl.getFields( new Version( "1.0.0" ) );
 
         assertEquals( 1, fields.size() );
 

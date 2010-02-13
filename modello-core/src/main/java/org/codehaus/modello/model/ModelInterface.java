@@ -60,17 +60,17 @@ public class ModelInterface
     /**
      * {@inheritDoc}
      */
-    public List getAllFields()
+    public List<ModelField> getAllFields()
     {
-        return new ArrayList();
+        return new ArrayList<ModelField>();
     }
 
     /**
      * {@inheritDoc}
      */
-    public List getAllFields( boolean withInheritedField )
+    public List<ModelField> getAllFields( boolean withInheritedField )
     {
-        return new ArrayList();
+        return new ArrayList<ModelField>();
     }
 
     public ModelField getField( String type, VersionRange versionRange )

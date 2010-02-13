@@ -77,7 +77,6 @@ package org.codehaus.modello.plugin.java.javasource;
 
 import java.io.File;
 import java.util.Enumeration;
-import java.util.Iterator;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.Vector;
@@ -120,13 +119,13 @@ public class JCompUnit
      * The set of top-level classes that live in this compilation unit.
      **/
     //private TypeList classes = null;
-    private Vector classes = null;
+    private Vector<JClass> classes = null;
 
     /**
      * The set of top-level interfaces that live in this compilation unit.
      **/
     //private TypeList interfaces = null;
-    private Vector interfaces = null;
+    private Vector<JInterface> interfaces = null;
 
     /**
      * Creates a new JCompUnit
@@ -194,8 +193,8 @@ public class JCompUnit
 
     private void init()
     {
-        classes = new Vector();
-        interfaces = new Vector();
+        classes = new Vector<JClass>();
+        interfaces = new Vector<JInterface>();
     }
 
     /**
@@ -245,17 +244,17 @@ public class JCompUnit
      * @return a array of String containing all import classes/packages,
      * also imports within the same package of this object.
      */
-    public SortedSet getImports()
+    public SortedSet<String> getImports()
     {
 
-        SortedSet allImports = new TreeSet();
+        SortedSet<String> allImports = new TreeSet<String>();
 
         // add imports from classes
         for ( int i = 0; i < classes.size(); ++i )
         {
-            JClass jClass = (JClass) classes.get( i );
+            JClass jClass = classes.get( i );
 
-            Enumeration e = jClass.getImports();
+            Enumeration<String> e = jClass.getImports();
             while ( e.hasMoreElements() )
             {
                 allImports.add( e.nextElement() );
@@ -264,8 +263,8 @@ public class JCompUnit
 
         for ( int i = 0; i < interfaces.size(); ++i )
         {
-            JInterface jInterface = (JInterface) interfaces.get( i );
-            Enumeration e = jInterface.getImports();
+            JInterface jInterface = interfaces.get( i );
+            Enumeration<String> e = jInterface.getImports();
             while ( e.hasMoreElements() )
             {
                 allImports.add( e.nextElement() );
@@ -431,12 +430,10 @@ public class JCompUnit
         jsw.writeln( " //- Imported classes, interfaces and packages -/" );
         jsw.writeln( "//---------------------------------------------/" );
         jsw.writeln();
-        SortedSet allImports = getImports();
+        SortedSet<String> allImports = getImports();
         String compUnitPackage = getPackageName();
-        Iterator iter = allImports.iterator();
-        while ( iter.hasNext() )
+        for ( String importName : allImports )
         {
-            String importName = (String) iter.next();
             String importsPackage
                 = JStructure.getPackageFromClassName( importName );
             if ( importsPackage != null &&
@@ -475,9 +472,8 @@ public class JCompUnit
         boolean isFirst = true;
 
         //SortedSet interfaceList = interfaces.sortedOnFullName();
-        for ( Enumeration e = interfaces.elements(); e.hasMoreElements(); )
+        for ( JInterface jInterface : interfaces )
         {
-            JInterface jInterface = (JInterface) e.nextElement();
             if ( jInterface.getModifiers().isPublic() == printPublic )
             {
                 if ( isFirst )
@@ -491,9 +487,8 @@ public class JCompUnit
         }
 
         //SortedSet classList = classes.sortedOnFullName();
-        for ( Enumeration e = classes.elements(); e.hasMoreElements(); )
+        for ( JClass jClass : classes )
         {
-            JClass jClass = (JClass) e.nextElement();
             if ( jClass.getModifiers().isPublic() == printPublic )
             {
                 if ( isFirst )

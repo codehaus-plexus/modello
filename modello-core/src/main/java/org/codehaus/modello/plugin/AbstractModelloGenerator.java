@@ -142,9 +142,9 @@ public abstract class AbstractModelloGenerator
      * @param modelClass current class
      * @return the list of fields of this class
      */
-    protected List getFieldsForClass( ModelClass modelClass )
+    protected List<ModelField> getFieldsForClass( ModelClass modelClass )
     {
-        List fields = new ArrayList();
+        List<ModelField> fields = new ArrayList<ModelField>();
 
         while ( modelClass != null )
         {

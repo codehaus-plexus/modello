@@ -31,7 +31,6 @@ import org.codehaus.modello.plugins.xml.AbstractXmlJavaGenerator;
 import org.codehaus.modello.plugins.xml.metadata.XmlAssociationMetadata;
 
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
@@ -43,7 +42,7 @@ import java.util.Set;
 public abstract class AbstractStaxGenerator
     extends AbstractXmlJavaGenerator
 {
-    private Set/*<ModelClass>*/ parts;
+    private Set<ModelClass> parts;
 
     protected void initialize( Model model, Properties parameters )
         throws ModelloException
@@ -72,10 +71,10 @@ public abstract class AbstractStaxGenerator
                     "' is not in the model" );
             }
 
-            List identifierFields = association.getToClass().getIdentifierFields( getGeneratedVersion() );
+            List<ModelField> identifierFields = association.getToClass().getIdentifierFields( getGeneratedVersion() );
             if ( identifierFields.size() == 1 )
             {
-                referenceIdentifierField = (ModelField) identifierFields.get( 0 );
+                referenceIdentifierField = identifierFields.get( 0 );
             }
             else
             {
@@ -90,15 +89,11 @@ public abstract class AbstractStaxGenerator
     {
         if ( parts == null )
         {
-            parts = new HashSet();
-            for ( Iterator i = modelClass.getModel().getClasses( getGeneratedVersion() ).iterator(); i.hasNext(); )
+            parts = new HashSet<ModelClass>();
+            for ( ModelClass clazz : modelClass.getModel().getClasses( getGeneratedVersion() ) )
             {
-                ModelClass clazz = (ModelClass) i.next();
-
-                for ( Iterator j = clazz.getFields( getGeneratedVersion() ).iterator(); j.hasNext(); )
+                for ( ModelField modelField : clazz.getFields( getGeneratedVersion() ) )
                 {
-                    ModelField modelField = (ModelField) j.next();
-
                     if ( modelField instanceof ModelAssociation )
                     {
                         ModelAssociation assoc = (ModelAssociation) modelField;

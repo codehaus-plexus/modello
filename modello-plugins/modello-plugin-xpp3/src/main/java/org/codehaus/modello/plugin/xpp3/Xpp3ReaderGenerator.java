@@ -23,7 +23,6 @@ package org.codehaus.modello.plugin.xpp3;
  */
 
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
@@ -303,10 +302,8 @@ public class Xpp3ReaderGenerator
     {
         ModelClass root = objectModel.getClass( objectModel.getRoot( getGeneratedVersion() ), getGeneratedVersion() );
 
-        for ( Iterator i = objectModel.getClasses( getGeneratedVersion() ).iterator(); i.hasNext(); )
+        for ( ModelClass clazz : objectModel.getClasses( getGeneratedVersion() ) )
         {
-            ModelClass clazz = (ModelClass) i.next();
-
             JavaClassMetadata javaClassMetadata = (JavaClassMetadata) clazz.getMetadata( JavaClassMetadata.ID );
 
             if ( !javaClassMetadata.isEnabled() )
@@ -352,7 +349,7 @@ public class Xpp3ReaderGenerator
 
         ModelField contentField = null;
 
-        List modelFields = getFieldsForXml( modelClass, getGeneratedVersion() );
+        List<ModelField> modelFields = getFieldsForXml( modelClass, getGeneratedVersion() );
 
         // read all XML attributes first
         contentField = writeClassAttributesParser( modelFields, uncapClassName, rootElement, sc, jClass );
@@ -376,10 +373,8 @@ public class Xpp3ReaderGenerator
 
             boolean addElse = false;
 
-            for ( Iterator i = modelFields.iterator(); i.hasNext(); )
+            for ( ModelField field : modelFields )
             {
-                ModelField field = (ModelField) i.next();
-
                 XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
 
                 if ( !xmlFieldMetadata.isAttribute() )
@@ -415,7 +410,8 @@ public class Xpp3ReaderGenerator
         jClass.addMethod( unmarshall );
     }
 
-    private ModelField writeClassAttributesParser( List modelFields, String objectName, boolean rootElement, JSourceCode sc, JClass jClass )
+    private ModelField writeClassAttributesParser( List<ModelField> modelFields, String objectName,
+                                                   boolean rootElement, JSourceCode sc, JClass jClass )
     {
         ModelField contentField = null;
 
@@ -438,10 +434,8 @@ public class Xpp3ReaderGenerator
             sc.add( "}" );
         }
 
-        for ( Iterator i = modelFields.iterator(); i.hasNext(); )
+        for ( ModelField field : modelFields )
         {
-            ModelField field = (ModelField) i.next();
-
             XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
 
             if ( xmlFieldMetadata.isAttribute() )

@@ -6,11 +6,11 @@ import java.util.List;
 
 public class JAnnotations
 {
-    private List/*String*/ annotations;
+    private List<String> annotations;
 
     public JAnnotations()
     {
-        this.annotations = new ArrayList();
+        this.annotations = new ArrayList<String>();
     }
 
     public void appendAnnotation( String annotation )
@@ -25,10 +25,9 @@ public class JAnnotations
     public String toString()
     {
         StringBuffer sb = new StringBuffer();
-        Iterator iterator = annotations.iterator();
-        while ( iterator.hasNext() )
+        for ( Iterator<String> iterator = annotations.iterator(); iterator.hasNext(); )
         {
-            sb.append( iterator.next().toString() );
+            sb.append( iterator.next() );
             if ( iterator.hasNext() )
             {
                 sb.append( ' ' );
@@ -44,8 +43,7 @@ public class JAnnotations
      */
     public void print( JSourceWriter jsw )
     {
-        Iterator iterator = annotations.iterator();
-        while ( iterator.hasNext() )
+        for ( Iterator<String> iterator = annotations.iterator(); iterator.hasNext(); )
         {
             jsw.writeln( iterator.next().toString() );
         }

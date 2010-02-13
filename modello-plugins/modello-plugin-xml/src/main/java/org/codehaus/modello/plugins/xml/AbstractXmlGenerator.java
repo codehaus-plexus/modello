@@ -83,7 +83,7 @@ public abstract class AbstractXmlGenerator
         return XmlModelHelpers.resolveTagName( fieldTagName, xmlAssociationMetadata );
     }
 
-    protected boolean hasContentField( List/*<ModelField>*/ modelFields )
+    protected boolean hasContentField( List<ModelField> modelFields )
     {
         return ( getContentField( modelFields ) != null );
     }
@@ -94,7 +94,7 @@ public abstract class AbstractXmlGenerator
      * @param modelFields the fields to check
      * @return the field, or <code>null</code> if no field is <code>Content</code>
      */
-    protected ModelField getContentField( List/*<ModelField>*/ modelFields )
+    protected ModelField getContentField( List<ModelField> modelFields )
     {
         return XmlModelHelpers.getContentField( modelFields );
     }
@@ -106,7 +106,7 @@ public abstract class AbstractXmlGenerator
      *            <code>null</code>.
      * @return The list of XML attributes fields, can be empty but never <code>null</code>.
      */
-    protected List getXmlAttributeFields( List/*<ModelField>*/ modelFields )
+    protected List<ModelField> getXmlAttributeFields( List<ModelField> modelFields )
     {
         return XmlModelHelpers.getXmlAttributeFields( modelFields );
     }
@@ -118,7 +118,7 @@ public abstract class AbstractXmlGenerator
      * @param version the version of the class to use
      * @return the list of XML fields of this class
      */
-    protected List getFieldsForXml( ModelClass modelClass, Version version )
+    protected List<ModelField> getFieldsForXml( ModelClass modelClass, Version version )
     {
         return XmlModelHelpers.getFieldsForXml( modelClass, version );
     }

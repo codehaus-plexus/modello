@@ -111,12 +111,12 @@ public abstract class JStructure extends JType
     /**
      * List of imported classes and packages
      */
-    private Vector imports = null;
+    private Vector<String> imports = null;
 
     /**
      * The set of interfaces implemented/extended by this JStructure
      */
-    private Vector interfaces = null;
+    private Vector<String> interfaces = null;
 
     /**
      * The Javadoc for this JStructure
@@ -162,8 +162,8 @@ public abstract class JStructure extends JType
             throw new IllegalArgumentException( err );
         }
         this.packageName = getPackageFromClassName( name );
-        imports = new Vector();
-        interfaces = new Vector();
+        imports = new Vector<String>();
+        interfaces = new Vector<String>();
         jdc = new JDocComment();
         modifiers = new JModifiers();
         //-- initialize default Java doc
@@ -416,7 +416,7 @@ public abstract class JStructure extends JType
      *
      * @return the Enumeration of imports. May be empty.
      */
-    public Enumeration getImports()
+    public Enumeration<String> getImports()
     {
         return imports.elements();
     } //-- getImports
@@ -428,7 +428,7 @@ public abstract class JStructure extends JType
      * @return the Enumeration of interface names for this
      * JStructure. May be empty.
      */
-    public Enumeration getInterfaces()
+    public Enumeration<String> getInterfaces()
     {
         return interfaces.elements();
     } //-- getInterfaces
@@ -676,7 +676,7 @@ public abstract class JStructure extends JType
             jsw.writeln( " //- Imported classes and packages -/" );
             jsw.writeln( "//---------------------------------/" );
             jsw.writeln();
-            Enumeration e = imports.elements();
+            Enumeration<String> e = imports.elements();
             while ( e.hasMoreElements() )
             {
                 jsw.write( "import " );

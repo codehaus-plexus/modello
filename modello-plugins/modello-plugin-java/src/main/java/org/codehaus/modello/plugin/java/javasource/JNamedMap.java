@@ -80,8 +80,8 @@ import java.util.Vector;
 public class JNamedMap
 {
 
-    private Vector names = null;
-    private Vector objects = null;
+    private Vector<String> names = null;
+    private Vector<Object> objects = null;
 
     /**
      * Creates a new JNamedMap
@@ -89,8 +89,8 @@ public class JNamedMap
     public JNamedMap()
     {
 
-        names = new Vector();
-        objects = new Vector();
+        names = new Vector<String>();
+        objects = new Vector<Object>();
 
     } //-- JNamedMap
 
@@ -102,8 +102,8 @@ public class JNamedMap
     public JNamedMap( int size )
     {
 
-        names = new Vector( size );
-        objects = new Vector( size );
+        names = new Vector<String>( size );
+        objects = new Vector<Object>( size );
 
     } //-- JNamedMap
 
@@ -151,9 +151,9 @@ public class JNamedMap
      *
      * @return a Vector of names
      **/
-    public Vector getNames()
+    public Vector<String> getNames()
     {
-        return (Vector) names.clone();
+        return (Vector<String>) names.clone();
     } //-- getNames
 
     /**
@@ -161,9 +161,9 @@ public class JNamedMap
      *
      * @return a Vector of Objects
      **/
-    public Vector getObjects()
+    public Vector<Object> getObjects()
     {
-        return (Vector) objects.clone();
+        return (Vector<Object>) objects.clone();
     } //-- getObjects
 
     /**

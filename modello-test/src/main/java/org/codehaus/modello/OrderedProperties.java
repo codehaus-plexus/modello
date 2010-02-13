@@ -36,8 +36,8 @@ import java.util.TreeSet;
 public class OrderedProperties
     extends Properties
 {
-    public Set keySet()
+    public Set<Object> keySet()
     {
-        return new TreeSet( super.keySet() );
+        return new TreeSet<Object>( super.keySet() );
     }
 }

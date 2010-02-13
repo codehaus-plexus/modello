@@ -65,9 +65,9 @@ public class JavaModelloGenerator
     extends AbstractJavaModelloGenerator
 {
 
-    private Collection immutableTypes =
-        new HashSet( Arrays.asList( new String[] { "boolean", "Boolean", "byte", "Byte", "char", "Character", "short",
-            "Short", "int", "Integer", "long", "Long", "float", "Float", "double", "Double", "String" } ) );
+    private Collection<String> immutableTypes =
+        new HashSet<String>( Arrays.asList( new String[] { "boolean", "Boolean", "byte", "Byte", "char", "Character",
+            "short", "Short", "int", "Integer", "long", "Long", "float", "Float", "double", "Double", "String" } ) );
 
     public void generate( Model model, Properties parameters )
         throws ModelloException
@@ -93,10 +93,8 @@ public class JavaModelloGenerator
         // Generate the interfaces.
         // ----------------------------------------------------------------------
 
-        for ( Iterator i = objectModel.getInterfaces( getGeneratedVersion() ).iterator(); i.hasNext(); )
+        for ( ModelInterface modelInterface : objectModel.getInterfaces( getGeneratedVersion() ) )
         {
-            ModelInterface modelInterface = (ModelInterface) i.next();
-
             String packageName = modelInterface.getPackageName( isPackageWithVersion(), getGeneratedVersion() );
 
             JSourceWriter sourceWriter = newJSourceWriter( packageName, modelInterface.getName() );
@@ -132,19 +130,17 @@ public class JavaModelloGenerator
 
             if ( modelInterface.getCodeSegments( getGeneratedVersion() ) != null )
             {
-                for ( Iterator iterator = modelInterface.getCodeSegments( getGeneratedVersion() ).iterator(); iterator.hasNext(); )
+                for ( CodeSegment codeSegment : modelInterface.getCodeSegments( getGeneratedVersion() ) )
                 {
-                    CodeSegment codeSegment = (CodeSegment) iterator.next();
-
                     jInterface.addSourceCode( codeSegment.getCode() );
                 }
             }
 
             if ( useJava5 && !modelInterface.getAnnotations().isEmpty() )
             {
-                for ( Iterator iterator = modelInterface.getAnnotations().iterator(); iterator.hasNext(); )
+                for ( String annotation : modelInterface.getAnnotations() )
                 {
-                    jInterface.appendAnnotation( iterator.next().toString() );
+                    jInterface.appendAnnotation( annotation );
                 }
             }
 
@@ -157,10 +153,8 @@ public class JavaModelloGenerator
         // Generate the classes.
         // ----------------------------------------------------------------------
 
-        for ( Iterator i = objectModel.getClasses( getGeneratedVersion() ).iterator(); i.hasNext(); )
+        for ( ModelClass modelClass : objectModel.getClasses( getGeneratedVersion() ) )
         {
-            ModelClass modelClass = (ModelClass) i.next();
-
             JavaClassMetadata javaClassMetadata = (JavaClassMetadata) modelClass.getMetadata( JavaClassMetadata.ID );
 
             if ( !javaClassMetadata.isEnabled() )
@@ -193,10 +187,8 @@ public class JavaModelloGenerator
                 jClass.setSuperClass( modelClass.getSuperClass() );
             }
 
-            for ( Iterator j = modelClass.getInterfaces().iterator(); j.hasNext(); )
+            for ( String implementedInterface : modelClass.getInterfaces() )
             {
-                String implementedInterface = (String) j.next();
-
                 jClass.addInterface( implementedInterface );
             }
 
@@ -204,18 +196,16 @@ public class JavaModelloGenerator
 
             if ( useJava5 && !modelClass.getAnnotations().isEmpty() )
             {
-                for ( Iterator iterator = modelClass.getAnnotations().iterator(); iterator.hasNext(); )
+                for ( String annotation : modelClass.getAnnotations() )
                 {
-                    jClass.appendAnnotation( iterator.next().toString() );
+                    jClass.appendAnnotation( annotation );
                 }
             }
 
             JSourceCode jConstructorSource = new JSourceCode();
 
-            for ( Iterator j = modelClass.getFields( getGeneratedVersion() ).iterator(); j.hasNext(); )
+            for ( ModelField modelField : modelClass.getFields( getGeneratedVersion() ) )
             {
-                ModelField modelField = (ModelField) j.next();
-
                 if ( modelField instanceof ModelAssociation )
                 {
                     createAssociation( jClass, (ModelAssociation) modelField, jConstructorSource );
@@ -238,7 +228,7 @@ public class JavaModelloGenerator
             // equals() / hashCode() / toString()
             // ----------------------------------------------------------------------
 
-            List identifierFields = modelClass.getIdentifierFields( getGeneratedVersion() );
+            List<ModelField> identifierFields = modelClass.getIdentifierFields( getGeneratedVersion() );
 
             if ( identifierFields.size() != 0 )
             {
@@ -264,10 +254,8 @@ public class JavaModelloGenerator
 
             if ( modelClass.getCodeSegments( getGeneratedVersion() ) != null )
             {
-                for ( Iterator iterator = modelClass.getCodeSegments( getGeneratedVersion() ).iterator(); iterator.hasNext(); )
+                for ( CodeSegment codeSegment : modelClass.getCodeSegments( getGeneratedVersion() ) )
                 {
-                    CodeSegment codeSegment = (CodeSegment) iterator.next();
-
                     jClass.addSourceCode( codeSegment.getCode() );
                 }
             }
@@ -312,10 +300,8 @@ public class JavaModelloGenerator
 
         sc.add( "" );
 
-        for ( Iterator j = modelClass.getIdentifierFields( getGeneratedVersion() ).iterator(); j.hasNext(); )
+        for ( ModelField identifier : modelClass.getIdentifierFields( getGeneratedVersion() ) )
         {
-            ModelField identifier = (ModelField) j.next();
-
             String name = identifier.getName();
             if ( "boolean".equals( identifier.getType() ) || "byte".equals( identifier.getType() )
                 || "char".equals( identifier.getType() ) || "double".equals( identifier.getType() )
@@ -348,7 +334,7 @@ public class JavaModelloGenerator
     {
         JMethod toString = new JMethod( "toString", new JType( String.class.getName() ), null );
 
-        List identifierFields = modelClass.getIdentifierFields( getGeneratedVersion() );
+        List<ModelField> identifierFields = modelClass.getIdentifierFields( getGeneratedVersion() );
 
         JSourceCode sc = toString.getSourceCode();
 
@@ -370,9 +356,9 @@ public class JavaModelloGenerator
 
         sc.add( "" );
 
-        for ( Iterator j = identifierFields.iterator(); j.hasNext(); )
+        for ( Iterator<ModelField> j = identifierFields.iterator(); j.hasNext(); )
         {
-            ModelField identifier = (ModelField) j.next();
+            ModelField identifier = j.next();
 
             String getter = "boolean".equals( identifier.getType() ) ? "is" : "get";
 
@@ -403,7 +389,7 @@ public class JavaModelloGenerator
     {
         JMethod hashCode = new JMethod( "hashCode", JType.INT, null );
 
-        List identifierFields = modelClass.getIdentifierFields( getGeneratedVersion() );
+        List<ModelField> identifierFields = modelClass.getIdentifierFields( getGeneratedVersion() );
 
         JSourceCode sc = hashCode.getSourceCode();
 
@@ -418,10 +404,8 @@ public class JavaModelloGenerator
 
         sc.add( "" );
 
-        for ( Iterator j = identifierFields.iterator(); j.hasNext(); )
+        for ( ModelField identifier : identifierFields )
         {
-            ModelField identifier = (ModelField) j.next();
-
             sc.add( "result = 37 * result + " + createHashCodeForField( identifier ) + ";" );
         }
 
@@ -469,10 +453,8 @@ public class JavaModelloGenerator
 
         sc.add( "" );
 
-        for ( Iterator j = modelClass.getFields( getGeneratedVersion() ).iterator(); j.hasNext(); )
+        for ( ModelField modelField : modelClass.getFields( getGeneratedVersion() ) )
         {
-            ModelField modelField = (ModelField) j.next();
-
             String thisField = "this." + modelField.getName();
             String copyField = "copy." + modelField.getName();
 
@@ -812,9 +794,9 @@ public class JavaModelloGenerator
 
         if ( useJava5 && !modelField.getAnnotations().isEmpty() )
         {
-            for ( Iterator iterator = modelField.getAnnotations().iterator(); iterator.hasNext(); )
+            for ( String annotation : modelField.getAnnotations() )
             {
-                field.appendAnnotation( iterator.next().toString() );
+                field.appendAnnotation( annotation );
             }
         }
 
@@ -1075,9 +1057,9 @@ public class JavaModelloGenerator
 
             if ( useJava5 && !modelAssociation.getAnnotations().isEmpty() )
             {
-                for ( Iterator iterator = modelAssociation.getAnnotations().iterator(); iterator.hasNext(); )
+                for ( String annotation : modelAssociation.getAnnotations() )
                 {
-                    jField.appendAnnotation( iterator.next().toString() );
+                    jField.appendAnnotation( annotation );
                 }
             }
 
@@ -1402,10 +1384,8 @@ public class JavaModelloGenerator
 
         ModelClass toClass = association.getToClass();
 
-        for ( Iterator j = toClass.getFields( getGeneratedVersion() ).iterator(); j.hasNext(); )
+        for ( ModelField modelField : toClass.getFields( getGeneratedVersion() ) )
         {
-            ModelField modelField = (ModelField) j.next();
-
             if ( !( modelField instanceof ModelAssociation ) )
             {
                 continue;

@@ -41,7 +41,6 @@ import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
 import org.codehaus.plexus.util.StringUtils;
 
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
@@ -233,10 +232,8 @@ public class Dom4jReaderGenerator
     {
         ModelClass root = objectModel.getClass( objectModel.getRoot( getGeneratedVersion() ), getGeneratedVersion() );
 
-        for ( Iterator i = objectModel.getClasses( getGeneratedVersion() ).iterator(); i.hasNext(); )
+        for ( ModelClass clazz : objectModel.getClasses( getGeneratedVersion() ) )
         {
-            ModelClass clazz = (ModelClass) i.next();
-
             JavaClassMetadata javaClassMetadata = (JavaClassMetadata) clazz.getMetadata( JavaClassMetadata.ID );
 
             if ( !javaClassMetadata.isEnabled() )
@@ -273,13 +270,11 @@ public class Dom4jReaderGenerator
 
         ModelField contentField = null;
 
-        List modelFields = getFieldsForXml( modelClass, getGeneratedVersion() );
+        List<ModelField> modelFields = getFieldsForXml( modelClass, getGeneratedVersion() );
 
         // read all XML attributes first
-        for ( Iterator i = modelFields.iterator(); i.hasNext(); )
+        for ( ModelField field : modelFields )
         {
-            ModelField field = (ModelField) i.next();
-
             XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
 
             if ( xmlFieldMetadata.isAttribute() )
@@ -347,10 +342,8 @@ public class Dom4jReaderGenerator
 
             boolean addElse = false;
 
-            for ( Iterator i = modelFields.iterator(); i.hasNext(); )
+            for ( ModelField field : modelFields )
             {
-                ModelField field = (ModelField) i.next();
-
                 XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
 
                 if ( !xmlFieldMetadata.isAttribute() )

@@ -26,7 +26,7 @@ public class StaxGeneratorWrongVersionInNamespaceTest
     {
         Model model = modello.loadModel( getXmlResourceReader( "/version-in-namespace.mdo" ) );
 
-        List classesList = model.getClasses( new Version( "4.0.0" ) );
+        List<ModelClass> classesList = model.getClasses( new Version( "4.0.0" ) );
 
         assertEquals( 1, classesList.size() );
 

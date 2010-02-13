@@ -69,7 +69,7 @@ public class JavaMetadataPlugin
     // Map to Metadata
     // ----------------------------------------------------------------------
 
-    public ModelMetadata getModelMetadata( Model model, Map data )
+    public ModelMetadata getModelMetadata( Model model, Map<String, String> data )
     {
         JavaModelMetadata metadata = new JavaModelMetadata();
 
@@ -78,7 +78,7 @@ public class JavaMetadataPlugin
         return metadata;
     }
 
-    public ClassMetadata getClassMetadata( ModelClass clazz, Map data )
+    public ClassMetadata getClassMetadata( ModelClass clazz, Map<String, String> data )
     {
         JavaClassMetadata metadata = new JavaClassMetadata();
 
@@ -93,7 +93,7 @@ public class JavaMetadataPlugin
         return metadata;
     }
 
-    public FieldMetadata getFieldMetadata( ModelField field, Map data )
+    public FieldMetadata getFieldMetadata( ModelField field, Map<String, String> data )
     {
         JavaFieldMetadata metadata = new JavaFieldMetadata();
 
@@ -107,7 +107,7 @@ public class JavaMetadataPlugin
         return metadata;
     }
 
-    public AssociationMetadata getAssociationMetadata( ModelAssociation association, Map data )
+    public AssociationMetadata getAssociationMetadata( ModelAssociation association, Map<String, String> data )
     {
         JavaAssociationMetadata metadata = new JavaAssociationMetadata();
 

@@ -46,7 +46,7 @@ public class StaxGeneratorPartsTest
     {
         Model model = modello.loadModel( getXmlResourceReader( "/parts.mdo" ) );
 
-        List classesList = model.getClasses( new Version( "4.0.0" ) );
+        List<ModelClass> classesList = model.getClasses( new Version( "4.0.0" ) );
 
         assertEquals( 12, classesList.size() );
 

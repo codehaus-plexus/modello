@@ -84,7 +84,7 @@ public class JDocComment
     /**
      * An ordered list of descriptors
      */
-    private Vector _descriptors = null;
+    private Vector<JDocDescriptor> _descriptors = null;
 
     /**
      * The internal buffer for this JDocComment
@@ -97,7 +97,7 @@ public class JDocComment
     public JDocComment()
     {
         super();
-        _descriptors = new Vector();
+        _descriptors = new Vector<JDocDescriptor>();
         _comment = new StringBuffer();
     } //--  JDocComment
 
@@ -168,7 +168,7 @@ public class JDocComment
      *
      * @return an enumeration of the parameters of this JDocComment
      */
-    public Enumeration getDescriptors()
+    public Enumeration<JDocDescriptor> getDescriptors()
     {
         return _descriptors.elements();
     } //-- getDescriptors

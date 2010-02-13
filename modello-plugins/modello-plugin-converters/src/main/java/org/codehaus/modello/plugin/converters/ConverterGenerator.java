@@ -48,7 +48,6 @@ import org.codehaus.plexus.util.IOUtil;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
@@ -65,21 +64,20 @@ public class ConverterGenerator
 
         String[] versions = parameters.getProperty( ModelloParameterConstants.ALL_VERSIONS ).split( "," );
 
-        List allVersions = new ArrayList( versions.length );
-        for ( int i = 0; i < versions.length; i++ )
+        List<Version> allVersions = new ArrayList<Version>( versions.length );
+        for ( String version : versions )
         {
-            allVersions.add( new Version( versions[i] ) );
+            allVersions.add( new Version( version ) );
         }
         Collections.sort( allVersions );
 
         Version nextVersion = null;
-        for ( Iterator i = allVersions.iterator(); i.hasNext() && nextVersion == null; )
+        for ( Version v : allVersions )
         {
-            Version v = (Version) i.next();
-
             if ( v.greaterThan( getGeneratedVersion() ) )
             {
                 nextVersion = v;
+                break;
             }
         }
 
@@ -126,10 +124,8 @@ public class ConverterGenerator
 
         VersionDefinition versionDefinition = objectModel.getVersionDefinition();
 
-        for ( Iterator i = objectModel.getClasses( fromVersion ).iterator(); i.hasNext(); )
+        for ( ModelClass modelClass : objectModel.getClasses( fromVersion ) )
         {
-            ModelClass modelClass = (ModelClass) i.next();
-
             JavaClassMetadata javaClassMetadata = (JavaClassMetadata) modelClass.getMetadata( JavaClassMetadata.ID );
 
             if ( !javaClassMetadata.isEnabled() )
@@ -197,10 +193,8 @@ public class ConverterGenerator
                 sc.add( "" );
             }
 
-            for ( Iterator j = modelClass.getFields( fromVersion ).iterator(); j.hasNext(); )
+            for ( ModelField modelField : modelClass.getFields( fromVersion ) )
             {
-                ModelField modelField = (ModelField) j.next();
-
                 String name = capitalise( modelField.getName() );
 
                 if ( toVersion != null )
@@ -377,7 +371,7 @@ public class ConverterGenerator
         }
     }
 
-    private void generateConverterTool( List allVersions )
+    private void generateConverterTool( List<Version> allVersions )
         throws ModelloException, IOException
     {
         Model objectModel = getModel();
@@ -401,10 +395,8 @@ public class ConverterGenerator
 
         converterClass.addImport( "javax.xml.stream.*" );
 
-        for ( Iterator i = allVersions.iterator(); i.hasNext(); )
+        for ( Version v : allVersions )
         {
-            Version v = (Version) i.next();
-
             writeConvertMethod( converterClass, objectModel, basePackage, allVersions, v, rootClass );
         }
         writeConvertMethod( converterClass, objectModel, basePackage, allVersions, null, rootClass );
@@ -422,7 +414,7 @@ public class ConverterGenerator
     }
 
     private static void writeConvertMethod( JClass converterClass, Model objectModel, String basePackage,
-                                            List allVersions, Version v, ModelClass rootClass )
+                                            List<Version> allVersions, Version v, ModelClass rootClass )
     {
         String modelName = objectModel.getName();
         String rootClassName = rootClass.getName();
@@ -449,9 +441,8 @@ public class ConverterGenerator
         sc.add( "Object value = reader.read( f );" );
 
         String prefix = "";
-        for ( Iterator j = allVersions.iterator(); j.hasNext(); )
+        for ( Version sourceVersion : allVersions )
         {
-            Version sourceVersion = (Version) j.next();
             String sourcePackage = objectModel.getDefaultPackageName( true, sourceVersion );
             String sourceClass = sourcePackage + "." + rootClassName;
             sc.add( prefix + "if ( value instanceof " + sourceClass + " )" );
@@ -459,10 +450,8 @@ public class ConverterGenerator
             sc.indent();
 
             boolean foundFirst = false;
-            for ( Iterator k = allVersions.iterator(); k.hasNext(); )
+            for ( Version targetVersion : allVersions )
             {
-                Version targetVersion = (Version) k.next();
-
                 if ( !foundFirst )
                 {
                     if ( targetVersion.equals( sourceVersion ) )

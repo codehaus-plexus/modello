@@ -44,7 +44,6 @@ import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlModelMetadata;
 
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
@@ -172,10 +171,8 @@ public class StaxWriterGenerator
     private void writeAllClasses( Model objectModel, JClass jClass )
         throws ModelloException
     {
-        for ( Iterator i = objectModel.getClasses( getGeneratedVersion() ).iterator(); i.hasNext(); )
+        for ( ModelClass clazz : objectModel.getClasses( getGeneratedVersion() ) )
         {
-            ModelClass clazz = (ModelClass) i.next();
-
             JavaClassMetadata javaClassMetadata = (JavaClassMetadata) clazz.getMetadata( JavaClassMetadata.ID );
 
             if ( !javaClassMetadata.isEnabled() )
@@ -254,13 +251,11 @@ public class StaxWriterGenerator
 
         String contentValue = null;
 
-        List modelFields = getFieldsForXml( modelClass, getGeneratedVersion() );
+        List<ModelField> modelFields = getFieldsForXml( modelClass, getGeneratedVersion() );
 
         // XML attributes
-        for ( Iterator i = modelFields.iterator(); i.hasNext(); )
+        for ( ModelField field : modelFields )
         {
-            ModelField field = (ModelField) i.next();
-
             XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
 
             String fieldTagName = resolveTagName( field, xmlFieldMetadata );
@@ -294,10 +289,8 @@ public class StaxWriterGenerator
         }
 
         // XML tags
-        for ( Iterator fieldIterator = modelFields.iterator(); fieldIterator.hasNext(); )
+        for ( ModelField field : modelFields )
         {
-            ModelField field = (ModelField) fieldIterator.next();
-
             XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
 
             if ( xmlFieldMetadata.isContent() )

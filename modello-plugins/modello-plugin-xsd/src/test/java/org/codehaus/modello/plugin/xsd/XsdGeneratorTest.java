@@ -53,7 +53,7 @@ public class XsdGeneratorTest
         Model model = modello.loadModel( getXmlResourceReader( "/maven.mdo" ) );
 
         // check misc. properties of the model loaded
-        List classesList = model.getClasses( new Version( "4.0.0" ) );
+        List<ModelClass> classesList = model.getClasses( new Version( "4.0.0" ) );
 
         assertEquals( 26, classesList.size() );
 

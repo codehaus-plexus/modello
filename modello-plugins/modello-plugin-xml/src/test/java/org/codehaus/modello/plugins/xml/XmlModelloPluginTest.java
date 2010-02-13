@@ -59,7 +59,7 @@ public class XmlModelloPluginTest
 
         Model model = modello.loadModel( getTestFile( "src/test/resources/model.mdo" ) );
 
-        List classes = model.getClasses( new Version( "4.0.0" ) );
+        List<ModelClass> classes = model.getClasses( new Version( "4.0.0" ) );
 
         assertEquals( 2, classes.size() );
 

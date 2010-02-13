@@ -26,7 +26,7 @@ public class StaxGeneratorVersionInFieldTest
     {
         Model model = modello.loadModel( getXmlResourceReader( "/version-in-field.mdo" ) );
 
-        List classesList = model.getClasses( new Version( "4.0.0" ) );
+        List<ModelClass> classesList = model.getClasses( new Version( "4.0.0" ) );
 
         assertEquals( 1, classesList.size() );
 

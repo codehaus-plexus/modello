@@ -32,7 +32,7 @@ import java.util.List;
 
 /**
  * This is the base class for all elements of the model. The name attribute is immutable because it's used as the key.
- * 
+ *
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
@@ -46,13 +46,13 @@ public abstract class BaseElement
 
     private String comment;
 
-    private List annotations = new ArrayList();
+    private List<String> annotations = new ArrayList<String>();
 
     private VersionRange versionRange = new VersionRange( "0.0.0+" );
 
     private Version deprecatedVersion;
 
-    private transient Map metadata = new HashMap();
+    private transient Map<String, Metadata> metadata = new HashMap<String, Metadata>();
 
     private boolean nameRequired;
 
@@ -133,9 +133,9 @@ public abstract class BaseElement
         this.metadata.put( metadata.getClass().getName(), metadata );
     }
 
-    protected Metadata getMetadata( Class type, String key )
+    protected Metadata getMetadata( Class<?> type, String key )
     {
-        Metadata metadata = (Metadata) this.metadata.get( key );
+        Metadata metadata = this.metadata.get( key );
 
         if ( metadata == null )
         {
@@ -220,7 +220,7 @@ public abstract class BaseElement
     /**
      * @return the annotations
      */
-    public List getAnnotations()
+    public List<String> getAnnotations()
     {
         return annotations;
     }
@@ -228,7 +228,7 @@ public abstract class BaseElement
     /**
      * @param annotations the annotations to set
      */
-    public void setAnnotations( List annotations )
+    public void setAnnotations( List<String> annotations )
     {
         this.annotations = annotations;
     }

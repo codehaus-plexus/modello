@@ -46,7 +46,6 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 
@@ -90,9 +89,10 @@ public class DefaultModelloCore
         }
     }
 
-    private void upgradeModifiedAttribute( String name, Map from, String newName, Map to, String warn )
+    private void upgradeModifiedAttribute( String name, Map<String, String> from, String newName,
+                                           Map<String, String> to, String warn )
     {
-        Object value = from.remove( name );
+        String value = from.remove( name );
 
         if ( value != null )
         {
@@ -102,23 +102,22 @@ public class DefaultModelloCore
         }
     }
 
-    private void upgradeModifiedAttribute( String name, Map from, Map to, String warn )
+    private void upgradeModifiedAttribute( String name, Map<String, String> from, Map<String, String> to, String warn )
     {
         upgradeModifiedAttribute( name, from, name, to, warn );
     }
 
     private void upgradeModelloModel( ModelReader modelReader, Model model )
     {
-        Map modelAttributes = modelReader.getAttributesForModel();
+        Map<String, String> modelAttributes = modelReader.getAttributesForModel();
 
         upgradeModifiedAttribute( "xsd.target-namespace", modelAttributes, "xsd.targetNamespace", modelAttributes,
                                   "attribute 'xsd.target-namespace' for model element is deprecated: "
                                   + "it has been renamed to 'xsd.targetNamespace'" );
 
-        for ( Iterator classes = model.getAllClasses().iterator(); classes.hasNext(); )
+        for ( ModelClass clazz : model.getAllClasses() )
         {
-            ModelClass clazz = (ModelClass) classes.next();
-            Map classAttributes = modelReader.getAttributesForClass( clazz );
+            Map<String, String> classAttributes = modelReader.getAttributesForClass( clazz );
 
             // attributes moved from root class to model
             upgradeModifiedAttribute( "xml.namespace", classAttributes, modelAttributes,
@@ -127,14 +126,12 @@ public class DefaultModelloCore
             upgradeModifiedAttribute( "xml.schemaLocation", classAttributes, modelAttributes,
                 "attribute 'xml.schemaLocation' for class element is deprecated: it should be moved to model element" );
 
-            for ( Iterator fields = clazz.getAllFields().iterator(); fields.hasNext(); )
+            for ( ModelField field : clazz.getAllFields() )
             {
-                ModelField field = (ModelField) fields.next();
-
                 if ( field instanceof ModelAssociation )
                 {
-                    Map fieldAttributes = modelReader.getAttributesForField( field );
-                    Map associationAttributes = modelReader.getAttributesForAssociation( (ModelAssociation)field );
+                    Map<String, String> fieldAttributes = modelReader.getAttributesForField( field );
+                    Map<String, String> associationAttributes = modelReader.getAttributesForAssociation( (ModelAssociation)field );
 
                     upgradeModifiedAttribute( "java.adder", fieldAttributes, associationAttributes,
                         "attribute 'java.adder' for field element is deprecated: it should be moved to association" );
@@ -164,7 +161,7 @@ public class DefaultModelloCore
                 {
                     // TODO : add a deprecation Warning
                     field.setType( "String" );
-                    Map fieldAttributes = modelReader.getAttributesForField( field );
+                    Map<String, String> fieldAttributes = modelReader.getAttributesForField( field );
                     fieldAttributes.put( "xml._content_", "true" );
                 }
             }
@@ -197,11 +194,9 @@ public class DefaultModelloCore
     private void handlePluginsMetadata( ModelReader modelReader, Model model )
         throws ModelloException
     {
-        for ( Iterator plugins = metadataPluginManager.getPluginsIterator(); plugins.hasNext(); )
+        for ( MetadataPlugin plugin : metadataPluginManager.getPlugins().values() )
         {
-            MetadataPlugin plugin = (MetadataPlugin) plugins.next();
-
-            Map attributes = Collections.unmodifiableMap( modelReader.getAttributesForModel() );
+            Map<String, String> attributes = Collections.unmodifiableMap( modelReader.getAttributesForModel() );
 
             attributes = Collections.unmodifiableMap( attributes );
 
@@ -215,18 +210,14 @@ public class DefaultModelloCore
             model.addMetadata( metadata );
         }
 
-        for ( Iterator classes = model.getAllClasses().iterator(); classes.hasNext(); )
+        for ( ModelClass clazz : model.getAllClasses() )
         {
-            ModelClass clazz = (ModelClass) classes.next();
-
-            Map attributes = Collections.unmodifiableMap( modelReader.getAttributesForClass( clazz ) );
+            Map<String, String> attributes = Collections.unmodifiableMap( modelReader.getAttributesForClass( clazz ) );
 
             attributes = Collections.unmodifiableMap( attributes );
 
-            for ( Iterator plugins = metadataPluginManager.getPluginsIterator(); plugins.hasNext(); )
+            for ( MetadataPlugin plugin : metadataPluginManager.getPlugins().values() )
             {
-                MetadataPlugin plugin = (MetadataPlugin) plugins.next();
-
                 ClassMetadata metadata = plugin.getClassMetadata( clazz, attributes );
 
                 if ( metadata == null )
@@ -237,26 +228,22 @@ public class DefaultModelloCore
                 clazz.addMetadata( metadata );
             }
 
-            for ( Iterator fields = clazz.getAllFields().iterator(); fields.hasNext(); )
+            for ( ModelField field : clazz.getAllFields() )
             {
-                Object field = fields.next();
-
                 if ( field instanceof ModelAssociation )
                 {
                     ModelAssociation modelAssociation = (ModelAssociation) field;
 
-                    Map fieldAttributes = modelReader.getAttributesForField( modelAssociation );
+                    Map<String, String> fieldAttributes = modelReader.getAttributesForField( modelAssociation );
 
                     fieldAttributes = Collections.unmodifiableMap( fieldAttributes );
 
-                    Map associationAttributes = modelReader.getAttributesForAssociation( modelAssociation );
+                    Map<String, String> associationAttributes = modelReader.getAttributesForAssociation( modelAssociation );
 
                     associationAttributes = Collections.unmodifiableMap( associationAttributes );
 
-                    for ( Iterator plugins = metadataPluginManager.getPluginsIterator(); plugins.hasNext(); )
+                    for ( MetadataPlugin plugin : metadataPluginManager.getPlugins().values() )
                     {
-                        MetadataPlugin plugin = (MetadataPlugin) plugins.next();
-
                         FieldMetadata fieldMetadata = plugin.getFieldMetadata( modelAssociation, fieldAttributes );
 
                         if ( fieldMetadata == null )
@@ -278,24 +265,20 @@ public class DefaultModelloCore
                 }
                 else
                 {
-                    ModelField modelField = (ModelField) field;
-
-                    attributes = modelReader.getAttributesForField( modelField );
+                    attributes = modelReader.getAttributesForField( field );
 
                     attributes = Collections.unmodifiableMap( attributes );
 
-                    for ( Iterator plugins = metadataPluginManager.getPluginsIterator(); plugins.hasNext(); )
+                    for ( MetadataPlugin plugin : metadataPluginManager.getPlugins().values() )
                     {
-                        MetadataPlugin plugin = (MetadataPlugin) plugins.next();
-
-                        FieldMetadata metadata = plugin.getFieldMetadata( modelField, attributes );
+                        FieldMetadata metadata = plugin.getFieldMetadata( field, attributes );
 
                         if ( metadata == null )
                         {
                             throw new ModelloException( "A meta data plugin must not return null." );
                         }
 
-                        modelField.addMetadata( metadata );
+                        field.addMetadata( metadata );
                     }
                 }
             }
@@ -312,46 +295,25 @@ public class DefaultModelloCore
     {
         model.validate();
 
-        for ( Iterator defaults = model.getDefaults().iterator(); defaults.hasNext(); )
+        for ( ModelDefault modelDefault : model.getDefaults() )
         {
-            ModelDefault modelDefault = (ModelDefault) defaults.next();
-
             modelDefault.validateElement();
         }
 
-        for ( Iterator classes = model.getAllClasses().iterator(); classes.hasNext(); )
+        for ( ModelClass modelClass : model.getAllClasses() )
         {
-            ModelClass modelClass = (ModelClass) classes.next();
-
             modelClass.validate();
         }
 
-        for ( Iterator classes = model.getAllClasses().iterator(); classes.hasNext(); )
+        for ( ModelClass modelClass : model.getAllClasses() )
         {
-            ModelClass modelClass = (ModelClass) classes.next();
-
-            for ( Iterator fields = modelClass.getAllFields().iterator(); fields.hasNext(); )
+            for ( ModelField field : modelClass.getAllFields() )
             {
-                Object field = fields.next();
-
-                if ( field instanceof ModelAssociation )
-                {
-                    ModelAssociation modelAssociation = (ModelAssociation) field;
-
-                    modelAssociation.validate();
-                }
-                else
-                {
-                    ModelField modelField = (ModelField) field;
-
-                    modelField.validate();
-                }
+                field.validate();
             }
 
-            for ( Iterator codeSegments = modelClass.getAllCodeSegments().iterator(); codeSegments.hasNext(); )
+            for ( CodeSegment codeSegment : modelClass.getAllCodeSegments() )
             {
-                CodeSegment codeSegment = (CodeSegment) codeSegments.next();
-
                 codeSegment.validate();
             }
         }

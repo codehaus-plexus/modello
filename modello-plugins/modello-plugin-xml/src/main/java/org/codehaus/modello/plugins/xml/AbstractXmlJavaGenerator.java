@@ -103,7 +103,7 @@ public abstract class AbstractXmlJavaGenerator
      * @param modelFields the fields to check
      * @return the field, or <code>null</code> if no field is <code>Content</code>
      */
-    protected ModelField getContentField( List/*<ModelField>*/ modelFields )
+    protected ModelField getContentField( List<ModelField> modelFields )
     {
         return XmlModelHelpers.getContentField( modelFields );
     }
@@ -115,7 +115,7 @@ public abstract class AbstractXmlJavaGenerator
      * @param version the version of the class to use
      * @return the list of XML fields of this class
      */
-    protected List getFieldsForXml( ModelClass modelClass, Version version )
+    protected List<ModelField> getFieldsForXml( ModelClass modelClass, Version version )
     {
         return XmlModelHelpers.getFieldsForXml( modelClass, version );
     }

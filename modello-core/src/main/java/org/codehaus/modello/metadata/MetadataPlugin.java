@@ -38,16 +38,16 @@ public interface MetadataPlugin
 {
     String ROLE = MetadataPlugin.class.getName();
 
-    ModelMetadata getModelMetadata( Model model, Map data )
+    ModelMetadata getModelMetadata( Model model, Map<String, String> data )
         throws ModelloException;
 
-    ClassMetadata getClassMetadata( ModelClass clazz, Map data )
+    ClassMetadata getClassMetadata( ModelClass clazz, Map<String, String> data )
         throws ModelloException;
 
-    FieldMetadata getFieldMetadata( ModelField field, Map data )
+    FieldMetadata getFieldMetadata( ModelField field, Map<String, String> data )
         throws ModelloException;
 
-    AssociationMetadata getAssociationMetadata( ModelAssociation association, Map data )
+    AssociationMetadata getAssociationMetadata( ModelAssociation association, Map<String, String> data )
         throws ModelloException;
 
     Map getModelMap( Model model, ModelMetadata metadata )

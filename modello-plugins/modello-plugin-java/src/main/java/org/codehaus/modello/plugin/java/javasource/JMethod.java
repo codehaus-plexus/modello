@@ -86,7 +86,7 @@ public class JMethod implements JMember
     /**
      * The set of classes that contain this JMethod.
      **/
-    private Vector _classes = null;
+    private Vector<JClass> _classes = null;
 
     /**
      * The JavaDoc comment for this JMethod. This
@@ -151,7 +151,7 @@ public class JMethod implements JMember
             throw new IllegalArgumentException( err );
         }
 
-        _classes = new Vector( 1 );
+        _classes = new Vector<JClass>( 1 );
         this.source = new JSourceCode();
         _signature = new JMethodSignature( name, returnType );
         this.jdc = _signature.getJDocComment();

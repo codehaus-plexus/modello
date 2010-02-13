@@ -40,18 +40,18 @@ public class JavaClassMetadata
     public static final String CLONE_SHALLOW = "shallow";
     public static final String CLONE_DEEP = "deep";
 
-    public final static List CLONE_MODES;
+    public final static List<String> CLONE_MODES;
 
     static
     {
-        CLONE_MODES = new ArrayList();
+        CLONE_MODES = new ArrayList<String>();
         CLONE_MODES.add( CLONE_NONE );
         CLONE_MODES.add( CLONE_SHALLOW );
         CLONE_MODES.add( CLONE_DEEP );
     }
 
     private boolean abstractMode;
-    
+
     private boolean enabled;
 
     private String cloneMode;
@@ -67,7 +67,7 @@ public class JavaClassMetadata
     {
         return abstractMode;
     }
-    
+
     public boolean isEnabled()
     {
         return enabled;

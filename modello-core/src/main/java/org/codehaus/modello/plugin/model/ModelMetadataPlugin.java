@@ -49,12 +49,12 @@ public class ModelMetadataPlugin
     // Map to Metadata
     // ----------------------------------------------------------------------
 
-    public ModelMetadata getModelMetadata( Model model, Map data )
+    public ModelMetadata getModelMetadata( Model model, Map<String, String> data )
     {
         return new ModelModelMetadata();
     }
 
-    public ClassMetadata getClassMetadata( ModelClass clazz, Map data )
+    public ClassMetadata getClassMetadata( ModelClass clazz, Map<String, String> data )
     {
         ModelClassMetadata metadata = new ModelClassMetadata();
 
@@ -63,12 +63,12 @@ public class ModelMetadataPlugin
         return metadata;
     }
 
-    public FieldMetadata getFieldMetadata( ModelField field, Map data )
+    public FieldMetadata getFieldMetadata( ModelField field, Map<String, String> data )
     {
         return new ModelFieldMetadata();
     }
 
-    public AssociationMetadata getAssociationMetadata( ModelAssociation association, Map data )
+    public AssociationMetadata getAssociationMetadata( ModelAssociation association, Map<String, String> data )
     {
         return new ModelAssociationMetadata();
     }

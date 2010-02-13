@@ -25,8 +25,8 @@ package org.codehaus.modello.maven;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
@@ -114,7 +114,7 @@ public abstract class AbstractModelloGeneratorMojo
      *
      * @parameter
      */
-    private List/*<String>*/ packagedVersions = Collections.EMPTY_LIST;
+    private List<String> packagedVersions = new ArrayList<String>();
 
     /**
      * Generate Java 5 sources, with generic collections.
@@ -261,10 +261,8 @@ public abstract class AbstractModelloGeneratorMojo
         getLog().info( "Generating current version: " + version );
         modelloCore.generate( model, getGeneratorType(), parameters );
 
-        for ( Iterator i = packagedVersions.iterator(); i.hasNext(); )
+        for ( String version : packagedVersions )
         {
-            String version = (String) i.next();
-
             parameters.setProperty( ModelloParameterConstants.VERSION, version );
 
             parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString( true ) );
@@ -345,7 +343,7 @@ public abstract class AbstractModelloGeneratorMojo
         this.project = project;
     }
 
-    public void setPackagedVersions( List/*<String>*/ packagedVersions )
+    public void setPackagedVersions( List<String> packagedVersions )
     {
         this.packagedVersions = Collections.unmodifiableList( packagedVersions );
     }

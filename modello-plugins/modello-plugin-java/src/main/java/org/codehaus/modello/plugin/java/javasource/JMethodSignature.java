@@ -113,7 +113,7 @@ public final class JMethodSignature
     /**
      * The exceptions that this method throws
      **/
-    private Vector exceptions = null;
+    private Vector<JClass> exceptions = null;
 
     /**
      * Creates a new method with the given name and return type.
@@ -136,7 +136,7 @@ public final class JMethodSignature
         this.name = name;
         this.modifiers = new JModifiers();
         this.params = new JNamedMap( 3 );
-        this.exceptions = new Vector( 1 );
+        this.exceptions = new Vector<JClass>( 1 );
     } //-- JMethodSignature
 
     /**
@@ -423,7 +423,7 @@ public final class JMethodSignature
 
     protected String[] getParameterClassNames()
     {
-        Vector names = new Vector( params.size() );
+        Vector<String> names = new Vector<String>( params.size() );
 
         for ( int i = 0; i < params.size(); i++ )
         {

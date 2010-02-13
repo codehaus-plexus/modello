@@ -50,7 +50,7 @@ public class StaxGeneratorTest
     {
         Model model = modello.loadModel( getXmlResourceReader( "/maven.mdo" ) );
 
-        List classesList = model.getClasses( new Version( "4.0.0" ) );
+        List<ModelClass> classesList = model.getClasses( new Version( "4.0.0" ) );
 
         assertEquals( 27, classesList.size() );
 

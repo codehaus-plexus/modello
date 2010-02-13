@@ -24,7 +24,6 @@ package org.codehaus.modello.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -40,11 +39,11 @@ public abstract class ModelType
 {
     private String packageName;
 
-    private List codeSegments;
+    private List<CodeSegment> codeSegments;
 
     private transient Model model;
 
-    private transient Map codeSegmentMap = new HashMap();
+    private transient Map<String, CodeSegment> codeSegmentMap = new HashMap<String, CodeSegment>();
 
     public ModelType()
     {
@@ -105,33 +104,31 @@ public abstract class ModelType
     // CodeSegment
     // ----------------------------------------------------------------------
 
-    public List getAllCodeSegments()
+    public List<CodeSegment> getAllCodeSegments()
     {
         if ( codeSegments == null )
         {
-            codeSegments = new ArrayList();
+            codeSegments = new ArrayList<CodeSegment>();
         }
 
         return codeSegments;
     }
 
-    public List getCodeSegments( Version version )
+    public List<CodeSegment> getCodeSegments( Version version )
     {
         return getCodeSegments( new VersionRange( version ) );
     }
 
-    public List getCodeSegments( VersionRange versionRange )
+    public List<CodeSegment> getCodeSegments( VersionRange versionRange )
     {
-        ArrayList codeSegments = (ArrayList) getAllCodeSegments();
+        List<CodeSegment> codeSegments = getAllCodeSegments();
 
-        ArrayList codeSegmentsList = new ArrayList();
+        List<CodeSegment> codeSegmentsList = new ArrayList<CodeSegment>();
 
         if ( codeSegments != null )
         {
-            for ( Iterator i = codeSegments.iterator(); i.hasNext(); )
+            for ( CodeSegment codeSegment : codeSegments )
             {
-                CodeSegment codeSegment = (CodeSegment) i.next();
-
                 if ( versionRange.getFromVersion().inside( codeSegment.getVersionRange() )
                     && versionRange.getToVersion().inside( codeSegment.getVersionRange() ) )
                 {
@@ -162,14 +159,14 @@ public abstract class ModelType
      * @return Returns the list of all fields in this class. It does not include the
      *         fields of super classes.
      */
-    public abstract List getAllFields();
+    public abstract List<ModelField> getAllFields();
 
     /**
      * Returns all the fields in this class and all super classes if withInheritedField equals to true.
      *
      * @return Returns all the fields in this class and all super classes.
      */
-    public abstract List getAllFields( boolean withInheritedField );
+    public abstract List<ModelField> getAllFields( boolean withInheritedField );
 
     public abstract ModelField getField( String type, VersionRange versionRange );
 
@@ -181,14 +178,12 @@ public abstract class ModelType
      * @return Returns the list of all fields in this class. It does not include the
      *         fields of super classes.
      */
-    public List getFields( Version version )
+    public List<ModelField> getFields( Version version )
     {
-        ArrayList fieldList = new ArrayList();
+        List<ModelField> fieldList = new ArrayList<ModelField>();
 
-        for ( Iterator i = getAllFields().iterator(); i.hasNext(); )
+        for ( ModelField currentField : getAllFields() )
         {
-            ModelField currentField = (ModelField) i.next();
-
             if ( version.inside( currentField.getVersionRange() ) )
             {
                 fieldList.add( currentField );
@@ -198,26 +193,22 @@ public abstract class ModelType
         return fieldList;
     }
 
-    public List getAllFields( Version version, boolean withInheritedField )
+    public List<ModelField> getAllFields( Version version, boolean withInheritedField )
     {
-        ArrayList allFieldsList = new ArrayList();
+        List<ModelField> allFieldsList = new ArrayList<ModelField>();
 
-        ArrayList fieldList = new ArrayList();
+        List<ModelField> fieldList = new ArrayList<ModelField>();
 
-        for ( Iterator i = getAllFields( withInheritedField ).iterator(); i.hasNext(); )
+        for ( ModelField currentField : getAllFields( withInheritedField ) )
         {
-            ModelField currentField = (ModelField) i.next();
-
             if ( version.inside( currentField.getVersionRange() ) )
             {
                 allFieldsList.add( currentField );
             }
         }
 
-        for ( Iterator i = allFieldsList.iterator(); i.hasNext(); )
+        for ( ModelField currentField : allFieldsList )
         {
-            ModelField currentField = (ModelField) i.next();
-
             if ( version.inside( currentField.getVersionRange() ) )
             {
                 fieldList.add( currentField );
@@ -246,14 +237,12 @@ public abstract class ModelType
         return getField( type, new VersionRange( version ) );
     }
 
-    public List getIdentifierFields( Version version )
+    public List<ModelField> getIdentifierFields( Version version )
     {
-        List identifierFields = new ArrayList();
+        List<ModelField> identifierFields = new ArrayList<ModelField>();
 
-        for ( Iterator it = getFields( version ).iterator(); it.hasNext(); )
+        for ( ModelField field : getFields( version ) )
         {
-            ModelField field = (ModelField) it.next();
-
             if ( field.isIdentifier() )
             {
                 identifierFields.add( field );

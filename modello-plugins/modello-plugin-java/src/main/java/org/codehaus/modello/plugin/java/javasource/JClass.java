@@ -76,7 +76,6 @@ package org.codehaus.modello.plugin.java.javasource;
 
 import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
@@ -97,7 +96,7 @@ public class JClass extends JStructure
     /**
      * The list of constructors for this JClass
      */
-    private Vector _constructors = null;
+    private Vector<JConstructor> _constructors = null;
 
 
     /**
@@ -106,12 +105,12 @@ public class JClass extends JStructure
     private JNamedMap _fields = null;
 
 
-    private Vector _innerClasses = null;
+    private Vector<JClass> _innerClasses = null;
 
     /**
      * The list of methods of this JClass
      */
-    private Vector _methods = null;
+    private Vector<JMethod> _methods = null;
 
     /**
      * The superclass for this JClass
@@ -134,10 +133,10 @@ public class JClass extends JStructure
         throws IllegalArgumentException
     {
         super( name );
-        _constructors = new Vector();
+        _constructors = new Vector<JConstructor>();
         _fields = new JNamedMap();
-        _methods = new Vector();
-        _innerClasses = new Vector();
+        _methods = new Vector<JMethod>();
+        _innerClasses = new Vector<JClass>();
         //-- initialize default Java doc
         getJDocComment().appendComment( "Class " + getLocalName() + "." );
 
@@ -555,17 +554,17 @@ public class JClass extends JStructure
             printPackageDeclaration( jsw );
 
             //-- get imports from inner-classes
-            Vector removeImports = null;
+            Vector<String> removeImports = null;
             if ( _innerClasses.size() > 0 )
             {
-                removeImports = new Vector();
+                removeImports = new Vector<String>();
                 for ( int i = 0; i < _innerClasses.size(); i++ )
                 {
                     JClass iClass = (JClass) _innerClasses.elementAt( i );
-                    Enumeration e = iClass.getImports();
+                    Enumeration<String> e = iClass.getImports();
                     while ( e.hasMoreElements() )
                     {
-                        String classname = (String) e.nextElement();
+                        String classname = e.nextElement();
                         if ( !hasImport( classname ) )
                         {
                             addImport( classname );
@@ -634,7 +633,7 @@ public class JClass extends JStructure
         {
             buffer.append( "implements " );
 
-            Enumeration e = getInterfaces();
+            Enumeration<String> e = getInterfaces();
             while ( e.hasMoreElements() )
             {
                 buffer.append( e.nextElement() );
@@ -763,9 +762,9 @@ public class JClass extends JStructure
             jsw.writeln();
         }
 
-        for ( Iterator iterator = sourceCodeEntries.iterator(); iterator.hasNext(); )
+        for ( String sourceCodeEntry : sourceCodeEntries )
         {
-            jsw.writeln( (String) iterator.next() );
+            jsw.writeln( sourceCodeEntry );
         }
 
         jsw.unindent();
@@ -774,7 +773,7 @@ public class JClass extends JStructure
         jsw.flush();
     } //-- printSource
 
-    private List sourceCodeEntries = new ArrayList();
+    private List<String> sourceCodeEntries = new ArrayList<String>();
 
     public void addSourceCode( String sourceCode )
     {

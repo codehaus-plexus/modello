@@ -44,12 +44,14 @@ public class XsdMetadataPlugin
 
     public static final String COMPOSITOR = "xsd.compositor";
 
-    public AssociationMetadata getAssociationMetadata( ModelAssociation association, Map data ) throws ModelloException
+    public AssociationMetadata getAssociationMetadata( ModelAssociation association, Map<String, String> data )
+        throws ModelloException
     {
         return new XsdAssociationMetadata();
     }
 
-    public ClassMetadata getClassMetadata( ModelClass clazz, Map data ) throws ModelloException
+    public ClassMetadata getClassMetadata( ModelClass clazz, Map<String, String> data )
+        throws ModelloException
     {
         XsdClassMetadata metadata = new XsdClassMetadata();
 
@@ -58,12 +60,14 @@ public class XsdMetadataPlugin
         return metadata;
     }
 
-    public FieldMetadata getFieldMetadata( ModelField field, Map data ) throws ModelloException
+    public FieldMetadata getFieldMetadata( ModelField field, Map<String, String> data )
+        throws ModelloException
     {
         return new XsdFieldMetadata();
     }
 
-    public ModelMetadata getModelMetadata( Model model, Map data ) throws ModelloException
+    public ModelMetadata getModelMetadata( Model model, Map<String, String> data )
+        throws ModelloException
     {
         XsdModelMetadata metadata = new XsdModelMetadata();
 

@@ -46,7 +46,6 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
@@ -64,9 +63,9 @@ import java.util.Properties;
 public abstract class AbstractModelloJavaGeneratorTest
     extends AbstractModelloGeneratorTest
 {
-    private List dependencies = new ArrayList();
+    private List<File> dependencies = new ArrayList<File>();
 
-    private List urls = new ArrayList();
+    private List<URL> urls = new ArrayList<URL>();
 
     private ArtifactRepository repository;
 
@@ -78,7 +77,7 @@ public abstract class AbstractModelloJavaGeneratorTest
 
     private ArtifactRepositoryLayout repositoryLayout;
 
-    private List classPathElements = new ArrayList();
+    private List<String> classPathElements = new ArrayList<String>();
 
     protected AbstractModelloJavaGeneratorTest( String name )
     {
@@ -135,7 +134,7 @@ public abstract class AbstractModelloJavaGeneratorTest
         return dependencyFile;
     }
 
-    public List getClasspath()
+    public List<File> getClasspath()
     {
         return dependencies;
     }
@@ -225,12 +224,10 @@ public abstract class AbstractModelloJavaGeneratorTest
             configuration.setTargetVersion( "1.4" );
         }
 
-        List messages = compiler.compile( configuration );
+        List<CompilerError> messages = compiler.compile( configuration );
 
-        for ( Iterator it = messages.iterator(); it.hasNext(); )
+        for ( CompilerError message : messages )
         {
-            CompilerError message = (CompilerError) it.next();
-
             System.out.println( message.getFile() + "[" + message.getStartLine() + "," + message.getStartColumn()
                                 + "]: " + message.getMessage() );
         }
@@ -260,7 +257,7 @@ public abstract class AbstractModelloJavaGeneratorTest
 
         try
         {
-            Class clazz = classLoader.loadClass( verifierClassName );
+            Class<?> clazz = classLoader.loadClass( verifierClassName );
 
             Method verify = clazz.getMethod( "verify", new Class[0] );
 
@@ -333,7 +330,7 @@ public abstract class AbstractModelloJavaGeneratorTest
         return false;
     }
 
-    protected List getClassPathElements()
+    protected List<String> getClassPathElements()
     {
         return classPathElements;
     }

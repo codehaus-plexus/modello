@@ -43,7 +43,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
@@ -167,7 +166,7 @@ public class XsdGenerator
             // Element descriptors
             // Traverse from root so "abstract" models aren't included
             int initialCapacity = objectModel.getClasses( getGeneratedVersion() ).size();
-            writeComplexTypeDescriptor( w, objectModel, root, new HashSet( initialCapacity ) );
+            writeComplexTypeDescriptor( w, objectModel, root, new HashSet<ModelClass>( initialCapacity ) );
 
             w.endElement();
         }
@@ -213,18 +212,19 @@ public class XsdGenerator
         }
     }
 
-    private void writeComplexTypeDescriptor( XMLWriter w, Model objectModel, ModelClass modelClass, Set written )
+    private void writeComplexTypeDescriptor( XMLWriter w, Model objectModel, ModelClass modelClass,
+                                             Set<ModelClass> written )
     {
         written.add( modelClass );
 
         w.startElement( "xs:complexType" );
         w.addAttribute( "name", modelClass.getName() );
 
-        List fields = getFieldsForXml( modelClass, getGeneratedVersion() );
+        List<ModelField> fields = getFieldsForXml( modelClass, getGeneratedVersion() );
 
         boolean hasContentField = hasContentField( fields );
 
-        List attributeFields = getXmlAttributeFields( fields );
+        List<ModelField> attributeFields = getXmlAttributeFields( fields );
 
         fields.removeAll( attributeFields );
 
@@ -248,7 +248,7 @@ public class XsdGenerator
 
         writeClassDocumentation( w, modelClass );
 
-        Set toWrite = new HashSet();
+        Set<ModelClass> toWrite = new HashSet<ModelClass>();
 
         if ( fields.size() > 0 )
         {
@@ -266,10 +266,8 @@ public class XsdGenerator
                     w.startElement( "xs:sequence" );
                 }
             }
-            for ( Iterator j = fields.iterator(); j.hasNext(); )
+            for ( ModelField field : fields )
             {
-                ModelField field = (ModelField) j.next();
-
                 XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
 
                 String fieldTagName = resolveTagName( field, xmlFieldMetadata );
@@ -417,10 +415,8 @@ public class XsdGenerator
             }
         }
 
-        for ( Iterator j = attributeFields.iterator(); j.hasNext(); )
+        for ( ModelField field : attributeFields )
         {
-            ModelField field = (ModelField) j.next();
-
             XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
 
             w.startElement( "xs:attribute" );
@@ -466,9 +462,8 @@ public class XsdGenerator
 
         w.endElement(); // xs:complexType
 
-        for ( Iterator iter = toWrite.iterator(); iter.hasNext(); )
+        for ( ModelClass fieldModelClass : toWrite )
         {
-            ModelClass fieldModelClass = (ModelClass) iter.next();
             if ( !written.contains( fieldModelClass ) )
             {
                 writeComplexTypeDescriptor( w, objectModel, fieldModelClass, written );

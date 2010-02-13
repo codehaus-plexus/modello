@@ -73,9 +73,9 @@ public abstract class AbstractMetadataPlugin
     //
     // ----------------------------------------------------------------------
 
-    protected boolean getBoolean( Map data, String key, boolean defaultValue )
+    protected boolean getBoolean( Map<String, String> data, String key, boolean defaultValue )
     {
-        String value = (String) data.get( key );
+        String value = data.get( key );
 
         if ( StringUtils.isEmpty( value ) )
         {
@@ -85,9 +85,9 @@ public abstract class AbstractMetadataPlugin
         return Boolean.valueOf( value ).booleanValue();
     }
 
-    protected String getString( Map data, String key )
+    protected String getString( Map<String, String> data, String key )
     {
-        String value = (String) data.get( key );
+        String value = data.get( key );
 
         return StringUtils.isEmpty( value ) ? null : value;
     }

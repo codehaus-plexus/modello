@@ -33,7 +33,7 @@ import org.codehaus.plexus.util.StringUtils;
  * @version $Id$
  */
 public class Version
-    implements Comparable
+    implements Comparable<Version>
 {
     public static final Version INFINITE = new Version( "32767.32767.32767" );
 
@@ -254,10 +254,8 @@ public class Version
         return prefix + major + separator + minor + separator + micro;
     }
 
-    public int compareTo( Object o )
+    public int compareTo( Version otherVersion )
     {
-        Version otherVersion = (Version) o;
-
         if ( greaterThan( otherVersion ) )
         {
             return +1;

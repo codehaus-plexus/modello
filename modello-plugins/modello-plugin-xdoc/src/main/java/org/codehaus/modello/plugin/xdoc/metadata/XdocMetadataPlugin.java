@@ -46,18 +46,18 @@ public class XdocMetadataPlugin
 {
     public static final String XDOC_SEPARATOR = "xdoc.separator";
 
-    public ClassMetadata getClassMetadata( ModelClass clazz, Map data )
+    public ClassMetadata getClassMetadata( ModelClass clazz, Map<String, String> data )
     {
         return new XdocClassMetadata();
     }
 
-    public AssociationMetadata getAssociationMetadata( ModelAssociation association, Map data )
+    public AssociationMetadata getAssociationMetadata( ModelAssociation association, Map<String, String> data )
         throws ModelloException
     {
         return new XdocAssociationMetadata();
     }
 
-    public FieldMetadata getFieldMetadata( ModelField field, Map data )
+    public FieldMetadata getFieldMetadata( ModelField field, Map<String, String> data )
         throws ModelloException
     {
         XdocFieldMetadata metadata = new XdocFieldMetadata();
@@ -67,7 +67,7 @@ public class XdocMetadataPlugin
         return metadata;
     }
 
-    public ModelMetadata getModelMetadata( Model model, Map data )
+    public ModelMetadata getModelMetadata( Model model, Map<String, String> data )
         throws ModelloException
     {
         return new XdocModelMetadata();

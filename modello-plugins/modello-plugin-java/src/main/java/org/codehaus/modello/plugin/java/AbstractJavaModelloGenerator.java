@@ -30,7 +30,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.Locale;
 import java.util.Properties;
 
@@ -150,9 +149,8 @@ public abstract class AbstractJavaModelloGenerator
         }
 
         // import interfaces
-        for ( Iterator i = getModel().getInterfaces( getGeneratedVersion() ).iterator(); i.hasNext(); )
+        for ( ModelInterface modelInterface : getModel().getInterfaces( getGeneratedVersion() ) )
         {
-            ModelInterface modelInterface = (ModelInterface) i.next();
             String packageName = modelInterface.getPackageName( isPackageWithVersion(), getGeneratedVersion() );
 
             if ( packageName.equals( basePackageName ) )
@@ -164,9 +162,8 @@ public abstract class AbstractJavaModelloGenerator
         }
 
         // import classes
-        for ( Iterator i = getModel().getClasses( getGeneratedVersion() ).iterator(); i.hasNext(); )
+        for ( ModelClass modelClass : getModel().getClasses( getGeneratedVersion() ) )
         {
-            ModelClass modelClass = (ModelClass) i.next();
             String packageName = modelClass.getPackageName( isPackageWithVersion(), getGeneratedVersion() );
 
             if ( packageName.equals( basePackageName ) )

@@ -85,7 +85,7 @@ public class JSourceCode
     /**
      * A list of JCodeStatements
      **/
-    private Vector source = null;
+    private Vector<JCodeStatement> source = null;
 
     /**
      * The indent size
@@ -103,7 +103,7 @@ public class JSourceCode
     public JSourceCode()
     {
         super();
-        source = new Vector();
+        source = new Vector<JCodeStatement>();
     } //-- JSourceCode
 
     /**

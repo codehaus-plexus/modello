@@ -26,7 +26,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
@@ -183,7 +182,7 @@ public class XdocGenerator
      */
     private void writeModelDescriptor( XMLWriter w, ModelClass rootModelClass )
     {
-        writeElementDescriptor( w, rootModelClass, null, new HashSet() );
+        writeElementDescriptor( w, rootModelClass, null, new HashSet<String>() );
     }
 
     /**
@@ -194,7 +193,8 @@ public class XdocGenerator
      * @param association the association we are coming from (can be <code>null</code>)
      * @param written set of data already written
      */
-    private void writeElementDescriptor( XMLWriter w, ModelClass modelClass, ModelAssociation association, Set written )
+    private void writeElementDescriptor( XMLWriter w, ModelClass modelClass, ModelAssociation association,
+                                         Set<String> written )
     {
         String tagName = resolveTagName( modelClass, association );
 
@@ -220,7 +220,7 @@ public class XdocGenerator
 
         writeMarkupElement( w, "p", getDescription( modelClass ) );
 
-        List elementFields = getFieldsForXml( modelClass, getGeneratedVersion() );
+        List<ModelField> elementFields = getFieldsForXml( modelClass, getGeneratedVersion() );
 
         ModelField contentField = getContentField( elementFields );
 
@@ -236,7 +236,7 @@ public class XdocGenerator
             w.endElement();
         }
 
-        List attributeFields = getXmlAttributeFields( elementFields );
+        List<ModelField> attributeFields = getXmlAttributeFields( elementFields );
 
         elementFields.removeAll( attributeFields );
 
@@ -246,10 +246,8 @@ public class XdocGenerator
         w.endElement();
 
         // check every fields that are inner associations to write their element descriptor
-        for ( Iterator iter = elementFields.iterator(); iter.hasNext(); )
+        for ( ModelField f : elementFields )
         {
-            ModelField f = (ModelField) iter.next();
-
             if ( isInnerAssociation( f ) )
             {
                 ModelAssociation assoc = (ModelAssociation) f;
@@ -270,7 +268,7 @@ public class XdocGenerator
      * @param fields the fields to add in the table
      * @param elementFields <code>true</code> if fields are elements, <code>false</code> if fields are attributes
      */
-    private void writeFieldsTable( XMLWriter w, List fields, boolean elementFields )
+    private void writeFieldsTable( XMLWriter w, List<ModelField> fields, boolean elementFields )
     {
         if ( fields == null || fields.isEmpty() )
         {
@@ -303,10 +301,8 @@ public class XdocGenerator
 
         w.endElement(); // tr
 
-        for ( Iterator j = fields.iterator(); j.hasNext(); )
+        for ( ModelField f : fields )
         {
-            ModelField f = (ModelField) j.next();
-
             XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) f.getMetadata( XmlFieldMetadata.ID );
 
             if ( xmlFieldMetadata.isContent() )
@@ -468,7 +464,7 @@ public class XdocGenerator
      */
     private String getModelXmlDescriptor( ModelClass rootModelClass )
     {
-        return getElementXmlDescriptor( rootModelClass, null, new Stack() );
+        return getElementXmlDescriptor( rootModelClass, null, new Stack<String>() );
     }
 
     /**
@@ -480,7 +476,7 @@ public class XdocGenerator
      * @return the String representing the tree model
      * @throws ModelloRuntimeException
      */
-    private String getElementXmlDescriptor( ModelClass modelClass, ModelAssociation association, Stack stack )
+    private String getElementXmlDescriptor( ModelClass modelClass, ModelAssociation association, Stack<String> stack )
         throws ModelloRuntimeException
     {
         StringBuffer sb = new StringBuffer();
@@ -500,17 +496,15 @@ public class XdocGenerator
             return sb.toString();
         }
 
-        List fields = getFieldsForXml( modelClass, getGeneratedVersion() );
+        List<ModelField> fields = getFieldsForXml( modelClass, getGeneratedVersion() );
 
-        List attributeFields = getXmlAttributeFields( fields);
+        List<ModelField> attributeFields = getXmlAttributeFields( fields);
 
         if ( attributeFields.size() > 0 )
         {
 
-            for ( Iterator iter = attributeFields.iterator(); iter.hasNext(); )
+            for ( ModelField f : attributeFields )
             {
-                ModelField f = (ModelField) iter.next();
-
                 XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) f.getMetadata( XmlFieldMetadata.ID );
 
                 sb.append( ' ' );
@@ -534,10 +528,8 @@ public class XdocGenerator
 
             stack.push( id );
 
-            for ( Iterator iter = fields.iterator(); iter.hasNext(); )
+            for ( ModelField f : fields )
             {
-                ModelField f = (ModelField) iter.next();
-
                 XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) f.getMetadata( XmlFieldMetadata.ID );
 
                 XdocFieldMetadata xdocFieldMetadata = (XdocFieldMetadata) f.getMetadata( XdocFieldMetadata.ID );

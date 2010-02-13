@@ -35,9 +35,9 @@ public interface MetadataPluginManager
 {
     String ROLE = MetadataPluginManager.class.getName();
 
-    Map getPlugins();
+    Map<String, MetadataPlugin> getPlugins();
 
-    Iterator getPluginsIterator();
+    Iterator<MetadataPlugin> getPluginsIterator();
 
     MetadataPlugin getMetadataPlugin( String metadataId );
 

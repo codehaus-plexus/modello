@@ -69,7 +69,6 @@ package org.codehaus.modello.plugin.java.javasource;
 
 import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
@@ -95,7 +94,7 @@ public final class JInterface extends JStructure
     /**
      * The list of methods of this JInterface
      */
-    private Vector methods = null;
+    private Vector<JMethodSignature> methods = null;
 
 
     /**
@@ -109,7 +108,7 @@ public final class JInterface extends JStructure
         throws IllegalArgumentException
     {
         super( name );
-        methods = new Vector();
+        methods = new Vector<JMethodSignature>();
 
         //-- initialize default Java doc
         getJDocComment().appendComment( "Interface " + getLocalName() + "." );
@@ -414,7 +413,7 @@ public final class JInterface extends JStructure
 
         if ( getInterfaceCount() > 0 )
         {
-            Enumeration e = getInterfaces();
+            Enumeration<String> e = getInterfaces();
             buffer.append( "extends " );
             while ( e.hasMoreElements() )
             {
@@ -500,9 +499,9 @@ public final class JInterface extends JStructure
             jsw.writeln( ';' );
         }
 
-        for ( Iterator iterator = sourceCodeEntries.iterator(); iterator.hasNext(); )
+        for ( String sourceCodeEntry : sourceCodeEntries )
         {
-            jsw.writeln( (String) iterator.next() );
+            jsw.writeln( sourceCodeEntry );
         }
 
         jsw.unindent();
@@ -511,7 +510,7 @@ public final class JInterface extends JStructure
         jsw.close();
     } //-- printSource
 
-    private List sourceCodeEntries = new ArrayList();
+    private List<String> sourceCodeEntries = new ArrayList<String>();
 
     public void addSourceCode( String sourceCode )
     {

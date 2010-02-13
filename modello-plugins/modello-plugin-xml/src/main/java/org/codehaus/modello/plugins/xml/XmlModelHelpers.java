@@ -116,16 +116,14 @@ class XmlModelHelpers
      * @param modelFields the fields to check
      * @return the field, or <code>null</code> if no field is <code>Content</code>
      */
-    static ModelField getContentField( List/*<ModelField>*/ modelFields )
+    static ModelField getContentField( List<ModelField> modelFields )
     {
         if ( modelFields == null )
         {
             return null;
         }
-        for ( Iterator j = modelFields.iterator(); j.hasNext(); )
+        for ( ModelField field : modelFields )
         {
-            ModelField field = (ModelField) j.next();
-
             XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
 
             if ( xmlFieldMetadata.isContent() )
@@ -143,14 +141,12 @@ class XmlModelHelpers
      *            <code>null</code>.
      * @return The list of XML attributes fields, can be empty but never <code>null</code>.
      */
-    static List getXmlAttributeFields( List/*<ModelField>*/ modelFields )
+    static List<ModelField> getXmlAttributeFields( List<ModelField> modelFields )
     {
-        List xmlAttributeFields = new ArrayList();
+        List<ModelField> xmlAttributeFields = new ArrayList<ModelField>();
 
-        for ( Iterator it = modelFields.iterator(); it.hasNext(); )
+        for ( ModelField field : modelFields )
         {
-            ModelField field = (ModelField) it.next();
-
             XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
 
             if ( xmlFieldMetadata.isAttribute() )
@@ -169,9 +165,9 @@ class XmlModelHelpers
      * @param version the version of the class to use
      * @return the list of XML fields of this class
      */
-    static List getFieldsForXml( ModelClass modelClass, Version version )
+    static List<ModelField> getFieldsForXml( ModelClass modelClass, Version version )
     {
-        List/*<ModelClass>*/ classes = new ArrayList();
+        List<ModelClass> classes = new ArrayList<ModelClass>();
 
         // get the full inheritance
         while ( modelClass != null )
@@ -189,20 +185,18 @@ class XmlModelHelpers
             }
         }
 
-        List fields = new ArrayList();
+        List<ModelField> fields = new ArrayList<ModelField>();
 
         for ( int i = classes.size() - 1; i >= 0; i-- )
         {
             modelClass = (ModelClass) classes.get( i );
 
-            Iterator parentIter = fields.iterator();
+            Iterator<ModelField> parentIter = fields.iterator();
 
-            fields = new ArrayList();
+            fields = new ArrayList<ModelField>();
 
-            for ( Iterator it = modelClass.getFields( version ).iterator(); it.hasNext(); )
+            for ( ModelField field : modelClass.getFields( version ) )
             {
-                ModelField field = (ModelField) it.next();
-
                 XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
 
                 if ( xmlFieldMetadata.isTransient() )

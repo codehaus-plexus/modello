@@ -51,34 +51,34 @@ import java.util.List;
  */
 public class ModelReader
 {
-    private Map/*<String, String>*/ modelAttributes = new HashMap();
+    private Map<String, String> modelAttributes = new HashMap<String, String>();
 
-    private Map/*<String, Map<String, String>>*/ classAttributes = new HashMap();
+    private Map<String, Map<String, String>> classAttributes = new HashMap<String, Map<String, String>>();
 
-    private Map/*<String, Map<String, String>>*/ fieldAttributes = new HashMap();
+    private Map<String, Map<String, String>> fieldAttributes = new HashMap<String, Map<String, String>>();
 
-    private Map/*<String, Map<String, String>>*/ associationAttributes = new HashMap();
+    private Map<String, Map<String, String>> associationAttributes = new HashMap<String, Map<String, String>>();
 
-    public Map/*<String, String>*/ getAttributesForModel()
+    public Map<String, String> getAttributesForModel()
     {
-        return (Map) modelAttributes;
+        return modelAttributes;
     }
 
-    public Map/*<String, String>*/ getAttributesForClass( ModelClass modelClass )
+    public Map<String, String> getAttributesForClass( ModelClass modelClass )
     {
-        return (Map) classAttributes.get( modelClass.getName() );
+        return classAttributes.get( modelClass.getName() );
     }
 
-    public Map/*<String, String>*/ getAttributesForField( ModelField modelField )
+    public Map<String, String> getAttributesForField( ModelField modelField )
     {
-        return (Map) fieldAttributes.get( modelField.getModelClass().getName() + ':' + modelField.getName() + ':'
-                                          + modelField.getVersionRange() );
+        return fieldAttributes.get( modelField.getModelClass().getName() + ':' + modelField.getName() + ':'
+            + modelField.getVersionRange() );
     }
 
-    public Map/*<String, String>*/ getAttributesForAssociation( ModelAssociation modelAssociation )
+    public Map<String, String> getAttributesForAssociation( ModelAssociation modelAssociation )
     {
-        return (Map) associationAttributes.get( modelAssociation.getModelClass().getName() + ':'
-            + modelAssociation.getName() + ':' + modelAssociation.getVersionRange() );
+        return associationAttributes.get( modelAssociation.getModelClass().getName() + ':' + modelAssociation.getName()
+            + ':' + modelAssociation.getVersionRange() );
     }
 
     public Model loadModel( Reader reader )
@@ -262,7 +262,7 @@ public class ModelReader
             {
                 ModelClass modelClass = new ModelClass();
 
-                Map/*<String, String>*/ attributes = getAttributes( parser );
+                Map<String, String> attributes = getAttributes( parser );
 
                 while ( parser.nextTag() == XmlPullParser.START_TAG )
                 {
@@ -332,9 +332,9 @@ public class ModelReader
 
                 ModelAssociation modelAssociation = null;
 
-                Map fAttributes = getAttributes( parser );
+                Map<String, String> fAttributes = getAttributes( parser );
 
-                Map aAttributes = new HashMap();
+                Map<String, String> aAttributes = new HashMap<String, String>();
 
                 while ( parser.nextTag() == XmlPullParser.START_TAG )
                 {
@@ -544,7 +544,7 @@ public class ModelReader
         }
         else if ( "annotations".equals( parser.getName() ) )
         {
-            List annotationsList = new ArrayList();
+            List<String> annotationsList = new ArrayList<String>();
             while ( parser.nextTag() == XmlPullParser.START_TAG )
             {
                 if ( "annotation".equals( parser.getName() ) )
@@ -562,9 +562,9 @@ public class ModelReader
         return true;
     }
 
-    private Map/* <String, String> */getAttributes( XmlPullParser parser )
+    private Map<String, String> getAttributes( XmlPullParser parser )
     {
-        Map attributes = new HashMap();
+        Map<String, String> attributes = new HashMap<String, String>();
 
         for ( int i = 0; i < parser.getAttributeCount(); i++ )
         {

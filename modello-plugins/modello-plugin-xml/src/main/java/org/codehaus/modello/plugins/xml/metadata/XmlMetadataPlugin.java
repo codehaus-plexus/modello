@@ -33,7 +33,6 @@ import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
 
-import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -73,7 +72,7 @@ public class XmlMetadataPlugin
     // Map to Metadata
     // ----------------------------------------------------------------------
 
-    public ModelMetadata getModelMetadata( Model model, Map data )
+    public ModelMetadata getModelMetadata( Model model, Map<String, String> data )
     {
         XmlModelMetadata metadata = new XmlModelMetadata();
 
@@ -84,7 +83,7 @@ public class XmlMetadataPlugin
         return metadata;
     }
 
-    public ClassMetadata getClassMetadata( ModelClass clazz, Map data )
+    public ClassMetadata getClassMetadata( ModelClass clazz, Map<String, String> data )
     {
         XmlClassMetadata metadata = new XmlClassMetadata();
 
@@ -93,7 +92,7 @@ public class XmlMetadataPlugin
         return metadata;
     }
 
-    public FieldMetadata getFieldMetadata( ModelField field, Map data )
+    public FieldMetadata getFieldMetadata( ModelField field, Map<String, String> data )
     {
         XmlFieldMetadata metadata = new XmlFieldMetadata();
 
@@ -114,7 +113,7 @@ public class XmlMetadataPlugin
         return metadata;
     }
 
-    public AssociationMetadata getAssociationMetadata( ModelAssociation association, Map data )
+    public AssociationMetadata getAssociationMetadata( ModelAssociation association, Map<String, String> data )
     {
         XmlAssociationMetadata metadata = new XmlAssociationMetadata();
 
@@ -127,14 +126,5 @@ public class XmlMetadataPlugin
         metadata.setReference( getBoolean( data, XML_REFERENCE, false ) );
 
         return metadata;
-    }
-
-    // ----------------------------------------------------------------------
-    // Metadata to Map
-    // ----------------------------------------------------------------------
-
-    public Map getFieldMap( ModelField field, FieldMetadata metadata )
-    {
-        return Collections.EMPTY_MAP;
     }
 }

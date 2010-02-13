@@ -37,7 +37,6 @@ import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
@@ -570,12 +569,10 @@ public class JDOMWriterGenerator
     private void writeAllClasses( Model objectModel, JClass jClass, ModelClass rootClass )
         throws ModelloException
     {
-        ArrayList alwaysExistingElements = new ArrayList();
+        List<ModelClass> alwaysExistingElements = new ArrayList<ModelClass>();
         alwaysExistingElements.add( rootClass );
-        for ( Iterator i = objectModel.getClasses( getGeneratedVersion() ).iterator(); i.hasNext(); )
+        for ( ModelClass clazz : objectModel.getClasses( getGeneratedVersion() ) )
         {
-            ModelClass clazz = (ModelClass) i.next();
-
             JavaClassMetadata javaClassMetadata = (JavaClassMetadata) clazz.getMetadata( JavaClassMetadata.ID );
 
             if ( !javaClassMetadata.isEnabled() )
@@ -588,7 +585,7 @@ public class JDOMWriterGenerator
         }
     }
 
-    private void updateClass( ModelClass clazz, JClass jClass, ArrayList alwaysExisting )
+    private void updateClass( ModelClass clazz, JClass jClass, List<ModelClass> alwaysExisting )
         throws ModelloException
     {
         String className = clazz.getName();
@@ -620,11 +617,10 @@ public class JDOMWriterGenerator
         }
         sc.add( "Counter innerCount = new Counter( counter.getDepth() + 1 );" );
 
-        List modelFields = getFieldsForXml( clazz, getGeneratedVersion() );
+        List<ModelField> modelFields = getFieldsForXml( clazz, getGeneratedVersion() );
 
-        for ( Iterator i = modelFields.iterator(); i.hasNext(); )
+        for ( ModelField field : modelFields )
         {
-            ModelField field = (ModelField) i.next();
             XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
             JavaFieldMetadata javaFieldMetadata = (JavaFieldMetadata) field.getMetadata( JavaFieldMetadata.ID );
 

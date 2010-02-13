@@ -74,7 +74,7 @@ public class XdocGeneratorTest
 
         Model model = modello.loadModel( getXmlResourceReader( "/maven.mdo" ) );
 
-        List classesList = model.getClasses( new Version( "4.0.0" ) );
+        List<ModelClass> classesList = model.getClasses( new Version( "4.0.0" ) );
 
         assertEquals( 26, classesList.size() );
 
@@ -144,7 +144,7 @@ public class XdocGeneratorTest
     {
         String content = FileUtils.fileRead( new File( getOutputDirectory(), filename ), "UTF-8" );
 
-        Set hrefs = new HashSet();
+        Set<String> hrefs = new HashSet<String>();
         Pattern p = Pattern.compile( "<a href=\"#(class_[^\"]+)\"", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE );
         Matcher m = p.matcher( content );
         while ( m.find() )
@@ -153,7 +153,7 @@ public class XdocGeneratorTest
         }
         Assert.assertTrue( "should find some '<a href=' links", hrefs.size() > 0 );
 
-        Set names = new HashSet();
+        Set<String> names = new HashSet<String>();
         p = Pattern.compile( "<a name=\"(class_[^\"]+)\"", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE );
         m = p.matcher( content );
         while ( m.find() )

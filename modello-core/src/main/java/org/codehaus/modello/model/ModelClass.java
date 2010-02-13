@@ -28,7 +28,6 @@ import org.codehaus.plexus.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -45,11 +44,11 @@ public class ModelClass
 
     private boolean isInternalSuperClass;
 
-    private List interfaces;
+    private List<String> interfaces;
 
-    private List fields;
+    private List<ModelField> fields;
 
-    private transient Map fieldMap = new HashMap();
+    private transient Map<String, List<ModelField>> fieldMap = new HashMap<String, List<ModelField>>();
 
     public ModelClass()
     {
@@ -80,11 +79,11 @@ public class ModelClass
      *
      * @return Returns the list of all interfaces of this class.
      */
-    public List getInterfaces()
+    public List<String> getInterfaces()
     {
         if ( interfaces == null )
         {
-            interfaces = new ArrayList();
+            interfaces = new ArrayList<String>();
         }
 
         return interfaces;
@@ -107,11 +106,11 @@ public class ModelClass
     /**
      * {@inheritDoc}
      */
-    public List getAllFields()
+    public List<ModelField> getAllFields()
     {
         if ( fields == null )
         {
-            fields = new ArrayList();
+            fields = new ArrayList<ModelField>();
         }
 
         return fields;
@@ -122,14 +121,14 @@ public class ModelClass
      *
      * @return Returns all the fields in this class and all super classes.
      */
-    public List getAllFields( boolean withInheritedField )
+    public List<ModelField> getAllFields( boolean withInheritedField )
     {
         if ( ! withInheritedField )
         {
             return getAllFields();
         }
 
-        List fields = new ArrayList( getAllFields() );
+        List<ModelField> fields = new ArrayList<ModelField>( getAllFields() );
 
         ModelClass c = this;
 
@@ -147,14 +146,12 @@ public class ModelClass
 
     public ModelField getField( String type, VersionRange versionRange )
     {
-        ArrayList fieldList = (ArrayList) fieldMap.get( type );
+        List<ModelField> fieldList = fieldMap.get( type );
 
         if ( fieldList != null )
         {
-            for ( Iterator i = fieldList.iterator(); i.hasNext(); )
+            for ( ModelField modelField : fieldList )
             {
-                ModelField modelField = (ModelField) i.next();
-
                 if ( versionRange.getFromVersion().inside( modelField.getVersionRange() )
                     && versionRange.getToVersion().inside( modelField.getVersionRange() ) )
                 {
@@ -170,12 +167,10 @@ public class ModelClass
     {
         if ( fieldMap.containsKey( modelField.getName() ) )
         {
-            ArrayList fieldList = (ArrayList) fieldMap.get( modelField.getName() );
+            List<ModelField> fieldList = fieldMap.get( modelField.getName() );
 
-            for ( Iterator i = fieldList.iterator(); i.hasNext(); )
+            for ( ModelField currentField : fieldList )
             {
-                ModelField currentField = (ModelField) i.next();
-
                 if ( VersionUtil.isInConflict( modelField.getVersionRange(), currentField.getVersionRange() ) )
                 {
                     throw new ModelloRuntimeException( "Duplicate field in " + getName() + ": " + modelField.getName() + "." );
@@ -184,14 +179,14 @@ public class ModelClass
         }
         else
         {
-            ArrayList fieldList = new ArrayList();
+            List<ModelField> fieldList = new ArrayList<ModelField>();
 
             fieldMap.put( modelField.getName(), fieldList );
         }
 
         getAllFields().add( modelField );
 
-        ( (ArrayList) fieldMap.get( modelField.getName() ) ).add( modelField );
+        fieldMap.get( modelField.getName() ).add( modelField );
     }
 
     // ----------------------------------------------------------------------
@@ -217,22 +212,9 @@ public class ModelClass
     {
         super.initialize( model );
 
-        for ( Iterator it = getAllFields().iterator(); it.hasNext(); )
+        for ( ModelField modelField : getAllFields() )
         {
-            Object field = it.next();
-
-            if ( field instanceof ModelAssociation )
-            {
-                ModelAssociation modelAssociation = (ModelAssociation) field;
-
-                modelAssociation.initialize( this );
-            }
-            else
-            {
-                ModelField modelField = (ModelField) field;
-
-                modelField.initialize( this );
-            }
+            modelField.initialize( this );
         }
     }
 

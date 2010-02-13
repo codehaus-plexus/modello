@@ -40,11 +40,11 @@ public class JavaAssociationMetadata
     public static final String CONSTRUCTOR_INIT = "constructor";
     public static final String FIELD_INIT = "field";
 
-    public final static List INIT_TYPES;
+    public final static List<String> INIT_TYPES;
 
     static
     {
-        INIT_TYPES = new ArrayList();
+        INIT_TYPES = new ArrayList<String>();
         INIT_TYPES.add( LAZY_INIT );
         INIT_TYPES.add( CONSTRUCTOR_INIT );
         INIT_TYPES.add( FIELD_INIT );
@@ -53,11 +53,11 @@ public class JavaAssociationMetadata
     public static final String CLONE_SHALLOW = "shallow";
     public static final String CLONE_DEEP = "deep";
 
-    public final static List CLONE_MODES;
+    public final static List<String> CLONE_MODES;
 
     static
     {
-        CLONE_MODES = new ArrayList();
+        CLONE_MODES = new ArrayList<String>();
         CLONE_MODES.add( CLONE_SHALLOW );
         CLONE_MODES.add( CLONE_DEEP );
     }

@@ -28,7 +28,6 @@ import org.codehaus.modello.plugin.model.ModelClassMetadata;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -42,17 +41,17 @@ public class Model
 {
     private String id;
 
-    private List/*<ModelClass>*/ classes = new ArrayList/*<ModelClass>*/();
+    private List<ModelClass> classes = new ArrayList<ModelClass>();
 
-    private List/*<ModelDefault>*/ defaults = new ArrayList/*<ModelDefault>*/();
+    private List<ModelDefault> defaults = new ArrayList<ModelDefault>();
 
-    private List/*<ModelInterface>*/ interfaces = new ArrayList/*<ModelInterface>*/();
+    private List<ModelInterface> interfaces = new ArrayList<ModelInterface>();
 
-    private transient Map/*<String,List<ModelClass>>*/ classMap = new HashMap/*<String,List<ModelClass>>*/();
+    private transient Map<String,List<ModelClass>> classMap = new HashMap<String,List<ModelClass>>();
 
-    private transient Map/*<String,ModelDefault>*/ defaultMap = new HashMap/*<String,ModelDefault>*/();
+    private transient Map<String,ModelDefault> defaultMap = new HashMap<String,ModelDefault>();
 
-    private transient Map/*<String,List<ModelInterface>>*/ interfaceMap = new HashMap/*<String,list<ModelInterface>>*/();
+    private transient Map<String,List<ModelInterface>> interfaceMap = new HashMap<String,List<ModelInterface>>();
 
     private VersionDefinition versionDefinition;
 
@@ -88,14 +87,12 @@ public class Model
 
     public String getRoot( Version version )
     {
-        List classes = getClasses( version );
+        List<ModelClass> classes = getClasses( version );
 
         String className = null;
 
-        for ( Iterator i = classes.iterator(); i.hasNext(); )
+        for ( ModelClass currentClass : classes )
         {
-            ModelClass currentClass = (ModelClass) i.next();
-
             ModelClassMetadata metadata = null;
 
             try
@@ -137,19 +134,17 @@ public class Model
         return getDefaultPackageName( withVersion, version );
     }
 
-    public List getAllClasses()
+    public List<ModelClass> getAllClasses()
     {
         return classes;
     }
 
-    public List/*<ModelClass>*/ getClasses( Version version )
+    public List<ModelClass> getClasses( Version version )
     {
-        List classList = new ArrayList();
+        List<ModelClass> classList = new ArrayList<ModelClass>();
 
-        for ( Iterator i = classes.iterator(); i.hasNext(); )
+        for ( ModelClass currentClass : classes )
         {
-            ModelClass currentClass = (ModelClass) i.next();
-
             if ( version.inside( currentClass.getVersionRange() ) )
             {
                 classList.add( currentClass );
@@ -186,15 +181,13 @@ public class Model
 
     private ModelClass getModelClass( String type, VersionRange versionRange )
     {
-        ArrayList classList = (ArrayList) classMap.get( type );
+        List<ModelClass> classList = classMap.get( type );
 
         ModelClass value = null;
         if ( classList != null )
         {
-            for ( Iterator i = classList.iterator(); i.hasNext() && value == null; )
+            for ( ModelClass modelClass : classList )
             {
-                ModelClass modelClass = (ModelClass) i.next();
-
                 if ( versionRange.getFromVersion().inside( modelClass.getVersionRange() )
                      && versionRange.getToVersion().inside( modelClass.getVersionRange() ) )
                 {
@@ -209,12 +202,10 @@ public class Model
     {
         if ( classMap.containsKey( modelClass.getName() ) )
         {
-            List classList = (List) classMap.get( modelClass.getName() );
+            List<ModelClass> classList = classMap.get( modelClass.getName() );
 
-            for ( Iterator i = classList.iterator(); i.hasNext(); )
+            for ( ModelClass currentClass : classList )
             {
-                ModelClass currentClass = (ModelClass) i.next();
-
                 if ( VersionUtil.isInConflict( modelClass.getVersionRange(), currentClass.getVersionRange() ) )
                 {
                     throw new ModelloRuntimeException( "Duplicate class: " + modelClass.getName() + "." );
@@ -223,21 +214,21 @@ public class Model
         }
         else
         {
-            List classList = new ArrayList();
+            List<ModelClass> classList = new ArrayList<ModelClass>();
 
             classMap.put( modelClass.getName(), classList );
         }
 
         getAllClasses().add( modelClass );
 
-        ( (List) classMap.get( modelClass.getName() ) ).add( modelClass );
+        classMap.get( modelClass.getName() ).add( modelClass );
     }
 
     // ----------------------------------------------------------------------
     // Defaults
     // ----------------------------------------------------------------------
 
-    public List/*<ModelDefault>*/ getDefaults()
+    public List<ModelDefault> getDefaults()
     {
         return defaults;
     }
@@ -289,19 +280,17 @@ public class Model
     //
     // ----------------------------------------------------------------------
 
-    public List getAllInterfaces()
+    public List<ModelInterface> getAllInterfaces()
     {
         return interfaces;
     }
 
-    public List getInterfaces( Version version )
+    public List<ModelInterface> getInterfaces( Version version )
     {
-        List interfaceList = new ArrayList();
+        List<ModelInterface> interfaceList = new ArrayList<ModelInterface>();
 
-        for ( Iterator i = interfaces.iterator(); i.hasNext(); )
+        for ( ModelInterface currentInterface : interfaces )
         {
-            ModelInterface currentInterface = (ModelInterface) i.next();
-
             if ( version.inside( currentInterface.getVersionRange() ) )
             {
                 interfaceList.add( currentInterface );
@@ -331,14 +320,12 @@ public class Model
 
     private ModelInterface getModelInterface( String type, VersionRange versionRange )
     {
-        List interfaceList = (List) interfaceMap.get( type );
+        List<ModelInterface> interfaceList = interfaceMap.get( type );
 
         if ( interfaceList != null )
         {
-            for ( Iterator i = interfaceList.iterator(); i.hasNext(); )
+            for ( ModelInterface modelInterface : interfaceList )
             {
-                ModelInterface modelInterface = (ModelInterface) i.next();
-
                 if ( versionRange.getFromVersion().inside( modelInterface.getVersionRange() )
                      && versionRange.getToVersion().inside( modelInterface.getVersionRange() ) )
                 {
@@ -354,12 +341,10 @@ public class Model
     {
         if ( interfaceMap.containsKey( modelInterface.getName() ) )
         {
-            List interfaceList = (List) interfaceMap.get( modelInterface.getName() );
+            List<ModelInterface> interfaceList = interfaceMap.get( modelInterface.getName() );
 
-            for ( Iterator i = interfaceList.iterator(); i.hasNext(); )
+            for ( ModelInterface currentInterface : interfaceList )
             {
-                ModelInterface currentInterface = (ModelInterface) i.next();
-
                 if ( VersionUtil.isInConflict( modelInterface.getVersionRange(), currentInterface.getVersionRange() ) )
                 {
                     throw new ModelloRuntimeException( "Duplicate interface: " + modelInterface.getName() + "." );
@@ -368,14 +353,14 @@ public class Model
         }
         else
         {
-            List interfaceList = new ArrayList();
+            List<ModelInterface> interfaceList = new ArrayList<ModelInterface>();
 
             interfaceMap.put( modelInterface.getName(), interfaceList );
         }
 
         getAllInterfaces().add( modelInterface );
 
-        ( (List) interfaceMap.get( modelInterface.getName() ) ).add( modelInterface );
+        interfaceMap.get( modelInterface.getName() ).add( modelInterface );
     }
 
     public ModelType getType( String type, Version version )
@@ -405,17 +390,13 @@ public class Model
 
     public void initialize()
     {
-        for ( Iterator i = classes.iterator(); i.hasNext(); )
+        for ( ModelClass modelClass : classes )
         {
-            ModelClass modelClass = (ModelClass) i.next();
-
             modelClass.initialize( this );
         }
 
-        for ( Iterator i = interfaces.iterator(); i.hasNext(); )
+        for ( ModelInterface modelInterface : interfaces )
         {
-            ModelInterface modelInterface = (ModelInterface) i.next();
-
             modelInterface.initialize( this );
         }
     }

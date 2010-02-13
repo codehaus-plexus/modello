@@ -46,7 +46,6 @@ import org.codehaus.plexus.util.StringUtils;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
@@ -135,9 +134,8 @@ public class StaxReaderGenerator
         GeneratorNode rootNode = findRequiredReferenceResolvers( root, null );
 
         writeReferenceResolvers( rootNode, jClass );
-        for ( Iterator i = rootNode.getNodesWithReferencableChildren().values().iterator(); i.hasNext(); )
+        for ( GeneratorNode node : rootNode.getNodesWithReferencableChildren().values() )
         {
-            GeneratorNode node = (GeneratorNode) i.next();
             writeReferenceResolvers( node, jClass );
         }
 
@@ -279,7 +277,7 @@ public class StaxReaderGenerator
         sourceWriter.close();
     }
 
-    private void generateStaxReaderDelegate( List/*<String>*/ versions )
+    private void generateStaxReaderDelegate( List<String> versions )
         throws ModelloException, IOException
     {
         Model objectModel = getModel();
@@ -334,10 +332,8 @@ public class StaxReaderGenerator
         writeModelVersionHack( sc );
 
         String prefix = "";
-        for ( Iterator i = versions.iterator(); i.hasNext(); )
+        for ( String version : versions )
         {
-            String version = (String) i.next();
-
             sc.add( prefix + "if ( \"" + version + "\".equals( modelVersion ) )" );
             sc.add( "{" );
             sc.addIndented( "return new " + getModel().getDefaultPackageName( true, new Version( version ) )
@@ -577,10 +573,8 @@ public class StaxReaderGenerator
     {
         ModelClass root = objectModel.getClass( objectModel.getRoot( getGeneratedVersion() ), getGeneratedVersion() );
 
-        for ( Iterator i = objectModel.getClasses( getGeneratedVersion() ).iterator(); i.hasNext(); )
+        for ( ModelClass clazz : objectModel.getClasses( getGeneratedVersion() ) )
         {
-            ModelClass clazz = (ModelClass) i.next();
-
             JavaClassMetadata javaClassMetadata = (JavaClassMetadata) clazz.getMetadata( JavaClassMetadata.ID );
 
             if ( !javaClassMetadata.isEnabled() )
@@ -707,10 +701,8 @@ public class StaxReaderGenerator
 
             // Write other fields
 
-            for ( Iterator i = modelClass.getAllFields( getGeneratedVersion(), true ).iterator(); i.hasNext(); )
+            for ( ModelField field : modelClass.getAllFields( getGeneratedVersion(), true ) )
             {
-                ModelField field = (ModelField) i.next();
-
                 XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
 
                 if ( !xmlFieldMetadata.isAttribute() && !xmlFieldMetadata.isTransient() )
@@ -784,7 +776,7 @@ public class StaxReaderGenerator
             // This must be last so that we guarantee the ID has been filled already
             if ( isAssociationPartToClass( modelClass ) )
             {
-                List identifierFields = modelClass.getIdentifierFields( getGeneratedVersion() );
+                List<ModelField> identifierFields = modelClass.getIdentifierFields( getGeneratedVersion() );
 
                 if ( identifierFields.size() == 1 )
                 {
@@ -809,10 +801,8 @@ public class StaxReaderGenerator
 
         GeneratorNode value = new GeneratorNode( className, parent );
 
-        for ( Iterator i = modelClass.getAllFields( getGeneratedVersion(), true ).iterator(); i.hasNext(); )
+        for ( ModelField field : modelClass.getAllFields( getGeneratedVersion(), true ) )
         {
-            ModelField field = (ModelField) i.next();
-
             if ( field instanceof ModelAssociation )
             {
                 ModelAssociation association = (ModelAssociation) field;
@@ -845,10 +835,8 @@ public class StaxReaderGenerator
         }
 
         // propagate the flag up
-        for ( Iterator i = value.getChildren().iterator(); i.hasNext(); )
+        for ( GeneratorNode child : value.getChildren() )
         {
-            GeneratorNode child = (GeneratorNode) i.next();
-
             if ( child.isReferencable() || child.isReferencableChildren() )
             {
                 value.setReferencableChildren( true );
@@ -872,10 +860,8 @@ public class StaxReaderGenerator
 
         sc.add( "java.util.Map refs;" );
 
-        for ( Iterator i = node.getChildren().iterator(); i.hasNext(); )
+        for ( GeneratorNode child : node.getChildren() )
         {
-            GeneratorNode child = (GeneratorNode) i.next();
-
             if ( child.isReferencable() )
             {
                 ModelAssociation association = child.getAssociation();
@@ -973,10 +959,8 @@ public class StaxReaderGenerator
     private void writeAttributes( ModelClass modelClass, String uncapClassName, JSourceCode sc )
         throws ModelloException
     {
-        for ( Iterator i = modelClass.getAllFields( getGeneratedVersion(), true ).iterator(); i.hasNext(); )
+        for ( ModelField field : modelClass.getAllFields( getGeneratedVersion(), true ) )
         {
-            ModelField field = (ModelField) i.next();
-
             XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
 
             if ( xmlFieldMetadata.isAttribute() && !xmlFieldMetadata.isTransient() )
