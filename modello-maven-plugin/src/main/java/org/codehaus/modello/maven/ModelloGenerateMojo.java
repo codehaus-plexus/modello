@@ -23,6 +23,7 @@ package org.codehaus.modello.maven;
  */
 
 import org.apache.maven.plugin.MojoExecutionException;
+import org.codehaus.modello.plugin.ModelloGenerator;
 
 import java.io.File;
 import java.util.Map;
@@ -31,7 +32,7 @@ import java.util.Map;
  * <p>
  * ModelloGenerateMojo - A dynamic way to use generators and modello plugins.
  * </p>
- * 
+ *
  * <p>
  * Example Usage:
  * </p>
@@ -79,7 +80,7 @@ import java.util.Map;
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
- * 
+ *
  * @goal generate
  * @phase generate-sources
  * @description Execute a Modello Generator.
@@ -90,7 +91,7 @@ public class ModelloGenerateMojo extends AbstractModelloGeneratorMojo
      * @component role="org.codehaus.modello.plugin.ModelloGenerator"
      * @required
      */
-    private Map generatorMap;
+    private Map<String, ModelloGenerator> generatorMap;
 
     /**
      * @parameter expression="${modello.generator.id}" default-value="java"
