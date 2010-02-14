@@ -26,7 +26,7 @@ import org.codehaus.modello.ModelloRuntimeException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
 
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -34,33 +34,30 @@ import java.util.Map;
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
-public abstract class AbstractPluginManager
+public abstract class AbstractPluginManager<T>
     extends AbstractLogEnabled
     implements Initializable
 {
-    private Map plugins;
+    /* injected by Plexus: see META-INF/plexus/components.xml */
+    private Map<String, T> plugins = new HashMap<String, T>();
 
     public void initialize()
     {
-        if ( plugins == null )
-        {
-            plugins = Collections.EMPTY_MAP;
-        }
     }
 
-    public Map getPlugins()
+    public Map<String, T> getPlugins()
     {
         return plugins;
     }
 
-    public Iterator getPluginsIterator()
+    public Iterator<T> getPluginsIterator()
     {
         return plugins.values().iterator();
     }
 
-    public Object getPlugin( String name )
+    public T getPlugin( String name )
     {
-        Object plugin = plugins.get( name );
+        T plugin = plugins.get( name );
 
         if ( plugin == null )
         {

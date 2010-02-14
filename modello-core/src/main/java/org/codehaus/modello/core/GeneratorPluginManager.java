@@ -35,9 +35,9 @@ public interface GeneratorPluginManager
 {
     String ROLE = GeneratorPluginManager.class.getName();
 
-    Map getPlugins();
+    Map<String, ModelloGenerator> getPlugins();
 
-    Iterator getPluginsIterator();
+    Iterator<ModelloGenerator> getPluginsIterator();
 
     ModelloGenerator getGeneratorPlugin( String generatorId );
 

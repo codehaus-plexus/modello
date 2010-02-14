@@ -31,12 +31,12 @@ import org.codehaus.modello.plugin.ModelloGenerator;
  * @version $Id$
  */
 public class DefaultGeneratorPluginManager
-    extends AbstractPluginManager
+    extends AbstractPluginManager<ModelloGenerator>
     implements GeneratorPluginManager
 {
     public ModelloGenerator getGeneratorPlugin( String generatorId )
     {
-        ModelloGenerator generator = (ModelloGenerator) getPlugin( generatorId );
+        ModelloGenerator generator = getPlugin( generatorId );
 
         if ( generator == null )
         {

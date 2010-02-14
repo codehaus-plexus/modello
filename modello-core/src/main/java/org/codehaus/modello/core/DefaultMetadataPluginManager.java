@@ -31,12 +31,12 @@ import org.codehaus.modello.plugin.AbstractPluginManager;
  * @version $Id$
  */
 public class DefaultMetadataPluginManager
-    extends AbstractPluginManager
+    extends AbstractPluginManager<MetadataPlugin>
     implements MetadataPluginManager
 {
     public MetadataPlugin getMetadataPlugin( String metadataId )
     {
-        MetadataPlugin metadata = (MetadataPlugin) getPlugin( metadataId );
+        MetadataPlugin metadata = getPlugin( metadataId );
 
         if ( metadata == null )
         {
