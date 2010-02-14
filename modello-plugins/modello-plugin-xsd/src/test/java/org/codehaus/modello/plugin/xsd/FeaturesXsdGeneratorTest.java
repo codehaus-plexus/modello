@@ -33,8 +33,13 @@ import org.xml.sax.helpers.DefaultHandler;
 import java.io.File;
 import java.util.Properties;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
 
 /**
  * @author Hervé Boutemy
@@ -59,28 +64,13 @@ public class FeaturesXsdGeneratorTest
 
         modello.generate( model, "xsd", parameters );
 
-        /* only available in JAXP 1.3, JDK 5+
-        SchemaFactory factory = SchemaFactory.newInstance( XMLConstants.W3C_XML_SCHEMA_NS_URI );
-        Schema schema = factory.newSchema( new StreamSource( new File( generatedSources, "features.xsd" ) ) );
-
-        SAXParserFactory spf = SAXParserFactory.newInstance();
-        spf.setSchema( schema );
-        SAXParser parser = spf.newSAXParser();
-        parser.parse( new InputSource( getClass().getResourceAsStream( "/features.xml" ) ) );
-        */
-
-        SAXParserFactory factory = SAXParserFactory.newInstance();
-        factory.setValidating( true );
-        factory.setNamespaceAware( true );
-        SAXParser saxParser = factory.newSAXParser();
-        saxParser.setProperty( "http://java.sun.com/xml/jaxp/properties/schemaLanguage",
-                               "http://www.w3.org/2001/XMLSchema" );
-        saxParser.setProperty( "http://java.sun.com/xml/jaxp/properties/schemaSource",
-                               new File( getOutputDirectory(), "features-1.0.0.xsd" ) );
+        SchemaFactory sf = SchemaFactory.newInstance( XMLConstants.W3C_XML_SCHEMA_NS_URI );
+        Schema schema = sf.newSchema( new StreamSource( new File( getOutputDirectory(), "features-1.0.0.xsd" ) ) );
+        Validator validator = schema.newValidator();
 
         try
         {
-            saxParser.parse( getClass().getResourceAsStream( "/features.xml" ), new Handler() );
+            validator.validate( new StreamSource( getClass().getResourceAsStream( "/features.xml" ) ) );
         }
         catch ( SAXParseException e )
         {
@@ -89,7 +79,7 @@ public class FeaturesXsdGeneratorTest
 
         try
         {
-            saxParser.parse( getClass().getResourceAsStream( "/features-invalid.xml" ), new Handler() );
+            validator.validate( new StreamSource( getClass().getResourceAsStream( "/features-invalid.xml" ) ) );
             fail( "parsing of features-invalid.xml should have failed" );
         }
         catch ( SAXParseException e )
@@ -100,29 +90,13 @@ public class FeaturesXsdGeneratorTest
 
         try
         {
-            saxParser.parse( getClass().getResourceAsStream( "/features-invalid-transient.xml" ), new Handler() );
+            validator.validate( new StreamSource( getClass().getResourceAsStream( "/features-invalid-transient.xml" ) ) );
             fail( "XSD did not prohibit appearance of transient fields" );
         }
         catch ( SAXParseException e )
         {
             // ok, expected exception
             assertTrue( String.valueOf( e.getMessage() ).indexOf( "transientString" ) >= 0 );
-        }
-    }
-
-    private static class Handler
-        extends DefaultHandler
-    {
-        public void warning ( SAXParseException e )
-            throws SAXException
-        {
-            throw e;
-        }
-
-        public void error ( SAXParseException e )
-            throws SAXException
-        {
-            throw e;
         }
     }
 }
