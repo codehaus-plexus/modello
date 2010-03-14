@@ -151,6 +151,8 @@ public class Xpp3ReaderGenerator
         JSourceCode sc = unmarshall.getSourceCode();
 
         String tagName = resolveTagName( root );
+        String className = root.getName();
+        String variableName = uncapitalise( className );
 
         sc.add( "int eventType = parser.getEventType();" );
 
@@ -171,11 +173,11 @@ public class Xpp3ReaderGenerator
                         + "found '\" + parser.getName() + \"'\", parser, null );" );
         sc.add( "}" );
 
-        sc.add( root.getName() + ' ' + tagName + " = parse" + root.getName() + "( parser, strict );" );
+        sc.add( className + ' ' + variableName + " = parse" + root.getName() + "( parser, strict );" );
 
-        sc.add( tagName + ".setModelEncoding( parser.getInputEncoding() );" );
+        sc.add( variableName + ".setModelEncoding( parser.getInputEncoding() );" );
 
-        sc.add( "return " + tagName + ';' );
+        sc.add( "return " + variableName + ';' );
 
         sc.unindent();
         sc.add( "}" );

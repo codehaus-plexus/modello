@@ -106,13 +106,14 @@ public class Dom4jWriterGenerator
         ModelClass rootClass = objectModel.getClass( root, getGeneratedVersion() );
 
         String rootElement = resolveTagName( rootClass );
+        String variableName = uncapitalise( root );
 
         // Write the parse method which will do the unmarshalling.
 
         JMethod marshall = new JMethod( "write" );
 
         marshall.addParameter( new JParameter( new JClass( "Writer" ), "writer" ) );
-        marshall.addParameter( new JParameter( new JClass( root ), rootElement ) );
+        marshall.addParameter( new JParameter( new JClass( root ), variableName ) );
 
         marshall.addException( new JClass( "java.io.IOException" ) );
 
@@ -120,7 +121,7 @@ public class Dom4jWriterGenerator
 
         sc.add( "Document document = new DocumentFactory().createDocument();" );
 
-        sc.add( "write" + root + "( " + rootElement + ", \"" + rootElement + "\", document );" );
+        sc.add( "write" + root + "( " + variableName + ", \"" + rootElement + "\", document );" );
 
         // TODO: pretty printing optional
         sc.add( "OutputFormat format = OutputFormat.createPrettyPrint();" );

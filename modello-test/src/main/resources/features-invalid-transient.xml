@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<features xmlns="http://modello.codehaus.org/FEATURES/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<features-demo xmlns="http://modello.codehaus.org/FEATURES/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
    xsi:schemaLocation="http://modello.codehaus.org/FEATURES/1.0.0 http://modello.codehaus.org/features-1.0.0.xsd">
   <xmlFeatures>
     <xmlTransientFields>
@@ -8,4 +8,4 @@
       <transientString>FAILED</transientString>
     </xmlTransientFields>
   </xmlFeatures>
-</features>
+</features-demo>

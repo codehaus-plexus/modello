@@ -30,7 +30,7 @@
 
   <classes>
 
-    <class rootElement="true">
+    <class rootElement="true" xml.tagName="features-demo">
       <name>Features</name>
       <version>1.0.0+</version>
       <!--

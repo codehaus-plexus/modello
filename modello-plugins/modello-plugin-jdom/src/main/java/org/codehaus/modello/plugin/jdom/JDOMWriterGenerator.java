@@ -165,9 +165,11 @@ public class JDOMWriterGenerator
 
     private JMethod generateWriteModel( String root, String rootElement )
     {
+        String variableName = uncapitalise( root );
+
         JMethod marshall = new JMethod( "write" );
 
-        marshall.addParameter( new JParameter( new JClass( root ), rootElement ) );
+        marshall.addParameter( new JParameter( new JClass( root ), variableName ) );
         marshall.addParameter( new JParameter( new JClass( "Document" ), "document" ) );
         marshall.addParameter( new JParameter( new JClass( "OutputStream" ), "stream" ) );
         marshall.addException( new JClass( "java.io.IOException" ) );
@@ -175,7 +177,7 @@ public class JDOMWriterGenerator
         marshall.getJDocComment().appendComment( "\n@deprecated" );
 
         JSourceCode sc = marshall.getSourceCode();
-        sc.add( "update" + root + "( " + rootElement + ", \"" + rootElement
+        sc.add( "update" + root + "( " + variableName + ", \"" + rootElement
                 + "\", new Counter( 0 ), document.getRootElement() );" );
         sc.add( "XMLOutputter outputter = new XMLOutputter();" );
         sc.add( "outputter.setFormat( Format.getPrettyFormat()" );
@@ -189,9 +191,11 @@ public class JDOMWriterGenerator
 
     private JMethod generateWriteModel2( String root, String rootElement )
     {
+        String variableName = uncapitalise( root );
+
         JMethod marshall = new JMethod( "write" );
 
-        marshall.addParameter( new JParameter( new JClass( root ), rootElement ) );
+        marshall.addParameter( new JParameter( new JClass( root ), variableName ) );
         marshall.addParameter( new JParameter( new JClass( "Document" ), "document" ) );
         marshall.addParameter( new JParameter( new JClass( "OutputStreamWriter" ), "writer" ) );
         marshall.addException( new JClass( "java.io.IOException" ) );
@@ -200,23 +204,25 @@ public class JDOMWriterGenerator
         sc.add( "Format format = Format.getRawFormat()" );
         sc.add( "    .setEncoding( writer.getEncoding() )" );
         sc.add( "    .setLineSeparator( System.getProperty( \"line.separator\" ) );" );
-        sc.add( "write( " + rootElement + ", document, writer, format );" );
+        sc.add( "write( " + variableName + ", document, writer, format );" );
         return marshall;
 
     }
 
     private JMethod generateWriteModel3( String root, String rootElement )
     {
+        String variableName = uncapitalise( root );
+
         JMethod marshall = new JMethod( "write" );
 
-        marshall.addParameter( new JParameter( new JClass( root ), rootElement ) );
+        marshall.addParameter( new JParameter( new JClass( root ), variableName ) );
         marshall.addParameter( new JParameter( new JClass( "Document" ), "document" ) );
         marshall.addParameter( new JParameter( new JClass( "Writer" ), "writer" ) );
         marshall.addParameter( new JParameter( new JClass( "Format" ), "jdomFormat" ) );
         marshall.addException( new JClass( "java.io.IOException" ) );
 
         JSourceCode sc = marshall.getSourceCode();
-        sc.add( "update" + root + "( " + rootElement + ", \"" + rootElement
+        sc.add( "update" + root + "( " + variableName + ", \"" + rootElement
             + "\", new Counter( 0 ), document.getRootElement() );" );
         sc.add( "XMLOutputter outputter = new XMLOutputter();" );
         sc.add( "outputter.setFormat( jdomFormat );" );

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<features xmlns="http://modello.codehaus.org/FEATURES/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<features-demo xmlns="http://modello.codehaus.org/FEATURES/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
    xsi:schemaLocation="http://modello.codehaus.org/FEATURES/1.0.0 http://modello.codehaus.org/features-1.0.0.xsd">
   <versionField>1.0.0</versionField>
   <!--required></required--><!-- TODO: this field is marked required but not set in the XML, should fail... -->
@@ -191,4 +191,4 @@
       </rootRecursion>
     </rootRecursion>
   </rootRecursion-->
-</features>
+</features-demo>

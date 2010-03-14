@@ -154,18 +154,19 @@ public class StaxReaderGenerator
 
         JSourceCode sc = unmarshall.getSourceCode();
 
-        String tagName = resolveTagName( root );
+        String className = root.getName();
+        String variableName = uncapitalise( className );
 
         sc.add( "String encoding = xmlStreamReader.getCharacterEncodingScheme();" );
 
-        sc.add( root.getName() + ' ' + tagName + " = parse" + root.getName() + "( \"" + resolveTagName( root )
+        sc.add( className + ' ' + variableName + " = parse" + root.getName() + "( \"" + resolveTagName( root )
             + "\", xmlStreamReader, strict );" );
 
-        sc.add( tagName + ".setModelEncoding( encoding );" );
+        sc.add( variableName + ".setModelEncoding( encoding );" );
 
-        sc.add( "resolveReferences( " + tagName + " );" );
+        sc.add( "resolveReferences( " + variableName + " );" );
 
-        sc.add( "return " + tagName + ";" );
+        sc.add( "return " + variableName + ";" );
 
         jClass.addMethod( unmarshall );
 
