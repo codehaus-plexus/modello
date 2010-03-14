@@ -854,16 +854,16 @@
             <type>XmlAttributes</type>
           </association>
         </field>
-        <field xml.tagName="tagName">
+        <field xml.tagName="tag-name">
           <name>fieldName</name>
           <version>1.0.0+</version>
-          <description><![CDATA[<code>&lt;field xml.tagName="<i>tagName</i>"&gt;</code>: a field with an XML name different from the field name.]]></description>
+          <description><![CDATA[<code>&lt;field xml.tagName="<i>tag-name</i>"&gt;</code>: a field with an XML name different from the field name.]]></description>
           <type>String</type>
         </field>
-        <field xml.attribute="true" xml.tagName="tagNameAttribute">
+        <field xml.attribute="true" xml.tagName="tag-name.attribute">
           <name>fieldNameAttribute</name>
           <version>1.0.0+</version>
-          <description><![CDATA[<code>&lt;field xml.attribute="true" xml.tagName="<i>tagName</i>"&gt;</code>]]></description>
+          <description><![CDATA[<code>&lt;field xml.attribute="true" xml.tagName="<i>tag-name.attribute</i>"&gt;</code>]]></description>
           <type>String</type>
         </field>
         <field xml.format="yyyy-MM-dd'T'HH:mm:ss">
@@ -890,29 +890,29 @@
         <field>
           <name>xmlAssociationTagNames</name>
           <version>1.0.0+</version>
-          <description><![CDATA[<code>&lt;field&gt;&lt;association xml.tagName="<i>association</i>"&gt;&lt;/field&gt;</code>:
+          <description><![CDATA[<code>&lt;field&gt;&lt;association xml.tagName="<i>association.tag-name</i>"&gt;&lt;/field&gt;</code>:
             a list with an XML name different from calculated singular of tag name.]]></description>
-          <association xml.tagName="association">
+          <association xml.tagName="association.tag-name">
             <type>Reference</type>
             <multiplicity>*</multiplicity>
           </association>
         </field>
-        <field xml.tagName="fieldTagNames">
+        <field xml.tagName="field.tag-names">
           <name>xmlTagNameAssociation</name>
           <version>1.0.0+</version>
-          <description><![CDATA[<code>&lt;field xml.tagName="fieldTagNames"&gt;&lt;association&gt;&lt;/field&gt;</code>:
+          <description><![CDATA[<code>&lt;field xml.tagName="field.tag-names"&gt;&lt;association&gt;&lt;/field&gt;</code>:
             a list with an XML name different from field name.]]></description>
           <association>
             <type>Reference</type>
             <multiplicity>*</multiplicity>
           </association>
         </field>
-        <field xml.tagName="fieldTagName">
+        <field xml.tagName="field.tag-name">
           <name>xmlTagNameAssociationTagNames</name>
           <version>1.0.0+</version>
-          <description><![CDATA[<code>&lt;field xml.tagName="fieldTagName"&gt;&lt;association xml.tagName="association"&gt;&lt;/field&gt;</code>:
+          <description><![CDATA[<code>&lt;field xml.tagName="field.tag-name"&gt;&lt;association xml.tagName="association.tag-name"&gt;&lt;/field&gt;</code>:
             a list with an XML name different from field name and an XML name different from calculated singular of tag name.]]></description>
-          <association xml.tagName="association">
+          <association xml.tagName="association.tag-name">
             <type>Reference</type>
             <multiplicity>*</multiplicity>
           </association>
@@ -920,9 +920,9 @@
         <field>
           <name>xmlFlatAssociationTagNames</name>
           <version>1.0.0+</version>
-          <description><![CDATA[<code>&lt;field&gt;&lt;association xml.itemsStyle="flat" xml.tagName="<i>association</i>"&gt;&lt;/field&gt;</code>:
+          <description><![CDATA[<code>&lt;field&gt;&lt;association xml.itemsStyle="flat" xml.tagName="<i>association.tag-name</i>"&gt;&lt;/field&gt;</code>:
             a flat list with an XML name different from calculated singular of tag name.]]></description>
-          <association xml.itemsStyle="flat" xml.tagName="association">
+          <association xml.itemsStyle="flat" xml.tagName="association.tag-name">
             <type>Reference</type>
             <multiplicity>*</multiplicity>
           </association>
@@ -972,7 +972,7 @@
           <version>1.0.0+</version>
           <description><![CDATA[<code>&lt;type&gt;Properties&lt;/type&gt;&lt;association xml.mapStyle="explode"&gt;</code>.]]></description>
           <type>Properties</type>
-          <association xml.itemsStyle="flat" xml.tagName="property" xml.mapStyle="explode">
+          <association xml.itemsStyle="flat" xml.tagName="property.tag-name" xml.mapStyle="explode">
             <type>String</type>
             <multiplicity>*</multiplicity>
           </association>
@@ -1133,10 +1133,10 @@
           <description><![CDATA[<code>Date</code> class.]]></description>
           <type>Date</type>
         </field>
-        <field xml.attribute="true" xml.tagName="tagName">
+        <field xml.attribute="true" xml.tagName="tag-name">
           <name>attribute</name>
           <version>1.0.0+</version>
-          <description><![CDATA[<code>&lt;field xml.attribute="true" xml.tagName="tagName"&gt;</code>.]]></description>
+          <description><![CDATA[<code>&lt;field xml.attribute="true" xml.tagName="tag-name"&gt;</code>.]]></description>
           <type>String</type>
           <defaultValue>default</defaultValue>
         </field>
@@ -1221,7 +1221,7 @@
       <name>XmlFieldsOrderParent2</name>
       <version>1.0.0+</version>
       <fields>
-        <field xml.tagName="field2">
+        <field xml.tagName="field-2">
           <name>field</name>
           <version>1.0.0+</version>
           <type>String</type>

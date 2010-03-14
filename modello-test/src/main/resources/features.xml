@@ -75,7 +75,7 @@
     </subClass3>
   </javaFeatures>
 
-  <xmlFeatures tagNameAttribute="another value from XML file">
+  <xmlFeatures tag-name.attribute="another value from XML file">
     <attributes
       primitiveBoolean="false"
       primitiveByte="-70"
@@ -87,10 +87,10 @@
       primitiveDouble="-7.7"
       objectString="String value from XML file"
       objectDate="2012-12-24T22:12:12.012"
-      tagName="value"
+      tag-name="value"
     ></attributes>
     <attributesDefault></attributesDefault>
-    <tagName>value from XML file</tagName>
+    <tag-name>value from XML file</tag-name>
     <dateXmlFormat>2012-12-24T22:12:12</dateXmlFormat>
     <dateLong>121212121212</dateLong>
 
@@ -99,27 +99,27 @@
     <xmlItemsStyleFlat><id>flat third</id></xmlItemsStyleFlat>
 
     <xmlAssociationTagNames>
-      <association><id>first</id></association>
-      <association><id>second</id></association>
-      <association><id>third</id></association>
+      <association.tag-name><id>first</id></association.tag-name>
+      <association.tag-name><id>second</id></association.tag-name>
+      <association.tag-name><id>third</id></association.tag-name>
     </xmlAssociationTagNames>
 
-    <fieldTagNames>
-      <fieldTagName><id>first</id></fieldTagName>
-      <fieldTagName><id>second</id></fieldTagName>
-      <fieldTagName><id>third</id></fieldTagName>
-    </fieldTagNames>
+    <field.tag-names>
+      <field.tag-name><id>first</id></field.tag-name>
+      <field.tag-name><id>second</id></field.tag-name>
+      <field.tag-name><id>third</id></field.tag-name>
+    </field.tag-names>
 
-    <fieldTagName>
-      <association><id>first</id></association>
-      <association><id>second</id></association>
-      <association><id>third</id></association>
-    </fieldTagName>
+    <field.tag-name>
+      <association.tag-name><id>first</id></association.tag-name>
+      <association.tag-name><id>second</id></association.tag-name>
+      <association.tag-name><id>third</id></association.tag-name>
+    </field.tag-name>
 
     <!-- xmlFlatAssociationTagNames -->
-    <association><id>flat first</id></association>
-    <association><id>flat second</id></association>
-    <association><id>flat third</id></association>
+    <association.tag-name><id>flat first</id></association.tag-name>
+    <association.tag-name><id>flat second</id></association.tag-name>
+    <association.tag-name><id>flat third</id></association.tag-name>
 
     <explodeProperties>
       <explodeProperty>
@@ -158,7 +158,7 @@
 
     <xmlFieldsOrder>
       <field1>first</field1>
-      <field2>second</field2>
+      <field-2>second</field-2>
       <field3>third</field3>
       <field4>fourth</field4>
       <field5>fifth</field5>
