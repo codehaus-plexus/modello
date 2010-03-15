@@ -11,6 +11,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import junit.framework.Assert;
+
 public class InterfaceAssociationVerifier
     extends Verifier
 {
@@ -39,13 +41,14 @@ public class InterfaceAssociationVerifier
 
         location.removeRelative( person );
 
-        // check IPerson mother attribute getter/setter
-        // FIXME one multiplicity with java.useInterface does not work
-        Field motherField = Location.class.getDeclaredField( "mother" );
-        /*Assert.assertEquals( "mother attribute type", IPerson.class, motherField.getType() );
+        IPerson mother = new Person();
 
-        IPerson mother = location.getMother();
+        location.setMother( mother );
 
-        location.setMother( mother );*/
+        Assert.assertNotNull( location.getMother() );
+
+        location.setMother( null );
+
+        Assert.assertNull( location.getMother() );
     }
 }

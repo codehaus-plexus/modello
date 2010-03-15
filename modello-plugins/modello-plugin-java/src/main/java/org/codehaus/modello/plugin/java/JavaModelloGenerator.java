@@ -989,7 +989,7 @@ public class JavaModelloGenerator
         // Add sane class cast exception message
         // When will sun ever fix this?
 
-        sc.add( "if ( !( " + fieldName + " instanceof " + instanceName + " ) )" );
+        sc.add( "if ( " + fieldName +" != null && !( " + fieldName + " instanceof " + instanceName + " ) )" );
 
         sc.add( "{" );
 
