@@ -43,10 +43,13 @@ import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.Version;
 import org.codehaus.modello.model.VersionRange;
 import org.codehaus.modello.plugin.xdoc.metadata.XdocFieldMetadata;
+import org.codehaus.modello.plugin.xsd.XsdModelHelper;
 import org.codehaus.modello.plugins.xml.AbstractXmlGenerator;
 import org.codehaus.modello.plugins.xml.metadata.XmlAssociationMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlClassMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
+import org.codehaus.modello.plugins.xml.metadata.XmlModelMetadata;
+import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.WriterFactory;
 import org.codehaus.plexus.util.xml.PrettyPrintXMLWriter;
 import org.codehaus.plexus.util.xml.XMLWriter;
@@ -485,8 +488,37 @@ public class XdocGenerator
 
         String tagName = resolveTagName( modelClass, association );
 
+        // <tagName
         sb.append( "&lt;<a href=\"#" ).append( getAnchorName( tagName ) ).append( "\">" );
         sb.append( tagName ).append( "</a>" );
+
+        boolean addNewline = false;
+        if ( stack.size() == 0 )
+        {
+            // try to add XML Schema reference
+            try
+            {
+                String targetNamespace = XsdModelHelper.getTargetNamespace( modelClass.getModel(), getGeneratedVersion() );
+
+                XmlModelMetadata xmlModelMetadata = (XmlModelMetadata) modelClass.getModel().getMetadata( XmlModelMetadata.ID );
+
+                if ( StringUtils.isNotBlank( targetNamespace ) && ( xmlModelMetadata.getSchemaLocation() != null ) )
+                {
+                    String schemaLocation = xmlModelMetadata.getSchemaLocation( getGeneratedVersion() );
+
+                    sb.append( " xmlns=\"" + targetNamespace + "\"" );
+                    sb.append( " xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n" );
+                    sb.append( "  xsi:schemaLocation=\"" + targetNamespace );
+                    sb.append( " <a href=\"" + schemaLocation + "\">" + schemaLocation + "</a>\"" );
+
+                    addNewline = true;
+                }
+            }
+            catch ( ModelloException me )
+            {
+                // ignore unavailable XML Schema configuration
+            }
+        }
 
         String id = tagName + '/' + modelClass.getPackageName() + '.' + modelClass.getName();
         if ( stack.contains( id ) )
@@ -507,7 +539,16 @@ public class XdocGenerator
             {
                 XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) f.getMetadata( XmlFieldMetadata.ID );
 
-                sb.append( ' ' );
+                if ( addNewline )
+                {
+                    addNewline = false;
+
+                    sb.append( "\n  " );
+                }
+                else
+                {
+                    sb.append( ' ' );
+                }
 
                 sb.append( resolveTagName( f, xmlFieldMetadata ) ).append( "=.." );
             }

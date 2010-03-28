@@ -29,11 +29,9 @@ import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.plugin.xsd.metadata.XsdClassMetadata;
-import org.codehaus.modello.plugin.xsd.metadata.XsdModelMetadata;
 import org.codehaus.modello.plugins.xml.AbstractXmlGenerator;
 import org.codehaus.modello.plugins.xml.metadata.XmlAssociationMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
-import org.codehaus.modello.plugins.xml.metadata.XmlModelMetadata;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.WriterFactory;
 import org.codehaus.plexus.util.xml.PrettyPrintXMLWriter;
@@ -114,39 +112,11 @@ public class XsdGenerator
             ModelClass root = objectModel.getClass( objectModel.getRoot( getGeneratedVersion() ),
                                                     getGeneratedVersion() );
 
-            XmlModelMetadata xmlModelMetadata = (XmlModelMetadata) root.getModel().getMetadata( XmlModelMetadata.ID );
-
-            XsdModelMetadata xsdModelMetadata = (XsdModelMetadata) root.getModel().getMetadata( XsdModelMetadata.ID );
-
-            String namespace;
-            if ( StringUtils.isNotEmpty( xsdModelMetadata.getNamespace() ) )
-            {
-                namespace = xsdModelMetadata.getNamespace( getGeneratedVersion() );
-            }
-            else
-            {
-                // xsd.namespace is not set, try using xml.namespace
-                if ( StringUtils.isEmpty( xmlModelMetadata.getNamespace() ) )
-                {
-                    throw new ModelloException( "Cannot generate xsd without xmlns specification:"
-                                                + " <model xml.namespace='...'> or <model xsd.namespace='...'>" );
-                }
-
-                namespace = xmlModelMetadata.getNamespace( getGeneratedVersion() );
-            }
+            String namespace = XsdModelHelper.getNamespace( root.getModel(), getGeneratedVersion() );
 
             w.addAttribute( "xmlns", namespace );
 
-            String targetNamespace;
-            if ( xsdModelMetadata.getTargetNamespace() == null )
-            {
-                // xsd.target-namespace not set, using namespace
-                targetNamespace = namespace;
-            }
-            else
-            {
-                targetNamespace = xsdModelMetadata.getTargetNamespace( getGeneratedVersion() );
-            }
+            String targetNamespace = XsdModelHelper.getTargetNamespace( root.getModel(), getGeneratedVersion(), namespace );
 
             // add targetNamespace if attribute is not blank (specifically set to avoid a target namespace)
             if ( StringUtils.isNotBlank( targetNamespace ) )

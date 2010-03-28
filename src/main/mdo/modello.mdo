@@ -7,11 +7,7 @@
   <id>modello</id>
   <name>Modello</name>
   <description>
-    <![CDATA[
-    <p>This is a reference for the Modello descriptor used to describe a model with Modello.</p>
-    <p>An XSD is available at
-    <a href="http://modello.codehaus.org/xsd/modello-1.3.0.xsd">http://modello.codehaus.org/xsd/modello-1.3.0.xsd</a>.
-    </p>]]>
+    This is a reference for the Modello descriptor used to describe a model with Modello.
   </description>
 
   <defaults>
