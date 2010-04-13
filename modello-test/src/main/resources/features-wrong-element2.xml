@@ -6,6 +6,15 @@
   <required></required>
 
   <simpleTypes>
-    <invalidElement>If strict, parsing should fail.</invalidElement>
+    <objectString>good</objectString>
+    <invalidElement>
+      <!--
+      NOTE: The essential piece here is that this invalid element
+      a) has child elements and
+      b) has a not-first-in-list child that matches a valid but already parsed element of the parent (objectString)
+      -->
+      <childOfInvalidElement>foo</childOfInvalidElement>
+      <objectString>If strict, parsing should fail.</objectString>
+    </invalidElement>
   </simpleTypes>
 </features-demo>

@@ -1331,9 +1331,20 @@ public class Xpp3ReaderGenerator
 
         sc.add( "" );
 
-        sc.add( "// swallow up to end tag since this is not valid" );
-
-        sc.add( "while ( parser.next() != XmlPullParser.END_TAG ) {}" );
+        sc.add( "for ( int unrecognizedTagCount = 1; unrecognizedTagCount > 0; )" );
+        sc.add( "{" );
+        sc.indent();
+        sc.add( "int eventType = parser.next();" );
+        sc.add( "if ( eventType == XmlPullParser.START_TAG )" );
+        sc.add( "{" );
+        sc.addIndented( "unrecognizedTagCount++;" );
+        sc.add( "}" );
+        sc.add( "else if ( eventType == XmlPullParser.END_TAG )" );
+        sc.add( "{" );
+        sc.addIndented( "unrecognizedTagCount--;" );
+        sc.add( "}" );
+        sc.unindent();
+        sc.add( "}" );
 
         jClass.addMethod( method );
 
