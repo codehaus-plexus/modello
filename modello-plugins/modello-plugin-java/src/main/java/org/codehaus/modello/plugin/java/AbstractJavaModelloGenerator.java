@@ -29,7 +29,9 @@ import java.io.Writer;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 
@@ -162,20 +164,12 @@ public abstract class AbstractJavaModelloGenerator
         }
 
         // import classes
-        for ( ModelClass modelClass : getModel().getClasses( getGeneratedVersion() ) )
+        for ( ModelClass modelClass : getClasses( getModel() ) )
         {
             String packageName = modelClass.getPackageName( isPackageWithVersion(), getGeneratedVersion() );
 
             if ( packageName.equals( basePackageName ) )
             {
-                continue;
-            }
-
-            JavaClassMetadata javaClassMetadata = (JavaClassMetadata) modelClass.getMetadata( JavaClassMetadata.ID );
-
-            if ( !javaClassMetadata.isEnabled() )
-            {
-                // Skip import of those classes that are not enabled for the java plugin.
                 continue;
             }
 
@@ -265,4 +259,26 @@ public abstract class AbstractJavaModelloGenerator
         }
         return retVal;
     }
+
+    protected List<ModelClass> getClasses( Model model )
+    {
+        List<ModelClass> modelClasses = new ArrayList<ModelClass>();
+
+        for ( ModelClass modelClass : model.getClasses( getGeneratedVersion() ) )
+        {
+            if ( isRelevant( modelClass ) )
+            {
+                modelClasses.add( modelClass );
+            }
+        }
+
+        return modelClasses;
+    }
+
+    protected boolean isRelevant( ModelClass modelClass )
+    {
+        JavaClassMetadata javaClassMetadata = (JavaClassMetadata) modelClass.getMetadata( JavaClassMetadata.ID );
+        return javaClassMetadata != null && javaClassMetadata.isEnabled();
+    }
+
 }

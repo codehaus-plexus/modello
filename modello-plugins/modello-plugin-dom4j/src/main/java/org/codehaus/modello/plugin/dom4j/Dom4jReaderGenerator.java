@@ -34,7 +34,6 @@ import org.codehaus.modello.plugin.java.javasource.JParameter;
 import org.codehaus.modello.plugin.java.javasource.JSourceCode;
 import org.codehaus.modello.plugin.java.javasource.JSourceWriter;
 import org.codehaus.modello.plugin.java.javasource.JType;
-import org.codehaus.modello.plugin.java.metadata.JavaClassMetadata;
 import org.codehaus.modello.plugins.xml.AbstractXmlJavaGenerator;
 import org.codehaus.modello.plugins.xml.metadata.XmlAssociationMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
@@ -233,16 +232,8 @@ public class Dom4jReaderGenerator
     {
         ModelClass root = objectModel.getClass( objectModel.getRoot( getGeneratedVersion() ), getGeneratedVersion() );
 
-        for ( ModelClass clazz : objectModel.getClasses( getGeneratedVersion() ) )
+        for ( ModelClass clazz : getClasses( objectModel ) )
         {
-            JavaClassMetadata javaClassMetadata = (JavaClassMetadata) clazz.getMetadata( JavaClassMetadata.ID );
-
-            if ( !javaClassMetadata.isEnabled() )
-            {
-                // Skip import of those classes that are not enabled for the java plugin.
-                continue;
-            }
-
             writeClassParser( clazz, jClass, root.getName().equals( clazz.getName() ) );
         }
     }

@@ -30,7 +30,6 @@ import org.codehaus.modello.plugin.java.javasource.JParameter;
 import org.codehaus.modello.plugin.java.javasource.JSourceCode;
 import org.codehaus.modello.plugin.java.javasource.JSourceWriter;
 import org.codehaus.modello.plugin.java.javasource.JType;
-import org.codehaus.modello.plugin.java.metadata.JavaClassMetadata;
 import org.codehaus.modello.plugin.java.metadata.JavaFieldMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlAssociationMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
@@ -577,16 +576,9 @@ public class JDOMWriterGenerator
     {
         List<ModelClass> alwaysExistingElements = new ArrayList<ModelClass>();
         alwaysExistingElements.add( rootClass );
-        for ( ModelClass clazz : objectModel.getClasses( getGeneratedVersion() ) )
+
+        for ( ModelClass clazz : getClasses( objectModel ) )
         {
-            JavaClassMetadata javaClassMetadata = (JavaClassMetadata) clazz.getMetadata( JavaClassMetadata.ID );
-
-            if ( !javaClassMetadata.isEnabled() )
-            {
-                // Skip import of those classes that are not enabled for the java plugin.
-                continue;
-            }
-
             updateClass( clazz, jClass, alwaysExistingElements );
         }
     }

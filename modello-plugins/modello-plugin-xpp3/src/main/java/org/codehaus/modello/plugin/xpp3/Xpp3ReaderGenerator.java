@@ -304,16 +304,8 @@ public class Xpp3ReaderGenerator
     {
         ModelClass root = objectModel.getClass( objectModel.getRoot( getGeneratedVersion() ), getGeneratedVersion() );
 
-        for ( ModelClass clazz : objectModel.getClasses( getGeneratedVersion() ) )
+        for ( ModelClass clazz : getClasses( objectModel ) )
         {
-            JavaClassMetadata javaClassMetadata = (JavaClassMetadata) clazz.getMetadata( JavaClassMetadata.ID );
-
-            if ( !javaClassMetadata.isEnabled() )
-            {
-                // Skip import of those classes that are not enabled for the java plugin.
-                continue;
-            }
-
             writeClassParser( clazz, jClass, root.getName().equals( clazz.getName() ) );
         }
     }
