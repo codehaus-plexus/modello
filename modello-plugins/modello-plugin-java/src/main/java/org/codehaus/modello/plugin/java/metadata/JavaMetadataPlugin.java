@@ -26,12 +26,14 @@ import org.codehaus.modello.metadata.AbstractMetadataPlugin;
 import org.codehaus.modello.metadata.AssociationMetadata;
 import org.codehaus.modello.metadata.ClassMetadata;
 import org.codehaus.modello.metadata.FieldMetadata;
+import org.codehaus.modello.metadata.InterfaceMetadata;
 import org.codehaus.modello.metadata.MetadataPlugin;
 import org.codehaus.modello.metadata.ModelMetadata;
 import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
+import org.codehaus.modello.model.ModelInterface;
 
 import java.util.Map;
 
@@ -91,6 +93,11 @@ public class JavaMetadataPlugin
         metadata.setCloneHook( getString( data, JAVA_CLONE_HOOK ) );
 
         return metadata;
+    }
+
+    public InterfaceMetadata getInterfaceMetadata( ModelInterface iface, Map<String, String> data )
+    {
+        return new JavaInterfaceMetadata();
     }
 
     public FieldMetadata getFieldMetadata( ModelField field, Map<String, String> data )

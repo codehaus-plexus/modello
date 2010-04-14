@@ -28,6 +28,7 @@ import org.codehaus.modello.core.io.ModelReader;
 import org.codehaus.modello.metadata.AssociationMetadata;
 import org.codehaus.modello.metadata.ClassMetadata;
 import org.codehaus.modello.metadata.FieldMetadata;
+import org.codehaus.modello.metadata.InterfaceMetadata;
 import org.codehaus.modello.metadata.MetadataPlugin;
 import org.codehaus.modello.metadata.ModelMetadata;
 import org.codehaus.modello.model.CodeSegment;
@@ -36,6 +37,7 @@ import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelDefault;
 import org.codehaus.modello.model.ModelField;
+import org.codehaus.modello.model.ModelInterface;
 import org.codehaus.modello.model.ModelValidationException;
 import org.codehaus.modello.plugin.ModelloGenerator;
 import org.codehaus.plexus.util.IOUtil;
@@ -45,6 +47,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Properties;
@@ -194,9 +197,11 @@ public class DefaultModelloCore
     private void handlePluginsMetadata( ModelReader modelReader, Model model )
         throws ModelloException
     {
-        for ( MetadataPlugin plugin : metadataPluginManager.getPlugins().values() )
+        Collection<MetadataPlugin> plugins = metadataPluginManager.getPlugins().values();
+
+        for ( MetadataPlugin plugin : plugins )
         {
-            Map<String, String> attributes = Collections.unmodifiableMap( modelReader.getAttributesForModel() );
+            Map<String, String> attributes = modelReader.getAttributesForModel();
 
             attributes = Collections.unmodifiableMap( attributes );
 
@@ -212,11 +217,11 @@ public class DefaultModelloCore
 
         for ( ModelClass clazz : model.getAllClasses() )
         {
-            Map<String, String> attributes = Collections.unmodifiableMap( modelReader.getAttributesForClass( clazz ) );
+            Map<String, String> attributes = modelReader.getAttributesForClass( clazz );
 
             attributes = Collections.unmodifiableMap( attributes );
 
-            for ( MetadataPlugin plugin : metadataPluginManager.getPlugins().values() )
+            for ( MetadataPlugin plugin : plugins )
             {
                 ClassMetadata metadata = plugin.getClassMetadata( clazz, attributes );
 
@@ -242,7 +247,7 @@ public class DefaultModelloCore
 
                     associationAttributes = Collections.unmodifiableMap( associationAttributes );
 
-                    for ( MetadataPlugin plugin : metadataPluginManager.getPlugins().values() )
+                    for ( MetadataPlugin plugin : plugins )
                     {
                         FieldMetadata fieldMetadata = plugin.getFieldMetadata( modelAssociation, fieldAttributes );
 
@@ -269,7 +274,7 @@ public class DefaultModelloCore
 
                     attributes = Collections.unmodifiableMap( attributes );
 
-                    for ( MetadataPlugin plugin : metadataPluginManager.getPlugins().values() )
+                    for ( MetadataPlugin plugin : plugins )
                     {
                         FieldMetadata metadata = plugin.getFieldMetadata( field, attributes );
 
@@ -281,6 +286,25 @@ public class DefaultModelloCore
                         field.addMetadata( metadata );
                     }
                 }
+            }
+        }
+
+        for ( ModelInterface iface : model.getAllInterfaces() )
+        {
+            Map<String, String> attributes = modelReader.getAttributesForInterface( iface );
+
+            attributes = Collections.unmodifiableMap( attributes );
+
+            for ( MetadataPlugin plugin : plugins )
+            {
+                InterfaceMetadata metadata = plugin.getInterfaceMetadata( iface, attributes );
+
+                if ( metadata == null )
+                {
+                    throw new ModelloException( "A meta data plugin must not return null." );
+                }
+
+                iface.addMetadata( metadata );
             }
         }
     }

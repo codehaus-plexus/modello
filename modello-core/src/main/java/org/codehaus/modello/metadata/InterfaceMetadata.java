@@ -22,35 +22,11 @@ package org.codehaus.modello.metadata;
  * SOFTWARE.
  */
 
-import org.codehaus.modello.ModelloException;
-import org.codehaus.modello.model.Model;
-import org.codehaus.modello.model.ModelAssociation;
-import org.codehaus.modello.model.ModelClass;
-import org.codehaus.modello.model.ModelField;
-import org.codehaus.modello.model.ModelInterface;
-
-import java.util.Map;
-
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
-public interface MetadataPlugin
+public interface InterfaceMetadata
+    extends Metadata
 {
-    String ROLE = MetadataPlugin.class.getName();
-
-    ModelMetadata getModelMetadata( Model model, Map<String, String> data )
-        throws ModelloException;
-
-    ClassMetadata getClassMetadata( ModelClass clazz, Map<String, String> data )
-        throws ModelloException;
-
-    InterfaceMetadata getInterfaceMetadata( ModelInterface iface, Map<String, String> data )
-        throws ModelloException;
-
-    FieldMetadata getFieldMetadata( ModelField field, Map<String, String> data )
-        throws ModelloException;
-
-    AssociationMetadata getAssociationMetadata( ModelAssociation association, Map<String, String> data )
-        throws ModelloException;
 }

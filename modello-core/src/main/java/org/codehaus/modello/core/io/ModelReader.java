@@ -55,6 +55,8 @@ public class ModelReader
 
     private Map<String, Map<String, String>> classAttributes = new HashMap<String, Map<String, String>>();
 
+    private Map<String, Map<String, String>> interfaceAttributes = new HashMap<String, Map<String, String>>();
+
     private Map<String, Map<String, String>> fieldAttributes = new HashMap<String, Map<String, String>>();
 
     private Map<String, Map<String, String>> associationAttributes = new HashMap<String, Map<String, String>>();
@@ -67,6 +69,11 @@ public class ModelReader
     public Map<String, String> getAttributesForClass( ModelClass modelClass )
     {
         return classAttributes.get( modelClass.getName() );
+    }
+
+    public Map<String, String> getAttributesForInterface( ModelInterface modelInterface )
+    {
+        return interfaceAttributes.get( modelInterface.getName() );
     }
 
     public Map<String, String> getAttributesForField( ModelField modelField )
@@ -221,6 +228,8 @@ public class ModelReader
             {
                 ModelInterface modelInterface = new ModelInterface();
 
+                Map<String, String> attributes = getAttributes( parser );
+
                 while ( parser.nextTag() == XmlPullParser.START_TAG )
                 {
                     if ( parseBaseElement( modelInterface, parser ) )
@@ -245,6 +254,7 @@ public class ModelReader
                 }
 
                 model.addInterface( modelInterface );
+                interfaceAttributes.put( modelInterface.getName(), attributes );
             }
             else
             {
