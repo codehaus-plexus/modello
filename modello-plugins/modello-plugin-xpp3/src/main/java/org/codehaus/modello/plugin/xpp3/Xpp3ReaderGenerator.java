@@ -215,7 +215,7 @@ public class Xpp3ReaderGenerator
 
         sc.add( "" );
 
-        writeParserInitialization( sc );
+        sc.add( "initParser( parser );" );
 
         sc.add( "" );
 
@@ -1369,6 +1369,10 @@ public class Xpp3ReaderGenerator
         }
 
         jClass.addMethod( method );
+
+        // --------------------------------------------------------------------
+
+        jClass.addMethod( initParser() );
     }
 
     private JMethod convertNumericalType( String methodName, JType returnType, String expression, String typeDesc )
@@ -1417,4 +1421,19 @@ public class Xpp3ReaderGenerator
 
         return method;
     }
+
+    private JMethod initParser()
+    {
+        JMethod method = new JMethod( "initParser" );
+        method.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
+        method.addException( new JClass( "XmlPullParserException" ) );
+        method.getModifiers().makePrivate();
+
+        JSourceCode sc = method.getSourceCode();
+
+        writeParserInitialization( sc );
+
+        return method;
+    }
+
 }
