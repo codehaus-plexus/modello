@@ -136,7 +136,7 @@ public class ModelField
 
     public FieldMetadata getMetadata( String key )
     {
-        return (FieldMetadata) getMetadata( FieldMetadata.class, key );
+        return getMetadata( FieldMetadata.class, key );
     }
 
     public boolean isPrimitive()

@@ -205,7 +205,7 @@ public class ModelClass
 
     public ClassMetadata getMetadata( String key )
     {
-        return (ClassMetadata) getMetadata( ClassMetadata.class, key );
+        return getMetadata( ClassMetadata.class, key );
     }
 
     public void initialize( Model model )

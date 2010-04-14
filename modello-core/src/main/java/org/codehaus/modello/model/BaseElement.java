@@ -133,7 +133,7 @@ public abstract class BaseElement
         this.metadata.put( metadata.getClass().getName(), metadata );
     }
 
-    protected Metadata getMetadata( Class<?> type, String key )
+    protected <T extends Metadata> T getMetadata( Class<T> type, String key )
     {
         Metadata metadata = this.metadata.get( key );
 
@@ -142,13 +142,13 @@ public abstract class BaseElement
             throw new ModelloRuntimeException( "No such metadata: '" + key + "' for element: '" + getName() + "'." );
         }
 
-        if ( !type.isAssignableFrom( metadata.getClass() ) )
+        if ( !type.isInstance( metadata ) )
         {
             throw new ModelloRuntimeException( "The metadata is not of the expected type. Key: '" + key
                 + "', expected type: '" + type.getName() + "'." );
         }
 
-        return metadata;
+        return type.cast( metadata );
     }
 
     // ----------------------------------------------------------------------

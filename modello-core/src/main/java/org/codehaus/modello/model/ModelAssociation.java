@@ -115,7 +115,7 @@ public class ModelAssociation
 
     public AssociationMetadata getAssociationMetadata( String key )
     {
-        return (AssociationMetadata) getMetadata( AssociationMetadata.class, key );
+        return getMetadata( AssociationMetadata.class, key );
     }
 
     // ----------------------------------------------------------------------

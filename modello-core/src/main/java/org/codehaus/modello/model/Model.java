@@ -82,7 +82,7 @@ public class Model
 
     public ModelMetadata getMetadata( String key )
     {
-        return (ModelMetadata) getMetadata( ModelMetadata.class, key );
+        return getMetadata( ModelMetadata.class, key );
     }
 
     public String getRoot( Version version )
