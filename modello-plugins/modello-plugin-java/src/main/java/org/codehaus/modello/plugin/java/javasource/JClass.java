@@ -615,6 +615,11 @@ public class JClass extends JStructure
             buffer.append( "abstract " );
         }
 
+        if ( modifiers.isFinal() )
+        {
+            buffer.append( "final " );
+        }
+
         buffer.append( "class " );
         buffer.append( getLocalName() );
         jsw.writeln( buffer.toString() );

@@ -203,6 +203,16 @@ public class JModifiers
     } //-- isAbstract
 
     /**
+     * Returns true if the final qualifier is present.
+     * <BR> This is only applicable to methods and classes.
+     * @return true if the final qualifier is present
+     **/
+    public boolean isFinal()
+    {
+        return isFinal;
+    } //-- isFinal
+
+    /**
      * Returns true if the modifier represented is private.
      * @return true if the modifier represented is private.
      **/
