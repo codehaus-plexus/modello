@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<model>
+
+  <string>test</string>
+
+  <flatListString>a</flatListString>
+  <flatListString>b</flatListString>
+  <flatListString>c</flatListString>
+
+  <flatSetString>a</flatSetString>
+  <flatSetString>b</flatSetString>
+  <flatSetString>c</flatSetString>
+
+  <wrappedListStrings>
+    <wrappedListString>a</wrappedListString>
+    <wrappedListString>b</wrappedListString>
+    <wrappedListString>c</wrappedListString>
+  </wrappedListStrings>
+
+  <wrappedSetStrings>
+    <wrappedSetString>a</wrappedSetString>
+    <wrappedSetString>b</wrappedSetString>
+    <wrappedSetString>c</wrappedSetString>
+  </wrappedSetStrings>
+
+  <inlinedProperties>
+    <a>test</a>
+    <b>test</b>
+  </inlinedProperties>
+
+  <explodedProperties>
+    <explodedProperty>
+      <key>a</key>
+      <value>test</value>
+    </explodedProperty>
+    <explodedProperty>
+      <!-- value first this time -->
+      <value>test</value>
+      <key>b</key>
+    </explodedProperty>
+  </explodedProperties>
+
+  <items>
+    <item>
+      <string>test</string>
+    </item>
+  </items>
+</model>
