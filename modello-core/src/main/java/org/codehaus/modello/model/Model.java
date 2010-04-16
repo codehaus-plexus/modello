@@ -25,6 +25,7 @@ package org.codehaus.modello.model;
 import org.codehaus.modello.ModelloRuntimeException;
 import org.codehaus.modello.metadata.ModelMetadata;
 import org.codehaus.modello.plugin.model.ModelClassMetadata;
+import org.codehaus.plexus.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -404,4 +405,61 @@ public class Model
     public void validateElement()
     {
     }
+
+    public ModelClass getLocationTracker( Version version )
+    {
+        List<ModelClass> modelClasses = getClasses( version );
+
+        ModelClass locationTracker = null;
+
+        for ( ModelClass modelClass : modelClasses )
+        {
+            ModelClassMetadata metadata = (ModelClassMetadata) modelClass.getMetadata( ModelClassMetadata.ID );
+
+            if ( metadata != null && StringUtils.isNotEmpty( metadata.getLocationTracker() ) )
+            {
+                if ( locationTracker == null )
+                {
+                    locationTracker = modelClass;
+                }
+                else
+                {
+                    throw new ModelloRuntimeException( "There are multiple location tracker classes ("
+                        + locationTracker.getName() + " vs. " + modelClass.getName() + ") for this version " + version
+                        + "." );
+                }
+            }
+        }
+
+        return locationTracker;
+    }
+
+    public ModelClass getSourceTracker( Version version )
+    {
+        List<ModelClass> modelClasses = getClasses( version );
+
+        ModelClass sourceTracker = null;
+
+        for ( ModelClass modelClass : modelClasses )
+        {
+            ModelClassMetadata metadata = (ModelClassMetadata) modelClass.getMetadata( ModelClassMetadata.ID );
+
+            if ( metadata != null && StringUtils.isNotEmpty( metadata.getSourceTracker() ) )
+            {
+                if ( sourceTracker == null )
+                {
+                    sourceTracker = modelClass;
+                }
+                else
+                {
+                    throw new ModelloRuntimeException( "There are multiple source tracker classes ("
+                        + sourceTracker.getName() + " vs. " + modelClass.getName() + ") for this version " + version
+                        + "." );
+                }
+            }
+        }
+
+        return sourceTracker;
+    }
+
 }

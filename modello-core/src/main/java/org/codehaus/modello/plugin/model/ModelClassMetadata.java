@@ -35,6 +35,10 @@ public class ModelClassMetadata
 
     private boolean rootElement = false;
 
+    private String locationTracker;
+
+    private String sourceTracker;
+
     public boolean isRootElement()
     {
         return rootElement;
@@ -44,4 +48,25 @@ public class ModelClassMetadata
     {
         this.rootElement = rootElement;
     }
+
+    public String getLocationTracker()
+    {
+        return locationTracker;
+    }
+
+    public void setLocationTracker( String locationTracker )
+    {
+        this.locationTracker = locationTracker;
+    }
+
+    public String getSourceTracker()
+    {
+        return sourceTracker;
+    }
+
+    public void setSourceTracker( String sourceTracker )
+    {
+        this.sourceTracker = sourceTracker;
+    }
+
 }

@@ -389,6 +389,31 @@
           </description>
           <comment>see org.codehaus.modello.plugin.model.ModelMetadataPlugin</comment>
         </field>
+        <field xml.attribute="true">
+          <name>locationTracker</name>
+          <version>1.4.0+</version>
+          <type>String</type>
+          <description><![CDATA[
+            Indicates that this class is used to track line/column information (at most one class in a model can have this
+            attribute set). The value of this attribute specifies the field name (in plural form, e.g. "locations") that
+            will be used in all other model classes to store the location tracking information and indirectly controls
+            the names of the generated accessors.]]>
+          </description>
+          <comment>see org.codehaus.modello.plugin.model.ModelMetadataPlugin</comment>
+        </field>
+        <field xml.attribute="true">
+          <name>sourceTracker</name>
+          <version>1.4.0+</version>
+          <type>String</type>
+          <description><![CDATA[
+            Indicates that this class is used to track source file information (at most one class in a model can have
+            this attribute set). The value of this attribute specifies the field name (e.g. "source") that will be used
+            in the class marked by <code>locationTracker</code> to store the source tracking information and indirectly
+            controls the names of the generated accessors. This attribute is only relevant in combination with
+            <code>locationTracker</code> and must not be used on the same class.]]>
+          </description>
+          <comment>see org.codehaus.modello.plugin.model.ModelMetadataPlugin</comment>
+        </field>
         <field xml.attribute="true" xml.tagName="xml.tagName">
           <name>tagName</name>
           <version>1.0.0+</version>
@@ -424,7 +449,7 @@
           <description><![CDATA[
             Controls the generation of a <code>clone()</code> method for this class. Allowed values are
             <code>none</code>, <code>shallow</code> and <code>deep</code>. The value is inherited from super classes
-            and defaults to <code>none</code> if no super class declares otherwise. <em>Since Modello 1.1</em>]]>
+            and defaults to <code>none</code> if no super class declares otherwise.]]>
           </description>
           <comment>see org.codehaus.modello.plugin.java.metadata.JavaMetadataPlugin</comment>
         </field>
@@ -439,7 +464,7 @@
             the default method name <code>cloneHook</code>. The hook method itself must have a single parameter whose
             type matches this class in order to receive the cloned object for further manipulation before completion of
             the clone operation. Besides, the hook method must not have a return value and must not throw a checked
-            exception. <em>Since Modello 1.1</em>]]>
+            exception.]]>
           </description>
           <comment>see org.codehaus.modello.plugin.java.metadata.JavaMetadataPlugin</comment>
         </field>
@@ -586,7 +611,7 @@
           <defaultValue>false</defaultValue>
           <description><![CDATA[
             Whether this field should be excluded from parsers and writers. Fields marked as transient carry runtime
-            state that is not meant to be persisted into XML. <em>Since Modello 1.1</em>]]>
+            state that is not meant to be persisted into XML.]]>
           </description>
           <comment>see org.codehaus.modello.plugins.xml.metadata.XmlMetadataPlugin</comment>
         </field>
@@ -722,8 +747,7 @@
           <type>String</type>
           <description><![CDATA[
             Allows to override the clone mode for this assocation. Allowed values are <code>shallow</code> and
-            <code>deep</code>. If the value is not specified, the clone mode of the container class will be used.
-            <em>Since Modello 1.1</em>]]>
+            <code>deep</code>. If the value is not specified, the clone mode of the container class will be used.]]>
           </description>
           <comment>see org.codehaus.modello.plugin.java.metadata.JavaMetadataPlugin</comment>
         </field>
