@@ -44,6 +44,7 @@ import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelDefault;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.ModelInterface;
+import org.codehaus.modello.model.ModelType;
 import org.codehaus.modello.plugin.AbstractModelloGenerator;
 import org.codehaus.modello.plugin.java.javasource.JClass;
 import org.codehaus.modello.plugin.java.javasource.JComment;
@@ -136,44 +137,31 @@ public abstract class AbstractJavaModelloGenerator
         throws ModelloException
     {
         String basePackageName = null;
-        if ( baseElem != null )
+        if ( baseElem instanceof ModelType )
         {
-            if ( baseElem instanceof ModelInterface )
-            {
-                basePackageName =
-                    ( (ModelInterface) baseElem ).getPackageName( isPackageWithVersion(), getGeneratedVersion() );
-            }
-            else if ( baseElem instanceof ModelClass )
-            {
-                basePackageName =
-                    ( (ModelClass) baseElem ).getPackageName( isPackageWithVersion(), getGeneratedVersion() );
-            }
+            basePackageName = ( (ModelType) baseElem ).getPackageName( isPackageWithVersion(), getGeneratedVersion() );
         }
 
         // import interfaces
         for ( ModelInterface modelInterface : getModel().getInterfaces( getGeneratedVersion() ) )
         {
-            String packageName = modelInterface.getPackageName( isPackageWithVersion(), getGeneratedVersion() );
-
-            if ( packageName.equals( basePackageName ) )
-            {
-                continue;
-            }
-
-            jClass.addImport( packageName + '.' + modelInterface.getName() );
+            addModelImport( jClass, modelInterface, basePackageName );
         }
 
         // import classes
         for ( ModelClass modelClass : getClasses( getModel() ) )
         {
-            String packageName = modelClass.getPackageName( isPackageWithVersion(), getGeneratedVersion() );
+            addModelImport( jClass, modelClass, basePackageName );
+        }
+    }
 
-            if ( packageName.equals( basePackageName ) )
-            {
-                continue;
-            }
+    private void addModelImport( JClass jClass, ModelType modelType, String basePackageName )
+    {
+        String packageName = modelType.getPackageName( isPackageWithVersion(), getGeneratedVersion() );
 
-            jClass.addImport( packageName + '.' + modelClass.getName() );
+        if ( !packageName.equals( basePackageName ) )
+        {
+            jClass.addImport( packageName + '.' + modelType.getName() );
         }
     }
 
@@ -277,8 +265,13 @@ public abstract class AbstractJavaModelloGenerator
 
     protected boolean isRelevant( ModelClass modelClass )
     {
+        return isJavaEnabled( modelClass );
+    }
+
+    protected boolean isJavaEnabled( ModelClass modelClass )
+    {
         JavaClassMetadata javaClassMetadata = (JavaClassMetadata) modelClass.getMetadata( JavaClassMetadata.ID );
-        return javaClassMetadata != null && javaClassMetadata.isEnabled();
+        return javaClassMetadata.isEnabled();
     }
 
 }
