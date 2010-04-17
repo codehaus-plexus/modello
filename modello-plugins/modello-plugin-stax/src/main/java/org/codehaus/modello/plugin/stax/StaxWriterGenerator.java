@@ -54,6 +54,9 @@ import java.util.Properties;
 public class StaxWriterGenerator
     extends AbstractStaxGenerator
 {
+
+    private StaxSerializerGenerator serializerGenerator;
+
     public void generate( Model model, Properties parameters )
         throws ModelloException
     {
@@ -67,6 +70,8 @@ public class StaxWriterGenerator
         {
             throw new ModelloException( "Exception while generating StAX Writer.", ex );
         }
+        
+        serializerGenerator.generate( model, parameters );
     }
 
     private void generateStaxWriter()
@@ -94,7 +99,6 @@ public class StaxWriterGenerator
         jClass.addImport( "java.util.Locale" );
         jClass.addImport( "java.util.jar.Manifest" );
         jClass.addImport( "javax.xml.stream.*" );
-        jClass.addImport( "javanet.staxutils.IndentingXMLStreamWriter" );
         jClass.addImport( "org.codehaus.plexus.util.xml.Xpp3Dom" );
 
         addModelImports( jClass, null );
