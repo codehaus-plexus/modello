@@ -82,14 +82,16 @@ public class Xpp3LocationsVerifier
         assertLocation( item.getLocation( "string" ), 45, 15 );
     }
 
-    private void assertLocation( Location location, int line, int column)
+    private void assertLocation( Location location, int line, int column )
         throws Exception
     {
         assertNotNull( location );
+
         if ( line >= 0 )
         {
             assertEquals( line, location.getLineNumber() );
         }
+
         if ( column >= 0 )
         {
             assertEquals( column, location.getColumnNumber() );
