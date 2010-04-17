@@ -4,11 +4,13 @@
       <role>org.codehaus.modello.plugin.ModelloGenerator</role>
       <role-hint>dom4j-reader</role-hint>
       <implementation>org.codehaus.modello.plugin.dom4j.Dom4jReaderGenerator</implementation>
+      <instantiation-strategy>per-lookup</instantiation-strategy>
     </component>
     <component>
       <role>org.codehaus.modello.plugin.ModelloGenerator</role>
       <role-hint>dom4j-writer</role-hint>
       <implementation>org.codehaus.modello.plugin.dom4j.Dom4jWriterGenerator</implementation>
+      <instantiation-strategy>per-lookup</instantiation-strategy>
     </component>
   </components>
 </component-set>

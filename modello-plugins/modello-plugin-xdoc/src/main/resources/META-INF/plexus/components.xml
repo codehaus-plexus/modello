@@ -4,12 +4,14 @@
       <role>org.codehaus.modello.plugin.ModelloGenerator</role>
       <role-hint>xdoc</role-hint>
       <implementation>org.codehaus.modello.plugin.xdoc.XdocGenerator</implementation>
+      <instantiation-strategy>per-lookup</instantiation-strategy>
     </component>
 
     <component>
       <role>org.codehaus.modello.metadata.MetadataPlugin</role>
       <role-hint>xdoc</role-hint>
       <implementation>org.codehaus.modello.plugin.xdoc.metadata.XdocMetadataPlugin</implementation>
+      <instantiation-strategy>per-lookup</instantiation-strategy>
     </component>
   </components>
 </component-set>
