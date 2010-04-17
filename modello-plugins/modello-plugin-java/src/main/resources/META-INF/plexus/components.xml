@@ -4,12 +4,14 @@
       <role>org.codehaus.modello.plugin.ModelloGenerator</role>
       <role-hint>java</role-hint>
       <implementation>org.codehaus.modello.plugin.java.JavaModelloGenerator</implementation>
+      <instantiation-strategy>per-lookup</instantiation-strategy>
     </component>
 
     <component>
       <role>org.codehaus.modello.metadata.MetadataPlugin</role>
       <role-hint>java</role-hint>
       <implementation>org.codehaus.modello.plugin.java.metadata.JavaMetadataPlugin</implementation>
+      <instantiation-strategy>per-lookup</instantiation-strategy>
     </component>
   </components>
 </component-set>

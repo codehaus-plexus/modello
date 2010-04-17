@@ -3,6 +3,7 @@
     <component>
       <role>org.codehaus.modello.core.ModelloCore</role>
       <implementation>org.codehaus.modello.core.DefaultModelloCore</implementation>
+      <instantiation-strategy>per-lookup</instantiation-strategy>
       <requirements>
         <requirement>
           <role>org.codehaus.modello.core.MetadataPluginManager</role>
@@ -15,6 +16,7 @@
     <component>
       <role>org.codehaus.modello.core.MetadataPluginManager</role>
       <implementation>org.codehaus.modello.core.DefaultMetadataPluginManager</implementation>
+      <instantiation-strategy>per-lookup</instantiation-strategy>
       <requirements>
         <requirement>
           <field-name>plugins</field-name>
@@ -25,6 +27,7 @@
     <component>
       <role>org.codehaus.modello.core.GeneratorPluginManager</role>
       <implementation>org.codehaus.modello.core.DefaultGeneratorPluginManager</implementation>
+      <instantiation-strategy>per-lookup</instantiation-strategy>
       <requirements>
         <requirement>
           <field-name>plugins</field-name>
