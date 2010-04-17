@@ -712,7 +712,7 @@ public class JavaModelloGenerator
 
         String propertyName = capitalise( singular( locationField ) );
 
-        String interfaceName = propertyName + "Tracker";
+        String interfaceName = locationClass.getName() + "Tracker";
 
         String packageName = locationClass.getPackageName( isPackageWithVersion(), getGeneratedVersion() );
 
