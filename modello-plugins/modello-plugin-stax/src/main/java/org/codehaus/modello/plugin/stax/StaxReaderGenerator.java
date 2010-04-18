@@ -56,10 +56,15 @@ import java.util.Properties;
 public class StaxReaderGenerator
     extends AbstractStaxGenerator
 {
+
+    private boolean requiresDomSupport;
+
     public void generate( Model model, Properties parameters )
         throws ModelloException
     {
         initialize( model, parameters );
+
+        requiresDomSupport = false;
 
         try
         {
@@ -119,7 +124,6 @@ public class StaxReaderGenerator
         jClass.addImport( "java.util.regex.Pattern" );
         jClass.addImport( "java.util.Locale" );
         jClass.addImport( "javax.xml.stream.*" );
-        jClass.addImport( "org.codehaus.plexus.util.xml.Xpp3Dom" );
 
         addModelImports( jClass, null );
 
@@ -266,7 +270,11 @@ public class StaxReaderGenerator
 
         writeHelpers( jClass );
 
-        writeBuildDomMethod( jClass );
+        if ( requiresDomSupport )
+        {
+            jClass.addImport( "org.codehaus.plexus.util.xml.Xpp3Dom" );
+            writeBuildDomMethod( jClass );
+        }
 
         // ----------------------------------------------------------------------
         //
@@ -1411,6 +1419,8 @@ public class StaxReaderGenerator
         else if ( "DOM".equals( type ) )
         {
             sc.add( objectName + "." + setterName + "( buildDom( xmlStreamReader ) );" );
+
+            requiresDomSupport = true;
         }
         else
         {

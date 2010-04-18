@@ -46,10 +46,15 @@ public class JDOMWriterGenerator
     extends AbstractJDOMGenerator
 {
 
+    private boolean requiresDomSupport;
+
     public void generate( Model model, Properties parameters )
         throws ModelloException
     {
         initialize( model, parameters );
+
+        requiresDomSupport = false;
+
         try
         {
             generateJDOMWriter();
@@ -98,7 +103,6 @@ public class JDOMWriterGenerator
         jClass.addImport( "org.jdom.Text" );
         jClass.addImport( "org.jdom.output.Format" );
         jClass.addImport( "org.jdom.output.XMLOutputter" );
-        jClass.addImport( "org.codehaus.plexus.util.xml.Xpp3Dom" );
 
         addModelImports( jClass, null );
 
@@ -127,7 +131,15 @@ public class JDOMWriterGenerator
         jClass.addMethods( generateUtilityMethods() );
 
         writeAllClasses( objectModel, jClass, rootClass );
+
+        if ( requiresDomSupport )
+        {
+            jClass.addImport( "org.codehaus.plexus.util.xml.Xpp3Dom" );
+            jClass.addMethods( generateDomMethods() );
+        }
+
         jClass.print( sourceWriter );
+
         sourceWriter.close();
     }
 
@@ -486,13 +498,18 @@ public class JDOMWriterGenerator
         sc.add( "}" );
         sc.add( "return element;" );
 
+        return new JMethod[] { findRSElement, updateElement, insAtPref, findRSProps, findRSLists };
+    }
+
+    private JMethod[] generateDomMethods()
+    {
         JMethod findRSDom = new JMethod( "findAndReplaceXpp3DOM", new JClass( "Element" ), null );
         findRSDom.addParameter( new JParameter( new JClass( "Counter" ), "counter" ) );
         findRSDom.addParameter( new JParameter( new JClass( "Element" ), "parent" ) );
         findRSDom.addParameter( new JParameter( new JClass( "String" ), "name" ) );
         findRSDom.addParameter( new JParameter( new JClass( "Xpp3Dom" ), "dom" ) );
         findRSDom.getModifiers().makeProtected();
-        sc = findRSDom.getSourceCode();
+        JSourceCode sc = findRSDom.getSourceCode();
         sc.add( "boolean shouldExist = ( dom != null ) && ( dom.getChildCount() > 0 || dom.getValue() != null );" );
         sc.add( "Element element = updateElement( counter, parent, name, shouldExist );" );
         sc.add( "if ( shouldExist )" );
@@ -568,7 +585,7 @@ public class JDOMWriterGenerator
         sc.addIndented( "parent.setText( parentDom.getValue() );" );
         sc.add( "}" );
 
-        return new JMethod[]{findRSElement, updateElement, insAtPref, findRSProps, findRSLists, findRSDom, findRSDom2};
+        return new JMethod[] { findRSDom, findRSDom2 };
     }
 
     private void writeAllClasses( Model objectModel, JClass jClass, ModelClass rootClass )
@@ -693,6 +710,8 @@ public class JDOMWriterGenerator
                 {
                     sc.add(
                         "findAndReplaceXpp3DOM( innerCount, root, \"" + fieldTagName + "\", (Xpp3Dom) " + value + " );" );
+
+                    requiresDomSupport = true;
                 }
                 else
                 {
