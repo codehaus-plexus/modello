@@ -133,7 +133,7 @@ public class Dom4jWriterGenerator
 
         writeAllClasses( objectModel, jClass );
 
-        writeHelpers( jClass );
+        writeDomHelpers( jClass );
 
         jClass.print( sourceWriter );
 
@@ -410,7 +410,7 @@ public class Dom4jWriterGenerator
         }
     }
 
-    private void writeHelpers( JClass jClass )
+    private void writeDomHelpers( JClass jClass )
     {
         JMethod method = new JMethod( "writeXpp3DomToElement" );
         method.getModifiers().makePrivate();

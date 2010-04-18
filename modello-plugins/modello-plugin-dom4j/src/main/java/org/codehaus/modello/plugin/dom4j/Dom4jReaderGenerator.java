@@ -218,6 +218,7 @@ public class Dom4jReaderGenerator
         // ----------------------------------------------------------------------
 
         writeHelpers( jClass );
+        writeDomHelpers( jClass );
 
         // ----------------------------------------------------------------------
         //
@@ -907,48 +908,6 @@ public class Dom4jReaderGenerator
 
         // --------------------------------------------------------------------
 
-        method = new JMethod( "writeElementToXpp3Dom", new JClass( "Xpp3Dom" ), null );
-        method.getModifiers().makePrivate();
-
-        method.addParameter( new JParameter( new JClass( "Element" ), "element" ) );
-
-        sc = method.getSourceCode();
-
-        sc.add( "Xpp3Dom xpp3Dom = new Xpp3Dom( element.getName() );" );
-
-        sc.add( "if ( element.elements().isEmpty() && element.getText() != null )" );
-        sc.add( "{" );
-        sc.addIndented( "xpp3Dom.setValue( element.getText() );" );
-        sc.add( "}" );
-
-        sc.add( "for ( Iterator i = element.attributeIterator(); i.hasNext(); )" );
-        sc.add( "{" );
-        sc.indent();
-
-        sc.add( "Attribute attribute = (Attribute) i.next();" );
-        sc.add( "xpp3Dom.setAttribute( attribute.getName(), attribute.getValue() );" );
-
-        sc.unindent();
-        sc.add( "}" );
-
-        // TODO: would be nice to track whitespace in here
-
-        sc.add( "for ( Iterator i = element.elementIterator(); i.hasNext(); )" );
-        sc.add( "{" );
-        sc.indent();
-
-        sc.add( "Element child = (Element) i.next();" );
-        sc.add( "xpp3Dom.addChild( writeElementToXpp3Dom( child ) );" );
-
-        sc.unindent();
-        sc.add( "}" );
-
-        sc.add( "return xpp3Dom;" );
-
-        jClass.addMethod( method );
-
-        // --------------------------------------------------------------------
-
         method = new JMethod( "checkFieldWithDuplicate", JType.BOOLEAN, null );
         method.getModifiers().makePrivate();
 
@@ -994,6 +953,49 @@ public class Dom4jReaderGenerator
         sc.add( "{" );
         sc.addIndented( "throw new DocumentException( \"Unrecognised tag: '\" + element.getName() + \"'\" );" );
         sc.add( "}" );
+
+        jClass.addMethod( method );
+    }
+
+    private void writeDomHelpers( JClass jClass )
+    {
+        JMethod method = new JMethod( "writeElementToXpp3Dom", new JClass( "Xpp3Dom" ), null );
+        method.getModifiers().makePrivate();
+
+        method.addParameter( new JParameter( new JClass( "Element" ), "element" ) );
+
+        JSourceCode sc = method.getSourceCode();
+
+        sc.add( "Xpp3Dom xpp3Dom = new Xpp3Dom( element.getName() );" );
+
+        sc.add( "if ( element.elements().isEmpty() && element.getText() != null )" );
+        sc.add( "{" );
+        sc.addIndented( "xpp3Dom.setValue( element.getText() );" );
+        sc.add( "}" );
+
+        sc.add( "for ( Iterator i = element.attributeIterator(); i.hasNext(); )" );
+        sc.add( "{" );
+        sc.indent();
+
+        sc.add( "Attribute attribute = (Attribute) i.next();" );
+        sc.add( "xpp3Dom.setAttribute( attribute.getName(), attribute.getValue() );" );
+
+        sc.unindent();
+        sc.add( "}" );
+
+        // TODO: would be nice to track whitespace in here
+
+        sc.add( "for ( Iterator i = element.elementIterator(); i.hasNext(); )" );
+        sc.add( "{" );
+        sc.indent();
+
+        sc.add( "Element child = (Element) i.next();" );
+        sc.add( "xpp3Dom.addChild( writeElementToXpp3Dom( child ) );" );
+
+        sc.unindent();
+        sc.add( "}" );
+
+        sc.add( "return xpp3Dom;" );
 
         jClass.addMethod( method );
     }

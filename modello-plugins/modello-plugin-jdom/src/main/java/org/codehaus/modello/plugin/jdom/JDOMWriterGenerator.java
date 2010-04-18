@@ -125,6 +125,7 @@ public class JDOMWriterGenerator
         jClass.addMethod( generateWriteModel3( root, rootElement ) );
         // the private utility classes;
         jClass.addMethods( generateUtilityMethods() );
+        jClass.addMethods( generateDomMethods() );
 
         writeAllClasses( objectModel, jClass, rootClass );
         jClass.print( sourceWriter );
@@ -486,13 +487,18 @@ public class JDOMWriterGenerator
         sc.add( "}" );
         sc.add( "return element;" );
 
+        return new JMethod[] { findRSElement, updateElement, insAtPref, findRSProps, findRSLists };
+    }
+
+    private JMethod[] generateDomMethods()
+    {
         JMethod findRSDom = new JMethod( "findAndReplaceXpp3DOM", new JClass( "Element" ), null );
         findRSDom.addParameter( new JParameter( new JClass( "Counter" ), "counter" ) );
         findRSDom.addParameter( new JParameter( new JClass( "Element" ), "parent" ) );
         findRSDom.addParameter( new JParameter( new JClass( "String" ), "name" ) );
         findRSDom.addParameter( new JParameter( new JClass( "Xpp3Dom" ), "dom" ) );
         findRSDom.getModifiers().makeProtected();
-        sc = findRSDom.getSourceCode();
+        JSourceCode sc = findRSDom.getSourceCode();
         sc.add( "boolean shouldExist = ( dom != null ) && ( dom.getChildCount() > 0 || dom.getValue() != null );" );
         sc.add( "Element element = updateElement( counter, parent, name, shouldExist );" );
         sc.add( "if ( shouldExist )" );
@@ -568,7 +574,7 @@ public class JDOMWriterGenerator
         sc.addIndented( "parent.setText( parentDom.getValue() );" );
         sc.add( "}" );
 
-        return new JMethod[]{findRSElement, updateElement, insAtPref, findRSProps, findRSLists, findRSDom, findRSDom2};
+        return new JMethod[] { findRSDom, findRSDom2 };
     }
 
     private void writeAllClasses( Model objectModel, JClass jClass, ModelClass rootClass )
