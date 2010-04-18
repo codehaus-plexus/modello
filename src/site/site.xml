@@ -31,6 +31,7 @@
     <menu name="Documentation" inherit="bottom">
       <item name="Wiki" href="http://modello.codehaus.org/" />
       <item name="Modello Model" href="modello.html" />
+      <item name="Location Tracking" href="location-tracking.html" />
       <item name="Maven Plugin" href="modello-maven-plugin/" />
       <item name="Release Notes" href="release-notes.html"/>
     </menu>

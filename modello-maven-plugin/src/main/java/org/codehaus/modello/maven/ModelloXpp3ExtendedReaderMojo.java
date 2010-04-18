@@ -23,7 +23,8 @@ package org.codehaus.modello.maven;
  */
 
 /**
- * Creates an XPP3 extended reader from the model.
+ * Creates an XPP3 extended reader from the model. An extended reader populates the parsed model with metadata about the
+ * line/column from which the data was read.
  *
  * @goal xpp3-extended-reader
  *

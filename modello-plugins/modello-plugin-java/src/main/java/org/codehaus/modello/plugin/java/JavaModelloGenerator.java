@@ -44,6 +44,7 @@ import org.codehaus.modello.plugin.java.javasource.JArrayType;
 import org.codehaus.modello.plugin.java.javasource.JClass;
 import org.codehaus.modello.plugin.java.javasource.JCollectionType;
 import org.codehaus.modello.plugin.java.javasource.JConstructor;
+import org.codehaus.modello.plugin.java.javasource.JDocDescriptor;
 import org.codehaus.modello.plugin.java.javasource.JField;
 import org.codehaus.modello.plugin.java.javasource.JInterface;
 import org.codehaus.modello.plugin.java.javasource.JMethod;
@@ -725,12 +726,17 @@ public class JavaModelloGenerator
         suppressAllWarnings( objectModel, jInterface );
 
         JMethodSignature jMethod = new JMethodSignature( "get" + propertyName, new JType( locationClass.getName() ) );
-        jMethod.addParameter( new JParameter( new JType( "Object" ), "field" ) );
+        jMethod.setComment( "Gets the location of the specified field in the input source." );
+        addParameter( jMethod, "Object", "field", "The key of the field, must not be <code>null</code>." );
+        String returnDoc = "The location of the field in the input source or <code>null</code> if unknown.";
+        jMethod.getJDocComment().addDescriptor( JDocDescriptor.createReturnDesc( returnDoc ) );
         jInterface.addMethod( jMethod );
 
         jMethod = new JMethodSignature( "set" + propertyName, null );
-        jMethod.addParameter( new JParameter( new JType( "Object" ), "field" ) );
-        jMethod.addParameter( new JParameter( new JType( locationClass.getName() ), singular( locationField ) ) );
+        jMethod.setComment( "Sets the location of the specified field." );
+        addParameter( jMethod, "Object", "field", "The key of the field, must not be <code>null</code>." );
+        addParameter( jMethod, locationClass.getName(), singular( locationField ),
+                      "The location of the field, may be <code>null</code>." );
         jInterface.addMethod( jMethod );
 
         jInterface.print( sourceWriter );
@@ -808,6 +814,7 @@ public class JavaModelloGenerator
 
         // int lineNumber;
         ModelField lineNumber = new ModelField( locationClass, "lineNumber" );
+        lineNumber.setDescription( "The one-based line number. The value will be non-positive if unknown." );
         lineNumber.setType( "int" );
         lineNumber.setDefaultValue( "-1" );
         lineNumber.addMetadata( readOnlyField );
@@ -815,6 +822,7 @@ public class JavaModelloGenerator
 
         // int columnNumber;
         ModelField columnNumber = new ModelField( locationClass, "columnNumber" );
+        columnNumber.setDescription( "The one-based column number. The value will be non-positive if unknown." );
         columnNumber.setType( "int" );
         columnNumber.setDefaultValue( "-1" );
         columnNumber.addMetadata( readOnlyField );
@@ -1762,4 +1770,11 @@ public class JavaModelloGenerator
 
         return type;
     }
+
+    private void addParameter( JMethodSignature jMethod, String type, String name, String comment )
+    {
+        jMethod.addParameter( new JParameter( new JType( type ), name ) );
+        jMethod.getJDocComment().getParamDescriptor( name ).setDescription( comment );
+    }
+
 }
