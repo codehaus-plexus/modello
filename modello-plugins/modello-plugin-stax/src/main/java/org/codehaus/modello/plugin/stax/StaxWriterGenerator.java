@@ -55,12 +55,16 @@ public class StaxWriterGenerator
     extends AbstractStaxGenerator
 {
 
+    private boolean requiresDomSupport;
+
     private StaxSerializerGenerator serializerGenerator;
 
     public void generate( Model model, Properties parameters )
         throws ModelloException
     {
         initialize( model, parameters );
+
+        requiresDomSupport = false;
 
         try
         {
@@ -99,7 +103,6 @@ public class StaxWriterGenerator
         jClass.addImport( "java.util.Locale" );
         jClass.addImport( "java.util.jar.Manifest" );
         jClass.addImport( "javax.xml.stream.*" );
-        jClass.addImport( "org.codehaus.plexus.util.xml.Xpp3Dom" );
 
         addModelImports( jClass, null );
 
@@ -162,9 +165,13 @@ public class StaxWriterGenerator
 
         jClass.addMethod( marshall );
 
-        createWriteDomMethod( jClass );
-
         writeAllClasses( objectModel, jClass );
+
+        if ( requiresDomSupport )
+        {
+            jClass.addImport( "org.codehaus.plexus.util.xml.Xpp3Dom" );
+            createWriteDomMethod( jClass );
+        }
 
         jClass.print( sourceWriter );
 
@@ -472,6 +479,8 @@ public class StaxWriterGenerator
                 if ( "DOM".equals( field.getType() ) )
                 {
                     sc.add( "writeDom( (Xpp3Dom) " + value + ", serializer );" );
+
+                    requiresDomSupport = true;
                 }
                 else
                 {

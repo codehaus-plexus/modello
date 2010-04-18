@@ -54,10 +54,15 @@ import java.util.Properties;
 public class Dom4jWriterGenerator
     extends AbstractXmlJavaGenerator
 {
+
+    private boolean requiresDomSupport;
+
     public void generate( Model model, Properties parameters )
         throws ModelloException
     {
         initialize( model, parameters );
+
+        requiresDomSupport = false;
 
         try
         {
@@ -90,7 +95,6 @@ public class Dom4jWriterGenerator
         jClass.addImport( "java.util.Iterator" );
         jClass.addImport( "java.util.Locale" );
         jClass.addImport( "java.text.DateFormat" );
-        jClass.addImport( "org.codehaus.plexus.util.xml.Xpp3Dom" );
         jClass.addImport( "org.dom4j.Document" );
         jClass.addImport( "org.dom4j.DocumentException" );
         jClass.addImport( "org.dom4j.DocumentFactory" );
@@ -133,7 +137,11 @@ public class Dom4jWriterGenerator
 
         writeAllClasses( objectModel, jClass );
 
-        writeDomHelpers( jClass );
+        if ( requiresDomSupport )
+        {
+            jClass.addImport( "org.codehaus.plexus.util.xml.Xpp3Dom" );
+            writeDomHelpers( jClass );
+        }
 
         jClass.print( sourceWriter );
 
@@ -398,6 +406,8 @@ public class Dom4jWriterGenerator
             if ( "DOM".equals( field.getType() ) )
             {
                 sc.add( "writeXpp3DomToElement( (Xpp3Dom) " + value + ", element );" );
+
+                requiresDomSupport = true;
             }
             else
             {

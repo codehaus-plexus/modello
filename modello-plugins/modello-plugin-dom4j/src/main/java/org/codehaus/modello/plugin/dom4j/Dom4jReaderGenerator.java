@@ -52,10 +52,15 @@ import java.util.Properties;
 public class Dom4jReaderGenerator
     extends AbstractXmlJavaGenerator
 {
+
+    private boolean requiresDomSupport;
+
     public void generate( Model model, Properties parameters )
         throws ModelloException
     {
         initialize( model, parameters );
+
+        requiresDomSupport = false;
 
         try
         {
@@ -91,7 +96,6 @@ public class Dom4jReaderGenerator
         jClass.addImport( "java.text.DateFormat" );
         jClass.addImport( "java.text.ParsePosition" );
         jClass.addImport( "java.util.Iterator" );
-        jClass.addImport( "org.codehaus.plexus.util.xml.Xpp3Dom" );
         jClass.addImport( "org.dom4j.Attribute" );
         jClass.addImport( "org.dom4j.Document" );
         jClass.addImport( "org.dom4j.DocumentException" );
@@ -218,7 +222,12 @@ public class Dom4jReaderGenerator
         // ----------------------------------------------------------------------
 
         writeHelpers( jClass );
-        writeDomHelpers( jClass );
+
+        if ( requiresDomSupport )
+        {
+            jClass.addImport( "org.codehaus.plexus.util.xml.Xpp3Dom" );
+            writeDomHelpers( jClass );
+        }
 
         // ----------------------------------------------------------------------
         //
@@ -754,6 +763,8 @@ public class Dom4jReaderGenerator
         else if ( "DOM".equals( type ) )
         {
             sc.add( objectName + "." + setterName + "( writeElementToXpp3Dom( " + childElementName + " ) );" );
+
+            requiresDomSupport = true;
         }
         else
         {

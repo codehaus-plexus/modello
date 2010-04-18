@@ -46,10 +46,15 @@ public class JDOMWriterGenerator
     extends AbstractJDOMGenerator
 {
 
+    private boolean requiresDomSupport;
+
     public void generate( Model model, Properties parameters )
         throws ModelloException
     {
         initialize( model, parameters );
+
+        requiresDomSupport = false;
+
         try
         {
             generateJDOMWriter();
@@ -98,7 +103,6 @@ public class JDOMWriterGenerator
         jClass.addImport( "org.jdom.Text" );
         jClass.addImport( "org.jdom.output.Format" );
         jClass.addImport( "org.jdom.output.XMLOutputter" );
-        jClass.addImport( "org.codehaus.plexus.util.xml.Xpp3Dom" );
 
         addModelImports( jClass, null );
 
@@ -125,10 +129,17 @@ public class JDOMWriterGenerator
         jClass.addMethod( generateWriteModel3( root, rootElement ) );
         // the private utility classes;
         jClass.addMethods( generateUtilityMethods() );
-        jClass.addMethods( generateDomMethods() );
 
         writeAllClasses( objectModel, jClass, rootClass );
+
+        if ( requiresDomSupport )
+        {
+            jClass.addImport( "org.codehaus.plexus.util.xml.Xpp3Dom" );
+            jClass.addMethods( generateDomMethods() );
+        }
+
         jClass.print( sourceWriter );
+
         sourceWriter.close();
     }
 
@@ -699,6 +710,8 @@ public class JDOMWriterGenerator
                 {
                     sc.add(
                         "findAndReplaceXpp3DOM( innerCount, root, \"" + fieldTagName + "\", (Xpp3Dom) " + value + " );" );
+
+                    requiresDomSupport = true;
                 }
                 else
                 {
