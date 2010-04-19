@@ -10,6 +10,7 @@
       <role>org.codehaus.modello.plugin.ModelloGenerator</role>
       <role-hint>xpp3-extended-reader</role-hint>
       <implementation>org.codehaus.modello.plugin.xpp3.Xpp3ExtendedReaderGenerator</implementation>
+      <instantiation-strategy>per-lookup</instantiation-strategy>
     </component>
     <component>
       <role>org.codehaus.modello.plugin.ModelloGenerator</role>
