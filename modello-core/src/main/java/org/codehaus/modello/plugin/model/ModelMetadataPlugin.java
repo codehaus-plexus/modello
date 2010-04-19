@@ -47,6 +47,10 @@ public class ModelMetadataPlugin
 {
     public static final String ROOT_ELEMENT = "rootElement";
 
+    public static final String LOCATION_TRACKER = "locationTracker";
+
+    public static final String SOURCE_TRACKER = "sourceTracker";
+
     // ----------------------------------------------------------------------
     // Map to Metadata
     // ----------------------------------------------------------------------
@@ -61,6 +65,10 @@ public class ModelMetadataPlugin
         ModelClassMetadata metadata = new ModelClassMetadata();
 
         metadata.setRootElement( getBoolean( data, ROOT_ELEMENT, false ) );
+
+        metadata.setLocationTracker( getString( data, LOCATION_TRACKER ) );
+
+        metadata.setSourceTracker( getString( data, SOURCE_TRACKER ) );
 
         return metadata;
     }

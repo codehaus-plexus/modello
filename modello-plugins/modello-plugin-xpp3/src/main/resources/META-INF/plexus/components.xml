@@ -8,6 +8,11 @@
     </component>
     <component>
       <role>org.codehaus.modello.plugin.ModelloGenerator</role>
+      <role-hint>xpp3-extended-reader</role-hint>
+      <implementation>org.codehaus.modello.plugin.xpp3.Xpp3ExtendedReaderGenerator</implementation>
+    </component>
+    <component>
+      <role>org.codehaus.modello.plugin.ModelloGenerator</role>
       <role-hint>xpp3-writer</role-hint>
       <implementation>org.codehaus.modello.plugin.xpp3.Xpp3WriterGenerator</implementation>
       <instantiation-strategy>per-lookup</instantiation-strategy>

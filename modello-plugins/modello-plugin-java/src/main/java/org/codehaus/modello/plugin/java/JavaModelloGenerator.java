@@ -44,9 +44,11 @@ import org.codehaus.modello.plugin.java.javasource.JArrayType;
 import org.codehaus.modello.plugin.java.javasource.JClass;
 import org.codehaus.modello.plugin.java.javasource.JCollectionType;
 import org.codehaus.modello.plugin.java.javasource.JConstructor;
+import org.codehaus.modello.plugin.java.javasource.JDocDescriptor;
 import org.codehaus.modello.plugin.java.javasource.JField;
 import org.codehaus.modello.plugin.java.javasource.JInterface;
 import org.codehaus.modello.plugin.java.javasource.JMethod;
+import org.codehaus.modello.plugin.java.javasource.JMethodSignature;
 import org.codehaus.modello.plugin.java.javasource.JParameter;
 import org.codehaus.modello.plugin.java.javasource.JSourceCode;
 import org.codehaus.modello.plugin.java.javasource.JSourceWriter;
@@ -89,65 +91,19 @@ public class JavaModelloGenerator
     {
         Model objectModel = getModel();
 
+        ModelClass locationTrackerClass = objectModel.getLocationTracker( getGeneratedVersion() );
+        ModelClass sourceTrackerClass = objectModel.getSourceTracker( getGeneratedVersion() );
+
         // ----------------------------------------------------------------------
         // Generate the interfaces.
         // ----------------------------------------------------------------------
 
         for ( ModelInterface modelInterface : objectModel.getInterfaces( getGeneratedVersion() ) )
         {
-            String packageName = modelInterface.getPackageName( isPackageWithVersion(), getGeneratedVersion() );
-
-            JSourceWriter sourceWriter = newJSourceWriter( packageName, modelInterface.getName() );
-
-            JInterface jInterface = new JInterface( packageName + '.' + modelInterface.getName() );
-
-            initHeader( jInterface );
-
-            suppressAllWarnings( objectModel, jInterface );
-
-            if ( modelInterface.getSuperInterface() != null )
-            {
-                // check if we need an import: if it is a generated superInterface in another package
-                try
-                {
-                    ModelInterface superInterface =
-                        objectModel.getInterface( modelInterface.getSuperInterface(), getGeneratedVersion() );
-                    String superPackageName =
-                        superInterface.getPackageName( isPackageWithVersion(), getGeneratedVersion() );
-
-                    if ( !packageName.equals( superPackageName ) )
-                    {
-                        jInterface.addImport( superPackageName + '.' + superInterface.getName() );
-                    }
-                }
-                catch ( ModelloRuntimeException mre )
-                {
-                    // no problem if the interface does not exist in the model, it can be in the jdk
-                }
-
-                jInterface.addInterface( modelInterface.getSuperInterface() );
-            }
-
-            if ( modelInterface.getCodeSegments( getGeneratedVersion() ) != null )
-            {
-                for ( CodeSegment codeSegment : modelInterface.getCodeSegments( getGeneratedVersion() ) )
-                {
-                    jInterface.addSourceCode( codeSegment.getCode() );
-                }
-            }
-
-            if ( useJava5 && !modelInterface.getAnnotations().isEmpty() )
-            {
-                for ( String annotation : modelInterface.getAnnotations() )
-                {
-                    jInterface.appendAnnotation( annotation );
-                }
-            }
-
-            jInterface.print( sourceWriter );
-
-            sourceWriter.close();
+            generateInterface( modelInterface );
         }
+
+        String locationTrackerInterface = generateLocationTracker( objectModel, locationTrackerClass );
 
         // ----------------------------------------------------------------------
         // Generate the classes.
@@ -182,9 +138,11 @@ public class JavaModelloGenerator
 
             jClass.getModifiers().setAbstract( javaClassMetadata.isAbstract() );
 
+            boolean superClassInModel = false;
             if ( modelClass.getSuperClass() != null )
             {
                 jClass.setSuperClass( modelClass.getSuperClass() );
+                superClassInModel = isClassInModel( modelClass.getSuperClass(), objectModel );
             }
 
             for ( String implementedInterface : modelClass.getInterfaces() )
@@ -245,7 +203,8 @@ public class JavaModelloGenerator
                 jClass.addMethod( toString );
             }
 
-            JMethod[] cloneMethods = generateClone( modelClass );
+            boolean cloneLocations = !superClassInModel && modelClass != sourceTrackerClass;
+            JMethod[] cloneMethods = generateClone( modelClass, cloneLocations ? locationTrackerClass : null );
             if ( cloneMethods.length > 0 )
             {
                 jClass.addInterface( Cloneable.class.getName() );
@@ -260,21 +219,97 @@ public class JavaModelloGenerator
                 }
             }
 
-            ModelClassMetadata metadata = (ModelClassMetadata) modelClass.getMetadata( ModelClassMetadata.ID );
+            ModelClassMetadata modelClassMetadata = (ModelClassMetadata) modelClass.getMetadata( ModelClassMetadata.ID );
 
-            if ( ( metadata != null ) && metadata.isRootElement() )
+            if ( modelClassMetadata != null )
             {
-                ModelField modelEncoding = new ModelField( modelClass, "modelEncoding" );
-                modelEncoding.setType( "String" );
-                modelEncoding.setDefaultValue( "UTF-8" );
-                modelEncoding.addMetadata( new JavaFieldMetadata() );
-                createField( jClass, modelEncoding );
+                if ( modelClassMetadata.isRootElement() )
+                {
+                    ModelField modelEncoding = new ModelField( modelClass, "modelEncoding" );
+                    modelEncoding.setType( "String" );
+                    modelEncoding.setDefaultValue( "UTF-8" );
+                    modelEncoding.addMetadata( new JavaFieldMetadata() );
+                    createField( jClass, modelEncoding );
+                }
+            }
+
+            if ( modelClass == locationTrackerClass )
+            {
+                jClass.addInterface( locationTrackerInterface );
+
+                generateLocationBean( jClass, modelClass, sourceTrackerClass );
+
+                generateLocationTracking( jClass, modelClass, locationTrackerClass );
+            }
+            else if ( locationTrackerClass != null && modelClass != sourceTrackerClass && !superClassInModel)
+            {
+                jClass.addInterface( locationTrackerInterface );
+
+                generateLocationTracking( jClass, modelClass, locationTrackerClass );
             }
 
             jClass.print( sourceWriter );
 
             sourceWriter.close();
         }
+    }
+
+    private void generateInterface( ModelInterface modelInterface )
+        throws ModelloException, IOException
+    {
+        Model objectModel = modelInterface.getModel();
+
+        String packageName = modelInterface.getPackageName( isPackageWithVersion(), getGeneratedVersion() );
+
+        JSourceWriter sourceWriter = newJSourceWriter( packageName, modelInterface.getName() );
+
+        JInterface jInterface = new JInterface( packageName + '.' + modelInterface.getName() );
+
+        initHeader( jInterface );
+
+        suppressAllWarnings( objectModel, jInterface );
+
+        if ( modelInterface.getSuperInterface() != null )
+        {
+            // check if we need an import: if it is a generated superInterface in another package
+            try
+            {
+                ModelInterface superInterface =
+                    objectModel.getInterface( modelInterface.getSuperInterface(), getGeneratedVersion() );
+                String superPackageName = superInterface.getPackageName( isPackageWithVersion(), getGeneratedVersion() );
+
+                if ( !packageName.equals( superPackageName ) )
+                {
+                    jInterface.addImport( superPackageName + '.' + superInterface.getName() );
+                }
+            }
+            catch ( ModelloRuntimeException mre )
+            {
+                // no problem if the interface does not exist in the model, it can be in the jdk
+            }
+
+            jInterface.addInterface( modelInterface.getSuperInterface() );
+        }
+
+        if ( modelInterface.getCodeSegments( getGeneratedVersion() ) != null )
+        {
+            for ( CodeSegment codeSegment : modelInterface.getCodeSegments( getGeneratedVersion() ) )
+            {
+                jInterface.addSourceCode( codeSegment.getCode() );
+            }
+        }
+
+        if ( useJava5 && !modelInterface.getAnnotations().isEmpty() )
+        {
+            for ( String annotation : modelInterface.getAnnotations() )
+            {
+                jInterface.appendAnnotation( annotation );
+            }
+        }
+
+        jInterface.print( sourceWriter );
+
+        sourceWriter.close();
     }
 
     private JMethod generateEquals( ModelClass modelClass )
@@ -421,7 +456,7 @@ public class JavaModelloGenerator
         return hashCode;
     }
 
-    private JMethod[] generateClone( ModelClass modelClass )
+    private JMethod[] generateClone( ModelClass modelClass, ModelClass locationClass )
         throws ModelloException
     {
         String cloneModeClass = getCloneMode( modelClass );
@@ -555,6 +590,19 @@ public class JavaModelloGenerator
             }
         }
 
+        if ( locationClass != null )
+        {
+            String locationField =
+                ( (ModelClassMetadata) locationClass.getMetadata( ModelClassMetadata.ID ) ).getLocationTracker();
+            sc.add( "if ( copy." + locationField + " != null )" );
+            sc.add( "{" );
+            sc.indent();
+            sc.add( "copy." + locationField + " = new java.util.LinkedHashMap" + "( copy." + locationField + " );" );
+            sc.unindent();
+            sc.add( "}" );
+            sc.add( "" );
+        }
+
         String cloneHook = getCloneHook( modelClass );
 
         if ( StringUtils.isNotEmpty( cloneHook ) && !"false".equalsIgnoreCase( cloneHook ) )
@@ -650,6 +698,289 @@ public class JavaModelloGenerator
         JavaClassMetadata javaClassMetadata = (JavaClassMetadata) modelClass.getMetadata( JavaClassMetadata.ID );
 
         return javaClassMetadata.getCloneHook();
+    }
+
+    private String generateLocationTracker( Model objectModel, ModelClass locationClass )
+        throws ModelloException, IOException
+    {
+        if ( locationClass == null )
+        {
+            return null;
+        }
+
+        String locationField =
+            ( (ModelClassMetadata) locationClass.getMetadata( ModelClassMetadata.ID ) ).getLocationTracker();
+
+        String propertyName = capitalise( singular( locationField ) );
+
+        String interfaceName = locationClass.getName() + "Tracker";
+
+        String packageName = locationClass.getPackageName( isPackageWithVersion(), getGeneratedVersion() );
+
+        JSourceWriter sourceWriter = newJSourceWriter( packageName, interfaceName );
+
+        JInterface jInterface = new JInterface( packageName + '.' + interfaceName );
+
+        initHeader( jInterface );
+
+        suppressAllWarnings( objectModel, jInterface );
+
+        JMethodSignature jMethod = new JMethodSignature( "get" + propertyName, new JType( locationClass.getName() ) );
+        jMethod.setComment( "Gets the location of the specified field in the input source." );
+        addParameter( jMethod, "Object", "field", "The key of the field, must not be <code>null</code>." );
+        String returnDoc = "The location of the field in the input source or <code>null</code> if unknown.";
+        jMethod.getJDocComment().addDescriptor( JDocDescriptor.createReturnDesc( returnDoc ) );
+        jInterface.addMethod( jMethod );
+
+        jMethod = new JMethodSignature( "set" + propertyName, null );
+        jMethod.setComment( "Sets the location of the specified field." );
+        addParameter( jMethod, "Object", "field", "The key of the field, must not be <code>null</code>." );
+        addParameter( jMethod, locationClass.getName(), singular( locationField ),
+                      "The location of the field, may be <code>null</code>." );
+        jInterface.addMethod( jMethod );
+
+        jInterface.print( sourceWriter );
+
+        sourceWriter.close();
+
+        return jInterface.getName();
+    }
+
+    private void generateLocationTracking( JClass jClass, ModelClass modelClass, ModelClass locationClass )
+        throws ModelloException
+    {
+        if ( locationClass == null )
+        {
+            return;
+        }
+
+        String superClass = modelClass.getSuperClass();
+        if ( StringUtils.isNotEmpty( superClass ) && isClassInModel( superClass, getModel() ) )
+        {
+            return;
+        }
+
+        ModelClassMetadata metadata = (ModelClassMetadata) locationClass.getMetadata( ModelClassMetadata.ID );
+        String locationField = metadata.getLocationTracker();
+
+        String fieldType = "java.util.Map" + ( useJava5 ? "<Object, " + locationClass.getName() + ">" : "" );
+        String fieldImpl = "java.util.LinkedHashMap" + ( useJava5 ? "<Object, " + locationClass.getName() + ">" : "" );
+
+        // private java.util.Map<Object, Location> locations;
+        JField jField = new JField( new JType( fieldType ), locationField );
+        jClass.addField( jField );
+
+        JMethod jMethod;
+        JSourceCode sc;
+
+        // public Location getLocation( Object key )
+        jMethod =
+            new JMethod( "get" + capitalise( singular( locationField ) ), new JType( locationClass.getName() ), null );
+        jMethod.addParameter( new JParameter( new JType( "Object" ), "key" ) );
+        sc = jMethod.getSourceCode();
+        sc.add( "return ( " + locationField + " != null ) ? " + locationField + ".get( key ) : null;" );
+        jMethod.setComment( "" );
+        jClass.addMethod( jMethod );
+
+        // public void setLocation( Object key, Location location )
+        jMethod = new JMethod( "set" + capitalise( singular( locationField ) ) );
+        jMethod.addParameter( new JParameter( new JType( "Object" ), "key" ) );
+        jMethod.addParameter( new JParameter( new JType( locationClass.getName() ), singular( locationField ) ) );
+        sc = jMethod.getSourceCode();
+        sc.add( "if ( " + singular( locationField ) + " != null )" );
+        sc.add( "{" );
+        sc.indent();
+        sc.add( "if ( this." + locationField + " == null )" );
+        sc.add( "{" );
+        sc.addIndented( "this." + locationField + " = new " + fieldImpl + "();" );
+        sc.add( "}" );
+        sc.add( "this." + locationField + ".put( key, " + singular( locationField ) + " );" );
+        sc.unindent();
+        sc.add( "}" );
+        jMethod.setComment( "" );
+        jClass.addMethod( jMethod );
+    }
+
+    private void generateLocationBean( JClass jClass, ModelClass locationClass, ModelClass sourceClass )
+        throws ModelloException
+    {
+        jClass.getModifiers().setFinal( true );
+
+        String locationsField =
+            ( (ModelClassMetadata) locationClass.getMetadata( ModelClassMetadata.ID ) ).getLocationTracker();
+
+        JavaFieldMetadata readOnlyField = new JavaFieldMetadata();
+        readOnlyField.setSetter( false );
+
+        // int lineNumber;
+        ModelField lineNumber = new ModelField( locationClass, "lineNumber" );
+        lineNumber.setDescription( "The one-based line number. The value will be non-positive if unknown." );
+        lineNumber.setType( "int" );
+        lineNumber.setDefaultValue( "-1" );
+        lineNumber.addMetadata( readOnlyField );
+        createField( jClass, lineNumber );
+
+        // int columnNumber;
+        ModelField columnNumber = new ModelField( locationClass, "columnNumber" );
+        columnNumber.setDescription( "The one-based column number. The value will be non-positive if unknown." );
+        columnNumber.setType( "int" );
+        columnNumber.setDefaultValue( "-1" );
+        columnNumber.addMetadata( readOnlyField );
+        createField( jClass, columnNumber );
+
+        // Source source;
+        ModelField source = null;
+        if ( sourceClass != null )
+        {
+            ModelClassMetadata metadata = (ModelClassMetadata) sourceClass.getMetadata( ModelClassMetadata.ID );
+            String sourceField = metadata.getSourceTracker();
+
+            source = new ModelField( locationClass, sourceField );
+            source.setType( sourceClass.getName() );
+            source.addMetadata( readOnlyField );
+            createField( jClass, source );
+        }
+
+        // Location( int lineNumber, int columnNumber );
+        JConstructor jConstructor = jClass.createConstructor();
+        JSourceCode sc = jConstructor.getSourceCode();
+
+        jConstructor.addParameter( new JParameter( JType.INT, lineNumber.getName() ) );
+        sc.add( "this." + lineNumber.getName() + " = " + lineNumber.getName() + ";" );
+
+        jConstructor.addParameter( new JParameter( JType.INT, columnNumber.getName() ) );
+        sc.add( "this." + columnNumber.getName() + " = " + columnNumber.getName() + ";" );
+
+        // Location( int lineNumber, int columnNumber, Source source );
+        if ( sourceClass != null )
+        {
+            jConstructor = jClass.createConstructor( jConstructor.getParameters() );
+            sc.copyInto( jConstructor.getSourceCode() );
+            sc = jConstructor.getSourceCode();
+
+            jConstructor.addParameter( new JParameter( new JType( sourceClass.getName() ), source.getName() ) );
+            sc.add( "this." + source.getName() + " = " + source.getName() + ";" );
+        }
+
+        String fieldType = "java.util.Map" + ( useJava5 ? "<Object, " + locationClass.getName() + ">" : "" );
+        String fieldImpl = "java.util.LinkedHashMap" + ( useJava5 ? "<Object, " + locationClass.getName() + ">" : "" );
+
+        // public Map<Object, Location> getLocations()
+        JMethod jMethod = new JMethod( "get" + capitalise( locationsField ), new JType( fieldType ), null );
+        sc = jMethod.getSourceCode();
+        sc.add( "return " + locationsField + ";" );
+        jMethod.setComment( "" );
+        jClass.addMethod( jMethod );
+
+        // public void setLocations( Map<Object, Location> locations )
+        jMethod = new JMethod( "set" + capitalise( locationsField ) );
+        jMethod.addParameter( new JParameter( new JType( fieldType ), locationsField ) );
+        sc = jMethod.getSourceCode();
+        sc.add( "this." + locationsField + " = " + locationsField + ";" );
+        jMethod.setComment( "" );
+        jClass.addMethod( jMethod );
+
+        // public static Location merge( Location target, Location source, boolean sourceDominant )
+        jMethod = new JMethod( "merge", new JType( locationClass.getName() ), null );
+        jMethod.getModifiers().setStatic( true );
+        jMethod.addParameter( new JParameter( new JType( locationClass.getName() ), "target" ) );
+        jMethod.addParameter( new JParameter( new JType( locationClass.getName() ), "source" ) );
+        jMethod.addParameter( new JParameter( JType.BOOLEAN, "sourceDominant" ) );
+        sc = jMethod.getSourceCode();
+        sc.add( "if ( source == null )" );
+        sc.add( "{" );
+        sc.addIndented( "return target;" );
+        sc.add( "}" );
+        sc.add( "else if ( target == null )" );
+        sc.add( "{" );
+        sc.addIndented( "return source;" );
+        sc.add( "}" );
+        sc.add( "" );
+        sc.add( locationClass.getName() + " result =" );
+        sc.add( "    new " + locationClass.getName() + "( target.getLineNumber(), target.getColumnNumber()"
+            + ( sourceClass != null ? ", target.get" + capitalise( source.getName() ) + "()" : "" ) + " );" );
+        sc.add( "" );
+        sc.add( fieldType + " locations;" );
+        sc.add( fieldType + " sourceLocations = source.get" + capitalise( locationsField ) + "();" );
+        sc.add( fieldType + " targetLocations = target.get" + capitalise( locationsField ) + "();" );
+        sc.add( "if ( sourceLocations == null )" );
+        sc.add( "{" );
+        sc.addIndented( "locations = targetLocations;" );
+        sc.add( "}" );
+        sc.add( "else if ( targetLocations == null )" );
+        sc.add( "{" );
+        sc.addIndented( "locations = sourceLocations;" );
+        sc.add( "}" );
+        sc.add( "else" );
+        sc.add( "{" );
+        sc.addIndented( "locations = new " + fieldImpl + "();" );
+        sc.addIndented( "locations.putAll( sourceDominant ? targetLocations : sourceLocations );" );
+        sc.addIndented( "locations.putAll( sourceDominant ? sourceLocations : targetLocations );" );
+        sc.add( "}" );
+        sc.add( "result.set" + capitalise( locationsField ) + "( locations );" );
+        sc.add( "" );
+        sc.add( "return result;" );
+        jClass.addMethod( jMethod );
+
+        // public static Location merge( Location target, Location source, Collection<Integer> indices )
+        jMethod = new JMethod( "merge", new JType( locationClass.getName() ), null );
+        jMethod.getModifiers().setStatic( true );
+        jMethod.addParameter( new JParameter( new JType( locationClass.getName() ), "target" ) );
+        jMethod.addParameter( new JParameter( new JType( locationClass.getName() ), "source" ) );
+        jMethod.addParameter( new JParameter( new JCollectionType( "java.util.Collection", new JType( "Integer" ),
+                                                                   useJava5 ), "indices" ) );
+        String intWrap = useJava5 ? "Integer.valueOf" : "new Integer";
+        sc = jMethod.getSourceCode();
+        sc.add( "if ( source == null )" );
+        sc.add( "{" );
+        sc.addIndented( "return target;" );
+        sc.add( "}" );
+        sc.add( "else if ( target == null )" );
+        sc.add( "{" );
+        sc.addIndented( "return source;" );
+        sc.add( "}" );
+        sc.add( "" );
+        sc.add( locationClass.getName() + " result =" );
+        sc.add( "    new " + locationClass.getName() + "( target.getLineNumber(), target.getColumnNumber()"
+            + ( sourceClass != null ? ", target.get" + capitalise( source.getName() ) + "()" : "" ) + " );" );
+        sc.add( "" );
+        sc.add( fieldType + " locations;" );
+        sc.add( fieldType + " sourceLocations = source.get" + capitalise( locationsField ) + "();" );
+        sc.add( fieldType + " targetLocations = target.get" + capitalise( locationsField ) + "();" );
+        sc.add( "if ( sourceLocations == null )" );
+        sc.add( "{" );
+        sc.addIndented( "locations = targetLocations;" );
+        sc.add( "}" );
+        sc.add( "else if ( targetLocations == null )" );
+        sc.add( "{" );
+        sc.addIndented( "locations = sourceLocations;" );
+        sc.add( "}" );
+        sc.add( "else" );
+        sc.add( "{" );
+        sc.indent();
+        sc.add( "locations = new " + fieldImpl + "();" );
+        sc.add( "for ( java.util.Iterator" + ( useJava5 ? "<Integer>" : "" ) + " it = indices.iterator(); it.hasNext(); )" );
+        sc.add( "{" );
+        sc.indent();
+        sc.add( locationClass.getName() + " location;" );
+        sc.add( "Integer index = " + ( useJava5 ? "" : "(Integer) " ) + "it.next();" );
+        sc.add( "if ( index.intValue() < 0 )" );
+        sc.add( "{" );
+        sc.addIndented( "location = sourceLocations.get( " + intWrap + "( ~index.intValue() ) );" );
+        sc.add( "}" );
+        sc.add( "else" );
+        sc.add( "{" );
+        sc.addIndented( "location = targetLocations.get( index );" );
+        sc.add( "}" );
+        sc.add( "locations.put( " + intWrap + "( locations.size() ), location );" );
+        sc.unindent();
+        sc.add( "}" );
+        sc.unindent();
+        sc.add( "}" );
+        sc.add( "result.set" + capitalise( locationsField ) + "( locations );" );
+        sc.add( "" );
+        sc.add( "return result;" );
+        jClass.addMethod( jMethod );
     }
 
     /**
@@ -1439,4 +1770,11 @@ public class JavaModelloGenerator
 
         return type;
     }
+
+    private void addParameter( JMethodSignature jMethod, String type, String name, String comment )
+    {
+        jMethod.addParameter( new JParameter( new JType( type ), name ) );
+        jMethod.getJDocComment().getParamDescriptor( name ).setDescription( comment );
+    }
+
 }

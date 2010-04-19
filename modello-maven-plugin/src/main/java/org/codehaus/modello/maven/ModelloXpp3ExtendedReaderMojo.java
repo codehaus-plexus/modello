@@ -1,4 +1,4 @@
-package org.codehaus.modello.plugin.model;
+package org.codehaus.modello.maven;
 
 /*
  * Copyright (c) 2004, Codehaus.org
@@ -22,51 +22,25 @@ package org.codehaus.modello.plugin.model;
  * SOFTWARE.
  */
 
-import org.codehaus.modello.metadata.ClassMetadata;
-
 /**
- * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
+ * Creates an XPP3 extended reader from the model. An extended reader populates the parsed model with metadata about the
+ * line/column from which the data was read.
+ *
+ * @goal xpp3-extended-reader
+ *
+ * @phase generate-sources
+ *
+ * @author Benjamin Bentmann
  * @version $Id$
  */
-public class ModelClassMetadata
-    implements ClassMetadata
+public class ModelloXpp3ExtendedReaderMojo
+    extends ModelloXpp3ReaderMojo
 {
-    public static final String ID = ModelClassMetadata.class.getName();
 
-    private boolean rootElement = false;
-
-    private String locationTracker;
-
-    private String sourceTracker;
-
-    public boolean isRootElement()
+    @Override
+    protected String getGeneratorType()
     {
-        return rootElement;
-    }
-
-    public void setRootElement( boolean rootElement )
-    {
-        this.rootElement = rootElement;
-    }
-
-    public String getLocationTracker()
-    {
-        return locationTracker;
-    }
-
-    public void setLocationTracker( String locationTracker )
-    {
-        this.locationTracker = locationTracker;
-    }
-
-    public String getSourceTracker()
-    {
-        return sourceTracker;
-    }
-
-    public void setSourceTracker( String sourceTracker )
-    {
-        this.sourceTracker = sourceTracker;
+        return "xpp3-extended-reader";
     }
 
 }

@@ -40,6 +40,7 @@ import org.codehaus.modello.plugin.java.javasource.JSourceCode;
 import org.codehaus.modello.plugin.java.javasource.JSourceWriter;
 import org.codehaus.modello.plugin.java.javasource.JType;
 import org.codehaus.modello.plugin.java.metadata.JavaClassMetadata;
+import org.codehaus.modello.plugin.model.ModelClassMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlAssociationMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
 import org.codehaus.plexus.util.StringUtils;
@@ -52,10 +53,51 @@ import org.codehaus.plexus.util.StringUtils;
 public class Xpp3ReaderGenerator
     extends AbstractXpp3Generator
 {
+
+    private static final String SOURCE_PARAM = "source";
+
+    private static final String LOCATION_VAR = "_location";
+
+    private ModelClass locationTracker;
+
+    private String locationField;
+
+    private ModelClass sourceTracker;
+
+    private String trackingArgs;
+
+    protected boolean isLocationTracking()
+    {
+        return false;
+    }
+
     public void generate( Model model, Properties parameters )
         throws ModelloException
     {
         initialize( model, parameters );
+
+        locationTracker = sourceTracker = null;
+        trackingArgs = locationField = "";
+
+        if ( isLocationTracking() )
+        {
+            locationTracker = model.getLocationTracker( getGeneratedVersion() );
+            if ( locationTracker == null )
+            {
+                throw new ModelloException( "No model class has been marked as location tracker"
+                    + " via the attribute locationTracker=\"locations\"" + ", cannot generate extended reader." );
+            }
+
+            locationField =
+                ( (ModelClassMetadata) locationTracker.getMetadata( ModelClassMetadata.ID ) ).getLocationTracker();
+
+            sourceTracker = model.getSourceTracker( getGeneratedVersion() );
+
+            if ( sourceTracker != null )
+            {
+                trackingArgs += ", " + SOURCE_PARAM;
+            }
+        }
 
         try
         {
@@ -75,7 +117,7 @@ public class Xpp3ReaderGenerator
         String packageName = objectModel.getDefaultPackageName( isPackageWithVersion(), getGeneratedVersion() )
             + ".io.xpp3";
 
-        String unmarshallerName = getFileName( "Xpp3Reader" );
+        String unmarshallerName = getFileName( "Xpp3Reader" + ( isLocationTracking() ? "Ex" : "" ) );
 
         JSourceWriter sourceWriter = newJSourceWriter( packageName, unmarshallerName );
 
@@ -144,6 +186,7 @@ public class Xpp3ReaderGenerator
 
         unmarshall.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
         unmarshall.addParameter( new JParameter( JClass.BOOLEAN, "strict" ) );
+        addTrackingParameters( unmarshall );
 
         unmarshall.addException( new JClass( "IOException" ) );
         unmarshall.addException( new JClass( "XmlPullParserException" ) );
@@ -173,7 +216,8 @@ public class Xpp3ReaderGenerator
                         + "found '\" + parser.getName() + \"'\", parser, null );" );
         sc.add( "}" );
 
-        sc.add( className + ' ' + variableName + " = parse" + root.getName() + "( parser, strict );" );
+        sc.add( className + ' ' + variableName + " = parse" + root.getName() + "( parser, strict" + trackingArgs
+            + " );" );
 
         sc.add( variableName + ".setModelEncoding( parser.getInputEncoding() );" );
 
@@ -201,6 +245,7 @@ public class Xpp3ReaderGenerator
 
         unmarshall.addParameter( new JParameter( new JClass( "Reader" ), "reader" ) );
         unmarshall.addParameter( new JParameter( JClass.BOOLEAN, "strict" ) );
+        addTrackingParameters( unmarshall );
 
         unmarshall.addException( new JClass( "IOException" ) );
         unmarshall.addException( new JClass( "XmlPullParserException" ) );
@@ -219,24 +264,27 @@ public class Xpp3ReaderGenerator
 
         sc.add( "" );
 
-        sc.add( "return read( parser, strict );" );
+        sc.add( "return read( parser, strict" + trackingArgs + " );" );
 
         jClass.addMethod( unmarshall );
 
         // ----------------------------------------------------------------------
 
-        unmarshall = new JMethod( "read", rootType, null );
-        unmarshall.setComment( "@see ReaderFactory#newXmlReader" );
+        if ( locationTracker == null )
+        {
+            unmarshall = new JMethod( "read", rootType, null );
+            unmarshall.setComment( "@see ReaderFactory#newXmlReader" );
 
-        unmarshall.addParameter( new JParameter( new JClass( "Reader" ), "reader" ) );
+            unmarshall.addParameter( new JParameter( new JClass( "Reader" ), "reader" ) );
 
-        unmarshall.addException( new JClass( "IOException" ) );
-        unmarshall.addException( new JClass( "XmlPullParserException" ) );
+            unmarshall.addException( new JClass( "IOException" ) );
+            unmarshall.addException( new JClass( "XmlPullParserException" ) );
 
-        sc = unmarshall.getSourceCode();
-        sc.add( "return read( reader, true );" );
+            sc = unmarshall.getSourceCode();
+            sc.add( "return read( reader, true );" );
 
-        jClass.addMethod( unmarshall );
+            jClass.addMethod( unmarshall );
+        }
 
         // ----------------------------------------------------------------------
         // Write the read(InputStream[,boolean]) methods which will do the unmarshalling.
@@ -246,38 +294,34 @@ public class Xpp3ReaderGenerator
 
         unmarshall.addParameter( new JParameter( new JClass( "InputStream" ), "in" ) );
         unmarshall.addParameter( new JParameter( JClass.BOOLEAN, "strict" ) );
+        addTrackingParameters( unmarshall );
 
         unmarshall.addException( new JClass( "IOException" ) );
         unmarshall.addException( new JClass( "XmlPullParserException" ) );
 
         sc = unmarshall.getSourceCode();
 
-        sc.add( "Reader reader = ReaderFactory.newXmlReader( in );" );
-
-        sc.add( "" );
-
-        sc.add( "return read( reader, strict );" );
+        sc.add( "return read( ReaderFactory.newXmlReader( in ), strict" + trackingArgs + " );" );
 
         jClass.addMethod( unmarshall );
 
         // --------------------------------------------------------------------
 
-        unmarshall = new JMethod( "read", rootType, null );
+        if ( locationTracker == null )
+        {
+            unmarshall = new JMethod( "read", rootType, null );
 
-        unmarshall.addParameter( new JParameter( new JClass( "InputStream" ), "in" ) );
+            unmarshall.addParameter( new JParameter( new JClass( "InputStream" ), "in" ) );
 
-        unmarshall.addException( new JClass( "IOException" ) );
-        unmarshall.addException( new JClass( "XmlPullParserException" ) );
+            unmarshall.addException( new JClass( "IOException" ) );
+            unmarshall.addException( new JClass( "XmlPullParserException" ) );
 
-        sc = unmarshall.getSourceCode();
+            sc = unmarshall.getSourceCode();
 
-        sc.add( "Reader reader = ReaderFactory.newXmlReader( in );" );
+            sc.add( "return read( ReaderFactory.newXmlReader( in ) );" );
 
-        sc.add( "" );
-
-        sc.add( "return read( reader );" );
-
-        jClass.addMethod( unmarshall );
+            jClass.addMethod( unmarshall );
+        }
 
         // ----------------------------------------------------------------------
         // Write the class parsers
@@ -306,6 +350,11 @@ public class Xpp3ReaderGenerator
 
         for ( ModelClass clazz : getClasses( objectModel ) )
         {
+            if ( isTrackingSupport( clazz ) )
+            {
+                continue;
+            }
+
             writeClassParser( clazz, jClass, root.getName().equals( clazz.getName() ) );
         }
     }
@@ -332,6 +381,7 @@ public class Xpp3ReaderGenerator
 
         unmarshall.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
         unmarshall.addParameter( new JParameter( JClass.BOOLEAN, "strict" ) );
+        addTrackingParameters( unmarshall );
 
         unmarshall.addException( new JClass( "IOException" ) );
         unmarshall.addException( new JClass( "XmlPullParserException" ) );
@@ -340,6 +390,12 @@ public class Xpp3ReaderGenerator
 
         sc.add( "String tagName = parser.getName();" );
         sc.add( className + " " + uncapClassName + " = new " + className + "();" );
+
+        if ( locationTracker != null )
+        {
+            sc.add( locationTracker.getName() + " " + LOCATION_VAR + ";" );
+            writeNewSetLocation( "\"\"", uncapClassName, null, sc );
+        }
 
         ModelField contentField = null;
 
@@ -351,8 +407,8 @@ public class Xpp3ReaderGenerator
         // then read content, either content field or elements
         if ( contentField != null )
         {
-            writePrimitiveField( contentField, contentField.getType(), uncapClassName,
-                                 "set" + capitalise( contentField.getName() ), sc, jClass );
+            writePrimitiveField( contentField, contentField.getType(), uncapClassName, uncapClassName, "\"\"", "set"
+                + capitalise( contentField.getName() ), sc, jClass );
         }
         else
         {
@@ -440,8 +496,8 @@ public class Xpp3ReaderGenerator
                 sc.add(  "{" );
                 sc.indent();
 
-                writePrimitiveField( field, field.getType(), objectName, "set" + capitalise( field.getName() ), sc,
-                                     jClass );
+                writePrimitiveField( field, field.getType(), objectName, objectName, "\"" + field.getName() + "\"",
+                                     "set" + capitalise( field.getName() ), sc, jClass );
 
                 sc.unindent();
                 sc.add( "}" );
@@ -504,8 +560,8 @@ public class Xpp3ReaderGenerator
             sc.add( "{" );
             sc.indent();
 
-            writePrimitiveField( field, field.getType(), objectName, "set" + capitalise( field.getName() ), sc,
-                                 jClass );
+            writePrimitiveField( field, field.getType(), objectName, objectName, "\"" + field.getName() + "\"", "set"
+                + capitalise( field.getName() ), sc, jClass );
 
             sc.unindent();
             sc.add( "}" );
@@ -521,7 +577,8 @@ public class Xpp3ReaderGenerator
                 sc.add( tagComparison );
 
                 sc.add( "{" );
-                sc.addIndented( objectName + ".set" + capFieldName + "( parse" + association.getTo() + "( parser, strict ) );" );
+                sc.addIndented( objectName + ".set" + capFieldName + "( parse" + association.getTo()
+                    + "( parser, strict" + trackingArgs + " ) );" );
                 sc.add( "}" );
             }
             else
@@ -539,6 +596,8 @@ public class Xpp3ReaderGenerator
                 {
                     boolean wrappedItems = xmlAssociationMetadata.isWrappedItems();
 
+                    boolean inModel = isClassInModel( association.getTo(), field.getModelClass().getModel() );
+
                     if ( wrappedItems )
                     {
                         sc.add( tagComparison );
@@ -549,6 +608,12 @@ public class Xpp3ReaderGenerator
                         sc.add( type + " " + associationName + " = " + association.getDefaultValue() + ";" );
 
                         sc.add( objectName + ".set" + capFieldName + "( " + associationName + " );" );
+
+                        if ( !inModel && locationTracker != null )
+                        {
+                            sc.add( locationTracker.getName() + " " + LOCATION_VAR + "s;" );
+                            writeNewSetLocation( field, objectName, LOCATION_VAR + "s", sc );
+                        }
 
                         sc.add( "while ( parser.nextTag() == XmlPullParser.START_TAG )" );
 
@@ -581,15 +646,40 @@ public class Xpp3ReaderGenerator
 
                         sc.unindent();
                         sc.add( "}" );
+
+                        if ( !inModel && locationTracker != null )
+                        {
+                            sc.add( locationTracker.getName() + " " + LOCATION_VAR + "s = " + objectName + ".get"
+                                + capitalise( singular( locationField ) ) + "( \"" + field.getName() + "\" );" );
+                            sc.add( "if ( " + LOCATION_VAR + "s == null )" );
+                            sc.add( "{" );
+                            sc.indent();
+                            writeNewSetLocation( field, objectName, LOCATION_VAR + "s", sc );
+                            sc.unindent();
+                            sc.add( "}" );
+                        }
                     }
 
-                    if ( isClassInModel( association.getTo(), field.getModelClass().getModel() ) )
+                    if ( inModel )
                     {
-                        sc.add( associationName + ".add( parse" + association.getTo() + "( parser, strict ) );" );
+                        sc.add( associationName + ".add( parse" + association.getTo() + "( parser, strict"
+                            + trackingArgs + " ) );" );
                     }
                     else
                     {
-                        writePrimitiveField( association, association.getTo(), associationName, "add", sc, jClass );
+                        String key;
+                        if ( ModelDefault.SET.equals( type ) )
+                        {
+                            key = "?";
+                        }
+                        else
+                        {
+                            key =
+                                ( useJava5 ? "Integer.valueOf" : "new java.lang.Integer" ) + "( " + associationName
+                                    + ".size() )";
+                        }
+                        writePrimitiveField( association, association.getTo(), associationName, LOCATION_VAR + "s",
+                                             key, "add", sc, jClass );
                     }
 
                     if ( wrappedItems )
@@ -624,6 +714,12 @@ public class Xpp3ReaderGenerator
                     sc.add( "{" );
                     sc.indent();
 
+                    if ( locationTracker != null )
+                    {
+                        sc.add( locationTracker.getName() + " " + LOCATION_VAR + "s;" );
+                        writeNewSetLocation( field, objectName, LOCATION_VAR + "s", sc );
+                    }
+
                     if ( xmlAssociationMetadata.isMapExplode() )
                     {
                         sc.add( "while ( parser.nextTag() == XmlPullParser.START_TAG )" );
@@ -639,6 +735,8 @@ public class Xpp3ReaderGenerator
                         sc.add( "String key = null;" );
 
                         sc.add( "String value = null;" );
+                        
+                        writeNewLocation( LOCATION_VAR, sc );
 
                         sc.add( "// " + xmlAssociationMetadata.getMapStyle() + " mode." );
 
@@ -656,8 +754,10 @@ public class Xpp3ReaderGenerator
                         sc.add( "else if ( \"value\".equals( parser.getName() ) )" );
 
                         sc.add( "{" );
-                        sc.addIndented( "value = parser.nextText()" + ( xmlFieldMetadata.isTrim() ? ".trim()" : "" )
-                                        + ";" );
+                        sc.indent();
+                        writeNewLocation( LOCATION_VAR, sc );
+                        sc.add( "value = parser.nextText()" + ( xmlFieldMetadata.isTrim() ? ".trim()" : "" ) + ";" );
+                        sc.unindent();
                         sc.add( "}" );
 
                         sc.add( "else" );
@@ -670,6 +770,7 @@ public class Xpp3ReaderGenerator
                         sc.add( "}" );
 
                         sc.add( objectName + ".add" + capitalise( singularName ) + "( key, value );" );
+                        writeSetLocation( "key", LOCATION_VAR + "s", LOCATION_VAR, sc );
 
                         sc.unindent();
                         sc.add( "}" );
@@ -690,6 +791,8 @@ public class Xpp3ReaderGenerator
 
                         sc.add( "String key = parser.getName();" );
 
+                        writeNewSetLocation( "key", LOCATION_VAR + "s", null, sc );
+
                         sc.add( "String value = parser.nextText()" + ( xmlFieldMetadata.isTrim() ? ".trim()" : "" )
                                 + ";" );
 
@@ -706,8 +809,8 @@ public class Xpp3ReaderGenerator
         }
     }
 
-    private void writePrimitiveField( ModelField field, String type, String objectName, String setterName,
-                                      JSourceCode sc, JClass jClass )
+    private void writePrimitiveField( ModelField field, String type, String objectName, String locatorName,
+                                      String locationKey, String setterName, JSourceCode sc, JClass jClass )
     {
         XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
 
@@ -735,67 +838,85 @@ public class Xpp3ReaderGenerator
             parserGetter = "getTrimmedValue( " + parserGetter + " )";
         }
 
+        String keyCapture = "";
+        writeNewLocation( null, sc );
+        if ( locationTracker != null && "?".equals( locationKey ) )
+        {
+            sc.add( "Object _key;" );
+            locationKey = "_key";
+            keyCapture = "_key = ";
+        }
+        else
+        {
+            writeSetLocation( locationKey, locatorName, null, sc );
+        }
+
         if ( "boolean".equals( type ) )
         {
-            sc.add( objectName + "." + setterName + "( getBooleanValue( " + parserGetter + ", \"" + tagName +
-                "\", parser, \"" + field.getDefaultValue() + "\" ) );" );
+            sc.add( objectName + "." + setterName + "( " + keyCapture + "getBooleanValue( " + parserGetter + ", \""
+                + tagName + "\", parser, \"" + field.getDefaultValue() + "\" ) );" );
         }
         else if ( "char".equals( type ) )
         {
-            sc.add( objectName + "." + setterName + "( getCharacterValue( " + parserGetter + ", \"" + tagName +
-                "\", parser ) );" );
+            sc.add( objectName + "." + setterName + "( " + keyCapture + "getCharacterValue( " + parserGetter + ", \""
+                + tagName + "\", parser ) );" );
         }
         else if ( "double".equals( type ) )
         {
-            sc.add( objectName + "." + setterName + "( getDoubleValue( " + parserGetter + ", \"" + tagName +
-                "\", parser, strict ) );" );
+            sc.add( objectName + "." + setterName + "( " + keyCapture + "getDoubleValue( " + parserGetter + ", \""
+                + tagName + "\", parser, strict ) );" );
         }
         else if ( "float".equals( type ) )
         {
-            sc.add( objectName + "." + setterName + "( getFloatValue( " + parserGetter + ", \"" + tagName +
-                "\", parser, strict ) );" );
+            sc.add( objectName + "." + setterName + "( " + keyCapture + "getFloatValue( " + parserGetter + ", \""
+                + tagName + "\", parser, strict ) );" );
         }
         else if ( "int".equals( type ) )
         {
-            sc.add( objectName + "." + setterName + "( getIntegerValue( " + parserGetter + ", \"" + tagName +
-                "\", parser, strict ) );" );
+            sc.add( objectName + "." + setterName + "( " + keyCapture + "getIntegerValue( " + parserGetter + ", \""
+                + tagName + "\", parser, strict ) );" );
         }
         else if ( "long".equals( type ) )
         {
-            sc.add( objectName + "." + setterName + "( getLongValue( " + parserGetter + ", \"" + tagName +
-                "\", parser, strict ) );" );
+            sc.add( objectName + "." + setterName + "( " + keyCapture + "getLongValue( " + parserGetter + ", \""
+                + tagName + "\", parser, strict ) );" );
         }
         else if ( "short".equals( type ) )
         {
-            sc.add( objectName + "." + setterName + "( getShortValue( " + parserGetter + ", \"" + tagName +
-                "\", parser, strict ) );" );
+            sc.add( objectName + "." + setterName + "( " + keyCapture + "getShortValue( " + parserGetter + ", \""
+                + tagName + "\", parser, strict ) );" );
         }
         else if ( "byte".equals( type ) )
         {
-            sc.add( objectName + "." + setterName + "( getByteValue( " + parserGetter + ", \"" + tagName +
-                "\", parser, strict ) );" );
+            sc.add( objectName + "." + setterName + "( " + keyCapture + "getByteValue( " + parserGetter + ", \""
+                + tagName + "\", parser, strict ) );" );
         }
         else if ( "String".equals( type ) || "Boolean".equals( type ) )
         {
             // TODO: other Primitive types
-            sc.add( objectName + "." + setterName + "( " + parserGetter + " );" );
+            sc.add( objectName + "." + setterName + "( " + keyCapture +  parserGetter + " );" );
         }
         else if ( "Date".equals( type ) )
         {
             sc.add( "String dateFormat = " +
                 ( xmlFieldMetadata.getFormat() != null ? "\"" + xmlFieldMetadata.getFormat() + "\"" : "null" ) + ";" );
-            sc.add( objectName + "." + setterName + "( getDateValue( " + parserGetter + ", \"" + tagName +
-                "\", dateFormat, parser ) );" );
+            sc.add( objectName + "." + setterName + "( " + keyCapture + "getDateValue( " + parserGetter + ", \""
+                + tagName + "\", dateFormat, parser ) );" );
         }
         else if ( "DOM".equals( type ) )
         {
             jClass.addImport( "org.codehaus.plexus.util.xml.Xpp3DomBuilder" );
 
-            sc.add( objectName + "." + setterName + "( Xpp3DomBuilder.build( parser ) );" );
+            sc.add( objectName + "." + setterName + "( " + keyCapture + "Xpp3DomBuilder.build( parser ) );" );
         }
         else
         {
             throw new IllegalArgumentException( "Unknown type: " + type );
+        }
+
+        if ( keyCapture.length() > 0 )
+        {
+            writeSetLocation( locationKey, locatorName, null, sc );
         }
     }
 
@@ -1434,6 +1555,51 @@ public class Xpp3ReaderGenerator
         writeParserInitialization( sc );
 
         return method;
+    }
+
+    private void addTrackingParameters( JMethod method )
+    {
+        if ( sourceTracker != null )
+        {
+            method.addParameter( new JParameter( new JClass( sourceTracker.getName() ), SOURCE_PARAM ) );
+        }
+    }
+
+    private void writeNewSetLocation( ModelField field, String objectName, String trackerVariable, JSourceCode sc )
+    {
+        writeNewSetLocation( "\"" + field.getName() + "\"", objectName, trackerVariable, sc );
+    }
+
+    private void writeNewSetLocation( String key, String objectName, String trackerVariable, JSourceCode sc )
+    {
+        writeNewLocation( trackerVariable, sc );
+        writeSetLocation( key, objectName, trackerVariable, sc );
+    }
+
+    private void writeNewLocation( String trackerVariable, JSourceCode sc )
+    {
+        if ( locationTracker == null )
+        {
+            return;
+        }
+
+        String constr = "new " + locationTracker.getName() + "( parser.getLineNumber(), parser.getColumnNumber()";
+        constr += ( sourceTracker != null ) ? ", " + SOURCE_PARAM : "";
+        constr += " )";
+
+        sc.add( ( ( trackerVariable != null ) ? trackerVariable : LOCATION_VAR ) + " = " + constr + ";" );
+    }
+
+    private void writeSetLocation( String key, String objectName, String trackerVariable, JSourceCode sc )
+    {
+        if ( locationTracker == null )
+        {
+            return;
+        }
+
+        String variable = ( trackerVariable != null ) ? trackerVariable : LOCATION_VAR;
+
+        sc.add( objectName + ".set" + capitalise( singular( locationField ) ) + "( " + key + ", " + variable + " );" );
     }
 
 }

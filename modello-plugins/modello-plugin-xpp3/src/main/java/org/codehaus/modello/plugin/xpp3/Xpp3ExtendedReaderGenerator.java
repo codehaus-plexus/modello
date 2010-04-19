@@ -1,4 +1,4 @@
-package org.codehaus.modello.plugin.model;
+package org.codehaus.modello.plugin.xpp3;
 
 /*
  * Copyright (c) 2004, Codehaus.org
@@ -22,51 +22,27 @@ package org.codehaus.modello.plugin.model;
  * SOFTWARE.
  */
 
-import org.codehaus.modello.metadata.ClassMetadata;
+import org.codehaus.modello.model.ModelClass;
 
 /**
- * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
- * @version $Id$
+ * The generator for XPP3-based parsers that support input location tracking.
+ * 
+ * @author Benjamin Bentmann
  */
-public class ModelClassMetadata
-    implements ClassMetadata
+public class Xpp3ExtendedReaderGenerator
+    extends Xpp3ReaderGenerator
 {
-    public static final String ID = ModelClassMetadata.class.getName();
 
-    private boolean rootElement = false;
-
-    private String locationTracker;
-
-    private String sourceTracker;
-
-    public boolean isRootElement()
+    @Override
+    protected boolean isRelevant( ModelClass modelClass )
     {
-        return rootElement;
+        return isJavaEnabled( modelClass );
     }
 
-    public void setRootElement( boolean rootElement )
+    @Override
+    protected boolean isLocationTracking()
     {
-        this.rootElement = rootElement;
-    }
-
-    public String getLocationTracker()
-    {
-        return locationTracker;
-    }
-
-    public void setLocationTracker( String locationTracker )
-    {
-        this.locationTracker = locationTracker;
-    }
-
-    public String getSourceTracker()
-    {
-        return sourceTracker;
-    }
-
-    public void setSourceTracker( String sourceTracker )
-    {
-        this.sourceTracker = sourceTracker;
+        return true;
     }
 
 }

@@ -54,6 +54,7 @@ import org.codehaus.modello.plugin.java.javasource.JStructure;
 import org.codehaus.modello.plugin.java.metadata.JavaClassMetadata;
 import org.codehaus.modello.plugin.java.metadata.JavaFieldMetadata;
 import org.codehaus.modello.plugin.java.metadata.JavaModelMetadata;
+import org.codehaus.modello.plugin.model.ModelClassMetadata;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.WriterFactory;
 
@@ -265,13 +266,27 @@ public abstract class AbstractJavaModelloGenerator
 
     protected boolean isRelevant( ModelClass modelClass )
     {
-        return isJavaEnabled( modelClass );
+        return isJavaEnabled( modelClass ) && !isTrackingSupport( modelClass );
     }
 
     protected boolean isJavaEnabled( ModelClass modelClass )
     {
         JavaClassMetadata javaClassMetadata = (JavaClassMetadata) modelClass.getMetadata( JavaClassMetadata.ID );
         return javaClassMetadata.isEnabled();
+    }
+
+    protected boolean isTrackingSupport( ModelClass modelClass )
+    {
+        ModelClassMetadata modelClassMetadata = (ModelClassMetadata) modelClass.getMetadata( ModelClassMetadata.ID );
+        if ( StringUtils.isNotEmpty( modelClassMetadata.getLocationTracker() ) )
+        {
+            return true;
+        }
+        if ( StringUtils.isNotEmpty( modelClassMetadata.getSourceTracker() ) )
+        {
+            return true;
+        }
+        return false;
     }
 
 }

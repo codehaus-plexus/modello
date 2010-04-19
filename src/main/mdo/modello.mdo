@@ -389,6 +389,31 @@
           </description>
           <comment>see org.codehaus.modello.plugin.model.ModelMetadataPlugin</comment>
         </field>
+        <field xml.attribute="true">
+          <name>locationTracker</name>
+          <version>1.4.0+</version>
+          <type>String</type>
+          <description><![CDATA[
+            Indicates that this class is used to track line/column information (at most one class in a model can have this
+            attribute set). The value of this attribute specifies the field name (in plural form, e.g. "locations") that
+            will be used in all other model classes to store the location tracking information and indirectly controls
+            the names of the generated accessors.]]>
+          </description>
+          <comment>see org.codehaus.modello.plugin.model.ModelMetadataPlugin</comment>
+        </field>
+        <field xml.attribute="true">
+          <name>sourceTracker</name>
+          <version>1.4.0+</version>
+          <type>String</type>
+          <description><![CDATA[
+            Indicates that this class is used to track source file information (at most one class in a model can have
+            this attribute set). The value of this attribute specifies the field name (e.g. "source") that will be used
+            in the class marked by <code>locationTracker</code> to store the source tracking information and indirectly
+            controls the names of the generated accessors. This attribute is only relevant in combination with
+            <code>locationTracker</code> and must not be used on the same class.]]>
+          </description>
+          <comment>see org.codehaus.modello.plugin.model.ModelMetadataPlugin</comment>
+        </field>
         <field xml.attribute="true" xml.tagName="xml.tagName">
           <name>tagName</name>
           <version>1.0.0+</version>

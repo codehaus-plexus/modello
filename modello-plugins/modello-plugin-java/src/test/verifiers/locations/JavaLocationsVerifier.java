@@ -1,5 +1,3 @@
-package org.codehaus.modello.plugin.model;
-
 /*
  * Copyright (c) 2004, Codehaus.org
  *
@@ -22,51 +20,27 @@ package org.codehaus.modello.plugin.model;
  * SOFTWARE.
  */
 
-import org.codehaus.modello.metadata.ClassMetadata;
+import junit.framework.Assert;
+import org.codehaus.modello.test.locations.Item;
+import org.codehaus.modello.test.locations.Location;
+import org.codehaus.modello.test.locations.LocationTracker;
+import org.codehaus.modello.test.locations.Model;
+import org.codehaus.modello.verifier.Verifier;
 
 /**
- * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
+ * @author Benjamin Bentmann
  * @version $Id$
  */
-public class ModelClassMetadata
-    implements ClassMetadata
+public class JavaLocationsVerifier
+    extends Verifier
 {
-    public static final String ID = ModelClassMetadata.class.getName();
 
-    private boolean rootElement = false;
-
-    private String locationTracker;
-
-    private String sourceTracker;
-
-    public boolean isRootElement()
+    public void verify()
+        throws Exception
     {
-        return rootElement;
-    }
-
-    public void setRootElement( boolean rootElement )
-    {
-        this.rootElement = rootElement;
-    }
-
-    public String getLocationTracker()
-    {
-        return locationTracker;
-    }
-
-    public void setLocationTracker( String locationTracker )
-    {
-        this.locationTracker = locationTracker;
-    }
-
-    public String getSourceTracker()
-    {
-        return sourceTracker;
-    }
-
-    public void setSourceTracker( String sourceTracker )
-    {
-        this.sourceTracker = sourceTracker;
+        assertTrue( LocationTracker.class.isAssignableFrom( Model.class ) );
+        assertTrue( LocationTracker.class.isAssignableFrom( Item.class ) );
+        assertTrue( LocationTracker.class.isAssignableFrom( Location.class ) );
     }
 
 }

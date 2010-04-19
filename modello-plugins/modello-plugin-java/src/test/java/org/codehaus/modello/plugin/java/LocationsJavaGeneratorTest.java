@@ -1,4 +1,4 @@
-package org.codehaus.modello.plugin.model;
+package org.codehaus.modello.plugin.java;
 
 /*
  * Copyright (c) 2004, Codehaus.org
@@ -22,51 +22,39 @@ package org.codehaus.modello.plugin.model;
  * SOFTWARE.
  */
 
-import org.codehaus.modello.metadata.ClassMetadata;
+import org.codehaus.modello.AbstractModelloJavaGeneratorTest;
+import org.codehaus.modello.core.ModelloCore;
+import org.codehaus.modello.model.Model;
+
+import java.util.Properties;
 
 /**
- * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
+ * @author Benjamin Bentmann
  * @version $Id$
  */
-public class ModelClassMetadata
-    implements ClassMetadata
+public class LocationsJavaGeneratorTest
+    extends AbstractModelloJavaGeneratorTest
 {
-    public static final String ID = ModelClassMetadata.class.getName();
 
-    private boolean rootElement = false;
-
-    private String locationTracker;
-
-    private String sourceTracker;
-
-    public boolean isRootElement()
+    public LocationsJavaGeneratorTest()
     {
-        return rootElement;
+        super( "locations" );
     }
 
-    public void setRootElement( boolean rootElement )
+    public void testLocations()
+        throws Throwable
     {
-        this.rootElement = rootElement;
-    }
+        ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
 
-    public String getLocationTracker()
-    {
-        return locationTracker;
-    }
+        Model model = modello.loadModel( getXmlResourceReader( "/locations.mdo" ) );
 
-    public void setLocationTracker( String locationTracker )
-    {
-        this.locationTracker = locationTracker;
-    }
+        Properties parameters = getModelloParameters( "1.0.0" );
 
-    public String getSourceTracker()
-    {
-        return sourceTracker;
-    }
+        modello.generate( model, "java", parameters );
 
-    public void setSourceTracker( String sourceTracker )
-    {
-        this.sourceTracker = sourceTracker;
+        compileGeneratedSources();
+
+        verifyCompiledGeneratedSources( "JavaLocationsVerifier" );
     }
 
 }
