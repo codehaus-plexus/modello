@@ -334,17 +334,6 @@
     </dependency>
   </dependencies>
 
-  <repositories>
-    <repository>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-      <id>codehaus-snapshots</id>
-      <name>Codehaus Snapshot Development Repository</name>
-      <url>http://snapshots.repository.codehaus.org/</url>
-    </repository>
-  </repositories>
-
   <build>
     <plugins>
       <plugin>
@@ -356,6 +345,11 @@
     <pluginManagement>
       <plugins>
         <!-- set versions of common plugins for reproducibility, ordered alphabetically -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-assembly-plugin</artifactId>
+          <version>2.2-beta-5</version>
+        </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-clean-plugin</artifactId>
@@ -374,6 +368,11 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-deploy-plugin</artifactId>
           <version>2.5</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-gpg-plugin</artifactId>
+          <version>1.0</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -406,9 +405,9 @@
             <autoVersionSubmodules>true</autoVersionSubmodules>
             <!-- modello tests require installation first at present -->
             <preparationGoals>clean install</preparationGoals>
-            <useReleaseProfile>true</useReleaseProfile>
+            <useReleaseProfile>false</useReleaseProfile>
             <goals>deploy</goals>
-            <arguments>-Prelease</arguments>
+            <arguments>-Pmodello-release</arguments>
           </configuration>
         </plugin>
         <plugin>
@@ -450,9 +449,50 @@
 
   <profiles>
     <profile>
-      <id>release</id>
+      <id>modello-release</id>
       <build>
         <plugins>
+          <plugin>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <dependencies>
+              <dependency>
+                <groupId>org.apache.apache.resources</groupId>
+                <artifactId>apache-source-release-assembly-descriptor</artifactId>
+                <version>1.0.2</version>
+              </dependency>
+            </dependencies>
+            <executions>
+              <execution>
+                <id>source-release-assembly</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>single</goal>
+                </goals>
+                <configuration>
+                  <runOnlyAtExecutionRoot>true</runOnlyAtExecutionRoot>
+                  <descriptorRefs>
+                    <descriptorRef>source-release</descriptorRef>
+                  </descriptorRefs>
+                  <tarLongFileFormat>gnu</tarLongFileFormat>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <configuration>
+              <passphrase>${gpg.passphrase}</passphrase>
+            </configuration>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-source-plugin</artifactId>
@@ -460,7 +500,7 @@
               <execution>
                 <id>attach-sources</id>
                 <goals>
-                  <goal>jar</goal>
+                  <goal>jar-no-fork</goal>
                 </goals>
               </execution>
             </executions>

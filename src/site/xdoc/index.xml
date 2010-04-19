@@ -4,7 +4,7 @@
 
   <properties>
     <title>Modello</title>
-    <author email="hboutemy_AT_apache_DOT_org">Hervé Boutemy</author>
+    <author email="hboutemy_AT_apache_DOT_org">HervÃ© Boutemy</author>
   </properties>
 
   <body>
@@ -17,12 +17,7 @@
     and documentation.</p>
 
       <p>
-        <!-- workaround for DOXIA-227: usemap attribute is stripped (fixed in Doxia 1.1, was 1.0-beta-1) -->
-        <script type="text/javascript">
-          tag='<img src="modello-deps.png" width="730" height="326" border="0" usemap="#Modello_dependencies" />';
-          tag=tag.substring(0,tag.length-2)+' usemap=\'#Modello_dependencies\''+tag.substring(tag.length-2);
-          document.write(tag);
-        </script>
+        <img src="modello-deps.png" width="730" height="326" border="0" usemap="#Modello_dependencies" />
         <map name="Modello_dependencies">
           <area shape="rect" coords="252,294,374,325" href="modello-test/" />
           <area shape="rect" coords="252,243,374,273" href="modello-core/" />
