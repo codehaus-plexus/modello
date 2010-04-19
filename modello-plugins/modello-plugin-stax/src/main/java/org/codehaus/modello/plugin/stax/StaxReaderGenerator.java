@@ -114,6 +114,7 @@ public class StaxReaderGenerator
         jClass.addImport( "java.io.Reader" );
         jClass.addImport( "java.io.File" );
         jClass.addImport( "java.io.FileInputStream" );
+        jClass.addImport( "java.io.InputStream" );
         jClass.addImport( "java.io.StringWriter" );
         jClass.addImport( "java.io.StringReader" );
         jClass.addImport( "java.io.ByteArrayInputStream" );
@@ -206,6 +207,42 @@ public class StaxReaderGenerator
 
         sc = unmarshall.getSourceCode();
         sc.add( "return read( reader, true );" );
+
+        jClass.addMethod( unmarshall );
+
+        // ----------------------------------------------------------------------
+        // Write the read(InputStream[,boolean]) methods which will do the unmarshalling.
+        // ----------------------------------------------------------------------
+
+        unmarshall = new JMethod( "read", rootType, null );
+
+        unmarshall.addParameter( new JParameter( new JClass( "InputStream" ), "stream" ) );
+        unmarshall.addParameter( new JParameter( JType.BOOLEAN, "strict" ) );
+
+        unmarshall.addException( new JClass( "IOException" ) );
+        unmarshall.addException( new JClass( "XMLStreamException" ) );
+
+        sc = unmarshall.getSourceCode();
+
+        sc.add( "XMLStreamReader xmlStreamReader = XMLInputFactory.newInstance().createXMLStreamReader( stream );" );
+
+        sc.add( "" );
+
+        sc.add( "return read( xmlStreamReader, strict );" );
+
+        jClass.addMethod( unmarshall );
+
+        // ----------------------------------------------------------------------
+
+        unmarshall = new JMethod( "read", rootType, null );
+
+        unmarshall.addParameter( new JParameter( new JClass( "InputStream" ), "stream" ) );
+
+        unmarshall.addException( new JClass( "IOException" ) );
+        unmarshall.addException( new JClass( "XMLStreamException" ) );
+
+        sc = unmarshall.getSourceCode();
+        sc.add( "return read( stream, true );" );
 
         jClass.addMethod( unmarshall );
 

@@ -88,6 +88,7 @@ public class Dom4jReaderGenerator
         initHeader( jClass );
         suppressAllWarnings( objectModel, jClass );
 
+        jClass.addImport( "java.io.InputStream" );
         jClass.addImport( "java.io.IOException" );
         jClass.addImport( "java.io.Reader" );
         jClass.addImport( "java.net.URL" );
@@ -171,6 +172,43 @@ public class Dom4jReaderGenerator
         sc = unmarshall.getSourceCode();
 
         sc.add( "return read( reader, true );" );
+
+        jClass.addMethod( unmarshall );
+
+        // ----------------------------------------------------------------------
+        // Write the read(InputStream[,boolean]) methods which will do the unmarshalling.
+        // ----------------------------------------------------------------------
+
+        unmarshall = new JMethod( "read", rootType, null );
+
+        unmarshall.addParameter( new JParameter( new JClass( "InputStream" ), "stream" ) );
+        unmarshall.addParameter( new JParameter( JType.BOOLEAN, "strict" ) );
+
+        unmarshall.addException( new JClass( "IOException" ) );
+        unmarshall.addException( new JClass( "DocumentException" ) );
+
+        sc = unmarshall.getSourceCode();
+
+        sc.add( "SAXReader parser = new SAXReader();" );
+
+        sc.add( "Document document = parser.read( stream );" );
+
+        sc.add( "return read( document, strict );" );
+
+        jClass.addMethod( unmarshall );
+
+        // ----------------------------------------------------------------------
+
+        unmarshall = new JMethod( "read", rootType, null );
+
+        unmarshall.addParameter( new JParameter( new JClass( "InputStream" ), "stream" ) );
+
+        unmarshall.addException( new JClass( "IOException" ) );
+        unmarshall.addException( new JClass( "DocumentException" ) );
+
+        sc = unmarshall.getSourceCode();
+
+        sc.add( "return read( stream, true );" );
 
         jClass.addMethod( unmarshall );
 
