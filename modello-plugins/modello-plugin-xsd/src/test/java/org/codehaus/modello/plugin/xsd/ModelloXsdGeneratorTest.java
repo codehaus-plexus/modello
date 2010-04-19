@@ -55,7 +55,7 @@ public class ModelloXsdGeneratorTest
     {
         ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
 
-        Properties parameters = getModelloParameters( "1.3.0" );
+        Properties parameters = getModelloParameters( "1.4.0" );
 
         Model model = modello.loadModel( getTestFile( "../../src/main/mdo/modello.mdo" ) );
 
@@ -78,7 +78,7 @@ public class ModelloXsdGeneratorTest
         saxParser.setProperty( "http://java.sun.com/xml/jaxp/properties/schemaLanguage",
                                "http://www.w3.org/2001/XMLSchema" );
         saxParser.setProperty( "http://java.sun.com/xml/jaxp/properties/schemaSource",
-                               new File( getOutputDirectory(), "modello-1.3.0.xsd" ) );
+                               new File( getOutputDirectory(), "modello-1.4.0.xsd" ) );
 
         // first self-test: validate Modello model with xsd generated from it
         saxParser.parse( getTestFile( "../../src/main/mdo/modello.mdo" ), new Handler() );
