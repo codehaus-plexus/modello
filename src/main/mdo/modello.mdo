@@ -578,7 +578,7 @@
         </field>
         <field xml.attribute="true" xml.tagName="xml.content">
           <name>content</name>
-          <version>1.0.0+</version>
+          <version>1.4.0+</version>
           <type>boolean</type>
           <description>
             Consider this field as the content of the class' element.
