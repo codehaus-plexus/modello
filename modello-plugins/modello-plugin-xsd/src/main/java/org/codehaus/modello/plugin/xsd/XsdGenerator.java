@@ -192,7 +192,9 @@ public class XsdGenerator
 
         List<ModelField> fields = getFieldsForXml( modelClass, getGeneratedVersion() );
 
-        boolean hasContentField = hasContentField( fields );
+        ModelField contentField = getContentField( fields );
+
+        boolean hasContentField = contentField != null;
 
         List<ModelField> attributeFields = getXmlAttributeFields( fields );
 
@@ -205,7 +207,7 @@ public class XsdGenerator
 
             w.startElement( "xs:extension" );
 
-            w.addAttribute( "base", "xs:string" );
+            w.addAttribute( "base", getXsdType( contentField.getType() ) );
         }
 
         writeClassDocumentation( w, modelClass );

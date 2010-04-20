@@ -576,6 +576,15 @@
           </description>
           <comment>see org.codehaus.modello.plugins.xml.metadata.XmlMetadataPlugin</comment>
         </field>
+        <field xml.attribute="true" xml.tagName="xml.content">
+          <name>content</name>
+          <version>1.0.0+</version>
+          <type>boolean</type>
+          <description>
+            Consider this field as the content of the class' element.
+          </description>
+          <comment>see org.codehaus.modello.plugins.xml.metadata.XmlMetadataPlugin</comment>
+        </field>
         <field xml.attribute="true" xml.tagName="xml.trim">
           <name>trim</name>
           <version>1.0.0+</version>
@@ -640,8 +649,9 @@
           <description><![CDATA[
             Simple type for this field (or array of such type). Can be one of : <code>boolean</code>, <code>byte</code>,
             <code>char</code>, <code>short</code>, <code>int</code>, <code>long</code>, <code>float</code>,
-            <code>double</code>, <code>String</code>, <code>Boolean</code>, <code>Date</code>, <code>DOM</code>,
-            <code>Content</code>.]]>
+            <code>double</code>, <code>String</code>, <code>Boolean</code>, <code>Date</code>, <code>DOM</code>.
+            Not that <code>Content</code> type is deprecated in favor of <code>xml.content="true"</code> field
+            attribute.]]>
           </description>
         </field>
         <field>

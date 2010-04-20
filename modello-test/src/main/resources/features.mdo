@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
-<model xmlns="http://modello.codehaus.org/MODELLO/1.3.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://modello.codehaus.org/MODELLO/1.3.0 http://modello.codehaus.org/xsd/modello-1.3.0.xsd"
+<model xmlns="http://modello.codehaus.org/MODELLO/1.4.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://modello.codehaus.org/MODELLO/1.4.0 http://modello.codehaus.org/xsd/modello-1.4.0.xsd"
   xml.namespace="http://modello.codehaus.org/FEATURES/${version}"
   xml.schemaLocation="http://modello.codehaus.org/features-${version}.xsd">
   <id>features</id>
@@ -860,6 +860,13 @@
             <type>XmlAttributes</type>
           </association>
         </field>
+        <field>
+          <name>content</name>
+          <version>1.0.0+</version>
+          <association>
+            <type>XmlContent</type>
+          </association>
+        </field>
         <field xml.tagName="tag-name">
           <name>fieldName</name>
           <version>1.0.0+</version>
@@ -1145,6 +1152,75 @@
           <description><![CDATA[<code>&lt;field xml.attribute="true" xml.tagName="tag-name"&gt;</code>.]]></description>
           <type>String</type>
           <defaultValue>default</defaultValue>
+        </field>
+      </fields>
+    </class>
+
+    <class>
+      <name>XmlContent</name>
+      <version>1.0.0+</version>
+      <description><![CDATA[<code>&lt;field xml.content="true"&gt;</code>: fields as XML content,
+        for every simple type.]]>
+      </description>
+      <fields>
+        <field xml.tagName="content.long">
+          <name>longContent</name>
+          <version>1.0.0+</version>
+          <association>
+            <type>XmlContentLong</type>
+            <multiplicity>1</multiplicity>
+          </association>
+        </field>
+        <field xml.tagName="content.long-with-attributes">
+          <name>longContentWithAttributes</name>
+          <version>1.0.0+</version>
+          <association>
+            <type>XmlContentLongWithAttributes</type>
+            <multiplicity>1</multiplicity>
+          </association>
+        </field>
+      </fields>
+    </class>
+
+    <class>
+      <name>XmlContentLong</name>
+      <version>1.0.0+</version>
+      <description><![CDATA[<code>&lt;field xml.content="true"&gt;</code> with <code>long</code> type.]]>
+      </description>
+      <fields>
+        <field xml.content="true">
+          <name>content</name>
+          <version>1.0.0+</version>
+          <description><![CDATA[<code>long</code> primitive.]]></description>
+          <type>long</type>
+          <defaultValue>12121212</defaultValue>
+        </field>
+      </fields>
+    </class>
+    <class>
+      <name>XmlContentLongWithAttributes</name>
+      <version>1.0.0+</version>
+      <description><![CDATA[<code>&lt;field xml.content="true"&gt;</code> with <code>long</code> type and some attributes.]]>
+      </description>
+      <fields>
+        <field xml.content="true">
+          <name>content</name>
+          <version>1.0.0+</version>
+          <description><![CDATA[<code>long</code> primitive.]]></description>
+          <type>long</type>
+          <defaultValue>12121212</defaultValue>
+        </field>
+        <field xml.attribute="true">
+          <name>attr</name>
+          <description>An XML attribute.</description>
+          <version>1.0.0+</version>
+          <type>String</type>
+        </field>
+        <field xml.attribute="true">
+          <name>attr2</name>
+          <description>A 2nd XML attribute.</description>
+          <version>1.0.0+</version>
+          <type>int</type>
         </field>
       </fields>
     </class>

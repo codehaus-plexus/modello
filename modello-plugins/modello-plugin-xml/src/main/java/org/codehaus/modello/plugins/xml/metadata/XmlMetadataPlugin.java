@@ -48,7 +48,7 @@ public class XmlMetadataPlugin
 {
     public static final String XML_ATTRIBUTE = "xml.attribute";
 
-    static final String XML_CONTENT = "xml._content_"; // not published in Modello's model yet
+    public static final String XML_CONTENT = "xml.content";
 
     public static final String XML_FORMAT = "xml.format";
 

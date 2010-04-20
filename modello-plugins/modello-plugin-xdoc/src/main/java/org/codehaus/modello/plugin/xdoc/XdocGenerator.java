@@ -201,7 +201,7 @@ public class XdocGenerator
     {
         String tagName = resolveTagName( modelClass, association );
 
-        String id = tagName + '/' + modelClass.getPackageName() + '.' + modelClass.getName();
+        String id = getId( tagName, modelClass );
         if ( written.contains( id ) )
         {
             // tag already written for this model class accessed as this tag name
@@ -256,12 +256,17 @@ public class XdocGenerator
                 ModelAssociation assoc = (ModelAssociation) f;
                 ModelClass fieldModelClass = getModel().getClass( assoc.getTo(), getGeneratedVersion() );
 
-                if ( !written.contains( resolveTagName( fieldModelClass, assoc ) ) )
+                if ( !written.contains( getId( resolveTagName( fieldModelClass, assoc ), fieldModelClass ) ) )
                 {
                     writeElementDescriptor( w, fieldModelClass, assoc, written );
                 }
             }
         }
+    }
+
+    private String getId( String tagName, ModelClass modelClass )
+    {
+        return tagName + '/' + modelClass.getPackageName() + '.' + modelClass.getName();
     }
 
     /**

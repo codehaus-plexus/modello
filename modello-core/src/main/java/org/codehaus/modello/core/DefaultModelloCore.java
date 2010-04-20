@@ -162,10 +162,10 @@ public class DefaultModelloCore
 
                 if ( "Content".equals( field.getType() ) )
                 {
-                    // TODO : add a deprecation Warning
+                    getLogger().warn( "'Content' type is deprecated: use 'String' type and add xml.content='true' to the field" );
                     field.setType( "String" );
                     Map<String, String> fieldAttributes = modelReader.getAttributesForField( field );
-                    fieldAttributes.put( "xml._content_", "true" );
+                    fieldAttributes.put( "xml.content", "true" );
                 }
             }
         }

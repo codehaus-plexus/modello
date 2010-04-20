@@ -90,6 +90,12 @@
       tag-name="value"
     ></attributes>
     <attributesDefault></attributesDefault>
+
+    <content>
+      <content.long>-707070707070</content.long>
+      <content.long-with-attributes attr="attribute" attr2="12">-707070707070</content.long-with-attributes>
+    </content>
+
     <tag-name>value from XML file</tag-name>
     <dateXmlFormat>2012-12-24T22:12:12</dateXmlFormat>
     <dateLong>121212121212</dateLong>
