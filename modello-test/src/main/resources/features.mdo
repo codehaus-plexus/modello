@@ -341,6 +341,12 @@
           <version>1.0.0+</version>
           <type>String</type>
         </field>
+        <field xml.attribute="true">
+          <name>attr2</name>
+          <description>A 2nd XML attribute.</description>
+          <version>1.0.0+</version>
+          <type>int</type>
+        </field>
       </fields>
     </class>
 

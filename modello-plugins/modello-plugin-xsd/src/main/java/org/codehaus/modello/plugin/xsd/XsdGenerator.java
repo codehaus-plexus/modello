@@ -198,15 +198,7 @@ public class XsdGenerator
 
         fields.removeAll( attributeFields );
 
-        boolean mixedContent = hasContentField && fields.size() > 0;
-
-        // other fields with complexType
-        // if yes it's a mixed content element and attribute
-        if ( mixedContent )
-        {
-            w.addAttribute( "mixed", "true" );
-        }
-        else if ( hasContentField )
+        if ( hasContentField )
         {
             // yes it's only an extension of xs:string
             w.startElement( "xs:simpleContent" );
@@ -225,7 +217,7 @@ public class XsdGenerator
             XsdClassMetadata xsdClassMetadata = (XsdClassMetadata) modelClass.getMetadata( XsdClassMetadata.ID );
             boolean compositorAll = XsdClassMetadata.COMPOSITOR_ALL.equals( xsdClassMetadata.getCompositor() );
 
-            if ( ( mixedContent ) || ( !hasContentField ) )
+            if ( !hasContentField )
             {
                 if ( compositorAll )
                 {
@@ -236,6 +228,7 @@ public class XsdGenerator
                     w.startElement( "xs:sequence" );
                 }
             }
+
             for ( ModelField field : fields )
             {
                 XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
@@ -317,23 +310,12 @@ public class XsdGenerator
                                         + "then class " + modelClass.getName() + " MUST be declared as xsd.compositor=\"sequence\"" );
                                 }
 
-                                if ( mixedContent )
-                                {
-                                    w.startElement( "xs:element" );
-                                    w.addAttribute( "minOccurs", "0" );
-                                }
-
                                 w.addAttribute( "name", resolveTagName( fieldTagName, xmlAssociationMetadata ) );
 
                                 w.addAttribute( "type", fieldModelClass.getName() );
                                 w.addAttribute( "maxOccurs", "unbounded" );
 
                                 writeFieldDocumentation( w, field );
-
-                                if ( mixedContent )
-                                {
-                                    w.endElement();
-                                }
                             }
                         }
                         else
@@ -379,7 +361,8 @@ public class XsdGenerator
                     w.endElement();
                 }
             }// end fields iterator
-            if ( !hasContentField || mixedContent )
+
+            if ( !hasContentField )
             {
                 w.endElement(); // xs:all or xs:sequence
             }
@@ -422,7 +405,7 @@ public class XsdGenerator
             w.endElement();
         }
 
-        if ( hasContentField && !mixedContent )
+        if ( hasContentField )
         {
             w.endElement(); //xs:extension
 
@@ -528,11 +511,11 @@ public class XsdGenerator
         {
             return "xs:long";
         }
-        else if ("float".equals( type ) || "Float".equals( type ) )
+        else if ( "float".equals( type ) || "Float".equals( type ) )
         {
             return "xs:float";
         }
-        else if ("double".equals( type ) || "Double".equals( type ) )
+        else if ( "double".equals( type ) || "Double".equals( type ) )
         {
             return "xs:double";
         }

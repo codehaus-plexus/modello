@@ -25,7 +25,7 @@
         <el2>text</el2>
       </el1>
     </dom>
-    <content attr="attribute">content value</content>
+    <content attr="attribute" attr2="12">content value</content>
   </simpleTypes>
   <defaultValues></defaultValues>
 
