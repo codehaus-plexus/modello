@@ -69,9 +69,9 @@ Usage
 
   This configuration will take into account the model described in the file <<<src/main/mdo/myModel.mdo>>> in version 1.0.0. It will execute the following goals in the <<<generate-source>>> phase:
 
-  * {{{java-mojo.html}java}} which will generate Java beans from the model,
+  * {{{./java-mojo.html}java}} which will generate Java beans from the model,
 
-  * {{{xpp3-reader-mojo.html}xpp3-reader}} which will create an XPP reader for the model.
+  * {{{./xpp3-reader-mojo.html}xpp3-reader}} which will create an XPP reader for the model.
 
   []
 
@@ -79,8 +79,8 @@ Usage
 
   During the <<<pre-site>>> phase, it will execute the following goals:
 
-  * {{{xdoc-mojo.html}xdoc}} which will generate a documentation of the model in the <<<target/generated-site/xdoc>>> folder, which will in turn be processed to output in the standard site, during the <<<site>>> phase,
+  * {{{./xdoc-mojo.html}xdoc}} which will generate a documentation of the model in the <<<target/generated-site/xdoc>>> folder, which will in turn be processed to output in the standard site, during the <<<site>>> phase,
 
-  * {{{xsd-mojo.html}xsd}} which will generate an XML Schema for our model in the <<<target/generated-site/resources/xsd>>> folder (set by the <<<outputDirectory>>> parameter), which will in turn be copied in the standard site, during the <<<site>>> phase.
+  * {{{./xsd-mojo.html}xsd}} which will generate an XML Schema for our model in the <<<target/generated-site/resources/xsd>>> folder (set by the <<<outputDirectory>>> parameter), which will in turn be copied in the standard site, during the <<<site>>> phase.
 
   []

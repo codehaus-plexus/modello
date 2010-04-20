@@ -14,50 +14,50 @@ Modello Maven Plugin
 
 * Goals Overview
 
-  * {{{xsd-mojo.html}modello:xsd}} Generates an XML Schema from the Modello model.
+  * {{{./xsd-mojo.html}modello:xsd}} Generates an XML Schema from the Modello model.
 
-  * {{{xdoc-mojo.html}modello:xdoc}} Generates standard documentation for the Modello model, in xdoc format.
+  * {{{./xdoc-mojo.html}modello:xdoc}} Generates standard documentation for the Modello model, in xdoc format.
 
-  * {{{java-mojo.html}modello:java}} Generates Java beans from the Modello model.
+  * {{{./java-mojo.html}modello:java}} Generates Java beans from the Modello model.
 
-  * {{{xpp3-writer-mojo.html}modello:xpp3-writer}} Generates an XML Pull Parser writer from the Modello model.
+  * {{{./xpp3-writer-mojo.html}modello:xpp3-writer}} Generates an XML Pull Parser writer from the Modello model.
 
-  * {{{xpp3-reader-mojo.html}modello:xpp3-reader}} Generates an XML Pull Parser reader from the Modello model.
+  * {{{./xpp3-reader-mojo.html}modello:xpp3-reader}} Generates an XML Pull Parser reader from the Modello model.
 
-  * {{{dom4j-writer-mojo.html}modello:dom4j-writer}} Generates a DOM4J writer from the Modello model.
+  * {{{./dom4j-writer-mojo.html}modello:dom4j-writer}} Generates a DOM4J writer from the Modello model.
 
-  * {{{dom4j-reader-mojo.html}modello:dom4j-reader}} Generates a DOM4J reader from the Modello model.
+  * {{{./dom4j-reader-mojo.html}modello:dom4j-reader}} Generates a DOM4J reader from the Modello model.
 
-  * {{{stax-writer-mojo.html}modello:stax-writer}} Generates a StAX writer from the Modello model.
+  * {{{./stax-writer-mojo.html}modello:stax-writer}} Generates a StAX writer from the Modello model.
 
-  * {{{stax-reader-mojo.html}modello:stax-reader}} Generates a StAX reader from the Modello model.
+  * {{{./stax-reader-mojo.html}modello:stax-reader}} Generates a StAX reader from the Modello model.
 
-  * {{{jdom-writer-mojo.html}modello:jdom-writer}} Generates a {{{http://www.jdom.org/}jdom}} writer from the model that is capable of preserving element ordering and comments.
+  * {{{./jdom-writer-mojo.html}modello:jdom-writer}} Generates a {{{http://www.jdom.org/}jdom}} writer from the model that is capable of preserving element ordering and comments.
 
-  * {{{converters-mojo.html}modello:converters}} Generates classes that can convert between different versions of the model.
+  * {{{./converters-mojo.html}modello:converters}} Generates classes that can convert between different versions of the model.
 
   []
 
 * Usage
 
-  General instructions on how to use the Modello Plugin can be found on the {{{usage.html}usage page}}. Some more
+  General instructions on how to use the Modello Plugin can be found on the {{{./usage.html}usage page}}. Some more
   specific use cases are described in the examples given below.
 
-  In case you still have questions regarding the plugin's usage, please have a look at the {{{faq.html}FAQ}} and feel
-  free to contact the {{{mail-lists.html}user mailing list}}. The posts to the mailing list are archived and could
+  In case you still have questions regarding the plugin's usage, please have a look at the {{{./faq.html}FAQ}} and feel
+  free to contact the {{{./mail-lists.html}user mailing list}}. The posts to the mailing list are archived and could
   already contain the answer to your question as part of an older thread. Hence, it is also worth browsing/searching
-  the {{{mail-lists.html}mail archive}}.
+  the {{{./mail-lists.html}mail archive}}.
 
   If you feel like the plugin is missing a feature or has a defect, you can fill a feature request or bug report in our
-  {{{issue-tracking.html}issue tracker}}. When creating a new issue, please provide a comprehensive description of your
+  {{{./issue-tracking.html}issue tracker}}. When creating a new issue, please provide a comprehensive description of your
   concern. Especially for fixing bugs it is crucial that the developers can reproduce your problem. For this reason,
   entire debug logs, POMs or most preferably little demo projects attached to the issue are very much appreciated.
   Of course, patches are welcome, too. Contributors can check out the project from our
-  {{{source-repository.html}source repository}}.
+  {{{./source-repository.html}source repository}}.
 
 * Examples
 
   To provide you with better understanding of some usages of the Modello Plugin,
   you can take a look at the following example:
 
-  * {{{examples/multi-model.html}Including multiple models}}
+  * {{{./examples/multi-model.html}Including multiple models}}
