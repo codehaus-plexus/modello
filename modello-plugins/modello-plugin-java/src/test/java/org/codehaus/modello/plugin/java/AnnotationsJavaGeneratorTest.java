@@ -55,8 +55,8 @@ public class AnnotationsJavaGeneratorTest
 
         modello.generate( model, "java", parameters );
 
-        addDependency( "javax.xml.bind", "jaxb-api", "2.1" );
-        addDependency( "javax.persistence", "persistence-api", "1.0" );
+        addDependency( "javax.xml.bind", "jaxb-api" );
+        addDependency( "javax.persistence", "persistence-api" );
         compileGeneratedSources( true );
 
         verifyCompiledGeneratedSources( "AnnotationsVerifier" );

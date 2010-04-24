@@ -53,9 +53,9 @@ public class FeaturesStaxGeneratorTest
         modello.generate( model, "stax-writer", parameters );
         modello.generate( model, "stax-reader", parameters );
 
-        addDependency( "stax", "stax-api", "1.0.1" );
-        addDependency( "org.codehaus.woodstox", "wstx-asl", "3.2.0" );
-        addDependency( "xmlunit", "xmlunit", "1.2" );
+        addDependency( "stax", "stax-api" );
+        addDependency( "org.codehaus.woodstox", "wstx-asl" );
+        addDependency( "xmlunit", "xmlunit" );
 
         compileGeneratedSources();
 

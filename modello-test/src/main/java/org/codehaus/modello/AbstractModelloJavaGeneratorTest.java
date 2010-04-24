@@ -22,12 +22,6 @@ package org.codehaus.modello;
  * SOFTWARE.
  */
 
-import org.apache.maven.artifact.Artifact;
-import org.apache.maven.artifact.factory.ArtifactFactory;
-import org.apache.maven.artifact.repository.ArtifactRepository;
-import org.apache.maven.artifact.repository.ArtifactRepositoryFactory;
-import org.apache.maven.artifact.repository.layout.ArtifactRepositoryLayout;
-import org.apache.maven.settings.MavenSettingsBuilder;
 import org.codehaus.modello.verifier.VerifierException;
 import org.codehaus.plexus.compiler.Compiler;
 import org.codehaus.plexus.compiler.CompilerConfiguration;
@@ -67,16 +61,6 @@ public abstract class AbstractModelloJavaGeneratorTest
 
     private List<URL> urls = new ArrayList<URL>();
 
-    private ArtifactRepository repository;
-
-    private ArtifactFactory artifactFactory;
-
-    private ArtifactRepositoryFactory artifactRepositoryFactory;
-
-    private MavenSettingsBuilder settingsBuilder;
-
-    private ArtifactRepositoryLayout repositoryLayout;
-
     private List<String> classPathElements = new ArrayList<String>();
 
     protected AbstractModelloJavaGeneratorTest( String name )
@@ -92,15 +76,6 @@ public abstract class AbstractModelloJavaGeneratorTest
         FileUtils.deleteDirectory( getOutputClasses() );
 
         assertTrue( getOutputClasses().mkdirs() );
-
-        repositoryLayout = (ArtifactRepositoryLayout) lookup( ArtifactRepositoryLayout.ROLE, "default" );
-        artifactFactory = (ArtifactFactory) lookup( ArtifactFactory.ROLE );
-        settingsBuilder = (MavenSettingsBuilder) lookup( MavenSettingsBuilder.ROLE );
-        artifactRepositoryFactory = (ArtifactRepositoryFactory) lookup( ArtifactRepositoryFactory.ROLE );
-
-        String localRepo = settingsBuilder.buildSettings().getLocalRepository();
-        String url = "file://" + localRepo;
-        repository = artifactRepositoryFactory.createArtifactRepository( "local", url, repositoryLayout, null, null );
     }
 
     protected File getOutputDirectory()
@@ -113,24 +88,24 @@ public abstract class AbstractModelloJavaGeneratorTest
         return getTestFile( "target/" + getName() + "/classes" );
     }
 
-    protected void addDependency( String groupId, String artifactId, String version )
-        throws MalformedURLException
+    protected void addDependency( String groupId, String artifactId )
     {
-        File dependencyFile = getDependencyFile( groupId, artifactId, version );
+        File dependencyFile = getDependencyFile( groupId, artifactId );
 
         dependencies.add( dependencyFile );
 
         addClassPathFile( dependencyFile );
     }
 
-    protected File getDependencyFile( String groupId, String artifactId, String version )
+    protected File getDependencyFile( String groupId, String artifactId )
     {
-        Artifact artifact =
-            artifactFactory.createArtifact( groupId, artifactId, version, Artifact.SCOPE_COMPILE, "jar" );
+        // NOTE: dependency version is managed by project POM and not selectable by test
 
-        File dependencyFile = new File( repository.getBasedir(), repository.pathOf( artifact ) );
+        String libsDir = System.getProperty( "tests.lib.dir", "target/test-libs" );
+        File dependencyFile = new File( libsDir, artifactId + ".jar" );
 
         assertTrue( "Can't find dependency: " + dependencyFile.getAbsolutePath(), dependencyFile.isFile() );
+
         return dependencyFile;
     }
 
@@ -182,9 +157,9 @@ public abstract class AbstractModelloJavaGeneratorTest
         File generatedSources = getOutputDirectory();
         File destinationDirectory = getOutputClasses();
 
-        addDependency( "junit", "junit", "3.8.2" );
-        addDependency( "org.codehaus.plexus", "plexus-utils", "1.5.8" ); // version must be the same as in pom.xml
-        addDependency( "org.codehaus.modello", "modello-test", getModelloVersion() );
+        addDependency( "junit", "junit" );
+        addDependency( "org.codehaus.plexus", "plexus-utils" );
+        addDependency( "org.codehaus.modello", "modello-test" );
 
         String[] classPathElements = new String[dependencies.size() + 2];
         classPathElements[0] = getTestPath( "target/classes" );
@@ -282,11 +257,17 @@ public abstract class AbstractModelloJavaGeneratorTest
     }
 
     protected void addClassPathFile( File file )
-        throws MalformedURLException
     {
         assertTrue( "File doesn't exists: " + file.getAbsolutePath(), file.exists() );
 
-        urls.add( file.toURL() );
+        try
+        {
+            urls.add( file.toURI().toURL() );
+        }
+        catch ( MalformedURLException e )
+        {
+            throw new RuntimeException( e );
+        }
 
         classPathElements.add( file.getAbsolutePath() );
     }

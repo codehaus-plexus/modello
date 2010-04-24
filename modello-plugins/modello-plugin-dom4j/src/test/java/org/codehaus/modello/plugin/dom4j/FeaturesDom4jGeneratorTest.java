@@ -53,8 +53,8 @@ public class FeaturesDom4jGeneratorTest
         modello.generate( model, "dom4j-writer", parameters );
         modello.generate( model, "dom4j-reader", parameters );
 
-        addDependency( "dom4j", "dom4j", "1.6.1" );
-        addDependency( "xmlunit", "xmlunit", "1.2" );
+        addDependency( "dom4j", "dom4j" );
+        addDependency( "xmlunit", "xmlunit" );
         compileGeneratedSources();
 
         verifyCompiledGeneratedSources( "org.codehaus.modello.generator.xml.dom4j.Dom4jFeaturesVerifier" );

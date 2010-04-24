@@ -53,7 +53,7 @@ public class FeaturesXpp3GeneratorTest
         modello.generate( model, "xpp3-writer", parameters );
         modello.generate( model, "xpp3-reader", parameters );
 
-        addDependency( "xmlunit", "xmlunit", "1.2" );
+        addDependency( "xmlunit", "xmlunit" );
         compileGeneratedSources();
 
         verifyCompiledGeneratedSources( "org.codehaus.modello.generator.xml.xpp3.Xpp3FeaturesVerifier" );
