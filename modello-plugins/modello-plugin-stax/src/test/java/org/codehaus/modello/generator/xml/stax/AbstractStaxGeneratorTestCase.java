@@ -23,14 +23,11 @@ package org.codehaus.modello.generator.xml.stax;
  */
 
 import org.codehaus.modello.AbstractModelloJavaGeneratorTest;
-import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
-import org.codehaus.plexus.compiler.CompilerException;
 import org.codehaus.plexus.util.StringUtils;
 
-import java.io.IOException;
 import java.util.Properties;
 
 public abstract class AbstractStaxGeneratorTestCase
@@ -52,13 +49,13 @@ public abstract class AbstractStaxGeneratorTestCase
     }
 
     protected void verifyModel( Model model, String className )
-        throws IOException, ModelloException, CompilerException
+        throws Exception
     {
         verifyModel( model, className, null );
     }
 
     protected void verifyModel( Model model, String className, String[] versions )
-        throws IOException, ModelloException, CompilerException
+        throws Exception
     {
         Properties parameters = getModelloParameters( "4.0.0" );
 
