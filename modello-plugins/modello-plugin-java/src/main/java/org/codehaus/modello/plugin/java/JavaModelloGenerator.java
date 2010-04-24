@@ -1724,6 +1724,11 @@ public class JavaModelloGenerator
 
             ModelAssociation modelAssociation = (ModelAssociation) modelField;
 
+            if ( association == modelAssociation )
+            {
+                continue;
+            }
+
             if ( !isClassInModel( modelAssociation.getTo(), model ) )
             {
                 continue;
