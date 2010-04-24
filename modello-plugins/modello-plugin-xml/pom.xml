@@ -19,5 +19,9 @@
       <artifactId>modello-plugin-java</artifactId>
       <optional>true</optional><!-- this dependency is only used for plugins generating java code -->
     </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-utils</artifactId>
+    </dependency>
   </dependencies>
 </project>

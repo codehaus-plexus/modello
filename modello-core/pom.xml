@@ -24,9 +24,8 @@
       <artifactId>plexus-container-default</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.codehaus.modello</groupId>
-      <artifactId>modello-test</artifactId>
-      <scope>test</scope>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-utils</artifactId>
     </dependency>
   </dependencies>
 
