@@ -37,9 +37,13 @@ import org.custommonkey.xmlunit.XMLUnit;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.io.Writer;
 
 /**
  * @author Herve Boutemy
@@ -51,6 +55,8 @@ public class Xpp3FeaturesVerifier
     public void verify()
         throws Exception
     {
+        verifyAPI();
+
         Features features = verifyReader();
 
         features.getXmlFeatures().getXmlTransientFields().setTransientString( "NOT-TO-BE-WRITTEN" );
@@ -66,6 +72,16 @@ public class Xpp3FeaturesVerifier
         verifyTransientElement();
 
         verifyEncoding();
+    }
+
+    public void verifyAPI()
+        throws Exception
+    {
+        assertReader( ModelloFeaturesTestXpp3Reader.class, Features.class, Reader.class, XmlPullParserException.class );
+        assertReader( ModelloFeaturesTestXpp3Reader.class, Features.class, InputStream.class, XmlPullParserException.class );
+
+        assertWriter( ModelloFeaturesTestXpp3Writer.class, Features.class, Writer.class, XmlPullParserException.class );
+        assertWriter( ModelloFeaturesTestXpp3Writer.class, Features.class, OutputStream.class, XmlPullParserException.class );
     }
 
     public Features verifyReader()

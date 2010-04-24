@@ -37,9 +37,13 @@ import org.custommonkey.xmlunit.XMLUnit;
 import org.dom4j.DocumentException;
 
 import java.io.File;
+import java.io.InputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.io.Writer;
 
 /**
  * @author Herve Boutemy
@@ -51,6 +55,8 @@ public class Dom4jFeaturesVerifier
     public void verify()
         throws Exception
     {
+        verifyAPI();
+
         Features features = verifyReader();
 
         features.getXmlFeatures().getXmlTransientFields().setTransientString( "NOT-TO-BE-WRITTEN" );
@@ -64,6 +70,16 @@ public class Dom4jFeaturesVerifier
         verifyTransientElement();
 
         verifyEncoding();
+    }
+
+    public void verifyAPI()
+        throws Exception
+    {
+        assertReader( ModelloFeaturesTestDom4jReader.class, Features.class, Reader.class, DocumentException.class );
+        assertReader( ModelloFeaturesTestDom4jReader.class, Features.class, InputStream.class, DocumentException.class );
+
+        assertWriter( ModelloFeaturesTestDom4jWriter.class, Features.class, Writer.class, IOException.class );
+        assertWriter( ModelloFeaturesTestDom4jWriter.class, Features.class, OutputStream.class, IOException.class );
     }
 
     public Features verifyReader()

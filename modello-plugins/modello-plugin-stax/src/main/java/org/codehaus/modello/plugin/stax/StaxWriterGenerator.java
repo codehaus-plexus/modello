@@ -94,8 +94,8 @@ public class StaxWriterGenerator
         initHeader( jClass );
         suppressAllWarnings( objectModel, jClass );
 
-        jClass.addImport( "java.io.InputStream" );
         jClass.addImport( "java.io.IOException" );
+        jClass.addImport( "java.io.OutputStream" );
         jClass.addImport( "java.io.Writer" );
         jClass.addImport( "java.io.StringWriter" );
         jClass.addImport( "java.text.DateFormat" );
@@ -118,7 +118,9 @@ public class StaxWriterGenerator
 
         String rootElement = resolveTagName( rootClass );
 
-        // Write the parse method which will do the unmarshalling.
+        // ----------------------------------------------------------------------
+        // Write the write( Writer, Model ) method which will do the unmarshalling.
+        // ----------------------------------------------------------------------
 
         JMethod marshall = new JMethod( "write" );
 
@@ -151,6 +153,54 @@ public class StaxWriterGenerator
 
         sc.add(
             "IndentingXMLStreamWriter serializer = new IndentingXMLStreamWriter( factory.createXMLStreamWriter( writer ) );" );
+
+        sc.add( "if ( supportWindowsLineEndings )" );
+        sc.add( "{" );
+        sc.addIndented( "serializer.setNewLine( serializer.getLineSeparator() );" );
+        sc.add( "}" );
+
+        sc.add( "serializer.writeStartDocument( " + rootElementParameterName + ".getModelEncoding(), \"1.0\" );" );
+
+        sc.add( "write" + root + "( " + rootElementParameterName + ", \"" + rootElement + "\", serializer );" );
+
+        sc.add( "serializer.writeEndDocument();" );
+
+        jClass.addMethod( marshall );
+
+        // ----------------------------------------------------------------------
+        // Write the write( OutputStream, Model ) method which will do the unmarshalling.
+        // ----------------------------------------------------------------------
+
+        marshall = new JMethod( "write" );
+
+        marshall.addParameter( new JParameter( new JClass( "OutputStream" ), "stream" ) );
+        marshall.addParameter( new JParameter( new JClass( root ), rootElementParameterName ) );
+
+        marshall.addException( new JClass( "java.io.IOException" ) );
+        marshall.addException( new JClass( "XMLStreamException" ) );
+
+        sc = marshall.getSourceCode();
+
+        sc.add( "XMLOutputFactory factory = XMLOutputFactory.newInstance();" );
+
+        // currently, only woodstox supports Windows line endings. It works with Java 6/RI and stax <= 1.1.1 as well
+        // but we have no way to detect them
+        sc.add( "boolean supportWindowsLineEndings = false;" );
+        sc.add( "if ( factory.isPropertySupported( \"com.ctc.wstx.outputEscapeCr\" ) )" );
+        sc.add( "{" );
+        sc.indent();
+        sc.add( "factory.setProperty( \"com.ctc.wstx.outputEscapeCr\", Boolean.FALSE );" );
+        sc.add( "supportWindowsLineEndings = true;" );
+        sc.unindent();
+        sc.add( "}" );
+
+        sc.add( "if ( factory.isPropertySupported( \"org.codehaus.stax2.automaticEmptyElements\" ) )" );
+        sc.add( "{" );
+        sc.addIndented( "factory.setProperty( \"org.codehaus.stax2.automaticEmptyElements\", Boolean.FALSE );" );
+        sc.add( "}" );
+
+        sc.add( "IndentingXMLStreamWriter serializer = new IndentingXMLStreamWriter( factory.createXMLStreamWriter( stream, "
+            + rootElementParameterName + ".getModelEncoding() ) );" );
 
         sc.add( "if ( supportWindowsLineEndings )" );
         sc.add( "{" );

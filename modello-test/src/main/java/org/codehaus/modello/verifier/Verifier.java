@@ -25,6 +25,7 @@ package org.codehaus.modello.verifier;
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
+import java.lang.reflect.Method;
 
 import junit.framework.Assert;
 
@@ -55,4 +56,67 @@ public abstract class Verifier
     {
         return ReaderFactory.newXmlReader( getClass().getResourceAsStream( name ) );
     }
+
+    protected void assertReader( Class<?> reader, Class<?> model, Class<?> input, Class<?> exception )
+    {
+        Method read;
+
+        // Model read( OutputStream|Writer ) throws IOException, ?
+        try
+        {
+            read = reader.getMethod( "read", input );
+
+            assertEquals( "Bad return type of " + read, model, read.getReturnType() );
+
+            for ( Class<?> e : read.getExceptionTypes() )
+            {
+                assertTrue( "Unexpected exception " + e.getName() + " at " + read, IOException.class.equals( e )
+                    || exception.equals( e ) );
+            }
+        }
+        catch ( NoSuchMethodException e )
+        {
+            fail( e.toString() );
+        }
+
+        // Model read( OutputStream|Writer, boolean ) throws IOException, ?
+        try
+        {
+            read = reader.getMethod( "read", input, Boolean.TYPE );
+
+            assertEquals( "Bad return type of " + read, model, read.getReturnType() );
+
+            for ( Class<?> e : read.getExceptionTypes() )
+            {
+                assertTrue( "Unexpected exception " + e.getName() + " at " + read, IOException.class.equals( e )
+                    || exception.equals( e ) );
+            }
+        }
+        catch ( NoSuchMethodException e )
+        {
+            fail( e.toString() );
+        }
+    }
+
+    protected void assertWriter( Class<?> writer, Class<?> model, Class<?> output, Class<?> exception )
+    {
+        Method write;
+
+        // write( OutputStream|Writer, Model ) throws IOException, ?
+        try
+        {
+            write = writer.getMethod( "write", output, model );
+
+            for ( Class<?> e : write.getExceptionTypes() )
+            {
+                assertTrue( "Unexpected exception " + e.getName() + " at " + write, IOException.class.equals( e )
+                    || exception.equals( e ) );
+            }
+        }
+        catch ( NoSuchMethodException e )
+        {
+            fail( e.toString() );
+        }
+    }
+
 }

@@ -37,9 +37,13 @@ import org.custommonkey.xmlunit.XMLUnit;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.io.Writer;
 
 import javax.xml.stream.XMLStreamException;
 
@@ -53,6 +57,8 @@ public class StaxFeaturesVerifier
     public void verify()
         throws Exception
     {
+        verifyAPI();
+
         Features features = verifyReader();
 
         features.getXmlFeatures().getXmlTransientFields().setTransientString( "NOT-TO-BE-WRITTEN" );
@@ -66,6 +72,16 @@ public class StaxFeaturesVerifier
         verifyTransientElement();
 
         verifyEncoding();
+    }
+
+    public void verifyAPI()
+        throws Exception
+    {
+        assertReader( ModelloFeaturesTestStaxReader.class, Features.class, Reader.class, XMLStreamException.class );
+        assertReader( ModelloFeaturesTestStaxReader.class, Features.class, InputStream.class, XMLStreamException.class );
+
+        assertWriter( ModelloFeaturesTestStaxWriter.class, Features.class, Writer.class, XMLStreamException.class );
+        assertWriter( ModelloFeaturesTestStaxWriter.class, Features.class, OutputStream.class, XMLStreamException.class );
     }
 
     public Features verifyReader()

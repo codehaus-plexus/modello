@@ -85,6 +85,7 @@ public class Xpp3WriterGenerator
 
         jClass.addImport( "org.codehaus.plexus.util.xml.pull.XmlSerializer" );
         jClass.addImport( "org.codehaus.plexus.util.xml.pull.MXSerializer" );
+        jClass.addImport( "java.io.OutputStream" );
         jClass.addImport( "java.io.Writer" );
         jClass.addImport( "java.text.DateFormat" );
         jClass.addImport( "java.util.Iterator" );
@@ -104,7 +105,9 @@ public class Xpp3WriterGenerator
 
         String rootElement = resolveTagName( rootClass );
 
-        // Write the write method which will do the marshalling.
+        // ----------------------------------------------------------------------
+        // Write the write( Writer, Model ) method which will do the unmarshalling.
+        // ----------------------------------------------------------------------
 
         JMethod marshall = new JMethod( "write" );
 
@@ -125,6 +128,37 @@ public class Xpp3WriterGenerator
             "serializer.setProperty( \"http://xmlpull.org/v1/doc/properties.html#serializer-line-separator\", \"\\n\" );" );
 
         sc.add( "serializer.setOutput( writer );" );
+
+        sc.add( "serializer.startDocument( " + rootElementParameterName + ".getModelEncoding(), null );" );
+
+        sc.add( "write" + root + "( " + rootElementParameterName + ", \"" + rootElement + "\", serializer );" );
+
+        sc.add( "serializer.endDocument();" );
+
+        jClass.addMethod( marshall );
+
+        // ----------------------------------------------------------------------
+        // Write the write( OutputStream, Model ) method which will do the unmarshalling.
+        // ----------------------------------------------------------------------
+
+        marshall = new JMethod( "write" );
+
+        marshall.addParameter( new JParameter( new JClass( "OutputStream" ), "stream" ) );
+        marshall.addParameter( new JParameter( new JClass( root ), rootElementParameterName ) );
+
+        marshall.addException( new JClass( "java.io.IOException" ) );
+
+        sc = marshall.getSourceCode();
+
+        sc.add( "XmlSerializer serializer = new MXSerializer();" );
+
+        sc.add(
+            "serializer.setProperty( \"http://xmlpull.org/v1/doc/properties.html#serializer-indentation\", \"  \" );" );
+
+        sc.add(
+            "serializer.setProperty( \"http://xmlpull.org/v1/doc/properties.html#serializer-line-separator\", \"\\n\" );" );
+
+        sc.add( "serializer.setOutput( stream, " + rootElementParameterName + ".getModelEncoding() );" );
 
         sc.add( "serializer.startDocument( " + rootElementParameterName + ".getModelEncoding(), null );" );
 

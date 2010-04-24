@@ -90,6 +90,7 @@ public class Dom4jWriterGenerator
         initHeader( jClass );
         suppressAllWarnings( objectModel, jClass );
 
+        jClass.addImport( "java.io.OutputStream" );
         jClass.addImport( "java.io.Writer" );
         jClass.addImport( "java.util.Arrays" );
         jClass.addImport( "java.util.Iterator" );
@@ -111,7 +112,9 @@ public class Dom4jWriterGenerator
         String rootElement = resolveTagName( rootClass );
         String variableName = uncapitalise( root );
 
-        // Write the parse method which will do the unmarshalling.
+        // ----------------------------------------------------------------------
+        // Write the write( Reader, Model ) method which will do the unmarshalling.
+        // ----------------------------------------------------------------------
 
         JMethod marshall = new JMethod( "write" );
 
@@ -130,6 +133,33 @@ public class Dom4jWriterGenerator
         sc.add( "OutputFormat format = OutputFormat.createPrettyPrint();" );
         sc.add( "format.setLineSeparator( System.getProperty( \"line.separator\" ) );" );
         sc.add( "XMLWriter serializer = new XMLWriter( writer, format );" );
+
+        sc.add( "serializer.write( document );" );
+
+        jClass.addMethod( marshall );
+
+        // ----------------------------------------------------------------------
+        // Write the write( OutputStream, Model ) method which will do the unmarshalling.
+        // ----------------------------------------------------------------------
+
+        marshall = new JMethod( "write" );
+
+        marshall.addParameter( new JParameter( new JClass( "OutputStream" ), "stream" ) );
+        marshall.addParameter( new JParameter( new JClass( root ), variableName ) );
+
+        marshall.addException( new JClass( "java.io.IOException" ) );
+
+        sc = marshall.getSourceCode();
+
+        sc.add( "Document document = new DocumentFactory().createDocument();" );
+
+        sc.add( "write" + root + "( " + variableName + ", \"" + rootElement + "\", document );" );
+
+        // TODO: pretty printing optional
+        sc.add( "OutputFormat format = OutputFormat.createPrettyPrint();" );
+        sc.add( "format.setLineSeparator( System.getProperty( \"line.separator\" ) );" );
+        sc.add( "format.setEncoding( " + variableName + ".getModelEncoding() );" );
+        sc.add( "XMLWriter serializer = new XMLWriter( stream, format );" );
 
         sc.add( "serializer.write( document );" );
 
