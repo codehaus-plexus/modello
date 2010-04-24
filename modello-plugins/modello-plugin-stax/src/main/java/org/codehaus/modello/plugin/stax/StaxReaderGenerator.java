@@ -158,19 +158,55 @@ public class StaxReaderGenerator
 
         JSourceCode sc = unmarshall.getSourceCode();
 
+        String tagName = resolveTagName( root );
         String className = root.getName();
         String variableName = uncapitalise( className );
 
-        sc.add( "String encoding = xmlStreamReader.getCharacterEncodingScheme();" );
+        sc.add( "int eventType = xmlStreamReader.getEventType();" );
 
-        sc.add( className + ' ' + variableName + " = parse" + root.getName() + "( \"" + resolveTagName( root )
-            + "\", xmlStreamReader, strict );" );
+        sc.add( "while ( eventType != XMLStreamConstants.END_DOCUMENT )" );
 
-        sc.add( variableName + ".setModelEncoding( encoding );" );
+        sc.add( "{" );
+        sc.indent();
+
+        sc.add( "if ( eventType == XMLStreamConstants.START_ELEMENT )" );
+
+        sc.add( "{" );
+        sc.indent();
+
+        sc.add( "if ( strict && ! \"" + tagName + "\".equals( xmlStreamReader.getLocalName() ) )" );
+
+        sc.add( "{" );
+        sc.addIndented( "throw new XMLStreamException( \"Expected root element '" + tagName + "' but "
+                        + "found '\" + xmlStreamReader.getLocalName() + \"'\", xmlStreamReader.getLocation(), null );" );
+        sc.add( "}" );
+
+        VersionDefinition versionDefinition = objectModel.getVersionDefinition();
+        if ( versionDefinition != null && "namespace".equals( versionDefinition.getType() ) )
+        {
+            sc.add( "String modelVersion = getVersionFromRootNamespace( xmlStreamReader );" );
+
+            writeModelVersionCheck( sc );
+        }
+
+        sc.add( className + ' ' + variableName + " = parse" + root.getName() + "( xmlStreamReader, strict );" );
+
+        sc.add( variableName + ".setModelEncoding( xmlStreamReader.getCharacterEncodingScheme() );" );
 
         sc.add( "resolveReferences( " + variableName + " );" );
 
-        sc.add( "return " + variableName + ";" );
+        sc.add( "return " + variableName + ';' );
+
+        sc.unindent();
+        sc.add( "}" );
+
+        sc.add( "eventType = xmlStreamReader.next();" );
+
+        sc.unindent();
+        sc.add( "}" );
+
+        sc.add( "throw new XMLStreamException( \"Expected root element '" + tagName + "' but "
+                        + "found no element at all: invalid XML document\", xmlStreamReader.getLocation(), null );" );
 
         jClass.addMethod( unmarshall );
 
@@ -289,7 +325,6 @@ public class StaxReaderGenerator
         // Determine the version. Currently, it causes the document to be reparsed, but could be made more efficient in
         // future by buffering the read XML and piping that into any consequent read method.
 
-        VersionDefinition versionDefinition = objectModel.getVersionDefinition();
         if ( versionDefinition != null )
         {
             writeDetermineVersionMethod( jClass, objectModel );
@@ -644,7 +679,6 @@ public class StaxReaderGenerator
         JMethod unmarshall = new JMethod( "parse" + capClassName, new JClass( className ), null );
         unmarshall.getModifiers().makePrivate();
 
-        unmarshall.addParameter( new JParameter( new JClass( "String" ), "tagName" ) );
         unmarshall.addParameter( new JParameter( new JClass( "XMLStreamReader" ), "xmlStreamReader" ) );
         unmarshall.addParameter( new JParameter( JType.BOOLEAN, "strict" ) );
 
@@ -670,71 +704,30 @@ public class StaxReaderGenerator
 
             String instanceFieldName = getInstanceFieldName( className );
 
-            if ( rootElement )
+            writeAttributes( modelClass, uncapClassName, sc );
+
+            if ( isAssociationPartToClass( modelClass ) )
             {
-                sc.add( "boolean foundRoot = false;" );
+                jClass.addField( new JField( new JType( "java.util.Map" ), instanceFieldName ) );
 
-                sc.add( "while ( xmlStreamReader.hasNext() )" );
-
+                sc.add( "if ( " + instanceFieldName + " == null )" );
                 sc.add( "{" );
-                sc.indent();
+                sc.addIndented( instanceFieldName + " = new java.util.HashMap();" );
+                sc.add( "}" );
 
-                sc.add( "int eventType = xmlStreamReader.next();" );
-
-                sc.add( "if ( eventType == XMLStreamConstants.START_ELEMENT )" );
+                sc.add( "String v = xmlStreamReader.getAttributeValue( null, \"modello.id\" );" );
+                sc.add( "if ( v != null )" );
+                sc.add( "{" );
+                sc.addIndented( instanceFieldName + ".put( v, " + uncapClassName + " );" );
+                sc.add( "}" );
             }
-            else
-            {
-                writeAttributes( modelClass, uncapClassName, sc );
 
-                if ( isAssociationPartToClass( modelClass ) )
-                {
-                    jClass.addField( new JField( new JType( "java.util.Map" ), instanceFieldName ) );
-
-                    sc.add( "if ( " + instanceFieldName + " == null )" );
-                    sc.add( "{" );
-                    sc.addIndented( instanceFieldName + " = new java.util.HashMap();" );
-                    sc.add( "}" );
-
-                    sc.add( "String v = xmlStreamReader.getAttributeValue( null, \"modello.id\" );" );
-                    sc.add( "if ( v != null )" );
-                    sc.add( "{" );
-                    sc.addIndented( instanceFieldName + ".put( v, " + uncapClassName + " );" );
-                    sc.add( "}" );
-                }
-
-                sc.add( "while ( xmlStreamReader.nextTag() == XMLStreamConstants.START_ELEMENT )" );
-            }
+            sc.add( "while ( xmlStreamReader.nextTag() == XMLStreamConstants.START_ELEMENT )" );
 
             sc.add( "{" );
             sc.indent();
 
             boolean addElse = false;
-
-            if ( rootElement )
-            {
-                sc.add( "if ( xmlStreamReader.getLocalName().equals( tagName ) )" );
-
-                sc.add( "{" );
-                sc.indent();
-
-                VersionDefinition versionDefinition = modelClass.getModel().getVersionDefinition();
-                if ( versionDefinition != null && "namespace".equals( versionDefinition.getType() ) )
-                {
-                    sc.add( "String modelVersion = getVersionFromRootNamespace( xmlStreamReader );" );
-
-                    writeModelVersionCheck( sc );
-                }
-
-                writeAttributes( modelClass, uncapClassName, sc );
-
-                sc.add( "foundRoot = true;" );
-
-                sc.unindent();
-                sc.add( "}" );
-
-                addElse = true;
-            }
 
             // Write other fields
 
@@ -749,60 +742,30 @@ public class StaxReaderGenerator
                     addElse = true;
                 }
             }
-            if ( !rootElement )
+
+            /*
+            if ( modelClass.getFields( getGeneratedVersion() ).size() > 0 )
             {
-    /*
-                if ( modelClass.getFields( getGeneratedVersion() ).size() > 0 )
-                {
-                    sc.add( "else" );
+                sc.add( "else" );
 
-                    sc.add( "{" );
-                    sc.addIndented( "parser.nextText();" );
-                    sc.add( "}" );
-                }
-    */
-
-                if ( addElse )
-                {
-                    sc.add( "else" );
-
-                    sc.add( "{" );
-                    sc.indent();
-                }
-
-                sc.add( "checkUnknownElement( xmlStreamReader, strict );" );
-
-                if ( addElse )
-                {
-                    sc.unindent();
-                    sc.add( "}" );
-                }
+                sc.add( "{" );
+                sc.addIndented( "parser.nextText();" );
+                sc.add( "}" );
             }
-            else
-            { // rootElement == true
+*/
+
+            if ( addElse )
+            {
                 sc.add( "else" );
 
                 sc.add( "{" );
                 sc.indent();
+            }
 
-                sc.add( "if ( foundRoot )" );
+            sc.add( "checkUnknownElement( xmlStreamReader, strict );" );
 
-                sc.add( "{" );
-                sc.indent();
-
-                sc.add( "if ( strict )" );
-
-                sc.add( "{" );
-                sc.addIndented( "throw new XMLStreamException( \"Unrecognised tag: '\" + xmlStreamReader.getLocalName() + "
-                                + "\"'\", xmlStreamReader.getLocation() );" );
-                sc.add( "}" );
-
-                sc.unindent();
-                sc.add( "}" );
-
-                sc.unindent();
-                sc.add( "}" );
-
+            if ( addElse )
+            {
                 sc.unindent();
                 sc.add( "}" );
             }
@@ -1090,8 +1053,8 @@ public class StaxReaderGenerator
                 }
                 else
                 {
-                    sc.add( objectName + ".set" + capFieldName + "( parse" + association.getTo() + "( \"" + fieldTagName
-                            + "\", xmlStreamReader, strict ) );" );
+                    sc.add( objectName + ".set" + capFieldName + "( parse" + association.getTo()
+                        + "( xmlStreamReader, strict ) );" );
                 }
 
                 sc.unindent();
@@ -1170,14 +1133,13 @@ public class StaxReaderGenerator
                             // HACK: the addXXX method will cause an OOME when compiling a self-referencing class, so we
                             //  just add it to the array. This could disrupt the links if you are using break/create
                             //  constraints in modello.
-                            sc.add( associationName + ".add( parse" + association.getTo() + "( \"" + valuesTagName
-                                    + "\", xmlStreamReader, strict ) );" );
+                            sc.add( associationName + ".add( parse" + association.getTo()
+                                + "( xmlStreamReader, strict ) );" );
                         }
                         else
                         {
                             sc.add( objectName + ".add" + capitalise( singular( associationName ) ) + "( parse"
-                                    + association.getTo() + "( \"" + valuesTagName
-                                    + "\", xmlStreamReader, strict ) );" );
+                                    + association.getTo() + "( xmlStreamReader, strict ) );" );
                         }
                     }
                     else
