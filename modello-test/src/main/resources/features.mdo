@@ -1382,7 +1382,7 @@
         <field>
           <name>child</name>
           <version>1.0.0+</version>
-          <association java.bidi="false">
+          <association>
             <type>NodeItem</type>
           </association>
         </field>

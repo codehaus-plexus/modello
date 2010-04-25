@@ -32,6 +32,7 @@ import org.codehaus.modello.test.features.BidiInSet;
 import org.codehaus.modello.test.features.InterfacesFeature;
 import org.codehaus.modello.test.features.JavaAbstractFeature;
 import org.codehaus.modello.test.features.JavaFeatures;
+import org.codehaus.modello.test.features.NodeItem;
 import org.codehaus.modello.test.features.Reference;
 import org.codehaus.modello.test.features.SimpleInterface;
 import org.codehaus.modello.test.features.SimpleTypes;
@@ -311,6 +312,13 @@ public class JavaVerifier
         Assert.assertEquals( bidiInSet, association.getSetOfBidis().iterator().next() );
         association.removeSetOfBidi( bidiInSet );
         Assert.assertEquals( 0, association.getSetOfBidis().size() );
+
+        // class with single association to itself, but not bidi!
+        NodeItem parentNode = new NodeItem();
+        NodeItem childNode = new NodeItem();
+        parentNode.setChild( childNode );
+        assertSame( childNode, parentNode.getChild() );
+        assertNull( childNode.getChild() );
 
         // java.useInterface
         checkField( JavaFeatures.class, "useInterface", SubClassLevel1.class, "getUseInterface", "setUseInterface",
