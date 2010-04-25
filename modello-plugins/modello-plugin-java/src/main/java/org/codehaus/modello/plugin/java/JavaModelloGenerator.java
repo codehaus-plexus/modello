@@ -1459,10 +1459,6 @@ public class JavaModelloGenerator
             if ( javaAssociationMetadata.isBidi() )
             {
                 createCreateAssociation( jClass, modelAssociation );
-            }
-
-            if ( javaAssociationMetadata.isBidi() )
-            {
                 createBreakAssociation( jClass, modelAssociation );
             }
         }
