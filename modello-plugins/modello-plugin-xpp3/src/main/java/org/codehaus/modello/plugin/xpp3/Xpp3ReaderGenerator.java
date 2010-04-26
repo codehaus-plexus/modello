@@ -416,7 +416,7 @@ public class Xpp3ReaderGenerator
 
             sc.add( "java.util.Set parsed = new java.util.HashSet();" );
 
-            sc.add( "while ( parser.nextTag() == XmlPullParser.START_TAG )" );
+            sc.add( "while ( ( strict ? parser.nextTag() : nextTag( parser ) ) == XmlPullParser.START_TAG )" );
 
             sc.add( "{" );
             sc.indent();
@@ -1488,6 +1488,30 @@ public class Xpp3ReaderGenerator
         {
             sc.add( "// strictXmlAttributes = false for model: always ignore unknown XML attribute, even if strict == true" );
         }
+
+        jClass.addMethod( method );
+
+        // --------------------------------------------------------------------
+
+        method = new JMethod( "nextTag", JType.INT, null );
+        method.addException( new JClass( "IOException" ) );
+        method.addException( new JClass( "XmlPullParserException" ) );
+        method.getModifiers().makePrivate();
+
+        method.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
+
+        sc = method.getSourceCode();
+
+        sc.add( "int eventType = parser.next();" );
+        sc.add( "if ( eventType == XmlPullParser.TEXT )" );
+        sc.add( "{" );
+        sc.addIndented( "eventType = parser.next();" );
+        sc.add( "}" );
+        sc.add( "if ( eventType != XmlPullParser.START_TAG && eventType != XmlPullParser.END_TAG )" );
+        sc.add( "{" );
+        sc.addIndented( "throw new XmlPullParserException( \"expected START_TAG or END_TAG not \" + XmlPullParser.TYPES[eventType], parser, null );" );
+        sc.add( "}" );
+        sc.add( "return eventType;" );
 
         jClass.addMethod( method );
 

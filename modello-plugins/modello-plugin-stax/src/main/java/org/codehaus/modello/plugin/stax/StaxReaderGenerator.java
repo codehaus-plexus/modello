@@ -722,7 +722,7 @@ public class StaxReaderGenerator
                 sc.add( "}" );
             }
 
-            sc.add( "while ( xmlStreamReader.nextTag() == XMLStreamConstants.START_ELEMENT )" );
+            sc.add( "while ( ( strict ? xmlStreamReader.nextTag() : nextTag( xmlStreamReader ) ) == XMLStreamConstants.START_ELEMENT )" );
 
             sc.add( "{" );
             sc.indent();
@@ -1782,6 +1782,41 @@ public class StaxReaderGenerator
         sc.addIndented( "unrecognizedTagCount--;" );
         sc.add( "}" );
 
+        sc.unindent();
+        sc.add( "}" );
+
+        jClass.addMethod( method );
+
+        // --------------------------------------------------------------------
+
+        method = new JMethod( "nextTag", JType.INT, null );
+        method.getModifiers().makePrivate();
+
+        method.addParameter( new JParameter( new JClass( "XMLStreamReader" ), "xmlStreamReader" ) );
+        method.addException( new JClass( "XMLStreamException" ) );
+
+        sc = method.getSourceCode();
+
+        sc.add( "while ( true )" );
+        sc.add( "{" );
+        sc.indent();
+        sc.add( "int eventType = xmlStreamReader.next();" );
+        sc.add( "switch ( eventType )" );
+        sc.add( "{" );
+        sc.indent();
+        sc.add( "case XMLStreamConstants.CHARACTERS:" );
+        sc.add( "case XMLStreamConstants.CDATA:" );
+        sc.add( "case XMLStreamConstants.SPACE:" );
+        sc.add( "case XMLStreamConstants.PROCESSING_INSTRUCTION:" );
+        sc.add( "case XMLStreamConstants.COMMENT:" );
+        sc.addIndented( "break;" );
+        sc.add( "case XMLStreamConstants.START_ELEMENT:" );
+        sc.add( "case XMLStreamConstants.END_ELEMENT:" );
+        sc.addIndented( "return eventType;" );
+        sc.add( "default:" );
+        sc.addIndented( "throw new XMLStreamException( \"expected start or end tag\", xmlStreamReader.getLocation() );" );
+        sc.unindent();
+        sc.add( "}" );
         sc.unindent();
         sc.add( "}" );
 

@@ -69,6 +69,8 @@ public class StaxFeaturesVerifier
 
         verifyWrongElement();
 
+        verifyWrongContent();
+
         verifyTransientElement();
 
         verifyEncoding();
@@ -166,6 +168,27 @@ public class StaxFeaturesVerifier
         catch ( XMLStreamException xse )
         {
             checkExpectedFailure( xse, "'invalidElement'" );
+        }
+    }
+
+    public void verifyWrongContent()
+        throws Exception
+    {
+        ModelloFeaturesTestStaxReader reader = new ModelloFeaturesTestStaxReader();
+
+        // reading with strict=false should accept unexpected text content
+        reader.read( getClass().getResourceAsStream( "/features-wrong-content.xml" ), false );
+
+        // by default, strict=true: reading should not accept unexpected content
+        try
+        {
+            reader.read( getClass().getResourceAsStream( "/features-wrong-content.xml" ) );
+
+            throw new VerifierException( "Reading a document with a bad content under strict option should fail." );
+        }
+        catch ( XMLStreamException xse )
+        {
+            checkExpectedFailure( xse, "non-all-whitespace CHARACTERS or CDATA event" );
         }
     }
 
