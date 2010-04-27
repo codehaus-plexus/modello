@@ -1733,14 +1733,12 @@ public class StaxReaderGenerator
         sc.addIndented( "return false;" );
         sc.add( "}" );
 
-        sc.add( "if ( parsed.contains( tagName ) )" );
+        sc.add( "if ( !parsed.add( tagName ) )" );
 
         sc.add( "{" );
         sc.addIndented(
             "throw new XMLStreamException( \"Duplicated tag: '\" + tagName + \"'\", xmlStreamReader.getLocation() );" );
         sc.add( "}" );
-
-        sc.add( "parsed.add( tagName );" );
 
         sc.add( "return true;" );
 

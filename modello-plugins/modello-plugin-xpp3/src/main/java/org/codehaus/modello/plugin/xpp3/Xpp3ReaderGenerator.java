@@ -1410,14 +1410,12 @@ public class Xpp3ReaderGenerator
         sc.addIndented( "return false;" );
         sc.add( "}" );
 
-        sc.add( "if ( parsed.contains( tagName ) )" );
+        sc.add( "if ( !parsed.add( tagName ) )" );
 
         sc.add( "{" );
         sc.addIndented(
             "throw new XmlPullParserException( \"Duplicated tag: '\" + tagName + \"'\", parser, null );" );
         sc.add( "}" );
-
-        sc.add( "parsed.add( tagName );" );
 
         sc.add( "return true;" );
 
