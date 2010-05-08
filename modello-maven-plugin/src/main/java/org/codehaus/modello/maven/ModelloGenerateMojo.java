@@ -30,7 +30,7 @@ import java.util.Map;
 
 /**
  * <p>
- * ModelloGenerateMojo - A dynamic way to use generators and modello plugins.
+ * A dynamic way to use generators and Modello plugins.
  * </p>
  *
  * <p>
@@ -40,7 +40,7 @@ import java.util.Map;
  *   &lt;plugin&gt;
  *     &lt;groupId&gt;org.codehaus.modello&lt;/groupId&gt;
  *     &lt;artifactId&gt;modello-maven-plugin&lt;/artifactId&gt;
- *     &lt;version&gt;1.0-alpha-15-SNAPSHOT&lt;/version&gt;
+ *     &lt;version&gt;1.3&lt;/version&gt;
  *     &lt;dependencies&gt;
  *       &lt;dependency&gt;
  *         &lt;groupId&gt;org.codehaus.modello&lt;/groupId&gt;
@@ -83,9 +83,9 @@ import java.util.Map;
  *
  * @goal generate
  * @phase generate-sources
- * @description Execute a Modello Generator.
  */
-public class ModelloGenerateMojo extends AbstractModelloGeneratorMojo
+public class ModelloGenerateMojo
+    extends AbstractModelloGeneratorMojo
 {
     /**
      * @component role="org.codehaus.modello.plugin.ModelloGenerator"
@@ -116,7 +116,8 @@ public class ModelloGenerateMojo extends AbstractModelloGeneratorMojo
         return outputDirectory;
     }
 
-    public void execute() throws MojoExecutionException
+    public void execute()
+        throws MojoExecutionException
     {
         if ( !generatorMap.containsKey( generatorId ) )
         {
