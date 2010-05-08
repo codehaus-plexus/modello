@@ -199,10 +199,17 @@ public class JavaVerifier
         Assert.assertEquals( "primitiveChar"   , 'H'            , simple.getPrimitiveChar() );
         Assert.assertEquals( "primitiveShort"  , (short) 1212   , simple.getPrimitiveShort() );
         Assert.assertEquals( "primitiveInt"    , 121212         , simple.getPrimitiveInt() );
-        Assert.assertEquals( "primitiveLong"   , 12121212       , simple.getPrimitiveLong() );
+        Assert.assertEquals( "primitiveLong"   , 1234567890123L , simple.getPrimitiveLong() );
         Assert.assertEquals( "primitiveFloat"  , 12.12f         , simple.getPrimitiveFloat(), 0f );
         Assert.assertEquals( "primitiveDouble" , 12.12          , simple.getPrimitiveDouble(), 0 );
-        Assert.assertEquals( "objectBoolean"   , Boolean.FALSE  , simple.isObjectBoolean() );
+        Assert.assertEquals( "objectBoolean"   , Boolean.TRUE   , simple.isObjectBoolean() );
+        Assert.assertEquals( "objectByte"      , 12             , simple.getObjectByte().byteValue() );
+        Assert.assertEquals( "objectChar"      , 'H'            , simple.getObjectCharacter().charValue() );
+        Assert.assertEquals( "objectShort"     , (short) 1212   , simple.getObjectShort().shortValue() );
+        Assert.assertEquals( "objectInt"       , 121212         , simple.getObjectInteger().intValue() );
+        Assert.assertEquals( "objectLong"      , 1234567890123L , simple.getObjectLong().longValue() );
+        Assert.assertEquals( "objectFloat"     , 12.12f         , simple.getObjectFloat().floatValue(), 0f );
+        Assert.assertEquals( "objectDouble"    , 12.12          , simple.getObjectDouble().doubleValue(), 0 );
         Assert.assertEquals( "objectString"    , "default value", simple.getObjectString() );
 
         XmlAttributes xmlAttributes = new XmlAttributes();
@@ -211,10 +218,17 @@ public class JavaVerifier
         Assert.assertEquals( "primitiveChar"   , 'H'            , xmlAttributes.getPrimitiveChar() );
         Assert.assertEquals( "primitiveShort"  , (short) 1212   , xmlAttributes.getPrimitiveShort() );
         Assert.assertEquals( "primitiveInt"    , 121212         , xmlAttributes.getPrimitiveInt() );
-        Assert.assertEquals( "primitiveLong"   , 12121212       , xmlAttributes.getPrimitiveLong() );
+        Assert.assertEquals( "primitiveLong"   , 1234567890123L , xmlAttributes.getPrimitiveLong() );
         Assert.assertEquals( "primitiveFloat"  , 12.12f         , xmlAttributes.getPrimitiveFloat(), 0f );
         Assert.assertEquals( "primitiveDouble" , 12.12          , xmlAttributes.getPrimitiveDouble(), 0 );
-        Assert.assertEquals( "objectBoolean"   , Boolean.FALSE  , xmlAttributes.isObjectBoolean() );
+        Assert.assertEquals( "objectBoolean"   , Boolean.TRUE   , xmlAttributes.isObjectBoolean() );
+        Assert.assertEquals( "objectByte"      , 12             , xmlAttributes.getObjectByte().byteValue() );
+        Assert.assertEquals( "objectChar"      , 'H'            , xmlAttributes.getObjectCharacter().charValue() );
+        Assert.assertEquals( "objectShort"     , (short) 1212   , xmlAttributes.getObjectShort().shortValue() );
+        Assert.assertEquals( "objectInt"       , 121212         , xmlAttributes.getObjectInteger().intValue() );
+        Assert.assertEquals( "objectLong"      , 1234567890123L , xmlAttributes.getObjectLong().longValue() );
+        Assert.assertEquals( "objectFloat"     , 12.12f         , xmlAttributes.getObjectFloat().floatValue(), 0f );
+        Assert.assertEquals( "objectDouble"    , 12.12          , xmlAttributes.getObjectDouble().doubleValue(), 0 );
         Assert.assertEquals( "objectString"    , "default value", xmlAttributes.getObjectString() );
     }
 

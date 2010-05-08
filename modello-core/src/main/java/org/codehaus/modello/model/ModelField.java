@@ -47,8 +47,8 @@ public class ModelField
     private transient ModelClass modelClass;
 
     private static final String[] PRIMITIVE_TYPES =
-        new String[] { "boolean", "byte", "char", "short", "int", "long", "float", "double", "String", "Boolean",
-            "Date", "DOM" };
+        { "boolean", "Boolean", "char", "Character", "byte", "Byte", "short", "Short", "int", "Integer", "long",
+            "Long", "float", "Float", "double", "Double", "String", "Date", "DOM" };
 
     public ModelField()
     {
@@ -202,8 +202,11 @@ public class ModelField
             {
                 defaultValue = "0.0";
             }
-            else if ( "int".equals( type ) || "long".equals( type ) || "char".equals( type ) || "short".equals( type )
-                 || "byte".equals( type ) )
+            else if ( "int".equals( type ) || "long".equals( type ) || "short".equals( type ) || "byte".equals( type ) )
+            {
+                defaultValue = "0";
+            }
+            else if ( "char".equals( type ) )
             {
                 defaultValue = "0";
             }

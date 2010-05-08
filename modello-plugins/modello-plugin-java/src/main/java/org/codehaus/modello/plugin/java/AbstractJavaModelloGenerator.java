@@ -188,36 +188,87 @@ public abstract class AbstractJavaModelloGenerator
     protected String getJavaDefaultValue( ModelField modelField )
         throws ModelloException
     {
-        if ( "String".equals( modelField.getType() ) )
+        String type = modelField.getType();
+        String value = modelField.getDefaultValue();
+
+        if ( "String".equals( type ) )
         {
-            return '"' + modelField.getDefaultValue() + '"';
+            return '"' + value + '"';
         }
-        else if ( "char".equals( modelField.getType() ) )
+        else if ( "char".equals( type ) )
         {
-            return '\'' + modelField.getDefaultValue() + '\'';
+            return '\'' + value + '\'';
         }
-        else if ( "long".equals( modelField.getType() ) )
+        else if ( "long".equals( type ) )
         {
-            return modelField.getDefaultValue() + 'L';
+            return value + 'L';
         }
-        else if ( "float".equals( modelField.getType() ) )
+        else if ( "float".equals( type ) )
         {
-            return modelField.getDefaultValue() + 'f';
+            return value + 'f';
         }
-        else if ( "Date".equals( modelField.getType() ) )
+        else if ( "Date".equals( type ) )
         {
             DateFormat format = new SimpleDateFormat( DEFAULT_DATE_FORMAT, Locale.US );
             try
             {
-                Date date = format.parse( modelField.getDefaultValue() );
+                Date date = format.parse( value );
                 return "new java.util.Date( " + date.getTime() + "L )";
             }
             catch ( ParseException pe )
             {
-                throw new ModelloException( "Unparseable default date: " + modelField.getDefaultValue(), pe );
+                throw new ModelloException( "Unparseable default date: " + value, pe );
             }
         }
-        return modelField.getDefaultValue();
+        else if ( value != null && value.length() > 0 )
+        {
+            if ( "Character".equals( type ) && !value.contains( type ) )
+            {
+                return newPrimitiveWrapper( type, "'" + value + "'", useJava5 );
+            }
+            else if ( "Boolean".equals( type ) && !value.contains( type ) )
+            {
+                return newPrimitiveWrapper( type, value, true );
+            }
+            else if ( "Byte".equals( type ) && !value.contains( type ) )
+            {
+                return newPrimitiveWrapper( type, "(byte) " + value, useJava5 );
+            }
+            else if ( "Short".equals( type ) && !value.contains( type ) )
+            {
+                return newPrimitiveWrapper( type, "(short) " + value, useJava5 );
+            }
+            else if ( "Integer".equals( type ) && !value.contains( type ) )
+            {
+                return newPrimitiveWrapper( type, value, useJava5 );
+            }
+            else if ( "Long".equals( type ) && !value.contains( type ) )
+            {
+                return newPrimitiveWrapper( type, value + 'L', useJava5 );
+            }
+            else if ( "Float".equals( type ) && !value.contains( type ) )
+            {
+                return newPrimitiveWrapper( type, value + 'f', useJava5 );
+            }
+            else if ( "Double".equals( type ) && !value.contains( type ) )
+            {
+                return newPrimitiveWrapper( type, value, useJava5 );
+            }
+        }
+
+        return value;
+    }
+
+    private String newPrimitiveWrapper( String type, String value, boolean useJava5 )
+    {
+        if ( useJava5 )
+        {
+            return type + ".valueOf( " + value + " )";
+        }
+        else
+        {
+            return "new " + type + "( " + value + " )";
+        }
     }
 
     protected String getValueChecker( String type, String value, ModelField field )

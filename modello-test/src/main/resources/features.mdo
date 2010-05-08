@@ -186,18 +186,18 @@
           <defaultValue>true</defaultValue>
         </field>
         <field>
-          <name>primitiveByte</name>
-          <version>1.0.0+</version>
-          <description><![CDATA[<code>byte</code> primitive.]]></description>
-          <type>byte</type>
-          <defaultValue>12</defaultValue>
-        </field>
-        <field>
           <name>primitiveChar</name>
           <version>1.0.0+</version>
           <description><![CDATA[<code>char</code> primitive.]]></description>
           <type>char</type>
           <defaultValue>H</defaultValue>
+        </field>
+        <field>
+          <name>primitiveByte</name>
+          <version>1.0.0+</version>
+          <description><![CDATA[<code>byte</code> primitive.]]></description>
+          <type>byte</type>
+          <defaultValue>12</defaultValue>
         </field>
         <field>
           <name>primitiveShort</name>
@@ -218,7 +218,7 @@
           <version>1.0.0+</version>
           <description><![CDATA[<code>long</code> primitive.]]></description>
           <type>long</type>
-          <defaultValue>12121212</defaultValue>
+          <defaultValue>1234567890123</defaultValue>
         </field>
         <field>
           <name>primitiveFloat</name>
@@ -236,60 +236,60 @@
         </field>
         <field>
           <name>objectBoolean</name>
-          <version>2.0.0+</version>
+          <version>1.5.0+</version>
           <description><![CDATA[<code>Boolean</code> class.]]></description>
           <type>Boolean</type>
-          <defaultValue>Boolean.FALSE</defaultValue>
+          <defaultValue>true</defaultValue>
         </field>
-        <!--field>
+        <field>
+          <name>objectCharacter</name>
+          <version>1.5.0+</version>
+          <description><![CDATA[<code>Char</code> class.]]></description>
+          <type>Character</type>
+          <defaultValue>H</defaultValue>
+        </field>
+        <field>
           <name>objectByte</name>
-          <version>1.0.0+</version>
+          <version>1.5.0+</version>
           <description><![CDATA[<code>Byte</code> class.]]></description>
           <type>Byte</type>
           <defaultValue>12</defaultValue>
         </field>
         <field>
-          <name>objectChar</name>
-          <version>1.0.0+</version>
-          <description><![CDATA[<code>Char</code> class.]]></description>
-          <type>Char</type>
-          <defaultValue>H</defaultValue>
-        </field>
-        <field>
           <name>objectShort</name>
-          <version>1.0.0+</version>
+          <version>1.5.0+</version>
           <description><![CDATA[<code>Short</code> class.]]></description>
           <type>Short</type>
           <defaultValue>1212</defaultValue>
         </field>
         <field>
           <name>objectInteger</name>
-          <version>1.0.0+</version>
+          <version>1.5.0+</version>
           <description><![CDATA[<code>Integer</code> class.]]></description>
           <type>Integer</type>
-          <defaultValue>new Integer( 12 )</defaultValue>
+          <defaultValue>121212</defaultValue>
         </field>
         <field>
           <name>objectLong</name>
-          <version>1.0.0+</version>
+          <version>1.5.0+</version>
           <description><![CDATA[<code>Long</code> class.]]></description>
           <type>Long</type>
-          <defaultValue>new Long( 12 )</defaultValue>
+          <defaultValue>1234567890123</defaultValue>
         </field>
         <field>
           <name>objectFloat</name>
-          <version>1.0.0+</version>
+          <version>1.5.0+</version>
           <description><![CDATA[<code>Float</code> class.]]></description>
           <type>Float</type>
-          <defaultValue>new Float( 12.12 )</defaultValue>
+          <defaultValue>12.12</defaultValue>
         </field>
         <field>
           <name>objectDouble</name>
-          <version>1.0.0+</version>
+          <version>1.5.0+</version>
           <description><![CDATA[<code>Double</code> class.]]></description>
           <type>Double</type>
-          <defaultValue>new Double( 12.12 )</defaultValue>
-        </field-->
+          <defaultValue>12.12</defaultValue>
+        </field>
         <field>
           <name>objectString</name>
           <version>1.0.0+</version>
@@ -1029,18 +1029,18 @@
           <defaultValue>true</defaultValue>
         </field>
         <field xml.attribute="true">
-          <name>primitiveByte</name>
-          <version>1.0.0+</version>
-          <description><![CDATA[<code>byte</code> primitive.]]></description>
-          <type>byte</type>
-          <defaultValue>12</defaultValue>
-        </field>
-        <field xml.attribute="true">
           <name>primitiveChar</name>
           <version>1.0.0+</version>
           <description><![CDATA[<code>char</code> primitive.]]></description>
           <type>char</type>
           <defaultValue>H</defaultValue>
+        </field>
+        <field xml.attribute="true">
+          <name>primitiveByte</name>
+          <version>1.0.0+</version>
+          <description><![CDATA[<code>byte</code> primitive.]]></description>
+          <type>byte</type>
+          <defaultValue>12</defaultValue>
         </field>
         <field xml.attribute="true">
           <name>primitiveShort</name>
@@ -1061,7 +1061,7 @@
           <version>1.0.0+</version>
           <description><![CDATA[<code>long</code> primitive.]]></description>
           <type>long</type>
-          <defaultValue>12121212</defaultValue>
+          <defaultValue>1234567890123</defaultValue>
         </field>
         <field xml.attribute="true">
           <name>primitiveFloat</name>
@@ -1079,60 +1079,60 @@
         </field>
         <field xml.attribute="true">
           <name>objectBoolean</name>
-          <version>2.0.0+</version><!-- causes a problem with StAX plugin -->
+          <version>1.5.0+</version><!-- causes a problem with StAX plugin -->
           <description><![CDATA[<code>Boolean</code> class.]]></description>
           <type>Boolean</type>
-          <defaultValue>Boolean.FALSE</defaultValue>
+          <defaultValue>true</defaultValue>
         </field>
-        <!--field xml.attribute="true">
+        <field xml.attribute="true">
+          <name>objectCharacter</name>
+          <version>1.5.0+</version>
+          <description><![CDATA[<code>Char</code> class.]]></description>
+          <type>Character</type>
+          <defaultValue>H</defaultValue>
+        </field>
+        <field xml.attribute="true">
           <name>objectByte</name>
-          <version>1.0.0+</version>
+          <version>1.5.0+</version>
           <description><![CDATA[<code>Byte</code> class.]]></description>
           <type>Byte</type>
           <defaultValue>12</defaultValue>
         </field>
         <field xml.attribute="true">
-          <name>objectChar</name>
-          <version>1.0.0+</version>
-          <description><![CDATA[<code>Char</code> class.]]></description>
-          <type>Char</type>
-          <defaultValue>H</defaultValue>
-        </field>
-        <field xml.attribute="true">
           <name>objectShort</name>
-          <version>1.0.0+</version>
+          <version>1.5.0+</version>
           <description><![CDATA[<code>Short</code> class.]]></description>
           <type>Short</type>
           <defaultValue>1212</defaultValue>
         </field>
         <field xml.attribute="true">
           <name>objectInteger</name>
-          <version>1.0.0+</version>
+          <version>1.5.0+</version>
           <description><![CDATA[<code>Integer</code> class.]]></description>
           <type>Integer</type>
-          <defaultValue>new Integer( 12 )</defaultValue>
+          <defaultValue>121212</defaultValue>
         </field>
         <field xml.attribute="true">
           <name>objectLong</name>
-          <version>1.0.0+</version>
+          <version>1.5.0+</version>
           <description><![CDATA[<code>Long</code> class.]]></description>
           <type>Long</type>
-          <defaultValue>new Long( 12 )</defaultValue>
+          <defaultValue>1234567890123</defaultValue>
         </field>
         <field xml.attribute="true">
           <name>objectFloat</name>
-          <version>1.0.0+</version>
+          <version>1.5.0+</version>
           <description><![CDATA[<code>Float</code> class.]]></description>
           <type>Float</type>
-          <defaultValue>new Float( 12.12 )</defaultValue>
+          <defaultValue>12.12</defaultValue>
         </field>
         <field xml.attribute="true">
           <name>objectDouble</name>
-          <version>1.0.0+</version>
+          <version>1.5.0+</version>
           <description><![CDATA[<code>Double</code> class.]]></description>
           <type>Double</type>
-          <defaultValue>new Double( 12.12 )</defaultValue>
-        </field-->
+          <defaultValue>12.12</defaultValue>
+        </field>
         <field xml.attribute="true">
           <name>objectString</name>
           <version>1.0.0+</version>

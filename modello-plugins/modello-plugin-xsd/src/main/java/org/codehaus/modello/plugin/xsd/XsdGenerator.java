@@ -257,7 +257,7 @@ public class XsdGenerator
                 {
                     // nothing to add
                 }
-                else if ( ( xsdType != null ) || "char".equals( field.getType() ) || "Char".equals( field.getType() ) )
+                else if ( ( xsdType != null ) || "char".equals( field.getType() ) || "Character".equals( field.getType() ) )
                 {
                     w.addAttribute( "name", fieldTagName );
 
@@ -394,7 +394,7 @@ public class XsdGenerator
 
             writeFieldDocumentation( w, field );
 
-            if ( "char".equals( field.getType() ) || "Char".equals( field.getType() ) )
+            if ( "char".equals( field.getType() ) || "Character".equals( field.getType() ) )
             {
                 writeCharElement( w );
             }
