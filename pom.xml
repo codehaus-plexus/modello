@@ -193,12 +193,12 @@
   </ciManagement>
   <distributionManagement>
     <repository>
-      <id>codehaus.org</id>
+      <id>codehaus-nexus-staging</id>
       <name>Modello Repository</name>
-      <url>dav:https://dav.codehaus.org/repository/modello/</url>
+      <url>https://nexus.codehaus.org/service/local/staging/deploy/maven2</url>
     </repository>
     <snapshotRepository>
-      <id>codehaus.org</id>
+      <id>codehaus-nexus-snapshots</id>
       <name>Modello Development Repository</name>
       <url>${modelloDistMgmtSnapshotsUrl}</url>
     </snapshotRepository>
@@ -212,7 +212,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <maven.version>2.0.7</maven.version>
-    <modelloDistMgmtSnapshotsUrl>dav:https://dav.codehaus.org/snapshots.repository/modello/</modelloDistMgmtSnapshotsUrl>
+    <modelloDistMgmtSnapshotsUrl>https://nexus.codehaus.org/content/repositories/snapshots</modelloDistMgmtSnapshotsUrl>
   </properties>
 
   <dependencyManagement>
