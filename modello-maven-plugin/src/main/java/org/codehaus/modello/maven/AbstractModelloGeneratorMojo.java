@@ -58,7 +58,8 @@ public abstract class AbstractModelloGeneratorMojo
     /**
      * Base directory of the project.
      *
-     * @parameter expression="${basedir}"
+     * @parameter default-value="${basedir}"
+     * @readonly
      * @required
      */
     private String basedir;
@@ -105,7 +106,8 @@ public abstract class AbstractModelloGeneratorMojo
     /**
      * The Maven project instance for the executing project.
      *
-     * @parameter expression="${project}"
+     * @parameter default-value="${project}"
+     * @readonly
      * @required
      */
     private MavenProject project;
