@@ -8,6 +8,45 @@
 
 Modello
 
+* 1.4 Release Notes (2010-05-29)
+
+  The {{{http://jira.codehaus.org/secure/ReleaseNote.jspa?projectId=10510&version=16153}full list of changes}} can be found in our {{{./issue-tracking.html}issue management system}}, and is reproduced below.
+
+** Bug
+
+    * [MODELLO-23] - ModelloGeneratorTest is not repository independent
+
+    * [MODELLO-52] - Modello-core testCase broken
+
+    * [MODELLO-226] - Recursive descent fails for tree-like data model starting with root element
+
+    * [MODELLO-237] - Non-strict parsing mode doesn't properly skip over unknown elements with child elements
+
+    * [MODELLO-245] - Associations to same class are erroneously interpreted as bidirectional
+
+** Improvement
+
+    * [MODELLO-206] - improve generated XML schema for content
+
+    * [MODELLO-239] - Modello plugin is not thread-safe
+
+    * [MODELLO-241] - Remove dependency on stax-utils for StAX-based writers
+
+    * [MODELLO-242] - Remove dependency on plexus-utils for models that don't use DOM fields
+
+    * [MODELLO-243] - Add read() methods that take InputStream as data source
+
+    * [MODELLO-244] - Add write() methods that marshal to output stream
+
+    * [MODELLO-246] - Make non-strict parsing ignore text inside element-only sections
+
+** New Feature
+
+    * [MODELLO-85] - Allow an element to have a text and attributes at the same time
+
+    * [MODELLO-240] - Provide support to track line/column number of source elements
+
+
 * 1.3 Release Notes (2010-04-01)
 
   The full list of changes can be found in our {{{http://jira.codehaus.org/secure/ReleaseNote.jspa?projectId=10510&version=15584}issue management system}}, and is reproduced below.
