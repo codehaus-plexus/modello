@@ -545,7 +545,11 @@ public class JavaModelloGenerator
                     sc.add( "if ( " + thisField + " != null )" );
                     sc.add( "{" );
                     sc.indent();
-                    sc.add( copyField + " = " + getDefaultValue( modelAssociation ) + ";" );
+
+                    JavaAssociationMetadata javaAssociationMetadata = getJavaAssociationMetadata( modelAssociation );
+                    JType componentType = getComponentType( modelAssociation, javaAssociationMetadata );
+
+                    sc.add( copyField + " = " + getDefaultValue( modelAssociation, componentType ) + ";" );
 
                     if ( isCollection( modelField.getType() ) )
                     {
@@ -553,7 +557,7 @@ public class JavaModelloGenerator
                         {
                             if ( useJava5 )
                             {
-                                sc.add( "for ( " + modelAssociation.getTo() + " item : " + thisField + " )" );
+                                sc.add( "for ( " + componentType.getName() + " item : " + thisField + " )" );
                             }
                             else
                             {
@@ -563,7 +567,7 @@ public class JavaModelloGenerator
                             sc.indent();
                             if ( useJava5 )
                             {
-                                sc.add( copyField + ".add( item.clone() );" );
+                                sc.add( copyField + ".add( ( (" + modelAssociation.getTo() + ") item).clone() );" );
                             }
                             else
                             {
@@ -1340,39 +1344,18 @@ public class JavaModelloGenerator
     {
         JavaFieldMetadata javaFieldMetadata = (JavaFieldMetadata) modelAssociation.getMetadata( JavaFieldMetadata.ID );
 
-        JavaAssociationMetadata javaAssociationMetadata =
-            (JavaAssociationMetadata) modelAssociation.getAssociationMetadata( JavaAssociationMetadata.ID );
-
-        if ( !JavaAssociationMetadata.INIT_TYPES.contains( javaAssociationMetadata.getInitializationMode() ) )
-        {
-            throw new ModelloException( "The Java Modello Generator cannot use '"
-                + javaAssociationMetadata.getInitializationMode() + "' as a <association java.init=\""
-                + javaAssociationMetadata.getInitializationMode() + "\"> "
-                + "value, the only the following are acceptable " + JavaAssociationMetadata.INIT_TYPES );
-        }
+        JavaAssociationMetadata javaAssociationMetadata = getJavaAssociationMetadata( modelAssociation );
 
         if ( modelAssociation.isManyMultiplicity() )
         {
+            JType componentType = getComponentType( modelAssociation, javaAssociationMetadata );
+
+            String defaultValue = getDefaultValue( modelAssociation, componentType );
+
             JType type;
-            String defaultValue = getDefaultValue( modelAssociation );
             if ( modelAssociation.isGenericType() )
             {
-                JType componentType = getComponentType( modelAssociation, javaAssociationMetadata );
-
                 type = new JCollectionType( modelAssociation.getType(), componentType, useJava5 );
-
-                ModelDefault modelDefault = getModel().getDefault( modelAssociation.getType() );
-
-                if ( useJava5 )
-                {
-                    defaultValue =
-                        StringUtils.replace( modelDefault.getValue(), "<?>", "<" + componentType.getName() + ">" );
-                }
-                else
-                {
-                    defaultValue =
-                        StringUtils.replace( modelDefault.getValue(), "<?>", "/*<" + componentType.getName() + ">*/" );
-                }
             }
             else
             {
@@ -1462,6 +1445,44 @@ public class JavaModelloGenerator
                 createBreakAssociation( jClass, modelAssociation );
             }
         }
+    }
+
+    private String getDefaultValue( ModelAssociation modelAssociation, JType componentType )
+    {
+        String defaultValue = getDefaultValue( modelAssociation );
+
+        if ( modelAssociation.isGenericType() )
+        {
+            ModelDefault modelDefault = getModel().getDefault( modelAssociation.getType() );
+
+            if ( useJava5 )
+            {
+                defaultValue =
+                    StringUtils.replace( modelDefault.getValue(), "<?>", "<" + componentType.getName() + ">" );
+            }
+            else
+            {
+                defaultValue =
+                    StringUtils.replace( modelDefault.getValue(), "<?>", "/*<" + componentType.getName() + ">*/" );
+            }
+        }
+        return defaultValue;
+    }
+
+    private JavaAssociationMetadata getJavaAssociationMetadata( ModelAssociation modelAssociation )
+        throws ModelloException
+    {
+        JavaAssociationMetadata javaAssociationMetadata =
+            (JavaAssociationMetadata) modelAssociation.getAssociationMetadata( JavaAssociationMetadata.ID );
+
+        if ( !JavaAssociationMetadata.INIT_TYPES.contains( javaAssociationMetadata.getInitializationMode() ) )
+        {
+            throw new ModelloException( "The Java Modello Generator cannot use '"
+                + javaAssociationMetadata.getInitializationMode() + "' as a <association java.init=\""
+                + javaAssociationMetadata.getInitializationMode() + "\"> "
+                + "value, the only the following are acceptable " + JavaAssociationMetadata.INIT_TYPES );
+        }
+        return javaAssociationMetadata;
     }
 
     private JType getComponentType( ModelAssociation modelAssociation, JavaAssociationMetadata javaAssociationMetadata )

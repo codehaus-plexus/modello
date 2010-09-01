@@ -10,7 +10,7 @@
   </defaults>
 
   <classes>
-    <class>
+    <class java.clone="deep">
       <name>Location</name>
       <fields>
         <field>
@@ -37,7 +37,7 @@
       </fields>
     </class>
 
-    <class>
+    <class java.clone="deep">
       <name>Person</name>
       <interfaces>
         <interface>IPerson</interface>
