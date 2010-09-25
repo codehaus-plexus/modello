@@ -8,6 +8,14 @@
 
 Modello
 
+* 1.4.1 Release Notes (2010-09-25)
+
+  The {{{http://jira.codehaus.org/secure/ReleaseNote.jspa?projectId=10510&version=16774}full list of changes}} can be found in our {{{./issue-tracking.html}issue management system}}, and is reproduced below.
+
+** Bug
+
+    * [MODELLO-248] - bad deep clone implementation when using java5 and interface associations
+
 * 1.4 Release Notes (2010-05-29)
 
   The {{{http://jira.codehaus.org/secure/ReleaseNote.jspa?projectId=10510&version=16153}full list of changes}} can be found in our {{{./issue-tracking.html}issue management system}}, and is reproduced below.
