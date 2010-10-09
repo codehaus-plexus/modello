@@ -212,6 +212,24 @@ public class JavaVerifier
         Assert.assertEquals( "objectDouble"    , 12.12          , simple.getObjectDouble().doubleValue(), 0 );
         Assert.assertEquals( "objectString"    , "default value", simple.getObjectString() );
 
+        Assert.assertEquals( "primitiveBoolean", false          , simple.isPrimitiveBooleanNoDefault() );
+        Assert.assertEquals( "primitiveByte"   , 0              , simple.getPrimitiveByteNoDefault() );
+        Assert.assertEquals( "primitiveChar"   , '\0'           , simple.getPrimitiveCharNoDefault() );
+        Assert.assertEquals( "primitiveShort"  , 0              , simple.getPrimitiveShortNoDefault() );
+        Assert.assertEquals( "primitiveInt"    , 0              , simple.getPrimitiveIntNoDefault() );
+        Assert.assertEquals( "primitiveLong"   , 0              , simple.getPrimitiveLongNoDefault() );
+        Assert.assertEquals( "primitiveFloat"  , 0              , simple.getPrimitiveFloatNoDefault(), 0f );
+        Assert.assertEquals( "primitiveDouble" , 0              , simple.getPrimitiveDoubleNoDefault(), 0 );
+        Assert.assertEquals( "objectBoolean"   , null           , simple.isObjectBooleanNoDefault() );
+        Assert.assertEquals( "objectByte"      , null           , simple.getObjectByteNoDefault() );
+        Assert.assertEquals( "objectChar"      , null           , simple.getObjectCharacterNoDefault() );
+        Assert.assertEquals( "objectShort"     , null           , simple.getObjectShortNoDefault() );
+        Assert.assertEquals( "objectInt"       , null           , simple.getObjectIntegerNoDefault() );
+        Assert.assertEquals( "objectLong"      , null           , simple.getObjectLongNoDefault() );
+        Assert.assertEquals( "objectFloat"     , null           , simple.getObjectFloatNoDefault() );
+        Assert.assertEquals( "objectDouble"    , null           , simple.getObjectDoubleNoDefault() );
+        Assert.assertEquals( "objectString"    , null           , simple.getObjectStringNoDefault() );
+
         XmlAttributes xmlAttributes = new XmlAttributes();
         Assert.assertEquals( "primitiveBoolean", true           , xmlAttributes.isPrimitiveBoolean() );
         Assert.assertEquals( "primitiveByte"   , 12             , xmlAttributes.getPrimitiveByte() );

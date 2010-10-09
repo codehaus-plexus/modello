@@ -269,7 +269,11 @@ public class XsdGenerator
 
                     if ( field.getDefaultValue() != null )
                     {
-                        w.addAttribute( "default", field.getDefaultValue() );
+                        // \0 is the implicit default value for char/Character but \0 isn't a valid XML char
+                        if ( field.getDefaultValue() != "\0" )
+                        {
+                            w.addAttribute( "default", field.getDefaultValue() );
+                        }
                     }
 
                     writeFieldDocumentation( w, field );

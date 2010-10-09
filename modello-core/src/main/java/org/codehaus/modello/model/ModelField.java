@@ -208,7 +208,7 @@ public class ModelField
             }
             else if ( "char".equals( type ) )
             {
-                defaultValue = "0";
+                defaultValue = "\0";
             }
         }
     }
