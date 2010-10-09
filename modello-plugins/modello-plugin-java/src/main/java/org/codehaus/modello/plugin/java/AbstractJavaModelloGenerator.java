@@ -193,11 +193,11 @@ public abstract class AbstractJavaModelloGenerator
 
         if ( "String".equals( type ) )
         {
-            return '"' + value + '"';
+            return '"' + escapeStringLiteral( value ) + '"';
         }
         else if ( "char".equals( type ) )
         {
-            return '\'' + value + '\'';
+            return '\'' + escapeStringLiteral( value ) + '\'';
         }
         else if ( "long".equals( type ) )
         {
@@ -224,7 +224,7 @@ public abstract class AbstractJavaModelloGenerator
         {
             if ( "Character".equals( type ) && !value.contains( type ) )
             {
-                return newPrimitiveWrapper( type, "'" + value + "'", useJava5 );
+                return newPrimitiveWrapper( type, "'" + escapeStringLiteral( value ) + "'", useJava5 );
             }
             else if ( "Boolean".equals( type ) && !value.contains( type ) )
             {
@@ -269,6 +269,38 @@ public abstract class AbstractJavaModelloGenerator
         {
             return "new " + type + "( " + value + " )";
         }
+    }
+
+    private String escapeStringLiteral( String str )
+    {
+        StringBuilder buffer = new StringBuilder( str.length() + 32 );
+
+        for ( int i = 0, n = str.length(); i < n; i++ )
+        {
+            char c = str.charAt( i );
+            switch ( c )
+            {
+                case '\0':
+                    buffer.append( "\\0" );
+                    break;
+                case '\t':
+                    buffer.append( "\\t" );
+                    break;
+                case '\r':
+                    buffer.append( "\\r" );
+                    break;
+                case '\n':
+                    buffer.append( "\\n" );
+                    break;
+                case '\\':
+                    buffer.append( "\\\\" );
+                    break;
+                default:
+                    buffer.append( c );
+            }
+        }
+
+        return buffer.toString();
     }
 
     protected String getValueChecker( String type, String value, ModelField field )
