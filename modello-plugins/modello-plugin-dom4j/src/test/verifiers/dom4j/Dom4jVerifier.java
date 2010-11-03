@@ -93,6 +93,7 @@ public class Dom4jVerifier
         throws IOException, DocumentException
     {
         String expectedXml = FileUtils.fileRead( getTestFile( "src/test/verifiers/dom4j/expected.xml" ) );
+        expectedXml = expectedXml.replaceAll( "(\r\n)|(\r)", "\n" );
 
         // ----------------------------------------------------------------------
         // Build the model thats going to be written.
@@ -224,6 +225,7 @@ public class Dom4jVerifier
         writer.write( buffer, expected );
 
         String actualXml = buffer.toString();
+        actualXml = actualXml.replaceAll( "(\r\n)|(\r)", "\n" );
 
 //        System.out.println( expectedXml );
 //
