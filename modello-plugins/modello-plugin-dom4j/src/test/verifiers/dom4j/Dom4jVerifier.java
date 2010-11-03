@@ -245,7 +245,7 @@ public class Dom4jVerifier
 
         writer.write( buffer, actual );
 
-        Assert.assertEquals( expectedXml.trim(), buffer.toString().trim() );
+        Assert.assertEquals( expectedXml.trim(), buffer.toString().trim().replaceAll( "(\r\n)|(\r)", "\n" ) );
     }
 
     public void verifyReader()
