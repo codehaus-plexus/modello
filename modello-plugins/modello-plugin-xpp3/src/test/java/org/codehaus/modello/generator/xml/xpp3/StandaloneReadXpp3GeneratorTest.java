@@ -1,4 +1,4 @@
-package org.codehaus.modello.plugins.xml.metadata;
+package org.codehaus.modello.generator.xml.xpp3;
 
 /*
  * Copyright (c) 2004, Codehaus.org
@@ -22,38 +22,35 @@ package org.codehaus.modello.plugins.xml.metadata;
  * SOFTWARE.
  */
 
-import org.codehaus.modello.metadata.ClassMetadata;
+import java.util.Properties;
 
-/**
- * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id$
- */
-public class XmlClassMetadata
-    implements ClassMetadata
+import org.codehaus.modello.AbstractModelloJavaGeneratorTest;
+import org.codehaus.modello.core.ModelloCore;
+import org.codehaus.modello.model.Model;
+
+public class StandaloneReadXpp3GeneratorTest
+    extends AbstractModelloJavaGeneratorTest
 {
-    public static final String ID = XmlClassMetadata.class.getName();
-
-    private String tagName;
-
-    private boolean standaloneRead;
-
-    public String getTagName()
+    public StandaloneReadXpp3GeneratorTest()
     {
-        return tagName;
+        super( "testStandaloneRead" );
     }
 
-    public void setTagName( String tagName )
+    public void testStandaloneRead()
+        throws Throwable
     {
-        this.tagName = tagName;
+        ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
+
+        Model model = modello.loadModel( getXmlResourceReader( "/standaloneRead.mdo" ) );
+
+        Properties parameters = getModelloParameters( "1.0.0" );
+
+        modello.generate( model, "java", parameters );
+        modello.generate( model, "xpp3-reader", parameters );
+
+        compileGeneratedSources();
+
+        verifyCompiledGeneratedSources( "org.codehaus.modello.generator.xml.xpp3.Xpp3StandaloneReadVerifier" );
     }
 
-    public boolean isStandaloneRead()
-    {
-        return standaloneRead;
-    }
-
-    public void setStandaloneRead( boolean standaloneRead )
-    {
-        this.standaloneRead = standaloneRead;
-    }
 }

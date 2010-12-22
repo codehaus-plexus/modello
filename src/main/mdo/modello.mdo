@@ -390,6 +390,15 @@
           <comment>see org.codehaus.modello.plugin.model.ModelMetadataPlugin</comment>
         </field>
         <field xml.attribute="true">
+          <name>xml.standaloneRead</name>
+          <version>1.4.1+</version>
+          <type>boolean</type>
+          <description>
+            If true, the xml reader will have read methods that allow to read xml that has this class as root element.
+          </description>
+          <comment>see org.codehaus.modello.plugins.xml.metadata.XmlMetadataPlugin</comment>
+        </field>
+        <field xml.attribute="true">
           <name>locationTracker</name>
           <version>1.4.0+</version>
           <type>String</type>

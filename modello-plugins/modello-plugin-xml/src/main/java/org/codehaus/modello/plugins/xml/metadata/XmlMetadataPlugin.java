@@ -22,6 +22,8 @@ package org.codehaus.modello.plugins.xml.metadata;
  * SOFTWARE.
  */
 
+import java.util.Map;
+
 import org.codehaus.modello.metadata.AbstractMetadataPlugin;
 import org.codehaus.modello.metadata.AssociationMetadata;
 import org.codehaus.modello.metadata.ClassMetadata;
@@ -34,8 +36,6 @@ import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.ModelInterface;
-
-import java.util.Map;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -64,6 +64,8 @@ public class XmlMetadataPlugin
 
     public static final String XML_TAG_NAME = "xml.tagName";
 
+    public static final String XML_STANDALONE_READ = "xml.standaloneRead";
+
     public static final String XML_TRIM = "xml.trim";
 
     public static final String XML_TRANSIENT = "xml.transient";
@@ -90,6 +92,8 @@ public class XmlMetadataPlugin
         XmlClassMetadata metadata = new XmlClassMetadata();
 
         metadata.setTagName( getString( data, XML_TAG_NAME ) );
+
+        metadata.setStandaloneRead( getBoolean( data, XML_STANDALONE_READ, false ) );
 
         return metadata;
     }

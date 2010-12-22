@@ -42,6 +42,7 @@ import org.codehaus.modello.plugin.java.javasource.JType;
 import org.codehaus.modello.plugin.java.metadata.JavaClassMetadata;
 import org.codehaus.modello.plugin.model.ModelClassMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlAssociationMetadata;
+import org.codehaus.modello.plugins.xml.metadata.XmlClassMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
 import org.codehaus.plexus.util.StringUtils;
 
@@ -106,6 +107,197 @@ public class Xpp3ReaderGenerator
         catch ( IOException ex )
         {
             throw new ModelloException( "Exception while generating XPP3 Reader.", ex );
+        }
+    }
+
+    private void writeAllClassesReaders( Model objectModel, JClass jClass )
+    {
+        ModelClass root = objectModel.getClass( objectModel.getRoot( getGeneratedVersion() ), getGeneratedVersion() );
+
+        for ( ModelClass clazz : getClasses( objectModel ) )
+        {
+            if ( isTrackingSupport( clazz ) )
+            {
+                continue;
+            }
+
+            writeClassReaders( clazz, jClass, root.getName().equals( clazz.getName() ) );
+        }
+    }
+
+    private void writeClassReaders( ModelClass modelClass, JClass jClass, boolean rootElement )
+    {
+        JavaClassMetadata javaClassMetadata =
+            (JavaClassMetadata) modelClass.getMetadata( JavaClassMetadata.class.getName() );
+
+        // Skip abstract classes, no way to parse them out into objects
+        if ( javaClassMetadata.isAbstract() )
+        {
+            return;
+        }
+
+        XmlClassMetadata xmlClassMetadata = (XmlClassMetadata) modelClass.getMetadata( XmlClassMetadata.ID );
+        if ( !rootElement && !xmlClassMetadata.isStandaloneRead() )
+        {
+            return;
+        }
+
+        String className = modelClass.getName();
+
+        String capClassName = capitalise( className );
+
+        String readerMethodName = "read";
+        if ( !rootElement )
+        {
+            readerMethodName += capClassName;
+        }
+
+        // ----------------------------------------------------------------------
+        // Write the read(XmlPullParser,boolean) method which will do the unmarshalling.
+        // ----------------------------------------------------------------------
+
+        JMethod unmarshall = new JMethod( readerMethodName, new JClass( className ), null );
+        unmarshall.getModifiers().makePrivate();
+
+        unmarshall.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
+        unmarshall.addParameter( new JParameter( JClass.BOOLEAN, "strict" ) );
+        addTrackingParameters( unmarshall );
+
+        unmarshall.addException( new JClass( "IOException" ) );
+        unmarshall.addException( new JClass( "XmlPullParserException" ) );
+
+        JSourceCode sc = unmarshall.getSourceCode();
+
+        String tagName = resolveTagName( modelClass );
+        String variableName = uncapitalise( className );
+
+        sc.add( "int eventType = parser.getEventType();" );
+
+        sc.add( "while ( eventType != XmlPullParser.END_DOCUMENT )" );
+
+        sc.add( "{" );
+        sc.indent();
+
+        sc.add( "if ( eventType == XmlPullParser.START_TAG )" );
+
+        sc.add( "{" );
+        sc.indent();
+
+        sc.add( "if ( strict && ! \"" + tagName + "\".equals( parser.getName() ) )" );
+
+        sc.add( "{" );
+        sc.addIndented( "throw new XmlPullParserException( \"Expected root element '" + tagName + "' but "
+                        + "found '\" + parser.getName() + \"'\", parser, null );" );
+        sc.add( "}" );
+
+        sc.add( className + ' ' + variableName + " = parse" + capClassName + "( parser, strict" + trackingArgs
+            + " );" );
+
+        if ( rootElement )
+        {
+            sc.add( variableName + ".setModelEncoding( parser.getInputEncoding() );" );
+        }
+
+        sc.add( "return " + variableName + ';' );
+
+        sc.unindent();
+        sc.add( "}" );
+
+        sc.add( "eventType = parser.next();" );
+
+        sc.unindent();
+        sc.add( "}" );
+
+        sc.add( "throw new XmlPullParserException( \"Expected root element '" + tagName + "' but "
+                        + "found no element at all: invalid XML document\", parser, null );" );
+
+        jClass.addMethod( unmarshall );
+
+        // ----------------------------------------------------------------------
+        // Write the read(Reader[,boolean]) methods which will do the unmarshalling.
+        // ----------------------------------------------------------------------
+
+        unmarshall = new JMethod( readerMethodName, new JClass( className ), null );
+        unmarshall.setComment( "@see ReaderFactory#newXmlReader" );
+
+        unmarshall.addParameter( new JParameter( new JClass( "Reader" ), "reader" ) );
+        unmarshall.addParameter( new JParameter( JClass.BOOLEAN, "strict" ) );
+        addTrackingParameters( unmarshall );
+
+        unmarshall.addException( new JClass( "IOException" ) );
+        unmarshall.addException( new JClass( "XmlPullParserException" ) );
+
+        sc = unmarshall.getSourceCode();
+
+        sc.add( "XmlPullParser parser = new MXParser();" );
+
+        sc.add( "" );
+
+        sc.add( "parser.setInput( reader );" );
+
+        sc.add( "" );
+
+        sc.add( "initParser( parser );" );
+
+        sc.add( "" );
+
+        sc.add( "return " + readerMethodName + "( parser, strict" + trackingArgs + " );" );
+
+        jClass.addMethod( unmarshall );
+
+        // ----------------------------------------------------------------------
+
+        if ( locationTracker == null )
+        {
+            unmarshall = new JMethod( readerMethodName, new JClass( className ), null );
+            unmarshall.setComment( "@see ReaderFactory#newXmlReader" );
+
+            unmarshall.addParameter( new JParameter( new JClass( "Reader" ), "reader" ) );
+
+            unmarshall.addException( new JClass( "IOException" ) );
+            unmarshall.addException( new JClass( "XmlPullParserException" ) );
+
+            sc = unmarshall.getSourceCode();
+            sc.add( "return " + readerMethodName + "( reader, true );" );
+
+            jClass.addMethod( unmarshall );
+        }
+
+        // ----------------------------------------------------------------------
+        // Write the read(InputStream[,boolean]) methods which will do the unmarshalling.
+        // ----------------------------------------------------------------------
+
+        unmarshall = new JMethod( readerMethodName, new JClass( className ), null );
+
+        unmarshall.addParameter( new JParameter( new JClass( "InputStream" ), "in" ) );
+        unmarshall.addParameter( new JParameter( JClass.BOOLEAN, "strict" ) );
+        addTrackingParameters( unmarshall );
+
+        unmarshall.addException( new JClass( "IOException" ) );
+        unmarshall.addException( new JClass( "XmlPullParserException" ) );
+
+        sc = unmarshall.getSourceCode();
+
+        sc.add( "return " + readerMethodName + "( ReaderFactory.newXmlReader( in ), strict" + trackingArgs + " );" );
+
+        jClass.addMethod( unmarshall );
+
+        // --------------------------------------------------------------------
+
+        if ( locationTracker == null )
+        {
+            unmarshall = new JMethod( readerMethodName, new JClass( className ), null );
+
+            unmarshall.addParameter( new JParameter( new JClass( "InputStream" ), "in" ) );
+
+            unmarshall.addException( new JClass( "IOException" ) );
+            unmarshall.addException( new JClass( "XmlPullParserException" ) );
+
+            sc = unmarshall.getSourceCode();
+
+            sc.add( "return " + readerMethodName + "( ReaderFactory.newXmlReader( in ) );" );
+
+            jClass.addMethod( unmarshall );
         }
     }
 
@@ -174,154 +366,11 @@ public class Xpp3ReaderGenerator
 
         jClass.addMethod( addDefaultEntitiesGetter );
 
-        ModelClass root = objectModel.getClass( objectModel.getRoot( getGeneratedVersion() ), getGeneratedVersion() );
-        JClass rootType = new JClass( root.getName() );
-
         // ----------------------------------------------------------------------
-        // Write the read(XmlPullParser,boolean) method which will do the unmarshalling.
+        // Write the class readers
         // ----------------------------------------------------------------------
 
-        JMethod unmarshall = new JMethod( "read", rootType, null );
-        unmarshall.getModifiers().makePrivate();
-
-        unmarshall.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
-        unmarshall.addParameter( new JParameter( JClass.BOOLEAN, "strict" ) );
-        addTrackingParameters( unmarshall );
-
-        unmarshall.addException( new JClass( "IOException" ) );
-        unmarshall.addException( new JClass( "XmlPullParserException" ) );
-
-        JSourceCode sc = unmarshall.getSourceCode();
-
-        String tagName = resolveTagName( root );
-        String className = root.getName();
-        String variableName = uncapitalise( className );
-
-        sc.add( "int eventType = parser.getEventType();" );
-
-        sc.add( "while ( eventType != XmlPullParser.END_DOCUMENT )" );
-
-        sc.add( "{" );
-        sc.indent();
-
-        sc.add( "if ( eventType == XmlPullParser.START_TAG )" );
-
-        sc.add( "{" );
-        sc.indent();
-
-        sc.add( "if ( strict && ! \"" + tagName + "\".equals( parser.getName() ) )" );
-
-        sc.add( "{" );
-        sc.addIndented( "throw new XmlPullParserException( \"Expected root element '" + tagName + "' but "
-                        + "found '\" + parser.getName() + \"'\", parser, null );" );
-        sc.add( "}" );
-
-        sc.add( className + ' ' + variableName + " = parse" + root.getName() + "( parser, strict" + trackingArgs
-            + " );" );
-
-        sc.add( variableName + ".setModelEncoding( parser.getInputEncoding() );" );
-
-        sc.add( "return " + variableName + ';' );
-
-        sc.unindent();
-        sc.add( "}" );
-
-        sc.add( "eventType = parser.next();" );
-
-        sc.unindent();
-        sc.add( "}" );
-
-        sc.add( "throw new XmlPullParserException( \"Expected root element '" + tagName + "' but "
-                        + "found no element at all: invalid XML document\", parser, null );" );
-
-        jClass.addMethod( unmarshall );
-
-        // ----------------------------------------------------------------------
-        // Write the read(Reader[,boolean]) methods which will do the unmarshalling.
-        // ----------------------------------------------------------------------
-
-        unmarshall = new JMethod( "read", rootType, null );
-        unmarshall.setComment( "@see ReaderFactory#newXmlReader" );
-
-        unmarshall.addParameter( new JParameter( new JClass( "Reader" ), "reader" ) );
-        unmarshall.addParameter( new JParameter( JClass.BOOLEAN, "strict" ) );
-        addTrackingParameters( unmarshall );
-
-        unmarshall.addException( new JClass( "IOException" ) );
-        unmarshall.addException( new JClass( "XmlPullParserException" ) );
-
-        sc = unmarshall.getSourceCode();
-
-        sc.add( "XmlPullParser parser = new MXParser();" );
-
-        sc.add( "" );
-
-        sc.add( "parser.setInput( reader );" );
-
-        sc.add( "" );
-
-        sc.add( "initParser( parser );" );
-
-        sc.add( "" );
-
-        sc.add( "return read( parser, strict" + trackingArgs + " );" );
-
-        jClass.addMethod( unmarshall );
-
-        // ----------------------------------------------------------------------
-
-        if ( locationTracker == null )
-        {
-            unmarshall = new JMethod( "read", rootType, null );
-            unmarshall.setComment( "@see ReaderFactory#newXmlReader" );
-
-            unmarshall.addParameter( new JParameter( new JClass( "Reader" ), "reader" ) );
-
-            unmarshall.addException( new JClass( "IOException" ) );
-            unmarshall.addException( new JClass( "XmlPullParserException" ) );
-
-            sc = unmarshall.getSourceCode();
-            sc.add( "return read( reader, true );" );
-
-            jClass.addMethod( unmarshall );
-        }
-
-        // ----------------------------------------------------------------------
-        // Write the read(InputStream[,boolean]) methods which will do the unmarshalling.
-        // ----------------------------------------------------------------------
-
-        unmarshall = new JMethod( "read", rootType, null );
-
-        unmarshall.addParameter( new JParameter( new JClass( "InputStream" ), "in" ) );
-        unmarshall.addParameter( new JParameter( JClass.BOOLEAN, "strict" ) );
-        addTrackingParameters( unmarshall );
-
-        unmarshall.addException( new JClass( "IOException" ) );
-        unmarshall.addException( new JClass( "XmlPullParserException" ) );
-
-        sc = unmarshall.getSourceCode();
-
-        sc.add( "return read( ReaderFactory.newXmlReader( in ), strict" + trackingArgs + " );" );
-
-        jClass.addMethod( unmarshall );
-
-        // --------------------------------------------------------------------
-
-        if ( locationTracker == null )
-        {
-            unmarshall = new JMethod( "read", rootType, null );
-
-            unmarshall.addParameter( new JParameter( new JClass( "InputStream" ), "in" ) );
-
-            unmarshall.addException( new JClass( "IOException" ) );
-            unmarshall.addException( new JClass( "XmlPullParserException" ) );
-
-            sc = unmarshall.getSourceCode();
-
-            sc.add( "return read( ReaderFactory.newXmlReader( in ) );" );
-
-            jClass.addMethod( unmarshall );
-        }
+        writeAllClassesReaders( objectModel, jClass );
 
         // ----------------------------------------------------------------------
         // Write the class parsers

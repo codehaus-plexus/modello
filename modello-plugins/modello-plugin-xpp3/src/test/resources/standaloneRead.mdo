@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<model>
+    <id>StandaloneRead</id>
+    <name>StandaloneRead</name>
+    
+    <defaults>
+        <default>
+            <key>package</key>
+            <value>org.codehaus.modello.generator.xml.xpp3.test.standaloneread</value>
+        </default>
+    </defaults>
+    
+    <classes>
+        <class rootElement="true">
+            <name>RootClass</name>
+            <version>1.0.0+</version>
+            <fields>
+                <field>
+                    <name>leaves</name>
+                    <version>1.0.0+</version>
+                    <association xml.tagName="standaloneReadClass">
+                        <type>StandaloneReadClass</type>
+                        <multiplicity>*</multiplicity>
+                    </association>
+                </field>
+            </fields>
+        </class>
+        
+        <class>
+            <name>FooClass</name>
+            <version>1.0.0+</version>
+            <fields>
+                <field>
+                    <name>id</name>
+                    <type>String</type>
+                    <version>1.0.0+</version>
+                    <required>true</required>
+                </field>
+            </fields>
+        </class>
+        
+        <class xml.standaloneRead="true">
+            <name>StandaloneReadClass</name>
+            <version>1.0.0+</version>
+            <fields>
+                <field>
+                    <name>id</name>
+                    <type>String</type>
+                    <version>1.0.0+</version>
+                    <required>true</required>
+                </field>
+            </fields>
+        </class>
+    </classes>
+</model>
