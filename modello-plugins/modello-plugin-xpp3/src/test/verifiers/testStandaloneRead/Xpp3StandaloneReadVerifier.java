@@ -24,7 +24,6 @@ package org.codehaus.modello.generator.xml.xpp3;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
@@ -38,6 +37,7 @@ import org.codehaus.modello.generator.xml.xpp3.test.standaloneread.StandaloneRea
 import org.codehaus.modello.generator.xml.xpp3.test.standaloneread.io.xpp3.StandaloneReadXpp3Reader;
 
 import org.codehaus.modello.verifier.Verifier;
+import org.codehaus.plexus.util.ReaderFactory;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
 public class Xpp3StandaloneReadVerifier
@@ -62,11 +62,11 @@ public class Xpp3StandaloneReadVerifier
         rootClass = reader.read( in, true );
         assertNotNull( "Expected not null RootClass", rootClass );
 
-        FileReader fr = new FileReader( file );
+        Reader fr = ReaderFactory.newXmlReader( file );
         rootClass = reader.read( fr );
         assertNotNull( "Expected not null RootClass", rootClass );
 
-        fr = new FileReader( file );
+        fr = ReaderFactory.newXmlReader( file );
         rootClass = reader.read( fr, true );
         assertNotNull( "Expected not null RootClass", rootClass );
 
@@ -84,11 +84,11 @@ public class Xpp3StandaloneReadVerifier
         standaloneReadClass = reader.readStandaloneReadClass( in, true );
         assertNotNull( "Expected not null StandaloneReadClass", standaloneReadClass );
 
-        fr = new FileReader( file );
+        fr = ReaderFactory.newXmlReader( file );
         standaloneReadClass = reader.readStandaloneReadClass( fr );
         assertNotNull( "Expected not null StandaloneReadClass", standaloneReadClass );
 
-        fr = new FileReader( file );
+        fr = ReaderFactory.newXmlReader( file );
         standaloneReadClass = reader.readStandaloneReadClass( fr, true );
         assertNotNull( "Expected not null StandaloneReadClass", standaloneReadClass );
 
