@@ -61,7 +61,7 @@ public abstract class Verifier
     {
         Method read;
 
-        // Model read( OutputStream|Writer ) throws IOException, ?
+        // Model read( InputStream|Reader ) throws IOException, ?
         try
         {
             read = reader.getMethod( "read", input );
@@ -79,7 +79,7 @@ public abstract class Verifier
             fail( e.toString() );
         }
 
-        // Model read( OutputStream|Writer, boolean ) throws IOException, ?
+        // Model read( InputStream|Reader, boolean ) throws IOException, ?
         try
         {
             read = reader.getMethod( "read", input, Boolean.TYPE );
