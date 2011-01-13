@@ -39,8 +39,8 @@ import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelValidationException;
-import org.sonatype.plexus.build.incremental.BuildContext;
 import org.codehaus.plexus.util.StringUtils;
+import org.sonatype.plexus.build.incremental.BuildContext;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -213,43 +213,33 @@ public abstract class AbstractModelloGeneratorMojo
         //
         // ----------------------------------------------------------------------
 
-        try
+        MojoExecutionException firstError = null;
+        for ( String modelStr : models )
         {
-            for ( int i = 0; i < models.length; i++ )
+            try
             {
-                doExecute( models[i], outputDirectory, parameters );
+                doExecute( modelStr, outputDirectory, parameters );
+            }
+            catch ( MojoExecutionException e )
+            {
+                if ( firstError == null )
+                {
+                    firstError = e;
+                }
+                getLog().error( e );
             }
         }
-        catch ( FileNotFoundException e )
+        if ( firstError != null )
         {
-            throw new MojoExecutionException( "Couldn't find file.", e );
-        }
-        catch ( ModelloException e )
-        {
-            throw new MojoExecutionException( "Error generating.", e );
-        }
-        catch ( ModelValidationException e )
-        {
-            throw new MojoExecutionException( "Error generating.", e );
-        }
-        catch ( IOException e )
-        {
-            throw new MojoExecutionException( "Couldn't read file.", e );
+            throw firstError;
         }
     }
 
     /**
      * Performs execute on a single specified model.
-     *
-     * @param modelStr
-     * @param parameters
-     * @param outputDirectory
-     * @throws IOException
-     * @throws ModelloException
-     * @throws ModelValidationException
      */
     private void doExecute( String modelStr, String outputDirectory, Properties parameters )
-        throws IOException, ModelloException, ModelValidationException
+        throws MojoExecutionException
     {
         if ( !buildContext.hasDelta( modelStr ) )
         {
@@ -259,32 +249,79 @@ public abstract class AbstractModelloGeneratorMojo
 
         getLog().info( "Working on model: " + modelStr );
 
-        Model model = modelloCore.loadModel( new File( basedir, modelStr ) );
+        File modelFile = new File( basedir, modelStr );
+        buildContext.removeErrors( modelFile );
 
-        // TODO: dynamically resolve/load the generator type
-        getLog().info( "Generating current version: " + version );
-        modelloCore.generate( model, getGeneratorType(), parameters );
-
-        for ( String version : packagedVersions )
+        try
         {
-            parameters.setProperty( ModelloParameterConstants.VERSION, version );
+            Model model = modelloCore.loadModel( modelFile );
 
-            parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString( true ) );
-
-            getLog().info( "Generating packaged version: " + version );
+            // TODO: dynamically resolve/load the generator type
+            getLog().info( "Generating current version: " + version );
             modelloCore.generate( model, getGeneratorType(), parameters );
-        }
 
-        if ( producesCompilableResult() && project != null )
-        {
-            project.addCompileSourceRoot( outputDirectory );
-        }
+            for ( String version : packagedVersions )
+            {
+                parameters.setProperty( ModelloParameterConstants.VERSION, version );
 
-        if ( producesResources() && project != null )
+                parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString( true ) );
+
+                getLog().info( "Generating packaged version: " + version );
+                modelloCore.generate( model, getGeneratorType(), parameters );
+            }
+
+            if ( producesCompilableResult() && project != null )
+            {
+                project.addCompileSourceRoot( outputDirectory );
+            }
+
+            if ( producesResources() && project != null )
+            {
+                Resource resource = new Resource();
+                resource.setDirectory( outputDirectory );
+                project.addResource( resource );
+            }
+        }
+        catch ( FileNotFoundException e )
         {
-            Resource resource = new Resource();
-            resource.setDirectory( outputDirectory );
-            project.addResource( resource );
+            MojoExecutionException mojoExecutionException = new MojoExecutionException( e.getMessage(), e );
+            buildContext.addError( modelFile, 1 /* line */, 1 /* column */,
+                                   mojoExecutionException.getMessage(), mojoExecutionException );
+            throw mojoExecutionException;
+        }
+        catch ( ModelloException e )
+        {
+            MojoExecutionException mojoExecutionException =
+                new MojoExecutionException( "Error generating: " + e.getMessage(), e );
+            // TODO: Provide actual line/column numbers
+            buildContext.addError( modelFile, 1 /* line */, 1 /* column */,
+                                   mojoExecutionException.getMessage(), mojoExecutionException );
+            throw mojoExecutionException;
+        }
+        catch ( ModelValidationException e )
+        {
+            MojoExecutionException mojoExecutionException =
+                new MojoExecutionException( "Error generating: " + e.getMessage(), e );
+            // TODO: Provide actual line/column numbers
+            buildContext.addError( modelFile, 1 /* line */, 1 /* column */,
+                                   mojoExecutionException.getMessage(), mojoExecutionException );
+            throw mojoExecutionException;
+        }
+        catch ( IOException e )
+        {
+            MojoExecutionException mojoExecutionException =
+                new MojoExecutionException( "Couldn't read file: " + e.getMessage(), e );
+            buildContext.addError( modelFile, 1 /* line */, 1 /* column */,
+                                   mojoExecutionException.getMessage(), mojoExecutionException );
+            throw mojoExecutionException;
+        }
+        catch ( RuntimeException e )
+        {
+            MojoExecutionException mojoExecutionException =
+                new MojoExecutionException( "Error generating: " + e.getMessage(), e );
+            buildContext.addError( modelFile, 1 /* line */, 1 /* column */,
+                                   mojoExecutionException.getMessage(), mojoExecutionException );
+            throw mojoExecutionException;
         }
     }
 

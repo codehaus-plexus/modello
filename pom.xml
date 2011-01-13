@@ -316,7 +316,7 @@
       <dependency>
         <groupId>org.sonatype.plexus</groupId>
         <artifactId>plexus-build-api</artifactId>
-        <version>0.0.3</version>
+        <version>0.0.7-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>junit</groupId>
