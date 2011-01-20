@@ -250,7 +250,7 @@ public abstract class AbstractModelloGeneratorMojo
         getLog().info( "Working on model: " + modelStr );
 
         File modelFile = new File( basedir, modelStr );
-        buildContext.removeErrors( modelFile );
+        buildContext.removeMessages( modelFile );
 
         try
         {
@@ -285,8 +285,8 @@ public abstract class AbstractModelloGeneratorMojo
         catch ( FileNotFoundException e )
         {
             MojoExecutionException mojoExecutionException = new MojoExecutionException( e.getMessage(), e );
-            buildContext.addError( modelFile, 1 /* line */, 1 /* column */,
-                                   mojoExecutionException.getMessage(), mojoExecutionException );
+            buildContext.addMessage( modelFile, 1 /* line */, 1 /* column */, mojoExecutionException.getMessage(),
+                                     BuildContext.SEVERITY_ERROR, mojoExecutionException );
             throw mojoExecutionException;
         }
         catch ( ModelloException e )
@@ -294,8 +294,8 @@ public abstract class AbstractModelloGeneratorMojo
             MojoExecutionException mojoExecutionException =
                 new MojoExecutionException( "Error generating: " + e.getMessage(), e );
             // TODO: Provide actual line/column numbers
-            buildContext.addError( modelFile, 1 /* line */, 1 /* column */,
-                                   mojoExecutionException.getMessage(), mojoExecutionException );
+            buildContext.addMessage( modelFile, 1 /* line */, 1 /* column */, mojoExecutionException.getMessage(),
+                                     BuildContext.SEVERITY_ERROR, mojoExecutionException );
             throw mojoExecutionException;
         }
         catch ( ModelValidationException e )
@@ -303,24 +303,24 @@ public abstract class AbstractModelloGeneratorMojo
             MojoExecutionException mojoExecutionException =
                 new MojoExecutionException( "Error generating: " + e.getMessage(), e );
             // TODO: Provide actual line/column numbers
-            buildContext.addError( modelFile, 1 /* line */, 1 /* column */,
-                                   mojoExecutionException.getMessage(), mojoExecutionException );
+            buildContext.addMessage( modelFile, 1 /* line */, 1 /* column */, mojoExecutionException.getMessage(),
+                                     BuildContext.SEVERITY_ERROR, mojoExecutionException );
             throw mojoExecutionException;
         }
         catch ( IOException e )
         {
             MojoExecutionException mojoExecutionException =
                 new MojoExecutionException( "Couldn't read file: " + e.getMessage(), e );
-            buildContext.addError( modelFile, 1 /* line */, 1 /* column */,
-                                   mojoExecutionException.getMessage(), mojoExecutionException );
+            buildContext.addMessage( modelFile, 1 /* line */, 1 /* column */, mojoExecutionException.getMessage(),
+                                     BuildContext.SEVERITY_ERROR, mojoExecutionException );
             throw mojoExecutionException;
         }
         catch ( RuntimeException e )
         {
             MojoExecutionException mojoExecutionException =
                 new MojoExecutionException( "Error generating: " + e.getMessage(), e );
-            buildContext.addError( modelFile, 1 /* line */, 1 /* column */,
-                                   mojoExecutionException.getMessage(), mojoExecutionException );
+            buildContext.addMessage( modelFile, 1 /* line */, 1 /* column */, mojoExecutionException.getMessage(),
+                                     BuildContext.SEVERITY_ERROR, mojoExecutionException );
             throw mojoExecutionException;
         }
     }
