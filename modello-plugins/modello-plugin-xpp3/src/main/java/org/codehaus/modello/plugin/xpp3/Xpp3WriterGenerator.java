@@ -87,9 +87,7 @@ public class Xpp3WriterGenerator
         jClass.addImport( "org.codehaus.plexus.util.xml.pull.MXSerializer" );
         jClass.addImport( "java.io.OutputStream" );
         jClass.addImport( "java.io.Writer" );
-        jClass.addImport( "java.text.DateFormat" );
         jClass.addImport( "java.util.Iterator" );
-        jClass.addImport( "java.util.Locale" );
 
         JField namespaceField = new JField( new JClass( "String" ), "NAMESPACE" );
         namespaceField.getModifiers().setFinal( true );

@@ -139,7 +139,7 @@ public abstract class AbstractXmlJavaGenerator
             else
             {
                 textValue =
-                    "new java.text.SimpleDateFormat( \"" + dateFormat + "\", Locale.US ).format( " + textValue + " )";
+                    "new java.text.SimpleDateFormat( \"" + dateFormat + "\", java.util.Locale.US ).format( " + textValue + " )";
             }
         }
         else if ( !"String".equals( type ) )
@@ -196,7 +196,7 @@ public abstract class AbstractXmlJavaGenerator
         sc.add( "{" );
         sc.indent();
 
-        sc.add( "DateFormat dateParser = new java.text.SimpleDateFormat( effectiveDateFormat, Locale.US );" );
+        sc.add( "DateFormat dateParser = new java.text.SimpleDateFormat( effectiveDateFormat, java.util.Locale.US );" );
         sc.add( "return dateParser.parse( s );" );
 
         sc.unindent();
