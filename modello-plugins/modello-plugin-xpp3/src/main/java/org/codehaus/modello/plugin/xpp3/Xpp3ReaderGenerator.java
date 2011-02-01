@@ -325,7 +325,6 @@ public class Xpp3ReaderGenerator
         jClass.addImport( "java.io.IOException" );
         jClass.addImport( "java.io.Reader" );
         jClass.addImport( "java.text.DateFormat" );
-        jClass.addImport( "java.util.Locale" );
 
         addModelImports( jClass, null );
 
