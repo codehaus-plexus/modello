@@ -456,7 +456,7 @@ public class Xpp3ReaderGenerator
         if ( contentField != null )
         {
             writePrimitiveField( contentField, contentField.getType(), uncapClassName, uncapClassName, "\"\"", "set"
-                + capitalise( contentField.getName() ), sc, jClass );
+                + capitalise( contentField.getName() ), sc );
         }
         else
         {
@@ -545,7 +545,7 @@ public class Xpp3ReaderGenerator
                 sc.indent();
 
                 writePrimitiveField( field, field.getType(), objectName, objectName, "\"" + field.getName() + "\"",
-                                     "set" + capitalise( field.getName() ), sc, jClass );
+                                     "set" + capitalise( field.getName() ), sc );
 
                 sc.unindent();
                 sc.add( "}" );
@@ -609,7 +609,7 @@ public class Xpp3ReaderGenerator
             sc.indent();
 
             writePrimitiveField( field, field.getType(), objectName, objectName, "\"" + field.getName() + "\"", "set"
-                + capitalise( field.getName() ), sc, jClass );
+                + capitalise( field.getName() ), sc );
 
             sc.unindent();
             sc.add( "}" );
@@ -727,7 +727,7 @@ public class Xpp3ReaderGenerator
                                     + ".size() )";
                         }
                         writePrimitiveField( association, association.getTo(), associationName, LOCATION_VAR + "s",
-                                             key, "add", sc, jClass );
+                                             key, "add", sc );
                     }
 
                     if ( wrappedItems )
@@ -858,7 +858,7 @@ public class Xpp3ReaderGenerator
     }
 
     private void writePrimitiveField( ModelField field, String type, String objectName, String locatorName,
-                                      String locationKey, String setterName, JSourceCode sc, JClass jClass )
+                                      String locationKey, String setterName, JSourceCode sc )
     {
         XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
 
@@ -953,9 +953,8 @@ public class Xpp3ReaderGenerator
         }
         else if ( "DOM".equals( type ) )
         {
-            jClass.addImport( "org.codehaus.plexus.util.xml.Xpp3DomBuilder" );
-
-            sc.add( objectName + "." + setterName + "( " + keyCapture + "Xpp3DomBuilder.build( parser ) );" );
+            sc.add( objectName + "." + setterName + "( " + keyCapture
+                + "org.codehaus.plexus.util.xml.Xpp3DomBuilder.build( parser ) );" );
         }
         else
         {
