@@ -942,7 +942,7 @@ public class Xpp3ReaderGenerator
         else if ( "String".equals( type ) || "Boolean".equals( type ) )
         {
             // TODO: other Primitive types
-            sc.add( objectName + "." + setterName + "( " + keyCapture +  parserGetter + " );" );
+            sc.add( objectName + "." + setterName + "( " + keyCapture + parserGetter + " );" );
         }
         else if ( "Date".equals( type ) )
         {
