@@ -782,7 +782,7 @@ public class Xpp3ReaderGenerator
                         sc.add( "String key = null;" );
 
                         sc.add( "String value = null;" );
-                        
+
                         writeNewLocation( LOCATION_VAR, sc );
 
                         sc.add( "// " + xmlAssociationMetadata.getMapStyle() + " mode." );
