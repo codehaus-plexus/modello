@@ -601,15 +601,14 @@ public class Xpp3ReaderGenerator
             + "if ( checkFieldWithDuplicate( parser, \"" + fieldTagName + "\", " + alias + ", parsed ) )";
 
         if ( !( field instanceof ModelAssociation ) )
-        {
-            //ModelField
+        { // model field
             sc.add( tagComparison );
 
             sc.add( "{" );
             sc.indent();
 
             writePrimitiveField( field, field.getType(), objectName, objectName, "\"" + field.getName() + "\"", "set"
-                + capitalise( field.getName() ), sc );
+                + capFieldName, sc );
 
             sc.unindent();
             sc.add( "}" );
