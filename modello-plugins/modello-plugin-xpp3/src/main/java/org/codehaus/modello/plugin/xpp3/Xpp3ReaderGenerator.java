@@ -946,8 +946,8 @@ public class Xpp3ReaderGenerator
         }
         else if ( "Date".equals( type ) )
         {
-            sc.add( "String dateFormat = " +
-                ( xmlFieldMetadata.getFormat() != null ? "\"" + xmlFieldMetadata.getFormat() + "\"" : "null" ) + ";" );
+            String format = xmlFieldMetadata.getFormat();
+            sc.add( "String dateFormat = " + ( format != null ? "\"" + format + "\"" : "null" ) + ";" );
             sc.add( objectName + "." + setterName + "( " + keyCapture + "getDateValue( " + parserGetter + ", \""
                 + tagName + "\", dateFormat, parser ) );" );
         }
