@@ -644,7 +644,7 @@ public class XdocGenerator
                     }
 
                     appendSpacer( sb, stack.size() );
-                    sb.append( "&lt;" ).append( fieldTagName ).append( "/&gt;\n" );
+                    sb.append( "&lt;/" ).append( fieldTagName ).append( "&gt;\n" );
                 }
                 else
                 {

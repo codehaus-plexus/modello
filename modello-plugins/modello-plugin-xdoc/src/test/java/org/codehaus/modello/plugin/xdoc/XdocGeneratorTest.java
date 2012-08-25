@@ -65,6 +65,7 @@ public class XdocGeneratorTest
     {
         checkMavenXdocGenerator();
         checkFeaturesXdocGenerator();
+        checkSettingsXdocGenerator();
     }
 
     private void checkMavenXdocGenerator()
@@ -130,6 +131,24 @@ public class XdocGeneratorTest
         String content = FileUtils.fileRead( new File( getOutputDirectory(), "features.xml" ), "UTF-8" );
 
         assertTrue( "Transient fields were erroneously documented", content.indexOf( "transientString" ) < 0 );
+    }
+
+    public void checkSettingsXdocGenerator()
+        throws Exception
+    {
+        ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
+
+        Model model = modello.loadModel( getXmlResourceReader( "/settings.mdo" ) );
+
+        Properties parameters = getModelloParameters( "1.5.0" );
+
+        modello.generate( model, "xdoc", parameters );
+
+        checkInternalLinks( "settings.xml" );
+
+        String content = FileUtils.fileRead( new File( getOutputDirectory(), "settings.xml" ), "UTF-8" );
+
+        assertTrue( "Properties field was erroneously documented", !content.contains("&lt;properties/&gt;"));
     }
 
     /**
