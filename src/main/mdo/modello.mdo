@@ -659,7 +659,7 @@
             Simple type for this field (or array of such type). Can be one of : <code>boolean</code>, <code>byte</code>,
             <code>char</code>, <code>short</code>, <code>int</code>, <code>long</code>, <code>float</code>,
             <code>double</code>, <code>String</code>, <code>Boolean</code>, <code>Date</code>, <code>DOM</code>.
-            Not that <code>Content</code> type is deprecated in favor of <code>xml.content="true"</code> field
+            Note that <code>Content</code> type is deprecated in favor of <code>xml.content="true"</code> field
             attribute.]]>
           </description>
         </field>
