@@ -1,3 +1,5 @@
+package org.codehaus.modello.maven;
+
 /*
  * Copyright (c) 2004, Codehaus.org
  *
@@ -20,14 +22,8 @@
  * SOFTWARE.
  */
 
-package org.codehaus.modello.maven;
-
-import java.io.File;
-
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
-import org.apache.maven.plugins.annotations.Parameter;
-
 
 /**
  * Creates a jdom writer from the model that is capable of preserving element ordering
@@ -37,26 +33,10 @@ import org.apache.maven.plugins.annotations.Parameter;
  */
 @Mojo( name = "jdom-writer", defaultPhase = LifecyclePhase.GENERATE_SOURCES, threadSafe = true )
 public class ModelloJDOMWriterMojo
-    extends AbstractModelloGeneratorMojo
+    extends AbstractModelloSourceGeneratorMojo
 {
-    /**
-     * The output directory of the generated jdom writer.
-     */
-    @Parameter( defaultValue = "${basedir}/target/generated-sources/modello", required = true )
-    private File outputDirectory;
-
     protected String getGeneratorType()
     {
         return "jdom-writer";
-    }
-
-    public File getOutputDirectory()
-    {
-        return outputDirectory;
-    }
-
-    public void setOutputDirectory( File outputDirectory )
-    {
-        this.outputDirectory = outputDirectory;
     }
 }

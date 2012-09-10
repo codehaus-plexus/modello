@@ -1,11 +1,5 @@
 package org.codehaus.modello.maven;
 
-import java.io.File;
-
-import org.apache.maven.plugins.annotations.LifecyclePhase;
-import org.apache.maven.plugins.annotations.Mojo;
-import org.apache.maven.plugins.annotations.Parameter;
-
 /*
  * Copyright (c) 2004, Codehaus.org
  *
@@ -28,6 +22,9 @@ import org.apache.maven.plugins.annotations.Parameter;
  * SOFTWARE.
  */
 
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+
 /**
  * Creates an XPP3 reader from the model.
  *
@@ -35,26 +32,10 @@ import org.apache.maven.plugins.annotations.Parameter;
  */
 @Mojo( name = "xpp3-reader", defaultPhase = LifecyclePhase.GENERATE_SOURCES, threadSafe = true )
 public class ModelloXpp3ReaderMojo
-    extends AbstractModelloGeneratorMojo
+    extends AbstractModelloSourceGeneratorMojo
 {
-    /**
-     * The output directory of the generated XPP reader.
-     */
-    @Parameter( defaultValue = "${basedir}/target/generated-sources/modello", required = true )
-    private File outputDirectory;
-
     protected String getGeneratorType()
     {
         return "xpp3-reader";
-    }
-
-    public File getOutputDirectory()
-    {
-        return outputDirectory;
-    }
-
-    public void setOutputDirectory( File outputDirectory )
-    {
-        this.outputDirectory = outputDirectory;
     }
 }
