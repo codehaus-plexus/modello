@@ -3,10 +3,24 @@
   ------
   Hervé Boutemy
   ------
-  2010-04-01
+  2012-09-10
   ------
 
 Modello
+
+* 1.5 Release Notes (2011-05-30)
+
+  The {{{http://jira.codehaus.org/secure/ReleaseNote.jspa?projectId=10510&version=16405}full list of changes}} can be found in our {{{./issue-tracking.html}issue management system}}, and is reproduced below.
+
+** Bug
+
+    * [MODELLO-249] - Regression: char type is initialized with a '0' character instead a 0 value
+
+** New Feature
+
+    * [MODELLO-253] - Allow the xpp3 reader to read xml fragments
+
+    * [MODELLO-255] - Provide error information feedback through plexus-build-api's BuildContext
 
 * 1.4.1 Release Notes (2010-09-25)
 
