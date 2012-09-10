@@ -22,6 +22,8 @@ package org.codehaus.modello.maven;
  * SOFTWARE.
  */
 
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.codehaus.modello.ModelloParameterConstants;
 
 import java.io.File;
@@ -30,29 +32,24 @@ import java.util.Properties;
 /**
  * Creates documentation for the model in xdoc format.
  *
- * @goal xdoc
- *
  * @author <a href="mailto:brett@apache.org">Brett Porter</a>
  * @version $Id$
  */
+@Mojo( name = "xdoc", threadSafe = true )
 public class ModelloXdocMojo
     extends AbstractModelloGeneratorMojo
 {
     /**
      * The output directory of the generated documentation.
-     *
-     * @parameter expression="${basedir}/target/generated-site/xdoc"
-     *
-     * @required
      */
+    @Parameter( defaultValue = "${basedir}/target/generated-site/xdoc", required = true )
     private File outputDirectory;
     
     /**
      * 
-     * @parameter 
-     * 
      * @since 1.0-alpha-21
      */
+    @Parameter
     private String xdocFileName;
 
     /**
@@ -61,9 +58,9 @@ public class ModelloXdocMojo
      * version of the model, which in turn means that the since column will not
      * be shown.
      *
-     * @parameter
      * @since 1.0-alpha-14
      */
+    @Parameter
     private String firstVersion;
 
     protected String getGeneratorType()

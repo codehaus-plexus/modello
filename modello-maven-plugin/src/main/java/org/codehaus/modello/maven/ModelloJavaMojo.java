@@ -24,23 +24,24 @@ package org.codehaus.modello.maven;
 
 import java.io.File;
 
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
+
 /**
  * Creates Java beans from the Modello model.
  *
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
- * @goal java
- * @phase generate-sources
  */
+@Mojo( name = "java", defaultPhase = LifecyclePhase.GENERATE_SOURCES, threadSafe = true )
 public class ModelloJavaMojo
     extends AbstractModelloGeneratorMojo
 {
     /**
      * The output directory of the generated Java beans.
-     *
-     * @parameter expression="${basedir}/target/generated-sources/modello"
-     * @required
      */
+    @Parameter( defaultValue = "${basedir}/target/generated-sources/modello", required = true )
     private File outputDirectory;
 
     protected String getGeneratorType()

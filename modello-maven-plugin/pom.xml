@@ -7,8 +7,10 @@
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
+
   <artifactId>modello-maven-plugin</artifactId>
   <packaging>maven-plugin</packaging>
+
   <name>Modello Maven Plugin</name>
   <description>
     Modello Maven Plugin enables the use of Modello in Maven builds.
@@ -17,6 +19,10 @@
   <prerequisites>
     <maven>2.0.6</maven>
   </prerequisites>
+
+  <properties>
+    <mavenPluginTools>3.1</mavenPluginTools>
+  </properties>
 
   <dependencies>
     <dependency>
@@ -42,6 +48,12 @@
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-utils</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.plugin-tools</groupId>
+      <artifactId>maven-plugin-annotations</artifactId>
+      <version>${mavenPluginTools}</version>
+      <scope>provided</scope>
     </dependency>
 
     <!-- plugins, sorted alphabetically -->
@@ -95,7 +107,17 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-plugin-plugin</artifactId>
+        <version>${mavenPluginTools}</version>
+        <configuration>
+          <skipErrorNoDescriptorsFound>true</skipErrorNoDescriptorsFound>
+        </configuration>
         <executions>
+          <execution>
+            <id>mojo-descriptor</id>
+            <goals>
+              <goal>descriptor</goal>
+            </goals>
+          </execution>
           <execution>
             <id>generated-helpmojo</id>
             <goals>
@@ -112,7 +134,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-plugin-plugin</artifactId>
-        <version>2.6</version>
+        <version>${mavenPluginTools}</version>
       </plugin>
     </plugins>
   </reporting>

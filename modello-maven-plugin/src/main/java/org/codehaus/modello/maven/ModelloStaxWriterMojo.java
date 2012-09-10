@@ -2,23 +2,24 @@ package org.codehaus.modello.maven;
 
 import java.io.File;
 
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
+
 /**
  * Creates an StAX writer from the model.
  *
  * @author <a href="mailto:brett@apache.org">Brett Porter</a>
  * @version $Id$
- * @goal stax-writer
- * @phase generate-sources
  */
+@Mojo( name = "stax-writer", defaultPhase = LifecyclePhase.GENERATE_SOURCES, threadSafe = true )
 public class ModelloStaxWriterMojo
     extends AbstractModelloGeneratorMojo
 {
     /**
      * The output directory of the generated StAX writer.
-     *
-     * @parameter expression="${basedir}/target/generated-sources/modello"
-     * @required
      */
+    @Parameter( defaultValue = "${basedir}/target/generated-sources/modello", required = true )
     private File outputDirectory;
 
     protected String getGeneratorType()

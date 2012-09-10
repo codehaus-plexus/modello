@@ -1,5 +1,8 @@
 package org.codehaus.modello.maven;
 
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+
 /*
  * Copyright (c) 2004, Codehaus.org
  *
@@ -26,14 +29,11 @@ package org.codehaus.modello.maven;
  * Creates an XPP3 extended reader from the model. An extended reader populates the parsed model with metadata about the
  * line/column from which the data was read if the model supports this.
  *
- * @goal xpp3-extended-reader
- *
- * @phase generate-sources
- *
  * @since 1.4
  * @author Benjamin Bentmann
  * @version $Id$
  */
+@Mojo( name = "xpp3-extended-reader", defaultPhase = LifecyclePhase.GENERATE_SOURCES, threadSafe = true )
 public class ModelloXpp3ExtendedReaderMojo
     extends ModelloXpp3ReaderMojo
 {

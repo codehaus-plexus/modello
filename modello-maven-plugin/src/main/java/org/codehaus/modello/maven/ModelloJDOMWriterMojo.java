@@ -24,28 +24,25 @@ package org.codehaus.modello.maven;
 
 import java.io.File;
 
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
+
 
 /**
  * Creates a jdom writer from the model that is capable of preserving element ordering
  * and comments. In future it should also preserve whitespace.
  *
- * @goal jdom-writer
- *
- * @phase generate-sources
- *
  * @author <a href="mailto:mkleint@codehaus.org">Milos Kleint</a>
- *
  */
+@Mojo( name = "jdom-writer", defaultPhase = LifecyclePhase.GENERATE_SOURCES, threadSafe = true )
 public class ModelloJDOMWriterMojo
     extends AbstractModelloGeneratorMojo
 {
     /**
      * The output directory of the generated jdom writer.
-     *
-     * @parameter expression="${basedir}/target/generated-sources/modello"
-     *
-     * @required
      */
+    @Parameter( defaultValue = "${basedir}/target/generated-sources/modello", required = true )
     private File outputDirectory;
 
     protected String getGeneratorType()

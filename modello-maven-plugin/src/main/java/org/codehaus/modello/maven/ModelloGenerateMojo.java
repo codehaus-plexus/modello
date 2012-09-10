@@ -23,6 +23,10 @@ package org.codehaus.modello.maven;
  */
 
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.Component;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.codehaus.modello.plugin.ModelloGenerator;
 
 import java.io.File;
@@ -80,30 +84,21 @@ import java.util.Map;
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
- *
- * @goal generate
- * @phase generate-sources
  */
+@Mojo( name = "generate", defaultPhase = LifecyclePhase.GENERATE_SOURCES, threadSafe = true )
 public class ModelloGenerateMojo
     extends AbstractModelloGeneratorMojo
 {
-    /**
-     * @component role="org.codehaus.modello.plugin.ModelloGenerator"
-     * @required
-     */
+    @Component( role = ModelloGenerator.class )
     private Map<String, ModelloGenerator> generatorMap;
 
-    /**
-     * @parameter expression="${modello.generator.id}" default-value="java"
-     */
+    @Parameter( property = "modello.generator.id", defaultValue = "java" )
     private String generatorId;
 
     /**
      * The output directory of the generated source files.
-     *
-     * @parameter expression="${basedir}/target/generated-sources/modello"
-     * @required
      */
+    @Parameter( defaultValue = "${basedir}/target/generated-sources/modello", required = true )
     private File outputDirectory;
 
     protected String getGeneratorType()

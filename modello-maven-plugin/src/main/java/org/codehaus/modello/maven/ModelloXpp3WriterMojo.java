@@ -2,6 +2,10 @@ package org.codehaus.modello.maven;
 
 import java.io.File;
 
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
+
 /*
  * Copyright (c) 2004, Codehaus.org
  *
@@ -27,23 +31,17 @@ import java.io.File;
 /**
  * Creates an XPP3 writer from the model.
  *
- * @goal xpp3-writer
- *
- * @phase generate-sources
- *
  * @author <a href="mailto:brett@apache.org">Brett Porter</a>
  * @version $Id$
  */
+@Mojo( name = "xpp3-writer", defaultPhase = LifecyclePhase.GENERATE_SOURCES, threadSafe = true )
 public class ModelloXpp3WriterMojo
     extends AbstractModelloGeneratorMojo
 {
     /**
      * The output directory of the generated XPP writer.
-     *
-     * @parameter expression="${basedir}/target/generated-sources/modello"
-     *
-     * @required
      */
+    @Parameter( defaultValue = "${basedir}/target/generated-sources/modello", required = true )
     private File outputDirectory;
 
     protected String getGeneratorType()

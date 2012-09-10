@@ -33,6 +33,8 @@ import java.util.Properties;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.Component;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.ModelloParameterConstants;
@@ -45,8 +47,6 @@ import org.sonatype.plexus.build.incremental.BuildContext;
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
- * 
- * @threadSafe
  */
 public abstract class AbstractModelloGeneratorMojo
     extends AbstractMojo
@@ -57,77 +57,62 @@ public abstract class AbstractModelloGeneratorMojo
 
     /**
      * Base directory of the project.
-     *
-     * @parameter default-value="${basedir}"
-     * @readonly
-     * @required
      */
+    @Parameter( defaultValue = "${basedir}", readonly = true, required = true )
     private String basedir;
 
     /**
      * List of relative paths to mdo files containing the models.
-     *
-     * @parameter
-     * @required
      */
+    @Parameter( required = true )
     private String[] models;
 
     /**
      * The version of the model we will be working on.
-     *
-     * @parameter expression="${version}"
-     * @required
      */
+    @Parameter( property = "version", required = true )
     private String version;
 
     /**
      * The encoding to use when generating Java source files.
      *
-     * @parameter expression="${encoding}" default-value="${project.build.sourceEncoding}"
      * @since 1.0-alpha-19
      */
+    @Parameter( property = "encoding", defaultValue = "${project.build.sourceEncoding}" )
     private String encoding;
 
     /**
      * True if the generated package names should include the version.
-     *
-     * @parameter expression="${packageWithVersion}" default-value="false"
-     * @required
      */
+    @Parameter( property = "packageWithVersion", defaultValue = "false", required = true )
     private boolean packageWithVersion;
 
     /**
      * <p>Note: This is passed by Maven and must not be configured by the user.</p>
-     *
-     * @component
      */
+    @Component
     private ModelloCore modelloCore;
 
     /**
      * The Maven project instance for the executing project.
-     *
-     * @parameter default-value="${project}"
-     * @readonly
-     * @required
      */
+    @Component
     private MavenProject project;
 
     /**
      * Additional historical versions to generate, each being packaged with the version regardless of the
      * <code>packageWithVersion</code> setting.
-     *
-     * @parameter
      */
+    @Parameter
     private List<String> packagedVersions = new ArrayList<String>();
 
     /**
      * Generate Java 5 sources, with generic collections.
-     *
-     * @parameter expression="${useJava5}" default-value="false"
      */
+    @Parameter( property = "useJava5", defaultValue = "false" )
     private boolean useJava5;
 
-    /** @component */
+    @Component
     private BuildContext buildContext;
 
     // ----------------------------------------------------------------------

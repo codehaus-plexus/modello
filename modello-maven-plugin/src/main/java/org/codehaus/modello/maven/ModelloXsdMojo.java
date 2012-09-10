@@ -25,37 +25,33 @@ package org.codehaus.modello.maven;
 import java.io.File;
 import java.util.Properties;
 
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.codehaus.modello.ModelloParameterConstants;
 
 /**
  * Creates an XML schema from the model.
  *
- * @goal xsd
- *
- * @phase generate-sources
- *
  * @author <a href="mailto:brett@codehaus.org">Brett Porter</a>
  * @version $Id$
  */
+@Mojo( name = "xsd", defaultPhase = LifecyclePhase.GENERATE_SOURCES, threadSafe = true )
 public class ModelloXsdMojo
     extends AbstractModelloGeneratorMojo
 {
     /**
      * The output directory of the generated XML Schema. Hint: if you want to publish the schema automatically with
      * the site, configure this parameter to <code>${basedir}/target/generated-site/resources/xsd</code>.
-     *
-     * @parameter expression="${basedir}/target/generated-site/xsd"
-     *
-     * @required
      */
+    @Parameter( defaultValue = "${basedir}/target/generated-site/xsd", required = true )
     private File outputDirectory;
 
     /**
      *
-     * @parameter
-     *
      * @since 1.0-alpha-21
      */
+    @Parameter
     private String xsdFileName;
 
     protected String getGeneratorType()
