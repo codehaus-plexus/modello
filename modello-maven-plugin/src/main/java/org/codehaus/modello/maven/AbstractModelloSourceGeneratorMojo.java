@@ -35,7 +35,7 @@ public abstract class AbstractModelloSourceGeneratorMojo
     /**
      * The output directory of the generated Java beans.
      */
-    @Parameter( defaultValue = "${basedir}/target/generated-sources/modello", required = true )
+    @Parameter( defaultValue = "${project.build.directory}/generated-sources/modello", required = true )
     private File outputDirectory;
 
     public File getOutputDirectory()

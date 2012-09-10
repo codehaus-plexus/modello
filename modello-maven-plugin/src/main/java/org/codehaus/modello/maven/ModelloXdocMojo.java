@@ -41,7 +41,7 @@ public class ModelloXdocMojo
     /**
      * The output directory of the generated documentation.
      */
-    @Parameter( defaultValue = "${basedir}/target/generated-site/xdoc", required = true )
+    @Parameter( defaultValue = "${project.build.directory}/generated-site/xdoc", required = true )
     private File outputDirectory;
     
     /**
