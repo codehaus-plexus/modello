@@ -10,7 +10,6 @@ import org.apache.maven.plugins.annotations.Parameter;
  * Creates classes that can convert between different versions of the model.
  *
  * @author <a href="mailto:brett@apache.org">Brett Porter</a>
- * @version $Id$
  */
 @Mojo( name = "converters", defaultPhase = LifecyclePhase.GENERATE_SOURCES, threadSafe = true )
 public class ModelloConvertersMojo

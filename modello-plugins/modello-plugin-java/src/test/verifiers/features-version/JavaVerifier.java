@@ -27,7 +27,6 @@ import junit.framework.Assert;
 
 /**
  * @author Herve Boutemy
- * @version $Id$
  */
 public class JavaVerifier
     extends Verifier

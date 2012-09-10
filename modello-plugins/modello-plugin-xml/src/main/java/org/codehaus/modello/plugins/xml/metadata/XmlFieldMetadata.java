@@ -26,7 +26,6 @@ import org.codehaus.modello.metadata.FieldMetadata;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id$
  */
 public class XmlFieldMetadata
     implements FieldMetadata

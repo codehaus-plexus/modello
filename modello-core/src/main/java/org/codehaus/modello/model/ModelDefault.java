@@ -26,8 +26,6 @@ package org.codehaus.modello.model;
  * Default values for a model, that can be overrided with <code>defaults</code> element of the model descriptor.
  *
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
- *
- * @version $Id$
  */
 public class ModelDefault
 {

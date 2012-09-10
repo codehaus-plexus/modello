@@ -21,7 +21,6 @@ package org.codehaus.modello.plugin.java;
  * interface overrides can be used. 
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
- * @version $Id$
  */
 public interface Permission
 {

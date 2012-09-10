@@ -24,7 +24,6 @@ package org.codehaus.modello.model;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
- * @version $Id$
  */
 public class CodeSegment
     extends BaseElement

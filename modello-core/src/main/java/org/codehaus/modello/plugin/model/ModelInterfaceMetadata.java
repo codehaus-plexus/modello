@@ -26,7 +26,6 @@ import org.codehaus.modello.metadata.InterfaceMetadata;
 
 /**
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
- * @version $Id$
  */
 public class ModelInterfaceMetadata
     implements InterfaceMetadata

@@ -26,7 +26,6 @@ import org.codehaus.modello.metadata.AssociationMetadata;
 
 /**
  * @author Hervé Boutemy
- * @version $Id$
  */
 public class XdocAssociationMetadata
     implements AssociationMetadata

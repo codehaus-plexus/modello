@@ -30,7 +30,6 @@ import java.util.Properties;
 
 /**
  * @author Hervé Boutemy
- * @version $Id$
  */
 public class FeaturesXpp3GeneratorTest
     extends AbstractModelloJavaGeneratorTest

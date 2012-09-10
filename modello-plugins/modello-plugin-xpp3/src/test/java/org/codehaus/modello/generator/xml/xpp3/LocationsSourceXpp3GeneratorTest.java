@@ -30,7 +30,6 @@ import java.util.Properties;
 
 /**
  * @author Benjamin Bentmann
- * @version $Id$
  */
 public class LocationsSourceXpp3GeneratorTest
     extends AbstractModelloJavaGeneratorTest

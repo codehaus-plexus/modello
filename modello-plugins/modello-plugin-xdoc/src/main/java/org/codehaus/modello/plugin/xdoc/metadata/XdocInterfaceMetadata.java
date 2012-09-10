@@ -26,7 +26,6 @@ import org.codehaus.modello.metadata.InterfaceMetadata;
 
 /**
  * @author Hervé Boutemy
- * @version $Id$
  */
 public class XdocInterfaceMetadata
     implements InterfaceMetadata

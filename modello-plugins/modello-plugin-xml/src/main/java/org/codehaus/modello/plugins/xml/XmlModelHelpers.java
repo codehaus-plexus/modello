@@ -39,7 +39,6 @@ import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
  * Helper methods to deal with XML representation of the model.
  *
  * @author <a href="mailto:hboutemy@codehaus.org">Hervé Boutemy</a>
- * @version $Id$
  */
 class XmlModelHelpers
 {

@@ -33,7 +33,6 @@ import org.codehaus.plexus.util.StringUtils;
  * Helper methods to deal with XML schema representation of the model.
  *
  * @author <a href="mailto:hboutemy@codehaus.org">Hervé Boutemy</a>
- * @version $Id$
  */
 public class XsdModelHelper
 {

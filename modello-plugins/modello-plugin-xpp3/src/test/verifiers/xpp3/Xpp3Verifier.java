@@ -59,7 +59,6 @@ import java.util.TimeZone;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id$
  */
 public class Xpp3Verifier
     extends Verifier

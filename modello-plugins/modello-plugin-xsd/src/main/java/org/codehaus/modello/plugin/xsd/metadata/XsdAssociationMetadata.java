@@ -22,7 +22,6 @@ import org.codehaus.modello.metadata.AssociationMetadata;
  * XsdAssociationMetadata 
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
- * @version $Id$
  */
 public class XsdAssociationMetadata implements AssociationMetadata
 {

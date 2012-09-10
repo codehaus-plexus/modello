@@ -31,7 +31,6 @@ import org.apache.maven.plugins.annotations.Mojo;
  *
  * @since 1.4
  * @author Benjamin Bentmann
- * @version $Id$
  */
 @Mojo( name = "xpp3-extended-reader", defaultPhase = LifecyclePhase.GENERATE_SOURCES, threadSafe = true )
 public class ModelloXpp3ExtendedReaderMojo

@@ -34,8 +34,6 @@ import java.util.Map;
 /**
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
- *
- * @version $Id$
  */
 public class ModelClass
     extends ModelType

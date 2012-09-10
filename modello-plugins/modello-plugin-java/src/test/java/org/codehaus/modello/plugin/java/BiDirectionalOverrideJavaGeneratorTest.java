@@ -26,7 +26,6 @@ import java.util.Properties;
  * BiDirectionalOverrideJavaGeneratorTest
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
- * @version $Id$
  */
 public class BiDirectionalOverrideJavaGeneratorTest
     extends AbstractModelloJavaGeneratorTest

@@ -45,7 +45,6 @@ import java.io.StringWriter;
 
 /**
  * @author Herve Boutemy
- * @version $Id$
  */
 public class JDOMFeaturesVerifier
     extends Verifier

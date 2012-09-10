@@ -34,7 +34,6 @@ import org.codehaus.modello.ModelloParameterConstants;
  * Creates an XML schema from the model.
  *
  * @author <a href="mailto:brett@codehaus.org">Brett Porter</a>
- * @version $Id$
  */
 @Mojo( name = "xsd", defaultPhase = LifecyclePhase.GENERATE_SOURCES, threadSafe = true )
 public class ModelloXsdMojo

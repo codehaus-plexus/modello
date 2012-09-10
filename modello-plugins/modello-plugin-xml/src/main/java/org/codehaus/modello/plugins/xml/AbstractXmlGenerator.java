@@ -38,7 +38,6 @@ import org.codehaus.plexus.util.xml.XmlWriterUtil;
  * Java code.
  *
  * @author <a href="mailto:hboutemy@codehaus.org">Hervé Boutemy</a>
- * @version $Id$
  */
 public abstract class AbstractXmlGenerator
     extends AbstractModelloGenerator

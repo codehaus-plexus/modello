@@ -30,8 +30,6 @@ import org.codehaus.modello.model.Model;
 
 /**
  * Check that annotations are not added to generated sources when Java 5 features are not enabled.
- *
- * @version $Id$
  */
 public class AnnotationsJava4GeneratorTest
     extends AbstractModelloJavaGeneratorTest

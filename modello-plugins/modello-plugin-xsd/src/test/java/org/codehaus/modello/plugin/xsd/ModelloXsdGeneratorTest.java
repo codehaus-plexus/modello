@@ -40,7 +40,6 @@ import javax.xml.parsers.SAXParserFactory;
  * Modello model <code>modello.mdo</code>.
  *
  * @author Hervé Boutemy
- * @version $Id$
  */
 public class ModelloXsdGeneratorTest
     extends AbstractModelloGeneratorTest

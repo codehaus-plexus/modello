@@ -63,7 +63,6 @@ import org.codehaus.plexus.util.WriterFactory;
  * java generators can use.
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
- * @version $Id$
  */
 public abstract class AbstractJavaModelloGenerator
     extends AbstractModelloGenerator

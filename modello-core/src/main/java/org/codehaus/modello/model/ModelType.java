@@ -31,8 +31,6 @@ import java.util.Map;
  * Either a model class or interface.
  *
  * @author <a href="mailto:hboutemy@codehaus.org">Hervé Boutemy</a>
- *
- * @version $Id$
  */
 public abstract class ModelType
     extends BaseElement

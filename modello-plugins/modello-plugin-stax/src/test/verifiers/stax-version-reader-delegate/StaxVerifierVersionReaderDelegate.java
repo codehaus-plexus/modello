@@ -31,7 +31,6 @@ import java.io.IOException;
 import javax.xml.stream.XMLStreamException;
 
 /**
- * @version $Id$
  */
 public class StaxVerifierVersionReaderDelegate
     extends Verifier

@@ -49,7 +49,6 @@ import javax.xml.stream.XMLStreamException;
 
 /**
  * @author Herve Boutemy
- * @version $Id$
  */
 public class StaxFeaturesVerifier
     extends Verifier

@@ -35,7 +35,6 @@ import java.util.Map;
  * XsdMetadataPlugin
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
- * @version $Id$
  */
 public class XsdMetadataPlugin
     extends AbstractMetadataPlugin

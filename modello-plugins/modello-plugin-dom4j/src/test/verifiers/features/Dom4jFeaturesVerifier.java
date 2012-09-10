@@ -47,7 +47,6 @@ import java.io.Writer;
 
 /**
  * @author Herve Boutemy
- * @version $Id$
  */
 public class Dom4jFeaturesVerifier
     extends Verifier

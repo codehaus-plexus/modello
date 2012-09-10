@@ -54,7 +54,6 @@ import java.util.TimeZone;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id$
  */
 public class Dom4jVerifier
     extends Verifier

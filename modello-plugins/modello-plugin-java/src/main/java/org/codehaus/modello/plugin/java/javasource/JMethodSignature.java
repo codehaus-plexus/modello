@@ -78,7 +78,6 @@ import java.util.Vector;
  * as much as possible to reduce the learning curve.
  *
  * @author <a href="mailto:kvisco@intalio.com">Keith Visco</a>
- * @version $Id$
  **/
 public final class JMethodSignature
 {

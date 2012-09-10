@@ -26,7 +26,6 @@ import org.codehaus.modello.metadata.AssociationMetadata;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id$
  */
 public class XmlAssociationMetadata
     implements AssociationMetadata

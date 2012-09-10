@@ -60,8 +60,7 @@ import org.codehaus.modello.plugin.model.ModelClassMetadata;
 import org.codehaus.plexus.util.StringUtils;
 
 /**
- * @author <a href="mailto:jason@modello.org">Jason van Zyl </a>
- * @version $Id$
+ * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
  */
 public class JavaModelloGenerator
     extends AbstractJavaModelloGenerator

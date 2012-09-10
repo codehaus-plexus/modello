@@ -22,7 +22,6 @@ import org.codehaus.modello.metadata.ClassMetadata;
  * XsdClassMetadata
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
- * @version $Id$
  */
 public class XsdClassMetadata implements ClassMetadata
 {

@@ -33,7 +33,6 @@ import java.util.Properties;
  * <code>hashCode()</code>.
  *
  * @author <a href="mailto:vincent.siveton@gmail.com">Vincent Siveton</a>
- * @version $Id$
  */
 public class TmpJavaGeneratorTest
     extends AbstractModelloJavaGeneratorTest

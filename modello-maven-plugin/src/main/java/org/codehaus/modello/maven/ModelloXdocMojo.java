@@ -33,7 +33,6 @@ import java.util.Properties;
  * Creates documentation for the model in xdoc format.
  *
  * @author <a href="mailto:brett@apache.org">Brett Porter</a>
- * @version $Id$
  */
 @Mojo( name = "xdoc", threadSafe = true )
 public class ModelloXdocMojo

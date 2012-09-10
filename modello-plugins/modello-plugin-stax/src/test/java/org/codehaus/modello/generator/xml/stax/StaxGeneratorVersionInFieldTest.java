@@ -10,7 +10,6 @@ import java.util.List;
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
- * @version $Id$
  */
 public class StaxGeneratorVersionInFieldTest
     extends AbstractStaxGeneratorTestCase

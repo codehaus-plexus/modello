@@ -83,7 +83,6 @@ import java.util.Map;
  * </pre>
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
- * @version $Id$
  */
 @Mojo( name = "generate", defaultPhase = LifecyclePhase.GENERATE_SOURCES, threadSafe = true )
 public class ModelloGenerateMojo

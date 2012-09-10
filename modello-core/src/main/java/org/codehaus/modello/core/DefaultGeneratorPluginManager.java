@@ -28,7 +28,6 @@ import org.codehaus.modello.plugin.ModelloGenerator;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id$
  */
 public class DefaultGeneratorPluginManager
     extends AbstractPluginManager<ModelloGenerator>

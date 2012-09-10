@@ -55,8 +55,6 @@ import java.util.Properties;
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
- *
- * @version $Id$
  */
 public class DefaultModelloCore
     extends AbstractModelloCore

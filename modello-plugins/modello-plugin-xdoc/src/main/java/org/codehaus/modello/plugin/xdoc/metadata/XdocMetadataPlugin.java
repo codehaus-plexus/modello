@@ -40,7 +40,6 @@ import java.util.Map;
 
 /**
  * @author Hervé Boutemy
- * @version $Id$
  */
 public class XdocMetadataPlugin
     extends AbstractMetadataPlugin

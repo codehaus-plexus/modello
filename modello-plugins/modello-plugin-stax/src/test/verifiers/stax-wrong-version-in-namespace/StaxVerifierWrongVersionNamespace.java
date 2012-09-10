@@ -34,7 +34,6 @@ import java.io.Reader;
 import javax.xml.stream.XMLStreamException;
 
 /**
- * @version $Id$
  */
 public class StaxVerifierWrongVersionNamespace
     extends Verifier

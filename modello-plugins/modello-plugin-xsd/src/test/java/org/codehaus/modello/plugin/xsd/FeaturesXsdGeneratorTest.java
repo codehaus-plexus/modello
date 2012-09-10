@@ -39,7 +39,6 @@ import javax.xml.validation.Validator;
 
 /**
  * @author Hervé Boutemy
- * @version $Id$
  */
 public class FeaturesXsdGeneratorTest
     extends AbstractModelloGeneratorTest

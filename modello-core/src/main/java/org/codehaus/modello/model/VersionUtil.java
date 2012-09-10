@@ -22,12 +22,8 @@ package org.codehaus.modello.model;
  * SOFTWARE.
  */
 
-
-
 /**
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
- *
- * @version $Id$
  */
 public class VersionUtil
 {

@@ -26,7 +26,6 @@ import org.codehaus.modello.model.Model;
 import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 
 /**
- * @version $Id$
  */
 public class StaxGeneratorVersionReaderDelegateTest
     extends AbstractStaxGeneratorTestCase

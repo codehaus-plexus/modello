@@ -31,7 +31,6 @@ import org.codehaus.modello.verifier.Verifier;
 
 /**
  * @author Benjamin Bentmann
- * @version $Id$
  */
 public class Xpp3LocationsVerifier
     extends Verifier

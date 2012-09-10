@@ -43,7 +43,6 @@ import java.util.Properties;
  * Generates the IndentingXMLStreamWriter used by the writer for pretty printing.
  * 
  * @author Benjamin Bentmann
- * @version $Id$
  */
 public class StaxSerializerGenerator
     extends AbstractStaxGenerator

@@ -10,7 +10,6 @@ import org.apache.maven.plugins.annotations.Parameter;
  * Creates an StAX writer from the model.
  *
  * @author <a href="mailto:brett@apache.org">Brett Porter</a>
- * @version $Id$
  */
 @Mojo( name = "stax-writer", defaultPhase = LifecyclePhase.GENERATE_SOURCES, threadSafe = true )
 public class ModelloStaxWriterMojo

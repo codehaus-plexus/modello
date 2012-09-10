@@ -29,7 +29,6 @@ import org.codehaus.modello.metadata.ClassMetadata;
 
 /**
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
- * @version $Id$
  */
 public class JavaClassMetadata
     implements ClassMetadata

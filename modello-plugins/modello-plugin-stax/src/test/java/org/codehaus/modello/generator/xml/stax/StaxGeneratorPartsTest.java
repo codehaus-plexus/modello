@@ -30,7 +30,6 @@ import org.codehaus.plexus.component.repository.exception.ComponentLookupExcepti
 import java.util.List;
 
 /**
- * @version $Id$
  */
 public class StaxGeneratorPartsTest
     extends AbstractStaxGeneratorTestCase

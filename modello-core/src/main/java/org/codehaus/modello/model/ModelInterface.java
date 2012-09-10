@@ -29,8 +29,6 @@ import org.codehaus.modello.ModelloRuntimeException;
 
 /**
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
- *
- * @version $Id$
  */
 public class ModelInterface
     extends ModelType

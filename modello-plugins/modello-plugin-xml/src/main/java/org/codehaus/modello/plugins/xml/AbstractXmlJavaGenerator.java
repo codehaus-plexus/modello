@@ -40,7 +40,6 @@ import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
  * Abstract class for plugins generating Java code for XML representation of the model.
  *
  * @author <a href="mailto:hboutemy@codehaus.org">Hervé Boutemy</a>
- * @version $Id$
  */
 public abstract class AbstractXmlJavaGenerator
     extends AbstractJavaModelloGenerator

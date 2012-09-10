@@ -31,7 +31,6 @@ import java.util.TreeSet;
  * but sufficiently for Modello unit-tests when reading/writing XML samples.
  *
  * @author Hervé Boutemy
- * @version $Id$
  */
 public class OrderedProperties
     extends Properties

@@ -32,7 +32,6 @@ import org.apache.maven.plugins.annotations.Parameter;
  * Creates an XPP3 writer from the model.
  *
  * @author <a href="mailto:brett@apache.org">Brett Porter</a>
- * @version $Id$
  */
 @Mojo( name = "xpp3-writer", defaultPhase = LifecyclePhase.GENERATE_SOURCES, threadSafe = true )
 public class ModelloXpp3WriterMojo

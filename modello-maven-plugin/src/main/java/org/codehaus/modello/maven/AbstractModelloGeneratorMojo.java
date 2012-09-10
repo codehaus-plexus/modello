@@ -46,7 +46,6 @@ import org.sonatype.plexus.build.incremental.BuildContext;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id$
  */
 public abstract class AbstractModelloGeneratorMojo
     extends AbstractMojo

@@ -30,7 +30,6 @@ import org.codehaus.modello.model.Model;
 
 /**
  * @author <a href="mailto:olamy@apache.org">Brett Porter</a>
- * @version $Id$
  */
 public class ChangesXsdGeneratorTest
     extends AbstractModelloGeneratorTest

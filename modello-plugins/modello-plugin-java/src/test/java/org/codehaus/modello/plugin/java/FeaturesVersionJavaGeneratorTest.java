@@ -31,7 +31,6 @@ import java.util.Properties;
 
 /**
  * @author Hervé Boutemy
- * @version $Id$
  */
 public class FeaturesVersionJavaGeneratorTest
     extends AbstractModelloJavaGeneratorTest

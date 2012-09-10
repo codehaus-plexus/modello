@@ -32,7 +32,6 @@ import org.apache.maven.plugins.annotations.Parameter;
  * Creates Java beans from the Modello model.
  *
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id$
  */
 @Mojo( name = "java", defaultPhase = LifecyclePhase.GENERATE_SOURCES, threadSafe = true )
 public class ModelloJavaMojo

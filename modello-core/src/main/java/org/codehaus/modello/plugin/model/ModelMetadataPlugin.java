@@ -39,7 +39,6 @@ import java.util.Map;
 
 /**
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
- * @version $Id$
  */
 public class ModelMetadataPlugin
     extends AbstractMetadataPlugin

@@ -57,7 +57,6 @@ import org.codehaus.plexus.util.xml.XMLWriter;
 /**
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
  * @author <a href="mailto:emmanuel@venisse.net">Emmanuel Venisse</a>
- * @version $Id$
  */
 public class XdocGenerator
     extends AbstractXmlGenerator

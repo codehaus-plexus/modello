@@ -29,7 +29,6 @@ import org.codehaus.modello.verifier.Verifier;
 
 /**
  * @author Benjamin Bentmann
- * @version $Id$
  */
 public class JavaLocationsVerifier
     extends Verifier

@@ -26,7 +26,6 @@ import org.codehaus.modello.metadata.FieldMetadata;
 
 /**
  * @author Hervé Boutemy
- * @version $Id$
  */
 public class XdocFieldMetadata
     implements FieldMetadata

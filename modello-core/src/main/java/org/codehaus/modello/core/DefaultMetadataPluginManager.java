@@ -28,7 +28,6 @@ import org.codehaus.modello.plugin.AbstractPluginManager;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id$
  */
 public class DefaultMetadataPluginManager
     extends AbstractPluginManager<MetadataPlugin>

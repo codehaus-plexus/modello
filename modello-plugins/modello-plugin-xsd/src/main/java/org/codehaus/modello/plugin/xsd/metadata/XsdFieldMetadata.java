@@ -22,7 +22,6 @@ import org.codehaus.modello.metadata.FieldMetadata;
  * XsdFieldMetadata 
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
- * @version $Id$
  */
 public class XsdFieldMetadata implements FieldMetadata
 {

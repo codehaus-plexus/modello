@@ -52,7 +52,6 @@ import java.util.Properties;
  * @see org.codehaus.modello.verifier.Verifier Verifier base class for verifiers
  *
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id$
  */
 public abstract class AbstractModelloJavaGeneratorTest
     extends AbstractModelloGeneratorTest

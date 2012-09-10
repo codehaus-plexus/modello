@@ -28,7 +28,6 @@ import org.codehaus.modello.verifier.Verifier;
 
 /**
  * @author Hervé Boutemy
- * @version $Id$
  */
 public abstract class AbstractAnnotationsVerifier
     extends Verifier

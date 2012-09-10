@@ -49,7 +49,6 @@ import org.codehaus.plexus.util.StringUtils;
 /**
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
- * @version $Id$
  */
 public class Xpp3ReaderGenerator
     extends AbstractXpp3Generator

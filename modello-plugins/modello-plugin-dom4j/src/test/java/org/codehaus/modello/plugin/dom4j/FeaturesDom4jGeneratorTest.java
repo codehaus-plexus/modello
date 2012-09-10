@@ -30,7 +30,6 @@ import java.util.Properties;
 
 /**
  * @author Hervé Boutemy
- * @version $Id$
  */
 public class FeaturesDom4jGeneratorTest
     extends AbstractModelloJavaGeneratorTest

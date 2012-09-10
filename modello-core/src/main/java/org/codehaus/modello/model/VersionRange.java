@@ -29,7 +29,6 @@ package org.codehaus.modello.model;
  * <li><code>x.y.z<b>/</b>i.j.k</code>: a range from one version to another (both included).</li>
  * </ul>
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
- * @version $Id$
  */
 public class VersionRange
 {

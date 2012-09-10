@@ -26,7 +26,6 @@ import junit.framework.TestCase;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id$
  */
 public class VersionTest
     extends TestCase

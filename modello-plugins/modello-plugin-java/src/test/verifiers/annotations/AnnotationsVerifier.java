@@ -26,7 +26,6 @@ import org.codehaus.modello.plugin.java.AbstractAnnotationsVerifier;
 
 /**
  * @author Brian Demers
- * @version $Id$
  */
 public class AnnotationsVerifier
     extends AbstractAnnotationsVerifier

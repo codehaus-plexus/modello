@@ -41,7 +41,6 @@ import java.io.StringWriter;
 import javax.xml.stream.XMLStreamException;
 
 /**
- * @version $Id$
  */
 public class StaxVerifierParts
     extends Verifier

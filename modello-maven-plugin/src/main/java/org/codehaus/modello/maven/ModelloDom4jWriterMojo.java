@@ -8,8 +8,6 @@ import org.apache.maven.plugins.annotations.Parameter;
 
 /**
  * Creates a DOM4J writer from the model.
- *
- * @version $Id$
  */
 @Mojo( name = "dom4j-writer", defaultPhase = LifecyclePhase.GENERATE_SOURCES, threadSafe = true )
 public class ModelloDom4jWriterMojo

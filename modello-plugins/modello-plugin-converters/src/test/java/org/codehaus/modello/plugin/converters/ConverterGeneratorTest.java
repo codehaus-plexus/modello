@@ -32,7 +32,6 @@ import java.io.Reader;
 import java.util.Properties;
 
 /**
- * @version $Id$
  */
 public class ConverterGeneratorTest
     extends AbstractModelloJavaGeneratorTest
