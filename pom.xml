@@ -424,7 +424,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-project-info-reports-plugin</artifactId>
-        <version>2.5</version>
+        <version>2.5.1</version>
         <configuration>
           <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
           <offline>true</offline>
@@ -553,7 +553,7 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-project-info-reports-plugin</artifactId>
-            <version>2.5</version>
+            <version>2.5.1</version>
           </plugin>
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
