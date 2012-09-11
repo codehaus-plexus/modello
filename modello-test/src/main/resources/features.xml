@@ -188,6 +188,11 @@
     </child>
   </node>
 
+  <!--action dev="me">MODELLO-254
+    description
+    <dueTo name="from" email="from@mail"/>
+  </action-->
+
   <!--rootRecursion> MODELLO-226
     <node><value>1</value></node>
     <rootRecursion>

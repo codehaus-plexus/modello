@@ -153,6 +153,13 @@
             <type>File</type>
           </association>
         </field>
+        <field>
+          <name>action</name>
+          <version>1.0.0+</version>
+          <association>
+            <type>Action</type>
+          </association>
+        </field>
         <!--field>
           <name>rootRecursion</name>
           <version>1.0.0+</version>
@@ -1697,6 +1704,66 @@
           <name>file</name>
           <version>1.0.0+</version>
           <type>String</type>
+        </field>
+      </fields>
+    </class>
+    <!-- MODELLO-254: model fragment from maven-changes-plugin -->
+    <class xsd.compositor="sequence">
+      <name>Action</name>
+      <version>1.0.0+</version>
+      <description>
+        A single action done on the project, during this release.
+      </description>
+      <fields>
+        <field>
+          <name>action</name>
+          <version>1.0.0+</version>
+          <type>Content</type>
+          <description>
+            A short description of the action taken.
+          </description>
+        </field>
+        <field xml.attribute="true">
+          <name>dev</name>
+          <version>1.0.0+</version>
+          <required>true</required>
+          <type>String</type>
+          <description>
+            <![CDATA[
+            <p>Name of developer who committed the change.</p>
+            <p>This can be either the id of the developer, as specified in the developers section of the pom.xml file, or the name of the developer. If you generate a changes report and specify the id of the developer, a link is created to that developer in the team-list.html page.</p>
+            ]]>
+          </description>
+        </field>
+        <!--field>
+          <name>dueTos</name>
+          <version>1.0.0+</version>
+          <association xml.itemsStyle="flat" xml.tagName="dueto">
+            <type>DueTo</type>
+            <multiplicity>*</multiplicity>
+          </association>
+          <description>A list of contributors for this issue.</description>
+        </field-->
+      </fields>
+    </class>
+    <class xsd.compositor="sequence">
+      <name>DueTo</name>
+      <version>1.0.0+</version>
+      <description>
+        Name and Email of the person to be credited for this change. This can be used when a patch is submitted by a non-committer.
+      </description>
+      <fields>
+        <field xml.attribute="true">
+          <name>name</name>
+          <version>1.0.0+</version>
+          <type>String</type>
+          <description>Name of the person to be credited for this change.</description>
+        </field>
+        <field xml.attribute="true">
+          <name>email</name>
+          <version>1.0.0+</version>
+          <type>String</type>
+          <description>Email of the person to be credited for this change.</description>
         </field>
       </fields>
     </class>
