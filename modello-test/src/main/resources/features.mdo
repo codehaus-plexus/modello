@@ -146,6 +146,13 @@
             <type>Thing</type>
           </association>
         </field>
+        <field xdoc.separator="blank">
+          <name>file</name>
+          <version>1.0.0+</version>
+          <association>
+            <type>File</type>
+          </association>
+        </field>
         <!--field>
           <name>rootRecursion</name>
           <version>1.0.0+</version>
@@ -1678,6 +1685,18 @@
           <name>someContent</name>
           <version>1.0.0+</version>
           <type>Content</type>
+        </field>
+      </fields>
+    </class>
+    <class>
+      <name>File</name>
+      <comment>Check there is no clash with java.io.File.</comment>
+      <version>1.0.0+</version>
+      <fields>
+        <field>
+          <name>file</name>
+          <version>1.0.0+</version>
+          <type>String</type>
         </field>
       </fields>
     </class>

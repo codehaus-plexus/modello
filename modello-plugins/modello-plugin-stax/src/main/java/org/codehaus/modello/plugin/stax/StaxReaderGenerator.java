@@ -111,7 +111,6 @@ public class StaxReaderGenerator
 
         jClass.addImport( "java.io.IOException" );
         jClass.addImport( "java.io.Reader" );
-        jClass.addImport( "java.io.File" );
         jClass.addImport( "java.io.FileInputStream" );
         jClass.addImport( "java.io.InputStream" );
         jClass.addImport( "java.io.StringWriter" );
@@ -296,7 +295,7 @@ public class StaxReaderGenerator
 
         sc = unmarshall.getSourceCode();
 
-        sc.add( "File file = new File( filePath );" );
+        sc.add( "java.io.File file = new java.io.File( filePath );" );
 
         sc.add( "XMLStreamReader xmlStreamReader = XMLInputFactory.newInstance().createXMLStreamReader( "
                 + "file.toURL().toExternalForm(), new FileInputStream( file ) );" );
@@ -369,7 +368,6 @@ public class StaxReaderGenerator
 
         JClass jClass = new JClass( packageName + '.' + unmarshallerName );
 
-        jClass.addImport( "java.io.File" );
         jClass.addImport( "java.io.IOException" );
         jClass.addImport( "java.io.Reader" );
 
@@ -380,7 +378,7 @@ public class StaxReaderGenerator
 
         JMethod method = new JMethod( "read", new JClass( "Object" ), null );
 
-        method.addParameter( new JParameter( new JClass( "File" ), "f" ) );
+        method.addParameter( new JParameter( new JClass( "java.io.File" ), "f" ) );
 
         method.addParameter( new JParameter( JType.BOOLEAN, "strict" ) );
 
@@ -439,7 +437,7 @@ public class StaxReaderGenerator
 
         method = new JMethod( "read", new JClass( "Object" ), null );
 
-        method.addParameter( new JParameter( new JClass( "File" ), "f" ) );
+        method.addParameter( new JParameter( new JClass( "java.io.File" ), "f" ) );
 
         method.addException( new JClass( "IOException" ) );
         method.addException( new JClass( "XMLStreamException" ) );
