@@ -298,7 +298,7 @@ public class StaxReaderGenerator
         sc.add( "java.io.File file = new java.io.File( filePath );" );
 
         sc.add( "XMLStreamReader xmlStreamReader = XMLInputFactory.newInstance().createXMLStreamReader( "
-                + "file.toURL().toExternalForm(), new FileInputStream( file ) );" );
+                + "file.toURI().toURL().toExternalForm(), new FileInputStream( file ) );" );
 
         sc.add( "" );
 
