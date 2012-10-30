@@ -11,8 +11,12 @@
 
     <section name="Modello StAX Plugin">
 
-      <p>Modello StAX Plugin generates XML readers and writers based on StAX API, plus reader delegates to be able to
-        read multiple model versions.</p>
+      <p>Modello StAX Plugin generates XML readers and writers based on
+        <a href="http://docs.oracle.com/javase/6/docs/api/javax/xml/stream/package-summary.html">StAX API</a>,
+        plus reader delegates to be able to read multiple model versions.</p>
+
+      <p>Notice: DOM content type is represented as
+      <a href="http://plexus.codehaus.org/plexus-utils/apidocs/org/codehaus/plexus/util/xml/Xpp3Dom.html">plexus-utils' Xpp3Dom</a> objects</p>
 
       <subsection name="stax-reader">
       <p><code>stax-reader</code> generator creates

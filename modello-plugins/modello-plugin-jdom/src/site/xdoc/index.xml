@@ -11,9 +11,12 @@
 
     <section name="Modello JDOM Plugin">
 
-      <p>Modello JDOM Plugin generates XML writers based on JDOM API. It attempts to preserve formatting of
-        not changed elements and even with the changed ones it does some tricks to keep the formatting in line with the
-        rest.</p>
+      <p>Modello JDOM Plugin generates XML writers based on <a href="http://jdom.org/">JDOM 1 API</a>.
+        It attempts to preserve formatting of not changed elements and even with the changed ones it does
+        some tricks to keep the formatting in line with the rest.</p>
+
+      <p>Notice: DOM content type is represented as
+      <a href="http://plexus.codehaus.org/plexus-utils/apidocs/org/codehaus/plexus/util/xml/Xpp3Dom.html">plexus-utils' Xpp3Dom</a> objects</p>
 
       <subsection name="jdom-writer">
       <p><code>jdom-writer</code> generator creates
