@@ -58,7 +58,7 @@ public abstract class AbstractModelloGeneratorTest
 
     protected File getOutputDirectory()
     {
-        return getTestFile( "target/" + getName() );
+        return getTestFile( "target/generator-results/" + getName() );
     }
 
     public String getName()

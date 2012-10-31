@@ -79,12 +79,12 @@ public abstract class AbstractModelloJavaGeneratorTest
 
     protected File getOutputDirectory()
     {
-        return getTestFile( "target/" + getName() + "/sources" );
+        return new File( super.getOutputDirectory(), "sources" );
     }
 
     protected File getOutputClasses()
     {
-        return getTestFile( "target/" + getName() + "/classes" );
+        return new File( super.getOutputDirectory(), "classes" );
     }
 
     protected void addDependency( String groupId, String artifactId )
