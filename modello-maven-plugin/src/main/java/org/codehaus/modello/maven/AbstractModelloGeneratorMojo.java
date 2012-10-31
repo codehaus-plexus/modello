@@ -181,9 +181,12 @@ public abstract class AbstractModelloGeneratorMojo
         parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION,
                                 Boolean.toString( packageWithVersion ) );
 
-        parameters.setProperty( ModelloParameterConstants.ALL_VERSIONS,
-                                StringUtils.join( packagedVersions.iterator(), "," ) );
-
+        if ( packagedVersions.size() > 0 )
+        {
+            parameters.setProperty( ModelloParameterConstants.ALL_VERSIONS,
+                                    StringUtils.join( packagedVersions.iterator(), "," ) );
+        }
+        
         parameters.setProperty( ModelloParameterConstants.USE_JAVA5, Boolean.toString( useJava5 ) );
 
         if ( encoding != null )
