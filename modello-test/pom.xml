@@ -7,12 +7,11 @@
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.codehaus.modello</groupId>
   <artifactId>modello-test</artifactId>
   <name>Modello Test Package</name>
   <description>
-    Modello Test Package contains the basis to create Modello generator unit-tests, including a sample model to
-    test every plugins.
+    Modello Test Package contains the basis to create Modello generator unit-tests, including sample models
+    and xml files to test every feature for every plugin.
   </description>
 
   <dependencies>
