@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>org.codehaus.modello.its</groupId>
+  <artifactId>features</artifactId>
+  <version>0.1-SNAPSHOT</version>
+
+  <name>Full features IT</name>
+  <description>
+    Generates everything Modello can generate from features.mdo.
+  </description>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-utils</artifactId>
+      <version>3.0.8</version>
+    </dependency>
+    <dependency>
+      <groupId>stax</groupId>
+      <artifactId>stax-api</artifactId>
+      <version>1.0.1</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.woodstox</groupId>
+      <artifactId>wstx-asl</artifactId>
+      <version>3.2.0</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>dom4j</groupId>
+      <artifactId>dom4j</artifactId>
+      <version>1.6.1</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jdom</groupId>
+      <artifactId>jdom</artifactId>
+      <version>1.1</version>
+      <scope>compile</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>2.5.1</version>
+        <configuration>
+          <source>1.5</source>
+          <target>1.6</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>2.2</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.4.3</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-site-plugin</artifactId>
+        <version>3.2</version>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.modello</groupId>
+        <artifactId>modello-maven-plugin</artifactId>
+        <version>@project.version@</version>
+        <configuration>
+          <models>
+            <model>../../../../modello-test/src/main/resources/features.mdo</model>
+          </models>
+          <version>1.0.0</version>
+          <useJava5>true</useJava5>
+        </configuration>
+        <executions>
+          <execution>
+            <id>standard</id>
+            <goals>
+              <goal>java</goal>
+              <goal>xpp3-reader</goal>
+              <goal>xpp3-writer</goal>
+              <goal>dom4j-reader</goal>
+              <goal>dom4j-writer</goal>
+              <goal>jdom-writer</goal>
+              <goal>stax-reader</goal>
+              <goal>stax-writer</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>site-xsd</id>
+            <phase>pre-site</phase>
+            <goals>
+              <goal>xsd</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>target/generated-site/resources/xsd</outputDirectory>
+            </configuration>
+          </execution>
+          <execution>
+            <id>site-doc</id>
+            <phase>pre-site</phase>
+            <goals>
+              <goal>xdoc</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <reporting>
+    <plugins>
+      <plugin>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>2.9</version>
+      </plugin>
+      <plugin>
+        <artifactId>maven-jxr-plugin</artifactId>
+        <version>2.3</version>
+      </plugin>
+    </plugins>
+  </reporting>
+</project>
