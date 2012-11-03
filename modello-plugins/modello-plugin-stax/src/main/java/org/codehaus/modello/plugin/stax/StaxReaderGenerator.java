@@ -1433,9 +1433,9 @@ public class StaxReaderGenerator
 
         JSourceCode sc = method.getSourceCode();
 
-        sc.add( "java.util.List elements = new java.util.ArrayList();" );
+        sc.add( "java.util.Stack elements = new java.util.Stack();" );
 
-        sc.add( "java.util.List values = new java.util.ArrayList();" );
+        sc.add( "java.util.Stack values = new java.util.Stack();" );
 
         sc.add( "int eventType = xmlStreamReader.getEventType();" );
 
@@ -1448,28 +1448,26 @@ public class StaxReaderGenerator
         sc.indent();
         sc.add( "String rawName = xmlStreamReader.getLocalName();" );
 
-        sc.add( "Xpp3Dom childConfiguration = new Xpp3Dom( rawName );" );
+        sc.add( "Xpp3Dom element = new Xpp3Dom( rawName );" );
 
-        sc.add( "int depth = elements.size();" );
-
-        sc.add( "if ( depth > 0 )" );
+        sc.add( "if ( !elements.empty() )" );
         sc.add( "{" );
         sc.indent();
-        sc.add( "Xpp3Dom parent = (Xpp3Dom) elements.get( depth - 1 );" );
+        sc.add( "Xpp3Dom parent = (Xpp3Dom) elements.peek();" );
 
-        sc.add( "parent.addChild( childConfiguration );" );
+        sc.add( "parent.addChild( element );" );
         sc.unindent();
         sc.add( "}" );
 
-        sc.add( "elements.add( childConfiguration );" );
+        sc.add( "elements.push( element );" );
 
         sc.add( "if ( xmlStreamReader.isEndElement() )" );
         sc.add( "{" );
-        sc.addIndented( "values.add( null );" );
+        sc.addIndented( "values.push( null );" );
         sc.add( "}" );
         sc.add( "else" );
         sc.add( "{" );
-        sc.addIndented( "values.add( new StringBuffer() );" );
+        sc.addIndented( "values.push( new StringBuffer() );" );
         sc.add( "}" );
 
         sc.add( "int attributesSize = xmlStreamReader.getAttributeCount();" );
@@ -1481,7 +1479,7 @@ public class StaxReaderGenerator
 
         sc.add( "String value = xmlStreamReader.getAttributeValue( i );" );
 
-        sc.add( "childConfiguration.setAttribute( name, value );" );
+        sc.add( "element.setAttribute( name, value );" );
         sc.unindent();
         sc.add( "}" );
         sc.unindent();
@@ -1489,8 +1487,7 @@ public class StaxReaderGenerator
         sc.add( "else if ( eventType == XMLStreamConstants.CHARACTERS )" );
         sc.add( "{" );
         sc.indent();
-        sc.add( "int depth = values.size() - 1;" );
-        sc.add( "StringBuffer valueBuffer = (StringBuffer) values.get( depth );" );
+        sc.add( "StringBuffer valueBuffer = (StringBuffer) values.peek();" );
 
         sc.add( "String text = xmlStreamReader.getText();" );
 
@@ -1502,30 +1499,29 @@ public class StaxReaderGenerator
         sc.add( "else if ( eventType == XMLStreamConstants.END_ELEMENT )" );
         sc.add( "{" );
         sc.indent();
-        sc.add( "int depth = elements.size() - 1;" );
 
-        sc.add( "Xpp3Dom finishedConfiguration = (Xpp3Dom) elements.remove( depth );" );
+        sc.add( "Xpp3Dom element = (Xpp3Dom) elements.pop();" );
 
         sc.add( "// this Object could be null if it is a singleton tag" );
-        sc.add( "Object accumulatedValue = values.remove( depth );" );
+        sc.add( "Object accumulatedValue = values.pop();" );
 
-        sc.add( "if ( finishedConfiguration.getChildCount() == 0 )" );
+        sc.add( "if ( element.getChildCount() == 0 )" );
         sc.add( "{" );
         sc.indent();
         sc.add( "if ( accumulatedValue == null )" );
         sc.add( "{" );
-        sc.addIndented( "finishedConfiguration.setValue( null );" );
+        sc.addIndented( "element.setValue( null );" );
         sc.add( "}" );
         sc.add( "else" );
         sc.add( "{" );
-        sc.addIndented( "finishedConfiguration.setValue( accumulatedValue.toString() );" );
+        sc.addIndented( "element.setValue( accumulatedValue.toString() );" );
         sc.add( "}" );
         sc.unindent();
         sc.add( "}" );
 
-        sc.add( "if ( depth == 0 )" );
+        sc.add( "if ( values.empty() )" );
         sc.add( "{" );
-        sc.addIndented( "return finishedConfiguration;" );
+        sc.addIndented( "return element;" );
         sc.add( "}" );
         sc.unindent();
         sc.add( "}" );
