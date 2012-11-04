@@ -147,7 +147,7 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-invoker-plugin</artifactId>
-            <version>1.5</version>
+            <version>1.7</version>
             <configuration>
               <projectsDirectory>src/it</projectsDirectory>
               <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
@@ -159,7 +159,7 @@
               <localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
               <debug>true</debug>
               <filterProperties>
-                <plexusUtilsVersion>1.5.8</plexusUtilsVersion>
+                <plexusUtilsVersion>3.0.8</plexusUtilsVersion>
                 <junitVersion>3.8.2</junitVersion>
               </filterProperties>
               <goals>
