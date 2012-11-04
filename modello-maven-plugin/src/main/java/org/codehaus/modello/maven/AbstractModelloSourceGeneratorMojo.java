@@ -41,6 +41,20 @@ public abstract class AbstractModelloSourceGeneratorMojo
     private File outputDirectory;
 
     /**
+     * The encoding to use when generating Java source files.
+     *
+     * @since 1.0-alpha-19
+     */
+    @Parameter( property = "encoding", defaultValue = "${project.build.sourceEncoding}" )
+    private String encoding;
+
+    /**
+     * Generate Java 5 sources, with generic collections.
+     */
+    @Parameter( property = "useJava5", defaultValue = "false" )
+    private boolean useJava5;
+
+    /**
      * Generate DOM content as plexus-utils <code>Xpp3Dom</code> objects instead of <code>org.w3c.dom.Element</code>.
      */
     @Parameter( property = "domAsXpp3", defaultValue = "true" )
@@ -59,6 +73,13 @@ public abstract class AbstractModelloSourceGeneratorMojo
     protected void customizeParameters( Properties parameters )
     {
         super.customizeParameters( parameters );
+
+        if ( encoding != null )
+        {
+            parameters.setProperty( ModelloParameterConstants.ENCODING, encoding );
+        }
+
+        parameters.setProperty( ModelloParameterConstants.USE_JAVA5, Boolean.toString( useJava5 ) );
 
         parameters.setProperty( ModelloParameterConstants.DOM_AS_XPP3, Boolean.toString( domAsXpp3 ) );
     }

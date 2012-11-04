@@ -73,14 +73,6 @@ public abstract class AbstractModelloGeneratorMojo
     private String version;
 
     /**
-     * The encoding to use when generating Java source files.
-     *
-     * @since 1.0-alpha-19
-     */
-    @Parameter( property = "encoding", defaultValue = "${project.build.sourceEncoding}" )
-    private String encoding;
-
-    /**
      * True if the generated package names should include the version.
      */
     @Parameter( property = "packageWithVersion", defaultValue = "false", required = true )
@@ -104,12 +96,6 @@ public abstract class AbstractModelloGeneratorMojo
      */
     @Parameter
     private List<String> packagedVersions = new ArrayList<String>();
-
-    /**
-     * Generate Java 5 sources, with generic collections.
-     */
-    @Parameter( property = "useJava5", defaultValue = "false" )
-    private boolean useJava5;
 
     @Component
     private BuildContext buildContext;
@@ -187,13 +173,6 @@ public abstract class AbstractModelloGeneratorMojo
                                     StringUtils.join( packagedVersions.iterator(), "," ) );
         }
         
-        parameters.setProperty( ModelloParameterConstants.USE_JAVA5, Boolean.toString( useJava5 ) );
-
-        if ( encoding != null )
-        {
-            parameters.setProperty( ModelloParameterConstants.ENCODING, encoding );
-        }
-
         customizeParameters( parameters );
 
         // ----------------------------------------------------------------------
