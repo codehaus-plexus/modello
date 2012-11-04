@@ -23,8 +23,10 @@ package org.codehaus.modello.maven;
  */
 
 import java.io.File;
+import java.util.Properties;
 
 import org.apache.maven.plugins.annotations.Parameter;
+import org.codehaus.modello.ModelloParameterConstants;
 
 /**
  * @author Hervé Boutemy
@@ -38,6 +40,12 @@ public abstract class AbstractModelloSourceGeneratorMojo
     @Parameter( defaultValue = "${project.build.directory}/generated-sources/modello", required = true )
     private File outputDirectory;
 
+    /**
+     * Generate DOM content as plexus-utils <code>Xpp3Dom</code> objects instead of <code>org.w3c.dom.Element</code>.
+     */
+    @Parameter( property = "domAsXpp3", defaultValue = "true" )
+    private boolean domAsXpp3;
+
     public File getOutputDirectory()
     {
         return outputDirectory;
@@ -46,5 +54,12 @@ public abstract class AbstractModelloSourceGeneratorMojo
     public void setOutputDirectory( File outputDirectory )
     {
         this.outputDirectory = outputDirectory;
+    }
+
+    protected void customizeParameters( Properties parameters )
+    {
+        super.customizeParameters( parameters );
+
+        parameters.setProperty( ModelloParameterConstants.DOM_AS_XPP3, Boolean.toString( domAsXpp3 ) );
     }
 }

@@ -69,6 +69,8 @@ public abstract class AbstractJavaModelloGenerator
 {
     protected boolean useJava5 = false;
 
+    protected boolean domAsXpp3 = true;
+
     protected void initialize( Model model, Properties parameters )
         throws ModelloException
     {
@@ -76,6 +78,8 @@ public abstract class AbstractJavaModelloGenerator
 
         useJava5 = Boolean.valueOf( getParameter( parameters,
                                                   ModelloParameterConstants.USE_JAVA5, "false" ) ).booleanValue();
+
+        domAsXpp3 = !"false".equals( parameters.getProperty( ModelloParameterConstants.DOM_AS_XPP3 ) );
     }
 
     /**

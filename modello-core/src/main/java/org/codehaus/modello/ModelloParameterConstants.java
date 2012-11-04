@@ -49,6 +49,8 @@ public class ModelloParameterConstants
 
     public static final String OUTPUT_XSD_FILE_NAME = "modello.output.xsd.file";
 
+    public static final String DOM_AS_XPP3 = "modello.dom.xpp3";
+
     private ModelloParameterConstants()
     {
     }

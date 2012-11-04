@@ -496,9 +496,16 @@ public class JavaModelloGenerator
             {
                 sc.add( "if ( " + thisField + " != null )" );
                 sc.add( "{" );
-                sc.addIndented( copyField
-                    + " = new org.codehaus.plexus.util.xml.Xpp3Dom( (org.codehaus.plexus.util.xml.Xpp3Dom) "
-                    + thisField + " );" );
+                if ( domAsXpp3 )
+                {
+                    sc.addIndented( copyField
+                        + " = new org.codehaus.plexus.util.xml.Xpp3Dom( (org.codehaus.plexus.util.xml.Xpp3Dom) "
+                        + thisField + " );" );
+                }
+                else
+                {
+                    sc.addIndented( copyField + " = ( (org.w3c.dom.Node) " + thisField + ").cloneNode( true );" );
+                }
                 sc.add( "}" );
                 sc.add( "" );
             }
