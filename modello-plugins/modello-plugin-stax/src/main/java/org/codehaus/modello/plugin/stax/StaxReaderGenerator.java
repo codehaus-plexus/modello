@@ -142,6 +142,23 @@ public class StaxReaderGenerator
         }
 
         // ----------------------------------------------------------------------
+        // Write the class parsers
+        // ----------------------------------------------------------------------
+
+        writeAllClassesParser( objectModel, jClass );
+
+        // ----------------------------------------------------------------------
+        // Write helpers
+        // ----------------------------------------------------------------------
+
+        writeHelpers( jClass );
+
+        if ( requiresDomSupport )
+        {
+            writeBuildDomMethod( jClass );
+        }
+
+        // ----------------------------------------------------------------------
         // Write the read(XMLStreamReader,boolean) method which will do the unmarshalling.
         // ----------------------------------------------------------------------
 
@@ -159,6 +176,23 @@ public class StaxReaderGenerator
         String tagName = resolveTagName( root );
         String className = root.getName();
         String variableName = uncapitalise( className );
+
+        if ( requiresDomSupport && !domAsXpp3 )
+        {
+            sc.add( "if ( doc == null )" );
+            sc.add( "{" );
+            sc.indent();
+            sc.add( "try" );
+            sc.add( "{" );
+            sc.addIndented( "initDoc();" );
+            sc.add( "}" );
+            sc.add( "catch ( javax.xml.parsers.ParserConfigurationException pce )" );
+            sc.add( "{" );
+            sc.addIndented( "throw new XMLStreamException( \"Unable to create DOM document: \" + pce.getMessage(), pce );" );
+            sc.add( "}" );
+            sc.unindent();
+            sc.add( "}" );
+        }
 
         sc.add( "int eventType = xmlStreamReader.getEventType();" );
 
@@ -326,24 +360,6 @@ public class StaxReaderGenerator
         if ( versionDefinition != null )
         {
             writeDetermineVersionMethod( jClass, objectModel );
-        }
-
-        // ----------------------------------------------------------------------
-        // Write the class parsers
-        // ----------------------------------------------------------------------
-
-        writeAllClassesParser( objectModel, jClass );
-
-        // ----------------------------------------------------------------------
-        // Write helpers
-        // ----------------------------------------------------------------------
-
-        writeHelpers( jClass );
-
-        if ( requiresDomSupport )
-        {
-            jClass.addImport( "org.codehaus.plexus.util.xml.Xpp3Dom" );
-            writeBuildDomMethod( jClass );
         }
 
         // ----------------------------------------------------------------------
@@ -1426,7 +1442,25 @@ public class StaxReaderGenerator
 
     private void writeBuildDomMethod( JClass jClass )
     {
-        JMethod method = new JMethod( "buildDom", new JType( "Xpp3Dom" ), null );
+        if ( domAsXpp3 )
+        {
+            jClass.addImport( "org.codehaus.plexus.util.xml.Xpp3Dom" );
+        }
+        else
+        {
+            jClass.addField( new JField( new JClass( "org.w3c.dom.Document" ), "doc" ) );
+            JMethod method = new JMethod( "initDoc", null, null );
+            method.getModifiers().makePrivate();
+            method.addException( new JClass( "javax.xml.parsers.ParserConfigurationException" ) );
+
+            JSourceCode sc = method.getSourceCode();
+            sc.add( "javax.xml.parsers.DocumentBuilderFactory dbfac = javax.xml.parsers.DocumentBuilderFactory.newInstance();" );
+            sc.add( "javax.xml.parsers.DocumentBuilder docBuilder = dbfac.newDocumentBuilder();" );
+            sc.add( "doc = docBuilder.newDocument();" );
+            jClass.addMethod( method );
+        }
+        String type = domAsXpp3 ? "Xpp3Dom" : "org.w3c.dom.Element";
+        JMethod method = new JMethod( "buildDom", new JType( type ), null );
         method.getModifiers().makePrivate();
         method.addParameter( new JParameter( new JType( "XMLStreamReader" ), "xmlStreamReader" ) );
         method.addException( new JClass( "XMLStreamException" ) );
@@ -1448,14 +1482,21 @@ public class StaxReaderGenerator
         sc.indent();
         sc.add( "String rawName = xmlStreamReader.getLocalName();" );
 
-        sc.add( "Xpp3Dom element = new Xpp3Dom( rawName );" );
+        if ( domAsXpp3 )
+        {
+            sc.add( "Xpp3Dom element = new Xpp3Dom( rawName );" );
+        }
+        else
+        {
+            sc.add( "org.w3c.dom.Element element = doc.createElement( rawName );" );
+        }
 
         sc.add( "if ( !elements.empty() )" );
         sc.add( "{" );
         sc.indent();
-        sc.add( "Xpp3Dom parent = (Xpp3Dom) elements.peek();" );
+        sc.add( type + " parent = (" + type + ") elements.peek();" );
 
-        sc.add( "parent.addChild( element );" );
+        sc.add( "parent." + ( domAsXpp3 ? "addChild" : "appendChild" ) + "( element );" );
         sc.unindent();
         sc.add( "}" );
 
@@ -1500,23 +1541,14 @@ public class StaxReaderGenerator
         sc.add( "{" );
         sc.indent();
 
-        sc.add( "Xpp3Dom element = (Xpp3Dom) elements.pop();" );
+        sc.add( type + " element = (" + type + ") elements.pop();" );
 
         sc.add( "// this Object could be null if it is a singleton tag" );
         sc.add( "Object accumulatedValue = values.pop();" );
 
-        sc.add( "if ( element.getChildCount() == 0 )" );
+        sc.add( "if ( " + ( domAsXpp3 ? "element.getChildCount() == 0" : "!element.hasChildNodes()" ) + " )" );
         sc.add( "{" );
-        sc.indent();
-        sc.add( "if ( accumulatedValue == null )" );
-        sc.add( "{" );
-        sc.addIndented( "element.setValue( null );" );
-        sc.add( "}" );
-        sc.add( "else" );
-        sc.add( "{" );
-        sc.addIndented( "element.setValue( accumulatedValue.toString() );" );
-        sc.add( "}" );
-        sc.unindent();
+        sc.addIndented( "element." + ( domAsXpp3 ? "setValue" : "setTextContent" ) + "( ( accumulatedValue == null ) ? null : accumulatedValue.toString() );" );
         sc.add( "}" );
 
         sc.add( "if ( values.empty() )" );

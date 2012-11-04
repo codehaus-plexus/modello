@@ -218,7 +218,6 @@ public class StaxWriterGenerator
 
         if ( requiresDomSupport )
         {
-            jClass.addImport( "org.codehaus.plexus.util.xml.Xpp3Dom" );
             createWriteDomMethod( jClass );
         }
 
@@ -527,7 +526,8 @@ public class StaxWriterGenerator
 
                 if ( "DOM".equals( field.getType() ) )
                 {
-                    sc.add( "writeDom( (Xpp3Dom) " + value + ", serializer );" );
+                    sc.add( "writeDom( (" + ( domAsXpp3 ? "Xpp3Dom" : "org.w3c.dom.Element" ) + ") " + value
+                        + ", serializer );" );
 
                     requiresDomSupport = true;
                 }
@@ -594,39 +594,85 @@ public class StaxWriterGenerator
 
     private void createWriteDomMethod( JClass jClass )
     {
+        if ( domAsXpp3 )
+        {
+            jClass.addImport( "org.codehaus.plexus.util.xml.Xpp3Dom" );
+        }
+        String type = domAsXpp3 ? "Xpp3Dom" : "org.w3c.dom.Element";
         JMethod method = new JMethod( "writeDom" );
         method.getModifiers().makePrivate();
 
-        method.addParameter( new JParameter( new JType( "Xpp3Dom" ), "dom" ) );
+        method.addParameter( new JParameter( new JType( type ), "dom" ) );
         method.addParameter( new JParameter( new JType( "XMLStreamWriter" ), "serializer" ) );
 
         method.addException( new JClass( "XMLStreamException" ) );
 
         JSourceCode sc = method.getSourceCode();
 
-        sc.add( "serializer.writeStartElement( dom.getName() );" );
+        // start element
+        sc.add( "serializer.writeStartElement( dom.get" + ( domAsXpp3 ? "Name" : "TagName" ) + "() );" );
 
-        sc.add( "String[] attributeNames = dom.getAttributeNames();" );
-        sc.add( "for ( int i = 0; i < attributeNames.length; i++ )" );
-        sc.add( "{" );
+        // attributes
+        if ( domAsXpp3 )
+        {
+            sc.add( "String[] attributeNames = dom.getAttributeNames();" );
+            sc.add( "for ( int i = 0; i < attributeNames.length; i++ )" );
+            sc.add( "{" );
+    
+            sc.indent();
+            sc.add( "String attributeName = attributeNames[i];" );
+            sc.add( "serializer.writeAttribute( attributeName, dom.getAttribute( attributeName ) );" );
+            sc.unindent();
+    
+            sc.add( "}" );
+        }
+        else
+        {
+            sc.add( "org.w3c.dom.NamedNodeMap attributes = dom.getAttributes();" );
+            sc.add( "for ( int i = 0; i < attributes.getLength(); i++ )" );
+            sc.add( "{" );
+    
+            sc.indent();
+            sc.add( "org.w3c.dom.Node attribute = attributes.item( i );" );
+            sc.add( "serializer.writeAttribute( attribute.getNodeName(), attribute.getNodeValue() );" );
+            sc.unindent();
+    
+            sc.add( "}" );
+        }
 
-        sc.indent();
-        sc.add( "String attributeName = attributeNames[i];" );
-        sc.add( "serializer.writeAttribute( attributeName, dom.getAttribute( attributeName ) );" );
-        sc.unindent();
+        // child nodes & text
+        if ( domAsXpp3 )
+        {
+            sc.add( "Xpp3Dom[] children = dom.getChildren();" );
+            sc.add( "for ( int i = 0; i < children.length; i++ )" );
+            sc.add( "{" );
+            sc.addIndented( "writeDom( children[i], serializer );" );
+            sc.add( "}" );
 
-        sc.add( "}" );
-        sc.add( "Xpp3Dom[] children = dom.getChildren();" );
-        sc.add( "for ( int i = 0; i < children.length; i++ )" );
-        sc.add( "{" );
-        sc.addIndented( "writeDom( children[i], serializer );" );
-        sc.add( "}" );
-
-        sc.add( "String value = dom.getValue();" );
-        sc.add( "if ( value != null )" );
-        sc.add( "{" );
-        sc.addIndented( "serializer.writeCharacters( value );" );
-        sc.add( "}" );
+            sc.add( "String value = dom.getValue();" );
+            sc.add( "if ( value != null )" );
+            sc.add( "{" );
+            sc.addIndented( "serializer.writeCharacters( value );" );
+            sc.add( "}" );
+        }
+        else
+        {
+            sc.add( "org.w3c.dom.NodeList children = dom.getChildNodes();" );
+            sc.add( "for ( int i = 0; i < children.getLength(); i++ )" );
+            sc.add( "{" );
+            sc.indent();
+            sc.add( "org.w3c.dom.Node node = children.item( i );" );
+            sc.add( "if ( node instanceof org.w3c.dom.Element)" );
+            sc.add( "{" );
+            sc.addIndented( "writeDom( (org.w3c.dom.Element) children.item( i ), serializer );" );
+            sc.add( "}" );
+            sc.add( "else" );
+            sc.add( "{" );
+            sc.addIndented( "serializer.writeCharacters( node.getTextContent() );" );
+            sc.add( "}" );
+            sc.unindent();
+            sc.add( "}" );
+        }
 
         sc.add( "serializer.writeEndElement();" );
 

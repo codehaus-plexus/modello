@@ -15,8 +15,10 @@
         <a href="http://docs.oracle.com/javase/6/docs/api/javax/xml/stream/package-summary.html">StAX API</a>,
         plus reader delegates to be able to read multiple model versions.</p>
 
-      <p>Notice: DOM content type is represented as
-      <a href="http://plexus.codehaus.org/plexus-utils/apidocs/org/codehaus/plexus/util/xml/Xpp3Dom.html">plexus-utils' Xpp3Dom</a> objects</p>
+      <p>Notice: DOM content type can be represented either as
+      <a href="http://plexus.codehaus.org/plexus-utils/apidocs/org/codehaus/plexus/util/xml/Xpp3Dom.html">plexus-utils' Xpp3Dom</a>
+      or standard
+      <a href="http://docs.oracle.com/javase/1.4.2/docs/api/org/w3c/dom/Element.html">org.w3c.dom.Element</a> objects</p>
 
       <subsection name="stax-reader">
       <p><code>stax-reader</code> generator creates
