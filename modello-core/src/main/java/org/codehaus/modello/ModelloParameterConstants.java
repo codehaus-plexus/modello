@@ -41,14 +41,23 @@ public class ModelloParameterConstants
 
     public static final String FIRST_VERSION = "modello.first.version";
 
+    /**
+     * @since 1.0-alpha-19
+     */
     public static final String ENCODING = "modello.output.encoding";
 
+    /**
+     * @since 1.0
+     */
     public static final String USE_JAVA5 = "modello.output.useJava5";
 
     public static final String OUTPUT_XDOC_FILE_NAME = "modello.output.xdoc.file";
 
     public static final String OUTPUT_XSD_FILE_NAME = "modello.output.xsd.file";
 
+    /**
+     * @since 1.6
+     */
     public static final String DOM_AS_XPP3 = "modello.dom.xpp3";
 
     private ModelloParameterConstants()

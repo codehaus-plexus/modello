@@ -97,6 +97,9 @@ public abstract class AbstractModelloGeneratorMojo
     @Parameter
     private List<String> packagedVersions = new ArrayList<String>();
 
+    /**
+     * @since 1.0.1
+     */
     @Component
     private BuildContext buildContext;
 

@@ -50,12 +50,14 @@ public abstract class AbstractModelloSourceGeneratorMojo
 
     /**
      * Generate Java 5 sources, with generic collections.
+     * @since 1.0
      */
     @Parameter( property = "useJava5", defaultValue = "false" )
     private boolean useJava5;
 
     /**
      * Generate DOM content as plexus-utils <code>Xpp3Dom</code> objects instead of <code>org.w3c.dom.Element</code>.
+     * @since 1.6
      */
     @Parameter( property = "domAsXpp3", defaultValue = "true" )
     private boolean domAsXpp3;
