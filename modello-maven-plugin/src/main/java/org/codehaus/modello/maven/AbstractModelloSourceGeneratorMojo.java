@@ -62,6 +62,12 @@ public abstract class AbstractModelloSourceGeneratorMojo
     @Parameter( property = "domAsXpp3", defaultValue = "true" )
     private boolean domAsXpp3;
 
+    @Override
+    protected boolean producesCompilableResult()
+    {
+        return true;
+    }
+
     public File getOutputDirectory()
     {
         return outputDirectory;
@@ -72,6 +78,7 @@ public abstract class AbstractModelloSourceGeneratorMojo
         this.outputDirectory = outputDirectory;
     }
 
+    @Override
     protected void customizeParameters( Properties parameters )
     {
         super.customizeParameters( parameters );

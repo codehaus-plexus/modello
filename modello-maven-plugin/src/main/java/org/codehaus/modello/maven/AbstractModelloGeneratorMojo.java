@@ -113,7 +113,7 @@ public abstract class AbstractModelloGeneratorMojo
 
     protected boolean producesCompilableResult()
     {
-        return true;
+        return false;
     }
 
     protected boolean producesResources()
