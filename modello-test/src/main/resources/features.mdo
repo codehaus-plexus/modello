@@ -994,6 +994,12 @@
             <type>XmlContent</type>
           </association>
         </field>
+        <field xml.trim="false">
+          <name>fieldNoTrim</name>
+          <version>1.0.0+</version>
+          <description><![CDATA[<code>&lt;field xml.trim="false"&gt;</code>: a text field without trimming.]]></description>
+          <type>String</type>
+        </field>
         <field xml.tagName="tag-name">
           <name>fieldName</name>
           <version>1.0.0+</version>

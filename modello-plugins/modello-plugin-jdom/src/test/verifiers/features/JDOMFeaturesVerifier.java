@@ -105,5 +105,10 @@ public class JDOMFeaturesVerifier
             /*throw*/ new VerifierException( "writer result is not the same as original content: " + diff )
                 .printStackTrace( System.err );
         }
+
+        if ( !actualXml.contains( "<fieldNoTrim>   do not trim this field   </fieldNoTrim>" ) )
+        {
+            throw new VerifierException( "fieldNoTrim was trimmed..." );
+        }
     }
 }

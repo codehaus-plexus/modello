@@ -117,6 +117,11 @@ public class StaxFeaturesVerifier
             System.err.println( actualXml );
             throw new VerifierException( "writer result is not the same as original content: " + diff );
         }
+
+        if ( !actualXml.contains( "<fieldNoTrim>   do not trim this field   </fieldNoTrim>" ) )
+        {
+            throw new VerifierException( "fieldNoTrim was trimmed..." );
+        }
     }
 
     public void verifyBadVersion()
