@@ -175,7 +175,7 @@ public class Xpp3ReaderGenerator
 
         if ( requiresDomSupport && !domAsXpp3 )
         {
-            sc.add( "if ( doc == null )" );
+            sc.add( "if ( _doc_ == null )" );
             sc.add( "{" );
             sc.indent();
             sc.add( "try" );
@@ -1280,7 +1280,7 @@ public class Xpp3ReaderGenerator
             // no need, Xpp3DomBuilder provided by plexus-utils
             return;
         }
-        jClass.addField( new JField( new JClass( "org.w3c.dom.Document" ), "doc" ) );
+        jClass.addField( new JField( new JClass( "org.w3c.dom.Document" ), "_doc_" ) );
         JMethod method = new JMethod( "initDoc", null, null );
         method.getModifiers().makePrivate();
         method.addException( new JClass( "javax.xml.parsers.ParserConfigurationException" ) );
@@ -1288,7 +1288,7 @@ public class Xpp3ReaderGenerator
         JSourceCode sc = method.getSourceCode();
         sc.add( "javax.xml.parsers.DocumentBuilderFactory dbfac = javax.xml.parsers.DocumentBuilderFactory.newInstance();" );
         sc.add( "javax.xml.parsers.DocumentBuilder docBuilder = dbfac.newDocumentBuilder();" );
-        sc.add( "doc = docBuilder.newDocument();" );
+        sc.add( "_doc_ = docBuilder.newDocument();" );
         jClass.addMethod( method );
 
         String type = "org.w3c.dom.Element";
@@ -1315,7 +1315,7 @@ public class Xpp3ReaderGenerator
         sc.indent();
         sc.add( "String rawName = parser.getName();" );
 
-        sc.add( "org.w3c.dom.Element element = doc.createElement( rawName );" );
+        sc.add( "org.w3c.dom.Element element = _doc_.createElement( rawName );" );
 
         sc.add( "if ( !elements.empty() )" );
         sc.add( "{" );
