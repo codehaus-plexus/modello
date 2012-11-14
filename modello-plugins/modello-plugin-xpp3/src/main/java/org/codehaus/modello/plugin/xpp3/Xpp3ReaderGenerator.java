@@ -66,6 +66,8 @@ public class Xpp3ReaderGenerator
 
     private String trackingArgs;
 
+    private boolean requiresDomSupport;
+
     protected boolean isLocationTracking()
     {
         return false;
@@ -78,6 +80,7 @@ public class Xpp3ReaderGenerator
 
         locationTracker = sourceTracker = null;
         trackingArgs = locationField = "";
+        requiresDomSupport = false;
 
         if ( isLocationTracking() )
         {
@@ -169,6 +172,23 @@ public class Xpp3ReaderGenerator
 
         String tagName = resolveTagName( modelClass );
         String variableName = uncapitalise( className );
+
+        if ( requiresDomSupport && !domAsXpp3 )
+        {
+            sc.add( "if ( doc == null )" );
+            sc.add( "{" );
+            sc.indent();
+            sc.add( "try" );
+            sc.add( "{" );
+            sc.addIndented( "initDoc();" );
+            sc.add( "}" );
+            sc.add( "catch ( javax.xml.parsers.ParserConfigurationException pce )" );
+            sc.add( "{" );
+            sc.addIndented( "throw new XmlPullParserException( \"Unable to create DOM document: \" + pce.getMessage(), parser, pce );" );
+            sc.add( "}" );
+            sc.unindent();
+            sc.add( "}" );
+        }
 
         sc.add( "int eventType = parser.getEventType();" );
 
@@ -365,22 +385,27 @@ public class Xpp3ReaderGenerator
         jClass.addMethod( addDefaultEntitiesGetter );
 
         // ----------------------------------------------------------------------
-        // Write the class readers
-        // ----------------------------------------------------------------------
-
-        writeAllClassesReaders( objectModel, jClass );
-
-        // ----------------------------------------------------------------------
         // Write the class parsers
         // ----------------------------------------------------------------------
 
         writeAllClassesParser( objectModel, jClass );
 
         // ----------------------------------------------------------------------
+        // Write the class readers
+        // ----------------------------------------------------------------------
+
+        writeAllClassesReaders( objectModel, jClass );
+
+        // ----------------------------------------------------------------------
         // Write helpers
         // ----------------------------------------------------------------------
 
         writeHelpers( jClass );
+
+        if ( requiresDomSupport )
+        {
+            writeBuildDomMethod( jClass );
+        }
 
         // ----------------------------------------------------------------------
         //
@@ -952,7 +977,9 @@ public class Xpp3ReaderGenerator
         else if ( "DOM".equals( type ) )
         {
             sc.add( objectName + "." + setterName + "( " + keyCapture
-                + "org.codehaus.plexus.util.xml.Xpp3DomBuilder.build( parser ) );" );
+                + ( domAsXpp3 ? "org.codehaus.plexus.util.xml.Xpp3DomBuilder.build" : "buildDom" ) + "( parser ) );" );
+
+            requiresDomSupport = true;
         }
         else
         {
@@ -1244,6 +1271,127 @@ public class Xpp3ReaderGenerator
 
         sc.unindent();
         sc.add( "}" );
+    }
+
+    private void writeBuildDomMethod( JClass jClass )
+    {
+        if ( domAsXpp3 )
+        {
+            // no need, Xpp3DomBuilder provided by plexus-utils
+            return;
+        }
+        jClass.addField( new JField( new JClass( "org.w3c.dom.Document" ), "doc" ) );
+        JMethod method = new JMethod( "initDoc", null, null );
+        method.getModifiers().makePrivate();
+        method.addException( new JClass( "javax.xml.parsers.ParserConfigurationException" ) );
+
+        JSourceCode sc = method.getSourceCode();
+        sc.add( "javax.xml.parsers.DocumentBuilderFactory dbfac = javax.xml.parsers.DocumentBuilderFactory.newInstance();" );
+        sc.add( "javax.xml.parsers.DocumentBuilder docBuilder = dbfac.newDocumentBuilder();" );
+        sc.add( "doc = docBuilder.newDocument();" );
+        jClass.addMethod( method );
+
+        String type = "org.w3c.dom.Element";
+        method = new JMethod( "buildDom", new JType( type ), null );
+        method.getModifiers().makePrivate();
+        method.addParameter( new JParameter( new JType( "XmlPullParser" ), "parser" ) );
+        method.addException( new JClass( "XmlPullParserException" ) );
+        method.addException( new JClass( "IOException" ) );
+
+        sc = method.getSourceCode();
+
+        sc.add( "java.util.Stack elements = new java.util.Stack();" );
+
+        sc.add( "java.util.Stack values = new java.util.Stack();" );
+
+        sc.add( "int eventType = parser.getEventType();" );
+
+        sc.add( "while ( eventType != XmlPullParser.END_DOCUMENT )" );
+        sc.add( "{" );
+        sc.indent();
+
+        sc.add( "if ( eventType == XmlPullParser.START_TAG )" );
+        sc.add( "{" );
+        sc.indent();
+        sc.add( "String rawName = parser.getName();" );
+
+        sc.add( "org.w3c.dom.Element element = doc.createElement( rawName );" );
+
+        sc.add( "if ( !elements.empty() )" );
+        sc.add( "{" );
+        sc.indent();
+        sc.add( type + " parent = (" + type + ") elements.peek();" );
+
+        sc.add( "parent.appendChild( element );" );
+        sc.unindent();
+        sc.add( "}" );
+
+        sc.add( "elements.push( element );" );
+
+        sc.add( "if ( parser.isEmptyElementTag() )" );
+        sc.add( "{" );
+        sc.addIndented( "values.push( null );" );
+        sc.add( "}" );
+        sc.add( "else" );
+        sc.add( "{" );
+        sc.addIndented( "values.push( new StringBuffer() );" );
+        sc.add( "}" );
+
+        sc.add( "int attributesSize = parser.getAttributeCount();" );
+
+        sc.add( "for ( int i = 0; i < attributesSize; i++ )" );
+        sc.add( "{" );
+        sc.indent();
+        sc.add( "String name = parser.getAttributeName( i );" );
+
+        sc.add( "String value = parser.getAttributeValue( i );" );
+
+        sc.add( "element.setAttribute( name, value );" );
+        sc.unindent();
+        sc.add( "}" );
+        sc.unindent();
+        sc.add( "}" );
+        sc.add( "else if ( eventType == XmlPullParser.TEXT )" );
+        sc.add( "{" );
+        sc.indent();
+        sc.add( "StringBuffer valueBuffer = (StringBuffer) values.peek();" );
+
+        sc.add( "String text = parser.getText();" );
+
+        sc.add( "text = text.trim();" );
+
+        sc.add( "valueBuffer.append( text );" );
+        sc.unindent();
+        sc.add( "}" );
+        sc.add( "else if ( eventType == XmlPullParser.END_TAG )" );
+        sc.add( "{" );
+        sc.indent();
+
+        sc.add( type + " element = (" + type + ") elements.pop();" );
+
+        sc.add( "// this Object could be null if it is a singleton tag" );
+        sc.add( "Object accumulatedValue = values.pop();" );
+
+        sc.add( "if ( !element.hasChildNodes() )" );
+        sc.add( "{" );
+        sc.addIndented( "element.setTextContent( ( accumulatedValue == null ) ? null : accumulatedValue.toString() );" );
+        sc.add( "}" );
+
+        sc.add( "if ( values.empty() )" );
+        sc.add( "{" );
+        sc.addIndented( "return element;" );
+        sc.add( "}" );
+        sc.unindent();
+        sc.add( "}" );
+
+        sc.add( "eventType = parser.next();" );
+
+        sc.unindent();
+        sc.add( "}" );
+
+        sc.add( "throw new IllegalStateException( \"End of document found before returning to 0 depth\" );" );
+
+        jClass.addMethod( method );
     }
 
     private void writeHelpers( JClass jClass )

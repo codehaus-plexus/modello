@@ -34,6 +34,7 @@ import org.codehaus.modello.plugin.java.javasource.JMethod;
 import org.codehaus.modello.plugin.java.javasource.JParameter;
 import org.codehaus.modello.plugin.java.javasource.JSourceCode;
 import org.codehaus.modello.plugin.java.javasource.JSourceWriter;
+import org.codehaus.modello.plugin.java.javasource.JType;
 import org.codehaus.modello.plugin.java.metadata.JavaFieldMetadata;
 import org.codehaus.modello.plugin.model.ModelClassMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlAssociationMetadata;
@@ -51,10 +52,14 @@ import java.util.Properties;
 public class Xpp3WriterGenerator
     extends AbstractXpp3Generator
 {
+    private boolean requiresDomSupport;
+
     public void generate( Model model, Properties parameters )
         throws ModelloException
     {
         initialize( model, parameters );
+
+        requiresDomSupport = false;
 
         try
         {
@@ -166,6 +171,11 @@ public class Xpp3WriterGenerator
         jClass.addMethod( marshall );
 
         writeAllClasses( objectModel, jClass );
+
+        if ( requiresDomSupport )
+        {
+            createWriteDomMethod( jClass );
+        }
 
         jClass.print( sourceWriter );
 
@@ -426,9 +436,18 @@ public class Xpp3WriterGenerator
                 sc.add( "{" );
                 if ( "DOM".equals( field.getType() ) )
                 {
-                    jClass.addImport( "org.codehaus.plexus.util.xml.Xpp3Dom" );
+                    if ( domAsXpp3 )
+                    {
+                        jClass.addImport( "org.codehaus.plexus.util.xml.Xpp3Dom" );
+    
+                        sc.addIndented( "((Xpp3Dom) " + value + ").writeToSerializer( NAMESPACE, serializer );" );
+                    }
+                    else
+                    {
+                        sc.addIndented( "writeDom( (org.w3c.dom.Element) " + value + ", serializer );" );
+                    }
 
-                    sc.addIndented( "((Xpp3Dom) " + value + ").writeToSerializer( NAMESPACE, serializer );" );
+                    requiresDomSupport = true;
                 }
                 else
                 {
@@ -443,5 +462,59 @@ public class Xpp3WriterGenerator
         sc.add( "serializer.endTag( NAMESPACE, tagName );" );
 
         jClass.addMethod( marshall );
+    }
+
+    private void createWriteDomMethod( JClass jClass )
+    {
+        if ( domAsXpp3 )
+        {
+            return;
+        }
+        String type = "org.w3c.dom.Element";
+        JMethod method = new JMethod( "writeDom" );
+        method.getModifiers().makePrivate();
+
+        method.addParameter( new JParameter( new JType( type ), "dom" ) );
+        method.addParameter( new JParameter( new JClass( "XmlSerializer" ), "serializer" ) );
+
+        method.addException( new JClass( "java.io.IOException" ) );
+
+        JSourceCode sc = method.getSourceCode();
+
+        // start element
+        sc.add( "serializer.startTag( NAMESPACE, dom.getTagName() );" );
+
+        // attributes
+        sc.add( "org.w3c.dom.NamedNodeMap attributes = dom.getAttributes();" );
+        sc.add( "for ( int i = 0; i < attributes.getLength(); i++ )" );
+        sc.add( "{" );
+
+        sc.indent();
+        sc.add( "org.w3c.dom.Node attribute = attributes.item( i );" );
+        sc.add( "serializer.attribute( NAMESPACE, attribute.getNodeName(), attribute.getNodeValue() );" );
+        sc.unindent();
+
+        sc.add( "}" );
+
+        // child nodes & text
+        sc.add( "org.w3c.dom.NodeList children = dom.getChildNodes();" );
+        sc.add( "for ( int i = 0; i < children.getLength(); i++ )" );
+        sc.add( "{" );
+        sc.indent();
+        sc.add( "org.w3c.dom.Node node = children.item( i );" );
+        sc.add( "if ( node instanceof org.w3c.dom.Element)" );
+        sc.add( "{" );
+        sc.addIndented( "writeDom( (org.w3c.dom.Element) children.item( i ), serializer );" );
+        sc.add( "}" );
+        sc.add( "else" );
+        sc.add( "{" );
+        sc.addIndented( "serializer.text( node.getTextContent() );" );
+        sc.add( "}" );
+        sc.unindent();
+        sc.add( "}" );
+
+        sc.add( "serializer.endTag( NAMESPACE, dom.getTagName() );" );
+
+        jClass.addMethod( method );
     }
 }
