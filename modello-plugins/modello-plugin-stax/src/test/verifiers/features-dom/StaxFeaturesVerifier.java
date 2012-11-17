@@ -118,9 +118,21 @@ public class StaxFeaturesVerifier
             throw new VerifierException( "writer result is not the same as original content: " + diff );
         }
 
+        if ( !actualXml.contains( "<fieldTrim>by default, field content is trimmed</fieldTrim>" ) )
+        {
+            throw new VerifierException( "fieldTrim was not trimmed..." );
+        }
         if ( !actualXml.contains( "<fieldNoTrim>   do not trim this field   </fieldNoTrim>" ) )
         {
             throw new VerifierException( "fieldNoTrim was trimmed..." );
+        }
+        if ( !actualXml.contains( "<element>by default, the element content is trimmed</element>" ) )
+        {
+            throw new VerifierException( "dom was not trimmed..." );
+        }
+        if ( !actualXml.contains( "<element>   do not trim the element content   </element>" ) )
+        {
+            throw new VerifierException( "domNoTrim was trimmed..." );
         }
     }
 

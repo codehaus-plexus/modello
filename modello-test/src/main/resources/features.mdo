@@ -994,11 +994,29 @@
             <type>XmlContent</type>
           </association>
         </field>
+        <field>
+          <name>fieldTrim</name>
+          <version>1.0.0+</version>
+          <description><![CDATA[<code>&lt;field&gt;</code>: a text field, by default with trimming.]]></description>
+          <type>String</type>
+        </field>
         <field xml.trim="false">
           <name>fieldNoTrim</name>
           <version>1.0.0+</version>
           <description><![CDATA[<code>&lt;field xml.trim="false"&gt;</code>: a text field without trimming.]]></description>
           <type>String</type>
+        </field>
+        <field>
+          <name>dom</name>
+          <version>1.0.0+</version>
+          <description><![CDATA[<code>&lt;field&gt;&lt;type&gt;DOM&mt;&gt;&lt;/type&gt;</code>: a DOM field, by default with trimming (each element in the DOM tree).]]></description>
+          <type>DOM</type>
+        </field>
+        <field xml.trim="false">
+          <name>domNoTrim</name>
+          <version>1.0.0+</version>
+          <description><![CDATA[<code>&lt;field xml.trim="false"&gt;&lt;type&gt;DOM&mt;&gt;&lt;/type&gt;</code>: a DOM field without trimming.]]></description>
+          <type>DOM</type>
         </field>
         <field xml.tagName="tag-name">
           <name>fieldName</name>

@@ -96,7 +96,10 @@
       <content.long-with-attributes attr="attribute" attr2="12">-707070707070</content.long-with-attributes>
     </content>
 
+    <fieldTrim>   by default, field content is trimmed   </fieldTrim>
     <fieldNoTrim>   do not trim this field   </fieldNoTrim>
+    <dom><element>   by default, the element content is trimmed   </element></dom>
+    <domNoTrim><element>   do not trim the element content   </element></domNoTrim>
     <tag-name>value from XML file</tag-name>
     <dateXmlFormat>2012-12-24T22:12:12</dateXmlFormat>
     <dateLong>121212121212</dateLong>

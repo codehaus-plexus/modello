@@ -1430,7 +1430,7 @@ public class StaxReaderGenerator
         }
         else if ( "DOM".equals( type ) )
         {
-            sc.add( objectName + "." + setterName + "( buildDom( xmlStreamReader ) );" );
+            sc.add( objectName + "." + setterName + "( buildDom( xmlStreamReader, " + xmlFieldMetadata.isTrim() + " ) );" );
 
             requiresDomSupport = true;
         }
@@ -1463,6 +1463,7 @@ public class StaxReaderGenerator
         JMethod method = new JMethod( "buildDom", new JType( type ), null );
         method.getModifiers().makePrivate();
         method.addParameter( new JParameter( new JType( "XMLStreamReader" ), "xmlStreamReader" ) );
+        method.addParameter( new JParameter( JType.BOOLEAN, "trim" ) );
         method.addException( new JClass( "XMLStreamException" ) );
 
         JSourceCode sc = method.getSourceCode();
@@ -1532,7 +1533,10 @@ public class StaxReaderGenerator
 
         sc.add( "String text = xmlStreamReader.getText();" );
 
-        sc.add( "text = text.trim();" );
+        sc.add( "if ( trim )" );
+        sc.add( "{" );
+        sc.addIndented( "text = text.trim();" );
+        sc.add( "}" );
 
         sc.add( "valueBuffer.append( text );" );
         sc.unindent();

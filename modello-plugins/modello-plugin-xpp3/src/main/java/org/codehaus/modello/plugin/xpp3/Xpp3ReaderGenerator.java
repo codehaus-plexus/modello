@@ -977,7 +977,8 @@ public class Xpp3ReaderGenerator
         else if ( "DOM".equals( type ) )
         {
             sc.add( objectName + "." + setterName + "( " + keyCapture
-                + ( domAsXpp3 ? "org.codehaus.plexus.util.xml.Xpp3DomBuilder.build" : "buildDom" ) + "( parser ) );" );
+                + ( domAsXpp3 ? "org.codehaus.plexus.util.xml.Xpp3DomBuilder.build" : "buildDom" ) + "( parser, "
+                + xmlFieldMetadata.isTrim() + " ) );" );
 
             requiresDomSupport = true;
         }
@@ -1295,6 +1296,7 @@ public class Xpp3ReaderGenerator
         method = new JMethod( "buildDom", new JType( type ), null );
         method.getModifiers().makePrivate();
         method.addParameter( new JParameter( new JType( "XmlPullParser" ), "parser" ) );
+        method.addParameter( new JParameter( JType.BOOLEAN, "trim" ) );
         method.addException( new JClass( "XmlPullParserException" ) );
         method.addException( new JClass( "IOException" ) );
 
@@ -1358,7 +1360,10 @@ public class Xpp3ReaderGenerator
 
         sc.add( "String text = parser.getText();" );
 
-        sc.add( "text = text.trim();" );
+        sc.add( "if ( trim )" );
+        sc.add( "{" );
+        sc.addIndented( "text = text.trim();" );
+        sc.add( "}" );
 
         sc.add( "valueBuffer.append( text );" );
         sc.unindent();
