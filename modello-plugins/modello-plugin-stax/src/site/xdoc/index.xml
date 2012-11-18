@@ -17,7 +17,7 @@
 
       <p>Notice: DOM content type can be represented either as
       <a href="http://plexus.codehaus.org/plexus-utils/apidocs/org/codehaus/plexus/util/xml/Xpp3Dom.html">plexus-utils' Xpp3Dom</a>
-      or standard
+      or, since Modello 1.6, standard
       <a href="http://docs.oracle.com/javase/1.4.2/docs/api/org/w3c/dom/Element.html">org.w3c.dom.Element</a> objects</p>
 
       <subsection name="stax-reader">
