@@ -3,10 +3,36 @@
   ------
   Hervé Boutemy
   ------
-  2012-09-10
+  2012-11-18
   ------
 
 Modello
+
+* 1.6 Release Notes (2012-11)
+
+  The {{{http://jira.codehaus.org/secure/ReleaseNote.jspa?projectId=10510&version=18746}full list of changes}} can be found in our {{{./issue-tracking.html}issue management system}}, and is reproduced below.
+
+** Bug
+
+    * [MODELLO-251] - Stax generated code error with class name 'File'
+
+    * [MODELLO-256] - Maven pom.xml plugin configuration elements are trimmed
+
+    * [MODELLO-258] - The xdoc for a field of type Properties contains invalid xml
+
+    * [MODELLO-261] - remove useJava5 and encoding parameters from non-java code generators
+
+** Improvement
+
+    * [MODELLO-252] - Stax generates code which calls deperecated JRE method
+
+    * [MODELLO-259] - use maven-plugin-tools' java 5 annotations
+
+    * [MODELLO-263] - support xml:space="preserve" for DOM fields
+
+** New Feature
+
+    * [MODELLO-260] - Support DOM type representation other than plexus-utils' Xpp3Dom objects
 
 * 1.5 Release Notes (2011-05-30)
 
