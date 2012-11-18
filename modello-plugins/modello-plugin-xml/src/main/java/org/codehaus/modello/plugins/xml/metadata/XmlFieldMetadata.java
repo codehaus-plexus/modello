@@ -30,7 +30,7 @@ import org.codehaus.modello.metadata.FieldMetadata;
 public class XmlFieldMetadata
     implements FieldMetadata
 {
-    public final static String ID = XmlFieldMetadata.class.getName();
+    public static final String ID = XmlFieldMetadata.class.getName();
 
     private boolean attribute;
 

@@ -365,7 +365,7 @@ public class XsdGenerator
                 {
                     w.endElement();
                 }
-            }// end fields iterator
+            } // end fields iterator
 
             if ( !hasContentField )
             {

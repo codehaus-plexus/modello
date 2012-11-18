@@ -70,8 +70,8 @@ public class JDOMWriterGenerator
     {
         Model objectModel = getModel();
 
-        String packageName= objectModel.getDefaultPackageName( isPackageWithVersion(), getGeneratedVersion() )
-            + ".io.jdom";
+        String packageName =
+            objectModel.getDefaultPackageName( isPackageWithVersion(), getGeneratedVersion() ) + ".io.jdom";
 
         String marshallerName = getFileName( "JDOMWriter" );
 

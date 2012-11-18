@@ -359,12 +359,12 @@ public class Xpp3WriterGenerator
                         }
                         else
                         {
-                            sc.add( toType + " " + singular( uncapitalise( field.getName() ) ) + " = (" + toType +
-                                ") iter.next();" );
+                            sc.add( toType + " " + singular( uncapitalise( field.getName() ) ) + " = (" + toType
+                                + ") iter.next();" );
 
-                            sc.add( "serializer.startTag( NAMESPACE, " + "\"" + valuesTagName + "\" ).text( " +
-                                singular( uncapitalise( field.getName() ) ) + " ).endTag( NAMESPACE, " + "\"" +
-                                valuesTagName + "\" );" );
+                            sc.add( "serializer.startTag( NAMESPACE, " + "\"" + valuesTagName + "\" ).text( "
+                                + singular( uncapitalise( field.getName() ) ) + " ).endTag( NAMESPACE, " + "\""
+                                + valuesTagName + "\" );" );
                         }
 
                         sc.unindent();

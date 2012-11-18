@@ -30,7 +30,7 @@ import org.codehaus.modello.metadata.FieldMetadata;
 public class XdocFieldMetadata
     implements FieldMetadata
 {
-    public final static String ID = XdocFieldMetadata.class.getName();
+    public static final String ID = XdocFieldMetadata.class.getName();
 
     public static final String NONE = "none";
 

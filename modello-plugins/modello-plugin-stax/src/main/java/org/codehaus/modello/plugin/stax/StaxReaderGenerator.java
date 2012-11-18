@@ -1348,7 +1348,7 @@ public class StaxReaderGenerator
     {
         XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
 
-        String tagName = resolveTagName( field, xmlFieldMetadata);
+        String tagName = resolveTagName( field, xmlFieldMetadata );
 
         String parserGetter;
         if ( xmlFieldMetadata.isAttribute() )

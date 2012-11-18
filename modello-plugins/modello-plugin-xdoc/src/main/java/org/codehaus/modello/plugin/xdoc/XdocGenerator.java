@@ -367,7 +367,7 @@ public class XdocGenerator
                 {
                     w.writeText( itemTagName );
                 }
-                if (manyAssociation )
+                if ( manyAssociation )
                 {
                     w.writeText( "*" );
                 }
@@ -534,7 +534,7 @@ public class XdocGenerator
 
         List<ModelField> fields = getFieldsForXml( modelClass, getGeneratedVersion() );
 
-        List<ModelField> attributeFields = getXmlAttributeFields( fields);
+        List<ModelField> attributeFields = getXmlAttributeFields( fields );
 
         if ( attributeFields.size() > 0 )
         {

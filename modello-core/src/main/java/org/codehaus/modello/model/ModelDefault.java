@@ -154,7 +154,7 @@ public class ModelDefault
              && ! PACKAGE.equalsIgnoreCase( key )
              && ! STRICT_XML_ATTRIBUTES.equalsIgnoreCase( key ) )
         {
-            throw new ModelValidationException( "The key of default element must be ' "+ SET +"', '" + LIST + "', '"
+            throw new ModelValidationException( "The key of default element must be ' " + SET + "', '" + LIST + "', '"
                 + MAP + "', '" + PROPERTIES + "', '" + CHECK_DEPRECATION + "', '" + PACKAGE + "' or '"
                 + STRICT_XML_ATTRIBUTES + "', was '" + key + "'." );
         }

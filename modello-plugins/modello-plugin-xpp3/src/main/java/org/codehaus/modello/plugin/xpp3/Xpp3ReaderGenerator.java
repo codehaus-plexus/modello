@@ -355,10 +355,13 @@ public class Xpp3ReaderGenerator
         JField addDefaultEntities = new JField( JType.BOOLEAN, "addDefaultEntities" );
 
         addDefaultEntities.setComment(
-            "If set the parser will be loaded with all single characters from the XHTML specification.\n" +
-                "The entities used:\n" + "<ul>\n" + "<li>http://www.w3.org/TR/xhtml1/DTD/xhtml-lat1.ent</li>\n" +
-                "<li>http://www.w3.org/TR/xhtml1/DTD/xhtml-special.ent</li>\n" +
-                "<li>http://www.w3.org/TR/xhtml1/DTD/xhtml-symbol.ent</li>\n" + "</ul>\n" );
+            "If set the parser will be loaded with all single characters from the XHTML specification.\n"
+            + "The entities used:\n"
+            + "<ul>\n"
+            + "<li>http://www.w3.org/TR/xhtml1/DTD/xhtml-lat1.ent</li>\n"
+            + "<li>http://www.w3.org/TR/xhtml1/DTD/xhtml-special.ent</li>\n"
+            + "<li>http://www.w3.org/TR/xhtml1/DTD/xhtml-symbol.ent</li>\n"
+            + "</ul>\n" );
 
         addDefaultEntities.setInitString( "true" );
 
@@ -564,8 +567,8 @@ public class Xpp3ReaderGenerator
             {
                 String tagName = resolveTagName( field, xmlFieldMetadata );
 
-                sc.add( "else if ( \"" + tagName + "\".equals( name ) )");
-                sc.add(  "{" );
+                sc.add( "else if ( \"" + tagName + "\".equals( name ) )" );
+                sc.add( "{" );
                 sc.indent();
 
                 writePrimitiveField( field, field.getType(), objectName, objectName, "\"" + field.getName() + "\"",
@@ -885,7 +888,7 @@ public class Xpp3ReaderGenerator
     {
         XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
 
-        String tagName = resolveTagName( field, xmlFieldMetadata);
+        String tagName = resolveTagName( field, xmlFieldMetadata );
 
         String parserGetter;
         if ( xmlFieldMetadata.isAttribute() )
@@ -1752,8 +1755,8 @@ public class Xpp3ReaderGenerator
         sc.add( "if ( strict )" );
 
         sc.add( "{" );
-        sc.addIndented( "throw new XmlPullParserException( \"Unable to parse element '\" + attribute + \"', must be " +
-            typeDesc + "\", parser, nfe );" );
+        sc.addIndented( "throw new XmlPullParserException( \"Unable to parse element '\" + attribute + \"', must be "
+            + typeDesc + "\", parser, nfe );" );
         sc.add( "}" );
 
         sc.unindent();

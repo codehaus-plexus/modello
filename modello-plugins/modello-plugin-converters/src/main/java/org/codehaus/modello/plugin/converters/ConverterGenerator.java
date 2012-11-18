@@ -187,8 +187,8 @@ public class ConverterGenerator
             {
                 sc.add( "// Convert super class" );
 
-                sc.add( "value = (" + targetClass + ") convert" + modelClass.getSuperClass() + "( " + parameterName +
-                    ", value );" );
+                sc.add( "value = (" + targetClass + ") convert" + modelClass.getSuperClass() + "( " + parameterName
+                    + ", value );" );
 
                 sc.add( "" );
             }
@@ -201,8 +201,8 @@ public class ConverterGenerator
                 {
                     if ( versionDefinition != null && "field".equals( versionDefinition.getType() ) )
                     {
-                        if ( versionDefinition.getValue().equals( modelField.getName() ) ||
-                            versionDefinition.getValue().equals( modelField.getAlias() ) )
+                        if ( versionDefinition.getValue().equals( modelField.getName() )
+                            || versionDefinition.getValue().equals( modelField.getAlias() ) )
                         {
                             sc.add( "value.set" + name + "( \"" + toVersion + "\" );" );
                             continue;
@@ -247,8 +247,8 @@ public class ConverterGenerator
 
                             sc.add( assoc.getType() + " list = " + assoc.getDefaultValue() + ";" );
 
-                            sc.add( "for ( java.util.Iterator i = " + parameterName + ".get" + name +
-                                "().iterator(); i.hasNext(); )" );
+                            sc.add( "for ( java.util.Iterator i = " + parameterName + ".get" + name
+                                + "().iterator(); i.hasNext(); )" );
 
                             sc.add( "{" );
 
@@ -292,8 +292,8 @@ public class ConverterGenerator
                             // Map or Properties
                             sc.add( assoc.getType() + " map = " + assoc.getDefaultValue() + ";" );
 
-                            sc.add( "for ( java.util.Iterator i = " + parameterName + ".get" + name +
-                                "().entrySet().iterator(); i.hasNext(); )" );
+                            sc.add( "for ( java.util.Iterator i = " + parameterName + ".get" + name
+                                + "().entrySet().iterator(); i.hasNext(); )" );
 
                             sc.add( "{" );
 
@@ -333,8 +333,8 @@ public class ConverterGenerator
                     }
                     else
                     {
-                        sc.add( "value.set" + name + "( convert" + assoc.getTo() + "( " + parameterName + ".get" +
-                            name + "() ) );" );
+                        sc.add( "value.set" + name + "( convert" + assoc.getTo() + "( " + parameterName + ".get" + name
+                            + "() ) );" );
                     }
                 }
                 else
@@ -435,8 +435,8 @@ public class ConverterGenerator
 
         JSourceCode sc = method.getSourceCode();
 
-        sc.add( basePackage + ".io.stax." + modelName + "StaxReaderDelegate reader = new " + basePackage +
-            ".io.stax." + modelName + "StaxReaderDelegate();" );
+        sc.add( basePackage + ".io.stax." + modelName + "StaxReaderDelegate reader = new " + basePackage + ".io.stax."
+            + modelName + "StaxReaderDelegate();" );
 
         sc.add( "Object value = reader.read( f );" );
 

@@ -47,11 +47,11 @@ public class Model
 
     private List<ModelInterface> interfaces = new ArrayList<ModelInterface>();
 
-    private transient Map<String,List<ModelClass>> classMap = new HashMap<String,List<ModelClass>>();
+    private transient Map<String, List<ModelClass>> classMap = new HashMap<String, List<ModelClass>>();
 
-    private transient Map<String,ModelDefault> defaultMap = new HashMap<String,ModelDefault>();
+    private transient Map<String, ModelDefault> defaultMap = new HashMap<String, ModelDefault>();
 
-    private transient Map<String,List<ModelInterface>> interfaceMap = new HashMap<String,List<ModelInterface>>();
+    private transient Map<String, List<ModelInterface>> interfaceMap = new HashMap<String, List<ModelInterface>>();
 
     private VersionDefinition versionDefinition;
 
@@ -245,7 +245,7 @@ public class Model
             }
             catch ( ModelValidationException mve )
             {
-                throw new ModelloRuntimeException( mve.getMessage(), mve);
+                throw new ModelloRuntimeException( mve.getMessage(), mve );
             }
         }
 

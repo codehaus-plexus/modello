@@ -283,9 +283,8 @@ public class StaxWriterGenerator
 
                 sc.add( "serializer.setPrefix( \"xsi\", \"http://www.w3.org/2001/XMLSchema-instance\" );" );
                 sc.add( "serializer.writeNamespace( \"xsi\", \"http://www.w3.org/2001/XMLSchema-instance\" );" );
-                sc.add(
-                    "serializer.writeAttribute( \"http://www.w3.org/2001/XMLSchema-instance\", \"schemaLocation\", \"" +
-                        namespace + " " + url + "\" );" );
+                sc.add( "serializer.writeAttribute( \"http://www.w3.org/2001/XMLSchema-instance\", \"schemaLocation\", \""
+                    + namespace + " " + url + "\" );" );
             }
         }
 
@@ -326,8 +325,8 @@ public class StaxWriterGenerator
                 sc.add( getValueChecker( type, value, field ) );
 
                 sc.add( "{" );
-                sc.addIndented( "serializer.writeAttribute( \"" + fieldTagName + "\", " +
-                    getValue( field.getType(), value, xmlFieldMetadata ) + " );" );
+                sc.addIndented( "serializer.writeAttribute( \"" + fieldTagName + "\", "
+                    + getValue( field.getType(), value, xmlFieldMetadata ) + " );" );
                 sc.add( "}" );
             }
         }
@@ -386,8 +385,8 @@ public class StaxWriterGenerator
                     }
                     else
                     {
-                        sc.add( "write" + association.getTo() + "( (" + association.getTo() + ") " + value + ", \"" +
-                            fieldTagName + "\", serializer );" );
+                        sc.add( "write" + association.getTo() + "( (" + association.getTo() + ") " + value + ", \""
+                            + fieldTagName + "\", serializer );" );
                     }
 
                     sc.unindent();
@@ -443,8 +442,8 @@ public class StaxWriterGenerator
                         }
                         else
                         {
-                            sc.add( toType + " " + singular( uncapitalise( field.getName() ) ) + " = (" + toType +
-                                ") iter.next();" );
+                            sc.add( toType + " " + singular( uncapitalise( field.getName() ) ) + " = (" + toType
+                                + ") iter.next();" );
 
                             sc.add( "serializer.writeStartElement( " + "\"" + valuesTagName + "\" );" );
                             sc.add(

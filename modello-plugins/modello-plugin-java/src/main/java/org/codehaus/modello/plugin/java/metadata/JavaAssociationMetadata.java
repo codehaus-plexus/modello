@@ -39,7 +39,7 @@ public class JavaAssociationMetadata
     public static final String CONSTRUCTOR_INIT = "constructor";
     public static final String FIELD_INIT = "field";
 
-    public final static List<String> INIT_TYPES;
+    public static final List<String> INIT_TYPES;
 
     static
     {
@@ -52,7 +52,7 @@ public class JavaAssociationMetadata
     public static final String CLONE_SHALLOW = "shallow";
     public static final String CLONE_DEEP = "deep";
 
-    public final static List<String> CLONE_MODES;
+    public static final List<String> CLONE_MODES;
 
     static
     {

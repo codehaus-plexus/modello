@@ -325,7 +325,7 @@ public class Dom4jReaderGenerator
                     tagName = field.getName();
                 }
 
-                sc.add( "if ( element.attributeValue( \"" + tagName + "\" ) != null  )");
+                sc.add( "if ( element.attributeValue( \"" + tagName + "\" ) != null  )" );
                 sc.add(  "{" );
                 sc.indent();
 
@@ -722,7 +722,7 @@ public class Dom4jReaderGenerator
     {
         XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
 
-        String tagName = resolveTagName( field, xmlFieldMetadata);
+        String tagName = resolveTagName( field, xmlFieldMetadata );
 
         String parserGetter;
         if ( xmlFieldMetadata.isAttribute() )
@@ -793,10 +793,10 @@ public class Dom4jReaderGenerator
         }
         else if ( "Date".equals( type ) )
         {
-            sc.add( "String dateFormat = " +
-                    ( xmlFieldMetadata.getFormat() != null ? "\"" + xmlFieldMetadata.getFormat() + "\"" : "null" ) + ";" );
-                sc.add( objectName + "." + setterName + "( getDateValue( " + parserGetter + ", \"" + tagName +
-                    "\", dateFormat ) );" );
+            sc.add( "String dateFormat = "
+                + ( xmlFieldMetadata.getFormat() != null ? "\"" + xmlFieldMetadata.getFormat() + "\"" : "null" ) + ";" );
+            sc.add( objectName + "." + setterName + "( getDateValue( " + parserGetter + ", \"" + tagName
+                + "\", dateFormat ) );" );
         }
         else if ( "DOM".equals( type ) )
         {

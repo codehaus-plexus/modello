@@ -65,9 +65,9 @@ public abstract class AbstractStaxGenerator
             ModelClass modelClass = association.getModelClass();
             if ( !isClassInModel( association.getTo(), modelClass.getModel() ) )
             {
-                throw new ModelloException( "Can't use xml.reference on the '" + associationName +
-                    "' association of '" + modelClass.getName() + "' because the target class '" + association.getTo() +
-                    "' is not in the model" );
+                throw new ModelloException( "Can't use xml.reference on the '" + associationName + "' association of '"
+                    + modelClass.getName() + "' because the target class '" + association.getTo()
+                    + "' is not in the model" );
             }
 
             List<ModelField> identifierFields = association.getToClass().getIdentifierFields( getGeneratedVersion() );

@@ -186,7 +186,7 @@ public abstract class AbstractJavaModelloGenerator
         return value;
     }
 
-    protected final static String DEFAULT_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS";
+    protected static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS";
 
     protected String getJavaDefaultValue( ModelField modelField )
         throws ModelloException

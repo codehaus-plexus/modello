@@ -39,7 +39,7 @@ public class JavaClassMetadata
     public static final String CLONE_SHALLOW = "shallow";
     public static final String CLONE_DEEP = "deep";
 
-    public final static List<String> CLONE_MODES;
+    public static final List<String> CLONE_MODES;
 
     static
     {
