@@ -1308,6 +1308,8 @@ public class Xpp3ReaderGenerator
 
         sc.add( "int eventType = parser.getEventType();" );
 
+        sc.add( "boolean spacePreserve = false;" );
+
         sc.add( "while ( eventType != XmlPullParser.END_DOCUMENT )" );
         sc.add( "{" );
         sc.indent();
@@ -1315,6 +1317,7 @@ public class Xpp3ReaderGenerator
         sc.add( "if ( eventType == XmlPullParser.START_TAG )" );
         sc.add( "{" );
         sc.indent();
+        sc.add( "spacePreserve = false;" );
         sc.add( "String rawName = parser.getName();" );
 
         sc.add( "org.w3c.dom.Element element = _doc_.createElement( rawName );" );
@@ -1349,6 +1352,7 @@ public class Xpp3ReaderGenerator
         sc.add( "String value = parser.getAttributeValue( i );" );
 
         sc.add( "element.setAttribute( name, value );" );
+        sc.add( "spacePreserve = spacePreserve || ( \"xml:space\".equals( name ) && \"preserve\".equals( value ) );" );
         sc.unindent();
         sc.add( "}" );
         sc.unindent();
@@ -1360,7 +1364,7 @@ public class Xpp3ReaderGenerator
 
         sc.add( "String text = parser.getText();" );
 
-        sc.add( "if ( trim )" );
+        sc.add( "if ( trim && !spacePreserve )" );
         sc.add( "{" );
         sc.addIndented( "text = text.trim();" );
         sc.add( "}" );

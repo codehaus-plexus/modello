@@ -130,6 +130,10 @@ public class Xpp3FeaturesVerifier
         {
             throw new VerifierException( "dom was not trimmed..." );
         }
+        if ( !actualXml.contains( "<preserve xml:space=\"preserve\">   but with xml:space=\"preserve\", the element content is preserved   </preserve>" ) )
+        {
+            throw new VerifierException( "preserve was trimmed..." );
+        }
         if ( !actualXml.contains( "<element>   do not trim the element content   </element>" ) )
         {
             throw new VerifierException( "domNoTrim was trimmed..." );

@@ -1474,6 +1474,8 @@ public class StaxReaderGenerator
 
         sc.add( "int eventType = xmlStreamReader.getEventType();" );
 
+        sc.add( "boolean spacePreserve = false;" );
+
         sc.add( "while ( xmlStreamReader.hasNext() )" );
         sc.add( "{" );
         sc.indent();
@@ -1481,6 +1483,7 @@ public class StaxReaderGenerator
         sc.add( "if ( eventType == XMLStreamConstants.START_ELEMENT )" );
         sc.add( "{" );
         sc.indent();
+        sc.add( "spacePreserve = false;" );
         sc.add( "String rawName = xmlStreamReader.getLocalName();" );
 
         if ( domAsXpp3 )
@@ -1522,6 +1525,8 @@ public class StaxReaderGenerator
         sc.add( "String value = xmlStreamReader.getAttributeValue( i );" );
 
         sc.add( "element.setAttribute( name, value );" );
+
+        sc.add( "spacePreserve = spacePreserve || ( \"xml\".equals( xmlStreamReader.getAttributePrefix( i ) ) && \"space\".equals( name ) && \"preserve\".equals( value ) );" );
         sc.unindent();
         sc.add( "}" );
         sc.unindent();
@@ -1533,7 +1538,7 @@ public class StaxReaderGenerator
 
         sc.add( "String text = xmlStreamReader.getText();" );
 
-        sc.add( "if ( trim )" );
+        sc.add( "if ( trim && !spacePreserve )" );
         sc.add( "{" );
         sc.addIndented( "text = text.trim();" );
         sc.add( "}" );

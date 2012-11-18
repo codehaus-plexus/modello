@@ -107,6 +107,8 @@ public class Xpp3FeaturesVerifier
 
         // alias is rendered as default field name => must be reverted here to let the test pass
         actualXml = actualXml.replaceFirst( "<id>alias</id>", "<key>alias</key>" );
+        // writer doesn't check if space has to be preserved, so doesn't add xml:space="preserve" back
+        actualXml = actualXml.replaceFirst( "<preserve>", "<preserve xml:space=\"preserve\">" );
 
         XMLUnit.setIgnoreWhitespace( true );
         XMLUnit.setIgnoreComments( true );
@@ -129,6 +131,10 @@ public class Xpp3FeaturesVerifier
         if ( !actualXml.contains( "<element>by default, the element content is trimmed</element>" ) )
         {
             throw new VerifierException( "dom was not trimmed..." );
+        }
+        if ( !actualXml.contains( "<preserve xml:space=\"preserve\">   but with xml:space=\"preserve\", the element content is preserved   </preserve>" ) )
+        {
+            throw new VerifierException( "preserve was trimmed..." );
         }
         if ( !actualXml.contains( "<element>   do not trim the element content   </element>" ) )
         {
