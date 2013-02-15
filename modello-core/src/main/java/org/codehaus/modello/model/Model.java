@@ -154,9 +154,30 @@ public class Model
         return classList;
     }
 
+    public ModelClass getClass( String type, Version version, boolean optionnal )
+    {
+        return getClass( type, new VersionRange( version ), optionnal );
+    }
+
     public ModelClass getClass( String type, Version version )
     {
-        return getClass( type, new VersionRange( version ) );
+        return getClass( type, new VersionRange( version ), false );
+    }
+
+    public ModelClass getClass( String type, VersionRange versionRange, boolean optionnal )
+    {
+        ModelClass value = getModelClass( type, versionRange );
+
+        if ( value != null )
+        {
+            return value;
+        }
+        if ( optionnal )
+        {
+            return null;
+        }
+        throw new ModelloRuntimeException(
+            "There is no class '" + type + "' in the version range '" + versionRange.toString() + "'." );
     }
 
     public ModelClass getClass( String type, VersionRange versionRange )
@@ -189,7 +210,7 @@ public class Model
             for ( ModelClass modelClass : classList )
             {
                 if ( versionRange.getFromVersion().inside( modelClass.getVersionRange() )
-                     && versionRange.getToVersion().inside( modelClass.getVersionRange() ) )
+                    && versionRange.getToVersion().inside( modelClass.getVersionRange() ) )
                 {
                     value = modelClass;
                 }
@@ -327,7 +348,7 @@ public class Model
             for ( ModelInterface modelInterface : interfaceList )
             {
                 if ( versionRange.getFromVersion().inside( modelInterface.getVersionRange() )
-                     && versionRange.getToVersion().inside( modelInterface.getVersionRange() ) )
+                    && versionRange.getToVersion().inside( modelInterface.getVersionRange() ) )
                 {
                     return modelInterface;
                 }
@@ -423,9 +444,9 @@ public class Model
                 }
                 else
                 {
-                    throw new ModelloRuntimeException( "There are multiple location tracker classes ("
-                        + locationTracker.getName() + " vs. " + modelClass.getName() + ") for this version " + version
-                        + "." );
+                    throw new ModelloRuntimeException(
+                        "There are multiple location tracker classes (" + locationTracker.getName() + " vs. "
+                            + modelClass.getName() + ") for this version " + version + "." );
                 }
             }
         }
@@ -451,9 +472,9 @@ public class Model
                 }
                 else
                 {
-                    throw new ModelloRuntimeException( "There are multiple source tracker classes ("
-                        + sourceTracker.getName() + " vs. " + modelClass.getName() + ") for this version " + version
-                        + "." );
+                    throw new ModelloRuntimeException(
+                        "There are multiple source tracker classes (" + sourceTracker.getName() + " vs. "
+                            + modelClass.getName() + ") for this version " + version + "." );
                 }
             }
         }
