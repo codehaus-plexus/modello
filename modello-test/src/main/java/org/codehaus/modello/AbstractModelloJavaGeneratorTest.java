@@ -226,7 +226,7 @@ public abstract class AbstractModelloJavaGeneratorTest
         addClassPathFile( getTestFile( "target/test-classes" ) );
 
         ClassLoader oldCCL = Thread.currentThread().getContextClassLoader();
-        URLClassLoader classLoader = URLClassLoader.newInstance( (URL[]) urls.toArray( new URL[urls.size()] ), null );
+        URLClassLoader classLoader = URLClassLoader.newInstance( urls.toArray( new URL[urls.size()] ), null );
 
         Thread.currentThread().setContextClassLoader( classLoader );
 
