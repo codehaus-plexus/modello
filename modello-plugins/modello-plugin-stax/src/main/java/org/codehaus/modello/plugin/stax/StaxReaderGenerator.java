@@ -196,10 +196,17 @@ public class StaxReaderGenerator
 
         sc.add( "int eventType = xmlStreamReader.getEventType();" );
 
+        sc.add( "String encoding = null;" );
+
         sc.add( "while ( eventType != XMLStreamConstants.END_DOCUMENT )" );
 
         sc.add( "{" );
         sc.indent();
+
+        sc.add( "if ( eventType == XMLStreamConstants.START_DOCUMENT )");
+        sc.add( "{");
+        sc.add( "encoding = xmlStreamReader.getCharacterEncodingScheme();");
+        sc.add( "}");
 
         sc.add( "if ( eventType == XMLStreamConstants.START_ELEMENT )" );
 
@@ -223,7 +230,7 @@ public class StaxReaderGenerator
 
         sc.add( className + ' ' + variableName + " = parse" + root.getName() + "( xmlStreamReader, strict );" );
 
-        sc.add( variableName + ".setModelEncoding( xmlStreamReader.getCharacterEncodingScheme() );" );
+        sc.add( variableName + ".setModelEncoding( encoding );" );
 
         sc.add( "resolveReferences( " + variableName + " );" );
 
