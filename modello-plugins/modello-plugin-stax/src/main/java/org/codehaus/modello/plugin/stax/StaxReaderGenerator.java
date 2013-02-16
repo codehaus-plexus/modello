@@ -208,6 +208,7 @@ public class StaxReaderGenerator
         sc.indent();
 
         sc.add( "encoding = xmlStreamReader.getCharacterEncodingScheme();");
+        sc.unindent();
         sc.add( "}");
 
         sc.add( "if ( eventType == XMLStreamConstants.START_ELEMENT )" );
