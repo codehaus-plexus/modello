@@ -27,6 +27,8 @@ import org.codehaus.plexus.compiler.Compiler;
 import org.codehaus.plexus.compiler.CompilerConfiguration;
 import org.codehaus.plexus.compiler.CompilerError;
 import org.codehaus.plexus.compiler.CompilerException;
+import org.codehaus.plexus.compiler.CompilerMessage;
+import org.codehaus.plexus.compiler.CompilerResult;
 import org.codehaus.plexus.compiler.javac.JavacCompiler;
 import org.codehaus.plexus.util.FileUtils;
 
@@ -46,12 +48,11 @@ import java.util.Properties;
 /**
  * Base class for unit-tests of Modello plugins that generate java code.
  *
+ * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @see #compileGeneratedSources() compileGeneratedSources() method to compile generated sources
  * @see #verifyCompiledGeneratedSources(String) verifyCompiledGeneratedSources(String) method to run a Verifier
- * class against compiled generated code
+ *      class against compiled generated code
  * @see org.codehaus.modello.verifier.Verifier Verifier base class for verifiers
- *
- * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  */
 public abstract class AbstractModelloJavaGeneratorTest
     extends AbstractModelloGeneratorTest
@@ -149,7 +150,7 @@ public abstract class AbstractModelloJavaGeneratorTest
         compileGeneratedSources( verifierId, true );
     }
 
-    @SuppressWarnings( "unchecked" )
+    @SuppressWarnings("unchecked")
     protected void compileGeneratedSources( String verifierId, boolean useJava5 )
         throws IOException, CompilerException
     {
@@ -173,12 +174,11 @@ public abstract class AbstractModelloJavaGeneratorTest
         String[] sourceDirectories;
         if ( verifierDirectory.canRead() )
         {
-            sourceDirectories =
-                new String[] { verifierDirectory.getAbsolutePath(), generatedSources.getAbsolutePath() };
+            sourceDirectories = new String[]{ verifierDirectory.getAbsolutePath(), generatedSources.getAbsolutePath() };
         }
         else
         {
-            sourceDirectories = new String[] { generatedSources.getAbsolutePath() };
+            sourceDirectories = new String[]{ generatedSources.getAbsolutePath() };
         }
 
         Compiler compiler = new JavacCompiler();
@@ -199,15 +199,27 @@ public abstract class AbstractModelloJavaGeneratorTest
             configuration.setTargetVersion( "1.4" );
         }
 
-        List<CompilerError> messages = compiler.compile( configuration );
+        CompilerResult result = compiler.performCompile( configuration );
 
-        for ( CompilerError message : messages )
+        List<CompilerMessage> messages = result.getCompilerMessages();
+
+        for ( CompilerMessage message : messages )
         {
-            System.out.println( message.getFile() + "[" + message.getStartLine() + "," + message.getStartColumn()
-                                + "]: " + message.getMessage() );
+            System.out.println(
+                message.getFile() + "[" + message.getStartLine() + "," + message.getStartColumn() + "]: "
+                    + message.getMessage() );
         }
 
-        assertEquals( "There was compilation errors.", 0, messages.size() );
+        List<CompilerMessage> errors = new ArrayList<CompilerMessage>( 0 );
+        for ( CompilerMessage compilerMessage : result.getCompilerMessages() )
+        {
+            if ( compilerMessage.isError() )
+            {
+                errors.add( compilerMessage );
+            }
+        }
+
+        assertEquals( "There was compilation errors: " + errors, 0, errors.size() );
     }
 
     /**
@@ -303,8 +315,8 @@ public abstract class AbstractModelloJavaGeneratorTest
 
         if ( "1.5".compareTo( javaVersion ) > 0 )
         {
-            System.out.println( "Skipped Java 5 feature test, not supported by current test environment ("
-                + javaVersion + ")" );
+            System.out.println(
+                "Skipped Java 5 feature test, not supported by current test environment (" + javaVersion + ")" );
             return true;
         }
 
