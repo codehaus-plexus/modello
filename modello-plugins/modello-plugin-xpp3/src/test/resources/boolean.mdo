@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<model xmlns="http://modello.codehaus.org/MODELLO/1.4.0"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://modello.codehaus.org/MODELLO/1.4.0
+			   http://modello.codehaus.org/xsd/modello-1.4.0.xsd">
+  <id>test</id>
+  <name>Test</name>
+  <defaults>
+    <default>
+      <key>package</key>
+      <value>org.codehaus.modello.generator.xml.xpp3.test.testboolean</value>
+    </default>
+  </defaults>
+  <classes>
+    <class rootElement="true" xml.tagName="booleanTest">
+      <name>BooleanTest</name>
+      <version>1.0.0+</version>
+      <fields>
+        <field>
+          <name>property</name>
+          <version>1.0.0+</version>
+          <type>Boolean</type>
+        </field>
+      </fields>
+    </class>
+  </classes>
+</model>
