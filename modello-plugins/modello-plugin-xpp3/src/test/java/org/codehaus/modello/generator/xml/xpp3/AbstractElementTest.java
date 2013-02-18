@@ -32,10 +32,10 @@ import java.util.Properties;
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
  */
-public class _AbstractElementTest
+public class AbstractElementTest
     extends AbstractModelloJavaGeneratorTest
 {
-    public _AbstractElementTest()
+    public AbstractElementTest()
     {
         super( "abstracto" );
     }
