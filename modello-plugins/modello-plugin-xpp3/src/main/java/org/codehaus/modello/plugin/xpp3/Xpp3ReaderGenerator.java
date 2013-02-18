@@ -88,7 +88,8 @@ public class Xpp3ReaderGenerator
             if ( locationTracker == null )
             {
                 throw new ModelloException( "No model class has been marked as location tracker"
-                    + " via the attribute locationTracker=\"locations\"" + ", cannot generate extended reader." );
+                                                + " via the attribute locationTracker=\"locations\""
+                                                + ", cannot generate extended reader." );
             }
 
             locationField =
@@ -184,7 +185,8 @@ public class Xpp3ReaderGenerator
             sc.add( "}" );
             sc.add( "catch ( javax.xml.parsers.ParserConfigurationException pce )" );
             sc.add( "{" );
-            sc.addIndented( "throw new XmlPullParserException( \"Unable to create DOM document: \" + pce.getMessage(), parser, pce );" );
+            sc.addIndented(
+                "throw new XmlPullParserException( \"Unable to create DOM document: \" + pce.getMessage(), parser, pce );" );
             sc.add( "}" );
             sc.unindent();
             sc.add( "}" );
@@ -206,11 +208,11 @@ public class Xpp3ReaderGenerator
 
         sc.add( "{" );
         sc.addIndented( "throw new XmlPullParserException( \"Expected root element '" + tagName + "' but "
-                        + "found '\" + parser.getName() + \"'\", parser, null );" );
+                            + "found '\" + parser.getName() + \"'\", parser, null );" );
         sc.add( "}" );
 
-        sc.add( className + ' ' + variableName + " = parse" + capClassName + "( parser, strict" + trackingArgs
-            + " );" );
+        sc.add(
+            className + ' ' + variableName + " = parse" + capClassName + "( parser, strict" + trackingArgs + " );" );
 
         if ( rootElement )
         {
@@ -228,7 +230,7 @@ public class Xpp3ReaderGenerator
         sc.add( "}" );
 
         sc.add( "throw new XmlPullParserException( \"Expected root element '" + tagName + "' but "
-                        + "found no element at all: invalid XML document\", parser, null );" );
+                    + "found no element at all: invalid XML document\", parser, null );" );
 
         jClass.addMethod( unmarshall );
 
@@ -325,8 +327,8 @@ public class Xpp3ReaderGenerator
     {
         Model objectModel = getModel();
 
-        String packageName = objectModel.getDefaultPackageName( isPackageWithVersion(), getGeneratedVersion() )
-            + ".io.xpp3";
+        String packageName =
+            objectModel.getDefaultPackageName( isPackageWithVersion(), getGeneratedVersion() ) + ".io.xpp3";
 
         String unmarshallerName = getFileName( "Xpp3Reader" + ( isLocationTracking() ? "Ex" : "" ) );
 
@@ -356,12 +358,9 @@ public class Xpp3ReaderGenerator
 
         addDefaultEntities.setComment(
             "If set the parser will be loaded with all single characters from the XHTML specification.\n"
-            + "The entities used:\n"
-            + "<ul>\n"
-            + "<li>http://www.w3.org/TR/xhtml1/DTD/xhtml-lat1.ent</li>\n"
-            + "<li>http://www.w3.org/TR/xhtml1/DTD/xhtml-special.ent</li>\n"
-            + "<li>http://www.w3.org/TR/xhtml1/DTD/xhtml-symbol.ent</li>\n"
-            + "</ul>\n" );
+                + "The entities used:\n" + "<ul>\n" + "<li>http://www.w3.org/TR/xhtml1/DTD/xhtml-lat1.ent</li>\n"
+                + "<li>http://www.w3.org/TR/xhtml1/DTD/xhtml-special.ent</li>\n"
+                + "<li>http://www.w3.org/TR/xhtml1/DTD/xhtml-symbol.ent</li>\n" + "</ul>\n" );
 
         addDefaultEntities.setInitString( "true" );
 
@@ -482,8 +481,8 @@ public class Xpp3ReaderGenerator
         // then read content, either content field or elements
         if ( contentField != null )
         {
-            writePrimitiveField( contentField, contentField.getType(), uncapClassName, uncapClassName, "\"\"", "set"
-                + capitalise( contentField.getName() ), sc );
+            writePrimitiveField( contentField, contentField.getType(), uncapClassName, uncapClassName, "\"\"",
+                                 "set" + capitalise( contentField.getName() ), sc );
         }
         else
         {
@@ -535,8 +534,8 @@ public class Xpp3ReaderGenerator
         jClass.addMethod( unmarshall );
     }
 
-    private ModelField writeClassAttributesParser( List<ModelField> modelFields, String objectName,
-                                                   boolean rootElement, JSourceCode sc, JClass jClass )
+    private ModelField writeClassAttributesParser( List<ModelField> modelFields, String objectName, boolean rootElement,
+                                                   JSourceCode sc, JClass jClass )
     {
         ModelField contentField = null;
 
@@ -598,12 +597,12 @@ public class Xpp3ReaderGenerator
     /**
      * Generate code to process a field represented as an XML element.
      *
-     * @param field the field to process
+     * @param field            the field to process
      * @param xmlFieldMetadata its XML metadata
-     * @param addElse add an <code>else</code> statement before generating a new <code>if</code>
-     * @param sc the method source code to add to
-     * @param objectName the object name in the source
-     * @param jClass the generated class source file
+     * @param addElse          add an <code>else</code> statement before generating a new <code>if</code>
+     * @param sc               the method source code to add to
+     * @param objectName       the object name in the source
+     * @param jClass           the generated class source file
      */
     private void processField( ModelField field, XmlFieldMetadata xmlFieldMetadata, boolean addElse, JSourceCode sc,
                                String objectName, JClass jClass )
@@ -624,18 +623,20 @@ public class Xpp3ReaderGenerator
             alias = "\"" + field.getAlias() + "\"";
         }
 
-        String tagComparison = ( addElse ? "else " : "" )
-            + "if ( checkFieldWithDuplicate( parser, \"" + fieldTagName + "\", " + alias + ", parsed ) )";
+        String tagComparison =
+            ( addElse ? "else " : "" ) + "if ( checkFieldWithDuplicate( parser, \"" + fieldTagName + "\", " + alias
+                + ", parsed ) )";
 
         if ( !( field instanceof ModelAssociation ) )
         { // model field
             sc.add( tagComparison );
 
             sc.add( "{" );
+
             sc.indent();
 
-            writePrimitiveField( field, field.getType(), objectName, objectName, "\"" + field.getName() + "\"", "set"
-                + capFieldName, sc );
+            writePrimitiveField( field, field.getType(), objectName, objectName, "\"" + field.getName() + "\"",
+                                 "set" + capFieldName, sc );
 
             sc.unindent();
             sc.add( "}" );
@@ -651,8 +652,9 @@ public class Xpp3ReaderGenerator
                 sc.add( tagComparison );
 
                 sc.add( "{" );
-                sc.addIndented( objectName + ".set" + capFieldName + "( parse" + association.getTo()
-                    + "( parser, strict" + trackingArgs + " ) );" );
+                sc.addIndented(
+                    objectName + ".set" + capFieldName + "( parse" + association.getTo() + "( parser, strict"
+                        + trackingArgs + " ) );" );
                 sc.add( "}" );
             }
             else
@@ -701,8 +703,8 @@ public class Xpp3ReaderGenerator
                     }
                     else
                     {
-                        sc.add( ( addElse ? "else " : "" )
-                            + "if ( \"" + valuesTagName + "\".equals( parser.getName() ) )" );
+                        sc.add( ( addElse ? "else " : "" ) + "if ( \"" + valuesTagName
+                                    + "\".equals( parser.getName() ) )" );
 
                         sc.add( "{" );
                         sc.indent();
@@ -724,7 +726,8 @@ public class Xpp3ReaderGenerator
                         if ( !inModel && locationTracker != null )
                         {
                             sc.add( locationTracker.getName() + " " + LOCATION_VAR + "s = " + objectName + ".get"
-                                + capitalise( singular( locationField ) ) + "( \"" + field.getName() + "\" );" );
+                                        + capitalise( singular( locationField ) ) + "( \"" + field.getName()
+                                        + "\" );" );
                             sc.add( "if ( " + LOCATION_VAR + "s == null )" );
                             sc.add( "{" );
                             sc.indent();
@@ -736,8 +739,9 @@ public class Xpp3ReaderGenerator
 
                     if ( inModel )
                     {
-                        sc.add( associationName + ".add( parse" + association.getTo() + "( parser, strict"
-                            + trackingArgs + " ) );" );
+                        sc.add(
+                            associationName + ".add( parse" + association.getTo() + "( parser, strict" + trackingArgs
+                                + " ) );" );
                     }
                     else
                     {
@@ -748,12 +752,11 @@ public class Xpp3ReaderGenerator
                         }
                         else
                         {
-                            key =
-                                ( useJava5 ? "Integer.valueOf" : "new java.lang.Integer" ) + "( " + associationName
-                                    + ".size() )";
+                            key = ( useJava5 ? "Integer.valueOf" : "new java.lang.Integer" ) + "( " + associationName
+                                + ".size() )";
                         }
-                        writePrimitiveField( association, association.getTo(), associationName, LOCATION_VAR + "s",
-                                             key, "add", sc );
+                        writePrimitiveField( association, association.getTo(), associationName, LOCATION_VAR + "s", key,
+                                             "add", sc );
                     }
 
                     if ( wrappedItems )
@@ -867,8 +870,8 @@ public class Xpp3ReaderGenerator
 
                         writeNewSetLocation( "key", LOCATION_VAR + "s", null, sc );
 
-                        sc.add( "String value = parser.nextText()" + ( xmlFieldMetadata.isTrim() ? ".trim()" : "" )
-                                + ";" );
+                        sc.add(
+                            "String value = parser.nextText()" + ( xmlFieldMetadata.isTrim() ? ".trim()" : "" ) + ";" );
 
                         sc.add( objectName + ".add" + capitalise( singularName ) + "( key, value );" );
 
@@ -925,47 +928,52 @@ public class Xpp3ReaderGenerator
             writeSetLocation( locationKey, locatorName, null, sc );
         }
 
-        if ( "boolean".equals( type ) )
+        if ( "boolean".equals( type ) || "Boolean".equals( type ) )
         {
             sc.add( objectName + "." + setterName + "( " + keyCapture + "getBooleanValue( " + parserGetter + ", \""
-                + tagName + "\", parser, \"" + field.getDefaultValue() + "\" ) );" );
+                        + tagName + "\", parser, \"" + field.getDefaultValue() + "\" ) );" );
         }
         else if ( "char".equals( type ) )
         {
             sc.add( objectName + "." + setterName + "( " + keyCapture + "getCharacterValue( " + parserGetter + ", \""
-                + tagName + "\", parser ) );" );
+                        + tagName + "\", parser ) );" );
         }
         else if ( "double".equals( type ) )
         {
-            sc.add( objectName + "." + setterName + "( " + keyCapture + "getDoubleValue( " + parserGetter + ", \""
-                + tagName + "\", parser, strict ) );" );
+            sc.add(
+                objectName + "." + setterName + "( " + keyCapture + "getDoubleValue( " + parserGetter + ", \"" + tagName
+                    + "\", parser, strict ) );" );
         }
         else if ( "float".equals( type ) )
         {
-            sc.add( objectName + "." + setterName + "( " + keyCapture + "getFloatValue( " + parserGetter + ", \""
-                + tagName + "\", parser, strict ) );" );
+            sc.add(
+                objectName + "." + setterName + "( " + keyCapture + "getFloatValue( " + parserGetter + ", \"" + tagName
+                    + "\", parser, strict ) );" );
         }
         else if ( "int".equals( type ) )
         {
             sc.add( objectName + "." + setterName + "( " + keyCapture + "getIntegerValue( " + parserGetter + ", \""
-                + tagName + "\", parser, strict ) );" );
+                        + tagName + "\", parser, strict ) );" );
         }
         else if ( "long".equals( type ) )
         {
-            sc.add( objectName + "." + setterName + "( " + keyCapture + "getLongValue( " + parserGetter + ", \""
-                + tagName + "\", parser, strict ) );" );
+            sc.add(
+                objectName + "." + setterName + "( " + keyCapture + "getLongValue( " + parserGetter + ", \"" + tagName
+                    + "\", parser, strict ) );" );
         }
         else if ( "short".equals( type ) )
         {
-            sc.add( objectName + "." + setterName + "( " + keyCapture + "getShortValue( " + parserGetter + ", \""
-                + tagName + "\", parser, strict ) );" );
+            sc.add(
+                objectName + "." + setterName + "( " + keyCapture + "getShortValue( " + parserGetter + ", \"" + tagName
+                    + "\", parser, strict ) );" );
         }
         else if ( "byte".equals( type ) )
         {
-            sc.add( objectName + "." + setterName + "( " + keyCapture + "getByteValue( " + parserGetter + ", \""
-                + tagName + "\", parser, strict ) );" );
+            sc.add(
+                objectName + "." + setterName + "( " + keyCapture + "getByteValue( " + parserGetter + ", \"" + tagName
+                    + "\", parser, strict ) );" );
         }
-        else if ( "String".equals( type ) || "Boolean".equals( type ) )
+        else if ( "String".equals( type ) )
         {
             // TODO: other Primitive types
             sc.add( objectName + "." + setterName + "( " + keyCapture + parserGetter + " );" );
@@ -974,14 +982,15 @@ public class Xpp3ReaderGenerator
         {
             String format = xmlFieldMetadata.getFormat();
             sc.add( "String dateFormat = " + ( format != null ? "\"" + format + "\"" : "null" ) + ";" );
-            sc.add( objectName + "." + setterName + "( " + keyCapture + "getDateValue( " + parserGetter + ", \""
-                + tagName + "\", dateFormat, parser ) );" );
+            sc.add(
+                objectName + "." + setterName + "( " + keyCapture + "getDateValue( " + parserGetter + ", \"" + tagName
+                    + "\", dateFormat, parser ) );" );
         }
         else if ( "DOM".equals( type ) )
         {
-            sc.add( objectName + "." + setterName + "( " + keyCapture
-                + ( domAsXpp3 ? "org.codehaus.plexus.util.xml.Xpp3DomBuilder.build" : "buildDom" ) + "( parser, "
-                + xmlFieldMetadata.isTrim() + " ) );" );
+            sc.add( objectName + "." + setterName + "( " + keyCapture + ( domAsXpp3
+                ? "org.codehaus.plexus.util.xml.Xpp3DomBuilder.build"
+                : "buildDom" ) + "( parser, " + xmlFieldMetadata.isTrim() + " ) );" );
 
             requiresDomSupport = true;
         }
@@ -1290,7 +1299,8 @@ public class Xpp3ReaderGenerator
         method.addException( new JClass( "javax.xml.parsers.ParserConfigurationException" ) );
 
         JSourceCode sc = method.getSourceCode();
-        sc.add( "javax.xml.parsers.DocumentBuilderFactory dbfac = javax.xml.parsers.DocumentBuilderFactory.newInstance();" );
+        sc.add(
+            "javax.xml.parsers.DocumentBuilderFactory dbfac = javax.xml.parsers.DocumentBuilderFactory.newInstance();" );
         sc.add( "javax.xml.parsers.DocumentBuilder docBuilder = dbfac.newDocumentBuilder();" );
         sc.add( "_doc_ = docBuilder.newDocument();" );
         jClass.addMethod( method );
@@ -1386,7 +1396,8 @@ public class Xpp3ReaderGenerator
 
         sc.add( "if ( !element.hasChildNodes() )" );
         sc.add( "{" );
-        sc.addIndented( "element.setTextContent( ( accumulatedValue == null ) ? null : accumulatedValue.toString() );" );
+        sc.addIndented(
+            "element.setTextContent( ( accumulatedValue == null ) ? null : accumulatedValue.toString() );" );
         sc.add( "}" );
 
         sc.add( "if ( values.empty() )" );
@@ -1532,8 +1543,8 @@ public class Xpp3ReaderGenerator
 
         // --------------------------------------------------------------------
 
-        method = convertNumericalType( "getShortValue", JType.SHORT, "Short.valueOf( s ).shortValue()",
-                                       "a short integer" );
+        method =
+            convertNumericalType( "getShortValue", JType.SHORT, "Short.valueOf( s ).shortValue()", "a short integer" );
 
         jClass.addMethod( method );
 
@@ -1618,8 +1629,7 @@ public class Xpp3ReaderGenerator
         sc.add( "if ( !parsed.add( tagName ) )" );
 
         sc.add( "{" );
-        sc.addIndented(
-            "throw new XmlPullParserException( \"Duplicated tag: '\" + tagName + \"'\", parser, null );" );
+        sc.addIndented( "throw new XmlPullParserException( \"Duplicated tag: '\" + tagName + \"'\", parser, null );" );
         sc.add( "}" );
 
         sc.add( "return true;" );
@@ -1680,16 +1690,19 @@ public class Xpp3ReaderGenerator
 
         if ( strictXmlAttributes )
         {
-            sc.add( "// strictXmlAttributes = true for model: if strict == true, not only elements are checked but attributes too" );
+            sc.add(
+                "// strictXmlAttributes = true for model: if strict == true, not only elements are checked but attributes too" );
             sc.add( "if ( strict )" );
 
             sc.add( "{" );
-            sc.addIndented( "throw new XmlPullParserException( \"Unknown attribute '\" + attribute + \"' for tag '\" + tagName + \"'\", parser, null );" );
+            sc.addIndented(
+                "throw new XmlPullParserException( \"Unknown attribute '\" + attribute + \"' for tag '\" + tagName + \"'\", parser, null );" );
             sc.add( "}" );
         }
         else
         {
-            sc.add( "// strictXmlAttributes = false for model: always ignore unknown XML attribute, even if strict == true" );
+            sc.add(
+                "// strictXmlAttributes = false for model: always ignore unknown XML attribute, even if strict == true" );
         }
 
         jClass.addMethod( method );
@@ -1712,7 +1725,8 @@ public class Xpp3ReaderGenerator
         sc.add( "}" );
         sc.add( "if ( eventType != XmlPullParser.START_TAG && eventType != XmlPullParser.END_TAG )" );
         sc.add( "{" );
-        sc.addIndented( "throw new XmlPullParserException( \"expected START_TAG or END_TAG not \" + XmlPullParser.TYPES[eventType], parser, null );" );
+        sc.addIndented(
+            "throw new XmlPullParserException( \"expected START_TAG or END_TAG not \" + XmlPullParser.TYPES[eventType], parser, null );" );
         sc.add( "}" );
         sc.add( "return eventType;" );
 
@@ -1755,8 +1769,9 @@ public class Xpp3ReaderGenerator
         sc.add( "if ( strict )" );
 
         sc.add( "{" );
-        sc.addIndented( "throw new XmlPullParserException( \"Unable to parse element '\" + attribute + \"', must be "
-            + typeDesc + "\", parser, nfe );" );
+        sc.addIndented(
+            "throw new XmlPullParserException( \"Unable to parse element '\" + attribute + \"', must be " + typeDesc
+                + "\", parser, nfe );" );
         sc.add( "}" );
 
         sc.unindent();
