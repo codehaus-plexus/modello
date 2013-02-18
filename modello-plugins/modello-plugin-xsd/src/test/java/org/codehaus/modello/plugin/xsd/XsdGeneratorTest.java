@@ -47,7 +47,7 @@ public class XsdGeneratorTest
     public void testXsdGenerator()
         throws Throwable
     {
-        ModelloCore modello = (ModelloCore) container.lookup( ModelloCore.ROLE );
+        ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
 
         Model model = modello.loadModel( getXmlResourceReader( "/maven.mdo" ) );
 

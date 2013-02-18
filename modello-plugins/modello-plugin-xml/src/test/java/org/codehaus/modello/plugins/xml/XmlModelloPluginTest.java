@@ -54,7 +54,7 @@ public class XmlModelloPluginTest
     public void testXmlPlugin()
         throws Exception
     {
-        ModelloCore modello = (ModelloCore) container.lookup( ModelloCore.ROLE );
+        ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
 
         Model model = modello.loadModel( getTestFile( "src/test/resources/model.mdo" ) );
 
