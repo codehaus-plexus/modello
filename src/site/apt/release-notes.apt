@@ -8,6 +8,20 @@
 
 Modello
 
+* 1.7 Release Notes (2013-02-19)
+
+  The {{{http://jira.codehaus.org/secure/ReleaseNote.jspa?projectId=10510&version=18979}full list of changes}} can be found in our {{{./issue-tracking.html}issue management system}}, and is reproduced below.
+
+** Bug
+
+    * [MODELLO-266] - IllegalStateException with generated stax reader on IBM jvm
+
+    * [MODELLO-267] - Generated XPP3 reader fails to compile if there are any Boolean fields in the model
+
+** Improvement
+
+    * [MODELLO-265] - remove data/time in generated content
+
 * 1.6 Release Notes (2012-11)
 
   The {{{http://jira.codehaus.org/secure/ReleaseNote.jspa?projectId=10510&version=18746}full list of changes}} can be found in our {{{./issue-tracking.html}issue management system}}, and is reproduced below.
