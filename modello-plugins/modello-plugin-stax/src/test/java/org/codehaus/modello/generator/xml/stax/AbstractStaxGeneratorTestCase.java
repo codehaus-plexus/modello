@@ -45,7 +45,7 @@ public abstract class AbstractStaxGeneratorTestCase
     {
         super.setUp();
 
-        modello = (ModelloCore) container.lookup( ModelloCore.ROLE );
+        modello = (ModelloCore) lookup( ModelloCore.ROLE );
     }
 
     protected void verifyModel( Model model, String className )

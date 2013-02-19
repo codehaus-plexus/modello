@@ -49,7 +49,7 @@ public class Dom4jGeneratorTest
     public void testDom4jGenerator()
         throws Throwable
     {
-        ModelloCore modello = (ModelloCore) container.lookup( ModelloCore.ROLE );
+        ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
 
         Model model = modello.loadModel( getXmlResourceReader( "/maven.mdo" ) );
 
