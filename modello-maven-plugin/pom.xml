@@ -186,6 +186,22 @@
         <plugins>
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-verifier-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>features</id>
+                <phase>pre-site</phase><!-- check that run-its profile has generated features site -->
+                <goals>
+                  <goal>verify</goal>
+                </goals>
+                <configuration>
+                  <verificationFile>${basedir}/src/test/verifier/site-verifications.xml.</verificationFile>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-resources-plugin</artifactId>
             <executions>
               <execution>
