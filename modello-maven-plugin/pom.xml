@@ -195,7 +195,7 @@
                   <goal>verify</goal>
                 </goals>
                 <configuration>
-                  <verificationFile>${basedir}/src/test/verifier/site-verifications.xml.</verificationFile>
+                  <verificationFile>${basedir}/src/test/verifier/site-verifications.xml</verificationFile>
                 </configuration>
               </execution>
             </executions>
