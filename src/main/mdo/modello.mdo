@@ -390,6 +390,15 @@
           <comment>see org.codehaus.modello.plugin.model.ModelMetadataPlugin</comment>
         </field>
         <field xml.attribute="true">
+          <name>javag.generateToString</name>
+          <version>1.8.0+</version>
+          <type>String</type>
+          <description>
+            Will generate toString method for all fields of the class (disable per default).
+            toString method is still generated per default for identifier field.
+          </description>
+        </field>
+        <field xml.attribute="true">
           <name>xml.standaloneRead</name>
           <version>1.4.1+</version>
           <type>boolean</type>
