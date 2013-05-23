@@ -66,9 +66,9 @@ public class JavaModelloGenerator
     extends AbstractJavaModelloGenerator
 {
 
-    private Collection<String> immutableTypes =
-        new HashSet<String>( Arrays.asList( new String[] { "boolean", "Boolean", "byte", "Byte", "char", "Character",
-            "short", "Short", "int", "Integer", "long", "Long", "float", "Float", "double", "Double", "String" } ) );
+    private Collection<String> immutableTypes = new HashSet<String>( Arrays.asList(
+        new String[]{ "boolean", "Boolean", "byte", "Byte", "char", "Character", "short", "Short", "int", "Integer",
+            "long", "Long", "float", "Float", "double", "Double", "String" } ) );
 
     public void generate( Model model, Properties parameters )
         throws ModelloException
@@ -197,9 +197,23 @@ public class JavaModelloGenerator
 
                 jClass.addMethod( hashCode );
 
-                JMethod toString = generateToString( modelClass );
+                // backward compat
+                if ( !javaClassMetadata.isGenerateToString() )
+                {
+                    JMethod toString = generateToString( modelClass, true );
+
+                    jClass.addMethod( toString );
+                }
+
+            }
+
+            if ( javaClassMetadata.isGenerateToString() )
+            {
+
+                JMethod toString = generateToString( modelClass, false );
 
                 jClass.addMethod( toString );
+
             }
 
             boolean cloneLocations = !superClassInModel && modelClass != sourceTrackerClass;
@@ -218,7 +232,8 @@ public class JavaModelloGenerator
                 }
             }
 
-            ModelClassMetadata modelClassMetadata = (ModelClassMetadata) modelClass.getMetadata( ModelClassMetadata.ID );
+            ModelClassMetadata modelClassMetadata =
+                (ModelClassMetadata) modelClass.getMetadata( ModelClassMetadata.ID );
 
             if ( modelClassMetadata != null )
             {
@@ -275,7 +290,8 @@ public class JavaModelloGenerator
             {
                 ModelInterface superInterface =
                     objectModel.getInterface( modelInterface.getSuperInterface(), getGeneratedVersion() );
-                String superPackageName = superInterface.getPackageName( isPackageWithVersion(), getGeneratedVersion() );
+                String superPackageName =
+                    superInterface.getPackageName( isPackageWithVersion(), getGeneratedVersion() );
 
                 if ( !packageName.equals( superPackageName ) )
                 {
@@ -337,18 +353,19 @@ public class JavaModelloGenerator
         for ( ModelField identifier : modelClass.getIdentifierFields( getGeneratedVersion() ) )
         {
             String name = identifier.getName();
-            if ( "boolean".equals( identifier.getType() ) || "byte".equals( identifier.getType() )
-                || "char".equals( identifier.getType() ) || "double".equals( identifier.getType() )
-                || "float".equals( identifier.getType() ) || "int".equals( identifier.getType() )
-                || "short".equals( identifier.getType() ) || "long".equals( identifier.getType() ) )
+            if ( "boolean".equals( identifier.getType() ) || "byte".equals( identifier.getType() ) || "char".equals(
+                identifier.getType() ) || "double".equals( identifier.getType() ) || "float".equals(
+                identifier.getType() ) || "int".equals( identifier.getType() ) || "short".equals( identifier.getType() )
+                || "long".equals( identifier.getType() ) )
             {
                 sc.add( "result = result && " + name + " == that." + name + ";" );
             }
             else
             {
                 name = "get" + capitalise( name ) + "()";
-                sc.add( "result = result && ( " + name + " == null ? that." + name + " == null : " + name
-                    + ".equals( that." + name + " ) );" );
+                sc.add(
+                    "result = result && ( " + name + " == null ? that." + name + " == null : " + name + ".equals( that."
+                        + name + " ) );" );
             }
         }
 
@@ -364,15 +381,15 @@ public class JavaModelloGenerator
         return equals;
     }
 
-    private JMethod generateToString( ModelClass modelClass )
+    private JMethod generateToString( ModelClass modelClass, boolean onlyIdentifierFields )
     {
         JMethod toString = new JMethod( "toString", new JType( String.class.getName() ), null );
 
-        List<ModelField> identifierFields = modelClass.getIdentifierFields( getGeneratedVersion() );
+        List<ModelField> fields = onlyIdentifierFields ? modelClass.getIdentifierFields( getGeneratedVersion() ) : modelClass.getFields( getGeneratedVersion() );
 
         JSourceCode sc = toString.getSourceCode();
 
-        if ( identifierFields.size() == 0 )
+        if ( fields.size() == 0 )
         {
             sc.add( "return super.toString();" );
 
@@ -390,7 +407,7 @@ public class JavaModelloGenerator
 
         sc.add( "" );
 
-        for ( Iterator<ModelField> j = identifierFields.iterator(); j.hasNext(); )
+        for ( Iterator<ModelField> j = fields.iterator(); j.hasNext(); )
         {
             ModelField identifier = j.next();
 
@@ -499,8 +516,8 @@ public class JavaModelloGenerator
                 if ( domAsXpp3 )
                 {
                     sc.addIndented( copyField
-                        + " = new org.codehaus.plexus.util.xml.Xpp3Dom( (org.codehaus.plexus.util.xml.Xpp3Dom) "
-                        + thisField + " );" );
+                                        + " = new org.codehaus.plexus.util.xml.Xpp3Dom( (org.codehaus.plexus.util.xml.Xpp3Dom) "
+                                        + thisField + " );" );
                 }
                 else
                 {
@@ -509,7 +526,8 @@ public class JavaModelloGenerator
                 sc.add( "}" );
                 sc.add( "" );
             }
-            else if ( "Date".equalsIgnoreCase( modelField.getType() ) || "java.util.Date".equals( modelField.getType() ) )
+            else if ( "Date".equalsIgnoreCase( modelField.getType() ) || "java.util.Date".equals(
+                modelField.getType() ) )
             {
                 sc.add( "if ( " + thisField + " != null )" );
                 sc.add( "{" );
@@ -532,8 +550,8 @@ public class JavaModelloGenerator
                 String cloneModeAssoc = getCloneMode( modelAssociation, cloneModeClass );
 
                 boolean deepClone =
-                    JavaAssociationMetadata.CLONE_DEEP.equals( cloneModeAssoc )
-                        && !immutableTypes.contains( modelAssociation.getTo() );
+                    JavaAssociationMetadata.CLONE_DEEP.equals( cloneModeAssoc ) && !immutableTypes.contains(
+                        modelAssociation.getTo() );
 
                 if ( modelAssociation.isOneMultiplicity() )
                 {
@@ -541,7 +559,8 @@ public class JavaModelloGenerator
                     {
                         sc.add( "if ( " + thisField + " != null )" );
                         sc.add( "{" );
-                        sc.addIndented( copyField + " = (" + modelAssociation.getTo() + ") " + thisField + ".clone();" );
+                        sc.addIndented(
+                            copyField + " = (" + modelAssociation.getTo() + ") " + thisField + ".clone();" );
                         sc.add( "}" );
                         sc.add( "" );
                     }
@@ -577,7 +596,8 @@ public class JavaModelloGenerator
                             }
                             else
                             {
-                                sc.add( copyField + ".add( ( (" + modelAssociation.getTo() + ") it.next() ).clone() );" );
+                                sc.add(
+                                    copyField + ".add( ( (" + modelAssociation.getTo() + ") it.next() ).clone() );" );
                             }
                             sc.unindent();
                             sc.add( "}" );
@@ -634,12 +654,12 @@ public class JavaModelloGenerator
         sc.add( "{" );
         sc.indent();
         sc.add( "throw (" + RuntimeException.class.getName() + ") new " + UnsupportedOperationException.class.getName()
-            + "( getClass().getName()" );
+                    + "( getClass().getName()" );
         sc.addIndented( "+ \" does not support clone()\" ).initCause( ex );" );
         sc.unindent();
         sc.add( "}" );
 
-        return new JMethod[] { cloneMethod };
+        return new JMethod[]{ cloneMethod };
     }
 
     private String getCloneMode( ModelClass modelClass )
@@ -647,7 +667,7 @@ public class JavaModelloGenerator
     {
         String cloneMode = null;
 
-        for ( ModelClass currentClass = modelClass;; )
+        for ( ModelClass currentClass = modelClass; ; )
         {
             JavaClassMetadata javaClassMetadata = (JavaClassMetadata) currentClass.getMetadata( JavaClassMetadata.ID );
 
@@ -673,9 +693,9 @@ public class JavaModelloGenerator
         }
         else if ( !JavaClassMetadata.CLONE_MODES.contains( cloneMode ) )
         {
-            throw new ModelloException( "The Java Modello Generator cannot use '" + cloneMode
-                + "' as a value for <class java.clone=\"...\">, " + "only the following values are acceptable "
-                + JavaClassMetadata.CLONE_MODES );
+            throw new ModelloException(
+                "The Java Modello Generator cannot use '" + cloneMode + "' as a value for <class java.clone=\"...\">, "
+                    + "only the following values are acceptable " + JavaClassMetadata.CLONE_MODES );
         }
 
         return cloneMode;
@@ -695,8 +715,9 @@ public class JavaModelloGenerator
         else if ( !JavaAssociationMetadata.CLONE_MODES.contains( cloneModeAssoc ) )
         {
             throw new ModelloException( "The Java Modello Generator cannot use '" + cloneModeAssoc
-                + "' as a value for <association java.clone=\"...\">, " + "only the following values are acceptable "
-                + JavaAssociationMetadata.CLONE_MODES );
+                                            + "' as a value for <association java.clone=\"...\">, "
+                                            + "only the following values are acceptable "
+                                            + JavaAssociationMetadata.CLONE_MODES );
         }
 
         return cloneModeAssoc;
@@ -907,8 +928,10 @@ public class JavaModelloGenerator
         sc.add( "}" );
         sc.add( "" );
         sc.add( locationClass.getName() + " result =" );
-        sc.add( "    new " + locationClass.getName() + "( target.getLineNumber(), target.getColumnNumber()"
-            + ( sourceClass != null ? ", target.get" + capitalise( source.getName() ) + "()" : "" ) + " );" );
+        sc.add( "    new " + locationClass.getName() + "( target.getLineNumber(), target.getColumnNumber()" + (
+            sourceClass != null
+                ? ", target.get" + capitalise( source.getName() ) + "()"
+                : "" ) + " );" );
         sc.add( "" );
         sc.add( fieldType + " locations;" );
         sc.add( fieldType + " sourceLocations = source.get" + capitalise( locationsField ) + "();" );
@@ -937,8 +960,9 @@ public class JavaModelloGenerator
         jMethod.getModifiers().setStatic( true );
         jMethod.addParameter( new JParameter( new JType( locationClass.getName() ), "target" ) );
         jMethod.addParameter( new JParameter( new JType( locationClass.getName() ), "source" ) );
-        jMethod.addParameter( new JParameter( new JCollectionType( "java.util.Collection", new JType( "Integer" ),
-                                                                   useJava5 ), "indices" ) );
+        jMethod.addParameter(
+            new JParameter( new JCollectionType( "java.util.Collection", new JType( "Integer" ), useJava5 ),
+                            "indices" ) );
         String intWrap = useJava5 ? "Integer.valueOf" : "new Integer";
         sc = jMethod.getSourceCode();
         sc.add( "if ( source == null )" );
@@ -951,8 +975,10 @@ public class JavaModelloGenerator
         sc.add( "}" );
         sc.add( "" );
         sc.add( locationClass.getName() + " result =" );
-        sc.add( "    new " + locationClass.getName() + "( target.getLineNumber(), target.getColumnNumber()"
-            + ( sourceClass != null ? ", target.get" + capitalise( source.getName() ) + "()" : "" ) + " );" );
+        sc.add( "    new " + locationClass.getName() + "( target.getLineNumber(), target.getColumnNumber()" + (
+            sourceClass != null
+                ? ", target.get" + capitalise( source.getName() ) + "()"
+                : "" ) + " );" );
         sc.add( "" );
         sc.add( fieldType + " locations;" );
         sc.add( fieldType + " sourceLocations = source.get" + capitalise( locationsField ) + "();" );
@@ -969,7 +995,8 @@ public class JavaModelloGenerator
         sc.add( "{" );
         sc.indent();
         sc.add( "locations = new " + fieldImpl + "();" );
-        sc.add( "for ( java.util.Iterator" + ( useJava5 ? "<Integer>" : "" ) + " it = indices.iterator(); it.hasNext(); )" );
+        sc.add( "for ( java.util.Iterator" + ( useJava5 ? "<Integer>" : "" )
+                    + " it = indices.iterator(); it.hasNext(); )" );
         sc.add( "{" );
         sc.indent();
         sc.add( locationClass.getName() + " location;" );
@@ -1256,7 +1283,7 @@ public class JavaModelloGenerator
                 sc.indent();
 
                 sc.add( "this." + field.getName() + ".break" + modelAssociation.getModelClass().getName()
-                    + "Association( this );" );
+                            + "Association( this );" );
 
                 sc.unindent();
 
@@ -1288,7 +1315,7 @@ public class JavaModelloGenerator
                 sc.indent();
 
                 sc.add( "this." + field.getName() + ".create" + modelAssociation.getModelClass().getName()
-                    + "Association( this );" );
+                            + "Association( this );" );
 
                 sc.unindent();
 
@@ -1337,8 +1364,8 @@ public class JavaModelloGenerator
         sc.indent();
 
         sc.add( "throw new ClassCastException( \"" + modelAssociation.getModelClass().getName() + "." + crudModifier
-            + propertyName + "( " + fieldName + " ) parameter must be instanceof \" + " + instanceName
-            + ".class.getName() );" );
+                    + propertyName + "( " + fieldName + " ) parameter must be instanceof \" + " + instanceName
+                    + ".class.getName() );" );
 
         sc.unindent();
 
@@ -1483,10 +1510,10 @@ public class JavaModelloGenerator
 
         if ( !JavaAssociationMetadata.INIT_TYPES.contains( javaAssociationMetadata.getInitializationMode() ) )
         {
-            throw new ModelloException( "The Java Modello Generator cannot use '"
-                + javaAssociationMetadata.getInitializationMode() + "' as a <association java.init=\""
-                + javaAssociationMetadata.getInitializationMode() + "\"> "
-                + "value, the only the following are acceptable " + JavaAssociationMetadata.INIT_TYPES );
+            throw new ModelloException(
+                "The Java Modello Generator cannot use '" + javaAssociationMetadata.getInitializationMode()
+                    + "' as a <association java.init=\"" + javaAssociationMetadata.getInitializationMode() + "\"> "
+                    + "value, the only the following are acceptable " + JavaAssociationMetadata.INIT_TYPES );
         }
         return javaAssociationMetadata;
     }
@@ -1512,8 +1539,8 @@ public class JavaModelloGenerator
         JavaAssociationMetadata javaAssociationMetadata =
             (JavaAssociationMetadata) modelAssociation.getAssociationMetadata( JavaAssociationMetadata.ID );
 
-        createMethod.addParameter( new JParameter( new JClass( modelAssociation.getTo() ),
-                                                   uncapitalise( modelAssociation.getTo() ) ) );
+        createMethod.addParameter(
+            new JParameter( new JClass( modelAssociation.getTo() ), uncapitalise( modelAssociation.getTo() ) ) );
 
         // TODO: remove after tested
         // createMethod.addException( new JClass( "Exception" ) );
@@ -1530,7 +1557,8 @@ public class JavaModelloGenerator
 
                 sc.indent();
 
-                sc.add( "break" + modelAssociation.getTo() + "Association( this." + modelAssociation.getName() + " );" );
+                sc.add(
+                    "break" + modelAssociation.getTo() + "Association( this." + modelAssociation.getName() + " );" );
 
                 sc.unindent();
 
@@ -1546,19 +1574,19 @@ public class JavaModelloGenerator
             jClass.addImport( "java.util.Collection" );
 
             sc.add( "Collection " + modelAssociation.getName() + " = get" + capitalise( modelAssociation.getName() )
-                + "();" );
+                        + "();" );
 
             sc.add( "" );
 
             sc.add( "if ( " + modelAssociation.getName() + ".contains( " + uncapitalise( modelAssociation.getTo() )
-                + " ) )" );
+                        + " ) )" );
 
             sc.add( "{" );
 
             sc.indent();
 
             sc.add( "throw new IllegalStateException( \"" + uncapitalise( modelAssociation.getTo() )
-                + " is already assigned.\" );" );
+                        + " is already assigned.\" );" );
 
             sc.unindent();
 
@@ -1577,8 +1605,8 @@ public class JavaModelloGenerator
         JSourceCode sc;
         JMethod breakMethod = new JMethod( "break" + modelAssociation.getTo() + "Association" );
 
-        breakMethod.addParameter( new JParameter( new JClass( modelAssociation.getTo() ),
-                                                  uncapitalise( modelAssociation.getTo() ) ) );
+        breakMethod.addParameter(
+            new JParameter( new JClass( modelAssociation.getTo() ), uncapitalise( modelAssociation.getTo() ) ) );
 
         // TODO: remove after tested
         // breakMethod.addException( new JClass( "Exception" ) );
@@ -1587,15 +1615,15 @@ public class JavaModelloGenerator
 
         if ( modelAssociation.isOneMultiplicity() )
         {
-            sc.add( "if ( this." + modelAssociation.getName() + " != " + uncapitalise( modelAssociation.getTo() )
-                + " )" );
+            sc.add(
+                "if ( this." + modelAssociation.getName() + " != " + uncapitalise( modelAssociation.getTo() ) + " )" );
 
             sc.add( "{" );
 
             sc.indent();
 
             sc.add( "throw new IllegalStateException( \"" + uncapitalise( modelAssociation.getTo() )
-                + " isn't associated.\" );" );
+                        + " isn't associated.\" );" );
 
             sc.unindent();
 
@@ -1607,15 +1635,15 @@ public class JavaModelloGenerator
         }
         else
         {
-            sc.add( "if ( ! get" + capitalise( modelAssociation.getName() ) + "().contains( "
-                + uncapitalise( modelAssociation.getTo() ) + " ) )" );
+            sc.add( "if ( ! get" + capitalise( modelAssociation.getName() ) + "().contains( " + uncapitalise(
+                modelAssociation.getTo() ) + " ) )" );
 
             sc.add( "{" );
 
             sc.indent();
 
             sc.add( "throw new IllegalStateException( \"" + uncapitalise( modelAssociation.getTo() )
-                + " isn't associated.\" );" );
+                        + " isn't associated.\" );" );
 
             sc.unindent();
 
@@ -1623,8 +1651,8 @@ public class JavaModelloGenerator
 
             sc.add( "" );
 
-            sc.add( "get" + capitalise( modelAssociation.getName() ) + "().remove( "
-                + uncapitalise( modelAssociation.getTo() ) + " );" );
+            sc.add( "get" + capitalise( modelAssociation.getName() ) + "().remove( " + uncapitalise(
+                modelAssociation.getTo() ) + " );" );
         }
 
         jClass.addMethod( breakMethod );
@@ -1659,8 +1687,8 @@ public class JavaModelloGenerator
             addType = new JClass( "String" );
         }
 
-        if ( modelAssociation.getType().equals( ModelDefault.PROPERTIES )
-            || modelAssociation.getType().equals( ModelDefault.MAP ) )
+        if ( modelAssociation.getType().equals( ModelDefault.PROPERTIES ) || modelAssociation.getType().equals(
+            ModelDefault.MAP ) )
         {
             JMethod adder = new JMethod( "add" + capitalise( singular( fieldName ) ) );
 
@@ -1688,8 +1716,7 @@ public class JavaModelloGenerator
             createClassCastAssertion( adder.getSourceCode(), modelAssociation, "add" );
 
             adder.getSourceCode().add(
-                                       "get" + capitalise( fieldName ) + "().add( " + implementationParameterName
-                                           + " );" );
+                "get" + capitalise( fieldName ) + "().add( " + implementationParameterName + " );" );
 
             if ( bidirectionalAssociation && javaAssociationMetadata.isBidi() )
             {
@@ -1697,8 +1724,8 @@ public class JavaModelloGenerator
                 // adder.addException( new JClass( "Exception" ) );
 
                 adder.getSourceCode().add(
-                                           implementationParameterName + ".create"
-                                               + modelAssociation.getModelClass().getName() + "Association( this );" );
+                    implementationParameterName + ".create" + modelAssociation.getModelClass().getName()
+                        + "Association( this );" );
             }
 
             jClass.addMethod( adder );
@@ -1715,13 +1742,11 @@ public class JavaModelloGenerator
                 // remover.addException( new JClass( "Exception" ) );
 
                 remover.getSourceCode().add(
-                                             parameterName + ".break" + modelAssociation.getModelClass().getName()
-                                                 + "Association( this );" );
+                    parameterName + ".break" + modelAssociation.getModelClass().getName() + "Association( this );" );
             }
 
             remover.getSourceCode().add(
-                                         "get" + capitalise( fieldName ) + "().remove( " + implementationParameterName
-                                             + " );" );
+                "get" + capitalise( fieldName ) + "().remove( " + implementationParameterName + " );" );
 
             jClass.addMethod( remover );
         }

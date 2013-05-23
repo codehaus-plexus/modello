@@ -64,6 +64,11 @@ public class JavaMetadataPlugin
 
     public static final String JAVA_CLONE_HOOK = "java.clone.hook";
 
+    /**
+     * @since 1.8
+     */
+    public static final String JAVA_GENERATE_TOSTRING = "java.generateToString";
+
     public static final String JAVA_SUPPRESS_ALL_WARNINGS = "java.suppressAllWarnings";
 
     // ----------------------------------------------------------------------
@@ -90,6 +95,8 @@ public class JavaMetadataPlugin
         metadata.setCloneMode( getString( data, JAVA_CLONE ) );
 
         metadata.setCloneHook( getString( data, JAVA_CLONE_HOOK ) );
+
+        metadata.setGenerateToString( getBoolean( data, JAVA_GENERATE_TOSTRING, false ) );
 
         return metadata;
     }

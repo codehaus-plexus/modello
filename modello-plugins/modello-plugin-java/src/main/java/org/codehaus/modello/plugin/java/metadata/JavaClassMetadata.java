@@ -57,6 +57,11 @@ public class JavaClassMetadata
 
     private String cloneHook;
 
+    /**
+     * @since 1.8
+     */
+    private boolean generateToString = false;
+
     public void setAbstract( boolean abstractMode )
     {
         this.abstractMode = abstractMode;
@@ -96,5 +101,16 @@ public class JavaClassMetadata
     {
         this.cloneHook = cloneHook;
     }
+
+    public boolean isGenerateToString()
+    {
+        return generateToString;
+    }
+
+    public void setGenerateToString( boolean generateToString )
+    {
+        this.generateToString = generateToString;
+    }
+
 
 }
