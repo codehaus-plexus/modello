@@ -106,6 +106,8 @@ public class JacksonWriterGenerator
         sc.add( "factory.enable( Feature.QUOTE_NON_NUMERIC_NUMBERS );" );
         sc.add( "factory.disable( Feature.WRITE_NUMBERS_AS_STRINGS );" );
 
+        jClass.addConstructor( jacksonWriterConstructor );
+
         // ----------------------------------------------------------------------
         // Write the write( Writer, Model ) method which will do the unmarshalling.
         // ----------------------------------------------------------------------
