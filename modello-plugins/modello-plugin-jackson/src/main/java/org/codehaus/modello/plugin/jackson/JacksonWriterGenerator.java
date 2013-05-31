@@ -268,6 +268,7 @@ public class JacksonWriterGenerator
                     sc.add( getValueChecker( type, value, association ) );
 
                     sc.add( "{" );
+                    sc.addIndented( "generator.writeFieldName( \"" + fieldTagName + "\" );" );
                     sc.addIndented( "write" + association.getTo() + "( (" + association.getTo() + ") " + value + ", generator );" );
                     sc.add( "}" );
                 }
