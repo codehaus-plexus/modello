@@ -299,14 +299,9 @@ public class JacksonWriterGenerator
                         {
                             sc.add( "write" + toType + "( o, generator );" );
                         }
-                        else // TODO
+                        else
                         {
-                            sc.add( toType + " " + singular( uncapitalise( field.getName() ) ) + " = (" + toType
-                                + ") iter.next();" );
-
-                            sc.add( "generator.writeString( "
-                                    + singular( uncapitalise( field.getName() ) )
-                                    + " ) " );
+                            sc.add( "generator.writeObject( o ); " );
                         }
 
                         sc.unindent();
@@ -328,21 +323,24 @@ public class JacksonWriterGenerator
 
                         sc.add( "generator.writeObjectFieldStart( \"" + fieldTagName + "\" );" );
 
-                        sc.add( "for ( java.util.Map.Entry<String, String> entry : " + value + ".entrySet() )" );
+                        sc.add( "for ( java.util.Map.Entry<Object, Object> entry : " + value + ".entrySet() )" );
 
                         sc.add( "{" );
                         sc.indent();
 
+                        sc.add( "final String key = String.valueOf( entry.getKey() );" );
+                        sc.add( "final String value = String.valueOf( entry.getValue() );" );
+
                         if ( xmlAssociationMetadata.isMapExplode() )
                         {
                             sc.add( "generator.writeObjectFieldStart( \"" + singular( associationName ) + "\" );" );
-                            sc.add( "generator.writeStringField( \"key\", entry.getKey() );" );
-                            sc.add( "generator.writeStringField( \"value\", entry.getValue() );" );
+                            sc.add( "generator.writeStringField( \"key\", key );" );
+                            sc.add( "generator.writeStringField( \"value\", value );" );
                             sc.add( "generator.writeEndObject();" );
                         }
                         else
                         {
-                            sc.add( "generator.writeStringField( entry.getKey(), entry.getValue() );" );
+                            sc.add( "generator.writeStringField( key, value );" );
                         }
 
                         sc.unindent();
