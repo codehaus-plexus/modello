@@ -1,0 +1,29 @@
+<component-set>
+  <components>
+    <component>
+      <role>org.codehaus.modello.plugin.ModelloGenerator</role>
+      <role-hint>jackson-reader</role-hint>
+      <implementation>org.codehaus.modello.plugin.jackson.JacksonReaderGenerator</implementation>
+      <instantiation-strategy>per-lookup</instantiation-strategy>
+    </component>
+    <component>
+      <role>org.codehaus.modello.plugin.ModelloGenerator</role>
+      <role-hint>jackson-writer</role-hint>
+      <implementation>org.codehaus.modello.plugin.jackson.JacksonWriterGenerator</implementation>
+      <instantiation-strategy>per-lookup</instantiation-strategy>
+      <requirements>
+        <requirement>
+          <field-name>serializerGenerator</field-name>
+          <role>org.codehaus.modello.plugin.jackson.JacksonSerializerGenerator</role>
+          <role-hint>jackson-serializer</role-hint>
+        </requirement>
+      </requirements>
+    </component>
+    <component>
+      <role>org.codehaus.modello.plugin.jackson.JacksonSerializerGenerator</role>
+      <role-hint>jackson-serializer</role-hint>
+      <implementation>org.codehaus.modello.plugin.jackson.JacksonSerializerGenerator</implementation>
+      <instantiation-strategy>per-lookup</instantiation-strategy>
+    </component>
+  </components>
+</component-set>
