@@ -87,12 +87,12 @@ public class JacksonWriterGenerator
         jClass.addImport( "java.io.OutputStreamWriter" );
         jClass.addImport( "java.io.Writer" );
 
+        addModelImports( jClass, null );
+
         JField factoryField = new JField( new JClass( "JsonFactory" ), "factory" );
         factoryField.getModifiers().setFinal( true );
         factoryField.setInitString( "new JsonFactory()" );
         jClass.addField( factoryField );
-
-        addModelImports( jClass, null );
 
         String root = objectModel.getRoot( getGeneratedVersion() );
 
