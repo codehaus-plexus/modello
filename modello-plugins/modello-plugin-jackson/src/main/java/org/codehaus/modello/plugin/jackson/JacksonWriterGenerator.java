@@ -261,8 +261,6 @@ public class JacksonWriterGenerator
             {
                 ModelAssociation association = (ModelAssociation) field;
 
-                String associationName = association.getName();
-
                 if ( association.isOneMultiplicity() )
                 {
                     sc.add( getValueChecker( type, value, association ) );
@@ -322,9 +320,16 @@ public class JacksonWriterGenerator
                         sc.add( "{" );
                         sc.indent();
 
-                        sc.add( "generator.writeObjectFieldStart( \"" + fieldTagName + "\" );" );
+                        if ( xmlAssociationMetadata.isMapExplode() )
+                        {
+                            sc.add( "generator.writeArrayFieldStart( \"" + fieldTagName + "\" );" );
+                        }
+                        else
+                        {
+                            sc.add( "generator.writeObjectFieldStart( \"" + fieldTagName + "\" );" );
+                        }
 
-                        sc.add( "for ( java.util.Map.Entry<Object, Object> entry : " + value + ".entrySet() )" );
+                        sc.add( "for ( java.util.Map.Entry<?, ?> entry : " + value + ".entrySet() )" );
 
                         sc.add( "{" );
                         sc.indent();
@@ -334,7 +339,7 @@ public class JacksonWriterGenerator
 
                         if ( xmlAssociationMetadata.isMapExplode() )
                         {
-                            sc.add( "generator.writeObjectFieldStart( \"" + singular( associationName ) + "\" );" );
+                            sc.add( "generator.writeStartObject();" );
                             sc.add( "generator.writeStringField( \"key\", key );" );
                             sc.add( "generator.writeStringField( \"value\", value );" );
                             sc.add( "generator.writeEndObject();" );
@@ -347,7 +352,14 @@ public class JacksonWriterGenerator
                         sc.unindent();
                         sc.add( "}" );
 
-                        sc.add( "generator.writeEndObject();" );
+                        if ( xmlAssociationMetadata.isMapExplode() )
+                        {
+                            sc.add( "generator.writeEndArray();" );
+                        }
+                        else
+                        {
+                            sc.add( "generator.writeEndObject();" );
+                        }
 
                         sc.unindent();
                         sc.add( "}" );
