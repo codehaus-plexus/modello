@@ -35,8 +35,8 @@
       </ul>
       </subsection>
 
-      <subsection name="stax-writer">
-      <p><code>stax-writer</code> generator creates
+      <subsection name="snakeyaml-writer">
+      <p><code>snakeyaml-writer</code> generator creates
         <code><i>my.model.package</i><b>.io.snakeyaml.</b><i>ModelName</i><b>SnakeYamlWriter</b></code> class with following
         public methods:
       </p>
