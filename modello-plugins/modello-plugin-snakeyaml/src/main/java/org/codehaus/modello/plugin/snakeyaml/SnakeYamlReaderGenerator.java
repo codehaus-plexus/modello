@@ -648,9 +648,16 @@ public class SnakeYamlReaderGenerator
 
                     if ( inModel )
                     {
-                        sc.add(
+                        sc.add( "while ( !parser.peekEvent().is( Event.ID.SequenceEnd ) )" );
+                        sc.add( "{" );
+
+                        sc.addIndented(
                             associationName + ".add( parse" + association.getTo() + "( parser, strict" + trackingArgs
                                 + " ) );" );
+
+                        sc.add( "}" );
+
+                        sc.add( "parser.getEvent();" );
                     }
                     else
                     {

@@ -608,9 +608,15 @@ public class JacksonReaderGenerator
 
                     if ( inModel )
                     {
-                        sc.add(
+                        sc.add( "while ( JsonToken.END_ARRAY != parser.nextToken() )" );
+
+                        sc.add( "{" );
+
+                        sc.addIndented(
                             associationName + ".add( parse" + association.getTo() + "( parser, strict" + trackingArgs
                                 + " ) );" );
+
+                        sc.add( "}" );
                     }
                     else
                     {
