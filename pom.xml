@@ -125,6 +125,16 @@
       <timezone>Europe/Berlin</timezone>
     </developer>
   </developers>
+  <contributors>
+    <contributor>
+      <name>Simone Tripodi</name>
+      <email>simonetripodi@apache.org</email>
+      <roles>
+        <role>Jackson plugin original contributor</role>
+      </roles>
+      <timezone>Europe/Rome</timezone>
+    </contributor>
+  </contributors>
 
   <mailingLists>
     <mailingList>
@@ -233,6 +243,11 @@
         <artifactId>modello-test</artifactId>
         <version>${project.version}</version>
         <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.codehaus.modello</groupId>
+        <artifactId>modello-plugin-jackson</artifactId>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.modello</groupId>

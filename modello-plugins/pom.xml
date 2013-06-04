@@ -25,6 +25,7 @@
     <module>modello-plugin-stax</module>
     <module>modello-plugin-jdom</module>
     <module>modello-plugin-dom4j</module>
+    <module>modello-plugin-jackson</module>
   </modules>
 
   <dependencies>
