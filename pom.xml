@@ -124,18 +124,15 @@
       </roles>
       <timezone>Europe/Berlin</timezone>
     </developer>
-  </developers>
-  <contributors>
-    <contributor>
+    <developer>
       <name>Simone Tripodi</name>
       <email>simonetripodi@apache.org</email>
       <roles>
-        <role>Jackson plugin original contributor</role>
-        <role>SnakeYaml plugin original contributor</role>
+        <role>Developer</role>
       </roles>
       <timezone>Europe/Rome</timezone>
-    </contributor>
-  </contributors>
+    </developer>
+  </developers>
 
   <mailingLists>
     <mailingList>
