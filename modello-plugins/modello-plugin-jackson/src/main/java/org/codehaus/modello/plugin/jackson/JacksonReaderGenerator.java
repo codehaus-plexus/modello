@@ -526,8 +526,6 @@ public class JacksonReaderGenerator
                 XmlAssociationMetadata xmlAssociationMetadata =
                     (XmlAssociationMetadata) association.getAssociationMetadata( XmlAssociationMetadata.ID );
 
-                String valuesTagName = resolveTagName( fieldTagName, xmlAssociationMetadata );
-
                 String type = association.getType();
 
                 if ( ModelDefault.LIST.equals( type ) || ModelDefault.SET.equals( type ) )
