@@ -26,6 +26,7 @@
     <module>modello-plugin-jdom</module>
     <module>modello-plugin-dom4j</module>
     <module>modello-plugin-jackson</module>
+    <module>modello-plugin-snakeyaml</module>
   </modules>
 
   <dependencies>
