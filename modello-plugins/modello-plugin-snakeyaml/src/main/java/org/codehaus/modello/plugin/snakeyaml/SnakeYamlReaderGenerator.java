@@ -605,10 +605,17 @@ public class SnakeYamlReaderGenerator
                     else
                     {
                         sc.add( ( addElse ? "else " : "" ) + "if ( \"" + fieldTagName
-                                    + "\".equals( ( (ScalarEvent) parser.peekEvent() ).getValue() ) )" );
+                                    + "\".equals( ( (ScalarEvent) event ).getValue() ) )" );
 
                         sc.add( "{" );
                         sc.indent();
+
+                        sc.add( "if ( !parser.getEvent().is( Event.ID.SequenceStart ) )" );
+                        sc.add( "{" );
+                        sc.addIndented( "throw new ParserException( \"Expected '"
+                                        + field.getName()
+                                        + "' data to start with a Sequence\", event.getStartMark(), \"\", null );" );
+                        sc.add( "}" );
 
                         sc.add( type + " " + associationName + " = " + objectName + ".get" + capFieldName + "();" );
 
