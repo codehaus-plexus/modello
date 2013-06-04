@@ -565,8 +565,6 @@ public class SnakeYamlReaderGenerator
                 XmlAssociationMetadata xmlAssociationMetadata =
                     (XmlAssociationMetadata) association.getAssociationMetadata( XmlAssociationMetadata.ID );
 
-                String valuesTagName = resolveTagName( fieldTagName, xmlAssociationMetadata );
-
                 String type = association.getType();
 
                 if ( ModelDefault.LIST.equals( type ) || ModelDefault.SET.equals( type ) )
@@ -606,7 +604,7 @@ public class SnakeYamlReaderGenerator
                     }
                     else
                     {
-                        sc.add( ( addElse ? "else " : "" ) + "if ( \"" + valuesTagName
+                        sc.add( ( addElse ? "else " : "" ) + "if ( \"" + fieldTagName
                                     + "\".equals( ( (ScalarEvent) parser.peekEvent() ).getValue() ) )" );
 
                         sc.add( "{" );
