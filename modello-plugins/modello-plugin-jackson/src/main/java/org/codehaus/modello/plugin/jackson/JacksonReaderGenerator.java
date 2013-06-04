@@ -405,12 +405,9 @@ public class JacksonReaderGenerator
             {
                 XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
 
-                if ( !xmlFieldMetadata.isAttribute() )
-                {
-                    processField( field, xmlFieldMetadata, addElse, sc, uncapClassName, jClass );
+                processField( field, xmlFieldMetadata, addElse, sc, uncapClassName, jClass );
 
-                    addElse = true;
-                }
+                addElse = true;
             }
 
             if ( addElse )
@@ -565,8 +562,11 @@ public class JacksonReaderGenerator
                     }
                     else
                     {
-                        sc.add( ( addElse ? "else " : "" ) + "if ( \"" + fieldTagName
-                                    + "\".equals( parser.getCurrentName() ) )" );
+                        sc.add( ( addElse ? "else " : "" ) + "if ( checkFieldWithDuplicate( parser, \""
+                                + fieldTagName
+                                + "\", "
+                                + alias
+                                + ", parsed ) )" );
 
                         sc.add( "{" );
                         sc.indent();

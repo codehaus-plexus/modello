@@ -434,12 +434,9 @@ public class SnakeYamlReaderGenerator
             {
                 XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
 
-                if ( !xmlFieldMetadata.isAttribute() )
-                {
-                    processField( field, xmlFieldMetadata, addElse, sc, uncapClassName, jClass );
+                processField( field, xmlFieldMetadata, addElse, sc, uncapClassName, jClass );
 
-                    addElse = true;
-                }
+                addElse = true;
             }
 
             if ( addElse )
@@ -604,8 +601,12 @@ public class SnakeYamlReaderGenerator
                     }
                     else
                     {
-                        sc.add( ( addElse ? "else " : "" ) + "if ( \"" + fieldTagName
-                                    + "\".equals( ( (ScalarEvent) event ).getValue() ) )" );
+                        sc.add( ( addElse ? "else " : "" )
+                                + "if ( checkFieldWithDuplicate( event, \""
+                                + fieldTagName
+                                + "\", "
+                                + alias
+                                + ", parsed ) )" );
 
                         sc.add( "{" );
                         sc.indent();
