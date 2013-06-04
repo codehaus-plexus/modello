@@ -567,7 +567,7 @@ public class JacksonReaderGenerator
                     }
                     else
                     {
-                        sc.add( ( addElse ? "else " : "" ) + "if ( \"" + valuesTagName
+                        sc.add( ( addElse ? "else " : "" ) + "if ( \"" + fieldTagName
                                     + "\".equals( parser.getCurrentName() ) )" );
 
                         sc.add( "{" );
