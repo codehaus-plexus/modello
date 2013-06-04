@@ -389,7 +389,7 @@ public class SnakeYamlReaderGenerator
         sc.add( "{" );
         sc.addIndented( "throw new ParserException( \"Expected '"
                         + className
-                        + "' data to start with an Object\", event.getStartMark(), \"\", null );" );
+                        + "' data to start with a Mapping\", event.getStartMark(), \"\", null );" );
         sc.add( "}" );
 
         sc.add( "" );
@@ -724,7 +724,7 @@ public class SnakeYamlReaderGenerator
                         sc.add( "{" );
                         sc.addIndented( "throw new ParserException( \"Expected '"
                                         + field.getName()
-                                        + "' data to start with an Object\", event.getStartMark(), \"\", null );" );
+                                        + "' data to start with a Mapping\", event.getStartMark(), \"\", null );" );
                         sc.add( "}" );
 
                         sc.add( "while ( !parser.peekEvent().is( Event.ID.MappingEnd ) )" );
