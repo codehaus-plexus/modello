@@ -665,13 +665,81 @@ public class JacksonReaderGenerator
 
                     if ( xmlAssociationMetadata.isMapExplode() )
                     {
-                        // TODO
-                        throw new IllegalArgumentException( "Unsupported exploded "
-                                        + type
-                                        + " for field "
-                                        + field.getModelClass().getName()
-                                        + "."
-                                        + field.getName() );
+                        sc.add( "if ( JsonToken.START_ARRAY != parser.nextToken() )" );
+                        sc.add( "{" );
+                        sc.addIndented( "throw new JsonParseException( \"Expected '"
+                                        + fieldTagName
+                                        + "' data to start with an Array\", parser.getCurrentLocation() );" );
+                        sc.add( "}" );
+
+                        sc.add( "// " + xmlAssociationMetadata.getMapStyle() + " mode." );
+
+                        sc.add( "while ( JsonToken.END_ARRAY != parser.nextToken() )" );
+
+                        sc.add( "{" );
+                        sc.indent();
+
+                        sc.add( "if ( JsonToken.START_OBJECT != parser.getCurrentToken() && JsonToken.START_OBJECT != parser.nextToken() )" );
+                        sc.add( "{" );
+                        sc.addIndented( "throw new JsonParseException( \"Expected '"
+                                        + fieldTagName
+                                        + "' item data to start with an Object\", parser.getCurrentLocation() );" );
+                        sc.add( "}" );
+
+                        sc.add( "String key = null;" );
+
+                        sc.add( "String value = null;" );
+
+                        sc.add( "Set<String> parsedPropertiesElements = new HashSet<String>();" );
+
+                        sc.add( "while ( JsonToken.END_OBJECT != parser.nextToken() )" );
+
+                        sc.add( "{" );
+                        sc.indent();
+
+                        sc.add( "if ( checkFieldWithDuplicate( parser, \"key\", \"\", parsedPropertiesElements ) )" );
+
+                        sc.add( "{" );
+                        sc.addIndented( "parser.nextToken();" );
+
+                        String parserGetter = "parser.getText()";
+
+                        if ( xmlFieldMetadata.isTrim() )
+                        {
+                            parserGetter = "getTrimmedValue( " + parserGetter + " )";
+                        }
+
+                        sc.addIndented( "key = " + parserGetter + ";" );
+                        sc.add( "}" );
+
+                        sc.add( "else if ( checkFieldWithDuplicate( parser, \"value\", \"\", parsedPropertiesElements ) )" );
+
+                        sc.add( "{" );
+                        sc.addIndented( "parser.nextToken();" );
+
+                        parserGetter = "parser.getText()";
+
+                        if ( xmlFieldMetadata.isTrim() )
+                        {
+                            parserGetter = "getTrimmedValue( " + parserGetter + " )";
+                        }
+
+                        sc.addIndented( "value = " + parserGetter + ";" );
+                        sc.add( "}" );
+
+                        sc.add( "else" );
+
+                        sc.add( "{" );
+                        sc.addIndented( "checkUnknownElement( parser, strict );" );
+                        sc.add( "}" );
+
+                        sc.unindent();
+                        sc.add( "}" );
+
+                        sc.add( objectName + ".add" + capitalise( singularName ) + "( key, value );" );
+
+                        sc.unindent();
+                        sc.add( "}" );
                     }
                     else
                     {
