@@ -708,13 +708,80 @@ public class SnakeYamlReaderGenerator
 
                     if ( xmlAssociationMetadata.isMapExplode() )
                     {
-                        // TODO
-                        throw new IllegalArgumentException( "Unsupported exploded "
-                                        + type
-                                        + " for field "
-                                        + field.getModelClass().getName()
-                                        + "."
-                                        + field.getName() );
+                        sc.add( "if ( !parser.getEvent().is( Event.ID.SequenceStart ) )" );
+                        sc.add( "{" );
+                        sc.addIndented( "throw new ParserException( \"Expected '"
+                                        + field.getName()
+                                        + "' data to start with a Sequence\", event.getStartMark(), \"\", null );" );
+                        sc.add( "}" );
+
+                        sc.add( "while ( !parser.peekEvent().is( Event.ID.SequenceEnd ) )" );
+
+                        sc.add( "{" );
+                        sc.indent();
+
+                        sc.add( "event = parser.getEvent();" );
+
+                        sc.add( "" );
+
+                        sc.add( "if ( !event.is( Event.ID.MappingStart ) )" );
+                        sc.add( "{" );
+                        sc.addIndented( "throw new ParserException( \"Expected '"
+                                        + fieldTagName
+                                        + "' item data to start with a Mapping\", event.getStartMark(), \"\", null );" );
+                        sc.add( "}" );
+
+                        sc.add( "String key = null;" );
+
+                        sc.add( "String value = null;" );
+
+                        sc.add( "Set<String> parsedPropertiesElements = new HashSet<String>();" );
+
+                        sc.add( "while ( !( event = parser.getEvent() ).is( Event.ID.MappingEnd ) )" );
+
+                        sc.add( "{" );
+                        sc.indent();
+
+                        sc.add( "if ( checkFieldWithDuplicate( event, \"key\", \"\", parsedPropertiesElements ) )" );
+                        sc.add( "{" );
+
+                        String parserGetter = "( (ScalarEvent) parser.getEvent() ).getValue()";
+                        if ( xmlFieldMetadata.isTrim() )
+                        {
+                            parserGetter = "getTrimmedValue( " + parserGetter + " )";
+                        }
+
+                        sc.addIndented( "key = " + parserGetter + ";" );
+
+                        sc.add( "}" );
+                        sc.add( "else if ( checkFieldWithDuplicate( event, \"value\", \"\", parsedPropertiesElements ) )" );
+                        sc.add( "{" );
+
+                        parserGetter = "( (ScalarEvent) parser.getEvent() ).getValue()";
+                        if ( xmlFieldMetadata.isTrim() )
+                        {
+                            parserGetter = "getTrimmedValue( " + parserGetter + " )";
+                        }
+
+                        sc.addIndented( "value = " + parserGetter + ";" );
+
+                        sc.add( "}" );
+
+                        sc.add( "else" );
+
+                        sc.add( "{" );
+
+                        sc.addIndented( "checkUnknownElement( event, parser, strict );" );
+
+                        sc.add( "}" );
+
+                        sc.unindent();
+                        sc.add( "}" );
+
+                        sc.add( objectName + ".add" + capitalise( singularName ) + "( key, value );" );
+
+                        sc.unindent();
+                        sc.add( "}" );
                     }
                     else
                     {
