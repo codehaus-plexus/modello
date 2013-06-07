@@ -615,6 +615,11 @@ public class JClass extends JStructure
             buffer.append( "abstract " );
         }
 
+        if ( this instanceof JInnerClass && modifiers.isStatic() )
+        {
+            buffer.append( "static " );
+        }
+
         if ( modifiers.isFinal() )
         {
             buffer.append( "final " );
