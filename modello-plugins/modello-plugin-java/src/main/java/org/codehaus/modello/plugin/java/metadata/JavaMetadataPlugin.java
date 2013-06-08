@@ -67,7 +67,7 @@ public class JavaMetadataPlugin
     /**
      * @since 1.8
      */
-    public static final String JAVA_GENERATE_TOSTRING = "java.generateToString";
+    public static final String JAVA_GENERATE_TOSTRING = "java.toString";
 
     public static final String JAVA_SUPPRESS_ALL_WARNINGS = "java.suppressAllWarnings";
 

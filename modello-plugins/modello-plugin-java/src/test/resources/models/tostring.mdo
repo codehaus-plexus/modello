@@ -1,6 +1,6 @@
 <model>
-  <id>tmp</id>
-  <name>Modello Test Model with tmp</name>
+  <id>tostring</id>
+  <name>Modello Test Model with toString() method</name>
   <defaults>
     <default>
       <key>package</key>
@@ -8,7 +8,7 @@
     </default>
   </defaults>
   <classes>
-    <class rootElement="true" java.generateToString="true">
+    <class rootElement="true" java.toString="true">
       <name>MyClass</name>
       <version>1.0.0</version>
       <fields>

@@ -31,10 +31,9 @@ import java.io.File;
 import java.util.Properties;
 
 /**
- * MODELLO-83: check that <code>tmp</code> can be used as a field name without interference with generated code for
- * <code>hashCode()</code>.
+ * check <code>toString()</code> method is generated.
  *
- * @author <a href="mailto:vincent.siveton@gmail.com">Vincent Siveton</a>
+ * @author <a href="mailto:olamy@apache.org">Olivier Lamy</a>
  */
 public class ToStringJavaGeneratorTest
     extends AbstractModelloJavaGeneratorTest
@@ -45,10 +44,9 @@ public class ToStringJavaGeneratorTest
     }
 
     /**
-     * MODELLO-83
      * @throws Throwable
      */
-    public void testJavaGeneratorWithTmp()
+    public void testJavaGeneratorWithToString()
         throws Throwable
     {
         ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
