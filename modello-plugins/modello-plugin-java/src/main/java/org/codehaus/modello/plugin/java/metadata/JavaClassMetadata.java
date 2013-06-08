@@ -62,6 +62,11 @@ public class JavaClassMetadata
      */
     private boolean generateToString = false;
 
+    /**
+     * @since 1.8
+     */
+    private boolean generateBuilder = false;
+
     public void setAbstract( boolean abstractMode )
     {
         this.abstractMode = abstractMode;
@@ -112,5 +117,14 @@ public class JavaClassMetadata
         this.generateToString = generateToString;
     }
 
+    public boolean isGenerateBuilder()
+    {
+        return generateBuilder;
+    }
+
+    public void setGenerateBuilder( boolean generateBuilder )
+    {
+        this.generateBuilder = generateBuilder;
+    }
 
 }

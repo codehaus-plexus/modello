@@ -30,6 +30,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.ModelloRuntimeException;
@@ -173,10 +174,14 @@ public class JavaModelloGenerator
                 }
             }
 
+            // since 1.8
+            // needed to understand if the instance can be created with empty ctor or not
+            JConstructor jConstructor = null;
+
             if ( !jConstructorSource.isEmpty() )
             {
                 // Ironic that we are doing lazy init huh?
-                JConstructor jConstructor = jClass.createConstructor();
+                jConstructor = jClass.createConstructor();
                 jConstructor.setSourceCode( jConstructorSource );
                 jClass.addConstructor( jConstructor );
             }
@@ -214,6 +219,16 @@ public class JavaModelloGenerator
 
                 jClass.addMethod( toString );
 
+            }
+
+            // ----------------------------------------------------------------------
+            // Model.Builder
+            // since 1.8
+            // ----------------------------------------------------------------------
+
+            if ( javaClassMetadata.isGenerateBuilder() )
+            {
+                generateBuilder( modelClass, jClass.createInnerClass( "Builder" ), jConstructor );
             }
 
             boolean cloneLocations = !superClassInModel && modelClass != sourceTrackerClass;
@@ -1241,9 +1256,24 @@ public class JavaModelloGenerator
     private JMethod createSetter( JField field, ModelField modelField )
         throws ModelloException
     {
+        return createSetter( field, modelField, false );
+    }
+
+    // since 1.8
+    private JMethod createSetter( JField field, ModelField modelField, boolean isBuilderMethod )
+        throws ModelloException
+    {
         String propertyName = capitalise( field.getName() );
 
-        JMethod setter = new JMethod( "set" + propertyName );
+        JMethod setter;
+        if ( isBuilderMethod )
+        {
+            setter = new JMethod( "set" + propertyName, new JClass( "Builder" ), "this builder instance" );
+        }
+        else
+        {
+            setter = new JMethod( "set" + propertyName );
+        }
 
         StringBuffer comment = new StringBuffer( "Set " );
         if ( StringUtils.isEmpty( modelField.getDescription() ) )
@@ -1325,6 +1355,11 @@ public class JavaModelloGenerator
         else
         {
             sc.add( "this." + field.getName() + " = " + field.getName() + ";" );
+        }
+
+        if ( isBuilderMethod )
+        {
+            sc.add( "return this;" );
         }
 
         return setter;
@@ -1661,6 +1696,15 @@ public class JavaModelloGenerator
     private void createAdder( ModelAssociation modelAssociation, JClass jClass )
         throws ModelloException
     {
+        createAdder( modelAssociation, jClass, false );
+    }
+
+    /*
+     * since 1.8
+     */
+    private void createAdder( ModelAssociation modelAssociation, JClass jClass, boolean isBuilderMethod )
+        throws ModelloException
+    {
         String fieldName = modelAssociation.getName();
 
         JavaAssociationMetadata javaAssociationMetadata =
@@ -1690,7 +1734,17 @@ public class JavaModelloGenerator
         if ( modelAssociation.getType().equals( ModelDefault.PROPERTIES ) || modelAssociation.getType().equals(
             ModelDefault.MAP ) )
         {
-            JMethod adder = new JMethod( "add" + capitalise( singular( fieldName ) ) );
+            String adderName = "add" + capitalise( singular( fieldName ) );
+
+            JMethod adder;
+            if ( isBuilderMethod )
+            {
+                adder = new JMethod( adderName, new JClass( "Builder" ), "this builder instance" );
+            }
+            else
+            {
+                adder = new JMethod( adderName );
+            }
 
             if ( modelAssociation.getType().equals( ModelDefault.MAP ) )
             {
@@ -1703,22 +1757,64 @@ public class JavaModelloGenerator
 
             adder.addParameter( new JParameter( new JClass( modelAssociation.getTo() ), "value" ) );
 
-            adder.getSourceCode().add( "get" + capitalise( fieldName ) + "().put( key, value );" );
+            StringBuilder adderCode = new StringBuilder();
+
+            if ( isBuilderMethod )
+            {
+                adderCode.append( fieldName );
+            }
+            else
+            {
+                adderCode.append( "get" ).append( capitalise( fieldName ) ).append( "()" );
+            }
+
+            adderCode.append( ".put( key, value );" );
+
+            adder.getSourceCode().add( adderCode.toString() );
+
+            if ( isBuilderMethod )
+            {
+                adder.getSourceCode().add( "return this;" );
+            }
 
             jClass.addMethod( adder );
         }
         else
         {
-            JMethod adder = new JMethod( "add" + singular( capitalise( fieldName ) ) );
+            String adderName = "add" + singular( capitalise( singular( fieldName ) ) );
+
+            JMethod adder;
+            if ( isBuilderMethod )
+            {
+                adder = new JMethod( adderName, new JClass( "Builder" ), "this builder instance" );
+            }
+            else
+            {
+                adder = new JMethod( adderName );
+            }
 
             adder.addParameter( new JParameter( addType, parameterName ) );
 
             createClassCastAssertion( adder.getSourceCode(), modelAssociation, "add" );
 
-            adder.getSourceCode().add(
-                "get" + capitalise( fieldName ) + "().add( " + implementationParameterName + " );" );
+            StringBuilder adderCode = new StringBuilder();
 
-            if ( bidirectionalAssociation && javaAssociationMetadata.isBidi() )
+            if ( isBuilderMethod )
+            {
+                adderCode.append( fieldName );
+            }
+            else
+            {
+                adderCode.append( "get" ).append( capitalise( fieldName ) ).append( "()" );
+            }
+
+            adderCode.append( ".add( " )
+                     .append( implementationParameterName )
+                     .append( " );" );
+
+            adder.getSourceCode().add( adderCode.toString() );
+
+            if ( bidirectionalAssociation && javaAssociationMetadata.isBidi() && !isBuilderMethod )
             {
                 // TODO: remove after tested
                 // adder.addException( new JClass( "Exception" ) );
@@ -1728,7 +1824,18 @@ public class JavaModelloGenerator
                         + "Association( this );" );
             }
 
+            if ( isBuilderMethod )
+            {
+                adder.getSourceCode().add( "return this;" );
+            }
+
             jClass.addMethod( adder );
+
+            // don't add the remover in the inner Builder class
+            if ( isBuilderMethod )
+            {
+                return;
+            }
 
             JMethod remover = new JMethod( "remove" + singular( capitalise( fieldName ) ) );
 
@@ -1828,6 +1935,287 @@ public class JavaModelloGenerator
     {
         jMethod.addParameter( new JParameter( new JType( type ), name ) );
         jMethod.getJDocComment().getParamDescriptor( name ).setDescription( comment );
+    }
+
+    // ----------------------------------------------------------------------
+    // Model.Builder
+    // since 1.8
+    // ----------------------------------------------------------------------
+
+    private void generateBuilder( ModelClass modelClass, JClass builderClass, JConstructor outherClassConstructor )
+        throws ModelloException
+    {
+        builderClass.getModifiers().setStatic( true );
+        builderClass.getModifiers().setFinal( true );
+
+        // create builder setters methods
+        for ( ModelField modelField : modelClass.getFields( getGeneratedVersion() ) )
+        {
+            if ( modelField instanceof ModelAssociation )
+            {
+                createBuilderAssociation( builderClass, (ModelAssociation) modelField );
+            }
+            else
+            {
+                createBuilderField( builderClass, modelField );
+            }
+        }
+
+        // create and add the Model#build() method
+        JMethod build = new JMethod( "build", new JClass( modelClass.getName() ), "A new <code>"
+                                                                                  + modelClass.getName()
+                                                                                  + "</code> instance" );
+        build.getJDocComment().setComment( "Creates a new <code>"
+                                           + modelClass.getName()
+                                           + "</code> instance." );
+
+        JSourceCode sc = build.getSourceCode();
+
+        final Set<String> ctorArgs = new HashSet<String>();
+
+        StringBuilder ctor = new StringBuilder( modelClass.getName() )
+                                 .append( " instance = new " )
+                                 .append( modelClass.getName() )
+                                 .append( '(' );
+
+        // understand if default empty ctor can be used or if it requires parameters
+        if ( outherClassConstructor != null )
+        {
+            JParameter[] parameters = outherClassConstructor.getParameters();
+            for ( int i = 0; i < parameters.length; i++ )
+            {
+                if ( i > 0 )
+                {
+                    ctor.append( ',' );
+                }
+
+                JParameter parameter = parameters[i];
+
+                ctor.append( ' ' )
+                    .append( parameter.getName() )
+                    .append( ' ' );
+
+                ctorArgs.add( parameter.getName() );
+            }
+        }
+
+        ctor.append( ");" );
+
+        sc.add( ctor.toString() );
+
+        // collect parameters and set them in the instance object
+        for ( ModelField modelField : modelClass.getFields( getGeneratedVersion() ) )
+        {
+            if ( modelField instanceof ModelAssociation )
+            {
+                createSetBuilderAssociationToInstance( ctorArgs, (ModelAssociation) modelField, sc );
+            }
+            else
+            {
+                createSetBuilderFieldToInstance( ctorArgs, modelField, sc );
+            }
+        }
+
+        sc.add( "return instance;" );
+        builderClass.addMethod( build );
+    }
+
+    private void createBuilderField( JClass jClass, ModelField modelField )
+        throws ModelloException
+    {
+        JField field = createField( modelField );
+
+        jClass.addField( field );
+
+        jClass.addMethod( createSetter( field, modelField, true ) );
+    }
+
+    private boolean createSetBuilderFieldToInstance( Set<String> ctorArgs, ModelField modelField, JSourceCode sc )
+        throws ModelloException
+    {
+        JavaFieldMetadata javaFieldMetadata = (JavaFieldMetadata) modelField.getMetadata( JavaFieldMetadata.ID );
+
+        // if it is not already set by the ctor and if the setter method is available
+        if ( !ctorArgs.contains( modelField.getName() ) && javaFieldMetadata.isSetter() )
+        {
+            sc.add( "instance.set"
+                    + capitalise( modelField.getName() )
+                    + "( "
+                    + modelField.getName()
+                    + " );" );
+            return true;
+        }
+
+        return false;
+    }
+
+    private void createBuilderAssociation( JClass jClass, ModelAssociation modelAssociation )
+        throws ModelloException
+    {
+        JavaAssociationMetadata javaAssociationMetadata = getJavaAssociationMetadata( modelAssociation );
+
+        if ( modelAssociation.isManyMultiplicity() )
+        {
+            JType componentType = getComponentType( modelAssociation, javaAssociationMetadata );
+
+            String defaultValue = getDefaultValue( modelAssociation, componentType );
+
+            JType type;
+            if ( modelAssociation.isGenericType() )
+            {
+                type = new JCollectionType( modelAssociation.getType(), componentType, useJava5 );
+            }
+            else
+            {
+                type = new JClass( modelAssociation.getType() );
+            }
+
+            JField jField = new JField( type, modelAssociation.getName() );
+            jField.getModifiers().setFinal( true );
+
+            if ( !isEmpty( modelAssociation.getComment() ) )
+            {
+                jField.setComment( modelAssociation.getComment() );
+            }
+
+            if ( useJava5 && !modelAssociation.getAnnotations().isEmpty() )
+            {
+                for ( String annotation : modelAssociation.getAnnotations() )
+                {
+                    jField.appendAnnotation( annotation );
+                }
+            }
+
+            jField.setInitString( defaultValue );
+
+            jClass.addField( jField );
+
+            createAdder( modelAssociation, jClass, true );
+        }
+        else
+        {
+            createBuilderField( jClass, modelAssociation );
+        }
+    }
+
+    private void createSetBuilderAssociationToInstance( Set<String> ctorArgs, ModelAssociation modelAssociation, JSourceCode sc )
+        throws ModelloException
+    {
+        if ( modelAssociation.isManyMultiplicity() )
+        {
+            // Map/Properties don't have bidi association, they can be directly set
+            if ( modelAssociation.getType().equals( ModelDefault.PROPERTIES )
+                            || modelAssociation.getType().equals( ModelDefault.MAP ) )
+            {
+                if ( createSetBuilderFieldToInstance( ctorArgs, modelAssociation, sc ) )
+                {
+                    return;
+                }
+            }
+
+            // check if there's no bidi association, so
+
+            JavaAssociationMetadata javaAssociationMetadata = getJavaAssociationMetadata( modelAssociation );
+
+            boolean bidirectionalAssociation = isBidirectionalAssociation( modelAssociation );
+
+            if ( !bidirectionalAssociation || !javaAssociationMetadata.isBidi() )
+            {
+                JavaFieldMetadata javaFieldMetadata = (JavaFieldMetadata) modelAssociation.getMetadata( JavaFieldMetadata.ID );
+
+                // just use the plain old setter
+                if (createSetBuilderFieldToInstance( ctorArgs, modelAssociation, sc ) )
+                {
+                    return;
+                }
+                // or we can try to set by using the addAll if there is a getter available
+                else if ( javaFieldMetadata.isGetter() )
+                {
+                    sc.add( "instance.get" + capitalise( modelAssociation.getName() ) + "().addAll( " + modelAssociation.getName() + " );" );
+                    return;
+                }
+            }
+
+            // no previous precondition satisfied
+            // or no one of the previous method worked
+            // use the adder
+            // bidi association can be handled directly by the model, not a Builder task
+
+            String itemType;
+            String targetField = modelAssociation.getName();
+
+            if ( StringUtils.isNotEmpty( javaAssociationMetadata.getInterfaceName() ) )
+            {
+                itemType = javaAssociationMetadata.getInterfaceName();
+            }
+            else if ( modelAssociation.getToClass() != null )
+            {
+                itemType = modelAssociation.getToClass().getName();
+            }
+            else if ( modelAssociation.getType().equals( ModelDefault.PROPERTIES )
+                      || modelAssociation.getType().equals( ModelDefault.MAP ) )
+            {
+                itemType = "java.util.Map.Entry<";
+
+                if ( modelAssociation.getType().equals( ModelDefault.PROPERTIES ) )
+                {
+                    itemType += "Object, Object";
+                }
+                else
+                {
+                    itemType += "String, " + modelAssociation.getTo();
+                }
+
+                itemType += ">";
+                targetField += ".entrySet()";
+            }
+            else
+            {
+                itemType = "String";
+            }
+
+            StringBuilder adder = new StringBuilder( "instance.add" )
+                                      .append( capitalise( singular( modelAssociation.getName() ) ) )
+                                      .append( "( " );
+
+            if ( modelAssociation.getType().equals( ModelDefault.PROPERTIES )
+                            || modelAssociation.getType().equals( ModelDefault.MAP ) )
+            {
+                appendEntryMethod( "getKey()", adder, modelAssociation );
+                adder.append( ", " );
+                appendEntryMethod( "getValue()", adder, modelAssociation );
+            }
+            else
+            {
+                adder.append( "item" );
+            }
+
+            adder.append( " );" );
+
+            sc.add( "for ( " + itemType + " item : " + targetField + " )" );
+            sc.add( "{" );
+            sc.addIndented( adder.toString() );
+            sc.add( "}" );
+        }
+        else
+        {
+            createSetBuilderFieldToInstance( ctorArgs, modelAssociation, sc );
+        }
+    }
+
+    private static void appendEntryMethod( String method, StringBuilder target, ModelAssociation modelAssociation )
+    {
+        if ( modelAssociation.getType().equals( ModelDefault.PROPERTIES ) )
+        {
+            target.append( "String.valueOf( " );
+        }
+
+        target.append( "item." ).append( method );
+
+        if ( modelAssociation.getType().equals( ModelDefault.PROPERTIES ) )
+        {
+            target.append( " )" );
+        }
     }
 
 }
