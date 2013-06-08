@@ -76,6 +76,11 @@ public class JavaMetadataPlugin
      */
     public static final String JAVA_GENERATE_BUILDER = "java.builder";
 
+    /**
+     * @since 1.8
+     */
+    public static final String JAVA_GENERATE_STATIC_CREATORS = "java.staticCreator";
+
     // ----------------------------------------------------------------------
     // Map to Metadata
     // ----------------------------------------------------------------------
@@ -104,6 +109,8 @@ public class JavaMetadataPlugin
         metadata.setGenerateToString( getBoolean( data, JAVA_GENERATE_TOSTRING, false ) );
 
         metadata.setGenerateBuilder( getBoolean( data, JAVA_GENERATE_BUILDER, false ) );
+
+        metadata.setGenerateStaticCreators( getBoolean( data, JAVA_GENERATE_STATIC_CREATORS, false ) );
 
         return metadata;
     }

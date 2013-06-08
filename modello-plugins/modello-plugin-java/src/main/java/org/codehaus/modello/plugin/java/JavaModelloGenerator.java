@@ -231,6 +231,16 @@ public class JavaModelloGenerator
                 generateBuilder( modelClass, jClass.createInnerClass( "Builder" ), jConstructor );
             }
 
+            // ----------------------------------------------------------------------
+            // Model.newXXXInstance
+            // since 1.8
+            // ----------------------------------------------------------------------
+
+            if ( javaClassMetadata.isGenerateStaticCreators() )
+            {
+                generateStaticCreator( modelClass, jClass, jConstructor );
+            }
+
             boolean cloneLocations = !superClassInModel && modelClass != sourceTrackerClass;
             JMethod[] cloneMethods = generateClone( modelClass, cloneLocations ? locationTrackerClass : null );
             if ( cloneMethods.length > 0 )
@@ -1971,6 +1981,14 @@ public class JavaModelloGenerator
 
         JSourceCode sc = build.getSourceCode();
 
+        createInstanceAndSetProperties( modelClass, outherClassConstructor, sc );
+
+        builderClass.addMethod( build );
+    }
+
+    private void createInstanceAndSetProperties( ModelClass modelClass, JConstructor constructor, JSourceCode sc )
+        throws ModelloException
+    {
         final Set<String> ctorArgs = new HashSet<String>();
 
         StringBuilder ctor = new StringBuilder( modelClass.getName() )
@@ -1979,9 +1997,9 @@ public class JavaModelloGenerator
                                  .append( '(' );
 
         // understand if default empty ctor can be used or if it requires parameters
-        if ( outherClassConstructor != null )
+        if ( constructor != null )
         {
-            JParameter[] parameters = outherClassConstructor.getParameters();
+            JParameter[] parameters = constructor.getParameters();
             for ( int i = 0; i < parameters.length; i++ )
             {
                 if ( i > 0 )
@@ -2017,7 +2035,6 @@ public class JavaModelloGenerator
         }
 
         sc.add( "return instance;" );
-        builderClass.addMethod( build );
     }
 
     private void createBuilderField( JClass jClass, ModelField modelField )
@@ -2216,6 +2233,65 @@ public class JavaModelloGenerator
         {
             target.append( " )" );
         }
+    }
+
+    private void generateStaticCreator( ModelClass modelClass, JClass jClass, JConstructor constructor )
+        throws ModelloException
+    {
+        JMethod creatorMethod = new JMethod( "new" + modelClass.getName() + "Instance",
+                                             new JClass( modelClass.getName() ),
+                                             "a new <code>" + modelClass.getName() + "</code> instance." );
+        creatorMethod.getModifiers().setStatic( true );
+        creatorMethod.getJDocComment().setComment( "Creates a new <code>" + modelClass.getName() + "</code> instance." );
+
+        for ( ModelField modelField : modelClass.getFields( getGeneratedVersion() ) )
+        {
+            creatorMethod.addParameter( new JParameter( new JClass( modelField.getType() ), modelField.getName() ) );
+        }
+
+        JSourceCode sc = creatorMethod.getSourceCode();
+
+        createInstanceAndSetProperties( modelClass, constructor, sc );
+
+        jClass.addMethod( creatorMethod );
+
+        // creates a shortcut with default values
+        creatorMethod = new JMethod( "new" + modelClass.getName() + "Instance",
+                                     new JClass( modelClass.getName() ),
+                                     "a new <code>" + modelClass.getName() + "</code> instance." );
+        creatorMethod.getModifiers().setStatic( true );
+        creatorMethod.getJDocComment().setComment( "Creates a new <code>" + modelClass.getName() + "</code> instance." );
+
+        StringBuilder shortcutArgs = new StringBuilder();
+
+        for ( ModelField modelField : modelClass.getFields( getGeneratedVersion() ) )
+        {
+            if ( shortcutArgs.length() > 0 )
+            {
+                shortcutArgs.append( ',' );
+            }
+
+            shortcutArgs.append( ' ' );
+
+            if ( StringUtils.isEmpty( modelField.getDefaultValue() ) )
+            {
+                creatorMethod.addParameter( new JParameter( new JClass( modelField.getType() ), modelField.getName() ) );
+
+                shortcutArgs.append( modelField.getName() );
+            }
+            else
+            {
+                shortcutArgs.append( getJavaDefaultValue( modelField ) );
+            }
+
+            shortcutArgs.append( ' ' );
+        }
+
+        sc = creatorMethod.getSourceCode();
+
+        sc.add( "return new" + modelClass.getName() + "Instance(" + shortcutArgs + ");" );
+
+        jClass.addMethod( creatorMethod );
     }
 
 }

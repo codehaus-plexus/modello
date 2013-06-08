@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model>
+  <id>static-creator-test</id>
+  <name>StaticCreatorTest</name>
+
+  <defaults>
+    <default>
+      <key>package</key>
+      <value>org.codehaus.modello.staticcreator</value>
+    </default>
+  </defaults>
+
+  <classes>
+    <class java.staticCreator="true">
+      <name>Bundle</name>
+      <version>1.0.0+</version>
+      <fields>
+        <field>
+          <name>properties</name>
+          <version>1.0.0+</version>
+          <type>Properties</type>
+          <association>
+            <type>String</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+        <field>
+          <name>groupId</name>
+          <description>A universally unique identifier for a bundle.
+          </description>
+          <type>String</type>
+          <required>true</required>
+          <version>1.0.0+</version>
+        </field>
+        <field>
+          <name>artifactId</name>
+          <description>The identifier for this bundle that is unique
+            within the group given by the group ID.</description>
+          <type>String</type>
+          <required>true</required>
+          <version>1.0.0+</version>
+        </field>
+        <field>
+          <name>version</name>
+          <description>The current version of the artifact produced by
+            this project.</description>
+          <type>String</type>
+          <required>true</required>
+          <version>1.0.0+</version>
+        </field>
+        <field>
+          <name>runModes</name>
+          <type>String</type>
+          <required>false</required>
+          <version>1.0.0+</version>
+        </field>
+        <field>
+          <name>type</name>
+          <description>The bundle distributed type.</description>
+          <type>String</type>
+          <defaultValue>jar</defaultValue>
+          <required>false</required>
+          <version>1.0.0+</version>
+        </field>
+      </fields>
+    </class>
+  </classes>
+
+</model>
