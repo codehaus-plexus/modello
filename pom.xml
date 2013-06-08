@@ -114,7 +114,7 @@
       <roles>
         <role>Developer</role>
       </roles>
-      <timezone>Europe/Paris</timezone>
+      <timezone>Australia/Melbourne</timezone>
     </developer>
     <developer>
       <name>Benjamin Bentmann</name>
