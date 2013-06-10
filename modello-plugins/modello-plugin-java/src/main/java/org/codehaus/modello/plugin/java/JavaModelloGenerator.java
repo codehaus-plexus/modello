@@ -2193,7 +2193,9 @@ public class JavaModelloGenerator
                 // or we can try to set by using the addAll if there is a getter available
                 else if ( javaFieldMetadata.isGetter() )
                 {
-                    sc.add( "instance.get" + capitalise( modelAssociation.getName() ) + "().addAll( " + modelAssociation.getName() + " );" );
+                    String action = isMap( modelAssociation.getType() ) ? "put" : "add";
+
+                    sc.add( "instance.get" + capitalise( modelAssociation.getName() ) + "()." + action + "All( " + modelAssociation.getName() + " );" );
                     return;
                 }
             }
