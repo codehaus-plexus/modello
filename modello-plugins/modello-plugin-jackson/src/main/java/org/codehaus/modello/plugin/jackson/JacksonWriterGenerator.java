@@ -289,10 +289,22 @@ public class JacksonWriterGenerator
 
                         sc.add( "generator.writeArrayFieldStart( \"" + fieldTagName + "\" );" );
 
-                        sc.add( "for ( " + toType + " o : " + value + " )" );
+                        if ( useJava5 )
+                        {
+                            sc.add( "for ( " + toType + " o : " + value + " )" );
+                        }
+                        else
+                        {
+                            sc.add( "for ( java.util.Iterator it = " + value + ".iterator(); it.hasNext(); )" );
+                        }
 
                         sc.add( "{" );
                         sc.indent();
+
+                        if ( !useJava5 )
+                        {
+                            sc.add( toType + " o = (" + toType + " ) it.next();" );
+                        }
 
                         if ( isClassInModel( association.getTo(), modelClass.getModel() ) )
                         {

@@ -310,10 +310,22 @@ public class SnakeYamlWriterGenerator
                         writeScalarKey( sc, fieldTagName );
                         sc.add( "generator.emit( new SequenceStartEvent( null, null, true, null, null, false ) );" );
 
-                        sc.add( "for ( " + toType + " o : " + value + " )" );
+                        if ( useJava5 )
+                        {
+                            sc.add( "for ( " + toType + " o : " + value + " )" );
+                        }
+                        else
+                        {
+                            sc.add( "for ( java.util.Iterator it = " + value + ".iterator(); it.hasNext(); )" );
+                        }
 
                         sc.add( "{" );
                         sc.indent();
+
+                        if ( !useJava5 )
+                        {
+                            sc.add( toType + " o = (" + toType + " ) it.next();" );
+                        }
 
                         if ( isClassInModel( association.getTo(), modelClass.getModel() ) )
                         {
