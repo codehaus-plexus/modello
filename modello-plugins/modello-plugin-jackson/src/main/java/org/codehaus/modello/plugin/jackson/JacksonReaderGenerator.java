@@ -527,83 +527,49 @@ public class JacksonReaderGenerator
 
                 if ( ModelDefault.LIST.equals( type ) || ModelDefault.SET.equals( type ) )
                 {
-                    boolean wrappedItems = xmlAssociationMetadata.isWrappedItems();
-
                     boolean inModel = isClassInModel( association.getTo(), field.getModelClass().getModel() );
 
-                    if ( wrappedItems )
+                    sc.add( ( addElse ? "else " : "" ) + "if ( checkFieldWithDuplicate( parser, \""
+                            + fieldTagName
+                            + "\", "
+                            + alias
+                            + ", parsed ) )" );
+
+                    sc.add( "{" );
+                    sc.indent();
+
+                    sc.add( "if ( JsonToken.START_ARRAY != parser.nextToken() )" );
+                    sc.add( "{" );
+                    sc.addIndented( "throw new JsonParseException( \"Expected '"
+                                    + fieldTagName
+                                    + "' data to start with an Array\", parser.getCurrentLocation() );" );
+                    sc.add( "}" );
+
+                    sc.add( type + " " + associationName + " = " + objectName + ".get" + capFieldName + "();" );
+
+                    sc.add( "if ( " + associationName + " == null )" );
+
+                    sc.add( "{" );
+                    sc.indent();
+
+                    sc.add( associationName + " = " + association.getDefaultValue() + ";" );
+
+                    sc.add( objectName + ".set" + capFieldName + "( " + associationName + " );" );
+
+                    sc.unindent();
+                    sc.add( "}" );
+
+                    if ( !inModel && locationTracker != null )
                     {
-                        sc.add( tagComparison );
-
+                        sc.add( locationTracker.getName() + " " + LOCATION_VAR + "s = " + objectName + ".get"
+                                    + capitalise( singular( locationField ) ) + "( \"" + field.getName()
+                                    + "\" );" );
+                        sc.add( "if ( " + LOCATION_VAR + "s == null )" );
                         sc.add( "{" );
                         sc.indent();
-
-                        sc.add( "if ( JsonToken.START_ARRAY != parser.nextToken() )" );
-                        sc.add( "{" );
-                        sc.addIndented( "throw new JsonParseException( \"Expected '"
-                                        + fieldTagName
-                                        + "' data to start with an Array\", parser.getCurrentLocation() );" );
-                        sc.add( "}" );
-
-                        sc.add( type + " " + associationName + " = " + association.getDefaultValue() + ";" );
-
-                        sc.add( objectName + ".set" + capFieldName + "( " + associationName + " );" );
-
-                        if ( !inModel && locationTracker != null )
-                        {
-                            sc.add( locationTracker.getName() + " " + LOCATION_VAR + "s;" );
-                            writeNewSetLocation( field, objectName, LOCATION_VAR + "s", sc );
-                        }
-
-                        sc.add( "while ( JsonToken.END_ARRAY != parser.nextToken() )" );
-
-                        sc.add( "{" );
-                        sc.indent();
-                    }
-                    else
-                    {
-                        sc.add( ( addElse ? "else " : "" ) + "if ( checkFieldWithDuplicate( parser, \""
-                                + fieldTagName
-                                + "\", "
-                                + alias
-                                + ", parsed ) )" );
-
-                        sc.add( "{" );
-                        sc.indent();
-
-                        sc.add( "if ( JsonToken.START_ARRAY != parser.nextToken() )" );
-                        sc.add( "{" );
-                        sc.addIndented( "throw new JsonParseException( \"Expected '"
-                                        + fieldTagName
-                                        + "' data to start with an Array\", parser.getCurrentLocation() );" );
-                        sc.add( "}" );
-
-                        sc.add( type + " " + associationName + " = " + objectName + ".get" + capFieldName + "();" );
-
-                        sc.add( "if ( " + associationName + " == null )" );
-
-                        sc.add( "{" );
-                        sc.indent();
-
-                        sc.add( associationName + " = " + association.getDefaultValue() + ";" );
-
-                        sc.add( objectName + ".set" + capFieldName + "( " + associationName + " );" );
-
+                        writeNewSetLocation( field, objectName, LOCATION_VAR + "s", sc );
                         sc.unindent();
                         sc.add( "}" );
-
-                        if ( !inModel && locationTracker != null )
-                        {
-                            sc.add( locationTracker.getName() + " " + LOCATION_VAR + "s = " + objectName + ".get"
-                                        + capitalise( singular( locationField ) ) + "( \"" + field.getName()
-                                        + "\" );" );
-                            sc.add( "if ( " + LOCATION_VAR + "s == null )" );
-                            sc.add( "{" );
-                            sc.indent();
-                            writeNewSetLocation( field, objectName, LOCATION_VAR + "s", sc );
-                            sc.unindent();
-                            sc.add( "}" );
-                        }
                     }
 
                     if ( inModel )
@@ -631,22 +597,11 @@ public class JacksonReaderGenerator
                                 + ".size() )";
                         }
                         writePrimitiveField( association, association.getTo(), associationName, LOCATION_VAR + "s", key,
-                                             "add", sc, wrappedItems );
+                                             "add", sc, false );
                     }
 
-                    if ( wrappedItems )
-                    {
-                        sc.unindent();
-                        sc.add( "}" );
-
-                        sc.unindent();
-                        sc.add( "}" );
-                    }
-                    else
-                    {
-                        sc.unindent();
-                        sc.add( "}" );
-                    }
+                    sc.unindent();
+                    sc.add( "}" );
                 }
                 else
                 {
