@@ -2172,18 +2172,26 @@ public class JavaModelloGenerator
             else if ( modelAssociation.getType().equals( ModelDefault.PROPERTIES )
                       || modelAssociation.getType().equals( ModelDefault.MAP ) )
             {
-                itemType = "java.util.Map.Entry<";
+                StringBuilder itemTypeBuilder = new StringBuilder( "java.util.Map.Entry" );
 
-                if ( modelAssociation.getType().equals( ModelDefault.PROPERTIES ) )
+                if ( useJava5 )
                 {
-                    itemType += "Object, Object";
-                }
-                else
-                {
-                    itemType += "String, " + modelAssociation.getTo();
+                    itemTypeBuilder.append( '<' );
+
+                    if ( modelAssociation.getType().equals( ModelDefault.PROPERTIES ) )
+                    {
+                        itemTypeBuilder.append( "Object, Object" );
+                    }
+                    else
+                    {
+                        itemTypeBuilder.append( "String, " ).append( modelAssociation.getTo() );
+                    }
+
+                    itemTypeBuilder.append( '>' );
                 }
 
-                itemType += ">";
+                itemType = itemTypeBuilder.toString();
+
                 targetField += ".entrySet()";
             }
             else
@@ -2191,16 +2199,33 @@ public class JavaModelloGenerator
                 itemType = "String";
             }
 
+            if ( useJava5 )
+            {
+                sc.add( "for ( " + itemType + " item : " + targetField + " )" );
+            }
+            else
+            {
+                sc.add( "for ( java.util.Iterator it = " + targetField + ".iterator(); it.hasNext(); )" );
+            }
+
+            sc.add( "{" );
+            sc.indent();
+
+            if ( !useJava5 )
+            {
+                sc.add( itemType + " item = (" + itemType + ") it.next();" );
+            }
+
             StringBuilder adder = new StringBuilder( "instance.add" )
-                                      .append( capitalise( singular( modelAssociation.getName() ) ) )
-                                      .append( "( " );
+                        .append( capitalise( singular( modelAssociation.getName() ) ) )
+                        .append( "( " );
 
             if ( modelAssociation.getType().equals( ModelDefault.PROPERTIES )
-                            || modelAssociation.getType().equals( ModelDefault.MAP ) )
+                 || modelAssociation.getType().equals( ModelDefault.MAP ) )
             {
-                appendEntryMethod( "getKey()", adder, modelAssociation );
+                appendEntryMethod( "String", "getKey()", adder, modelAssociation );
                 adder.append( ", " );
-                appendEntryMethod( "getValue()", adder, modelAssociation );
+                appendEntryMethod( modelAssociation.getTo(), "getValue()", adder, modelAssociation );
             }
             else
             {
@@ -2209,9 +2234,9 @@ public class JavaModelloGenerator
 
             adder.append( " );" );
 
-            sc.add( "for ( " + itemType + " item : " + targetField + " )" );
-            sc.add( "{" );
-            sc.addIndented( adder.toString() );
+            sc.add( adder.toString() );
+
+            sc.unindent();
             sc.add( "}" );
         }
         else
@@ -2220,19 +2245,14 @@ public class JavaModelloGenerator
         }
     }
 
-    private static void appendEntryMethod( String method, StringBuilder target, ModelAssociation modelAssociation )
+    private void appendEntryMethod( String type, String method, StringBuilder target, ModelAssociation modelAssociation )
     {
-        if ( modelAssociation.getType().equals( ModelDefault.PROPERTIES ) )
+        if ( !useJava5 || modelAssociation.getType().equals( ModelDefault.PROPERTIES ) )
         {
-            target.append( "String.valueOf( " );
+            target.append( '(' ).append( type ).append( ") " );
         }
 
         target.append( "item." ).append( method );
-
-        if ( modelAssociation.getType().equals( ModelDefault.PROPERTIES ) )
-        {
-            target.append( " )" );
-        }
     }
 
     private void generateStaticCreator( ModelClass modelClass, JClass jClass, JConstructor constructor )
