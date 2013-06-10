@@ -341,10 +341,40 @@ public class JacksonWriterGenerator
                             sc.add( "generator.writeObjectFieldStart( \"" + fieldTagName + "\" );" );
                         }
 
-                        sc.add( "for ( java.util.Map.Entry<?, ?> entry : " + value + ".entrySet() )" );
+                        StringBuilder entryTypeBuilder = new StringBuilder( "java.util.Map.Entry" );
+
+                        if ( useJava5 )
+                        {
+                            entryTypeBuilder.append( '<' );
+
+                            if ( association.getType().equals( ModelDefault.PROPERTIES ) )
+                            {
+                                entryTypeBuilder.append( "Object, Object" );
+                            }
+                            else
+                            {
+                                entryTypeBuilder.append( "String, " ).append( association.getTo() );
+                            }
+
+                            entryTypeBuilder.append( '>' );
+                        }
+
+                        if ( useJava5 )
+                        {
+                            sc.add( "for ( " + entryTypeBuilder + " entry : " + value + ".entrySet() )" );
+                        }
+                        else
+                        {
+                            sc.add( "for ( java.util.Iterator it = " + value + ".entrySet().iterator(); it.hasNext(); )" );
+                        }
 
                         sc.add( "{" );
                         sc.indent();
+
+                        if ( !useJava5 )
+                        {
+                            sc.add( entryTypeBuilder + " entry = (" + entryTypeBuilder + ") it.next();" );
+                        }
 
                         sc.add( "final String key = String.valueOf( entry.getKey() );" );
                         sc.add( "final String value = String.valueOf( entry.getValue() );" );
