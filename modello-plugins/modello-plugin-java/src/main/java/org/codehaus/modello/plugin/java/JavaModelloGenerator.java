@@ -1680,7 +1680,21 @@ public class JavaModelloGenerator
         }
         else
         {
-            sc.add( "if ( ! get" + capitalise( modelAssociation.getName() ) + "().contains( " + uncapitalise(
+            JavaAssociationMetadata javaAssociationMetadata =
+                            (JavaAssociationMetadata) modelAssociation.getAssociationMetadata( JavaAssociationMetadata.ID );
+
+            String reference;
+
+            if ( JavaAssociationMetadata.LAZY_INIT.equals( javaAssociationMetadata.getInitializationMode() ) )
+            {
+                reference = "get" + capitalise( modelAssociation.getName() ) + "()";
+            }
+            else
+            {
+                reference = modelAssociation.getName();
+            }
+
+            sc.add( "if ( !" + reference + ".contains( " + uncapitalise(
                 modelAssociation.getTo() ) + " ) )" );
 
             sc.add( "{" );
@@ -1696,8 +1710,7 @@ public class JavaModelloGenerator
 
             sc.add( "" );
 
-            sc.add( "get" + capitalise( modelAssociation.getName() ) + "().remove( " + uncapitalise(
-                modelAssociation.getTo() ) + " );" );
+            sc.add( reference + ".remove( " + uncapitalise( modelAssociation.getTo() ) + " );" );
         }
 
         jClass.addMethod( breakMethod );
@@ -1769,13 +1782,14 @@ public class JavaModelloGenerator
 
             StringBuilder adderCode = new StringBuilder();
 
-            if ( isBuilderMethod )
+            if ( JavaAssociationMetadata.LAZY_INIT.equals( javaAssociationMetadata.getInitializationMode() )
+                    && !isBuilderMethod )
             {
-                adderCode.append( fieldName );
+                adderCode.append( "get" ).append( capitalise( fieldName ) ).append( "()" );
             }
             else
             {
-                adderCode.append( "get" ).append( capitalise( fieldName ) ).append( "()" );
+                adderCode.append( fieldName );
             }
 
             adderCode.append( ".put( key, value );" );
@@ -1809,13 +1823,14 @@ public class JavaModelloGenerator
 
             StringBuilder adderCode = new StringBuilder();
 
-            if ( isBuilderMethod )
+            if ( JavaAssociationMetadata.LAZY_INIT.equals( javaAssociationMetadata.getInitializationMode() )
+                    && !isBuilderMethod )
             {
-                adderCode.append( fieldName );
+                adderCode.append( "get" ).append( capitalise( fieldName ) ).append( "()" );
             }
             else
             {
-                adderCode.append( "get" ).append( capitalise( fieldName ) ).append( "()" );
+                adderCode.append( fieldName );
             }
 
             adderCode.append( ".add( " )
@@ -1862,8 +1877,18 @@ public class JavaModelloGenerator
                     parameterName + ".break" + modelAssociation.getModelClass().getName() + "Association( this );" );
             }
 
-            remover.getSourceCode().add(
-                "get" + capitalise( fieldName ) + "().remove( " + implementationParameterName + " );" );
+            String reference;
+
+            if ( JavaAssociationMetadata.LAZY_INIT.equals( javaAssociationMetadata.getInitializationMode() ) )
+            {
+                reference = "get" + capitalise( fieldName ) + "()";
+            }
+            else
+            {
+                reference = fieldName;
+            }
+
+            remover.getSourceCode().add( reference + ".remove( " + implementationParameterName + " );" );
 
             jClass.addMethod( remover );
         }
