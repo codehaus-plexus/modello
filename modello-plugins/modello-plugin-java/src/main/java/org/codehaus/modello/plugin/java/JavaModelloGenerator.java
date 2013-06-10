@@ -2141,7 +2141,7 @@ public class JavaModelloGenerator
                 JavaFieldMetadata javaFieldMetadata = (JavaFieldMetadata) modelAssociation.getMetadata( JavaFieldMetadata.ID );
 
                 // just use the plain old setter
-                if (createSetBuilderFieldToInstance( ctorArgs, modelAssociation, sc ) )
+                if ( createSetBuilderFieldToInstance( ctorArgs, modelAssociation, sc ) )
                 {
                     return;
                 }
