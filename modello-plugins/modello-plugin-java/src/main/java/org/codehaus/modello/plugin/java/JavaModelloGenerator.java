@@ -2026,7 +2026,27 @@ public class JavaModelloGenerator
         {
             if ( modelField instanceof ModelAssociation )
             {
-                createSetBuilderAssociationToInstance( ctorArgs, (ModelAssociation) modelField, sc );
+                ModelAssociation modelAssociation = (ModelAssociation) modelField;
+                JavaFieldMetadata javaFieldMetadata = (JavaFieldMetadata) modelField.getMetadata( JavaFieldMetadata.ID );
+                JavaAssociationMetadata javaAssociationMetadata = getJavaAssociationMetadata( modelAssociation );
+
+                if ( modelAssociation.isManyMultiplicity()
+                     && !javaFieldMetadata.isGetter()
+                     && !javaFieldMetadata.isSetter()
+                     && !javaAssociationMetadata.isAdder() )
+                {
+                    throw new ModelloException( "Exception while generating Java, Model inconsistency found: impossible to generate '"
+                                                + modelClass.getName()
+                                                + ".Builder#build()' method, '"
+                                                + modelClass.getName()
+                                                + "."
+                                                + modelAssociation.getName()
+                                                + "' field ("
+                                                + modelAssociation.getType()
+                                                + ") cannot be set, no getter/setter/adder method available." );
+                }
+
+                createSetBuilderAssociationToInstance( ctorArgs, modelAssociation, sc );
             }
             else
             {
