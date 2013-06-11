@@ -40,6 +40,7 @@ import org.codehaus.modello.plugin.java.javasource.JSourceCode;
 import org.codehaus.modello.plugin.java.javasource.JSourceWriter;
 import org.codehaus.modello.plugin.java.javasource.JType;
 import org.codehaus.modello.plugin.java.metadata.JavaClassMetadata;
+import org.codehaus.modello.plugin.java.metadata.JavaFieldMetadata;
 import org.codehaus.modello.plugin.model.ModelClassMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlAssociationMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlClassMetadata;
@@ -674,6 +675,10 @@ public class Xpp3ReaderGenerator
 
                     boolean inModel = isClassInModel( association.getTo(), field.getModelClass().getModel() );
 
+                    JavaFieldMetadata javaFieldMetadata = (JavaFieldMetadata) association.getMetadata( JavaFieldMetadata.ID );
+
+                    String adder;
+
                     if ( wrappedItems )
                     {
                         sc.add( tagComparison );
@@ -681,9 +686,18 @@ public class Xpp3ReaderGenerator
                         sc.add( "{" );
                         sc.indent();
 
-                        sc.add( type + " " + associationName + " = " + association.getDefaultValue() + ";" );
+                        if ( javaFieldMetadata.isSetter() )
+                        {
+                            sc.add( type + " " + associationName + " = " + association.getDefaultValue() + ";" );
 
-                        sc.add( objectName + ".set" + capFieldName + "( " + associationName + " );" );
+                            sc.add( objectName + ".set" + capFieldName + "( " + associationName + " );" );
+
+                            adder = associationName + ".add";
+                        }
+                        else
+                        {
+                            adder = objectName + ".add" + association.getTo();
+                        }
 
                         if ( !inModel && locationTracker != null )
                         {
@@ -709,19 +723,28 @@ public class Xpp3ReaderGenerator
                         sc.add( "{" );
                         sc.indent();
 
-                        sc.add( type + " " + associationName + " = " + objectName + ".get" + capFieldName + "();" );
+                        if ( javaFieldMetadata.isGetter() && javaFieldMetadata.isSetter() )
+                        {
+                            sc.add( type + " " + associationName + " = " + objectName + ".get" + capFieldName + "();" );
 
-                        sc.add( "if ( " + associationName + " == null )" );
+                            sc.add( "if ( " + associationName + " == null )" );
 
-                        sc.add( "{" );
-                        sc.indent();
+                            sc.add( "{" );
+                            sc.indent();
 
-                        sc.add( associationName + " = " + association.getDefaultValue() + ";" );
+                            sc.add( associationName + " = " + association.getDefaultValue() + ";" );
 
-                        sc.add( objectName + ".set" + capFieldName + "( " + associationName + " );" );
+                            sc.add( objectName + ".set" + capFieldName + "( " + associationName + " );" );
 
-                        sc.unindent();
-                        sc.add( "}" );
+                            sc.unindent();
+                            sc.add( "}" );
+
+                            adder = associationName + ".add";
+                        }
+                        else
+                        {
+                            adder = objectName + ".add" + association.getTo();
+                        }
 
                         if ( !inModel && locationTracker != null )
                         {
@@ -739,9 +762,7 @@ public class Xpp3ReaderGenerator
 
                     if ( inModel )
                     {
-                        sc.add(
-                            associationName + ".add( parse" + association.getTo() + "( parser, strict" + trackingArgs
-                                + " ) );" );
+                        sc.add( adder + "( parse" + association.getTo() + "( parser, strict" + trackingArgs + " ) );" );
                     }
                     else
                     {

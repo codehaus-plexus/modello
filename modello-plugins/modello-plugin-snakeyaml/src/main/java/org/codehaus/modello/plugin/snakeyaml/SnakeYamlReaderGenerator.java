@@ -39,6 +39,7 @@ import org.codehaus.modello.plugin.java.javasource.JSourceCode;
 import org.codehaus.modello.plugin.java.javasource.JSourceWriter;
 import org.codehaus.modello.plugin.java.javasource.JType;
 import org.codehaus.modello.plugin.java.metadata.JavaClassMetadata;
+import org.codehaus.modello.plugin.java.metadata.JavaFieldMetadata;
 import org.codehaus.modello.plugin.model.ModelClassMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlAssociationMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlClassMetadata;
@@ -585,19 +586,32 @@ public class SnakeYamlReaderGenerator
                                     + "' data to start with a Sequence\", event.getStartMark(), \"\", null );" );
                     sc.add( "}" );
 
-                    sc.add( type + " " + associationName + " = " + objectName + ".get" + capFieldName + "();" );
+                    JavaFieldMetadata javaFieldMetadata = (JavaFieldMetadata) association.getMetadata( JavaFieldMetadata.ID );
 
-                    sc.add( "if ( " + associationName + " == null )" );
+                    String adder;
 
-                    sc.add( "{" );
-                    sc.indent();
+                    if ( javaFieldMetadata.isGetter() && javaFieldMetadata.isSetter() )
+                    {
+                        sc.add( type + " " + associationName + " = " + objectName + ".get" + capFieldName + "();" );
 
-                    sc.add( associationName + " = " + association.getDefaultValue() + ";" );
+                        sc.add( "if ( " + associationName + " == null )" );
 
-                    sc.add( objectName + ".set" + capFieldName + "( " + associationName + " );" );
+                        sc.add( "{" );
+                        sc.indent();
 
-                    sc.unindent();
-                    sc.add( "}" );
+                        sc.add( associationName + " = " + association.getDefaultValue() + ";" );
+
+                        sc.add( objectName + ".set" + capFieldName + "( " + associationName + " );" );
+
+                        sc.unindent();
+                        sc.add( "}" );
+
+                        adder = associationName + ".add";
+                    }
+                    else
+                    {
+                        adder = objectName + ".add" + association.getTo();
+                    }
 
                     if ( !inModel && locationTracker != null )
                     {
@@ -617,9 +631,7 @@ public class SnakeYamlReaderGenerator
                         sc.add( "while ( !parser.peekEvent().is( Event.ID.SequenceEnd ) )" );
                         sc.add( "{" );
 
-                        sc.addIndented(
-                            associationName + ".add( parse" + association.getTo() + "( parser, strict" + trackingArgs
-                                + " ) );" );
+                        sc.addIndented( adder + "( parse" + association.getTo() + "( parser, strict" + trackingArgs + " ) );" );
 
                         sc.add( "}" );
 

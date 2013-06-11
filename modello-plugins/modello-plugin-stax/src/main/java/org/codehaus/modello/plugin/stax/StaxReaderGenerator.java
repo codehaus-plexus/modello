@@ -38,6 +38,7 @@ import org.codehaus.modello.plugin.java.javasource.JParameter;
 import org.codehaus.modello.plugin.java.javasource.JSourceCode;
 import org.codehaus.modello.plugin.java.javasource.JSourceWriter;
 import org.codehaus.modello.plugin.java.javasource.JType;
+import org.codehaus.modello.plugin.java.metadata.JavaFieldMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlAssociationMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlModelMetadata;
@@ -1095,6 +1096,10 @@ public class StaxReaderGenerator
 
                 if ( ModelDefault.LIST.equals( type ) || ModelDefault.SET.equals( type ) )
                 {
+                    JavaFieldMetadata javaFieldMetadata = (JavaFieldMetadata) association.getMetadata( JavaFieldMetadata.ID );
+
+                    String adder;
+
                     if ( wrappedItems )
                     {
                         sc.add( tagComparison );
@@ -1102,9 +1107,18 @@ public class StaxReaderGenerator
                         sc.add( "{" );
                         sc.indent();
 
-                        sc.add( type + " " + associationName + " = " + association.getDefaultValue() + ";" );
+                        if ( javaFieldMetadata.isSetter() )
+                        {
+                            sc.add( type + " " + associationName + " = " + association.getDefaultValue() + ";" );
 
-                        sc.add( objectName + ".set" + capFieldName + "( " + associationName + " );" );
+                            sc.add( objectName + ".set" + capFieldName + "( " + associationName + " );" );
+
+                            adder = associationName + ".add";
+                        }
+                        else
+                        {
+                            adder = objectName + ".add" + association.getTo();
+                        }
 
                         sc.add( "while ( xmlStreamReader.nextTag() == XMLStreamConstants.START_ELEMENT )" );
 
@@ -1124,19 +1138,28 @@ public class StaxReaderGenerator
                         sc.add( "{" );
                         sc.indent();
 
-                        sc.add( type + " " + associationName + " = " + objectName + ".get" + capFieldName + "();" );
+                        if ( javaFieldMetadata.isGetter() && javaFieldMetadata.isSetter() )
+                        {
+                            sc.add( type + " " + associationName + " = " + objectName + ".get" + capFieldName + "();" );
 
-                        sc.add( "if ( " + associationName + " == null )" );
+                            sc.add( "if ( " + associationName + " == null )" );
 
-                        sc.add( "{" );
-                        sc.indent();
+                            sc.add( "{" );
+                            sc.indent();
 
-                        sc.add( associationName + " = " + association.getDefaultValue() + ";" );
+                            sc.add( associationName + " = " + association.getDefaultValue() + ";" );
 
-                        sc.add( objectName + ".set" + capFieldName + "( " + associationName + " );" );
+                            sc.add( objectName + ".set" + capFieldName + "( " + associationName + " );" );
 
-                        sc.unindent();
-                        sc.add( "}" );
+                            sc.unindent();
+                            sc.add( "}" );
+
+                            adder = associationName + ".add";
+                        }
+                        else
+                        {
+                            adder = objectName + ".add" + association.getTo();
+                        }
                     }
 
                     if ( isClassInModel( association.getTo(), field.getModelClass().getModel() ) )
@@ -1153,8 +1176,8 @@ public class StaxReaderGenerator
                             // HACK: the addXXX method will cause an OOME when compiling a self-referencing class, so we
                             //  just add it to the array. This could disrupt the links if you are using break/create
                             //  constraints in modello.
-                            sc.add( associationName + ".add( parse" + association.getTo()
-                                + "( xmlStreamReader, strict ) );" );
+                            // MODELLO-273 update: Use addXXX only if no other methods are available!
+                            sc.add( adder + "( parse" + association.getTo() + "( xmlStreamReader, strict ) );" );
                         }
                         else
                         {
