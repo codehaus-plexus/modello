@@ -220,8 +220,7 @@ public class JacksonWriterGenerator
                 sc.add( getValueChecker( type, value, field ) );
 
                 sc.add( "{" );
-                sc.addIndented( "generator.writeObjectField( \"" + fieldTagName + "\", "
-                                + getValue( field.getType(), value, xmlFieldMetadata ) + " );" );
+                sc.addIndented( "generator.writeObjectField( \"" + fieldTagName + "\", " + value + " );" );
                 sc.add( "}" );
             }
 
@@ -413,8 +412,7 @@ public class JacksonWriterGenerator
                 sc.add( getValueChecker( type, value, field ) );
 
                 sc.add( "{" );
-                sc.addIndented( "generator.writeObjectField( \"" + fieldTagName + "\", "
-                                + getValue( field.getType(), value, xmlFieldMetadata ) + " );" );
+                sc.addIndented( "generator.writeObjectField( \"" + fieldTagName + "\", " + value + " );" );
                 sc.add( "}" );
             }
         }
