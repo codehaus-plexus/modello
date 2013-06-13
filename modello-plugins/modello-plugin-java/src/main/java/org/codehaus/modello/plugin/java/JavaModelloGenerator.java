@@ -1983,16 +1983,31 @@ public class JavaModelloGenerator
         builderClass.getModifiers().setStatic( true );
         builderClass.getModifiers().setFinal( true );
 
-        // create builder setters methods
-        for ( ModelField modelField : modelClass.getFields( getGeneratedVersion() ) )
+        ModelClass reference = modelClass;
+
+        // traverse the whole modelClass hierarchy to create the nested Builder
+        while ( reference != null )
         {
-            if ( modelField instanceof ModelAssociation )
+            // create builder setters methods
+            for ( ModelField modelField : reference.getFields( getGeneratedVersion() ) )
             {
-                createBuilderAssociation( builderClass, (ModelAssociation) modelField );
+                if ( modelField instanceof ModelAssociation )
+                {
+                    createBuilderAssociation( builderClass, (ModelAssociation) modelField );
+                }
+                else
+                {
+                    createBuilderField( builderClass, modelField );
+                }
+            }
+
+            if ( reference.hasSuperClass() )
+            {
+                reference = reference.getModel().getClass( reference.getSuperClass(), getGeneratedVersion() );
             }
             else
             {
-                createBuilderField( builderClass, modelField );
+                reference = null;
             }
         }
 
@@ -2046,36 +2061,51 @@ public class JavaModelloGenerator
 
         sc.add( ctor.toString() );
 
-        // collect parameters and set them in the instance object
-        for ( ModelField modelField : modelClass.getFields( getGeneratedVersion() ) )
+        ModelClass reference = modelClass;
+
+        // traverse the whole modelClass hierarchy to create the nested Builder instance
+        while ( reference != null )
         {
-            if ( modelField instanceof ModelAssociation )
+            // collect parameters and set them in the instance object
+            for ( ModelField modelField : reference.getFields( getGeneratedVersion() ) )
             {
-                ModelAssociation modelAssociation = (ModelAssociation) modelField;
-                JavaFieldMetadata javaFieldMetadata = (JavaFieldMetadata) modelField.getMetadata( JavaFieldMetadata.ID );
-                JavaAssociationMetadata javaAssociationMetadata = getJavaAssociationMetadata( modelAssociation );
-
-                if ( modelAssociation.isManyMultiplicity()
-                     && !javaFieldMetadata.isGetter()
-                     && !javaFieldMetadata.isSetter()
-                     && !javaAssociationMetadata.isAdder() )
+                if ( modelField instanceof ModelAssociation )
                 {
-                    throw new ModelloException( "Exception while generating Java, Model inconsistency found: impossible to generate '"
-                                                + modelClass.getName()
-                                                + ".Builder#build()' method, '"
-                                                + modelClass.getName()
-                                                + "."
-                                                + modelAssociation.getName()
-                                                + "' field ("
-                                                + modelAssociation.getType()
-                                                + ") cannot be set, no getter/setter/adder method available." );
-                }
+                    ModelAssociation modelAssociation = (ModelAssociation) modelField;
+                    JavaFieldMetadata javaFieldMetadata = (JavaFieldMetadata) modelField.getMetadata( JavaFieldMetadata.ID );
+                    JavaAssociationMetadata javaAssociationMetadata = getJavaAssociationMetadata( modelAssociation );
 
-                createSetBuilderAssociationToInstance( ctorArgs, modelAssociation, sc );
+                    if ( modelAssociation.isManyMultiplicity()
+                         && !javaFieldMetadata.isGetter()
+                         && !javaFieldMetadata.isSetter()
+                         && !javaAssociationMetadata.isAdder() )
+                    {
+                        throw new ModelloException( "Exception while generating Java, Model inconsistency found: impossible to generate '"
+                                                    + modelClass.getName()
+                                                    + ".Builder#build()' method, '"
+                                                    + modelClass.getName()
+                                                    + "."
+                                                    + modelAssociation.getName()
+                                                    + "' field ("
+                                                    + modelAssociation.getType()
+                                                    + ") cannot be set, no getter/setter/adder method available." );
+                    }
+
+                    createSetBuilderAssociationToInstance( ctorArgs, modelAssociation, sc );
+                }
+                else
+                {
+                    createSetBuilderFieldToInstance( ctorArgs, modelField, sc );
+                }
+            }
+
+            if ( reference.hasSuperClass() )
+            {
+                reference = reference.getModel().getClass( reference.getSuperClass(), getGeneratedVersion() );
             }
             else
             {
-                createSetBuilderFieldToInstance( ctorArgs, modelField, sc );
+                reference = null;
             }
         }
 
@@ -2311,9 +2341,26 @@ public class JavaModelloGenerator
         creatorMethod.getModifiers().setStatic( true );
         creatorMethod.getJDocComment().setComment( "Creates a new <code>" + modelClass.getName() + "</code> instance." );
 
-        for ( ModelField modelField : modelClass.getFields( getGeneratedVersion() ) )
+        ModelClass reference = modelClass;
+
+        // traverse the whole modelClass hierarchy to create the static creator method
+        while ( reference != null )
         {
-            creatorMethod.addParameter( new JParameter( new JClass( modelField.getType() ), modelField.getName() ) );
+            for ( ModelField modelField : reference.getFields( getGeneratedVersion() ) )
+            {
+                // this is hacky
+                JField field = createField( modelField );
+                creatorMethod.addParameter( new JParameter( field.getType(), field.getName() ) );
+            }
+
+            if ( reference.hasSuperClass() )
+            {
+                reference = reference.getModel().getClass( reference.getSuperClass(), getGeneratedVersion() );
+            }
+            else
+            {
+                reference = null;
+            }
         }
 
         JSourceCode sc = creatorMethod.getSourceCode();
@@ -2331,27 +2378,43 @@ public class JavaModelloGenerator
 
         StringBuilder shortcutArgs = new StringBuilder();
 
-        for ( ModelField modelField : modelClass.getFields( getGeneratedVersion() ) )
+        reference = modelClass;
+
+        while ( reference != null )
         {
-            if ( shortcutArgs.length() > 0 )
+            for ( ModelField modelField : reference.getFields( getGeneratedVersion() ) )
             {
-                shortcutArgs.append( ',' );
+                System.out.println( modelClass.getName() + "#" + modelField.getName() + " (" + modelField.getType() + ")" );
+
+                if ( shortcutArgs.length() > 0 )
+                {
+                    shortcutArgs.append( ',' );
+                }
+
+                shortcutArgs.append( ' ' );
+
+                if ( StringUtils.isEmpty( modelField.getDefaultValue() ) )
+                {
+                    creatorMethod.addParameter( new JParameter( new JClass( modelField.getType() ), modelField.getName() ) );
+
+                    shortcutArgs.append( modelField.getName() );
+                }
+                else
+                {
+                    shortcutArgs.append( getJavaDefaultValue( modelField ) );
+                }
+
+                shortcutArgs.append( ' ' );
             }
 
-            shortcutArgs.append( ' ' );
-
-            if ( StringUtils.isEmpty( modelField.getDefaultValue() ) )
+            if ( reference.hasSuperClass() )
             {
-                creatorMethod.addParameter( new JParameter( new JClass( modelField.getType() ), modelField.getName() ) );
-
-                shortcutArgs.append( modelField.getName() );
+                reference = reference.getModel().getClass( reference.getSuperClass(), getGeneratedVersion() );
             }
             else
             {
-                shortcutArgs.append( getJavaDefaultValue( modelField ) );
+                reference = null;
             }
-
-            shortcutArgs.append( ' ' );
         }
 
         sc = creatorMethod.getSourceCode();
