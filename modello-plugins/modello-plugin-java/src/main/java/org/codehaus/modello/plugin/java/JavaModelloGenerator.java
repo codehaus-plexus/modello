@@ -2343,6 +2343,8 @@ public class JavaModelloGenerator
 
         ModelClass reference = modelClass;
 
+        boolean hasDefaults = false;
+
         // traverse the whole modelClass hierarchy to create the static creator method
         while ( reference != null )
         {
@@ -2351,6 +2353,11 @@ public class JavaModelloGenerator
                 // this is hacky
                 JField field = createField( modelField );
                 creatorMethod.addParameter( new JParameter( field.getType(), field.getName() ) );
+
+                if ( !StringUtils.isEmpty( modelField.getDefaultValue() ) )
+                {
+                    hasDefaults = true;
+                }
             }
 
             if ( reference.hasSuperClass() )
@@ -2369,7 +2376,12 @@ public class JavaModelloGenerator
 
         jClass.addMethod( creatorMethod );
 
-        // creates a shortcut with default values
+        // creates a shortcut with default values only if necessary
+        if ( !hasDefaults )
+        {
+            return;
+        }
+
         creatorMethod = new JMethod( "new" + modelClass.getName() + "Instance",
                                      new JClass( modelClass.getName() ),
                                      "a new <code>" + modelClass.getName() + "</code> instance." );
@@ -2393,7 +2405,9 @@ public class JavaModelloGenerator
 
                 if ( StringUtils.isEmpty( modelField.getDefaultValue() ) )
                 {
-                    creatorMethod.addParameter( new JParameter( new JClass( modelField.getType() ), modelField.getName() ) );
+                    // this is hacky
+                    JField field = createField( modelField );
+                    creatorMethod.addParameter( new JParameter( field.getType(), field.getName() ) );
 
                     shortcutArgs.append( modelField.getName() );
                 }
