@@ -2384,8 +2384,6 @@ public class JavaModelloGenerator
         {
             for ( ModelField modelField : reference.getFields( getGeneratedVersion() ) )
             {
-                System.out.println( modelClass.getName() + "#" + modelField.getName() + " (" + modelField.getType() + ")" );
-
                 if ( shortcutArgs.length() > 0 )
                 {
                     shortcutArgs.append( ',' );
