@@ -1,0 +1,15 @@
+<component-set>
+  <components>
+    <component>
+      <role>org.codehaus.modello.plugin.ModelloGenerator</role>
+      <role-hint>jsonschema</role-hint>
+      <implementation>org.codehaus.modello.plugin.jsonschema.JsonSchemaGenerator</implementation>
+    </component>
+
+    <!-- component>
+      <role>org.codehaus.modello.metadata.MetadataPlugin</role>
+      <role-hint>xsd</role-hint>
+      <implementation>org.codehaus.modello.plugin.xsd.metadata.XsdMetadataPlugin</implementation>
+    </component -->
+  </components>
+</component-set>

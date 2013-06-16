@@ -56,6 +56,11 @@ public class ModelloParameterConstants
     public static final String OUTPUT_XSD_FILE_NAME = "modello.output.xsd.file";
 
     /**
+     * @since 1.8
+     */
+    public static final String OUTPUT_JSONSCHEMA_FILE_NAME = "modello.output.jsonschema.file";
+
+    /**
      * @since 1.6
      */
     public static final String DOM_AS_XPP3 = "modello.dom.xpp3";
