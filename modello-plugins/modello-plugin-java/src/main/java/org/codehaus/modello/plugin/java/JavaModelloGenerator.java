@@ -48,6 +48,7 @@ import org.codehaus.modello.plugin.java.javasource.JConstructor;
 import org.codehaus.modello.plugin.java.javasource.JDocDescriptor;
 import org.codehaus.modello.plugin.java.javasource.JField;
 import org.codehaus.modello.plugin.java.javasource.JInterface;
+import org.codehaus.modello.plugin.java.javasource.JMapType;
 import org.codehaus.modello.plugin.java.javasource.JMethod;
 import org.codehaus.modello.plugin.java.javasource.JMethodSignature;
 import org.codehaus.modello.plugin.java.javasource.JParameter;
@@ -1435,6 +1436,12 @@ public class JavaModelloGenerator
             {
                 type = new JCollectionType( modelAssociation.getType(), componentType, useJava5 );
             }
+            else if ( ModelDefault.MAP.equals( modelAssociation.getType() ) )
+            {
+                JMapType mapType = new JMapType( modelAssociation.getType(), defaultValue, componentType, useJava5 );
+                defaultValue = mapType.getInstanceName();
+                type = mapType;
+            }
             else
             {
                 type = new JClass( modelAssociation.getType() );
@@ -2156,6 +2163,12 @@ public class JavaModelloGenerator
             if ( modelAssociation.isGenericType() )
             {
                 type = new JCollectionType( modelAssociation.getType(), componentType, useJava5 );
+            }
+            else if ( ModelDefault.MAP.equals( modelAssociation.getType() ) )
+            {
+                JMapType mapType = new JMapType( modelAssociation.getType(), defaultValue, componentType, useJava5 );
+                defaultValue = mapType.getInstanceName();
+                type = mapType;
             }
             else
             {
