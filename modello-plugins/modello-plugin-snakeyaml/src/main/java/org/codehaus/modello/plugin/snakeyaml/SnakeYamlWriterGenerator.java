@@ -378,11 +378,14 @@ public class SnakeYamlWriterGenerator
                             }
                             else
                             {
-                                entryTypeBuilder.append( "String, " ).append( association.getTo() );
+                                entryTypeBuilder.append( "Object, " ).append( association.getTo() );
                             }
 
                             entryTypeBuilder.append( '>' );
                         }
+
+                        sc.add( "String key;" );
+                        sc.add( association.getTo() + " value;" );
 
                         if ( useJava5 )
                         {
@@ -401,22 +404,47 @@ public class SnakeYamlWriterGenerator
                             sc.add( entryTypeBuilder + " entry = (" + entryTypeBuilder + ") it.next();" );
                         }
 
-                        sc.add( "final String key = String.valueOf( entry.getKey() );" );
-                        sc.add( "final String value = String.valueOf( entry.getValue() );" );
+                        sc.add( "key = String.valueOf( entry.getKey() );" );
+
+                        if ( useJava5 )
+                        {
+                            sc.add( "value = entry.getValue();" );
+                        }
+                        else
+                        {
+                            sc.add( "value = (" + association.getTo() + ") entry.getValue();" );
+                        }
 
                         if ( xmlAssociationMetadata.isMapExplode() )
                         {
                             sc.add( "generator.emit( new MappingStartEvent( null, null, true, null, null, false ) );" );
                             writeScalarKey( sc, "key" );
                             writeScalar( sc, "key" );
+
                             writeScalarKey( sc, "value" );
-                            writeScalar( sc, "value" );
+                            if ( isClassInModel( association.getTo(), association.getModelClass().getModel() ) )
+                            {
+                                sc.add( "write" + association.getTo() + "( value, generator );" );
+                            }
+                            else
+                            {
+                                writeScalar( sc, "String.valueOf( value )" );
+                            }
+
                             sc.add( "generator.emit( new MappingEndEvent( null, null ) );" );
                         }
                         else
                         {
                             writeScalar( sc, "key" );
-                            writeScalar( sc, "value" );
+
+                            if ( isClassInModel( association.getTo(), association.getModelClass().getModel() ) )
+                            {
+                                sc.add( "write" + association.getTo() + "( value, generator );" );
+                            }
+                            else
+                            {
+                                writeScalar( sc, "String.valueOf( value )" );
+                            }
                         }
 
                         sc.unindent();
