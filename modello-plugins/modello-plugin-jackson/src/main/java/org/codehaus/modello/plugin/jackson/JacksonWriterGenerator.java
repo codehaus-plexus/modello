@@ -352,11 +352,14 @@ public class JacksonWriterGenerator
                             }
                             else
                             {
-                                entryTypeBuilder.append( "String, " ).append( association.getTo() );
+                                entryTypeBuilder.append( "Object, " ).append( association.getTo() );
                             }
 
                             entryTypeBuilder.append( '>' );
                         }
+
+                        sc.add( "String key;" );
+                        sc.add( association.getTo() + " value;" );
 
                         if ( useJava5 )
                         {
@@ -375,19 +378,45 @@ public class JacksonWriterGenerator
                             sc.add( entryTypeBuilder + " entry = (" + entryTypeBuilder + ") it.next();" );
                         }
 
-                        sc.add( "final String key = String.valueOf( entry.getKey() );" );
-                        sc.add( "final String value = String.valueOf( entry.getValue() );" );
+                        sc.add( "key = String.valueOf( entry.getKey() );" );
+
+                        if ( useJava5 )
+                        {
+                            sc.add( "value = entry.getValue();" );
+                        }
+                        else
+                        {
+                            sc.add( "value = (" + association.getTo() + ") entry.getValue();" );
+                        }
 
                         if ( xmlAssociationMetadata.isMapExplode() )
                         {
                             sc.add( "generator.writeStartObject();" );
                             sc.add( "generator.writeStringField( \"key\", key );" );
-                            sc.add( "generator.writeStringField( \"value\", value );" );
+
+                            if ( isClassInModel( association.getTo(), association.getModelClass().getModel() ) )
+                            {
+                                sc.add( "generator.writeFieldName( \"value\" );" );
+                                sc.add( "write" + association.getTo() + "( value, generator );" );
+                            }
+                            else
+                            {
+                                sc.add( "generator.writeObjectField( \"value\", value );" );
+                            }
+
                             sc.add( "generator.writeEndObject();" );
                         }
                         else
                         {
-                            sc.add( "generator.writeStringField( key, value );" );
+                            if ( isClassInModel( association.getTo(), association.getModelClass().getModel() ) )
+                            {
+                                sc.add( "generator.writeFieldName( key );" );
+                                sc.add( "write" + association.getTo() + "( value, generator );" );
+                            }
+                            else
+                            {
+                                sc.add( "generator.writeObjectField( key, value );" );
+                            }
                         }
 
                         sc.unindent();
