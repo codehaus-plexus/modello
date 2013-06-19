@@ -271,10 +271,7 @@ public class StaxWriterGenerator
             sc.add( "serializer.setDefaultNamespace( \"" + namespace + "\" );" );
         }
 
-        sc.add( "if ( tagName != null )" );
-        sc.add( "{" );
-        sc.addIndented( "serializer.writeStartElement( tagName );" );
-        sc.add( "}" );
+        sc.add( "serializer.writeStartElement( tagName );" );
 
         if ( namespace != null )
         {
@@ -491,37 +488,36 @@ public class StaxWriterGenerator
                         if ( xmlAssociationMetadata.isMapExplode() )
                         {
                             sc.add( "serializer.writeStartElement( \"" + singular( associationName ) + "\" );" );
+
                             sc.add( "serializer.writeStartElement( \"key\" );" );
                             sc.add( "serializer.writeCharacters( key );" );
                             sc.add( "serializer.writeEndElement();" );
-                            sc.add( "serializer.writeStartElement( \"value\" );" );
 
                             if ( isClassInModel( association.getTo(), association.getModelClass().getModel() ) )
                             {
-                                sc.add( "write" + association.getTo() + "( value, null, serializer );" );
+                                sc.add( "write" + association.getTo() + "( value, \"value\", serializer );" );
                             }
                             else
                             {
+                                sc.add( "serializer.writeStartElement( \"value\" );" );
                                 sc.add( "serializer.writeCharacters( " + getValue( association.getTo(), "value", xmlFieldMetadata ) + " );" );
+                                sc.add( "serializer.writeEndElement();" );
                             }
 
-                            sc.add( "serializer.writeEndElement();" );
                             sc.add( "serializer.writeEndElement();" );
                         }
                         else
                         {
-                            sc.add( "serializer.writeStartElement( key );" );
-
                             if ( isClassInModel( association.getTo(), association.getModelClass().getModel() ) )
                             {
-                                sc.add( "write" + association.getTo() + "( value, null, serializer );" );
+                                sc.add( "write" + association.getTo() + "( value, key, serializer );" );
                             }
                             else
                             {
+                                sc.add( "serializer.writeStartElement( key );" );
                                 sc.add( "serializer.writeCharacters( " + getValue( association.getTo(), "value", xmlFieldMetadata ) + " );" );
+                                sc.add( "serializer.writeEndElement();" );
                             }
-
-                            sc.add( "serializer.writeEndElement();" );
                         }
 
                         sc.unindent();
@@ -564,10 +560,7 @@ public class StaxWriterGenerator
             }
         }
 
-        sc.add( "if ( tagName != null )" );
-        sc.add( "{" );
-        sc.addIndented( "serializer.writeEndElement();" );
-        sc.add( "}" );
+        sc.add( "serializer.writeEndElement();" );
 
         sc.unindent();
         sc.add( "}" );
