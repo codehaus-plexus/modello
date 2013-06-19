@@ -1224,6 +1224,12 @@ public class StaxReaderGenerator
                     sc.add( "{" );
                     sc.indent();
 
+                    sc.add( "String key = null;" );
+
+                    sc.add( association.getTo() + " value = null;" );
+
+                    sc.add( "// " + xmlAssociationMetadata.getMapStyle() + " mode." );
+
                     if ( xmlAssociationMetadata.isMapExplode() )
                     {
                         sc.add( "while ( xmlStreamReader.nextTag() == XMLStreamConstants.START_ELEMENT )" );
@@ -1235,12 +1241,6 @@ public class StaxReaderGenerator
 
                         sc.add( "{" );
                         sc.indent();
-
-                        sc.add( "String key = null;" );
-
-                        sc.add( "String value = null;" );
-
-                        sc.add( "// " + xmlAssociationMetadata.getMapStyle() + " mode." );
 
                         sc.add( "while ( xmlStreamReader.nextTag() == XMLStreamConstants.START_ELEMENT )" );
 
@@ -1256,8 +1256,23 @@ public class StaxReaderGenerator
                         sc.add( "else if ( \"value\".equals( xmlStreamReader.getLocalName() ) )" );
 
                         sc.add( "{" );
-                        sc.addIndented( "value = xmlStreamReader.getElementText()"
-                                        + ( xmlFieldMetadata.isTrim() ? ".trim()" : "" ) + ";" );
+                        if ( isClassInModel( association.getTo(), association.getModelClass().getModel() ) )
+                        {
+                            sc.indent();
+
+                            sc.add( "value = parse" + association.getTo() + "( xmlStreamReader, strict );" );
+
+                            sc.unindent();
+                        }
+                        else
+                        {
+                            if ( "Date".equals( association.getTo() ) )
+                            {
+                                sc.add( "String dateFormat = "
+                                    + ( xmlFieldMetadata.getFormat() != null ? "\"" + xmlFieldMetadata.getFormat() + "\"" : "null" ) + ";" );
+                            }
+                            sc.addIndented( "value = "+ getPrimitiveAccessor( field, association.getTo() ) + ";" );
+                        }
                         sc.add( "}" );
 
                         sc.add( "else" );
@@ -1288,10 +1303,21 @@ public class StaxReaderGenerator
                         sc.add( "{" );
                         sc.indent();
 
-                        sc.add( "String key = xmlStreamReader.getLocalName();" );
+                        sc.add( "key = xmlStreamReader.getLocalName();" );
 
-                        sc.add( "String value = xmlStreamReader.getElementText()"
-                                + ( xmlFieldMetadata.isTrim() ? ".trim()" : "" ) + ";" );
+                        if ( isClassInModel( association.getTo(), association.getModelClass().getModel() ) )
+                        {
+                            sc.add( "value = parse" + association.getTo() + "( xmlStreamReader, strict );" );
+                        }
+                        else
+                        {
+                            if ( "Date".equals( association.getTo() ) )
+                            {
+                                sc.add( "String dateFormat = "
+                                    + ( xmlFieldMetadata.getFormat() != null ? "\"" + xmlFieldMetadata.getFormat() + "\"" : "null" ) + ";" );
+                            }
+                            sc.add( "value = "+ getPrimitiveAccessor( field, association.getTo() ) + ";" );
+                        }
 
                         sc.add( objectName + ".add" + capitalise( singularName ) + "( key, value );" );
 
@@ -1364,17 +1390,9 @@ public class StaxReaderGenerator
     }
 
     /**
-     * Write code to set a primitive field with a value got from the parser, with appropriate default value, trimming
-     * and required check logic.
-     *
-     * @param field the model field to set (either XML attribute or element)
-     * @param type the type of the value read from XML
-     * @param objectName the object name in source
-     * @param setterName the setter method name
-     * @param sc the source code to add to
+     * @since 1.8
      */
-    private void writePrimitiveField( ModelField field, String type, String objectName, String setterName,
-                                      JSourceCode sc )
+    private String getPrimitiveAccessor( ModelField field, String type )
     {
         XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
 
@@ -1390,12 +1408,6 @@ public class StaxReaderGenerator
             parserGetter = "xmlStreamReader.getElementText()";
         }
 
-/* TODO:
-        if ( xmlFieldMetadata.isRequired() )
-        {
-            parserGetter = "getRequiredAttributeValue( " + parserGetter + ", \"" + tagName + "\", parser, strict )";
-        }
-*/
         if ( field.getDefaultValue() != null )
         {
             parserGetter = "getDefaultValue( " + parserGetter + ", \"" + field.getDefaultValue() + "\" )";
@@ -1406,68 +1418,96 @@ public class StaxReaderGenerator
             parserGetter = "getTrimmedValue( " + parserGetter + " )";
         }
 
-        if ( "boolean".equals( type ) )
+/* TODO:
+        if ( xmlFieldMetadata.isRequired() )
         {
-            sc.add( objectName + "." + setterName + "( getBooleanValue( " + parserGetter + ", \"" + tagName
-                + "\", xmlStreamReader ) );" );
+            parserGetter = "getRequiredAttributeValue( " + parserGetter + ", \"" + tagName + "\", parser, strict )";
         }
-        else if ( "char".equals( type ) )
+*/
+
+        if ( "boolean".equals( type ) || "Boolean".equals( type ) )
         {
-            sc.add( objectName + "." + setterName + "( getCharacterValue( " + parserGetter + ", \"" + tagName
-                + "\", xmlStreamReader ) );" );
+            parserGetter = "getBooleanValue( " + parserGetter + ", \"" + tagName + "\", xmlStreamReader )";
         }
-        else if ( "double".equals( type ) )
+        else if ( "int".equals( type ) || "Integer".equals( type ) )
         {
-            sc.add( objectName + "." + setterName + "( getDoubleValue( " + parserGetter + ", \"" + tagName
-                + "\", xmlStreamReader, strict ) );" );
+            parserGetter = "getIntegerValue( " + parserGetter + ", \"" + tagName + "\", xmlStreamReader, strict )";
         }
-        else if ( "float".equals( type ) )
+        else if ( "short".equals( type ) || "Short".equals( type ) )
         {
-            sc.add( objectName + "." + setterName + "( getFloatValue( " + parserGetter + ", \"" + tagName
-                + "\", xmlStreamReader, strict ) );" );
+            parserGetter = "getShortValue( " + parserGetter + ", \"" + tagName + "\", xmlStreamReader, strict )";
         }
-        else if ( "int".equals( type ) )
+        else if ( "long".equals( type ) || "Long".equals( type ) )
         {
-            sc.add( objectName + "." + setterName + "( getIntegerValue( " + parserGetter + ", \"" + tagName
-                + "\", xmlStreamReader, strict ) );" );
+            parserGetter = "getLongValue( " + parserGetter + ", \"" + tagName + "\", xmlStreamReader, strict )";
         }
-        else if ( "long".equals( type ) )
+        else if ( "double".equals( type ) || "Double".equals( type ) )
         {
-            sc.add( objectName + "." + setterName + "( getLongValue( " + parserGetter + ", \"" + tagName
-                + "\", xmlStreamReader, strict ) );" );
+            parserGetter = "getDoubleValue( " + parserGetter + ", \"" + tagName + "\", xmlStreamReader, strict )";
         }
-        else if ( "short".equals( type ) )
+        else if ( "float".equals( type ) || "Float".equals( type ) )
         {
-            sc.add( objectName + "." + setterName + "( getShortValue( " + parserGetter + ", \"" + tagName
-                + "\", xmlStreamReader, strict ) );" );
+            parserGetter = "getFloatValue( " + parserGetter + ", \"" + tagName + "\", xmlStreamReader, strict )";
         }
         else if ( "byte".equals( type ) )
         {
-            sc.add( objectName + "." + setterName + "( getByteValue( " + parserGetter + ", \"" + tagName
-                + "\", xmlStreamReader, strict ) );" );
+            parserGetter = "getByteValue( " + parserGetter + ", \"" + tagName + "\", xmlStreamReader, strict )";
         }
-        else if ( "String".equals( type ) || "Boolean".equals( type ) )
+        else if ( "char".equals( type ) )
         {
-            // TODO: other Primitive types
-            sc.add( objectName + "." + setterName + "( " + parserGetter + " );" );
+            parserGetter = "getCharacterValue( " + parserGetter + ", \"" + tagName + "\", xmlStreamReader )";
         }
         else if ( "Date".equals( type ) )
         {
-            sc.add( "String dateFormat = "
-                + ( xmlFieldMetadata.getFormat() != null ? "\"" + xmlFieldMetadata.getFormat() + "\"" : "null" ) + ";" );
-            sc.add( objectName + "." + setterName + "( getDateValue( " + parserGetter + ", \"" + tagName
-                + "\", dateFormat, xmlStreamReader ) );" );
+            parserGetter = "getDateValue( " + parserGetter + ", \"" + tagName + "\", dateFormat, xmlStreamReader )";
         }
         else if ( "DOM".equals( type ) )
         {
-            sc.add( objectName + "." + setterName + "( buildDom( xmlStreamReader, " + xmlFieldMetadata.isTrim() + " ) );" );
+            parserGetter = "buildDom( xmlStreamReader, " + xmlFieldMetadata.isTrim() + " )";
 
             requiresDomSupport = true;
         }
+        else if ( "String".equals( type ) )
+        {
+            // stay as it is
+        }
         else
         {
-            throw new IllegalArgumentException( "Unknown type: " + type );
+            throw new IllegalArgumentException( "Unknown type "
+                                                + type
+                                                + " for field "
+                                                + field.getModelClass().getName()
+                                                + "."
+                                                + field.getName() );
         }
+
+        return parserGetter;
+    }
+
+    /**
+     * Write code to set a primitive field with a value got from the parser, with appropriate default value, trimming
+     * and required check logic.
+     *
+     * @param field the model field to set (either XML attribute or element)
+     * @param type the type of the value read from XML
+     * @param objectName the object name in source
+     * @param setterName the setter method name
+     * @param sc the source code to add to
+     */
+    private void writePrimitiveField( ModelField field, String type, String objectName, String setterName,
+                                      JSourceCode sc )
+    {
+        XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
+
+        String parserGetter = getPrimitiveAccessor( field, type );
+
+        if ( "Date".equals( type ) )
+        {
+            sc.add( "String dateFormat = "
+                + ( xmlFieldMetadata.getFormat() != null ? "\"" + xmlFieldMetadata.getFormat() + "\"" : "null" ) + ";" );
+        }
+
+        sc.add( objectName + "." + setterName + "( " + parserGetter + " );" );
     }
 
     private void writeBuildDomMethod( JClass jClass )
