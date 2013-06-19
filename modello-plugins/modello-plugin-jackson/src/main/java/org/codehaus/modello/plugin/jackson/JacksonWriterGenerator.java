@@ -380,7 +380,7 @@ public class JacksonWriterGenerator
 
                         sc.add( "key = String.valueOf( entry.getKey() );" );
 
-                        if ( useJava5 )
+                        if ( useJava5 && association.getType().equals( ModelDefault.MAP ) )
                         {
                             sc.add( "value = entry.getValue();" );
                         }

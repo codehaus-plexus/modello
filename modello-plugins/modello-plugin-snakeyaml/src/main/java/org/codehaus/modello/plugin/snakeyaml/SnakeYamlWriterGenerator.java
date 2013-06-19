@@ -364,8 +364,6 @@ public class SnakeYamlWriterGenerator
                             sc.add( "generator.emit( new MappingStartEvent( null, null, true, null, null, false ) );" );
                         }
 
-
-
                         StringBuilder entryTypeBuilder = new StringBuilder( "java.util.Map.Entry" );
 
                         if ( useJava5 )
@@ -406,7 +404,7 @@ public class SnakeYamlWriterGenerator
 
                         sc.add( "key = String.valueOf( entry.getKey() );" );
 
-                        if ( useJava5 )
+                        if ( useJava5 && association.getType().equals( ModelDefault.MAP ) )
                         {
                             sc.add( "value = entry.getValue();" );
                         }
