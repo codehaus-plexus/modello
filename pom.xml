@@ -264,6 +264,11 @@
       </dependency>
       <dependency>
         <groupId>org.codehaus.modello</groupId>
+        <artifactId>modello-plugin-sax</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.codehaus.modello</groupId>
         <artifactId>modello-plugin-snakeyaml</artifactId>
         <version>${project.version}</version>
       </dependency>

@@ -28,6 +28,7 @@
     <module>modello-plugin-dom4j</module>
     <module>modello-plugin-jackson</module>
     <module>modello-plugin-snakeyaml</module>
+    <module>modello-plugin-sax</module>
   </modules>
 
   <dependencies>

@@ -88,6 +88,11 @@
     </dependency>
     <dependency>
       <groupId>org.codehaus.modello</groupId>
+      <artifactId>modello-plugin-sax</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-plugin-snakeyaml</artifactId>
       <scope>runtime</scope>
     </dependency>
