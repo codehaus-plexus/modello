@@ -158,11 +158,7 @@ public class SaxWriterGenerator
         sc.add( "transformerHandler.getTransformer().setOutputProperties( format );" );
         sc.add( "transformerHandler.setResult( new StreamResult( writer ) );" );
 
-        sc.add( "transformerHandler.startDocument();" );
-
         sc.add( "write( transformerHandler, " + rootElementParameterName + " );" );
-
-        sc.add( "transformerHandler.endDocument();" );
 
         jClass.addMethod( marshall );
 
@@ -198,9 +194,37 @@ public class SaxWriterGenerator
 
         sc = marshall.getSourceCode();
 
+        sc.add( "write( contentHandler, " + rootElementParameterName + ", true );" );
+
+        jClass.addMethod( marshall );
+
+        // ----------------------------------------------------------------------
+        // Write the write( ContentHandler, Model, boolean ) method which will do the unmarshalling.
+        // ----------------------------------------------------------------------
+
+        marshall = new JMethod( "write" );
+
+        marshall.addParameter( new JParameter( new JClass( "ContentHandler" ), "contentHandler" ) );
+        marshall.addParameter( new JParameter( new JClass( root ), rootElementParameterName ) );
+        marshall.addParameter( new JParameter( JType.BOOLEAN, "startDocument" ) );
+
+        marshall.addException( new JClass( "SAXException" ) );
+
+        sc = marshall.getSourceCode();
+
+        sc.add( "if ( startDocument )" );
+        sc.add( "{" );
+        sc.addIndented( "contentHandler.startDocument();" );
+        sc.add( "}" );
+
         sc.add( "AttributesImpl attributes = new AttributesImpl();" );
 
         sc.add( "write" + root + "( " + rootElementParameterName + ", \"" + rootElement + "\", contentHandler, attributes );" );
+
+        sc.add( "if ( startDocument )" );
+        sc.add( "{" );
+        sc.addIndented( "contentHandler.endDocument();" );
+        sc.add( "}" );
 
         jClass.addMethod( marshall );
 

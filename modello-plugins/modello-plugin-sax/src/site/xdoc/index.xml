@@ -27,7 +27,9 @@
         <li><code>public void write( Writer writer, <i>RootClass</i> root )<br/>
             &#160;&#160;&#160;&#160;throws SAXException, TransformerException, UnsupportedEncodingException</code></li>
         <li><code>public void write( org.xml.sax.ContentHandler, <i>RootClass</i> root )<br/>
-            &#160;&#160;&#160;&#160;throws SAXException</code> (note that this method won't take care to open/close the XML document)</li>
+            &#160;&#160;&#160;&#160;throws SAXException</code> (this method will take care to open/close the XML document)</li>
+        <li><code>public void write( org.xml.sax.ContentHandler, <i>RootClass</i> root, boolean startDocument )<br/>
+            &#160;&#160;&#160;&#160;throws SAXException</code> (this method will take care to open/close the XML document depending on the <code>startDocument</code> flag)</li>
       </ul>
       </subsection>
 
