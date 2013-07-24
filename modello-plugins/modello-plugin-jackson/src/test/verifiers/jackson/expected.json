@@ -1,0 +1,67 @@
+{
+  "extender" : "/foo/bar",
+  "modelVersion" : "4.0.0",
+  "name" : "Maven",
+  "components" : [ {
+    "name" : "component1"
+  }, {
+    "comment" : "comment2",
+    "name" : "component2",
+    "components" : [ {
+      "comment" : "subcomment",
+      "name" : "sub"
+    } ]
+  }, {
+    "name" : "component3",
+    "custom" : {
+      "foo" : "bar",
+      "bar" : {
+        "att1" : "value",
+        "content" : "baz"
+      },
+      "el1" : {
+        "el2" : "te&xt"
+      },
+      "excludes" : [ "*.vlt", "*.xml" ]
+    }
+  }, {
+    "name" : "component4",
+    "properties" : [ {
+      "key" : "key",
+      "value" : "theValue"
+    } ],
+    "flatProperties" : {
+      "name" : "value"
+    }
+  } ],
+  "repositories" : [ {
+    "id" : "foo"
+  }, {
+    "id" : "bar"
+  } ],
+  "mailingLists" : [ {
+    "name" : "Mailing list",
+    "subscribe" : "Super Subscribe",
+    "unsubscribe" : "Duper Unsubscribe",
+    "archive" : "?ber Archive"
+  } ],
+  "scm" : {
+    "connection" : "connection",
+    "developerConnection" : "developerConnection",
+    "url" : "url"
+  },
+  "builder" : {
+    "sourceDirectory" : "src/main/java",
+    "unitTestSourceDirectory" : "src/test/java",
+    "sourceModifications" : [ {
+      "className" : "excludeEclipsePlugin",
+      "directory" : "foo",
+      "excludes" : [ "de/abstrakt/tools/codegeneration/eclipse/*.java" ]
+    } ],
+    "unitTest" : { }
+  },
+  "content" : {
+    "attr" : "attribute",
+    "content": "content value"
+  }
+}

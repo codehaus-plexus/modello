@@ -59,6 +59,8 @@ public class JacksonReaderGenerator
 
     private static final String LOCATION_VAR = "_location";
 
+    private boolean requiresDomSupport;
+
     private ModelClass locationTracker;
 
     private String locationField;
@@ -77,6 +79,7 @@ public class JacksonReaderGenerator
     {
         initialize( model, parameters );
 
+        requiresDomSupport = false;
         locationTracker = sourceTracker = null;
         trackingArgs = locationField = "";
 
@@ -310,8 +313,17 @@ public class JacksonReaderGenerator
         writeHelpers( jClass );
 
         // ----------------------------------------------------------------------
-        //
+        // DOM support
         // ----------------------------------------------------------------------
+
+        if ( requiresDomSupport )
+        {
+            getLogger().warn( "Jackson DOM support requires auxiliary com.fasterxml.jackson.core:jackson-databind module!" );
+
+            jClass.addImport( "com.fasterxml.jackson.databind.ObjectMapper" );
+
+            sc.add( "factory.setCodec( new ObjectMapper() );" );
+        }
 
         jClass.print( sourceWriter );
 
@@ -376,20 +388,8 @@ public class JacksonReaderGenerator
             writeNewSetLocation( "\"\"", uncapClassName, null, sc );
         }
 
-        ModelField contentField = null;
-
         List<ModelField> modelFields = getFieldsForXml( modelClass, getGeneratedVersion() );
 
-        // read all XML attributes first
-        contentField = writeClassAttributesParser( modelFields, uncapClassName, rootElement );
-
-        // then read content, either content field or elements
-        if ( contentField != null )
-        {
-            writePrimitiveField( contentField, contentField.getType(), uncapClassName, uncapClassName, "\"\"",
-                                 "set" + capitalise( contentField.getName() ), sc, false );
-        }
-        else
         {
             //Write other fields
 
@@ -434,24 +434,6 @@ public class JacksonReaderGenerator
         sc.add( "return " + uncapClassName + ";" );
 
         jClass.addMethod( unmarshall );
-    }
-
-    private ModelField writeClassAttributesParser( List<ModelField> modelFields, String objectName, boolean rootElement )
-    {
-        ModelField contentField = null;
-
-        for ( ModelField field : modelFields )
-        {
-            XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
-
-            // TODO check if we have already one with this type and throws Exception
-            if ( xmlFieldMetadata.isContent() )
-            {
-                contentField = field;
-            }
-        }
-
-        return contentField;
     }
 
     /**
@@ -586,15 +568,14 @@ public class JacksonReaderGenerator
                         sc.add( "}" );
                     }
 
+                    sc.add( "while ( JsonToken.END_ARRAY != parser.nextToken() )" );
+
+                    sc.add( "{" );
+                    sc.indent();
+
                     if ( inModel )
                     {
-                        sc.add( "while ( JsonToken.END_ARRAY != parser.nextToken() )" );
-
-                        sc.add( "{" );
-
-                        sc.addIndented( adder + "( parse" + association.getTo() + "( parser, strict" + trackingArgs + " ) );" );
-
-                        sc.add( "}" );
+                        sc.add( adder + "( parse" + association.getTo() + "( parser, strict" + trackingArgs + " ) );" );
                     }
                     else
                     {
@@ -609,8 +590,11 @@ public class JacksonReaderGenerator
                                 + ".size() )";
                         }
                         writePrimitiveField( association, association.getTo(), associationName, LOCATION_VAR + "s", key,
-                                             "add", sc, false );
+                                             "add", sc, true );
                     }
+
+                    sc.unindent();
+                    sc.add( "}" );
 
                     sc.unindent();
                     sc.add( "}" );
@@ -794,6 +778,11 @@ public class JacksonReaderGenerator
             {
                 parserGetter = "getTrimmedValue( " + parserGetter + " )";
             }
+        }
+        else if ( "DOM".equals( type ) )
+        {
+            requiresDomSupport = true;
+            parserGetter = "parser.readValueAsTree()";
         }
         else
         {

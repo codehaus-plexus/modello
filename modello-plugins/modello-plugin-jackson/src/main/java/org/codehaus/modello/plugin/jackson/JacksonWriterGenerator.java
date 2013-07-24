@@ -50,10 +50,14 @@ public class JacksonWriterGenerator
     extends AbstractJacksonGenerator
 {
 
+    private boolean requiresDomSupport;
+
     public void generate( Model model, Properties parameters )
         throws ModelloException
     {
         initialize( model, parameters );
+
+        requiresDomSupport = true;
 
         try
         {
@@ -83,6 +87,7 @@ public class JacksonWriterGenerator
         jClass.addImport( "com.fasterxml.jackson.core.JsonFactory" );
         jClass.addImport( "com.fasterxml.jackson.core.JsonGenerator" );
         jClass.addImport( "com.fasterxml.jackson.core.JsonGenerator.Feature" );
+        jClass.addImport( "java.io.IOException" );
         jClass.addImport( "java.io.OutputStream" );
         jClass.addImport( "java.io.OutputStreamWriter" );
         jClass.addImport( "java.io.Writer" );
@@ -108,6 +113,21 @@ public class JacksonWriterGenerator
 
         jClass.addConstructor( jacksonWriterConstructor );
 
+        writeAllClasses( objectModel, jClass );
+
+        // ----------------------------------------------------------------------
+        // DOM support
+        // ----------------------------------------------------------------------
+
+        if ( requiresDomSupport )
+        {
+            getLogger().warn( "Jackson DOM support requires auxiliary com.fasterxml.jackson.core:jackson-databind module!" );
+
+            jClass.addImport( "com.fasterxml.jackson.databind.ObjectMapper" );
+
+            sc.add( "factory.setCodec( new ObjectMapper() );" );
+        }
+
         // ----------------------------------------------------------------------
         // Write the write( Writer, Model ) method which will do the unmarshalling.
         // ----------------------------------------------------------------------
@@ -118,7 +138,7 @@ public class JacksonWriterGenerator
         marshall.addParameter( new JParameter( new JClass( "Writer" ), "writer" ) );
         marshall.addParameter( new JParameter( new JClass( root ), rootElementParameterName ) );
 
-        marshall.addException( new JClass( "java.io.IOException" ) );
+        marshall.addException( new JClass( "IOException" ) );
 
         sc = marshall.getSourceCode();
 
@@ -141,7 +161,7 @@ public class JacksonWriterGenerator
         marshall.addParameter( new JParameter( new JClass( "OutputStream" ), "stream" ) );
         marshall.addParameter( new JParameter( new JClass( root ), rootElementParameterName ) );
 
-        marshall.addException( new JClass( "java.io.IOException" ) );
+        marshall.addException( new JClass( "IOException" ) );
 
         sc = marshall.getSourceCode();
 
@@ -152,8 +172,6 @@ public class JacksonWriterGenerator
                         + " );" );
 
         jClass.addMethod( marshall );
-
-        writeAllClasses( objectModel, jClass );
 
         jClass.print( sourceWriter );
 
@@ -181,7 +199,7 @@ public class JacksonWriterGenerator
         marshall.addParameter( new JParameter( new JClass( className ), uncapClassName ) );
         marshall.addParameter( new JParameter( new JClass( "JsonGenerator" ), "generator" ) );
 
-        marshall.addException( new JClass( "java.io.IOException" ) );
+        marshall.addException( new JClass( "IOException" ) );
 
         marshall.getModifiers().makePrivate();
 
@@ -189,60 +207,13 @@ public class JacksonWriterGenerator
 
         sc.add( "generator.writeStartObject();" );
 
-        ModelField contentField = null;
-
-        String contentValue = null;
-
         List<ModelField> modelFields = getFieldsForXml( modelClass, getGeneratedVersion() );
-
-        // XML attributes
-        for ( ModelField field : modelFields )
-        {
-            XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
-
-            JavaFieldMetadata javaFieldMetadata = (JavaFieldMetadata) field.getMetadata( JavaFieldMetadata.ID );
-
-            String fieldTagName = resolveTagName( field, xmlFieldMetadata );
-
-            String type = field.getType();
-
-            String value = uncapClassName + "." + getPrefix( javaFieldMetadata ) + capitalise( field.getName() ) + "()";
-
-            if ( xmlFieldMetadata.isContent() )
-            {
-                contentField = field;
-                contentValue = value;
-                continue;
-            }
-
-            if ( xmlFieldMetadata.isAttribute() )
-            {
-                sc.add( getValueChecker( type, value, field ) );
-
-                sc.add( "{" );
-                sc.addIndented( "generator.writeObjectField( \"" + fieldTagName + "\", " + value + " );" );
-                sc.add( "}" );
-            }
-
-        }
-
-        if ( contentField != null )
-        {
-            XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) contentField.getMetadata( XmlFieldMetadata.ID );
-            sc.add( "serializer.text( " + getValue( contentField.getType(), contentValue, xmlFieldMetadata ) + " );" );
-        }
 
         // XML tags
         for ( ModelField field : modelFields )
         {
             XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
 
-            if ( xmlFieldMetadata.isContent() )
-            {
-                // skip field with type Content
-                continue;
-            }
-
             JavaFieldMetadata javaFieldMetadata = (JavaFieldMetadata) field.getMetadata( JavaFieldMetadata.ID );
 
             String fieldTagName = resolveTagName( field, xmlFieldMetadata );
@@ -250,11 +221,6 @@ public class JacksonWriterGenerator
             String type = field.getType();
 
             String value = uncapClassName + "." + getPrefix( javaFieldMetadata ) + capitalise( field.getName() ) + "()";
-
-            if ( xmlFieldMetadata.isAttribute() )
-            {
-                continue;
-            }
 
             if ( field instanceof ModelAssociation )
             {
@@ -441,7 +407,25 @@ public class JacksonWriterGenerator
                 sc.add( getValueChecker( type, value, field ) );
 
                 sc.add( "{" );
-                sc.addIndented( "generator.writeObjectField( \"" + fieldTagName + "\", " + value + " );" );
+                if ( "DOM".equals( field.getType() ) )
+                {
+                    if ( domAsXpp3 )
+                    {
+                        getLogger().warn( "Xpp3Dom not supported for "
+                                          + modelClass.getName()
+                                          + "#"
+                                          + field.getName()
+                                          + ", it will be treated as a regular Java Object." );
+                    }
+
+                    requiresDomSupport = true;
+
+                    sc.addIndented( "generator.writeObjectField( \"" + fieldTagName + "\", " + value + " );" );
+                }
+                else
+                {
+                    sc.addIndented( "generator.writeObjectField( \"" + fieldTagName + "\", " + value + " );" );
+                }
                 sc.add( "}" );
             }
         }
