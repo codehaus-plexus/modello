@@ -698,7 +698,7 @@ public class SnakeYamlReaderGenerator
 
                         sc.add( "String key = null;" );
 
-                        sc.add( association.getTo() + " value = null;" );
+                        sc.add( "String value = null;" );
 
                         sc.add( "Set<String> parsedPropertiesElements = new HashSet<String>();" );
 
@@ -707,7 +707,7 @@ public class SnakeYamlReaderGenerator
                         sc.add( "{" );
                         sc.indent();
 
-                        sc.add( "if ( checkFieldWithDuplicate( event, \"key\", null, parsedPropertiesElements ) )" );
+                        sc.add( "if ( checkFieldWithDuplicate( event, \"key\", \"\", parsedPropertiesElements ) )" );
                         sc.add( "{" );
 
                         String parserGetter = "( (ScalarEvent) parser.getEvent() ).getValue()";
@@ -719,17 +719,16 @@ public class SnakeYamlReaderGenerator
                         sc.addIndented( "key = " + parserGetter + ";" );
 
                         sc.add( "}" );
-                        sc.add( "else if ( checkFieldWithDuplicate( event, \"value\", null, parsedPropertiesElements ) )" );
+                        sc.add( "else if ( checkFieldWithDuplicate( event, \"value\", \"\", parsedPropertiesElements ) )" );
                         sc.add( "{" );
 
-                        if ( isClassInModel( association.getTo(), association.getModelClass().getModel() ) )
+                        parserGetter = "( (ScalarEvent) parser.getEvent() ).getValue()";
+                        if ( xmlFieldMetadata.isTrim() )
                         {
-                            sc.addIndented( "value = parse" + association.getTo() + "( parser, strict" + trackingArgs + " );" );
+                            parserGetter = "getTrimmedValue( " + parserGetter + " )";
                         }
-                        else
-                        {
-                            sc.addIndented( "value = "+ getPrimitiveAccessor( field, association.getTo() ) + ";" );
-                        }
+
+                        sc.addIndented( "value = " + parserGetter + ";" );
 
                         sc.add( "}" );
 
@@ -769,20 +768,8 @@ public class SnakeYamlReaderGenerator
 
                         writeNewSetLocation( "key", LOCATION_VAR + "s", null, sc );
 
-                        if ( isClassInModel( association.getTo(), association.getModelClass().getModel() ) )
-                        {
-                            sc.add( association.getTo() + " value = parse" + association.getTo() + "( parser, strict" + trackingArgs + " );" );
-                        }
-                        else
-                        {
-                            if ( "Date".equals( type ) )
-                            {
-                                sc.add( "String dateFormat = "
-                                                + ( xmlFieldMetadata.getFormat() != null ? "\"" + xmlFieldMetadata.getFormat() + "\"" : "null" ) + ";" );
-                            }
-
-                            sc.add( association.getTo() + " value = " + getPrimitiveAccessor( field, association.getTo() ) + ";" );
-                        }
+                        sc.add(
+                            "String value = ( (ScalarEvent) parser.getEvent() ).getValue()" + ( xmlFieldMetadata.isTrim() ? ".trim()" : "" ) + ";" );
 
                         sc.add( objectName + ".add" + capitalise( singularName ) + "( key, value );" );
 
@@ -1109,102 +1096,102 @@ public class SnakeYamlReaderGenerator
         sc.add( objectName + ".set" + capitalise( singular( locationField ) ) + "( " + key + ", " + variable + " );" );
     }
 
-    private String getPrimitiveAccessor( ModelField field, String type )
-    {
-        XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
-
-        String tagName = resolveTagName( field, xmlFieldMetadata );
-
-        String parserGetter = "( (ScalarEvent) parser.getEvent() ).getValue()";
-
-        if ( field.getDefaultValue() != null )
-        {
-            parserGetter = "getDefaultValue( " + parserGetter + ", \"" + field.getDefaultValue() + "\" )";
-        }
-
-        if ( xmlFieldMetadata.isTrim() )
-        {
-            parserGetter = "getTrimmedValue( " + parserGetter + " )";
-        }
-
-        if ( "boolean".equals( type ) || "Boolean".equals( type ) )
-        {
-            parserGetter = "getBooleanValue( " + parserGetter + " )";
-        }
-        else if ( "char".equals( type ) )
-        {
-            parserGetter = "getCharacterValue( " + parserGetter + ", \"" + tagName + "\" )";
-        }
-        else if ( "double".equals( type ) || "Double".equals( type ) )
-        {
-            parserGetter = "getDoubleValue( " + parserGetter + ", \"" + tagName + "\", parser.peekEvent(), strict )";
-        }
-        else if ( "float".equals( type ) || "Float".equals( type ) )
-        {
-            parserGetter = "getFloatValue( " + parserGetter + ", \"" + tagName + "\", parser.peekEvent(), strict )";
-        }
-        else if ( "int".equals( type ) || "Integer".equals( type ) )
-        {
-            parserGetter = "getIntegerValue( " + parserGetter + ", \"" + tagName + "\", parser.peekEvent(), strict )";
-        }
-        else if ( "long".equals( type ) || "Long".equals( type ) )
-        {
-            parserGetter = "getLongValue( " + parserGetter + ", \"" + tagName + "\", parser.peekEvent(), strict )";
-        }
-        else if ( "short".equals( type ) || "Short".equals( type ) )
-        {
-            parserGetter = "getShortValue( " + parserGetter + ", \"" + tagName + "\", parser.peekEvent(), strict )";
-        }
-        else if ( "byte".equals( type ) )
-        {
-            parserGetter = "getByteValue( " + parserGetter + ", \"" + tagName + "\", parser.peekEvent(), strict )";
-        }
-        else if ( "String".equals( type ) )
-        {
-            // TODO: other Primitive types
-        }
-        else if ( "Date".equals( type ) )
-        {
-            parserGetter = "getDateValue( " + parserGetter + ", \"" + tagName + "\", dateFormat, parser.peekEvent() ) )";
-        }
-        else
-        {
-            throw new IllegalArgumentException( "Unknown type "
-                                                + type
-                                                + " for field "
-                                                + field.getModelClass().getName()
-                                                + "."
-                                                + field.getName() );
-        }
-
-        return parserGetter;
-    }
-
     /**
-     * Write code to set a primitive field with a value got from the parser, with appropriate default value, trimming
-     * and required check logic.
-     *
-     * @param field the model field to set (either XML attribute or element)
-     * @param type the type of the value read from XML
-     * @param objectName the object name in source
-     * @param setterName the setter method name
-     * @param sc the source code to add to
-     */
-    private void writePrimitiveField( ModelField field, String type, String objectName, String locatorName,
-                                      String locationKey, String setterName, JSourceCode sc, boolean wrappedItem )
-    {
-        XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
-
-        String parserGetter = getPrimitiveAccessor( field, type );
-
-        if ( "Date".equals( type ) )
+         * Write code to set a primitive field with a value got from the parser, with appropriate default value, trimming
+         * and required check logic.
+         *
+         * @param field the model field to set (either XML attribute or element)
+         * @param type the type of the value read from XML
+         * @param objectName the object name in source
+         * @param setterName the setter method name
+         * @param sc the source code to add to
+         */
+        private void writePrimitiveField( ModelField field, String type, String objectName, String locatorName,
+                                          String locationKey, String setterName, JSourceCode sc, boolean wrappedItem )
         {
-            sc.add( "String dateFormat = "
-                            + ( xmlFieldMetadata.getFormat() != null ? "\"" + xmlFieldMetadata.getFormat() + "\"" : "null" ) + ";" );
-        }
+            XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
 
-        sc.add( objectName + "." + setterName + "( " + parserGetter + " );" );
-    }
+            String tagName = resolveTagName( field, xmlFieldMetadata );
+
+            String parserGetter = "( (ScalarEvent) parser.getEvent() ).getValue()";
+
+    /* TODO:
+            if ( xmlFieldMetadata.isRequired() )
+            {
+                parserGetter = "getRequiredAttributeValue( " + parserGetter + ", \"" + tagName + "\", parser, strict )";
+            }
+    */
+            if ( field.getDefaultValue() != null )
+            {
+                parserGetter = "getDefaultValue( " + parserGetter + ", \"" + field.getDefaultValue() + "\" )";
+            }
+
+            if ( xmlFieldMetadata.isTrim() )
+            {
+                parserGetter = "getTrimmedValue( " + parserGetter + " )";
+            }
+
+            if ( "boolean".equals( type ) )
+            {
+                sc.add( objectName + "." + setterName + "( getBooleanValue( " + parserGetter + " ) );" );
+            }
+            else if ( "char".equals( type ) )
+            {
+                sc.add( objectName + "." + setterName + "( getCharacterValue( " + parserGetter + ", \"" + tagName
+                    + "\" ) );" );
+            }
+            else if ( "double".equals( type ) )
+            {
+                sc.add( objectName + "." + setterName + "( getDoubleValue( " + parserGetter + ", \"" + tagName
+                    + "\", parser.peekEvent(), strict ) );" );
+            }
+            else if ( "float".equals( type ) )
+            {
+                sc.add( objectName + "." + setterName + "( getFloatValue( " + parserGetter + ", \"" + tagName
+                    + "\", parser.peekEvent(), strict ) );" );
+            }
+            else if ( "int".equals( type ) )
+            {
+                sc.add( objectName + "." + setterName + "( getIntegerValue( " + parserGetter + ", \"" + tagName
+                    + "\", parser.peekEvent(), strict ) );" );
+            }
+            else if ( "long".equals( type ) )
+            {
+                sc.add( objectName + "." + setterName + "( getLongValue( " + parserGetter + ", \"" + tagName
+                    + "\", parser.peekEvent(), strict ) );" );
+            }
+            else if ( "short".equals( type ) )
+            {
+                sc.add( objectName + "." + setterName + "( getShortValue( " + parserGetter + ", \"" + tagName
+                    + "\", parser.peekEvent(), strict ) );" );
+            }
+            else if ( "byte".equals( type ) )
+            {
+                sc.add( objectName + "." + setterName + "( getByteValue( " + parserGetter + ", \"" + tagName
+                    + "\", parser.peekEvent(), strict ) );" );
+            }
+            else if ( "String".equals( type ) || "Boolean".equals( type ) )
+            {
+                // TODO: other Primitive types
+                sc.add( objectName + "." + setterName + "( " + parserGetter + " );" );
+            }
+            else if ( "Date".equals( type ) )
+            {
+                sc.add( "String dateFormat = "
+                    + ( xmlFieldMetadata.getFormat() != null ? "\"" + xmlFieldMetadata.getFormat() + "\"" : "null" ) + ";" );
+                sc.add( objectName + "." + setterName + "( getDateValue( " + parserGetter + ", \"" + tagName
+                    + "\", dateFormat, parser.peekEvent() ) );" );
+            }
+            else
+            {
+                throw new IllegalArgumentException( "Unknown type "
+                                                    + type
+                                                    + " for field "
+                                                    + field.getModelClass().getName()
+                                                    + "."
+                                                    + field.getName() );
+            }
+        }
 
     private JMethod convertNumericalType( String methodName, JType returnType, String expression, String typeDesc )
     {
