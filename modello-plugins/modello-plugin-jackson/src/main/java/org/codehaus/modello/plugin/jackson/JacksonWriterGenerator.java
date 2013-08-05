@@ -346,7 +346,7 @@ public class JacksonWriterGenerator
 
                         sc.add( "key = String.valueOf( entry.getKey() );" );
 
-                        if ( useJava5 && association.getType().equals( ModelDefault.MAP ) )
+                        if ( useJava5 )
                         {
                             sc.add( "value = entry.getValue();" );
                         }
