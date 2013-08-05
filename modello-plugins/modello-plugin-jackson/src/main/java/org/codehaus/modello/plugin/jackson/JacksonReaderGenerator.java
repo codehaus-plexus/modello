@@ -639,7 +639,7 @@ public class JacksonReaderGenerator
 
                         sc.add( "String key = null;" );
 
-                        sc.add( association.getTo() + " value = null;" );
+                        sc.add( "String value = null;" );
 
                         sc.add( "Set<String> parsedPropertiesElements = new HashSet<String>();" );
 
@@ -648,7 +648,7 @@ public class JacksonReaderGenerator
                         sc.add( "{" );
                         sc.indent();
 
-                        sc.add( "if ( checkFieldWithDuplicate( parser, \"key\", null, parsedPropertiesElements ) )" );
+                        sc.add( "if ( checkFieldWithDuplicate( parser, \"key\", \"\", parsedPropertiesElements ) )" );
 
                         sc.add( "{" );
                         sc.addIndented( "parser.nextToken();" );
@@ -663,21 +663,19 @@ public class JacksonReaderGenerator
                         sc.addIndented( "key = " + parserGetter + ";" );
                         sc.add( "}" );
 
-                        sc.add( "else if ( checkFieldWithDuplicate( parser, \"value\", null, parsedPropertiesElements ) )" );
+                        sc.add( "else if ( checkFieldWithDuplicate( parser, \"value\", \"\", parsedPropertiesElements ) )" );
 
                         sc.add( "{" );
+                        sc.addIndented( "parser.nextToken();" );
 
-                        if ( isClassInModel( association.getTo(), association.getModelClass().getModel() ) )
-                        {
-                            sc.addIndented( "value = parse" + association.getTo() + "( parser, strict" + trackingArgs + " );" );
-                        }
-                        else
-                        {
-                            sc.addIndented( "parser.nextToken();" );
+                        parserGetter = "parser.getText()";
 
-                            sc.addIndented( "value = "+ getPrimitiveAccessor( field, association.getTo() ) + ";" );
+                        if ( xmlFieldMetadata.isTrim() )
+                        {
+                            parserGetter = "getTrimmedValue( " + parserGetter + " )";
                         }
 
+                        sc.addIndented( "value = " + parserGetter + ";" );
                         sc.add( "}" );
 
                         sc.add( "else" );
@@ -714,15 +712,8 @@ public class JacksonReaderGenerator
 
                         writeNewSetLocation( "key", LOCATION_VAR + "s", null, sc );
 
-                        if ( isClassInModel( association.getTo(), association.getModelClass().getModel() ) )
-                        {
-                            sc.add( association.getTo() + " value = parse" + association.getTo() + "( parser, strict" + trackingArgs + " );" );
-                        }
-                        else
-                        {
-                            sc.add( "parser.nextToken();" );
-                            sc.add( association.getTo() + " value = "+ getPrimitiveAccessor( field, association.getTo() ) + ";" );
-                        }
+                        sc.add(
+                            "String value = parser.nextTextValue()" + ( xmlFieldMetadata.isTrim() ? ".trim()" : "" ) + ";" );
 
                         sc.add( objectName + ".add" + capitalise( singularName ) + "( key, value );" );
 
@@ -737,7 +728,8 @@ public class JacksonReaderGenerator
         }
     }
 
-    private String getPrimitiveAccessor( ModelField field, String type )
+    private void writePrimitiveField( ModelField field, String type, String objectName, String locatorName,
+                                      String locationKey, String setterName, JSourceCode sc, boolean wrappedItem )
     {
         XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
 
@@ -793,14 +785,6 @@ public class JacksonReaderGenerator
                                                 + "."
                                                 + field.getName() );
         }
-
-        return parserGetter;
-    }
-
-    private void writePrimitiveField( ModelField field, String type, String objectName, String locatorName,
-                                      String locationKey, String setterName, JSourceCode sc, boolean wrappedItem )
-    {
-        String parserGetter = getPrimitiveAccessor( field, type );
 
         String keyCapture = "";
         writeNewLocation( null, sc );
