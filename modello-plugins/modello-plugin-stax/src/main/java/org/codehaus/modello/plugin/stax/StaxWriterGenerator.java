@@ -73,7 +73,7 @@ public class StaxWriterGenerator
         {
             throw new ModelloException( "Exception while generating StAX Writer.", ex );
         }
-
+        
         serializerGenerator.generate( model, parameters );
     }
 
@@ -271,10 +271,7 @@ public class StaxWriterGenerator
             sc.add( "serializer.setDefaultNamespace( \"" + namespace + "\" );" );
         }
 
-        sc.add( "if ( tagName != null )" );
-        sc.add( "{" );
-        sc.addIndented( "serializer.writeStartElement( tagName );" );
-        sc.add( "}" );
+        sc.add( "serializer.writeStartElement( tagName );" );
 
         if ( namespace != null )
         {
@@ -486,7 +483,7 @@ public class StaxWriterGenerator
 
                         sc.add( "String key = (String) iter.next();" );
 
-                        sc.add( association.getTo() + " value = (" + association.getTo() + ") " + value + ".get( key );" );
+                        sc.add( "String value = (String) " + value + ".get( key );" );
 
                         if ( xmlAssociationMetadata.isMapExplode() )
                         {
@@ -495,32 +492,14 @@ public class StaxWriterGenerator
                             sc.add( "serializer.writeCharacters( key );" );
                             sc.add( "serializer.writeEndElement();" );
                             sc.add( "serializer.writeStartElement( \"value\" );" );
-
-                            if ( isClassInModel( association.getTo(), association.getModelClass().getModel() ) )
-                            {
-                                sc.add( "write" + association.getTo() + "( value, null, serializer );" );
-                            }
-                            else
-                            {
-                                sc.add( "serializer.writeCharacters( " + getValue( association.getTo(), "value", xmlFieldMetadata ) + " );" );
-                            }
-
+                            sc.add( "serializer.writeCharacters( value );" );
                             sc.add( "serializer.writeEndElement();" );
                             sc.add( "serializer.writeEndElement();" );
                         }
                         else
                         {
-                            sc.add( "serializer.writeStartElement( key );" );
-
-                            if ( isClassInModel( association.getTo(), association.getModelClass().getModel() ) )
-                            {
-                                sc.add( "write" + association.getTo() + "( value, null, serializer );" );
-                            }
-                            else
-                            {
-                                sc.add( "serializer.writeCharacters( " + getValue( association.getTo(), "value", xmlFieldMetadata ) + " );" );
-                            }
-
+                            sc.add( "serializer.writeStartElement( \"\" + key + \"\" );" );
+                            sc.add( "serializer.writeCharacters( value );" );
                             sc.add( "serializer.writeEndElement();" );
                         }
 
@@ -564,10 +543,7 @@ public class StaxWriterGenerator
             }
         }
 
-        sc.add( "if ( tagName != null )" );
-        sc.add( "{" );
-        sc.addIndented( "serializer.writeEndElement();" );
-        sc.add( "}" );
+        sc.add( "serializer.writeEndElement();" );
 
         sc.unindent();
         sc.add( "}" );
@@ -641,12 +617,12 @@ public class StaxWriterGenerator
             sc.add( "String[] attributeNames = dom.getAttributeNames();" );
             sc.add( "for ( int i = 0; i < attributeNames.length; i++ )" );
             sc.add( "{" );
-
+    
             sc.indent();
             sc.add( "String attributeName = attributeNames[i];" );
             sc.add( "serializer.writeAttribute( attributeName, dom.getAttribute( attributeName ) );" );
             sc.unindent();
-
+    
             sc.add( "}" );
         }
         else
@@ -654,12 +630,12 @@ public class StaxWriterGenerator
             sc.add( "org.w3c.dom.NamedNodeMap attributes = dom.getAttributes();" );
             sc.add( "for ( int i = 0; i < attributes.getLength(); i++ )" );
             sc.add( "{" );
-
+    
             sc.indent();
             sc.add( "org.w3c.dom.Node attribute = attributes.item( i );" );
             sc.add( "serializer.writeAttribute( attribute.getNodeName(), attribute.getNodeValue() );" );
             sc.unindent();
-
+    
             sc.add( "}" );
         }
 
