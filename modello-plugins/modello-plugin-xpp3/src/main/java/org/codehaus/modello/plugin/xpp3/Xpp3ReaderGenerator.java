@@ -817,12 +817,6 @@ public class Xpp3ReaderGenerator
                         writeNewSetLocation( field, objectName, LOCATION_VAR + "s", sc );
                     }
 
-                    sc.add( "String key = null;" );
-
-                    sc.add( association.getTo() + " value = null;" );
-
-                    sc.add( "// " + xmlAssociationMetadata.getMapStyle() + " mode." );
-
                     if ( xmlAssociationMetadata.isMapExplode() )
                     {
                         sc.add( "while ( parser.nextTag() == XmlPullParser.START_TAG )" );
@@ -835,7 +829,13 @@ public class Xpp3ReaderGenerator
                         sc.add( "{" );
                         sc.indent();
 
+                        sc.add( "String key = null;" );
+
+                        sc.add( "String value = null;" );
+
                         writeNewLocation( LOCATION_VAR, sc );
+
+                        sc.add( "// " + xmlAssociationMetadata.getMapStyle() + " mode." );
 
                         sc.add( "while ( parser.nextTag() == XmlPullParser.START_TAG )" );
 
@@ -853,25 +853,7 @@ public class Xpp3ReaderGenerator
                         sc.add( "{" );
                         sc.indent();
                         writeNewLocation( LOCATION_VAR, sc );
-
-                        if ( isClassInModel( association.getTo(), association.getModelClass().getModel() ) )
-                        {
-                            sc.indent();
-
-                            sc.add( "value = parse" + association.getTo() + "( parser, strict );" );
-
-                            sc.unindent();
-                        }
-                        else
-                        {
-                            if ( "Date".equals( association.getTo() ) )
-                            {
-                                sc.add( "String dateFormat = "
-                                    + ( xmlFieldMetadata.getFormat() != null ? "\"" + xmlFieldMetadata.getFormat() + "\"" : "null" ) + ";" );
-                            }
-                            sc.addIndented( "value = "+ getPrimitiveAccessor( field, association.getTo() ) + ";" );
-                        }
-
+                        sc.add( "value = parser.nextText()" + ( xmlFieldMetadata.isTrim() ? ".trim()" : "" ) + ";" );
                         sc.unindent();
                         sc.add( "}" );
 
@@ -904,23 +886,12 @@ public class Xpp3ReaderGenerator
                         sc.add( "{" );
                         sc.indent();
 
-                        sc.add( "key = parser.getName();" );
+                        sc.add( "String key = parser.getName();" );
 
                         writeNewSetLocation( "key", LOCATION_VAR + "s", null, sc );
 
-                        if ( isClassInModel( association.getTo(), association.getModelClass().getModel() ) )
-                        {
-                            sc.add( "value = parse" + association.getTo() + "( parser, strict );" );
-                        }
-                        else
-                        {
-                            if ( "Date".equals( association.getTo() ) )
-                            {
-                                sc.add( "String dateFormat = "
-                                    + ( xmlFieldMetadata.getFormat() != null ? "\"" + xmlFieldMetadata.getFormat() + "\"" : "null" ) + ";" );
-                            }
-                            sc.add( "value = "+ getPrimitiveAccessor( field, association.getTo() ) + ";" );
-                        }
+                        sc.add(
+                            "String value = parser.nextText()" + ( xmlFieldMetadata.isTrim() ? ".trim()" : "" ) + ";" );
 
                         sc.add( objectName + ".add" + capitalise( singularName ) + "( key, value );" );
 
@@ -935,10 +906,8 @@ public class Xpp3ReaderGenerator
         }
     }
 
-    /**
-     * @since 1.8
-     */
-    private String getPrimitiveAccessor( ModelField field, String type )
+    private void writePrimitiveField( ModelField field, String type, String objectName, String locatorName,
+                                      String locationKey, String setterName, JSourceCode sc )
     {
         XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
 
@@ -966,85 +935,6 @@ public class Xpp3ReaderGenerator
             parserGetter = "getTrimmedValue( " + parserGetter + " )";
         }
 
-        if ( field.getDefaultValue() != null )
-        {
-            parserGetter = "getDefaultValue( " + parserGetter + ", \"" + field.getDefaultValue() + "\" )";
-        }
-
-/* TODO:
-        if ( xmlFieldMetadata.isRequired() )
-        {
-            parserGetter = "getRequiredAttributeValue( " + parserGetter + ", \"" + tagName + "\", parser, strict )";
-        }
-*/
-
-        if ( "boolean".equals( type ) || "Boolean".equals( type ) )
-        {
-            parserGetter = "getBooleanValue( " + parserGetter + ", \"" + tagName + "\", parser )";
-        }
-        else if ( "int".equals( type ) || "Integer".equals( type ) )
-        {
-            parserGetter = "getIntegerValue( " + parserGetter + ", \"" + tagName + "\", parser, strict )";
-        }
-        else if ( "short".equals( type ) || "Short".equals( type ) )
-        {
-            parserGetter = "getShortValue( " + parserGetter + ", \"" + tagName + "\", parser, strict )";
-        }
-        else if ( "long".equals( type ) || "Long".equals( type ) )
-        {
-            parserGetter = "getLongValue( " + parserGetter + ", \"" + tagName + "\", parser, strict )";
-        }
-        else if ( "double".equals( type ) || "Double".equals( type ) )
-        {
-            parserGetter = "getDoubleValue( " + parserGetter + ", \"" + tagName + "\", parser, strict )";
-        }
-        else if ( "float".equals( type ) || "Float".equals( type ) )
-        {
-            parserGetter = "getFloatValue( " + parserGetter + ", \"" + tagName + "\", parser, strict )";
-        }
-        else if ( "byte".equals( type ) )
-        {
-            parserGetter = "getByteValue( " + parserGetter + ", \"" + tagName + "\", parser, strict )";
-        }
-        else if ( "char".equals( type ) )
-        {
-            parserGetter = "getCharacterValue( " + parserGetter + ", \"" + tagName + "\", parser )";
-        }
-        else if ( "Date".equals( type ) )
-        {
-            parserGetter = "getDateValue( " + parserGetter + ", \"" + tagName + "\", dateFormat, parser )";
-        }
-        else if ( "DOM".equals( type ) )
-        {
-            parserGetter = ( domAsXpp3
-                             ? "org.codehaus.plexus.util.xml.Xpp3DomBuilder.build"
-                             : "buildDom" )
-                           + "( parser, " + xmlFieldMetadata.isTrim() + " )";
-
-            requiresDomSupport = true;
-        }
-        else if ( "String".equals( type ) )
-        {
-            // stay as it is
-        }
-        else
-        {
-            throw new IllegalArgumentException( "Unknown type "
-                                                + type
-                                                + " for field "
-                                                + field.getModelClass().getName()
-                                                + "."
-                                                + field.getName() );
-        }
-
-        return parserGetter;
-    }
-
-    private void writePrimitiveField( ModelField field, String type, String objectName, String locatorName,
-                                      String locationKey, String setterName, JSourceCode sc )
-    {
-        XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
-
         String keyCapture = "";
         writeNewLocation( null, sc );
         if ( locationTracker != null && "?".equals( locationKey ) )
@@ -1058,15 +948,76 @@ public class Xpp3ReaderGenerator
             writeSetLocation( locationKey, locatorName, null, sc );
         }
 
-        String parserGetter = keyCapture + getPrimitiveAccessor( field, type );
-
-        if ( "Date".equals( type ) )
+        if ( "boolean".equals( type ) || "Boolean".equals( type ) )
         {
-            sc.add( "String dateFormat = "
-                + ( xmlFieldMetadata.getFormat() != null ? "\"" + xmlFieldMetadata.getFormat() + "\"" : "null" ) + ";" );
+            sc.add( objectName + "." + setterName + "( " + keyCapture + "getBooleanValue( " + parserGetter + ", \""
+                        + tagName + "\", parser, \"" + field.getDefaultValue() + "\" ) );" );
         }
+        else if ( "char".equals( type ) )
+        {
+            sc.add( objectName + "." + setterName + "( " + keyCapture + "getCharacterValue( " + parserGetter + ", \""
+                        + tagName + "\", parser ) );" );
+        }
+        else if ( "double".equals( type ) )
+        {
+            sc.add(
+                objectName + "." + setterName + "( " + keyCapture + "getDoubleValue( " + parserGetter + ", \"" + tagName
+                    + "\", parser, strict ) );" );
+        }
+        else if ( "float".equals( type ) )
+        {
+            sc.add(
+                objectName + "." + setterName + "( " + keyCapture + "getFloatValue( " + parserGetter + ", \"" + tagName
+                    + "\", parser, strict ) );" );
+        }
+        else if ( "int".equals( type ) )
+        {
+            sc.add( objectName + "." + setterName + "( " + keyCapture + "getIntegerValue( " + parserGetter + ", \""
+                        + tagName + "\", parser, strict ) );" );
+        }
+        else if ( "long".equals( type ) )
+        {
+            sc.add(
+                objectName + "." + setterName + "( " + keyCapture + "getLongValue( " + parserGetter + ", \"" + tagName
+                    + "\", parser, strict ) );" );
+        }
+        else if ( "short".equals( type ) )
+        {
+            sc.add(
+                objectName + "." + setterName + "( " + keyCapture + "getShortValue( " + parserGetter + ", \"" + tagName
+                    + "\", parser, strict ) );" );
+        }
+        else if ( "byte".equals( type ) )
+        {
+            sc.add(
+                objectName + "." + setterName + "( " + keyCapture + "getByteValue( " + parserGetter + ", \"" + tagName
+                    + "\", parser, strict ) );" );
+        }
+        else if ( "String".equals( type ) )
+        {
+            // TODO: other Primitive types
+            sc.add( objectName + "." + setterName + "( " + keyCapture + parserGetter + " );" );
+        }
+        else if ( "Date".equals( type ) )
+        {
+            String format = xmlFieldMetadata.getFormat();
+            sc.add( "String dateFormat = " + ( format != null ? "\"" + format + "\"" : "null" ) + ";" );
+            sc.add(
+                objectName + "." + setterName + "( " + keyCapture + "getDateValue( " + parserGetter + ", \"" + tagName
+                    + "\", dateFormat, parser ) );" );
+        }
+        else if ( "DOM".equals( type ) )
+        {
+            sc.add( objectName + "." + setterName + "( " + keyCapture + ( domAsXpp3
+                ? "org.codehaus.plexus.util.xml.Xpp3DomBuilder.build"
+                : "buildDom" ) + "( parser, " + xmlFieldMetadata.isTrim() + " ) );" );
 
-        sc.add( objectName + "." + setterName + "( " + parserGetter + " );" );
+            requiresDomSupport = true;
+        }
+        else
+        {
+            throw new IllegalArgumentException( "Unknown type: " + type );
+        }
 
         if ( keyCapture.length() > 0 )
         {
@@ -1258,21 +1209,17 @@ public class Xpp3ReaderGenerator
 
         // --------------------------------------------------------------------
 
-        method = new JMethod( "getDefaultValue", new JClass( "String" ), null );
+        method = new JMethod( "getBooleanValue", JType.BOOLEAN, null );
+        method.addException( new JClass( "XmlPullParserException" ) );
         method.getModifiers().makePrivate();
 
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
-        method.addParameter( new JParameter( new JClass( "String" ), "v" ) );
+        method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
+        method.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
 
         sc = method.getSourceCode();
 
-        sc.add( "if ( s == null || s.length() == 0 )" );
-
-        sc.add( "{" );
-        sc.addIndented( "s = v;" );
-        sc.add( "}" );
-
-        sc.add( "return s;" );
+        sc.add( "return getBooleanValue( s, attribute, parser, null );" );
 
         jClass.addMethod( method );
 
@@ -1285,6 +1232,7 @@ public class Xpp3ReaderGenerator
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
         method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
         method.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
+        method.addParameter( new JParameter( new JClass( "String" ), "defaultValue" ) );
 
         sc = method.getSourceCode();
 
@@ -1292,6 +1240,12 @@ public class Xpp3ReaderGenerator
 
         sc.add( "{" );
         sc.addIndented( "return Boolean.valueOf( s ).booleanValue();" );
+        sc.add( "}" );
+
+        sc.add( "if ( defaultValue != null )" );
+
+        sc.add( "{" );
+        sc.addIndented( "return Boolean.valueOf( defaultValue ).booleanValue();" );
         sc.add( "}" );
 
         sc.add( "return false;" );

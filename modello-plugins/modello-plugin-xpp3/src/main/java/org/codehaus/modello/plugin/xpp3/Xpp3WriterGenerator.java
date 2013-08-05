@@ -399,39 +399,21 @@ public class Xpp3WriterGenerator
 
                         sc.add( "String key = (String) iter.next();" );
 
-                        sc.add( association.getTo() + " value = (" + association.getTo() + ") " + value + ".get( key );" );
+                        sc.add( "String value = (String) " + value + ".get( key );" );
 
                         if ( xmlAssociationMetadata.isMapExplode() )
                         {
                             sc.add( "serializer.startTag( NAMESPACE, \"" + singular( associationName ) + "\" );" );
-
-                            sc.add( "serializer.startTag( NAMESPACE, \"key\" ).text( key ).endTag( NAMESPACE, \"key\" );" );
-
-                            if ( isClassInModel( association.getTo(), association.getModelClass().getModel() ) )
-                            {
-                                sc.add( "write" + association.getTo() + "( value, \"value\", serializer );" );
-                            }
-                            else
-                            {
-                                sc.add( "serializer.startTag( NAMESPACE, \"value\" ).text( "
-                                        + getValue( association.getTo(), "value", xmlFieldMetadata )
-                                        + " ).endTag( NAMESPACE, \"value\" );" );
-                            }
-
+                            sc.add(
+                                "serializer.startTag( NAMESPACE, \"key\" ).text( key ).endTag( NAMESPACE, \"key\" );" );
+                            sc.add(
+                                "serializer.startTag( NAMESPACE, \"value\" ).text( value ).endTag( NAMESPACE, \"value\" );" );
                             sc.add( "serializer.endTag( NAMESPACE, \"" + singular( associationName ) + "\" );" );
                         }
                         else
                         {
-                            if ( isClassInModel( association.getTo(), association.getModelClass().getModel() ) )
-                            {
-                                sc.add( "write" + association.getTo() + "( value, key, serializer );" );
-                            }
-                            else
-                            {
-                                sc.add( "serializer.startTag( NAMESPACE, key ).text( "
-                                        + getValue( association.getTo(), "value", xmlFieldMetadata )
-                                        + " ).endTag( NAMESPACE, key );" );
-                            }
+                            sc.add(
+                                "serializer.startTag( NAMESPACE, \"\" + key + \"\" ).text( value ).endTag( NAMESPACE, \"\" + key + \"\" );" );
                         }
 
                         sc.unindent();
@@ -457,7 +439,7 @@ public class Xpp3WriterGenerator
                     if ( domAsXpp3 )
                     {
                         jClass.addImport( "org.codehaus.plexus.util.xml.Xpp3Dom" );
-
+    
                         sc.addIndented( "((Xpp3Dom) " + value + ").writeToSerializer( NAMESPACE, serializer );" );
                     }
                     else
