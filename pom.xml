@@ -3,7 +3,7 @@
 
   <groupId>org.codehaus.modello</groupId>
   <artifactId>modello</artifactId>
-  <version>1.8</version>
+  <version>1.9-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>Modello</name>
@@ -184,7 +184,7 @@
     <connection>scm:git:git@github.com:sonatype/modello.git</connection>
     <developerConnection>scm:git:git@github.com:sonatype/modello.git</developerConnection>
     <url>http://github.com/sonatype/modello/tree/master</url>
-    <tag>modello-1.8</tag>
+    <tag>HEAD</tag>
   </scm>
   <issueManagement>
     <system>jira</system>
