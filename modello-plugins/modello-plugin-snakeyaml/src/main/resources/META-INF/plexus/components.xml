@@ -11,13 +11,6 @@
       <role-hint>snakeyaml-writer</role-hint>
       <implementation>org.codehaus.modello.plugin.snakeyaml.SnakeYamlWriterGenerator</implementation>
       <instantiation-strategy>per-lookup</instantiation-strategy>
-      <requirements>
-        <requirement>
-          <field-name>serializerGenerator</field-name>
-          <role>org.codehaus.modello.plugin.snakeyaml.SnakeYamlSerializerGenerator</role>
-          <role-hint>snakeyaml-serializer</role-hint>
-        </requirement>
-      </requirements>
     </component>
     <component>
       <role>org.codehaus.modello.plugin.snakeyaml.SnakeYamlSerializerGenerator</role>
