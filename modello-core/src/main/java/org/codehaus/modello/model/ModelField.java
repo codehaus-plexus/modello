@@ -242,7 +242,7 @@ public class ModelField
         Model model = modelClass.getModel();
         VersionDefinition versionDefinition = model.getVersionDefinition();
 
-        return ( versionDefinition != null ) && "field".equals( versionDefinition.getType() )
+        return ( versionDefinition != null ) && versionDefinition.isFieldType()
             && ( versionDefinition.getValue().equals( getName() ) || versionDefinition.getValue().equals( alias ) );
     }
 }
