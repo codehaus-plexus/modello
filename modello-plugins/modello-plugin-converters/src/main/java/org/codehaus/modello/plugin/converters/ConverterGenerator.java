@@ -199,7 +199,7 @@ public class ConverterGenerator
 
                 if ( toVersion != null )
                 {
-                    if ( versionDefinition != null && "field".equals( versionDefinition.getType() ) )
+                    if ( versionDefinition != null && versionDefinition.isFieldType() )
                     {
                         if ( versionDefinition.getValue().equals( modelField.getName() )
                             || versionDefinition.getValue().equals( modelField.getAlias() ) )

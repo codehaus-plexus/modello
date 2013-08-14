@@ -222,7 +222,7 @@ public class StaxReaderGenerator
         sc.add( "}" );
 
         VersionDefinition versionDefinition = objectModel.getVersionDefinition();
-        if ( versionDefinition != null && "namespace".equals( versionDefinition.getType() ) )
+        if ( versionDefinition != null && versionDefinition.isNamespaceType() )
         {
             sc.add( "String modelVersion = getVersionFromRootNamespace( xmlStreamReader );" );
 
@@ -515,7 +515,7 @@ public class StaxReaderGenerator
         sc.add( "{" );
         sc.indent();
 
-        if ( "namespace".equals( versionDefinition.getType() ) )
+        if ( versionDefinition.isNamespaceType() )
         {
             XmlModelMetadata xmlModelMetadata = (XmlModelMetadata) objectModel.getMetadata( XmlModelMetadata.ID );
 
