@@ -277,13 +277,13 @@
           <required>true</required>
           <type>String</type>
           <description><![CDATA[The type of model version definition recognition. Can be one of: <code>field</code>,
-            <code>namespace</code>.]]></description>
+            <code>namespace</code>, <code>field+namespace</code>.]]></description>
         </field>
         <field>
           <name>value</name>
           <version>1.0.0+</version>
           <type>String</type>
-          <description><![CDATA[If type is <code>field</code>, the name of the field containing the model
+          <description><![CDATA[If type contains <code>field</code>, the name of the field containing the model
             version.]]></description>
         </field>
       </fields>
