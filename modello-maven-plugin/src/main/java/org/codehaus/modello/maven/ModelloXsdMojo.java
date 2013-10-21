@@ -41,7 +41,7 @@ public class ModelloXsdMojo
 {
     /**
      * The output directory of the generated XML Schema. Hint: if you want to publish the schema automatically with
-     * the site, configure this parameter to <code>${basedir}/target/generated-site/resources/xsd</code>.
+     * the site, configure this parameter to <code>${project.build.directory}/generated-site/resources/xsd</code>.
      */
     @Parameter( defaultValue = "${project.build.directory}/generated-site/xsd", required = true )
     private File outputDirectory;
