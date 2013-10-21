@@ -8,6 +8,42 @@
 
 Modello
 
+* 1.8.1 Release Notes (2013-08-12)
+
+ ???
+
+* 1.8 Release Notes (2013-08-06)
+
+  The {{{http://jira.codehaus.org/secure/ReleaseNote.jspa?projectId=10510&version=19102}full list of changes}} can be found in our {{{./issue-tracking.html}issue management system}}, and is reproduced below.
+
+** Bug
+
+    * [MODELLO-209] - Wrong handling of Map field in (XPP3|StAX|JSON|YAML)Reader/Writer with multiply association
+
+    * [MODELLO-268] - Dead link to Features demo
+
+    * [MODELLO-269] - Site => Source Repository => Web Access links in modules broken
+
+    * [MODELLO-272] - Wrong adder/remover generated code for association with no getter
+
+    * [MODELLO-273] - Generated (Xpp3|Stax|Jackson|SnakeYaml)Reader always assume modelAssociation has (g|s)etters methods
+
+    * [MODELLO-274] - (Jackson|SnakeYaml)ReaderGenerator can ignore the XML `wrapped` association style
+
+    * [MODELLO-275] - JSON serialization doesn't stream numbers correctly
+
+    * [MODELLO-276] - Nested generated Builder/Static creator methods have to take in consideration built type superclass fields
+
+    * [MODELLO-278] - JavaModelloGenerator is not able to generate Map code with Generic types
+
+** New Feature
+
+    * [MODELLO-271] - toString method is generated only of for identifier fields
+
+    * [MODELLO-277] - Add JSON Schema generator
+
+    * [MODELLO-279] - Create a SAX Writer plugin
+
 * 1.7 Release Notes (2013-02-19)
 
   The {{{http://jira.codehaus.org/secure/ReleaseNote.jspa?projectId=10510&version=18979}full list of changes}} can be found in our {{{./issue-tracking.html}issue management system}}, and is reproduced below.
