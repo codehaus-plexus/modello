@@ -599,7 +599,7 @@
                   <goal>xsd</goal>
                 </goals>
                 <configuration>
-                  <outputDirectory>${basedir}/target/generated-site/resources/xsd</outputDirectory>
+                  <outputDirectory>${project.build.directory}/generated-site/resources/xsd</outputDirectory>
                 </configuration>
               </execution>
             </executions>
