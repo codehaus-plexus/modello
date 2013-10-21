@@ -40,10 +40,9 @@ public class ModelloXsdMojo
     extends AbstractModelloGeneratorMojo
 {
     /**
-     * The output directory of the generated XML Schema. Hint: if you want to publish the schema automatically with
-     * the site, configure this parameter to <code>${project.build.directory}/generated-site/resources/xsd</code>.
+     * The output directory of the generated XML Schema.
      */
-    @Parameter( defaultValue = "${project.build.directory}/generated-site/xsd", required = true )
+    @Parameter( defaultValue = "${project.build.directory}/generated-site/resources/xsd", required = true )
     private File outputDirectory;
 
     /**
