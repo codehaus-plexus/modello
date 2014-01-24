@@ -38,6 +38,7 @@ import org.codehaus.modello.plugin.java.javasource.JParameter;
 import org.codehaus.modello.plugin.java.javasource.JSourceCode;
 import org.codehaus.modello.plugin.java.javasource.JSourceWriter;
 import org.codehaus.modello.plugin.java.javasource.JType;
+import org.codehaus.modello.plugin.java.metadata.JavaAssociationMetadata;
 import org.codehaus.modello.plugin.java.metadata.JavaFieldMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlAssociationMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
@@ -1097,6 +1098,7 @@ public class StaxReaderGenerator
                 if ( ModelDefault.LIST.equals( type ) || ModelDefault.SET.equals( type ) )
                 {
                     JavaFieldMetadata javaFieldMetadata = (JavaFieldMetadata) association.getMetadata( JavaFieldMetadata.ID );
+                    JavaAssociationMetadata javaAssociationMetadata = (JavaAssociationMetadata) association.getAssociationMetadata( JavaAssociationMetadata.ID );
 
                     String adder;
 
@@ -1171,7 +1173,7 @@ public class StaxReaderGenerator
                             addCodeToAddReferences( association, jClass, sc, referenceIdentifierField, objectName );
                         }
 
-                        if ( association.getTo().equals( field.getModelClass().getName() ) )
+                        if ( association.getTo().equals( field.getModelClass().getName() ) || !javaAssociationMetadata.isAdder() )
                         {
                             // HACK: the addXXX method will cause an OOME when compiling a self-referencing class, so we
                             //  just add it to the array. This could disrupt the links if you are using break/create
