@@ -1406,7 +1406,7 @@ public class StaxReaderGenerator
             parserGetter = "getTrimmedValue( " + parserGetter + " )";
         }
 
-        if ( "boolean".equals( type ) )
+        if ( "boolean".equals( type ) || "Boolean".equals( type ) )
         {
             sc.add( objectName + "." + setterName + "( getBooleanValue( " + parserGetter + ", \"" + tagName
                 + "\", xmlStreamReader ) );" );
@@ -1446,7 +1446,7 @@ public class StaxReaderGenerator
             sc.add( objectName + "." + setterName + "( getByteValue( " + parserGetter + ", \"" + tagName
                 + "\", xmlStreamReader, strict ) );" );
         }
-        else if ( "String".equals( type ) || "Boolean".equals( type ) )
+        else if ( "String".equals( type ) )
         {
             // TODO: other Primitive types
             sc.add( objectName + "." + setterName + "( " + parserGetter + " );" );
