@@ -77,8 +77,8 @@ public abstract class AbstractModelloGenerator
 
         generatedVersion = new Version( version );
 
-        packageWithVersion = Boolean.valueOf(
-            getParameter( parameters, ModelloParameterConstants.PACKAGE_WITH_VERSION ) ).booleanValue();
+        packageWithVersion =
+            Boolean.valueOf( getParameter( parameters, ModelloParameterConstants.PACKAGE_WITH_VERSION ) );
 
         encoding = parameters.getProperty( ModelloParameterConstants.ENCODING );
     }

@@ -129,7 +129,7 @@ public class XdocGeneratorTest
 
         String content = FileUtils.fileRead( new File( getOutputDirectory(), "features.xml" ), "UTF-8" );
 
-        assertTrue( "Transient fields were erroneously documented", content.indexOf( "transientString" ) < 0 );
+        assertTrue( "Transient fields were erroneously documented", !content.contains( "transientString" ) );
     }
 
     public void checkSettingsXdocGenerator()

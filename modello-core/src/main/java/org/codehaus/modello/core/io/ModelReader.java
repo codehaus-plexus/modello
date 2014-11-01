@@ -374,7 +374,7 @@ public class ModelReader
                     }
                     else if ( "required".equals( parser.getName() ) )
                     {
-                        modelField.setRequired( Boolean.valueOf( parser.nextText() ).booleanValue() );
+                        modelField.setRequired( Boolean.valueOf( parser.nextText() ) );
                     }
                     else if ( "identifier".equals( parser.getName() ) )
                     {

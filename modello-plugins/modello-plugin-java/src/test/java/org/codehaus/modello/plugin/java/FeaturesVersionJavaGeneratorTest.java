@@ -55,9 +55,9 @@ public class FeaturesVersionJavaGeneratorTest
 
         String[] versions = ALL_VERSIONS.split( "," );
 
-        for ( int i = 0; i < versions.length; i++ )
+        for ( String version : versions )
         {
-            parameters.setProperty( ModelloParameterConstants.VERSION, versions[i] );
+            parameters.setProperty( ModelloParameterConstants.VERSION, version );
             modello.generate( model, "java", parameters );
         }
 

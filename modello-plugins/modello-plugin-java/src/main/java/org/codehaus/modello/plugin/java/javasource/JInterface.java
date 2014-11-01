@@ -260,9 +260,9 @@ public final class JInterface extends JStructure
         }
         //-- check exceptions
         JClass[] exceptions = jMethodSig.getExceptions();
-        for ( int i = 0; i < exceptions.length; i++ )
+        for ( JClass exception : exceptions )
         {
-            addImport( exceptions[i].getName() );
+            addImport( exception.getName() );
         }
     } //-- addMethod
 
@@ -367,7 +367,7 @@ public final class JInterface extends JStructure
             throw new IllegalArgumentException( "argument 'jsw' should not be null." );
         }
 
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
 
         if ( !classOnly )
         {

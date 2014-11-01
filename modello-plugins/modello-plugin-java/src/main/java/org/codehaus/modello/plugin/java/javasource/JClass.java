@@ -314,8 +314,10 @@ public class JClass extends JStructure
     public void addMethods( JMethod[] jMethods )
         throws IllegalArgumentException
     {
-        for ( int i = 0; i < jMethods.length; i++ )
-            addMethod( jMethods[i] );
+        for ( JMethod jMethod : jMethods )
+        {
+            addMethod( jMethod );
+        }
     } //-- addMethods
 
 
@@ -341,8 +343,10 @@ public class JClass extends JStructure
         JConstructor cons = new JConstructor( this );
         if ( params != null )
         {
-            for ( int i = 0; i < params.length; i++ )
-                cons.addParameter( params[i] );
+            for ( JParameter param : params )
+            {
+                cons.addParameter( param );
+            }
         }
         addConstructor( cons );
         return cons;
@@ -545,7 +549,7 @@ public class JClass extends JStructure
         }
 
 
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
 
 
         if ( !classOnly )

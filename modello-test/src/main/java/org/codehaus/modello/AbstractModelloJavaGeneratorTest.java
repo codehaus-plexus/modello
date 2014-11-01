@@ -287,10 +287,8 @@ public abstract class AbstractModelloJavaGeneratorTest
     {
         URL[] urls = classLoader.getURLs();
 
-        for ( int i = 0; i < urls.length; i++ )
+        for ( URL url : urls )
         {
-            URL url = urls[i];
-
             System.out.println( url );
         }
     }

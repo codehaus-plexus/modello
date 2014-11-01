@@ -67,9 +67,9 @@ public abstract class AbstractStaxGeneratorTestCase
         {
             parameters.setProperty( ModelloParameterConstants.ALL_VERSIONS, StringUtils.join( versions, "," ) );
 
-            for ( int i = 0; i < versions.length; i++ )
+            for ( String version : versions )
             {
-                parameters.setProperty( ModelloParameterConstants.VERSION, versions[i] );
+                parameters.setProperty( ModelloParameterConstants.VERSION, version );
                 parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString( true ) );
 
                 modello.generate( model, "java", parameters );

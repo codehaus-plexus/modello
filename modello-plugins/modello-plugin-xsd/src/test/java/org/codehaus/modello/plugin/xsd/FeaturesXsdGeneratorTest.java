@@ -80,7 +80,7 @@ public class FeaturesXsdGeneratorTest
         catch ( SAXParseException e )
         {
             // ok, expected exception
-            assertTrue( String.valueOf( e.getMessage() ).indexOf( "invalidElement" ) >= 0 );
+            assertTrue( String.valueOf( e.getMessage() ).contains( "invalidElement" ) );
         }
 
         try
@@ -91,7 +91,7 @@ public class FeaturesXsdGeneratorTest
         catch ( SAXParseException e )
         {
             // ok, expected exception
-            assertTrue( String.valueOf( e.getMessage() ).indexOf( "transientString" ) >= 0 );
+            assertTrue( String.valueOf( e.getMessage() ).contains( "transientString" ) );
         }
     }
 }

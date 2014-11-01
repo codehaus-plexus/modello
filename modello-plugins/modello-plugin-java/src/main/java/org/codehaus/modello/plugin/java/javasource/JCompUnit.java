@@ -250,10 +250,8 @@ public class JCompUnit
         SortedSet<String> allImports = new TreeSet<String>();
 
         // add imports from classes
-        for ( int i = 0; i < classes.size(); ++i )
+        for ( JClass jClass : classes )
         {
-            JClass jClass = classes.get( i );
-
             Enumeration<String> e = jClass.getImports();
             while ( e.hasMoreElements() )
             {
@@ -261,9 +259,8 @@ public class JCompUnit
             }
         }
 
-        for ( int i = 0; i < interfaces.size(); ++i )
+        for ( JInterface jInterface : interfaces )
         {
-            JInterface jInterface = interfaces.get( i );
             Enumeration<String> e = jInterface.getImports();
             while ( e.hasMoreElements() )
             {
@@ -399,7 +396,7 @@ public class JCompUnit
         // update the names to match the compilation unit.
 
         resolveNames();
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
 
         //-- write file header
         if ( header != null )
@@ -605,9 +602,9 @@ class Header
     protected static void print( JSourceWriter jsw, boolean printPublic )
     {
         String[] header = printPublic ? publicHeader : nonPublicHeader;
-        for ( int j = 0; j < header.length; ++j )
+        for ( String aHeader : header )
         {
-            jsw.writeln( header[j] );
+            jsw.writeln( aHeader );
         }
         jsw.writeln();
     }

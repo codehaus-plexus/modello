@@ -148,10 +148,8 @@ public class ModelField
             return false;
         }
 
-        for ( int i = 0; i < PRIMITIVE_TYPES.length; i++ )
+        for ( String validType : PRIMITIVE_TYPES )
         {
-            String validType = PRIMITIVE_TYPES[i];
-
             if ( type.equals( validType ) )
             {
                 return true;
@@ -170,9 +168,9 @@ public class ModelField
     {
         String type = getType();
 
-        for ( int i = 0; i < PRIMITIVE_TYPES.length; i++ )
+        for ( String PRIMITIVE_TYPE : PRIMITIVE_TYPES )
         {
-            String validType = PRIMITIVE_TYPES[i] + "[]";
+            String validType = PRIMITIVE_TYPE + "[]";
 
             if ( validType.equals( type ) )
             {

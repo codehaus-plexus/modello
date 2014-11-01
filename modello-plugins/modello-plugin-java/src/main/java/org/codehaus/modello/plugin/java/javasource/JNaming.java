@@ -142,9 +142,12 @@ class JNaming
     public static boolean isKeyword( String name )
     {
         if ( name == null ) return false;
-        for ( int i = 0; i < keywords.length; i++ )
+        for ( String keyword : keywords )
         {
-            if ( keywords[i].equals( name ) ) return true;
+            if ( keyword.equals( name ) )
+            {
+                return true;
+            }
         }
         return false;
     } //-- isKeyword

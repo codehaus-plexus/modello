@@ -76,8 +76,7 @@ public abstract class AbstractJavaModelloGenerator
     {
         super.initialize( model, parameters );
 
-        useJava5 = Boolean.valueOf( getParameter( parameters,
-                                                  ModelloParameterConstants.USE_JAVA5, "false" ) ).booleanValue();
+        useJava5 = Boolean.valueOf( getParameter( parameters, ModelloParameterConstants.USE_JAVA5, "false" ) );
 
         domAsXpp3 = !"false".equals( parameters.getProperty( ModelloParameterConstants.DOM_AS_XPP3 ) );
     }

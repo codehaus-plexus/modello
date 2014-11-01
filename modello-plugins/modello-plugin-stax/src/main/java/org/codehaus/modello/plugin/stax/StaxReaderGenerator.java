@@ -521,7 +521,7 @@ public class StaxReaderGenerator
             XmlModelMetadata xmlModelMetadata = (XmlModelMetadata) objectModel.getMetadata( XmlModelMetadata.ID );
 
             String namespace = xmlModelMetadata.getNamespace();
-            if ( namespace == null || namespace.indexOf( "${version}" ) < 0 )
+            if ( namespace == null || !namespace.contains( "${version}" ) )
             {
                 throw new ModelloException( "versionDefinition is namespace, but the model does not declare "
                                             + "xml.namespace on the model element" );

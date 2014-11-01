@@ -24,7 +24,7 @@ public class JAnnotations
      **/
     public String toString()
     {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for ( Iterator<String> iterator = annotations.iterator(); iterator.hasNext(); )
         {
             sb.append( iterator.next() );
@@ -43,9 +43,9 @@ public class JAnnotations
      */
     public void print( JSourceWriter jsw )
     {
-        for ( Iterator<String> iterator = annotations.iterator(); iterator.hasNext(); )
+        for ( String annotation : annotations )
         {
-            jsw.writeln( iterator.next().toString() );
+            jsw.writeln( annotation.toString() );
         }
     } // -- print
 }
