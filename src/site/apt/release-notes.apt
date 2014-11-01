@@ -8,9 +8,26 @@
 
 Modello
 
+
+* 1.8.2
+
+  Added ability for clients to subclass Xpp3Reader to override instantiation. This makes it possible for
+  clients to subclass generated classes to add own features.
+
+  MODELLO-285
+
+  MODELLO-284
+
+  MODELLO-283
+
+  MODELLO-281
+
+  
+
+
 * 1.8.1 Release Notes (2013-08-12)
 
- ???
+ Restored maven 2.2.1 compatibility that was broken in 1.8
 
 * 1.8 Release Notes (2013-08-06)
 
