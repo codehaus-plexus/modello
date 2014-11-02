@@ -450,15 +450,7 @@ public class Xpp3ReaderGenerator
 
         String uncapClassName = uncapitalise( className );
 
-        JClass returnType = new JClass( className );
-        JMethod createInstance = new JMethod( "create" + capClassName, returnType, null );
-        createInstance.getModifiers().makeProtected();
-        JSourceCode sourceCode = createInstance.getSourceCode();
-        sourceCode.add( "return new " + capClassName + "();" );
-        jClass.addMethod( createInstance );
-
-
-        JMethod unmarshall = new JMethod( "parse" + capClassName, returnType, null );
+        JMethod unmarshall = new JMethod( "parse" + capClassName, new JClass( className ), null );
         unmarshall.getModifiers().makePrivate();
 
         unmarshall.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
@@ -471,7 +463,7 @@ public class Xpp3ReaderGenerator
         JSourceCode sc = unmarshall.getSourceCode();
 
         sc.add( "String tagName = parser.getName();" );
-        sc.add( className + " " + uncapClassName + " = create" + capClassName + "();" );
+        sc.add( className + " " + uncapClassName + " = new " + className + "();" );
 
         if ( locationTracker != null )
         {
