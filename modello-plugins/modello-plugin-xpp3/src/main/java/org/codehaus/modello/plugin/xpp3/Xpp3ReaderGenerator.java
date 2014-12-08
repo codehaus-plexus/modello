@@ -33,8 +33,10 @@ import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelDefault;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.plugin.java.javasource.JClass;
+import org.codehaus.modello.plugin.java.javasource.JConstructor;
 import org.codehaus.modello.plugin.java.javasource.JField;
 import org.codehaus.modello.plugin.java.javasource.JMethod;
+import org.codehaus.modello.plugin.java.javasource.JModifiers;
 import org.codehaus.modello.plugin.java.javasource.JParameter;
 import org.codehaus.modello.plugin.java.javasource.JSourceCode;
 import org.codehaus.modello.plugin.java.javasource.JSourceWriter;
@@ -353,6 +355,27 @@ public class Xpp3ReaderGenerator
         // Write option setters
         // ----------------------------------------------------------------------
 
+        JConstructor constructor2 = new JConstructor(jClass);
+        constructor2.getSourceCode().add( "this( new ReaderInterpolator()\n" + "        {\n"
+                                              + "            public String interpolate( String source, String contextDescription )\n"
+                                              + "            {\n" + "                return source;\n"
+                                              + "            }\n" + "        } );" );
+        jClass.addConstructor( constructor2 );
+
+
+        JConstructor constructor = new JConstructor(jClass);
+        constructor.addParameter( new JParameter( new JType("ReaderInterpolator"), "readerInterpolator"  ) );
+        constructor.getSourceCode().add( "this.readerInterpolator = readerInterpolator;" );
+        jClass.addConstructor( constructor );
+
+        jClass.addSourceCode(  "public static interface ReaderInterpolator\n" + "{\n" + "    /**\n"
+                                   + "     * Interpolate the value read from the xpp3 document\n"
+                                   + "     * @param source The source value\n"
+                                   + "     * @param contextDescription A description of the node being interpolated. The implementation may use this to\n"
+                                   + "     *                           log stuff.\n"
+                                   + "     * @return The interpolated value.\n" + "     */\n"
+                                   + "    String interpolate( String source, String contextDescription );\n" + "}\n");
+
         // The Field
         JField addDefaultEntities = new JField( JType.BOOLEAN, "addDefaultEntities" );
 
@@ -364,7 +387,16 @@ public class Xpp3ReaderGenerator
 
         addDefaultEntities.setInitString( "true" );
 
+
         jClass.addField( addDefaultEntities );
+
+        JField readerInterpolator = new JField( new JType("ReaderInterpolator"), "readerInterpolator" );
+        JModifiers jModifiers = new JModifiers();
+        jModifiers.setFinal(  true );
+        readerInterpolator.setModifiers( jModifiers );
+
+        jClass.addField( readerInterpolator );
+
 
         // The setter
         JMethod addDefaultEntitiesSetter = new JMethod( "setAddDefaultEntities" );
@@ -546,10 +578,10 @@ public class Xpp3ReaderGenerator
         sc.add( "String value = parser.getAttributeValue( i );" );
         sc.add( "" );
 
-        sc.add( "if ( name.indexOf( ':' ) >= 0 )" );
-        sc.add( "{" );
-        sc.addIndented( "// just ignore attributes with non-default namespace (for example: xmlns:xsi)" );
-        sc.add( "}" );
+        sc.add("if ( name.indexOf( ':' ) >= 0 )");
+        sc.add("{");
+        sc.addIndented("// just ignore attributes with non-default namespace (for example: xmlns:xsi)");
+        sc.add("}");
         if ( rootElement )
         {
             sc.add( "else if ( \"xmlns\".equals( name ) )" );
@@ -585,7 +617,7 @@ public class Xpp3ReaderGenerator
         sc.add( "else" );
 
         sc.add( "{" );
-        sc.addIndented( "checkUnknownAttribute( parser, name, tagName, strict );" );
+        sc.addIndented("checkUnknownAttribute( parser, name, tagName, strict );");
         sc.add( "}" );
 
         sc.unindent();
@@ -911,7 +943,7 @@ public class Xpp3ReaderGenerator
     {
         XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
 
-        String tagName = resolveTagName( field, xmlFieldMetadata );
+        String tagName = resolveTagName(field, xmlFieldMetadata);
 
         String parserGetter;
         if ( xmlFieldMetadata.isAttribute() )
@@ -932,7 +964,7 @@ public class Xpp3ReaderGenerator
 
         if ( xmlFieldMetadata.isTrim() )
         {
-            parserGetter = "getTrimmedValue( " + parserGetter + " )";
+            parserGetter = "interpolatedTrimmed( " + parserGetter + ", \"" + tagName + "\" )";
         }
 
         String keyCapture = "";
@@ -1158,7 +1190,8 @@ public class Xpp3ReaderGenerator
 
     private void writeHelpers( JClass jClass )
     {
-        jClass.addMethod(geTrimmedValueMethod());
+        jClass.addMethod(getTrimmedValueMethod());
+        jClass.addMethod(getInterpolatedTrimmed());
         jClass.addMethod(getRequiredAttributeValueMethod());
         jClass.addMethod(getBooleanValueMethod());
         jClass.addMethod(getBooleanValue2Method());
@@ -1222,24 +1255,24 @@ public class Xpp3ReaderGenerator
         JMethod method;
         JSourceCode sc;
         method = new JMethod( "nextTag", JType.INT, null );
-        method.addException( new JClass( "IOException" ) );
-        method.addException( new JClass( "XmlPullParserException" ) );
+        method.addException(new JClass("IOException"));
+        method.addException(new JClass("XmlPullParserException"));
         method.getModifiers().makePrivate();
 
-        method.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
+        method.addParameter(new JParameter(new JClass("XmlPullParser"), "parser"));
 
         sc = method.getSourceCode();
 
         sc.add( "int eventType = parser.next();" );
         sc.add( "if ( eventType == XmlPullParser.TEXT )" );
-        sc.add( "{" );
-        sc.addIndented( "eventType = parser.next();" );
+        sc.add("{");
+        sc.addIndented("eventType = parser.next();");
         sc.add( "}" );
         sc.add( "if ( eventType != XmlPullParser.START_TAG && eventType != XmlPullParser.END_TAG )" );
-        sc.add( "{" );
+        sc.add("{");
         sc.addIndented(
-            "throw new XmlPullParserException( \"expected START_TAG or END_TAG not \" + XmlPullParser.TYPES[eventType], parser, null );" );
-        sc.add( "}" );
+                "throw new XmlPullParserException( \"expected START_TAG or END_TAG not \" + XmlPullParser.TYPES[eventType], parser, null );");
+        sc.add("}");
         sc.add( "return eventType;" );
         return method;
     }
@@ -1250,12 +1283,12 @@ public class Xpp3ReaderGenerator
         method = new JMethod( "checkUnknownAttribute", null, null );
         method.getModifiers().makePrivate();
 
-        method.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
-        method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
+        method.addParameter(new JParameter(new JClass("XmlPullParser"), "parser"));
+        method.addParameter(new JParameter(new JClass("String"), "attribute"));
         method.addParameter( new JParameter( new JClass( "String" ), "tagName" ) );
         method.addParameter( new JParameter( JType.BOOLEAN, "strict" ) );
-        method.addException( new JClass( "XmlPullParserException" ) );
-        method.addException( new JClass( "IOException" ) );
+        method.addException(new JClass("XmlPullParserException"));
+        method.addException(new JClass("IOException"));
 
         sc = method.getSourceCode();
 
@@ -1316,11 +1349,11 @@ public class Xpp3ReaderGenerator
 
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
         method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
-        method.addParameter( new JParameter( new JClass( "String" ), "dateFormat" ) );
-        method.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
-        method.addException( new JClass( "XmlPullParserException" ) );
+        method.addParameter(new JParameter(new JClass("String"), "dateFormat"));
+        method.addParameter(new JParameter(new JClass("XmlPullParser"), "parser"));
+        method.addException(new JClass("XmlPullParserException"));
 
-        writeDateParsingHelper( method.getSourceCode(), "new XmlPullParserException( e.getMessage(), parser, e )" );
+        writeDateParsingHelper(method.getSourceCode(), "new XmlPullParserException( e.getMessage(), parser, e )");
         return method;
     }
 
@@ -1328,7 +1361,7 @@ public class Xpp3ReaderGenerator
         JMethod method;
         JSourceCode sc;
         method = new JMethod( "getDateValue", new JClass( "java.util.Date" ), null );
-        method.addException( new JClass( "XmlPullParserException" ) );
+        method.addException(new JClass("XmlPullParserException"));
         method.getModifiers().makePrivate();
 
         method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
@@ -1338,7 +1371,7 @@ public class Xpp3ReaderGenerator
 
         sc = method.getSourceCode();
 
-        sc.add( "return getDateValue( s, attribute, null, parser );" );
+        sc.add("return getDateValue( s, attribute, null, parser );");
         return method;
     }
 
@@ -1462,6 +1495,20 @@ public class Xpp3ReaderGenerator
         sc.add( "return s;" );
         return method;
     }
+
+    private JMethod getInterpolatedTrimmed() {
+        JMethod method = new JMethod( "interpolatedTrimmed", new JClass( "String" ), null );
+        method.getModifiers().makePrivate();
+
+        method.addParameter( new JParameter( new JClass( "String" ), "value" ) );
+        method.addParameter( new JParameter( new JClass( "String" ), "context" ) );
+
+        JSourceCode sc = method.getSourceCode();
+
+        sc.add( "return getTrimmedValue( readerInterpolator.interpolate( value, context ) );" );
+        return method;
+    }
+
 
     private JMethod convertNumericalType( String methodName, JType returnType, String expression, String typeDesc )
     {
