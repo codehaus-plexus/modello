@@ -1158,225 +1158,30 @@ public class Xpp3ReaderGenerator
 
     private void writeHelpers( JClass jClass )
     {
-        JMethod method = new JMethod( "getTrimmedValue", new JClass( "String" ), null );
-        method.getModifiers().makePrivate();
-
-        method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
-
-        JSourceCode sc = method.getSourceCode();
-
-        sc.add( "if ( s != null )" );
-
-        sc.add( "{" );
-        sc.addIndented( "s = s.trim();" );
-        sc.add( "}" );
-
-        sc.add( "return s;" );
-
-        jClass.addMethod( method );
-
-        // --------------------------------------------------------------------
-
-        method = new JMethod( "getRequiredAttributeValue", new JClass( "String" ), null );
-        method.addException( new JClass( "XmlPullParserException" ) );
-        method.getModifiers().makePrivate();
-
-        method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
-        method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
-        method.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
-        method.addParameter( new JParameter( JClass.BOOLEAN, "strict" ) );
-
-        sc = method.getSourceCode();
-
-        sc.add( "if ( s == null )" );
-
-        sc.add( "{" );
-        sc.indent();
-
-        sc.add( "if ( strict )" );
-
-        sc.add( "{" );
-        sc.addIndented(
-            "throw new XmlPullParserException( \"Missing required value for attribute '\" + attribute + \"'\", parser, null );" );
-        sc.add( "}" );
-
-        sc.unindent();
-        sc.add( "}" );
-
-        sc.add( "return s;" );
-
-        jClass.addMethod( method );
-
-        // --------------------------------------------------------------------
-
-        method = new JMethod( "getBooleanValue", JType.BOOLEAN, null );
-        method.addException( new JClass( "XmlPullParserException" ) );
-        method.getModifiers().makePrivate();
-
-        method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
-        method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
-        method.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
-
-        sc = method.getSourceCode();
-
-        sc.add( "return getBooleanValue( s, attribute, parser, null );" );
-
-        jClass.addMethod( method );
-
-        // --------------------------------------------------------------------
-
-        method = new JMethod( "getBooleanValue", JType.BOOLEAN, null );
-        method.addException( new JClass( "XmlPullParserException" ) );
-        method.getModifiers().makePrivate();
-
-        method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
-        method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
-        method.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
-        method.addParameter( new JParameter( new JClass( "String" ), "defaultValue" ) );
-
-        sc = method.getSourceCode();
-
-        sc.add( "if ( s != null && s.length() != 0 )" );
-
-        sc.add( "{" );
-        sc.addIndented( "return Boolean.valueOf( s ).booleanValue();" );
-        sc.add( "}" );
-
-        sc.add( "if ( defaultValue != null )" );
-
-        sc.add( "{" );
-        sc.addIndented( "return Boolean.valueOf( defaultValue ).booleanValue();" );
-        sc.add( "}" );
-
-        sc.add( "return false;" );
-
-        jClass.addMethod( method );
-
-        // --------------------------------------------------------------------
-
-        method = new JMethod( "getCharacterValue", JType.CHAR, null );
-        method.addException( new JClass( "XmlPullParserException" ) );
-        method.getModifiers().makePrivate();
-
-        method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
-        method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
-        method.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
-
-        sc = method.getSourceCode();
-
-        sc.add( "if ( s != null )" );
-
-        sc.add( "{" );
-        sc.addIndented( "return s.charAt( 0 );" );
-        sc.add( "}" );
-
-        sc.add( "return 0;" );
-
-        jClass.addMethod( method );
-
-        // --------------------------------------------------------------------
-
-        method = convertNumericalType( "getIntegerValue", JType.INT, "Integer.valueOf( s ).intValue()", "an integer" );
-
-        jClass.addMethod( method );
-
-        // --------------------------------------------------------------------
-
-        method =
-            convertNumericalType( "getShortValue", JType.SHORT, "Short.valueOf( s ).shortValue()", "a short integer" );
-
-        jClass.addMethod( method );
-
-        // --------------------------------------------------------------------
-
-        method = convertNumericalType( "getByteValue", JType.BYTE, "Byte.valueOf( s ).byteValue()", "a byte" );
-
-        jClass.addMethod( method );
-
-        // --------------------------------------------------------------------
-
-        method = convertNumericalType( "getLongValue", JType.LONG, "Long.valueOf( s ).longValue()", "a long integer" );
-
-        jClass.addMethod( method );
-
-        // --------------------------------------------------------------------
-
-        method = convertNumericalType( "getFloatValue", JType.FLOAT, "Float.valueOf( s ).floatValue()",
-                                       "a floating point number" );
-
-        jClass.addMethod( method );
-
-        // --------------------------------------------------------------------
-
-        method = convertNumericalType( "getDoubleValue", JType.DOUBLE, "Double.valueOf( s ).doubleValue()",
-                                       "a floating point number" );
-
-        jClass.addMethod( method );
-
-        // --------------------------------------------------------------------
-
-        method = new JMethod( "getDateValue", new JClass( "java.util.Date" ), null );
-        method.addException( new JClass( "XmlPullParserException" ) );
-        method.getModifiers().makePrivate();
-
-        method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
-        method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
-        method.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
-        method.addException( new JClass( "XmlPullParserException" ) );
-
-        sc = method.getSourceCode();
-
-        sc.add( "return getDateValue( s, attribute, null, parser );" );
-
-        jClass.addMethod( method );
-
-        // --------------------------------------------------------------------
-
-        method = new JMethod( "getDateValue", new JClass( "java.util.Date" ), null );
-        method.addException( new JClass( "XmlPullParserException" ) );
-        method.getModifiers().makePrivate();
-
-        method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
-        method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
-        method.addParameter( new JParameter( new JClass( "String" ), "dateFormat" ) );
-        method.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
-        method.addException( new JClass( "XmlPullParserException" ) );
-
-        writeDateParsingHelper( method.getSourceCode(), "new XmlPullParserException( e.getMessage(), parser, e )" );
-
-        jClass.addMethod( method );
-
-        // --------------------------------------------------------------------
-
-        method = new JMethod( "checkFieldWithDuplicate", JType.BOOLEAN, null );
-        method.getModifiers().makePrivate();
-
-        method.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
-        method.addParameter( new JParameter( new JClass( "String" ), "tagName" ) );
-        method.addParameter( new JParameter( new JClass( "String" ), "alias" ) );
-        method.addParameter( new JParameter( new JClass( "java.util.Set" ), "parsed" ) );
-        method.addException( new JClass( "XmlPullParserException" ) );
-
-        sc = method.getSourceCode();
-
-        sc.add( "if ( !( parser.getName().equals( tagName ) || parser.getName().equals( alias ) ) )" );
-
-        sc.add( "{" );
-        sc.addIndented( "return false;" );
-        sc.add( "}" );
-
-        sc.add( "if ( !parsed.add( tagName ) )" );
-
-        sc.add( "{" );
-        sc.addIndented( "throw new XmlPullParserException( \"Duplicated tag: '\" + tagName + \"'\", parser, null );" );
-        sc.add( "}" );
-
-        sc.add( "return true;" );
-
-        jClass.addMethod( method );
-
-        // --------------------------------------------------------------------
-
+        jClass.addMethod(geTrimmedValueMethod());
+        jClass.addMethod(getRequiredAttributeValueMethod());
+        jClass.addMethod(getBooleanValueMethod());
+        jClass.addMethod(getBooleanValue2Method());
+        jClass.addMethod( getCharacterValueMethod() );
+        jClass.addMethod(convertNumericalType( "getIntegerValue", JType.INT, "Integer.valueOf( s ).intValue()", "an integer" ));
+        jClass.addMethod(convertNumericalType( "getShortValue", JType.SHORT, "Short.valueOf( s ).shortValue()", "a short integer" ));
+        jClass.addMethod(convertNumericalType( "getByteValue", JType.BYTE, "Byte.valueOf( s ).byteValue()", "a byte" ));
+        jClass.addMethod(convertNumericalType( "getLongValue", JType.LONG, "Long.valueOf( s ).longValue()", "a long integer" ));
+        jClass.addMethod(convertNumericalType( "getFloatValue", JType.FLOAT, "Float.valueOf( s ).floatValue()",
+                                       "a floating point number" ));
+        jClass.addMethod(convertNumericalType( "getDoubleValue", JType.DOUBLE, "Double.valueOf( s ).doubleValue()",
+                                       "a floating point number" ));
+        jClass.addMethod( getDateValueMethod() );
+        jClass.addMethod( getDateValue2Method() );
+        jClass.addMethod( getCheckFieldWithDuplicateMethod() );
+        jClass.addMethod( getCheckUnknonwElement2Method() );
+        jClass.addMethod( getCheckUnknownAttributeMethod() );
+        jClass.addMethod( getNextTagMethod() );
+    }
+
+    private JMethod getCheckUnknonwElement2Method() {
+        JMethod method;
+        JSourceCode sc;
         method = new JMethod( "checkUnknownElement", null, null );
         method.getModifiers().makePrivate();
 
@@ -1410,11 +1215,38 @@ public class Xpp3ReaderGenerator
         sc.add( "}" );
         sc.unindent();
         sc.add( "}" );
+        return method;
+    }
 
-        jClass.addMethod( method );
+    private JMethod getNextTagMethod() {
+        JMethod method;
+        JSourceCode sc;
+        method = new JMethod( "nextTag", JType.INT, null );
+        method.addException( new JClass( "IOException" ) );
+        method.addException( new JClass( "XmlPullParserException" ) );
+        method.getModifiers().makePrivate();
 
-        // --------------------------------------------------------------------
+        method.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
 
+        sc = method.getSourceCode();
+
+        sc.add( "int eventType = parser.next();" );
+        sc.add( "if ( eventType == XmlPullParser.TEXT )" );
+        sc.add( "{" );
+        sc.addIndented( "eventType = parser.next();" );
+        sc.add( "}" );
+        sc.add( "if ( eventType != XmlPullParser.START_TAG && eventType != XmlPullParser.END_TAG )" );
+        sc.add( "{" );
+        sc.addIndented(
+            "throw new XmlPullParserException( \"expected START_TAG or END_TAG not \" + XmlPullParser.TYPES[eventType], parser, null );" );
+        sc.add( "}" );
+        sc.add( "return eventType;" );
+        return method;
+    }
+
+    private JMethod getCheckUnknownAttributeMethod() {
+        JMethod method;
+        JSourceCode sc;
         method = new JMethod( "checkUnknownAttribute", null, null );
         method.getModifiers().makePrivate();
 
@@ -1443,35 +1275,192 @@ public class Xpp3ReaderGenerator
             sc.add(
                 "// strictXmlAttributes = false for model: always ignore unknown XML attribute, even if strict == true" );
         }
+        return method;
+    }
 
-        jClass.addMethod( method );
+    private JMethod getCheckFieldWithDuplicateMethod() {
+        JMethod method;
+        JSourceCode sc;
+        method = new JMethod( "checkFieldWithDuplicate", JType.BOOLEAN, null );
+        method.getModifiers().makePrivate();
 
-        // --------------------------------------------------------------------
+        method.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
+        method.addParameter( new JParameter( new JClass( "String" ), "tagName" ) );
+        method.addParameter( new JParameter( new JClass( "String" ), "alias" ) );
+        method.addParameter( new JParameter( new JClass( "java.util.Set" ), "parsed" ) );
+        method.addException( new JClass( "XmlPullParserException" ) );
 
-        method = new JMethod( "nextTag", JType.INT, null );
-        method.addException( new JClass( "IOException" ) );
+        sc = method.getSourceCode();
+
+        sc.add( "if ( !( parser.getName().equals( tagName ) || parser.getName().equals( alias ) ) )" );
+
+        sc.add( "{" );
+        sc.addIndented( "return false;" );
+        sc.add( "}" );
+
+        sc.add( "if ( !parsed.add( tagName ) )" );
+
+        sc.add( "{" );
+        sc.addIndented( "throw new XmlPullParserException( \"Duplicated tag: '\" + tagName + \"'\", parser, null );" );
+        sc.add( "}" );
+
+        sc.add( "return true;" );
+        return method;
+    }
+
+    private JMethod getDateValue2Method() {
+        JMethod method;
+        method = new JMethod( "getDateValue", new JClass( "java.util.Date" ), null );
         method.addException( new JClass( "XmlPullParserException" ) );
         method.getModifiers().makePrivate();
 
+        method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
+        method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
+        method.addParameter( new JParameter( new JClass( "String" ), "dateFormat" ) );
+        method.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
+        method.addException( new JClass( "XmlPullParserException" ) );
+
+        writeDateParsingHelper( method.getSourceCode(), "new XmlPullParserException( e.getMessage(), parser, e )" );
+        return method;
+    }
+
+    private JMethod getDateValueMethod() {
+        JMethod method;
+        JSourceCode sc;
+        method = new JMethod( "getDateValue", new JClass( "java.util.Date" ), null );
+        method.addException( new JClass( "XmlPullParserException" ) );
+        method.getModifiers().makePrivate();
+
+        method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
+        method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
+        method.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
+        method.addException( new JClass( "XmlPullParserException" ) );
+
+        sc = method.getSourceCode();
+
+        sc.add( "return getDateValue( s, attribute, null, parser );" );
+        return method;
+    }
+
+    private JMethod getCharacterValueMethod() {
+        JMethod method;
+        JSourceCode sc;
+        method = new JMethod( "getCharacterValue", JType.CHAR, null );
+        method.addException( new JClass( "XmlPullParserException" ) );
+        method.getModifiers().makePrivate();
+
+        method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
+        method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
         method.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
 
         sc = method.getSourceCode();
 
-        sc.add( "int eventType = parser.next();" );
-        sc.add( "if ( eventType == XmlPullParser.TEXT )" );
+        sc.add( "if ( s != null )" );
+
         sc.add( "{" );
-        sc.addIndented( "eventType = parser.next();" );
+        sc.addIndented( "return s.charAt( 0 );" );
         sc.add( "}" );
-        sc.add( "if ( eventType != XmlPullParser.START_TAG && eventType != XmlPullParser.END_TAG )" );
+
+        sc.add( "return 0;" );
+        return method;
+    }
+
+    private JMethod getBooleanValue2Method() {
+        JMethod method;
+        JSourceCode sc;
+        method = new JMethod( "getBooleanValue", JType.BOOLEAN, null );
+        method.addException( new JClass( "XmlPullParserException" ) );
+        method.getModifiers().makePrivate();
+
+        method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
+        method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
+        method.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
+        method.addParameter( new JParameter( new JClass( "String" ), "defaultValue" ) );
+
+        sc = method.getSourceCode();
+
+        sc.add( "if ( s != null && s.length() != 0 )" );
+
+        sc.add( "{" );
+        sc.addIndented( "return Boolean.valueOf( s ).booleanValue();" );
+        sc.add( "}" );
+
+        sc.add( "if ( defaultValue != null )" );
+
+        sc.add( "{" );
+        sc.addIndented( "return Boolean.valueOf( defaultValue ).booleanValue();" );
+        sc.add( "}" );
+
+        sc.add( "return false;" );
+        return method;
+    }
+
+    private JMethod getBooleanValueMethod() {
+        JMethod method;
+        JSourceCode sc;
+        method = new JMethod( "getBooleanValue", JType.BOOLEAN, null );
+        method.addException( new JClass( "XmlPullParserException" ) );
+        method.getModifiers().makePrivate();
+
+        method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
+        method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
+        method.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
+
+        sc = method.getSourceCode();
+
+        sc.add( "return getBooleanValue( s, attribute, parser, null );" );
+        return method;
+    }
+
+    private JMethod getRequiredAttributeValueMethod() {
+        JMethod method;
+        JSourceCode sc;
+        method = new JMethod( "getRequiredAttributeValue", new JClass( "String" ), null );
+        method.addException( new JClass( "XmlPullParserException" ) );
+        method.getModifiers().makePrivate();
+
+        method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
+        method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
+        method.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
+        method.addParameter( new JParameter( JClass.BOOLEAN, "strict" ) );
+
+        sc = method.getSourceCode();
+
+        sc.add( "if ( s == null )" );
+
+        sc.add( "{" );
+        sc.indent();
+
+        sc.add( "if ( strict )" );
+
         sc.add( "{" );
         sc.addIndented(
-            "throw new XmlPullParserException( \"expected START_TAG or END_TAG not \" + XmlPullParser.TYPES[eventType], parser, null );" );
+            "throw new XmlPullParserException( \"Missing required value for attribute '\" + attribute + \"'\", parser, null );" );
         sc.add( "}" );
-        sc.add( "return eventType;" );
 
-        jClass.addMethod( method );
+        sc.unindent();
+        sc.add( "}" );
 
-        // --------------------------------------------------------------------
+        sc.add( "return s;" );
+        return method;
+    }
+
+    private JMethod getTrimmedValueMethod() {
+        JMethod method = new JMethod( "getTrimmedValue", new JClass( "String" ), null );
+        method.getModifiers().makePrivate();
+
+        method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
+
+        JSourceCode sc = method.getSourceCode();
+
+        sc.add( "if ( s != null )" );
+
+        sc.add( "{" );
+        sc.addIndented( "s = s.trim();" );
+        sc.add( "}" );
+
+        sc.add( "return s;" );
+        return method;
     }
 
     private JMethod convertNumericalType( String methodName, JType returnType, String expression, String typeDesc )
