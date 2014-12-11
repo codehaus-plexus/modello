@@ -356,25 +356,25 @@ public class Xpp3ReaderGenerator
         // ----------------------------------------------------------------------
 
         JConstructor constructor2 = new JConstructor(jClass);
-        constructor2.getSourceCode().add( "this( new ReaderInterpolator()\n" + "        {\n"
-                                              + "            public String interpolate( String source, String contextDescription )\n"
+        constructor2.getSourceCode().add( "this( new ContentTransformer()\n" + "        {\n"
+                                              + "            public String transform( String source, String fieldName )\n"
                                               + "            {\n" + "                return source;\n"
                                               + "            }\n" + "        } );" );
         jClass.addConstructor( constructor2 );
 
 
         JConstructor constructor = new JConstructor(jClass);
-        constructor.addParameter( new JParameter( new JType("ReaderInterpolator"), "readerInterpolator"  ) );
-        constructor.getSourceCode().add( "this.readerInterpolator = readerInterpolator;" );
+        constructor.addParameter( new JParameter( new JType("ContentTransformer"), "contentTransformer"  ) );
+        constructor.getSourceCode().add( "this.contentTransformer = contentTransformer;" );
         jClass.addConstructor( constructor );
 
-        jClass.addSourceCode(  "public static interface ReaderInterpolator\n" + "{\n" + "    /**\n"
+        jClass.addSourceCode(  "public static interface ContentTransformer\n" + "{\n" + "    /**\n"
                                    + "     * Interpolate the value read from the xpp3 document\n"
                                    + "     * @param source The source value\n"
-                                   + "     * @param contextDescription A description of the node being interpolated. The implementation may use this to\n"
+                                   + "     * @param fieldName A description of the field being interpolated. The implementation may use this to\n"
                                    + "     *                           log stuff.\n"
                                    + "     * @return The interpolated value.\n" + "     */\n"
-                                   + "    String interpolate( String source, String contextDescription );\n" + "}\n");
+                                   + "    String transform( String source, String fieldName );\n" + "}\n");
 
         // The Field
         JField addDefaultEntities = new JField( JType.BOOLEAN, "addDefaultEntities" );
@@ -390,12 +390,12 @@ public class Xpp3ReaderGenerator
 
         jClass.addField( addDefaultEntities );
 
-        JField readerInterpolator = new JField( new JType("ReaderInterpolator"), "readerInterpolator" );
+        JField contentTransformer = new JField( new JType("ContentTransformer"), "contentTransformer" );
         JModifiers jModifiers = new JModifiers();
         jModifiers.setFinal(  true );
-        readerInterpolator.setModifiers( jModifiers );
+        contentTransformer.setModifiers( jModifiers );
 
-        jClass.addField( readerInterpolator );
+        jClass.addField( contentTransformer );
 
 
         // The setter
@@ -1505,7 +1505,7 @@ public class Xpp3ReaderGenerator
 
         JSourceCode sc = method.getSourceCode();
 
-        sc.add( "return getTrimmedValue( readerInterpolator.interpolate( value, context ) );" );
+        sc.add( "return getTrimmedValue( contentTransformer.transform( value, context ) );" );
         return method;
     }
 
