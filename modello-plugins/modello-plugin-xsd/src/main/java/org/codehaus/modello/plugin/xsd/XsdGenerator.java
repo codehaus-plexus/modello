@@ -395,6 +395,8 @@ public class XsdGenerator
                 w.addAttribute( "default", field.getDefaultValue() );
             }
 
+            w.addAttribute( "use", field.isRequired() ? "required" : "optional" );
+
             writeFieldDocumentation( w, field );
 
             if ( "char".equals( field.getType() ) || "Character".equals( field.getType() ) )
