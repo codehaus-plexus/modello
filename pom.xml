@@ -181,14 +181,14 @@
   </modules>
 
   <scm>
-    <connection>scm:git:git@github.com:sonatype/modello.git</connection>
-    <developerConnection>scm:git:git@github.com:sonatype/modello.git</developerConnection>
-    <url>http://github.com/sonatype/modello/tree/master</url>
+    <connection>scm:git:git@github.com:codehaus-plexus/modello.git</connection>
+    <developerConnection>scm:git:git@github.com:codehaus-plexus/modello.git</developerConnection>
+    <url>http://github.com/codehaus-plexus/modello/tree/master</url>
     <tag>HEAD</tag>
   </scm>
   <issueManagement>
-    <system>jira</system>
-    <url>http://jira.codehaus.org/browse/MODELLO</url>
+    <system>github</system>
+    <url>http://github.com/codehaus-plexus/modello/issues</url>
   </issueManagement>
   <ciManagement>
     <notifiers>
