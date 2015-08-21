@@ -1,0 +1,3 @@
+table.bodyTable tr.a:hover, table.bodyTable tr.b:hover {
+  background: #dfe3db;
+}
