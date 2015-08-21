@@ -7,7 +7,7 @@ Modello generates code from a simple model format: based on a plugin architectur
 
 # Documentation
 
-Documentation can be found on Modello site hosted at [CodeHaus](http://modello.codehaus.org/index.html)
+Documentation can be found on the Modello site hosted at [Github.io](http://codehaus-plexus.github.io/modello/)
 
 # Licensing
 
