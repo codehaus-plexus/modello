@@ -228,6 +228,7 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <maven.version>2.0.7</maven.version>
     <jackson.version>2.1.5</jackson.version>
+    <modelloPluginVersion>1.8.3</modelloPluginVersion>
   </properties>
 
   <dependencyManagement>
@@ -595,13 +596,13 @@
       </build>
     </profile>
     <profile>
-      <id>model</id><!-- to generate model xsd and xdoc: mvn -N -P model site -->
+      <id>reporting</id>
       <build>
         <plugins>
           <plugin>
             <groupId>org.codehaus.modello</groupId>
             <artifactId>modello-maven-plugin</artifactId>
-            <version>${project.version}</version>
+            <version>${modelloPluginVersion}</version>
             <configuration>
               <models>
                 <model>src/main/mdo/modello.mdo</model>
@@ -611,6 +612,7 @@
             <executions>
               <execution>
                 <id>xdoc</id>
+                <inherited>false</inherited>
                 <phase>pre-site</phase>
                 <goals>
                   <goal>xdoc</goal>
@@ -621,6 +623,7 @@
               </execution>
               <execution>
                 <id>xsd</id>
+                <inherited>false</inherited>
                 <phase>pre-site</phase>
                 <goals>
                   <goal>xsd</goal>
@@ -633,9 +636,6 @@
           </plugin>
         </plugins>
       </build>
-    </profile>
-    <profile>
-      <id>reporting</id>
       <reporting>
         <plugins>
           <plugin>
