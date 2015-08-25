@@ -13,12 +13,13 @@
     descriptors can be generated from the single model, including Java POJOs, XML/JSON/YAML marshallers/unmarshallers,
     XSD and documentation.
   </description>
-  <url>http://modello.codehaus.org/</url>
+  <url>http://codehaus-plexus.github.io/modello/</url>
   <inceptionYear>2001</inceptionYear>
   <organization>
-    <name>Codehaus</name>
-    <url>http://www.codehaus.org/</url>
+    <name>Codehaus Plexus</name>
+    <url>http://codehaus-plexus.github.io/</url>
   </organization>
+  
   <licenses>
     <license>
       <name>The MIT License</name>
