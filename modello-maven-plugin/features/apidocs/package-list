@@ -1,0 +1,7 @@
+org.codehaus.modello
+org.codehaus.modello.test.features
+org.codehaus.modello.test.features.io.dom4j
+org.codehaus.modello.test.features.io.jdom
+org.codehaus.modello.test.features.io.stax
+org.codehaus.modello.test.features.io.xpp3
+org.codehaus.modello.test.features.other

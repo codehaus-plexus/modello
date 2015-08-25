@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<rss version="0.91">
+  <channel>
+    <title>Modello Maven Plugin - Checkstyle report</title>
+    <link>http://modello.codehaus.org/modello-maven-plugin/</link>
+    <description>Modello Maven Plugin - Checkstyle report</description>
+    <language>en-us</language>
+    <copyright>&#169;2001 - 2015 Codehaus</copyright>
+    <item>
+      <title>File: 22,
+             Errors: 22,
+             Warnings: 49,
+             Infos: 0
+      </title>
+            <link>http://modello.codehaus.org/modello-maven-plugin//checkstyle.html</link>
+      <description>
+        <p>Click <a href="http://modello.codehaus.org/modello-maven-plugin//checkstyle.html">here</a> for the full Checkstyle report.</p>
+
+        <table summary="Files" boder="1">
+          <thead>
+            <tr>
+              <th>Files</th>
+              <th style="width:30px;"><abbr title="Info">I</abbr></th>
+              <th style="width:30px;"><abbr title="Warning">W</abbr></th>
+              <th style="width:30px;"><abbr title="Error">E</abbr></th>
+            </tr>
+          </thead>
+          <tbody>
+                          <tr>
+                <td>
+                  <a href="http://modello.codehaus.org/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.ModelloSaxWriterMojo.java">org/codehaus/modello/maven/ModelloSaxWriterMojo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://modello.codehaus.org/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.ModelloJacksonReaderMojo.java">org/codehaus/modello/maven/ModelloJacksonReaderMojo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://modello.codehaus.org/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.ModelloDom4jReaderMojo.java">org/codehaus/modello/maven/ModelloDom4jReaderMojo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://modello.codehaus.org/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.ModelloJsonSchemaGeneratorMojo.java">org/codehaus/modello/maven/ModelloJsonSchemaGeneratorMojo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://modello.codehaus.org/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.ModelloGenerateMojo.java">org/codehaus/modello/maven/ModelloGenerateMojo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  2
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://modello.codehaus.org/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.ModelloXdocMojo.java">org/codehaus/modello/maven/ModelloXdocMojo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  7
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://modello.codehaus.org/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.ModelloStaxReaderMojo.java">org/codehaus/modello/maven/ModelloStaxReaderMojo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://modello.codehaus.org/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.ModelloJacksonWriterMojo.java">org/codehaus/modello/maven/ModelloJacksonWriterMojo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://modello.codehaus.org/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.ModelloJDOMWriterMojo.java">org/codehaus/modello/maven/ModelloJDOMWriterMojo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://modello.codehaus.org/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.ModelloXpp3WriterMojo.java">org/codehaus/modello/maven/ModelloXpp3WriterMojo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://modello.codehaus.org/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.ModelloDom4jWriterMojo.java">org/codehaus/modello/maven/ModelloDom4jWriterMojo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://modello.codehaus.org/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.ModelloJacksonExtendedReaderMojo.java">org/codehaus/modello/maven/ModelloJacksonExtendedReaderMojo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://modello.codehaus.org/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.AbstractModelloSourceGeneratorMojo.java">org/codehaus/modello/maven/AbstractModelloSourceGeneratorMojo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  2
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://modello.codehaus.org/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.ModelloConvertersMojo.java">org/codehaus/modello/maven/ModelloConvertersMojo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://modello.codehaus.org/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.AbstractModelloGeneratorMojo.java">org/codehaus/modello/maven/AbstractModelloGeneratorMojo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  18
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://modello.codehaus.org/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.ModelloXsdMojo.java">org/codehaus/modello/maven/ModelloXsdMojo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  5
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://modello.codehaus.org/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.ModelloXpp3ExtendedReaderMojo.java">org/codehaus/modello/maven/ModelloXpp3ExtendedReaderMojo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://modello.codehaus.org/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.ModelloSnakeYamlReaderMojo.java">org/codehaus/modello/maven/ModelloSnakeYamlReaderMojo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://modello.codehaus.org/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.ModelloStaxWriterMojo.java">org/codehaus/modello/maven/ModelloStaxWriterMojo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://modello.codehaus.org/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.ModelloXpp3ReaderMojo.java">org/codehaus/modello/maven/ModelloXpp3ReaderMojo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://modello.codehaus.org/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.ModelloJavaMojo.java">org/codehaus/modello/maven/ModelloJavaMojo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://modello.codehaus.org/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.ModelloSnakeYamlWriterMojo.java">org/codehaus/modello/maven/ModelloSnakeYamlWriterMojo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                      </tbody>
+        </table>
+        
+      </description>
+    </item>
+  </channel>
+</rss>
+

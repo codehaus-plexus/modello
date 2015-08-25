@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmd version="4.3" timestamp="2015-08-25T16:42:28.678">
+<file name="F:\tmp\modello\modello-core\src\main\java\org\codehaus\modello\core\io\ModelReader.java">
+<violation beginline="125" endline="126" begincolumn="17" endcolumn="17" rule="EmptyIfStmt" ruleset="Basic Rules" package="org.codehaus.modello.core.io" class="ModelReader" method="parseModel" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyIfStmt" priority="3">
+Avoid empty if statements
+</violation>
+<violation beginline="152" endline="154" begincolumn="17" endcolumn="17" rule="EmptyIfStmt" ruleset="Basic Rules" package="org.codehaus.modello.core.io" class="ModelReader" method="parseModel" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyIfStmt" priority="3">
+Avoid empty if statements
+</violation>
+<violation beginline="235" endline="236" begincolumn="21" endcolumn="21" rule="EmptyIfStmt" ruleset="Basic Rules" package="org.codehaus.modello.core.io" class="ModelReader" method="parseInterfaces" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyIfStmt" priority="3">
+Avoid empty if statements
+</violation>
+<violation beginline="279" endline="280" begincolumn="21" endcolumn="21" rule="EmptyIfStmt" ruleset="Basic Rules" package="org.codehaus.modello.core.io" class="ModelReader" method="parseClasses" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyIfStmt" priority="3">
+Avoid empty if statements
+</violation>
+<violation beginline="351" endline="352" begincolumn="21" endcolumn="21" rule="EmptyIfStmt" ruleset="Basic Rules" package="org.codehaus.modello.core.io" class="ModelReader" method="parseFields" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyIfStmt" priority="3">
+Avoid empty if statements
+</violation>
+<violation beginline="450" endline="451" begincolumn="13" endcolumn="13" rule="EmptyIfStmt" ruleset="Basic Rules" package="org.codehaus.modello.core.io" class="ModelReader" method="parseAssociation" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyIfStmt" priority="3">
+Avoid empty if statements
+</violation>
+<violation beginline="481" endline="482" begincolumn="21" endcolumn="21" rule="EmptyIfStmt" ruleset="Basic Rules" package="org.codehaus.modello.core.io" class="ModelReader" method="parseCodeSegment" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyIfStmt" priority="3">
+Avoid empty if statements
+</violation>
+<violation beginline="514" endline="515" begincolumn="21" endcolumn="21" rule="EmptyIfStmt" ruleset="Basic Rules" package="org.codehaus.modello.core.io" class="ModelReader" method="parseCodeSegment" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyIfStmt" priority="3">
+Avoid empty if statements
+</violation>
+</file>
+<file name="F:\tmp\modello\modello-core\src\main\java\org\codehaus\modello\model\Model.java">
+<violation beginline="102" endline="104" begincolumn="13" endcolumn="13" rule="EmptyCatchBlock" ruleset="Basic Rules" package="org.codehaus.modello.model" class="Model" method="getRoot" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyCatchBlock" priority="3">
+Avoid empty catch blocks
+</violation>
+</file>
+<file name="F:\tmp\modello\modello-core\src\main\java\org\codehaus\modello\model\ModelClass.java">
+<violation beginline="238" endline="242" begincolumn="13" endcolumn="13" rule="CollapsibleIfStatements" ruleset="Basic Rules" package="org.codehaus.modello.model" class="ModelClass" method="validateElement" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#CollapsibleIfStatements" priority="3">
+These nested if statements could be combined
+</violation>
+</file>
+<file name="F:\tmp\modello\modello-core\src\main\java\org\codehaus\modello\plugin\AbstractModelloGenerator.java">
+<violation beginline="126" endline="128" begincolumn="9" endcolumn="9" rule="EmptyCatchBlock" ruleset="Basic Rules" package="org.codehaus.modello.plugin" class="AbstractModelloGenerator" method="isClassInModel" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyCatchBlock" priority="3">
+Avoid empty catch blocks
+</violation>
+</file>
+</pmd>

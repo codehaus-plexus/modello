@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmd version="4.3" timestamp="2015-08-25T16:47:27.711">
+<file name="F:\tmp\modello\modello-plugins\modello-plugin-xsd\src\main\java\org\codehaus\modello\plugin\xsd\XsdGenerator.java">
+<violation beginline="256" endline="258" begincolumn="17" endcolumn="17" rule="EmptyIfStmt" ruleset="Basic Rules" package="org.codehaus.modello.plugin.xsd" class="XsdGenerator" method="writeComplexTypeDescriptor" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyIfStmt" priority="3">
+Avoid empty if statements
+</violation>
+<violation beginline="272" endline="275" begincolumn="25" endcolumn="25" rule="CollapsibleIfStatements" ruleset="Basic Rules" package="org.codehaus.modello.plugin.xsd" class="XsdGenerator" method="writeComplexTypeDescriptor" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#CollapsibleIfStatements" priority="3">
+These nested if statements could be combined
+</violation>
+</file>
+</pmd>

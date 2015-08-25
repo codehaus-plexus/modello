@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmd version="4.3" timestamp="2015-08-25T16:45:40.193">
+<file name="F:\tmp\modello\modello-plugins\modello-plugin-dom4j\src\main\java\org\codehaus\modello\plugin\dom4j\Dom4jReaderGenerator.java">
+<violation beginline="720" endline="811" begincolumn="13" endcolumn="5" rule="UnusedFormalParameter" ruleset="Unused Code Rules" package="org.codehaus.modello.plugin.dom4j" class="Dom4jReaderGenerator" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedFormalParameter" priority="3">
+Avoid unused method parameters such as 'jClass'.
+</violation>
+</file>
+<file name="F:\tmp\modello\modello-plugins\modello-plugin-dom4j\src\main\java\org\codehaus\modello\plugin\dom4j\Dom4jWriterGenerator.java">
+<violation beginline="304" endline="451" begincolumn="13" endcolumn="5" rule="UnusedFormalParameter" ruleset="Unused Code Rules" package="org.codehaus.modello.plugin.dom4j" class="Dom4jWriterGenerator" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedFormalParameter" priority="3">
+Avoid unused method parameters such as 'jClass'.
+</violation>
+</file>
+</pmd>

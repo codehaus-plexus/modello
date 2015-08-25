@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmd version="4.3" timestamp="2015-08-25T16:45:13.133">
+<file name="F:\tmp\modello\modello-plugins\modello-plugin-converters\src\main\java\org\codehaus\modello\plugin\converters\ConverterGenerator.java">
+<violation beginline="202" endline="210" begincolumn="21" endcolumn="21" rule="CollapsibleIfStatements" ruleset="Basic Rules" package="org.codehaus.modello.plugin.converters" class="ConverterGenerator" method="generateConverters" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#CollapsibleIfStatements" priority="3">
+These nested if statements could be combined
+</violation>
+<violation beginline="204" endline="209" begincolumn="25" endcolumn="25" rule="CollapsibleIfStatements" ruleset="Basic Rules" package="org.codehaus.modello.plugin.converters" class="ConverterGenerator" method="generateConverters" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#CollapsibleIfStatements" priority="3">
+These nested if statements could be combined
+</violation>
+</file>
+</pmd>

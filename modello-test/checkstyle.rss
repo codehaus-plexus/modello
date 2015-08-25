@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<rss version="0.91">
+  <channel>
+    <title>Modello Test Package - Checkstyle report</title>
+    <link>http://modello.codehaus.org/modello-test/</link>
+    <description>Modello Test Package - Checkstyle report</description>
+    <language>en-us</language>
+    <copyright>&#169;2001 - 2015 Codehaus</copyright>
+    <item>
+      <title>File: 5,
+             Errors: 9,
+             Warnings: 38,
+             Infos: 0
+      </title>
+            <link>http://modello.codehaus.org/modello-test//checkstyle.html</link>
+      <description>
+        <p>Click <a href="http://modello.codehaus.org/modello-test//checkstyle.html">here</a> for the full Checkstyle report.</p>
+
+        <table summary="Files" boder="1">
+          <thead>
+            <tr>
+              <th>Files</th>
+              <th style="width:30px;"><abbr title="Info">I</abbr></th>
+              <th style="width:30px;"><abbr title="Warning">W</abbr></th>
+              <th style="width:30px;"><abbr title="Error">E</abbr></th>
+            </tr>
+          </thead>
+          <tbody>
+                          <tr>
+                <td>
+                  <a href="http://modello.codehaus.org/modello-test//checkstyle.html#org.codehaus.modello.AbstractModelloJavaGeneratorTest.java">org/codehaus/modello/AbstractModelloJavaGeneratorTest.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  19
+                </td>
+                <td>
+                  4
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://modello.codehaus.org/modello-test//checkstyle.html#org.codehaus.modello.AbstractModelloGeneratorTest.java">org/codehaus/modello/AbstractModelloGeneratorTest.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  9
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://modello.codehaus.org/modello-test//checkstyle.html#org.codehaus.modello.verifier.VerifierException.java">org/codehaus/modello/verifier/VerifierException.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  3
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://modello.codehaus.org/modello-test//checkstyle.html#org.codehaus.modello.verifier.Verifier.java">org/codehaus/modello/verifier/Verifier.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  6
+                </td>
+                <td>
+                  2
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://modello.codehaus.org/modello-test//checkstyle.html#org.codehaus.modello.OrderedProperties.java">org/codehaus/modello/OrderedProperties.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                      </tbody>
+        </table>
+        
+      </description>
+    </item>
+  </channel>
+</rss>
+

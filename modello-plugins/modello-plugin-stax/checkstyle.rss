@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<rss version="0.91">
+  <channel>
+    <title>Modello StAX Plugin - Checkstyle report</title>
+    <link>http://modello.codehaus.org/modello-plugins/modello-plugin-stax/</link>
+    <description>Modello StAX Plugin - Checkstyle report</description>
+    <language>en-us</language>
+    <copyright>&#169;2001 - 2015 Codehaus</copyright>
+    <item>
+      <title>File: 6,
+             Errors: 31,
+             Warnings: 7,
+             Infos: 0
+      </title>
+            <link>http://modello.codehaus.org/modello-plugins/modello-plugin-stax//checkstyle.html</link>
+      <description>
+        <p>Click <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-stax//checkstyle.html">here</a> for the full Checkstyle report.</p>
+
+        <table summary="Files" boder="1">
+          <thead>
+            <tr>
+              <th>Files</th>
+              <th style="width:30px;"><abbr title="Info">I</abbr></th>
+              <th style="width:30px;"><abbr title="Warning">W</abbr></th>
+              <th style="width:30px;"><abbr title="Error">E</abbr></th>
+            </tr>
+          </thead>
+          <tbody>
+                          <tr>
+                <td>
+                  <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-stax//checkstyle.html#org.codehaus.modello.plugin.stax.StaxReaderGenerator.java">org/codehaus/modello/plugin/stax/StaxReaderGenerator.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  17
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-stax//checkstyle.html#org.codehaus.modello.plugin.stax.StaxWriterGenerator.java">org/codehaus/modello/plugin/stax/StaxWriterGenerator.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  7
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-stax//checkstyle.html#org.codehaus.modello.plugin.stax.AbstractStaxGenerator.java">org/codehaus/modello/plugin/stax/AbstractStaxGenerator.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  3
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-stax//checkstyle.html#org.codehaus.modello.plugin.stax.StaxSerializerGenerator.java">org/codehaus/modello/plugin/stax/StaxSerializerGenerator.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  3
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-stax//checkstyle.html#org.codehaus.modello.plugin.stax.GeneratorNode.java">org/codehaus/modello/plugin/stax/GeneratorNode.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-stax//checkstyle.html#org.codehaus.modello.plugin.stax.DummyIdModelField.java">org/codehaus/modello/plugin/stax/DummyIdModelField.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  2
+                </td>
+              </tr>
+                      </tbody>
+        </table>
+        
+      </description>
+    </item>
+  </channel>
+</rss>
+

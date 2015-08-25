@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmd-cpd>
+<duplication lines="23" tokens="102">
+<file line="469" path="F:\tmp\modello\modello-core\src\main\java\org\codehaus\modello\core\io\ModelReader.java"/>
+<file line="502" path="F:\tmp\modello\modello-core\src\main\java\org\codehaus\modello\core\io\ModelReader.java"/>
+<codefragment>
+<![CDATA[
+    private void parseCodeSegment( ModelClass modelClass, XmlPullParser parser )
+        throws XmlPullParserException, IOException
+    {
+        while ( parser.nextTag() == XmlPullParser.START_TAG )
+        {
+            if ( "codeSegment".equals( parser.getName() ) )
+            {
+                CodeSegment codeSegment = new CodeSegment();
+
+                while ( parser.nextTag() == XmlPullParser.START_TAG )
+                {
+                    if ( parseBaseElement( codeSegment, parser ) )
+                    {
+                    }
+                    else if ( "code".equals( parser.getName() ) )
+                    {
+                        codeSegment.setCode( parser.nextText() );
+                    }
+                    else
+                    {
+                        parser.nextText();
+                    }
+                }
+]]>
+</codefragment>
+</duplication>
+</pmd-cpd>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmd version="4.3" timestamp="2015-08-25T16:47:14.052">
+<file name="F:\tmp\modello\modello-plugins\modello-plugin-snakeyaml\src\main\java\org\codehaus\modello\plugin\snakeyaml\SnakeYamlReaderGenerator.java">
+<violation beginline="189" endline="192" begincolumn="9" endcolumn="9" rule="EmptyIfStmt" ruleset="Basic Rules" package="org.codehaus.modello.plugin.snakeyaml" class="SnakeYamlReaderGenerator" method="writeClassReaders" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyIfStmt" priority="3">
+Avoid empty if statements
+</violation>
+<violation beginline="468" endline="484" begincolumn="13" endcolumn="5" rule="UnusedFormalParameter" ruleset="Unused Code Rules" package="org.codehaus.modello.plugin.snakeyaml" class="SnakeYamlReaderGenerator" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedFormalParameter" priority="3">
+Avoid unused method parameters such as 'objectName'.
+</violation>
+<violation beginline="468" endline="484" begincolumn="13" endcolumn="5" rule="UnusedFormalParameter" ruleset="Unused Code Rules" package="org.codehaus.modello.plugin.snakeyaml" class="SnakeYamlReaderGenerator" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedFormalParameter" priority="3">
+Avoid unused method parameters such as 'rootElement'.
+</violation>
+<violation beginline="496" endline="787" begincolumn="13" endcolumn="5" rule="UnusedFormalParameter" ruleset="Unused Code Rules" package="org.codehaus.modello.plugin.snakeyaml" class="SnakeYamlReaderGenerator" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedFormalParameter" priority="3">
+Avoid unused method parameters such as 'jClass'.
+</violation>
+<violation beginline="1109" endline="1194" begincolumn="17" endcolumn="9" rule="UnusedFormalParameter" ruleset="Unused Code Rules" package="org.codehaus.modello.plugin.snakeyaml" class="SnakeYamlReaderGenerator" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedFormalParameter" priority="3">
+Avoid unused method parameters such as 'locationKey'.
+</violation>
+<violation beginline="1109" endline="1194" begincolumn="17" endcolumn="9" rule="UnusedFormalParameter" ruleset="Unused Code Rules" package="org.codehaus.modello.plugin.snakeyaml" class="SnakeYamlReaderGenerator" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedFormalParameter" priority="3">
+Avoid unused method parameters such as 'locatorName'.
+</violation>
+<violation beginline="1109" endline="1194" begincolumn="17" endcolumn="9" rule="UnusedFormalParameter" ruleset="Unused Code Rules" package="org.codehaus.modello.plugin.snakeyaml" class="SnakeYamlReaderGenerator" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedFormalParameter" priority="3">
+Avoid unused method parameters such as 'wrappedItem'.
+</violation>
+</file>
+</pmd>

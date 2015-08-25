@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<rss version="0.91">
+  <channel>
+    <title>Modello XSD Plugin - Checkstyle report</title>
+    <link>http://modello.codehaus.org/modello-plugins/modello-plugin-xsd/</link>
+    <description>Modello XSD Plugin - Checkstyle report</description>
+    <language>en-us</language>
+    <copyright>&#169;2001 - 2015 Codehaus</copyright>
+    <item>
+      <title>File: 8,
+             Errors: 15,
+             Warnings: 19,
+             Infos: 10
+      </title>
+            <link>http://modello.codehaus.org/modello-plugins/modello-plugin-xsd//checkstyle.html</link>
+      <description>
+        <p>Click <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-xsd//checkstyle.html">here</a> for the full Checkstyle report.</p>
+
+        <table summary="Files" boder="1">
+          <thead>
+            <tr>
+              <th>Files</th>
+              <th style="width:30px;"><abbr title="Info">I</abbr></th>
+              <th style="width:30px;"><abbr title="Warning">W</abbr></th>
+              <th style="width:30px;"><abbr title="Error">E</abbr></th>
+            </tr>
+          </thead>
+          <tbody>
+                          <tr>
+                <td>
+                  <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-xsd//checkstyle.html#org.codehaus.modello.plugin.xsd.XsdGenerator.java">org/codehaus/modello/plugin/xsd/XsdGenerator.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  8
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-xsd//checkstyle.html#org.codehaus.modello.plugin.xsd.metadata.XsdFieldMetadata.java">org/codehaus/modello/plugin/xsd/metadata/XsdFieldMetadata.java</a>
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-xsd//checkstyle.html#org.codehaus.modello.plugin.xsd.metadata.XsdModelMetadata.java">org/codehaus/modello/plugin/xsd/metadata/XsdModelMetadata.java</a>
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  8
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-xsd//checkstyle.html#org.codehaus.modello.plugin.xsd.metadata.XsdClassMetadata.java">org/codehaus/modello/plugin/xsd/metadata/XsdClassMetadata.java</a>
+                </td>
+                <td>
+                  3
+                </td>
+                <td>
+                  2
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-xsd//checkstyle.html#org.codehaus.modello.plugin.xsd.XsdModelHelper.java">org/codehaus/modello/plugin/xsd/XsdModelHelper.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  3
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-xsd//checkstyle.html#org.codehaus.modello.plugin.xsd.metadata.XsdMetadataPlugin.java">org/codehaus/modello/plugin/xsd/metadata/XsdMetadataPlugin.java</a>
+                </td>
+                <td>
+                  3
+                </td>
+                <td>
+                  5
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-xsd//checkstyle.html#org.codehaus.modello.plugin.xsd.metadata.XsdAssociationMetadata.java">org/codehaus/modello/plugin/xsd/metadata/XsdAssociationMetadata.java</a>
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-xsd//checkstyle.html#org.codehaus.modello.plugin.xsd.metadata.XsdInterfaceMetadata.java">org/codehaus/modello/plugin/xsd/metadata/XsdInterfaceMetadata.java</a>
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                      </tbody>
+        </table>
+        
+      </description>
+    </item>
+  </channel>
+</rss>
+

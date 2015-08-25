@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmd version="4.3" timestamp="2015-08-25T16:48:15.182">
+<file name="F:\tmp\modello\modello-plugins\modello-plugin-xpp3\src\main\java\org\codehaus\modello\plugin\xpp3\Xpp3ReaderGenerator.java">
+<violation beginline="569" endline="627" begincolumn="13" endcolumn="5" rule="UnusedFormalParameter" ruleset="Unused Code Rules" package="org.codehaus.modello.plugin.xpp3" class="Xpp3ReaderGenerator" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedFormalParameter" priority="3">
+Avoid unused method parameters such as 'jClass'.
+</violation>
+<violation beginline="639" endline="939" begincolumn="13" endcolumn="5" rule="UnusedFormalParameter" ruleset="Unused Code Rules" package="org.codehaus.modello.plugin.xpp3" class="Xpp3ReaderGenerator" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedFormalParameter" priority="3">
+Avoid unused method parameters such as 'jClass'.
+</violation>
+</file>
+</pmd>
