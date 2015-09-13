@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pmd version="4.3" timestamp="2015-09-13T20:14:56.226">
+<pmd version="4.3" timestamp="2015-09-13T23:06:32.664">
 <file name="/home/herve/projets/maven/plexus/modello/modello-plugins/modello-plugin-java/src/main/java/org/codehaus/modello/plugin/java/JavaModelloGenerator.java">
 <violation beginline="266" endline="273" begincolumn="17" endcolumn="17" rule="CollapsibleIfStatements" ruleset="Basic Rules" package="org.codehaus.modello.plugin.java" class="JavaModelloGenerator" method="generateJava" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#CollapsibleIfStatements" priority="3">
 These nested if statements could be combined

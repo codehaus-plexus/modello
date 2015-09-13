@@ -29,20 +29,6 @@
           <tbody>
                           <tr>
                 <td>
-                  <a href="http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-dom4j//checkstyle.html#org.codehaus.modello.plugin.dom4j.Dom4jReaderGenerator.java">org/codehaus/modello/plugin/dom4j/Dom4jReaderGenerator.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  1
-                </td>
-                <td>
-                  9
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-dom4j//checkstyle.html#org.codehaus.modello.plugin.dom4j.Dom4jWriterGenerator.java">org/codehaus/modello/plugin/dom4j/Dom4jWriterGenerator.java</a>
                 </td>
                 <td>
@@ -53,6 +39,20 @@
                 </td>
                 <td>
                   2
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-dom4j//checkstyle.html#org.codehaus.modello.plugin.dom4j.Dom4jReaderGenerator.java">org/codehaus/modello/plugin/dom4j/Dom4jReaderGenerator.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  9
                 </td>
               </tr>
                       </tbody>

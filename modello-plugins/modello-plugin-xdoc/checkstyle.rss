@@ -99,7 +99,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-xdoc//checkstyle.html#org.codehaus.modello.plugin.xdoc.metadata.XdocModelMetadata.java">org/codehaus/modello/plugin/xdoc/metadata/XdocModelMetadata.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-xdoc//checkstyle.html#org.codehaus.modello.plugin.xdoc.metadata.XdocAssociationMetadata.java">org/codehaus/modello/plugin/xdoc/metadata/XdocAssociationMetadata.java</a>
                 </td>
                 <td>
                   1
@@ -113,7 +113,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-xdoc//checkstyle.html#org.codehaus.modello.plugin.xdoc.metadata.XdocAssociationMetadata.java">org/codehaus/modello/plugin/xdoc/metadata/XdocAssociationMetadata.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-xdoc//checkstyle.html#org.codehaus.modello.plugin.xdoc.metadata.XdocModelMetadata.java">org/codehaus/modello/plugin/xdoc/metadata/XdocModelMetadata.java</a>
                 </td>
                 <td>
                   1

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pmd version="4.3" timestamp="2015-09-13T20:14:26.991">
+<pmd version="4.3" timestamp="2015-09-13T23:05:18.453">
 <file name="/home/herve/projets/maven/plexus/modello/modello-core/src/main/java/org/codehaus/modello/core/io/ModelReader.java">
 <violation beginline="125" endline="126" begincolumn="17" endcolumn="17" rule="EmptyIfStmt" ruleset="Basic Rules" package="org.codehaus.modello.core.io" class="ModelReader" method="parseModel" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyIfStmt" priority="3">
 Avoid empty if statements

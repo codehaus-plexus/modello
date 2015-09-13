@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pmd version="4.3" timestamp="2015-09-13T20:16:10.815">
+<pmd version="4.3" timestamp="2015-09-13T23:08:45.486">
 <file name="/home/herve/projets/maven/plexus/modello/modello-plugins/modello-plugin-jackson/src/main/java/org/codehaus/modello/plugin/jackson/JacksonReaderGenerator.java">
 <violation beginline="180" endline="183" begincolumn="9" endcolumn="9" rule="EmptyIfStmt" ruleset="Basic Rules" package="org.codehaus.modello.plugin.jackson" class="JacksonReaderGenerator" method="writeClassReaders" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyIfStmt" priority="3">
 Avoid empty if statements

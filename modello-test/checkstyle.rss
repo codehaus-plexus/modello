@@ -57,20 +57,6 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://codehaus-plexus.github.io/modello/modello-test//checkstyle.html#org.codehaus.modello.verifier.VerifierException.java">org/codehaus/modello/verifier/VerifierException.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  3
-                </td>
-                <td>
-                  1
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="http://codehaus-plexus.github.io/modello/modello-test//checkstyle.html#org.codehaus.modello.verifier.Verifier.java">org/codehaus/modello/verifier/Verifier.java</a>
                 </td>
                 <td>
@@ -81,6 +67,20 @@
                 </td>
                 <td>
                   2
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-test//checkstyle.html#org.codehaus.modello.verifier.VerifierException.java">org/codehaus/modello/verifier/VerifierException.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  3
+                </td>
+                <td>
+                  1
                 </td>
               </tr>
                           <tr>

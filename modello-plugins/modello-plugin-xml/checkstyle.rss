@@ -43,13 +43,13 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-xml//checkstyle.html#org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata.java">org/codehaus/modello/plugins/xml/metadata/XmlFieldMetadata.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-xml//checkstyle.html#org.codehaus.modello.plugins.xml.metadata.XmlAssociationMetadata.java">org/codehaus/modello/plugins/xml/metadata/XmlAssociationMetadata.java</a>
                 </td>
                 <td>
-                  1
+                  5
                 </td>
                 <td>
-                  11
+                  10
                 </td>
                 <td>
                   1
@@ -71,13 +71,13 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-xml//checkstyle.html#org.codehaus.modello.plugins.xml.metadata.XmlAssociationMetadata.java">org/codehaus/modello/plugins/xml/metadata/XmlAssociationMetadata.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-xml//checkstyle.html#org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata.java">org/codehaus/modello/plugins/xml/metadata/XmlFieldMetadata.java</a>
                 </td>
                 <td>
-                  5
+                  1
                 </td>
                 <td>
-                  10
+                  11
                 </td>
                 <td>
                   1
@@ -113,20 +113,6 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-xml//checkstyle.html#org.codehaus.modello.plugins.xml.metadata.XmlMetadataPlugin.java">org/codehaus/modello/plugins/xml/metadata/XmlMetadataPlugin.java</a>
-                </td>
-                <td>
-                  13
-                </td>
-                <td>
-                  5
-                </td>
-                <td>
-                  1
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-xml//checkstyle.html#org.codehaus.modello.plugins.xml.AbstractXmlGenerator.java">org/codehaus/modello/plugins/xml/AbstractXmlGenerator.java</a>
                 </td>
                 <td>
@@ -134,6 +120,20 @@
                 </td>
                 <td>
                   2
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-xml//checkstyle.html#org.codehaus.modello.plugins.xml.metadata.XmlMetadataPlugin.java">org/codehaus/modello/plugins/xml/metadata/XmlMetadataPlugin.java</a>
+                </td>
+                <td>
+                  13
+                </td>
+                <td>
+                  5
                 </td>
                 <td>
                   1
