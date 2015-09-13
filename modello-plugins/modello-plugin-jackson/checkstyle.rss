@@ -3,19 +3,19 @@
 <rss version="0.91">
   <channel>
     <title>Modello Jackson Plugin - Checkstyle report</title>
-    <link>http://modello.codehaus.org/modello-plugins/modello-plugin-jackson/</link>
+    <link>http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-jackson/</link>
     <description>Modello Jackson Plugin - Checkstyle report</description>
     <language>en-us</language>
-    <copyright>&#169;2001 - 2015 Codehaus</copyright>
+    <copyright>&#169;2001 - 2015 Codehaus Plexus</copyright>
     <item>
       <title>File: 4,
              Errors: 28,
              Warnings: 3,
              Infos: 0
       </title>
-            <link>http://modello.codehaus.org/modello-plugins/modello-plugin-jackson//checkstyle.html</link>
+            <link>http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-jackson//checkstyle.html</link>
       <description>
-        <p>Click <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-jackson//checkstyle.html">here</a> for the full Checkstyle report.</p>
+        <p>Click <a href="http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-jackson//checkstyle.html">here</a> for the full Checkstyle report.</p>
 
         <table summary="Files" boder="1">
           <thead>
@@ -29,7 +29,7 @@
           <tbody>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-jackson//checkstyle.html#org.codehaus.modello.plugin.jackson.JacksonReaderGenerator.java">org/codehaus/modello/plugin/jackson/JacksonReaderGenerator.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-jackson//checkstyle.html#org.codehaus.modello.plugin.jackson.JacksonReaderGenerator.java">org/codehaus/modello/plugin/jackson/JacksonReaderGenerator.java</a>
                 </td>
                 <td>
                   0
@@ -43,7 +43,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-jackson//checkstyle.html#org.codehaus.modello.plugin.jackson.JacksonExtendedReaderGenerator.java">org/codehaus/modello/plugin/jackson/JacksonExtendedReaderGenerator.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-jackson//checkstyle.html#org.codehaus.modello.plugin.jackson.JacksonExtendedReaderGenerator.java">org/codehaus/modello/plugin/jackson/JacksonExtendedReaderGenerator.java</a>
                 </td>
                 <td>
                   0
@@ -57,7 +57,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-jackson//checkstyle.html#org.codehaus.modello.plugin.jackson.JacksonWriterGenerator.java">org/codehaus/modello/plugin/jackson/JacksonWriterGenerator.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-jackson//checkstyle.html#org.codehaus.modello.plugin.jackson.JacksonWriterGenerator.java">org/codehaus/modello/plugin/jackson/JacksonWriterGenerator.java</a>
                 </td>
                 <td>
                   0
@@ -71,7 +71,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-jackson//checkstyle.html#org.codehaus.modello.plugin.jackson.AbstractJacksonGenerator.java">org/codehaus/modello/plugin/jackson/AbstractJacksonGenerator.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-jackson//checkstyle.html#org.codehaus.modello.plugin.jackson.AbstractJacksonGenerator.java">org/codehaus/modello/plugin/jackson/AbstractJacksonGenerator.java</a>
                 </td>
                 <td>
                   0

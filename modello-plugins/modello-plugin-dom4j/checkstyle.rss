@@ -3,19 +3,19 @@
 <rss version="0.91">
   <channel>
     <title>Modello Dom4J Plugin - Checkstyle report</title>
-    <link>http://modello.codehaus.org/modello-plugins/modello-plugin-dom4j/</link>
+    <link>http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-dom4j/</link>
     <description>Modello Dom4J Plugin - Checkstyle report</description>
     <language>en-us</language>
-    <copyright>&#169;2001 - 2015 Codehaus</copyright>
+    <copyright>&#169;2001 - 2015 Codehaus Plexus</copyright>
     <item>
       <title>File: 2,
              Errors: 11,
              Warnings: 2,
              Infos: 0
       </title>
-            <link>http://modello.codehaus.org/modello-plugins/modello-plugin-dom4j//checkstyle.html</link>
+            <link>http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-dom4j//checkstyle.html</link>
       <description>
-        <p>Click <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-dom4j//checkstyle.html">here</a> for the full Checkstyle report.</p>
+        <p>Click <a href="http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-dom4j//checkstyle.html">here</a> for the full Checkstyle report.</p>
 
         <table summary="Files" boder="1">
           <thead>
@@ -29,21 +29,7 @@
           <tbody>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-dom4j//checkstyle.html#org.codehaus.modello.plugin.dom4j.Dom4jWriterGenerator.java">org/codehaus/modello/plugin/dom4j/Dom4jWriterGenerator.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  1
-                </td>
-                <td>
-                  2
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-dom4j//checkstyle.html#org.codehaus.modello.plugin.dom4j.Dom4jReaderGenerator.java">org/codehaus/modello/plugin/dom4j/Dom4jReaderGenerator.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-dom4j//checkstyle.html#org.codehaus.modello.plugin.dom4j.Dom4jReaderGenerator.java">org/codehaus/modello/plugin/dom4j/Dom4jReaderGenerator.java</a>
                 </td>
                 <td>
                   0
@@ -53,6 +39,20 @@
                 </td>
                 <td>
                   9
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-dom4j//checkstyle.html#org.codehaus.modello.plugin.dom4j.Dom4jWriterGenerator.java">org/codehaus/modello/plugin/dom4j/Dom4jWriterGenerator.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  2
                 </td>
               </tr>
                       </tbody>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pmd-cpd>
 <duplication lines="18" tokens="113">
-<file line="779" path="F:\tmp\modello\modello-plugins\modello-plugin-jdom\src\main\java\org\codehaus\modello\plugin\jdom\JDOMWriterGenerator.java"/>
-<file line="844" path="F:\tmp\modello\modello-plugins\modello-plugin-jdom\src\main\java\org\codehaus\modello\plugin\jdom\JDOMWriterGenerator.java"/>
+<file line="779" path="/home/herve/projets/maven/plexus/modello/modello-plugins/modello-plugin-jdom/src/main/java/org/codehaus/modello/plugin/jdom/JDOMWriterGenerator.java"/>
+<file line="844" path="/home/herve/projets/maven/plexus/modello/modello-plugins/modello-plugin-jdom/src/main/java/org/codehaus/modello/plugin/jdom/JDOMWriterGenerator.java"/>
 <codefragment>
 <![CDATA[
         sc.add( "Iterator elIt = element.getChildren( childTag, element.getNamespace() ).iterator();" );
@@ -27,8 +27,8 @@
 </codefragment>
 </duplication>
 <duplication lines="19" tokens="111">
-<file line="804" path="F:\tmp\modello\modello-plugins\modello-plugin-jdom\src\main\java\org\codehaus\modello\plugin\jdom\JDOMWriterGenerator.java"/>
-<file line="869" path="F:\tmp\modello\modello-plugins\modello-plugin-jdom\src\main\java\org\codehaus\modello\plugin\jdom\JDOMWriterGenerator.java"/>
+<file line="804" path="/home/herve/projets/maven/plexus/modello/modello-plugins/modello-plugin-jdom/src/main/java/org/codehaus/modello/plugin/jdom/JDOMWriterGenerator.java"/>
+<file line="869" path="/home/herve/projets/maven/plexus/modello/modello-plugins/modello-plugin-jdom/src/main/java/org/codehaus/modello/plugin/jdom/JDOMWriterGenerator.java"/>
 <codefragment>
 <![CDATA[
         sc.add( "insertAtPreferredLocation( element, el, innerCount );" );

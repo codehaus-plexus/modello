@@ -3,19 +3,19 @@
 <rss version="0.91">
   <channel>
     <title>Modello XDOC Plugin - Checkstyle report</title>
-    <link>http://modello.codehaus.org/modello-plugins/modello-plugin-xdoc/</link>
+    <link>http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-xdoc/</link>
     <description>Modello XDOC Plugin - Checkstyle report</description>
     <language>en-us</language>
-    <copyright>&#169;2001 - 2015 Codehaus</copyright>
+    <copyright>&#169;2001 - 2015 Codehaus Plexus</copyright>
     <item>
       <title>File: 7,
              Errors: 12,
              Warnings: 8,
              Infos: 8
       </title>
-            <link>http://modello.codehaus.org/modello-plugins/modello-plugin-xdoc//checkstyle.html</link>
+            <link>http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-xdoc//checkstyle.html</link>
       <description>
-        <p>Click <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-xdoc//checkstyle.html">here</a> for the full Checkstyle report.</p>
+        <p>Click <a href="http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-xdoc//checkstyle.html">here</a> for the full Checkstyle report.</p>
 
         <table summary="Files" boder="1">
           <thead>
@@ -29,7 +29,7 @@
           <tbody>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-xdoc//checkstyle.html#org.codehaus.modello.plugin.xdoc.metadata.XdocClassMetadata.java">org/codehaus/modello/plugin/xdoc/metadata/XdocClassMetadata.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-xdoc//checkstyle.html#org.codehaus.modello.plugin.xdoc.metadata.XdocClassMetadata.java">org/codehaus/modello/plugin/xdoc/metadata/XdocClassMetadata.java</a>
                 </td>
                 <td>
                   1
@@ -43,7 +43,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-xdoc//checkstyle.html#org.codehaus.modello.plugin.xdoc.metadata.XdocFieldMetadata.java">org/codehaus/modello/plugin/xdoc/metadata/XdocFieldMetadata.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-xdoc//checkstyle.html#org.codehaus.modello.plugin.xdoc.metadata.XdocFieldMetadata.java">org/codehaus/modello/plugin/xdoc/metadata/XdocFieldMetadata.java</a>
                 </td>
                 <td>
                   3
@@ -57,7 +57,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-xdoc//checkstyle.html#org.codehaus.modello.plugin.xdoc.XdocGenerator.java">org/codehaus/modello/plugin/xdoc/XdocGenerator.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-xdoc//checkstyle.html#org.codehaus.modello.plugin.xdoc.XdocGenerator.java">org/codehaus/modello/plugin/xdoc/XdocGenerator.java</a>
                 </td>
                 <td>
                   0
@@ -71,7 +71,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-xdoc//checkstyle.html#org.codehaus.modello.plugin.xdoc.metadata.XdocMetadataPlugin.java">org/codehaus/modello/plugin/xdoc/metadata/XdocMetadataPlugin.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-xdoc//checkstyle.html#org.codehaus.modello.plugin.xdoc.metadata.XdocMetadataPlugin.java">org/codehaus/modello/plugin/xdoc/metadata/XdocMetadataPlugin.java</a>
                 </td>
                 <td>
                   1
@@ -85,7 +85,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-xdoc//checkstyle.html#org.codehaus.modello.plugin.xdoc.metadata.XdocInterfaceMetadata.java">org/codehaus/modello/plugin/xdoc/metadata/XdocInterfaceMetadata.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-xdoc//checkstyle.html#org.codehaus.modello.plugin.xdoc.metadata.XdocInterfaceMetadata.java">org/codehaus/modello/plugin/xdoc/metadata/XdocInterfaceMetadata.java</a>
                 </td>
                 <td>
                   1
@@ -99,7 +99,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-xdoc//checkstyle.html#org.codehaus.modello.plugin.xdoc.metadata.XdocModelMetadata.java">org/codehaus/modello/plugin/xdoc/metadata/XdocModelMetadata.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-xdoc//checkstyle.html#org.codehaus.modello.plugin.xdoc.metadata.XdocModelMetadata.java">org/codehaus/modello/plugin/xdoc/metadata/XdocModelMetadata.java</a>
                 </td>
                 <td>
                   1
@@ -113,7 +113,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-xdoc//checkstyle.html#org.codehaus.modello.plugin.xdoc.metadata.XdocAssociationMetadata.java">org/codehaus/modello/plugin/xdoc/metadata/XdocAssociationMetadata.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-xdoc//checkstyle.html#org.codehaus.modello.plugin.xdoc.metadata.XdocAssociationMetadata.java">org/codehaus/modello/plugin/xdoc/metadata/XdocAssociationMetadata.java</a>
                 </td>
                 <td>
                   1

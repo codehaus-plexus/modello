@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pmd version="4.3" timestamp="2015-08-25T16:43:28.722">
-<file name="F:\tmp\modello\modello-plugins\modello-plugin-java\src\main\java\org\codehaus\modello\plugin\java\JavaModelloGenerator.java">
+<pmd version="4.3" timestamp="2015-09-13T20:14:56.226">
+<file name="/home/herve/projets/maven/plexus/modello/modello-plugins/modello-plugin-java/src/main/java/org/codehaus/modello/plugin/java/JavaModelloGenerator.java">
 <violation beginline="266" endline="273" begincolumn="17" endcolumn="17" rule="CollapsibleIfStatements" ruleset="Basic Rules" package="org.codehaus.modello.plugin.java" class="JavaModelloGenerator" method="generateJava" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#CollapsibleIfStatements" priority="3">
 These nested if statements could be combined
 </violation>
@@ -11,22 +11,22 @@ These nested if statements could be combined
 These nested if statements could be combined
 </violation>
 </file>
-<file name="F:\tmp\modello\modello-plugins\modello-plugin-java\src\main\java\org\codehaus\modello\plugin\java\javasource\JClass.java">
+<file name="/home/herve/projets/maven/plexus/modello/modello-plugins/modello-plugin-java/src/main/java/org/codehaus/modello/plugin/java/javasource/JClass.java">
 <violation beginline="287" endline="292" begincolumn="17" endcolumn="17" rule="CollapsibleIfStatements" ruleset="Basic Rules" package="org.codehaus.modello.plugin.java.javasource" class="JClass" method="addMethod" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#CollapsibleIfStatements" priority="3">
 These nested if statements could be combined
 </violation>
 </file>
-<file name="F:\tmp\modello\modello-plugins\modello-plugin-java\src\main\java\org\codehaus\modello\plugin\java\javasource\JDocComment.java">
+<file name="/home/herve/projets/maven/plexus/modello/modello-plugins/modello-plugin-java/src/main/java/org/codehaus/modello/plugin/java/javasource/JDocComment.java">
 <violation beginline="203" endline="204" begincolumn="17" endcolumn="31" rule="CollapsibleIfStatements" ruleset="Basic Rules" package="org.codehaus.modello.plugin.java.javasource" class="JDocComment" method="getParamDescriptor" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#CollapsibleIfStatements" priority="3">
 These nested if statements could be combined
 </violation>
 </file>
-<file name="F:\tmp\modello\modello-plugins\modello-plugin-java\src\main\java\org\codehaus\modello\plugin\java\javasource\JInterface.java">
+<file name="/home/herve/projets/maven/plexus/modello/modello-plugins/modello-plugin-java/src/main/java/org/codehaus/modello/plugin/java/javasource/JInterface.java">
 <violation beginline="232" endline="237" begincolumn="17" endcolumn="17" rule="CollapsibleIfStatements" ruleset="Basic Rules" package="org.codehaus.modello.plugin.java.javasource" class="JInterface" method="addMethod" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#CollapsibleIfStatements" priority="3">
 These nested if statements could be combined
 </violation>
 </file>
-<file name="F:\tmp\modello\modello-plugins\modello-plugin-java\src\main\java\org\codehaus\modello\plugin\java\javasource\JSourceWriter.java">
+<file name="/home/herve/projets/maven/plexus/modello/modello-plugins/modello-plugin-java/src/main/java/org/codehaus/modello/plugin/java/javasource/JSourceWriter.java">
 <violation beginline="289" endline="291" begincolumn="13" endcolumn="13" rule="EmptyCatchBlock" ruleset="Basic Rules" package="org.codehaus.modello.plugin.java.javasource" class="JSourceWriter" method="writeln" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyCatchBlock" priority="3">
 Avoid empty catch blocks
 </violation>

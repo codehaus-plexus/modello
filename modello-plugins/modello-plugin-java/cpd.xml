@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pmd-cpd>
 <duplication lines="30" tokens="216">
-<file line="946" path="F:\tmp\modello\modello-plugins\modello-plugin-java\src\main\java\org\codehaus\modello\plugin\java\JavaModelloGenerator.java"/>
-<file line="993" path="F:\tmp\modello\modello-plugins\modello-plugin-java\src\main\java\org\codehaus\modello\plugin\java\JavaModelloGenerator.java"/>
+<file line="946" path="/home/herve/projets/maven/plexus/modello/modello-plugins/modello-plugin-java/src/main/java/org/codehaus/modello/plugin/java/JavaModelloGenerator.java"/>
+<file line="993" path="/home/herve/projets/maven/plexus/modello/modello-plugins/modello-plugin-java/src/main/java/org/codehaus/modello/plugin/java/JavaModelloGenerator.java"/>
 <codefragment>
 <![CDATA[
         sc = jMethod.getSourceCode();
@@ -39,8 +39,8 @@
 </codefragment>
 </duplication>
 <duplication lines="25" tokens="135">
-<file line="1426" path="F:\tmp\modello\modello-plugins\modello-plugin-java\src\main\java\org\codehaus\modello\plugin\java\JavaModelloGenerator.java"/>
-<file line="2154" path="F:\tmp\modello\modello-plugins\modello-plugin-java\src\main\java\org\codehaus\modello\plugin\java\JavaModelloGenerator.java"/>
+<file line="1426" path="/home/herve/projets/maven/plexus/modello/modello-plugins/modello-plugin-java/src/main/java/org/codehaus/modello/plugin/java/JavaModelloGenerator.java"/>
+<file line="2154" path="/home/herve/projets/maven/plexus/modello/modello-plugins/modello-plugin-java/src/main/java/org/codehaus/modello/plugin/java/JavaModelloGenerator.java"/>
 <codefragment>
 <![CDATA[
         JavaAssociationMetadata javaAssociationMetadata = getJavaAssociationMetadata( modelAssociation );
@@ -72,8 +72,8 @@
 </codefragment>
 </duplication>
 <duplication lines="27" tokens="123">
-<file line="688" path="F:\tmp\modello\modello-plugins\modello-plugin-java\src\main\java\org\codehaus\modello\plugin\java\javasource\JClass.java"/>
-<file line="455" path="F:\tmp\modello\modello-plugins\modello-plugin-java\src\main\java\org\codehaus\modello\plugin\java\javasource\JInterface.java"/>
+<file line="688" path="/home/herve/projets/maven/plexus/modello/modello-plugins/modello-plugin-java/src/main/java/org/codehaus/modello/plugin/java/javasource/JClass.java"/>
+<file line="455" path="/home/herve/projets/maven/plexus/modello/modello-plugins/modello-plugin-java/src/main/java/org/codehaus/modello/plugin/java/javasource/JInterface.java"/>
 <codefragment>
 <![CDATA[
             if ( fieldAnnotations != null ) fieldAnnotations.print( jsw );
@@ -107,8 +107,8 @@
 </codefragment>
 </duplication>
 <duplication lines="30" tokens="108">
-<file line="288" path="F:\tmp\modello\modello-plugins\modello-plugin-java\src\main\java\org\codehaus\modello\plugin\java\javasource\JCompUnit.java"/>
-<file line="378" path="F:\tmp\modello\modello-plugins\modello-plugin-java\src\main\java\org\codehaus\modello\plugin\java\javasource\JStructure.java"/>
+<file line="288" path="/home/herve/projets/maven/plexus/modello/modello-plugins/modello-plugin-java/src/main/java/org/codehaus/modello/plugin/java/javasource/JCompUnit.java"/>
+<file line="378" path="/home/herve/projets/maven/plexus/modello/modello-plugins/modello-plugin-java/src/main/java/org/codehaus/modello/plugin/java/javasource/JStructure.java"/>
 <codefragment>
 <![CDATA[
         String javaPackagePath = "";

@@ -3,19 +3,19 @@
 <rss version="0.91">
   <channel>
     <title>Modello Maven Plugin - Checkstyle report</title>
-    <link>http://modello.codehaus.org/modello-maven-plugin/</link>
+    <link>http://codehaus-plexus.github.io/modello/modello-maven-plugin/</link>
     <description>Modello Maven Plugin - Checkstyle report</description>
     <language>en-us</language>
-    <copyright>&#169;2001 - 2015 Codehaus</copyright>
+    <copyright>&#169;2001 - 2015 Codehaus Plexus</copyright>
     <item>
       <title>File: 22,
              Errors: 22,
              Warnings: 49,
              Infos: 0
       </title>
-            <link>http://modello.codehaus.org/modello-maven-plugin//checkstyle.html</link>
+            <link>http://codehaus-plexus.github.io/modello/modello-maven-plugin//checkstyle.html</link>
       <description>
-        <p>Click <a href="http://modello.codehaus.org/modello-maven-plugin//checkstyle.html">here</a> for the full Checkstyle report.</p>
+        <p>Click <a href="http://codehaus-plexus.github.io/modello/modello-maven-plugin//checkstyle.html">here</a> for the full Checkstyle report.</p>
 
         <table summary="Files" boder="1">
           <thead>
@@ -29,7 +29,7 @@
           <tbody>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.ModelloSaxWriterMojo.java">org/codehaus/modello/maven/ModelloSaxWriterMojo.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.ModelloJacksonReaderMojo.java">org/codehaus/modello/maven/ModelloJacksonReaderMojo.java</a>
                 </td>
                 <td>
                   0
@@ -43,7 +43,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.ModelloJacksonReaderMojo.java">org/codehaus/modello/maven/ModelloJacksonReaderMojo.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.ModelloSaxWriterMojo.java">org/codehaus/modello/maven/ModelloSaxWriterMojo.java</a>
                 </td>
                 <td>
                   0
@@ -57,7 +57,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.ModelloDom4jReaderMojo.java">org/codehaus/modello/maven/ModelloDom4jReaderMojo.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.ModelloDom4jReaderMojo.java">org/codehaus/modello/maven/ModelloDom4jReaderMojo.java</a>
                 </td>
                 <td>
                   0
@@ -71,7 +71,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.ModelloJsonSchemaGeneratorMojo.java">org/codehaus/modello/maven/ModelloJsonSchemaGeneratorMojo.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.ModelloJsonSchemaGeneratorMojo.java">org/codehaus/modello/maven/ModelloJsonSchemaGeneratorMojo.java</a>
                 </td>
                 <td>
                   0
@@ -85,7 +85,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.ModelloGenerateMojo.java">org/codehaus/modello/maven/ModelloGenerateMojo.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.ModelloGenerateMojo.java">org/codehaus/modello/maven/ModelloGenerateMojo.java</a>
                 </td>
                 <td>
                   0
@@ -99,7 +99,35 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.ModelloXdocMojo.java">org/codehaus/modello/maven/ModelloXdocMojo.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.ModelloStaxReaderMojo.java">org/codehaus/modello/maven/ModelloStaxReaderMojo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.ModelloJacksonWriterMojo.java">org/codehaus/modello/maven/ModelloJacksonWriterMojo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.ModelloXdocMojo.java">org/codehaus/modello/maven/ModelloXdocMojo.java</a>
                 </td>
                 <td>
                   0
@@ -113,7 +141,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.ModelloStaxReaderMojo.java">org/codehaus/modello/maven/ModelloStaxReaderMojo.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.ModelloJDOMWriterMojo.java">org/codehaus/modello/maven/ModelloJDOMWriterMojo.java</a>
                 </td>
                 <td>
                   0
@@ -127,7 +155,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.ModelloJacksonWriterMojo.java">org/codehaus/modello/maven/ModelloJacksonWriterMojo.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.ModelloXpp3WriterMojo.java">org/codehaus/modello/maven/ModelloXpp3WriterMojo.java</a>
                 </td>
                 <td>
                   0
@@ -141,7 +169,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.ModelloJDOMWriterMojo.java">org/codehaus/modello/maven/ModelloJDOMWriterMojo.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.ModelloDom4jWriterMojo.java">org/codehaus/modello/maven/ModelloDom4jWriterMojo.java</a>
                 </td>
                 <td>
                   0
@@ -155,35 +183,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.ModelloXpp3WriterMojo.java">org/codehaus/modello/maven/ModelloXpp3WriterMojo.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  1
-                </td>
-                <td>
-                  1
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://modello.codehaus.org/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.ModelloDom4jWriterMojo.java">org/codehaus/modello/maven/ModelloDom4jWriterMojo.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  1
-                </td>
-                <td>
-                  1
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://modello.codehaus.org/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.ModelloJacksonExtendedReaderMojo.java">org/codehaus/modello/maven/ModelloJacksonExtendedReaderMojo.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.ModelloJacksonExtendedReaderMojo.java">org/codehaus/modello/maven/ModelloJacksonExtendedReaderMojo.java</a>
                 </td>
                 <td>
                   0
@@ -197,7 +197,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.AbstractModelloSourceGeneratorMojo.java">org/codehaus/modello/maven/AbstractModelloSourceGeneratorMojo.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.AbstractModelloSourceGeneratorMojo.java">org/codehaus/modello/maven/AbstractModelloSourceGeneratorMojo.java</a>
                 </td>
                 <td>
                   0
@@ -211,7 +211,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.ModelloConvertersMojo.java">org/codehaus/modello/maven/ModelloConvertersMojo.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.ModelloConvertersMojo.java">org/codehaus/modello/maven/ModelloConvertersMojo.java</a>
                 </td>
                 <td>
                   0
@@ -225,7 +225,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.AbstractModelloGeneratorMojo.java">org/codehaus/modello/maven/AbstractModelloGeneratorMojo.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.AbstractModelloGeneratorMojo.java">org/codehaus/modello/maven/AbstractModelloGeneratorMojo.java</a>
                 </td>
                 <td>
                   0
@@ -239,7 +239,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.ModelloXsdMojo.java">org/codehaus/modello/maven/ModelloXsdMojo.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.ModelloXsdMojo.java">org/codehaus/modello/maven/ModelloXsdMojo.java</a>
                 </td>
                 <td>
                   0
@@ -253,7 +253,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.ModelloXpp3ExtendedReaderMojo.java">org/codehaus/modello/maven/ModelloXpp3ExtendedReaderMojo.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.ModelloXpp3ExtendedReaderMojo.java">org/codehaus/modello/maven/ModelloXpp3ExtendedReaderMojo.java</a>
                 </td>
                 <td>
                   0
@@ -267,7 +267,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.ModelloSnakeYamlReaderMojo.java">org/codehaus/modello/maven/ModelloSnakeYamlReaderMojo.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.ModelloSnakeYamlReaderMojo.java">org/codehaus/modello/maven/ModelloSnakeYamlReaderMojo.java</a>
                 </td>
                 <td>
                   0
@@ -281,7 +281,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.ModelloStaxWriterMojo.java">org/codehaus/modello/maven/ModelloStaxWriterMojo.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.ModelloStaxWriterMojo.java">org/codehaus/modello/maven/ModelloStaxWriterMojo.java</a>
                 </td>
                 <td>
                   0
@@ -295,7 +295,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.ModelloXpp3ReaderMojo.java">org/codehaus/modello/maven/ModelloXpp3ReaderMojo.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.ModelloXpp3ReaderMojo.java">org/codehaus/modello/maven/ModelloXpp3ReaderMojo.java</a>
                 </td>
                 <td>
                   0
@@ -309,7 +309,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.ModelloJavaMojo.java">org/codehaus/modello/maven/ModelloJavaMojo.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.ModelloJavaMojo.java">org/codehaus/modello/maven/ModelloJavaMojo.java</a>
                 </td>
                 <td>
                   0
@@ -323,7 +323,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.ModelloSnakeYamlWriterMojo.java">org/codehaus/modello/maven/ModelloSnakeYamlWriterMojo.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.ModelloSnakeYamlWriterMojo.java">org/codehaus/modello/maven/ModelloSnakeYamlWriterMojo.java</a>
                 </td>
                 <td>
                   0

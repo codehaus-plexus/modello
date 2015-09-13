@@ -3,19 +3,19 @@
 <rss version="0.91">
   <channel>
     <title>Modello Java Plugin - Checkstyle report</title>
-    <link>http://modello.codehaus.org/modello-plugins/modello-plugin-java/</link>
+    <link>http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-java/</link>
     <description>Modello Java Plugin - Checkstyle report</description>
     <language>en-us</language>
-    <copyright>&#169;2001 - 2015 Codehaus</copyright>
+    <copyright>&#169;2001 - 2015 Codehaus Plexus</copyright>
     <item>
       <title>File: 32,
              Errors: 274,
              Warnings: 170,
              Infos: 38
       </title>
-            <link>http://modello.codehaus.org/modello-plugins/modello-plugin-java//checkstyle.html</link>
+            <link>http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-java//checkstyle.html</link>
       <description>
-        <p>Click <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-java//checkstyle.html">here</a> for the full Checkstyle report.</p>
+        <p>Click <a href="http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-java//checkstyle.html">here</a> for the full Checkstyle report.</p>
 
         <table summary="Files" boder="1">
           <thead>
@@ -29,7 +29,7 @@
           <tbody>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-java//checkstyle.html#org.codehaus.modello.plugin.java.javasource.JField.java">org/codehaus/modello/plugin/java/javasource/JField.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-java//checkstyle.html#org.codehaus.modello.plugin.java.javasource.JField.java">org/codehaus/modello/plugin/java/javasource/JField.java</a>
                 </td>
                 <td>
                   0
@@ -43,7 +43,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-java//checkstyle.html#org.codehaus.modello.plugin.java.javasource.JMapType.java">org/codehaus/modello/plugin/java/javasource/JMapType.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-java//checkstyle.html#org.codehaus.modello.plugin.java.javasource.JMapType.java">org/codehaus/modello/plugin/java/javasource/JMapType.java</a>
                 </td>
                 <td>
                   0
@@ -57,21 +57,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-java//checkstyle.html#org.codehaus.modello.plugin.java.javasource.JArrayType.java">org/codehaus/modello/plugin/java/javasource/JArrayType.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  1
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-java//checkstyle.html#org.codehaus.modello.plugin.java.javasource.JNamedMap.java">org/codehaus/modello/plugin/java/javasource/JNamedMap.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-java//checkstyle.html#org.codehaus.modello.plugin.java.javasource.JNamedMap.java">org/codehaus/modello/plugin/java/javasource/JNamedMap.java</a>
                 </td>
                 <td>
                   0
@@ -85,7 +71,21 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-java//checkstyle.html#org.codehaus.modello.plugin.java.javasource.JMember.java">org/codehaus/modello/plugin/java/javasource/JMember.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-java//checkstyle.html#org.codehaus.modello.plugin.java.javasource.JArrayType.java">org/codehaus/modello/plugin/java/javasource/JArrayType.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-java//checkstyle.html#org.codehaus.modello.plugin.java.javasource.JMember.java">org/codehaus/modello/plugin/java/javasource/JMember.java</a>
                 </td>
                 <td>
                   0
@@ -99,7 +99,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-java//checkstyle.html#org.codehaus.modello.plugin.java.metadata.JavaMetadataPlugin.java">org/codehaus/modello/plugin/java/metadata/JavaMetadataPlugin.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-java//checkstyle.html#org.codehaus.modello.plugin.java.metadata.JavaMetadataPlugin.java">org/codehaus/modello/plugin/java/metadata/JavaMetadataPlugin.java</a>
                 </td>
                 <td>
                   11
@@ -113,7 +113,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-java//checkstyle.html#org.codehaus.modello.plugin.java.javasource.JType.java">org/codehaus/modello/plugin/java/javasource/JType.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-java//checkstyle.html#org.codehaus.modello.plugin.java.javasource.JType.java">org/codehaus/modello/plugin/java/javasource/JType.java</a>
                 </td>
                 <td>
                   8
@@ -127,7 +127,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-java//checkstyle.html#org.codehaus.modello.plugin.java.javasource.JModifiers.java">org/codehaus/modello/plugin/java/javasource/JModifiers.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-java//checkstyle.html#org.codehaus.modello.plugin.java.javasource.JModifiers.java">org/codehaus/modello/plugin/java/javasource/JModifiers.java</a>
                 </td>
                 <td>
                   0
@@ -141,7 +141,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-java//checkstyle.html#org.codehaus.modello.plugin.java.metadata.JavaFieldMetadata.java">org/codehaus/modello/plugin/java/metadata/JavaFieldMetadata.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-java//checkstyle.html#org.codehaus.modello.plugin.java.metadata.JavaFieldMetadata.java">org/codehaus/modello/plugin/java/metadata/JavaFieldMetadata.java</a>
                 </td>
                 <td>
                   1
@@ -155,7 +155,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-java//checkstyle.html#org.codehaus.modello.plugin.java.metadata.JavaClassMetadata.java">org/codehaus/modello/plugin/java/metadata/JavaClassMetadata.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-java//checkstyle.html#org.codehaus.modello.plugin.java.metadata.JavaClassMetadata.java">org/codehaus/modello/plugin/java/metadata/JavaClassMetadata.java</a>
                 </td>
                 <td>
                   5
@@ -169,7 +169,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-java//checkstyle.html#org.codehaus.modello.plugin.java.javasource.JSourceCode.java">org/codehaus/modello/plugin/java/javasource/JSourceCode.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-java//checkstyle.html#org.codehaus.modello.plugin.java.javasource.JSourceCode.java">org/codehaus/modello/plugin/java/javasource/JSourceCode.java</a>
                 </td>
                 <td>
                   0
@@ -183,21 +183,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-java//checkstyle.html#org.codehaus.modello.plugin.java.javasource.JDocDescriptor.java">org/codehaus/modello/plugin/java/javasource/JDocDescriptor.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  1
-                </td>
-                <td>
-                  2
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-java//checkstyle.html#org.codehaus.modello.plugin.java.javasource.JCompUnit.java">org/codehaus/modello/plugin/java/javasource/JCompUnit.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-java//checkstyle.html#org.codehaus.modello.plugin.java.javasource.JCompUnit.java">org/codehaus/modello/plugin/java/javasource/JCompUnit.java</a>
                 </td>
                 <td>
                   0
@@ -211,7 +197,21 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-java//checkstyle.html#org.codehaus.modello.plugin.java.javasource.JNaming.java">org/codehaus/modello/plugin/java/javasource/JNaming.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-java//checkstyle.html#org.codehaus.modello.plugin.java.javasource.JDocDescriptor.java">org/codehaus/modello/plugin/java/javasource/JDocDescriptor.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  2
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-java//checkstyle.html#org.codehaus.modello.plugin.java.javasource.JNaming.java">org/codehaus/modello/plugin/java/javasource/JNaming.java</a>
                 </td>
                 <td>
                   0
@@ -225,7 +225,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-java//checkstyle.html#org.codehaus.modello.plugin.java.javasource.JSourceWriter.java">org/codehaus/modello/plugin/java/javasource/JSourceWriter.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-java//checkstyle.html#org.codehaus.modello.plugin.java.javasource.JSourceWriter.java">org/codehaus/modello/plugin/java/javasource/JSourceWriter.java</a>
                 </td>
                 <td>
                   0
@@ -239,7 +239,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-java//checkstyle.html#org.codehaus.modello.plugin.java.metadata.JavaInterfaceMetadata.java">org/codehaus/modello/plugin/java/metadata/JavaInterfaceMetadata.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-java//checkstyle.html#org.codehaus.modello.plugin.java.metadata.JavaInterfaceMetadata.java">org/codehaus/modello/plugin/java/metadata/JavaInterfaceMetadata.java</a>
                 </td>
                 <td>
                   1
@@ -253,7 +253,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-java//checkstyle.html#org.codehaus.modello.plugin.java.javasource.JInterface.java">org/codehaus/modello/plugin/java/javasource/JInterface.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-java//checkstyle.html#org.codehaus.modello.plugin.java.javasource.JInterface.java">org/codehaus/modello/plugin/java/javasource/JInterface.java</a>
                 </td>
                 <td>
                   0
@@ -267,7 +267,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-java//checkstyle.html#org.codehaus.modello.plugin.java.javasource.JAnnotations.java">org/codehaus/modello/plugin/java/javasource/JAnnotations.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-java//checkstyle.html#org.codehaus.modello.plugin.java.javasource.JAnnotations.java">org/codehaus/modello/plugin/java/javasource/JAnnotations.java</a>
                 </td>
                 <td>
                   0
@@ -281,7 +281,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-java//checkstyle.html#org.codehaus.modello.plugin.java.javasource.JCollectionType.java">org/codehaus/modello/plugin/java/javasource/JCollectionType.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-java//checkstyle.html#org.codehaus.modello.plugin.java.javasource.JCollectionType.java">org/codehaus/modello/plugin/java/javasource/JCollectionType.java</a>
                 </td>
                 <td>
                   0
@@ -295,7 +295,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-java//checkstyle.html#org.codehaus.modello.plugin.java.javasource.JDocComment.java">org/codehaus/modello/plugin/java/javasource/JDocComment.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-java//checkstyle.html#org.codehaus.modello.plugin.java.javasource.JDocComment.java">org/codehaus/modello/plugin/java/javasource/JDocComment.java</a>
                 </td>
                 <td>
                   0
@@ -309,7 +309,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-java//checkstyle.html#org.codehaus.modello.plugin.java.javasource.JMethod.java">org/codehaus/modello/plugin/java/javasource/JMethod.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-java//checkstyle.html#org.codehaus.modello.plugin.java.javasource.JMethod.java">org/codehaus/modello/plugin/java/javasource/JMethod.java</a>
                 </td>
                 <td>
                   0
@@ -323,7 +323,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-java//checkstyle.html#org.codehaus.modello.plugin.java.AbstractJavaModelloGenerator.java">org/codehaus/modello/plugin/java/AbstractJavaModelloGenerator.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-java//checkstyle.html#org.codehaus.modello.plugin.java.AbstractJavaModelloGenerator.java">org/codehaus/modello/plugin/java/AbstractJavaModelloGenerator.java</a>
                 </td>
                 <td>
                   3
@@ -337,7 +337,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-java//checkstyle.html#org.codehaus.modello.plugin.java.javasource.JClass.java">org/codehaus/modello/plugin/java/javasource/JClass.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-java//checkstyle.html#org.codehaus.modello.plugin.java.javasource.JClass.java">org/codehaus/modello/plugin/java/javasource/JClass.java</a>
                 </td>
                 <td>
                   0
@@ -351,7 +351,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-java//checkstyle.html#org.codehaus.modello.plugin.java.javasource.JParameter.java">org/codehaus/modello/plugin/java/javasource/JParameter.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-java//checkstyle.html#org.codehaus.modello.plugin.java.javasource.JParameter.java">org/codehaus/modello/plugin/java/javasource/JParameter.java</a>
                 </td>
                 <td>
                   0
@@ -365,7 +365,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-java//checkstyle.html#org.codehaus.modello.plugin.java.metadata.JavaAssociationMetadata.java">org/codehaus/modello/plugin/java/metadata/JavaAssociationMetadata.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-java//checkstyle.html#org.codehaus.modello.plugin.java.metadata.JavaAssociationMetadata.java">org/codehaus/modello/plugin/java/metadata/JavaAssociationMetadata.java</a>
                 </td>
                 <td>
                   8
@@ -379,7 +379,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-java//checkstyle.html#org.codehaus.modello.plugin.java.javasource.JMethodSignature.java">org/codehaus/modello/plugin/java/javasource/JMethodSignature.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-java//checkstyle.html#org.codehaus.modello.plugin.java.javasource.JMethodSignature.java">org/codehaus/modello/plugin/java/javasource/JMethodSignature.java</a>
                 </td>
                 <td>
                   0
@@ -393,7 +393,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-java//checkstyle.html#org.codehaus.modello.plugin.java.javasource.JConstructor.java">org/codehaus/modello/plugin/java/javasource/JConstructor.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-java//checkstyle.html#org.codehaus.modello.plugin.java.javasource.JConstructor.java">org/codehaus/modello/plugin/java/javasource/JConstructor.java</a>
                 </td>
                 <td>
                   0
@@ -407,7 +407,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-java//checkstyle.html#org.codehaus.modello.plugin.java.javasource.JComponentizedType.java">org/codehaus/modello/plugin/java/javasource/JComponentizedType.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-java//checkstyle.html#org.codehaus.modello.plugin.java.javasource.JComponentizedType.java">org/codehaus/modello/plugin/java/javasource/JComponentizedType.java</a>
                 </td>
                 <td>
                   0
@@ -421,7 +421,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-java//checkstyle.html#org.codehaus.modello.plugin.java.javasource.JComment.java">org/codehaus/modello/plugin/java/javasource/JComment.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-java//checkstyle.html#org.codehaus.modello.plugin.java.javasource.JComment.java">org/codehaus/modello/plugin/java/javasource/JComment.java</a>
                 </td>
                 <td>
                   0
@@ -435,7 +435,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-java//checkstyle.html#org.codehaus.modello.plugin.java.javasource.JStructure.java">org/codehaus/modello/plugin/java/javasource/JStructure.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-java//checkstyle.html#org.codehaus.modello.plugin.java.javasource.JStructure.java">org/codehaus/modello/plugin/java/javasource/JStructure.java</a>
                 </td>
                 <td>
                   0
@@ -449,7 +449,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-java//checkstyle.html#org.codehaus.modello.plugin.java.JavaModelloGenerator.java">org/codehaus/modello/plugin/java/JavaModelloGenerator.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-java//checkstyle.html#org.codehaus.modello.plugin.java.JavaModelloGenerator.java">org/codehaus/modello/plugin/java/JavaModelloGenerator.java</a>
                 </td>
                 <td>
                   0
@@ -463,7 +463,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-java//checkstyle.html#org.codehaus.modello.plugin.java.metadata.JavaModelMetadata.java">org/codehaus/modello/plugin/java/metadata/JavaModelMetadata.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-java//checkstyle.html#org.codehaus.modello.plugin.java.metadata.JavaModelMetadata.java">org/codehaus/modello/plugin/java/metadata/JavaModelMetadata.java</a>
                 </td>
                 <td>
                   1

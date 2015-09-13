@@ -3,19 +3,19 @@
 <rss version="0.91">
   <channel>
     <title>Modello SnakeYaml Plugin - Checkstyle report</title>
-    <link>http://modello.codehaus.org/modello-plugins/modello-plugin-snakeyaml/</link>
+    <link>http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-snakeyaml/</link>
     <description>Modello SnakeYaml Plugin - Checkstyle report</description>
     <language>en-us</language>
-    <copyright>&#169;2001 - 2015 Codehaus</copyright>
+    <copyright>&#169;2001 - 2015 Codehaus Plexus</copyright>
     <item>
       <title>File: 4,
              Errors: 35,
              Warnings: 3,
              Infos: 0
       </title>
-            <link>http://modello.codehaus.org/modello-plugins/modello-plugin-snakeyaml//checkstyle.html</link>
+            <link>http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-snakeyaml//checkstyle.html</link>
       <description>
-        <p>Click <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-snakeyaml//checkstyle.html">here</a> for the full Checkstyle report.</p>
+        <p>Click <a href="http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-snakeyaml//checkstyle.html">here</a> for the full Checkstyle report.</p>
 
         <table summary="Files" boder="1">
           <thead>
@@ -29,7 +29,7 @@
           <tbody>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-snakeyaml//checkstyle.html#org.codehaus.modello.plugin.snakeyaml.SnakeYamlReaderGenerator.java">org/codehaus/modello/plugin/snakeyaml/SnakeYamlReaderGenerator.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-snakeyaml//checkstyle.html#org.codehaus.modello.plugin.snakeyaml.SnakeYamlReaderGenerator.java">org/codehaus/modello/plugin/snakeyaml/SnakeYamlReaderGenerator.java</a>
                 </td>
                 <td>
                   0
@@ -43,7 +43,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-snakeyaml//checkstyle.html#org.codehaus.modello.plugin.snakeyaml.SnakeYamlWriterGenerator.java">org/codehaus/modello/plugin/snakeyaml/SnakeYamlWriterGenerator.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-snakeyaml//checkstyle.html#org.codehaus.modello.plugin.snakeyaml.SnakeYamlWriterGenerator.java">org/codehaus/modello/plugin/snakeyaml/SnakeYamlWriterGenerator.java</a>
                 </td>
                 <td>
                   0
@@ -57,7 +57,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-snakeyaml//checkstyle.html#org.codehaus.modello.plugin.snakeyaml.AbstractSnakeYamlGenerator.java">org/codehaus/modello/plugin/snakeyaml/AbstractSnakeYamlGenerator.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-snakeyaml//checkstyle.html#org.codehaus.modello.plugin.snakeyaml.AbstractSnakeYamlGenerator.java">org/codehaus/modello/plugin/snakeyaml/AbstractSnakeYamlGenerator.java</a>
                 </td>
                 <td>
                   0
@@ -71,7 +71,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-plugins/modello-plugin-snakeyaml//checkstyle.html#org.codehaus.modello.plugin.snakeyaml.SnakeYamlExtendedReaderGenerator.java">org/codehaus/modello/plugin/snakeyaml/SnakeYamlExtendedReaderGenerator.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-snakeyaml//checkstyle.html#org.codehaus.modello.plugin.snakeyaml.SnakeYamlExtendedReaderGenerator.java">org/codehaus/modello/plugin/snakeyaml/SnakeYamlExtendedReaderGenerator.java</a>
                 </td>
                 <td>
                   0

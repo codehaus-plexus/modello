@@ -3,19 +3,19 @@
 <rss version="0.91">
   <channel>
     <title>Modello Test Package - Checkstyle report</title>
-    <link>http://modello.codehaus.org/modello-test/</link>
+    <link>http://codehaus-plexus.github.io/modello/modello-test/</link>
     <description>Modello Test Package - Checkstyle report</description>
     <language>en-us</language>
-    <copyright>&#169;2001 - 2015 Codehaus</copyright>
+    <copyright>&#169;2001 - 2015 Codehaus Plexus</copyright>
     <item>
       <title>File: 5,
              Errors: 9,
              Warnings: 38,
              Infos: 0
       </title>
-            <link>http://modello.codehaus.org/modello-test//checkstyle.html</link>
+            <link>http://codehaus-plexus.github.io/modello/modello-test//checkstyle.html</link>
       <description>
-        <p>Click <a href="http://modello.codehaus.org/modello-test//checkstyle.html">here</a> for the full Checkstyle report.</p>
+        <p>Click <a href="http://codehaus-plexus.github.io/modello/modello-test//checkstyle.html">here</a> for the full Checkstyle report.</p>
 
         <table summary="Files" boder="1">
           <thead>
@@ -29,7 +29,7 @@
           <tbody>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-test//checkstyle.html#org.codehaus.modello.AbstractModelloJavaGeneratorTest.java">org/codehaus/modello/AbstractModelloJavaGeneratorTest.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-test//checkstyle.html#org.codehaus.modello.AbstractModelloJavaGeneratorTest.java">org/codehaus/modello/AbstractModelloJavaGeneratorTest.java</a>
                 </td>
                 <td>
                   0
@@ -43,7 +43,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-test//checkstyle.html#org.codehaus.modello.AbstractModelloGeneratorTest.java">org/codehaus/modello/AbstractModelloGeneratorTest.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-test//checkstyle.html#org.codehaus.modello.AbstractModelloGeneratorTest.java">org/codehaus/modello/AbstractModelloGeneratorTest.java</a>
                 </td>
                 <td>
                   0
@@ -57,7 +57,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-test//checkstyle.html#org.codehaus.modello.verifier.VerifierException.java">org/codehaus/modello/verifier/VerifierException.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-test//checkstyle.html#org.codehaus.modello.verifier.VerifierException.java">org/codehaus/modello/verifier/VerifierException.java</a>
                 </td>
                 <td>
                   0
@@ -71,7 +71,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-test//checkstyle.html#org.codehaus.modello.verifier.Verifier.java">org/codehaus/modello/verifier/Verifier.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-test//checkstyle.html#org.codehaus.modello.verifier.Verifier.java">org/codehaus/modello/verifier/Verifier.java</a>
                 </td>
                 <td>
                   0
@@ -85,7 +85,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://modello.codehaus.org/modello-test//checkstyle.html#org.codehaus.modello.OrderedProperties.java">org/codehaus/modello/OrderedProperties.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-test//checkstyle.html#org.codehaus.modello.OrderedProperties.java">org/codehaus/modello/OrderedProperties.java</a>
                 </td>
                 <td>
                   0

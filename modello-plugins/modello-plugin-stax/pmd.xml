@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pmd version="4.3" timestamp="2015-08-25T16:44:33.680">
-<file name="F:\tmp\modello\modello-plugins\modello-plugin-stax\src\main\java\org\codehaus\modello\plugin\stax\StaxWriterGenerator.java">
+<pmd version="4.3" timestamp="2015-09-13T20:15:29.777">
+<file name="/home/herve/projets/maven/plexus/modello/modello-plugins/modello-plugin-stax/src/main/java/org/codehaus/modello/plugin/stax/StaxWriterGenerator.java">
 <violation beginline="293" endline="296" begincolumn="13" endcolumn="13" rule="CollapsibleIfStatements" ruleset="Basic Rules" package="org.codehaus.modello.plugin.stax" class="StaxWriterGenerator" method="writeClass" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#CollapsibleIfStatements" priority="3">
 These nested if statements could be combined
 </violation>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pmd version="4.3" timestamp="2015-08-25T16:42:50.608">
-<file name="F:\tmp\modello\modello-test\src\main\java\org\codehaus\modello\AbstractModelloJavaGeneratorTest.java">
+<pmd version="4.3" timestamp="2015-09-13T20:14:39.427">
+<file name="/home/herve/projets/maven/plexus/modello/modello-test/src/main/java/org/codehaus/modello/AbstractModelloJavaGeneratorTest.java">
 <violation beginline="28" endline="28" begincolumn="1" endcolumn="50" rule="UnusedImports" ruleset="Import Statement Rules" package="org.codehaus.modello" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
 Avoid unused imports such as 'org.codehaus.plexus.compiler.CompilerError'
 </violation>

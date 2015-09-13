@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pmd version="4.3" timestamp="2015-08-25T16:46:28.806">
-<file name="F:\tmp\modello\modello-plugins\modello-plugin-jdom\src\main\java\org\codehaus\modello\plugin\jdom\JDOMWriterGenerator.java">
+<pmd version="4.3" timestamp="2015-09-13T20:16:24.889">
+<file name="/home/herve/projets/maven/plexus/modello/modello-plugins/modello-plugin-jdom/src/main/java/org/codehaus/modello/plugin/jdom/JDOMWriterGenerator.java">
 <violation beginline="203" endline="221" begincolumn="13" endcolumn="5" rule="UnusedFormalParameter" ruleset="Unused Code Rules" package="org.codehaus.modello.plugin.jdom" class="JDOMWriterGenerator" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedFormalParameter" priority="3">
 Avoid unused method parameters such as 'rootElement'.
 </violation>
