@@ -9,15 +9,25 @@
   <skin>
     <groupId>org.apache.maven.skins</groupId>
     <artifactId>maven-fluido-skin</artifactId>
-    <version>1.2.1</version>
+    <version>1.4</version>
   </skin>
+
+  <custom>
+    <fluidoSkin>
+      <sourceLineNumbersEnabled>true</sourceLineNumbersEnabled>
+      <googlePlusOne />
+      <googleSearch>
+        <sitesearch>http://codehaus-plexus.github.io/modello/</sitesearch>
+      </googleSearch>
+    </fluidoSkin>
+  </custom>
 
   <publishDate format="yyyy-MM-dd" position="right" />
   <version position="right" />
 
   <body>
     <links>
-      <item name="Codehaus Plexus" href="http://github.com/codehaus-plexus/"/>
+      <item name="Codehaus Plexus" href="http://codehaus-plexus.github.io/"/>
       <item name="Apache Maven" href="http://maven.apache.org/"/>
     </links>
 

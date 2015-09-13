@@ -184,8 +184,8 @@
   <scm>
     <connection>scm:git:git@github.com:codehaus-plexus/modello.git</connection>
     <developerConnection>scm:git:git@github.com:codehaus-plexus/modello.git</developerConnection>
-    <url>http://github.com/codehaus-plexus/modello/tree/master</url>
-    <tag>HEAD</tag>
+    <url>http://github.com/codehaus-plexus/modello/tree/${project.scm.tag}/</url>
+    <tag>master</tag>
   </scm>
   <issueManagement>
     <system>github</system>
@@ -213,14 +213,8 @@
       <url>https://oss.sonatype.org/content/repositories/snapshots</url>
     </snapshotRepository>
     <site>
-      <id>codehaus.org</id>
-      <url>dav:https://dav.codehaus.org/modello</url>
-      <!--
-       dav.codehaus.org requires a specific CA
-       see http://docs.codehaus.org/display/HAUSMATES/Installing+a+new+CA+into+the+JDK
-       to avoid following failure:
-       javax.net.ssl.SSLHandshakeException: sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
-      -->
+      <id>github</id>
+      <url>scm:git:git@github.com:codehaus-plexus/modello.git</url>
     </site>
   </distributionManagement>
 
@@ -231,6 +225,10 @@
     <jackson.version>2.1.5</jackson.version>
     <modelloPluginVersion>1.8.3</modelloPluginVersion>
   </properties>
+
+  <prerequisites>
+    <maven>3.0</maven>
+  </prerequisites>
 
   <dependencyManagement>
     <dependencies>
@@ -448,6 +446,11 @@
           </configuration>
         </plugin>
         <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-project-info-reports-plugin</artifactId>
+          <version>2.8.1</version>
+        </plugin>
+        <plugin>
           <artifactId>maven-release-plugin</artifactId>
           <version>2.5.1</version>
           <configuration>
@@ -479,24 +482,10 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-site-plugin</artifactId>
-          <version>3.3</version>
-          <dependencies>
-            <dependency>
-              <groupId>org.apache.maven.wagon</groupId>
-              <artifactId>wagon-webdav-jackrabbit</artifactId>
-              <version>2.2</version>
-            </dependency>
-            <dependency>
-              <groupId>org.slf4j</groupId>
-              <artifactId>slf4j-api</artifactId>
-              <version>1.7.2</version>
-            </dependency>
-            <dependency>
-              <groupId>org.slf4j</groupId>
-              <artifactId>slf4j-simple</artifactId>
-              <version>1.7.2</version>
-            </dependency>
-          </dependencies>
+          <version>3.4</version>
+          <configuration>
+            <skipDeploy>true</skipDeploy><!-- don't deploy site with maven-site-plugin -->
+          </configuration>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -517,7 +506,6 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-project-info-reports-plugin</artifactId>
-        <version>2.7</version>
         <configuration>
           <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
           <offline>true</offline>
@@ -642,7 +630,6 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-project-info-reports-plugin</artifactId>
-            <version>2.7</version>
           </plugin>
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
