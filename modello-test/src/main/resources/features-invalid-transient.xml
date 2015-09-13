@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
-<features-demo xmlns="http://modello.codehaus.org/FEATURES/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   xsi:schemaLocation="http://modello.codehaus.org/FEATURES/1.0.0 http://modello.codehaus.org/features-1.0.0.xsd">
+<features-demo xmlns="http://codehaus-plexus.github.io/FEATURES/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://codehaus-plexus.github.io/FEATURES/1.0.0 http://codehaus-plexus.github.io/features-1.0.0.xsd">
   <xmlFeatures>
     <xmlTransientFields>
       <!-- transient fields should not be part of the schema and should be rejected by parsers -->

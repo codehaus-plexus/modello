@@ -11,8 +11,8 @@
     <type>namespace</type>
   </versionDefinition>
   <classes>
-    <class rootElement="true" xml.tagName="mavenModel" xml.namespace="http://modello.codehaus.org/test/${version}"
-           xml.schemaLocation="http://modello.codehaus.org/xsd/maven-${version}.xsd">
+    <class rootElement="true" xml.tagName="mavenModel" xml.namespace="http://codehaus-plexus.github.io/test/${version}"
+           xml.schemaLocation="http://codehaus-plexus.github.io/modello/xsd/maven-${version}.xsd">
       <name>Model</name>
       <version>3.0.0+</version>
       <fields>

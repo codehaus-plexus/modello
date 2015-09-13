@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-15"?>
 
-<features-demo xmlns="http://modello.codehaus.org/FEATURES/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   xsi:schemaLocation="http://modello.codehaus.org/FEATURES/1.0.0 http://modello.codehaus.org/features-1.0.0.xsd">
+<features-demo xmlns="http://codehaus-plexus.github.io/FEATURES/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://codehaus-plexus.github.io/FEATURES/1.0.0 http://codehaus-plexus.github.io/features-1.0.0.xsd">
   <versionField>1.0.0</versionField>
   <description>encoding check: euro €, OE/oe Œ/œ, S/s hácek Š/š, Z/z hácek Ž/ž, Y diaeresis: Ÿ</description>
 </features-demo>
