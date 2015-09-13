@@ -10,7 +10,7 @@
 
 Modello Maven Plugin
 
-  This plugin makes use of the {{{http://modello.codehaus.org/}Modello}} project.
+  This plugin makes use of the {{{http://codehaus-plexus.github.io/modello/}Modello}} project.
 
 * Goals Overview
 
