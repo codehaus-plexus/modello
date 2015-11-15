@@ -1,1 +1,1 @@
-/home/herve/local/opt/jdk1.7.0_80/jre/../bin/javadoc @options @packages
+/usr/lib/jvm/java-7-openjdk-amd64/jre/../bin/javadoc @options @packages

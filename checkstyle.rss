@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
 
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
 <rss version="0.91">
   <channel>
     <title>Modello - Checkstyle report</title>
@@ -9,8 +26,8 @@
     <copyright>&#169;2001 - 2015 Codehaus Plexus</copyright>
     <item>
       <title>File: 152,
-             Errors: 718,
-             Warnings: 615,
+             Errors: 673,
+             Warnings: 614,
              Infos: 117
       </title>
             <link>http://codehaus-plexus.github.io/modello//checkstyle.html</link>
@@ -178,7 +195,7 @@
                   3
                 </td>
                 <td>
-                  11
+                  10
                 </td>
               </tr>
                           <tr>
@@ -234,7 +251,7 @@
                   4
                 </td>
                 <td>
-                  14
+                  10
                 </td>
               </tr>
                           <tr>
@@ -346,7 +363,7 @@
                   4
                 </td>
                 <td>
-                  3
+                  1
                 </td>
               </tr>
                           <tr>
@@ -360,7 +377,7 @@
                   18
                 </td>
                 <td>
-                  3
+                  1
                 </td>
               </tr>
                           <tr>
@@ -514,7 +531,7 @@
                   4
                 </td>
                 <td>
-                  4
+                  3
                 </td>
               </tr>
                           <tr>
@@ -570,7 +587,7 @@
                   5
                 </td>
                 <td>
-                  7
+                  5
                 </td>
               </tr>
                           <tr>
@@ -875,10 +892,10 @@
                   0
                 </td>
                 <td>
-                  21
+                  20
                 </td>
                 <td>
-                  26
+                  20
                 </td>
               </tr>
                           <tr>
@@ -920,7 +937,7 @@
                   1
                 </td>
                 <td>
-                  6
+                  5
                 </td>
               </tr>
                           <tr>
@@ -962,7 +979,7 @@
                   8
                 </td>
                 <td>
-                  10
+                  9
                 </td>
               </tr>
                           <tr>
@@ -995,20 +1012,6 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://codehaus-plexus.github.io/modello//checkstyle.html#org.codehaus.modello.plugin.stax.AbstractStaxGenerator.java">org/codehaus/modello/plugin/stax/AbstractStaxGenerator.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  3
-                </td>
-                <td>
-                  1
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="http://codehaus-plexus.github.io/modello//checkstyle.html#org.codehaus.modello.plugin.stax.StaxWriterGenerator.java">org/codehaus/modello/plugin/stax/StaxWriterGenerator.java</a>
                 </td>
                 <td>
@@ -1019,6 +1022,20 @@
                 </td>
                 <td>
                   7
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://codehaus-plexus.github.io/modello//checkstyle.html#org.codehaus.modello.plugin.stax.AbstractStaxGenerator.java">org/codehaus/modello/plugin/stax/AbstractStaxGenerator.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  3
+                </td>
+                <td>
+                  1
                 </td>
               </tr>
                           <tr>
@@ -1060,7 +1077,7 @@
                   12
                 </td>
                 <td>
-                  25
+                  22
                 </td>
               </tr>
                           <tr>
@@ -1200,7 +1217,7 @@
                   16
                 </td>
                 <td>
-                  5
+                  4
                 </td>
               </tr>
                           <tr>
@@ -1242,7 +1259,7 @@
                   19
                 </td>
                 <td>
-                  8
+                  4
                 </td>
               </tr>
                           <tr>
@@ -1382,7 +1399,7 @@
                   10
                 </td>
                 <td>
-                  5
+                  4
                 </td>
               </tr>
                           <tr>
@@ -1410,7 +1427,7 @@
                   2
                 </td>
                 <td>
-                  2
+                  1
                 </td>
               </tr>
                           <tr>
@@ -1564,7 +1581,7 @@
                   24
                 </td>
                 <td>
-                  4
+                  3
                 </td>
               </tr>
                           <tr>
@@ -1844,21 +1861,7 @@
                   1
                 </td>
                 <td>
-                  4
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://codehaus-plexus.github.io/modello//checkstyle.html#org.codehaus.modello.core.io.ModelReader.java">org/codehaus/modello/core/io/ModelReader.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  7
-                </td>
-                <td>
-                  19
+                  3
                 </td>
               </tr>
                           <tr>
@@ -1873,6 +1876,20 @@
                 </td>
                 <td>
                   1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://codehaus-plexus.github.io/modello//checkstyle.html#org.codehaus.modello.core.io.ModelReader.java">org/codehaus/modello/core/io/ModelReader.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  7
+                </td>
+                <td>
+                  8
                 </td>
               </tr>
                           <tr>
@@ -2031,6 +2048,20 @@
               </tr>
                           <tr>
                 <td>
+                  <a href="http://codehaus-plexus.github.io/modello//checkstyle.html#org.codehaus.modello.plugin.java.javasource.JMethodSignature.java">org/codehaus/modello/plugin/java/javasource/JMethodSignature.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  3
+                </td>
+                <td>
+                  12
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="http://codehaus-plexus.github.io/modello//checkstyle.html#org.codehaus.modello.plugin.java.metadata.JavaAssociationMetadata.java">org/codehaus/modello/plugin/java/metadata/JavaAssociationMetadata.java</a>
                 </td>
                 <td>
@@ -2041,20 +2072,6 @@
                 </td>
                 <td>
                   1
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://codehaus-plexus.github.io/modello//checkstyle.html#org.codehaus.modello.plugin.java.javasource.JMethodSignature.java">org/codehaus/modello/plugin/java/javasource/JMethodSignature.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  3
-                </td>
-                <td>
-                  13
                 </td>
               </tr>
                           <tr>
@@ -2082,7 +2099,7 @@
                   1
                 </td>
                 <td>
-                  19
+                  18
                 </td>
               </tr>
                           <tr>
