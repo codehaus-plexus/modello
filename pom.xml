@@ -11,7 +11,7 @@
     Modello is a framework for code generation from a simple model.
     Modello generates code from a simple model format: based on a plugin architecture, various types of code and
     descriptors can be generated from the single model, including Java POJOs, XML/JSON/YAML marshallers/unmarshallers,
-    XSD and documentation.
+    XSD, JSON Schema and documentation.
   </description>
   <url>http://codehaus-plexus.github.io/modello/</url>
   <inceptionYear>2001</inceptionYear>
@@ -221,7 +221,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <maven.version>2.0.7</maven.version>
+    <maven.version>3.0</maven.version>
     <jackson.version>2.1.5</jackson.version>
     <modelloPluginVersion>1.8.3</modelloPluginVersion>
   </properties>
@@ -325,12 +325,12 @@
       </dependency>
       <dependency>
         <groupId>org.apache.maven</groupId>
-        <artifactId>maven-project</artifactId>
+        <artifactId>maven-model</artifactId>
         <version>${maven.version}</version>
       </dependency>
       <dependency>
         <groupId>org.apache.maven</groupId>
-        <artifactId>maven-model</artifactId>
+        <artifactId>maven-core</artifactId>
         <version>${maven.version}</version>
       </dependency>
       <dependency>
@@ -346,7 +346,7 @@
       <dependency>
         <groupId>org.codehaus.plexus</groupId>
         <artifactId>plexus-utils</artifactId>
-        <version>3.0.13</version>
+        <version>3.0.22</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.plexus</groupId>
@@ -490,7 +490,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
-          <version>2.14.1</version>
+          <version>2.18.1</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -634,12 +634,12 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-surefire-report-plugin</artifactId>
-            <version>2.14.1</version>
+            <version>2.18.1</version>
           </plugin>
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-checkstyle-plugin</artifactId>
-            <version>2.9.1</version>
+            <version>2.17</version>
             <configuration>
               <configLocation>config/maven_checks.xml</configLocation>
               <headerLocation>config/maven-header.txt</headerLocation>
@@ -648,7 +648,7 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-pmd-plugin</artifactId>
-            <version>2.7.1</version>
+            <version>3.5</version>
             <configuration>
               <targetJdk>1.5</targetJdk>
               <rulesets>

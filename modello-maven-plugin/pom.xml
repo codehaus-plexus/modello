@@ -17,7 +17,7 @@
   </description>
 
   <prerequisites>
-    <maven>2.0.6</maven>
+    <maven>3.0</maven>
   </prerequisites>
 
   <properties>
@@ -35,11 +35,11 @@
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
-      <artifactId>maven-project</artifactId>
+      <artifactId>maven-model</artifactId>
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
-      <artifactId>maven-model</artifactId>
+      <artifactId>maven-core</artifactId>
     </dependency>
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
@@ -186,7 +186,7 @@
               <localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
               <debug>true</debug>
               <filterProperties>
-                <plexusUtilsVersion>3.0.8</plexusUtilsVersion>
+                <plexusUtilsVersion>3.0.22</plexusUtilsVersion>
                 <junitVersion>3.8.2</junitVersion>
               </filterProperties>
               <goals>

@@ -87,7 +87,7 @@ public abstract class AbstractModelloGeneratorMojo
     /**
      * The Maven project instance for the executing project.
      */
-    @Component
+    @Parameter( defaultValue = "${project}", readonly = true, required = true )
     private MavenProject project;
 
     /**
