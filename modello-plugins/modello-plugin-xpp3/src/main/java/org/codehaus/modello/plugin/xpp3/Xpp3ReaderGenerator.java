@@ -719,7 +719,16 @@ public class Xpp3ReaderGenerator
 
                         if ( javaFieldMetadata.isSetter() )
                         {
-                            sc.add( type + " " + associationName + " = " + association.getDefaultValue() + ";" );
+                        	String associationType = type;
+                        	String defaultValue = association.getDefaultValue();
+                            if( useJava5 )
+                            {
+                            	// defaultValue looks like java.util.ArrayList/*<Type>*/()
+                            	defaultValue = defaultValue.replace("/*", "").replace("*/", "");
+                            	
+                            	associationType = type + '<' + association.getTo() + '>';
+                            }
+                            sc.add( associationType + " " + associationName + " = " + defaultValue + ";" );
 
                             sc.add( objectName + ".set" + capFieldName + "( " + associationName + " );" );
 
@@ -756,14 +765,24 @@ public class Xpp3ReaderGenerator
 
                         if ( javaFieldMetadata.isGetter() && javaFieldMetadata.isSetter() )
                         {
-                            sc.add( type + " " + associationName + " = " + objectName + ".get" + capFieldName + "();" );
+                        	String associationType = type;
+                            String defaultValue = association.getDefaultValue();
+                            if( useJava5 )
+                            {
+                            	// defaultValue looks like java.util.ArrayList/*<Type>*/()
+                            	defaultValue = defaultValue.replace("/*", "").replace("*/", "");
+                            	
+                            	associationType = type + '<' + association.getTo() + '>';
+                            }
+                        	
+                            sc.add( associationType + " " + associationName + " = " + objectName + ".get" + capFieldName + "();" );
 
                             sc.add( "if ( " + associationName + " == null )" );
 
                             sc.add( "{" );
                             sc.indent();
-
-                            sc.add( associationName + " = " + association.getDefaultValue() + ";" );
+                            
+                            sc.add( associationName + " = " + defaultValue + ";" );
 
                             sc.add( objectName + ".set" + capFieldName + "( " + associationName + " );" );
 
@@ -971,7 +990,14 @@ public class Xpp3ReaderGenerator
         writeNewLocation( null, sc );
         if ( locationTracker != null && "?".equals( locationKey ) )
         {
-            sc.add( "Object _key;" );
+        	if ( useJava5 )
+        	{
+        		sc.add( type + " _key;" );
+        	}
+        	else
+        	{
+                sc.add( "Object _key;" );
+        	}
             locationKey = "_key";
             keyCapture = "_key = ";
         }

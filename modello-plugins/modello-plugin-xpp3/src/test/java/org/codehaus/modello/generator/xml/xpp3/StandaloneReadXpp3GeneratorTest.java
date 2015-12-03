@@ -53,4 +53,21 @@ public class StandaloneReadXpp3GeneratorTest
         verifyCompiledGeneratedSources( "org.codehaus.modello.generator.xml.xpp3.Xpp3StandaloneReadVerifier" );
     }
 
+    public void testStandaloneReadJava5()
+            throws Throwable
+        {
+            ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
+
+            Model model = modello.loadModel( getXmlResourceReader( "/standaloneRead.mdo" ) );
+
+            Properties parameters = getModelloParameters( "1.0.0", true );
+
+            modello.generate( model, "java", parameters );
+            modello.generate( model, "xpp3-reader", parameters );
+
+            compileGeneratedSources();
+
+            verifyCompiledGeneratedSources( "org.codehaus.modello.generator.xml.xpp3.Xpp3StandaloneReadVerifier" );
+        }
+
 }
