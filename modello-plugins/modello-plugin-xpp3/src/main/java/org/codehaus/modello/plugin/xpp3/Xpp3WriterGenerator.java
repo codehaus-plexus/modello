@@ -99,6 +99,18 @@ public class Xpp3WriterGenerator
         namespaceField.setInitString( "null" );
         jClass.addField( namespaceField );
 
+        JField commentField = new JField( new JClass( "String" ), "fileComment" );
+        commentField.setInitString( "null" );
+        jClass.addField( commentField );
+
+        // Add setComment method
+        JMethod setComment = new JMethod( "setFileComment" );
+
+        setComment.addParameter( new JParameter( new JClass( "String" ), "fileComment" ) );
+        JSourceCode setCommentSourceCode = setComment.getSourceCode();
+        setCommentSourceCode.add( "this.fileComment = fileComment;" );
+        jClass.addMethod( setComment );
+
         addModelImports( jClass, null );
 
         String root = objectModel.getRoot( getGeneratedVersion() );
@@ -218,6 +230,11 @@ public class Xpp3WriterGenerator
         // add namespace information for root element only
         if ( classMetadata.isRootElement() && ( xmlModelMetadata.getNamespace() != null ) )
         {
+            sc.add( "if ( this.fileComment != null )" );
+            sc.add( "{" );
+            sc.add( "serializer.comment(this.fileComment);" );
+            sc.add( "}" );
+
             namespace = xmlModelMetadata.getNamespace( getGeneratedVersion() );
             sc.add( "serializer.setPrefix( \"\", \"" + namespace + "\" );" );
         }
