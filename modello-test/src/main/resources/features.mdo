@@ -61,13 +61,13 @@
           <name>required</name>
           <version>1.0.0+</version>
           <required>true</required>
-          <description><![CDATA[<field><required>true</required></field>: Test of a required field.]]></description>
+          <description><![CDATA[&lt;field&gt;&lt;required&gt;true&lt;/required&gt;&lt;/field&gt;: Test of a required field.]]></description>
           <type>String</type>
         </field>
         <field>
           <name>identifier</name>
           <version>1.0.0+</version>
-          <description><![CDATA[<field><identifier>true</identifier></field>: a field taking part in instance identifier.
+          <description><![CDATA[&lt;field&gt;&lt;identifier&gt;true&lt;/identifier&gt;&lt;/field&gt;: a field taking part in instance identifier.
             This field is used to generate <code>toString()</code>, <code>hashCode()</code> and <code>equals()</code>
             methods.]]></description>
           <identifier>true</identifier>
@@ -1009,13 +1009,13 @@
         <field>
           <name>dom</name>
           <version>1.0.0+</version>
-          <description><![CDATA[<code>&lt;field&gt;&lt;type&gt;DOM&mt;&gt;&lt;/type&gt;</code>: a DOM field, by default with trimming (each element in the DOM tree).]]></description>
+          <description><![CDATA[<code>&lt;field&gt;&lt;type&gt;DOM-&gt;&lt;/type&gt;</code>: a DOM field, by default with trimming (each element in the DOM tree).]]></description>
           <type>DOM</type>
         </field>
         <field xml.trim="false">
           <name>domNoTrim</name>
           <version>1.0.0+</version>
-          <description><![CDATA[<code>&lt;field xml.trim="false"&gt;&lt;type&gt;DOM&mt;&gt;&lt;/type&gt;</code>: a DOM field without trimming.]]></description>
+          <description><![CDATA[<code>&lt;field xml.trim="false"&gt;&lt;type&gt;DOM-&gt;&lt;/type&gt;</code>: a DOM field without trimming.]]></description>
           <type>DOM</type>
         </field>
         <field xml.tagName="tag-name">
