@@ -51,6 +51,8 @@ import java.util.Set;
 public class XsdGenerator
     extends AbstractXmlGenerator
 {
+    protected static final String LS = System.getProperty( "line.separator" );
+    
     public void generate( Model model, Properties parameters )
         throws ModelloException
     {
@@ -99,8 +101,8 @@ public class XsdGenerator
         {
             XMLWriter w = new PrettyPrintXMLWriter( writer );
 
-            writer.write( "<?xml version=\"1.0\"?>\n" );
-
+            writer.append( "<?xml version=\"1.0\"?>" ).write( LS );;
+            
             initHeader( w );
 
             // TODO: the writer should be knowledgeable of namespaces, but this works
