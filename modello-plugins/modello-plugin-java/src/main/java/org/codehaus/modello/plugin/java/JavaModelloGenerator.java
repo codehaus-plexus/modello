@@ -919,11 +919,11 @@ public class JavaModelloGenerator
             sc.add( "this." + source.getName() + " = " + source.getName() + ";" );
         }
 
-        String fieldType = "java.util.Map" + ( useJava5 ? "<Object, " + locationClass.getName() + ">" : "" );
-        String fieldImpl = "java.util.LinkedHashMap" + ( useJava5 ? "<Object, " + locationClass.getName() + ">" : "" );
+        JType fieldType = new JMapType( "java.util.Map", new JType(locationClass.getName()), useJava5 );
+        JType fieldImpl = new JMapType("java.util.LinkedHashMap", new JType(locationClass.getName()), useJava5);
 
         // public Map<Object, Location> getLocations()
-        JMethod jMethod = new JMethod( "get" + capitalise( locationsField ), new JType( fieldType ), null );
+        JMethod jMethod = new JMethod( "get" + capitalise( locationsField ), fieldType, null );
         sc = jMethod.getSourceCode();
         sc.add( "return " + locationsField + ";" );
         jMethod.setComment( "" );
@@ -931,7 +931,7 @@ public class JavaModelloGenerator
 
         // public void setLocations( Map<Object, Location> locations )
         jMethod = new JMethod( "set" + capitalise( locationsField ) );
-        jMethod.addParameter( new JParameter( new JType( fieldType ), locationsField ) );
+        jMethod.addParameter( new JParameter( fieldType, locationsField ) );
         sc = jMethod.getSourceCode();
         sc.add( "this." + locationsField + " = " + locationsField + ";" );
         jMethod.setComment( "" );
@@ -972,7 +972,7 @@ public class JavaModelloGenerator
         sc.add( "}" );
         sc.add( "else" );
         sc.add( "{" );
-        sc.addIndented( "locations = new " + fieldImpl + "();" );
+        sc.addIndented( "locations = new " + fieldImpl.getName() + "();" );
         sc.addIndented( "locations.putAll( sourceDominant ? targetLocations : sourceLocations );" );
         sc.addIndented( "locations.putAll( sourceDominant ? sourceLocations : targetLocations );" );
         sc.add( "}" );

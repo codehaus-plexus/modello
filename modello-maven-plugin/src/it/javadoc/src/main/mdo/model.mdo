@@ -1,0 +1,57 @@
+<!-- Licensed to the Apache Software Foundation (ASF) under one or more contributor 
+  license agreements. See the NOTICE file distributed with this work for additional 
+  information regarding copyright ownership. The ASF licenses this file to 
+  you under the Apache License, Version 2.0 (the "License"); you may not use 
+  this file except in compliance with the License. You may obtain a copy of 
+  the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required 
+  by applicable law or agreed to in writing, software distributed under the 
+  License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS 
+  OF ANY KIND, either express or implied. See the License for the specific 
+  language governing permissions and limitations under the License. -->
+
+<model xmlns="http://codehaus-plexus.github.io/MODELLO/1.8.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://codehaus-plexus.github.io/MODELLO/1.8.0 http://codehaus-plexus.github.io/modello/xsd/modello-1.8.0.xsd">
+  <id>model</id>
+  <name>Model</name>
+  <defaults>
+    <default>
+      <key>package</key>
+      <value>org.plexus.modello.demo.model</value>
+    </default>
+  </defaults>
+
+  <interfaces>
+    <interface>
+      <name>Interface</name>
+      <version>1.0.0+</version>
+    </interface>
+  </interfaces>
+
+  <classes>
+    <class rootElement="true">
+      <name>Root</name>
+      <version>1.0.0+</version>
+      <fields>
+        <field>
+          <name>field</name>
+          <type>String</type>
+          <version>1.0.0+</version>
+        </field>
+      </fields>
+      <interfaces>
+        <interface>Interface</interface>
+      </interfaces>
+    </class>
+    
+    <class locationTracker="locations" java.clone="shallow">
+      <name>Location</name>
+      <version>1.0.0+</version>
+    </class>
+    
+    <class sourceTracker="source">
+      <name>Source</name>
+      <version>1.0.0+</version>
+    </class>
+  </classes>
+</model>
