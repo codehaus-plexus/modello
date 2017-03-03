@@ -43,5 +43,19 @@ public class Xpp3ParsingTest
 
         reader.read( ReaderFactory.newXmlReader( model ), true );
     }
+    
+    @Test
+    public void testXpp3ParsingWithModelWithPostTags()
+        throws Exception
+    {
+        // internal message from MXParser
+        thrown.expectMessage( startsWith( "start tag not allowed in epilog" ) );
+        
+        File model = new File( System.getProperty( "basedir" ), "src/test/models/model-with-post-tags.xml" );
+
+        MavenXpp3Reader reader = new MavenXpp3Reader();
+
+        reader.read( ReaderFactory.newXmlReader( model ), true );
+    }
 
 }

@@ -194,8 +194,12 @@ public class Xpp3ReaderGenerator
             sc.unindent();
             sc.add( "}" );
         }
+        
+        sc.add( className + ' ' + variableName + " = null;" );
 
         sc.add( "int eventType = parser.getEventType();" );
+        
+        sc.add( "boolean parsed = false;" );
 
         sc.add( "while ( eventType != XmlPullParser.END_DOCUMENT )" );
 
@@ -213,16 +217,21 @@ public class Xpp3ReaderGenerator
         sc.addIndented( "throw new XmlPullParserException( \"Expected root element '" + tagName + "' but "
                             + "found '\" + parser.getName() + \"'\", parser, null );" );
         sc.add( "}" );
+        
+        sc.add( "else if ( parsed )" );
 
-        sc.add(
-            className + ' ' + variableName + " = parse" + capClassName + "( parser, strict" + trackingArgs + " );" );
+        sc.add( "{" );
+        sc.addIndented( "// fallback, already expected a XmlPullParserException due to invalid XML" );
+        sc.addIndented( "throw new XmlPullParserException( \"Duplicated tag: '" + tagName + "'\", parser, null );" );
+        sc.add( "}" );
+
+        sc.add( variableName + " = parse" + capClassName + "( parser, strict" + trackingArgs + " );" );
 
         if ( rootElement )
         {
             sc.add( variableName + ".setModelEncoding( parser.getInputEncoding() );" );
         }
-
-        sc.add( "return " + variableName + ';' );
+        sc.add( "parsed = true;" );
 
         sc.unindent();
         sc.add( "}" );
@@ -230,6 +239,11 @@ public class Xpp3ReaderGenerator
         sc.add( "eventType = parser.next();" );
 
         sc.unindent();
+        sc.add( "}" );
+        
+        sc.add( "if ( parsed )" );
+        sc.add( "{" );
+        sc.addIndented( "return " + variableName + ';' );
         sc.add( "}" );
 
         sc.add( "throw new XmlPullParserException( \"Expected root element '" + tagName + "' but "
