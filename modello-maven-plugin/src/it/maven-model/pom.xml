@@ -12,10 +12,13 @@
       <plugin>
         <groupId>org.codehaus.modello</groupId>
         <artifactId>modello-maven-plugin</artifactId>
-        <version>1.0-alpha-14-SNAPSHOT</version>
+        <version>@project.version@</version>
         <configuration>
           <version>4.0.0</version>
-          <model>src/main/mdo/maven.mdo</model>
+          <useJava5>true</useJava5>
+          <models>
+            <model>src/main/mdo/maven.mdo</model>
+          </models>
         </configuration>
         <executions>
           <execution>
@@ -37,7 +40,7 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>3.8.1</version>
+      <version>4.12</version>
     </dependency>
   </dependencies>
 </project>
