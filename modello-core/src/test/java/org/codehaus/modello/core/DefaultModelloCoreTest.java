@@ -81,4 +81,11 @@ public class DefaultModelloCoreTest
             assertEquals( "Duplicate field in MyClass: MyAssociation.", ex.getMessage() );
         }
     }
+    
+    public void testRecursion() throws Exception
+    {
+        ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
+        
+        modello.loadModel( getTestFile( "src/test/resources/models/recursion.mdo" ) ); 
+    }
 }
