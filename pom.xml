@@ -223,7 +223,6 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <maven.version>3.0</maven.version>
     <jackson.version>2.1.5</jackson.version>
-    <modelloPluginVersion>1.8.3</modelloPluginVersion>
   </properties>
 
   <prerequisites>
@@ -591,7 +590,7 @@
           <plugin>
             <groupId>org.codehaus.modello</groupId>
             <artifactId>modello-maven-plugin</artifactId>
-            <version>${modelloPluginVersion}</version>
+            <version>1.8.3</version>
             <configuration>
               <models>
                 <model>src/main/mdo/modello.mdo</model>
