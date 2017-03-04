@@ -143,6 +143,8 @@ public class JComment
 
     /**
      * Creates a new Java comment with the given style
+     * 
+     * @param style the comment style
      **/
     public JComment( short style )
     {

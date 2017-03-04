@@ -18,7 +18,7 @@ package org.codehaus.modello.plugin.java.javasource;
 /**
  * JType sub-class for componentized types, such as array as collections.
  *
- * @author <a href="mailto:werner DOT guttmann AT gmx DOT net">Werner Guttman</a>
+ * @author Werner Guttman
  * @version $Revision$ $Date$
  * @since 1.0.4
  */

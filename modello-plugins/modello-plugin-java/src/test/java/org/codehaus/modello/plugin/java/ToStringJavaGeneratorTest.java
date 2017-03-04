@@ -44,10 +44,10 @@ public class ToStringJavaGeneratorTest
     }
 
     /**
-     * @throws Throwable
+     * @throws Exception if any exception occurs
      */
     public void testJavaGeneratorWithToString()
-        throws Throwable
+        throws Exception 
     {
         ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
 

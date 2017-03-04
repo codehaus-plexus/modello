@@ -107,8 +107,7 @@ public final class JMapType
     }
 
     /**
-     * {@inheritDoc} <br/>
-     * Returns the String representation of this JType.
+     * @return the String representation of this JType.
      */
     public String toString()
     {

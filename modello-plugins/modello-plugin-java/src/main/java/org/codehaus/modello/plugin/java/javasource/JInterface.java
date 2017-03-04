@@ -358,6 +358,7 @@ public final class JInterface extends JStructure
      * Prints the source code for this JInterface to the given JSourceWriter
      *
      * @param jsw the JSourceWriter to print to. [May not be null]
+     * @param classOnly whether the header, package and imports should be printed too 
      */
     public void print( JSourceWriter jsw, boolean classOnly )
     {

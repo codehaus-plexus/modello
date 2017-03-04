@@ -1,8 +1,7 @@
 package org.codehaus.modello.plugin.java;
 
 /**
- * Test Abstract Class used by {@link JavaGeneratorTest#testBiDirectionalJavaGenerator()} to ensure that
- * externally referenced classes can be used in the &lt;superClass&gt; element.
+ * Test Abstract Class to ensure that externally referenced classes can be used in the &lt;superClass&gt; element.
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  */

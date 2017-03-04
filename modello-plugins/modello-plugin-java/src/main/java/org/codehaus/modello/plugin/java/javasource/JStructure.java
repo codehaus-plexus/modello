@@ -207,7 +207,7 @@ public abstract class JStructure extends JType
     /**
      * Adds the given import to this JStructure
      *
-     * @param the className of the class to import.
+     * @param className the className of the class to import.
      */
     public void addImport( String className )
     {
@@ -586,6 +586,7 @@ public abstract class JStructure extends JType
      * directory. Sub-directories will be created if necessary for the
      * package.
      *
+     * @param destDir the destination directory
      * @param lineSeparator the line separator to use at the end of each line.
      * If null, then the default line separator for the runtime platform will
      * be used.
@@ -877,6 +878,9 @@ public abstract class JStructure extends JType
 
     /**
      * Returns the package name from the given class name
+     * 
+     * @param className the className
+     * @return the package of the class, otherwise {@code null}
      */
     protected static String getPackageFromClassName( String className )
     {

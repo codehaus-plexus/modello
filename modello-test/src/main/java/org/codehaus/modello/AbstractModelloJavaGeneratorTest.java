@@ -25,7 +25,6 @@ package org.codehaus.modello;
 import org.codehaus.modello.verifier.VerifierException;
 import org.codehaus.plexus.compiler.Compiler;
 import org.codehaus.plexus.compiler.CompilerConfiguration;
-import org.codehaus.plexus.compiler.CompilerError;
 import org.codehaus.plexus.compiler.CompilerException;
 import org.codehaus.plexus.compiler.CompilerMessage;
 import org.codehaus.plexus.compiler.CompilerResult;
@@ -226,10 +225,8 @@ public abstract class AbstractModelloJavaGeneratorTest
      * Run a verifier class in a classloader context where compiled generated sources are available
      *
      * @param verifierClassName the class name of the verifier class
-     * @throws MalformedURLException
      */
     protected void verifyCompiledGeneratedSources( String verifierClassName )
-        throws MalformedURLException
     {
         addClassPathFile( getOutputClasses() );
 

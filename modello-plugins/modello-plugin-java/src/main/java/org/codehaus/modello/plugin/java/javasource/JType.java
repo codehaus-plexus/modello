@@ -95,7 +95,7 @@ public class JType
 
     /**
      * Creates a new JType with the given name
-     * @param the name of the type
+     * @param name the name of the type
      **/
     public JType( String name )
     {

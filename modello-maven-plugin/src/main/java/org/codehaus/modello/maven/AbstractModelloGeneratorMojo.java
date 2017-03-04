@@ -123,7 +123,7 @@ public abstract class AbstractModelloGeneratorMojo
 
     /**
      * Creates a Properties objects.
-     * <p/>
+     * <br>
      * The abstract mojo will override the output directory, the version and the
      * package with version flag.
      *
@@ -136,7 +136,7 @@ public abstract class AbstractModelloGeneratorMojo
 
     /**
      * Override this method to customize the values in the properties set.
-     * <p/>
+     * <p>
      * This method will be called after the parameters have been populated with the
      * parameters in the abstract mojo.
      *

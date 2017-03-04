@@ -240,7 +240,7 @@ public abstract class AbstractModelloGenerator
     // ----------------------------------------------------------------------
 
     /**
-     * @deprecated @{link Use getParameter( Properties, String )} instead
+     * @deprecated Use {@link #getParameter(Properties, String)} instead
      */
     protected String getParameter( String name, Properties parameters )
     {

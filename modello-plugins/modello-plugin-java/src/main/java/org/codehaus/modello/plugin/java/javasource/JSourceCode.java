@@ -132,7 +132,7 @@ public class JSourceCode
      * Adds the given statement to this JSourceCode. The statement
      * will be added on a new line.
      * @param statement the statement to add
-     * @param the indentSize is the size of the indentation to use
+     * @param indentSize the indentSize is the size of the indentation to use
      * when printing this JSourceCode
      * @see #print
      * @deprecated this method is not here any mode in castor codegen 1.3rc1

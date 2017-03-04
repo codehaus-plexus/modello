@@ -18,7 +18,7 @@ package org.codehaus.modello.plugin.java.javasource;
 /**
  * JType sub-class for collections.
  *
- * @author <a href="mailto:werner DOT guttmann AT gmx DOT net">Werner Guttman</a>
+ * @author Werner Guttman
  * @version $Revision$ $Date$
  * @since 1.0.4
  */
@@ -82,7 +82,6 @@ public final class JCollectionType
     }
 
     /**
-     * {@inheritDoc} <br/>
      * Returns the String representation of this JType.
      */
     public String toString()

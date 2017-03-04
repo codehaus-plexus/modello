@@ -187,6 +187,7 @@ public class JDocComment
      * Returns the Parameter Descriptor associated with the
      * given name
      *
+     * @param name the name of the parameter
      * @return the Parameter Descriptor associated with the
      * given name
      */

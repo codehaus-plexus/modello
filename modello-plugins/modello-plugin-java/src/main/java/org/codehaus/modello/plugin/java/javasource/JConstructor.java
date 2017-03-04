@@ -97,6 +97,8 @@ public class JConstructor
     /**
      * Creates a new method with the given name and returnType.
      * For "void" return types, simply pass in null as the returnType
+     * 
+     * @param declaringClass the declaring class for this constructor
      **/
     public JConstructor( JClass declaringClass )
     {

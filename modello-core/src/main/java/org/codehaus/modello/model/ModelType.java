@@ -162,6 +162,7 @@ public abstract class ModelType
     /**
      * Returns all the fields in this class and all super classes if withInheritedField equals to true.
      *
+     * @param withInheritedField whether inherited fields should be included.
      * @return Returns all the fields in this class and all super classes.
      */
     public abstract List<ModelField> getAllFields( boolean withInheritedField );
@@ -173,6 +174,7 @@ public abstract class ModelType
      *
      * It does not include the fields of super classes.
      *
+     * @param version the specific version
      * @return Returns the list of all fields in this class. It does not include the
      *         fields of super classes.
      */

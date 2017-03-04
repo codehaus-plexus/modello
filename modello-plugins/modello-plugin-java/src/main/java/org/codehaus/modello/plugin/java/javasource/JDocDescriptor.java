@@ -147,6 +147,7 @@ public class JDocDescriptor
     /**
      * Compares the type of this JDocDescriptor with the given descriptor.
      * Enables sorting of descriptors.
+     * @param jdd the javadoc descriptor
      * @return 0 if the two descriptor types are equal, 1 if the type of
      * this descriptor is greater than the given descriptor, or -1 if the
      * type of this descriptor is less than the given descriptor

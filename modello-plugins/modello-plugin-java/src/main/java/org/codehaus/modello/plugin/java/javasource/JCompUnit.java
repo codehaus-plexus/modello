@@ -224,6 +224,8 @@ public class JCompUnit
 
     /**
      * Adds a JClass which should be printed in this file.
+     * 
+     * @param jClass the JClass to add
      **/
     public void addClass( JClass jClass )
     {
@@ -232,6 +234,8 @@ public class JCompUnit
 
     /**
      * Adds a JInterface which should be printed in this file.
+     * 
+     * @param jInterface the JInterface to add
      **/
     public void addInterface( JInterface jInterface )
     {
@@ -332,7 +336,7 @@ public class JCompUnit
     /**
      * Prints the source code for this JClass in the current directory
      * with the default line seperator of the the runtime platform.
-     * @see print(java.lang.String, java.lang.String)
+     * @see #print(java.lang.String, java.lang.String)
      **/
     public void print()
     {
@@ -343,7 +347,7 @@ public class JCompUnit
      * Prints the source code for this JClass
      * with the default line seperator of the the runtime platform.
      * @param destDir the destination directory to generate the file.
-     * @see print(java.lang.String, java.lang.String)
+     * @see #print(java.lang.String, java.lang.String)
      **/
     public void print( String destDir )
     {

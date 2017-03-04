@@ -69,10 +69,10 @@ package org.codehaus.modello.plugin.java.javasource;
 import java.util.Vector;
 
 /**
+ * <p>
  * A simple String to Object mapping which preserves order.
- *
- * <BR/>
- * <B>Note:</B>
+ * </p>
+ * <strong>Note:</strong>
  * This class is not synchronized. So be careful. :-)
  *
  * @author <a href="mailto:kvisco@intalio.com">Keith Visco</a>
@@ -172,6 +172,7 @@ public class JNamedMap
      * Returns the index of the Object which has been
      * mapped (associated) with the given name
      *
+     * @param name the name
      * @return the index of the Object which has been mapped (associated)
      * to the given name
      **/
@@ -212,7 +213,7 @@ public class JNamedMap
     /**
      * Removes and returns the Object located at the given index
      *
-     * @param name the name of the Object to remove
+     * @param index the index of the Object to remove
      * @return the object removed from the map.
      **/
     public Object remove( int index )

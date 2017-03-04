@@ -19,8 +19,7 @@ package org.codehaus.modello.plugin.java;
 import java.util.List;
 
 /**
- * Test Interface used by {@link JavaGeneratorTest#testBiDirectionalJavaGenerator()} to ensure that
- * interface overrides can be used.
+ * Test Interface used by to ensure that interface overrides can be used.
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  */

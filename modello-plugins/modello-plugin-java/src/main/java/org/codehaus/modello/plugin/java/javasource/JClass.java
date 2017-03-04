@@ -148,7 +148,8 @@ public class JClass extends JStructure
      * The constructor must have been created with this JClass'
      * createConstructor.
      *
-     * @throws java.lang.IllegalArgumentException
+     * @param constructor a constructor
+     * @throws java.lang.IllegalArgumentException if {@code constructor} is {@code null} or invalid.
      */
     public void addConstructor( JConstructor constructor )
         throws IllegalArgumentException
@@ -235,12 +236,7 @@ public class JClass extends JStructure
     /**
      * Adds the given JMethod to this JClass
      *
-     * @param jMethod, the JMethod to add
-     * @param importReturnType true if we add the importReturnType to
-     * the class import lists. It could be useful to set it to false when
-     * all types are fully qualified.
-     * @exception java.lang.IllegalArgumentException when the given
-     * JMethod has the same name of an existing JMethod.
+     * @param jMethod the JMethod to add
      **/
     public void addMethod( JMethod jMethod )
     {
@@ -254,7 +250,7 @@ public class JClass extends JStructure
      * @param importReturnType true if we add the importReturnType to
      * the class import lists. It could be useful to set it to false when
      * all types are fully qualified.
-     * @exception java.lang.IllegalArgumentException when the given
+     * @throws java.lang.IllegalArgumentException when the given
      * JMethod has the same name of an existing JMethod.
      **/
     public void addMethod( JMethod jMethod, boolean importReturnType )
@@ -336,6 +332,7 @@ public class JClass extends JStructure
      * Creates a new JConstructor and adds it to this
      * JClass.
      *
+     * @param params the parameters
      * @return the newly created constructor
      */
     public JConstructor createConstructor( JParameter[] params )
@@ -539,6 +536,7 @@ public class JClass extends JStructure
      * Prints the source code for this JClass to the given JSourceWriter
      *
      * @param jsw the JSourceWriter to print to. [May not be null]
+     * @param classOnly whether the header, package and imports should be printed too 
      */
     public void print( JSourceWriter jsw, boolean classOnly )
     {
@@ -809,6 +807,7 @@ public class JClass extends JStructure
      * Removes the field with the given name from this JClass
      *
      * @param name the name of the field to remove
+     * @return the removed field
      **/
     public JField removeField( String name )
     {
@@ -825,6 +824,7 @@ public class JClass extends JStructure
      * Removes the given JField from this JClass
      *
      * @param jField, the JField to remove
+     * @return {{@code true} if and only if the field was successfully removed
      **/
     public boolean removeField( JField jField )
     {

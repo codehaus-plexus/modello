@@ -40,10 +40,10 @@ public class BuilderJavaGeneratorTest
 
     /**
      * MODELLO-83
-     * @throws Throwable
+     * @throws Exception if any exception occurs
      */
     public void testJavaGeneratorWithBuilder()
-        throws Throwable
+        throws Exception
     {
         ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
 
