@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+
+<model xmlns="http://codehaus-plexus.github.io/MODELLO/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://codehaus-plexus.github.io/MODELLO/1.0.0 http://codehaus-plexus.github.io/modello/xsd/modello-1.0.0.xsd">
+  <id>html4</id>
+  <name>Modello Java Mojo Test Model</name>
+  <root>Model</root>
+  <defaults>
+    <default>
+      <key>package</key>
+      <value>org.codehaus.mojo.modello.javatest</value>
+    </default>
+  </defaults>
+  <classes>
+    <class rootElement="true">
+      <comment>This is a comment</comment>
+      <description>
+        <![CDATA[
+            This is a description in HTML4<br>
+            <strong>NOTE: </strong> HTML linebreak should be converted to selfclosing XML-tag
+          ]]>
+      </description>
+      <name>Model</name>
+      <version>0.9.0+</version>
+      <fields>
+        <field>
+          <name>extend</name>
+          <version>1.0.0+</version>
+          <type>String</type>
+        </field>
+      </fields>
+    </class>
+    <class>
+      <name>NewModel</name>
+      <version>1.0.0+</version>
+    </class>
+  </classes>
+</model>

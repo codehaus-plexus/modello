@@ -53,6 +53,8 @@ import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.WriterFactory;
 import org.codehaus.plexus.util.xml.PrettyPrintXMLWriter;
 import org.codehaus.plexus.util.xml.XMLWriter;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
 /**
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
@@ -739,7 +741,7 @@ public class XdocGenerator
 
     private static String getDescription( BaseElement element )
     {
-        return ( element.getDescription() == null ) ? "No description." : element.getDescription();
+        return ( element.getDescription() == null ) ? "No description." : rewrite( element.getDescription() );
     }
 
     private static void writeTextElement( XMLWriter w, String name, String text )
@@ -754,5 +756,18 @@ public class XdocGenerator
         w.startElement( name );
         w.writeMarkup( markup );
         w.endElement();
+    }
+    
+    /**
+     * Ensures that text will have balanced tags
+     * 
+     * @param text xml or html based content
+     * @return valid XML string
+     */
+    private static String rewrite( String text )
+    {
+        Document document = Jsoup.parseBodyFragment( text );
+        document.outputSettings().syntax( Document.OutputSettings.Syntax.xml );
+        return document.body().html();
     }
 }

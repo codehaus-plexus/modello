@@ -1,5 +1,13 @@
 package org.codehaus.modello.plugin.xdoc;
 
+import java.io.File;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Properties;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /*
  * Copyright (c) 2004, Codehaus.org
  *
@@ -31,14 +39,9 @@ import org.codehaus.modello.model.Version;
 import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
 import org.codehaus.modello.verifier.VerifierException;
 import org.codehaus.plexus.util.FileUtils;
-
-import java.io.File;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Properties;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import org.xmlunit.builder.DiffBuilder;
+import org.xmlunit.builder.Input;
+import org.xmlunit.diff.Diff;
 
 import junit.framework.Assert;
 
@@ -65,6 +68,22 @@ public class XdocGeneratorTest
         checkMavenXdocGenerator();
         checkFeaturesXdocGenerator();
         checkSettingsXdocGenerator();
+    }
+    
+    public void testHtmlToXml() throws Exception
+    {
+        ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
+
+        Model model = modello.loadModel( getXmlResourceReader( "/html4.mdo" ) );
+
+        Properties parameters = getModelloParameters( "1.0.0" );
+
+        modello.generate( model, "xdoc", parameters );
+        
+        Diff diff = DiffBuilder.compare( Input.fromStream( XdocGeneratorTest.class.getResourceAsStream( "/html4.expected.xml" ) ) )
+                   .withTest( Input.fromFile( new File( getOutputDirectory(), "html4.xml" ) ) ).build();
+        
+        assertFalse(diff.toString(), diff.hasDifferences());
     }
 
     private void checkMavenXdocGenerator()
