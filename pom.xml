@@ -225,10 +225,6 @@
     <jackson.version>2.1.5</jackson.version>
   </properties>
 
-  <prerequisites>
-    <maven>3.0</maven>
-  </prerequisites>
-
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -413,7 +409,7 @@
         <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-enforcer-plugin</artifactId>
-        <version>1.4</version>
+        <version>3.0.0-M1</version>
         <executions>
           <execution>
             <id>enforce-java</id>
@@ -425,6 +421,9 @@
                 <requireJavaVersion>
                   <version>1.6.0</version>
                 </requireJavaVersion>
+                <requireMavenVersion>
+                  <version>3.0.5</version>
+                </requireMavenVersion>
               </rules>
             </configuration>
           </execution>
