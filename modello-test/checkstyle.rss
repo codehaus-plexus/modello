@@ -23,11 +23,11 @@ under the License.
     <link>http://codehaus-plexus.github.io/modello/modello-test/</link>
     <description>Modello Test Package - Checkstyle report</description>
     <language>en-us</language>
-    <copyright>&#169;2001 - 2015 Codehaus Plexus</copyright>
+    <copyright>&#169;2001 - 2018 Codehaus Plexus</copyright>
     <item>
       <title>File: 5,
-             Errors: 9,
-             Warnings: 38,
+             Errors: 8,
+             Warnings: 37,
              Infos: 0
       </title>
             <link>http://codehaus-plexus.github.io/modello/modello-test//checkstyle.html</link>
@@ -52,10 +52,10 @@ under the License.
                   0
                 </td>
                 <td>
-                  19
+                  18
                 </td>
                 <td>
-                  4
+                  3
                 </td>
               </tr>
                           <tr>

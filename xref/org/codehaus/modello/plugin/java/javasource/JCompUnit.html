@@ -234,391 +234,395 @@
 <a class="jxr_linenumber" name="224" href="#224">224</a> 
 <a class="jxr_linenumber" name="225" href="#225">225</a>     <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="226" href="#226">226</a> <em class="jxr_javadoccomment">     * Adds a JClass which should be printed in this file.</em>
-<a class="jxr_linenumber" name="227" href="#227">227</a> <em class="jxr_javadoccomment">     **/</em>
-<a class="jxr_linenumber" name="228" href="#228">228</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> addClass( JClass jClass )
-<a class="jxr_linenumber" name="229" href="#229">229</a>     {
-<a class="jxr_linenumber" name="230" href="#230">230</a>         classes.add( jClass );
-<a class="jxr_linenumber" name="231" href="#231">231</a>     } <em class="jxr_comment">//-- addClass</em>
-<a class="jxr_linenumber" name="232" href="#232">232</a> 
-<a class="jxr_linenumber" name="233" href="#233">233</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="234" href="#234">234</a> <em class="jxr_javadoccomment">     * Adds a JInterface which should be printed in this file.</em>
-<a class="jxr_linenumber" name="235" href="#235">235</a> <em class="jxr_javadoccomment">     **/</em>
-<a class="jxr_linenumber" name="236" href="#236">236</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> addInterface( JInterface jInterface )
-<a class="jxr_linenumber" name="237" href="#237">237</a>     {
-<a class="jxr_linenumber" name="238" href="#238">238</a>         interfaces.add( jInterface );
-<a class="jxr_linenumber" name="239" href="#239">239</a>     } <em class="jxr_comment">//-- addInterface</em>
-<a class="jxr_linenumber" name="240" href="#240">240</a> 
-<a class="jxr_linenumber" name="241" href="#241">241</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="242" href="#242">242</a> <em class="jxr_javadoccomment">     * returns a array of String containing all import classes/packages,</em>
-<a class="jxr_linenumber" name="243" href="#243">243</a> <em class="jxr_javadoccomment">     * also imports within the same package of this object.</em>
-<a class="jxr_linenumber" name="244" href="#244">244</a> <em class="jxr_javadoccomment">     * @return a array of String containing all import classes/packages,</em>
-<a class="jxr_linenumber" name="245" href="#245">245</a> <em class="jxr_javadoccomment">     * also imports within the same package of this object.</em>
-<a class="jxr_linenumber" name="246" href="#246">246</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="247" href="#247">247</a>     <strong class="jxr_keyword">public</strong> SortedSet&lt;String&gt; getImports()
-<a class="jxr_linenumber" name="248" href="#248">248</a>     {
-<a class="jxr_linenumber" name="249" href="#249">249</a> 
-<a class="jxr_linenumber" name="250" href="#250">250</a>         SortedSet&lt;String&gt; allImports = <strong class="jxr_keyword">new</strong> TreeSet&lt;String&gt;();
-<a class="jxr_linenumber" name="251" href="#251">251</a> 
-<a class="jxr_linenumber" name="252" href="#252">252</a>         <em class="jxr_comment">// add imports from classes</em>
-<a class="jxr_linenumber" name="253" href="#253">253</a>         <strong class="jxr_keyword">for</strong> ( JClass jClass : classes )
-<a class="jxr_linenumber" name="254" href="#254">254</a>         {
-<a class="jxr_linenumber" name="255" href="#255">255</a>             Enumeration&lt;String&gt; e = jClass.getImports();
-<a class="jxr_linenumber" name="256" href="#256">256</a>             <strong class="jxr_keyword">while</strong> ( e.hasMoreElements() )
-<a class="jxr_linenumber" name="257" href="#257">257</a>             {
-<a class="jxr_linenumber" name="258" href="#258">258</a>                 allImports.add( e.nextElement() );
-<a class="jxr_linenumber" name="259" href="#259">259</a>             }
-<a class="jxr_linenumber" name="260" href="#260">260</a>         }
-<a class="jxr_linenumber" name="261" href="#261">261</a> 
-<a class="jxr_linenumber" name="262" href="#262">262</a>         <strong class="jxr_keyword">for</strong> ( JInterface jInterface : interfaces )
-<a class="jxr_linenumber" name="263" href="#263">263</a>         {
-<a class="jxr_linenumber" name="264" href="#264">264</a>             Enumeration&lt;String&gt; e = jInterface.getImports();
-<a class="jxr_linenumber" name="265" href="#265">265</a>             <strong class="jxr_keyword">while</strong> ( e.hasMoreElements() )
-<a class="jxr_linenumber" name="266" href="#266">266</a>             {
-<a class="jxr_linenumber" name="267" href="#267">267</a>                 allImports.add( e.nextElement() );
-<a class="jxr_linenumber" name="268" href="#268">268</a>             }
-<a class="jxr_linenumber" name="269" href="#269">269</a>         }
-<a class="jxr_linenumber" name="270" href="#270">270</a> 
-<a class="jxr_linenumber" name="271" href="#271">271</a>         <strong class="jxr_keyword">return</strong> allImports;
-<a class="jxr_linenumber" name="272" href="#272">272</a>     }
-<a class="jxr_linenumber" name="273" href="#273">273</a> 
-<a class="jxr_linenumber" name="274" href="#274">274</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="275" href="#275">275</a> <em class="jxr_javadoccomment">     * Returns the name of the file that this JCompUnit would be</em>
-<a class="jxr_linenumber" name="276" href="#276">276</a> <em class="jxr_javadoccomment">     * printed as, given a call to #print.</em>
-<a class="jxr_linenumber" name="277" href="#277">277</a> <em class="jxr_javadoccomment">     *</em>
-<a class="jxr_linenumber" name="278" href="#278">278</a> <em class="jxr_javadoccomment">     * @param destDir the destination directory. This may be null.</em>
-<a class="jxr_linenumber" name="279" href="#279">279</a> <em class="jxr_javadoccomment">     * @return the name of the file that this JCompUnit would be</em>
+<a class="jxr_linenumber" name="227" href="#227">227</a> <em class="jxr_javadoccomment">     * </em>
+<a class="jxr_linenumber" name="228" href="#228">228</a> <em class="jxr_javadoccomment">     * @param jClass the JClass to add</em>
+<a class="jxr_linenumber" name="229" href="#229">229</a> <em class="jxr_javadoccomment">     **/</em>
+<a class="jxr_linenumber" name="230" href="#230">230</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> addClass( JClass jClass )
+<a class="jxr_linenumber" name="231" href="#231">231</a>     {
+<a class="jxr_linenumber" name="232" href="#232">232</a>         classes.add( jClass );
+<a class="jxr_linenumber" name="233" href="#233">233</a>     } <em class="jxr_comment">//-- addClass</em>
+<a class="jxr_linenumber" name="234" href="#234">234</a> 
+<a class="jxr_linenumber" name="235" href="#235">235</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="236" href="#236">236</a> <em class="jxr_javadoccomment">     * Adds a JInterface which should be printed in this file.</em>
+<a class="jxr_linenumber" name="237" href="#237">237</a> <em class="jxr_javadoccomment">     * </em>
+<a class="jxr_linenumber" name="238" href="#238">238</a> <em class="jxr_javadoccomment">     * @param jInterface the JInterface to add</em>
+<a class="jxr_linenumber" name="239" href="#239">239</a> <em class="jxr_javadoccomment">     **/</em>
+<a class="jxr_linenumber" name="240" href="#240">240</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> addInterface( JInterface jInterface )
+<a class="jxr_linenumber" name="241" href="#241">241</a>     {
+<a class="jxr_linenumber" name="242" href="#242">242</a>         interfaces.add( jInterface );
+<a class="jxr_linenumber" name="243" href="#243">243</a>     } <em class="jxr_comment">//-- addInterface</em>
+<a class="jxr_linenumber" name="244" href="#244">244</a> 
+<a class="jxr_linenumber" name="245" href="#245">245</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="246" href="#246">246</a> <em class="jxr_javadoccomment">     * returns a array of String containing all import classes/packages,</em>
+<a class="jxr_linenumber" name="247" href="#247">247</a> <em class="jxr_javadoccomment">     * also imports within the same package of this object.</em>
+<a class="jxr_linenumber" name="248" href="#248">248</a> <em class="jxr_javadoccomment">     * @return a array of String containing all import classes/packages,</em>
+<a class="jxr_linenumber" name="249" href="#249">249</a> <em class="jxr_javadoccomment">     * also imports within the same package of this object.</em>
+<a class="jxr_linenumber" name="250" href="#250">250</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="251" href="#251">251</a>     <strong class="jxr_keyword">public</strong> SortedSet&lt;String&gt; getImports()
+<a class="jxr_linenumber" name="252" href="#252">252</a>     {
+<a class="jxr_linenumber" name="253" href="#253">253</a> 
+<a class="jxr_linenumber" name="254" href="#254">254</a>         SortedSet&lt;String&gt; allImports = <strong class="jxr_keyword">new</strong> TreeSet&lt;String&gt;();
+<a class="jxr_linenumber" name="255" href="#255">255</a> 
+<a class="jxr_linenumber" name="256" href="#256">256</a>         <em class="jxr_comment">// add imports from classes</em>
+<a class="jxr_linenumber" name="257" href="#257">257</a>         <strong class="jxr_keyword">for</strong> ( JClass jClass : classes )
+<a class="jxr_linenumber" name="258" href="#258">258</a>         {
+<a class="jxr_linenumber" name="259" href="#259">259</a>             Enumeration&lt;String&gt; e = jClass.getImports();
+<a class="jxr_linenumber" name="260" href="#260">260</a>             <strong class="jxr_keyword">while</strong> ( e.hasMoreElements() )
+<a class="jxr_linenumber" name="261" href="#261">261</a>             {
+<a class="jxr_linenumber" name="262" href="#262">262</a>                 allImports.add( e.nextElement() );
+<a class="jxr_linenumber" name="263" href="#263">263</a>             }
+<a class="jxr_linenumber" name="264" href="#264">264</a>         }
+<a class="jxr_linenumber" name="265" href="#265">265</a> 
+<a class="jxr_linenumber" name="266" href="#266">266</a>         <strong class="jxr_keyword">for</strong> ( JInterface jInterface : interfaces )
+<a class="jxr_linenumber" name="267" href="#267">267</a>         {
+<a class="jxr_linenumber" name="268" href="#268">268</a>             Enumeration&lt;String&gt; e = jInterface.getImports();
+<a class="jxr_linenumber" name="269" href="#269">269</a>             <strong class="jxr_keyword">while</strong> ( e.hasMoreElements() )
+<a class="jxr_linenumber" name="270" href="#270">270</a>             {
+<a class="jxr_linenumber" name="271" href="#271">271</a>                 allImports.add( e.nextElement() );
+<a class="jxr_linenumber" name="272" href="#272">272</a>             }
+<a class="jxr_linenumber" name="273" href="#273">273</a>         }
+<a class="jxr_linenumber" name="274" href="#274">274</a> 
+<a class="jxr_linenumber" name="275" href="#275">275</a>         <strong class="jxr_keyword">return</strong> allImports;
+<a class="jxr_linenumber" name="276" href="#276">276</a>     }
+<a class="jxr_linenumber" name="277" href="#277">277</a> 
+<a class="jxr_linenumber" name="278" href="#278">278</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="279" href="#279">279</a> <em class="jxr_javadoccomment">     * Returns the name of the file that this JCompUnit would be</em>
 <a class="jxr_linenumber" name="280" href="#280">280</a> <em class="jxr_javadoccomment">     * printed as, given a call to #print.</em>
-<a class="jxr_linenumber" name="281" href="#281">281</a> <em class="jxr_javadoccomment">     **/</em>
-<a class="jxr_linenumber" name="282" href="#282">282</a>     <strong class="jxr_keyword">public</strong> String getFilename( String destDir )
-<a class="jxr_linenumber" name="283" href="#283">283</a>     {
-<a class="jxr_linenumber" name="284" href="#284">284</a> 
-<a class="jxr_linenumber" name="285" href="#285">285</a>         String filename = <strong class="jxr_keyword">new</strong> String( fileName );
-<a class="jxr_linenumber" name="286" href="#286">286</a> 
-<a class="jxr_linenumber" name="287" href="#287">287</a>         <em class="jxr_comment">//-- Convert Java package to path string</em>
-<a class="jxr_linenumber" name="288" href="#288">288</a>         String javaPackagePath = <span class="jxr_string">""</span>;
-<a class="jxr_linenumber" name="289" href="#289">289</a>         <strong class="jxr_keyword">if</strong> ( ( packageName != <strong class="jxr_keyword">null</strong> ) &amp;&amp; ( packageName.length() &gt; 0 ) )
-<a class="jxr_linenumber" name="290" href="#290">290</a>         {
-<a class="jxr_linenumber" name="291" href="#291">291</a>             javaPackagePath = packageName.replace( '.', File.separatorChar );
-<a class="jxr_linenumber" name="292" href="#292">292</a>         }
-<a class="jxr_linenumber" name="293" href="#293">293</a> 
-<a class="jxr_linenumber" name="294" href="#294">294</a>         <em class="jxr_comment">//-- Create fully qualified path (including 'destDir') to file</em>
-<a class="jxr_linenumber" name="295" href="#295">295</a>         File pathFile;
-<a class="jxr_linenumber" name="296" href="#296">296</a>         <strong class="jxr_keyword">if</strong> ( destDir == <strong class="jxr_keyword">null</strong> )
-<a class="jxr_linenumber" name="297" href="#297">297</a>             pathFile = <strong class="jxr_keyword">new</strong> File( javaPackagePath );
-<a class="jxr_linenumber" name="298" href="#298">298</a>         <strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="299" href="#299">299</a>             pathFile = <strong class="jxr_keyword">new</strong> File( destDir, javaPackagePath );
-<a class="jxr_linenumber" name="300" href="#300">300</a>         <strong class="jxr_keyword">if</strong> ( !pathFile.exists() )
-<a class="jxr_linenumber" name="301" href="#301">301</a>         {
-<a class="jxr_linenumber" name="302" href="#302">302</a>             pathFile.mkdirs();
-<a class="jxr_linenumber" name="303" href="#303">303</a>         }
-<a class="jxr_linenumber" name="304" href="#304">304</a> 
-<a class="jxr_linenumber" name="305" href="#305">305</a>         <em class="jxr_comment">//-- Prefix filename with path</em>
-<a class="jxr_linenumber" name="306" href="#306">306</a>         <strong class="jxr_keyword">if</strong> ( pathFile.toString().length() &gt; 0 )
-<a class="jxr_linenumber" name="307" href="#307">307</a>             filename = pathFile.toString() + File.separator + filename;
+<a class="jxr_linenumber" name="281" href="#281">281</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="282" href="#282">282</a> <em class="jxr_javadoccomment">     * @param destDir the destination directory. This may be null.</em>
+<a class="jxr_linenumber" name="283" href="#283">283</a> <em class="jxr_javadoccomment">     * @return the name of the file that this JCompUnit would be</em>
+<a class="jxr_linenumber" name="284" href="#284">284</a> <em class="jxr_javadoccomment">     * printed as, given a call to #print.</em>
+<a class="jxr_linenumber" name="285" href="#285">285</a> <em class="jxr_javadoccomment">     **/</em>
+<a class="jxr_linenumber" name="286" href="#286">286</a>     <strong class="jxr_keyword">public</strong> String getFilename( String destDir )
+<a class="jxr_linenumber" name="287" href="#287">287</a>     {
+<a class="jxr_linenumber" name="288" href="#288">288</a> 
+<a class="jxr_linenumber" name="289" href="#289">289</a>         String filename = <strong class="jxr_keyword">new</strong> String( fileName );
+<a class="jxr_linenumber" name="290" href="#290">290</a> 
+<a class="jxr_linenumber" name="291" href="#291">291</a>         <em class="jxr_comment">//-- Convert Java package to path string</em>
+<a class="jxr_linenumber" name="292" href="#292">292</a>         String javaPackagePath = <span class="jxr_string">""</span>;
+<a class="jxr_linenumber" name="293" href="#293">293</a>         <strong class="jxr_keyword">if</strong> ( ( packageName != <strong class="jxr_keyword">null</strong> ) &amp;&amp; ( packageName.length() &gt; 0 ) )
+<a class="jxr_linenumber" name="294" href="#294">294</a>         {
+<a class="jxr_linenumber" name="295" href="#295">295</a>             javaPackagePath = packageName.replace( '.', File.separatorChar );
+<a class="jxr_linenumber" name="296" href="#296">296</a>         }
+<a class="jxr_linenumber" name="297" href="#297">297</a> 
+<a class="jxr_linenumber" name="298" href="#298">298</a>         <em class="jxr_comment">//-- Create fully qualified path (including 'destDir') to file</em>
+<a class="jxr_linenumber" name="299" href="#299">299</a>         File pathFile;
+<a class="jxr_linenumber" name="300" href="#300">300</a>         <strong class="jxr_keyword">if</strong> ( destDir == <strong class="jxr_keyword">null</strong> )
+<a class="jxr_linenumber" name="301" href="#301">301</a>             pathFile = <strong class="jxr_keyword">new</strong> File( javaPackagePath );
+<a class="jxr_linenumber" name="302" href="#302">302</a>         <strong class="jxr_keyword">else</strong>
+<a class="jxr_linenumber" name="303" href="#303">303</a>             pathFile = <strong class="jxr_keyword">new</strong> File( destDir, javaPackagePath );
+<a class="jxr_linenumber" name="304" href="#304">304</a>         <strong class="jxr_keyword">if</strong> ( !pathFile.exists() )
+<a class="jxr_linenumber" name="305" href="#305">305</a>         {
+<a class="jxr_linenumber" name="306" href="#306">306</a>             pathFile.mkdirs();
+<a class="jxr_linenumber" name="307" href="#307">307</a>         }
 <a class="jxr_linenumber" name="308" href="#308">308</a> 
-<a class="jxr_linenumber" name="309" href="#309">309</a>         <strong class="jxr_keyword">return</strong> filename;
-<a class="jxr_linenumber" name="310" href="#310">310</a>     } <em class="jxr_comment">//-- getFilename</em>
-<a class="jxr_linenumber" name="311" href="#311">311</a> 
-<a class="jxr_linenumber" name="312" href="#312">312</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="313" href="#313">313</a> <em class="jxr_javadoccomment">     * Returns the name of the package that this JCompUnit is a member of</em>
-<a class="jxr_linenumber" name="314" href="#314">314</a> <em class="jxr_javadoccomment">     * @return the name of the package that this JCompUnit is a member of,</em>
-<a class="jxr_linenumber" name="315" href="#315">315</a> <em class="jxr_javadoccomment">     * or null if there is no current package name defined</em>
-<a class="jxr_linenumber" name="316" href="#316">316</a> <em class="jxr_javadoccomment">     **/</em>
-<a class="jxr_linenumber" name="317" href="#317">317</a>     <strong class="jxr_keyword">public</strong> String getPackageName()
-<a class="jxr_linenumber" name="318" href="#318">318</a>     {
-<a class="jxr_linenumber" name="319" href="#319">319</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.packageName;
-<a class="jxr_linenumber" name="320" href="#320">320</a>     } <em class="jxr_comment">//-- getPackageName</em>
-<a class="jxr_linenumber" name="321" href="#321">321</a> 
-<a class="jxr_linenumber" name="322" href="#322">322</a>     <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">static</strong> String getPackageFromClassName( String className )
-<a class="jxr_linenumber" name="323" href="#323">323</a>     {
-<a class="jxr_linenumber" name="324" href="#324">324</a>         <strong class="jxr_keyword">int</strong> idx = -1;
-<a class="jxr_linenumber" name="325" href="#325">325</a>         <strong class="jxr_keyword">if</strong> ( ( idx = className.lastIndexOf( '.' ) ) &gt; 0 )
-<a class="jxr_linenumber" name="326" href="#326">326</a>         {
-<a class="jxr_linenumber" name="327" href="#327">327</a>             <strong class="jxr_keyword">return</strong> className.substring( 0, idx );
-<a class="jxr_linenumber" name="328" href="#328">328</a>         }
-<a class="jxr_linenumber" name="329" href="#329">329</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="330" href="#330">330</a>     } <em class="jxr_comment">//-- getPackageFromClassName</em>
-<a class="jxr_linenumber" name="331" href="#331">331</a> 
-<a class="jxr_linenumber" name="332" href="#332">332</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="333" href="#333">333</a> <em class="jxr_javadoccomment">     * Prints the source code for this JClass in the current directory</em>
-<a class="jxr_linenumber" name="334" href="#334">334</a> <em class="jxr_javadoccomment">     * with the default line seperator of the the runtime platform.</em>
-<a class="jxr_linenumber" name="335" href="#335">335</a> <em class="jxr_javadoccomment">     * @see print(java.lang.String, java.lang.String)</em>
-<a class="jxr_linenumber" name="336" href="#336">336</a> <em class="jxr_javadoccomment">     **/</em>
-<a class="jxr_linenumber" name="337" href="#337">337</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> print()
-<a class="jxr_linenumber" name="338" href="#338">338</a>     {
-<a class="jxr_linenumber" name="339" href="#339">339</a>         print( <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong> );
-<a class="jxr_linenumber" name="340" href="#340">340</a>     } <em class="jxr_comment">//-- print</em>
-<a class="jxr_linenumber" name="341" href="#341">341</a> 
-<a class="jxr_linenumber" name="342" href="#342">342</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="343" href="#343">343</a> <em class="jxr_javadoccomment">     * Prints the source code for this JClass</em>
-<a class="jxr_linenumber" name="344" href="#344">344</a> <em class="jxr_javadoccomment">     * with the default line seperator of the the runtime platform.</em>
-<a class="jxr_linenumber" name="345" href="#345">345</a> <em class="jxr_javadoccomment">     * @param destDir the destination directory to generate the file.</em>
-<a class="jxr_linenumber" name="346" href="#346">346</a> <em class="jxr_javadoccomment">     * @see print(java.lang.String, java.lang.String)</em>
-<a class="jxr_linenumber" name="347" href="#347">347</a> <em class="jxr_javadoccomment">     **/</em>
-<a class="jxr_linenumber" name="348" href="#348">348</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> print( String destDir )
-<a class="jxr_linenumber" name="349" href="#349">349</a>     {
-<a class="jxr_linenumber" name="350" href="#350">350</a>         print( destDir, <strong class="jxr_keyword">null</strong> );
-<a class="jxr_linenumber" name="351" href="#351">351</a>     } <em class="jxr_comment">//-- print</em>
-<a class="jxr_linenumber" name="352" href="#352">352</a> 
-<a class="jxr_linenumber" name="353" href="#353">353</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="354" href="#354">354</a> <em class="jxr_javadoccomment">     * Prints the source code for this JCompUnit.</em>
-<a class="jxr_linenumber" name="355" href="#355">355</a> <em class="jxr_javadoccomment">     * @param destDir the destination directory to generate the file.</em>
-<a class="jxr_linenumber" name="356" href="#356">356</a> <em class="jxr_javadoccomment">     * @param lineSeparator the line separator to use at the end of each line.</em>
-<a class="jxr_linenumber" name="357" href="#357">357</a> <em class="jxr_javadoccomment">     * If null, then the default line separator for the runtime platform will</em>
-<a class="jxr_linenumber" name="358" href="#358">358</a> <em class="jxr_javadoccomment">     * be used.</em>
-<a class="jxr_linenumber" name="359" href="#359">359</a> <em class="jxr_javadoccomment">     **/</em>
-<a class="jxr_linenumber" name="360" href="#360">360</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> print( String destDir, String lineSeparator )
-<a class="jxr_linenumber" name="361" href="#361">361</a>     {
-<a class="jxr_linenumber" name="362" href="#362">362</a> 
-<a class="jxr_linenumber" name="363" href="#363">363</a>         <em class="jxr_comment">//-- open output file</em>
-<a class="jxr_linenumber" name="364" href="#364">364</a>         String filename = getFilename( destDir );
-<a class="jxr_linenumber" name="365" href="#365">365</a> 
-<a class="jxr_linenumber" name="366" href="#366">366</a>         File file = <strong class="jxr_keyword">new</strong> File( filename );
-<a class="jxr_linenumber" name="367" href="#367">367</a>         <a href="../../../../../../org/codehaus/modello/plugin/java/javasource/JSourceWriter.html">JSourceWriter</a> jsw = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="368" href="#368">368</a>         <strong class="jxr_keyword">try</strong>
-<a class="jxr_linenumber" name="369" href="#369">369</a>         {
-<a class="jxr_linenumber" name="370" href="#370">370</a>             jsw = <strong class="jxr_keyword">new</strong> <a href="../../../../../../org/codehaus/modello/plugin/java/javasource/JSourceWriter.html">JSourceWriter</a>( WriterFactory.newPlatformWriter( file ) );
-<a class="jxr_linenumber" name="371" href="#371">371</a>         }
-<a class="jxr_linenumber" name="372" href="#372">372</a>         <strong class="jxr_keyword">catch</strong> ( java.io.IOException ioe )
+<a class="jxr_linenumber" name="309" href="#309">309</a>         <em class="jxr_comment">//-- Prefix filename with path</em>
+<a class="jxr_linenumber" name="310" href="#310">310</a>         <strong class="jxr_keyword">if</strong> ( pathFile.toString().length() &gt; 0 )
+<a class="jxr_linenumber" name="311" href="#311">311</a>             filename = pathFile.toString() + File.separator + filename;
+<a class="jxr_linenumber" name="312" href="#312">312</a> 
+<a class="jxr_linenumber" name="313" href="#313">313</a>         <strong class="jxr_keyword">return</strong> filename;
+<a class="jxr_linenumber" name="314" href="#314">314</a>     } <em class="jxr_comment">//-- getFilename</em>
+<a class="jxr_linenumber" name="315" href="#315">315</a> 
+<a class="jxr_linenumber" name="316" href="#316">316</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="317" href="#317">317</a> <em class="jxr_javadoccomment">     * Returns the name of the package that this JCompUnit is a member of</em>
+<a class="jxr_linenumber" name="318" href="#318">318</a> <em class="jxr_javadoccomment">     * @return the name of the package that this JCompUnit is a member of,</em>
+<a class="jxr_linenumber" name="319" href="#319">319</a> <em class="jxr_javadoccomment">     * or null if there is no current package name defined</em>
+<a class="jxr_linenumber" name="320" href="#320">320</a> <em class="jxr_javadoccomment">     **/</em>
+<a class="jxr_linenumber" name="321" href="#321">321</a>     <strong class="jxr_keyword">public</strong> String getPackageName()
+<a class="jxr_linenumber" name="322" href="#322">322</a>     {
+<a class="jxr_linenumber" name="323" href="#323">323</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.packageName;
+<a class="jxr_linenumber" name="324" href="#324">324</a>     } <em class="jxr_comment">//-- getPackageName</em>
+<a class="jxr_linenumber" name="325" href="#325">325</a> 
+<a class="jxr_linenumber" name="326" href="#326">326</a>     <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">static</strong> String getPackageFromClassName( String className )
+<a class="jxr_linenumber" name="327" href="#327">327</a>     {
+<a class="jxr_linenumber" name="328" href="#328">328</a>         <strong class="jxr_keyword">int</strong> idx = -1;
+<a class="jxr_linenumber" name="329" href="#329">329</a>         <strong class="jxr_keyword">if</strong> ( ( idx = className.lastIndexOf( '.' ) ) &gt; 0 )
+<a class="jxr_linenumber" name="330" href="#330">330</a>         {
+<a class="jxr_linenumber" name="331" href="#331">331</a>             <strong class="jxr_keyword">return</strong> className.substring( 0, idx );
+<a class="jxr_linenumber" name="332" href="#332">332</a>         }
+<a class="jxr_linenumber" name="333" href="#333">333</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="334" href="#334">334</a>     } <em class="jxr_comment">//-- getPackageFromClassName</em>
+<a class="jxr_linenumber" name="335" href="#335">335</a> 
+<a class="jxr_linenumber" name="336" href="#336">336</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="337" href="#337">337</a> <em class="jxr_javadoccomment">     * Prints the source code for this JClass in the current directory</em>
+<a class="jxr_linenumber" name="338" href="#338">338</a> <em class="jxr_javadoccomment">     * with the default line seperator of the the runtime platform.</em>
+<a class="jxr_linenumber" name="339" href="#339">339</a> <em class="jxr_javadoccomment">     * @see #print(java.lang.String, java.lang.String)</em>
+<a class="jxr_linenumber" name="340" href="#340">340</a> <em class="jxr_javadoccomment">     **/</em>
+<a class="jxr_linenumber" name="341" href="#341">341</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> print()
+<a class="jxr_linenumber" name="342" href="#342">342</a>     {
+<a class="jxr_linenumber" name="343" href="#343">343</a>         print( <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong> );
+<a class="jxr_linenumber" name="344" href="#344">344</a>     } <em class="jxr_comment">//-- print</em>
+<a class="jxr_linenumber" name="345" href="#345">345</a> 
+<a class="jxr_linenumber" name="346" href="#346">346</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="347" href="#347">347</a> <em class="jxr_javadoccomment">     * Prints the source code for this JClass</em>
+<a class="jxr_linenumber" name="348" href="#348">348</a> <em class="jxr_javadoccomment">     * with the default line seperator of the the runtime platform.</em>
+<a class="jxr_linenumber" name="349" href="#349">349</a> <em class="jxr_javadoccomment">     * @param destDir the destination directory to generate the file.</em>
+<a class="jxr_linenumber" name="350" href="#350">350</a> <em class="jxr_javadoccomment">     * @see #print(java.lang.String, java.lang.String)</em>
+<a class="jxr_linenumber" name="351" href="#351">351</a> <em class="jxr_javadoccomment">     **/</em>
+<a class="jxr_linenumber" name="352" href="#352">352</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> print( String destDir )
+<a class="jxr_linenumber" name="353" href="#353">353</a>     {
+<a class="jxr_linenumber" name="354" href="#354">354</a>         print( destDir, <strong class="jxr_keyword">null</strong> );
+<a class="jxr_linenumber" name="355" href="#355">355</a>     } <em class="jxr_comment">//-- print</em>
+<a class="jxr_linenumber" name="356" href="#356">356</a> 
+<a class="jxr_linenumber" name="357" href="#357">357</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="358" href="#358">358</a> <em class="jxr_javadoccomment">     * Prints the source code for this JCompUnit.</em>
+<a class="jxr_linenumber" name="359" href="#359">359</a> <em class="jxr_javadoccomment">     * @param destDir the destination directory to generate the file.</em>
+<a class="jxr_linenumber" name="360" href="#360">360</a> <em class="jxr_javadoccomment">     * @param lineSeparator the line separator to use at the end of each line.</em>
+<a class="jxr_linenumber" name="361" href="#361">361</a> <em class="jxr_javadoccomment">     * If null, then the default line separator for the runtime platform will</em>
+<a class="jxr_linenumber" name="362" href="#362">362</a> <em class="jxr_javadoccomment">     * be used.</em>
+<a class="jxr_linenumber" name="363" href="#363">363</a> <em class="jxr_javadoccomment">     **/</em>
+<a class="jxr_linenumber" name="364" href="#364">364</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> print( String destDir, String lineSeparator )
+<a class="jxr_linenumber" name="365" href="#365">365</a>     {
+<a class="jxr_linenumber" name="366" href="#366">366</a> 
+<a class="jxr_linenumber" name="367" href="#367">367</a>         <em class="jxr_comment">//-- open output file</em>
+<a class="jxr_linenumber" name="368" href="#368">368</a>         String filename = getFilename( destDir );
+<a class="jxr_linenumber" name="369" href="#369">369</a> 
+<a class="jxr_linenumber" name="370" href="#370">370</a>         File file = <strong class="jxr_keyword">new</strong> File( filename );
+<a class="jxr_linenumber" name="371" href="#371">371</a>         <a href="../../../../../../org/codehaus/modello/plugin/java/javasource/JSourceWriter.html">JSourceWriter</a> jsw = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="372" href="#372">372</a>         <strong class="jxr_keyword">try</strong>
 <a class="jxr_linenumber" name="373" href="#373">373</a>         {
-<a class="jxr_linenumber" name="374" href="#374">374</a>             System.out.println( <span class="jxr_string">"unable to create compilation unit file: "</span> + filename );
-<a class="jxr_linenumber" name="375" href="#375">375</a>             <strong class="jxr_keyword">return</strong>;
-<a class="jxr_linenumber" name="376" href="#376">376</a>         }
-<a class="jxr_linenumber" name="377" href="#377">377</a> 
-<a class="jxr_linenumber" name="378" href="#378">378</a>         <strong class="jxr_keyword">if</strong> ( lineSeparator == <strong class="jxr_keyword">null</strong> )
-<a class="jxr_linenumber" name="379" href="#379">379</a>         {
-<a class="jxr_linenumber" name="380" href="#380">380</a>             lineSeparator = System.getProperty( <span class="jxr_string">"line.separator"</span> );
-<a class="jxr_linenumber" name="381" href="#381">381</a>         }
-<a class="jxr_linenumber" name="382" href="#382">382</a>         jsw.setLineSeparator( lineSeparator );
-<a class="jxr_linenumber" name="383" href="#383">383</a>         print( jsw );
-<a class="jxr_linenumber" name="384" href="#384">384</a>         jsw.flush();
-<a class="jxr_linenumber" name="385" href="#385">385</a>         jsw.close();
-<a class="jxr_linenumber" name="386" href="#386">386</a>     } <em class="jxr_comment">//-- print</em>
-<a class="jxr_linenumber" name="387" href="#387">387</a> 
-<a class="jxr_linenumber" name="388" href="#388">388</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="389" href="#389">389</a> <em class="jxr_javadoccomment">     * Prints the source code for this JClass.</em>
-<a class="jxr_linenumber" name="390" href="#390">390</a> <em class="jxr_javadoccomment">     * @param jsw the JSourceWriter to print to.</em>
-<a class="jxr_linenumber" name="391" href="#391">391</a> <em class="jxr_javadoccomment">     **/</em>
-<a class="jxr_linenumber" name="392" href="#392">392</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> print( JSourceWriter jsw )
-<a class="jxr_linenumber" name="393" href="#393">393</a>     {
-<a class="jxr_linenumber" name="394" href="#394">394</a> 
-<a class="jxr_linenumber" name="395" href="#395">395</a>         <em class="jxr_comment">// Traverse the nested class and interface heirarchy and</em>
-<a class="jxr_linenumber" name="396" href="#396">396</a>         <em class="jxr_comment">// update the names to match the compilation unit.</em>
-<a class="jxr_linenumber" name="397" href="#397">397</a> 
-<a class="jxr_linenumber" name="398" href="#398">398</a>         resolveNames();
-<a class="jxr_linenumber" name="399" href="#399">399</a>         StringBuilder buffer = <strong class="jxr_keyword">new</strong> StringBuilder();
-<a class="jxr_linenumber" name="400" href="#400">400</a> 
-<a class="jxr_linenumber" name="401" href="#401">401</a>         <em class="jxr_comment">//-- write file header</em>
-<a class="jxr_linenumber" name="402" href="#402">402</a>         <strong class="jxr_keyword">if</strong> ( header != <strong class="jxr_keyword">null</strong> )
-<a class="jxr_linenumber" name="403" href="#403">403</a>             header.print( jsw );
-<a class="jxr_linenumber" name="404" href="#404">404</a>         <strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="405" href="#405">405</a>         {
-<a class="jxr_linenumber" name="406" href="#406">406</a>             jsw.writeln( <span class="jxr_string">"/*"</span> );
-<a class="jxr_linenumber" name="407" href="#407">407</a>             jsw.writeln( <span class="jxr_string">" * "</span> + DEFAULT_HEADER );
-<a class="jxr_linenumber" name="408" href="#408">408</a>             jsw.writeln( <span class="jxr_string">"*/"</span> );
-<a class="jxr_linenumber" name="409" href="#409">409</a>         }
-<a class="jxr_linenumber" name="410" href="#410">410</a>         jsw.writeln();
-<a class="jxr_linenumber" name="411" href="#411">411</a>         jsw.flush();
-<a class="jxr_linenumber" name="412" href="#412">412</a> 
-<a class="jxr_linenumber" name="413" href="#413">413</a>         <em class="jxr_comment">//-- print package name</em>
-<a class="jxr_linenumber" name="414" href="#414">414</a>         <strong class="jxr_keyword">if</strong> ( ( packageName != <strong class="jxr_keyword">null</strong> ) &amp;&amp; ( packageName.length() &gt; 0 ) )
-<a class="jxr_linenumber" name="415" href="#415">415</a>         {
+<a class="jxr_linenumber" name="374" href="#374">374</a>             jsw = <strong class="jxr_keyword">new</strong> <a href="../../../../../../org/codehaus/modello/plugin/java/javasource/JSourceWriter.html">JSourceWriter</a>( WriterFactory.newPlatformWriter( file ) );
+<a class="jxr_linenumber" name="375" href="#375">375</a>         }
+<a class="jxr_linenumber" name="376" href="#376">376</a>         <strong class="jxr_keyword">catch</strong> ( java.io.IOException ioe )
+<a class="jxr_linenumber" name="377" href="#377">377</a>         {
+<a class="jxr_linenumber" name="378" href="#378">378</a>             System.out.println( <span class="jxr_string">"unable to create compilation unit file: "</span> + filename );
+<a class="jxr_linenumber" name="379" href="#379">379</a>             <strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="380" href="#380">380</a>         }
+<a class="jxr_linenumber" name="381" href="#381">381</a> 
+<a class="jxr_linenumber" name="382" href="#382">382</a>         <strong class="jxr_keyword">if</strong> ( lineSeparator == <strong class="jxr_keyword">null</strong> )
+<a class="jxr_linenumber" name="383" href="#383">383</a>         {
+<a class="jxr_linenumber" name="384" href="#384">384</a>             lineSeparator = System.getProperty( <span class="jxr_string">"line.separator"</span> );
+<a class="jxr_linenumber" name="385" href="#385">385</a>         }
+<a class="jxr_linenumber" name="386" href="#386">386</a>         jsw.setLineSeparator( lineSeparator );
+<a class="jxr_linenumber" name="387" href="#387">387</a>         print( jsw );
+<a class="jxr_linenumber" name="388" href="#388">388</a>         jsw.flush();
+<a class="jxr_linenumber" name="389" href="#389">389</a>         jsw.close();
+<a class="jxr_linenumber" name="390" href="#390">390</a>     } <em class="jxr_comment">//-- print</em>
+<a class="jxr_linenumber" name="391" href="#391">391</a> 
+<a class="jxr_linenumber" name="392" href="#392">392</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="393" href="#393">393</a> <em class="jxr_javadoccomment">     * Prints the source code for this JClass.</em>
+<a class="jxr_linenumber" name="394" href="#394">394</a> <em class="jxr_javadoccomment">     * @param jsw the JSourceWriter to print to.</em>
+<a class="jxr_linenumber" name="395" href="#395">395</a> <em class="jxr_javadoccomment">     **/</em>
+<a class="jxr_linenumber" name="396" href="#396">396</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> print( JSourceWriter jsw )
+<a class="jxr_linenumber" name="397" href="#397">397</a>     {
+<a class="jxr_linenumber" name="398" href="#398">398</a> 
+<a class="jxr_linenumber" name="399" href="#399">399</a>         <em class="jxr_comment">// Traverse the nested class and interface heirarchy and</em>
+<a class="jxr_linenumber" name="400" href="#400">400</a>         <em class="jxr_comment">// update the names to match the compilation unit.</em>
+<a class="jxr_linenumber" name="401" href="#401">401</a> 
+<a class="jxr_linenumber" name="402" href="#402">402</a>         resolveNames();
+<a class="jxr_linenumber" name="403" href="#403">403</a>         StringBuilder buffer = <strong class="jxr_keyword">new</strong> StringBuilder();
+<a class="jxr_linenumber" name="404" href="#404">404</a> 
+<a class="jxr_linenumber" name="405" href="#405">405</a>         <em class="jxr_comment">//-- write file header</em>
+<a class="jxr_linenumber" name="406" href="#406">406</a>         <strong class="jxr_keyword">if</strong> ( header != <strong class="jxr_keyword">null</strong> )
+<a class="jxr_linenumber" name="407" href="#407">407</a>             header.print( jsw );
+<a class="jxr_linenumber" name="408" href="#408">408</a>         <strong class="jxr_keyword">else</strong>
+<a class="jxr_linenumber" name="409" href="#409">409</a>         {
+<a class="jxr_linenumber" name="410" href="#410">410</a>             jsw.writeln( <span class="jxr_string">"/*"</span> );
+<a class="jxr_linenumber" name="411" href="#411">411</a>             jsw.writeln( <span class="jxr_string">" * "</span> + DEFAULT_HEADER );
+<a class="jxr_linenumber" name="412" href="#412">412</a>             jsw.writeln( <span class="jxr_string">"*/"</span> );
+<a class="jxr_linenumber" name="413" href="#413">413</a>         }
+<a class="jxr_linenumber" name="414" href="#414">414</a>         jsw.writeln();
+<a class="jxr_linenumber" name="415" href="#415">415</a>         jsw.flush();
 <a class="jxr_linenumber" name="416" href="#416">416</a> 
-<a class="jxr_linenumber" name="417" href="#417">417</a>             buffer.setLength( 0 );
-<a class="jxr_linenumber" name="418" href="#418">418</a>             buffer.append( <span class="jxr_string">"package "</span> );
-<a class="jxr_linenumber" name="419" href="#419">419</a>             buffer.append( packageName );
-<a class="jxr_linenumber" name="420" href="#420">420</a>             buffer.append( ';' );
-<a class="jxr_linenumber" name="421" href="#421">421</a>             jsw.writeln( buffer.toString() );
-<a class="jxr_linenumber" name="422" href="#422">422</a>             jsw.writeln();
-<a class="jxr_linenumber" name="423" href="#423">423</a>         }
-<a class="jxr_linenumber" name="424" href="#424">424</a> 
-<a class="jxr_linenumber" name="425" href="#425">425</a>         <em class="jxr_comment">//-- print imports</em>
-<a class="jxr_linenumber" name="426" href="#426">426</a>         jsw.writeln( <span class="jxr_string">"  //---------------------------------------------/"</span> );
-<a class="jxr_linenumber" name="427" href="#427">427</a>         jsw.writeln( <span class="jxr_string">" //- Imported classes, interfaces and packages -/"</span> );
-<a class="jxr_linenumber" name="428" href="#428">428</a>         jsw.writeln( <span class="jxr_string">"//---------------------------------------------/"</span> );
-<a class="jxr_linenumber" name="429" href="#429">429</a>         jsw.writeln();
-<a class="jxr_linenumber" name="430" href="#430">430</a>         SortedSet&lt;String&gt; allImports = getImports();
-<a class="jxr_linenumber" name="431" href="#431">431</a>         String compUnitPackage = getPackageName();
-<a class="jxr_linenumber" name="432" href="#432">432</a>         <strong class="jxr_keyword">for</strong> ( String importName : allImports )
-<a class="jxr_linenumber" name="433" href="#433">433</a>         {
-<a class="jxr_linenumber" name="434" href="#434">434</a>             String importsPackage
-<a class="jxr_linenumber" name="435" href="#435">435</a>                 = JStructure.getPackageFromClassName( importName );
-<a class="jxr_linenumber" name="436" href="#436">436</a>             <strong class="jxr_keyword">if</strong> ( importsPackage != <strong class="jxr_keyword">null</strong> &amp;&amp;
-<a class="jxr_linenumber" name="437" href="#437">437</a>                 !importsPackage.equals( compUnitPackage ) )
-<a class="jxr_linenumber" name="438" href="#438">438</a>             {
-<a class="jxr_linenumber" name="439" href="#439">439</a>                 jsw.write( <span class="jxr_string">"import "</span> );
-<a class="jxr_linenumber" name="440" href="#440">440</a>                 jsw.write( importName );
-<a class="jxr_linenumber" name="441" href="#441">441</a>                 jsw.writeln( ';' );
-<a class="jxr_linenumber" name="442" href="#442">442</a>             }
-<a class="jxr_linenumber" name="443" href="#443">443</a>         }
-<a class="jxr_linenumber" name="444" href="#444">444</a>         jsw.writeln();
-<a class="jxr_linenumber" name="445" href="#445">445</a> 
-<a class="jxr_linenumber" name="446" href="#446">446</a>         <em class="jxr_comment">// Print the public elements, interfaces first, then classes.</em>
-<a class="jxr_linenumber" name="447" href="#447">447</a>         <em class="jxr_comment">// There should only be one public element, but if there are</em>
-<a class="jxr_linenumber" name="448" href="#448">448</a>         <em class="jxr_comment">// more we let the compiler catch it.</em>
-<a class="jxr_linenumber" name="449" href="#449">449</a>         printStructures( jsw, <strong class="jxr_keyword">true</strong> );
-<a class="jxr_linenumber" name="450" href="#450">450</a> 
-<a class="jxr_linenumber" name="451" href="#451">451</a>         <em class="jxr_comment">// Print the remaining non-public elements, interfaces first.</em>
-<a class="jxr_linenumber" name="452" href="#452">452</a>         printStructures( jsw, false );
-<a class="jxr_linenumber" name="453" href="#453">453</a> 
-<a class="jxr_linenumber" name="454" href="#454">454</a>         jsw.flush();
-<a class="jxr_linenumber" name="455" href="#455">455</a>     } <em class="jxr_comment">//-- print</em>
-<a class="jxr_linenumber" name="456" href="#456">456</a> 
-<a class="jxr_linenumber" name="457" href="#457">457</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="458" href="#458">458</a> <em class="jxr_javadoccomment">     * Print the source code for the contained JClass objects.</em>
-<a class="jxr_linenumber" name="459" href="#459">459</a> <em class="jxr_javadoccomment">     * @param jsw the JSourceWriter to print to.</em>
-<a class="jxr_linenumber" name="460" href="#460">460</a> <em class="jxr_javadoccomment">     * @param printPublic if true, print only public classes; if</em>
-<a class="jxr_linenumber" name="461" href="#461">461</a> <em class="jxr_javadoccomment">     * false, print only non-public classes.</em>
-<a class="jxr_linenumber" name="462" href="#462">462</a> <em class="jxr_javadoccomment">     **/</em>
-<a class="jxr_linenumber" name="463" href="#463">463</a>     <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> printStructures( JSourceWriter jsw, <strong class="jxr_keyword">boolean</strong> printPublic )
-<a class="jxr_linenumber" name="464" href="#464">464</a>     {
-<a class="jxr_linenumber" name="465" href="#465">465</a> 
-<a class="jxr_linenumber" name="466" href="#466">466</a>         <em class="jxr_comment">//-- print class information</em>
-<a class="jxr_linenumber" name="467" href="#467">467</a>         <em class="jxr_comment">//-- we need to add some JavaDoc API adding comments</em>
-<a class="jxr_linenumber" name="468" href="#468">468</a> 
-<a class="jxr_linenumber" name="469" href="#469">469</a>         <strong class="jxr_keyword">boolean</strong> isFirst = <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="470" href="#470">470</a> 
-<a class="jxr_linenumber" name="471" href="#471">471</a>         <em class="jxr_comment">//SortedSet interfaceList = interfaces.sortedOnFullName();</em>
-<a class="jxr_linenumber" name="472" href="#472">472</a>         <strong class="jxr_keyword">for</strong> ( JInterface jInterface : interfaces )
-<a class="jxr_linenumber" name="473" href="#473">473</a>         {
-<a class="jxr_linenumber" name="474" href="#474">474</a>             <strong class="jxr_keyword">if</strong> ( jInterface.getModifiers().isPublic() == printPublic )
-<a class="jxr_linenumber" name="475" href="#475">475</a>             {
-<a class="jxr_linenumber" name="476" href="#476">476</a>                 <strong class="jxr_keyword">if</strong> ( isFirst )
-<a class="jxr_linenumber" name="477" href="#477">477</a>                 {
-<a class="jxr_linenumber" name="478" href="#478">478</a>                     Header.print( jsw, printPublic );
-<a class="jxr_linenumber" name="479" href="#479">479</a>                     isFirst = false;
-<a class="jxr_linenumber" name="480" href="#480">480</a>                 }
-<a class="jxr_linenumber" name="481" href="#481">481</a>                 jInterface.print( jsw, <strong class="jxr_keyword">true</strong> );
-<a class="jxr_linenumber" name="482" href="#482">482</a>                 jsw.writeln();
-<a class="jxr_linenumber" name="483" href="#483">483</a>             }
-<a class="jxr_linenumber" name="484" href="#484">484</a>         }
-<a class="jxr_linenumber" name="485" href="#485">485</a> 
-<a class="jxr_linenumber" name="486" href="#486">486</a>         <em class="jxr_comment">//SortedSet classList = classes.sortedOnFullName();</em>
-<a class="jxr_linenumber" name="487" href="#487">487</a>         <strong class="jxr_keyword">for</strong> ( JClass jClass : classes )
-<a class="jxr_linenumber" name="488" href="#488">488</a>         {
-<a class="jxr_linenumber" name="489" href="#489">489</a>             <strong class="jxr_keyword">if</strong> ( jClass.getModifiers().isPublic() == printPublic )
-<a class="jxr_linenumber" name="490" href="#490">490</a>             {
-<a class="jxr_linenumber" name="491" href="#491">491</a>                 <strong class="jxr_keyword">if</strong> ( isFirst )
-<a class="jxr_linenumber" name="492" href="#492">492</a>                 {
-<a class="jxr_linenumber" name="493" href="#493">493</a>                     Header.print( jsw, printPublic );
-<a class="jxr_linenumber" name="494" href="#494">494</a>                     isFirst = false;
-<a class="jxr_linenumber" name="495" href="#495">495</a>                 }
-<a class="jxr_linenumber" name="496" href="#496">496</a>                 jClass.print( jsw, <strong class="jxr_keyword">true</strong> );
-<a class="jxr_linenumber" name="497" href="#497">497</a>                 jsw.writeln();
-<a class="jxr_linenumber" name="498" href="#498">498</a>             }
-<a class="jxr_linenumber" name="499" href="#499">499</a>         }
-<a class="jxr_linenumber" name="500" href="#500">500</a>     } <em class="jxr_comment">//-- printElements(JSourceWriter, int)</em>
-<a class="jxr_linenumber" name="501" href="#501">501</a> 
-<a class="jxr_linenumber" name="502" href="#502">502</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="503" href="#503">503</a> <em class="jxr_javadoccomment">     * Sets the header comment for this JCompUnit</em>
-<a class="jxr_linenumber" name="504" href="#504">504</a> <em class="jxr_javadoccomment">     * @param comment the comment to display at the top of the source file</em>
-<a class="jxr_linenumber" name="505" href="#505">505</a> <em class="jxr_javadoccomment">     * when printed</em>
-<a class="jxr_linenumber" name="506" href="#506">506</a> <em class="jxr_javadoccomment">     **/</em>
-<a class="jxr_linenumber" name="507" href="#507">507</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setHeader( JComment comment )
-<a class="jxr_linenumber" name="508" href="#508">508</a>     {
-<a class="jxr_linenumber" name="509" href="#509">509</a>         <strong class="jxr_keyword">this</strong>.header = comment;
-<a class="jxr_linenumber" name="510" href="#510">510</a>     } <em class="jxr_comment">//-- setHeader</em>
-<a class="jxr_linenumber" name="511" href="#511">511</a> 
-<a class="jxr_linenumber" name="512" href="#512">512</a>     <em class="jxr_comment">//-------------------/</em>
-<a class="jxr_linenumber" name="513" href="#513">513</a>     <em class="jxr_comment">//- Private Methods -/</em>
-<a class="jxr_linenumber" name="514" href="#514">514</a>     <em class="jxr_comment">//-------------------/</em>
+<a class="jxr_linenumber" name="417" href="#417">417</a>         <em class="jxr_comment">//-- print package name</em>
+<a class="jxr_linenumber" name="418" href="#418">418</a>         <strong class="jxr_keyword">if</strong> ( ( packageName != <strong class="jxr_keyword">null</strong> ) &amp;&amp; ( packageName.length() &gt; 0 ) )
+<a class="jxr_linenumber" name="419" href="#419">419</a>         {
+<a class="jxr_linenumber" name="420" href="#420">420</a> 
+<a class="jxr_linenumber" name="421" href="#421">421</a>             buffer.setLength( 0 );
+<a class="jxr_linenumber" name="422" href="#422">422</a>             buffer.append( <span class="jxr_string">"package "</span> );
+<a class="jxr_linenumber" name="423" href="#423">423</a>             buffer.append( packageName );
+<a class="jxr_linenumber" name="424" href="#424">424</a>             buffer.append( ';' );
+<a class="jxr_linenumber" name="425" href="#425">425</a>             jsw.writeln( buffer.toString() );
+<a class="jxr_linenumber" name="426" href="#426">426</a>             jsw.writeln();
+<a class="jxr_linenumber" name="427" href="#427">427</a>         }
+<a class="jxr_linenumber" name="428" href="#428">428</a> 
+<a class="jxr_linenumber" name="429" href="#429">429</a>         <em class="jxr_comment">//-- print imports</em>
+<a class="jxr_linenumber" name="430" href="#430">430</a>         jsw.writeln( <span class="jxr_string">"  //---------------------------------------------/"</span> );
+<a class="jxr_linenumber" name="431" href="#431">431</a>         jsw.writeln( <span class="jxr_string">" //- Imported classes, interfaces and packages -/"</span> );
+<a class="jxr_linenumber" name="432" href="#432">432</a>         jsw.writeln( <span class="jxr_string">"//---------------------------------------------/"</span> );
+<a class="jxr_linenumber" name="433" href="#433">433</a>         jsw.writeln();
+<a class="jxr_linenumber" name="434" href="#434">434</a>         SortedSet&lt;String&gt; allImports = getImports();
+<a class="jxr_linenumber" name="435" href="#435">435</a>         String compUnitPackage = getPackageName();
+<a class="jxr_linenumber" name="436" href="#436">436</a>         <strong class="jxr_keyword">for</strong> ( String importName : allImports )
+<a class="jxr_linenumber" name="437" href="#437">437</a>         {
+<a class="jxr_linenumber" name="438" href="#438">438</a>             String importsPackage
+<a class="jxr_linenumber" name="439" href="#439">439</a>                 = JStructure.getPackageFromClassName( importName );
+<a class="jxr_linenumber" name="440" href="#440">440</a>             <strong class="jxr_keyword">if</strong> ( importsPackage != <strong class="jxr_keyword">null</strong> &amp;&amp;
+<a class="jxr_linenumber" name="441" href="#441">441</a>                 !importsPackage.equals( compUnitPackage ) )
+<a class="jxr_linenumber" name="442" href="#442">442</a>             {
+<a class="jxr_linenumber" name="443" href="#443">443</a>                 jsw.write( <span class="jxr_string">"import "</span> );
+<a class="jxr_linenumber" name="444" href="#444">444</a>                 jsw.write( importName );
+<a class="jxr_linenumber" name="445" href="#445">445</a>                 jsw.writeln( ';' );
+<a class="jxr_linenumber" name="446" href="#446">446</a>             }
+<a class="jxr_linenumber" name="447" href="#447">447</a>         }
+<a class="jxr_linenumber" name="448" href="#448">448</a>         jsw.writeln();
+<a class="jxr_linenumber" name="449" href="#449">449</a> 
+<a class="jxr_linenumber" name="450" href="#450">450</a>         <em class="jxr_comment">// Print the public elements, interfaces first, then classes.</em>
+<a class="jxr_linenumber" name="451" href="#451">451</a>         <em class="jxr_comment">// There should only be one public element, but if there are</em>
+<a class="jxr_linenumber" name="452" href="#452">452</a>         <em class="jxr_comment">// more we let the compiler catch it.</em>
+<a class="jxr_linenumber" name="453" href="#453">453</a>         printStructures( jsw, <strong class="jxr_keyword">true</strong> );
+<a class="jxr_linenumber" name="454" href="#454">454</a> 
+<a class="jxr_linenumber" name="455" href="#455">455</a>         <em class="jxr_comment">// Print the remaining non-public elements, interfaces first.</em>
+<a class="jxr_linenumber" name="456" href="#456">456</a>         printStructures( jsw, false );
+<a class="jxr_linenumber" name="457" href="#457">457</a> 
+<a class="jxr_linenumber" name="458" href="#458">458</a>         jsw.flush();
+<a class="jxr_linenumber" name="459" href="#459">459</a>     } <em class="jxr_comment">//-- print</em>
+<a class="jxr_linenumber" name="460" href="#460">460</a> 
+<a class="jxr_linenumber" name="461" href="#461">461</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="462" href="#462">462</a> <em class="jxr_javadoccomment">     * Print the source code for the contained JClass objects.</em>
+<a class="jxr_linenumber" name="463" href="#463">463</a> <em class="jxr_javadoccomment">     * @param jsw the JSourceWriter to print to.</em>
+<a class="jxr_linenumber" name="464" href="#464">464</a> <em class="jxr_javadoccomment">     * @param printPublic if true, print only public classes; if</em>
+<a class="jxr_linenumber" name="465" href="#465">465</a> <em class="jxr_javadoccomment">     * false, print only non-public classes.</em>
+<a class="jxr_linenumber" name="466" href="#466">466</a> <em class="jxr_javadoccomment">     **/</em>
+<a class="jxr_linenumber" name="467" href="#467">467</a>     <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> printStructures( JSourceWriter jsw, <strong class="jxr_keyword">boolean</strong> printPublic )
+<a class="jxr_linenumber" name="468" href="#468">468</a>     {
+<a class="jxr_linenumber" name="469" href="#469">469</a> 
+<a class="jxr_linenumber" name="470" href="#470">470</a>         <em class="jxr_comment">//-- print class information</em>
+<a class="jxr_linenumber" name="471" href="#471">471</a>         <em class="jxr_comment">//-- we need to add some JavaDoc API adding comments</em>
+<a class="jxr_linenumber" name="472" href="#472">472</a> 
+<a class="jxr_linenumber" name="473" href="#473">473</a>         <strong class="jxr_keyword">boolean</strong> isFirst = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="474" href="#474">474</a> 
+<a class="jxr_linenumber" name="475" href="#475">475</a>         <em class="jxr_comment">//SortedSet interfaceList = interfaces.sortedOnFullName();</em>
+<a class="jxr_linenumber" name="476" href="#476">476</a>         <strong class="jxr_keyword">for</strong> ( JInterface jInterface : interfaces )
+<a class="jxr_linenumber" name="477" href="#477">477</a>         {
+<a class="jxr_linenumber" name="478" href="#478">478</a>             <strong class="jxr_keyword">if</strong> ( jInterface.getModifiers().isPublic() == printPublic )
+<a class="jxr_linenumber" name="479" href="#479">479</a>             {
+<a class="jxr_linenumber" name="480" href="#480">480</a>                 <strong class="jxr_keyword">if</strong> ( isFirst )
+<a class="jxr_linenumber" name="481" href="#481">481</a>                 {
+<a class="jxr_linenumber" name="482" href="#482">482</a>                     Header.print( jsw, printPublic );
+<a class="jxr_linenumber" name="483" href="#483">483</a>                     isFirst = false;
+<a class="jxr_linenumber" name="484" href="#484">484</a>                 }
+<a class="jxr_linenumber" name="485" href="#485">485</a>                 jInterface.print( jsw, <strong class="jxr_keyword">true</strong> );
+<a class="jxr_linenumber" name="486" href="#486">486</a>                 jsw.writeln();
+<a class="jxr_linenumber" name="487" href="#487">487</a>             }
+<a class="jxr_linenumber" name="488" href="#488">488</a>         }
+<a class="jxr_linenumber" name="489" href="#489">489</a> 
+<a class="jxr_linenumber" name="490" href="#490">490</a>         <em class="jxr_comment">//SortedSet classList = classes.sortedOnFullName();</em>
+<a class="jxr_linenumber" name="491" href="#491">491</a>         <strong class="jxr_keyword">for</strong> ( JClass jClass : classes )
+<a class="jxr_linenumber" name="492" href="#492">492</a>         {
+<a class="jxr_linenumber" name="493" href="#493">493</a>             <strong class="jxr_keyword">if</strong> ( jClass.getModifiers().isPublic() == printPublic )
+<a class="jxr_linenumber" name="494" href="#494">494</a>             {
+<a class="jxr_linenumber" name="495" href="#495">495</a>                 <strong class="jxr_keyword">if</strong> ( isFirst )
+<a class="jxr_linenumber" name="496" href="#496">496</a>                 {
+<a class="jxr_linenumber" name="497" href="#497">497</a>                     Header.print( jsw, printPublic );
+<a class="jxr_linenumber" name="498" href="#498">498</a>                     isFirst = false;
+<a class="jxr_linenumber" name="499" href="#499">499</a>                 }
+<a class="jxr_linenumber" name="500" href="#500">500</a>                 jClass.print( jsw, <strong class="jxr_keyword">true</strong> );
+<a class="jxr_linenumber" name="501" href="#501">501</a>                 jsw.writeln();
+<a class="jxr_linenumber" name="502" href="#502">502</a>             }
+<a class="jxr_linenumber" name="503" href="#503">503</a>         }
+<a class="jxr_linenumber" name="504" href="#504">504</a>     } <em class="jxr_comment">//-- printElements(JSourceWriter, int)</em>
+<a class="jxr_linenumber" name="505" href="#505">505</a> 
+<a class="jxr_linenumber" name="506" href="#506">506</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="507" href="#507">507</a> <em class="jxr_javadoccomment">     * Sets the header comment for this JCompUnit</em>
+<a class="jxr_linenumber" name="508" href="#508">508</a> <em class="jxr_javadoccomment">     * @param comment the comment to display at the top of the source file</em>
+<a class="jxr_linenumber" name="509" href="#509">509</a> <em class="jxr_javadoccomment">     * when printed</em>
+<a class="jxr_linenumber" name="510" href="#510">510</a> <em class="jxr_javadoccomment">     **/</em>
+<a class="jxr_linenumber" name="511" href="#511">511</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setHeader( JComment comment )
+<a class="jxr_linenumber" name="512" href="#512">512</a>     {
+<a class="jxr_linenumber" name="513" href="#513">513</a>         <strong class="jxr_keyword">this</strong>.header = comment;
+<a class="jxr_linenumber" name="514" href="#514">514</a>     } <em class="jxr_comment">//-- setHeader</em>
 <a class="jxr_linenumber" name="515" href="#515">515</a> 
-<a class="jxr_linenumber" name="516" href="#516">516</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="517" href="#517">517</a> <em class="jxr_javadoccomment">     * Update the names of nested classes and interfaces.</em>
-<a class="jxr_linenumber" name="518" href="#518">518</a> <em class="jxr_javadoccomment">     **/</em>
-<a class="jxr_linenumber" name="519" href="#519">519</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> resolveNames()
-<a class="jxr_linenumber" name="520" href="#520">520</a>     {
-<a class="jxr_linenumber" name="521" href="#521">521</a> 
-<a class="jxr_linenumber" name="522" href="#522">522</a>         <em class="jxr_comment">/*</em>
-<a class="jxr_linenumber" name="523" href="#523">523</a> <em class="jxr_comment">          Commented out until support for inner-classes is added</em>
-<a class="jxr_linenumber" name="524" href="#524">524</a> <em class="jxr_comment">          kvisco - 20021211</em>
+<a class="jxr_linenumber" name="516" href="#516">516</a>     <em class="jxr_comment">//-------------------/</em>
+<a class="jxr_linenumber" name="517" href="#517">517</a>     <em class="jxr_comment">//- Private Methods -/</em>
+<a class="jxr_linenumber" name="518" href="#518">518</a>     <em class="jxr_comment">//-------------------/</em>
+<a class="jxr_linenumber" name="519" href="#519">519</a> 
+<a class="jxr_linenumber" name="520" href="#520">520</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="521" href="#521">521</a> <em class="jxr_javadoccomment">     * Update the names of nested classes and interfaces.</em>
+<a class="jxr_linenumber" name="522" href="#522">522</a> <em class="jxr_javadoccomment">     **/</em>
+<a class="jxr_linenumber" name="523" href="#523">523</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> resolveNames()
+<a class="jxr_linenumber" name="524" href="#524">524</a>     {
 <a class="jxr_linenumber" name="525" href="#525">525</a> 
-<a class="jxr_linenumber" name="526" href="#526">526</a> <em class="jxr_comment">        for (int i = 0; i &lt; classes.size(); i++) {</em>
-<a class="jxr_linenumber" name="527" href="#527">527</a> <em class="jxr_comment">            JClass jClass = (JClass) classes.get(i);</em>
-<a class="jxr_linenumber" name="528" href="#528">528</a> <em class="jxr_comment">            jClass.resolveNames(packageName, null);</em>
-<a class="jxr_linenumber" name="529" href="#529">529</a> <em class="jxr_comment">        }</em>
-<a class="jxr_linenumber" name="530" href="#530">530</a> <em class="jxr_comment">        for (int i = 0; i &lt; interfaces.size(); i++) {</em>
-<a class="jxr_linenumber" name="531" href="#531">531</a> <em class="jxr_comment">            JInterface jInterface = (JInterface) interfaces.get(i);</em>
-<a class="jxr_linenumber" name="532" href="#532">532</a> <em class="jxr_comment">            jInterface.resolveNames(packageName, null);</em>
+<a class="jxr_linenumber" name="526" href="#526">526</a>         <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="527" href="#527">527</a> <em class="jxr_comment">          Commented out until support for inner-classes is added</em>
+<a class="jxr_linenumber" name="528" href="#528">528</a> <em class="jxr_comment">          kvisco - 20021211</em>
+<a class="jxr_linenumber" name="529" href="#529">529</a> 
+<a class="jxr_linenumber" name="530" href="#530">530</a> <em class="jxr_comment">        for (int i = 0; i &lt; classes.size(); i++) {</em>
+<a class="jxr_linenumber" name="531" href="#531">531</a> <em class="jxr_comment">            JClass jClass = (JClass) classes.get(i);</em>
+<a class="jxr_linenumber" name="532" href="#532">532</a> <em class="jxr_comment">            jClass.resolveNames(packageName, null);</em>
 <a class="jxr_linenumber" name="533" href="#533">533</a> <em class="jxr_comment">        }</em>
-<a class="jxr_linenumber" name="534" href="#534">534</a> <em class="jxr_comment">        */</em>
-<a class="jxr_linenumber" name="535" href="#535">535</a>     } <em class="jxr_comment">//-- resolveNames</em>
-<a class="jxr_linenumber" name="536" href="#536">536</a> 
-<a class="jxr_linenumber" name="537" href="#537">537</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="538" href="#538">538</a> <em class="jxr_javadoccomment">     * Test drive method...to be removed or commented out</em>
-<a class="jxr_linenumber" name="539" href="#539">539</a> <em class="jxr_javadoccomment">     **</em>
-<a class="jxr_linenumber" name="540" href="#540">540</a> <em class="jxr_javadoccomment">     public static void main(String[] args) {</em>
-<a class="jxr_linenumber" name="541" href="#541">541</a> <em class="jxr_javadoccomment">     JCompUnit unit = new JCompUnit("com.acme", "Test.java");</em>
-<a class="jxr_linenumber" name="542" href="#542">542</a> 
-<a class="jxr_linenumber" name="543" href="#543">543</a> <em class="jxr_javadoccomment">     JClass testClass = new JClass("Test");</em>
-<a class="jxr_linenumber" name="544" href="#544">544</a> 
-<a class="jxr_linenumber" name="545" href="#545">545</a> <em class="jxr_javadoccomment">     testClass.addImport("java.util.Vector");</em>
-<a class="jxr_linenumber" name="546" href="#546">546</a> <em class="jxr_javadoccomment">     testClass.addMember(new JField(JType.Int, "x"));</em>
-<a class="jxr_linenumber" name="547" href="#547">547</a> 
-<a class="jxr_linenumber" name="548" href="#548">548</a> <em class="jxr_javadoccomment">     JField field = null;</em>
-<a class="jxr_linenumber" name="549" href="#549">549</a> <em class="jxr_javadoccomment">     field = new JField(JType.Int, "_z");</em>
-<a class="jxr_linenumber" name="550" href="#550">550</a> <em class="jxr_javadoccomment">     field.getModifiers().setStatic(true);</em>
-<a class="jxr_linenumber" name="551" href="#551">551</a> <em class="jxr_javadoccomment">     testClass.addField(field);</em>
-<a class="jxr_linenumber" name="552" href="#552">552</a> 
-<a class="jxr_linenumber" name="553" href="#553">553</a> <em class="jxr_javadoccomment">     testClass.getStaticInitializationCode().add("_z = 75;");</em>
-<a class="jxr_linenumber" name="554" href="#554">554</a> 
-<a class="jxr_linenumber" name="555" href="#555">555</a> <em class="jxr_javadoccomment">     JClass jcString = new JClass("String");</em>
-<a class="jxr_linenumber" name="556" href="#556">556</a> <em class="jxr_javadoccomment">     field = new JField(jcString, "myString");</em>
-<a class="jxr_linenumber" name="557" href="#557">557</a> <em class="jxr_javadoccomment">     field.getModifiers().makePrivate();</em>
-<a class="jxr_linenumber" name="558" href="#558">558</a> <em class="jxr_javadoccomment">     testClass.addMember(field);</em>
-<a class="jxr_linenumber" name="559" href="#559">559</a> 
-<a class="jxr_linenumber" name="560" href="#560">560</a> <em class="jxr_javadoccomment">     //-- create constructor</em>
-<a class="jxr_linenumber" name="561" href="#561">561</a> <em class="jxr_javadoccomment">     JConstructor cons = testClass.createConstructor();</em>
-<a class="jxr_linenumber" name="562" href="#562">562</a> <em class="jxr_javadoccomment">     testClass.addConstructor(cons);</em>
-<a class="jxr_linenumber" name="563" href="#563">563</a> <em class="jxr_javadoccomment">     cons.getSourceCode().add("this.x = 6;");</em>
-<a class="jxr_linenumber" name="564" href="#564">564</a> 
-<a class="jxr_linenumber" name="565" href="#565">565</a> <em class="jxr_javadoccomment">     JMethod jMethod = new JMethod(JType.Int, "getX");</em>
-<a class="jxr_linenumber" name="566" href="#566">566</a> <em class="jxr_javadoccomment">     jMethod.setSourceCode("return this.x;");</em>
-<a class="jxr_linenumber" name="567" href="#567">567</a> <em class="jxr_javadoccomment">     testClass.addMethod(jMethod);</em>
+<a class="jxr_linenumber" name="534" href="#534">534</a> <em class="jxr_comment">        for (int i = 0; i &lt; interfaces.size(); i++) {</em>
+<a class="jxr_linenumber" name="535" href="#535">535</a> <em class="jxr_comment">            JInterface jInterface = (JInterface) interfaces.get(i);</em>
+<a class="jxr_linenumber" name="536" href="#536">536</a> <em class="jxr_comment">            jInterface.resolveNames(packageName, null);</em>
+<a class="jxr_linenumber" name="537" href="#537">537</a> <em class="jxr_comment">        }</em>
+<a class="jxr_linenumber" name="538" href="#538">538</a> <em class="jxr_comment">        */</em>
+<a class="jxr_linenumber" name="539" href="#539">539</a>     } <em class="jxr_comment">//-- resolveNames</em>
+<a class="jxr_linenumber" name="540" href="#540">540</a> 
+<a class="jxr_linenumber" name="541" href="#541">541</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="542" href="#542">542</a> <em class="jxr_javadoccomment">     * Test drive method...to be removed or commented out</em>
+<a class="jxr_linenumber" name="543" href="#543">543</a> <em class="jxr_javadoccomment">     **</em>
+<a class="jxr_linenumber" name="544" href="#544">544</a> <em class="jxr_javadoccomment">     public static void main(String[] args) {</em>
+<a class="jxr_linenumber" name="545" href="#545">545</a> <em class="jxr_javadoccomment">     JCompUnit unit = new JCompUnit("com.acme", "Test.java");</em>
+<a class="jxr_linenumber" name="546" href="#546">546</a> 
+<a class="jxr_linenumber" name="547" href="#547">547</a> <em class="jxr_javadoccomment">     JClass testClass = new JClass("Test");</em>
+<a class="jxr_linenumber" name="548" href="#548">548</a> 
+<a class="jxr_linenumber" name="549" href="#549">549</a> <em class="jxr_javadoccomment">     testClass.addImport("java.util.Vector");</em>
+<a class="jxr_linenumber" name="550" href="#550">550</a> <em class="jxr_javadoccomment">     testClass.addMember(new JField(JType.Int, "x"));</em>
+<a class="jxr_linenumber" name="551" href="#551">551</a> 
+<a class="jxr_linenumber" name="552" href="#552">552</a> <em class="jxr_javadoccomment">     JField field = null;</em>
+<a class="jxr_linenumber" name="553" href="#553">553</a> <em class="jxr_javadoccomment">     field = new JField(JType.Int, "_z");</em>
+<a class="jxr_linenumber" name="554" href="#554">554</a> <em class="jxr_javadoccomment">     field.getModifiers().setStatic(true);</em>
+<a class="jxr_linenumber" name="555" href="#555">555</a> <em class="jxr_javadoccomment">     testClass.addField(field);</em>
+<a class="jxr_linenumber" name="556" href="#556">556</a> 
+<a class="jxr_linenumber" name="557" href="#557">557</a> <em class="jxr_javadoccomment">     testClass.getStaticInitializationCode().add("_z = 75;");</em>
+<a class="jxr_linenumber" name="558" href="#558">558</a> 
+<a class="jxr_linenumber" name="559" href="#559">559</a> <em class="jxr_javadoccomment">     JClass jcString = new JClass("String");</em>
+<a class="jxr_linenumber" name="560" href="#560">560</a> <em class="jxr_javadoccomment">     field = new JField(jcString, "myString");</em>
+<a class="jxr_linenumber" name="561" href="#561">561</a> <em class="jxr_javadoccomment">     field.getModifiers().makePrivate();</em>
+<a class="jxr_linenumber" name="562" href="#562">562</a> <em class="jxr_javadoccomment">     testClass.addMember(field);</em>
+<a class="jxr_linenumber" name="563" href="#563">563</a> 
+<a class="jxr_linenumber" name="564" href="#564">564</a> <em class="jxr_javadoccomment">     //-- create constructor</em>
+<a class="jxr_linenumber" name="565" href="#565">565</a> <em class="jxr_javadoccomment">     JConstructor cons = testClass.createConstructor();</em>
+<a class="jxr_linenumber" name="566" href="#566">566</a> <em class="jxr_javadoccomment">     testClass.addConstructor(cons);</em>
+<a class="jxr_linenumber" name="567" href="#567">567</a> <em class="jxr_javadoccomment">     cons.getSourceCode().add("this.x = 6;");</em>
 <a class="jxr_linenumber" name="568" href="#568">568</a> 
-<a class="jxr_linenumber" name="569" href="#569">569</a> <em class="jxr_javadoccomment">     unit.addClass (testClass);</em>
-<a class="jxr_linenumber" name="570" href="#570">570</a> 
-<a class="jxr_linenumber" name="571" href="#571">571</a> <em class="jxr_javadoccomment">     unit.print();</em>
+<a class="jxr_linenumber" name="569" href="#569">569</a> <em class="jxr_javadoccomment">     JMethod jMethod = new JMethod(JType.Int, "getX");</em>
+<a class="jxr_linenumber" name="570" href="#570">570</a> <em class="jxr_javadoccomment">     jMethod.setSourceCode("return this.x;");</em>
+<a class="jxr_linenumber" name="571" href="#571">571</a> <em class="jxr_javadoccomment">     testClass.addMethod(jMethod);</em>
 <a class="jxr_linenumber" name="572" href="#572">572</a> 
-<a class="jxr_linenumber" name="573" href="#573">573</a> <em class="jxr_javadoccomment">     } //-- main</em>
-<a class="jxr_linenumber" name="574" href="#574">574</a> <em class="jxr_javadoccomment">     /* */</em>
-<a class="jxr_linenumber" name="575" href="#575">575</a> 
-<a class="jxr_linenumber" name="576" href="#576">576</a> } <em class="jxr_comment">//-- JCompUnit</em>
-<a class="jxr_linenumber" name="577" href="#577">577</a> 
-<a class="jxr_linenumber" name="578" href="#578">578</a> <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="579" href="#579">579</a> <em class="jxr_javadoccomment"> * Print the headers delineating the public and non-public elements of</em>
-<a class="jxr_linenumber" name="580" href="#580">580</a> <em class="jxr_javadoccomment"> * the compilation unit.</em>
-<a class="jxr_linenumber" name="581" href="#581">581</a> <em class="jxr_javadoccomment"> **/</em>
-<a class="jxr_linenumber" name="582" href="#582">582</a> <strong class="jxr_keyword">class</strong> <a href="../../../../../../org/codehaus/modello/plugin/java/javasource/JCompUnit.html">Header</a>
-<a class="jxr_linenumber" name="583" href="#583">583</a> {
-<a class="jxr_linenumber" name="584" href="#584">584</a> 
-<a class="jxr_linenumber" name="585" href="#585">585</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String[] publicHeader = {
-<a class="jxr_linenumber" name="586" href="#586">586</a>         <span class="jxr_string">"  //-----------------------------/"</span>,
-<a class="jxr_linenumber" name="587" href="#587">587</a>         <span class="jxr_string">" //-  Public Class / Interface -/"</span>,
-<a class="jxr_linenumber" name="588" href="#588">588</a>         <span class="jxr_string">"//-----------------------------/"</span>,
-<a class="jxr_linenumber" name="589" href="#589">589</a>     };
-<a class="jxr_linenumber" name="590" href="#590">590</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String[] nonPublicHeader = {
-<a class="jxr_linenumber" name="591" href="#591">591</a>         <span class="jxr_string">"  //-------------------------------------/"</span>,
-<a class="jxr_linenumber" name="592" href="#592">592</a>         <span class="jxr_string">" //-  Non-Public Classes / Interfaces  -/"</span>,
-<a class="jxr_linenumber" name="593" href="#593">593</a>         <span class="jxr_string">"//-------------------------------------/"</span>,
-<a class="jxr_linenumber" name="594" href="#594">594</a>     };
-<a class="jxr_linenumber" name="595" href="#595">595</a> 
-<a class="jxr_linenumber" name="596" href="#596">596</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="597" href="#597">597</a> <em class="jxr_javadoccomment">     * Print the specified header to the given Writer.</em>
-<a class="jxr_linenumber" name="598" href="#598">598</a> <em class="jxr_javadoccomment">     * @params JSourceWriter an open JSourceWriter</em>
-<a class="jxr_linenumber" name="599" href="#599">599</a> <em class="jxr_javadoccomment">     * @params boolean if true print the public header, otherwise</em>
-<a class="jxr_linenumber" name="600" href="#600">600</a> <em class="jxr_javadoccomment">     * print the non-public header.</em>
-<a class="jxr_linenumber" name="601" href="#601">601</a> <em class="jxr_javadoccomment">     **/</em>
-<a class="jxr_linenumber" name="602" href="#602">602</a>     <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> print( JSourceWriter jsw, <strong class="jxr_keyword">boolean</strong> printPublic )
-<a class="jxr_linenumber" name="603" href="#603">603</a>     {
-<a class="jxr_linenumber" name="604" href="#604">604</a>         String[] header = printPublic ? publicHeader : nonPublicHeader;
-<a class="jxr_linenumber" name="605" href="#605">605</a>         <strong class="jxr_keyword">for</strong> ( String aHeader : header )
-<a class="jxr_linenumber" name="606" href="#606">606</a>         {
-<a class="jxr_linenumber" name="607" href="#607">607</a>             jsw.writeln( aHeader );
-<a class="jxr_linenumber" name="608" href="#608">608</a>         }
-<a class="jxr_linenumber" name="609" href="#609">609</a>         jsw.writeln();
-<a class="jxr_linenumber" name="610" href="#610">610</a>     }
-<a class="jxr_linenumber" name="611" href="#611">611</a> } <em class="jxr_comment">//-- Header</em>
+<a class="jxr_linenumber" name="573" href="#573">573</a> <em class="jxr_javadoccomment">     unit.addClass (testClass);</em>
+<a class="jxr_linenumber" name="574" href="#574">574</a> 
+<a class="jxr_linenumber" name="575" href="#575">575</a> <em class="jxr_javadoccomment">     unit.print();</em>
+<a class="jxr_linenumber" name="576" href="#576">576</a> 
+<a class="jxr_linenumber" name="577" href="#577">577</a> <em class="jxr_javadoccomment">     } //-- main</em>
+<a class="jxr_linenumber" name="578" href="#578">578</a> <em class="jxr_javadoccomment">     /* */</em>
+<a class="jxr_linenumber" name="579" href="#579">579</a> 
+<a class="jxr_linenumber" name="580" href="#580">580</a> } <em class="jxr_comment">//-- JCompUnit</em>
+<a class="jxr_linenumber" name="581" href="#581">581</a> 
+<a class="jxr_linenumber" name="582" href="#582">582</a> <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="583" href="#583">583</a> <em class="jxr_javadoccomment"> * Print the headers delineating the public and non-public elements of</em>
+<a class="jxr_linenumber" name="584" href="#584">584</a> <em class="jxr_javadoccomment"> * the compilation unit.</em>
+<a class="jxr_linenumber" name="585" href="#585">585</a> <em class="jxr_javadoccomment"> **/</em>
+<a class="jxr_linenumber" name="586" href="#586">586</a> <strong class="jxr_keyword">class</strong> <a href="../../../../../../org/codehaus/modello/plugin/java/javasource/JCompUnit.html">Header</a>
+<a class="jxr_linenumber" name="587" href="#587">587</a> {
+<a class="jxr_linenumber" name="588" href="#588">588</a> 
+<a class="jxr_linenumber" name="589" href="#589">589</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String[] publicHeader = {
+<a class="jxr_linenumber" name="590" href="#590">590</a>         <span class="jxr_string">"  //-----------------------------/"</span>,
+<a class="jxr_linenumber" name="591" href="#591">591</a>         <span class="jxr_string">" //-  Public Class / Interface -/"</span>,
+<a class="jxr_linenumber" name="592" href="#592">592</a>         <span class="jxr_string">"//-----------------------------/"</span>,
+<a class="jxr_linenumber" name="593" href="#593">593</a>     };
+<a class="jxr_linenumber" name="594" href="#594">594</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String[] nonPublicHeader = {
+<a class="jxr_linenumber" name="595" href="#595">595</a>         <span class="jxr_string">"  //-------------------------------------/"</span>,
+<a class="jxr_linenumber" name="596" href="#596">596</a>         <span class="jxr_string">" //-  Non-Public Classes / Interfaces  -/"</span>,
+<a class="jxr_linenumber" name="597" href="#597">597</a>         <span class="jxr_string">"//-------------------------------------/"</span>,
+<a class="jxr_linenumber" name="598" href="#598">598</a>     };
+<a class="jxr_linenumber" name="599" href="#599">599</a> 
+<a class="jxr_linenumber" name="600" href="#600">600</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="601" href="#601">601</a> <em class="jxr_javadoccomment">     * Print the specified header to the given Writer.</em>
+<a class="jxr_linenumber" name="602" href="#602">602</a> <em class="jxr_javadoccomment">     * @params JSourceWriter an open JSourceWriter</em>
+<a class="jxr_linenumber" name="603" href="#603">603</a> <em class="jxr_javadoccomment">     * @params boolean if true print the public header, otherwise</em>
+<a class="jxr_linenumber" name="604" href="#604">604</a> <em class="jxr_javadoccomment">     * print the non-public header.</em>
+<a class="jxr_linenumber" name="605" href="#605">605</a> <em class="jxr_javadoccomment">     **/</em>
+<a class="jxr_linenumber" name="606" href="#606">606</a>     <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> print( JSourceWriter jsw, <strong class="jxr_keyword">boolean</strong> printPublic )
+<a class="jxr_linenumber" name="607" href="#607">607</a>     {
+<a class="jxr_linenumber" name="608" href="#608">608</a>         String[] header = printPublic ? publicHeader : nonPublicHeader;
+<a class="jxr_linenumber" name="609" href="#609">609</a>         <strong class="jxr_keyword">for</strong> ( String aHeader : header )
+<a class="jxr_linenumber" name="610" href="#610">610</a>         {
+<a class="jxr_linenumber" name="611" href="#611">611</a>             jsw.writeln( aHeader );
+<a class="jxr_linenumber" name="612" href="#612">612</a>         }
+<a class="jxr_linenumber" name="613" href="#613">613</a>         jsw.writeln();
+<a class="jxr_linenumber" name="614" href="#614">614</a>     }
+<a class="jxr_linenumber" name="615" href="#615">615</a> } <em class="jxr_comment">//-- Header</em>
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
 </html>

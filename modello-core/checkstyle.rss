@@ -23,11 +23,11 @@ under the License.
     <link>http://codehaus-plexus.github.io/modello/modello-core/</link>
     <description>Modello Core - Checkstyle report</description>
     <language>en-us</language>
-    <copyright>&#169;2001 - 2015 Codehaus Plexus</copyright>
+    <copyright>&#169;2001 - 2018 Codehaus Plexus</copyright>
     <item>
       <title>File: 44,
              Errors: 66,
-             Warnings: 265,
+             Warnings: 255,
              Infos: 38
       </title>
             <link>http://codehaus-plexus.github.io/modello/modello-core//checkstyle.html</link>
@@ -136,7 +136,7 @@ under the License.
                   1
                 </td>
                 <td>
-                  18
+                  10
                 </td>
                 <td>
                   2
@@ -430,7 +430,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  20
+                  18
                 </td>
                 <td>
                   1

@@ -23,7 +23,7 @@ under the License.
     <link>http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-jsonschema/</link>
     <description>Modello JSON-Schema Plugin - Checkstyle report</description>
     <language>en-us</language>
-    <copyright>&#169;2001 - 2015 Codehaus Plexus</copyright>
+    <copyright>&#169;2001 - 2018 Codehaus Plexus</copyright>
     <item>
       <title>File: 1,
              Errors: 2,

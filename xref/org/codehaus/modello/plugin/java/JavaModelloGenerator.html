@@ -929,11 +929,11 @@
 <a class="jxr_linenumber" name="919" href="#919">919</a>             sc.add( <span class="jxr_string">"this."</span> + source.getName() + <span class="jxr_string">" = "</span> + source.getName() + <span class="jxr_string">";"</span> );
 <a class="jxr_linenumber" name="920" href="#920">920</a>         }
 <a class="jxr_linenumber" name="921" href="#921">921</a> 
-<a class="jxr_linenumber" name="922" href="#922">922</a>         String fieldType = <span class="jxr_string">"java.util.Map"</span> + ( useJava5 ? <span class="jxr_string">"&lt;Object, "</span> + locationClass.getName() + <span class="jxr_string">"&gt;"</span> : <span class="jxr_string">""</span> );
-<a class="jxr_linenumber" name="923" href="#923">923</a>         String fieldImpl = <span class="jxr_string">"java.util.LinkedHashMap"</span> + ( useJava5 ? <span class="jxr_string">"&lt;Object, "</span> + locationClass.getName() + <span class="jxr_string">"&gt;"</span> : <span class="jxr_string">""</span> );
+<a class="jxr_linenumber" name="922" href="#922">922</a>         <a href="../../../../../org/codehaus/modello/plugin/java/javasource/JType.html">JType</a> fieldType = <strong class="jxr_keyword">new</strong> <a href="../../../../../org/codehaus/modello/plugin/java/javasource/JMapType.html">JMapType</a>( <span class="jxr_string">"java.util.Map"</span>, <strong class="jxr_keyword">new</strong> <a href="../../../../../org/codehaus/modello/plugin/java/javasource/JType.html">JType</a>(locationClass.getName()), useJava5 );
+<a class="jxr_linenumber" name="923" href="#923">923</a>         <a href="../../../../../org/codehaus/modello/plugin/java/javasource/JType.html">JType</a> fieldImpl = <strong class="jxr_keyword">new</strong> <a href="../../../../../org/codehaus/modello/plugin/java/javasource/JMapType.html">JMapType</a>(<span class="jxr_string">"java.util.LinkedHashMap"</span>, <strong class="jxr_keyword">new</strong> <a href="../../../../../org/codehaus/modello/plugin/java/javasource/JType.html">JType</a>(locationClass.getName()), useJava5);
 <a class="jxr_linenumber" name="924" href="#924">924</a> 
 <a class="jxr_linenumber" name="925" href="#925">925</a>         <em class="jxr_comment">// public Map&lt;Object, Location&gt; getLocations()</em>
-<a class="jxr_linenumber" name="926" href="#926">926</a>         <a href="../../../../../org/codehaus/modello/plugin/java/javasource/JMethod.html">JMethod</a> jMethod = <strong class="jxr_keyword">new</strong> <a href="../../../../../org/codehaus/modello/plugin/java/javasource/JMethod.html">JMethod</a>( <span class="jxr_string">"get"</span> + capitalise( locationsField ), <strong class="jxr_keyword">new</strong> JType( fieldType ), <strong class="jxr_keyword">null</strong> );
+<a class="jxr_linenumber" name="926" href="#926">926</a>         <a href="../../../../../org/codehaus/modello/plugin/java/javasource/JMethod.html">JMethod</a> jMethod = <strong class="jxr_keyword">new</strong> <a href="../../../../../org/codehaus/modello/plugin/java/javasource/JMethod.html">JMethod</a>( <span class="jxr_string">"get"</span> + capitalise( locationsField ), fieldType, <strong class="jxr_keyword">null</strong> );
 <a class="jxr_linenumber" name="927" href="#927">927</a>         sc = jMethod.getSourceCode();
 <a class="jxr_linenumber" name="928" href="#928">928</a>         sc.add( <span class="jxr_string">"return "</span> + locationsField + <span class="jxr_string">";"</span> );
 <a class="jxr_linenumber" name="929" href="#929">929</a>         jMethod.setComment( <span class="jxr_string">""</span> );
@@ -941,7 +941,7 @@
 <a class="jxr_linenumber" name="931" href="#931">931</a> 
 <a class="jxr_linenumber" name="932" href="#932">932</a>         <em class="jxr_comment">// public void setLocations( Map&lt;Object, Location&gt; locations )</em>
 <a class="jxr_linenumber" name="933" href="#933">933</a>         jMethod = <strong class="jxr_keyword">new</strong> <a href="../../../../../org/codehaus/modello/plugin/java/javasource/JMethod.html">JMethod</a>( <span class="jxr_string">"set"</span> + capitalise( locationsField ) );
-<a class="jxr_linenumber" name="934" href="#934">934</a>         jMethod.addParameter( <strong class="jxr_keyword">new</strong> JParameter( <strong class="jxr_keyword">new</strong> JType( fieldType ), locationsField ) );
+<a class="jxr_linenumber" name="934" href="#934">934</a>         jMethod.addParameter( <strong class="jxr_keyword">new</strong> JParameter( fieldType, locationsField ) );
 <a class="jxr_linenumber" name="935" href="#935">935</a>         sc = jMethod.getSourceCode();
 <a class="jxr_linenumber" name="936" href="#936">936</a>         sc.add( <span class="jxr_string">"this."</span> + locationsField + <span class="jxr_string">" = "</span> + locationsField + <span class="jxr_string">";"</span> );
 <a class="jxr_linenumber" name="937" href="#937">937</a>         jMethod.setComment( <span class="jxr_string">""</span> );
@@ -982,7 +982,7 @@
 <a class="jxr_linenumber" name="972" href="#972">972</a>         sc.add( <span class="jxr_string">"}"</span> );
 <a class="jxr_linenumber" name="973" href="#973">973</a>         sc.add( <span class="jxr_string">"else"</span> );
 <a class="jxr_linenumber" name="974" href="#974">974</a>         sc.add( <span class="jxr_string">"{"</span> );
-<a class="jxr_linenumber" name="975" href="#975">975</a>         sc.addIndented( <span class="jxr_string">"locations = new "</span> + fieldImpl + <span class="jxr_string">"();"</span> );
+<a class="jxr_linenumber" name="975" href="#975">975</a>         sc.addIndented( <span class="jxr_string">"locations = new "</span> + fieldImpl.getName() + <span class="jxr_string">"();"</span> );
 <a class="jxr_linenumber" name="976" href="#976">976</a>         sc.addIndented( <span class="jxr_string">"locations.putAll( sourceDominant ? targetLocations : sourceLocations );"</span> );
 <a class="jxr_linenumber" name="977" href="#977">977</a>         sc.addIndented( <span class="jxr_string">"locations.putAll( sourceDominant ? sourceLocations : targetLocations );"</span> );
 <a class="jxr_linenumber" name="978" href="#978">978</a>         sc.add( <span class="jxr_string">"}"</span> );

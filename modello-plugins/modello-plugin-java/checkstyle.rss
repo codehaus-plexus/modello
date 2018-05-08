@@ -23,11 +23,11 @@ under the License.
     <link>http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-java/</link>
     <description>Modello Java Plugin - Checkstyle report</description>
     <language>en-us</language>
-    <copyright>&#169;2001 - 2015 Codehaus Plexus</copyright>
+    <copyright>&#169;2001 - 2018 Codehaus Plexus</copyright>
     <item>
       <title>File: 32,
-             Errors: 251,
-             Warnings: 169,
+             Errors: 257,
+             Warnings: 140,
              Infos: 38
       </title>
             <link>http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-java//checkstyle.html</link>
@@ -80,7 +80,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  5
+                  2
                 </td>
                 <td>
                   5
@@ -136,7 +136,7 @@ under the License.
                   8
                 </td>
                 <td>
-                  5
+                  3
                 </td>
                 <td>
                   19
@@ -192,7 +192,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  3
+                  1
                 </td>
                 <td>
                   7
@@ -206,7 +206,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  3
+                  1
                 </td>
                 <td>
                   10
@@ -220,7 +220,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  1
+                  0
                 </td>
                 <td>
                   2
@@ -276,7 +276,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  4
+                  3
                 </td>
                 <td>
                   10
@@ -304,7 +304,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  0
+                  1
                 </td>
                 <td>
                   2
@@ -318,7 +318,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  1
+                  0
                 </td>
                 <td>
                   7
@@ -360,7 +360,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  20
+                  11
                 </td>
                 <td>
                   20
@@ -374,7 +374,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  4
+                  2
                 </td>
                 <td>
                   1
@@ -416,7 +416,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  8
+                  7
                 </td>
                 <td>
                   9
@@ -444,7 +444,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  1
+                  0
                 </td>
                 <td>
                   18
@@ -458,7 +458,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  12
+                  7
                 </td>
                 <td>
                   22
@@ -475,7 +475,7 @@ under the License.
                   1
                 </td>
                 <td>
-                  17
+                  23
                 </td>
               </tr>
                           <tr>

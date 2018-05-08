@@ -23,10 +23,10 @@ under the License.
     <link>http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-xpp3/</link>
     <description>Modello XPP3 Plugin - Checkstyle report</description>
     <language>en-us</language>
-    <copyright>&#169;2001 - 2015 Codehaus Plexus</copyright>
+    <copyright>&#169;2001 - 2018 Codehaus Plexus</copyright>
     <item>
       <title>File: 4,
-             Errors: 151,
+             Errors: 181,
              Warnings: 3,
              Infos: 0
       </title>
@@ -83,7 +83,7 @@ under the License.
                   2
                 </td>
                 <td>
-                  143
+                  173
                 </td>
               </tr>
                           <tr>
