@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/DECORATION/1.1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/DECORATION/1.1.0 http://maven.apache.org/xsd/decoration-1.1.0.xsd">
+<project xmlns="http://maven.apache.org/DECORATION/1.8.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/DECORATION/1.8.0 https://maven.apache.org/xsd/decoration-1.8.0.xsd">
   <bannerLeft>
     <name>Modello</name>
     <href>http://codehaus-plexus.github.io/modello/</href>
@@ -9,8 +9,10 @@
   <skin>
     <groupId>org.apache.maven.skins</groupId>
     <artifactId>maven-fluido-skin</artifactId>
-    <version>1.6</version>
+    <version>1.7</version>
   </skin>
+
+  <edit>${project.scm.url}</edit>
 
   <custom>
     <fluidoSkin>
@@ -28,7 +30,7 @@
   <body>
     <links>
       <item name="Codehaus Plexus" href="http://codehaus-plexus.github.io/"/>
-      <item name="Apache Maven" href="http://maven.apache.org/"/>
+      <item name="Apache Maven" href="https://maven.apache.org/"/>
     </links>
 
     <!-- Breadcrumbs that every project will inherit -->
