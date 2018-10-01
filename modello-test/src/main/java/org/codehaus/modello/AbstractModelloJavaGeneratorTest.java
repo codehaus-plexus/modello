@@ -187,16 +187,10 @@ public abstract class AbstractModelloJavaGeneratorTest
         configuration.setSourceLocations( Arrays.asList( sourceDirectories ) );
         configuration.setOutputLocation( destinationDirectory.getAbsolutePath() );
         configuration.setDebug( true );
-        if ( useJava5 )
-        {
-            configuration.setSourceVersion( "1.5" );
-            configuration.setTargetVersion( "1.5" );
-        }
-        else
-        {
-            configuration.setSourceVersion( "1.4" );
-            configuration.setTargetVersion( "1.4" );
-        }
+        
+        configuration.setSourceVersion( "1.7" );
+        configuration.setTargetVersion( "1.7" );
+        
 
         CompilerResult result = compiler.performCompile( configuration );
 
