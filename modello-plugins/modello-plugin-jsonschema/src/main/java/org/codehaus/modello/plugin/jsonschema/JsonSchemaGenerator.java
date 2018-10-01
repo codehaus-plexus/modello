@@ -95,7 +95,7 @@ public final class JsonSchemaGenerator
         }
         else
         {
-            schemaFile = new File( directory, objectModel.getId() + "-" + getGeneratedVersion() + ".schema.json" );
+            schemaFile = new File( directory, objectModel.getId() + '-' + getGeneratedVersion() + ".schema.json" );
         }
 
         JsonGenerator generator = new JsonFactory()
@@ -116,18 +116,15 @@ public final class JsonSchemaGenerator
         try
         {
             generator.writeStartObject();
-            generator.writeStringField( "$schema", "http://json-schema.org/draft-04/schema#" );
-
-            writeClassDocumentation( generator, root, true );
+            generator.writeStringField( "$schema", "http://json-schema.org/draft-07/schema#" );
+            generator.writeStringField( "$id", objectModel.getId() + '-' + getGeneratedVersion() + ".schema.json" );
+            generator.writeStringField( "$ref", "#/definitions/" + root.getName() );
 
             generator.writeObjectFieldStart( "definitions" );
 
             for ( ModelClass current : objectModel.getClasses( getGeneratedVersion() ) )
             {
-                if ( !root.equals( current ) )
-                {
-                    writeClassDocumentation( generator, current, false );
-                }
+                writeClassDocumentation( generator, current );
             }
 
             // end "definitions"
@@ -142,15 +139,11 @@ public final class JsonSchemaGenerator
         }
     }
 
-    private void writeClassDocumentation( JsonGenerator generator, ModelClass modelClass, boolean isRoot )
+    private void writeClassDocumentation( JsonGenerator generator, ModelClass modelClass )
         throws IOException
     {
-        if ( !isRoot )
-        {
-            generator.writeObjectFieldStart( modelClass.getName() );
-        }
-
-        generator.writeStringField( "id", modelClass.getName() + '#' );
+        generator.writeObjectFieldStart( modelClass.getName() );
+        generator.writeStringField( "$id", '#' + modelClass.getName() );
         writeDescriptionField( generator, modelClass.getDescription() );
         writeTypeField( generator, "object" );
 
@@ -276,10 +269,7 @@ public final class JsonSchemaGenerator
         }
 
         // end definition
-        if ( !isRoot )
-        {
-            generator.writeEndObject();
-        }
+        generator.writeEndObject();
     }
 
     private static void writeDescriptionField( JsonGenerator generator, String description )
