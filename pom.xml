@@ -133,6 +133,14 @@
       </roles>
       <timezone>Europe/Rome</timezone>
     </developer>
+    <developer>
+      <name>Karl Heinz Marbaise</name>
+      <email>khmarbaise@apache.org</email>
+      <roles>
+        <role>Developer</role>
+      </roles>
+      <timezone>Europe/Berlin</timezone>
+    </developer>
   </developers>
 
   <mailingLists>
