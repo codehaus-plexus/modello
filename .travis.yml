@@ -1,9 +1,9 @@
 language: java
 jdk:
   - openjdk7
-  - oraclejdk8
-#  java 10 need some fixes
-#  - oraclejdk10
+  - openjdk9
+  - openjdk10
+  - openjdk11
 
 # No need for preliminary install step.
 install: true
