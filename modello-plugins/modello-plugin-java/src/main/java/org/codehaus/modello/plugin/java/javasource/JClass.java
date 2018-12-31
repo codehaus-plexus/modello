@@ -76,8 +76,9 @@ package org.codehaus.modello.plugin.java.javasource;
 
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Vector;
+import java.util.Map;
 
 /**
  * A representation of the Java Source code for a Java Class. This is
@@ -96,21 +97,21 @@ public class JClass extends JStructure
     /**
      * The list of constructors for this JClass
      */
-    private Vector<JConstructor> _constructors = null;
+    private List<JConstructor> _constructors = null;
 
 
     /**
      * The list of member variables (fields) of this JClass
      */
-    private JNamedMap _fields = null;
+    private Map<String, JField> _fields = null;
 
 
-    private Vector<JClass> _innerClasses = null;
+    private List<JClass> _innerClasses = null;
 
     /**
      * The list of methods of this JClass
      */
-    private Vector<JMethod> _methods = null;
+    private List<JMethod> _methods = null;
 
     /**
      * The superclass for this JClass
@@ -133,10 +134,10 @@ public class JClass extends JStructure
         throws IllegalArgumentException
     {
         super( name );
-        _constructors = new Vector<JConstructor>();
-        _fields = new JNamedMap();
-        _methods = new Vector<JMethod>();
-        _innerClasses = new Vector<JClass>();
+        _constructors = new ArrayList<JConstructor>();
+        _fields = new LinkedHashMap<>();
+        _methods = new ArrayList<JMethod>();
+        _innerClasses = new ArrayList<JClass>();
         //-- initialize default Java doc
         getJDocComment().appendComment( "Class " + getLocalName() + "." );
 
@@ -163,7 +164,7 @@ public class JClass extends JStructure
             /** check signatures (add later) **/
             if ( !_constructors.contains( constructor ) )
             {
-                _constructors.addElement( constructor );
+                _constructors.add( constructor );
             }
         }
         else
@@ -276,13 +277,13 @@ public class JClass extends JStructure
 
         for ( int i = 0; i < _methods.size(); i++ )
         {
-            JMethod tmp = (JMethod) _methods.elementAt( i );
+            JMethod tmp = (JMethod) _methods.get( i );
             //-- first compare modifiers
             if ( tmp.getModifiers().isPrivate() )
             {
                 if ( !modifiers.isPrivate() )
                 {
-                    _methods.insertElementAt( jMethod, i );
+                    _methods.add( i, jMethod );
                     added = true;
                     break;
                 }
@@ -290,13 +291,13 @@ public class JClass extends JStructure
             //-- compare names
             if ( jMethod.getName().compareTo( tmp.getName() ) < 0 )
             {
-                _methods.insertElementAt( jMethod, i );
+                _methods.add( i, jMethod );
                 added = true;
                 break;
             }
         }
         //-- END SORT
-        if ( !added ) _methods.addElement( jMethod );
+        if ( !added ) _methods.add( jMethod );
 
     } //-- addMethod
 
@@ -378,7 +379,7 @@ public class JClass extends JStructure
         }
 
         JClass innerClass = new JInnerClass( classname );
-        _innerClasses.addElement( innerClass );
+        _innerClasses.add( innerClass );
         return innerClass;
 
     } //-- createInnerClass
@@ -391,7 +392,7 @@ public class JClass extends JStructure
      */
     public JConstructor getConstructor( int index )
     {
-        return (JConstructor) _constructors.elementAt( index );
+        return (JConstructor) _constructors.get( index );
     } //-- getConstructor
 
     /**
@@ -407,7 +408,7 @@ public class JClass extends JStructure
 
         for ( int i = 0; i < _constructors.size(); i++ )
         {
-            jcArray[i] = (JConstructor) _constructors.elementAt( i );
+            jcArray[i] = _constructors.get( i );
         }
         return jcArray;
     } //-- getConstructors
@@ -431,13 +432,7 @@ public class JClass extends JStructure
      **/
     public JField[] getFields()
     {
-        int size = _fields.size();
-        JField[] farray = new JField[size];
-        for ( int i = 0; i < size; i++ )
-        {
-            farray[i] = (JField) _fields.get( i );
-        }
-        return farray;
+        return  _fields.values().toArray( new JField[0] );
     } //-- getFields
 
     /**
@@ -448,10 +443,7 @@ public class JClass extends JStructure
      */
     public JClass[] getInnerClasses()
     {
-        int size = _innerClasses.size();
-        JClass[] carray = new JClass[size];
-        _innerClasses.copyInto( carray );
-        return carray;
+        return _innerClasses.toArray( new JClass[0] );
     } //-- getInnerClasses;
 
     /**
@@ -466,7 +458,7 @@ public class JClass extends JStructure
 
         for ( int i = 0; i < _methods.size(); i++ )
         {
-            marray[i] = (JMethod) _methods.elementAt( i );
+            marray[i] = _methods.get( i );
         }
         return marray;
     } //-- getMethods
@@ -483,7 +475,7 @@ public class JClass extends JStructure
     {
         for ( int i = startIndex; i < _methods.size(); i++ )
         {
-            JMethod jMethod = (JMethod) _methods.elementAt( i );
+            JMethod jMethod = _methods.get( i );
             if ( jMethod.getName().equals( name ) ) return jMethod;
         }
         return null;
@@ -497,7 +489,7 @@ public class JClass extends JStructure
      */
     public JMethod getMethod( int index )
     {
-        return (JMethod) _methods.elementAt( index );
+        return _methods.get( index );
     } //-- getMethod
 
 
@@ -556,13 +548,12 @@ public class JClass extends JStructure
             printPackageDeclaration( jsw );
 
             //-- get imports from inner-classes
-            Vector<String> removeImports = null;
+            List<String> removeImports = null;
             if ( _innerClasses.size() > 0 )
             {
-                removeImports = new Vector<String>();
-                for ( int i = 0; i < _innerClasses.size(); i++ )
+                removeImports = new ArrayList<String>();
+                for ( JClass iClass : _innerClasses )
                 {
-                    JClass iClass = (JClass) _innerClasses.elementAt( i );
                     Enumeration<String> e = iClass.getImports();
                     while ( e.hasMoreElements() )
                     {
@@ -570,7 +561,7 @@ public class JClass extends JStructure
                         if ( !hasImport( classname ) )
                         {
                             addImport( classname );
-                            removeImports.addElement( classname );
+                            removeImports.add( classname );
                         }
                     }
                 }
@@ -582,7 +573,7 @@ public class JClass extends JStructure
             {
                 for ( int i = 0; i < removeImports.size(); i++ )
                 {
-                    removeImport( (String) removeImports.elementAt( i ) );
+                    removeImport( removeImports.get( i ) );
                 }
             }
 
@@ -673,11 +664,8 @@ public class JClass extends JStructure
             jsw.writeln();
         }
 
-        for ( int i = 0; i < _fields.size(); i++ )
+        for ( JField jField : _fields.values() )
         {
-
-            JField jField = (JField) _fields.get( i );
-
             //-- print Java comment
             JDocComment comment = jField.getComment();
             if ( comment != null ) comment.print( jsw );
@@ -736,7 +724,7 @@ public class JClass extends JStructure
         }
         for ( int i = 0; i < _constructors.size(); i++ )
         {
-            JConstructor jConstructor = (JConstructor) _constructors.elementAt( i );
+            JConstructor jConstructor = _constructors.get( i );
             jConstructor.print( jsw );
             jsw.writeln();
         }
@@ -753,7 +741,7 @@ public class JClass extends JStructure
 
         for ( int i = 0; i < _methods.size(); i++ )
         {
-            JMethod jMethod = (JMethod) _methods.elementAt( i );
+            JMethod jMethod = _methods.get( i );
             jMethod.print( jsw );
             jsw.writeln();
         }
@@ -769,7 +757,7 @@ public class JClass extends JStructure
         }
         for ( int i = 0; i < _innerClasses.size(); i++ )
         {
-            JClass jClass = (JClass) _innerClasses.elementAt( i );
+            JClass jClass = _innerClasses.get( i );
             jClass.print( jsw, true );
             jsw.writeln();
         }
@@ -800,7 +788,7 @@ public class JClass extends JStructure
      */
     public boolean removeConstructor( JConstructor constructor )
     {
-        return _constructors.removeElement( constructor );
+        return _constructors.remove( constructor );
     } //-- removeConstructor
 
     /**
@@ -850,7 +838,7 @@ public class JClass extends JStructure
      */
     public boolean removeInnerClass( JClass jClass )
     {
-        return _innerClasses.removeElement( jClass );
+        return _innerClasses.remove( jClass );
     } //-- removeInnerClass
 
     /**
@@ -861,58 +849,6 @@ public class JClass extends JStructure
     {
         _superClass = superClass;
     } //-- setSuperClass
-
-
-    /**
-     * Test drive method...to be removed or commented out
-     **/
-    /*public static void main( String[] args )
-    {
-        JClass testClass = new JClass( "org.acme.Test" );
-
-        testClass.addImport( "java.util.Vector" );
-        testClass.addMember( new JField( JType.INT, "x" ) );
-        JClass jcString = new JClass( "String" );
-
-        JField field = null;
-        field = new JField( JType.INT, "_z" );
-        field.getModifiers().setStatic( true );
-        testClass.addField( field );
-
-        testClass.getStaticInitializationCode().add( "_z = 75;" );
-
-        field = new JField( jcString, "myString" );
-        field.getModifiers().makePrivate();
-        testClass.addMember( field );
-
-        //-- create constructor
-        JConstructor cons = testClass.createConstructor();
-        cons.getSourceCode().add( "this.x = 6;" );
-
-        JMethod jMethod = new JMethod( "getX", JType.INT, null );
-        jMethod.setSourceCode( "return this.x;" );
-        testClass.addMethod( jMethod );
-
-        //-- create inner-class
-        JClass innerClass = testClass.createInnerClass( "Foo" );
-        innerClass.addImport( "java.util.Hashtable" );
-        innerClass.addMember( new JField( JType.INT, "_type" ) );
-
-        field = new JField( jcString, "_name" );
-        field.getModifiers().makePrivate();
-        innerClass.addMember( field );
-
-        //-- create constructor
-        cons = innerClass.createConstructor();
-        cons.getSourceCode().add( "_name = \"foo\";" );
-
-        jMethod = new JMethod( "getName", jcString, null );
-        jMethod.setSourceCode( "return _name;" );
-        innerClass.addMethod( jMethod );
-
-        testClass.print();
-    } //-- main
-    */
 
     final class JInnerClass extends JClass
     {

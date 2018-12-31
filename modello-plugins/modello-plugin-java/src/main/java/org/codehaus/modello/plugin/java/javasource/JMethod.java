@@ -45,7 +45,6 @@
 
 package org.codehaus.modello.plugin.java.javasource;
 
-
 /*
  * Copyright (c) 2004, Codehaus.org
  *
@@ -68,7 +67,8 @@ package org.codehaus.modello.plugin.java.javasource;
  * SOFTWARE.
  */
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A class which holds information about the methods of
@@ -86,7 +86,7 @@ public class JMethod implements JMember
     /**
      * The set of classes that contain this JMethod.
      **/
-    private Vector<JClass> _classes = null;
+    private List<JClass> _classes = null;
 
     /**
      * The JavaDoc comment for this JMethod. This
@@ -151,7 +151,7 @@ public class JMethod implements JMember
             throw new IllegalArgumentException( err );
         }
 
-        _classes = new Vector<JClass>( 1 );
+        _classes = new ArrayList<JClass>( 1 );
         this.source = new JSourceCode();
         _signature = new JMethodSignature( name, returnType );
         this.jdc = _signature.getJDocComment();
@@ -415,7 +415,7 @@ public class JMethod implements JMember
      **/
     protected void addDeclaringClass( JClass jClass )
     {
-        _classes.addElement( jClass );
+        _classes.add( jClass );
     } //-- addDeclaringClass
 
     /**
@@ -427,7 +427,7 @@ public class JMethod implements JMember
      **/
     protected void removeDeclaringClass( JClass jClass )
     {
-        _classes.removeElement( jClass );
+        _classes.remove( jClass );
     } //-- removeDeclaringClass
 
     protected String[] getParameterClassNames()

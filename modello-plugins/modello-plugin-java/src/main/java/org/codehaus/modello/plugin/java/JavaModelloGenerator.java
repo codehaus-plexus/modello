@@ -428,7 +428,7 @@ public class JavaModelloGenerator
         }
         else
         {
-            sc.add( "StringBuffer buf = new StringBuffer( 128 );" );
+            sc.add( "StringBuilder buf = new StringBuilder( 128 );" );
         }
 
         sc.add( "" );
@@ -1246,7 +1246,7 @@ public class JavaModelloGenerator
 
         JMethod getter = new JMethod( prefix + propertyName, returnType, null );
 
-        StringBuffer comment = new StringBuffer( "Get " );
+        StringBuilder comment = new StringBuilder( "Get " );
         if ( StringUtils.isEmpty( modelField.getDescription() ) )
         {
             comment.append( "the " );
@@ -1286,7 +1286,7 @@ public class JavaModelloGenerator
             setter = new JMethod( "set" + propertyName );
         }
 
-        StringBuffer comment = new StringBuffer( "Set " );
+        StringBuilder comment = new StringBuilder( "Set " );
         if ( StringUtils.isEmpty( modelField.getDescription() ) )
         {
             comment.append( "the " );

@@ -494,7 +494,7 @@
           <code><![CDATA[
             public String getId()
             {
-                StringBuffer id = new StringBuffer();
+                StringBuilder id = new StringBuilder();
 
                 id.append( getGroupId() );
                 id.append( ":" );
@@ -1748,7 +1748,7 @@
           <code><![CDATA[
             public String getId()
             {
-                StringBuffer id = new StringBuffer();
+                StringBuilder id = new StringBuilder();
 
                 id.append( getGroupId() );
                 id.append( ":" );

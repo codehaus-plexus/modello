@@ -1544,7 +1544,7 @@ public class StaxReaderGenerator
         sc.add( "}" );
         sc.add( "else" );
         sc.add( "{" );
-        sc.addIndented( "values.push( new StringBuffer() );" );
+        sc.addIndented( "values.push( new StringBuilder() );" );
         sc.add( "}" );
 
         sc.add( "int attributesSize = xmlStreamReader.getAttributeCount();" );
@@ -1566,7 +1566,7 @@ public class StaxReaderGenerator
         sc.add( "else if ( eventType == XMLStreamConstants.CHARACTERS )" );
         sc.add( "{" );
         sc.indent();
-        sc.add( "StringBuffer valueBuffer = (StringBuffer) values.peek();" );
+        sc.add( "StringBuilder valueBuffer = (StringBuilder) values.peek();" );
 
         sc.add( "String text = xmlStreamReader.getText();" );
 

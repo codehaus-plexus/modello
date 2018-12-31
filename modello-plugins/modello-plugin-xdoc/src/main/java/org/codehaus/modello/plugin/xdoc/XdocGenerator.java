@@ -488,7 +488,7 @@ public class XdocGenerator
     private String getElementXmlDescriptor( ModelClass modelClass, ModelAssociation association, Stack<String> stack )
         throws ModelloRuntimeException
     {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
 
         appendSpacer( sb, stack.size() );
 
@@ -727,11 +727,11 @@ public class XdocGenerator
     }
 
     /**
-     * Appends the required spacers to the given StringBuffer.
+     * Appends the required spacers to the given StringBuilder.
      * @param sb where to append the spacers
      * @param depth the depth of spacers to generate
      */
-    private static void appendSpacer( StringBuffer sb, int depth )
+    private static void appendSpacer( StringBuilder sb, int depth )
     {
         for ( int i = 0; i < depth; i++ )
         {

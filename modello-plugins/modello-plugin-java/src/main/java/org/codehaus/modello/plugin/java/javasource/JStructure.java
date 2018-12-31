@@ -68,8 +68,10 @@ package org.codehaus.modello.plugin.java.javasource;
  */
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
-import java.util.Vector;
+import java.util.List;
 
 import org.codehaus.plexus.util.WriterFactory;
 
@@ -111,12 +113,12 @@ public abstract class JStructure extends JType
     /**
      * List of imported classes and packages
      */
-    private Vector<String> imports = null;
+    private List<String> imports = null;
 
     /**
      * The set of interfaces implemented/extended by this JStructure
      */
-    private Vector<String> interfaces = null;
+    private List<String> interfaces = null;
 
     /**
      * The Javadoc for this JStructure
@@ -162,8 +164,8 @@ public abstract class JStructure extends JType
             throw new IllegalArgumentException( err );
         }
         this.packageName = getPackageFromClassName( name );
-        imports = new Vector<String>();
-        interfaces = new Vector<String>();
+        imports = new ArrayList<String>();
+        interfaces = new ArrayList<String>();
         jdc = new JDocComment();
         modifiers = new JModifiers();
         //-- initialize default Java doc
@@ -231,15 +233,15 @@ public abstract class JStructure extends JType
             //-- we do not include more than one of the same import
             for ( int i = 0; i < imports.size(); i++ )
             {
-                String imp = (String) imports.elementAt( i );
+                String imp = imports.get( i );
                 if ( imp.equals( className ) ) return;
                 if ( imp.compareTo( className ) > 0 )
                 {
-                    imports.insertElementAt( className, i );
+                    imports.add( i, className );
                     return;
                 }
             }
-            imports.addElement( className );
+            imports.add( className );
         }
     } //-- addImport
 
@@ -254,7 +256,7 @@ public abstract class JStructure extends JType
     public void addInterface( String interfaceName )
     {
         if ( !interfaces.contains( interfaceName ) )
-            interfaces.addElement( interfaceName );
+            interfaces.add( interfaceName );
     } //-- addInterface
 
     /**
@@ -270,7 +272,7 @@ public abstract class JStructure extends JType
         String interfaceName = jInterface.getName();
         if ( !interfaces.contains( interfaceName ) )
         {
-            interfaces.addElement( interfaceName );
+            interfaces.add( interfaceName );
         }
     } //-- addInterface
 
@@ -418,7 +420,7 @@ public abstract class JStructure extends JType
      */
     public Enumeration<String> getImports()
     {
-        return imports.elements();
+        return Collections.enumeration( imports );
     } //-- getImports
 
     /**
@@ -430,7 +432,7 @@ public abstract class JStructure extends JType
      */
     public Enumeration<String> getInterfaces()
     {
-        return interfaces.elements();
+        return Collections.enumeration( interfaces );
     } //-- getInterfaces
 
     /**
@@ -548,8 +550,7 @@ public abstract class JStructure extends JType
         if ( className == null ) return result;
         if ( className.length() == 0 ) return result;
 
-        result = imports.removeElement( className );
-        return result;
+        return imports.remove( className );
     } //-- removeImport
 
 
@@ -677,11 +678,10 @@ public abstract class JStructure extends JType
             jsw.writeln( " //- Imported classes and packages -/" );
             jsw.writeln( "//---------------------------------/" );
             jsw.writeln();
-            Enumeration<String> e = imports.elements();
-            while ( e.hasMoreElements() )
+            for( String imp : imports )
             {
                 jsw.write( "import " );
-                jsw.write( e.nextElement() );
+                jsw.write( imp );
                 jsw.writeln( ';' );
             }
             jsw.writeln();
@@ -723,7 +723,7 @@ public abstract class JStructure extends JType
      public abstract void print(JSourceWriter jsw);
 
 
-     StringBuffer buffer = new StringBuffer();
+     StringBuilder buffer = new StringBuilder();
 
 
      printHeader();

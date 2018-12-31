@@ -45,6 +45,11 @@
 
 package org.codehaus.modello.plugin.java.javasource;
 
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 /*
  * Copyright (c) 2004, Codehaus.org
  *
@@ -83,7 +88,7 @@ public class JConstructor
     /**
      * List of parameters for this Constructor
      **/
-    private JNamedMap params = null;
+    private Map<String, JParameter> params = null;
 
     /**
      * The Class in this JMember has been declared
@@ -104,7 +109,7 @@ public class JConstructor
     {
         this.declaringClass = declaringClass;
         this.modifiers = new JModifiers();
-        this.params = new JNamedMap();
+        this.params = new LinkedHashMap<>();
         this.sourceCode = new JSourceCode();
     }
 
@@ -122,7 +127,7 @@ public class JConstructor
         //-- check current params
         if ( params.get( parameter.getName() ) != null )
         {
-            StringBuffer err = new StringBuffer();
+            StringBuilder err = new StringBuilder();
             err.append( "A parameter already exists for the constructor, " );
             err.append( this.declaringClass.getName() );
             err.append( ", with the name: " );
@@ -160,13 +165,7 @@ public class JConstructor
      **/
     public JParameter[] getParameters()
     {
-        JParameter[] jpArray = new JParameter[params.size()];
-        for ( int i = 0; i < jpArray.length; i++ )
-        {
-            jpArray[i] = (JParameter) params.get( i );
-        }
-        return jpArray;
-
+        return params.values().toArray( new JParameter[0] );
     } //-- getParameters
 
     public JSourceCode getSourceCode()
@@ -190,10 +189,20 @@ public class JConstructor
         jsw.write( '(' );
 
         //-- print parameters
+        if ( !params.isEmpty() )
+        {
+            Enumeration<JParameter> paramEnum = Collections.enumeration( params.values() );
+            jsw.write( paramEnum.nextElement() );
+            while( paramEnum.hasMoreElements())
+            {
+                jsw.write( ", " );
+                jsw.write( paramEnum.nextElement() );
+            }
+        }
+        
+        
         for ( int i = 0; i < params.size(); i++ )
         {
-            if ( i > 0 ) jsw.write( ", " );
-            jsw.write( params.get( i ) );
         }
         jsw.writeln( ')' );
         jsw.writeln( '{' );
@@ -223,16 +232,20 @@ public class JConstructor
 
     public String toString()
     {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append( declaringClass.getName() );
         sb.append( '(' );
 
         //-- print parameters
-        for ( int i = 0; i < params.size(); i++ )
+        if ( !params.isEmpty() )
         {
-            JParameter jp = (JParameter) params.get( i );
-            if ( i > 0 ) sb.append( ", " );
-            sb.append( jp.getType().getName() );
+            Enumeration<JParameter> paramEnum = Collections.enumeration( params.values() );
+            sb.append( paramEnum.nextElement().getType().getName() );
+            while( paramEnum.hasMoreElements())
+            {
+                sb.append( ", " );
+                sb.append( paramEnum.nextElement().getType().getName() );
+            }
         }
         sb.append( ')' );
         return sb.toString();
