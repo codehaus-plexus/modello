@@ -46,6 +46,9 @@
 
 package org.codehaus.modello.plugin.java.javasource;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 /*
  * Copyright (c) 2004, Codehaus.org
  *
@@ -69,7 +72,7 @@ package org.codehaus.modello.plugin.java.javasource;
  */
 
 import java.util.Enumeration;
-import java.util.Vector;
+import java.util.List;
 
 /**
  * A class that "SOMEWHAT" represents a Java Doc Comment.
@@ -84,7 +87,7 @@ public class JDocComment
     /**
      * An ordered list of descriptors
      */
-    private Vector<JDocDescriptor> _descriptors = null;
+    private List<JDocDescriptor> _descriptors = null;
 
     /**
      * The internal buffer for this JDocComment
@@ -97,7 +100,7 @@ public class JDocComment
     public JDocComment()
     {
         super();
-        _descriptors = new Vector<JDocDescriptor>();
+        _descriptors = new ArrayList<JDocDescriptor>();
         _comment = new StringBuffer();
     } //--  JDocComment
 
@@ -113,24 +116,24 @@ public class JDocComment
         //-- on the fly sorting of descriptors
         if ( _descriptors.size() == 0 )
         {
-            _descriptors.addElement( jdesc );
+            _descriptors.add( jdesc );
             return;
         }
 
         for ( int i = 0; i < _descriptors.size(); i++ )
         {
             JDocDescriptor jdd
-                = (JDocDescriptor) _descriptors.elementAt( i );
+                = _descriptors.get( i );
 
             short compare = jdesc.compareTo( jdd );
 
             switch ( compare )
             {
                 case 0: // equal
-                    _descriptors.insertElementAt( jdesc, i + 1 );
+                    _descriptors.add( i + 1, jdesc );
                     return;
                 case -1: //-- less than
-                    _descriptors.insertElementAt( jdesc, i );
+                    _descriptors.add( i, jdesc );
                     return;
                 case 1:
                     //-- keep looking
@@ -139,7 +142,7 @@ public class JDocComment
         }
 
         //-- if we make it here we need to add
-        _descriptors.addElement( jdesc );
+        _descriptors.add( jdesc );
 
     } //-- addException
 
@@ -170,7 +173,7 @@ public class JDocComment
      */
     public Enumeration<JDocDescriptor> getDescriptors()
     {
-        return _descriptors.elements();
+        return Collections.enumeration( _descriptors );
     } //-- getDescriptors
 
     /**
@@ -195,10 +198,8 @@ public class JDocComment
     {
         if ( name == null ) return null;
 
-        for ( int i = 0; i < _descriptors.size(); i++ )
+        for ( JDocDescriptor jdd : _descriptors )
         {
-            JDocDescriptor jdd
-                = (JDocDescriptor) _descriptors.elementAt( i );
             if ( jdd.getType() == JDocDescriptor.PARAM )
             {
                 if ( name.equals( jdd.getName() ) )
@@ -232,7 +233,7 @@ public class JDocComment
         for ( int i = 0; i < _descriptors.size(); i++ )
         {
             jComment.appendComment( "\n" );
-            jComment.appendComment( _descriptors.elementAt( i ).toString() );
+            jComment.appendComment( _descriptors.get( i ).toString() );
         }
         jComment.print( jsw );
     } //-- print

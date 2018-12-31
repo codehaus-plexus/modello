@@ -45,7 +45,6 @@
 
 package org.codehaus.modello.plugin.java.javasource;
 
-
 /*
  * Copyright (c) 2004, Codehaus.org
  *
@@ -68,7 +67,13 @@ package org.codehaus.modello.plugin.java.javasource;
  * SOFTWARE.
  */
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * A class which holds information about the signature
@@ -102,7 +107,7 @@ public final class JMethodSignature
      * The list of parameters of this JMethodSignature in declared
      * order
      **/
-    private JNamedMap params = null;
+    private Map<String, JParameter> params = null;
 
     /**
      * The JavaDoc comment for this method signature.
@@ -112,7 +117,7 @@ public final class JMethodSignature
     /**
      * The exceptions that this method throws
      **/
-    private Vector<JClass> exceptions = null;
+    private List<JClass> exceptions = null;
 
     /**
      * Creates a new method with the given name and return type.
@@ -134,8 +139,8 @@ public final class JMethodSignature
         this.returnType = returnType;
         this.name = name;
         this.modifiers = new JModifiers();
-        this.params = new JNamedMap( 3 );
-        this.exceptions = new Vector<JClass>( 1 );
+        this.params = new LinkedHashMap<>( 3 );
+        this.exceptions = new ArrayList<JClass>( 1 );
     } //-- JMethodSignature
 
     /**
@@ -150,13 +155,12 @@ public final class JMethodSignature
 
         //-- make sure exception is not already added
         String expClassName = exp.getName();
-        for ( int i = 0; i < exceptions.size(); i++ )
+        for ( JClass jClass  : exceptions )
         {
-            JClass jClass = (JClass) exceptions.elementAt( i );
             if ( expClassName.equals( jClass.getName() ) ) return;
         }
         //-- add exception
-        exceptions.addElement( exp );
+        exceptions.add( exp );
 
         //-- create comment
         jdc.addDescriptor( JDocDescriptor.createExceptionDesc( expClassName, null ) );
@@ -207,10 +211,7 @@ public final class JMethodSignature
      **/
     public JClass[] getExceptions()
     {
-
-        JClass[] jclasses = new JClass[exceptions.size()];
-        exceptions.copyInto( jclasses );
-        return jclasses;
+        return exceptions.toArray( new JClass[0] );
     } //-- getExceptions
 
     /**
@@ -251,7 +252,13 @@ public final class JMethodSignature
      **/
     public JParameter getParameter( int index )
     {
-        return (JParameter) params.get( index );
+        Iterator<Map.Entry<String, JParameter>> paramIter = params.entrySet().iterator();
+        Map.Entry<String, JParameter> selected = null;
+        for( int i = 0; i <= index; i++)
+        {
+            selected = paramIter.next();
+        }
+        return selected.getValue();
     } //-- getParameter
 
     /**
@@ -263,12 +270,7 @@ public final class JMethodSignature
      **/
     public synchronized JParameter[] getParameters()
     {
-        JParameter[] pArray = new JParameter[params.size()];
-        for ( int i = 0; i < pArray.length; i++ )
-        {
-            pArray[i] = (JParameter) params.get( i );
-        }
-        return pArray;
+        return params.values().toArray( new JParameter[0] );
     } //-- getParameters
 
     /**
@@ -358,11 +360,15 @@ public final class JMethodSignature
         if ( params.size() > 0 )
         {
             jsw.write( ' ' );
-            for ( int i = 0; i < params.size(); i++ )
+
+            Enumeration<JParameter> paramEnum = Collections.enumeration( params.values() );
+            jsw.write( paramEnum.nextElement() );
+            while( paramEnum.hasMoreElements() )
             {
-                if ( i > 0 ) jsw.write( ", " );
-                jsw.write( params.get( i ) );
+                jsw.write( ", " );
+                jsw.write( paramEnum.nextElement() );
             }
+            
             jsw.write( ' ' );
         }
 
@@ -375,7 +381,7 @@ public final class JMethodSignature
             for ( int i = 0; i < exceptions.size(); i++ )
             {
                 if ( i > 0 ) jsw.write( ", " );
-                JClass jClass = (JClass) exceptions.elementAt( i );
+                JClass jClass = exceptions.get( i );
                 jsw.write( jClass.getName() );
             }
         }
@@ -406,12 +412,15 @@ public final class JMethodSignature
         if ( params.size() > 0 )
         {
             sb.append( ' ' );
-            for ( int i = 0; i < params.size(); i++ )
+            
+            Enumeration<JParameter> paramEnum = Collections.enumeration( params.values() );
+            sb.append( paramEnum.nextElement().getType().getName() );
+            while( paramEnum.hasMoreElements() )
             {
-                JParameter jParam = (JParameter) params.get( i );
-                if ( i > 0 ) sb.append( ", " );
-                sb.append( jParam.getType().getName() );
+                sb.append( ", " );
+                sb.append( paramEnum.nextElement().getType().getName() );
             }
+            
             sb.append( ' ' );
         }
 
@@ -422,23 +431,20 @@ public final class JMethodSignature
 
     protected String[] getParameterClassNames()
     {
-        Vector<String> names = new Vector<String>( params.size() );
+        List<String> names = new ArrayList<String>( params.size() );
 
-        for ( int i = 0; i < params.size(); i++ )
+        for ( JParameter param : params.values() )
         {
-
-            JType jType = ( (JParameter) params.get( i ) ).getType();
+            JType jType = param.getType();
             while ( jType.isArray() ) jType = jType.getComponentType();
             if ( !jType.isPrimitive() )
             {
                 JClass jclass = (JClass) jType;
-                names.addElement( jclass.getName() );
+                names.add( jclass.getName() );
             }
         }
 
-        String[] names_array = new String[names.size()];
-        names.copyInto( names_array );
-        return names_array;
+        return names.toArray( new String[0] );
     } //-- getParameterClassNames
 
 } //-- JMethodSignature

@@ -69,8 +69,9 @@ package org.codehaus.modello.plugin.java.javasource;
 
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Vector;
+import java.util.Map;
 
 /**
  * A representation of the Java Source code for a Java Interface.
@@ -89,12 +90,12 @@ public final class JInterface extends JStructure
     /**
      * The fields for this JInterface
      */
-    private JNamedMap fields = null;
+    private Map<String, JField> fields = null;
 
     /**
      * The list of methods of this JInterface
      */
-    private Vector<JMethodSignature> methods = null;
+    private List<JMethodSignature> methods = null;
 
 
     /**
@@ -108,7 +109,7 @@ public final class JInterface extends JStructure
         throws IllegalArgumentException
     {
         super( name );
-        methods = new Vector<JMethodSignature>();
+        methods = new ArrayList<JMethodSignature>();
 
         //-- initialize default Java doc
         getJDocComment().appendComment( "Interface " + getLocalName() + "." );
@@ -160,7 +161,7 @@ public final class JInterface extends JStructure
         //-- don't contain any fields, no need to waste space
         if ( fields == null )
         {
-            fields = new JNamedMap( 3 );
+            fields = new LinkedHashMap<>( 3 );
         }
 
         fields.put( name, jField );
@@ -225,13 +226,13 @@ public final class JInterface extends JStructure
         JModifiers modifiers = jMethodSig.getModifiers();
         for ( int i = 0; i < methods.size(); i++ )
         {
-            JMethodSignature tmp = (JMethodSignature) methods.elementAt( i );
+            JMethodSignature tmp = methods.get( i );
             //-- first compare modifiers
             if ( tmp.getModifiers().isProtected() )
             {
                 if ( !modifiers.isProtected() )
                 {
-                    methods.insertElementAt( jMethodSig, i );
+                    methods.add( i, jMethodSig );
                     added = true;
                     break;
                 }
@@ -239,13 +240,13 @@ public final class JInterface extends JStructure
             //-- compare names
             if ( jMethodSig.getName().compareTo( tmp.getName() ) < 0 )
             {
-                methods.insertElementAt( jMethodSig, i );
+                methods.add( i, jMethodSig );
                 added = true;
                 break;
             }
         }
         //-- END SORT
-        if ( !added ) methods.addElement( jMethodSig );
+        if ( !added ) methods.add( jMethodSig );
 
         //-- check return type to make sure it's included in the
         //-- import list
@@ -291,13 +292,7 @@ public final class JInterface extends JStructure
         {
             return new JField[0];
         }
-        int size = fields.size();
-        JField[] farray = new JField[size];
-        for ( int i = 0; i < size; i++ )
-        {
-            farray[i] = (JField) fields.get( i );
-        }
-        return farray;
+        return fields.values().toArray( new JField[0] );
     } //-- getFields
 
 
@@ -308,9 +303,7 @@ public final class JInterface extends JStructure
      **/
     public JMethodSignature[] getMethods()
     {
-        JMethodSignature[] marray = new JMethodSignature[methods.size()];
-        methods.copyInto( marray );
-        return marray;
+        return methods.toArray( new JMethodSignature[0] );
     } //-- getMethods
 
     /**
@@ -324,9 +317,8 @@ public final class JInterface extends JStructure
      **/
     public JMethodSignature getMethod( String name, int startIndex )
     {
-        for ( int i = startIndex; i < methods.size(); i++ )
+        for ( JMethodSignature jMethod : methods )
         {
-            JMethodSignature jMethod = (JMethodSignature) methods.elementAt( i );
             if ( jMethod.getName().equals( name ) ) return jMethod;
         }
         return null;
@@ -340,7 +332,7 @@ public final class JInterface extends JStructure
      **/
     public JMethodSignature getMethod( int index )
     {
-        return (JMethodSignature) methods.elementAt( index );
+        return methods.get( index );
     } //-- getMethod
 
 
@@ -446,11 +438,8 @@ public final class JInterface extends JStructure
             }
 
 
-            for ( int i = 0; i < fields.size(); i++ )
+            for ( JField jField : fields.values() )
             {
-
-                JField jField = (JField) fields.get( i );
-
                 //-- print Java comment
                 JDocComment comment = jField.getComment();
                 if ( comment != null ) comment.print( jsw );
@@ -493,9 +482,8 @@ public final class JInterface extends JStructure
             jsw.writeln();
         }
 
-        for ( int i = 0; i < methods.size(); i++ )
+        for ( JMethodSignature signature : methods )
         {
-            JMethodSignature signature = (JMethodSignature) methods.elementAt( i );
             signature.print( jsw );
             jsw.writeln( ';' );
         }
@@ -517,32 +505,5 @@ public final class JInterface extends JStructure
     {
         sourceCodeEntries.add( sourceCode );
     }
-
-    /**
-     * Test drive method...to be removed or commented out
-     **
-     public static void main(String[] args) {
-     JInterface jInterface = new JInterface("Test");
-
-     //-- add an import
-     jInterface.addImport("java.util.Vector");
-     JClass jString = new JClass("String");
-
-     //-- add an interface
-     jInterface.addInterface("java.io.Serializable");
-
-     //-- add a static field
-     JField jField = new JField(new JClass("java.lang.String"), "TEST");
-     jField.setInitString("\"Test\"");
-     jField.getModifiers().setStatic(true);
-     jField.getModifiers().makePublic();
-     jInterface.addField(jField);
-
-     //-- add a method signature
-     JMethodSignature jMethodSig = new JMethodSignature("getName", jString);
-     jInterface.addMethod(jMethodSig);
-     jInterface.print();
-     } //-- main
-     /* */
 
 } //-- JInterface

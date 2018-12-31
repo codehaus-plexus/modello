@@ -76,10 +76,11 @@ package org.codehaus.modello.plugin.java.javasource;
  */
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import java.util.Vector;
 
 import org.codehaus.plexus.util.WriterFactory;
 
@@ -119,13 +120,13 @@ public class JCompUnit
      * The set of top-level classes that live in this compilation unit.
      **/
     //private TypeList classes = null;
-    private Vector<JClass> classes = null;
+    private List<JClass> classes = null;
 
     /**
      * The set of top-level interfaces that live in this compilation unit.
      **/
     //private TypeList interfaces = null;
-    private Vector<JInterface> interfaces = null;
+    private List<JInterface> interfaces = null;
 
     /**
      * Creates a new JCompUnit
@@ -193,8 +194,8 @@ public class JCompUnit
 
     private void init()
     {
-        classes = new Vector<JClass>();
-        interfaces = new Vector<JInterface>();
+        classes = new ArrayList<JClass>();
+        interfaces = new ArrayList<JInterface>();
     }
 
     /**
@@ -538,44 +539,6 @@ public class JCompUnit
         */
     } //-- resolveNames
 
-    /**
-     * Test drive method...to be removed or commented out
-     **
-     public static void main(String[] args) {
-     JCompUnit unit = new JCompUnit("com.acme", "Test.java");
-
-     JClass testClass = new JClass("Test");
-
-     testClass.addImport("java.util.Vector");
-     testClass.addMember(new JField(JType.Int, "x"));
-
-     JField field = null;
-     field = new JField(JType.Int, "_z");
-     field.getModifiers().setStatic(true);
-     testClass.addField(field);
-
-     testClass.getStaticInitializationCode().add("_z = 75;");
-
-     JClass jcString = new JClass("String");
-     field = new JField(jcString, "myString");
-     field.getModifiers().makePrivate();
-     testClass.addMember(field);
-
-     //-- create constructor
-     JConstructor cons = testClass.createConstructor();
-     testClass.addConstructor(cons);
-     cons.getSourceCode().add("this.x = 6;");
-
-     JMethod jMethod = new JMethod(JType.Int, "getX");
-     jMethod.setSourceCode("return this.x;");
-     testClass.addMethod(jMethod);
-
-     unit.addClass (testClass);
-
-     unit.print();
-
-     } //-- main
-     /* */
 
 } //-- JCompUnit
 

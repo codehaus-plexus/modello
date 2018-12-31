@@ -66,7 +66,9 @@ package org.codehaus.modello.plugin.java.javasource;
  * SOFTWARE.
  */
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 /**
  * <p>
@@ -76,12 +78,14 @@ import java.util.Vector;
  * This class is not synchronized. So be careful. :-)
  *
  * @author <a href="mailto:kvisco@intalio.com">Keith Visco</a>
+ * @deprecated use {@link LinkedHashMap} instead
  **/
+@Deprecated
 public class JNamedMap
 {
 
-    private Vector<String> names = null;
-    private Vector<Object> objects = null;
+    private List<String> names = null;
+    private List<Object> objects = null;
 
     /**
      * Creates a new JNamedMap
@@ -89,8 +93,8 @@ public class JNamedMap
     public JNamedMap()
     {
 
-        names = new Vector<String>();
-        objects = new Vector<Object>();
+        names = new ArrayList<String>();
+        objects = new ArrayList<Object>();
 
     } //-- JNamedMap
 
@@ -102,8 +106,8 @@ public class JNamedMap
     public JNamedMap( int size )
     {
 
-        names = new Vector<String>( size );
-        objects = new Vector<Object>( size );
+        names = new ArrayList<String>( size );
+        objects = new ArrayList<Object>( size );
 
     } //-- JNamedMap
 
@@ -117,7 +121,7 @@ public class JNamedMap
     public Object get( String name )
     {
         int i = indexOf( name );
-        if ( i >= 0 ) return objects.elementAt( i );
+        if ( i >= 0 ) return objects.get( i );
         return null;
     } //-- get
 
@@ -130,7 +134,7 @@ public class JNamedMap
     public Object get( int index )
         throws IndexOutOfBoundsException
     {
-        return objects.elementAt( index );
+        return objects.get( index );
     } //-- get
 
     /**
@@ -142,7 +146,7 @@ public class JNamedMap
     public String getNameByObject( Object obj )
     {
         int i = objects.indexOf( obj );
-        if ( i >= 0 ) return (String) names.elementAt( i );
+        if ( i >= 0 ) return (String) names.get( i );
         return null;
     } //-- getNameByObject
 
@@ -151,10 +155,9 @@ public class JNamedMap
      *
      * @return a Vector of names
      **/
-    @SuppressWarnings( "unchecked" )
-    public Vector<String> getNames()
+    public java.util.Vector<String> getNames()
     {
-        return (Vector<String>) names.clone();
+        return new java.util.Vector<String>( names );
     } //-- getNames
 
     /**
@@ -162,10 +165,9 @@ public class JNamedMap
      *
      * @return a Vector of Objects
      **/
-    @SuppressWarnings( "unchecked" )
-    public Vector<Object> getObjects()
+    public java.util.Vector<Object> getObjects()
     {
-        return (Vector<Object>) objects.clone();
+        return new java.util.Vector<Object>( objects );
     } //-- getObjects
 
     /**
@@ -181,7 +183,7 @@ public class JNamedMap
 
         for ( int i = 0; i < names.size(); i++ )
         {
-            String iName = (String) names.elementAt( i );
+            String iName = (String) names.get( i );
             if ( iName.equals( name ) ) return i;
         }
         return -1;
@@ -200,13 +202,13 @@ public class JNamedMap
         int idx = indexOf( name );
 
         if ( idx >= 0 )
-            objects.setElementAt( obj, idx );
+            objects.add( idx, obj );
         else
         {
             //-- we may need some synchronization here
             //-- if we are in a multithreaded environment
-            names.addElement( name );
-            objects.addElement( obj );
+            names.add( name );
+            objects.add( obj );
         }
     } //-- put
 
@@ -219,9 +221,9 @@ public class JNamedMap
     public Object remove( int index )
         throws IndexOutOfBoundsException
     {
-        Object obj = objects.elementAt( index );
-        objects.removeElementAt( index );
-        names.removeElementAt( index );
+        Object obj = objects.get( index );
+        objects.remove( index );
+        names.remove( index );
         return obj;
     } //-- remove
 
@@ -239,9 +241,9 @@ public class JNamedMap
         int idx = indexOf( name );
         if ( idx >= 0 )
         {
-            obj = objects.elementAt( idx );
-            objects.removeElementAt( idx );
-            names.removeElementAt( idx );
+            obj = objects.get( idx );
+            objects.remove( idx );
+            names.remove( idx );
         }
         return obj;
     } //-- remove
