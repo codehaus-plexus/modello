@@ -92,7 +92,7 @@ public class JDocComment
     /**
      * The internal buffer for this JDocComment
      */
-    private StringBuffer _comment = null;
+    private StringBuilder _comment = null;
 
     /**
      * Creates a new JavaDoc Comment
@@ -101,7 +101,7 @@ public class JDocComment
     {
         super();
         _descriptors = new ArrayList<JDocDescriptor>();
-        _comment = new StringBuffer();
+        _comment = new StringBuilder();
     } //--  JDocComment
 
     /**
@@ -256,7 +256,7 @@ public class JDocComment
      */
     public String toString()
     {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append( "/**\n" );
         sb.append( " * " );
 

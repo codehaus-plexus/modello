@@ -1163,7 +1163,7 @@ public class Xpp3ReaderGenerator
         sc.add( "}" );
         sc.add( "else" );
         sc.add( "{" );
-        sc.addIndented( "values.push( new StringBuffer() );" );
+        sc.addIndented( "values.push( new StringBuilder() );" );
         sc.add( "}" );
 
         sc.add( "int attributesSize = parser.getAttributeCount();" );
@@ -1184,7 +1184,7 @@ public class Xpp3ReaderGenerator
         sc.add( "else if ( eventType == XmlPullParser.TEXT )" );
         sc.add( "{" );
         sc.indent();
-        sc.add( "StringBuffer valueBuffer = (StringBuffer) values.peek();" );
+        sc.add( "StringBuilder valueBuffer = (StringBuilder) values.peek();" );
 
         sc.add( "String text = parser.getText();" );
 

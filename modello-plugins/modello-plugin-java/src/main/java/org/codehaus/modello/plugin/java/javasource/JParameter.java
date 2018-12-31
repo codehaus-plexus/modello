@@ -150,7 +150,7 @@ public class JParameter
      **/
     public String toString()
     {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         if ( annotations != null )
         {
             sb.append( annotations.toString() );

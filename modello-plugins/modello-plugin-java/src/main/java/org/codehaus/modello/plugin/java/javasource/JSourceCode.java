@@ -245,7 +245,7 @@ public class JSourceCode
      **/
     public String toString()
     {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         String lineSeparator = System.getProperty( "line.separator" );
         for ( int i = 0; i < source.size(); i++ )
         {
@@ -274,14 +274,14 @@ public class JSourceCode
 class JCodeStatement
 {
 
-    private StringBuffer value = null;
+    private StringBuilder value = null;
     static public short DEFAULT_INDENTSIZE = 4;
     private short indentSize = DEFAULT_INDENTSIZE;
 
     JCodeStatement()
     {
         super();
-        value = new StringBuffer();
+        value = new StringBuilder();
     } //-- JCodeStatement
 
     JCodeStatement( String statement )
@@ -319,7 +319,7 @@ class JCodeStatement
             return "";
         }
 
-        StringBuffer sb = new StringBuffer( indentSize + value.length() );
+        StringBuilder sb = new StringBuilder( indentSize + value.length() );
         for ( int i = 0; i < indentSize; i++ ) sb.append( ' ' );
         sb.append( value.toString() );
         return sb.toString();

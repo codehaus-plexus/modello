@@ -127,7 +127,7 @@ public class JConstructor
         //-- check current params
         if ( params.get( parameter.getName() ) != null )
         {
-            StringBuffer err = new StringBuffer();
+            StringBuilder err = new StringBuilder();
             err.append( "A parameter already exists for the constructor, " );
             err.append( this.declaringClass.getName() );
             err.append( ", with the name: " );
@@ -232,7 +232,7 @@ public class JConstructor
 
     public String toString()
     {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append( declaringClass.getName() );
         sb.append( '(' );
 

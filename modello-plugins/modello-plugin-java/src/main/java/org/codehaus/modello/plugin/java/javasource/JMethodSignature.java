@@ -186,7 +186,7 @@ public final class JMethodSignature
         //-- check current params
         if ( params.get( pName ) != null )
         {
-            StringBuffer err = new StringBuffer();
+            StringBuilder err = new StringBuilder();
             err.append( "A parameter already exists for this method, " );
             err.append( name );
             err.append( ", with the name: " );
@@ -397,7 +397,7 @@ public final class JMethodSignature
     public String toString()
     {
 
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         if ( returnType != null )
         {
             sb.append( returnType );

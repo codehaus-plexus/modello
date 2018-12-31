@@ -124,7 +124,7 @@ public class JComment
     /**
      * The main comment for this JDocComment
      **/
-    private StringBuffer _comment = null;
+    private StringBuilder _comment = null;
 
     /**
      * The maximum number of characters per line
@@ -138,7 +138,7 @@ public class JComment
     public JComment()
     {
         super();
-        _comment = new StringBuffer();
+        _comment = new StringBuilder();
     } //-- JComment
 
     /**
@@ -279,7 +279,7 @@ class LineFormatter
 
     String prefix = null;
 
-    private StringBuffer sb = null;
+    private StringBuilder sb = null;
 
     /**
      * Creates a LineFormatter for the given comment
@@ -289,7 +289,7 @@ class LineFormatter
     {
         this.comment = comment;
         if ( comment != null ) this.length = comment.length();
-        sb = new StringBuffer();
+        sb = new StringBuilder();
     } //-- LineFormatter
 
 

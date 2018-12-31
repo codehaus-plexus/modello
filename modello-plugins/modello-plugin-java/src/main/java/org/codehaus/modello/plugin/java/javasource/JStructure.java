@@ -723,7 +723,7 @@ public abstract class JStructure extends JType
      public abstract void print(JSourceWriter jsw);
 
 
-     StringBuffer buffer = new StringBuffer();
+     StringBuilder buffer = new StringBuilder();
 
 
      printHeader();

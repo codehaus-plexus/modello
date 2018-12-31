@@ -180,7 +180,7 @@ public abstract class AbstractModelloGenerator
             return str;
         }
 
-        return new StringBuffer( str.length() )
+        return new StringBuilder( str.length() )
             .append( Character.toTitleCase( str.charAt( 0 ) ) )
             .append( str.substring( 1 ) )
             .toString();
@@ -220,7 +220,7 @@ public abstract class AbstractModelloGenerator
             return str;
         }
 
-        return new StringBuffer( str.length() )
+        return new StringBuilder( str.length() )
             .append( Character.toLowerCase( str.charAt( 0 ) ) )
             .append( str.substring( 1 ) )
             .toString();
