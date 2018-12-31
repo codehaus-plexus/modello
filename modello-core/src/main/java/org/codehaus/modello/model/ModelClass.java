@@ -43,6 +43,8 @@ public class ModelClass
     private boolean isInternalSuperClass;
 
     private List<String> interfaces;
+    
+    private List<String> typeParameters;
 
     private List<ModelField> fields;
 
@@ -67,7 +69,7 @@ public class ModelClass
     {
         this.superClass = superClass;
     }
-
+    
     // ----------------------------------------------------------------------
     // Interfaces
     // ----------------------------------------------------------------------
@@ -96,6 +98,26 @@ public class ModelClass
 
         getInterfaces().add( modelInterface );
     }
+    
+    // ----------------------------------------------------------------------
+    // TypeVariables
+    // ----------------------------------------------------------------------
+
+    public List<String> getTypeParameters()
+    {
+        if ( typeParameters == null )
+        {
+            return new ArrayList<String>();
+        }
+        return typeParameters;
+    }
+    
+    public void setTypeParameters( List<String> typeParameters )
+    {
+        this.typeParameters = typeParameters;
+    }
+
+
 
     // ----------------------------------------------------------------------
     // Field

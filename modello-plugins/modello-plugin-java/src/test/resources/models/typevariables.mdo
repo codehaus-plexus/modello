@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model>
+  <version>1.0.0</version>
+  <name>untitledModel</name>
+
+  <classes>
+    <class>
+      <name>Box</name>
+      <version>1.0.0</version>
+      <typeParameters>
+        <typeParameter>T</typeParameter>
+      </typeParameters>
+      <fields>
+        <field>
+          <name>t</name>
+          <type>T</type>
+        </field>
+      </fields>
+    </class>
+    <class>
+      <name>OrderedPair</name>
+      <typeParameters>
+        <typeParameter>K</typeParameter>
+        <typeParameter>V</typeParameter>
+      </typeParameters>
+      <interfaces>
+        <interface>Pair&lt;K, V&gt;</interface>
+      </interfaces>
+      <fields>
+        <field java.setter="false">
+          <name>key</name>
+          <type>K</type>
+        </field>
+        <field java.setter="false">
+          <name>value</name>
+          <type>V</type>
+        </field>
+      </fields>
+    </class>
+  </classes>
+
+  <interfaces>
+    <interface>
+      <name>Pair</name>
+      <typeParameters>
+        <typeParameter>K</typeParameter>
+        <typeParameter>V</typeParameter>
+      </typeParameters>
+      <codeSegments>
+        <codeSegment>
+          <code>
+            K getKey();
+            V getValue();
+          </code>
+        </codeSegment>
+      </codeSegments>
+    </interface>
+  </interfaces>
+</model>

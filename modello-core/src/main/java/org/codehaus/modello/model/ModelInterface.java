@@ -34,6 +34,8 @@ public class ModelInterface
     extends ModelType
 {
     private String superInterface;
+    
+    private List<String> typeParameters;
 
     public ModelInterface()
     {
@@ -53,6 +55,24 @@ public class ModelInterface
     public String getSuperInterface()
     {
         return superInterface;
+    }
+    
+    // ----------------------------------------------------------------------
+    // TypeVariables
+    // ----------------------------------------------------------------------
+
+    public List<String> getTypeParameters()
+    {
+        if ( typeParameters == null )
+        {
+            return new ArrayList<String>();
+        }
+        return typeParameters;
+    }
+    
+    public void setTypeParameters( List<String> typeParameters )
+    {
+        this.typeParameters = typeParameters;
     }
 
     /**

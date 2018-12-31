@@ -246,6 +246,18 @@ public class ModelReader
                     {
                         parseCodeSegment( modelInterface, parser );
                     }
+                    else if ( "typeParameters".equals( parser.getName() ) )
+                    {
+                        List<String> typeParametersList = new ArrayList<String>();
+                        while ( parser.nextTag() == XmlPullParser.START_TAG )
+                        {
+                            if ( "typeParameter".equals( parser.getName() ) )
+                            {
+                                typeParametersList.add( parser.nextText() );
+                            }
+                        }
+                        modelInterface.setTypeParameters( typeParametersList );
+                    }
                     else
                     {
                         parser.nextText();
@@ -297,6 +309,18 @@ public class ModelReader
                     else if ( "codeSegments".equals( parser.getName() ) )
                     {
                         parseCodeSegment( modelClass, parser );
+                    }
+                    else if ( "typeParameters".equals( parser.getName() ) )
+                    {
+                        List<String> typeParametersList = new ArrayList<String>();
+                        while ( parser.nextTag() == XmlPullParser.START_TAG )
+                        {
+                            if ( "typeParameter".equals( parser.getName() ) )
+                            {
+                                typeParametersList.add( parser.nextText() );
+                            }
+                        }
+                        modelClass.setTypeParameters( typeParametersList );
                     }
                     else
                     {

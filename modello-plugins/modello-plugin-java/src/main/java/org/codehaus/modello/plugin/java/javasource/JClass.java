@@ -75,6 +75,7 @@ package org.codehaus.modello.plugin.java.javasource;
  */
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -93,6 +94,7 @@ import java.util.Map;
 public class JClass extends JStructure
 {
 
+    private List<JTypeVariable> _typeParameters;
 
     /**
      * The list of constructors for this JClass
@@ -134,10 +136,11 @@ public class JClass extends JStructure
         throws IllegalArgumentException
     {
         super( name );
-        _constructors = new ArrayList<JConstructor>();
+        _typeParameters = new ArrayList<>();
+        _constructors = new ArrayList<>();
         _fields = new LinkedHashMap<>();
-        _methods = new ArrayList<JMethod>();
-        _innerClasses = new ArrayList<JClass>();
+        _methods = new ArrayList<>();
+        _innerClasses = new ArrayList<>();
         //-- initialize default Java doc
         getJDocComment().appendComment( "Class " + getLocalName() + "." );
 
@@ -200,6 +203,8 @@ public class JClass extends JStructure
         _fields.put( name, jField );
 
     } //-- addField
+    
+    
 
     /**
      * Adds the given JMember to this JClass
@@ -513,6 +518,11 @@ public class JClass extends JStructure
     {
         return _superClass;
     } //-- getSuperClass
+    
+    public void addTypeParameter( JTypeVariable typeParameter )
+    {
+        this._typeParameters.add( typeParameter );
+    }
 
     /**
      * Prints the source code for this JClass to the given JSourceWriter
@@ -596,31 +606,45 @@ public class JClass extends JStructure
         JModifiers modifiers = getModifiers();
         if ( modifiers.isPrivate() )
         {
-            buffer.append( "private " );
+            jsw.write( "private " );
         }
         else if ( modifiers.isPublic() )
         {
-            buffer.append( "public " );
+            jsw.write( "public " );
         }
 
         if ( modifiers.isAbstract() )
         {
-            buffer.append( "abstract " );
+            jsw.write( "abstract " );
         }
 
         if ( this instanceof JInnerClass && modifiers.isStatic() )
         {
-            buffer.append( "static " );
+            jsw.write( "static " );
         }
 
         if ( modifiers.isFinal() )
         {
-            buffer.append( "final " );
+            jsw.write( "final " );
         }
 
-        buffer.append( "class " );
-        buffer.append( getLocalName() );
-        jsw.writeln( buffer.toString() );
+        jsw.write( "class " );
+        jsw.write( getLocalName() );
+        if ( !_typeParameters.isEmpty() )
+        {
+            jsw.write( '<' );
+            Enumeration<JTypeVariable> typeParamEnum = Collections.enumeration( _typeParameters );
+            typeParamEnum.nextElement().print( jsw );
+            while ( typeParamEnum.hasMoreElements() )
+            {
+                jsw.write( ", " );
+                typeParamEnum.nextElement().print( jsw );
+            }
+            jsw.write( '>' );
+        }
+        
+        jsw.writeln();
+        
         buffer.setLength( 0 );
         jsw.indent();
 

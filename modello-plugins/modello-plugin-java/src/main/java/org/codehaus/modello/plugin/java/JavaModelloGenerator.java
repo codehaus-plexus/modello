@@ -55,6 +55,7 @@ import org.codehaus.modello.plugin.java.javasource.JParameter;
 import org.codehaus.modello.plugin.java.javasource.JSourceCode;
 import org.codehaus.modello.plugin.java.javasource.JSourceWriter;
 import org.codehaus.modello.plugin.java.javasource.JType;
+import org.codehaus.modello.plugin.java.javasource.JTypeVariable;
 import org.codehaus.modello.plugin.java.metadata.JavaAssociationMetadata;
 import org.codehaus.modello.plugin.java.metadata.JavaClassMetadata;
 import org.codehaus.modello.plugin.java.metadata.JavaFieldMetadata;
@@ -125,6 +126,8 @@ public class JavaModelloGenerator
             JSourceWriter sourceWriter = newJSourceWriter( packageName, modelClass.getName() );
 
             JClass jClass = new JClass( packageName + '.' + modelClass.getName() );
+
+            addTypeParameters( jClass, modelClass );
 
             initHeader( jClass );
 
@@ -294,6 +297,22 @@ public class JavaModelloGenerator
         }
     }
 
+    private void addTypeParameters( JClass jClass, ModelClass modelClass )
+    {
+        for ( String value : modelClass.getTypeParameters() )
+        {
+            jClass.addTypeParameter( new JTypeVariable( value ) );
+        }
+    }
+
+    private void addTypeParameters( JInterface jInterface, ModelInterface modelInterface)
+    {
+        for ( String value : modelInterface.getTypeParameters() )
+        {
+            jInterface.addTypeParameter( new JTypeVariable( value ) );
+        }
+    }
+
     private void generateInterface( ModelInterface modelInterface )
         throws ModelloException, IOException
     {
@@ -307,6 +326,8 @@ public class JavaModelloGenerator
 
         initHeader( jInterface );
 
+        addTypeParameters( jInterface, modelInterface );
+        
         suppressAllWarnings( objectModel, jInterface );
 
         if ( modelInterface.getSuperInterface() != null )

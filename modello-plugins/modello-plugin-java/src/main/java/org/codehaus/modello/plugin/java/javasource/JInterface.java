@@ -68,6 +68,7 @@ package org.codehaus.modello.plugin.java.javasource;
  */
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -85,7 +86,7 @@ import java.util.Map;
  **/
 public final class JInterface extends JStructure
 {
-
+    private List<JTypeVariable> _typeParameters;
 
     /**
      * The fields for this JInterface
@@ -109,7 +110,8 @@ public final class JInterface extends JStructure
         throws IllegalArgumentException
     {
         super( name );
-        methods = new ArrayList<JMethodSignature>();
+        methods = new ArrayList<>();
+        _typeParameters = new ArrayList<>();
 
         //-- initialize default Java doc
         getJDocComment().appendComment( "Interface " + getLocalName() + "." );
@@ -335,7 +337,11 @@ public final class JInterface extends JStructure
         return methods.get( index );
     } //-- getMethod
 
-
+    public void addTypeParameter( JTypeVariable typeParameter )
+    {
+        this._typeParameters.add( typeParameter );
+    }
+    
     /**
      * Prints the source code for this JInterface to the given JSourceWriter
      *
@@ -386,22 +392,34 @@ public final class JInterface extends JStructure
         JModifiers modifiers = getModifiers();
         if ( modifiers.isPrivate() )
         {
-            buffer.append( "private " );
+            jsw.write( "private " );
         }
         else if ( modifiers.isPublic() )
         {
-            buffer.append( "public " );
+            jsw.write( "public " );
         }
 
         if ( modifiers.isAbstract() )
         {
-            buffer.append( "abstract " );
+            jsw.write( "abstract " );
         }
 
-        buffer.append( "interface " );
-        buffer.append( getLocalName() );
+        jsw.write( "interface " );
+        jsw.write( getLocalName() );
         jsw.writeln( buffer.toString() );
-        buffer.setLength( 0 );
+        if ( !_typeParameters.isEmpty() )
+        {
+            jsw.write( '<' );
+            Enumeration<JTypeVariable> typeParamEnum = Collections.enumeration( _typeParameters );
+            typeParamEnum.nextElement().print( jsw );
+            while ( typeParamEnum.hasMoreElements() )
+            {
+                jsw.write( ", " );
+                typeParamEnum.nextElement().print( jsw );
+            }
+            jsw.write( '>' );
+        }
+        
         jsw.indent();
 
         if ( getInterfaceCount() > 0 )

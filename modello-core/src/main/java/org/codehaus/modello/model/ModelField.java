@@ -210,6 +210,21 @@ public class ModelField
         }
     }
 
+    public boolean isTypeVariable() 
+    {
+        String type = getType();
+        for ( String t : modelClass.getTypeParameters() )
+        {
+            String name = t.split( " " )[0];
+            if ( type.equals( name ) )
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    
     public void validateElement()
         throws ModelValidationException
     {
@@ -219,7 +234,7 @@ public class ModelField
 
         // TODO: these definitions are duplicated throughout. Defined centrally, and loop through in the various uses
 
-        if ( !isPrimitive() && !isPrimitiveArray() )
+        if ( !isPrimitive() && !isPrimitiveArray() && !isTypeVariable() )
         {
             throw new ModelValidationException( "Field '" + getName() + "': Illegal type: '" + type + "'." );
         }
