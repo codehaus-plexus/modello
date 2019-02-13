@@ -61,6 +61,13 @@
       <p>If source tracking is enabled in addition to location tracking, the public methods have an extra parameter which
       is the source tracker instance.</p>
       </subsection>
+
+      <subsection name="xpp3-extended-writer">
+      <p><code>xpp3-extended-writer</code> generator creates
+        <code><i>my.model.package</i><b>.io.xpp3.</b><i>ModelName</i><b>Xpp3WriterEx</b></code> class  with same public methods
+      as <code>xpp3-writer</code>, but it adds location tracking information on each written field as comments.
+      </p>
+      </subsection>
     </section>
 
   </body>

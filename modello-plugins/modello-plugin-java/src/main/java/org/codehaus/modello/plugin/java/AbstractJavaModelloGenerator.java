@@ -158,7 +158,7 @@ public abstract class AbstractJavaModelloGenerator
         }
     }
 
-    private void addModelImport( JClass jClass, ModelType modelType, String basePackageName )
+    protected void addModelImport( JClass jClass, ModelType modelType, String basePackageName )
     {
         String packageName = modelType.getPackageName( isPackageWithVersion(), getGeneratedVersion() );
 

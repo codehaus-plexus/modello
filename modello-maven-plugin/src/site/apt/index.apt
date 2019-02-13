@@ -25,7 +25,10 @@ Modello Maven Plugin
   * {{{./xpp3-reader-mojo.html}modello:xpp3-reader}} Generates an XML Pull Parser reader from the Modello model.
 
   * {{{./xpp3-extended-reader-mojo.html}modello:xpp3-extended-reader}} Generates an XML Pull Parser reader from the
-    Modello model that records line/column number metadata in the parsed model.
+    Modello model that records line/column number metadata and eventual source in the parsed model.
+
+  * {{{./xpp3-extended-writer-mojo.html}modello:xpp3-extended-writer}} Generates an XML Pull Parser writer from the
+    Modello model that writes line/column number and source info as comments on each line.
 
   * {{{./dom4j-writer-mojo.html}modello:dom4j-writer}} Generates a DOM4J writer from the Modello model.
 

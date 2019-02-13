@@ -65,6 +65,11 @@ public class ModelloParameterConstants
      */
     public static final String DOM_AS_XPP3 = "modello.dom.xpp3";
 
+    /**
+     * @since 1.10
+     */
+    public static final String EXTENDED_CLASSNAME_SUFFIX = "modello.xpp3.extended.suffix";
+
     private ModelloParameterConstants()
     {
     }

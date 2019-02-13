@@ -23,6 +23,7 @@ package org.codehaus.modello.plugin.xpp3;
  */
 
 import org.codehaus.modello.ModelloException;
+import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
@@ -54,13 +55,34 @@ public class Xpp3WriterGenerator
 {
     private boolean requiresDomSupport;
 
+    private String extendedClassnameSuffix;
+
+    protected boolean isLocationTracking()
+    {
+        return false;
+    }
+
+    protected void prepareLocationTracking( JClass jClass )
+    {
+        // NO OP
+    }
+
+    protected void writeLocationTracking( JSourceCode sc, String name, String key )
+    {
+        if ( isLocationTracking() )
+        {
+            sc.addIndented( "writeLocationTracking( " + name + ", \"" + key + "\", serializer );" );
+        }
+    }
+
     public void generate( Model model, Properties parameters )
         throws ModelloException
     {
         initialize( model, parameters );
 
         requiresDomSupport = false;
-
+        extendedClassnameSuffix = parameters.getProperty( ModelloParameterConstants.EXTENDED_CLASSNAME_SUFFIX );
+        
         try
         {
             generateXpp3Writer();
@@ -79,7 +101,7 @@ public class Xpp3WriterGenerator
         String packageName = objectModel.getDefaultPackageName( isPackageWithVersion(), getGeneratedVersion() )
             + ".io.xpp3";
 
-        String marshallerName = getFileName( "Xpp3Writer" );
+        String marshallerName = getFileName( "Xpp3Writer" + ( isLocationTracking() ? extendedClassnameSuffix : "" ) );
 
         JSourceWriter sourceWriter = newJSourceWriter( packageName, marshallerName );
 
@@ -112,6 +134,11 @@ public class Xpp3WriterGenerator
         jClass.addMethod( setComment );
 
         addModelImports( jClass, null );
+
+        if ( isLocationTracking() )
+        {
+            prepareLocationTracking( jClass );
+        }
 
         String root = objectModel.getRoot( getGeneratedVersion() );
 
@@ -471,6 +498,7 @@ public class Xpp3WriterGenerator
                     sc.addIndented( "serializer.startTag( NAMESPACE, " + "\"" + fieldTagName + "\" ).text( "
                         + getValue( field.getType(), value, xmlFieldMetadata ) + " ).endTag( NAMESPACE, " + "\""
                         + fieldTagName + "\" );" );
+                    writeLocationTracking( sc, uncapClassName, fieldTagName );
                 }
                 sc.add( "}" );
             }
