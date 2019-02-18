@@ -91,8 +91,8 @@
 <p>A <tt>Tracker</tt> interface will be generated to factor out accessors to <tt>locationTracker</tt>:</p>
 <div class="source"><pre class="prettyprint linenums">public interface LocationTracker // named by adding &quot;Tracker&quot; to location tracker class name
 {
-    public InputLocation getLocation( Object field );
-    public void setLocation( Object field, InputLocation location );
+    public Location getLocation( Object field );
+    public void setLocation( Object field, Location location );
 }</pre></div>
 <p>All other model classes will be equipped with a field to hold instances of the <tt>Location</tt> class and implement <tt>Tracker</tt> accessors to query them. The value of <tt>locationTracker</tt> attribute is used to name this field. This way, each model class keeps track of the input locations for its fields:</p>
 <div class="source"><pre class="prettyprint linenums">public class Model implements LocationTracker
