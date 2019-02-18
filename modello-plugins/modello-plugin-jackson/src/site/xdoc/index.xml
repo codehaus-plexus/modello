@@ -36,7 +36,7 @@
       </subsection>
 
       <subsection name="jackson-writer">
-      <p><code>stax-writer</code> generator creates
+      <p><code>jackson-writer</code> generator creates
         <code><i>my.model.package</i><b>.io.jackson.</b><i>ModelName</i><b>JacksonWriter</b></code> class with following
         public methods:
       </p>
@@ -47,6 +47,14 @@
         <li><code>public void write( Writer writer, <i>RootClass</i> root )<br/>
             &#160;&#160;&#160;&#160;throws IOException</code></li>
       </ul>
+      </subsection>
+
+      <subsection name="jackson-extended-reader">
+      <p><code>jackson-extended-reader</code> generator creates
+      <code><i>my.model.package</i><b>.io.jackson.</b><i>ModelName</i><b>JacksonReaderEx</b></code> class with same public methods
+      as <code>jackson-reader</code>, but with <a href="../../location-tracking.html">location tracking enabled</a>.</p>
+      <p>If source tracking is enabled in addition to location tracking, the public methods have an extra parameter which
+      is the source tracker instance.</p>
       </subsection>
 
     </section>

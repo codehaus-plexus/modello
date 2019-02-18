@@ -37,6 +37,20 @@ Modello Maven Plugin
 
   * {{{./jdom-writer-mojo.html}modello:jdom-writer}} Generates a {{{http://www.jdom.org/}jdom}} writer from the model that is capable of preserving element ordering and comments.
 
+  * {{{./jackson-writer-mojo.html}modello:jackson-writer}} Generates a JSON writer based on Jackson Streaming APIs from the Modello model.
+
+  * {{{./jackson-reader-mojo.html}modello:jackson-reader}} Generates a JSON reader based on Jackson Streaming APIs from the Modello model.
+
+  * {{{./jackson-extended-reader-mojo.html}modello:jackson-extended-reader}} Generates a JSON reader based on Jackson Streaming APIs from the.
+    Modello model that records line/column number metadata in the parsed model.
+
+  * {{{./snakeyaml-writer-mojo.html}modello:snakeyaml-writer}} Generates a YAML writer based on SnakeYaml Streaming APIs from the Modello model.
+
+  * {{{./snakeyaml-reader-mojo.html}modello:snakeyaml-reader}} Generates a YAML reader based on SnakeYaml Streaming APIs from the Modello model.
+
+  * {{{./snakeyaml-extended-reader-mojo.html}modello:snakeyaml-extended-reader}} Generates a YAML reader based on SnakeYaml Streaming APIs from the.
+    Modello model that records line/column number metadata in the parsed model.
+
   * {{{./converters-mojo.html}modello:converters}} Generates classes that can convert between different versions of the model.
 
   []

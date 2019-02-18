@@ -54,6 +54,13 @@
       </ul>
       </subsection>
 
+      <subsection name="xpp3-extended-reader">
+      <p><code>xpp3-extended-reader</code> generator creates
+      <code><i>my.model.package</i><b>.io.xpp3.</b><i>ModelName</i><b>Xpp3ReaderEx</b></code> class with same public methods
+      as <code>xpp3-reader</code>, but with <a href="../../location-tracking.html">location tracking enabled</a>.</p>
+      <p>If source tracking is enabled in addition to location tracking, the public methods have an extra parameter which
+      is the source tracker instance.</p>
+      </subsection>
     </section>
 
   </body>

@@ -49,6 +49,14 @@
       </ul>
       </subsection>
 
+      <subsection name="snakeyaml-extended-reader">
+      <p><code>snakeyaml-extended-reader</code> generator creates
+      <code><i>my.model.package</i><b>.io.snakeyaml.</b><i>ModelName</i><b>SnakeYamlReaderEx</b></code> class with same public methods
+      as <code>snakeyaml-reader</code>, but with <a href="../../location-tracking.html">location tracking enabled</a>.</p>
+      <p>If source tracking is enabled in addition to location tracking, the public methods have an extra parameter which
+      is the source tracker instance.</p>
+      </subsection>
+
     </section>
 
   </body>
