@@ -64,7 +64,7 @@ public class Xpp3WriterGenerator
     {
         if ( isLocationTracking() )
         {
-            sc.addIndented( "writeLocationTracking( " + name + ", \"" + key + "\", serializer );" );
+            sc.add( "writeLocationTracking( " + name + ", " + key + ", serializer );" );
         }
     }
 
@@ -436,7 +436,12 @@ public class Xpp3WriterGenerator
 
                         if ( wrappedItems )
                         {
-                            sc.add( "serializer.startTag( NAMESPACE, " + "\"" + fieldTagName + "\" );" );
+                            sc.add( "serializer.startTag( NAMESPACE, \"" + fieldTagName + "\" );" );
+                        }
+
+                        if ( isLocationTracking() )
+                        {
+                            sc.add( locationTracker.getName() + " location = " + uncapClassName + ".getLocation( \"" + fieldTagName + "\" );" );
                         }
 
                         sc.add( "for ( Iterator iter = " + value + ".keySet().iterator(); iter.hasNext(); )" );
@@ -460,15 +465,17 @@ public class Xpp3WriterGenerator
                         else
                         {
                             sc.add(
-                                "serializer.startTag( NAMESPACE, \"\" + key + \"\" ).text( value ).endTag( NAMESPACE, \"\" + key + \"\" );" );
+                                "serializer.startTag( NAMESPACE, key ).text( value ).endTag( NAMESPACE, key );" );
                         }
+
+                        writeLocationTracking( sc, "location", "key" );
 
                         sc.unindent();
                         sc.add( "}" );
 
                         if ( wrappedItems )
                         {
-                            sc.add( "serializer.endTag( NAMESPACE, " + "\"" + fieldTagName + "\" );" );
+                            sc.add( "serializer.endTag( NAMESPACE, \"" + fieldTagName + "\" );" );
                         }
 
                         sc.unindent();
@@ -501,7 +508,9 @@ public class Xpp3WriterGenerator
                     sc.addIndented( "serializer.startTag( NAMESPACE, " + "\"" + fieldTagName + "\" ).text( "
                         + getValue( field.getType(), value, xmlFieldMetadata ) + " ).endTag( NAMESPACE, " + "\""
                         + fieldTagName + "\" );" );
-                    writeLocationTracking( sc, uncapClassName, fieldTagName );
+                    sc.indent();
+                    writeLocationTracking( sc, uncapClassName, '"' + fieldTagName + '"' );
+                    sc.unindent();
                 }
                 sc.add( "}" );
             }
