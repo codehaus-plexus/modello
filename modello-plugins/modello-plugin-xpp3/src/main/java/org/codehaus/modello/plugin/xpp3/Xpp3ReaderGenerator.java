@@ -61,50 +61,35 @@ public class Xpp3ReaderGenerator
 
     private static final String LOCATION_VAR = "_location";
 
-    private ModelClass locationTracker;
-
     private String locationField;
-
-    private ModelClass sourceTracker;
 
     private String trackingArgs;
 
-    private boolean requiresDomSupport;
-
-    protected boolean isLocationTracking()
-    {
-        return false;
-    }
-
-    public void generate( Model model, Properties parameters )
+    @Override
+    protected void initialize( Model model, Properties parameters )
         throws ModelloException
     {
-        initialize( model, parameters );
+        super.initialize( model, parameters );
 
-        locationTracker = sourceTracker = null;
         trackingArgs = locationField = "";
-        requiresDomSupport = false;
 
         if ( isLocationTracking() )
         {
-            locationTracker = model.getLocationTracker( getGeneratedVersion() );
-            if ( locationTracker == null )
-            {
-                throw new ModelloException( "No model class has been marked as location tracker"
-                                                + " via the attribute locationTracker=\"locations\""
-                                                + ", cannot generate extended reader." );
-            }
-
             locationField =
                 ( (ModelClassMetadata) locationTracker.getMetadata( ModelClassMetadata.ID ) ).getLocationTracker();
-
-            sourceTracker = model.getSourceTracker( getGeneratedVersion() );
 
             if ( sourceTracker != null )
             {
                 trackingArgs += ", " + SOURCE_PARAM;
             }
         }
+
+    }
+
+    public void generate( Model model, Properties parameters )
+        throws ModelloException
+    {
+        initialize( model, parameters );
 
         try
         {

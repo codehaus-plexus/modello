@@ -22,7 +22,6 @@ package org.codehaus.modello.plugin.xpp3;
  * SOFTWARE.
  */
 
-import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.plugin.java.javasource.JClass;
 import org.codehaus.modello.plugin.java.javasource.JMethod;
 import org.codehaus.modello.plugin.java.javasource.JParameter;
@@ -38,10 +37,6 @@ import org.codehaus.modello.plugin.java.javasource.JType;
 public class Xpp3ExtendedWriterGenerator
     extends Xpp3WriterGenerator
 {
-    ModelClass locationTrackerModelClass;
-
-    ModelClass sourceTrackerModelClass;
-
     @Override
     protected boolean isLocationTracking()
     {
@@ -51,13 +46,10 @@ public class Xpp3ExtendedWriterGenerator
     @Override
     protected void prepareLocationTracking( JClass jClass )
     {
-        locationTrackerModelClass = getModel().getLocationTracker( getGeneratedVersion() );
-        sourceTrackerModelClass = getModel().getSourceTracker( getGeneratedVersion() );
+        String packageName = locationTracker.getPackageName( isPackageWithVersion(), getGeneratedVersion() );
 
-        String packageName = locationTrackerModelClass.getPackageName( isPackageWithVersion(), getGeneratedVersion() );
-
-        jClass.addImport( packageName + '.' + locationTrackerModelClass.getName() + "Tracker" );
-        addModelImport( jClass, locationTrackerModelClass, null );
+        jClass.addImport( packageName + '.' + locationTracker.getName() + "Tracker" );
+        addModelImport( jClass, locationTracker, null );
 
         createLocationTrackingMethod( jClass );
     }
@@ -67,7 +59,7 @@ public class Xpp3ExtendedWriterGenerator
         JMethod method = new JMethod( "writeLocationTracking" );
         method.getModifiers().makePrivate();
 
-        method.addParameter( new JParameter( new JType( locationTrackerModelClass.getName() + "Tracker" ), "locationTracker" ) );
+        method.addParameter( new JParameter( new JType( locationTracker.getName() + "Tracker" ), "locationTracker" ) );
         method.addParameter( new JParameter( new JClass( "Object" ), "key" ) );
         method.addParameter( new JParameter( new JClass( "XmlSerializer" ), "serializer" ) );
 
@@ -75,7 +67,7 @@ public class Xpp3ExtendedWriterGenerator
 
         JSourceCode sc = method.getSourceCode();
 
-        sc.add( locationTrackerModelClass.getName() + " location = locationTracker.getLocation( key );" );
+        sc.add( locationTracker.getName() + " location = locationTracker.getLocation( key );" );
         sc.add( "if ( location != null )" );
         sc.add( "{" );
         sc.addIndented( "serializer.comment( toString( location ) );" );
@@ -86,10 +78,11 @@ public class Xpp3ExtendedWriterGenerator
         method = new JMethod( "toString", new JType( "String" ), null );
         method.getModifiers().makeProtected();
 
-        method.addParameter( new JParameter( new JType( locationTrackerModelClass.getName() ), "location" ) );
+        method.addParameter( new JParameter( new JType( locationTracker.getName() ), "location" ) );
 
         sc = method.getSourceCode();
-        sc.add( "return ' ' + location.getSource().toString() + ':' + location.getLineNumber() + ' ';" );
+        sc.add( "return ' ' + " + ( ( sourceTracker == null ) ? "" : "location.getSource().toString() + ':' + " )
+            + "location.getLineNumber() + ' ';" );
 
         jClass.addMethod( method );
     }

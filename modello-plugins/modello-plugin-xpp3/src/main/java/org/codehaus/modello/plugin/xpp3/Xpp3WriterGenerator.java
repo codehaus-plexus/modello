@@ -53,14 +53,7 @@ import java.util.Properties;
 public class Xpp3WriterGenerator
     extends AbstractXpp3Generator
 {
-    private boolean requiresDomSupport;
-
     private String extendedClassnameSuffix;
-
-    protected boolean isLocationTracking()
-    {
-        return false;
-    }
 
     protected void prepareLocationTracking( JClass jClass )
     {
@@ -75,14 +68,24 @@ public class Xpp3WriterGenerator
         }
     }
 
+    @Override
+    protected void initialize( Model model, Properties parameters )
+        throws ModelloException
+    {
+        super.initialize( model, parameters );
+
+        extendedClassnameSuffix = "Ex";
+        if ( isLocationTracking() )
+        {
+            extendedClassnameSuffix = parameters.getProperty( ModelloParameterConstants.EXTENDED_CLASSNAME_SUFFIX );
+        }
+    }
+
     public void generate( Model model, Properties parameters )
         throws ModelloException
     {
         initialize( model, parameters );
 
-        requiresDomSupport = false;
-        extendedClassnameSuffix = parameters.getProperty( ModelloParameterConstants.EXTENDED_CLASSNAME_SUFFIX );
-        
         try
         {
             generateXpp3Writer();

@@ -22,6 +22,11 @@ package org.codehaus.modello.plugin.xpp3;
  * SOFTWARE.
  */
 
+import java.util.Properties;
+
+import org.codehaus.modello.ModelloException;
+import org.codehaus.modello.model.Model;
+import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.plugins.xml.AbstractXmlJavaGenerator;
 
 /**
@@ -30,4 +35,36 @@ import org.codehaus.modello.plugins.xml.AbstractXmlJavaGenerator;
 public abstract class AbstractXpp3Generator
     extends AbstractXmlJavaGenerator
 {
+    protected boolean requiresDomSupport;
+
+    protected ModelClass locationTracker;
+
+    protected ModelClass sourceTracker;
+
+    protected boolean isLocationTracking()
+    {
+        return false;
+    }
+
+    @Override
+    protected void initialize( Model model, Properties parameters )
+        throws ModelloException
+    {
+        super.initialize( model, parameters );
+
+        requiresDomSupport = false;
+        locationTracker = sourceTracker = null;
+
+        if ( isLocationTracking() )
+        {
+            locationTracker = model.getLocationTracker( getGeneratedVersion() );
+            if ( locationTracker == null )
+            {
+                throw new ModelloException( "No model class has been marked as location tracker"
+                    + " via the attribute locationTracker=\"locations\"" + ", cannot generate extended reader." );
+            }
+
+            sourceTracker = model.getSourceTracker( getGeneratedVersion() );
+        }
+    }
 }
