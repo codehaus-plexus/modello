@@ -40,8 +40,8 @@ Location Tracking
 +----+
 public interface LocationTracker // named by adding "Tracker" to location tracker class name
 {
-    public InputLocation getLocation( Object field );
-    public void setLocation( Object field, InputLocation location );
+    public Location getLocation( Object field );
+    public void setLocation( Object field, Location location );
 }
 +----+
 
