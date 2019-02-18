@@ -23,10 +23,10 @@ under the License.
     <link>http://codehaus-plexus.github.io/modello/</link>
     <description>Modello - Checkstyle report</description>
     <language>en-us</language>
-    <copyright>&#169;2001 - 2018 Codehaus Plexus</copyright>
+    <copyright>&#169;2001 - 2019 Codehaus Plexus</copyright>
     <item>
-      <title>File: 152,
-             Errors: 708,
+      <title>File: 153,
+             Errors: 716,
              Warnings: 574,
              Infos: 118
       </title>
@@ -587,7 +587,7 @@ under the License.
                   2
                 </td>
                 <td>
-                  5
+                  6
                 </td>
               </tr>
                           <tr>
@@ -979,7 +979,7 @@ under the License.
                   7
                 </td>
                 <td>
-                  9
+                  12
                 </td>
               </tr>
                           <tr>
@@ -1077,7 +1077,7 @@ under the License.
                   7
                 </td>
                 <td>
-                  22
+                  23
                 </td>
               </tr>
                           <tr>
@@ -1572,6 +1572,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="http://codehaus-plexus.github.io/modello//checkstyle.html#org.codehaus.modello.maven.ModelloSnakeYamlExtendedReaderMojo.java">org/codehaus/modello/maven/ModelloSnakeYamlExtendedReaderMojo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  2
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="http://codehaus-plexus.github.io/modello//checkstyle.html#org.codehaus.modello.plugin.AbstractModelloGenerator.java">org/codehaus/modello/plugin/AbstractModelloGenerator.java</a>
                 </td>
                 <td>
@@ -2057,7 +2071,7 @@ under the License.
                   3
                 </td>
                 <td>
-                  12
+                  13
                 </td>
               </tr>
                           <tr>

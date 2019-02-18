@@ -1554,7 +1554,7 @@
 <a class="jxr_linenumber" name="1544" href="#1544">1544</a>         sc.add( <span class="jxr_string">"}"</span> );
 <a class="jxr_linenumber" name="1545" href="#1545">1545</a>         sc.add( <span class="jxr_string">"else"</span> );
 <a class="jxr_linenumber" name="1546" href="#1546">1546</a>         sc.add( <span class="jxr_string">"{"</span> );
-<a class="jxr_linenumber" name="1547" href="#1547">1547</a>         sc.addIndented( <span class="jxr_string">"values.push( new StringBuffer() );"</span> );
+<a class="jxr_linenumber" name="1547" href="#1547">1547</a>         sc.addIndented( <span class="jxr_string">"values.push( new StringBuilder() );"</span> );
 <a class="jxr_linenumber" name="1548" href="#1548">1548</a>         sc.add( <span class="jxr_string">"}"</span> );
 <a class="jxr_linenumber" name="1549" href="#1549">1549</a> 
 <a class="jxr_linenumber" name="1550" href="#1550">1550</a>         sc.add( <span class="jxr_string">"int attributesSize = xmlStreamReader.getAttributeCount();"</span> );
@@ -1576,7 +1576,7 @@
 <a class="jxr_linenumber" name="1566" href="#1566">1566</a>         sc.add( <span class="jxr_string">"else if ( eventType == XMLStreamConstants.CHARACTERS )"</span> );
 <a class="jxr_linenumber" name="1567" href="#1567">1567</a>         sc.add( <span class="jxr_string">"{"</span> );
 <a class="jxr_linenumber" name="1568" href="#1568">1568</a>         sc.indent();
-<a class="jxr_linenumber" name="1569" href="#1569">1569</a>         sc.add( <span class="jxr_string">"StringBuffer valueBuffer = (StringBuffer) values.peek();"</span> );
+<a class="jxr_linenumber" name="1569" href="#1569">1569</a>         sc.add( <span class="jxr_string">"StringBuilder valueBuffer = (StringBuilder) values.peek();"</span> );
 <a class="jxr_linenumber" name="1570" href="#1570">1570</a> 
 <a class="jxr_linenumber" name="1571" href="#1571">1571</a>         sc.add( <span class="jxr_string">"String text = xmlStreamReader.getText();"</span> );
 <a class="jxr_linenumber" name="1572" href="#1572">1572</a> 

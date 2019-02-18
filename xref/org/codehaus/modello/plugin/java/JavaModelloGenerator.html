@@ -438,7 +438,7 @@
 <a class="jxr_linenumber" name="428" href="#428">428</a>         }
 <a class="jxr_linenumber" name="429" href="#429">429</a>         <strong class="jxr_keyword">else</strong>
 <a class="jxr_linenumber" name="430" href="#430">430</a>         {
-<a class="jxr_linenumber" name="431" href="#431">431</a>             sc.add( <span class="jxr_string">"StringBuffer buf = new StringBuffer( 128 );"</span> );
+<a class="jxr_linenumber" name="431" href="#431">431</a>             sc.add( <span class="jxr_string">"StringBuilder buf = new StringBuilder( 128 );"</span> );
 <a class="jxr_linenumber" name="432" href="#432">432</a>         }
 <a class="jxr_linenumber" name="433" href="#433">433</a> 
 <a class="jxr_linenumber" name="434" href="#434">434</a>         sc.add( <span class="jxr_string">""</span> );
@@ -1256,7 +1256,7 @@
 <a class="jxr_linenumber" name="1246" href="#1246">1246</a> 
 <a class="jxr_linenumber" name="1247" href="#1247">1247</a>         <a href="../../../../../org/codehaus/modello/plugin/java/javasource/JMethod.html">JMethod</a> getter = <strong class="jxr_keyword">new</strong> <a href="../../../../../org/codehaus/modello/plugin/java/javasource/JMethod.html">JMethod</a>( prefix + propertyName, returnType, <strong class="jxr_keyword">null</strong> );
 <a class="jxr_linenumber" name="1248" href="#1248">1248</a> 
-<a class="jxr_linenumber" name="1249" href="#1249">1249</a>         StringBuffer comment = <strong class="jxr_keyword">new</strong> StringBuffer( <span class="jxr_string">"Get "</span> );
+<a class="jxr_linenumber" name="1249" href="#1249">1249</a>         StringBuilder comment = <strong class="jxr_keyword">new</strong> StringBuilder( <span class="jxr_string">"Get "</span> );
 <a class="jxr_linenumber" name="1250" href="#1250">1250</a>         <strong class="jxr_keyword">if</strong> ( StringUtils.isEmpty( modelField.getDescription() ) )
 <a class="jxr_linenumber" name="1251" href="#1251">1251</a>         {
 <a class="jxr_linenumber" name="1252" href="#1252">1252</a>             comment.append( <span class="jxr_string">"the "</span> );
@@ -1296,7 +1296,7 @@
 <a class="jxr_linenumber" name="1286" href="#1286">1286</a>             setter = <strong class="jxr_keyword">new</strong> <a href="../../../../../org/codehaus/modello/plugin/java/javasource/JMethod.html">JMethod</a>( <span class="jxr_string">"set"</span> + propertyName );
 <a class="jxr_linenumber" name="1287" href="#1287">1287</a>         }
 <a class="jxr_linenumber" name="1288" href="#1288">1288</a> 
-<a class="jxr_linenumber" name="1289" href="#1289">1289</a>         StringBuffer comment = <strong class="jxr_keyword">new</strong> StringBuffer( <span class="jxr_string">"Set "</span> );
+<a class="jxr_linenumber" name="1289" href="#1289">1289</a>         StringBuilder comment = <strong class="jxr_keyword">new</strong> StringBuilder( <span class="jxr_string">"Set "</span> );
 <a class="jxr_linenumber" name="1290" href="#1290">1290</a>         <strong class="jxr_keyword">if</strong> ( StringUtils.isEmpty( modelField.getDescription() ) )
 <a class="jxr_linenumber" name="1291" href="#1291">1291</a>         {
 <a class="jxr_linenumber" name="1292" href="#1292">1292</a>             comment.append( <span class="jxr_string">"the "</span> );

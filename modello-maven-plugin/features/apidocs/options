@@ -1,23 +1,23 @@
 -classpath
-'/home/herve/projets/maven/git/aggregator/plexus/modello/modello-maven-plugin/target/it/features/target/classes:/home/herve/projets/maven/git/aggregator/plexus/modello/modello-maven-plugin/target/local-repo/xml-apis/xml-apis/1.0.b2/xml-apis-1.0.b2.jar:/home/herve/projets/maven/git/aggregator/plexus/modello/modello-maven-plugin/target/local-repo/stax/stax-api/1.0.1/stax-api-1.0.1.jar:/home/herve/projets/maven/git/aggregator/plexus/modello/modello-maven-plugin/target/local-repo/org/codehaus/plexus/plexus-utils/3.0.13/plexus-utils-3.0.13.jar:/home/herve/projets/maven/git/aggregator/plexus/modello/modello-maven-plugin/target/local-repo/org/codehaus/woodstox/wstx-asl/3.2.0/wstx-asl-3.2.0.jar:/home/herve/projets/maven/git/aggregator/plexus/modello/modello-maven-plugin/target/local-repo/org/jdom/jdom/1.1/jdom-1.1.jar:/home/herve/projets/maven/git/aggregator/plexus/modello/modello-maven-plugin/target/local-repo/dom4j/dom4j/1.6.1/dom4j-1.6.1.jar'
+'/home/herve/projets/maven/sources/plexus/modello/modello-maven-plugin/target/local-repo/xml-apis/xml-apis/1.0.b2/xml-apis-1.0.b2.jar:/home/herve/projets/maven/sources/plexus/modello/modello-maven-plugin/target/local-repo/stax/stax-api/1.0.1/stax-api-1.0.1.jar:/home/herve/projets/maven/sources/plexus/modello/modello-maven-plugin/target/local-repo/org/codehaus/plexus/plexus-utils/3.0.13/plexus-utils-3.0.13.jar:/home/herve/projets/maven/sources/plexus/modello/modello-maven-plugin/target/local-repo/org/codehaus/woodstox/wstx-asl/3.2.0/wstx-asl-3.2.0.jar:/home/herve/projets/maven/sources/plexus/modello/modello-maven-plugin/target/local-repo/org/jdom/jdom/1.1/jdom-1.1.jar:/home/herve/projets/maven/sources/plexus/modello/modello-maven-plugin/target/local-repo/dom4j/dom4j/1.6.1/dom4j-1.6.1.jar'
 -encoding
 'UTF-8'
 -private
 -sourcepath
-'/home/herve/projets/maven/git/aggregator/plexus/modello/modello-maven-plugin/target/it/features/src/main/java:/home/herve/projets/maven/git/aggregator/plexus/modello/modello-maven-plugin/target/it/features/target/generated-sources/modello'
+'/home/herve/projets/maven/sources/plexus/modello/modello-maven-plugin/target/it/features/src/main/java:/home/herve/projets/maven/sources/plexus/modello/modello-maven-plugin/target/it/features/target/generated-sources/modello:/home/herve/projets/maven/sources/plexus/modello/modello-maven-plugin/target/it/features/target/generated-sources/annotations'
 -author
 -bottom
-'Copyright &#169; 2018. All Rights Reserved.'
+'Copyright &#169; 2019. All rights reserved.'
 -charset
 'UTF-8'
 -d
-'/home/herve/projets/maven/git/aggregator/plexus/modello/modello-maven-plugin/target/it/features/target/site/apidocs'
+'/home/herve/projets/maven/sources/plexus/modello/modello-maven-plugin/target/it/features/target/site/apidocs'
 -docencoding
 'UTF-8'
 -doctitle
 'Full features IT 0.1-SNAPSHOT API'
 -linkoffline
-'http://docs.oracle.com/javase/1.5.0/docs/api' '/home/herve/projets/maven/git/aggregator/plexus/modello/modello-maven-plugin/target/it/features/target/javadoc-bundle-options'
+'https://docs.oracle.com/javase/7/docs/api' '/home/herve/projets/maven/sources/plexus/modello/modello-maven-plugin/target/it/features/target/javadoc-bundle-options'
 -linksource
 -use
 -version

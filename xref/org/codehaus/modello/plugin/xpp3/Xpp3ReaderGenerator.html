@@ -1173,7 +1173,7 @@
 <a class="jxr_linenumber" name="1163" href="#1163">1163</a>         sc.add( <span class="jxr_string">"}"</span> );
 <a class="jxr_linenumber" name="1164" href="#1164">1164</a>         sc.add( <span class="jxr_string">"else"</span> );
 <a class="jxr_linenumber" name="1165" href="#1165">1165</a>         sc.add( <span class="jxr_string">"{"</span> );
-<a class="jxr_linenumber" name="1166" href="#1166">1166</a>         sc.addIndented( <span class="jxr_string">"values.push( new StringBuffer() );"</span> );
+<a class="jxr_linenumber" name="1166" href="#1166">1166</a>         sc.addIndented( <span class="jxr_string">"values.push( new StringBuilder() );"</span> );
 <a class="jxr_linenumber" name="1167" href="#1167">1167</a>         sc.add( <span class="jxr_string">"}"</span> );
 <a class="jxr_linenumber" name="1168" href="#1168">1168</a> 
 <a class="jxr_linenumber" name="1169" href="#1169">1169</a>         sc.add( <span class="jxr_string">"int attributesSize = parser.getAttributeCount();"</span> );
@@ -1194,7 +1194,7 @@
 <a class="jxr_linenumber" name="1184" href="#1184">1184</a>         sc.add( <span class="jxr_string">"else if ( eventType == XmlPullParser.TEXT )"</span> );
 <a class="jxr_linenumber" name="1185" href="#1185">1185</a>         sc.add( <span class="jxr_string">"{"</span> );
 <a class="jxr_linenumber" name="1186" href="#1186">1186</a>         sc.indent();
-<a class="jxr_linenumber" name="1187" href="#1187">1187</a>         sc.add( <span class="jxr_string">"StringBuffer valueBuffer = (StringBuffer) values.peek();"</span> );
+<a class="jxr_linenumber" name="1187" href="#1187">1187</a>         sc.add( <span class="jxr_string">"StringBuilder valueBuffer = (StringBuilder) values.peek();"</span> );
 <a class="jxr_linenumber" name="1188" href="#1188">1188</a> 
 <a class="jxr_linenumber" name="1189" href="#1189">1189</a>         sc.add( <span class="jxr_string">"String text = parser.getText();"</span> );
 <a class="jxr_linenumber" name="1190" href="#1190">1190</a> 

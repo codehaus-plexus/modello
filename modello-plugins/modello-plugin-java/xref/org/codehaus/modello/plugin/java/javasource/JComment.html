@@ -134,7 +134,7 @@
 <a class="jxr_linenumber" name="124" href="#124">124</a>     <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="125" href="#125">125</a> <em class="jxr_javadoccomment">     * The main comment for this JDocComment</em>
 <a class="jxr_linenumber" name="126" href="#126">126</a> <em class="jxr_javadoccomment">     **/</em>
-<a class="jxr_linenumber" name="127" href="#127">127</a>     <strong class="jxr_keyword">private</strong> StringBuffer _comment = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="127" href="#127">127</a>     <strong class="jxr_keyword">private</strong> StringBuilder _comment = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="128" href="#128">128</a> 
 <a class="jxr_linenumber" name="129" href="#129">129</a>     <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="130" href="#130">130</a> <em class="jxr_javadoccomment">     * The maximum number of characters per line</em>
@@ -148,7 +148,7 @@
 <a class="jxr_linenumber" name="138" href="#138">138</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../../../org/codehaus/modello/plugin/java/javasource/JComment.html">JComment</a>()
 <a class="jxr_linenumber" name="139" href="#139">139</a>     {
 <a class="jxr_linenumber" name="140" href="#140">140</a>         <strong class="jxr_keyword">super</strong>();
-<a class="jxr_linenumber" name="141" href="#141">141</a>         _comment = <strong class="jxr_keyword">new</strong> StringBuffer();
+<a class="jxr_linenumber" name="141" href="#141">141</a>         _comment = <strong class="jxr_keyword">new</strong> StringBuilder();
 <a class="jxr_linenumber" name="142" href="#142">142</a>     } <em class="jxr_comment">//-- JComment</em>
 <a class="jxr_linenumber" name="143" href="#143">143</a> 
 <a class="jxr_linenumber" name="144" href="#144">144</a>     <em class="jxr_javadoccomment">/**</em>
@@ -289,7 +289,7 @@
 <a class="jxr_linenumber" name="279" href="#279">279</a> 
 <a class="jxr_linenumber" name="280" href="#280">280</a>     String prefix = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="281" href="#281">281</a> 
-<a class="jxr_linenumber" name="282" href="#282">282</a>     <strong class="jxr_keyword">private</strong> StringBuffer sb = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="282" href="#282">282</a>     <strong class="jxr_keyword">private</strong> StringBuilder sb = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="283" href="#283">283</a> 
 <a class="jxr_linenumber" name="284" href="#284">284</a>     <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="285" href="#285">285</a> <em class="jxr_javadoccomment">     * Creates a LineFormatter for the given comment</em>
@@ -299,7 +299,7 @@
 <a class="jxr_linenumber" name="289" href="#289">289</a>     {
 <a class="jxr_linenumber" name="290" href="#290">290</a>         <strong class="jxr_keyword">this</strong>.comment = comment;
 <a class="jxr_linenumber" name="291" href="#291">291</a>         <strong class="jxr_keyword">if</strong> ( comment != <strong class="jxr_keyword">null</strong> ) <strong class="jxr_keyword">this</strong>.length = comment.length();
-<a class="jxr_linenumber" name="292" href="#292">292</a>         sb = <strong class="jxr_keyword">new</strong> StringBuffer();
+<a class="jxr_linenumber" name="292" href="#292">292</a>         sb = <strong class="jxr_keyword">new</strong> StringBuilder();
 <a class="jxr_linenumber" name="293" href="#293">293</a>     } <em class="jxr_comment">//-- LineFormatter</em>
 <a class="jxr_linenumber" name="294" href="#294">294</a> 
 <a class="jxr_linenumber" name="295" href="#295">295</a> 
