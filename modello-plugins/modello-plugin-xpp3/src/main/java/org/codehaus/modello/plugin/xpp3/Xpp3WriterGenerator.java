@@ -383,6 +383,8 @@ public class Xpp3WriterGenerator
 
                     if ( ModelDefault.LIST.equals( type ) || ModelDefault.SET.equals( type ) )
                     {
+                        boolean isList = ModelDefault.LIST.equals( type );
+
                         sc.add( getValueChecker( type, value, association ) );
 
                         sc.add( "{" );
@@ -391,6 +393,15 @@ public class Xpp3WriterGenerator
                         if ( wrappedItems )
                         {
                             sc.add( "serializer.startTag( NAMESPACE, " + "\"" + fieldTagName + "\" );" );
+                        }
+
+                        if ( isLocationTracking() && !isClassInModel( association.getTo(), modelClass.getModel() ) )
+                        {
+                            sc.add( locationTracker.getName() + " location = " + uncapClassName + ".getLocation( \"" + fieldTagName + "\" );" );
+                            if ( isList )
+                            {
+                                sc.add( "int n = 0;" );
+                            }
                         }
 
                         sc.add( "for ( Iterator iter = " + value + ".iterator(); iter.hasNext(); )" );
@@ -406,12 +417,14 @@ public class Xpp3WriterGenerator
                         }
                         else
                         {
-                            sc.add( toType + " " + singular( uncapitalise( field.getName() ) ) + " = (" + toType
-                                + ") iter.next();" );
+                            String variable = singular( uncapitalise( field.getName() ) );
 
-                            sc.add( "serializer.startTag( NAMESPACE, " + "\"" + valuesTagName + "\" ).text( "
-                                + singular( uncapitalise( field.getName() ) ) + " ).endTag( NAMESPACE, " + "\""
-                                + valuesTagName + "\" );" );
+                            sc.add( toType + " " + variable + " = (" + toType + ") iter.next();" );
+
+                            sc.add( "serializer.startTag( NAMESPACE, \"" + valuesTagName + "\" ).text( " + variable
+                                + " ).endTag( NAMESPACE, \"" + valuesTagName + "\" );" );
+
+                            writeLocationTracking( sc, "location", isList ? "Integer.valueOf( n++ )" : variable );
                         }
 
                         sc.unindent();
@@ -419,7 +432,7 @@ public class Xpp3WriterGenerator
 
                         if ( wrappedItems )
                         {
-                            sc.add( "serializer.endTag( NAMESPACE, " + "\"" + fieldTagName + "\" );" );
+                            sc.add( "serializer.endTag( NAMESPACE, \"" + fieldTagName + "\" );" );
                         }
 
                         sc.unindent();

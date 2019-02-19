@@ -67,7 +67,7 @@ public class Xpp3ExtendedWriterGenerator
 
         JSourceCode sc = method.getSourceCode();
 
-        sc.add( locationTracker.getName() + " location = locationTracker.getLocation( key );" );
+        sc.add( locationTracker.getName() + " location = ( locationTracker == null ) ? null : locationTracker.getLocation( key );" );
         sc.add( "if ( location != null )" );
         sc.add( "{" );
         sc.addIndented( "serializer.comment( toString( location ) );" );
