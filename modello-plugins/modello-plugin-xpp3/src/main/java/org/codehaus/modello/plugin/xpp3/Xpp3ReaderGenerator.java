@@ -438,6 +438,11 @@ public class Xpp3ReaderGenerator
         if ( requiresDomSupport )
         {
             writeBuildDomMethod( jClass );
+
+            if ( isLocationTracking() )
+            {
+                writeBuildDomLocationTrackingMethod( jClass );
+            }
         }
 
         // ----------------------------------------------------------------------
@@ -1065,9 +1070,14 @@ public class Xpp3ReaderGenerator
         }
         else if ( "DOM".equals( type ) )
         {
-            sc.add( objectName + "." + setterName + "( " + keyCapture + ( domAsXpp3
-                ? "org.codehaus.plexus.util.xml.Xpp3DomBuilder.build"
-                : "buildDom" ) + "( parser, " + xmlFieldMetadata.isTrim() + " ) );" );
+            String locationBuilderParam = "";
+            if ( isLocationTracking() && domAsXpp3 )
+            {
+                locationBuilderParam = ", new Xpp3DomBuilderInputLocationBuilder( " + LOCATION_VAR + " )";
+            }
+            sc.add( objectName + "." + setterName + "( " + keyCapture
+                + ( domAsXpp3 ? "org.codehaus.plexus.util.xml.Xpp3DomBuilder.build" : "buildDom" )
+                + "( parser, " + xmlFieldMetadata.isTrim() + locationBuilderParam + " ) );" );
 
             requiresDomSupport = true;
         }
@@ -1089,6 +1099,7 @@ public class Xpp3ReaderGenerator
             // no need, Xpp3DomBuilder provided by plexus-utils
             return;
         }
+
         jClass.addField( new JField( new JClass( "org.w3c.dom.Document" ), "_doc_" ) );
         JMethod method = new JMethod( "initDoc", null, null );
         method.getModifiers().makePrivate();
@@ -1211,6 +1222,34 @@ public class Xpp3ReaderGenerator
         sc.add( "throw new IllegalStateException( \"End of document found before returning to 0 depth\" );" );
 
         jClass.addMethod( method );
+    }
+
+    private void writeBuildDomLocationTrackingMethod( JClass jClass )
+    {
+        if ( !domAsXpp3 )
+        {
+            // no need, input location tracking available only for Xpp3
+            return;
+        }
+
+        JClass builderClass = jClass.createInnerClass( "Xpp3DomBuilderInputLocationBuilder" );
+        builderClass.getModifiers().makePrivate();
+        builderClass.getModifiers().setStatic( true );
+        builderClass.addInterface( "org.codehaus.plexus.util.xml.Xpp3DomBuilder.InputLocationBuilder" );
+
+        JField field = new JField( new JType( locationTracker.getName() ), "rootLocation" );
+        field.getModifiers().setFinal( true );
+        builderClass.addField( field );
+
+        JConstructor constructor = new JConstructor( builderClass );
+        constructor.addParameter( new JParameter( new JType( locationTracker.getName() ), "rootLocation" ) );
+        constructor.getSourceCode().add( "this.rootLocation = rootLocation;" );
+        builderClass.addConstructor( constructor );
+
+        JMethod method = new JMethod( "toInputLocation", new JType( "Object" ), null );
+        method.addParameter( new JParameter( new JType( "XmlPullParser" ), "parser" ) );
+        method.getSourceCode().add( "return " + buildNewLocation( "rootLocation.getSource()" ) + ";" );
+        builderClass.addMethod( method );
     }
 
     private void writeHelpers( JClass jClass )
@@ -1609,11 +1648,14 @@ public class Xpp3ReaderGenerator
             return;
         }
 
-        String constr = "new " + locationTracker.getName() + "( parser.getLineNumber(), parser.getColumnNumber()";
-        constr += ( sourceTracker != null ) ? ", " + SOURCE_PARAM : "";
-        constr += " )";
+        sc.add( ( ( trackerVariable != null ) ? trackerVariable : LOCATION_VAR ) + " = "
+            + buildNewLocation( SOURCE_PARAM ) + ";" );
+    }
 
-        sc.add( ( ( trackerVariable != null ) ? trackerVariable : LOCATION_VAR ) + " = " + constr + ";" );
+    private String buildNewLocation( String source )
+    {
+        return "new " + locationTracker.getName() + "( parser.getLineNumber(), parser.getColumnNumber()"
+            + ( ( sourceTracker != null ) ? ", " + source : "" ) + " )";
     }
 
     private void writeSetLocation( String key, String objectName, String trackerVariable, JSourceCode sc )

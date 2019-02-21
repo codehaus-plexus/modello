@@ -138,11 +138,6 @@ public class Xpp3WriterGenerator
 
         addModelImports( jClass, null );
 
-        if ( isLocationTracking() )
-        {
-            prepareLocationTracking( jClass );
-        }
-
         String root = objectModel.getRoot( getGeneratedVersion() );
 
         ModelClass rootClass = objectModel.getClass( root, getGeneratedVersion() );
@@ -213,6 +208,11 @@ public class Xpp3WriterGenerator
         jClass.addMethod( marshall );
 
         writeAllClasses( objectModel, jClass );
+
+        if ( isLocationTracking() )
+        {
+            prepareLocationTracking( jClass );
+        }
 
         if ( requiresDomSupport )
         {
@@ -506,8 +506,15 @@ public class Xpp3WriterGenerator
                     if ( domAsXpp3 )
                     {
                         jClass.addImport( "org.codehaus.plexus.util.xml.Xpp3Dom" );
-    
-                        sc.addIndented( "((Xpp3Dom) " + value + ").writeToSerializer( NAMESPACE, serializer );" );
+
+                        if ( isLocationTracking() )
+                        {
+                            sc.addIndented( "writeXpp3DomToSerializer( (Xpp3Dom) " + value + ", serializer );" );
+                        }
+                        else
+                        {
+                            sc.addIndented( "((Xpp3Dom) " + value + ").writeToSerializer( NAMESPACE, serializer );" );
+                        }
                     }
                     else
                     {

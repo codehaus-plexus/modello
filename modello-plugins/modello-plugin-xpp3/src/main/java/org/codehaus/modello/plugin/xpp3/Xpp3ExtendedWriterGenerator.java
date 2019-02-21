@@ -52,6 +52,11 @@ public class Xpp3ExtendedWriterGenerator
         addModelImport( jClass, locationTracker, null );
 
         createLocationTrackingMethod( jClass );
+
+        if ( requiresDomSupport && domAsXpp3 )
+        {
+            createXpp3DomToSerializerMethod( jClass );
+        }
     }
 
     private void createLocationTrackingMethod( JClass jClass )
@@ -83,6 +88,46 @@ public class Xpp3ExtendedWriterGenerator
         sc = method.getSourceCode();
         sc.add( "return ' ' + " + ( ( sourceTracker == null ) ? "" : "location.getSource().toString() + ':' + " )
             + "location.getLineNumber() + ' ';" );
+
+        jClass.addMethod( method );
+    }
+
+    private void createXpp3DomToSerializerMethod( JClass jClass )
+    {
+        JMethod method = new JMethod( "writeXpp3DomToSerializer" );
+        method.getModifiers().makePrivate();
+
+        method.addParameter( new JParameter( new JClass( "Xpp3Dom" ), "dom" ) );
+        method.addParameter( new JParameter( new JClass( "XmlSerializer" ), "serializer" ) );
+
+        method.addException( new JClass( "java.io.IOException" ) );
+
+        JSourceCode sc = method.getSourceCode();
+
+        sc.add( "serializer.startTag( NAMESPACE, dom.getName() );" );
+        sc.add( "" );
+        sc.add( "String[] attributeNames = dom.getAttributeNames();" );
+        sc.add( "for ( String attributeName : attributeNames )" );
+        sc.add( "{" );
+        sc.addIndented( "serializer.attribute( NAMESPACE, attributeName, dom.getAttribute( attributeName ) );" );
+        sc.add( "}" );
+        sc.add( "for ( Xpp3Dom aChild : dom.getChildren() )" );
+        sc.add( "{" );
+        sc.addIndented( "writeXpp3DomToSerializer( aChild, serializer );" );
+        sc.add( "}" );
+        sc.add( "" );
+        sc.add( "String value = dom.getValue();" );
+        sc.add( "if ( value != null )" );
+        sc.add( "{" );
+        sc.addIndented( "serializer.text( value );" );
+        sc.add( "}" );
+        sc.add( "" );
+        sc.add( "serializer.endTag( NAMESPACE, dom.getName() );" );
+        sc.add( "" );
+        sc.add( "if ( dom.getInputLocation() != null && dom.getChildCount() == 0 )" );
+        sc.add( "{" );
+        sc.addIndented( "serializer.comment( toString( (InputLocation) dom.getInputLocation() ) );" );
+        sc.add( "}" );
 
         jClass.addMethod( method );
     }
