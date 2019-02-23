@@ -23,6 +23,7 @@ package org.codehaus.modello.plugin.xpp3;
  */
 
 import org.codehaus.modello.plugin.java.javasource.JClass;
+import org.codehaus.modello.plugin.java.javasource.JField;
 import org.codehaus.modello.plugin.java.javasource.JMethod;
 import org.codehaus.modello.plugin.java.javasource.JParameter;
 import org.codehaus.modello.plugin.java.javasource.JSourceCode;
@@ -80,12 +81,26 @@ public class Xpp3ExtendedWriterGenerator
 
         jClass.addMethod( method );
 
+        JField field = new JField( new JType( locationTracker.getName() + ".StringFormatter" ), "stringFormatter" );
+        field.getModifiers().makeProtected();
+        jClass.addField( field );
+
+        method = new JMethod( "setStringFormatter", null, null );
+        method.addParameter( new JParameter( new JType( locationTracker.getName() + ".StringFormatter" ), "stringFormatter" ) );
+        sc = method.getSourceCode();
+        sc.add( "this.stringFormatter = stringFormatter;" );
+        jClass.addMethod( method );
+
         method = new JMethod( "toString", new JType( "String" ), null );
         method.getModifiers().makeProtected();
 
         method.addParameter( new JParameter( new JType( locationTracker.getName() ), "location" ) );
 
         sc = method.getSourceCode();
+        sc.add( "if ( stringFormatter != null )" );
+        sc.add( "{" );
+        sc.addIndented( "return stringFormatter.toString( location );" );
+        sc.add( "}" );
         sc.add( "return ' ' + " + ( ( sourceTracker == null ) ? "" : "location.getSource().toString() + ':' + " )
             + "location.getLineNumber() + ' ';" );
 

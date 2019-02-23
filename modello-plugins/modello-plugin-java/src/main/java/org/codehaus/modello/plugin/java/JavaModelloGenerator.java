@@ -920,7 +920,7 @@ public class JavaModelloGenerator
         }
 
         JType fieldType = new JMapType( "java.util.Map", new JType(locationClass.getName()), useJava5 );
-        JType fieldImpl = new JMapType("java.util.LinkedHashMap", new JType(locationClass.getName()), useJava5);
+        JType fieldImpl = new JMapType( "java.util.LinkedHashMap", new JType( locationClass.getName() ), useJava5 );
 
         // public Map<Object, Location> getLocations()
         JMethod jMethod = new JMethod( "get" + capitalise( locationsField ), fieldType, null );
@@ -1044,6 +1044,15 @@ public class JavaModelloGenerator
         sc.add( "" );
         sc.add( "return result;" );
         jClass.addMethod( jMethod );
+
+        JClass stringFormatterClass = jClass.createInnerClass( "StringFormatter" );
+        stringFormatterClass.getModifiers().setStatic( true );
+        stringFormatterClass.getModifiers().setAbstract( true );
+
+        jMethod = new JMethod( "toString", new JType( "String" ), null );
+        jMethod.getModifiers().setAbstract( true );
+        jMethod.addParameter( new JParameter( new JType( locationClass.getName() ), "location" ) );
+        stringFormatterClass.addMethod( jMethod );
     }
 
     /**

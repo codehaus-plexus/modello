@@ -61,7 +61,7 @@ public abstract class AbstractXpp3Generator
             if ( locationTracker == null )
             {
                 throw new ModelloException( "No model class has been marked as location tracker"
-                    + " via the attribute locationTracker=\"locations\"" + ", cannot generate extended reader." );
+                    + " via the attribute locationTracker=\"locations\", cannot generate extended reader." );
             }
 
             sourceTracker = model.getSourceTracker( getGeneratedVersion() );
