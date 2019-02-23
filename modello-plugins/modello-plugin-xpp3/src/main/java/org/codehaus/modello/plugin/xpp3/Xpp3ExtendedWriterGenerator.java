@@ -95,7 +95,7 @@ public class Xpp3ExtendedWriterGenerator
     private void createXpp3DomToSerializerMethod( JClass jClass )
     {
         JMethod method = new JMethod( "writeXpp3DomToSerializer" );
-        method.getModifiers().makePrivate();
+        method.getModifiers().makeProtected();
 
         method.addParameter( new JParameter( new JClass( "Xpp3Dom" ), "dom" ) );
         method.addParameter( new JParameter( new JClass( "XmlSerializer" ), "serializer" ) );
