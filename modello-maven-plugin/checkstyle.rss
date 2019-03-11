@@ -25,9 +25,9 @@ under the License.
     <language>en-us</language>
     <copyright>&#169;2001 - 2019 Codehaus Plexus</copyright>
     <item>
-      <title>File: 23,
-             Errors: 24,
-             Warnings: 49,
+      <title>File: 25,
+             Errors: 26,
+             Warnings: 50,
              Infos: 0
       </title>
             <link>http://codehaus-plexus.github.io/modello/modello-maven-plugin//checkstyle.html</link>
@@ -74,7 +74,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://codehaus-plexus.github.io/modello/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.ModelloDom4jReaderMojo.java">org/codehaus/modello/maven/ModelloDom4jReaderMojo.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.ModelloJsonSchemaGeneratorMojo.java">org/codehaus/modello/maven/ModelloJsonSchemaGeneratorMojo.java</a>
                 </td>
                 <td>
                   0
@@ -88,7 +88,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://codehaus-plexus.github.io/modello/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.ModelloJsonSchemaGeneratorMojo.java">org/codehaus/modello/maven/ModelloJsonSchemaGeneratorMojo.java</a>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.ModelloDom4jReaderMojo.java">org/codehaus/modello/maven/ModelloDom4jReaderMojo.java</a>
                 </td>
                 <td>
                   0
@@ -242,6 +242,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.HelpMojo.java">org/codehaus/modello/maven/HelpMojo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="http://codehaus-plexus.github.io/modello/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.AbstractModelloGeneratorMojo.java">org/codehaus/modello/maven/AbstractModelloGeneratorMojo.java</a>
                 </td>
                 <td>
@@ -280,6 +294,20 @@ under the License.
                 </td>
                 <td>
                   2
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://codehaus-plexus.github.io/modello/modello-maven-plugin//checkstyle.html#org.codehaus.modello.maven.ModelloXpp3ExtendedWriterMojo.java">org/codehaus/modello/maven/ModelloXpp3ExtendedWriterMojo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  1
                 </td>
               </tr>
                           <tr>

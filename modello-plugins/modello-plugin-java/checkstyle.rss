@@ -26,8 +26,8 @@ under the License.
     <copyright>&#169;2001 - 2019 Codehaus Plexus</copyright>
     <item>
       <title>File: 32,
-             Errors: 263,
-             Warnings: 140,
+             Errors: 259,
+             Warnings: 141,
              Infos: 38
       </title>
             <link>http://codehaus-plexus.github.io/modello/modello-plugins/modello-plugin-java//checkstyle.html</link>
@@ -346,7 +346,7 @@ under the License.
                   3
                 </td>
                 <td>
-                  15
+                  16
                 </td>
                 <td>
                   2
@@ -475,7 +475,7 @@ under the License.
                   1
                 </td>
                 <td>
-                  23
+                  19
                 </td>
               </tr>
                           <tr>

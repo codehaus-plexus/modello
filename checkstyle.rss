@@ -25,10 +25,10 @@ under the License.
     <language>en-us</language>
     <copyright>&#169;2001 - 2019 Codehaus Plexus</copyright>
     <item>
-      <title>File: 153,
-             Errors: 716,
-             Warnings: 574,
-             Infos: 118
+      <title>File: 155,
+             Errors: 717,
+             Warnings: 578,
+             Infos: 121
       </title>
             <link>http://codehaus-plexus.github.io/modello//checkstyle.html</link>
       <description>
@@ -80,10 +80,10 @@ under the License.
                   0
                 </td>
                 <td>
-                  2
+                  1
                 </td>
                 <td>
-                  173
+                  172
                 </td>
               </tr>
                           <tr>
@@ -378,6 +378,34 @@ under the License.
                 </td>
                 <td>
                   1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://codehaus-plexus.github.io/modello//checkstyle.html#org.codehaus.modello.maven.ModelloXpp3ExtendedWriterMojo.java">org/codehaus/modello/maven/ModelloXpp3ExtendedWriterMojo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://codehaus-plexus.github.io/modello//checkstyle.html#org.codehaus.modello.plugin.xpp3.Xpp3ExtendedWriterGenerator.java">org/codehaus/modello/plugin/xpp3/Xpp3ExtendedWriterGenerator.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  3
                 </td>
               </tr>
                           <tr>
@@ -696,10 +724,10 @@ under the License.
                   0
                 </td>
                 <td>
-                  1
+                  3
                 </td>
                 <td>
-                  6
+                  7
                 </td>
               </tr>
                           <tr>
@@ -1438,7 +1466,7 @@ under the License.
                   3
                 </td>
                 <td>
-                  15
+                  16
                 </td>
                 <td>
                   2
@@ -1637,7 +1665,7 @@ under the License.
                   1
                 </td>
                 <td>
-                  23
+                  19
                 </td>
               </tr>
                           <tr>
@@ -2093,13 +2121,13 @@ under the License.
                   <a href="http://codehaus-plexus.github.io/modello//checkstyle.html#org.codehaus.modello.plugin.xpp3.AbstractXpp3Generator.java">org/codehaus/modello/plugin/xpp3/AbstractXpp3Generator.java</a>
                 </td>
                 <td>
-                  0
-                </td>
-                <td>
-                  0
+                  3
                 </td>
                 <td>
                   1
+                </td>
+                <td>
+                  2
                 </td>
               </tr>
                           <tr>
