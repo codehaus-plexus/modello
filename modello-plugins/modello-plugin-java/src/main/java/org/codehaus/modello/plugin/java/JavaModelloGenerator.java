@@ -812,50 +812,176 @@ public class JavaModelloGenerator
         }
 
         String superClass = modelClass.getSuperClass();
-        if ( StringUtils.isNotEmpty( superClass ) && isClassInModel( superClass, getModel() ) )
-        {
-            return;
-        }
-
         ModelClassMetadata metadata = (ModelClassMetadata) locationClass.getMetadata( ModelClassMetadata.ID );
         String locationField = metadata.getLocationTracker();
+        boolean hasModeSuperClass = StringUtils.isNotEmpty(superClass) && isClassInModel(superClass, getModel());
+        if (!hasModeSuperClass)
+        {
+            String fieldType = "java.util.Map" + ( useJava5 ? "<Object, " + locationClass.getName() + ">" : "" );
+            String fieldImpl = "java.util.LinkedHashMap" + ( useJava5 ? "<Object, " + locationClass.getName() + ">" : "" );
 
-        String fieldType = "java.util.Map" + ( useJava5 ? "<Object, " + locationClass.getName() + ">" : "" );
-        String fieldImpl = "java.util.LinkedHashMap" + ( useJava5 ? "<Object, " + locationClass.getName() + ">" : "" );
+            // private java.util.Map<Object, Location> locations;
+            JField jField = new JField( new JType( fieldType ), locationField );
+            jClass.addField( jField );
 
-        // private java.util.Map<Object, Location> locations;
-        JField jField = new JField( new JType( fieldType ), locationField );
-        jClass.addField( jField );
+            // public Location getOtherLocation( Object key )
+            JMethod getter =
+                    new JMethod( "getOther" + capitalise( singular( locationField ) ), new JType( locationClass.getName() ), null );
+            getter.addParameter( new JParameter( new JType( "Object" ), "key" ) );
+            getter.getModifiers().makePrivate();
+            JSourceCode getterSc = getter.getSourceCode();
+            getterSc.add( "return ( " + locationField + " != null ) ? " + locationField + ".get( key ) : null;" );
+            getter.setComment( "" );
+            jClass.addMethod( getter );
 
-        JMethod jMethod;
-        JSourceCode sc;
+            // public void setOtherLocation( Object key, Location location )
+            JMethod setter = new JMethod( "setOther" + capitalise( singular( locationField ) ) );
+            setter.addParameter( new JParameter( new JType( "Object" ), "key" ) );
+            setter.addParameter( new JParameter( new JType( locationClass.getName() ), singular( locationField ) ) );
+            JSourceCode setterSc = setter.getSourceCode();
+            setterSc.add( "if ( " + singular( locationField ) + " != null )" );
+            setterSc.add( "{" );
+            setterSc.indent();
+            setterSc.add( "if ( this." + locationField + " == null )" );
+            setterSc.add( "{" );
+            setterSc.addIndented( "this." + locationField + " = new " + fieldImpl + "();" );
+            setterSc.add( "}" );
+            setterSc.add( "this." + locationField + ".put( key, " + singular( locationField ) + " );" );
+            setterSc.unindent();
+            setterSc.add( "}" );
+            setter.setComment( "" );
+            jClass.addMethod( setter );
+        }
+
+        JField ownLocation = new JField( new JType( locationClass.getName() ), singular( locationField ) );
+        jClass.addField( ownLocation );
+        for (ModelField field : modelClass.getAllFields())
+        {
+            JField fieldLocation = new JField( new JType( locationClass.getName() ), field.getName() + capitalise( singular( locationField ) ) );
+            jClass.addField( fieldLocation );
+        }
 
         // public Location getLocation( Object key )
-        jMethod =
-            new JMethod( "get" + capitalise( singular( locationField ) ), new JType( locationClass.getName() ), null );
-        jMethod.addParameter( new JParameter( new JType( "Object" ), "key" ) );
-        sc = jMethod.getSourceCode();
-        sc.add( "return ( " + locationField + " != null ) ? " + locationField + ".get( key ) : null;" );
-        jMethod.setComment( "" );
-        jClass.addMethod( jMethod );
+        JMethod getter =
+                new JMethod( "get" + capitalise( singular( locationField ) ), new JType( locationClass.getName() ), null );
+        getter.addParameter( new JParameter( new JType( "Object" ), "key" ) );
+        JSourceCode getterSc = getter.getSourceCode();
+
+        getterSc.add( "if ( key instanceof String )" );
+        getterSc.add( "{" );
+        getterSc.indent();
+        getterSc.add( "switch ( ( String ) key )" );
+        getterSc.add( "{" );
+        getterSc.indent();
+        getterSc.add( "case \"\" :" );
+        getterSc.add( "{" );
+        getterSc.indent();
+        getterSc.add( "return this." + singular( locationField ) + ";" );
+        getterSc.unindent();
+        getterSc.add( "}" );
+        for (ModelField field : modelClass.getAllFields())
+        {
+            getterSc.add( "case \"" + field.getName() + "\" :" );
+            getterSc.add( "{" );
+            getterSc.indent();
+            getterSc.add( "return " + field.getName() + capitalise( singular( locationField ) ) + ";" );
+            getterSc.unindent();
+            getterSc.add( "}" );
+        }
+        getterSc.add( "default :" );
+        getterSc.add( "{" );
+        getterSc.indent();
+        if (hasModeSuperClass)
+        {
+            getterSc.add( "return super.get" + capitalise( singular( locationField ) ) + "( key );" );
+        }
+        else
+        {
+            getterSc.add( "return getOther" + capitalise( singular( locationField ) ) + "( key );" );
+        }
+        getterSc.unindent();
+        getterSc.add( "}" );
+        getterSc.add( "}" );
+        getterSc.unindent();
+        getterSc.add( "}" );
+        getterSc.add( "else" );
+        getterSc.add( "{" );
+        getterSc.indent();
+        if (hasModeSuperClass)
+        {
+            getterSc.add( "return super.get" + capitalise( singular( locationField ) ) + "( key );" );
+        }
+        else
+        {
+            getterSc.add( "return getOther" + capitalise( singular( locationField ) ) + "( key );" );
+        }
+        getterSc.unindent();
+        getterSc.add( "}" );
+
+        getter.setComment( "" );
+        jClass.addMethod( getter );
 
         // public void setLocation( Object key, Location location )
-        jMethod = new JMethod( "set" + capitalise( singular( locationField ) ) );
-        jMethod.addParameter( new JParameter( new JType( "Object" ), "key" ) );
-        jMethod.addParameter( new JParameter( new JType( locationClass.getName() ), singular( locationField ) ) );
-        sc = jMethod.getSourceCode();
-        sc.add( "if ( " + singular( locationField ) + " != null )" );
-        sc.add( "{" );
-        sc.indent();
-        sc.add( "if ( this." + locationField + " == null )" );
-        sc.add( "{" );
-        sc.addIndented( "this." + locationField + " = new " + fieldImpl + "();" );
-        sc.add( "}" );
-        sc.add( "this." + locationField + ".put( key, " + singular( locationField ) + " );" );
-        sc.unindent();
-        sc.add( "}" );
-        jMethod.setComment( "" );
-        jClass.addMethod( jMethod );
+        JMethod setter = new JMethod( "set" + capitalise( singular( locationField ) ) );
+        setter.addParameter( new JParameter( new JType( "Object" ), "key" ) );
+        setter.addParameter( new JParameter( new JType( locationClass.getName() ), singular( locationField ) ) );
+        JSourceCode setterSc = setter.getSourceCode();
+        setterSc.add( "if ( key instanceof String )" );
+        setterSc.add( "{" );
+        setterSc.indent();
+        setterSc.add( "switch ( ( String ) key )" );
+        setterSc.add( "{" );
+        setterSc.indent();
+        setterSc.add( "case \"\" :" );
+        setterSc.add( "{" );
+        setterSc.indent();
+        setterSc.add( "this." + singular( locationField ) + " = " + singular(locationField) + ";" );
+        setterSc.add("return;");
+        setterSc.unindent();
+        setterSc.add( "}" );
+        for (ModelField field : modelClass.getAllFields())
+        {
+            setterSc.add( "case \"" + field.getName()+ "\" :" );
+            setterSc.add( "{" );
+            setterSc.indent();
+            setterSc.add( field.getName() + capitalise( singular( locationField ) ) + " = " + singular(locationField) + ";" );
+            setterSc.add("return;");
+            setterSc.unindent();
+            setterSc.add( "}" );
+        }
+        setterSc.add( "default :" );
+        setterSc.add( "{" );
+        setterSc.indent();
+        if (hasModeSuperClass)
+        {
+            setterSc.add( "super.set" + capitalise( singular( locationField ) ) + "( key, " + singular(locationField) + " );" );
+        }
+        else
+        {
+            setterSc.add( "setOther" + capitalise( singular( locationField ) ) + "( key, " + singular(locationField) + " );" );
+        }
+        setterSc.add("return;");
+        setterSc.unindent();
+        setterSc.add( "}" );
+        setterSc.add( "}" );
+        setterSc.unindent();
+        setterSc.add( "}" );
+        setterSc.add( "else" );
+        setterSc.add( "{" );
+        setterSc.indent();
+        if (hasModeSuperClass)
+        {
+            setterSc.add( "super.set" + capitalise( singular( locationField ) ) + "( key, " + singular(locationField) + " );" );
+        }
+        else
+        {
+            setterSc.add( "setOther" + capitalise( singular( locationField ) ) + "( key, " + singular(locationField) + " );" );
+        }
+        setterSc.unindent();
+        setterSc.add( "}" );
+
+        setter.setComment( "" );
+        jClass.addMethod( setter );
     }
 
     private void generateLocationBean( JClass jClass, ModelClass locationClass, ModelClass sourceClass )
