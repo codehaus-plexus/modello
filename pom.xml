@@ -3,7 +3,7 @@
 
   <groupId>org.codehaus.modello</groupId>
   <artifactId>modello</artifactId>
-  <version>1.10.1-SNAPSHOT</version>
+  <version>1.11</version>
   <packaging>pom</packaging>
 
   <name>Modello</name>
@@ -193,7 +193,7 @@
     <connection>scm:git:https://github.com/codehaus-plexus/modello.git</connection>
     <developerConnection>scm:git:https://github.com/codehaus-plexus/modello.git</developerConnection>
     <url>http://github.com/codehaus-plexus/modello/tree/${project.scm.tag}/</url>
-    <tag>master</tag>
+    <tag>modello-1.11</tag>
   </scm>
   <issueManagement>
     <system>github</system>
