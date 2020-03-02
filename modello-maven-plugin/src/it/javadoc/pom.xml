@@ -7,6 +7,10 @@
   <artifactId>javadoc</artifactId>
   <version>0.1-SNAPSHOT</version>
 
+  <properties>
+    <source>1.7</source>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
