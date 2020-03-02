@@ -82,8 +82,11 @@ public class SnakeYamlWriterGenerator
 
         jClass.addImport( "org.yaml.snakeyaml.DumperOptions" );
         jClass.addImport( "org.yaml.snakeyaml.DumperOptions.Version" );
+        jClass.addImport( "org.yaml.snakeyaml.DumperOptions.FlowStyle" );
+        jClass.addImport( "org.yaml.snakeyaml.DumperOptions.ScalarStyle" );
         jClass.addImport( "org.yaml.snakeyaml.emitter.Emitable" );
         jClass.addImport( "org.yaml.snakeyaml.emitter.Emitter" );
+        jClass.addImport( "org.yaml.snakeyaml.error.Mark" );
         jClass.addImport( "org.yaml.snakeyaml.events.DocumentEndEvent" );
         jClass.addImport( "org.yaml.snakeyaml.events.DocumentStartEvent" );
         jClass.addImport( "org.yaml.snakeyaml.events.ImplicitTuple" );
@@ -199,7 +202,7 @@ public class SnakeYamlWriterGenerator
 
         JSourceCode sc = marshall.getSourceCode();
 
-        sc.add( "generator.emit( new MappingStartEvent( null, null, true, null, null, false ) );" );
+        sc.add( "generator.emit( new MappingStartEvent( null, null, true, null, null, FlowStyle.BLOCK ) );" );
 
         ModelField contentField = null;
 
@@ -361,7 +364,7 @@ public class SnakeYamlWriterGenerator
                         }
                         else
                         {
-                            sc.add( "generator.emit( new MappingStartEvent( null, null, true, null, null, false ) );" );
+                            sc.add( "generator.emit( new MappingStartEvent( null, null, true, null, null, FlowStyle.BLOCK ) );" );
                         }
 
 
@@ -406,7 +409,7 @@ public class SnakeYamlWriterGenerator
 
                         if ( xmlAssociationMetadata.isMapExplode() )
                         {
-                            sc.add( "generator.emit( new MappingStartEvent( null, null, true, null, null, false ) );" );
+                            sc.add( "generator.emit( new MappingStartEvent( null, null, true, null, null, FlowStyle.BLOCK) );" );
                             writeScalarKey( sc, "key" );
                             writeScalar( sc, "key" );
                             writeScalarKey( sc, "value" );
@@ -463,9 +466,16 @@ public class SnakeYamlWriterGenerator
 
     private void writeScalar( JSourceCode sc, String value )
     {
-        sc.add( "generator.emit( new ScalarEvent( null, null, new ImplicitTuple( true, true ), "
+        sc.add( "{" );
+        sc.indent();
+        sc.add( "String anchor = null, tag = null;" );
+        sc.add( "Mark startMark = null, endMark = null;" );
+        sc.add( "ScalarStyle style = ScalarStyle.DOUBLE_QUOTED;" );
+        sc.add( "generator.emit( new ScalarEvent( anchor, tag, new ImplicitTuple( true, true ), "
                 + value
-                + ", null, null, ' ' ) );" );
+                + ", startMark, endMark, style ) );" );
+        sc.unindent();
+        sc.add( "}" );
     }
 
 }
