@@ -125,10 +125,11 @@
     <plugins>
       <plugin>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <version>3.0.1</version>
+        <version>3.1.1</version>
         <configuration>
           <show>private</show>
           <linksource>true</linksource>
+          <source>1.7</source>
         </configuration>
       </plugin>
       <plugin>
