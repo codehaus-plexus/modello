@@ -7,10 +7,6 @@
     <faq id="question1">
       <question>Where can I find documentation about Modello?</question>
       <answer>
-        <p>
-          A good starting place to get some insight into Modello is <a href='http://docs.codehaus.org/display/MODELLO/Home'>Modello's
-          wiki</a>.
-        </p>
         <p><a href='http://codehaus-plexus.github.io/modello/modello.html'>Modello model descriptor</a> is described and documented with Modello.</p>
       </answer>
     </faq>
