@@ -111,11 +111,11 @@
     </developer>
     <developer>
       <name>Olivier Lamy</name>
-      <email>olamy@codehaus.org</email>
+      <email>olamy@apache.org</email>
       <roles>
         <role>Developer</role>
       </roles>
-      <timezone>Australia/Melbourne</timezone>
+      <timezone>Australia/Brisbane</timezone>
     </developer>
     <developer>
       <name>Benjamin Bentmann</name>
