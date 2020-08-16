@@ -218,7 +218,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <maven.version>3.0</maven.version>
-    <jackson.version>2.9.7</jackson.version>
+    <jackson.version>2.11.2</jackson.version>
     <!--
       ! This controls the minimum java version
       ! and also the version which is used
