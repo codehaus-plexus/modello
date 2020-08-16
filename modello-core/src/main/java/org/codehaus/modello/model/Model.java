@@ -41,17 +41,17 @@ public class Model
 {
     private String id;
 
-    private List<ModelClass> classes = new ArrayList<ModelClass>();
+    private List<ModelClass> classes = new ArrayList<>();
 
-    private List<ModelDefault> defaults = new ArrayList<ModelDefault>();
+    private List<ModelDefault> defaults = new ArrayList<>();
 
-    private List<ModelInterface> interfaces = new ArrayList<ModelInterface>();
+    private List<ModelInterface> interfaces = new ArrayList<>();
 
-    private transient Map<String, List<ModelClass>> classMap = new HashMap<String, List<ModelClass>>();
+    private transient Map<String, List<ModelClass>> classMap = new HashMap<>();
 
-    private transient Map<String, ModelDefault> defaultMap = new HashMap<String, ModelDefault>();
+    private transient Map<String, ModelDefault> defaultMap = new HashMap<>();
 
-    private transient Map<String, List<ModelInterface>> interfaceMap = new HashMap<String, List<ModelInterface>>();
+    private transient Map<String, List<ModelInterface>> interfaceMap = new HashMap<>();
 
     private VersionDefinition versionDefinition;
 
@@ -128,7 +128,12 @@ public class Model
     /**
      * @deprecated This shouldn't be used, anything querying the model should read the
      *             package of the class. Use getDefaultPackageName(..).
+     * @param withVersion return the version
+     * @param version the version
+     * @return the package name
+     *
      */
+    @Deprecated
     public String getPackageName( boolean withVersion, Version version )
     {
         return getDefaultPackageName( withVersion, version );
@@ -141,7 +146,7 @@ public class Model
 
     public List<ModelClass> getClasses( Version version )
     {
-        List<ModelClass> classList = new ArrayList<ModelClass>();
+        List<ModelClass> classList = new ArrayList<>();
 
         for ( ModelClass currentClass : classes )
         {
@@ -235,7 +240,7 @@ public class Model
         }
         else
         {
-            List<ModelClass> classList = new ArrayList<ModelClass>();
+            List<ModelClass> classList = new ArrayList<>();
 
             classMap.put( modelClass.getName(), classList );
         }
@@ -308,7 +313,7 @@ public class Model
 
     public List<ModelInterface> getInterfaces( Version version )
     {
-        List<ModelInterface> interfaceList = new ArrayList<ModelInterface>();
+        List<ModelInterface> interfaceList = new ArrayList<>();
 
         for ( ModelInterface currentInterface : interfaces )
         {
@@ -374,7 +379,7 @@ public class Model
         }
         else
         {
-            List<ModelInterface> interfaceList = new ArrayList<ModelInterface>();
+            List<ModelInterface> interfaceList = new ArrayList<>();
 
             interfaceMap.put( modelInterface.getName(), interfaceList );
         }

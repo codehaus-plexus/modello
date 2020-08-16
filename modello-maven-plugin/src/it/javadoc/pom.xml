@@ -33,6 +33,19 @@
 
   <build>
     <defaultGoal>test</defaultGoal>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <version>3.2.0</version>
+          <configuration>
+            <show>private</show>
+            <linksource>true</linksource>
+            <detectJavaApiLink>false</detectJavaApiLink>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

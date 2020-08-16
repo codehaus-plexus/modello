@@ -241,7 +241,11 @@ public abstract class AbstractModelloGenerator
 
     /**
      * @deprecated Use {@link #getParameter(Properties, String)} instead
+     * @param name parameter name
+     * @param parameters the properties
+     * @return the parameter value
      */
+    @Deprecated
     protected String getParameter( String name, Properties parameters )
     {
         return getParameter( parameters, name );
