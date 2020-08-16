@@ -1,0 +1,2 @@
+_extends: .github
+tag-template: modello-$NEXT_MINOR_VERSION
