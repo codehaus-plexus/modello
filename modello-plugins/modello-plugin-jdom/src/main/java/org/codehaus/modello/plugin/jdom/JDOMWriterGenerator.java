@@ -31,8 +31,10 @@ import org.codehaus.modello.plugin.java.javasource.JSourceCode;
 import org.codehaus.modello.plugin.java.javasource.JSourceWriter;
 import org.codehaus.modello.plugin.java.javasource.JType;
 import org.codehaus.modello.plugin.java.metadata.JavaFieldMetadata;
+import org.codehaus.modello.plugin.model.ModelClassMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlAssociationMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
+import org.codehaus.modello.plugins.xml.metadata.XmlModelMetadata;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -75,8 +77,6 @@ public class JDOMWriterGenerator
 
         String marshallerName = getFileName( "JDOMWriter" );
 
-        JSourceWriter sourceWriter = newJSourceWriter( packageName, marshallerName );
-
         JClass jClass = new JClass( packageName + '.' + marshallerName );
         initHeader( jClass );
         suppressAllWarnings( objectModel, jClass );
@@ -100,22 +100,35 @@ public class JDOMWriterGenerator
         jClass.addImport( "org.jdom.DefaultJDOMFactory" );
         jClass.addImport( "org.jdom.Document" );
         jClass.addImport( "org.jdom.Element" );
+        jClass.addImport( "org.jdom.JDOMFactory" );
+        jClass.addImport( "org.jdom.Namespace" );
+        jClass.addImport( "org.jdom.Parent" );
         jClass.addImport( "org.jdom.Text" );
         jClass.addImport( "org.jdom.output.Format" );
         jClass.addImport( "org.jdom.output.XMLOutputter" );
 
         addModelImports( jClass, null );
 
-        jClass.addField( new JField( new JClass( "DefaultJDOMFactory" ), "factory" ) );
-        jClass.addField( new JField( new JClass( "String" ), "lineSeparator" ) );
+        JField factoryField = new JField( new JClass( "JDOMFactory" ), "factory" );
+        factoryField.getModifiers().setFinal( true );
+        jClass.addField( factoryField );
+        
+        JField lineSeparatorField = new JField( new JClass( "String" ), "lineSeparator" );
+        lineSeparatorField.getModifiers().setFinal( true );
+        jClass.addField( lineSeparatorField );
 
         createCounter( jClass );
 
         // constructor --
         JConstructor constructor = jClass.createConstructor();
         JSourceCode constCode = constructor.getSourceCode();
-        constCode.add( "factory = new DefaultJDOMFactory();" );
-        constCode.add( "lineSeparator = \"\\n\";" );
+        constCode.add( "this( new DefaultJDOMFactory() );" );
+
+        constructor = jClass.createConstructor();
+        constructor.addParameter( new JParameter( new JClass( "JDOMFactory" ), "factory" ) );
+        constCode = constructor.getSourceCode();
+        constCode.add( "this.factory = factory;" );
+        constCode.add( "this.lineSeparator = \"\\n\";" );
 
         String root = objectModel.getRoot( getGeneratedVersion() );
 
@@ -124,7 +137,6 @@ public class JDOMWriterGenerator
         String rootElement = resolveTagName( rootClass );
 
         // the public global write method..
-        jClass.addMethod( generateWriteModel( root, rootElement ) );
         jClass.addMethod( generateWriteModel2( root, rootElement ) );
         jClass.addMethod( generateWriteModel3( root, rootElement ) );
         // the private utility classes;
@@ -137,10 +149,11 @@ public class JDOMWriterGenerator
             jClass.addImport( "org.codehaus.plexus.util.xml.Xpp3Dom" );
             jClass.addMethods( generateDomMethods() );
         }
-
-        jClass.print( sourceWriter );
-
-        sourceWriter.close();
+    
+        try ( JSourceWriter sourceWriter = newJSourceWriter( packageName, marshallerName ) ) 
+        {
+            jClass.print( sourceWriter );
+        }
     }
 
     private void createCounter( final JClass jClass )
@@ -174,32 +187,6 @@ public class JDOMWriterGenerator
         counter.addMethod( getter );
     }
 
-    private JMethod generateWriteModel( String root, String rootElement )
-    {
-        String variableName = uncapitalise( root );
-
-        JMethod marshall = new JMethod( "write" );
-
-        marshall.addParameter( new JParameter( new JClass( root ), variableName ) );
-        marshall.addParameter( new JParameter( new JClass( "Document" ), "document" ) );
-        marshall.addParameter( new JParameter( new JClass( "OutputStream" ), "stream" ) );
-        marshall.addException( new JClass( "java.io.IOException" ) );
-
-        marshall.getJDocComment().appendComment( "\n@deprecated" );
-
-        JSourceCode sc = marshall.getSourceCode();
-        sc.add( "update" + root + "( " + variableName + ", \"" + rootElement
-                + "\", new Counter( 0 ), document.getRootElement() );" );
-        sc.add( "XMLOutputter outputter = new XMLOutputter();" );
-        sc.add( "outputter.setFormat( Format.getPrettyFormat()" );
-        sc.add( "    .setIndent( \"    \" )" );
-        sc.add( "    .setLineSeparator( System.getProperty( \"line.separator\" ) ) );" );
-        sc.add( "outputter.output( document, stream );" );
-
-        return marshall;
-
-    }
-
     private JMethod generateWriteModel2( String root, String rootElement )
     {
         String variableName = uncapitalise( root );
@@ -207,7 +194,6 @@ public class JDOMWriterGenerator
         JMethod marshall = new JMethod( "write" );
 
         marshall.addParameter( new JParameter( new JClass( root ), variableName ) );
-        marshall.addParameter( new JParameter( new JClass( "Document" ), "document" ) );
         marshall.addParameter( new JParameter( new JClass( "OutputStreamWriter" ), "writer" ) );
         marshall.addException( new JClass( "java.io.IOException" ) );
 
@@ -215,7 +201,7 @@ public class JDOMWriterGenerator
         sc.add( "Format format = Format.getRawFormat()" );
         sc.add( "    .setEncoding( writer.getEncoding() )" );
         sc.add( "    .setLineSeparator( System.getProperty( \"line.separator\" ) );" );
-        sc.add( "write( " + variableName + ", document, writer, format );" );
+        sc.add( "write( " + variableName + ", writer, format );" );
         return marshall;
 
     }
@@ -227,14 +213,14 @@ public class JDOMWriterGenerator
         JMethod marshall = new JMethod( "write" );
 
         marshall.addParameter( new JParameter( new JClass( root ), variableName ) );
-        marshall.addParameter( new JParameter( new JClass( "Document" ), "document" ) );
         marshall.addParameter( new JParameter( new JClass( "Writer" ), "writer" ) );
         marshall.addParameter( new JParameter( new JClass( "Format" ), "jdomFormat" ) );
         marshall.addException( new JClass( "java.io.IOException" ) );
 
         JSourceCode sc = marshall.getSourceCode();
+        sc.add( "Document document = factory.document( null );" );
         sc.add( "update" + root + "( " + variableName + ", \"" + rootElement
-            + "\", new Counter( 0 ), document.getRootElement() );" );
+            + "\", new Counter( 0 ), document );" );
         sc.add( "XMLOutputter outputter = new XMLOutputter();" );
         sc.add( "outputter.setFormat( jdomFormat );" );
         sc.add( "outputter.output( document, writer );" );
@@ -267,7 +253,7 @@ public class JDOMWriterGenerator
         sc.add( "}" );
 
         sc.add( "boolean shouldExist = ( text != null ) && ( text.trim().length() > 0 );" );
-        sc.add( "Element element = updateElement( counter, parent, name, shouldExist );" );
+        sc.add( "Element element = updateElement( counter, parent, name );" );
         sc.add( "if ( shouldExist )" );
         sc.add( "{" );
         sc.addIndented( "element.setText( text );" );
@@ -278,48 +264,11 @@ public class JDOMWriterGenerator
         updateElement.addParameter( new JParameter( new JClass( "Counter" ), "counter" ) );
         updateElement.addParameter( new JParameter( new JClass( "Element" ), "parent" ) );
         updateElement.addParameter( new JParameter( new JClass( "String" ), "name" ) );
-        updateElement.addParameter( new JParameter( new JType( "boolean" ), "shouldExist" ) );
         updateElement.getModifiers().makeProtected();
         sc = updateElement.getSourceCode();
-        sc.add( "Element element =  parent.getChild( name, parent.getNamespace() );" );
-
-        sc.add( "if ( shouldExist )" );
-        sc.add( "{" );
-        sc.indent();
-        sc.add( "if ( element == null )" );
-        sc.add( "{" );
-        sc.indent();
-        sc.add( "element = factory.element( name, parent.getNamespace() );" );
+        sc.add( "Element element = factory.element( name, parent.getNamespace() );" );
         sc.add( "insertAtPreferredLocation( parent, element, counter );" );
-        sc.unindent();
-        sc.add( "}" );
         sc.add( "counter.increaseCount();" );
-        sc.unindent();
-        sc.add( "}" );
-
-        sc.add( "else if ( element != null )" );
-        sc.add( "{" );
-        sc.indent();
-        sc.add( "int index = parent.indexOf( element );" );
-        sc.add( "if ( index > 0 )" );
-        sc.add( "{" );
-        sc.indent();
-        sc.add( "Content previous = parent.getContent( index - 1 );" );
-        sc.add( "if ( previous instanceof Text )" );
-        sc.add( "{" );
-        sc.indent();
-        sc.add( "Text txt = (Text) previous;" );
-        sc.add( "if ( txt.getTextTrim().length() == 0 )" );
-        sc.add( "{" );
-        sc.addIndented( "parent.removeContent( txt );" );
-        sc.add( "}" );
-        sc.unindent();
-        sc.add( "}" );
-        sc.unindent();
-        sc.add( "}" );
-        sc.add( "parent.removeContent( element );" );
-        sc.unindent();
-        sc.add( "}" );
         sc.add( "return element;" );
 
         JMethod insAtPref = new JMethod( "insertAtPreferredLocation" );
@@ -352,23 +301,6 @@ public class JDOMWriterGenerator
         sc.add( "}" );
         sc.unindent();
         sc.add( "}" );
-//        sc.add("if ( lastText == null )" );
-//        sc.add( "{" );
-//        sc.indent();
-//        sc.add( "int index = parent.getParentElement().indexOf( parent );" );
-//        sc.add( "if ( index > 0 ) ");
-//        sc.add( "{" );
-//        sc.indent();
-//        sc.add( "Content cont = parent.getParentElement().getContent( index  - 1 );" );
-//        sc.add( "if ( cont instanceof Text )" );
-//        sc.add( "{" );
-//        sc.addIndented( "lastText = (Text) cont;" );
-//        sc.add( "}" );
-//        sc.unindent();
-//        sc.add( "}" );
-//        sc.unindent();
-//        sc.add( "}" );
-
         sc.add( "if ( lastText != null && lastText.getTextTrim().length() == 0 )" );
         sc.add( "{" );
         sc.addIndented( "lastText = (Text) lastText.clone();" );
@@ -397,44 +329,6 @@ public class JDOMWriterGenerator
         sc.add( "parent.addContent( contentIndex, child );" );
         sc.add( "parent.addContent( contentIndex, lastText );" );
 
-        JMethod findRSProps = new JMethod( "findAndReplaceProperties", new JClass( "Element" ), null );
-        findRSProps.addParameter( new JParameter( new JClass( "Counter" ), "counter" ) );
-        findRSProps.addParameter( new JParameter( new JClass( "Element" ), "parent" ) );
-        findRSProps.addParameter( new JParameter( new JClass( "String" ), "name" ) );
-        findRSProps.addParameter( new JParameter( new JClass( "Map" ), "props" ) );
-        findRSProps.getModifiers().makeProtected();
-        sc = findRSProps.getSourceCode();
-        sc.add( "boolean shouldExist = ( props != null ) && ! props.isEmpty();" );
-        sc.add( "Element element = updateElement( counter, parent, name, shouldExist );" );
-        sc.add( "if ( shouldExist )" );
-        sc.add( "{" );
-        sc.indent();
-        sc.add( "Iterator it = props.keySet().iterator();" );
-        sc.add( "Counter innerCounter = new Counter( counter.getDepth() + 1 );" );
-        sc.add( "while ( it.hasNext() )" );
-        sc.add( "{" );
-        sc.indent();
-        sc.add( "String key = (String) it.next();" );
-        sc.add( "findAndReplaceSimpleElement( innerCounter, element, key, (String) props.get( key ), null );" );
-        sc.unindent();
-        sc.add( "}" );
-        sc.add( "ArrayList lst = new ArrayList( props.keySet() );" );
-        sc.add( "it = element.getChildren().iterator();" );
-        sc.add( "while ( it.hasNext() )" );
-        sc.add( "{" );
-        sc.indent();
-        sc.add( "Element elem = (Element) it.next();" );
-        sc.add( "String key = elem.getName();" );
-        sc.add( "if ( !lst.contains( key ) )" );
-        sc.add( "{" );
-        sc.addIndented( "it.remove();" );
-        sc.add( "}" );
-        sc.unindent();
-        sc.add( "}" );
-        sc.unindent();
-        sc.add( "}" );
-        sc.add( "return element;" );
-
         JMethod findRSLists = new JMethod( "findAndReplaceSimpleLists", new JClass( "Element" ), null );
         findRSLists.addParameter( new JParameter( new JClass( "Counter" ), "counter" ) );
         findRSLists.addParameter( new JParameter( new JClass( "Element" ), "parent" ) );
@@ -444,61 +338,26 @@ public class JDOMWriterGenerator
         findRSLists.getModifiers().makeProtected();
         sc = findRSLists.getSourceCode();
         sc.add( "boolean shouldExist = ( list != null ) && ( list.size() > 0 );" );
-        sc.add( "Element element = updateElement( counter, parent, parentName, shouldExist );" );
+        sc.add( "Element element = updateElement( counter, parent, parentName );" );
         sc.add( "if ( shouldExist )" );
         sc.add( "{" );
         sc.indent();
         sc.add( "Iterator it = list.iterator();" );
-        sc.add( "Iterator elIt = element.getChildren( childName, element.getNamespace() ).iterator();" );
-        sc.add( "if ( ! elIt.hasNext() )" );
-        sc.add( "{" );
-        sc.addIndented( " elIt = null;" );
-        sc.add( "}" );
         sc.add( "Counter innerCount = new Counter( counter.getDepth() + 1 );" );
         sc.add( "while ( it.hasNext() )" );
         sc.add( "{" );
         sc.indent();
         sc.add( "String value = (String) it.next();" );
-        sc.add( "Element el;" );
-        sc.add( "if ( elIt != null && elIt.hasNext() )" );
-        sc.add( "{" );
-        sc.indent();
-        sc.add( "el = (Element) elIt.next();" );
-        sc.add( "if ( ! elIt.hasNext() )" );
-        sc.add( "{" );
-        sc.addIndented( "elIt = null;" );
-        sc.add( "}" );
-        sc.unindent();
-        sc.add( "}" );
-        sc.add( "else" );
-        sc.add( "{" );
-        sc.indent();
-        sc.add( "el = factory.element( childName, element.getNamespace() );" );
+        sc.add( "Element el = factory.element( childName, element.getNamespace() );" );
         sc.add( "insertAtPreferredLocation( element, el, innerCount );" );
-        sc.unindent();
-        sc.add( "}" );
         sc.add( "el.setText( value );" );
         sc.add( "innerCount.increaseCount();" );
-
         sc.unindent();
         sc.add( "}" );
-        sc.add( "if ( elIt != null )" );
-        sc.add( "{" );
-        sc.indent();
-        sc.add( "while ( elIt.hasNext() )" );
-        sc.add( "{" );
-        sc.indent();
-        sc.add( "elIt.next();" );
-        sc.add( "elIt.remove();" );
-        sc.unindent();
-        sc.add( "}" );
-        sc.unindent();
-        sc.add( "}" );
-        sc.unindent();
         sc.add( "}" );
         sc.add( "return element;" );
 
-        return new JMethod[] { findRSElement, updateElement, insAtPref, findRSProps, findRSLists };
+        return new JMethod[] { findRSElement, updateElement, insAtPref, findRSLists };
     }
 
     private JMethod[] generateDomMethods()
@@ -511,7 +370,7 @@ public class JDOMWriterGenerator
         findRSDom.getModifiers().makeProtected();
         JSourceCode sc = findRSDom.getSourceCode();
         sc.add( "boolean shouldExist = ( dom != null ) && ( dom.getChildCount() > 0 || dom.getValue() != null );" );
-        sc.add( "Element element = updateElement( counter, parent, name, shouldExist );" );
+        sc.add( "Element element = updateElement( counter, parent, name );" );
         sc.add( "if ( shouldExist )" );
         sc.add( "{" );
         sc.addIndented( "replaceXpp3DOM( element, dom, new Counter( counter.getDepth() + 1 ) );" );
@@ -524,6 +383,21 @@ public class JDOMWriterGenerator
         findRSDom2.addParameter( new JParameter( new JClass( "Counter" ), "counter" ) );
         findRSDom2.getModifiers().makeProtected();
         sc = findRSDom2.getSourceCode();
+        
+        sc.add( "for( String attributeName : parentDom.getAttributeNames() )" );
+        sc.add( "{" );
+        sc.indent();
+        sc.add( "String[] attrDetails = attributeName.split( \":\", 2 );" );
+        sc.add( "if ( attrDetails.length == 2 )" );
+        sc.add( "{" );
+        sc.addIndented( "parent.setAttribute( attrDetails[1], parentDom.getAttribute( attributeName ), parent.getNamespace( attrDetails[0] ) );" );
+        sc.add( "}" );
+        sc.add( "else ");
+        sc.add( "{" );
+        sc.addIndented( "parent.setAttribute( attributeName, parentDom.getAttribute( attributeName ) );" );
+        sc.add( "}" );
+        sc.unindent();
+        sc.add( "}" );
         sc.add( "if ( parentDom.getChildCount() > 0 )" );
         sc.add( "{" );
         sc.indent();
@@ -608,30 +482,60 @@ public class JDOMWriterGenerator
         String capClassName = capitalise( className );
 
         String uncapClassName = uncapitalise( className );
+        
+        ModelClassMetadata classMetadata = (ModelClassMetadata) clazz.getMetadata( ModelClassMetadata.ID );
 
         JMethod marshall = new JMethod( "update" + capClassName );
         marshall.addParameter( new JParameter( new JClass( className ), uncapClassName ) );
         marshall.addParameter( new JParameter( new JClass( "String" ), "xmlTag" ) );
         marshall.addParameter( new JParameter( new JClass( "Counter" ), "counter" ) );
-        marshall.addParameter( new JParameter( new JClass( "Element" ), "element" ) );
-        marshall.getModifiers().makeProtected();
-
-        JSourceCode sc = marshall.getSourceCode();
-        boolean shouldExist = alwaysExisting.contains( clazz );
-        if ( shouldExist )
+        if ( classMetadata.isRootElement() )
         {
-            sc.add( "Element root = element;" );
+            marshall.addParameter( new JParameter( new JClass( "Document" ), "document" ) );
         }
         else
         {
-            sc.add( "boolean shouldExist = ( " + uncapClassName + " != null );" );
-            sc.add( "Element root = updateElement( counter, element, xmlTag, shouldExist );" );
-            sc.add( "if ( shouldExist )" );
-            sc.add( "{" );
-            sc.indent();
+            marshall.addParameter( new JParameter( new JClass( "Element" ), "element" ) );
         }
+        marshall.getModifiers().makeProtected();
+
+        JSourceCode sc = marshall.getSourceCode();
+        sc.add( "if ( " + uncapClassName + " != null )" );
+        sc.add( "{" );
+        sc.indent();
+        
+        if ( classMetadata.isRootElement() )
+        {
+            XmlModelMetadata xmlModelMetadata = (XmlModelMetadata) clazz.getModel().getMetadata( XmlModelMetadata.ID );
+            String namespace = xmlModelMetadata.getNamespace( getGeneratedVersion() );
+
+            if ( namespace != null )
+            {
+                sc.add( "Element root = factory.element( xmlTag, \"" + namespace + "\" );" );
+                if ( xmlModelMetadata.getSchemaLocation() != null )
+                {
+                    String url = xmlModelMetadata.getSchemaLocation( getGeneratedVersion() );
+                    sc.add("Namespace xsins = Namespace.getNamespace( \"xsi\", \"http://www.w3.org/2001/XMLSchema-instance\" );" );
+                    sc.add( "root.setAttribute( \"schemaLocation\", \"" + namespace + " " + url + "\", xsins );" );
+                }
+            }
+            else
+            {
+                sc.add( "Element root = factory.element( xmlTag );" );
+            }
+            sc.add( "document.setRootElement( root );" );
+        }
+        else
+        {
+            sc.add( "Element root = updateElement( counter, element, xmlTag );" );
+        }
+        
         sc.add( "Counter innerCount = new Counter( counter.getDepth() + 1 );" );
 
+        ModelField contentField = null;
+
+        String contentValue = null;
+        
         List<ModelField> modelFields = getFieldsForXml( clazz, getGeneratedVersion() );
 
         for ( ModelField field : modelFields )
@@ -643,18 +547,35 @@ public class JDOMWriterGenerator
 
             String type = field.getType();
             String value = uncapClassName + '.' + getPrefix( javaFieldMetadata ) + capitalise( field.getName() ) + "()";
+            
+            if ( xmlFieldMetadata.isContent() )
+            {
+                contentField = field;
+                contentValue = value;
+                continue;
+            }
+            
             if ( xmlFieldMetadata.isAttribute() )
             {
+                sc.add( getValueChecker( type, value, field ) );
+                sc.add( "{" );
+                sc.addIndented( "root.setAttribute( \"" + fieldTagName + "\", "
+                                + getValue( field.getType(), value, xmlFieldMetadata ) + " );" );
+                sc.add( "}" );
                 continue;
             }
             if ( field instanceof ModelAssociation )
             {
                 ModelAssociation association = (ModelAssociation) field;
+                
                 ModelClass toClass = association.getToClass();
                 if ( association.isOneMultiplicity() )
                 {
-                    sc.add( "update" + capitalise( field.getType() ) + "( " + value + ", \"" + fieldTagName
-                        + "\", innerCount, root );" );
+                    sc.add( getValueChecker( type, value, field ) );
+                    sc.add( "{" );
+                    sc.addIndented( "update" + capitalise( field.getType() ) + "( " + value + ", \"" + fieldTagName
+                            + "\", innerCount, root );" );
+                    sc.add( "}" );
                 }
                 else
                 {
@@ -663,7 +584,7 @@ public class JDOMWriterGenerator
                     XmlAssociationMetadata xmlAssociationMetadata =
                         (XmlAssociationMetadata) association.getAssociationMetadata( XmlAssociationMetadata.ID );
 
-                    //String valuesTagName = resolveTagName( fieldTagName, xmlAssociationMetadata );
+                    String valuesTagName = resolveTagName( fieldTagName, xmlAssociationMetadata );
 //
 //                    type = association.getType();
 //                    String toType = association.getTo();
@@ -677,17 +598,16 @@ public class JDOMWriterGenerator
                             if ( xmlAssociationMetadata.isWrappedItems() )
                             {
                                 sc.add( "iterate" + capitalise( toType ) + "( innerCount, root, " + value + ",\""
-                                    + field.getName() + "\",\"" + singular( fieldTagName ) + "\" );" );
+                                    + fieldTagName + "\",\"" + valuesTagName + "\" );" );
                                 createIterateMethod( field.getName(), toClass, singular( fieldTagName ), jClass );
                             }
                             else
                             {
                                 //assume flat..
                                 sc.add( "iterate2" + capitalise( toType ) + "( innerCount, root, " + value + ", \""
-                                        + singular( fieldTagName ) + "\" );" );
+                                        + valuesTagName + "\" );" );
                                 createIterateMethod2( field.getName(), toClass, singular( fieldTagName ), jClass );
                             }
-                            alwaysExisting.add( toClass );
                         }
                         else
                         {
@@ -699,8 +619,33 @@ public class JDOMWriterGenerator
                     else
                     {
                         //Map or Properties
-                        sc.add(
-                            "findAndReplaceProperties( innerCount, root,  \"" + fieldTagName + "\", " + value + " );" );
+                        sc.add( getValueChecker( type, value, field ) );
+                        sc.add( "{" );
+                        sc.indent();
+                        sc.add( "Element listElement = updateElement( innerCount, root, \"" + fieldTagName
+                                        + "\" );" );
+                        sc.add( "Iterator it = " + value + ".keySet().iterator();" );
+                        sc.add( "Counter propertiesCounter = new Counter( innerCount.getDepth() + 1 );" );
+                        sc.add( "while ( it.hasNext() )" );
+                        sc.add( "{" );
+                        sc.indent();
+                        sc.add( "String key = (String) it.next();" );
+                        if ( xmlAssociationMetadata.isMapExplode() ) 
+                        {
+                            sc.add( "Element propTag = updateElement( propertiesCounter, listElement, \"" + singular( fieldTagName ) +"\" );" );
+                            sc.add( "Counter propertyCounter = new Counter( propertiesCounter.getDepth() + 1 );" );
+                            sc.add( "findAndReplaceSimpleElement( propertyCounter, propTag, \"key\", key, null );" );
+                            sc.add( "findAndReplaceSimpleElement( propertyCounter, propTag, \"value\", (String) "
+                                            + value + ".get( key ), null );" );
+                        }
+                        else 
+                        {
+                            sc.add( "findAndReplaceSimpleElement( propertiesCounter, listElement, key, (String) " + value + ".get( key ), null );" );
+                        }
+                        sc.unindent();
+                        sc.add( "}" );
+                        sc.unindent();
+                        sc.add( "}" );
                     }
                 }
             }
@@ -715,51 +660,31 @@ public class JDOMWriterGenerator
                 }
                 else
                 {
-                    sc.add( "findAndReplaceSimpleElement( innerCount, root, \"" + fieldTagName + "\", "
-                        + getJdomValueChecker( type, value, field ) + getValue( type, value, xmlFieldMetadata ) + ", "
-                        + ( field.getDefaultValue() != null ? ( "\"" + field.getDefaultValue() + "\"" ) : "null" )
-                        + " );" );
+                    sc.add( getValueChecker( type, value, field ) );
+                    sc.add( "{");
+                    sc.addIndented( "updateElement( innerCount, root,  \"" + fieldTagName + "\" ).setText( "
+                                    + getValue( field.getType(), value, xmlFieldMetadata ) + " );" );
+                    sc.add( "}" );
                 }
             }
         }
-        if ( !shouldExist )
+        
+        if ( contentField != null )
         {
-            sc.unindent();
-            sc.add( "}" );
+            XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) contentField.getMetadata( XmlFieldMetadata.ID );
+            sc.add( "root.setText( " + getValue( contentField.getType(), contentValue, xmlFieldMetadata ) + " );" );
         }
-        jClass.addMethod( marshall );
-    }
+        
+        sc.unindent();
+        sc.add( "}" );
 
-    private String getJdomValueChecker( String type, String value, ModelField field )
-        throws ModelloException
-    {
-        if ( "boolean".equals( type ) || "double".equals( type ) || "float".equals( type ) || "int".equals( type )
-            || "long".equals( type ) || "short".equals( type ) || "byte".equals( type ) || "char".equals( type ) )
-        {
-            return value + " == " + getJavaDefaultValue( field ) + " ? null : ";
-        }
-        else if ( ModelDefault.LIST.equals( type ) || ModelDefault.SET.equals( type )
-            || ModelDefault.MAP.equals( type ) || ModelDefault.PROPERTIES.equals( type ) )
-        {
-            return value + " == null || " + value + ".size() == 0 ? null : ";
-//        } else if ( "String".equals( type ) && field.getDefaultValue() != null ) {
-//            return "" + value + " == null || " + value + ".equals( \"" + field.getDefaultValue() + "\" ) ? null : ";
-        }
-        else if ( "Date".equals( type ) && field.getDefaultValue() != null )
-        {
-            return "" + value + " == null || " + value + ".equals( " + getJavaDefaultValue( field ) + " ) ? null : ";
-        }
-        else
-        {
-            return value + " == null ? null : ";
-        }
+        jClass.addMethod( marshall );
     }
 
     private void createIterateMethod( String field, ModelClass toClass, String childFieldTagName, JClass jClass )
     {
         if ( jClass.getMethod( "iterate" + capitalise( toClass.getName() ), 0 ) != null )
         {
-//            System.out.println("method iterate" + capitalise(field) + " already exists");
             return;
         }
         JMethod toReturn = new JMethod( "iterate" + capitalise( toClass.getName() ) );
@@ -771,53 +696,18 @@ public class JDOMWriterGenerator
         toReturn.getModifiers().makeProtected();
         JSourceCode sc = toReturn.getSourceCode();
         sc.add( "boolean shouldExist = ( list != null ) && ( list.size() > 0 );" );
-        sc.add( "Element element = updateElement( counter, parent, parentTag, shouldExist );" );
+        sc.add( "Element element = updateElement( counter, parent, parentTag );" );
         sc.add( "if ( shouldExist )" );
         sc.add( "{" );
         sc.indent();
         sc.add( "Iterator it = list.iterator();" );
-        sc.add( "Iterator elIt = element.getChildren( childTag, element.getNamespace() ).iterator();" );
-        sc.add( "if ( !elIt.hasNext() )" );
-        sc.add( "{" );
-        sc.addIndented( "elIt = null;" );
-        sc.add( "}" );
         sc.add( "Counter innerCount = new Counter( counter.getDepth() + 1 );" );
         sc.add( "while ( it.hasNext() )" );
         sc.add( "{" );
         sc.indent();
         sc.add( toClass.getName() + " value = (" + toClass.getName() + ") it.next();" );
-        sc.add( "Element el;" );
-        sc.add( "if ( elIt != null && elIt.hasNext() )" );
-        sc.add( "{" );
-        sc.indent();
-        sc.add( "el = (Element) elIt.next();" );
-        sc.add( "if ( ! elIt.hasNext() )" );
-        sc.add( "{" );
-        sc.addIndented( " elIt = null;" );
-        sc.add( "}" );
-        sc.unindent();
-        sc.add( "}" );
-        sc.add( "else" );
-        sc.add( "{" );
-        sc.indent();
-        sc.add( "el = factory.element( childTag, element.getNamespace() );" );
-        sc.add( "insertAtPreferredLocation( element, el, innerCount );" );
-        sc.unindent();
-        sc.add( "}" );
-        sc.add( "update" + toClass.getName() + "( value, childTag, innerCount, el );" );
+        sc.add( "update" + toClass.getName() + "( value, childTag, innerCount, element );" );
         sc.add( "innerCount.increaseCount();" );
-        sc.unindent();
-        sc.add( "}" );
-        sc.add( "if ( elIt != null )" );
-        sc.add( "{" );
-        sc.indent();
-        sc.add( "while ( elIt.hasNext() )" );
-        sc.add( "{" );
-        sc.indent();
-        sc.add( "elIt.next();" );
-        sc.add( "elIt.remove();" );
-        sc.unindent();
-        sc.add( "}" );
         sc.unindent();
         sc.add( "}" );
         sc.unindent();
@@ -830,7 +720,6 @@ public class JDOMWriterGenerator
     {
         if ( jClass.getMethod( "iterate2" + capitalise( toClass.getName() ), 0 ) != null )
         {
-//            System.out.println("method iterate" + capitalise(field) + " already exists");
             return;
         }
         JMethod toReturn = new JMethod( "iterate2" + capitalise( toClass.getName() ) );
@@ -841,48 +730,11 @@ public class JDOMWriterGenerator
         toReturn.getModifiers().makeProtected();
         JSourceCode sc = toReturn.getSourceCode();
         sc.add( "Iterator it = list.iterator();" );
-        sc.add( "Iterator elIt = parent.getChildren( childTag, parent.getNamespace() ).iterator();" );
-        sc.add( "if ( !elIt.hasNext() )" );
-        sc.add( "{" );
-        sc.addIndented( "elIt = null;" );
-        sc.add( "}" );
-        sc.add( "Counter innerCount = new Counter( counter.getDepth() + 1 );" );
         sc.add( "while ( it.hasNext() )" );
         sc.add( "{" );
         sc.indent();
         sc.add( toClass.getName() + " value = (" + toClass.getName() + ") it.next();" );
-        sc.add( "Element el;" );
-        sc.add( "if ( elIt != null && elIt.hasNext() )" );
-        sc.add( "{" );
-        sc.indent();
-        sc.add( "el = (Element) elIt.next();" );
-        sc.add( "if ( ! elIt.hasNext() )" );
-        sc.add( "{" );
-        sc.addIndented( "elIt = null;" );
-        sc.add( "}" );
-        sc.unindent();
-        sc.add( "}" );
-        sc.add( "else" );
-        sc.add( "{" );
-        sc.indent();
-        sc.add( "el = factory.element( childTag, parent.getNamespace() );" );
-        sc.add( "insertAtPreferredLocation( parent, el, innerCount );" );
-        sc.unindent();
-        sc.add( "}" );
-        sc.add( "update" + toClass.getName() + "( value, childTag, innerCount, el );" );
-        sc.add( "innerCount.increaseCount();" );
-        sc.unindent();
-        sc.add( "}" );
-        sc.add( "if ( elIt != null )" );
-        sc.add( "{" );
-        sc.indent();
-        sc.add( "while ( elIt.hasNext() )" );
-        sc.add( "{" );
-        sc.indent();
-        sc.add( "elIt.next();" );
-        sc.add( "elIt.remove();" );
-        sc.unindent();
-        sc.add( "}" );
+        sc.add( "update" + toClass.getName() + "( value, childTag, counter, parent );" );
         sc.unindent();
         sc.add( "}" );
 

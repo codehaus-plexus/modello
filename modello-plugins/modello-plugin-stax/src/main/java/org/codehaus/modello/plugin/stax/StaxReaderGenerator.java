@@ -124,6 +124,7 @@ public class StaxReaderGenerator
         jClass.addImport( "java.util.regex.Matcher" );
         jClass.addImport( "java.util.regex.Pattern" );
         jClass.addImport( "java.util.Locale" );
+        jClass.addImport( "javax.xml.XMLConstants" );
         jClass.addImport( "javax.xml.stream.*" );
 
         addModelImports( jClass, null );
@@ -1552,13 +1553,18 @@ public class StaxReaderGenerator
         sc.add( "for ( int i = 0; i < attributesSize; i++ )" );
         sc.add( "{" );
         sc.indent();
-        sc.add( "String name = xmlStreamReader.getAttributeLocalName( i );" );
-
+        sc.add( "String prefix = xmlStreamReader.getAttributePrefix( i );" );
+        sc.add( "String localName = xmlStreamReader.getAttributeLocalName( i );" );
         sc.add( "String value = xmlStreamReader.getAttributeValue( i );" );
-
-        sc.add( "element.setAttribute( name, value );" );
-
-        sc.add( "spacePreserve = spacePreserve || ( \"xml\".equals( xmlStreamReader.getAttributePrefix( i ) ) && \"space\".equals( name ) && \"preserve\".equals( value ) );" );
+        sc.add( "if ( XMLConstants.DEFAULT_NS_PREFIX.equals( xmlStreamReader.getAttributeName( i ).getPrefix() ) )" );
+        sc.add( "{" );
+        sc.addIndented( "element.setAttribute( localName, value );" );
+        sc.add( "}" );
+        sc.add( "else" );
+        sc.add( "{" );
+        sc.addIndented( "element.setAttribute( prefix + ':'+ localName , value );" );
+        sc.add( "}" );
+        sc.add( "spacePreserve = spacePreserve || ( \"xml\".equals( prefix ) && \"space\".equals( localName ) && \"preserve\".equals( value ) );" );
         sc.unindent();
         sc.add( "}" );
         sc.unindent();

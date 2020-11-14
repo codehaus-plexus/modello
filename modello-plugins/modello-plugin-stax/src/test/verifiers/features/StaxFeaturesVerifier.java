@@ -107,8 +107,6 @@ public class StaxFeaturesVerifier
 
         // alias is rendered as default field name => must be reverted here to let the test pass
         actualXml = actualXml.replaceFirst( "<id>alias</id>", "<key>alias</key>" );
-        // writer doesn't handle namespace
-        actualXml = actualXml.replaceFirst( "<preserve space=\"preserve\">", "<preserve xml:space=\"preserve\">" );
 
         XMLUnit.setIgnoreWhitespace( true );
         XMLUnit.setIgnoreComments( true );

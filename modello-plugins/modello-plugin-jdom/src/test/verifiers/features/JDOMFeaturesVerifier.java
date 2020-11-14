@@ -24,7 +24,7 @@ package org.codehaus.modello.generator.xml.jdom;
 
 import junit.framework.Assert;
 import org.codehaus.modello.test.features.Features;
-import org.codehaus.modello.test.features.io.dom4j.ModelloFeaturesTestDom4jReader;
+import org.codehaus.modello.test.features.io.stax.ModelloFeaturesTestStaxReader;
 import org.codehaus.modello.test.features.io.jdom.ModelloFeaturesTestJDOMWriter;
 import org.codehaus.modello.verifier.Verifier;
 import org.codehaus.modello.verifier.VerifierException;
@@ -62,10 +62,10 @@ public class JDOMFeaturesVerifier
     private Features read()
         throws Exception
     {
-        // no JDOM reader: using Dom4j reader instead...
-        ModelloFeaturesTestDom4jReader reader = new ModelloFeaturesTestDom4jReader();
+        // no JDOM reader: using Stax reader instead...
+        ModelloFeaturesTestStaxReader reader = new ModelloFeaturesTestStaxReader();
 
-        return reader.read( getClass().getResource( "/features.xml" ) );
+        return reader.read( getXmlResourceReader( "/features.xml" ) );
     }
 
     public void verifyWriter( Features features )
@@ -75,23 +75,13 @@ public class JDOMFeaturesVerifier
 
         StringWriter buffer = new StringWriter();
 
-        Document doc = new Document( new Element( "features" ) );
-        writer.write( features, doc, buffer, Format.getRawFormat() );
+        writer.write( features, buffer, Format.getRawFormat() );
 
         String initialXml = IOUtil.toString( getXmlResourceReader( "/features.xml" ) );
         String actualXml = buffer.toString();
 
-        // workaround for MODELLO-...
-        actualXml =
-            actualXml.replaceFirst( "<features>", "<features xmlns=\"http://codehaus-plexus.github.io/FEATURES/1.0.0\" "
-                + "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" "
-                + "xsi:schemaLocation=\"http://codehaus-plexus.github.io/FEATURES/1.0.0 "
-                + "http://codehaus-plexus.github.io/features-1.0.0.xsd\">" );
-
         // alias is rendered as default field name => must be reverted here to let the test pass
         actualXml = actualXml.replaceFirst( "<id>alias</id>", "<key>alias</key>" );
-
-        //assertTrue( actualXml.substring( 0, 38 ), actualXml.startsWith( "<?xml version=\"1.0\"?>" ) );
 
         XMLUnit.setIgnoreWhitespace( true );
         XMLUnit.setIgnoreComments( true );
@@ -114,7 +104,7 @@ public class JDOMFeaturesVerifier
         {
             throw new VerifierException( "fieldNoTrim was trimmed..." );
         }
-        if ( !actualXml.contains( "<element>   by default, the element content is trimmed   </element>" ) )
+        if ( !actualXml.contains( "<element>by default, the element content is trimmed</element>" ) )
         {
             throw new VerifierException( "dom was trimmed..." );
         }

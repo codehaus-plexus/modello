@@ -26,9 +26,10 @@
       <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-plugin-xml</artifactId>
     </dependency>
+
     <dependency>
       <groupId>org.codehaus.modello</groupId>
-      <artifactId>modello-plugin-dom4j</artifactId>
+      <artifactId>modello-plugin-stax</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -43,12 +44,6 @@
       <groupId>xmlunit</groupId>
       <artifactId>xmlunit</artifactId>
       <version>1.2</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>dom4j</groupId>
-      <artifactId>dom4j</artifactId>
-      <version>1.6.1</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

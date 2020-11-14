@@ -49,10 +49,9 @@ public class FeaturesJDOMGeneratorTest
         Properties parameters = getModelloParameters( "1.0.0" );
 
         modello.generate( model, "java", parameters );
-        modello.generate( model, "dom4j-reader", parameters );
+        modello.generate( model, "stax-reader", parameters );
         modello.generate( model, "jdom-writer", parameters );
 
-        addDependency( "dom4j", "dom4j" ); // needed to read features.xml with dom4j
         addDependency( "org.jdom", "jdom" );
         addDependency( "xmlunit", "xmlunit" );
         compileGeneratedSources();
