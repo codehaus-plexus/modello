@@ -456,11 +456,11 @@
         <code>Content</code> type.]]></description>
       <version>1.0.0+</version>
       <fields>
-        <field>
+        <field xml.content="true">
           <name>content</name>
           <description><![CDATA[The field of the class with <code>Content</code> type.]]></description>
           <version>1.0.0+</version>
-          <type>Content</type>
+          <type>String</type>
         </field>
         <field xml.attribute="true">
           <name>attr</name>
@@ -1712,10 +1712,10 @@
       <superClass>SuperThing</superClass>
       <version>1.0.0+</version>
       <fields>
-        <field>
+        <field xml.content="true">
           <name>someContent</name>
           <version>1.0.0+</version>
-          <type>Content</type>
+          <type>String</type>
         </field>
       </fields>
     </class>
@@ -1739,10 +1739,10 @@
         A single action done on the project, during this release.
       </description>
       <fields>
-        <field>
+        <field xml.content="true">
           <name>action</name>
           <version>1.0.0+</version>
-          <type>Content</type>
+          <type>String</type>
           <description>
             A short description of the action taken.
           </description>

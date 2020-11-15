@@ -40,7 +40,6 @@ import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.ModelInterface;
 import org.codehaus.modello.model.ModelValidationException;
 import org.codehaus.modello.plugin.ModelloGenerator;
-import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.ReaderFactory;
 
 import java.io.File;
@@ -77,16 +76,9 @@ public class DefaultModelloCore
     public Model loadModel( File file )
         throws IOException, ModelloException, ModelValidationException
     {
-        Reader reader = null;
-
-        try
+        try ( Reader reader = ReaderFactory.newXmlReader( file ) )
         {
-            reader = ReaderFactory.newXmlReader( file );
             return loadModel( reader );
-        }
-        finally
-        {
-            IOUtil.close( reader );
         }
     }
 
@@ -156,14 +148,6 @@ public class DefaultModelloCore
                     upgradeModifiedAttribute( "xml.listStyle", fieldAttributes,
                         "xml.itemsStyle", associationAttributes, "attribute 'xml.listStyle' for field element is "
                         + "deprecated: use 'xml.itemsStyle' in association instead" );
-                }
-
-                if ( "Content".equals( field.getType() ) )
-                {
-                    getLogger().warn( "'Content' type is deprecated: use 'String' type and add xml.content='true' to the field" );
-                    field.setType( "String" );
-                    Map<String, String> fieldAttributes = modelReader.getAttributesForField( field );
-                    fieldAttributes.put( "xml.content", "true" );
                 }
             }
         }

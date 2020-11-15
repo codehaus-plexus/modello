@@ -152,10 +152,10 @@ under the License.
         A description of the author page.
       </description>
       <fields>
-        <field>
+        <field xml.content="true">
           <name>name</name>
           <version>1.0.0</version>
-          <type>Content</type>
+          <type>String</type>
           <description>
             The page author name.
           </description>
@@ -177,10 +177,10 @@ under the License.
         A single action done on the project, during this release.
       </description>
       <fields>
-        <field>
+        <field xml.content="true">
           <name>action</name>
           <version>1.0.0</version>
-          <type>Content</type>
+          <type>String</type>
           <description>
             A short description of the action taken.
           </description>

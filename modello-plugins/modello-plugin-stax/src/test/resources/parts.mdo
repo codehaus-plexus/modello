@@ -319,11 +319,11 @@
         <code>Content</code> type.]]></description>
       <version>1.0.0+</version>
       <fields>
-        <field>
+        <field xml.content="true">
           <name>content</name>
           <description><![CDATA[The field of the class with <code>Content</code> type.]]></description>
           <version>1.5.0+</version><!-- MODELLO-185 -->
-          <type>Content</type>
+          <type>String</type>
         </field>
         <field xml.attribute="true">
           <name>attr</name>
