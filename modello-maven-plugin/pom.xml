@@ -193,6 +193,7 @@
                 <plexusUtilsVersion>3.0.22</plexusUtilsVersion>
                 <junitVersion>3.8.2</junitVersion>
                 <java.version>${java.version}</java.version>
+                <jdom.version>${jdom.version}</jdom.version>
               </filterProperties>
               <goals>
                 <goal>clean</goal>

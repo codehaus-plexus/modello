@@ -97,16 +97,16 @@ public class JDOMWriterGenerator
         jClass.addImport( "java.util.Locale" );
         jClass.addImport( "java.util.Map" );
         jClass.addImport( "java.util.Properties" );
-        jClass.addImport( "org.jdom.Content" );
-        jClass.addImport( "org.jdom.DefaultJDOMFactory" );
-        jClass.addImport( "org.jdom.Document" );
-        jClass.addImport( "org.jdom.Element" );
-        jClass.addImport( "org.jdom.JDOMFactory" );
-        jClass.addImport( "org.jdom.Namespace" );
-        jClass.addImport( "org.jdom.Parent" );
-        jClass.addImport( "org.jdom.Text" );
-        jClass.addImport( "org.jdom.output.Format" );
-        jClass.addImport( "org.jdom.output.XMLOutputter" );
+        jClass.addImport( "org.jdom2.Content" );
+        jClass.addImport( "org.jdom2.DefaultJDOMFactory" );
+        jClass.addImport( "org.jdom2.Document" );
+        jClass.addImport( "org.jdom2.Element" );
+        jClass.addImport( "org.jdom2.JDOMFactory" );
+        jClass.addImport( "org.jdom2.Namespace" );
+        jClass.addImport( "org.jdom2.Parent" );
+        jClass.addImport( "org.jdom2.Text" );
+        jClass.addImport( "org.jdom2.output.Format" );
+        jClass.addImport( "org.jdom2.output.XMLOutputter" );
 
         addModelImports( jClass, null );
 

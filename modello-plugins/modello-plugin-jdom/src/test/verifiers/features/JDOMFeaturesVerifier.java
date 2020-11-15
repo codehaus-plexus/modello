@@ -34,9 +34,9 @@ import org.codehaus.plexus.util.IOUtil;
 import org.custommonkey.xmlunit.Diff;
 import org.custommonkey.xmlunit.XMLUnit;
 
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.output.Format;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.output.Format;
 
 import java.io.File;
 import java.io.IOException;
