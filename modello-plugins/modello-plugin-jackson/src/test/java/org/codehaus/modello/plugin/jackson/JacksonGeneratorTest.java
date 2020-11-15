@@ -55,7 +55,7 @@ public class JacksonGeneratorTest
         assertEquals( 28, classesList.size() );
 
         // now generate sources and test them
-        Properties parameters = getModelloParameters( "4.0.0" );
+        Properties parameters = getModelloParameters( "4.0.0", 5 );
 
         modello.generate( model, "java", parameters );
         modello.generate( model, "jackson-writer", parameters );
@@ -65,7 +65,7 @@ public class JacksonGeneratorTest
         addDependency( "com.fasterxml.jackson.core", "jackson-databind" );
         // looks like jackson-databind requires jackson-annotations to run...
         addDependency( "com.fasterxml.jackson.core", "jackson-annotations" );
-        compileGeneratedSources();
+        compileGeneratedSources( 5 );
 
         // TODO: see why without this, version system property is set to "2.4.1" value after verify
         System.setProperty( "version", getModelloVersion() );

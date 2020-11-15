@@ -26,11 +26,11 @@ public class InterfaceAssociationTest
 
         Model model = modello.loadModel( getXmlResourceReader( "/models/interfaceAssociation.mdo" ) );
 
-        Properties parameters = getModelloParameters( "4.0.0", true );
+        Properties parameters = getModelloParameters( "4.0.0", 5 );
 
         modello.generate( model, "java", parameters );
 
-        compileGeneratedSources( true );
+        compileGeneratedSources( 5 );
 
         verifyCompiledGeneratedSources( "InterfaceAssociationVerifier" );
     }

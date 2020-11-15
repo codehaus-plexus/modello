@@ -153,7 +153,7 @@ public class JavaModelloGenerator
 
             jClass.addInterface( Serializable.class.getName() );
 
-            if ( useJava5 && !modelClass.getAnnotations().isEmpty() )
+            if (hasJavaSourceSupport( 5 ) && !modelClass.getAnnotations().isEmpty() )
             {
                 for ( String annotation : modelClass.getAnnotations() )
                 {
@@ -340,7 +340,7 @@ public class JavaModelloGenerator
             }
         }
 
-        if ( useJava5 && !modelInterface.getAnnotations().isEmpty() )
+        if ( hasJavaSourceSupport( 5 ) && !modelInterface.getAnnotations().isEmpty() )
         {
             for ( String annotation : modelInterface.getAnnotations() )
             {
@@ -422,7 +422,7 @@ public class JavaModelloGenerator
             return toString;
         }
 
-        if ( useJava5 )
+        if ( hasJavaSourceSupport( 5 ) )
         {
             sc.add( "StringBuilder buf = new StringBuilder( 128 );" );
         }
@@ -508,6 +508,8 @@ public class JavaModelloGenerator
             return new JMethod[0];
         }
 
+        boolean useJava5 = hasJavaSourceSupport( 5 );
+        
         JType returnType;
         if ( useJava5 )
         {
@@ -817,6 +819,7 @@ public class JavaModelloGenerator
         boolean hasModeSuperClass = StringUtils.isNotEmpty(superClass) && isClassInModel(superClass, getModel());
         if (!hasModeSuperClass)
         {
+            boolean useJava5 = hasJavaSourceSupport( 5 );
             String fieldType = "java.util.Map" + ( useJava5 ? "<Object, " + locationClass.getName() + ">" : "" );
             String fieldImpl = "java.util.LinkedHashMap" + ( useJava5 ? "<Object, " + locationClass.getName() + ">" : "" );
 
@@ -870,38 +873,72 @@ public class JavaModelloGenerator
         getterSc.add( "if ( key instanceof String )" );
         getterSc.add( "{" );
         getterSc.indent();
-        getterSc.add( "switch ( ( String ) key )" );
-        getterSc.add( "{" );
-        getterSc.indent();
-        getterSc.add( "case \"\" :" );
-        getterSc.add( "{" );
-        getterSc.indent();
-        getterSc.add( "return this." + singular( locationField ) + ";" );
-        getterSc.unindent();
-        getterSc.add( "}" );
-        for (ModelField field : modelClass.getAllFields())
+        if ( hasJavaSourceSupport( 7 ) )
         {
-            getterSc.add( "case \"" + field.getName() + "\" :" );
+            getterSc.add( "switch ( ( String ) key )" );
             getterSc.add( "{" );
             getterSc.indent();
-            getterSc.add( "return " + field.getName() + capitalise( singular( locationField ) ) + ";" );
+            getterSc.add( "case \"\" :" );
+            getterSc.add( "{" );
+            getterSc.indent();
+            getterSc.add( "return this." + singular( locationField ) + ";" );
             getterSc.unindent();
             getterSc.add( "}" );
-        }
-        getterSc.add( "default :" );
-        getterSc.add( "{" );
-        getterSc.indent();
-        if (hasModeSuperClass)
-        {
-            getterSc.add( "return super.get" + capitalise( singular( locationField ) ) + "( key );" );
+            for (ModelField field : modelClass.getAllFields())
+            {
+                getterSc.add( "case \"" + field.getName() + "\" :" );
+                getterSc.add( "{" );
+                getterSc.indent();
+                getterSc.add( "return " + field.getName() + capitalise( singular( locationField ) ) + ";" );
+                getterSc.unindent();
+                getterSc.add( "}" );
+            }
+            getterSc.add( "default :" );
+            getterSc.add( "{" );
+            getterSc.indent();
+            if (hasModeSuperClass)
+            {
+                getterSc.add( "return super.get" + capitalise( singular( locationField ) ) + "( key );" );
+            }
+            else
+            {
+                getterSc.add( "return getOther" + capitalise( singular( locationField ) ) + "( key );" );
+            }
+            getterSc.unindent();
+            getterSc.add( "}" );
+            getterSc.add( "}" );
         }
         else
         {
-            getterSc.add( "return getOther" + capitalise( singular( locationField ) ) + "( key );" );
+            getterSc.add( "if ( \"\".equals( key ) )" );
+            getterSc.add( "{" );
+            getterSc.indent();
+            getterSc.add( "return this." + singular( locationField ) + ";" );
+            getterSc.unindent();
+            getterSc.add( "}" );
+            for (ModelField field : modelClass.getAllFields())
+            {
+                getterSc.add( "else if ( \"" + field.getName() + "\".equals( key ) )" );
+                getterSc.add( "{" );
+                getterSc.indent();
+                getterSc.add( "return " + field.getName() + capitalise( singular( locationField ) ) + ";" );
+                getterSc.unindent();
+                getterSc.add( "}" );
+            }
+            getterSc.add( "else" );
+            getterSc.add( "{" );
+            getterSc.indent();
+            if (hasModeSuperClass)
+            {
+                getterSc.add( "return super.get" + capitalise( singular( locationField ) ) + "( key );" );
+            }
+            else
+            {
+                getterSc.add( "return getOther" + capitalise( singular( locationField ) ) + "( key );" );
+            }
+            getterSc.unindent();
+            getterSc.add( "}" );
         }
-        getterSc.unindent();
-        getterSc.add( "}" );
-        getterSc.add( "}" );
         getterSc.unindent();
         getterSc.add( "}" );
         getterSc.add( "else" );
@@ -929,41 +966,80 @@ public class JavaModelloGenerator
         setterSc.add( "if ( key instanceof String )" );
         setterSc.add( "{" );
         setterSc.indent();
-        setterSc.add( "switch ( ( String ) key )" );
-        setterSc.add( "{" );
-        setterSc.indent();
-        setterSc.add( "case \"\" :" );
-        setterSc.add( "{" );
-        setterSc.indent();
-        setterSc.add( "this." + singular( locationField ) + " = " + singular(locationField) + ";" );
-        setterSc.add("return;");
-        setterSc.unindent();
-        setterSc.add( "}" );
-        for (ModelField field : modelClass.getAllFields())
+        if ( hasJavaSourceSupport( 7 ) )
         {
-            setterSc.add( "case \"" + field.getName()+ "\" :" );
+            setterSc.add( "switch ( ( String ) key )" );
             setterSc.add( "{" );
             setterSc.indent();
-            setterSc.add( field.getName() + capitalise( singular( locationField ) ) + " = " + singular(locationField) + ";" );
+            setterSc.add( "case \"\" :" );
+            setterSc.add( "{" );
+            setterSc.indent();
+            setterSc.add( "this." + singular( locationField ) + " = " + singular(locationField) + ";" );
+            setterSc.add("return;");
+            setterSc.unindent();
+            setterSc.add( "}" );
+            for (ModelField field : modelClass.getAllFields())
+            {
+                setterSc.add( "case \"" + field.getName()+ "\" :" );
+                setterSc.add( "{" );
+                setterSc.indent();
+                setterSc.add( field.getName() + capitalise( singular( locationField ) ) + " = " + singular(locationField) + ";" );
+                setterSc.add("return;");
+                setterSc.unindent();
+                setterSc.add( "}" );
+            }
+            setterSc.add( "default :" );
+            setterSc.add( "{" );
+            setterSc.indent();
+            if (hasModeSuperClass)
+            {
+                setterSc.add( "super.set" + capitalise( singular( locationField ) ) + "( key, " + singular(locationField) + " );" );
+            }
+            else
+            {
+                setterSc.add( "setOther" + capitalise( singular( locationField ) ) + "( key, " + singular(locationField) + " );" );
+            }
+            setterSc.add("return;");
+            setterSc.unindent();
+            setterSc.add( "}" );
+            setterSc.unindent();
+            setterSc.add( "}" );
+        }
+        else
+        {
+            setterSc.add( "if ( \"\".equals( key ) )" );
+            setterSc.add( "{" );
+            setterSc.indent();
+            setterSc.add( "this." + singular( locationField ) + " = " + singular(locationField) + ";" );
+            setterSc.add("return;");
+            setterSc.unindent();
+            setterSc.add( "}" );
+            for ( ModelField field : modelClass.getAllFields() )
+            {
+                setterSc.add( "else if ( \"" + field.getName()+ "\".equals( key ) )" );
+                setterSc.add( "{" );
+                setterSc.indent();
+                setterSc.add( field.getName() + capitalise( singular( locationField ) ) + " = " + singular(locationField) + ";" );
+                setterSc.add("return;");
+                setterSc.unindent();
+                setterSc.add( "}" );
+            }
+            setterSc.add( "else" );
+            setterSc.add( "{" );
+            setterSc.indent();
+            if (hasModeSuperClass)
+            {
+                setterSc.add( "super.set" + capitalise( singular( locationField ) ) + "( key, " + singular(locationField) + " );" );
+            }
+            else
+            {
+                setterSc.add( "setOther" + capitalise( singular( locationField ) ) + "( key, " + singular(locationField) + " );" );
+            }
             setterSc.add("return;");
             setterSc.unindent();
             setterSc.add( "}" );
         }
-        setterSc.add( "default :" );
-        setterSc.add( "{" );
-        setterSc.indent();
-        if (hasModeSuperClass)
-        {
-            setterSc.add( "super.set" + capitalise( singular( locationField ) ) + "( key, " + singular(locationField) + " );" );
-        }
-        else
-        {
-            setterSc.add( "setOther" + capitalise( singular( locationField ) ) + "( key, " + singular(locationField) + " );" );
-        }
-        setterSc.add("return;");
-        setterSc.unindent();
-        setterSc.add( "}" );
-        setterSc.add( "}" );
+
         setterSc.unindent();
         setterSc.add( "}" );
         setterSc.add( "else" );
@@ -1045,6 +1121,7 @@ public class JavaModelloGenerator
             sc.add( "this." + source.getName() + " = " + source.getName() + ";" );
         }
 
+        boolean useJava5 = hasJavaSourceSupport( 5 );
         JType fieldType = new JMapType( "java.util.Map", new JType(locationClass.getName()), useJava5 );
         JType fieldImpl = new JMapType( "java.util.LinkedHashMap", new JType( locationClass.getName() ), useJava5 );
 
@@ -1299,6 +1376,7 @@ public class JavaModelloGenerator
             type = new JClass( baseType );
         }
 
+        boolean useJava5 = hasJavaSourceSupport( 5 );
         if ( modelField.isArray() )
         {
             type = new JArrayType( type, useJava5 );
@@ -1560,6 +1638,8 @@ public class JavaModelloGenerator
 
         JavaAssociationMetadata javaAssociationMetadata = getJavaAssociationMetadata( modelAssociation );
 
+        boolean useJava5 = hasJavaSourceSupport( 5 );
+
         if ( modelAssociation.isManyMultiplicity() )
         {
             JType componentType = getComponentType( modelAssociation, javaAssociationMetadata );
@@ -1675,7 +1755,7 @@ public class JavaModelloGenerator
         {
             ModelDefault modelDefault = getModel().getDefault( modelAssociation.getType() );
 
-            if ( useJava5 )
+            if ( hasJavaSourceSupport( 5 ) )
             {
                 defaultValue =
                     StringUtils.replace( modelDefault.getValue(), "<?>", "<" + componentType.getName() + ">" );
@@ -2097,7 +2177,7 @@ public class JavaModelloGenerator
             else if ( modelAssociation.isManyMultiplicity() && modelAssociation.isGenericType() )
             {
                 JType componentType = getComponentType( modelAssociation, javaAssociationMetadata );
-                type = new JCollectionType( modelAssociation.getType(), componentType, useJava5 );
+                type = new JCollectionType( modelAssociation.getType(), componentType,hasJavaSourceSupport( 5 ) );
             }
             else if ( useTo )
             {
@@ -2291,6 +2371,7 @@ public class JavaModelloGenerator
         if ( modelAssociation.isManyMultiplicity() )
         {
             JType componentType = getComponentType( modelAssociation, javaAssociationMetadata );
+            boolean useJava5 = hasJavaSourceSupport( 5 );
 
             String defaultValue = getDefaultValue( modelAssociation, componentType );
 
@@ -2386,6 +2467,8 @@ public class JavaModelloGenerator
             String itemType;
             String targetField = modelAssociation.getName();
 
+            boolean useJava5 = hasJavaSourceSupport( 5 );
+
             if ( StringUtils.isNotEmpty( javaAssociationMetadata.getInterfaceName() ) )
             {
                 itemType = javaAssociationMetadata.getInterfaceName();
@@ -2472,7 +2555,7 @@ public class JavaModelloGenerator
 
     private void appendEntryMethod( String type, String method, StringBuilder target, ModelAssociation modelAssociation )
     {
-        if ( !useJava5 || modelAssociation.getType().equals( ModelDefault.PROPERTIES ) )
+        if ( !hasJavaSourceSupport( 5 ) || modelAssociation.getType().equals( ModelDefault.PROPERTIES ) )
         {
             target.append( '(' ).append( type ).append( ") " );
         }

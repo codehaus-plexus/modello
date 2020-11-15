@@ -104,18 +104,18 @@ public class ModelloCli
 
         parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, packageWithVersion );
 
-        String useJava5 = args[ 5 ];
+        String javaSource = args[ 5 ];
 
-        if ( StringUtils.isEmpty( useJava5 ) )
+        if ( StringUtils.isEmpty( javaSource ) )
         {
-            System.err.println( "Missing required parameter: use Java 5" );
+            System.err.println( "Missing required parameter: Java Source" );
 
             usage();
 
             System.exit( 1 );
         }
 
-        parameters.setProperty( ModelloParameterConstants.USE_JAVA5, useJava5 );
+        parameters.setProperty( ModelloParameterConstants.OUTPUT_JAVA_SOURCE, javaSource );
 
         if ( args.length > 6 )
         {
@@ -130,6 +130,6 @@ public class ModelloCli
     private static void usage()
     {
         System.err.println( "Usage: modello <model> <outputType> <output directory> <modelVersion> <packageWithVersion>"
-                            + "<useJava5> [<encoding>]" );
+                            + "<javaSource> [<encoding>]" );
     }
 }

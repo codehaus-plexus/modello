@@ -25,6 +25,7 @@ package org.codehaus.modello;
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
+import java.util.Optional;
 import java.util.Properties;
 
 import org.codehaus.plexus.PlexusTestCase;
@@ -77,18 +78,19 @@ public abstract class AbstractModelloGeneratorTest
 
     protected Properties getModelloParameters( String version )
     {
-        Properties parameters = getModelloParameters( version, true );
+        Properties parameters = getModelloParameters( version, null );
 
         return parameters;
     }
 
-    protected Properties getModelloParameters( String version, boolean useJava5 )
+    protected Properties getModelloParameters( String version, Integer javaSource )
     {
         Properties parameters = getModelloParameters();
 
         parameters.setProperty( "modello.package.with.version", Boolean.toString( false ) );
         parameters.setProperty( "modello.version", version );
-        parameters.setProperty( "modello.output.useJava5", Boolean.toString( useJava5 ) );
+        Optional.ofNullable( javaSource ).ifPresent( a -> parameters.setProperty( "modello.output.java.source",
+                                                                                  Integer.toString( a ) ) );
 
         return parameters;
     }

@@ -46,10 +46,10 @@ public class AnnotationsJava4GeneratorTest
 
         Model model = modello.loadModel( getXmlResourceReader( "/models/annotations.mdo" ) );
 
-        Properties parameters = getModelloParameters( "1.0.0", false );
+        Properties parameters = getModelloParameters( "1.0.0" );
 
         modello.generate( model, "java", parameters );
 
-        compileGeneratedSources( false );
+        compileGeneratedSources();
     }
 }

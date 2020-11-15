@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.Properties;
 
 import org.codehaus.modello.ModelloException;
@@ -67,7 +68,7 @@ import org.codehaus.plexus.util.WriterFactory;
 public abstract class AbstractJavaModelloGenerator
     extends AbstractModelloGenerator
 {
-    protected boolean useJava5 = false;
+    private Optional<Integer> javaSource;
 
     protected boolean domAsXpp3 = true;
 
@@ -76,7 +77,7 @@ public abstract class AbstractJavaModelloGenerator
     {
         super.initialize( model, parameters );
 
-        useJava5 = Boolean.valueOf( getParameter( parameters, ModelloParameterConstants.USE_JAVA5, "false" ) );
+        javaSource = Optional.ofNullable( getParameter( parameters, ModelloParameterConstants.OUTPUT_JAVA_SOURCE, null ) ).map( Integer::valueOf );
 
         domAsXpp3 = !"false".equals( parameters.getProperty( ModelloParameterConstants.DOM_AS_XPP3 ) );
     }
@@ -125,12 +126,17 @@ public abstract class AbstractJavaModelloGenerator
     {
         interfaze.setHeader( getHeaderComment() );
     }
+    
+    protected final boolean hasJavaSourceSupport( int source )
+    {
+        return javaSource.map( i -> i >= source ).orElse( false );
+    }
 
     protected void suppressAllWarnings( Model objectModel, JStructure structure )
     {
         JavaModelMetadata javaModelMetadata = (JavaModelMetadata) objectModel.getMetadata( JavaModelMetadata.ID );
 
-        if ( useJava5 && javaModelMetadata.isSuppressAllWarnings() )
+        if ( hasJavaSourceSupport( 5 ) && javaModelMetadata.isSuppressAllWarnings() )
         {
             structure.appendAnnotation( "@SuppressWarnings( \"all\" )" );
         }
@@ -177,7 +183,7 @@ public abstract class AbstractJavaModelloGenerator
     {
         String value = association.getDefaultValue();
 
-        if ( useJava5 )
+        if ( hasJavaSourceSupport( 5 ) )
         {
             value = StringUtils.replaceOnce( StringUtils.replaceOnce( value, "/*", "" ), "*/", "" );
         }
@@ -224,6 +230,7 @@ public abstract class AbstractJavaModelloGenerator
         }
         else if ( value != null && value.length() > 0 )
         {
+            boolean useJava5 = hasJavaSourceSupport( 5 );
             if ( "Character".equals( type ) && !value.contains( type ) )
             {
                 return newPrimitiveWrapper( type, "'" + escapeStringLiteral( value ) + "'", useJava5 );

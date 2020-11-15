@@ -51,11 +51,11 @@ public class FeaturesJava5GeneratorTest
 
         Model model = modello.loadModel( getXmlResourceReader( "/features.mdo" ) );
 
-        Properties parameters = getModelloParameters( "2.0.0", true );
+        Properties parameters = getModelloParameters( "2.0.0", 5 );
 
         modello.generate( model, "java", parameters );
 
-        compileGeneratedSources( "features", true );
+        compileGeneratedSources( "features", 5 );
 
         verifyCompiledGeneratedSources( "JavaVerifier" );
     }

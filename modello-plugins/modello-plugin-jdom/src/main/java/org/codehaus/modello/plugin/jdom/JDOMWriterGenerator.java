@@ -89,6 +89,7 @@ public class JDOMWriterGenerator
         jClass.addImport( "java.io.Writer" );
         jClass.addImport( "java.text.DateFormat" );
         jClass.addImport( "java.util.ArrayList" );
+        jClass.addImport( "java.util.Arrays" );
         jClass.addImport( "java.util.Collection" );
         jClass.addImport( "java.util.Iterator" );
         jClass.addImport( "java.util.List" );
@@ -384,9 +385,20 @@ public class JDOMWriterGenerator
         findRSDom2.getModifiers().makeProtected();
         sc = findRSDom2.getSourceCode();
         
-        sc.add( "for( String attributeName : parentDom.getAttributeNames() )" );
-        sc.add( "{" );
-        sc.indent();
+        if ( hasJavaSourceSupport( 5 ) )
+        {
+            sc.add( "for( String attributeName : parentDom.getAttributeNames() )" );
+            sc.add( "{" );
+            sc.indent();
+        }
+        else
+        {
+            sc.add( "for ( Iterator i = Arrays.asList( parentDom.getAttributeNames() ).iterator(); i.hasNext(); )" );
+            sc.add( "{" );
+            sc.indent();
+
+            sc.add( "String attributeName = (String) i.next();" );
+        }
         sc.add( "String[] attrDetails = attributeName.split( \":\", 2 );" );
         sc.add( "if ( attrDetails.length == 2 )" );
         sc.add( "{" );

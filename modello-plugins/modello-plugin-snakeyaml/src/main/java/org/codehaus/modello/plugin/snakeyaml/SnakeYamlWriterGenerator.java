@@ -252,6 +252,8 @@ public class SnakeYamlWriterGenerator
             writeScalar( sc, getValue( contentField.getType(), contentValue, xmlFieldMetadata ) );
         }
 
+        final boolean useJava5 = hasJavaSourceSupport( 5 );
+
         // XML tags
         for ( ModelField field : modelFields )
         {

@@ -47,9 +47,10 @@ public class ModelloParameterConstants
     public static final String ENCODING = "modello.output.encoding";
 
     /**
-     * @since 1.0
+     * Replaces USE_JAVA5 
+     * @since 2.0
      */
-    public static final String USE_JAVA5 = "modello.output.useJava5";
+    public static final String OUTPUT_JAVA_SOURCE = "modello.output.java.source";
 
     public static final String OUTPUT_XDOC_FILE_NAME = "modello.output.xdoc.file";
 

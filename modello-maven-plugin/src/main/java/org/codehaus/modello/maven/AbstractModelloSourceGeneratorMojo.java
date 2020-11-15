@@ -45,21 +45,21 @@ public abstract class AbstractModelloSourceGeneratorMojo
      *
      * @since 1.0-alpha-19
      */
-    @Parameter( property = "encoding", defaultValue = "${project.build.sourceEncoding}" )
+    @Parameter( defaultValue = "${project.build.sourceEncoding}" )
     private String encoding;
 
     /**
      * Generate Java 5 sources, with generic collections.
      * @since 1.0
      */
-    @Parameter( property = "useJava5", defaultValue = "false" )
-    private boolean useJava5;
+    @Parameter( defaultValue = "${maven.compiler.source}" )
+    private Integer javaSource;
 
     /**
      * Generate DOM content as plexus-utils <code>Xpp3Dom</code> objects instead of <code>org.w3c.dom.Element</code>.
      * @since 1.6
      */
-    @Parameter( property = "domAsXpp3", defaultValue = "true" )
+    @Parameter( defaultValue = "true" )
     private boolean domAsXpp3;
 
     @Override
@@ -88,7 +88,10 @@ public abstract class AbstractModelloSourceGeneratorMojo
             parameters.setProperty( ModelloParameterConstants.ENCODING, encoding );
         }
 
-        parameters.setProperty( ModelloParameterConstants.USE_JAVA5, Boolean.toString( useJava5 ) );
+        if ( javaSource != null )
+        {
+            parameters.setProperty( ModelloParameterConstants.OUTPUT_JAVA_SOURCE, Integer.toString( javaSource ) );
+        }
 
         parameters.setProperty( ModelloParameterConstants.DOM_AS_XPP3, Boolean.toString( domAsXpp3 ) );
     }

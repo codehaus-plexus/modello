@@ -84,14 +84,14 @@ public class Xpp3GeneratorTest
         assertEquals( "builder", xml.getTagName() );
 
         // now generate sources and test them
-        Properties parameters = getModelloParameters( "4.0.0" );
+        Properties parameters = getModelloParameters( "4.0.0", 5 );
 
         modello.generate( model, "java", parameters );
         modello.generate( model, "xpp3-writer", parameters );
         modello.generate( model, "xpp3-reader", parameters );
 
         addDependency( "xmlunit", "xmlunit" );
-        compileGeneratedSources();
+        compileGeneratedSources( 5 );
 
         // TODO: see why without this, version system property is set to "2.4.1" value after verify
         System.setProperty( "version", getModelloVersion() );

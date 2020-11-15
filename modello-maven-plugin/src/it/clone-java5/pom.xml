@@ -53,7 +53,7 @@
         <version>@project.version@</version>
         <configuration>
           <version>1.0.0</version>
-          <useJava5>true</useJava5>
+          <javaSource>5</javaSource>
           <models>
             <model>src/main/mdo/thing.mdo</model>
           </models>

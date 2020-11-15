@@ -48,7 +48,7 @@ public class StandaloneReadXpp3GeneratorTest
         modello.generate( model, "java", parameters );
         modello.generate( model, "xpp3-reader", parameters );
 
-        compileGeneratedSources();
+        compileGeneratedSources( 5 ); // enhanced for loops in Xpp3StandaloneReadVerifier
 
         verifyCompiledGeneratedSources( "org.codehaus.modello.generator.xml.xpp3.Xpp3StandaloneReadVerifier" );
     }
@@ -60,12 +60,12 @@ public class StandaloneReadXpp3GeneratorTest
 
             Model model = modello.loadModel( getXmlResourceReader( "/standaloneRead.mdo" ) );
 
-            Properties parameters = getModelloParameters( "1.0.0", true );
+            Properties parameters = getModelloParameters( "1.0.0", 5 );
 
             modello.generate( model, "java", parameters );
             modello.generate( model, "xpp3-reader", parameters );
 
-            compileGeneratedSources();
+            compileGeneratedSources( 5 );
 
             verifyCompiledGeneratedSources( "org.codehaus.modello.generator.xml.xpp3.Xpp3StandaloneReadVerifier" );
         }

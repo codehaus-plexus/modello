@@ -51,13 +51,13 @@ public class AnnotationsJavaGeneratorTest
 
         Model model = modello.loadModel( getXmlResourceReader( "/models/annotations.mdo" ) );
 
-        Properties parameters = getModelloParameters( "1.0.0", true );
+        Properties parameters = getModelloParameters( "1.0.0", 5 );
 
         modello.generate( model, "java", parameters );
 
         addDependency( "javax.xml.bind", "jaxb-api" );
         addDependency( "javax.persistence", "persistence-api" );
-        compileGeneratedSources( true );
+        compileGeneratedSources( 5 );
 
         verifyCompiledGeneratedSources( "AnnotationsVerifier" );
     }

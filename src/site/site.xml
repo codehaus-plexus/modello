@@ -43,6 +43,7 @@
       <item name="Location Tracking" href="location-tracking.html" />
       <item name="Maven Plugin" href="modello-maven-plugin/" />
       <item name="Release Notes" href="release-notes.html"/>
+      <item name="Migration Guide" href="migration-guide.html"/>
     </menu>
 
     <menu ref="modules" />

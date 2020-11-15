@@ -42,7 +42,7 @@ public class BiDirectionalOverrideJavaGeneratorTest
 
         Model model = modello.loadModel( getXmlResourceReader( "/models/bidirectional-override.mdo" ) );
 
-        Properties parameters = getModelloParameters( "1.0.0", false );
+        Properties parameters = getModelloParameters( "1.0.0" );
 
         modello.generate( model, "java", parameters );
 

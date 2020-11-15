@@ -712,6 +712,8 @@ public class Xpp3ReaderGenerator
 
                     JavaFieldMetadata javaFieldMetadata = (JavaFieldMetadata) association.getMetadata( JavaFieldMetadata.ID );
 
+                    final boolean useJava5 = hasJavaSourceSupport( 5 );
+
                     String adder;
 
                     if ( wrappedItems )
@@ -994,7 +996,7 @@ public class Xpp3ReaderGenerator
         writeNewLocation( null, sc );
         if ( locationTracker != null && "?".equals( locationKey ) )
         {
-        	if ( useJava5 )
+        	if ( hasJavaSourceSupport( 5 ) )
         	{
         		sc.add( type + " _key;" );
         	}

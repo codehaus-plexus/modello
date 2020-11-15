@@ -265,14 +265,7 @@ public abstract class AbstractModelloGenerator
 
     protected String getParameter( Properties parameters, String name, String defaultValue )
     {
-        String value = parameters.getProperty( name );
-
-        if ( value == null )
-        {
-            return defaultValue;
-        }
-
-        return value;
+        return parameters.getProperty( name, defaultValue );
     }
 
     public void contextualize( Context ctx )

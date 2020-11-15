@@ -40,11 +40,11 @@ public class BooleanTypeXpp3GeneratorTest
 
         Model model = modello.loadModel( getXmlResourceReader( "/boolean.mdo" ) );
 
-        Properties parameters = getModelloParameters( "1.0.0" );
+        Properties parameters = getModelloParameters( "1.0.0", 5 ); // autoboxing
 
         modello.generate( model, "java", parameters );
         modello.generate( model, "xpp3-reader", parameters );
 
-        compileGeneratedSources();
+        compileGeneratedSources( 5 );
     }
 }

@@ -137,20 +137,67 @@ public abstract class AbstractModelloJavaGeneratorTest
         compileGeneratedSources( getName() );
     }
 
-    protected void compileGeneratedSources( boolean useJava5 )
-        throws IOException, CompilerException
+    protected void compileGeneratedSources( int minJavaSource )
+                    throws IOException, CompilerException
     {
-        compileGeneratedSources( getName(), useJava5 );
+        compileGeneratedSources( getName(), minJavaSource );
     }
 
     protected void compileGeneratedSources( String verifierId )
         throws IOException, CompilerException
     {
-        compileGeneratedSources( verifierId, true );
+        String runtimeVersion = System.getProperty( "java.specification.version" );
+        if ( runtimeVersion.startsWith( "1." ) )
+        {
+            runtimeVersion = runtimeVersion.substring( 2 );
+        }
+        int runtimeSource = Integer.parseInt( runtimeVersion );
+        
+        String javaSource;
+        if ( runtimeSource <= 8 )
+        {
+            javaSource = "1.3";
+        }
+        else if ( runtimeSource <= 11 )
+        {
+            javaSource = "6";
+        }
+        else 
+        {
+            javaSource = "7";
+        }
+        
+        compileGeneratedSources( verifierId, javaSource );
     }
 
-    @SuppressWarnings("unchecked")
-    protected void compileGeneratedSources( String verifierId, boolean useJava5 )
+    protected void compileGeneratedSources( String verifierId, int minJavaSource )
+        throws IOException, CompilerException
+    {
+        String runtimeVersion = System.getProperty( "java.specification.version" );
+        if ( runtimeVersion.startsWith( "1." ) )
+        {
+            runtimeVersion = runtimeVersion.substring( 2 );
+        }
+        int runtimeSource = Integer.parseInt( runtimeVersion );
+        
+        String javaSource;
+        if ( runtimeSource <= 8 )
+        {
+            javaSource = "1." + Math.max( minJavaSource, 3 );
+        }
+        else if ( runtimeSource <= 11 )
+        {
+            javaSource = Integer.toString( Math.max( minJavaSource, 6) );
+        }
+        else 
+        {
+            javaSource = Integer.toString( Math.max( minJavaSource, 7) );;
+        }
+        
+        compileGeneratedSources( verifierId, javaSource );
+    }
+    
+    private void compileGeneratedSources( String verifierId, String javaSource )
         throws IOException, CompilerException
     {
         File generatedSources = getOutputDirectory();
@@ -188,20 +235,19 @@ public abstract class AbstractModelloJavaGeneratorTest
         configuration.setOutputLocation( destinationDirectory.getAbsolutePath() );
         configuration.setDebug( true );
         
-        configuration.setSourceVersion( "1.7" );
-        configuration.setTargetVersion( "1.7" );
-        
+        configuration.setSourceVersion( javaSource );
+        configuration.setTargetVersion( javaSource );
 
         CompilerResult result = compiler.performCompile( configuration );
 
         List<CompilerMessage> messages = result.getCompilerMessages();
 
-        for ( CompilerMessage message : messages )
-        {
-            System.out.println(
-                message.getFile() + "[" + message.getStartLine() + "," + message.getStartColumn() + "]: "
-                    + message.getMessage() );
-        }
+//        for ( CompilerMessage message : messages )
+//        {
+//            System.out.println(
+//                message.getFile() + "[" + message.getStartLine() + "," + message.getStartColumn() + "]: "
+//                    + message.getMessage() );
+//        }
 
         List<CompilerMessage> errors = new ArrayList<CompilerMessage>( 0 );
         for ( CompilerMessage compilerMessage : result.getCompilerMessages() )

@@ -128,7 +128,14 @@ public class SaxWriterGenerator
 
         JConstructor saxWriterConstructor = new JConstructor( jClass );
         JSourceCode sc = saxWriterConstructor.getSourceCode();
-        sc.add( "transformerFactory.setAttribute( \"indent-number\", 2 );" );
+        if ( hasJavaSourceSupport( 5 ) )
+        {
+            sc.add( "transformerFactory.setAttribute( \"indent-number\", 2 );" );
+        }
+        else
+        {
+            sc.add( "transformerFactory.setAttribute( \"indent-number\", new Integer( 2 ) );" );
+        }
 
         jClass.addConstructor( saxWriterConstructor );
 

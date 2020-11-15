@@ -586,7 +586,7 @@ public class JacksonReaderGenerator
                         }
                         else
                         {
-                            key = ( useJava5 ? "Integer.valueOf" : "new java.lang.Integer" ) + "( " + associationName
+                            key = ( hasJavaSourceSupport( 5 ) ? "Integer.valueOf" : "new java.lang.Integer" ) + "( " + associationName
                                 + ".size() )";
                         }
                         writePrimitiveField( association, association.getTo(), associationName, LOCATION_VAR + "s", key,
