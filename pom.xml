@@ -312,9 +312,15 @@
         <version>${project.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.codehaus.plexus</groupId>
-        <artifactId>plexus-container-default</artifactId>
-        <version>1.7</version>
+        <groupId>org.eclipse.sisu</groupId>
+        <artifactId>org.eclipse.sisu.plexus</artifactId>
+        <version>0.3.4</version>
+      </dependency>
+      <dependency>
+        <groupId>org.sonatype.sisu</groupId>
+        <artifactId>sisu-guice</artifactId>
+        <version>4.2.0</version>
+        <classifier>no_aop</classifier>
       </dependency>
       <dependency>
         <groupId>org.codehaus.plexus</groupId>
