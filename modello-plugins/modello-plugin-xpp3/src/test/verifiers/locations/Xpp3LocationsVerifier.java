@@ -22,7 +22,10 @@ package org.codehaus.modello.generator.xml.xpp3;
  * SOFTWARE.
  */
 
-import junit.framework.Assert;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
+
 import org.codehaus.modello.test.locations.Item;
 import org.codehaus.modello.test.locations.Location;
 import org.codehaus.modello.test.locations.Model;

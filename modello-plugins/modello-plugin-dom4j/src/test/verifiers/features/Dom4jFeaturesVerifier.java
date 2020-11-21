@@ -22,7 +22,10 @@ package org.codehaus.modello.generator.xml.dom4j;
  * SOFTWARE.
  */
 
-import junit.framework.Assert;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import org.codehaus.modello.test.features.Features;
 import org.codehaus.modello.test.features.io.dom4j.ModelloFeaturesTestDom4jReader;
 import org.codehaus.modello.test.features.io.dom4j.ModelloFeaturesTestDom4jWriter;

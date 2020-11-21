@@ -22,17 +22,18 @@ package org.codehaus.modello.verifier;
  * SOFTWARE.
  */
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
 import java.lang.reflect.Method;
 
-import junit.framework.Assert;
-
 import org.codehaus.plexus.util.ReaderFactory;
 
 public abstract class Verifier
-    extends Assert
 {
     public abstract void verify()
         throws Throwable;

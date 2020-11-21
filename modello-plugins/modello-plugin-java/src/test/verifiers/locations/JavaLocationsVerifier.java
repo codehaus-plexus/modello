@@ -20,7 +20,8 @@
  * SOFTWARE.
  */
 
-import junit.framework.Assert;
+import static org.junit.Assert.assertTrue;
+
 import org.codehaus.modello.test.locations.Item;
 import org.codehaus.modello.test.locations.Location;
 import org.codehaus.modello.test.locations.LocationTracker;

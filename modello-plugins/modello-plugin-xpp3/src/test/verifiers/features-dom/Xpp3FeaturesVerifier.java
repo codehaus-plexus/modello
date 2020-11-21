@@ -22,7 +22,10 @@ package org.codehaus.modello.generator.xml.xpp3;
  * SOFTWARE.
  */
 
-import junit.framework.Assert;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import org.codehaus.modello.test.features.Features;
 import org.codehaus.modello.test.features.io.xpp3.ModelloFeaturesTestXpp3Reader;
 import org.codehaus.modello.test.features.io.xpp3.ModelloFeaturesTestXpp3Writer;

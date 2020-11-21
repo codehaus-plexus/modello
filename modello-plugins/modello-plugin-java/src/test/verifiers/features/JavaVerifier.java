@@ -20,6 +20,13 @@
  * SOFTWARE.
  */
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+
 import org.codehaus.modello.OrderedProperties;
 import org.codehaus.modello.verifier.Verifier;
 import org.codehaus.modello.verifier.VerifierException;
@@ -57,8 +64,6 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import junit.framework.Assert;
 
 /**
  * @author Herve Boutemy
@@ -126,17 +131,17 @@ public class JavaVerifier
         throws NoSuchFieldException, NoSuchMethodException
     {
         Field field = clazz.getDeclaredField( attributeName );
-        Assert.assertEquals( attributeName + " attribute type", type, field.getType() );
-        Assert.assertTrue( attributeName + " attribute should be private", Modifier.isPrivate( field.getModifiers() ) );
+        assertEquals( attributeName + " attribute type", type, field.getType() );
+        assertTrue( attributeName + " attribute should be private", Modifier.isPrivate( field.getModifiers() ) );
 
         Method getter = clazz.getMethod( getterName, (Class[]) null );
-        Assert.assertNotNull( getterName + "() method", getter );
-        Assert.assertEquals( getterName + "() method return type", getterAndSetterType, getter.getReturnType() );
-        Assert.assertTrue( getterName + "() method should be public", Modifier.isPublic( getter.getModifiers() ) );
+        assertNotNull( getterName + "() method", getter );
+        assertEquals( getterName + "() method return type", getterAndSetterType, getter.getReturnType() );
+        assertTrue( getterName + "() method should be public", Modifier.isPublic( getter.getModifiers() ) );
 
         Method setter = clazz.getMethod( setterName, new Class[] { getterAndSetterType } );
-        Assert.assertNotNull( setterName + "( " + type.getName() + " ) method", setter );
-        Assert.assertTrue( setterName + "( " + type.getName() + " ) method should be public",
+        assertNotNull( setterName + "( " + type.getName() + " ) method", setter );
+        assertTrue( setterName + "( " + type.getName() + " ) method should be public",
                            Modifier.isPublic( setter.getModifiers() ) );
     }
 
@@ -193,60 +198,60 @@ public class JavaVerifier
     public void verifyDefaultValues()
     {
         SimpleTypes simple = new SimpleTypes();
-        Assert.assertEquals( "primitiveBoolean", true           , simple.isPrimitiveBoolean() );
-        Assert.assertEquals( "primitiveByte"   , 12             , simple.getPrimitiveByte() );
-        Assert.assertEquals( "primitiveChar"   , 'H'            , simple.getPrimitiveChar() );
-        Assert.assertEquals( "primitiveShort"  , (short) 1212   , simple.getPrimitiveShort() );
-        Assert.assertEquals( "primitiveInt"    , 121212         , simple.getPrimitiveInt() );
-        Assert.assertEquals( "primitiveLong"   , 1234567890123L , simple.getPrimitiveLong() );
-        Assert.assertEquals( "primitiveFloat"  , 12.12f         , simple.getPrimitiveFloat(), 0f );
-        Assert.assertEquals( "primitiveDouble" , 12.12          , simple.getPrimitiveDouble(), 0 );
-        Assert.assertEquals( "objectBoolean"   , Boolean.TRUE   , simple.isObjectBoolean() );
-        Assert.assertEquals( "objectByte"      , 12             , simple.getObjectByte().byteValue() );
-        Assert.assertEquals( "objectChar"      , 'H'            , simple.getObjectCharacter().charValue() );
-        Assert.assertEquals( "objectShort"     , (short) 1212   , simple.getObjectShort().shortValue() );
-        Assert.assertEquals( "objectInt"       , 121212         , simple.getObjectInteger().intValue() );
-        Assert.assertEquals( "objectLong"      , 1234567890123L , simple.getObjectLong().longValue() );
-        Assert.assertEquals( "objectFloat"     , 12.12f         , simple.getObjectFloat().floatValue(), 0f );
-        Assert.assertEquals( "objectDouble"    , 12.12          , simple.getObjectDouble().doubleValue(), 0 );
-        Assert.assertEquals( "objectString"    , "default value", simple.getObjectString() );
+        assertEquals( "primitiveBoolean", true           , simple.isPrimitiveBoolean() );
+        assertEquals( "primitiveByte"   , 12             , simple.getPrimitiveByte() );
+        assertEquals( "primitiveChar"   , 'H'            , simple.getPrimitiveChar() );
+        assertEquals( "primitiveShort"  , (short) 1212   , simple.getPrimitiveShort() );
+        assertEquals( "primitiveInt"    , 121212         , simple.getPrimitiveInt() );
+        assertEquals( "primitiveLong"   , 1234567890123L , simple.getPrimitiveLong() );
+        assertEquals( "primitiveFloat"  , 12.12f         , simple.getPrimitiveFloat(), 0f );
+        assertEquals( "primitiveDouble" , 12.12          , simple.getPrimitiveDouble(), 0 );
+        assertEquals( "objectBoolean"   , Boolean.TRUE   , simple.isObjectBoolean() );
+        assertEquals( "objectByte"      , 12             , simple.getObjectByte().byteValue() );
+        assertEquals( "objectChar"      , 'H'            , simple.getObjectCharacter().charValue() );
+        assertEquals( "objectShort"     , (short) 1212   , simple.getObjectShort().shortValue() );
+        assertEquals( "objectInt"       , 121212         , simple.getObjectInteger().intValue() );
+        assertEquals( "objectLong"      , 1234567890123L , simple.getObjectLong().longValue() );
+        assertEquals( "objectFloat"     , 12.12f         , simple.getObjectFloat().floatValue(), 0f );
+        assertEquals( "objectDouble"    , 12.12          , simple.getObjectDouble().doubleValue(), 0 );
+        assertEquals( "objectString"    , "default value", simple.getObjectString() );
 
-        Assert.assertEquals( "primitiveBoolean", false          , simple.isPrimitiveBooleanNoDefault() );
-        Assert.assertEquals( "primitiveByte"   , 0              , simple.getPrimitiveByteNoDefault() );
-        Assert.assertEquals( "primitiveChar"   , '\0'           , simple.getPrimitiveCharNoDefault() );
-        Assert.assertEquals( "primitiveShort"  , 0              , simple.getPrimitiveShortNoDefault() );
-        Assert.assertEquals( "primitiveInt"    , 0              , simple.getPrimitiveIntNoDefault() );
-        Assert.assertEquals( "primitiveLong"   , 0              , simple.getPrimitiveLongNoDefault() );
-        Assert.assertEquals( "primitiveFloat"  , 0              , simple.getPrimitiveFloatNoDefault(), 0f );
-        Assert.assertEquals( "primitiveDouble" , 0              , simple.getPrimitiveDoubleNoDefault(), 0 );
-        Assert.assertEquals( "objectBoolean"   , null           , simple.isObjectBooleanNoDefault() );
-        Assert.assertEquals( "objectByte"      , null           , simple.getObjectByteNoDefault() );
-        Assert.assertEquals( "objectChar"      , null           , simple.getObjectCharacterNoDefault() );
-        Assert.assertEquals( "objectShort"     , null           , simple.getObjectShortNoDefault() );
-        Assert.assertEquals( "objectInt"       , null           , simple.getObjectIntegerNoDefault() );
-        Assert.assertEquals( "objectLong"      , null           , simple.getObjectLongNoDefault() );
-        Assert.assertEquals( "objectFloat"     , null           , simple.getObjectFloatNoDefault() );
-        Assert.assertEquals( "objectDouble"    , null           , simple.getObjectDoubleNoDefault() );
-        Assert.assertEquals( "objectString"    , null           , simple.getObjectStringNoDefault() );
+        assertEquals( "primitiveBoolean", false          , simple.isPrimitiveBooleanNoDefault() );
+        assertEquals( "primitiveByte"   , 0              , simple.getPrimitiveByteNoDefault() );
+        assertEquals( "primitiveChar"   , '\0'           , simple.getPrimitiveCharNoDefault() );
+        assertEquals( "primitiveShort"  , 0              , simple.getPrimitiveShortNoDefault() );
+        assertEquals( "primitiveInt"    , 0              , simple.getPrimitiveIntNoDefault() );
+        assertEquals( "primitiveLong"   , 0              , simple.getPrimitiveLongNoDefault() );
+        assertEquals( "primitiveFloat"  , 0              , simple.getPrimitiveFloatNoDefault(), 0f );
+        assertEquals( "primitiveDouble" , 0              , simple.getPrimitiveDoubleNoDefault(), 0 );
+        assertEquals( "objectBoolean"   , null           , simple.isObjectBooleanNoDefault() );
+        assertEquals( "objectByte"      , null           , simple.getObjectByteNoDefault() );
+        assertEquals( "objectChar"      , null           , simple.getObjectCharacterNoDefault() );
+        assertEquals( "objectShort"     , null           , simple.getObjectShortNoDefault() );
+        assertEquals( "objectInt"       , null           , simple.getObjectIntegerNoDefault() );
+        assertEquals( "objectLong"      , null           , simple.getObjectLongNoDefault() );
+        assertEquals( "objectFloat"     , null           , simple.getObjectFloatNoDefault() );
+        assertEquals( "objectDouble"    , null           , simple.getObjectDoubleNoDefault() );
+        assertEquals( "objectString"    , null           , simple.getObjectStringNoDefault() );
 
         XmlAttributes xmlAttributes = new XmlAttributes();
-        Assert.assertEquals( "primitiveBoolean", true           , xmlAttributes.isPrimitiveBoolean() );
-        Assert.assertEquals( "primitiveByte"   , 12             , xmlAttributes.getPrimitiveByte() );
-        Assert.assertEquals( "primitiveChar"   , 'H'            , xmlAttributes.getPrimitiveChar() );
-        Assert.assertEquals( "primitiveShort"  , (short) 1212   , xmlAttributes.getPrimitiveShort() );
-        Assert.assertEquals( "primitiveInt"    , 121212         , xmlAttributes.getPrimitiveInt() );
-        Assert.assertEquals( "primitiveLong"   , 1234567890123L , xmlAttributes.getPrimitiveLong() );
-        Assert.assertEquals( "primitiveFloat"  , 12.12f         , xmlAttributes.getPrimitiveFloat(), 0f );
-        Assert.assertEquals( "primitiveDouble" , 12.12          , xmlAttributes.getPrimitiveDouble(), 0 );
-        Assert.assertEquals( "objectBoolean"   , Boolean.TRUE   , xmlAttributes.isObjectBoolean() );
-        Assert.assertEquals( "objectByte"      , 12             , xmlAttributes.getObjectByte().byteValue() );
-        Assert.assertEquals( "objectChar"      , 'H'            , xmlAttributes.getObjectCharacter().charValue() );
-        Assert.assertEquals( "objectShort"     , (short) 1212   , xmlAttributes.getObjectShort().shortValue() );
-        Assert.assertEquals( "objectInt"       , 121212         , xmlAttributes.getObjectInteger().intValue() );
-        Assert.assertEquals( "objectLong"      , 1234567890123L , xmlAttributes.getObjectLong().longValue() );
-        Assert.assertEquals( "objectFloat"     , 12.12f         , xmlAttributes.getObjectFloat().floatValue(), 0f );
-        Assert.assertEquals( "objectDouble"    , 12.12          , xmlAttributes.getObjectDouble().doubleValue(), 0 );
-        Assert.assertEquals( "objectString"    , "default value", xmlAttributes.getObjectString() );
+        assertEquals( "primitiveBoolean", true           , xmlAttributes.isPrimitiveBoolean() );
+        assertEquals( "primitiveByte"   , 12             , xmlAttributes.getPrimitiveByte() );
+        assertEquals( "primitiveChar"   , 'H'            , xmlAttributes.getPrimitiveChar() );
+        assertEquals( "primitiveShort"  , (short) 1212   , xmlAttributes.getPrimitiveShort() );
+        assertEquals( "primitiveInt"    , 121212         , xmlAttributes.getPrimitiveInt() );
+        assertEquals( "primitiveLong"   , 1234567890123L , xmlAttributes.getPrimitiveLong() );
+        assertEquals( "primitiveFloat"  , 12.12f         , xmlAttributes.getPrimitiveFloat(), 0f );
+        assertEquals( "primitiveDouble" , 12.12          , xmlAttributes.getPrimitiveDouble(), 0 );
+        assertEquals( "objectBoolean"   , Boolean.TRUE   , xmlAttributes.isObjectBoolean() );
+        assertEquals( "objectByte"      , 12             , xmlAttributes.getObjectByte().byteValue() );
+        assertEquals( "objectChar"      , 'H'            , xmlAttributes.getObjectCharacter().charValue() );
+        assertEquals( "objectShort"     , (short) 1212   , xmlAttributes.getObjectShort().shortValue() );
+        assertEquals( "objectInt"       , 121212         , xmlAttributes.getObjectInteger().intValue() );
+        assertEquals( "objectLong"      , 1234567890123L , xmlAttributes.getObjectLong().longValue() );
+        assertEquals( "objectFloat"     , 12.12f         , xmlAttributes.getObjectFloat().floatValue(), 0f );
+        assertEquals( "objectDouble"    , 12.12          , xmlAttributes.getObjectDouble().doubleValue(), 0 );
+        assertEquals( "objectString"    , "default value", xmlAttributes.getObjectString() );
     }
 
     public void verifyJavaFeatures()
@@ -317,32 +322,32 @@ public class JavaVerifier
         // bidi
         Bidirectional bidi = new Bidirectional();
         association.setBidi( bidi );
-        Assert.assertEquals( "setting bidi in association should set the reverse association",
+        assertEquals( "setting bidi in association should set the reverse association",
                              association, bidi.getParent() );
         bidi.setParent( null );
-        Assert.assertNull( "setting parent to null in bidi should remove value in association", association.getBidi() );
+        assertNull( "setting parent to null in bidi should remove value in association", association.getBidi() );
 
         BidiInList bidiInList = new BidiInList();
         association.addListOfBidi( bidiInList );
-        Assert.assertEquals( "setting bidi in many association should set the reverse association",
+        assertEquals( "setting bidi in many association should set the reverse association",
                              association, bidiInList.getParent() );
         bidiInList.setParent( null );
-        Assert.assertEquals( 0, association.getListOfBidis().size() );
+        assertEquals( 0, association.getListOfBidis().size() );
         bidiInList.setParent( association );
-        Assert.assertEquals( bidiInList, association.getListOfBidis().get( 0 ) );
+        assertEquals( bidiInList, association.getListOfBidis().get( 0 ) );
         association.removeListOfBidi( bidiInList );
-        Assert.assertEquals( 0, association.getListOfBidis().size() );
+        assertEquals( 0, association.getListOfBidis().size() );
 
         BidiInSet bidiInSet = new BidiInSet();
         association.addSetOfBidi( bidiInSet );
-        Assert.assertEquals( "setting bidi in many association should set the reverse association",
+        assertEquals( "setting bidi in many association should set the reverse association",
                              association, bidiInSet.getParent() );
         bidiInSet.setParent( null );
-        Assert.assertEquals( 0, association.getSetOfBidis().size() );
+        assertEquals( 0, association.getSetOfBidis().size() );
         bidiInSet.setParent( association );
-        Assert.assertEquals( bidiInSet, association.getSetOfBidis().iterator().next() );
+        assertEquals( bidiInSet, association.getSetOfBidis().iterator().next() );
         association.removeSetOfBidi( bidiInSet );
-        Assert.assertEquals( 0, association.getSetOfBidis().size() );
+        assertEquals( 0, association.getSetOfBidis().size() );
 
         // class with single association to itself, but not bidi!
         NodeItem parentNode = new NodeItem();
@@ -379,9 +384,9 @@ public class JavaVerifier
 
     public void verifyInterfaces()
     {
-        Assert.assertTrue( "SimpleInterface should be an interface", SimpleInterface.class.isInterface() );
-        Assert.assertTrue( "SubInterface should be an interface", SubInterface.class.isInterface() );
-        Assert.assertTrue( "SubInterfaceInPackage should be an interface", SubInterfaceInPackage.class.isInterface() );
+        assertTrue( "SimpleInterface should be an interface", SimpleInterface.class.isInterface() );
+        assertTrue( "SubInterface should be an interface", SubInterface.class.isInterface() );
+        assertTrue( "SubInterfaceInPackage should be an interface", SubInterfaceInPackage.class.isInterface() );
 
         // superInterface feature
         if ( !SimpleInterface.class.isAssignableFrom( SubInterface.class ) )
@@ -394,7 +399,7 @@ public class JavaVerifier
         }
 
         // codeSegments
-        Assert.assertNotNull( "SimpleInterface.CODE_SEGMENT should be here", SimpleInterface.CODE_SEGMENT );
+        assertNotNull( "SimpleInterface.CODE_SEGMENT should be here", SimpleInterface.CODE_SEGMENT );
     }
 
     /**

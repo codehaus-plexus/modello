@@ -22,6 +22,10 @@ package org.codehaus.modello.plugin.java;
  * SOFTWARE.
  */
 
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
 import java.lang.annotation.Annotation;
 
 import org.codehaus.modello.verifier.Verifier;

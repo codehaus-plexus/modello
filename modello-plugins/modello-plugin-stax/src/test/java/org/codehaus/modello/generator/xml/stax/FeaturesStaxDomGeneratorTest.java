@@ -57,7 +57,7 @@ public class FeaturesStaxDomGeneratorTest
         addDependency( "org.codehaus.woodstox", "wstx-asl" );
         addDependency( "xmlunit", "xmlunit" );
 
-        compileGeneratedSources();
+        compileGeneratedSources( 5 );
 
         // TODO: see why without this, version system property is set to "2.4.1" value after verify
         System.setProperty( "version", getModelloVersion() );

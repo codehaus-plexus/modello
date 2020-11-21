@@ -240,15 +240,6 @@ public abstract class AbstractModelloJavaGeneratorTest
 
         CompilerResult result = compiler.performCompile( configuration );
 
-        List<CompilerMessage> messages = result.getCompilerMessages();
-
-//        for ( CompilerMessage message : messages )
-//        {
-//            System.out.println(
-//                message.getFile() + "[" + message.getStartLine() + "," + message.getStartColumn() + "]: "
-//                    + message.getMessage() );
-//        }
-
         List<CompilerMessage> errors = new ArrayList<CompilerMessage>( 0 );
         for ( CompilerMessage compilerMessage : result.getCompilerMessages() )
         {
@@ -287,7 +278,7 @@ public abstract class AbstractModelloJavaGeneratorTest
 
             try
             {
-                verify.invoke( clazz.newInstance(), new Object[0] );
+                verify.invoke( clazz.getDeclaredConstructor().newInstance(), new Object[0] );
             }
             catch ( InvocationTargetException ex )
             {

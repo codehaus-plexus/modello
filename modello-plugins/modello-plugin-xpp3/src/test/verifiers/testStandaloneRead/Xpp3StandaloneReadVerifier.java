@@ -22,14 +22,16 @@ package org.codehaus.modello.generator.xml.xpp3;
  * SOFTWARE.
  */
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.lang.reflect.Method;
-
-import junit.framework.Assert;
 
 import org.codehaus.modello.generator.xml.xpp3.test.standaloneread.RootClass;
 import org.codehaus.modello.generator.xml.xpp3.test.standaloneread.StandaloneReadClass;
