@@ -134,7 +134,7 @@ public abstract class JStructure extends JType
     /**
      * The package to which this JStructure belongs
      */
-    private String packageName = null;
+    private final String packageName;
 
     private JAnnotations annotations = null;
 
@@ -814,19 +814,6 @@ public abstract class JStructure extends JType
     {
         this.header = comment;
     } //-- setHeader
-
-    /**
-     * Allows changing the package name of this JStructure
-     *
-     * @param packageName the package name to use
-     * @deprecated removed in future version of javasource
-     */
-    public void setPackageName( String packageName )
-    {
-        this.packageName = packageName;
-        changePackage( packageName );
-    } //-- setPackageName
-
 
     //---------------------/
     //- Protected Methods -/

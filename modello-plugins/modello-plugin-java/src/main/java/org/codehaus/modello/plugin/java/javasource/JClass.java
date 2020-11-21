@@ -852,21 +852,10 @@ public class JClass extends JStructure
 
     final class JInnerClass extends JClass
     {
-
         JInnerClass( String name )
         {
             super( name );
         }
-
-        /**
-         * Allows changing the package name of this JStructure
-         *
-         * @param packageName the package name to use
-         */
-        public void setPackageName( String packageName )
-        {
-            throw new IllegalStateException( "Cannot change the package of an inner-class" );
-        } //-- setPackageName
     } //-- JInnerClass
 
 } //-- JClass
