@@ -25,7 +25,7 @@
         <field>
           <name>roles</name>
           <version>1.0.0</version>
-          <association java.generate-break="false" java.generate-create="false" java.use-interface="org.codehaus.modello.plugin.java.Role">
+          <association java.bidi="false" java.useInterface="org.codehaus.modello.plugin.java.Role">
             <type>BiRole</type>
             <multiplicity>*</multiplicity>
           </association>
@@ -36,7 +36,7 @@
         <field>
           <name>permission</name>
           <version>1.0.0</version>
-          <association java.generate-break="false" java.generate-create="false" java.use-interface="org.codehaus.modello.plugin.java.Permission">
+          <association java.bidi="false" java.useInterface="org.codehaus.modello.plugin.java.Permission">
             <type>BiPermission</type>
             <multiplicity>1</multiplicity>
           </association>

@@ -206,20 +206,20 @@
           <type>String</type>
           <comment>This naming is inconsistent and distribution should occur from a repository structure.</comment>
         </field>
-        <field xml.listStyle="flat">
+        <field>
           <name>components</name>
           <version>4.0.0</version>
-          <association>
+          <association xml.itemsStyle="flat">
             <type>Component</type>
             <multiplicity>*</multiplicity>
           </association>
         </field>
 
-        <field xml.associationTagName="repo">
+        <field>
           <name>repositories</name>
           <version>4.0.0</version>
           <description>The lists of the remote repositories</description>
-          <association>
+          <association xml.tagName="repo">
             <type>Repository</type>
             <multiplicity>*</multiplicity>
           </association>
@@ -1726,10 +1726,10 @@
           <version>4.0.0</version>
           <type>String</type>
         </field>
-        <field xml.listStyle="flat">
+        <field>
           <name>components</name>
           <version>4.0.0</version>
-          <association>
+          <association xml.itemsStyle="flat">
             <type>Component</type>
             <multiplicity>*</multiplicity>
           </association>

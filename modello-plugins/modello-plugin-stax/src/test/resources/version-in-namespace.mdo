@@ -1,4 +1,4 @@
-<model>
+<model xml.namespace="http://codehaus-plexus.github.io/test/${version}" xml.schemaLocation="http://codehaus-plexus.github.io/modello/xsd/maven-${version}.xsd">
   <id>maven</id>
   <name>VersionInNamespace</name>
   <defaults>
@@ -11,8 +11,7 @@
     <type>namespace</type>
   </versionDefinition>
   <classes>
-    <class rootElement="true" xml.tagName="mavenModel" xml.namespace="http://codehaus-plexus.github.io/test/${version}"
-           xml.schemaLocation="http://codehaus-plexus.github.io/modello/xsd/maven-${version}.xsd">
+    <class rootElement="true" xml.tagName="mavenModel">
       <name>Model</name>
       <version>3.0.0+</version>
       <fields>

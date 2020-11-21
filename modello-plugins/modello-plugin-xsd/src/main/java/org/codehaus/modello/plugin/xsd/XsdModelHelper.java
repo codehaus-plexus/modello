@@ -70,7 +70,7 @@ public class XsdModelHelper
         String targetNamespace;
         if ( xsdModelMetadata.getTargetNamespace() == null )
         {
-            // xsd.target-namespace not set, using namespace
+            // xsd.targetNamespace not set, using namespace
             targetNamespace = namespace;
         }
         else

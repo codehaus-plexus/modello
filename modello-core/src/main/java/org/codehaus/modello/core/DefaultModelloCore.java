@@ -95,62 +95,20 @@ public class DefaultModelloCore
         }
     }
 
+    @SuppressWarnings( "unused" )
     private void upgradeModifiedAttribute( String name, Map<String, String> from, Map<String, String> to, String warn )
     {
         upgradeModifiedAttribute( name, from, name, to, warn );
     }
 
+    /**
+     * Rename or move entities and provide a deprecation message
+     * 
+     * @param modelReader
+     * @param model
+     */
     private void upgradeModelloModel( ModelReader modelReader, Model model )
     {
-        Map<String, String> modelAttributes = modelReader.getAttributesForModel();
-
-        upgradeModifiedAttribute( "xsd.target-namespace", modelAttributes, "xsd.targetNamespace", modelAttributes,
-                                  "attribute 'xsd.target-namespace' for model element is deprecated: "
-                                  + "it has been renamed to 'xsd.targetNamespace'" );
-
-        for ( ModelClass clazz : model.getAllClasses() )
-        {
-            Map<String, String> classAttributes = modelReader.getAttributesForClass( clazz );
-
-            // attributes moved from root class to model
-            upgradeModifiedAttribute( "xml.namespace", classAttributes, modelAttributes,
-                "attribute 'xml.namespace' for class element is deprecated: it should be moved to model element" );
-
-            upgradeModifiedAttribute( "xml.schemaLocation", classAttributes, modelAttributes,
-                "attribute 'xml.schemaLocation' for class element is deprecated: it should be moved to model element" );
-
-            for ( ModelField field : clazz.getAllFields() )
-            {
-                if ( field instanceof ModelAssociation )
-                {
-                    Map<String, String> fieldAttributes = modelReader.getAttributesForField( field );
-                    Map<String, String> associationAttributes = modelReader.getAttributesForAssociation( (ModelAssociation)field );
-
-                    upgradeModifiedAttribute( "java.adder", fieldAttributes, associationAttributes,
-                        "attribute 'java.adder' for field element is deprecated: it should be moved to association" );
-
-                    upgradeModifiedAttribute( "java.generate-create", associationAttributes,
-                        "java.bidi", associationAttributes, "attribute 'java.generate-create' for association "
-                        + "element is deprecated: it has been renamed to 'java.bidi'" );
-
-                    upgradeModifiedAttribute( "java.generate-break", associationAttributes,
-                        "java.bidi", associationAttributes, "attribute 'java.generate-break' for association "
-                        + "element is deprecated: it has been renamed to 'java.bidi'" );
-
-                    upgradeModifiedAttribute( "java.use-interface", associationAttributes,
-                        "java.useInterface", associationAttributes, "attribute 'xml.use-interface' for association "
-                        + "element is deprecated: it has been renamed to 'xml.useInterface'" );
-
-                    upgradeModifiedAttribute( "xml.associationTagName", fieldAttributes,
-                        "xml.tagName", associationAttributes, "attribute 'xml.associationTagName' for field element is "
-                        + "deprecated: use 'xml.tagName' in association instead" );
-
-                    upgradeModifiedAttribute( "xml.listStyle", fieldAttributes,
-                        "xml.itemsStyle", associationAttributes, "attribute 'xml.listStyle' for field element is "
-                        + "deprecated: use 'xml.itemsStyle' in association instead" );
-                }
-            }
-        }
     }
 
     public Model loadModel( Reader reader )

@@ -1045,7 +1045,7 @@
         <field>
           <name>xmlItemsStyleFlats</name>
           <version>1.0.0+</version>
-          <description><![CDATA[<code>&lt;field&gt;&lt;association xml.listStyle="flat"/&gt;&lt;/field&gt;</code>: a "flat" list, ie without enclosing tag.]]></description>
+          <description><![CDATA[<code>&lt;field&gt;&lt;association xml.itemsStyle="flat"/&gt;&lt;/field&gt;</code>: a "flat" list, ie without enclosing tag.]]></description>
           <association xml.itemsStyle="flat">
             <type>Reference</type>
             <multiplicity>*</multiplicity>
