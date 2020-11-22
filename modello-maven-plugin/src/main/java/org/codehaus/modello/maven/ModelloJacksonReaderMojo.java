@@ -1,5 +1,7 @@
 package org.codehaus.modello.maven;
 
+import java.util.Properties;
+
 /*
  * Copyright (c) 2004-2012, Codehaus.org
  *
@@ -24,6 +26,7 @@ package org.codehaus.modello.maven;
 
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
+import org.codehaus.modello.ModelloParameterConstants;
 
 /**
  * Creates an Jackson reader from the model.
@@ -38,5 +41,17 @@ public class ModelloJacksonReaderMojo
     protected String getGeneratorType()
     {
         return "jackson-reader";
+    }
+    
+    @Override
+    protected void customizeParameters( Properties parameters )
+    {
+        super.customizeParameters( parameters );
+        
+        if ( "true".equals( parameters.getProperty( ModelloParameterConstants.DOM_AS_XPP3 ) ) &&
+                !getProject().getArtifactMap().containsKey( "com.fasterxml.jackson.core:jackson-databind" ) )
+        {
+            getLog().warn( "Jackson DOM support requires auxiliary com.fasterxml.jackson.core:jackson-databind module!" );
+        }
     }
 }

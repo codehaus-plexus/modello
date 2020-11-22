@@ -22,7 +22,10 @@ package org.codehaus.modello.generator.jackson;
  * SOFTWARE.
  */
 
-import junit.framework.Assert;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+
 import org.codehaus.modello.test.model.Build;
 import org.codehaus.modello.test.model.Component;
 import org.codehaus.modello.test.model.ContentTest;
@@ -226,12 +229,6 @@ public class JacksonVerifier
 
         String actualJson = buffer.toString();
 
-        System.out.println( expectedJson );
-
-        System.out.println( "+-----------------------------------+" );
-
-        System.out.println( actualJson );
-
         compareJsonText( expectedJson, actualJson );
 
         // Test the reader
@@ -240,7 +237,7 @@ public class JacksonVerifier
 
         Model actual = reader.read( new StringReader( expectedJson ) );
 
-        Assert.assertNotNull( "Actual", actual );
+        assertNotNull( "Actual", actual );
 
         assertModel( expected, actual );
 
@@ -261,7 +258,7 @@ public class JacksonVerifier
         JsonNode expected = mapper.readTree( expectedJson.trim() );
         JsonNode actual = mapper.readTree( actualJson.trim() );
 
-        Assert.assertEquals( expected, actual );
+        assertEquals( expected, actual );
     }
 
     // ----------------------------------------------------------------------
@@ -270,37 +267,37 @@ public class JacksonVerifier
 
     public void assertModel( Model expected, Model actual )
     {
-        Assert.assertNotNull( "Actual model", actual );
+        assertNotNull( "Actual model", actual );
 
-        Assert.assertEquals( "/model/extend", expected.getExtend(), actual.getExtend() );
+        assertEquals( "/model/extend", expected.getExtend(), actual.getExtend() );
 
 //        assertParent( expected.getParent(), actual.getParent() );
 
-        Assert.assertEquals( "/model/modelVersion", expected.getModelVersion(), actual.getModelVersion() );
+        assertEquals( "/model/modelVersion", expected.getModelVersion(), actual.getModelVersion() );
 
-        Assert.assertEquals( "/model/groupId", expected.getGroupId(), actual.getGroupId() );
+        assertEquals( "/model/groupId", expected.getGroupId(), actual.getGroupId() );
 
-        Assert.assertEquals( "/model/artifactId", expected.getArtifactId(), actual.getArtifactId() );
+        assertEquals( "/model/artifactId", expected.getArtifactId(), actual.getArtifactId() );
 
-        Assert.assertEquals( "/model/type", expected.getType(), actual.getType() );
+        assertEquals( "/model/type", expected.getType(), actual.getType() );
 
-        Assert.assertEquals( "/model/name", expected.getName(), actual.getName() );
+        assertEquals( "/model/name", expected.getName(), actual.getName() );
 
-        Assert.assertEquals( "/model/version", expected.getVersion(), actual.getVersion() );
+        assertEquals( "/model/version", expected.getVersion(), actual.getVersion() );
 
-        Assert.assertEquals( "/model/shortDescription", expected.getShortDescription(), actual.getShortDescription() );
+        assertEquals( "/model/shortDescription", expected.getShortDescription(), actual.getShortDescription() );
 
-        Assert.assertEquals( "/model/description", expected.getDescription(), actual.getDescription() );
+        assertEquals( "/model/description", expected.getDescription(), actual.getDescription() );
 
-        Assert.assertEquals( "/model/url", expected.getUrl(), actual.getUrl() );
+        assertEquals( "/model/url", expected.getUrl(), actual.getUrl() );
 
-        Assert.assertEquals( "/model/logo", expected.getLogo(), actual.getLogo() );
+        assertEquals( "/model/logo", expected.getLogo(), actual.getLogo() );
 
 //        assertIssueManagement();
 
 //        assertCiManagement();
 
-        Assert.assertEquals( "/model/inceptionYear", expected.getInceptionYear(), actual.getInceptionYear() );
+        assertEquals( "/model/inceptionYear", expected.getInceptionYear(), actual.getInceptionYear() );
 
 //        assertEquals( "/model/siteAddress", expected.getSiteAddress(), actual.getSiteAddress() );
 
@@ -337,9 +334,9 @@ public class JacksonVerifier
 
     public void assertMailingLists( List expected, List actual )
     {
-        Assert.assertNotNull( "/model/mailingLists", actual );
+        assertNotNull( "/model/mailingLists", actual );
 
-        Assert.assertEquals( "/model/mailingLists.size", expected.size(), actual.size() );
+        assertEquals( "/model/mailingLists.size", expected.size(), actual.size() );
 
         for ( int i = 0; i < expected.size(); i++ )
         {
@@ -349,43 +346,43 @@ public class JacksonVerifier
 
     public void assertMailingList( int i, MailingList expected, Object actualObject )
     {
-        Assert.assertNotNull( "/model/mailingLists[" + i + "]", actualObject );
+        assertNotNull( "/model/mailingLists[" + i + "]", actualObject );
 
-        Assert.assertEquals( "/model/mailingLists", MailingList.class, actualObject.getClass() );
+        assertEquals( "/model/mailingLists", MailingList.class, actualObject.getClass() );
 
         MailingList actual = (MailingList) actualObject;
 
-        Assert.assertEquals( "/model/mailingLists[" + i + "]/name", expected.getName(), actual.getName() );
+        assertEquals( "/model/mailingLists[" + i + "]/name", expected.getName(), actual.getName() );
 
-        Assert.assertEquals( "/model/mailingLists[" + i + "]/subscribe", expected.getSubscribe(),
+        assertEquals( "/model/mailingLists[" + i + "]/subscribe", expected.getSubscribe(),
                              actual.getSubscribe() );
 
-        Assert.assertEquals( "/model/mailingLists[" + i + "]/unsubscribe", expected.getUnsubscribe(),
+        assertEquals( "/model/mailingLists[" + i + "]/unsubscribe", expected.getUnsubscribe(),
                              actual.getUnsubscribe() );
 
-        Assert.assertEquals( "/model/mailingLists[" + i + "]/archive", expected.getArchive(), actual.getArchive() );
+        assertEquals( "/model/mailingLists[" + i + "]/archive", expected.getArchive(), actual.getArchive() );
     }
 
     public void assertScm( Scm expected, Object actualObject )
     {
         if ( expected == null )
         {
-            Assert.assertNull( "/model/scm", actualObject );
+            assertNull( "/model/scm", actualObject );
         }
         else
         {
-            Assert.assertNotNull( "/model/scm", actualObject );
+            assertNotNull( "/model/scm", actualObject );
 
-            Assert.assertEquals( "/model/scm", Scm.class, actualObject.getClass() );
+            assertEquals( "/model/scm", Scm.class, actualObject.getClass() );
 
             Scm actual = (Scm) actualObject;
 
-            Assert.assertEquals( "/model/scm/connection", expected.getConnection(), actual.getConnection() );
+            assertEquals( "/model/scm/connection", expected.getConnection(), actual.getConnection() );
 
-            Assert.assertEquals( "/model/scm/developerConnection", expected.getDeveloperConnection(),
+            assertEquals( "/model/scm/developerConnection", expected.getDeveloperConnection(),
                                  actual.getDeveloperConnection() );
 
-            Assert.assertEquals( "/model/scm/url", expected.getUrl(), actual.getUrl() );
+            assertEquals( "/model/scm/url", expected.getUrl(), actual.getUrl() );
         }
     }
 
@@ -393,20 +390,20 @@ public class JacksonVerifier
     {
         if ( expected == null )
         {
-            Assert.assertNull( "/model/builder", actualObject );
+            assertNull( "/model/builder", actualObject );
         }
         else
         {
-            Assert.assertNotNull( "/model/builder", actualObject );
+            assertNotNull( "/model/builder", actualObject );
 
-            Assert.assertEquals( "/model/builder", Build.class, actualObject.getClass() );
+            assertEquals( "/model/builder", Build.class, actualObject.getClass() );
 
             Build actual = (Build) actualObject;
 
-            Assert.assertEquals( "/model/builder/sourceDirectory", expected.getSourceDirectory(),
+            assertEquals( "/model/builder/sourceDirectory", expected.getSourceDirectory(),
                                  actual.getSourceDirectory() );
 
-            Assert.assertEquals( "/model/builder/unitTestSourceDirectory", expected.getUnitTestSourceDirectory(),
+            assertEquals( "/model/builder/unitTestSourceDirectory", expected.getUnitTestSourceDirectory(),
                                  actual.getUnitTestSourceDirectory() );
         }
     }
@@ -415,17 +412,17 @@ public class JacksonVerifier
     {
         if ( expected == null )
         {
-            Assert.assertNull( "/model/local", actualObject );
+            assertNull( "/model/local", actualObject );
         }
         else
         {
-            Assert.assertNotNull( "/model/local", actualObject );
+            assertNotNull( "/model/local", actualObject );
 
-            Assert.assertEquals( "/model/local", Local.class, actualObject.getClass() );
+            assertEquals( "/model/local", Local.class, actualObject.getClass() );
 
             Local actual = (Local) actualObject;
 
-            Assert.assertEquals( "/model/local/online", expected.isOnline(),
+            assertEquals( "/model/local/online", expected.isOnline(),
                                  actual.isOnline() );
         }
     }

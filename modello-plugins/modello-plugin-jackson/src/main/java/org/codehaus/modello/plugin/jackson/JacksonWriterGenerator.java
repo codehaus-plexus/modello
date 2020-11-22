@@ -121,8 +121,6 @@ public class JacksonWriterGenerator
 
         if ( requiresDomSupport )
         {
-            getLogger().warn( "Jackson DOM support requires auxiliary com.fasterxml.jackson.core:jackson-databind module!" );
-
             jClass.addImport( "com.fasterxml.jackson.databind.ObjectMapper" );
 
             sc.add( "factory.setCodec( new ObjectMapper() );" );
