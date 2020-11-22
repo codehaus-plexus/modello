@@ -43,6 +43,7 @@ import com.fasterxml.jackson.core.JsonEncoding;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonGenerator.Feature;
+import com.fasterxml.jackson.core.json.JsonWriteFeature;
 
 /**
  * @author <a href="mailto:simonetripodi@apache.org">Simone Tripodi</a>
@@ -101,11 +102,11 @@ public final class JsonSchemaGenerator
         JsonGenerator generator = new JsonFactory()
                                   .enable( Feature.AUTO_CLOSE_JSON_CONTENT )
                                   .enable( Feature.AUTO_CLOSE_TARGET )
-                                  .enable( Feature.ESCAPE_NON_ASCII )
                                   .enable( Feature.FLUSH_PASSED_TO_STREAM )
-                                  .enable( Feature.QUOTE_FIELD_NAMES )
-                                  .enable( Feature.QUOTE_NON_NUMERIC_NUMBERS )
-                                  .disable( Feature.WRITE_NUMBERS_AS_STRINGS )
+                                  .enable( JsonWriteFeature.ESCAPE_NON_ASCII.mappedFeature() )
+                                  .enable( JsonWriteFeature.QUOTE_FIELD_NAMES.mappedFeature() )
+                                  .enable( JsonWriteFeature.QUOTE_FIELD_NAMES.mappedFeature() )
+                                  .disable( JsonWriteFeature.WRITE_NUMBERS_AS_STRINGS.mappedFeature() )
                                   .createGenerator( schemaFile, JsonEncoding.UTF8 );
 
         generator.useDefaultPrettyPrinter();
