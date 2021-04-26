@@ -53,8 +53,8 @@ public class FeaturesStaxDomGeneratorTest
         modello.generate( model, "stax-writer", parameters );
         modello.generate( model, "stax-reader", parameters );
 
-        addDependency( "stax", "stax-api" );
-        addDependency( "org.codehaus.woodstox", "wstx-asl" );
+        addDependency( "org.codehaus.woodstox", "stax2-api" );
+        addDependency( "com.fasterxml.woodstox", "woodstox-core" );
         addDependency( "org.xmlunit", "xmlunit-core" );
 
         compileGeneratedSources( 5 );

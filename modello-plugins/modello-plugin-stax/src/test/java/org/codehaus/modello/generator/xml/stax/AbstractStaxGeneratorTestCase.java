@@ -78,8 +78,8 @@ public abstract class AbstractStaxGeneratorTestCase
             }
         }
 
-        addDependency( "stax", "stax-api" );
-        addDependency( "org.codehaus.woodstox", "wstx-asl" );
+        addDependency( "org.codehaus.woodstox", "stax2-api" );
+        addDependency( "com.fasterxml.woodstox", "woodstox-core" );
 
         compileGeneratedSources();
 
