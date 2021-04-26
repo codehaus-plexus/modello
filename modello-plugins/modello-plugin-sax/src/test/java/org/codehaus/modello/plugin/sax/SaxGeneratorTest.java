@@ -88,7 +88,7 @@ public class SaxGeneratorTest
         modello.generate( model, "java", parameters );
         modello.generate( model, "sax-writer", parameters );
 
-        addDependency( "xmlunit", "xmlunit" );
+        addDependency( "org.xmlunit", "xmlunit-core" );
         compileGeneratedSources();
 
         // TODO: see why without this, version system property is set to "2.4.1" value after verify

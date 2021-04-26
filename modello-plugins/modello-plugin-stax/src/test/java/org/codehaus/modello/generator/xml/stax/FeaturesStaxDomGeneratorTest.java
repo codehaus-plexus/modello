@@ -55,7 +55,7 @@ public class FeaturesStaxDomGeneratorTest
 
         addDependency( "stax", "stax-api" );
         addDependency( "org.codehaus.woodstox", "wstx-asl" );
-        addDependency( "xmlunit", "xmlunit" );
+        addDependency( "org.xmlunit", "xmlunit-core" );
 
         compileGeneratedSources( 5 );
 

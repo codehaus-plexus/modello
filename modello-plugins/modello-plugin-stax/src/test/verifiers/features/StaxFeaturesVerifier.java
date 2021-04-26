@@ -35,8 +35,8 @@ import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
-import org.custommonkey.xmlunit.Diff;
-import org.custommonkey.xmlunit.XMLUnit;
+import org.xmlunit.builder.DiffBuilder;
+import org.xmlunit.diff.Diff;
 
 import java.io.File;
 import java.io.IOException;
@@ -111,11 +111,9 @@ public class StaxFeaturesVerifier
         // alias is rendered as default field name => must be reverted here to let the test pass
         actualXml = actualXml.replaceFirst( "<id>alias</id>", "<key>alias</key>" );
 
-        XMLUnit.setIgnoreWhitespace( true );
-        XMLUnit.setIgnoreComments( true );
-        Diff diff = XMLUnit.compareXML( initialXml, actualXml );
+        Diff diff = DiffBuilder.compare( initialXml ).withTest( actualXml ).ignoreWhitespace().ignoreComments().build();
 
-        if ( !diff.identical() )
+        if ( diff.hasDifferences() )
         {
             System.err.println( actualXml );
             throw new VerifierException( "writer result is not the same as original content: " + diff );

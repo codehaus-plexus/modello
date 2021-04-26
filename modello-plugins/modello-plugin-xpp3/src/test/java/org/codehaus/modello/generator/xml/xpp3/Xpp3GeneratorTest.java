@@ -90,7 +90,7 @@ public class Xpp3GeneratorTest
         modello.generate( model, "xpp3-writer", parameters );
         modello.generate( model, "xpp3-reader", parameters );
 
-        addDependency( "xmlunit", "xmlunit" );
+        addDependency( "org.xmlunit", "xmlunit-core" );
         compileGeneratedSources( 5 );
 
         // TODO: see why without this, version system property is set to "2.4.1" value after verify

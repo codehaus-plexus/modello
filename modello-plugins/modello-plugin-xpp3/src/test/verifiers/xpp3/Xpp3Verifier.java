@@ -42,8 +42,8 @@ import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.ReaderFactory;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
-import org.custommonkey.xmlunit.Diff;
-import org.custommonkey.xmlunit.XMLUnit;
+import org.xmlunit.builder.DiffBuilder;
+import org.xmlunit.diff.Diff;
 
 import java.io.File;
 import java.io.IOException;
@@ -362,15 +362,9 @@ public class Xpp3Verifier
 
         String actualXml = buffer.toString();
 
-//        System.out.println( expectedXml );
-//
-//        System.err.println( actualXml );
+        Diff diff = DiffBuilder.compare( expectedXml ).withTest( actualXml ).ignoreWhitespace().ignoreComments().build();
 
-        XMLUnit.setIgnoreWhitespace( true );
-        XMLUnit.setIgnoreComments( true );
-        Diff diff = XMLUnit.compareXML( expectedXml.trim(), actualXml.trim() );
-
-        if ( !diff.identical() )
+        if ( diff.hasDifferences() )
         {
             System.err.println( actualXml );
             throw new VerifierException( "writer result is not the same as original content: " + diff );
@@ -388,9 +382,9 @@ public class Xpp3Verifier
 
         writer.write( buffer, actual );
 
-        diff = XMLUnit.compareXML( expectedXml.trim(), buffer.toString().trim() );
+        diff = DiffBuilder.compare( expectedXml ).withTest( buffer.toString() ).ignoreWhitespace().ignoreComments().build();
 
-        if ( !diff.identical() )
+        if ( diff.hasDifferences() )
         {
             System.err.println( actualXml );
             throw new VerifierException( "re-writer result is not the same as original content: " + diff );

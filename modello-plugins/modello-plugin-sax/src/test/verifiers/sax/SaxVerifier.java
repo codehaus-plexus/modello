@@ -41,8 +41,8 @@ import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.ReaderFactory;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
-import org.custommonkey.xmlunit.Diff;
-import org.custommonkey.xmlunit.XMLUnit;
+import org.xmlunit.builder.DiffBuilder;
+import org.xmlunit.diff.Diff;
 
 import java.io.File;
 import java.io.IOException;
@@ -218,11 +218,9 @@ public class SaxVerifier
 
         String actualXml = buffer.toString();
 
-        XMLUnit.setIgnoreWhitespace( true );
-        XMLUnit.setIgnoreComments( true );
-        Diff diff = XMLUnit.compareXML( expectedXml.trim(), actualXml.trim() );
+        Diff diff = DiffBuilder.compare( expectedXml ).withTest( actualXml ).ignoreWhitespace().ignoreComments().build();
 
-        if ( !diff.identical() )
+        if ( diff.hasDifferences() )
         {
             System.err.println( actualXml );
             throw new VerifierException( "writer result is not the same as original content: " + diff );

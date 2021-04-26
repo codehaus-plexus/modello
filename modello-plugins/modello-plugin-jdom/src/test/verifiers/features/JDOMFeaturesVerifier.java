@@ -31,8 +31,8 @@ import org.codehaus.modello.verifier.VerifierException;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.IOUtil;
 
-import org.custommonkey.xmlunit.Diff;
-import org.custommonkey.xmlunit.XMLUnit;
+import org.xmlunit.builder.DiffBuilder;
+import org.xmlunit.diff.Diff;
 
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -83,11 +83,9 @@ public class JDOMFeaturesVerifier
         // alias is rendered as default field name => must be reverted here to let the test pass
         actualXml = actualXml.replaceFirst( "<id>alias</id>", "<key>alias</key>" );
 
-        XMLUnit.setIgnoreWhitespace( true );
-        XMLUnit.setIgnoreComments( true );
-        Diff diff = XMLUnit.compareXML( initialXml, actualXml );
+        Diff diff = DiffBuilder.compare( initialXml ).withTest( actualXml ).ignoreWhitespace().ignoreComments().build();
 
-        if ( !diff.identical() )
+        if ( diff.hasDifferences() )
         {
             System.err.println( actualXml );
             System.err.println( "known features missing: MODELLO-161 = attributes, MODELLO-202 = Content type, "

@@ -53,7 +53,7 @@ public class FeaturesJDOMGeneratorTest
         modello.generate( model, "jdom-writer", parameters );
 
         addDependency( "org.jdom", "jdom" );
-        addDependency( "xmlunit", "xmlunit" );
+        addDependency( "org.xmlunit", "xmlunit-core" );
         compileGeneratedSources();
 
         verifyCompiledGeneratedSources( "org.codehaus.modello.generator.xml.jdom.JDOMFeaturesVerifier" );

@@ -35,8 +35,8 @@ import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
-import org.custommonkey.xmlunit.Diff;
-import org.custommonkey.xmlunit.XMLUnit;
+import org.xmlunit.builder.DiffBuilder;
+import org.xmlunit.diff.Diff;
 
 import java.io.File;
 import java.io.IOException;
@@ -113,11 +113,9 @@ public class StaxFeaturesVerifier
         // writer doesn't handle namespace
         actualXml = actualXml.replaceFirst( "<preserve space=\"preserve\">", "<preserve xml:space=\"preserve\">" );
 
-        XMLUnit.setIgnoreWhitespace( true );
-        XMLUnit.setIgnoreComments( true );
-        Diff diff = XMLUnit.compareXML( initialXml, actualXml );
+        Diff diff = DiffBuilder.compare( initialXml ).withTest( actualXml ).ignoreWhitespace().ignoreComments().build();
 
-        if ( !diff.identical() )
+        if ( diff.hasDifferences() )
         {
             System.err.println( actualXml );
             throw new VerifierException( "writer result is not the same as original content: " + diff );
