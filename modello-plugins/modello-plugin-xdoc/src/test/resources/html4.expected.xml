@@ -18,8 +18,7 @@
       <a name="class_model"/>
       <subsection name="model">
         <p>This is a description in HTML4
-<br /> 
-<strong>NOTE: </strong> HTML linebreak should be converted to selfclosing XML-tag</p>
+<br /> <strong>NOTE: </strong> HTML linebreak should be converted to selfclosing XML-tag</p>
         <table>
           <tr>
             <th>Element</th>
