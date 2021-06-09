@@ -24,8 +24,9 @@ package org.codehaus.modello.plugin.java;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.Writer;
+import java.nio.charset.Charset;
+import java.nio.file.Path;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -47,6 +48,7 @@ import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.ModelInterface;
 import org.codehaus.modello.model.ModelType;
 import org.codehaus.modello.plugin.AbstractModelloGenerator;
+import org.codehaus.modello.plugin.CachingWriter;
 import org.codehaus.modello.plugin.java.javasource.JClass;
 import org.codehaus.modello.plugin.java.javasource.JComment;
 import org.codehaus.modello.plugin.java.javasource.JInterface;
@@ -57,7 +59,6 @@ import org.codehaus.modello.plugin.java.metadata.JavaFieldMetadata;
 import org.codehaus.modello.plugin.java.metadata.JavaModelMetadata;
 import org.codehaus.modello.plugin.model.ModelClassMetadata;
 import org.codehaus.plexus.util.StringUtils;
-import org.codehaus.plexus.util.WriterFactory;
 
 /**
  * AbstractJavaModelloGenerator - similar in scope to {@link AbstractModelloGenerator} but with features that
@@ -102,12 +103,7 @@ public abstract class AbstractJavaModelloGenerator
             f.getParentFile().mkdirs();
         }
 
-        OutputStream os = getBuildContext().newFileOutputStream( f );
-
-        Writer writer = ( getEncoding() == null ) ? WriterFactory.newPlatformWriter( os )
-                        : WriterFactory.newWriter( os, getEncoding() );
-
-        return new JSourceWriter( writer );
+        return new JSourceWriter( newWriter( f.toPath() ) );
     }
 
     private JComment getHeaderComment()
