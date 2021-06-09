@@ -53,7 +53,7 @@ public abstract class AbstractModelloSourceGeneratorMojo
      * @since 1.0
      */
     @Parameter( defaultValue = "${maven.compiler.source}" )
-    private Integer javaSource;
+    private String javaSource;
 
     /**
      * Generate DOM content as plexus-utils <code>Xpp3Dom</code> objects instead of <code>org.w3c.dom.Element</code>.
@@ -90,7 +90,11 @@ public abstract class AbstractModelloSourceGeneratorMojo
 
         if ( javaSource != null )
         {
-            parameters.setProperty( ModelloParameterConstants.OUTPUT_JAVA_SOURCE, Integer.toString( javaSource ) );
+            if ( javaSource.startsWith( "1." ) )
+            {
+                javaSource = javaSource.substring( "1.".length() );
+            }
+            parameters.setProperty( ModelloParameterConstants.OUTPUT_JAVA_SOURCE, javaSource );
         }
 
         parameters.setProperty( ModelloParameterConstants.DOM_AS_XPP3, Boolean.toString( domAsXpp3 ) );
