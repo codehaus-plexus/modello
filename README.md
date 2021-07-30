@@ -1,7 +1,7 @@
 Modello
 =======================
 
-[![Maven Central](https://img.shields.io/maven-central/v/org.codehaus.modello/modello.svg?label=Maven%20Central)](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.codehaus.modello%22%20a%3A%22modello%22)
+[![Maven Central](https://img.shields.io/maven-central/v/org.codehaus.modello/modello.svg?label=Maven%20Central)](https://search.maven.org/artifact/org.codehaus.modello/modello)
 [![MIT License](https://img.shields.io/github/license/codehaus-plexus/modello.svg?label=License)](http://www.apache.org/licenses/)
 ![Build Status](https://github.com/codehaus-plexus/modello/workflows/GitHub%20CI/badge.svg)
 
