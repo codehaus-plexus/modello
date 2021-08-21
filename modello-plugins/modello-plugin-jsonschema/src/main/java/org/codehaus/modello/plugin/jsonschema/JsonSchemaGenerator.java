@@ -107,7 +107,7 @@ public final class JsonSchemaGenerator
                                   .enable( JsonWriteFeature.QUOTE_FIELD_NAMES.mappedFeature() )
                                   .enable( JsonWriteFeature.QUOTE_FIELD_NAMES.mappedFeature() )
                                   .disable( JsonWriteFeature.WRITE_NUMBERS_AS_STRINGS.mappedFeature() )
-                                  .createGenerator( schemaFile, JsonEncoding.UTF8 );
+                                  .createGenerator( newWriter( schemaFile.toPath() ) );
 
         generator.useDefaultPrettyPrinter();
 

@@ -23,6 +23,9 @@ package org.codehaus.modello.plugin;
  */
 
 import java.io.File;
+import java.io.Writer;
+import java.nio.charset.Charset;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -287,4 +290,11 @@ public abstract class AbstractModelloGenerator
     {
         return buildContext;
     }
+
+    protected Writer newWriter( Path path )
+    {
+        Charset charset = getEncoding() != null ? Charset.forName( getEncoding() ) : Charset.defaultCharset();
+        return new CachingWriter( getBuildContext(), path, charset );
+    }
+
 }
