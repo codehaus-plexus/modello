@@ -48,8 +48,8 @@ public class ConverterGeneratorTest
 
         generateConverterClasses( getXmlResourceReader( "/features.mdo" ), "1.0.0", "1.1.0" );
 
-        addDependency( "stax", "stax-api" );
-        addDependency( "org.codehaus.woodstox", "wstx-asl" );
+        addDependency( "org.codehaus.woodstox", "stax2-api" );
+        addDependency( "com.fasterxml.woodstox", "woodstox-core" );
 
         compileGeneratedSources();
 
