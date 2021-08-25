@@ -49,6 +49,7 @@ jobs:
         with:
           distribution: ${{ matrix.jdk }}
           java-version: ${{ matrix.java }}
+          cache: 'maven'
 
       - name: Build with Maven
         run: mvn install javadoc:javadoc -e -B -V -Prun-its
