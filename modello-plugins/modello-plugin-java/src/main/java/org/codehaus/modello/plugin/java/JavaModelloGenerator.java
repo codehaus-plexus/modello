@@ -422,14 +422,7 @@ public class JavaModelloGenerator
             return toString;
         }
 
-        if ( hasJavaSourceSupport( 5 ) )
-        {
-            sc.add( "StringBuilder buf = new StringBuilder( 128 );" );
-        }
-        else
-        {
-            sc.add( "StringBuilder buf = new StringBuilder( 128 );" );
-        }
+        sc.add( "StringBuilder buf = new StringBuilder( 128 );" );
 
         sc.add( "" );
 
