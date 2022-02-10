@@ -5,4 +5,5 @@ target/
 bin
 .idea/
 *.iml
+.factorypath
 pom.xml.releaseBackup

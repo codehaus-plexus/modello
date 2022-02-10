@@ -25,8 +25,10 @@ package org.codehaus.modello.plugin.xdoc;
 import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.Stack;
@@ -42,6 +44,7 @@ import org.codehaus.modello.model.ModelDefault;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.Version;
 import org.codehaus.modello.model.VersionRange;
+import org.codehaus.modello.plugin.xdoc.metadata.XdocClassMetadata;
 import org.codehaus.modello.plugin.xdoc.metadata.XdocFieldMetadata;
 import org.codehaus.modello.plugin.xsd.XsdModelHelper;
 import org.codehaus.modello.plugins.xml.AbstractXmlGenerator;
@@ -171,11 +174,16 @@ public class XdocGenerator
      * Get the anchor name by which model classes can be accessed in the generated xdoc/html file.
      *
      * @param tagName the name of the XML tag of the model class
+     * @param modelClass the model class, that eventually can have customized anchor name
      * @return the corresponding anchor name
      */
-    private String getAnchorName( String tagName )
+    private String getAnchorName( String tagName, ModelClass modelClass )
     {
-        return "class_" + tagName ;
+        XdocClassMetadata xdocClassMetadata = (XdocClassMetadata) modelClass.getMetadata( XdocClassMetadata.ID );
+
+        String anchorName = xdocClassMetadata.getAnchorName();
+
+        return "class_" + ( anchorName == null ? tagName : anchorName );
     }
 
     /**
@@ -186,7 +194,7 @@ public class XdocGenerator
      */
     private void writeModelDescriptor( XMLWriter w, ModelClass rootModelClass )
     {
-        writeElementDescriptor( w, rootModelClass, null, new HashSet<String>() );
+        writeElementDescriptor( w, rootModelClass, null, new HashSet<>(), new HashMap<>() );
     }
 
     /**
@@ -195,26 +203,37 @@ public class XdocGenerator
      * @param w the output writer
      * @param modelClass the mode class to describe
      * @param association the association we are coming from (can be <code>null</code>)
-     * @param written set of data already written
+     * @param writtenIds set of data already written ids
+     * @param writtenAnchors map of already written anchors with corresponding ids
      */
     private void writeElementDescriptor( XMLWriter w, ModelClass modelClass, ModelAssociation association,
-                                         Set<String> written )
+                                         Set<String> writtenIds, Map<String, String> writtenAnchors )
     {
         String tagName = resolveTagName( modelClass, association );
 
         String id = getId( tagName, modelClass );
-        if ( written.contains( id ) )
+        if ( writtenIds.contains( id ) )
         {
             // tag already written for this model class accessed as this tag name
             return;
         }
-        written.add( id );
+        writtenIds.add( id );
 
-        written.add( tagName );
+        String anchorName = getAnchorName( tagName, modelClass );
+        if ( writtenAnchors.containsKey( anchorName ) )
+        {
+            // TODO use logging API?
+            System.out.println( "[warn] model class " + id + " with tagName " + tagName + " gets duplicate anchorName "
+                + anchorName + ", conflicting with model class " + writtenAnchors.get( anchorName ) );
+        }
+        else
+        {
+            writtenAnchors.put( anchorName, id );
+        }
 
         w.startElement( "a" );
 
-        w.addAttribute( "name", getAnchorName( tagName ) );
+        w.addAttribute( "name", anchorName );
 
         w.endElement();
 
@@ -257,9 +276,9 @@ public class XdocGenerator
                 ModelAssociation assoc = (ModelAssociation) f;
                 ModelClass fieldModelClass = getModel().getClass( assoc.getTo(), getGeneratedVersion() );
 
-                if ( !written.contains( getId( resolveTagName( fieldModelClass, assoc ), fieldModelClass ) ) )
+                if ( !writtenIds.contains( getId( resolveTagName( fieldModelClass, assoc ), fieldModelClass ) ) )
                 {
-                    writeElementDescriptor( w, fieldModelClass, assoc, written );
+                    writeElementDescriptor( w, fieldModelClass, assoc, writtenIds, writtenAnchors );
                 }
             }
         }
@@ -350,7 +369,7 @@ public class XdocGenerator
                 if ( isInnerAssociation( f ) )
                 {
                     w.startElement( "a" );
-                    w.addAttribute( "href", "#" + getAnchorName( itemTagName ) );
+                    w.addAttribute( "href", "#" + getAnchorName( itemTagName, assoc.getToClass() ) );
                     w.writeText( itemTagName );
                     w.endElement();
                 }
@@ -497,7 +516,7 @@ public class XdocGenerator
         String tagName = resolveTagName( modelClass, association );
 
         // <tagName
-        sb.append( "&lt;<a href=\"#" ).append( getAnchorName( tagName ) ).append( "\">" );
+        sb.append( "&lt;<a href=\"#" ).append( getAnchorName( tagName, modelClass ) ).append( "\">" );
         sb.append( tagName ).append( "</a>" );
 
         boolean addNewline = false;
@@ -672,7 +691,7 @@ public class XdocGenerator
      * @param modelClass the class we are looking for the tag name
      * @param association the association where this class is used
      * @return the tag name to use
-     * @todo refactor to use resolveTagName helpers instead
+     * @todo refactor to use XmlModelHelpers.resolveTagName helpers instead
      */
     private String resolveTagName( ModelClass modelClass, ModelAssociation association )
     {

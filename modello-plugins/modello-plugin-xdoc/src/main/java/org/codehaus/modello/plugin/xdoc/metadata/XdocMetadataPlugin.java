@@ -46,10 +46,15 @@ public class XdocMetadataPlugin
     implements MetadataPlugin
 {
     public static final String XDOC_SEPARATOR = "xdoc.separator";
+    public static final String XDOC_ANCHORNAME = "xdoc.anchorName";
 
     public ClassMetadata getClassMetadata( ModelClass clazz, Map<String, String> data )
     {
-        return new XdocClassMetadata();
+        XdocClassMetadata metadata = new XdocClassMetadata();
+
+        metadata.setAnchorName( getString( data, XDOC_ANCHORNAME ) );
+
+        return metadata;
     }
 
     public InterfaceMetadata getInterfaceMetadata( ModelInterface iface, Map<String, String> data )

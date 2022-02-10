@@ -441,6 +441,15 @@
           </description>
           <comment>see org.codehaus.modello.plugin.model.ModelMetadataPlugin</comment>
         </field>
+        <field xml.attribute="true" xml.tagName="xdoc.anchorName">
+          <name>anchorName</name>
+          <version>2.0.0+</version>
+          <type>String</type>
+          <description>
+            Define a anchor base name to be used in XML content, which can be different from the XML tag name name.
+          </description>
+          <comment>see org.codehaus.modello.plugin.model.ModelMetadataPlugin</comment>
+        </field>
         <field xml.attribute="true" xml.tagName="java.enabled">
           <name>enabled</name>
           <version>1.0.0+</version>

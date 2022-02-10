@@ -69,8 +69,9 @@ public class XdocGeneratorTest
         checkFeaturesXdocGenerator();
         checkSettingsXdocGenerator();
     }
-    
-    public void testHtmlToXml() throws Exception
+
+    public void testHtmlToXml()
+        throws Exception
     {
         ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
 
@@ -79,11 +80,11 @@ public class XdocGeneratorTest
         Properties parameters = getModelloParameters( "1.0.0" );
 
         modello.generate( model, "xdoc", parameters );
-        
+
         Diff diff = DiffBuilder.compare( Input.fromStream( XdocGeneratorTest.class.getResourceAsStream( "/html4.expected.xml" ) ) )
                    .withTest( Input.fromFile( new File( getOutputDirectory(), "html4.xml" ) ) ).build();
-        
-        assertFalse(diff.toString(), diff.hasDifferences());
+
+        assertFalse( diff.toString(), diff.hasDifferences() );
     }
 
     private void checkMavenXdocGenerator()
@@ -166,7 +167,7 @@ public class XdocGeneratorTest
 
         String content = FileUtils.fileRead( new File( getOutputDirectory(), "settings.xml" ), "UTF-8" );
 
-        assertTrue( "Properties field was erroneously documented", !content.contains("&lt;properties/&gt;"));
+        assertTrue( "Properties field was erroneously documented", !content.contains("&lt;properties/&gt;") );
     }
 
     /**
