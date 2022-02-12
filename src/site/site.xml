@@ -38,7 +38,8 @@
       <item name="Modello" href="http://codehaus-plexus.github.io/modello/index.html" />
     </breadcrumbs>
 
-    <menu name="Documentation" inherit="bottom">
+    <menu name="Overview" inherit="bottom">
+      <item name="Introduction" href="index.html" />
       <item name="Modello Model" href="modello.html" />
       <item name="Location Tracking" href="location-tracking.html" />
       <item name="Maven Plugin" href="modello-maven-plugin/" />
