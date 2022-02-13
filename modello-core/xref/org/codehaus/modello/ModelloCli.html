@@ -39,7 +39,7 @@
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * @author &lt;a href="<a href="mailto:trygvis@inamo.no" target="alexandria_uri">mailto:trygvis@inamo.no</a>"&gt;Trygve Laugst&amp;oslash;l&lt;/a&gt;</em>
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../org/codehaus/modello/ModelloCli.html">ModelloCli</a>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="ModelloCli" href="../../../org/codehaus/modello/ModelloCli.html#ModelloCli">ModelloCli</a>
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  {
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> File modelFile;
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  
@@ -50,7 +50,7 @@
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> main( String[] args )
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>          <strong class="jxr_keyword">throws</strong> Exception
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>      {
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>          <a href="../../../org/codehaus/modello/Modello.html">Modello</a> modello = <strong class="jxr_keyword">new</strong> <a href="../../../org/codehaus/modello/Modello.html">Modello</a>();
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>          <a name="Modello" href="../../../org/codehaus/modello/Modello.html#Modello">Modello</a> modello = <strong class="jxr_keyword">new</strong> <a name="Modello" href="../../../org/codehaus/modello/Modello.html#Modello">Modello</a>();
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>          parseArgumentsFromCommandLine( args );
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  
@@ -112,18 +112,18 @@
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> 
 <a class="jxr_linenumber" name="L105" href="#L105">105</a>         parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, packageWithVersion );
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 
-<a class="jxr_linenumber" name="L107" href="#L107">107</a>         String useJava5 = args[ 5 ];
+<a class="jxr_linenumber" name="L107" href="#L107">107</a>         String javaSource = args[ 5 ];
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 
-<a class="jxr_linenumber" name="L109" href="#L109">109</a>         <strong class="jxr_keyword">if</strong> ( StringUtils.isEmpty( useJava5 ) )
+<a class="jxr_linenumber" name="L109" href="#L109">109</a>         <strong class="jxr_keyword">if</strong> ( StringUtils.isEmpty( javaSource ) )
 <a class="jxr_linenumber" name="L110" href="#L110">110</a>         {
-<a class="jxr_linenumber" name="L111" href="#L111">111</a>             System.err.println( <span class="jxr_string">"Missing required parameter: use Java 5"</span> );
+<a class="jxr_linenumber" name="L111" href="#L111">111</a>             System.err.println( <span class="jxr_string">"Missing required parameter: Java Source"</span> );
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 
 <a class="jxr_linenumber" name="L113" href="#L113">113</a>             usage();
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> 
 <a class="jxr_linenumber" name="L115" href="#L115">115</a>             System.exit( 1 );
 <a class="jxr_linenumber" name="L116" href="#L116">116</a>         }
 <a class="jxr_linenumber" name="L117" href="#L117">117</a> 
-<a class="jxr_linenumber" name="L118" href="#L118">118</a>         parameters.setProperty( ModelloParameterConstants.USE_JAVA5, useJava5 );
+<a class="jxr_linenumber" name="L118" href="#L118">118</a>         parameters.setProperty( ModelloParameterConstants.OUTPUT_JAVA_SOURCE, javaSource );
 <a class="jxr_linenumber" name="L119" href="#L119">119</a> 
 <a class="jxr_linenumber" name="L120" href="#L120">120</a>         <strong class="jxr_keyword">if</strong> ( args.length &gt; 6 )
 <a class="jxr_linenumber" name="L121" href="#L121">121</a>         {
@@ -138,11 +138,11 @@
 <a class="jxr_linenumber" name="L130" href="#L130">130</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> usage()
 <a class="jxr_linenumber" name="L131" href="#L131">131</a>     {
 <a class="jxr_linenumber" name="L132" href="#L132">132</a>         System.err.println( <span class="jxr_string">"Usage: modello &lt;model&gt; &lt;outputType&gt; &lt;output directory&gt; &lt;modelVersion&gt; &lt;packageWithVersion&gt;"</span>
-<a class="jxr_linenumber" name="L133" href="#L133">133</a>                             + <span class="jxr_string">"&lt;useJava5&gt; [&lt;encoding&gt;]"</span> );
+<a class="jxr_linenumber" name="L133" href="#L133">133</a>                             + <span class="jxr_string">"&lt;javaSource&gt; [&lt;encoding&gt;]"</span> );
 <a class="jxr_linenumber" name="L134" href="#L134">134</a>     }
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2001&#x2013;2019 <a href="http://codehaus-plexus.github.io/">Codehaus Plexus</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2001&#x2013;2022 <a href="http://codehaus-plexus.github.io/">Codehaus Plexus</a>. All rights reserved.</div>
 </body>
 </html>

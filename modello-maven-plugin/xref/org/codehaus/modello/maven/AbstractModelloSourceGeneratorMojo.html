@@ -39,8 +39,8 @@
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * @author Hervé Boutemy</em>
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../org/codehaus/modello/maven/AbstractModelloSourceGeneratorMojo.html">AbstractModelloSourceGeneratorMojo</a>
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>      <strong class="jxr_keyword">extends</strong> <a href="../../../../org/codehaus/modello/maven/AbstractModelloGeneratorMojo.html">AbstractModelloGeneratorMojo</a>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">class</strong> <a name="AbstractModelloSourceGeneratorMojo" href="../../../../org/codehaus/modello/maven/AbstractModelloSourceGeneratorMojo.html#AbstractModelloSourceGeneratorMojo">AbstractModelloSourceGeneratorMojo</a>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>      <strong class="jxr_keyword">extends</strong> <a name="AbstractModelloGeneratorMojo" href="../../../../org/codehaus/modello/maven/AbstractModelloGeneratorMojo.html#AbstractModelloGeneratorMojo">AbstractModelloGeneratorMojo</a>
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  {
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>      <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment">     * The output directory of the generated Java beans.</em>
@@ -53,21 +53,21 @@
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment">     *</em>
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment">     * @since 1.0-alpha-19</em>
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>      @Parameter( property = <span class="jxr_string">"encoding"</span>, defaultValue = <span class="jxr_string">"${project.build.sourceEncoding}"</span> )
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>      @Parameter( defaultValue = <span class="jxr_string">"${project.build.sourceEncoding}"</span> )
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>      <strong class="jxr_keyword">private</strong> String encoding;
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>      <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment">     * Generate Java 5 sources, with generic collections.</em>
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment">     * @since 1.0</em>
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>      @Parameter( property = <span class="jxr_string">"useJava5"</span>, defaultValue = <span class="jxr_string">"false"</span> )
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> useJava5;
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>      @Parameter( defaultValue = <span class="jxr_string">"${maven.compiler.source}"</span> )
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>      <strong class="jxr_keyword">private</strong> String javaSource;
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>      <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment">     * Generate DOM content as plexus-utils &lt;code&gt;Xpp3Dom&lt;/code&gt; objects instead of &lt;code&gt;org.w3c.dom.Element&lt;/code&gt;.</em>
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment">     * @since 1.6</em>
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>      @Parameter( property = <span class="jxr_string">"domAsXpp3"</span>, defaultValue = <span class="jxr_string">"true"</span> )
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>      @Parameter( defaultValue = <span class="jxr_string">"true"</span> )
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> domAsXpp3;
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>      @Override
@@ -96,13 +96,20 @@
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>              parameters.setProperty( ModelloParameterConstants.ENCODING, encoding );
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>          }
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>          parameters.setProperty( ModelloParameterConstants.USE_JAVA5, Boolean.toString( useJava5 ) );
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>          parameters.setProperty( ModelloParameterConstants.DOM_AS_XPP3, Boolean.toString( domAsXpp3 ) );
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>      }
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  }
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>          <strong class="jxr_keyword">if</strong> ( javaSource != <strong class="jxr_keyword">null</strong> )
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>          {
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>              <strong class="jxr_keyword">if</strong> ( javaSource.startsWith( <span class="jxr_string">"1."</span> ) )
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>              {
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>                  javaSource = javaSource.substring( <span class="jxr_string">"1."</span>.length() );
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>              }
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>              parameters.setProperty( ModelloParameterConstants.OUTPUT_JAVA_SOURCE, javaSource );
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>          }
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  
+<a class="jxr_linenumber" name="L100" href="#L100">100</a>         parameters.setProperty( ModelloParameterConstants.DOM_AS_XPP3, Boolean.toString( domAsXpp3 ) );
+<a class="jxr_linenumber" name="L101" href="#L101">101</a>     }
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2001&#x2013;2019 <a href="http://codehaus-plexus.github.io/">Codehaus Plexus</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2001&#x2013;2022 <a href="http://codehaus-plexus.github.io/">Codehaus Plexus</a>. All rights reserved.</div>
 </body>
 </html>

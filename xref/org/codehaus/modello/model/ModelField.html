@@ -36,8 +36,8 @@
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> * @author &lt;a href="<a href="mailto:jason@modello.org" target="alexandria_uri">mailto:jason@modello.org</a>"&gt;Jason van Zyl &lt;/a&gt;</em>
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * @author &lt;a href="<a href="mailto:evenisse@codehaus.org" target="alexandria_uri">mailto:evenisse@codehaus.org</a>"&gt;Emmanuel Venisse &lt;/a&gt;</em>
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../org/codehaus/modello/model/ModelField.html">ModelField</a>
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>      <strong class="jxr_keyword">extends</strong> <a href="../../../../org/codehaus/modello/model/BaseElement.html">BaseElement</a>
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="ModelField" href="../../../../org/codehaus/modello/model/ModelField.html#ModelField">ModelField</a>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>      <strong class="jxr_keyword">extends</strong> <a name="BaseElement" href="../../../../org/codehaus/modello/model/BaseElement.html#BaseElement">BaseElement</a>
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  {
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>      <strong class="jxr_keyword">private</strong> String type;
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  
@@ -51,18 +51,18 @@
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>      <strong class="jxr_keyword">private</strong> String alias;
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">transient</strong> <a href="../../../../org/codehaus/modello/model/ModelClass.html">ModelClass</a> modelClass;
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">transient</strong> <a name="ModelClass" href="../../../../org/codehaus/modello/model/ModelClass.html#ModelClass">ModelClass</a> modelClass;
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String[] PRIMITIVE_TYPES =
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>          { <span class="jxr_string">"boolean"</span>, <span class="jxr_string">"Boolean"</span>, <span class="jxr_string">"char"</span>, <span class="jxr_string">"Character"</span>, <span class="jxr_string">"byte"</span>, <span class="jxr_string">"Byte"</span>, <span class="jxr_string">"short"</span>, <span class="jxr_string">"Short"</span>, <span class="jxr_string">"int"</span>, <span class="jxr_string">"Integer"</span>, <span class="jxr_string">"long"</span>,
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>              <span class="jxr_string">"Long"</span>, <span class="jxr_string">"float"</span>, <span class="jxr_string">"Float"</span>, <span class="jxr_string">"double"</span>, <span class="jxr_string">"Double"</span>, <span class="jxr_string">"String"</span>, <span class="jxr_string">"Date"</span>, <span class="jxr_string">"DOM"</span> };
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../org/codehaus/modello/model/ModelField.html">ModelField</a>()
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>      <strong class="jxr_keyword">public</strong> <a name="ModelField" href="../../../../org/codehaus/modello/model/ModelField.html#ModelField">ModelField</a>()
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>      {
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>          <strong class="jxr_keyword">super</strong>( <strong class="jxr_keyword">true</strong> );
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>      }
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../org/codehaus/modello/model/ModelField.html">ModelField</a>( ModelClass modelClass, String name )
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>      <strong class="jxr_keyword">public</strong> <a name="ModelField" href="../../../../org/codehaus/modello/model/ModelField.html#ModelField">ModelField</a>( <a name="ModelClass" href="../../../../org/codehaus/modello/model/ModelClass.html#ModelClass">ModelClass</a> modelClass, String name )
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>      {
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>          <strong class="jxr_keyword">super</strong>( <strong class="jxr_keyword">true</strong>, name );
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  
@@ -136,12 +136,12 @@
 <a class="jxr_linenumber" name="L128" href="#L128">128</a>     <em class="jxr_comment">// Misc</em>
 <a class="jxr_linenumber" name="L129" href="#L129">129</a>     <em class="jxr_comment">// ----------------------------------------------------------------------</em>
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 
-<a class="jxr_linenumber" name="L131" href="#L131">131</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../org/codehaus/modello/model/ModelClass.html">ModelClass</a> getModelClass()
+<a class="jxr_linenumber" name="L131" href="#L131">131</a>     <strong class="jxr_keyword">public</strong> <a name="ModelClass" href="../../../../org/codehaus/modello/model/ModelClass.html#ModelClass">ModelClass</a> getModelClass()
 <a class="jxr_linenumber" name="L132" href="#L132">132</a>     {
 <a class="jxr_linenumber" name="L133" href="#L133">133</a>         <strong class="jxr_keyword">return</strong> modelClass;
 <a class="jxr_linenumber" name="L134" href="#L134">134</a>     }
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 
-<a class="jxr_linenumber" name="L136" href="#L136">136</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../org/codehaus/modello/metadata/FieldMetadata.html">FieldMetadata</a> getMetadata( String key )
+<a class="jxr_linenumber" name="L136" href="#L136">136</a>     <strong class="jxr_keyword">public</strong> <a name="FieldMetadata" href="../../../../org/codehaus/modello/metadata/FieldMetadata.html#FieldMetadata">FieldMetadata</a> getMetadata( String key )
 <a class="jxr_linenumber" name="L137" href="#L137">137</a>     {
 <a class="jxr_linenumber" name="L138" href="#L138">138</a>         <strong class="jxr_keyword">return</strong> getMetadata( FieldMetadata.<strong class="jxr_keyword">class</strong>, key );
 <a class="jxr_linenumber" name="L139" href="#L139">139</a>     }
@@ -193,7 +193,7 @@
 <a class="jxr_linenumber" name="L185" href="#L185">185</a>     <em class="jxr_comment">// BaseElement Overrides</em>
 <a class="jxr_linenumber" name="L186" href="#L186">186</a>     <em class="jxr_comment">// ----------------------------------------------------------------------</em>
 <a class="jxr_linenumber" name="L187" href="#L187">187</a> 
-<a class="jxr_linenumber" name="L188" href="#L188">188</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> initialize( ModelClass modelClass )
+<a class="jxr_linenumber" name="L188" href="#L188">188</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> initialize( <a name="ModelClass" href="../../../../org/codehaus/modello/model/ModelClass.html#ModelClass">ModelClass</a> modelClass )
 <a class="jxr_linenumber" name="L189" href="#L189">189</a>     {
 <a class="jxr_linenumber" name="L190" href="#L190">190</a>         <strong class="jxr_keyword">this</strong>.modelClass = modelClass;
 <a class="jxr_linenumber" name="L191" href="#L191">191</a> 
@@ -219,7 +219,7 @@
 <a class="jxr_linenumber" name="L211" href="#L211">211</a>     }
 <a class="jxr_linenumber" name="L212" href="#L212">212</a> 
 <a class="jxr_linenumber" name="L213" href="#L213">213</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> validateElement()
-<a class="jxr_linenumber" name="L214" href="#L214">214</a>         <strong class="jxr_keyword">throws</strong> <a href="../../../../org/codehaus/modello/model/ModelValidationException.html">ModelValidationException</a>
+<a class="jxr_linenumber" name="L214" href="#L214">214</a>         <strong class="jxr_keyword">throws</strong> <a name="ModelValidationException" href="../../../../org/codehaus/modello/model/ModelValidationException.html#ModelValidationException">ModelValidationException</a>
 <a class="jxr_linenumber" name="L215" href="#L215">215</a>     {
 <a class="jxr_linenumber" name="L216" href="#L216">216</a>         validateFieldNotEmpty( <span class="jxr_string">"field"</span>, <span class="jxr_string">"name"</span>, getName() );
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> 
@@ -229,7 +229,7 @@
 <a class="jxr_linenumber" name="L221" href="#L221">221</a> 
 <a class="jxr_linenumber" name="L222" href="#L222">222</a>         <strong class="jxr_keyword">if</strong> ( !isPrimitive() &amp;&amp; !isPrimitiveArray() )
 <a class="jxr_linenumber" name="L223" href="#L223">223</a>         {
-<a class="jxr_linenumber" name="L224" href="#L224">224</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../org/codehaus/modello/model/ModelValidationException.html">ModelValidationException</a>( <span class="jxr_string">"Field '"</span> + getName() + <span class="jxr_string">"': Illegal type: '"</span> + type + <span class="jxr_string">"'."</span> );
+<a class="jxr_linenumber" name="L224" href="#L224">224</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ModelValidationException" href="../../../../org/codehaus/modello/model/ModelValidationException.html#ModelValidationException">ModelValidationException</a>( <span class="jxr_string">"Field '"</span> + getName() + <span class="jxr_string">"': Illegal type: '"</span> + type + <span class="jxr_string">"'."</span> );
 <a class="jxr_linenumber" name="L225" href="#L225">225</a>         }
 <a class="jxr_linenumber" name="L226" href="#L226">226</a>     }
 <a class="jxr_linenumber" name="L227" href="#L227">227</a> 
@@ -245,8 +245,8 @@
 <a class="jxr_linenumber" name="L237" href="#L237">237</a> 
 <a class="jxr_linenumber" name="L238" href="#L238">238</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isModelVersionField()
 <a class="jxr_linenumber" name="L239" href="#L239">239</a>     {
-<a class="jxr_linenumber" name="L240" href="#L240">240</a>         <a href="../../../../org/codehaus/modello/model/Model.html">Model</a> model = modelClass.getModel();
-<a class="jxr_linenumber" name="L241" href="#L241">241</a>         <a href="../../../../org/codehaus/modello/model/VersionDefinition.html">VersionDefinition</a> versionDefinition = model.getVersionDefinition();
+<a class="jxr_linenumber" name="L240" href="#L240">240</a>         <a name="Model" href="../../../../org/codehaus/modello/model/Model.html#Model">Model</a> model = modelClass.getModel();
+<a class="jxr_linenumber" name="L241" href="#L241">241</a>         <a name="VersionDefinition" href="../../../../org/codehaus/modello/model/VersionDefinition.html#VersionDefinition">VersionDefinition</a> versionDefinition = model.getVersionDefinition();
 <a class="jxr_linenumber" name="L242" href="#L242">242</a> 
 <a class="jxr_linenumber" name="L243" href="#L243">243</a>         <strong class="jxr_keyword">return</strong> ( versionDefinition != <strong class="jxr_keyword">null</strong> ) &amp;&amp; versionDefinition.isFieldType()
 <a class="jxr_linenumber" name="L244" href="#L244">244</a>             &amp;&amp; ( versionDefinition.getValue().equals( getName() ) || versionDefinition.getValue().equals( alias ) );
@@ -254,6 +254,6 @@
 <a class="jxr_linenumber" name="L246" href="#L246">246</a> }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2001&#x2013;2019 <a href="http://codehaus-plexus.github.io/">Codehaus Plexus</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2001&#x2013;2022 <a href="http://codehaus-plexus.github.io/">Codehaus Plexus</a>. All rights reserved.</div>
 </body>
 </html>

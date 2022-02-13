@@ -55,7 +55,7 @@
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment"> * @author &lt;a href="<a href="mailto:trygvis@inamo.no" target="alexandria_uri">mailto:trygvis@inamo.no</a>"&gt;Trygve Laugst&amp;oslash;l&lt;/a&gt;</em>
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../org/codehaus/modello/maven/AbstractModelloGeneratorMojo.html">AbstractModelloGeneratorMojo</a>
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">class</strong> <a name="AbstractModelloGeneratorMojo" href="../../../../org/codehaus/modello/maven/AbstractModelloGeneratorMojo.html#AbstractModelloGeneratorMojo">AbstractModelloGeneratorMojo</a>
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>      <strong class="jxr_keyword">extends</strong> AbstractMojo
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  {
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>      <em class="jxr_comment">// ----------------------------------------------------------------------</em>
@@ -90,7 +90,7 @@
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  <em class="jxr_javadoccomment">     * &lt;p&gt;Note: This is passed by Maven and must not be configured by the user.&lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>      @Component
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>      <strong class="jxr_keyword">private</strong> <a href="../../../../org/codehaus/modello/core/ModelloCore.html">ModelloCore</a> modelloCore;
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>      <strong class="jxr_keyword">private</strong> <a name="ModelloCore" href="../../../../org/codehaus/modello/core/ModelloCore.html#ModelloCore">ModelloCore</a> modelloCore;
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>      <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  <em class="jxr_javadoccomment">     * The Maven project instance for the executing project.</em>
@@ -231,7 +231,7 @@
 <a class="jxr_linenumber" name="L223" href="#L223">223</a> 
 <a class="jxr_linenumber" name="L224" href="#L224">224</a>         <strong class="jxr_keyword">try</strong>
 <a class="jxr_linenumber" name="L225" href="#L225">225</a>         {
-<a class="jxr_linenumber" name="L226" href="#L226">226</a>             <a href="../../../../org/codehaus/modello/model/Model.html">Model</a> model = modelloCore.loadModel( modelFile );
+<a class="jxr_linenumber" name="L226" href="#L226">226</a>             <a name="Model" href="../../../../org/codehaus/modello/model/Model.html#Model">Model</a> model = modelloCore.loadModel( modelFile );
 <a class="jxr_linenumber" name="L227" href="#L227">227</a> 
 <a class="jxr_linenumber" name="L228" href="#L228">228</a>             <em class="jxr_comment">// TODO: dynamically resolve/load the generator type</em>
 <a class="jxr_linenumber" name="L229" href="#L229">229</a>             getLog().info( <span class="jxr_string">"Generating current version: "</span> + version );
@@ -266,7 +266,7 @@
 <a class="jxr_linenumber" name="L258" href="#L258">258</a>                                      BuildContext.SEVERITY_ERROR, mojoExecutionException );
 <a class="jxr_linenumber" name="L259" href="#L259">259</a>             <strong class="jxr_keyword">throw</strong> mojoExecutionException;
 <a class="jxr_linenumber" name="L260" href="#L260">260</a>         }
-<a class="jxr_linenumber" name="L261" href="#L261">261</a>         <strong class="jxr_keyword">catch</strong> ( ModelloException e )
+<a class="jxr_linenumber" name="L261" href="#L261">261</a>         <strong class="jxr_keyword">catch</strong> ( <a name="ModelloException" href="../../../../org/codehaus/modello/ModelloException.html#ModelloException">ModelloException</a> e )
 <a class="jxr_linenumber" name="L262" href="#L262">262</a>         {
 <a class="jxr_linenumber" name="L263" href="#L263">263</a>             MojoExecutionException mojoExecutionException =
 <a class="jxr_linenumber" name="L264" href="#L264">264</a>                 <strong class="jxr_keyword">new</strong> MojoExecutionException( <span class="jxr_string">"Error generating: "</span> + e.getMessage(), e );
@@ -275,7 +275,7 @@
 <a class="jxr_linenumber" name="L267" href="#L267">267</a>                                      BuildContext.SEVERITY_ERROR, mojoExecutionException );
 <a class="jxr_linenumber" name="L268" href="#L268">268</a>             <strong class="jxr_keyword">throw</strong> mojoExecutionException;
 <a class="jxr_linenumber" name="L269" href="#L269">269</a>         }
-<a class="jxr_linenumber" name="L270" href="#L270">270</a>         <strong class="jxr_keyword">catch</strong> ( ModelValidationException e )
+<a class="jxr_linenumber" name="L270" href="#L270">270</a>         <strong class="jxr_keyword">catch</strong> ( <a name="ModelValidationException" href="../../../../org/codehaus/modello/model/ModelValidationException.html#ModelValidationException">ModelValidationException</a> e )
 <a class="jxr_linenumber" name="L271" href="#L271">271</a>         {
 <a class="jxr_linenumber" name="L272" href="#L272">272</a>             MojoExecutionException mojoExecutionException =
 <a class="jxr_linenumber" name="L273" href="#L273">273</a>                 <strong class="jxr_keyword">new</strong> MojoExecutionException( <span class="jxr_string">"Error generating: "</span> + e.getMessage(), e );
@@ -336,12 +336,12 @@
 <a class="jxr_linenumber" name="L328" href="#L328">328</a>         <strong class="jxr_keyword">this</strong>.packageWithVersion = packageWithVersion;
 <a class="jxr_linenumber" name="L329" href="#L329">329</a>     }
 <a class="jxr_linenumber" name="L330" href="#L330">330</a> 
-<a class="jxr_linenumber" name="L331" href="#L331">331</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../org/codehaus/modello/core/ModelloCore.html">ModelloCore</a> getModelloCore()
+<a class="jxr_linenumber" name="L331" href="#L331">331</a>     <strong class="jxr_keyword">public</strong> <a name="ModelloCore" href="../../../../org/codehaus/modello/core/ModelloCore.html#ModelloCore">ModelloCore</a> getModelloCore()
 <a class="jxr_linenumber" name="L332" href="#L332">332</a>     {
 <a class="jxr_linenumber" name="L333" href="#L333">333</a>         <strong class="jxr_keyword">return</strong> modelloCore;
 <a class="jxr_linenumber" name="L334" href="#L334">334</a>     }
 <a class="jxr_linenumber" name="L335" href="#L335">335</a> 
-<a class="jxr_linenumber" name="L336" href="#L336">336</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setModelloCore( ModelloCore modelloCore )
+<a class="jxr_linenumber" name="L336" href="#L336">336</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setModelloCore( <a name="ModelloCore" href="../../../../org/codehaus/modello/core/ModelloCore.html#ModelloCore">ModelloCore</a> modelloCore )
 <a class="jxr_linenumber" name="L337" href="#L337">337</a>     {
 <a class="jxr_linenumber" name="L338" href="#L338">338</a>         <strong class="jxr_keyword">this</strong>.modelloCore = modelloCore;
 <a class="jxr_linenumber" name="L339" href="#L339">339</a>     }
@@ -384,6 +384,6 @@
 <a class="jxr_linenumber" name="L376" href="#L376">376</a> }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2001&#x2013;2019 <a href="http://codehaus-plexus.github.io/">Codehaus Plexus</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2001&#x2013;2022 <a href="http://codehaus-plexus.github.io/">Codehaus Plexus</a>. All rights reserved.</div>
 </body>
 </html>

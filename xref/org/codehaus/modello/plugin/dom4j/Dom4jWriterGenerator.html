@@ -60,14 +60,14 @@
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment"> * @author &lt;a href="<a href="mailto:brett@codehaus.org" target="alexandria_uri">mailto:brett@codehaus.org</a>"&gt;Brett Porter&lt;/a&gt;</em>
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../org/codehaus/modello/plugin/dom4j/Dom4jWriterGenerator.html">Dom4jWriterGenerator</a>
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>      <strong class="jxr_keyword">extends</strong> <a href="../../../../../org/codehaus/modello/plugins/xml/AbstractXmlJavaGenerator.html">AbstractXmlJavaGenerator</a>
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="Dom4jWriterGenerator" href="../../../../../org/codehaus/modello/plugin/dom4j/Dom4jWriterGenerator.html#Dom4jWriterGenerator">Dom4jWriterGenerator</a>
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>      <strong class="jxr_keyword">extends</strong> <a name="AbstractXmlJavaGenerator" href="../../../../../org/codehaus/modello/plugins/xml/AbstractXmlJavaGenerator.html#AbstractXmlJavaGenerator">AbstractXmlJavaGenerator</a>
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  {
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> requiresDomSupport;
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> generate( Model model, Properties parameters )
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>          <strong class="jxr_keyword">throws</strong> <a href="../../../../../org/codehaus/modello/ModelloException.html">ModelloException</a>
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> generate( <a name="Model" href="../../../../../org/codehaus/modello/model/Model.html#Model">Model</a> model, Properties parameters )
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>          <strong class="jxr_keyword">throws</strong> <a name="ModelloException" href="../../../../../org/codehaus/modello/ModelloException.html#ModelloException">ModelloException</a>
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>      {
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>          initialize( model, parameters );
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  
@@ -79,23 +79,23 @@
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>          }
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>          <strong class="jxr_keyword">catch</strong> ( IOException ex )
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>          {
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>              <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../org/codehaus/modello/ModelloException.html">ModelloException</a>( <span class="jxr_string">"Exception while generating Dom4j Writer."</span>, ex );
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>              <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ModelloException" href="../../../../../org/codehaus/modello/ModelloException.html#ModelloException">ModelloException</a>( <span class="jxr_string">"Exception while generating Dom4j Writer."</span>, ex );
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>          }
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>      }
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> generateDom4jWriter()
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>          <strong class="jxr_keyword">throws</strong> ModelloException, IOException
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>      {
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>          <a href="../../../../../org/codehaus/modello/model/Model.html">Model</a> objectModel = getModel();
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>          <a name="Model" href="../../../../../org/codehaus/modello/model/Model.html#Model">Model</a> objectModel = getModel();
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>          String packageName = objectModel.getDefaultPackageName( isPackageWithVersion(), getGeneratedVersion() )
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>              + <span class="jxr_string">".io.dom4j"</span>;
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>          String marshallerName = getFileName( <span class="jxr_string">"Dom4jWriter"</span> );
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>          <a href="../../../../../org/codehaus/modello/plugin/java/javasource/JSourceWriter.html">JSourceWriter</a> sourceWriter = newJSourceWriter( packageName, marshallerName );
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>          <a name="JSourceWriter" href="../../../../../org/codehaus/modello/plugin/java/javasource/JSourceWriter.html#JSourceWriter">JSourceWriter</a> sourceWriter = newJSourceWriter( packageName, marshallerName );
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>          <a href="../../../../../org/codehaus/modello/plugin/java/javasource/JClass.html">JClass</a> jClass = <strong class="jxr_keyword">new</strong> <a href="../../../../../org/codehaus/modello/plugin/java/javasource/JClass.html">JClass</a>( packageName + '.' + marshallerName );
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>          <a name="JClass" href="../../../../../org/codehaus/modello/plugin/java/javasource/JClass.html#JClass">JClass</a> jClass = <strong class="jxr_keyword">new</strong> <a name="JClass" href="../../../../../org/codehaus/modello/plugin/java/javasource/JClass.html#JClass">JClass</a>( packageName + '.' + marshallerName );
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>          initHeader( jClass );
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>          suppressAllWarnings( objectModel, jClass );
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  
@@ -116,7 +116,7 @@
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 
 <a class="jxr_linenumber" name="L109" href="#L109">109</a>         String root = objectModel.getRoot( getGeneratedVersion() );
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 
-<a class="jxr_linenumber" name="L111" href="#L111">111</a>         <a href="../../../../../org/codehaus/modello/model/ModelClass.html">ModelClass</a> rootClass = objectModel.getClass( root, getGeneratedVersion() );
+<a class="jxr_linenumber" name="L111" href="#L111">111</a>         <a name="ModelClass" href="../../../../../org/codehaus/modello/model/ModelClass.html#ModelClass">ModelClass</a> rootClass = objectModel.getClass( root, getGeneratedVersion() );
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 
 <a class="jxr_linenumber" name="L113" href="#L113">113</a>         String rootElement = resolveTagName( rootClass );
 <a class="jxr_linenumber" name="L114" href="#L114">114</a>         String variableName = uncapitalise( root );
@@ -125,14 +125,14 @@
 <a class="jxr_linenumber" name="L117" href="#L117">117</a>         <em class="jxr_comment">// Write the write( Reader, Model ) method which will do the unmarshalling.</em>
 <a class="jxr_linenumber" name="L118" href="#L118">118</a>         <em class="jxr_comment">// ----------------------------------------------------------------------</em>
 <a class="jxr_linenumber" name="L119" href="#L119">119</a> 
-<a class="jxr_linenumber" name="L120" href="#L120">120</a>         <a href="../../../../../org/codehaus/modello/plugin/java/javasource/JMethod.html">JMethod</a> marshall = <strong class="jxr_keyword">new</strong> <a href="../../../../../org/codehaus/modello/plugin/java/javasource/JMethod.html">JMethod</a>( <span class="jxr_string">"write"</span> );
+<a class="jxr_linenumber" name="L120" href="#L120">120</a>         <a name="JMethod" href="../../../../../org/codehaus/modello/plugin/java/javasource/JMethod.html#JMethod">JMethod</a> marshall = <strong class="jxr_keyword">new</strong> <a name="JMethod" href="../../../../../org/codehaus/modello/plugin/java/javasource/JMethod.html#JMethod">JMethod</a>( <span class="jxr_string">"write"</span> );
 <a class="jxr_linenumber" name="L121" href="#L121">121</a> 
-<a class="jxr_linenumber" name="L122" href="#L122">122</a>         marshall.addParameter( <strong class="jxr_keyword">new</strong> JParameter( <strong class="jxr_keyword">new</strong> JClass( <span class="jxr_string">"Writer"</span> ), <span class="jxr_string">"writer"</span> ) );
-<a class="jxr_linenumber" name="L123" href="#L123">123</a>         marshall.addParameter( <strong class="jxr_keyword">new</strong> JParameter( <strong class="jxr_keyword">new</strong> JClass( root ), variableName ) );
+<a class="jxr_linenumber" name="L122" href="#L122">122</a>         marshall.addParameter( <strong class="jxr_keyword">new</strong> <a name="JParameter" href="../../../../../org/codehaus/modello/plugin/java/javasource/JParameter.html#JParameter">JParameter</a>( <strong class="jxr_keyword">new</strong> <a name="JClass" href="../../../../../org/codehaus/modello/plugin/java/javasource/JClass.html#JClass">JClass</a>( <span class="jxr_string">"Writer"</span> ), <span class="jxr_string">"writer"</span> ) );
+<a class="jxr_linenumber" name="L123" href="#L123">123</a>         marshall.addParameter( <strong class="jxr_keyword">new</strong> <a name="JParameter" href="../../../../../org/codehaus/modello/plugin/java/javasource/JParameter.html#JParameter">JParameter</a>( <strong class="jxr_keyword">new</strong> <a name="JClass" href="../../../../../org/codehaus/modello/plugin/java/javasource/JClass.html#JClass">JClass</a>( root ), variableName ) );
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> 
-<a class="jxr_linenumber" name="L125" href="#L125">125</a>         marshall.addException( <strong class="jxr_keyword">new</strong> JClass( <span class="jxr_string">"java.io.IOException"</span> ) );
+<a class="jxr_linenumber" name="L125" href="#L125">125</a>         marshall.addException( <strong class="jxr_keyword">new</strong> <a name="JClass" href="../../../../../org/codehaus/modello/plugin/java/javasource/JClass.html#JClass">JClass</a>( <span class="jxr_string">"java.io.IOException"</span> ) );
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 
-<a class="jxr_linenumber" name="L127" href="#L127">127</a>         <a href="../../../../../org/codehaus/modello/plugin/java/javasource/JSourceCode.html">JSourceCode</a> sc = marshall.getSourceCode();
+<a class="jxr_linenumber" name="L127" href="#L127">127</a>         <a name="JSourceCode" href="../../../../../org/codehaus/modello/plugin/java/javasource/JSourceCode.html#JSourceCode">JSourceCode</a> sc = marshall.getSourceCode();
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 
 <a class="jxr_linenumber" name="L129" href="#L129">129</a>         sc.add( <span class="jxr_string">"Document document = new DocumentFactory().createDocument();"</span> );
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 
@@ -151,12 +151,12 @@
 <a class="jxr_linenumber" name="L143" href="#L143">143</a>         <em class="jxr_comment">// Write the write( OutputStream, Model ) method which will do the unmarshalling.</em>
 <a class="jxr_linenumber" name="L144" href="#L144">144</a>         <em class="jxr_comment">// ----------------------------------------------------------------------</em>
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 
-<a class="jxr_linenumber" name="L146" href="#L146">146</a>         marshall = <strong class="jxr_keyword">new</strong> <a href="../../../../../org/codehaus/modello/plugin/java/javasource/JMethod.html">JMethod</a>( <span class="jxr_string">"write"</span> );
+<a class="jxr_linenumber" name="L146" href="#L146">146</a>         marshall = <strong class="jxr_keyword">new</strong> <a name="JMethod" href="../../../../../org/codehaus/modello/plugin/java/javasource/JMethod.html#JMethod">JMethod</a>( <span class="jxr_string">"write"</span> );
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 
-<a class="jxr_linenumber" name="L148" href="#L148">148</a>         marshall.addParameter( <strong class="jxr_keyword">new</strong> JParameter( <strong class="jxr_keyword">new</strong> JClass( <span class="jxr_string">"OutputStream"</span> ), <span class="jxr_string">"stream"</span> ) );
-<a class="jxr_linenumber" name="L149" href="#L149">149</a>         marshall.addParameter( <strong class="jxr_keyword">new</strong> JParameter( <strong class="jxr_keyword">new</strong> JClass( root ), variableName ) );
+<a class="jxr_linenumber" name="L148" href="#L148">148</a>         marshall.addParameter( <strong class="jxr_keyword">new</strong> <a name="JParameter" href="../../../../../org/codehaus/modello/plugin/java/javasource/JParameter.html#JParameter">JParameter</a>( <strong class="jxr_keyword">new</strong> <a name="JClass" href="../../../../../org/codehaus/modello/plugin/java/javasource/JClass.html#JClass">JClass</a>( <span class="jxr_string">"OutputStream"</span> ), <span class="jxr_string">"stream"</span> ) );
+<a class="jxr_linenumber" name="L149" href="#L149">149</a>         marshall.addParameter( <strong class="jxr_keyword">new</strong> <a name="JParameter" href="../../../../../org/codehaus/modello/plugin/java/javasource/JParameter.html#JParameter">JParameter</a>( <strong class="jxr_keyword">new</strong> <a name="JClass" href="../../../../../org/codehaus/modello/plugin/java/javasource/JClass.html#JClass">JClass</a>( root ), variableName ) );
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 
-<a class="jxr_linenumber" name="L151" href="#L151">151</a>         marshall.addException( <strong class="jxr_keyword">new</strong> JClass( <span class="jxr_string">"java.io.IOException"</span> ) );
+<a class="jxr_linenumber" name="L151" href="#L151">151</a>         marshall.addException( <strong class="jxr_keyword">new</strong> <a name="JClass" href="../../../../../org/codehaus/modello/plugin/java/javasource/JClass.html#JClass">JClass</a>( <span class="jxr_string">"java.io.IOException"</span> ) );
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 
 <a class="jxr_linenumber" name="L153" href="#L153">153</a>         sc = marshall.getSourceCode();
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 
@@ -187,42 +187,42 @@
 <a class="jxr_linenumber" name="L179" href="#L179">179</a>         sourceWriter.close();
 <a class="jxr_linenumber" name="L180" href="#L180">180</a>     }
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 
-<a class="jxr_linenumber" name="L182" href="#L182">182</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> writeAllClasses( Model objectModel, JClass jClass )
-<a class="jxr_linenumber" name="L183" href="#L183">183</a>         <strong class="jxr_keyword">throws</strong> <a href="../../../../../org/codehaus/modello/ModelloException.html">ModelloException</a>
+<a class="jxr_linenumber" name="L182" href="#L182">182</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> writeAllClasses( <a name="Model" href="../../../../../org/codehaus/modello/model/Model.html#Model">Model</a> objectModel, <a name="JClass" href="../../../../../org/codehaus/modello/plugin/java/javasource/JClass.html#JClass">JClass</a> jClass )
+<a class="jxr_linenumber" name="L183" href="#L183">183</a>         <strong class="jxr_keyword">throws</strong> <a name="ModelloException" href="../../../../../org/codehaus/modello/ModelloException.html#ModelloException">ModelloException</a>
 <a class="jxr_linenumber" name="L184" href="#L184">184</a>     {
-<a class="jxr_linenumber" name="L185" href="#L185">185</a>         <strong class="jxr_keyword">for</strong> ( ModelClass clazz : getClasses( objectModel ) )
+<a class="jxr_linenumber" name="L185" href="#L185">185</a>         <strong class="jxr_keyword">for</strong> ( <a name="ModelClass" href="../../../../../org/codehaus/modello/model/ModelClass.html#ModelClass">ModelClass</a> clazz : getClasses( objectModel ) )
 <a class="jxr_linenumber" name="L186" href="#L186">186</a>         {
 <a class="jxr_linenumber" name="L187" href="#L187">187</a>             writeClass( clazz, jClass );
 <a class="jxr_linenumber" name="L188" href="#L188">188</a>         }
 <a class="jxr_linenumber" name="L189" href="#L189">189</a>     }
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> 
-<a class="jxr_linenumber" name="L191" href="#L191">191</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> writeClass( ModelClass modelClass, JClass jClass )
-<a class="jxr_linenumber" name="L192" href="#L192">192</a>         <strong class="jxr_keyword">throws</strong> <a href="../../../../../org/codehaus/modello/ModelloException.html">ModelloException</a>
+<a class="jxr_linenumber" name="L191" href="#L191">191</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> writeClass( <a name="ModelClass" href="../../../../../org/codehaus/modello/model/ModelClass.html#ModelClass">ModelClass</a> modelClass, <a name="JClass" href="../../../../../org/codehaus/modello/plugin/java/javasource/JClass.html#JClass">JClass</a> jClass )
+<a class="jxr_linenumber" name="L192" href="#L192">192</a>         <strong class="jxr_keyword">throws</strong> <a name="ModelloException" href="../../../../../org/codehaus/modello/ModelloException.html#ModelloException">ModelloException</a>
 <a class="jxr_linenumber" name="L193" href="#L193">193</a>     {
 <a class="jxr_linenumber" name="L194" href="#L194">194</a>         String className = modelClass.getName();
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> 
 <a class="jxr_linenumber" name="L196" href="#L196">196</a>         String uncapClassName = uncapitalise( className );
 <a class="jxr_linenumber" name="L197" href="#L197">197</a> 
-<a class="jxr_linenumber" name="L198" href="#L198">198</a>         <a href="../../../../../org/codehaus/modello/plugin/java/javasource/JMethod.html">JMethod</a> marshall = <strong class="jxr_keyword">new</strong> <a href="../../../../../org/codehaus/modello/plugin/java/javasource/JMethod.html">JMethod</a>( <span class="jxr_string">"write"</span> + className );
+<a class="jxr_linenumber" name="L198" href="#L198">198</a>         <a name="JMethod" href="../../../../../org/codehaus/modello/plugin/java/javasource/JMethod.html#JMethod">JMethod</a> marshall = <strong class="jxr_keyword">new</strong> <a name="JMethod" href="../../../../../org/codehaus/modello/plugin/java/javasource/JMethod.html#JMethod">JMethod</a>( <span class="jxr_string">"write"</span> + className );
 <a class="jxr_linenumber" name="L199" href="#L199">199</a>         marshall.getModifiers().makePrivate();
 <a class="jxr_linenumber" name="L200" href="#L200">200</a> 
-<a class="jxr_linenumber" name="L201" href="#L201">201</a>         marshall.addParameter( <strong class="jxr_keyword">new</strong> JParameter( <strong class="jxr_keyword">new</strong> JClass( className ), uncapClassName ) );
-<a class="jxr_linenumber" name="L202" href="#L202">202</a>         marshall.addParameter( <strong class="jxr_keyword">new</strong> JParameter( <strong class="jxr_keyword">new</strong> JClass( <span class="jxr_string">"String"</span> ), <span class="jxr_string">"tagName"</span> ) );
+<a class="jxr_linenumber" name="L201" href="#L201">201</a>         marshall.addParameter( <strong class="jxr_keyword">new</strong> <a name="JParameter" href="../../../../../org/codehaus/modello/plugin/java/javasource/JParameter.html#JParameter">JParameter</a>( <strong class="jxr_keyword">new</strong> <a name="JClass" href="../../../../../org/codehaus/modello/plugin/java/javasource/JClass.html#JClass">JClass</a>( className ), uncapClassName ) );
+<a class="jxr_linenumber" name="L202" href="#L202">202</a>         marshall.addParameter( <strong class="jxr_keyword">new</strong> <a name="JParameter" href="../../../../../org/codehaus/modello/plugin/java/javasource/JParameter.html#JParameter">JParameter</a>( <strong class="jxr_keyword">new</strong> <a name="JClass" href="../../../../../org/codehaus/modello/plugin/java/javasource/JClass.html#JClass">JClass</a>( <span class="jxr_string">"String"</span> ), <span class="jxr_string">"tagName"</span> ) );
 <a class="jxr_linenumber" name="L203" href="#L203">203</a> 
-<a class="jxr_linenumber" name="L204" href="#L204">204</a>         <a href="../../../../../org/codehaus/modello/plugin/model/ModelClassMetadata.html">ModelClassMetadata</a> classMetadata = (ModelClassMetadata) modelClass.getMetadata( ModelClassMetadata.ID );
+<a class="jxr_linenumber" name="L204" href="#L204">204</a>         <a name="ModelClassMetadata" href="../../../../../org/codehaus/modello/plugin/model/ModelClassMetadata.html#ModelClassMetadata">ModelClassMetadata</a> classMetadata = (<a name="ModelClassMetadata" href="../../../../../org/codehaus/modello/plugin/model/ModelClassMetadata.html#ModelClassMetadata">ModelClassMetadata</a>) modelClass.getMetadata( ModelClassMetadata.ID );
 <a class="jxr_linenumber" name="L205" href="#L205">205</a> 
-<a class="jxr_linenumber" name="L206" href="#L206">206</a>         marshall.addParameter( <strong class="jxr_keyword">new</strong> JParameter( <strong class="jxr_keyword">new</strong> JClass( <span class="jxr_string">"org.dom4j.Branch"</span> ), <span class="jxr_string">"parentElement"</span> ) );
+<a class="jxr_linenumber" name="L206" href="#L206">206</a>         marshall.addParameter( <strong class="jxr_keyword">new</strong> <a name="JParameter" href="../../../../../org/codehaus/modello/plugin/java/javasource/JParameter.html#JParameter">JParameter</a>( <strong class="jxr_keyword">new</strong> <a name="JClass" href="../../../../../org/codehaus/modello/plugin/java/javasource/JClass.html#JClass">JClass</a>( <span class="jxr_string">"org.dom4j.Branch"</span> ), <span class="jxr_string">"parentElement"</span> ) );
 <a class="jxr_linenumber" name="L207" href="#L207">207</a> 
-<a class="jxr_linenumber" name="L208" href="#L208">208</a>         marshall.addException( <strong class="jxr_keyword">new</strong> JClass( <span class="jxr_string">"java.io.IOException"</span> ) );
+<a class="jxr_linenumber" name="L208" href="#L208">208</a>         marshall.addException( <strong class="jxr_keyword">new</strong> <a name="JClass" href="../../../../../org/codehaus/modello/plugin/java/javasource/JClass.html#JClass">JClass</a>( <span class="jxr_string">"java.io.IOException"</span> ) );
 <a class="jxr_linenumber" name="L209" href="#L209">209</a> 
-<a class="jxr_linenumber" name="L210" href="#L210">210</a>         <a href="../../../../../org/codehaus/modello/plugin/java/javasource/JSourceCode.html">JSourceCode</a> sc = marshall.getSourceCode();
+<a class="jxr_linenumber" name="L210" href="#L210">210</a>         <a name="JSourceCode" href="../../../../../org/codehaus/modello/plugin/java/javasource/JSourceCode.html#JSourceCode">JSourceCode</a> sc = marshall.getSourceCode();
 <a class="jxr_linenumber" name="L211" href="#L211">211</a> 
 <a class="jxr_linenumber" name="L212" href="#L212">212</a>         sc.add( <span class="jxr_string">"if ( "</span> + uncapClassName + <span class="jxr_string">" != null )"</span> );
 <a class="jxr_linenumber" name="L213" href="#L213">213</a> 
 <a class="jxr_linenumber" name="L214" href="#L214">214</a>         sc.add( <span class="jxr_string">"{"</span> );
 <a class="jxr_linenumber" name="L215" href="#L215">215</a>         sc.indent();
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> 
-<a class="jxr_linenumber" name="L217" href="#L217">217</a>         <a href="../../../../../org/codehaus/modello/plugins/xml/metadata/XmlModelMetadata.html">XmlModelMetadata</a> xmlModelMetadata = (XmlModelMetadata) modelClass.getModel().getMetadata( XmlModelMetadata.ID );
+<a class="jxr_linenumber" name="L217" href="#L217">217</a>         <a name="XmlModelMetadata" href="../../../../../org/codehaus/modello/plugins/xml/metadata/XmlModelMetadata.html#XmlModelMetadata">XmlModelMetadata</a> xmlModelMetadata = (<a name="XmlModelMetadata" href="../../../../../org/codehaus/modello/plugins/xml/metadata/XmlModelMetadata.html#XmlModelMetadata">XmlModelMetadata</a>) modelClass.getModel().getMetadata( XmlModelMetadata.ID );
 <a class="jxr_linenumber" name="L218" href="#L218">218</a> 
 <a class="jxr_linenumber" name="L219" href="#L219">219</a>         <em class="jxr_comment">// add namespace information for root element only</em>
 <a class="jxr_linenumber" name="L220" href="#L220">220</a>         <strong class="jxr_keyword">if</strong> ( classMetadata.isRootElement() &amp;&amp; ( xmlModelMetadata.getNamespace() != <strong class="jxr_keyword">null</strong> ) )
@@ -244,18 +244,18 @@
 <a class="jxr_linenumber" name="L236" href="#L236">236</a>             sc.add( <span class="jxr_string">"Element element = parentElement.addElement( tagName );"</span> );
 <a class="jxr_linenumber" name="L237" href="#L237">237</a>         }
 <a class="jxr_linenumber" name="L238" href="#L238">238</a> 
-<a class="jxr_linenumber" name="L239" href="#L239">239</a>         <a href="../../../../../org/codehaus/modello/model/ModelField.html">ModelField</a> contentField = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L239" href="#L239">239</a>         <a name="ModelField" href="../../../../../org/codehaus/modello/model/ModelField.html#ModelField">ModelField</a> contentField = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L240" href="#L240">240</a> 
 <a class="jxr_linenumber" name="L241" href="#L241">241</a>         String contentValue = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L242" href="#L242">242</a> 
 <a class="jxr_linenumber" name="L243" href="#L243">243</a>         List&lt;ModelField&gt; modelFields = getFieldsForXml( modelClass, getGeneratedVersion() );
 <a class="jxr_linenumber" name="L244" href="#L244">244</a> 
 <a class="jxr_linenumber" name="L245" href="#L245">245</a>         <em class="jxr_comment">// XML attributes</em>
-<a class="jxr_linenumber" name="L246" href="#L246">246</a>         <strong class="jxr_keyword">for</strong> ( ModelField field : modelFields )
+<a class="jxr_linenumber" name="L246" href="#L246">246</a>         <strong class="jxr_keyword">for</strong> ( <a name="ModelField" href="../../../../../org/codehaus/modello/model/ModelField.html#ModelField">ModelField</a> field : modelFields )
 <a class="jxr_linenumber" name="L247" href="#L247">247</a>         {
-<a class="jxr_linenumber" name="L248" href="#L248">248</a>             <a href="../../../../../org/codehaus/modello/plugins/xml/metadata/XmlFieldMetadata.html">XmlFieldMetadata</a> xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
+<a class="jxr_linenumber" name="L248" href="#L248">248</a>             <a name="XmlFieldMetadata" href="../../../../../org/codehaus/modello/plugins/xml/metadata/XmlFieldMetadata.html#XmlFieldMetadata">XmlFieldMetadata</a> xmlFieldMetadata = (<a name="XmlFieldMetadata" href="../../../../../org/codehaus/modello/plugins/xml/metadata/XmlFieldMetadata.html#XmlFieldMetadata">XmlFieldMetadata</a>) field.getMetadata( XmlFieldMetadata.ID );
 <a class="jxr_linenumber" name="L249" href="#L249">249</a> 
-<a class="jxr_linenumber" name="L250" href="#L250">250</a>             <a href="../../../../../org/codehaus/modello/plugin/java/metadata/JavaFieldMetadata.html">JavaFieldMetadata</a> javaFieldMetadata = (JavaFieldMetadata) field.getMetadata( JavaFieldMetadata.ID );
+<a class="jxr_linenumber" name="L250" href="#L250">250</a>             <a name="JavaFieldMetadata" href="../../../../../org/codehaus/modello/plugin/java/metadata/JavaFieldMetadata.html#JavaFieldMetadata">JavaFieldMetadata</a> javaFieldMetadata = (<a name="JavaFieldMetadata" href="../../../../../org/codehaus/modello/plugin/java/metadata/JavaFieldMetadata.html#JavaFieldMetadata">JavaFieldMetadata</a>) field.getMetadata( JavaFieldMetadata.ID );
 <a class="jxr_linenumber" name="L251" href="#L251">251</a> 
 <a class="jxr_linenumber" name="L252" href="#L252">252</a>             String fieldTagName = resolveTagName( field, xmlFieldMetadata );
 <a class="jxr_linenumber" name="L253" href="#L253">253</a> 
@@ -283,14 +283,14 @@
 <a class="jxr_linenumber" name="L275" href="#L275">275</a> 
 <a class="jxr_linenumber" name="L276" href="#L276">276</a>         <strong class="jxr_keyword">if</strong> ( contentField != <strong class="jxr_keyword">null</strong> )
 <a class="jxr_linenumber" name="L277" href="#L277">277</a>         {
-<a class="jxr_linenumber" name="L278" href="#L278">278</a>             <a href="../../../../../org/codehaus/modello/plugins/xml/metadata/XmlFieldMetadata.html">XmlFieldMetadata</a> xmlFieldMetadata = (XmlFieldMetadata) contentField.getMetadata( XmlFieldMetadata.ID );
+<a class="jxr_linenumber" name="L278" href="#L278">278</a>             <a name="XmlFieldMetadata" href="../../../../../org/codehaus/modello/plugins/xml/metadata/XmlFieldMetadata.html#XmlFieldMetadata">XmlFieldMetadata</a> xmlFieldMetadata = (<a name="XmlFieldMetadata" href="../../../../../org/codehaus/modello/plugins/xml/metadata/XmlFieldMetadata.html#XmlFieldMetadata">XmlFieldMetadata</a>) contentField.getMetadata( XmlFieldMetadata.ID );
 <a class="jxr_linenumber" name="L279" href="#L279">279</a>             sc.add( <span class="jxr_string">"element.setText( "</span> + getValue( contentField.getType(), contentValue, xmlFieldMetadata ) + <span class="jxr_string">" );"</span> );
 <a class="jxr_linenumber" name="L280" href="#L280">280</a>         }
 <a class="jxr_linenumber" name="L281" href="#L281">281</a> 
 <a class="jxr_linenumber" name="L282" href="#L282">282</a>         <em class="jxr_comment">// XML tags</em>
-<a class="jxr_linenumber" name="L283" href="#L283">283</a>         <strong class="jxr_keyword">for</strong> ( ModelField field : modelFields )
+<a class="jxr_linenumber" name="L283" href="#L283">283</a>         <strong class="jxr_keyword">for</strong> ( <a name="ModelField" href="../../../../../org/codehaus/modello/model/ModelField.html#ModelField">ModelField</a> field : modelFields )
 <a class="jxr_linenumber" name="L284" href="#L284">284</a>         {
-<a class="jxr_linenumber" name="L285" href="#L285">285</a>             <a href="../../../../../org/codehaus/modello/plugins/xml/metadata/XmlFieldMetadata.html">XmlFieldMetadata</a> xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
+<a class="jxr_linenumber" name="L285" href="#L285">285</a>             <a name="XmlFieldMetadata" href="../../../../../org/codehaus/modello/plugins/xml/metadata/XmlFieldMetadata.html#XmlFieldMetadata">XmlFieldMetadata</a> xmlFieldMetadata = (<a name="XmlFieldMetadata" href="../../../../../org/codehaus/modello/plugins/xml/metadata/XmlFieldMetadata.html#XmlFieldMetadata">XmlFieldMetadata</a>) field.getMetadata( XmlFieldMetadata.ID );
 <a class="jxr_linenumber" name="L286" href="#L286">286</a> 
 <a class="jxr_linenumber" name="L287" href="#L287">287</a>             <strong class="jxr_keyword">if</strong> ( xmlFieldMetadata.isContent() )
 <a class="jxr_linenumber" name="L288" href="#L288">288</a>             {
@@ -310,11 +310,11 @@
 <a class="jxr_linenumber" name="L302" href="#L302">302</a>         jClass.addMethod( marshall );
 <a class="jxr_linenumber" name="L303" href="#L303">303</a>     }
 <a class="jxr_linenumber" name="L304" href="#L304">304</a> 
-<a class="jxr_linenumber" name="L305" href="#L305">305</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> processField( ModelField field, XmlFieldMetadata xmlFieldMetadata, String uncapClassName,
-<a class="jxr_linenumber" name="L306" href="#L306">306</a>                                <a href="../../../../../org/codehaus/modello/plugin/java/javasource/JSourceCode.html">JSourceCode</a> sc, <a href="../../../../../org/codehaus/modello/model/ModelClass.html">ModelClass</a> modelClass, <a href="../../../../../org/codehaus/modello/plugin/java/javasource/JClass.html">JClass</a> jClass )
-<a class="jxr_linenumber" name="L307" href="#L307">307</a>         <strong class="jxr_keyword">throws</strong> <a href="../../../../../org/codehaus/modello/ModelloException.html">ModelloException</a>
+<a class="jxr_linenumber" name="L305" href="#L305">305</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> processField( <a name="ModelField" href="../../../../../org/codehaus/modello/model/ModelField.html#ModelField">ModelField</a> field, <a name="XmlFieldMetadata" href="../../../../../org/codehaus/modello/plugins/xml/metadata/XmlFieldMetadata.html#XmlFieldMetadata">XmlFieldMetadata</a> xmlFieldMetadata, String uncapClassName,
+<a class="jxr_linenumber" name="L306" href="#L306">306</a>                                <a name="JSourceCode" href="../../../../../org/codehaus/modello/plugin/java/javasource/JSourceCode.html#JSourceCode">JSourceCode</a> sc, <a name="ModelClass" href="../../../../../org/codehaus/modello/model/ModelClass.html#ModelClass">ModelClass</a> modelClass, <a name="JClass" href="../../../../../org/codehaus/modello/plugin/java/javasource/JClass.html#JClass">JClass</a> jClass )
+<a class="jxr_linenumber" name="L307" href="#L307">307</a>         <strong class="jxr_keyword">throws</strong> <a name="ModelloException" href="../../../../../org/codehaus/modello/ModelloException.html#ModelloException">ModelloException</a>
 <a class="jxr_linenumber" name="L308" href="#L308">308</a>     {
-<a class="jxr_linenumber" name="L309" href="#L309">309</a>         <a href="../../../../../org/codehaus/modello/plugin/java/metadata/JavaFieldMetadata.html">JavaFieldMetadata</a> javaFieldMetadata = (JavaFieldMetadata) field.getMetadata( JavaFieldMetadata.ID );
+<a class="jxr_linenumber" name="L309" href="#L309">309</a>         <a name="JavaFieldMetadata" href="../../../../../org/codehaus/modello/plugin/java/metadata/JavaFieldMetadata.html#JavaFieldMetadata">JavaFieldMetadata</a> javaFieldMetadata = (<a name="JavaFieldMetadata" href="../../../../../org/codehaus/modello/plugin/java/metadata/JavaFieldMetadata.html#JavaFieldMetadata">JavaFieldMetadata</a>) field.getMetadata( JavaFieldMetadata.ID );
 <a class="jxr_linenumber" name="L310" href="#L310">310</a> 
 <a class="jxr_linenumber" name="L311" href="#L311">311</a>         String fieldTagName = resolveTagName( field, xmlFieldMetadata );
 <a class="jxr_linenumber" name="L312" href="#L312">312</a> 
@@ -322,9 +322,9 @@
 <a class="jxr_linenumber" name="L314" href="#L314">314</a> 
 <a class="jxr_linenumber" name="L315" href="#L315">315</a>         String value = uncapClassName + <span class="jxr_string">"."</span> + getPrefix( javaFieldMetadata ) + capitalise( field.getName() ) + <span class="jxr_string">"()"</span>;
 <a class="jxr_linenumber" name="L316" href="#L316">316</a> 
-<a class="jxr_linenumber" name="L317" href="#L317">317</a>         <strong class="jxr_keyword">if</strong> ( field instanceof ModelAssociation )
+<a class="jxr_linenumber" name="L317" href="#L317">317</a>         <strong class="jxr_keyword">if</strong> ( field instanceof <a name="ModelAssociation" href="../../../../../org/codehaus/modello/model/ModelAssociation.html#ModelAssociation">ModelAssociation</a> )
 <a class="jxr_linenumber" name="L318" href="#L318">318</a>         {
-<a class="jxr_linenumber" name="L319" href="#L319">319</a>             <a href="../../../../../org/codehaus/modello/model/ModelAssociation.html">ModelAssociation</a> association = (ModelAssociation) field;
+<a class="jxr_linenumber" name="L319" href="#L319">319</a>             <a name="ModelAssociation" href="../../../../../org/codehaus/modello/model/ModelAssociation.html#ModelAssociation">ModelAssociation</a> association = (<a name="ModelAssociation" href="../../../../../org/codehaus/modello/model/ModelAssociation.html#ModelAssociation">ModelAssociation</a>) field;
 <a class="jxr_linenumber" name="L320" href="#L320">320</a> 
 <a class="jxr_linenumber" name="L321" href="#L321">321</a>             String associationName = association.getName();
 <a class="jxr_linenumber" name="L322" href="#L322">322</a> 
@@ -340,8 +340,8 @@
 <a class="jxr_linenumber" name="L332" href="#L332">332</a>             {
 <a class="jxr_linenumber" name="L333" href="#L333">333</a>                 <em class="jxr_comment">//MANY_MULTIPLICITY</em>
 <a class="jxr_linenumber" name="L334" href="#L334">334</a> 
-<a class="jxr_linenumber" name="L335" href="#L335">335</a>                 <a href="../../../../../org/codehaus/modello/plugins/xml/metadata/XmlAssociationMetadata.html">XmlAssociationMetadata</a> xmlAssociationMetadata =
-<a class="jxr_linenumber" name="L336" href="#L336">336</a>                     (<a href="../../../../../org/codehaus/modello/plugins/xml/metadata/XmlAssociationMetadata.html">XmlAssociationMetadata</a>) association.getAssociationMetadata( XmlAssociationMetadata.ID );
+<a class="jxr_linenumber" name="L335" href="#L335">335</a>                 <a name="XmlAssociationMetadata" href="../../../../../org/codehaus/modello/plugins/xml/metadata/XmlAssociationMetadata.html#XmlAssociationMetadata">XmlAssociationMetadata</a> xmlAssociationMetadata =
+<a class="jxr_linenumber" name="L336" href="#L336">336</a>                     (<a name="XmlAssociationMetadata" href="../../../../../org/codehaus/modello/plugins/xml/metadata/XmlAssociationMetadata.html#XmlAssociationMetadata">XmlAssociationMetadata</a>) association.getAssociationMetadata( XmlAssociationMetadata.ID );
 <a class="jxr_linenumber" name="L337" href="#L337">337</a> 
 <a class="jxr_linenumber" name="L338" href="#L338">338</a>                 String valuesTagName = resolveTagName( fieldTagName, xmlAssociationMetadata );
 <a class="jxr_linenumber" name="L339" href="#L339">339</a> 
@@ -459,15 +459,15 @@
 <a class="jxr_linenumber" name="L451" href="#L451">451</a>         }
 <a class="jxr_linenumber" name="L452" href="#L452">452</a>     }
 <a class="jxr_linenumber" name="L453" href="#L453">453</a> 
-<a class="jxr_linenumber" name="L454" href="#L454">454</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> writeDomHelpers( JClass jClass )
+<a class="jxr_linenumber" name="L454" href="#L454">454</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> writeDomHelpers( <a name="JClass" href="../../../../../org/codehaus/modello/plugin/java/javasource/JClass.html#JClass">JClass</a> jClass )
 <a class="jxr_linenumber" name="L455" href="#L455">455</a>     {
-<a class="jxr_linenumber" name="L456" href="#L456">456</a>         <a href="../../../../../org/codehaus/modello/plugin/java/javasource/JMethod.html">JMethod</a> method = <strong class="jxr_keyword">new</strong> <a href="../../../../../org/codehaus/modello/plugin/java/javasource/JMethod.html">JMethod</a>( <span class="jxr_string">"writeXpp3DomToElement"</span> );
+<a class="jxr_linenumber" name="L456" href="#L456">456</a>         <a name="JMethod" href="../../../../../org/codehaus/modello/plugin/java/javasource/JMethod.html#JMethod">JMethod</a> method = <strong class="jxr_keyword">new</strong> <a name="JMethod" href="../../../../../org/codehaus/modello/plugin/java/javasource/JMethod.html#JMethod">JMethod</a>( <span class="jxr_string">"writeXpp3DomToElement"</span> );
 <a class="jxr_linenumber" name="L457" href="#L457">457</a>         method.getModifiers().makePrivate();
 <a class="jxr_linenumber" name="L458" href="#L458">458</a> 
-<a class="jxr_linenumber" name="L459" href="#L459">459</a>         method.addParameter( <strong class="jxr_keyword">new</strong> JParameter( <strong class="jxr_keyword">new</strong> JClass( <span class="jxr_string">"Xpp3Dom"</span> ), <span class="jxr_string">"xpp3Dom"</span> ) );
-<a class="jxr_linenumber" name="L460" href="#L460">460</a>         method.addParameter( <strong class="jxr_keyword">new</strong> JParameter( <strong class="jxr_keyword">new</strong> JClass( <span class="jxr_string">"Element"</span> ), <span class="jxr_string">"parentElement"</span> ) );
+<a class="jxr_linenumber" name="L459" href="#L459">459</a>         method.addParameter( <strong class="jxr_keyword">new</strong> <a name="JParameter" href="../../../../../org/codehaus/modello/plugin/java/javasource/JParameter.html#JParameter">JParameter</a>( <strong class="jxr_keyword">new</strong> <a name="JClass" href="../../../../../org/codehaus/modello/plugin/java/javasource/JClass.html#JClass">JClass</a>( <span class="jxr_string">"Xpp3Dom"</span> ), <span class="jxr_string">"xpp3Dom"</span> ) );
+<a class="jxr_linenumber" name="L460" href="#L460">460</a>         method.addParameter( <strong class="jxr_keyword">new</strong> <a name="JParameter" href="../../../../../org/codehaus/modello/plugin/java/javasource/JParameter.html#JParameter">JParameter</a>( <strong class="jxr_keyword">new</strong> <a name="JClass" href="../../../../../org/codehaus/modello/plugin/java/javasource/JClass.html#JClass">JClass</a>( <span class="jxr_string">"Element"</span> ), <span class="jxr_string">"parentElement"</span> ) );
 <a class="jxr_linenumber" name="L461" href="#L461">461</a> 
-<a class="jxr_linenumber" name="L462" href="#L462">462</a>         <a href="../../../../../org/codehaus/modello/plugin/java/javasource/JSourceCode.html">JSourceCode</a> sc = method.getSourceCode();
+<a class="jxr_linenumber" name="L462" href="#L462">462</a>         <a name="JSourceCode" href="../../../../../org/codehaus/modello/plugin/java/javasource/JSourceCode.html#JSourceCode">JSourceCode</a> sc = method.getSourceCode();
 <a class="jxr_linenumber" name="L463" href="#L463">463</a> 
 <a class="jxr_linenumber" name="L464" href="#L464">464</a>         sc.add( <span class="jxr_string">"Element element = parentElement.addElement( xpp3Dom.getName() );"</span> );
 <a class="jxr_linenumber" name="L465" href="#L465">465</a> 
@@ -501,6 +501,6 @@
 <a class="jxr_linenumber" name="L493" href="#L493">493</a> }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2001&#x2013;2019 <a href="http://codehaus-plexus.github.io/">Codehaus Plexus</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2001&#x2013;2022 <a href="http://codehaus-plexus.github.io/">Codehaus Plexus</a>. All rights reserved.</div>
 </body>
 </html>

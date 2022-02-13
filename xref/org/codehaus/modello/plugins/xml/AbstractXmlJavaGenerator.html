@@ -49,13 +49,13 @@
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> * @author &lt;a href="<a href="mailto:hboutemy@codehaus.org" target="alexandria_uri">mailto:hboutemy@codehaus.org</a>"&gt;Hervé Boutemy&lt;/a&gt;</em>
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../org/codehaus/modello/plugins/xml/AbstractXmlJavaGenerator.html">AbstractXmlJavaGenerator</a>
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>      <strong class="jxr_keyword">extends</strong> <a href="../../../../../org/codehaus/modello/plugin/java/AbstractJavaModelloGenerator.html">AbstractJavaModelloGenerator</a>
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">class</strong> <a name="AbstractXmlJavaGenerator" href="../../../../../org/codehaus/modello/plugins/xml/AbstractXmlJavaGenerator.html#AbstractXmlJavaGenerator">AbstractXmlJavaGenerator</a>
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>      <strong class="jxr_keyword">extends</strong> <a name="AbstractJavaModelloGenerator" href="../../../../../org/codehaus/modello/plugin/java/AbstractJavaModelloGenerator.html#AbstractJavaModelloGenerator">AbstractJavaModelloGenerator</a>
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  {
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>      <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">boolean</strong> strictXmlAttributes;
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>      <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> initialize( Model model, Properties parameters )
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>          <strong class="jxr_keyword">throws</strong> <a href="../../../../../org/codehaus/modello/ModelloException.html">ModelloException</a>
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>      <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> initialize( <a name="Model" href="../../../../../org/codehaus/modello/model/Model.html#Model">Model</a> model, Properties parameters )
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>          <strong class="jxr_keyword">throws</strong> <a name="ModelloException" href="../../../../../org/codehaus/modello/ModelloException.html#ModelloException">ModelloException</a>
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>      {
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>          <strong class="jxr_keyword">super</strong>.initialize( model, parameters );
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  
@@ -75,7 +75,7 @@
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment">     * @param modelClass the model class</em>
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment">     * @return the XML tag name for the class</em>
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>      <strong class="jxr_keyword">protected</strong> String resolveTagName( ModelClass modelClass )
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>      <strong class="jxr_keyword">protected</strong> String resolveTagName( <a name="ModelClass" href="../../../../../org/codehaus/modello/model/ModelClass.html#ModelClass">ModelClass</a> modelClass )
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>      {
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>          <strong class="jxr_keyword">return</strong> XmlModelHelpers.resolveTagName( modelClass );
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>      }
@@ -87,7 +87,7 @@
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  <em class="jxr_javadoccomment">     * @param xmlFieldMetadata the XML metadata of the field</em>
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  <em class="jxr_javadoccomment">     * @return the XML tag name for the field</em>
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>      <strong class="jxr_keyword">protected</strong> String resolveTagName( ModelField modelField, XmlFieldMetadata xmlFieldMetadata )
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>      <strong class="jxr_keyword">protected</strong> String resolveTagName( <a name="ModelField" href="../../../../../org/codehaus/modello/model/ModelField.html#ModelField">ModelField</a> modelField, <a name="XmlFieldMetadata" href="../../../../../org/codehaus/modello/plugins/xml/metadata/XmlFieldMetadata.html#XmlFieldMetadata">XmlFieldMetadata</a> xmlFieldMetadata )
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>      {
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>          <strong class="jxr_keyword">return</strong> XmlModelHelpers.resolveTagName( modelField, xmlFieldMetadata );
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>      }
@@ -99,7 +99,7 @@
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  <em class="jxr_javadoccomment">     * @param xmlAssociationMetadata the XML metadata of the association</em>
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  <em class="jxr_javadoccomment">     * @return the XML tag name for items</em>
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>      <strong class="jxr_keyword">protected</strong> String resolveTagName( String fieldTagName, XmlAssociationMetadata xmlAssociationMetadata )
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>      <strong class="jxr_keyword">protected</strong> String resolveTagName( String fieldTagName, <a name="XmlAssociationMetadata" href="../../../../../org/codehaus/modello/plugins/xml/metadata/XmlAssociationMetadata.html#XmlAssociationMetadata">XmlAssociationMetadata</a> xmlAssociationMetadata )
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>      {
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>          <strong class="jxr_keyword">return</strong> XmlModelHelpers.resolveTagName( fieldTagName, xmlAssociationMetadata );
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>      }
@@ -110,7 +110,7 @@
 <a class="jxr_linenumber" name="L102" href="#L102">102</a> <em class="jxr_javadoccomment">     * @param modelFields the fields to check</em>
 <a class="jxr_linenumber" name="L103" href="#L103">103</a> <em class="jxr_javadoccomment">     * @return the field, or &lt;code&gt;null&lt;/code&gt; if no field is &lt;code&gt;Content&lt;/code&gt;</em>
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L105" href="#L105">105</a>     <strong class="jxr_keyword">protected</strong> <a href="../../../../../org/codehaus/modello/model/ModelField.html">ModelField</a> getContentField( List&lt;ModelField&gt; modelFields )
+<a class="jxr_linenumber" name="L105" href="#L105">105</a>     <strong class="jxr_keyword">protected</strong> <a name="ModelField" href="../../../../../org/codehaus/modello/model/ModelField.html#ModelField">ModelField</a> getContentField( List&lt;ModelField&gt; modelFields )
 <a class="jxr_linenumber" name="L106" href="#L106">106</a>     {
 <a class="jxr_linenumber" name="L107" href="#L107">107</a>         <strong class="jxr_keyword">return</strong> XmlModelHelpers.getContentField( modelFields );
 <a class="jxr_linenumber" name="L108" href="#L108">108</a>     }
@@ -122,12 +122,12 @@
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> <em class="jxr_javadoccomment">     * @param version the version of the class to use</em>
 <a class="jxr_linenumber" name="L115" href="#L115">115</a> <em class="jxr_javadoccomment">     * @return the list of XML fields of this class</em>
 <a class="jxr_linenumber" name="L116" href="#L116">116</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L117" href="#L117">117</a>     <strong class="jxr_keyword">protected</strong> List&lt;ModelField&gt; getFieldsForXml( ModelClass modelClass, Version version )
+<a class="jxr_linenumber" name="L117" href="#L117">117</a>     <strong class="jxr_keyword">protected</strong> List&lt;ModelField&gt; getFieldsForXml( <a name="ModelClass" href="../../../../../org/codehaus/modello/model/ModelClass.html#ModelClass">ModelClass</a> modelClass, <a name="Version" href="../../../../../org/codehaus/modello/model/Version.html#Version">Version</a> version )
 <a class="jxr_linenumber" name="L118" href="#L118">118</a>     {
 <a class="jxr_linenumber" name="L119" href="#L119">119</a>         <strong class="jxr_keyword">return</strong> XmlModelHelpers.getFieldsForXml( modelClass, version );
 <a class="jxr_linenumber" name="L120" href="#L120">120</a>     }
 <a class="jxr_linenumber" name="L121" href="#L121">121</a> 
-<a class="jxr_linenumber" name="L122" href="#L122">122</a>     <strong class="jxr_keyword">protected</strong> String getValue( String type, String initialValue, XmlFieldMetadata xmlFieldMetadata )
+<a class="jxr_linenumber" name="L122" href="#L122">122</a>     <strong class="jxr_keyword">protected</strong> String getValue( String type, String initialValue, <a name="XmlFieldMetadata" href="../../../../../org/codehaus/modello/plugins/xml/metadata/XmlFieldMetadata.html#XmlFieldMetadata">XmlFieldMetadata</a> xmlFieldMetadata )
 <a class="jxr_linenumber" name="L123" href="#L123">123</a>     {
 <a class="jxr_linenumber" name="L124" href="#L124">124</a>         String textValue = initialValue;
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 
@@ -157,7 +157,7 @@
 <a class="jxr_linenumber" name="L149" href="#L149">149</a>         <strong class="jxr_keyword">return</strong> textValue;
 <a class="jxr_linenumber" name="L150" href="#L150">150</a>     }
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 
-<a class="jxr_linenumber" name="L152" href="#L152">152</a>     <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> writeDateParsingHelper( JSourceCode sc, String exception )
+<a class="jxr_linenumber" name="L152" href="#L152">152</a>     <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> writeDateParsingHelper( <a name="JSourceCode" href="../../../../../org/codehaus/modello/plugin/java/javasource/JSourceCode.html#JSourceCode">JSourceCode</a> sc, String exception )
 <a class="jxr_linenumber" name="L153" href="#L153">153</a>     {
 <a class="jxr_linenumber" name="L154" href="#L154">154</a>         sc.add( <span class="jxr_string">"if ( s != null )"</span> );
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 
@@ -225,6 +225,6 @@
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2001&#x2013;2019 <a href="http://codehaus-plexus.github.io/">Codehaus Plexus</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2001&#x2013;2022 <a href="http://codehaus-plexus.github.io/">Codehaus Plexus</a>. All rights reserved.</div>
 </body>
 </html>

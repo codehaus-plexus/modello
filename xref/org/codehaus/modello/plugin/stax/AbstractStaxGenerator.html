@@ -46,34 +46,34 @@
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> * @author &lt;a href="<a href="mailto:trygvis@inamo.no" target="alexandria_uri">mailto:trygvis@inamo.no</a>"&gt;Trygve Laugst&amp;oslash;l&lt;/a&gt;</em>
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../org/codehaus/modello/plugin/stax/AbstractStaxGenerator.html">AbstractStaxGenerator</a>
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>      <strong class="jxr_keyword">extends</strong> <a href="../../../../../org/codehaus/modello/plugins/xml/AbstractXmlJavaGenerator.html">AbstractXmlJavaGenerator</a>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">class</strong> <a name="AbstractStaxGenerator" href="../../../../../org/codehaus/modello/plugin/stax/AbstractStaxGenerator.html#AbstractStaxGenerator">AbstractStaxGenerator</a>
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>      <strong class="jxr_keyword">extends</strong> <a name="AbstractXmlJavaGenerator" href="../../../../../org/codehaus/modello/plugins/xml/AbstractXmlJavaGenerator.html#AbstractXmlJavaGenerator">AbstractXmlJavaGenerator</a>
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  {
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>      <strong class="jxr_keyword">private</strong> Set&lt;ModelClass&gt; parts;
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>      <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> initialize( Model model, Properties parameters )
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>          <strong class="jxr_keyword">throws</strong> <a href="../../../../../org/codehaus/modello/ModelloException.html">ModelloException</a>
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>      <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> initialize( <a name="Model" href="../../../../../org/codehaus/modello/model/Model.html#Model">Model</a> model, Properties parameters )
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>          <strong class="jxr_keyword">throws</strong> <a name="ModelloException" href="../../../../../org/codehaus/modello/ModelloException.html#ModelloException">ModelloException</a>
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>      {
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>          <strong class="jxr_keyword">super</strong>.initialize( model, parameters );
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>          parts = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>      }
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>      <strong class="jxr_keyword">protected</strong> <a href="../../../../../org/codehaus/modello/model/ModelField.html">ModelField</a> getReferenceIdentifierField( ModelAssociation association )
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>          <strong class="jxr_keyword">throws</strong> <a href="../../../../../org/codehaus/modello/ModelloException.html">ModelloException</a>
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>      <strong class="jxr_keyword">protected</strong> <a name="ModelField" href="../../../../../org/codehaus/modello/model/ModelField.html#ModelField">ModelField</a> getReferenceIdentifierField( <a name="ModelAssociation" href="../../../../../org/codehaus/modello/model/ModelAssociation.html#ModelAssociation">ModelAssociation</a> association )
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>          <strong class="jxr_keyword">throws</strong> <a name="ModelloException" href="../../../../../org/codehaus/modello/ModelloException.html#ModelloException">ModelloException</a>
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>      {
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>          <a href="../../../../../org/codehaus/modello/plugins/xml/metadata/XmlAssociationMetadata.html">XmlAssociationMetadata</a> xmlAssocMetadata =
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>              (<a href="../../../../../org/codehaus/modello/plugins/xml/metadata/XmlAssociationMetadata.html">XmlAssociationMetadata</a>) association.getAssociationMetadata( XmlAssociationMetadata.ID );
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>          <a name="XmlAssociationMetadata" href="../../../../../org/codehaus/modello/plugins/xml/metadata/XmlAssociationMetadata.html#XmlAssociationMetadata">XmlAssociationMetadata</a> xmlAssocMetadata =
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>              (<a name="XmlAssociationMetadata" href="../../../../../org/codehaus/modello/plugins/xml/metadata/XmlAssociationMetadata.html#XmlAssociationMetadata">XmlAssociationMetadata</a>) association.getAssociationMetadata( XmlAssociationMetadata.ID );
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>          <a href="../../../../../org/codehaus/modello/model/ModelField.html">ModelField</a> referenceIdentifierField = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>          <a name="ModelField" href="../../../../../org/codehaus/modello/model/ModelField.html#ModelField">ModelField</a> referenceIdentifierField = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>          <strong class="jxr_keyword">if</strong> ( xmlAssocMetadata.isReference() )
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>          {
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>              String associationName = association.getName();
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>              <a href="../../../../../org/codehaus/modello/model/ModelClass.html">ModelClass</a> modelClass = association.getModelClass();
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>              <a name="ModelClass" href="../../../../../org/codehaus/modello/model/ModelClass.html#ModelClass">ModelClass</a> modelClass = association.getModelClass();
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>              <strong class="jxr_keyword">if</strong> ( !isClassInModel( association.getTo(), modelClass.getModel() ) )
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>              {
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>                  <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../org/codehaus/modello/ModelloException.html">ModelloException</a>( <span class="jxr_string">"Can't use xml.reference on the '"</span> + associationName + <span class="jxr_string">"' association of '"</span>
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>                  <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ModelloException" href="../../../../../org/codehaus/modello/ModelloException.html#ModelloException">ModelloException</a>( <span class="jxr_string">"Can't use xml.reference on the '"</span> + associationName + <span class="jxr_string">"' association of '"</span>
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>                      + modelClass.getName() + <span class="jxr_string">"' because the target class '"</span> + association.getTo()
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>                      + <span class="jxr_string">"' is not in the model"</span> );
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>              }
@@ -85,28 +85,28 @@
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>              }
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>              <strong class="jxr_keyword">else</strong>
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>              {
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>                  referenceIdentifierField = <strong class="jxr_keyword">new</strong> <a href="../../../../../org/codehaus/modello/plugin/stax/DummyIdModelField.html">DummyIdModelField</a>();
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>                  referenceIdentifierField = <strong class="jxr_keyword">new</strong> <a name="DummyIdModelField" href="../../../../../org/codehaus/modello/plugin/stax/DummyIdModelField.html#DummyIdModelField">DummyIdModelField</a>();
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>                  referenceIdentifierField.setName( <span class="jxr_string">"modello.refid"</span> );
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>              }
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>          }
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>          <strong class="jxr_keyword">return</strong> referenceIdentifierField;
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>      }
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>      <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">boolean</strong> isAssociationPartToClass( ModelClass modelClass )
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>      <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">boolean</strong> isAssociationPartToClass( <a name="ModelClass" href="../../../../../org/codehaus/modello/model/ModelClass.html#ModelClass">ModelClass</a> modelClass )
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>      {
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>          <strong class="jxr_keyword">if</strong> ( parts == <strong class="jxr_keyword">null</strong> )
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>          {
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>              parts = <strong class="jxr_keyword">new</strong> HashSet&lt;ModelClass&gt;();
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>              <strong class="jxr_keyword">for</strong> ( ModelClass clazz : modelClass.getModel().getClasses( getGeneratedVersion() ) )
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>              <strong class="jxr_keyword">for</strong> ( <a name="ModelClass" href="../../../../../org/codehaus/modello/model/ModelClass.html#ModelClass">ModelClass</a> clazz : modelClass.getModel().getClasses( getGeneratedVersion() ) )
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>              {
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>                  <strong class="jxr_keyword">for</strong> ( ModelField modelField : clazz.getFields( getGeneratedVersion() ) )
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>                  <strong class="jxr_keyword">for</strong> ( <a name="ModelField" href="../../../../../org/codehaus/modello/model/ModelField.html#ModelField">ModelField</a> modelField : clazz.getFields( getGeneratedVersion() ) )
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>                  {
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>                      <strong class="jxr_keyword">if</strong> ( modelField instanceof ModelAssociation )
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>                      <strong class="jxr_keyword">if</strong> ( modelField instanceof <a name="ModelAssociation" href="../../../../../org/codehaus/modello/model/ModelAssociation.html#ModelAssociation">ModelAssociation</a> )
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>                      {
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>                          <a href="../../../../../org/codehaus/modello/model/ModelAssociation.html">ModelAssociation</a> assoc = (ModelAssociation) modelField;
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>                          <a name="ModelAssociation" href="../../../../../org/codehaus/modello/model/ModelAssociation.html#ModelAssociation">ModelAssociation</a> assoc = (<a name="ModelAssociation" href="../../../../../org/codehaus/modello/model/ModelAssociation.html#ModelAssociation">ModelAssociation</a>) modelField;
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  
-<a class="jxr_linenumber" name="L100" href="#L100">100</a>                         <a href="../../../../../org/codehaus/modello/plugins/xml/metadata/XmlAssociationMetadata.html">XmlAssociationMetadata</a> xmlAssocMetadata =
-<a class="jxr_linenumber" name="L101" href="#L101">101</a>                             (<a href="../../../../../org/codehaus/modello/plugins/xml/metadata/XmlAssociationMetadata.html">XmlAssociationMetadata</a>) assoc.getAssociationMetadata( XmlAssociationMetadata.ID );
+<a class="jxr_linenumber" name="L100" href="#L100">100</a>                         <a name="XmlAssociationMetadata" href="../../../../../org/codehaus/modello/plugins/xml/metadata/XmlAssociationMetadata.html#XmlAssociationMetadata">XmlAssociationMetadata</a> xmlAssocMetadata =
+<a class="jxr_linenumber" name="L101" href="#L101">101</a>                             (<a name="XmlAssociationMetadata" href="../../../../../org/codehaus/modello/plugins/xml/metadata/XmlAssociationMetadata.html#XmlAssociationMetadata">XmlAssociationMetadata</a>) assoc.getAssociationMetadata( XmlAssociationMetadata.ID );
 <a class="jxr_linenumber" name="L102" href="#L102">102</a> 
 <a class="jxr_linenumber" name="L103" href="#L103">103</a>                         <strong class="jxr_keyword">if</strong> ( xmlAssocMetadata.isReference() )
 <a class="jxr_linenumber" name="L104" href="#L104">104</a>                         {
@@ -121,6 +121,6 @@
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2001&#x2013;2019 <a href="http://codehaus-plexus.github.io/">Codehaus Plexus</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2001&#x2013;2022 <a href="http://codehaus-plexus.github.io/">Codehaus Plexus</a>. All rights reserved.</div>
 </body>
 </html>

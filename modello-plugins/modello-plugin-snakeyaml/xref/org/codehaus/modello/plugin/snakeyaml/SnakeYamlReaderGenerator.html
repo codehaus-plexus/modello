@@ -57,8 +57,8 @@
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  <em class="jxr_javadoccomment"> * @author &lt;a href="<a href="mailto:simonetripodi@apache.org" target="alexandria_uri">mailto:simonetripodi@apache.org</a>"&gt;Simone Tripodi&lt;/a&gt;</em>
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../org/codehaus/modello/plugin/snakeyaml/SnakeYamlReaderGenerator.html">SnakeYamlReaderGenerator</a>
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>      <strong class="jxr_keyword">extends</strong> <a href="../../../../../org/codehaus/modello/plugin/snakeyaml/AbstractSnakeYamlGenerator.html">AbstractSnakeYamlGenerator</a>
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="SnakeYamlReaderGenerator" href="../../../../../org/codehaus/modello/plugin/snakeyaml/SnakeYamlReaderGenerator.html#SnakeYamlReaderGenerator">SnakeYamlReaderGenerator</a>
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>      <strong class="jxr_keyword">extends</strong> <a name="AbstractSnakeYamlGenerator" href="../../../../../org/codehaus/modello/plugin/snakeyaml/AbstractSnakeYamlGenerator.html#AbstractSnakeYamlGenerator">AbstractSnakeYamlGenerator</a>
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  {
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String SOURCE_PARAM = <span class="jxr_string">"source"</span>;
@@ -654,7 +654,7 @@
 <a class="jxr_linenumber" name="L646" href="#L646">646</a>                         }
 <a class="jxr_linenumber" name="L647" href="#L647">647</a>                         <strong class="jxr_keyword">else</strong>
 <a class="jxr_linenumber" name="L648" href="#L648">648</a>                         {
-<a class="jxr_linenumber" name="L649" href="#L649">649</a>                             key = ( useJava5 ? <span class="jxr_string">"Integer.valueOf"</span> : <span class="jxr_string">"new java.lang.Integer"</span> ) + <span class="jxr_string">"( "</span> + associationName
+<a class="jxr_linenumber" name="L649" href="#L649">649</a>                             key = ( hasJavaSourceSupport( 5 ) ? <span class="jxr_string">"Integer.valueOf"</span> : <span class="jxr_string">"new java.lang.Integer"</span> ) + <span class="jxr_string">"( "</span> + associationName
 <a class="jxr_linenumber" name="L650" href="#L650">650</a>                                 + <span class="jxr_string">".size() )"</span>;
 <a class="jxr_linenumber" name="L651" href="#L651">651</a>                         }
 <a class="jxr_linenumber" name="L652" href="#L652">652</a>                         writePrimitiveField( association, association.getTo(), associationName, LOCATION_VAR + <span class="jxr_string">"s"</span>, key,
@@ -1251,6 +1251,6 @@
 <a class="jxr_linenumber" name="L1243" href="#L1243">1243</a> }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2001&#x2013;2019 <a href="http://codehaus-plexus.github.io/">Codehaus Plexus</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2001&#x2013;2022 <a href="http://codehaus-plexus.github.io/">Codehaus Plexus</a>. All rights reserved.</div>
 </body>
 </html>

@@ -1,1 +1,1 @@
-/opt/jdk1.7.0_80/jre/../bin/javadoc @options @packages
+/home/herve/local/.jdk/jdk8u202-b08/jre/../bin/javadoc @options @packages

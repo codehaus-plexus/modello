@@ -36,10 +36,10 @@
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.codehaus.modello.core.ModelloCore;
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.codehaus.modello.model.Model;
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../org/codehaus/modello/generator/xml/xpp3/StandaloneReadXpp3GeneratorTest.html">StandaloneReadXpp3GeneratorTest</a>
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="StandaloneReadXpp3GeneratorTest" href="../../../../../../org/codehaus/modello/generator/xml/xpp3/StandaloneReadXpp3GeneratorTest.html#StandaloneReadXpp3GeneratorTest">StandaloneReadXpp3GeneratorTest</a>
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>      <strong class="jxr_keyword">extends</strong> AbstractModelloJavaGeneratorTest
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  {
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../../../org/codehaus/modello/generator/xml/xpp3/StandaloneReadXpp3GeneratorTest.html">StandaloneReadXpp3GeneratorTest</a>()
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>      <strong class="jxr_keyword">public</strong> <a name="StandaloneReadXpp3GeneratorTest" href="../../../../../../org/codehaus/modello/generator/xml/xpp3/StandaloneReadXpp3GeneratorTest.html#StandaloneReadXpp3GeneratorTest">StandaloneReadXpp3GeneratorTest</a>()
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>      {
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>          <strong class="jxr_keyword">super</strong>( <span class="jxr_string">"testStandaloneRead"</span> );
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>      }
@@ -56,7 +56,7 @@
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>          modello.generate( model, <span class="jxr_string">"java"</span>, parameters );
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>          modello.generate( model, <span class="jxr_string">"xpp3-reader"</span>, parameters );
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>          compileGeneratedSources();
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>          compileGeneratedSources( 5 ); <em class="jxr_comment">// enhanced for loops in Xpp3StandaloneReadVerifier</em>
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>          verifyCompiledGeneratedSources( <span class="jxr_string">"org.codehaus.modello.generator.xml.xpp3.Xpp3StandaloneReadVerifier"</span> );
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>      }
@@ -68,12 +68,12 @@
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>              Model model = modello.loadModel( getXmlResourceReader( <span class="jxr_string">"/standaloneRead.mdo"</span> ) );
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>              Properties parameters = getModelloParameters( <span class="jxr_string">"1.0.0"</span>, <strong class="jxr_keyword">true</strong> );
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>              Properties parameters = getModelloParameters( <span class="jxr_string">"1.0.0"</span>, 5 );
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>              modello.generate( model, <span class="jxr_string">"java"</span>, parameters );
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>              modello.generate( model, <span class="jxr_string">"xpp3-reader"</span>, parameters );
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>              compileGeneratedSources();
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>              compileGeneratedSources( 5 );
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>              verifyCompiledGeneratedSources( <span class="jxr_string">"org.codehaus.modello.generator.xml.xpp3.Xpp3StandaloneReadVerifier"</span> );
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>          }
@@ -81,6 +81,6 @@
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2001&#x2013;2019 <a href="http://codehaus-plexus.github.io/">Codehaus Plexus</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2001&#x2013;2022 <a href="http://codehaus-plexus.github.io/">Codehaus Plexus</a>. All rights reserved.</div>
 </body>
 </html>

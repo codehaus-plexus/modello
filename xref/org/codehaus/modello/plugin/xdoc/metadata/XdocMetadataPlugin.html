@@ -49,46 +49,51 @@
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> * @author Hervé Boutemy</em>
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../org/codehaus/modello/plugin/xdoc/metadata/XdocMetadataPlugin.html">XdocMetadataPlugin</a>
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>      <strong class="jxr_keyword">extends</strong> <a href="../../../../../../org/codehaus/modello/metadata/AbstractMetadataPlugin.html">AbstractMetadataPlugin</a>
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>      <strong class="jxr_keyword">implements</strong> <a href="../../../../../../org/codehaus/modello/metadata/MetadataPlugin.html">MetadataPlugin</a>
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="XdocMetadataPlugin" href="../../../../../../org/codehaus/modello/plugin/xdoc/metadata/XdocMetadataPlugin.html#XdocMetadataPlugin">XdocMetadataPlugin</a>
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>      <strong class="jxr_keyword">extends</strong> <a name="AbstractMetadataPlugin" href="../../../../../../org/codehaus/modello/metadata/AbstractMetadataPlugin.html#AbstractMetadataPlugin">AbstractMetadataPlugin</a>
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>      <strong class="jxr_keyword">implements</strong> <a name="MetadataPlugin" href="../../../../../../org/codehaus/modello/metadata/MetadataPlugin.html#MetadataPlugin">MetadataPlugin</a>
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  {
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String XDOC_SEPARATOR = <span class="jxr_string">"xdoc.separator"</span>;
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../../../org/codehaus/modello/metadata/ClassMetadata.html">ClassMetadata</a> getClassMetadata( ModelClass clazz, Map&lt;String, String&gt; data )
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>      {
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../../org/codehaus/modello/plugin/xdoc/metadata/XdocClassMetadata.html">XdocClassMetadata</a>();
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>      }
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String XDOC_ANCHORNAME = <span class="jxr_string">"xdoc.anchorName"</span>;
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>      <strong class="jxr_keyword">public</strong> <a name="ClassMetadata" href="../../../../../../org/codehaus/modello/metadata/ClassMetadata.html#ClassMetadata">ClassMetadata</a> getClassMetadata( <a name="ModelClass" href="../../../../../../org/codehaus/modello/model/ModelClass.html#ModelClass">ModelClass</a> clazz, Map&lt;String, String&gt; data )
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>      {
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>          <a name="XdocClassMetadata" href="../../../../../../org/codehaus/modello/plugin/xdoc/metadata/XdocClassMetadata.html#XdocClassMetadata">XdocClassMetadata</a> metadata = <strong class="jxr_keyword">new</strong> <a name="XdocClassMetadata" href="../../../../../../org/codehaus/modello/plugin/xdoc/metadata/XdocClassMetadata.html#XdocClassMetadata">XdocClassMetadata</a>();
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../../../org/codehaus/modello/metadata/InterfaceMetadata.html">InterfaceMetadata</a> getInterfaceMetadata( ModelInterface iface, Map&lt;String, String&gt; data )
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>      {
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../../org/codehaus/modello/plugin/xdoc/metadata/XdocInterfaceMetadata.html">XdocInterfaceMetadata</a>();
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>          metadata.setAnchorName( getString( data, XDOC_ANCHORNAME ) );
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>          <strong class="jxr_keyword">return</strong> metadata;
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>      }
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../../../org/codehaus/modello/metadata/AssociationMetadata.html">AssociationMetadata</a> getAssociationMetadata( ModelAssociation association, Map&lt;String, String&gt; data )
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>          <strong class="jxr_keyword">throws</strong> <a href="../../../../../../org/codehaus/modello/ModelloException.html">ModelloException</a>
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>      {
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../../org/codehaus/modello/plugin/xdoc/metadata/XdocAssociationMetadata.html">XdocAssociationMetadata</a>();
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>      }
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../../../org/codehaus/modello/metadata/FieldMetadata.html">FieldMetadata</a> getFieldMetadata( ModelField field, Map&lt;String, String&gt; data )
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>          <strong class="jxr_keyword">throws</strong> <a href="../../../../../../org/codehaus/modello/ModelloException.html">ModelloException</a>
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>      {
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>          <a href="../../../../../../org/codehaus/modello/plugin/xdoc/metadata/XdocFieldMetadata.html">XdocFieldMetadata</a> metadata = <strong class="jxr_keyword">new</strong> <a href="../../../../../../org/codehaus/modello/plugin/xdoc/metadata/XdocFieldMetadata.html">XdocFieldMetadata</a>();
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>      <strong class="jxr_keyword">public</strong> <a name="InterfaceMetadata" href="../../../../../../org/codehaus/modello/metadata/InterfaceMetadata.html#InterfaceMetadata">InterfaceMetadata</a> getInterfaceMetadata( <a name="ModelInterface" href="../../../../../../org/codehaus/modello/model/ModelInterface.html#ModelInterface">ModelInterface</a> iface, Map&lt;String, String&gt; data )
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>      {
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="XdocInterfaceMetadata" href="../../../../../../org/codehaus/modello/plugin/xdoc/metadata/XdocInterfaceMetadata.html#XdocInterfaceMetadata">XdocInterfaceMetadata</a>();
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>      }
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>      <strong class="jxr_keyword">public</strong> <a name="AssociationMetadata" href="../../../../../../org/codehaus/modello/metadata/AssociationMetadata.html#AssociationMetadata">AssociationMetadata</a> getAssociationMetadata( <a name="ModelAssociation" href="../../../../../../org/codehaus/modello/model/ModelAssociation.html#ModelAssociation">ModelAssociation</a> association, Map&lt;String, String&gt; data )
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>          <strong class="jxr_keyword">throws</strong> <a name="ModelloException" href="../../../../../../org/codehaus/modello/ModelloException.html#ModelloException">ModelloException</a>
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>      {
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="XdocAssociationMetadata" href="../../../../../../org/codehaus/modello/plugin/xdoc/metadata/XdocAssociationMetadata.html#XdocAssociationMetadata">XdocAssociationMetadata</a>();
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>      }
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>          metadata.setSeparator( getString( data, XDOC_SEPARATOR ) );
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>          <strong class="jxr_keyword">return</strong> metadata;
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>      }
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>      <strong class="jxr_keyword">public</strong> <a name="FieldMetadata" href="../../../../../../org/codehaus/modello/metadata/FieldMetadata.html#FieldMetadata">FieldMetadata</a> getFieldMetadata( <a name="ModelField" href="../../../../../../org/codehaus/modello/model/ModelField.html#ModelField">ModelField</a> field, Map&lt;String, String&gt; data )
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>          <strong class="jxr_keyword">throws</strong> <a name="ModelloException" href="../../../../../../org/codehaus/modello/ModelloException.html#ModelloException">ModelloException</a>
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>      {
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>          <a name="XdocFieldMetadata" href="../../../../../../org/codehaus/modello/plugin/xdoc/metadata/XdocFieldMetadata.html#XdocFieldMetadata">XdocFieldMetadata</a> metadata = <strong class="jxr_keyword">new</strong> <a name="XdocFieldMetadata" href="../../../../../../org/codehaus/modello/plugin/xdoc/metadata/XdocFieldMetadata.html#XdocFieldMetadata">XdocFieldMetadata</a>();
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../../../org/codehaus/modello/metadata/ModelMetadata.html">ModelMetadata</a> getModelMetadata( Model model, Map&lt;String, String&gt; data )
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>          <strong class="jxr_keyword">throws</strong> <a href="../../../../../../org/codehaus/modello/ModelloException.html">ModelloException</a>
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>      {
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../../org/codehaus/modello/plugin/xdoc/metadata/XdocModelMetadata.html">XdocModelMetadata</a>();
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>      }
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  }
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>          metadata.setSeparator( getString( data, XDOC_SEPARATOR ) );
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>          <strong class="jxr_keyword">return</strong> metadata;
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>      }
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>      <strong class="jxr_keyword">public</strong> <a name="ModelMetadata" href="../../../../../../org/codehaus/modello/metadata/ModelMetadata.html#ModelMetadata">ModelMetadata</a> getModelMetadata( <a name="Model" href="../../../../../../org/codehaus/modello/model/Model.html#Model">Model</a> model, Map&lt;String, String&gt; data )
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>          <strong class="jxr_keyword">throws</strong> <a name="ModelloException" href="../../../../../../org/codehaus/modello/ModelloException.html#ModelloException">ModelloException</a>
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>      {
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="XdocModelMetadata" href="../../../../../../org/codehaus/modello/plugin/xdoc/metadata/XdocModelMetadata.html#XdocModelMetadata">XdocModelMetadata</a>();
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>      }
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2001&#x2013;2019 <a href="http://codehaus-plexus.github.io/">Codehaus Plexus</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2001&#x2013;2022 <a href="http://codehaus-plexus.github.io/">Codehaus Plexus</a>. All rights reserved.</div>
 </body>
 </html>

@@ -35,7 +35,7 @@
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> * @author &lt;a href="<a href="mailto:evenisse@codehaus.org" target="alexandria_uri">mailto:evenisse@codehaus.org</a>"&gt;Emmanuel Venisse&lt;/a&gt;</em>
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../org/codehaus/modello/model/ModelDefault.html">ModelDefault</a>
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="ModelDefault" href="../../../../org/codehaus/modello/model/ModelDefault.html#ModelDefault">ModelDefault</a>
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  {
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String CHECK_DEPRECATION = <span class="jxr_string">"checkDeprecation"</span>;
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  
@@ -69,12 +69,12 @@
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>      <strong class="jxr_keyword">private</strong> String value;
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../org/codehaus/modello/model/ModelDefault.html">ModelDefault</a> getDefault( String key )
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>          <strong class="jxr_keyword">throws</strong> <a href="../../../../org/codehaus/modello/model/ModelValidationException.html">ModelValidationException</a>
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="ModelDefault" href="../../../../org/codehaus/modello/model/ModelDefault.html#ModelDefault">ModelDefault</a> getDefault( String key )
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>          <strong class="jxr_keyword">throws</strong> <a name="ModelValidationException" href="../../../../org/codehaus/modello/model/ModelValidationException.html#ModelValidationException">ModelValidationException</a>
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>      {
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>          validateKey( key );
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>          <a href="../../../../org/codehaus/modello/model/ModelDefault.html">ModelDefault</a> modelDefault = <strong class="jxr_keyword">new</strong> <a href="../../../../org/codehaus/modello/model/ModelDefault.html">ModelDefault</a>();
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>          <a name="ModelDefault" href="../../../../org/codehaus/modello/model/ModelDefault.html#ModelDefault">ModelDefault</a> modelDefault = <strong class="jxr_keyword">new</strong> <a name="ModelDefault" href="../../../../org/codehaus/modello/model/ModelDefault.html#ModelDefault">ModelDefault</a>();
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>          modelDefault.setKey( key );
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  
@@ -136,23 +136,23 @@
 <a class="jxr_linenumber" name="L128" href="#L128">128</a>     }
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 
 <a class="jxr_linenumber" name="L130" href="#L130">130</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> validateElement()
-<a class="jxr_linenumber" name="L131" href="#L131">131</a>         <strong class="jxr_keyword">throws</strong> <a href="../../../../org/codehaus/modello/model/ModelValidationException.html">ModelValidationException</a>
+<a class="jxr_linenumber" name="L131" href="#L131">131</a>         <strong class="jxr_keyword">throws</strong> <a name="ModelValidationException" href="../../../../org/codehaus/modello/model/ModelValidationException.html#ModelValidationException">ModelValidationException</a>
 <a class="jxr_linenumber" name="L132" href="#L132">132</a>     {
 <a class="jxr_linenumber" name="L133" href="#L133">133</a>         <strong class="jxr_keyword">if</strong> ( isEmpty( key ) )
 <a class="jxr_linenumber" name="L134" href="#L134">134</a>         {
-<a class="jxr_linenumber" name="L135" href="#L135">135</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../org/codehaus/modello/model/ModelValidationException.html">ModelValidationException</a>( <span class="jxr_string">"You must define the key of default element."</span> );
+<a class="jxr_linenumber" name="L135" href="#L135">135</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ModelValidationException" href="../../../../org/codehaus/modello/model/ModelValidationException.html#ModelValidationException">ModelValidationException</a>( <span class="jxr_string">"You must define the key of default element."</span> );
 <a class="jxr_linenumber" name="L136" href="#L136">136</a>         }
 <a class="jxr_linenumber" name="L137" href="#L137">137</a> 
 <a class="jxr_linenumber" name="L138" href="#L138">138</a>         <strong class="jxr_keyword">if</strong> ( isEmpty( value ) )
 <a class="jxr_linenumber" name="L139" href="#L139">139</a>         {
-<a class="jxr_linenumber" name="L140" href="#L140">140</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../org/codehaus/modello/model/ModelValidationException.html">ModelValidationException</a>( <span class="jxr_string">"You must define the value of default element."</span> );
+<a class="jxr_linenumber" name="L140" href="#L140">140</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ModelValidationException" href="../../../../org/codehaus/modello/model/ModelValidationException.html#ModelValidationException">ModelValidationException</a>( <span class="jxr_string">"You must define the value of default element."</span> );
 <a class="jxr_linenumber" name="L141" href="#L141">141</a>         }
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 
 <a class="jxr_linenumber" name="L143" href="#L143">143</a>         validateKey( key );
 <a class="jxr_linenumber" name="L144" href="#L144">144</a>     }
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 
 <a class="jxr_linenumber" name="L146" href="#L146">146</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> validateKey( String key )
-<a class="jxr_linenumber" name="L147" href="#L147">147</a>         <strong class="jxr_keyword">throws</strong> <a href="../../../../org/codehaus/modello/model/ModelValidationException.html">ModelValidationException</a>
+<a class="jxr_linenumber" name="L147" href="#L147">147</a>         <strong class="jxr_keyword">throws</strong> <a name="ModelValidationException" href="../../../../org/codehaus/modello/model/ModelValidationException.html#ModelValidationException">ModelValidationException</a>
 <a class="jxr_linenumber" name="L148" href="#L148">148</a>     {
 <a class="jxr_linenumber" name="L149" href="#L149">149</a>         <strong class="jxr_keyword">if</strong> ( ! SET.equalsIgnoreCase( key )
 <a class="jxr_linenumber" name="L150" href="#L150">150</a>              &amp;&amp; ! LIST.equalsIgnoreCase( key )
@@ -162,7 +162,7 @@
 <a class="jxr_linenumber" name="L154" href="#L154">154</a>              &amp;&amp; ! PACKAGE.equalsIgnoreCase( key )
 <a class="jxr_linenumber" name="L155" href="#L155">155</a>              &amp;&amp; ! STRICT_XML_ATTRIBUTES.equalsIgnoreCase( key ) )
 <a class="jxr_linenumber" name="L156" href="#L156">156</a>         {
-<a class="jxr_linenumber" name="L157" href="#L157">157</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../org/codehaus/modello/model/ModelValidationException.html">ModelValidationException</a>( <span class="jxr_string">"The key of default element must be ' "</span> + SET + <span class="jxr_string">"', '"</span> + LIST + <span class="jxr_string">"', '"</span>
+<a class="jxr_linenumber" name="L157" href="#L157">157</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ModelValidationException" href="../../../../org/codehaus/modello/model/ModelValidationException.html#ModelValidationException">ModelValidationException</a>( <span class="jxr_string">"The key of default element must be ' "</span> + SET + <span class="jxr_string">"', '"</span> + LIST + <span class="jxr_string">"', '"</span>
 <a class="jxr_linenumber" name="L158" href="#L158">158</a>                 + MAP + <span class="jxr_string">"', '"</span> + PROPERTIES + <span class="jxr_string">"', '"</span> + CHECK_DEPRECATION + <span class="jxr_string">"', '"</span> + PACKAGE + <span class="jxr_string">"' or '"</span>
 <a class="jxr_linenumber" name="L159" href="#L159">159</a>                 + STRICT_XML_ATTRIBUTES + <span class="jxr_string">"', was '"</span> + key + <span class="jxr_string">"'."</span> );
 <a class="jxr_linenumber" name="L160" href="#L160">160</a>         }
@@ -175,6 +175,6 @@
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2001&#x2013;2019 <a href="http://codehaus-plexus.github.io/">Codehaus Plexus</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2001&#x2013;2022 <a href="http://codehaus-plexus.github.io/">Codehaus Plexus</a>. All rights reserved.</div>
 </body>
 </html>
