@@ -470,9 +470,8 @@
           <version>3.0.0-M5</version>
           <configuration>
             <autoVersionSubmodules>true</autoVersionSubmodules>
-            <useReleaseProfile>false</useReleaseProfile>
             <goals>deploy</goals>
-            <arguments>-Pmodello-release</arguments>
+            <releaseProfiles>modello-release</releaseProfiles>
           </configuration>
         </plugin>
         <plugin>
