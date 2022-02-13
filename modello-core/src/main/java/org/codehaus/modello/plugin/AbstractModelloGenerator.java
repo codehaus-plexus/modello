@@ -294,6 +294,11 @@ public abstract class AbstractModelloGenerator
     protected Writer newWriter( Path path )
     {
         Charset charset = getEncoding() != null ? Charset.forName( getEncoding() ) : Charset.defaultCharset();
+        return newWriter( path, charset );
+    }
+
+    protected Writer newWriter( Path path, Charset charset )
+    {
         return new CachingWriter( getBuildContext(), path, charset );
     }
 
