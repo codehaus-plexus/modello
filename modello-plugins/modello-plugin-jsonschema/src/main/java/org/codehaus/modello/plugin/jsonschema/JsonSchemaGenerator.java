@@ -24,6 +24,7 @@ package org.codehaus.modello.plugin.jsonschema;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
@@ -107,7 +108,7 @@ public final class JsonSchemaGenerator
                                   .enable( JsonWriteFeature.QUOTE_FIELD_NAMES.mappedFeature() )
                                   .enable( JsonWriteFeature.QUOTE_FIELD_NAMES.mappedFeature() )
                                   .disable( JsonWriteFeature.WRITE_NUMBERS_AS_STRINGS.mappedFeature() )
-                                  .createGenerator( newWriter( schemaFile.toPath() ) );
+                                  .createGenerator( newWriter( schemaFile.toPath(), StandardCharsets.UTF_8 ) );
 
         generator.useDefaultPrettyPrinter();
 
