@@ -148,7 +148,6 @@ public class Xpp3ReaderGenerator
         // ----------------------------------------------------------------------
 
         JMethod unmarshall = new JMethod( readerMethodName, new JClass( className ), null );
-        unmarshall.getModifiers().makePrivate();
 
         unmarshall.addParameter( new JParameter( new JClass( "XmlPullParser" ), "parser" ) );
         unmarshall.addParameter( new JParameter( JClass.BOOLEAN, "strict" ) );
