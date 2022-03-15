@@ -73,6 +73,14 @@ public abstract class AbstractJavaModelloGenerator
 
     protected boolean domAsXpp3 = true;
 
+    protected boolean domAsCustom;
+
+    protected String domAsCustomInterface;
+
+    protected String domAsCustomBuilder;
+
+    protected String domAsCustomLocationBuilder;
+
     protected void initialize( Model model, Properties parameters )
         throws ModelloException
     {
@@ -81,6 +89,11 @@ public abstract class AbstractJavaModelloGenerator
         javaSource = Optional.ofNullable( getParameter( parameters, ModelloParameterConstants.OUTPUT_JAVA_SOURCE, null ) ).map( Integer::valueOf );
 
         domAsXpp3 = !"false".equals( parameters.getProperty( ModelloParameterConstants.DOM_AS_XPP3 ) );
+
+        domAsCustom = "true".equals( parameters.getProperty( ModelloParameterConstants.DOM_AS_CUSTOM ) );
+        domAsCustomInterface = parameters.getProperty( ModelloParameterConstants.DOM_AS_CUSTOM_INTERFACE );
+        domAsCustomBuilder = parameters.getProperty( ModelloParameterConstants.DOM_AS_CUSTOM_BUILDER );
+        domAsCustomLocationBuilder = parameters.getProperty( ModelloParameterConstants.DOM_AS_CUSTOM_LOCATION_BUILDER );
     }
 
     /**

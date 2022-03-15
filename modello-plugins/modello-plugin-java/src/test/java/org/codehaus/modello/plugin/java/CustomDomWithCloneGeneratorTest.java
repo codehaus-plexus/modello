@@ -22,37 +22,38 @@ package org.codehaus.modello.plugin.java;
  * SOFTWARE.
  */
 
+import java.util.Properties;
+
 import org.codehaus.modello.AbstractModelloJavaGeneratorTest;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
 
-import java.util.Properties;
-
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  */
-public class JavaGeneratorTest
+public class CustomDomWithCloneGeneratorTest
     extends AbstractModelloJavaGeneratorTest
 {
-    public JavaGeneratorTest()
+    public CustomDomWithCloneGeneratorTest()
     {
-        super( "java" );
+        super( "custom-dom-with-clone" );
     }
 
-    public void testJavaGenerator()
+    public void testCustomDom()
         throws Throwable
     {
         ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
 
-        Model model = modello.loadModel( getXmlResourceReader( "/models/maven.mdo" ) );
+        Model model = modello.loadModel( getXmlResourceReader( "/models/customDomWithClone.mdo" ) );
 
         Properties parameters = getModelloParameters( "4.0.0" );
+        parameters.put( "modello.dom.custom", "true" );
+        parameters.put( "modello.dom.custom.interface", "org.codehaus.modello.plugin.java.customDom.DomWithClone" );
 
         modello.generate( model, "java", parameters );
 
         compileGeneratedSources();
 
-        verifyCompiledGeneratedSources( "JavaVerifier" );
+        verifyCompiledGeneratedSources( "CustomDomVerifier" );
     }
-
 }

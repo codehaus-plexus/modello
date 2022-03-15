@@ -534,7 +534,11 @@ public class JavaModelloGenerator
             {
                 sc.add( "if ( " + thisField + " != null )" );
                 sc.add( "{" );
-                if ( domAsXpp3 )
+                if ( domAsCustom )
+                {
+                    sc.addIndented( copyField + " = " + thisField + ".clone();" );
+                }
+                else if ( domAsXpp3 )
                 {
                     sc.addIndented( copyField
                                         + " = new org.codehaus.plexus.util.xml.Xpp3Dom( (org.codehaus.plexus.util.xml.Xpp3Dom) "
@@ -1359,10 +1363,17 @@ public class JavaModelloGenerator
         }
         else if ( "DOM".equals( baseType ) )
         {
-            // TODO: maybe DOM is not how to specify it in the model, but just Object and markup Xpp3Dom for the
-            // Xpp3Reader?
-            // not sure how we'll treat it for the other sources, eg sql.
-            type = new JClass( "Object" );
+            if ( domAsCustom )
+            {
+                type = new JClass( domAsCustomInterface );
+            }
+            else
+            {
+                // TODO: maybe DOM is not how to specify it in the model, but just Object and markup Xpp3Dom for the
+                // Xpp3Reader?
+                // not sure how we'll treat it for the other sources, eg sql.
+                type = new JClass( "Object" );
+            }
         }
         else
         {

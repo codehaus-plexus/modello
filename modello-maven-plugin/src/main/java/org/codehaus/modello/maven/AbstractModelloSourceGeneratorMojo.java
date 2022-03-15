@@ -62,6 +62,18 @@ public abstract class AbstractModelloSourceGeneratorMojo
     @Parameter( defaultValue = "true" )
     private boolean domAsXpp3;
 
+    @Parameter
+    private String domAsCustom;
+
+    @Parameter
+    private String domAsCustomInterface;
+
+    @Parameter
+    private String domAsCustomBuilder;
+
+    @Parameter
+    private String domAsCustomLocationBuilder;
+
     @Override
     protected boolean producesCompilableResult()
     {
@@ -98,5 +110,22 @@ public abstract class AbstractModelloSourceGeneratorMojo
         }
 
         parameters.setProperty( ModelloParameterConstants.DOM_AS_XPP3, Boolean.toString( domAsXpp3 ) );
+
+        if ( domAsCustom != null )
+        {
+            parameters.setProperty( ModelloParameterConstants.DOM_AS_CUSTOM, domAsCustom );
+        }
+        if ( domAsCustomInterface != null )
+        {
+            parameters.setProperty( ModelloParameterConstants.DOM_AS_CUSTOM_INTERFACE, domAsCustomInterface );
+        }
+        if ( domAsCustomBuilder != null )
+        {
+            parameters.setProperty( ModelloParameterConstants.DOM_AS_CUSTOM_BUILDER, domAsCustomBuilder );
+        }
+        if ( domAsCustomLocationBuilder != null )
+        {
+            parameters.setProperty( ModelloParameterConstants.DOM_AS_CUSTOM_LOCATION_BUILDER, domAsCustomLocationBuilder );
+        }
     }
 }

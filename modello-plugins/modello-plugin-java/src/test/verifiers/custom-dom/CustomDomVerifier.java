@@ -1,5 +1,3 @@
-package org.codehaus.modello.plugin.java;
-
 /*
  * Copyright (c) 2004, Codehaus.org
  *
@@ -22,37 +20,19 @@ package org.codehaus.modello.plugin.java;
  * SOFTWARE.
  */
 
-import org.codehaus.modello.AbstractModelloJavaGeneratorTest;
-import org.codehaus.modello.core.ModelloCore;
-import org.codehaus.modello.model.Model;
+import org.codehaus.modello.verifier.Verifier;
 
-import java.util.Properties;
+import java.util.ArrayList;
+import java.util.List;
 
-/**
- * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- */
-public class JavaGeneratorTest
-    extends AbstractModelloJavaGeneratorTest
+import junit.framework.Assert;
+
+public class CustomDomVerifier
+        extends Verifier
 {
-    public JavaGeneratorTest()
+    public void verify()
     {
-        super( "java" );
-    }
-
-    public void testJavaGenerator()
-        throws Throwable
-    {
-        ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
-
-        Model model = modello.loadModel( getXmlResourceReader( "/models/maven.mdo" ) );
-
-        Properties parameters = getModelloParameters( "4.0.0" );
-
-        modello.generate( model, "java", parameters );
-
-        compileGeneratedSources();
-
-        verifyCompiledGeneratedSources( "JavaVerifier" );
+        new foo.customDom.MyClass();
     }
 
 }

@@ -71,6 +71,26 @@ public class ModelloParameterConstants
      */
     public static final String EXTENDED_CLASSNAME_SUFFIX = "modello.xpp3.extended.suffix";
 
+    /**
+     * @since 2.1
+     */
+    public static final String DOM_AS_CUSTOM = "modello.dom.custom";
+
+    /**
+     * @since 2.1
+     */
+    public static final String DOM_AS_CUSTOM_INTERFACE = "modello.dom.custom.interface";
+
+    /**
+     * @since 2.1
+     */
+    public static final String DOM_AS_CUSTOM_BUILDER = "modello.dom.custom.builder";
+
+    /**
+     * @since 2.1
+     */
+    public static final String DOM_AS_CUSTOM_LOCATION_BUILDER = "modello.dom.custom.location.builder";
+
     private ModelloParameterConstants()
     {
     }

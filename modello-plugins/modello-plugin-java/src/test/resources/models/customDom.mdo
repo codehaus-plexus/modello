@@ -1,0 +1,21 @@
+<model>
+  <id>customDom</id>
+  <name>Modello Test Model with custom Dom class</name>
+  <defaults>
+    <default>
+      <key>package</key>
+      <value>foo.customDom</value>
+    </default>
+  </defaults>
+  <classes>
+    <class rootElement="true">
+      <name>MyClass</name>
+      <fields>
+        <field>
+          <name>dom</name>
+          <type>DOM</type>
+        </field>
+      </fields>
+    </class>
+  </classes>
+</model>

@@ -1075,10 +1075,11 @@ public class Xpp3ReaderGenerator
             String locationBuilderParam = "";
             if ( isLocationTracking() && domAsXpp3 )
             {
-                locationBuilderParam = ", new Xpp3DomBuilderInputLocationBuilder( " + LOCATION_VAR + " )";
+                String locBuilder = domAsCustom ? domAsCustomLocationBuilder : "Xpp3DomBuilderInputLocationBuilder";
+                locationBuilderParam = ", new " + locBuilder + "( " + LOCATION_VAR + " )";
             }
             sc.add( objectName + "." + setterName + "( " + keyCapture
-                + ( domAsXpp3 ? "org.codehaus.plexus.util.xml.Xpp3DomBuilder.build" : "buildDom" )
+                + ( domAsCustom ? domAsCustomBuilder + ".build" : domAsXpp3 ? "org.codehaus.plexus.util.xml.Xpp3DomBuilder.build" : "buildDom" )
                 + "( parser, " + xmlFieldMetadata.isTrim() + locationBuilderParam + " ) );" );
 
             requiresDomSupport = true;
@@ -1096,7 +1097,7 @@ public class Xpp3ReaderGenerator
 
     private void writeBuildDomMethod( JClass jClass )
     {
-        if ( domAsXpp3 )
+        if ( domAsXpp3 || domAsCustom )
         {
             // no need, Xpp3DomBuilder provided by plexus-utils
             return;
@@ -1228,7 +1229,7 @@ public class Xpp3ReaderGenerator
 
     private void writeBuildDomLocationTrackingMethod( JClass jClass )
     {
-        if ( !domAsXpp3 )
+        if ( !domAsXpp3 || domAsCustom )
         {
             // no need, input location tracking available only for Xpp3
             return;
