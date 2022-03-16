@@ -57,7 +57,10 @@ public class Xpp3WriterGenerator
 
     protected void prepareLocationTracking( JClass jClass )
     {
-        // NO OP
+        if ( requiresDomSupport && domAsCustom )
+        {
+            createDomToSerializerMethod( jClass );
+        }
     }
 
     protected void writeLocationTracking( JSourceCode sc, String name, String key )
@@ -503,7 +506,11 @@ public class Xpp3WriterGenerator
                 sc.add( "{" );
                 if ( "DOM".equals( field.getType() ) )
                 {
-                    if ( domAsXpp3 )
+                    if ( domAsCustom )
+                    {
+                        sc.addIndented( "writeDomToSerializer( " + value + ", serializer );" );
+                    }
+                    else if ( domAsXpp3 )
                     {
                         jClass.addImport( "org.codehaus.plexus.util.xml.Xpp3Dom" );
 
@@ -543,6 +550,11 @@ public class Xpp3WriterGenerator
 
     private void createWriteDomMethod( JClass jClass )
     {
+        if ( domAsCustom )
+        {
+            createDomToSerializerMethod( jClass );
+            return;
+        }
         if ( domAsXpp3 )
         {
             return;
@@ -592,6 +604,50 @@ public class Xpp3WriterGenerator
 
         sc.add( "serializer.endTag( NAMESPACE, dom.getTagName() );" );
 
+        jClass.addMethod( method );
+    }
+
+    private void createDomToSerializerMethod( JClass jClass )
+    {
+        jClass.addImport( "java.util.Map" );
+        jClass.addImport( domAsCustomInterface );
+
+        JMethod method = new JMethod( "writeDomToSerializer" );
+        method.getModifiers().makeProtected();
+
+        method.addParameter( new JParameter( new JClass( domAsCustomInterface ), "dom" ) );
+        method.addParameter( new JParameter( new JClass( "XmlSerializer" ), "serializer" ) );
+
+        method.addException( new JClass( "java.io.IOException" ) );
+
+        JSourceCode sc = method.getSourceCode();
+
+        sc.add( "serializer.startTag( NAMESPACE, dom.getName() );" );
+        sc.add( "" );
+        sc.add( "for ( Map.Entry<String, String> attribute : dom.getAttributes().entrySet() )" );
+        sc.add( "{" );
+        sc.addIndented( "serializer.attribute( NAMESPACE, attribute.getKey(), attribute.getValue() );" );
+        sc.add( "}" );
+        sc.add( "for ( Dom aChild : dom.getChildren() )" );
+        sc.add( "{" );
+        sc.addIndented( "writeDomToSerializer( aChild, serializer );" );
+        sc.add( "}" );
+        sc.add( "" );
+        sc.add( "String value = dom.getValue();" );
+        sc.add( "if ( value != null )" );
+        sc.add( "{" );
+        sc.addIndented( "serializer.text( value );" );
+        sc.add( "}" );
+        sc.add( "" );
+        sc.add( "serializer.endTag( NAMESPACE, dom.getName() );" );
+        sc.add( "" );
+        if ( isLocationTracking() )
+        {
+            sc.add( "if ( dom.getInputLocation() != null && !dom.getChildren().isEmpty() )" );
+            sc.add( "{" );
+            sc.addIndented( "serializer.comment( toString( (InputLocation) dom.getInputLocation() ) );" );
+            sc.add( "}" );
+        }
         jClass.addMethod( method );
     }
 }

@@ -54,7 +54,7 @@ public class Xpp3ExtendedWriterGenerator
 
         createLocationTrackingMethod( jClass );
 
-        if ( requiresDomSupport && domAsXpp3 )
+        if ( requiresDomSupport && domAsXpp3 && !domAsCustom )
         {
             createXpp3DomToSerializerMethod( jClass );
         }
