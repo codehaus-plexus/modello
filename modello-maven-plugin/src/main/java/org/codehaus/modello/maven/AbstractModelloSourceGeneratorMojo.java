@@ -62,15 +62,60 @@ public abstract class AbstractModelloSourceGeneratorMojo
     @Parameter( defaultValue = "true" )
     private boolean domAsXpp3;
 
+    /**
+     * Generate DOM with custom interfaces.  If set, this flag takes precedence over the {@link #domAsXpp3} one.
+     *
+     * @since 2.1
+     * @see #domAsCustomInterface
+     * @see #domAsCustomBuilder
+     * @see #domAsCustomLocationBuilder
+     */
     @Parameter
     private String domAsCustom;
 
+    /**
+     * If the {@link #domAsCustom} flag is set, this property should hold
+     * the name of the Dom node interface to use. The interface (<code>Dom</code>
+     * in the following definition) is supposed to define the following methods:
+     * <ul>
+     *     <li><code></code>String getName()</code></li>
+     *     <li><code>String getValue()</code></li>
+     *     <li><code>Map<String, String> getAttributes()</code></li>
+     *     <li><code>Collection<? extends Dom> getChildren()</code></li>
+     *     <li><code>Object getInputLocation()</code> if location tracking is enabled</li>
+     * </ul>
+     * @since 2.1
+     */
     @Parameter
     private String domAsCustomInterface;
 
+    /**
+     * If the {@link #domAsCustom} flag is set, this property should hold
+     * the name of the Dom builder class to use.  This class is supposed to define
+     * a <code>public static Dom build(XmlPullParser, boolean)</code> method, where
+     * <code>Dom</code> is the name given by the {@link #domAsCustomInterface}
+     * property and, if location tracking is enabled, a
+     * <code>public static Dom build(XmlPullParser, boolean, LocationBuilder)</code>
+     * where the <code>LocationBuilder</code> is actually the value of the
+     * {@link #domAsCustomLocationBuilder} property.
+     *
+     * @since 2.1
+     * @see #domAsCustom
+     * @see #domAsCustomInterface
+     * @see #domAsCustomLocationBuilder
+     */
     @Parameter
     private String domAsCustomBuilder;
 
+    /**
+     * The name of the class to use for location tracking.
+     * The class is supposed to define a constructor which will receive the input location data class
+     * and instances of those classes will be passed to the <code>build</code> method of the builder.
+     *
+     * @since 2.1
+     * @see #domAsCustom
+     * @see #domAsCustomBuilder
+     */
     @Parameter
     private String domAsCustomLocationBuilder;
 
