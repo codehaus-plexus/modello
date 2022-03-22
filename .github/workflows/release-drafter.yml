@@ -4,9 +4,6 @@ on:
     branches:
       - master
 jobs:
-  update_release_draft:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: release-drafter/release-drafter@v5.19.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  build:
+    name: Verify
+    uses: codehaus-plexus/.github/.github/workflows/release-drafter.yml@master
