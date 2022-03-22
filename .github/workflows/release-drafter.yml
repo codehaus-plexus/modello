@@ -4,6 +4,5 @@ on:
     branches:
       - master
 jobs:
-  build:
-    name: Verify
+  update_release_draft:
     uses: codehaus-plexus/.github/.github/workflows/release-drafter.yml@master
