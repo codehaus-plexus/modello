@@ -29,6 +29,7 @@ import org.codehaus.plexus.compiler.CompilerException;
 import org.codehaus.plexus.compiler.CompilerMessage;
 import org.codehaus.plexus.compiler.CompilerResult;
 import org.codehaus.plexus.compiler.javac.JavacCompiler;
+import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 import org.codehaus.plexus.util.FileUtils;
 
 import java.io.File;
@@ -227,7 +228,15 @@ public abstract class AbstractModelloJavaGeneratorTest
             sourceDirectories = new String[]{ generatedSources.getAbsolutePath() };
         }
 
-        Compiler compiler = new JavacCompiler();
+        Compiler compiler;
+        try
+        {
+            compiler = lookup(Compiler.class, "javac");
+        }
+        catch (ComponentLookupException e)
+        {
+            throw new RuntimeException(e.getMessage(), e);
+        }
 
         CompilerConfiguration configuration = new CompilerConfiguration();
         configuration.setClasspathEntries( Arrays.asList( classPathElements ) );
