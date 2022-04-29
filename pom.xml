@@ -382,7 +382,7 @@
             <dependency>
               <groupId>com.puppycrawl.tools</groupId>
               <artifactId>checkstyle</artifactId>
-              <version>9.3</version><!-- 10.x requires Java 11 -->
+              <version>10.1</version><!-- 10.x requires Java 11 -->
             </dependency>
             <!-- replace with Plexus own checkstyle definitions -->
             <dependency>
