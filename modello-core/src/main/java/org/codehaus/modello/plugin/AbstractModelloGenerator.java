@@ -81,7 +81,7 @@ public abstract class AbstractModelloGenerator
         generatedVersion = new Version( version );
 
         packageWithVersion =
-            Boolean.valueOf( getParameter( parameters, ModelloParameterConstants.PACKAGE_WITH_VERSION ) );
+            Boolean.parseBoolean( getParameter( parameters, ModelloParameterConstants.PACKAGE_WITH_VERSION ) );
 
         encoding = parameters.getProperty( ModelloParameterConstants.ENCODING );
     }
@@ -126,7 +126,7 @@ public abstract class AbstractModelloGenerator
         {
             return model.getClass( fieldType, generatedVersion ) != null;
         }
-        catch ( Exception e )
+        catch ( Exception ignored )
         {
         }
 
@@ -140,7 +140,7 @@ public abstract class AbstractModelloGenerator
      */
     protected List<ModelField> getFieldsForClass( ModelClass modelClass )
     {
-        List<ModelField> fields = new ArrayList<ModelField>();
+        List<ModelField> fields = new ArrayList<>();
 
         while ( modelClass != null )
         {
@@ -183,10 +183,7 @@ public abstract class AbstractModelloGenerator
             return str;
         }
 
-        return new StringBuilder( str.length() )
-            .append( Character.toTitleCase( str.charAt( 0 ) ) )
-            .append( str.substring( 1 ) )
-            .toString();
+        return Character.toTitleCase( str.charAt( 0 ) ) + str.substring( 1 );
     }
 
     public static String singular( String name )
@@ -223,10 +220,7 @@ public abstract class AbstractModelloGenerator
             return str;
         }
 
-        return new StringBuilder( str.length() )
-            .append( Character.toLowerCase( str.charAt( 0 ) ) )
-            .append( str.substring( 1 ) )
-            .toString();
+        return Character.toLowerCase( str.charAt( 0 ) ) + str.substring( 1 );
     }
 
     // ----------------------------------------------------------------------

@@ -103,12 +103,12 @@ public class JSourceWriter extends Writer
      * A flag indicating whether this JSourceWriter should perform
      * autoflush at the end of a new line
      **/
-    private boolean autoflush = false;
+    private boolean autoflush;
 
     /**
      * The tab (indentation) size
      **/
-    private short tabSize = DEFAULT_SIZE;
+    private short tabSize;
 
     /**
      * The tab representation
@@ -118,7 +118,7 @@ public class JSourceWriter extends Writer
     /**
      * The character to use for indentation
      **/
-    private char tabChar = DEFAULT_CHAR;
+    private char tabChar;
 
     /**
      * The current tab level
@@ -128,7 +128,7 @@ public class JSourceWriter extends Writer
     /**
      * The writer to send all output to
      **/
-    private Writer out = null;
+    private Writer out;
 
 
     /**
@@ -286,10 +286,9 @@ public class JSourceWriter extends Writer
             {
                 out.write( String.valueOf( f ) );
             }
-            catch ( java.io.IOException ioe )
+            catch ( java.io.IOException ignored )
             {
             }
-            ;
             linefeed();
             addIndentation = true;
         }
@@ -304,10 +303,9 @@ public class JSourceWriter extends Writer
             {
                 out.write( String.valueOf( l ) );
             }
-            catch ( java.io.IOException ioe )
+            catch ( java.io.IOException ignored )
             {
             }
-            ;
             linefeed();
             addIndentation = true;
         }
@@ -322,10 +320,9 @@ public class JSourceWriter extends Writer
             {
                 out.write( String.valueOf( i ) );
             }
-            catch ( java.io.IOException ioe )
+            catch ( java.io.IOException ignored )
             {
             }
-            ;
             linefeed();
             addIndentation = true;
         }
@@ -340,10 +337,9 @@ public class JSourceWriter extends Writer
             {
                 out.write( String.valueOf( d ) );
             }
-            catch ( java.io.IOException ioe )
+            catch ( java.io.IOException ignored )
             {
             }
-            ;
             linefeed();
             addIndentation = true;
         }
@@ -359,10 +355,9 @@ public class JSourceWriter extends Writer
             {
                 out.write( obj.toString() );
             }
-            catch ( java.io.IOException ioe )
+            catch ( java.io.IOException ignored )
             {
             }
-            ;
             linefeed();
             addIndentation = true;
         }
@@ -379,7 +374,7 @@ public class JSourceWriter extends Writer
                 {
                     out.write( string );
                 }
-                catch ( java.io.IOException ioe )
+                catch ( java.io.IOException ignored )
                 {
                 }
             }
@@ -398,10 +393,9 @@ public class JSourceWriter extends Writer
             {
                 out.write( chars );
             }
-            catch ( java.io.IOException ioe )
+            catch ( java.io.IOException ignored )
             {
             }
-            ;
             linefeed();
             addIndentation = true;
         }
@@ -416,10 +410,9 @@ public class JSourceWriter extends Writer
             {
                 out.write( String.valueOf( b ) );
             }
-            catch ( java.io.IOException ioe )
+            catch ( java.io.IOException ignored )
             {
             }
-            ;
             linefeed();
             addIndentation = true;
         }
@@ -434,10 +427,9 @@ public class JSourceWriter extends Writer
             {
                 out.write( c );
             }
-            catch ( java.io.IOException ioe )
+            catch ( java.io.IOException ignored )
             {
             }
-            ;
             linefeed();
             addIndentation = true;
         }
@@ -454,10 +446,9 @@ public class JSourceWriter extends Writer
         {
             out.close();
         }
-        catch ( java.io.IOException ioe )
+        catch ( java.io.IOException ignored )
         {
         }
-        ;
     } //-- close
 
 
@@ -467,10 +458,9 @@ public class JSourceWriter extends Writer
         {
             out.flush();
         }
-        catch ( java.io.IOException ioe )
+        catch ( java.io.IOException ignored )
         {
         }
-        ;
     } //-- flush
 
 
@@ -483,10 +473,9 @@ public class JSourceWriter extends Writer
             {
                 out.write( s, off, len );
             }
-            catch ( java.io.IOException ioe )
+            catch ( java.io.IOException ignored )
             {
             }
-            ;
             if ( autoflush ) flush();
         }
     } //-- write
@@ -501,10 +490,9 @@ public class JSourceWriter extends Writer
             {
                 out.write( s );
             }
-            catch ( java.io.IOException ioe )
+            catch ( java.io.IOException ignored )
             {
             }
-            ;
             if ( autoflush ) flush();
         }
     } //-- write
@@ -518,10 +506,9 @@ public class JSourceWriter extends Writer
             {
                 out.write( buf );
             }
-            catch ( java.io.IOException ioe )
+            catch ( java.io.IOException ignored )
             {
             }
-            ;
 
             if ( autoflush ) flush();
         }
@@ -537,10 +524,9 @@ public class JSourceWriter extends Writer
             {
                 out.write( c );
             }
-            catch ( java.io.IOException ioe )
+            catch ( java.io.IOException ignored )
             {
             }
-            ;
             if ( autoflush ) flush();
         }
     } //-- write
@@ -555,10 +541,9 @@ public class JSourceWriter extends Writer
             {
                 out.write( buf, off, len );
             }
-            catch ( java.io.IOException ioe )
+            catch ( java.io.IOException ignored )
             {
             }
-            ;
             if ( autoflush ) flush();
         }
     } //-- write
@@ -593,10 +578,9 @@ public class JSourceWriter extends Writer
         {
             for ( int i = 0; i < tabLevel; i++ ) out.write( tab );
         }
-        catch ( java.io.IOException ioe )
+        catch ( java.io.IOException ignored )
         {
         }
-        ;
 
     } //-- writeIndent
 
@@ -623,10 +607,9 @@ public class JSourceWriter extends Writer
         {
             out.write( lineSeparator );
         }
-        catch ( java.io.IOException ioe )
+        catch ( java.io.IOException ignored )
         {
         }
-        ;
     } //-- linefeed
 
     /**

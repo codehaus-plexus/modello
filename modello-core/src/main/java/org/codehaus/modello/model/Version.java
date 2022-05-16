@@ -218,12 +218,7 @@ public class Version
         {
             return true;
         }
-        else if ( this.equals( range.getFromVersion() ) || this.equals( range.getToVersion() ) )
-        {
-            return true;
-        }
-
-        return false;
+        else return this.equals( range.getFromVersion() ) || this.equals( range.getToVersion() );
     }
 
     // ----------------------------------------------------------------------

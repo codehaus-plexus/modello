@@ -23,7 +23,7 @@ package org.codehaus.modello.plugin.java;
  */
 public interface Permission
 {
-    public String getName();
+    String getName();
 
-    public void setName( String name );
+    void setName( String name );
 }

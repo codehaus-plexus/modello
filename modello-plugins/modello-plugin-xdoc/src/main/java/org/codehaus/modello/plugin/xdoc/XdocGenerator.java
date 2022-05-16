@@ -494,7 +494,7 @@ public class XdocGenerator
      */
     private String getModelXmlDescriptor( ModelClass rootModelClass )
     {
-        return getElementXmlDescriptor( rootModelClass, null, new Stack<String>() );
+        return getElementXmlDescriptor( rootModelClass, null, new Stack<>() );
     }
 
     /**
@@ -504,7 +504,7 @@ public class XdocGenerator
      * @param association the association we are coming from (can be <code>null</code>)
      * @param stack the stack of elements that have been traversed to come to the current one
      * @return the String representing the tree model
-     * @throws ModelloRuntimeException
+     * @throws ModelloRuntimeException if the model is not well formed
      */
     private String getElementXmlDescriptor( ModelClass modelClass, ModelAssociation association, Stack<String> stack )
         throws ModelloRuntimeException
@@ -533,10 +533,11 @@ public class XdocGenerator
                 {
                     String schemaLocation = xmlModelMetadata.getSchemaLocation( getGeneratedVersion() );
 
-                    sb.append( " xmlns=\"" + targetNamespace + "\"" );
+                    sb.append( " xmlns=\"" ).append( targetNamespace ).append( "\"" );
                     sb.append( " xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n" );
-                    sb.append( "  xsi:schemaLocation=\"" + targetNamespace );
-                    sb.append( " <a href=\"" + schemaLocation + "\">" + schemaLocation + "</a>\"" );
+                    sb.append( "  xsi:schemaLocation=\"" ).append( targetNamespace );
+                    sb.append( " <a href=\"" ).append( schemaLocation ).append( "\">" ).append( schemaLocation )
+                            .append( "</a>\"" );
 
                     addNewline = true;
                 }

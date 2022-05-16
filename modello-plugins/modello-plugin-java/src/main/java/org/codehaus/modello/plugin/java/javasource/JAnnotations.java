@@ -10,7 +10,7 @@ public class JAnnotations
 
     public JAnnotations()
     {
-        this.annotations = new ArrayList<String>();
+        this.annotations = new ArrayList<>();
     }
 
     public void appendAnnotation( String annotation )
@@ -45,7 +45,7 @@ public class JAnnotations
     {
         for ( String annotation : annotations )
         {
-            jsw.writeln( annotation.toString() );
+            jsw.writeln( annotation );
         }
     } // -- print
 }

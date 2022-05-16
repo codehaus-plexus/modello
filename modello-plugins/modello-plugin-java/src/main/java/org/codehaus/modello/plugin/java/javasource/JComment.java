@@ -124,7 +124,7 @@ public class JComment
     /**
      * The main comment for this JDocComment
      **/
-    private StringBuilder _comment = null;
+    private StringBuilder _comment;
 
     /**
      * The maximum number of characters per line
@@ -172,7 +172,7 @@ public class JComment
 
         if ( jsw == null ) return; //-- nothing to do
 
-        LineFormatter formatter = null;
+        LineFormatter formatter;
 
         //-- calculate comment length
         short currentIndent = jsw.getIndentSize();
@@ -198,7 +198,7 @@ public class JComment
 
 
         //-- start comment
-        String prefix = null;
+        String prefix;
         String start = null;
         String end = null;
 
@@ -271,7 +271,7 @@ public class JComment
 class LineFormatter
 {
 
-    String comment = null;
+    String comment;
 
     int maxLength = 65;
     int offset = 0;
@@ -279,7 +279,7 @@ class LineFormatter
 
     String prefix = null;
 
-    private StringBuilder sb = null;
+    private StringBuilder sb;
 
     /**
      * Creates a LineFormatter for the given comment
@@ -342,7 +342,7 @@ class LineFormatter
             char ch = comment.charAt( index );
             if ( isNewLine( ch ) )
             {
-                sb.append( comment.substring( offset, index ) );
+                sb.append( comment, offset, index );
                 offset = index + 1;
                 return sb.toString();
             }
@@ -364,7 +364,7 @@ class LineFormatter
             else
                 index = breakable;
         }
-        sb.append( comment.substring( offset, index ) );
+        sb.append( comment, offset, index );
         offset = index + 1;
         return sb.toString();
     } //-- getNextLine

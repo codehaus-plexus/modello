@@ -95,7 +95,7 @@ public final class JInterface extends JStructure
     /**
      * The list of methods of this JInterface
      */
-    private List<JMethodSignature> methods = null;
+    private List<JMethodSignature> methods;
 
 
     /**
@@ -109,7 +109,7 @@ public final class JInterface extends JStructure
         throws IllegalArgumentException
     {
         super( name );
-        methods = new ArrayList<JMethodSignature>();
+        methods = new ArrayList<>();
 
         //-- initialize default Java doc
         getJDocComment().appendComment( "Interface " + getLocalName() + "." );
@@ -193,8 +193,7 @@ public final class JInterface extends JStructure
         }
         else
         {
-            throw new IllegalArgumentException( "invalid member for JInterface: " +
-                                                jMember.toString() );
+            throw new IllegalArgumentException( "invalid member for JInterface: " + jMember );
         }
 
     } //-- addMember
@@ -278,7 +277,7 @@ public final class JInterface extends JStructure
     public JField getField( String name )
     {
         if ( fields == null ) return null;
-        return (JField) fields.get( name );
+        return fields.get( name );
     } //-- getField
 
     /**
@@ -499,7 +498,7 @@ public final class JInterface extends JStructure
         jsw.close();
     } //-- printSource
 
-    private List<String> sourceCodeEntries = new ArrayList<String>();
+    private List<String> sourceCodeEntries = new ArrayList<>();
 
     public void addSourceCode( String sourceCode )
     {

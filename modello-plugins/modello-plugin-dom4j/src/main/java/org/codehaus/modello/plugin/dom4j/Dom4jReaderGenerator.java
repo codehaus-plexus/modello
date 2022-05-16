@@ -567,14 +567,9 @@ public class Dom4jReaderGenerator
                         sc.unindent();
                         sc.add( "}" );
 
-                        sc.unindent();
-                        sc.add( "}" );
                     }
-                    else
-                    {
-                        sc.unindent();
-                        sc.add( "}" );
-                    }
+                    sc.unindent();
+                    sc.add( "}" );
                 }
                 else
                 {

@@ -451,16 +451,6 @@ public class StaxWriterGenerator
                             sc.add( "serializer.writeEndElement();" );
                         }
 
-                        sc.unindent();
-                        sc.add( "}" );
-
-                        if ( wrappedItems )
-                        {
-                            sc.add( "serializer.writeEndElement();" );
-                        }
-
-                        sc.unindent();
-                        sc.add( "}" );
                     }
                     else
                     {
@@ -503,17 +493,15 @@ public class StaxWriterGenerator
                             sc.add( "serializer.writeEndElement();" );
                         }
 
-                        sc.unindent();
-                        sc.add( "}" );
-
-                        if ( wrappedItems )
-                        {
-                            sc.add( "serializer.writeEndElement();" );
-                        }
-
-                        sc.unindent();
-                        sc.add( "}" );
                     }
+                    sc.unindent();
+                    sc.add( "}" );
+                    if ( wrappedItems )
+                    {
+                        sc.add( "serializer.writeEndElement();" );
+                    }
+                    sc.unindent();
+                    sc.add( "}" );
                 }
             }
             else
@@ -621,9 +609,7 @@ public class StaxWriterGenerator
             sc.indent();
             sc.add( "String attributeName = attributeNames[i];" );
             sc.add( "serializer.writeAttribute( attributeName, dom.getAttribute( attributeName ) );" );
-            sc.unindent();
-    
-            sc.add( "}" );
+
         }
         else
         {
@@ -634,10 +620,10 @@ public class StaxWriterGenerator
             sc.indent();
             sc.add( "org.w3c.dom.Node attribute = attributes.item( i );" );
             sc.add( "serializer.writeAttribute( attribute.getNodeName(), attribute.getNodeValue() );" );
-            sc.unindent();
-    
-            sc.add( "}" );
+
         }
+        sc.unindent();
+        sc.add( "}" );
 
         // child nodes & text
         if ( domAsXpp3 )

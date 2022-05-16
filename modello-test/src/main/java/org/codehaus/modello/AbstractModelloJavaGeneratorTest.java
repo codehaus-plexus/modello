@@ -28,7 +28,6 @@ import org.codehaus.plexus.compiler.CompilerConfiguration;
 import org.codehaus.plexus.compiler.CompilerException;
 import org.codehaus.plexus.compiler.CompilerMessage;
 import org.codehaus.plexus.compiler.CompilerResult;
-import org.codehaus.plexus.compiler.javac.JavacCompiler;
 import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 import org.codehaus.plexus.util.FileUtils;
 
@@ -57,11 +56,11 @@ import java.util.Properties;
 public abstract class AbstractModelloJavaGeneratorTest
     extends AbstractModelloGeneratorTest
 {
-    private List<File> dependencies = new ArrayList<File>();
+    private List<File> dependencies = new ArrayList<>();
 
-    private List<URL> urls = new ArrayList<URL>();
+    private List<URL> urls = new ArrayList<>();
 
-    private List<String> classPathElements = new ArrayList<String>();
+    private List<String> classPathElements = new ArrayList<>();
 
     protected AbstractModelloJavaGeneratorTest( String name )
     {
@@ -192,14 +191,14 @@ public abstract class AbstractModelloJavaGeneratorTest
         }
         else 
         {
-            javaSource = Integer.toString( Math.max( minJavaSource, 7) );;
+            javaSource = Integer.toString( Math.max( minJavaSource, 7) );
         }
         
         compileGeneratedSources( verifierId, javaSource );
     }
     
     private void compileGeneratedSources( String verifierId, String javaSource )
-        throws IOException, CompilerException
+        throws CompilerException
     {
         File generatedSources = getOutputDirectory();
         File destinationDirectory = getOutputClasses();
@@ -214,7 +213,7 @@ public abstract class AbstractModelloJavaGeneratorTest
 
         for ( int i = 0; i < dependencies.size(); i++ )
         {
-            classPathElements[i + 2] = ( (File) dependencies.get( i ) ).getAbsolutePath();
+            classPathElements[i + 2] = dependencies.get( i ).getAbsolutePath();
         }
 
         File verifierDirectory = getTestFile( "src/test/verifiers/" + verifierId );
@@ -249,7 +248,7 @@ public abstract class AbstractModelloJavaGeneratorTest
 
         CompilerResult result = compiler.performCompile( configuration );
 
-        List<CompilerMessage> errors = new ArrayList<CompilerMessage>( 0 );
+        List<CompilerMessage> errors = new ArrayList<>( 0 );
         for ( CompilerMessage compilerMessage : result.getCompilerMessages() )
         {
             if ( compilerMessage.isError() )
@@ -275,7 +274,7 @@ public abstract class AbstractModelloJavaGeneratorTest
         addClassPathFile( getTestFile( "target/test-classes" ) );
 
         ClassLoader oldCCL = Thread.currentThread().getContextClassLoader();
-        URLClassLoader classLoader = URLClassLoader.newInstance( urls.toArray( new URL[urls.size()] ), null );
+        URLClassLoader classLoader = URLClassLoader.newInstance( urls.toArray( new URL[0] ), null );
 
         Thread.currentThread().setContextClassLoader( classLoader );
 
@@ -283,11 +282,11 @@ public abstract class AbstractModelloJavaGeneratorTest
         {
             Class<?> clazz = classLoader.loadClass( verifierClassName );
 
-            Method verify = clazz.getMethod( "verify", new Class[0] );
+            Method verify = clazz.getMethod( "verify" );
 
             try
             {
-                verify.invoke( clazz.getDeclaredConstructor().newInstance(), new Object[0] );
+                verify.invoke( clazz.getDeclaredConstructor().newInstance() );
             }
             catch ( InvocationTargetException ex )
             {

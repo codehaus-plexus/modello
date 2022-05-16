@@ -93,7 +93,7 @@ public class StaxReaderGenerator
      * with <code>public <i>RootClass</i> read( ... )</code> methods.
      *
      * @throws ModelloException
-     * @throws IOException
+     * @throws IOException if an error occurs while writing the source code.
      */
     private void generateStaxReader()
         throws ModelloException, IOException
@@ -668,7 +668,7 @@ public class StaxReaderGenerator
      *
      * @param objectModel the model
      * @param jClass the generated class source file
-     * @throws ModelloException
+     * @throws ModelloException if an error occurs
      * @see {@link #writeClassParser(ModelClass, JClass, boolean)}
      */
     private void writeAllClassesParser( Model objectModel, JClass jClass )
@@ -803,7 +803,7 @@ public class StaxReaderGenerator
 
                 if ( identifierFields.size() == 1 )
                 {
-                    ModelField field = (ModelField) identifierFields.get( 0 );
+                    ModelField field = identifierFields.get( 0 );
 
                     String v = uncapClassName + ".get" + capitalise( field.getName() ) + "()";
                     v = getValue( field.getType(), v, (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID ) );
@@ -975,12 +975,10 @@ public class StaxReaderGenerator
      * Add code to parse fields of a model class that are XML attributes.
      *
      * @param modelClass the model class
-     * @param uncapClassName
+     * @param uncapClassName the uncapitalised name of the class
      * @param sc the source code to add to
-     * @throws ModelloException
      */
     private void writeAttributes( ModelClass modelClass, String uncapClassName, JSourceCode sc )
-        throws ModelloException
     {
         for ( ModelField field : modelClass.getAllFields( getGeneratedVersion(), true ) )
         {
@@ -1004,7 +1002,7 @@ public class StaxReaderGenerator
      * @param objectName the object name in the source
      * @param rootElement is the enclosing model class the root class (for model version field handling)
      * @param jClass the generated class source file
-     * @throws ModelloException
+     * @throws ModelloException if an error occurs
      */
     private void processField( ModelField field, XmlFieldMetadata xmlFieldMetadata, boolean addElse, JSourceCode sc,
                                String objectName, boolean rootElement, JClass jClass )
@@ -1208,15 +1206,9 @@ public class StaxReaderGenerator
                         sc.unindent();
                         sc.add( "}" );
 
-                        sc.unindent();
-                        sc.add( "}" );
                     }
-                    else
-                    {
-
-                        sc.unindent();
-                        sc.add( "}" );
-                    }
+                    sc.unindent();
+                    sc.add( "}" );
                 }
                 else
                 {

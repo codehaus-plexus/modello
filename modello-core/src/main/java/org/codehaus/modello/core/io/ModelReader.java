@@ -50,15 +50,15 @@ import java.util.List;
  */
 public class ModelReader
 {
-    private Map<String, String> modelAttributes = new HashMap<String, String>();
+    private Map<String, String> modelAttributes = new HashMap<>();
 
-    private Map<String, Map<String, String>> classAttributes = new HashMap<String, Map<String, String>>();
+    private Map<String, Map<String, String>> classAttributes = new HashMap<>();
 
-    private Map<String, Map<String, String>> interfaceAttributes = new HashMap<String, Map<String, String>>();
+    private Map<String, Map<String, String>> interfaceAttributes = new HashMap<>();
 
-    private Map<String, Map<String, String>> fieldAttributes = new HashMap<String, Map<String, String>>();
+    private Map<String, Map<String, String>> fieldAttributes = new HashMap<>();
 
-    private Map<String, Map<String, String>> associationAttributes = new HashMap<String, Map<String, String>>();
+    private Map<String, Map<String, String>> associationAttributes = new HashMap<>();
 
     public Map<String, String> getAttributesForModel()
     {
@@ -102,11 +102,7 @@ public class ModelReader
 
             return model;
         }
-        catch ( IOException ex )
-        {
-            throw new ModelloException( "Error parsing the model.", ex );
-        }
-        catch ( XmlPullParserException ex )
+        catch ( IOException | XmlPullParserException ex )
         {
             throw new ModelloException( "Error parsing the model.", ex );
         }
@@ -343,7 +339,7 @@ public class ModelReader
 
                 Map<String, String> fAttributes = getAttributes( parser );
 
-                Map<String, String> aAttributes = new HashMap<String, String>();
+                Map<String, String> aAttributes = new HashMap<>();
 
                 while ( parser.nextTag() == XmlPullParser.START_TAG )
                 {
@@ -374,11 +370,11 @@ public class ModelReader
                     }
                     else if ( "required".equals( parser.getName() ) )
                     {
-                        modelField.setRequired( Boolean.valueOf( parser.nextText() ) );
+                        modelField.setRequired( Boolean.parseBoolean( parser.nextText() ) );
                     }
                     else if ( "identifier".equals( parser.getName() ) )
                     {
-                        modelField.setIdentifier( Boolean.valueOf( parser.nextText() ).booleanValue() );
+                        modelField.setIdentifier( Boolean.parseBoolean( parser.nextText() ) );
                     }
                     else
                     {
@@ -553,7 +549,7 @@ public class ModelReader
         }
         else if ( "annotations".equals( parser.getName() ) )
         {
-            List<String> annotationsList = new ArrayList<String>();
+            List<String> annotationsList = new ArrayList<>();
             while ( parser.nextTag() == XmlPullParser.START_TAG )
             {
                 if ( "annotation".equals( parser.getName() ) )
@@ -573,7 +569,7 @@ public class ModelReader
 
     private Map<String, String> getAttributes( XmlPullParser parser )
     {
-        Map<String, String> attributes = new HashMap<String, String>();
+        Map<String, String> attributes = new HashMap<>();
 
         for ( int i = 0; i < parser.getAttributeCount(); i++ )
         {

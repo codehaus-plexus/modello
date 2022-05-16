@@ -3,7 +3,6 @@ package org.codehaus.modello.generator.xml.stax;
 import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.Version;
-import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 
 import java.util.List;
 
@@ -15,7 +14,6 @@ public class StaxGeneratorWrongVersionInNamespaceTest
     extends AbstractStaxGeneratorTestCase
 {
     public StaxGeneratorWrongVersionInNamespaceTest()
-        throws ComponentLookupException
     {
         super( "stax-wrong-version-in-namespace" );
     }
@@ -29,7 +27,7 @@ public class StaxGeneratorWrongVersionInNamespaceTest
 
         assertEquals( 1, classesList.size() );
 
-        ModelClass clazz = (ModelClass) classesList.get( 0 );
+        ModelClass clazz = classesList.get( 0 );
 
         assertEquals( "Model", clazz.getName() );
 

@@ -177,8 +177,7 @@ class JNaming
             if ( !Character.isJavaIdentifierPart( chars[i] ) )
                 return false;
         }
-        if ( isKeyword( string ) ) return false;
-        return true;
+        return !isKeyword( string );
     } //-- isValidJavaIdentifier
 
 } //-- JNaming

@@ -97,21 +97,21 @@ public class JClass extends JStructure
     /**
      * The list of constructors for this JClass
      */
-    private List<JConstructor> _constructors = null;
+    private List<JConstructor> _constructors;
 
 
     /**
      * The list of member variables (fields) of this JClass
      */
-    private Map<String, JField> _fields = null;
+    private Map<String, JField> _fields;
 
 
-    private List<JClass> _innerClasses = null;
+    private List<JClass> _innerClasses;
 
     /**
      * The list of methods of this JClass
      */
-    private List<JMethod> _methods = null;
+    private List<JMethod> _methods;
 
     /**
      * The superclass for this JClass
@@ -134,10 +134,10 @@ public class JClass extends JStructure
         throws IllegalArgumentException
     {
         super( name );
-        _constructors = new ArrayList<JConstructor>();
+        _constructors = new ArrayList<>();
         _fields = new LinkedHashMap<>();
-        _methods = new ArrayList<JMethod>();
-        _innerClasses = new ArrayList<JClass>();
+        _methods = new ArrayList<>();
+        _innerClasses = new ArrayList<>();
         //-- initialize default Java doc
         getJDocComment().appendComment( "Class " + getLocalName() + "." );
 
@@ -219,7 +219,7 @@ public class JClass extends JStructure
             addMethod( (JMethod) jMember );
         else
         {
-            String error = null;
+            String error;
             if ( jMember == null )
             {
                 error = "the argument 'jMember' must not be null.";
@@ -277,7 +277,7 @@ public class JClass extends JStructure
 
         for ( int i = 0; i < _methods.size(); i++ )
         {
-            JMethod tmp = (JMethod) _methods.get( i );
+            JMethod tmp = _methods.get( i );
             //-- first compare modifiers
             if ( tmp.getModifiers().isPrivate() )
             {
@@ -392,7 +392,7 @@ public class JClass extends JStructure
      */
     public JConstructor getConstructor( int index )
     {
-        return (JConstructor) _constructors.get( index );
+        return _constructors.get( index );
     } //-- getConstructor
 
     /**
@@ -423,7 +423,7 @@ public class JClass extends JStructure
      **/
     public JField getField( String name )
     {
-        return (JField) _fields.get( name );
+        return _fields.get( name );
     } //-- getField
 
     /**
@@ -551,7 +551,7 @@ public class JClass extends JStructure
             List<String> removeImports = null;
             if ( _innerClasses.size() > 0 )
             {
-                removeImports = new ArrayList<String>();
+                removeImports = new ArrayList<>();
                 for ( JClass iClass : _innerClasses )
                 {
                     Enumeration<String> e = iClass.getImports();
@@ -571,9 +571,9 @@ public class JClass extends JStructure
             //-- remove imports from inner-classes, if necessary
             if ( removeImports != null )
             {
-                for ( int i = 0; i < removeImports.size(); i++ )
+                for ( String removeImport : removeImports )
                 {
-                    removeImport( removeImports.get( i ) );
+                    removeImport( removeImport );
                 }
             }
 
@@ -722,9 +722,8 @@ public class JClass extends JStructure
             jsw.writeln( "//----------------/" );
             jsw.writeln();
         }
-        for ( int i = 0; i < _constructors.size(); i++ )
+        for ( JConstructor jConstructor : _constructors )
         {
-            JConstructor jConstructor = _constructors.get( i );
             jConstructor.print( jsw );
             jsw.writeln();
         }
@@ -739,9 +738,8 @@ public class JClass extends JStructure
             jsw.writeln();
         }
 
-        for ( int i = 0; i < _methods.size(); i++ )
+        for ( JMethod jMethod : _methods )
         {
-            JMethod jMethod = _methods.get( i );
             jMethod.print( jsw );
             jsw.writeln();
         }
@@ -755,9 +753,8 @@ public class JClass extends JStructure
             jsw.writeln( "//-----------------/" );
             jsw.writeln();
         }
-        for ( int i = 0; i < _innerClasses.size(); i++ )
+        for ( JClass jClass : _innerClasses )
         {
-            JClass jClass = _innerClasses.get( i );
             jClass.print( jsw, true );
             jsw.writeln();
         }
@@ -773,7 +770,7 @@ public class JClass extends JStructure
         jsw.flush();
     } //-- printSource
 
-    private List<String> sourceCodeEntries = new ArrayList<String>();
+    private List<String> sourceCodeEntries = new ArrayList<>();
 
     public void addSourceCode( String sourceCode )
     {
@@ -801,7 +798,7 @@ public class JClass extends JStructure
     {
         if ( name == null ) return null;
 
-        JField field = (JField) _fields.remove( name );
+        JField field = _fields.remove( name );
 
         //-- clean up imports
         //-- NOT YET IMPLEMENTED
@@ -850,7 +847,7 @@ public class JClass extends JStructure
         _superClass = superClass;
     } //-- setSuperClass
 
-    final class JInnerClass extends JClass
+    static final class JInnerClass extends JClass
     {
         JInnerClass( String name )
         {

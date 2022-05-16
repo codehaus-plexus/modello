@@ -99,7 +99,7 @@ public class Model
             {
                 metadata = (ModelClassMetadata) currentClass.getMetadata( ModelClassMetadata.ID );
             }
-            catch ( Exception e )
+            catch ( Exception ignored )
             {
             }
 
@@ -261,7 +261,7 @@ public class Model
 
     public ModelDefault getDefault( String key )
     {
-        ModelDefault modelDefault = (ModelDefault) defaultMap.get( key );
+        ModelDefault modelDefault = defaultMap.get( key );
 
         if ( modelDefault == null )
         {

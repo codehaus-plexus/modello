@@ -38,8 +38,6 @@ import org.codehaus.plexus.DefaultPlexusContainer;
  */
 public class Modello
 {
-    private PlexusContainer container;
-
     private ModelloCore core;
 
     public Modello()
@@ -47,7 +45,7 @@ public class Modello
     {
         try
         {
-            container = new DefaultPlexusContainer();
+            PlexusContainer container = new DefaultPlexusContainer();
 
             core = (ModelloCore) container.lookup( ModelloCore.ROLE );
         }

@@ -153,7 +153,7 @@ public class JParameter
         StringBuilder sb = new StringBuilder();
         if ( annotations != null )
         {
-            sb.append( annotations.toString() );
+            sb.append( annotations );
             sb.append( ' ' );
         }
         sb.append( this.type.toString() );

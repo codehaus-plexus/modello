@@ -346,8 +346,6 @@ public class SnakeYamlWriterGenerator
 
                         sc.add( "generator.emit( new SequenceEndEvent( null, null ) );" );
 
-                        sc.unindent();
-                        sc.add( "}" );
                     }
                     else
                     {
@@ -436,9 +434,9 @@ public class SnakeYamlWriterGenerator
                             sc.add( "generator.emit( new MappingEndEvent( null, null ) );" );
                         }
 
-                        sc.unindent();
-                        sc.add( "}" );
                     }
+                    sc.unindent();
+                    sc.add( "}" );
                 }
             }
             else

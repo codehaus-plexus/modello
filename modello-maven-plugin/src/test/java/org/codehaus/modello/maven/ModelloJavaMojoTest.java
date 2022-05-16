@@ -41,7 +41,7 @@ public class ModelloJavaMojoTest
     {
         ModelloCore modelloCore = (ModelloCore) lookup( ModelloCore.ROLE );
 
-        BuildContext buildContext = (BuildContext) lookup( BuildContext.class );
+        BuildContext buildContext = lookup( BuildContext.class );
 
         ModelloJavaMojo mojo = new ModelloJavaMojo();
 
@@ -55,7 +55,7 @@ public class ModelloJavaMojoTest
 
         mojo.setOutputDirectory( outputDirectory );
 
-        String models[] = new String[1];
+        String[] models = new String[1];
         models[0] = getTestPath( "src/test/resources/java-model.mdo" );
         mojo.setModels( models );
 
@@ -63,7 +63,7 @@ public class ModelloJavaMojoTest
 
         mojo.setPackageWithVersion( false );
 
-        mojo.setPackagedVersions( Arrays.asList( new String[] { "0.9.0", "1.0.0" } ) );
+        mojo.setPackagedVersions( Arrays.asList( "0.9.0", "1.0.0" ) );
 
         mojo.setModelloCore( modelloCore );
         

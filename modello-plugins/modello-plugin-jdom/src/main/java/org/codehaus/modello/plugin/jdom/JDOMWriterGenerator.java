@@ -477,7 +477,7 @@ public class JDOMWriterGenerator
     private void writeAllClasses( Model objectModel, JClass jClass, ModelClass rootClass )
         throws ModelloException
     {
-        List<ModelClass> alwaysExistingElements = new ArrayList<ModelClass>();
+        List<ModelClass> alwaysExistingElements = new ArrayList<>();
         alwaysExistingElements.add( rootClass );
 
         for ( ModelClass clazz : getClasses( objectModel ) )

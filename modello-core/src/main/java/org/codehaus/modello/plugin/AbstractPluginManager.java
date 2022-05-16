@@ -38,7 +38,7 @@ public abstract class AbstractPluginManager<T>
     implements Initializable
 {
     /* injected by Plexus: see META-INF/plexus/components.xml */
-    private Map<String, T> plugins = new HashMap<String, T>();
+    private Map<String, T> plugins = new HashMap<>();
 
     public void initialize()
     {

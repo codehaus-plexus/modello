@@ -46,7 +46,7 @@ public class ModelClass
 
     private List<ModelField> fields;
 
-    private transient Map<String, List<ModelField>> fieldMap = new HashMap<String, List<ModelField>>();
+    private transient Map<String, List<ModelField>> fieldMap = new HashMap<>();
 
     public ModelClass()
     {
@@ -81,7 +81,7 @@ public class ModelClass
     {
         if ( interfaces == null )
         {
-            interfaces = new ArrayList<String>();
+            interfaces = new ArrayList<>();
         }
 
         return interfaces;
@@ -108,7 +108,7 @@ public class ModelClass
     {
         if ( fields == null )
         {
-            fields = new ArrayList<ModelField>();
+            fields = new ArrayList<>();
         }
 
         return fields;
@@ -126,7 +126,7 @@ public class ModelClass
             return getAllFields();
         }
 
-        List<ModelField> fields = new ArrayList<ModelField>( getAllFields() );
+        List<ModelField> fields = new ArrayList<>( getAllFields() );
 
         ModelClass c = this;
 
@@ -177,7 +177,7 @@ public class ModelClass
         }
         else
         {
-            List<ModelField> fieldList = new ArrayList<ModelField>();
+            List<ModelField> fieldList = new ArrayList<>();
 
             fieldMap.put( modelField.getName(), fieldList );
         }

@@ -285,8 +285,6 @@ public class JacksonWriterGenerator
 
                         sc.add( "generator.writeEndArray();" );
 
-                        sc.unindent();
-                        sc.add( "}" );
                     }
                     else
                     {
@@ -368,9 +366,9 @@ public class JacksonWriterGenerator
                             sc.add( "generator.writeEndObject();" );
                         }
 
-                        sc.unindent();
-                        sc.add( "}" );
                     }
+                    sc.unindent();
+                    sc.add( "}" );
                 }
             }
             else

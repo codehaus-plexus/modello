@@ -594,8 +594,6 @@ public class JacksonReaderGenerator
                     sc.unindent();
                     sc.add( "}" );
 
-                    sc.unindent();
-                    sc.add( "}" );
                 }
                 else
                 {
@@ -719,9 +717,9 @@ public class JacksonReaderGenerator
                         sc.add( "}" );
                     }
 
-                    sc.unindent();
-                    sc.add( "}" );
                 }
+                sc.unindent();
+                sc.add( "}" );
             }
         }
     }
@@ -731,7 +729,7 @@ public class JacksonReaderGenerator
     {
         XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
 
-        String parserGetter = null;
+        String parserGetter;
         if ( "boolean".equals( type ) || "Boolean".equals( type ) )
         {
             parserGetter = "parser.getBooleanValue()";

@@ -90,34 +90,34 @@ public final class JMethodSignature
     /**
      * The set of modifiers for this JMethod
      **/
-    private JModifiers modifiers = null;
+    private JModifiers modifiers;
 
     /**
      * The return type of this Method
      **/
-    private JType returnType = null;
+    private JType returnType;
 
     /**
      * The name of this method
      **/
-    private String name = null;
+    private String name;
 
 
     /**
      * The list of parameters of this JMethodSignature in declared
      * order
      **/
-    private Map<String, JParameter> params = null;
+    private Map<String, JParameter> params;
 
     /**
      * The JavaDoc comment for this method signature.
      **/
-    private JDocComment jdc = null;
+    private JDocComment jdc;
 
     /**
      * The exceptions that this method throws
      **/
-    private List<JClass> exceptions = null;
+    private List<JClass> exceptions;
 
     /**
      * Creates a new method with the given name and return type.
@@ -140,7 +140,7 @@ public final class JMethodSignature
         this.name = name;
         this.modifiers = new JModifiers();
         this.params = new LinkedHashMap<>( 3 );
-        this.exceptions = new ArrayList<JClass>( 1 );
+        this.exceptions = new ArrayList<>( 1 );
     } //-- JMethodSignature
 
     /**
@@ -186,12 +186,11 @@ public final class JMethodSignature
         //-- check current params
         if ( params.get( pName ) != null )
         {
-            StringBuilder err = new StringBuilder();
-            err.append( "A parameter already exists for this method, " );
-            err.append( name );
-            err.append( ", with the name: " );
-            err.append( pName );
-            throw new IllegalArgumentException( err.toString() );
+            String err = "A parameter already exists for this method, "
+                    + name
+                    + ", with the name: "
+                    + pName;
+            throw new IllegalArgumentException( err );
         }
 
 
@@ -431,7 +430,7 @@ public final class JMethodSignature
 
     protected String[] getParameterClassNames()
     {
-        List<String> names = new ArrayList<String>( params.size() );
+        List<String> names = new ArrayList<>( params.size() );
 
         for ( JParameter param : params.values() )
         {

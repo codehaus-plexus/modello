@@ -78,25 +78,25 @@ package org.codehaus.modello.plugin.java.javasource;
 interface JMember
 {
 
-    /**
-     * Returns the class in which this JMember has been declared
-     * @return the class in which this JMember has been declared
-     **/
+    /*
+      Returns the class in which this JMember has been declared
+      @return the class in which this JMember has been declared
+     */
     //public JClass getDeclaringClass();
 
     /**
      * Returns the modifiers for this JMember
      * @return the modifiers for this JMember
      **/
-    public JModifiers getModifiers();
+    JModifiers getModifiers();
 
     /**
      * Returns the name of this JMember
      * @return the name of this JMember
      **/
-    public String getName();
+    String getName();
 
-    public JAnnotations getAnnotations();
+    JAnnotations getAnnotations();
 
 } //-- JMember
 

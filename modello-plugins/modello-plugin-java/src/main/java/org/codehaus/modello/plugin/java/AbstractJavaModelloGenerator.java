@@ -24,9 +24,6 @@ package org.codehaus.modello.plugin.java;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.Writer;
-import java.nio.charset.Charset;
-import java.nio.file.Path;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -48,7 +45,6 @@ import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.ModelInterface;
 import org.codehaus.modello.model.ModelType;
 import org.codehaus.modello.plugin.AbstractModelloGenerator;
-import org.codehaus.modello.plugin.CachingWriter;
 import org.codehaus.modello.plugin.java.javasource.JClass;
 import org.codehaus.modello.plugin.java.javasource.JComment;
 import org.codehaus.modello.plugin.java.javasource.JInterface;
@@ -89,7 +85,7 @@ public abstract class AbstractJavaModelloGenerator
      * @param packageName the package of the source file to create
      * @param className the class of the source file to create
      * @return a JSourceWriter with configured encoding
-     * @throws IOException
+     * @throws IOException if an error occurs
      */
     protected JSourceWriter newJSourceWriter( String packageName, String className )
         throws IOException
@@ -339,7 +335,7 @@ public abstract class AbstractJavaModelloGenerator
 
     protected List<ModelClass> getClasses( Model model )
     {
-        List<ModelClass> modelClasses = new ArrayList<ModelClass>();
+        List<ModelClass> modelClasses = new ArrayList<>();
 
         for ( ModelClass modelClass : model.getClasses( getGeneratedVersion() ) )
         {
@@ -370,11 +366,7 @@ public abstract class AbstractJavaModelloGenerator
         {
             return true;
         }
-        if ( StringUtils.isNotEmpty( modelClassMetadata.getSourceTracker() ) )
-        {
-            return true;
-        }
-        return false;
+        return StringUtils.isNotEmpty( modelClassMetadata.getSourceTracker() );
     }
 
 }

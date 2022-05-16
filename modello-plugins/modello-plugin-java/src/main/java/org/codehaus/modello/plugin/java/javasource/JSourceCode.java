@@ -85,7 +85,7 @@ public class JSourceCode
     /**
      * A list of JCodeStatements
      **/
-    private List<JCodeStatement> source = null;
+    private List<JCodeStatement> source;
 
     /**
      * The indent size
@@ -103,7 +103,7 @@ public class JSourceCode
     public JSourceCode()
     {
         super();
-        source = new ArrayList<JCodeStatement>();
+        source = new ArrayList<>();
     } //-- JSourceCode
 
     /**
@@ -174,7 +174,7 @@ public class JSourceCode
             add( segment );
         else
         {
-            JCodeStatement jcs = (JCodeStatement) source.get( source.size() - 1 );
+            JCodeStatement jcs = source.get( source.size() - 1 );
             jcs.append( segment );
         }
     } //-- append(String)
@@ -193,9 +193,9 @@ public class JSourceCode
      **/
     public void copyInto( JSourceCode jsc )
     {
-        for ( int i = 0; i < source.size(); i++ )
+        for ( JCodeStatement jCodeStatement : source )
         {
-            jsc.addCodeStatement( source.get( i ) );
+            jsc.addCodeStatement( jCodeStatement );
         }
     } //-- copyInto
 
@@ -222,8 +222,7 @@ public class JSourceCode
      **/
     public void print( JSourceWriter jsw )
     {
-        for ( int i = 0; i < source.size(); i++ )
-            jsw.writeln( source.get( i ).toString() );
+        for ( JCodeStatement jCodeStatement : source ) jsw.writeln( jCodeStatement.toString() );
     } //-- print
 
     /**
@@ -247,9 +246,9 @@ public class JSourceCode
     {
         StringBuilder sb = new StringBuilder();
         String lineSeparator = System.getProperty( "line.separator" );
-        for ( int i = 0; i < source.size(); i++ )
+        for ( JCodeStatement jCodeStatement : source )
         {
-            sb.append( source.get( i ).toString() );
+            sb.append( jCodeStatement.toString() );
             sb.append( lineSeparator );
         }
         return sb.toString();
@@ -274,7 +273,7 @@ public class JSourceCode
 class JCodeStatement
 {
 
-    private StringBuilder value = null;
+    private StringBuilder value;
     static public short DEFAULT_INDENTSIZE = 4;
     private short indentSize = DEFAULT_INDENTSIZE;
 
@@ -321,7 +320,7 @@ class JCodeStatement
 
         StringBuilder sb = new StringBuilder( indentSize + value.length() );
         for ( int i = 0; i < indentSize; i++ ) sb.append( ' ' );
-        sb.append( value.toString() );
+        sb.append( value );
         return sb.toString();
     }
 } //-- JCodeStatement

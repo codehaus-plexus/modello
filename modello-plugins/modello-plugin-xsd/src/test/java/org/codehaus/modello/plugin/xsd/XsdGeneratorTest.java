@@ -56,7 +56,7 @@ public class XsdGeneratorTest
 
         assertEquals( 26, classesList.size() );
 
-        ModelClass clazz = (ModelClass) classesList.get( 0 );
+        ModelClass clazz = classesList.get( 0 );
 
         assertEquals( "Model", clazz.getName() );
 

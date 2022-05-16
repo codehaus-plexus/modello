@@ -40,7 +40,6 @@ import org.codehaus.modello.plugins.xml.AbstractXmlJavaGenerator;
 import org.codehaus.modello.plugins.xml.metadata.XmlAssociationMetadata;
 import org.codehaus.plexus.util.StringUtils;
 
-import com.fasterxml.jackson.core.JsonEncoding;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonGenerator.Feature;
@@ -70,7 +69,7 @@ public final class JsonSchemaGenerator
     }
 
     private void generateJsonSchema( Properties parameters )
-        throws IOException, ModelloException
+        throws IOException
     {
         Model objectModel = getModel();
 
@@ -158,7 +157,7 @@ public final class JsonSchemaGenerator
 
         generator.writeObjectFieldStart( "properties" );
 
-        List<String> required = new LinkedList<String>();
+        List<String> required = new LinkedList<>();
 
         ModelClass reference = modelClass;
         // traverse the whole modelClass hierarchy to create the nested Builder instance

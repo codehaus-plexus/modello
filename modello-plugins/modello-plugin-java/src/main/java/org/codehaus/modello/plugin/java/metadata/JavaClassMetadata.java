@@ -43,7 +43,7 @@ public class JavaClassMetadata
 
     static
     {
-        CLONE_MODES = new ArrayList<String>();
+        CLONE_MODES = new ArrayList<>();
         CLONE_MODES.add( CLONE_NONE );
         CLONE_MODES.add( CLONE_SHALLOW );
         CLONE_MODES.add( CLONE_DEEP );

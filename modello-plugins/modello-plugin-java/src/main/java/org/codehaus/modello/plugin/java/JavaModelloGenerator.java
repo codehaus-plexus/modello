@@ -29,6 +29,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.Set;
 
@@ -68,9 +69,9 @@ public class JavaModelloGenerator
     extends AbstractJavaModelloGenerator
 {
 
-    private Collection<String> immutableTypes = new HashSet<String>( Arrays.asList(
-        new String[]{ "boolean", "Boolean", "byte", "Byte", "char", "Character", "short", "Short", "int", "Integer",
-            "long", "Long", "float", "Float", "double", "Double", "String" } ) );
+    private final Collection<String> immutableTypes = new HashSet<>( Arrays.asList(
+            "boolean", "Boolean", "byte", "Byte", "char", "Character", "short", "Short", "int", "Integer",
+            "long", "Long", "float", "Float", "double", "Double", "String" ) );
 
     public void generate( Model model, Properties parameters )
         throws ModelloException
@@ -295,7 +296,7 @@ public class JavaModelloGenerator
     }
 
     private void generateInterface( ModelInterface modelInterface )
-        throws ModelloException, IOException
+        throws IOException
     {
         Model objectModel = modelInterface.getModel();
 
@@ -686,7 +687,7 @@ public class JavaModelloGenerator
     private String getCloneMode( ModelClass modelClass )
         throws ModelloException
     {
-        String cloneMode = null;
+        String cloneMode;
 
         for ( ModelClass currentClass = modelClass; ; )
         {
@@ -745,7 +746,6 @@ public class JavaModelloGenerator
     }
 
     private String getCloneHook( ModelClass modelClass )
-        throws ModelloException
     {
         JavaClassMetadata javaClassMetadata = (JavaClassMetadata) modelClass.getMetadata( JavaClassMetadata.ID );
 
@@ -753,7 +753,7 @@ public class JavaModelloGenerator
     }
 
     private String generateLocationTracker( Model objectModel, ModelClass locationClass )
-        throws ModelloException, IOException
+        throws IOException
     {
         if ( locationClass == null )
         {
@@ -799,7 +799,6 @@ public class JavaModelloGenerator
     }
 
     private void generateLocationTracking( JClass jClass, ModelClass modelClass, ModelClass locationClass )
-        throws ModelloException
     {
         if ( locationClass == null )
         {
@@ -1670,14 +1669,14 @@ public class JavaModelloGenerator
                 }
             }
 
-            if ( StringUtils.equals( javaAssociationMetadata.getInitializationMode(),
-                                     JavaAssociationMetadata.FIELD_INIT ) )
+            if ( Objects.equals( javaAssociationMetadata.getInitializationMode(),
+                    JavaAssociationMetadata.FIELD_INIT ) )
             {
                 jField.setInitString( defaultValue );
             }
 
-            if ( StringUtils.equals( javaAssociationMetadata.getInitializationMode(),
-                                     JavaAssociationMetadata.CONSTRUCTOR_INIT ) )
+            if ( Objects.equals( javaAssociationMetadata.getInitializationMode(),
+                    JavaAssociationMetadata.CONSTRUCTOR_INIT ) )
             {
                 jConstructorSource.add( "this." + jField.getName() + " = " + defaultValue + ";" );
             }
@@ -1692,8 +1691,8 @@ public class JavaModelloGenerator
 
                 JSourceCode sc = getter.getSourceCode();
 
-                if ( StringUtils.equals( javaAssociationMetadata.getInitializationMode(),
-                                         JavaAssociationMetadata.LAZY_INIT ) )
+                if ( Objects.equals( javaAssociationMetadata.getInitializationMode(),
+                        JavaAssociationMetadata.LAZY_INIT ) )
                 {
                     sc.add( "if ( this." + jField.getName() + " == null )" );
 
@@ -2244,7 +2243,7 @@ public class JavaModelloGenerator
     private void createInstanceAndSetProperties( ModelClass modelClass, JConstructor constructor, JSourceCode sc )
         throws ModelloException
     {
-        final Set<String> ctorArgs = new HashSet<String>();
+        final Set<String> ctorArgs = new HashSet<>();
 
         StringBuilder ctor = new StringBuilder( modelClass.getName() )
                                  .append( " instance = new " )
@@ -2338,7 +2337,6 @@ public class JavaModelloGenerator
     }
 
     private boolean createSetBuilderFieldToInstance( Set<String> ctorArgs, ModelField modelField, JSourceCode sc )
-        throws ModelloException
     {
         JavaFieldMetadata javaFieldMetadata = (JavaFieldMetadata) modelField.getMetadata( JavaFieldMetadata.ID );
 

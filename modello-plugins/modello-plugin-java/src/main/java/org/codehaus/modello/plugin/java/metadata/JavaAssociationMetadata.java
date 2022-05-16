@@ -43,7 +43,7 @@ public class JavaAssociationMetadata
 
     static
     {
-        INIT_TYPES = new ArrayList<String>();
+        INIT_TYPES = new ArrayList<>();
         INIT_TYPES.add( LAZY_INIT );
         INIT_TYPES.add( CONSTRUCTOR_INIT );
         INIT_TYPES.add( FIELD_INIT );
@@ -56,7 +56,7 @@ public class JavaAssociationMetadata
 
     static
     {
-        CLONE_MODES = new ArrayList<String>();
+        CLONE_MODES = new ArrayList<>();
         CLONE_MODES.add( CLONE_SHALLOW );
         CLONE_MODES.add( CLONE_DEEP );
     }

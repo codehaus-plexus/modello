@@ -25,19 +25,19 @@ import java.util.List;
  */
 public interface Role
 {
-    public String getName();
+    String getName();
 
-    public void setName(String name);
+    void setName(String name);
 
-    public void setRoles(List<Role> roles);
+    void setRoles(List<Role> roles);
 
-    public List<Role> getRoles();
+    List<Role> getRoles();
 
-    public void addRole(Role role);
+    void addRole(Role role);
 
-    public void removeRole(Role role);
+    void removeRole(Role role);
 
-    public void setPermission(Permission permission);
+    void setPermission(Permission permission);
 
-    public Permission getPermission();
+    Permission getPermission();
 }

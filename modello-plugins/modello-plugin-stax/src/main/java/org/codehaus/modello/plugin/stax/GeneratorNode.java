@@ -36,13 +36,13 @@ class GeneratorNode
 
     private boolean referencableChildren;
 
-    private List<GeneratorNode> children = new LinkedList<GeneratorNode>();
+    private List<GeneratorNode> children = new LinkedList<>();
 
     private ModelAssociation association;
 
     private boolean referencable;
 
-    private Map<String, GeneratorNode> nodesWithReferencableChildren = new HashMap<String, GeneratorNode>();
+    private Map<String, GeneratorNode> nodesWithReferencableChildren = new HashMap<>();
 
     private List<String> chain;
 
@@ -60,7 +60,7 @@ class GeneratorNode
     {
         this.to = to;
         this.association = association;
-        this.chain = parent != null ? new ArrayList<String>( parent.getChain() ) : new ArrayList<String>();
+        this.chain = parent != null ? new ArrayList<>( parent.getChain() ) : new ArrayList<>();
         this.chain.add( to );
     }
 

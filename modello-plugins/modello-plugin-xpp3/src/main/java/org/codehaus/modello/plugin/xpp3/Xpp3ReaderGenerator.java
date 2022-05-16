@@ -506,7 +506,7 @@ public class Xpp3ReaderGenerator
             writeNewSetLocation( "\"\"", uncapClassName, null, sc );
         }
 
-        ModelField contentField = null;
+        ModelField contentField;
 
         List<ModelField> modelFields = getFieldsForXml( modelClass, getGeneratedVersion() );
 
@@ -849,14 +849,9 @@ public class Xpp3ReaderGenerator
                         sc.unindent();
                         sc.add( "}" );
 
-                        sc.unindent();
-                        sc.add( "}" );
                     }
-                    else
-                    {
-                        sc.unindent();
-                        sc.add( "}" );
-                    }
+                    sc.unindent();
+                    sc.add( "}" );
                 }
                 else
                 {

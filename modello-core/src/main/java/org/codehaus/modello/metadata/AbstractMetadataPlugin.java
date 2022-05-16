@@ -43,7 +43,7 @@ public abstract class AbstractMetadataPlugin
             return defaultValue;
         }
 
-        return Boolean.valueOf( value ).booleanValue();
+        return Boolean.parseBoolean( value );
     }
 
     protected String getString( Map<String, String> data, String key )

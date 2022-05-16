@@ -88,7 +88,7 @@ public abstract class AbstractStaxGenerator
     {
         if ( parts == null )
         {
-            parts = new HashSet<ModelClass>();
+            parts = new HashSet<>();
             for ( ModelClass clazz : modelClass.getModel().getClasses( getGeneratedVersion() ) )
             {
                 for ( ModelField modelField : clazz.getFields( getGeneratedVersion() ) )

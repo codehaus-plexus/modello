@@ -83,19 +83,19 @@ public class JConstructor
     /**
      * The set of modifiers for this JMethod
      **/
-    private JModifiers modifiers = null;
+    private JModifiers modifiers;
 
     /**
      * List of parameters for this Constructor
      **/
-    private Map<String, JParameter> params = null;
+    private Map<String, JParameter> params;
 
     /**
      * The Class in this JMember has been declared
      **/
-    private JClass declaringClass = null;
+    private JClass declaringClass;
 
-    private JSourceCode sourceCode = null;
+    private JSourceCode sourceCode;
 
     private JAnnotations annotations = null;
 
@@ -127,12 +127,11 @@ public class JConstructor
         //-- check current params
         if ( params.get( parameter.getName() ) != null )
         {
-            StringBuilder err = new StringBuilder();
-            err.append( "A parameter already exists for the constructor, " );
-            err.append( this.declaringClass.getName() );
-            err.append( ", with the name: " );
-            err.append( parameter.getName() );
-            throw new IllegalArgumentException( err.toString() );
+            String err = "A parameter already exists for the constructor, "
+                    + this.declaringClass.getName()
+                    + ", with the name: "
+                    + parameter.getName();
+            throw new IllegalArgumentException( err );
         }
 
         params.put( parameter.getName(), parameter );

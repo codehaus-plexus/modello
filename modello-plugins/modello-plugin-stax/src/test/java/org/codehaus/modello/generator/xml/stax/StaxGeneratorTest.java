@@ -27,7 +27,6 @@ import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.Version;
 import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
-import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 
 import java.util.List;
 
@@ -39,7 +38,6 @@ public class StaxGeneratorTest
     extends AbstractStaxGeneratorTestCase
 {
     public StaxGeneratorTest()
-        throws ComponentLookupException
     {
         super( "stax" );
     }
@@ -53,7 +51,7 @@ public class StaxGeneratorTest
 
         assertEquals( 27, classesList.size() );
 
-        ModelClass clazz = (ModelClass) classesList.get( 0 );
+        ModelClass clazz = classesList.get( 0 );
 
         assertEquals( "Model", clazz.getName() );
 

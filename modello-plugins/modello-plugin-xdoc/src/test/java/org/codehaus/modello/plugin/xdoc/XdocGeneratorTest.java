@@ -43,8 +43,6 @@ import org.xmlunit.builder.DiffBuilder;
 import org.xmlunit.builder.Input;
 import org.xmlunit.diff.Diff;
 
-import junit.framework.Assert;
-
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  */
@@ -98,7 +96,7 @@ public class XdocGeneratorTest
 
         assertEquals( 26, classesList.size() );
 
-        ModelClass clazz = (ModelClass) classesList.get( 0 );
+        ModelClass clazz = classesList.get( 0 );
 
         assertEquals( "Model", clazz.getName() );
 
@@ -149,7 +147,7 @@ public class XdocGeneratorTest
 
         String content = FileUtils.fileRead( new File( getOutputDirectory(), "features.xml" ), "UTF-8" );
 
-        assertTrue( "Transient fields were erroneously documented", !content.contains( "transientString" ) );
+        assertFalse( "Transient fields were erroneously documented", content.contains( "transientString" ) );
     }
 
     public void checkSettingsXdocGenerator()
@@ -167,38 +165,38 @@ public class XdocGeneratorTest
 
         String content = FileUtils.fileRead( new File( getOutputDirectory(), "settings.xml" ), "UTF-8" );
 
-        assertTrue( "Properties field was erroneously documented", !content.contains("&lt;properties/&gt;") );
+        assertFalse( "Properties field was erroneously documented", content.contains( "&lt;properties/&gt;" ) );
     }
 
     /**
      * Checks internal links in the xdoc content: for every 'a href="#xxx"' link, a 'a name="xxx"' must exist (or there
      * is a problem in the generated content).
      *
-     * @param xdoc
-     * @throws Exception
+     * @param filename the filename to check
+     * @throws Exception if something goes wrong
      */
     private void checkInternalLinks( String filename )
         throws Exception
     {
         String content = FileUtils.fileRead( new File( getOutputDirectory(), filename ), "UTF-8" );
 
-        Set<String> hrefs = new HashSet<String>();
+        Set<String> hrefs = new HashSet<>();
         Pattern p = Pattern.compile( "<a href=\"#(class_[^\"]+)\"", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE );
         Matcher m = p.matcher( content );
         while ( m.find() )
         {
             hrefs.add( m.group( 1 ) );
         }
-        Assert.assertTrue( "should find some '<a href=' links", hrefs.size() > 0 );
+        assertTrue( "should find some '<a href=' links", hrefs.size() > 0 );
 
-        Set<String> names = new HashSet<String>();
+        Set<String> names = new HashSet<>();
         p = Pattern.compile( "<a name=\"(class_[^\"]+)\"", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE );
         m = p.matcher( content );
         while ( m.find() )
         {
             names.add( m.group( 1 ) );
         }
-        Assert.assertTrue( "should find some '<a name=' anchor definitions", names.size() > 0 );
+        assertTrue( "should find some '<a name=' anchor definitions", names.size() > 0 );
 
         hrefs.removeAll( names );
         if ( hrefs.size() > 0 )

@@ -39,6 +39,6 @@ public class OrderedProperties
 
     public Set<Object> keySet()
     {
-        return new TreeSet<Object>( super.keySet() );
+        return new TreeSet<>( super.keySet() );
     }
 }

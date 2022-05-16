@@ -62,7 +62,7 @@ public class XmlModelloPluginTest
 
         assertEquals( 2, classes.size() );
 
-        ModelClass clazz = (ModelClass) classes.get( 0 );
+        ModelClass clazz = classes.get( 0 );
 
         assertEquals( "Model", clazz.getName() );
 

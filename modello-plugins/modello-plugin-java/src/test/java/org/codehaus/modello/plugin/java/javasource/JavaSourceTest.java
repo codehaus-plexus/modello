@@ -32,7 +32,7 @@ public class JavaSourceTest
         testClass.addMember( new JField( JType.INT, "x" ) );
         JClass jcString = new JClass( "String" );
 
-        JField field = null;
+        JField field;
         field = new JField( JType.INT, "_z" );
         field.appendAnnotation( "@Deprecated" );
         field.getModifiers().setStatic( true );
@@ -111,7 +111,7 @@ public class JavaSourceTest
         testClass.addImport( "java.util.Vector" );
         testClass.addMember( new JField( JType.INT, "x" ) );
 
-        JField field = null;
+        JField field;
         field = new JField( JType.INT, "_z" );
         field.getModifiers().setStatic( true );
         testClass.addField( field );

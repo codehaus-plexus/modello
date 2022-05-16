@@ -64,7 +64,7 @@ public class StaxSerializerGenerator
     }
 
     private void generateStaxSerializer()
-        throws ModelloException, IOException
+        throws IOException
     {
         Model objectModel = getModel();
 
@@ -327,7 +327,7 @@ public class StaxSerializerGenerator
 
     private void add( JClass jClass, String name, String before, String after, JParameter... params )
     {
-        List<String> names = new ArrayList<String>();
+        List<String> names = new ArrayList<>();
 
         JMethod jMethod = new JMethod( "write" + name );
         jMethod.addException( new JClass( "XMLStreamException" ) );

@@ -81,17 +81,17 @@ public class JField implements JMember
     /**
      * The set of modifiers for this JField
      **/
-    private JModifiers modifiers = null;
+    private JModifiers modifiers;
 
-    private JType type = null;
+    private JType type;
 
     private String name = null;
 
-    private JDocComment comment = null;
+    private JDocComment comment;
 
     private String initString = null;
 
-    private JAnnotations annotations = null;
+    private JAnnotations annotations;
 
     /**
      * The Class in this JField has been declared
@@ -236,13 +236,12 @@ public class JField implements JMember
 
     public String toString()
     {
-        StringBuilder sb = new StringBuilder();
-        sb.append( modifiers.toString() );
-        sb.append( ' ' );
-        sb.append( type );
-        sb.append( ' ' );
-        sb.append( name );
-        return sb.toString();
+        String sb = modifiers.toString()
+                + ' '
+                + type
+                + ' '
+                + name;
+        return sb;
     } //-- toString
 
     /**

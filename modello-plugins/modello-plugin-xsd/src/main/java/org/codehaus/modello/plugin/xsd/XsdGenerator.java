@@ -95,9 +95,7 @@ public class XsdGenerator
             f = new File( directory, xsdFileName );
         }
 
-        Writer writer = WriterFactory.newXmlWriter( f );
-
-        try
+        try ( Writer writer = WriterFactory.newXmlWriter( f ) )
         {
             XMLWriter w = new PrettyPrintXMLWriter( writer );
 
@@ -111,13 +109,14 @@ public class XsdGenerator
             w.addAttribute( "elementFormDefault", "qualified" );
 
             ModelClass root = objectModel.getClass( objectModel.getRoot( getGeneratedVersion() ),
-                                                    getGeneratedVersion() );
+                    getGeneratedVersion() );
 
             String namespace = XsdModelHelper.getNamespace( root.getModel(), getGeneratedVersion() );
 
             w.addAttribute( "xmlns", namespace );
 
-            String targetNamespace = XsdModelHelper.getTargetNamespace( root.getModel(), getGeneratedVersion(), namespace );
+            String targetNamespace =
+                    XsdModelHelper.getTargetNamespace( root.getModel(), getGeneratedVersion(), namespace );
 
             // add targetNamespace if attribute is not blank (specifically set to avoid a target namespace)
             if ( StringUtils.isNotBlank( targetNamespace ) )
@@ -137,13 +136,9 @@ public class XsdGenerator
             // Element descriptors
             // Traverse from root so "abstract" models aren't included
             int initialCapacity = objectModel.getClasses( getGeneratedVersion() ).size();
-            writeComplexTypeDescriptor( w, objectModel, root, new HashSet<ModelClass>( initialCapacity ) );
+            writeComplexTypeDescriptor( w, objectModel, root, new HashSet<>( initialCapacity ) );
 
             w.endElement();
-        }
-        finally
-        {
-            writer.close();
         }
     }
 
@@ -213,7 +208,7 @@ public class XsdGenerator
 
         writeClassDocumentation( w, modelClass );
 
-        Set<ModelClass> toWrite = new HashSet<ModelClass>();
+        Set<ModelClass> toWrite = new HashSet<>();
 
         if ( fields.size() > 0 )
         {

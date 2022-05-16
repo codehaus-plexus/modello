@@ -113,23 +113,23 @@ public abstract class JStructure extends JType
     /**
      * List of imported classes and packages
      */
-    private List<String> imports = null;
+    private List<String> imports;
 
     /**
      * The set of interfaces implemented/extended by this JStructure
      */
-    private List<String> interfaces = null;
+    private List<String> interfaces;
 
     /**
      * The Javadoc for this JStructure
      */
-    private JDocComment jdc = null;
+    private JDocComment jdc;
 
     /**
      * The JModifiers for this JStructure, which allows us to
      * change the resulting qualifiers
      */
-    private JModifiers modifiers = null;
+    private JModifiers modifiers;
 
     /**
      * The package to which this JStructure belongs
@@ -164,8 +164,8 @@ public abstract class JStructure extends JType
             throw new IllegalArgumentException( err );
         }
         this.packageName = getPackageFromClassName( name );
-        imports = new ArrayList<String>();
-        interfaces = new ArrayList<String>();
+        imports = new ArrayList<>();
+        interfaces = new ArrayList<>();
         jdc = new JDocComment();
         modifiers = new JModifiers();
         //-- initialize default Java doc
@@ -278,14 +278,6 @@ public abstract class JStructure extends JType
 
 
 
-    /**
-     * Adds the given JMethodSignature to this JClass
-     *
-     * @param jMethodSig the JMethodSignature to add.
-     * @throws java.lang.IllegalArgumentException when the given
-     * JMethodSignature conflicts with an existing
-     * method signature.
-     */
     /*
        public void addMethod(JMethodSignature jMethodSig)
            throws IllegalArgumentException
@@ -396,7 +388,7 @@ public abstract class JStructure extends JType
 
         //-- Prefix filename with path
         if ( pathFile.toString().length() > 0 )
-            filename = pathFile.toString() + File.separator + filename;
+            filename = pathFile + File.separator + filename;
 
         return filename;
     } //-- getFilename
@@ -445,12 +437,7 @@ public abstract class JStructure extends JType
         return jdc;
     } //-- getJDocComment
 
-    /**
-     * Returns an array of all the JMethodSignatures of this JInterface.
-     *
-     * @return an array of all the JMethodSignatures of this JInterface.
-     */
-/*
+    /*
     public JMethodSignature[] getMethods() {
         JMethodSignature[] marray = new JMethodSignature[methods.size()];
         methods.copyInto(marray);
@@ -458,16 +445,7 @@ public abstract class JStructure extends JType
     } //-- getMethods
 */
 
-    /**
-     * Returns the JMethodSignature with the given name,
-     * and occuring at or after the given starting index.
-     *
-     * @param name the name of the JMethodSignature to return.
-     * @param startIndex the starting index to begin searching
-     * from.
-     * @return the JMethodSignature, or null if not found.
-     */
-/*
+    /*
     public JMethodSignature getMethod(String name, int startIndex) {
         for (int i = startIndex; i < methods.size(); i++) {
             JMethodSignature jMethod = (JMethodSignature)methods.elementAt(i);
@@ -477,12 +455,6 @@ public abstract class JStructure extends JType
     } //-- getMethod
 */
 
-    /**
-     * Returns the JMethodSignature at the given index.
-     *
-     * @param index the index of the JMethodSignature to return.
-     * @return the JMethodSignature at the given index.
-     */
     /*
        public JMethodSignature getMethod(int index) {
            return (JMethodSignature)methods.elementAt(index);
@@ -579,7 +551,7 @@ public abstract class JStructure extends JType
      */
     public void print()
     {
-        print( (String) null, (String) null );
+        print( null, null );
     } //-- printSrouce
 
     /**
@@ -601,7 +573,7 @@ public abstract class JStructure extends JType
         String filename = getFilename( destDir );
 
         File file = new File( filename );
-        JSourceWriter jsw = null;
+        JSourceWriter jsw;
         try
         {
             jsw = new JSourceWriter( WriterFactory.newPlatformWriter( file ) );
@@ -715,96 +687,6 @@ public abstract class JStructure extends JType
     } //-- printPackageDeclaration
 
     /**
-     * Prints the source code for this JStructure to the given
-     * JSourceWriter.
-     *
-     * @param jsw the JSourceWriter to print to.
-     *
-     public abstract void print(JSourceWriter jsw);
-
-
-     StringBuilder buffer = new StringBuilder();
-
-
-     printHeader();
-     printPackageDeclaration();
-     printImportDeclarations();
-
-     //------------/
-     //- Java Doc -/
-     //------------/
-
-     jdc.print(jsw);
-
-     //-- print class information
-     //-- we need to add some JavaDoc API adding comments
-
-     buffer.setLength(0);
-
-     if (modifiers.isPrivate()) {
-     buffer.append("private ");
-     }
-     else if (modifiers.isPublic()) {
-     buffer.append("public ");
-     }
-
-     if (modifiers.isAbstract()) {
-     buffer.append("abstract ");
-     }
-
-     buffer.append("interface ");
-     buffer.append(getLocalName());
-     buffer.append(' ');
-     if (interfaces.size() > 0) {
-     boolean endl = false;
-     if (interfaces.size() > 1) {
-     jsw.writeln(buffer.toString());
-     buffer.setLength(0);
-     endl = true;
-     }
-     buffer.append("extends ");
-     for (int i = 0; i < interfaces.size(); i++) {
-     if (i > 0) buffer.append(", ");
-     buffer.append(interfaces.elementAt(i));
-     }
-     if (endl) {
-     jsw.writeln(buffer.toString());
-     buffer.setLength(0);
-     }
-     else buffer.append(' ');
-     }
-
-     buffer.append('{');
-     jsw.writeln(buffer.toString());
-     buffer.setLength(0);
-     jsw.writeln();
-
-     jsw.indent();
-
-     //-- print method signatures
-
-     if (methods.size() > 0) {
-     jsw.writeln();
-     jsw.writeln("  //-----------/");
-     jsw.writeln(" //- Methods -/");
-     jsw.writeln("//-----------/");
-     jsw.writeln();
-     }
-
-     for (int i = 0; i < methods.size(); i++) {
-     JMethodSignature signature = (JMethodSignature) methods.elementAt(i);
-     signature.print(jsw);
-     jsw.writeln(';');
-     }
-
-     jsw.unindent();
-     jsw.writeln('}');
-     jsw.flush();
-     jsw.close();
-     } //-- printSource
-     */
-
-    /**
      * Sets the header comment for this JStructure
      *
      * @param comment the comment to display at the top of the source file
@@ -871,7 +753,7 @@ public abstract class JStructure extends JType
      */
     protected static String getPackageFromClassName( String className )
     {
-        int idx = -1;
+        int idx;
         if ( ( idx = className.lastIndexOf( '.' ) ) > 0 )
         {
             return className.substring( 0, idx );

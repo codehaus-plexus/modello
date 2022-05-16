@@ -64,7 +64,7 @@ public class ConverterGenerator
 
         String[] versions = parameters.getProperty( ModelloParameterConstants.ALL_VERSIONS ).split( "," );
 
-        List<Version> allVersions = new ArrayList<Version>( versions.length );
+        List<Version> allVersions = new ArrayList<>( versions.length );
         for ( String version : versions )
         {
             allVersions.add( new Version( version ) );
@@ -99,7 +99,7 @@ public class ConverterGenerator
     }
 
     private void generateConverters( Version toVersion )
-        throws ModelloException, IOException
+        throws IOException
     {
         Model objectModel = getModel();
 
@@ -279,9 +279,6 @@ public class ConverterGenerator
 
                             sc.add( "value.set" + name + "( list );" );
 
-                            sc.unindent();
-
-                            sc.add( "}" );
                         }
                         else
                         {
@@ -326,10 +323,9 @@ public class ConverterGenerator
 
                             sc.add( "value.set" + name + "( map );" );
 
-                            sc.unindent();
-
-                            sc.add( "}" );
                         }
+                        sc.unindent();
+                        sc.add( "}" );
                     }
                     else
                     {
@@ -353,26 +349,18 @@ public class ConverterGenerator
             sc.add( "return value;" );
         }
 
-        JSourceWriter interfaceWriter = null;
-        JSourceWriter classWriter = null;
-
-        try
+        try ( JSourceWriter interfaceWriter =
+                      newJSourceWriter( packageName, conversionInterface.getName( true ) );
+              JSourceWriter classWriter =
+                      newJSourceWriter( packageName, basicConverterClass.getName( true ) ) )
         {
-            interfaceWriter = newJSourceWriter( packageName, conversionInterface.getName( true ) );
-            classWriter = newJSourceWriter( packageName, basicConverterClass.getName( true ) );
-
             conversionInterface.print( interfaceWriter );
             basicConverterClass.print( classWriter );
-        }
-        finally
-        {
-            IOUtil.close( classWriter );
-            IOUtil.close( interfaceWriter );
         }
     }
 
     private void generateConverterTool( List<Version> allVersions )
-        throws ModelloException, IOException
+        throws IOException
     {
         Model objectModel = getModel();
         String root = objectModel.getRoot( getGeneratedVersion() );
@@ -401,15 +389,10 @@ public class ConverterGenerator
         }
         writeConvertMethod( converterClass, objectModel, basePackage, allVersions, null, rootClass );
 
-        JSourceWriter classWriter = null;
-        try
+        try ( JSourceWriter classWriter =
+                      newJSourceWriter( packageName, converterClass.getName( true ) ) )
         {
-            classWriter = newJSourceWriter( packageName, converterClass.getName( true ) );
             converterClass.print( new JSourceWriter( classWriter ) );
-        }
-        finally
-        {
-            IOUtil.close( classWriter );
         }
     }
 

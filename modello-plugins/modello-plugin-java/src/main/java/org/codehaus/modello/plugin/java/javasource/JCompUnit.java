@@ -109,12 +109,12 @@ public class JCompUnit
     /**
      * The package for this JCompUnit
      **/
-    private String packageName = null;
+    private String packageName;
 
     /**
      * The file to which this JCompUnit will be saved
      **/
-    private String fileName = null;
+    private String fileName;
 
     /**
      * The set of top-level classes that live in this compilation unit.
@@ -194,8 +194,8 @@ public class JCompUnit
 
     private void init()
     {
-        classes = new ArrayList<JClass>();
-        interfaces = new ArrayList<JInterface>();
+        classes = new ArrayList<>();
+        interfaces = new ArrayList<>();
     }
 
     /**
@@ -252,7 +252,7 @@ public class JCompUnit
     public SortedSet<String> getImports()
     {
 
-        SortedSet<String> allImports = new TreeSet<String>();
+        SortedSet<String> allImports = new TreeSet<>();
 
         // add imports from classes
         for ( JClass jClass : classes )
@@ -287,7 +287,7 @@ public class JCompUnit
     public String getFilename( String destDir )
     {
 
-        String filename = new String( fileName );
+        String filename = fileName;
 
         //-- Convert Java package to path string
         String javaPackagePath = "";
@@ -309,7 +309,7 @@ public class JCompUnit
 
         //-- Prefix filename with path
         if ( pathFile.toString().length() > 0 )
-            filename = pathFile.toString() + File.separator + filename;
+            filename = pathFile + File.separator + filename;
 
         return filename;
     } //-- getFilename
@@ -326,7 +326,7 @@ public class JCompUnit
 
     protected static String getPackageFromClassName( String className )
     {
-        int idx = -1;
+        int idx;
         if ( ( idx = className.lastIndexOf( '.' ) ) > 0 )
         {
             return className.substring( 0, idx );
@@ -369,7 +369,7 @@ public class JCompUnit
         String filename = getFilename( destDir );
 
         File file = new File( filename );
-        JSourceWriter jsw = null;
+        JSourceWriter jsw;
         try
         {
             jsw = new JSourceWriter( WriterFactory.newPlatformWriter( file ) );

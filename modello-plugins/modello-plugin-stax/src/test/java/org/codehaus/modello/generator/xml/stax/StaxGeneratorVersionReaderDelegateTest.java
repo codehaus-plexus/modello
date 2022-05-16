@@ -23,7 +23,6 @@ package org.codehaus.modello.generator.xml.stax;
  */
 
 import org.codehaus.modello.model.Model;
-import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 
 /**
  */
@@ -31,7 +30,6 @@ public class StaxGeneratorVersionReaderDelegateTest
     extends AbstractStaxGeneratorTestCase
 {
     public StaxGeneratorVersionReaderDelegateTest()
-        throws ComponentLookupException
     {
         super( "stax-version-reader-delegate" );
     }

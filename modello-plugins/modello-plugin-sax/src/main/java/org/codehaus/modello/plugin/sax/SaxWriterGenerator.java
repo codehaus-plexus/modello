@@ -464,16 +464,6 @@ public class SaxWriterGenerator
                             sc.add( "contentHandler.endElement( NAMESPACE, \"" + valuesTagName + "\", \"" + valuesTagName + "\" );" );
                         }
 
-                        sc.unindent();
-                        sc.add( "}" );
-
-                        if ( wrappedItems )
-                        {
-                            sc.add( "contentHandler.endElement( NAMESPACE, \"" + fieldTagName + "\", \"" + fieldTagName + "\" );" );
-                        }
-
-                        sc.unindent();
-                        sc.add( "}" );
                     }
                     else
                     {
@@ -533,17 +523,15 @@ public class SaxWriterGenerator
                             }
                         }
 
-                        sc.unindent();
-                        sc.add( "}" );
-
-                        if ( wrappedItems )
-                        {
-                            sc.add( "contentHandler.endElement( NAMESPACE, \"" + fieldTagName + "\", \"" + fieldTagName + "\" );" );
-                        }
-
-                        sc.unindent();
-                        sc.add( "}" );
                     }
+                    sc.unindent();
+                    sc.add( "}" );
+                    if ( wrappedItems )
+                    {
+                        sc.add( "contentHandler.endElement( NAMESPACE, \"" + fieldTagName + "\", \"" + fieldTagName + "\" );" );
+                    }
+                    sc.unindent();
+                    sc.add( "}" );
                 }
             }
             else

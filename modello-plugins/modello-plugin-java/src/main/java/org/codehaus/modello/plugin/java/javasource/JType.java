@@ -84,7 +84,7 @@ public class JType
     public static final JType LONG = new JType( "long" );
     public static final JType SHORT = new JType( "short" );
 
-    private String name = null;
+    private String name;
 
     private boolean _isArray = false;
 
@@ -204,7 +204,7 @@ public class JType
         if ( this.name == null ) return;
         if ( this.isPrimitive() ) return;
 
-        String localName = null;
+        String localName;
         int idx = name.lastIndexOf( '.' );
         if ( idx >= 0 )
             localName = this.name.substring( idx + 1 );

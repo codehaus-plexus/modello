@@ -376,11 +376,6 @@ public class Dom4jWriterGenerator
                             + singular( uncapitalise( field.getName() ) ) + " );" );
                     }
 
-                    sc.unindent();
-                    sc.add( "}" );
-
-                    sc.unindent();
-                    sc.add( "}" );
                 }
                 else
                 {
@@ -419,12 +414,11 @@ public class Dom4jWriterGenerator
                         sc.add( "listElement.addElement( key ).setText( value );" );
                     }
 
-                    sc.unindent();
-                    sc.add( "}" );
-
-                    sc.unindent();
-                    sc.add( "}" );
                 }
+                sc.unindent();
+                sc.add( "}" );
+                sc.unindent();
+                sc.add( "}" );
             }
         }
         else

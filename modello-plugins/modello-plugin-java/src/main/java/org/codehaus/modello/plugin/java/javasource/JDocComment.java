@@ -87,12 +87,12 @@ public class JDocComment
     /**
      * An ordered list of descriptors
      */
-    private List<JDocDescriptor> _descriptors = null;
+    private List<JDocDescriptor> _descriptors;
 
     /**
      * The internal buffer for this JDocComment
      */
-    private StringBuilder _comment = null;
+    private StringBuilder _comment;
 
     /**
      * Creates a new JavaDoc Comment
@@ -100,7 +100,7 @@ public class JDocComment
     public JDocComment()
     {
         super();
-        _descriptors = new ArrayList<JDocDescriptor>();
+        _descriptors = new ArrayList<>();
         _comment = new StringBuilder();
     } //--  JDocComment
 
@@ -230,10 +230,10 @@ public class JDocComment
             jComment.appendComment( "\n" );
         }
 
-        for ( int i = 0; i < _descriptors.size(); i++ )
+        for ( JDocDescriptor descriptor : _descriptors )
         {
             jComment.appendComment( "\n" );
-            jComment.appendComment( _descriptors.get( i ).toString() );
+            jComment.appendComment( descriptor.toString() );
         }
         jComment.print( jsw );
     } //-- print
@@ -256,14 +256,8 @@ public class JDocComment
      */
     public String toString()
     {
-        StringBuilder sb = new StringBuilder();
-        sb.append( "/**\n" );
-        sb.append( " * " );
-
-        sb.append( " */\n" );
-
-        return sb.toString();
-    } //-- toString
+        return "/**\n" + " * " + " */\n";
+    }
 
 } //-- JDocComment
 

@@ -41,7 +41,7 @@ public abstract class ModelType
 
     private transient Model model;
 
-    private transient Map<String, CodeSegment> codeSegmentMap = new HashMap<String, CodeSegment>();
+    private transient Map<String, CodeSegment> codeSegmentMap = new HashMap<>();
 
     public ModelType()
     {
@@ -106,7 +106,7 @@ public abstract class ModelType
     {
         if ( codeSegments == null )
         {
-            codeSegments = new ArrayList<CodeSegment>();
+            codeSegments = new ArrayList<>();
         }
 
         return codeSegments;
@@ -121,7 +121,7 @@ public abstract class ModelType
     {
         List<CodeSegment> codeSegments = getAllCodeSegments();
 
-        List<CodeSegment> codeSegmentsList = new ArrayList<CodeSegment>();
+        List<CodeSegment> codeSegmentsList = new ArrayList<>();
 
         if ( codeSegments != null )
         {
@@ -180,7 +180,7 @@ public abstract class ModelType
      */
     public List<ModelField> getFields( Version version )
     {
-        List<ModelField> fieldList = new ArrayList<ModelField>();
+        List<ModelField> fieldList = new ArrayList<>();
 
         for ( ModelField currentField : getAllFields() )
         {
@@ -195,9 +195,9 @@ public abstract class ModelType
 
     public List<ModelField> getAllFields( Version version, boolean withInheritedField )
     {
-        List<ModelField> allFieldsList = new ArrayList<ModelField>();
+        List<ModelField> allFieldsList = new ArrayList<>();
 
-        List<ModelField> fieldList = new ArrayList<ModelField>();
+        List<ModelField> fieldList = new ArrayList<>();
 
         for ( ModelField currentField : getAllFields( withInheritedField ) )
         {
@@ -239,7 +239,7 @@ public abstract class ModelType
 
     public List<ModelField> getIdentifierFields( Version version )
     {
-        List<ModelField> identifierFields = new ArrayList<ModelField>();
+        List<ModelField> identifierFields = new ArrayList<>();
 
         for ( ModelField field : getFields( version ) )
         {

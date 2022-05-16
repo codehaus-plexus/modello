@@ -403,7 +403,7 @@ public class SnakeYamlReaderGenerator
             writeNewSetLocation( "\"\"", uncapClassName, null, sc );
         }
 
-        ModelField contentField = null;
+        ModelField contentField;
 
         List<ModelField> modelFields = getFieldsForXml( modelClass, getGeneratedVersion() );
 
@@ -653,8 +653,6 @@ public class SnakeYamlReaderGenerator
                                              "add", sc, false );
                     }
 
-                    sc.unindent();
-                    sc.add( "}" );
                 }
                 else
                 {
@@ -779,9 +777,9 @@ public class SnakeYamlReaderGenerator
 
                     sc.add( "parser.getEvent();" );
 
-                    sc.unindent();
-                    sc.add( "}" );
                 }
+                sc.unindent();
+                sc.add( "}" );
             }
         }
     }

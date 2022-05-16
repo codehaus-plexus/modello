@@ -427,16 +427,6 @@ public class Xpp3WriterGenerator
                             writeLocationTracking( sc, "location", isList ? "Integer.valueOf( n++ )" : variable );
                         }
 
-                        sc.unindent();
-                        sc.add( "}" );
-
-                        if ( wrappedItems )
-                        {
-                            sc.add( "serializer.endTag( NAMESPACE, \"" + fieldTagName + "\" );" );
-                        }
-
-                        sc.unindent();
-                        sc.add( "}" );
                     }
                     else
                     {
@@ -483,17 +473,15 @@ public class Xpp3WriterGenerator
 
                         writeLocationTracking( sc, "location", "key" );
 
-                        sc.unindent();
-                        sc.add( "}" );
-
-                        if ( wrappedItems )
-                        {
-                            sc.add( "serializer.endTag( NAMESPACE, \"" + fieldTagName + "\" );" );
-                        }
-
-                        sc.unindent();
-                        sc.add( "}" );
                     }
+                    sc.unindent();
+                    sc.add( "}" );
+                    if ( wrappedItems )
+                    {
+                        sc.add( "serializer.endTag( NAMESPACE, \"" + fieldTagName + "\" );" );
+                    }
+                    sc.unindent();
+                    sc.add( "}" );
                 }
             }
             else

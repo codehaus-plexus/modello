@@ -95,7 +95,7 @@ public abstract class AbstractModelloGeneratorMojo
      * <code>packageWithVersion</code> setting.
      */
     @Parameter
-    private List<String> packagedVersions = new ArrayList<String>();
+    private List<String> packagedVersions = new ArrayList<>();
 
     /**
      * @since 1.0.1
@@ -258,16 +258,7 @@ public abstract class AbstractModelloGeneratorMojo
                                      BuildContext.SEVERITY_ERROR, mojoExecutionException );
             throw mojoExecutionException;
         }
-        catch ( ModelloException e )
-        {
-            MojoExecutionException mojoExecutionException =
-                new MojoExecutionException( "Error generating: " + e.getMessage(), e );
-            // TODO: Provide actual line/column numbers
-            buildContext.addMessage( modelFile, 1 /* line */, 1 /* column */, mojoExecutionException.getMessage(),
-                                     BuildContext.SEVERITY_ERROR, mojoExecutionException );
-            throw mojoExecutionException;
-        }
-        catch ( ModelValidationException e )
+        catch ( ModelloException | ModelValidationException e )
         {
             MojoExecutionException mojoExecutionException =
                 new MojoExecutionException( "Error generating: " + e.getMessage(), e );

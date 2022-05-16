@@ -57,7 +57,7 @@ public class Dom4jGeneratorTest
 
         assertEquals( 27, classesList.size() );
 
-        ModelClass clazz = (ModelClass) classesList.get( 0 );
+        ModelClass clazz = classesList.get( 0 );
 
         assertEquals( "Model", clazz.getName() );
 

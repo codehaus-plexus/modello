@@ -122,7 +122,7 @@ public class JDocDescriptor
 
     private String description = null;
     private String name = null;
-    private short type = -1;
+    private short type;
 
     /**
      * Creates a new JDocDescriptor
