@@ -15,7 +15,7 @@
   </description>
 
   <properties>
-    <plexus.compiler.version>2.12.0</plexus.compiler.version>
+    <plexus.compiler.version>2.12.1</plexus.compiler.version>
   </properties>
   <dependencies>
     <dependency>
