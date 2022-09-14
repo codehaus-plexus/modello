@@ -809,6 +809,7 @@ public class JavaModelloGenerator
         String superClass = modelClass.getSuperClass();
         ModelClassMetadata metadata = (ModelClassMetadata) locationClass.getMetadata( ModelClassMetadata.ID );
         String locationField = metadata.getLocationTracker();
+        String referencedByField = metadata.getReferencedByTracker();
         boolean hasModeSuperClass = StringUtils.isNotEmpty(superClass) && isClassInModel(superClass, getModel());
         if (!hasModeSuperClass)
         {
@@ -849,13 +850,19 @@ public class JavaModelloGenerator
             jClass.addMethod( setter );
         }
 
+        // private InputLocation location
         JField ownLocation = new JField( new JType( locationClass.getName() ), singular( locationField ) );
         jClass.addField( ownLocation );
         for (ModelField field : modelClass.getAllFields())
         {
+            // private InputLocation <fieldName>Location
             JField fieldLocation = new JField( new JType( locationClass.getName() ), field.getName() + capitalise( singular( locationField ) ) );
             jClass.addField( fieldLocation );
         }
+
+        // private InputLocation referencedBy
+        JField referencedBy = new JField( new JType( locationClass.getName() ), singular(referencedByField) );
+        jClass.addField( referencedBy );
 
         // public Location getLocation( Object key )
         JMethod getter =
@@ -1051,6 +1058,22 @@ public class JavaModelloGenerator
 
         setter.setComment( "" );
         jClass.addMethod( setter );
+
+        // public InputLocation getReferencedBy
+        JMethod getReferencedBy = new JMethod(
+                "get" + capitalise( singular( referencedByField ) ),
+                new JType( locationClass.getName() ),
+                null );
+        JSourceCode getReferencedBySc = getReferencedBy.getSourceCode();
+        getReferencedBySc.add( "return this." + singular( referencedByField ) + ";" );
+        jClass.addMethod( getReferencedBy );
+
+        // public void setReferencedBy( InputLocation inputLocation )
+        JMethod setReferencedBy = new JMethod( "set" + capitalise( singular( referencedByField ) ) );
+        setReferencedBy.addParameter( new JParameter( new JType( locationClass.getName() ), singular( referencedByField ) ) );
+        JSourceCode setReferencedBySc = setReferencedBy.getSourceCode();
+        setReferencedBySc.add( "this." + singular( referencedByField ) + " = " + singular( referencedByField ) + ";" );
+        jClass.addMethod( setReferencedBy );
     }
 
     private void generateLocationBean( JClass jClass, ModelClass locationClass, ModelClass sourceClass )

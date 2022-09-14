@@ -487,4 +487,32 @@ public class Model
         return sourceTracker;
     }
 
+    public ModelClass getReferencedByTracker( Version version )
+    {
+        List<ModelClass> modelClasses = getClasses( version );
+
+        ModelClass referencedByTracker = null;
+
+        for ( ModelClass modelClass : modelClasses )
+        {
+            ModelClassMetadata metadata = (ModelClassMetadata) modelClass.getMetadata( ModelClassMetadata.ID );
+
+            if ( metadata != null && StringUtils.isNotEmpty( metadata.getReferencedByTracker() ) )
+            {
+                if ( referencedByTracker == null )
+                {
+                    referencedByTracker = modelClass;
+                }
+                else
+                {
+                    throw new ModelloRuntimeException(
+                            "There are multiple referenced-by tracker classes (" + referencedByTracker.getName() + " vs. "
+                                    + modelClass.getName() + ") for this version " + version + "." );
+                }
+            }
+        }
+
+        return referencedByTracker;
+    }
+
 }

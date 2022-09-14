@@ -38,6 +38,8 @@ public class ModelClassMetadata
 
     private String sourceTracker;
 
+    private String referencedByTracker;
+
     public boolean isRootElement()
     {
         return rootElement;
@@ -66,6 +68,16 @@ public class ModelClassMetadata
     public void setSourceTracker( String sourceTracker )
     {
         this.sourceTracker = sourceTracker;
+    }
+
+    public String getReferencedByTracker()
+    {
+        return referencedByTracker;
+    }
+
+    public void setReferencedByTracker( String referencedByTracker )
+    {
+        this.referencedByTracker = referencedByTracker;
     }
 
 }

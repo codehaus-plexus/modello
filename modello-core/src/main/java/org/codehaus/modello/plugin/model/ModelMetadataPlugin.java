@@ -48,6 +48,8 @@ public class ModelMetadataPlugin
 
     public static final String LOCATION_TRACKER = "locationTracker";
 
+    public static final String REFERENCED_BY_TRACKER = "referencedByTracker";
+
     public static final String SOURCE_TRACKER = "sourceTracker";
 
     // ----------------------------------------------------------------------
@@ -66,6 +68,8 @@ public class ModelMetadataPlugin
         metadata.setRootElement( getBoolean( data, ROOT_ELEMENT, false ) );
 
         metadata.setLocationTracker( getString( data, LOCATION_TRACKER ) );
+
+        metadata.setReferencedByTracker( getString( data, REFERENCED_BY_TRACKER ) );
 
         metadata.setSourceTracker( getString( data, SOURCE_TRACKER ) );
 

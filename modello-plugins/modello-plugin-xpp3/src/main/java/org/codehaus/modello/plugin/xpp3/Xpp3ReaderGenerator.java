@@ -63,6 +63,8 @@ public class Xpp3ReaderGenerator
 
     private String locationField;
 
+    private String referencedByField;
+
     private String trackingArgs;
 
     @Override
@@ -71,12 +73,15 @@ public class Xpp3ReaderGenerator
     {
         super.initialize( model, parameters );
 
-        trackingArgs = locationField = "";
+        trackingArgs = locationField = referencedByField = "";
 
         if ( isLocationTracking() )
         {
             locationField =
                 ( (ModelClassMetadata) locationTracker.getMetadata( ModelClassMetadata.ID ) ).getLocationTracker();
+
+            referencedByField =
+                ( (ModelClassMetadata) locationTracker.getMetadata( ModelClassMetadata.ID ) ).getReferencedByTracker();
 
             if ( sourceTracker != null )
             {

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
-<model xmlns="http://codehaus-plexus.github.io/MODELLO/1.4.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://codehaus-plexus.github.io/MODELLO/1.4.0 http://codehaus-plexus.github.io/modello/xsd/modello-1.4.0.xsd"
+<model xmlns="http://codehaus-plexus.github.io/MODELLO/2.1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://codehaus-plexus.github.io/MODELLO/2.1.0 http://codehaus-plexus.github.io/modello/xsd/modello-2.1.0.xsd"
   xml.namespace="http://codehaus-plexus.github.io/FEATURES/${version}"
   xml.schemaLocation="http://codehaus-plexus.github.io/features-${version}.xsd">
   <id>locations</id>
@@ -16,7 +16,7 @@
   </defaults>
 
   <classes>
-    <class locationTracker="locations" java.clone="shallow">
+    <class referencedByTracker="referencedBy" locationTracker="locations" java.clone="shallow">
       <name>Location</name>
       <version>1.0.0+</version>
       <fields>

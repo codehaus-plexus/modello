@@ -39,6 +39,8 @@ public abstract class AbstractXpp3Generator
 
     protected ModelClass locationTracker;
 
+    protected ModelClass referencedByTracker;
+
     protected ModelClass sourceTracker;
 
     protected boolean isLocationTracking()
@@ -53,7 +55,7 @@ public abstract class AbstractXpp3Generator
         super.initialize( model, parameters );
 
         requiresDomSupport = false;
-        locationTracker = sourceTracker = null;
+        locationTracker = sourceTracker = referencedByTracker = null;
 
         if ( isLocationTracking() )
         {
@@ -62,6 +64,13 @@ public abstract class AbstractXpp3Generator
             {
                 throw new ModelloException( "No model class has been marked as location tracker"
                     + " via the attribute locationTracker=\"locations\", cannot generate extended reader." );
+            }
+
+            referencedByTracker = model.getReferencedByTracker( getGeneratedVersion() );
+            if ( referencedByTracker == null )
+            {
+                throw new ModelloException( "No model class has been marked as reference tracker"
+                        + " via the attribute referencedBy=\"referencedBy\", cannot generate extended reader." );
             }
 
             sourceTracker = model.getSourceTracker( getGeneratedVersion() );
