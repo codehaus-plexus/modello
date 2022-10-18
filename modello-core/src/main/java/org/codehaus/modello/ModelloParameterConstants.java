@@ -71,6 +71,12 @@ public class ModelloParameterConstants
      */
     public static final String EXTENDED_CLASSNAME_SUFFIX = "modello.xpp3.extended.suffix";
 
+    /**
+     * Boolean flag relaxing XSD generation with regards to mandatory elements.
+     * If set to {@code true} will not require mandatory elements in the XML which can be useful if the XML is post processed (e.g. POM merging with parents)
+     * @since 2.1
+     */
+    public static final String XSD_MANDATORY_ELEMENTS_NOT_ENFORCED = "modello.xsd.mandatory.element.not.enforced";
     private ModelloParameterConstants()
     {
     }

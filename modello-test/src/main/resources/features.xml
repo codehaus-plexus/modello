@@ -3,7 +3,7 @@
 <features-demo xmlns="http://codehaus-plexus.github.io/FEATURES/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
    xsi:schemaLocation="http://codehaus-plexus.github.io/FEATURES/1.0.0 http://codehaus-plexus.github.io/features-1.0.0.xsd">
   <versionField>1.0.0</versionField>
-  <!--required></required--><!-- TODO: this field is marked required but not set in the XML, should fail... -->
+  <required></required>
   <identifier>id</identifier>
   <identifierPart2><id>reference</id></identifierPart2>
 

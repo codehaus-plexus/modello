@@ -80,7 +80,19 @@ public class FeaturesXsdGeneratorTest
         catch ( SAXParseException e )
         {
             // ok, expected exception
-            assertTrue( String.valueOf( e.getMessage() ).contains( "invalidElement" ) );
+            assertTrue( e.getMessage().contains( "invalidElement" ) );
+        }
+
+        try
+        {
+            validator.validate( new StreamSource( getClass().getResourceAsStream( "/features-missing-required.xml" ) ) );
+            fail( "parsing of features-invalid.xml should have failed" );
+        }
+        catch ( SAXParseException e )
+        {
+            // ok, expected exception
+            assertTrue( e.getMessage().contains( "description" ) );
+            assertTrue( e.getMessage().endsWith(" is expected."));
         }
 
         try
@@ -91,7 +103,7 @@ public class FeaturesXsdGeneratorTest
         catch ( SAXParseException e )
         {
             // ok, expected exception
-            assertTrue( String.valueOf( e.getMessage() ).contains( "transientString" ) );
+            assertTrue( e.getMessage().contains( "transientString" ) );
         }
     }
 }

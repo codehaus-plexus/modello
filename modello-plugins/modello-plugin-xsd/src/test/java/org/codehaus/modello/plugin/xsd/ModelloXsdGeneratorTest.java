@@ -23,6 +23,7 @@ package org.codehaus.modello.plugin.xsd;
  */
 
 import org.codehaus.modello.AbstractModelloGeneratorTest;
+import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
 import org.xml.sax.SAXException;
@@ -55,6 +56,7 @@ public class ModelloXsdGeneratorTest
         ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
 
         Properties parameters = getModelloParameters( "1.4.0" );
+        parameters.setProperty( ModelloParameterConstants.XSD_MANDATORY_ELEMENTS_NOT_ENFORCED, "true" );
 
         Model model = modello.loadModel( getTestFile( "../../src/main/mdo/modello.mdo" ) );
 
