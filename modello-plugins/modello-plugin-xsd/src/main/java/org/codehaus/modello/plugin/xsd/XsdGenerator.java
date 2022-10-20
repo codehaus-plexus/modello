@@ -51,6 +51,10 @@ import java.util.Set;
 public class XsdGenerator
     extends AbstractXmlGenerator
 {
+    /**
+     * Value standing for any element name (used on xml.tagName)
+     */
+    private static final String ANY_NAME = "*";
     protected static final String LS = System.getProperty( "line.separator" );
 
     public void generate( Model model, Properties parameters )
@@ -240,6 +244,15 @@ public class XsdGenerator
 
                 if ( !hasContentField )
                 {
+                    if ( fieldTagName.equals( ANY_NAME ) )
+                    {
+                        w.startElement( "xs:any" );
+                        w.addAttribute( "minOccurs", "0" );
+                        w.addAttribute( "maxOccurs", "unbounded" );
+                        w.addAttribute( "processContents", "skip" );
+                        w.endElement();
+                        continue;
+                    }
                     w.startElement( "xs:element" );
 
                     // Usually, would only do this if the field is not "required", but due to inheritance, it may be
@@ -481,11 +494,19 @@ public class XsdGenerator
 
         w.startElement( "xs:sequence" );
 
-        w.startElement( "xs:element" );
-        w.addAttribute( "name", valuesTagName );
+        if ( valuesTagName.equals( ANY_NAME ) )
+        {
+            w.startElement( "xs:any" );
+            w.addAttribute( "processContents", "skip" );
+        }
+        else
+        {
+            w.startElement( "xs:element" );
+            w.addAttribute( "type", type );
+            w.addAttribute( "name", valuesTagName );
+        }
         w.addAttribute( "minOccurs", "0" );
         w.addAttribute( "maxOccurs", "unbounded" );
-        w.addAttribute( "type", type );
 
         w.endElement();
 
