@@ -715,6 +715,8 @@ public class Xpp3ReaderGenerator
 
                     String adder;
 
+                    boolean requireSetter = false;
+
                     if ( wrappedItems )
                     {
                         sc.add( tagComparison );
@@ -735,7 +737,7 @@ public class Xpp3ReaderGenerator
                             }
                             sc.add( associationType + " " + associationName + " = " + defaultValue + ";" );
 
-                            sc.add( objectName + ".set" + capFieldName + "( " + associationName + " );" );
+                            requireSetter = true;
 
                             adder = associationName + ".add";
                         }
@@ -789,8 +791,8 @@ public class Xpp3ReaderGenerator
                             
                             sc.add( associationName + " = " + defaultValue + ";" );
 
-                            sc.add( objectName + ".set" + capFieldName + "( " + associationName + " );" );
-
+                            requireSetter = true;
+                            
                             sc.unindent();
                             sc.add( "}" );
 
@@ -848,15 +850,14 @@ public class Xpp3ReaderGenerator
 
                         sc.unindent();
                         sc.add( "}" );
-
-                        sc.unindent();
-                        sc.add( "}" );
                     }
-                    else
+                    if (requireSetter)
                     {
-                        sc.unindent();
-                        sc.add( "}" );
+                        sc.add( objectName + ".set" + capFieldName + "( " + associationName + " );" );
                     }
+                    sc.unindent();
+                    sc.add( "}" );
+                    
                 }
                 else
                 {
