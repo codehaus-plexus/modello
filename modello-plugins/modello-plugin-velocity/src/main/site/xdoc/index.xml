@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+
+<document>
+
+  <properties>
+    <title>Modello Velocity Plugin</title>
+    <author email="gnodet_AT_apache_DOT_org">Guillaume Nodet</author>
+  </properties>
+
+  <body>
+
+    <section name="Modello Velocity Plugin">
+
+      <p>Modello Velocity Plugin generates files using the Velocity templating engine.</p>
+
+    </section>
+
+  </body>
+
+</document>

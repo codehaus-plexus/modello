@@ -29,6 +29,7 @@
     <module>modello-plugin-jackson</module>
     <module>modello-plugin-snakeyaml</module>
     <module>modello-plugin-sax</module>
+    <module>modello-plugin-velocity</module>
   </modules>
 
   <dependencies>

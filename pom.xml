@@ -314,6 +314,11 @@
         <version>${project.version}</version>
       </dependency>
       <dependency>
+        <groupId>org.codehaus.modello</groupId>
+        <artifactId>modello-plugin-velocity</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
         <groupId>org.eclipse.sisu</groupId>
         <artifactId>org.eclipse.sisu.plexus</artifactId>
         <version>0.3.5</version>
@@ -327,7 +332,7 @@
       <dependency>
         <groupId>org.codehaus.plexus</groupId>
         <artifactId>plexus-utils</artifactId>
-        <version>3.4.1</version>
+        <version>3.4.2</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.plexus</groupId>
