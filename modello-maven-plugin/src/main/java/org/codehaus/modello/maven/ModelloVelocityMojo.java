@@ -50,9 +50,8 @@ import org.codehaus.modello.plugin.velocity.VelocityGenerator;
  * directive will redirect further output from the template to a file named
  * {@code org/apache/maven/api/model/Plugin.java} if the variable {@code package} is set to
  * {@code org.apache.maven.api.model} and the variable {@code className} is set to {@code Plugin}.
- * <pre>
+ * <p>
  *     {@code #MODELLO-VELOCITY#REDIRECT ${package.replace('.','/')}/${className}.java}
- * </pre
  */
 @Mojo( name = "velocity", defaultPhase = LifecyclePhase.GENERATE_SOURCES, threadSafe = true )
 public class ModelloVelocityMojo
