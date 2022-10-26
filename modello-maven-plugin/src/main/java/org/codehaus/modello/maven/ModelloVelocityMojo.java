@@ -34,22 +34,50 @@ import org.codehaus.modello.plugin.velocity.VelocityGenerator;
 
 /**
  * Creates files from the model using Velocity templates.
- *
- * @author <a href="mailto:brett@codehaus.org">Brett Porter</a>
+ * <p>
+ * This mojo can be given a list of templates and a list of parameters.
+ * Each template fomr the {@link #templates} property will be run with the following context:
+ * <ul>
+ *    <li>{@code version}: the version of the model to generate</li>
+ *    <li>{@code model}: the modello model</li>
+ *    <li>{@code Helper}: a {@link org.codehaus.modello.plugin.velocity.Helper} object instance</li>
+ *    <li>any additional parameters specified using the {@link #params} property</li>
+ * </ul>
+ * The output file is controlled from within the template using the {@code #MODELLO-VELOCITY#REDIRECT}
+ * directive. This allows a single template to generate multiple files. For example, the following
+ * directive will redirect further output from the template to a file named
+ * {@code org/apache/maven/api/model/Plugin.java} if the variable {@code package} is set to
+ * {@code org.apache.maven.api.model} and the variable {@code className} is set to {@code Plugin}.
+ * </p>
+ * <p>
+ *     {@code #MODELLO-VELOCITY#REDIRECT ${package.replace('.','/')}/${className}.java}
+ * </p>
  */
 @Mojo( name = "velocity", defaultPhase = LifecyclePhase.GENERATE_SOURCES, threadSafe = true )
 public class ModelloVelocityMojo
         extends AbstractModelloGeneratorMojo
 {
     /**
-     * The output directory of the generated XML Schema.
+     * The output directory of the generated files.
      */
     @Parameter( defaultValue = "${project.build.directory}/generated-sources/modello", required = true )
     private File outputDirectory;
 
+    /**
+     * A list of template files to be run against the loaded modello model.
+     * Those are {@code .vm} files as described in the
+     * <a href="https://velocity.apache.org/engine/devel/user-guide.html">Velocity Users Guide</a>.
+     * Those files are resolved relative to the project's {@code ${basedir}} when given to
+     * <a href="https://velocity.apache.org/engine/devel/apidocs/org/apache/velocity/runtime/RuntimeInstance.html#getTemplate-java.lang.String-">
+     *     {@code RuntimeInstance.getTemplate(String)}</a> method.
+     */
     @Parameter
     private List<String> templates;
 
+    /**
+     * A list of parameters using the syntax {@code key=value}.
+     * Those parameters will be made accessible to the templates.
+     */
     @Parameter
     private List<String> params;
 

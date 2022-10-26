@@ -34,6 +34,16 @@ import org.codehaus.modello.plugins.xml.metadata.XmlClassMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
 import org.codehaus.plexus.util.StringUtils;
 
+/**
+ * Helper class to use inside velocity templates.
+ * <p>
+ * This will be made available using {@code ${Helper}} inside the template.
+ * For example, the following line will return the list of ancestors for a given modello class:
+ * </p>
+ * <p>
+ * {@code   #set ( $ancestors = $Helper.ancestors( $class ) )}
+ * </p>
+ */
 @SuppressWarnings( "unused" )
 public class Helper
 {
@@ -44,21 +54,33 @@ public class Helper
         this.version = version;
     }
 
+    /**
+     * Returns the capitalised version of the given string.
+     */
     public String capitalise( String str )
     {
         return StringUtils.isEmpty( str ) ? str : Character.toTitleCase( str.charAt( 0 ) ) + str.substring( 1 );
     }
 
+    /**
+     * Returns the uncapitalised version of the given string.
+     */
     public String uncapitalise( String str )
     {
         return StringUtils.isEmpty( str ) ? str : Character.toLowerCase( str.charAt( 0 ) ) + str.substring( 1 );
     }
 
+    /**
+     * Returns the singular name for the given string.
+     */
     public String singular( String str )
     {
         return AbstractModelloGenerator.singular( str );
     }
 
+    /**
+     * Returns the list of ancestors for the given {@code ModelClass}.
+     */
     public List<ModelClass> ancestors( ModelClass clazz )
     {
         List<ModelClass> ancestors = new ArrayList<>();
@@ -70,27 +92,44 @@ public class Helper
         return ancestors;
     }
 
+    /**
+     * Returns the {@code XmlClassMetadata} for the given {@code ModelClass}.
+     */
     public XmlClassMetadata xmlClassMetadata( ModelClass clazz )
     {
         return (XmlClassMetadata) clazz.getMetadata( XmlClassMetadata.ID );
     }
 
+    /**
+     * Returns the {@code XmlFieldMetadata} for the given {@code ModelField}.
+     */
     public XmlFieldMetadata xmlFieldMetadata( ModelField field )
     {
         return (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
     }
 
+    /**
+     * Returns the {@code XmlAssociationMetadata} for the given {@code ModelField}.
+     */
     public XmlAssociationMetadata xmAssociationMetadata( ModelField field )
     {
         return (XmlAssociationMetadata) ( (ModelAssociation) field )
                 .getAssociationMetadata( XmlAssociationMetadata.ID );
     }
 
+    /**
+     * Checks if the given {@code ModelField} is a flat item.
+     */
     public boolean isFlatItems( ModelField field )
     {
         return field instanceof ModelAssociation && xmAssociationMetadata( field ).isFlatItems();
     }
 
+    /**
+     * Returns a list of all {@code ModelField} for a given {@code ModelClass}.
+     * The list will contain all fields defined on the class and on its parents,
+     * excluding any field flagged as being xml transient.
+     */
     public List<ModelField> xmlFields( ModelClass modelClass )
     {
         List<ModelClass> classes = new ArrayList<>();
