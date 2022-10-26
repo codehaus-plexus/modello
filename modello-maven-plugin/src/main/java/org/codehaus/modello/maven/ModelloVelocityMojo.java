@@ -36,7 +36,7 @@ import org.codehaus.modello.plugin.velocity.VelocityGenerator;
  * Creates files from the model using Velocity templates.
  * <p>
  * This mojo can be given a list of templates and a list of parameters.
- * Each template fomr the {@link #templates} property will be run with the following context:
+ * Each template from the {@link #templates} property will be run with the following context:
  * <ul>
  *    <li>{@code version}: the version of the model to generate</li>
  *    <li>{@code model}: the modello model</li>
