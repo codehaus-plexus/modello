@@ -20,6 +20,8 @@ package org.codehaus.modello.maven;
  */
 
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -67,12 +69,9 @@ public class ModelloVelocityMojo
      * A list of template files to be run against the loaded modello model.
      * Those are {@code .vm} files as described in the
      * <a href="https://velocity.apache.org/engine/devel/user-guide.html">Velocity Users Guide</a>.
-     * Those files are resolved relative to the project's {@code ${basedir}} when given to
-     * <a href="https://velocity.apache.org/engine/devel/apidocs/org/apache/velocity/runtime/RuntimeInstance.html#getTemplate-java.lang.String-">
-     *     {@code RuntimeInstance.getTemplate(String)}</a> method.
      */
     @Parameter
-    private List<String> templates;
+    private List<File> templates;
 
     /**
      * A list of parameters using the syntax {@code key=value}.
@@ -93,7 +92,12 @@ public class ModelloVelocityMojo
                 s -> s.substring( 0, s.indexOf( '=' ) ), s -> s.substring( s.indexOf( '=' ) + 1 )
         ) ) : Collections.emptyMap();
         parameters.put( "basedir", Objects.requireNonNull( getBasedir(), "basedir is null" ) );
-        parameters.put( VelocityGenerator.VELOCITY_TEMPLATES, String.join( ",", templates ) );
+        Path basedir = Paths.get( getBasedir() );
+        parameters.put( VelocityGenerator.VELOCITY_TEMPLATES, templates.stream()
+                        .map( File::toPath )
+                        .map( basedir::relativize )
+                        .map( Path::toString )
+                        .collect( Collectors.joining( "," ) ) );
         parameters.put( VelocityGenerator.VELOCITY_PARAMETERS, params );
     }
 
