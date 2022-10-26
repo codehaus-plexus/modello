@@ -23,6 +23,8 @@ package org.codehaus.modello.plugin;
  */
 
 import java.io.File;
+import java.io.FilterWriter;
+import java.io.IOException;
 import java.io.Writer;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
@@ -41,6 +43,7 @@ import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.Version;
 import org.codehaus.plexus.PlexusConstants;
 import org.codehaus.plexus.PlexusContainer;
+import org.codehaus.plexus.util.io.CachingWriter;
 import org.sonatype.plexus.build.incremental.BuildContext;
 import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 import org.codehaus.plexus.context.Context;
@@ -291,15 +294,31 @@ public abstract class AbstractModelloGenerator
         return buildContext;
     }
 
-    protected Writer newWriter( Path path )
+    protected Writer newWriter( Path path ) throws IOException
     {
         Charset charset = getEncoding() != null ? Charset.forName( getEncoding() ) : Charset.defaultCharset();
         return newWriter( path, charset );
     }
 
-    protected Writer newWriter( Path path, Charset charset )
+    protected Writer newWriter( Path path, Charset charset ) throws IOException
     {
-        return new CachingWriter( getBuildContext(), path, charset );
+        CachingWriter cachingWriter = new CachingWriter( path, charset );
+        return new FilterWriter( cachingWriter )
+        {
+            @Override
+            public void close() throws IOException
+            {
+                super.close();
+                if ( cachingWriter.isModified() )
+                {
+                    getBuildContext().refresh( path.toFile() );
+                }
+                else
+                {
+                    getLogger().debug( "The contents of the file " + path + " matches, skipping writing file." );
+                }
+            }
+        };
     }
 
 }

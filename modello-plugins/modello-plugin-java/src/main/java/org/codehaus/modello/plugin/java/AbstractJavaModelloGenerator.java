@@ -48,7 +48,6 @@ import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.ModelInterface;
 import org.codehaus.modello.model.ModelType;
 import org.codehaus.modello.plugin.AbstractModelloGenerator;
-import org.codehaus.modello.plugin.CachingWriter;
 import org.codehaus.modello.plugin.java.javasource.JClass;
 import org.codehaus.modello.plugin.java.javasource.JComment;
 import org.codehaus.modello.plugin.java.javasource.JInterface;
