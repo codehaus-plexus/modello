@@ -46,8 +46,8 @@ public class ModelloXsdMojo
     private File outputDirectory;
 
     /**
-     * Boolean flag relaxing XSD generation with regards to mandatory elements.
-     * If set to {@code true} will not require mandatory elements in the XML which can be useful if the XML is post processed (e.g. POM merging with parents).
+     * Boolean flag to enforce mandatory elements in the XML schema.
+     * If set to {@code false} the XSD won't enforce mandatory elements in the XML which can be useful if the XML is post processed (e.g. POM merging with parents).
      * The default value is {@code false} for backwards compatibility reasons, but should be set to {@code true} for most cases.
      * @since 2.1.0
      */
