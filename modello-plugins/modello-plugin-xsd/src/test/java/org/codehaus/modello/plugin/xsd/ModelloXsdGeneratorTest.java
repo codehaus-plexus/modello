@@ -56,7 +56,6 @@ public class ModelloXsdGeneratorTest
         ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
 
         Properties parameters = getModelloParameters( "1.4.0" );
-        parameters.setProperty( ModelloParameterConstants.XSD_MANDATORY_ELEMENTS_NOT_ENFORCED, "true" );
 
         Model model = modello.loadModel( getTestFile( "../../src/main/mdo/modello.mdo" ) );
 

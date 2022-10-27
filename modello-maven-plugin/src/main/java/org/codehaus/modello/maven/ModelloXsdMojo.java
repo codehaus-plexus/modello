@@ -48,11 +48,11 @@ public class ModelloXsdMojo
     /**
      * Boolean flag relaxing XSD generation with regards to mandatory elements.
      * If set to {@code true} will not require mandatory elements in the XML which can be useful if the XML is post processed (e.g. POM merging with parents).
-     * The default value is true for backwards compatibility reasons, but should be set to false for most cases.
+     * The default value is {@code false} for backwards compatibility reasons, but should be set to {@code true} for most cases.
      * @since 2.1.0
      */
-    @Parameter( defaultValue = "true")
-    private boolean areMandatoryElementsNotEnforced;
+    @Parameter( defaultValue = "false")
+    private boolean enforceMandatoryElements;
 
     /**
      *
@@ -74,7 +74,7 @@ public class ModelloXsdMojo
         {
             parameters.put( ModelloParameterConstants.OUTPUT_XSD_FILE_NAME, xsdFileName );
         }
-        parameters.put( ModelloParameterConstants.XSD_MANDATORY_ELEMENTS_NOT_ENFORCED, areMandatoryElementsNotEnforced );
+        parameters.put( ModelloParameterConstants.XSD_ENFORCE_MANDATORY_ELEMENTS, enforceMandatoryElements );
     }
 
     protected boolean producesCompilableResult()
