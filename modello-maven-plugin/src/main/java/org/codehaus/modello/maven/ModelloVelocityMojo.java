@@ -46,7 +46,8 @@ import org.codehaus.modello.plugin.velocity.VelocityGenerator;
  *    <li>any additional parameters specified using the {@link #params} property</li>
  * </ul>
  * The output file is controlled from within the template using the {@code #MODELLO-VELOCITY#REDIRECT}
- * directive. This allows a single template to generate multiple files. For example, the following
+ * <a href="https://velocity.apache.org/engine/2.3/vtl-reference.html#directives">VTL directive</a>.
+ * This allows a single template to generate multiple files. For example, the following
  * directive will redirect further output from the template to a file named
  * {@code org/apache/maven/api/model/Plugin.java} if the variable {@code package} is set to
  * {@code org.apache.maven.api.model} and the variable {@code className} is set to {@code Plugin}.

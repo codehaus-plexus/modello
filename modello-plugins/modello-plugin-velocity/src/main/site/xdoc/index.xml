@@ -11,7 +11,7 @@
 
     <section name="Modello Velocity Plugin">
 
-      <p>Modello Velocity Plugin generates files using the Velocity templating engine.</p>
+      <p>Modello Velocity Plugin generates files from the Modello model using Velocity templates.</p>
 
     </section>
 

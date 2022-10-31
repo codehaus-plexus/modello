@@ -42,7 +42,7 @@ import org.codehaus.plexus.util.io.CachingWriter;
 public class VelocityGenerator
         extends AbstractModelloGenerator
 {
-    public static final String VELOCITY_TEMPLATES = "modello.velocity.template";
+    public static final String VELOCITY_TEMPLATES = "modello.velocity.templates";
 
     public static final String VELOCITY_PARAMETERS = "modello.velocity.parameters";
 
