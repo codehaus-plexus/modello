@@ -46,6 +46,8 @@ public class VelocityGenerator
 
     public static final String VELOCITY_PARAMETERS = "modello.velocity.parameters";
 
+    public static final String MODELLO_VELOCITY_OUTPUT = "#MODELLO-VELOCITY#SAVE-OUTPUT-TO ";
+
     @Override
     public void generate( Model model, Properties parameters ) throws ModelloException
     {
@@ -126,9 +128,9 @@ public class VelocityGenerator
 
         protected void writeLine( String line ) throws IOException
         {
-            if ( line.startsWith( "#MODELLO-VELOCITY#REDIRECT " ) )
+            if ( line.startsWith( MODELLO_VELOCITY_OUTPUT ) )
             {
-                String file = line.substring( "#MODELLO-VELOCITY#REDIRECT ".length() );
+                String file = line.substring( MODELLO_VELOCITY_OUTPUT.length() );
                 if ( current != null )
                 {
                     current.close();
