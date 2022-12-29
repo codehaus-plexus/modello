@@ -10,7 +10,7 @@
 
 Modello Maven Plugin
 
-  This plugin makes use of the {{{http://codehaus-plexus.github.io/modello/}Modello}} project.
+  This plugin makes use of the {{{https://codehaus-plexus.github.io/modello/}Modello}} project.
 
 * Goals Overview
 
@@ -53,6 +53,8 @@ Modello Maven Plugin
 
   * {{{./snakeyaml-extended-reader-mojo.html}modello:snakeyaml-extended-reader}} Generates a YAML reader based on SnakeYaml Streaming APIs from the.
     Modello model that records line/column number metadata in the parsed model.
+
+  * {{{./velocity-mojo.html}modello:velocity}} Creates files from the model using Velocity templates.
 
   * {{{./converters-mojo.html}modello:converters}} Generates classes that can convert between different versions of the model.
 
