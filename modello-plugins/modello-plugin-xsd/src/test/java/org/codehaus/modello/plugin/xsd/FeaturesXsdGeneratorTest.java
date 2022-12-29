@@ -24,6 +24,7 @@ package org.codehaus.modello.plugin.xsd;
 
 import org.codehaus.modello.AbstractModelloGeneratorTest;
 import org.codehaus.modello.ModelloException;
+import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
 import org.xml.sax.SAXParseException;
@@ -56,7 +57,8 @@ public class FeaturesXsdGeneratorTest
         Model model = modello.loadModel( getXmlResourceReader( "/features.mdo" ) );
 
         Properties parameters = getModelloParameters( "1.0.0" );
-
+        parameters.setProperty( ModelloParameterConstants.XSD_ENFORCE_MANDATORY_ELEMENTS, "true" );
+        
         modello.generate( model, "xsd", parameters );
 
         SchemaFactory sf = SchemaFactory.newInstance( XMLConstants.W3C_XML_SCHEMA_NS_URI );
@@ -80,7 +82,19 @@ public class FeaturesXsdGeneratorTest
         catch ( SAXParseException e )
         {
             // ok, expected exception
-            assertTrue( String.valueOf( e.getMessage() ).contains( "invalidElement" ) );
+            assertTrue( e.getMessage().contains( "invalidElement" ) );
+        }
+
+        try
+        {
+            validator.validate( new StreamSource( getClass().getResourceAsStream( "/features-missing-required.xml" ) ) );
+            fail( "parsing of features-invalid.xml should have failed" );
+        }
+        catch ( SAXParseException e )
+        {
+            // ok, expected exception
+            assertTrue( e.getMessage().contains( "description" ) );
+            assertTrue( e.getMessage().endsWith(" is expected."));
         }
 
         try
@@ -91,7 +105,7 @@ public class FeaturesXsdGeneratorTest
         catch ( SAXParseException e )
         {
             // ok, expected exception
-            assertTrue( String.valueOf( e.getMessage() ).contains( "transientString" ) );
+            assertTrue( e.getMessage().contains( "transientString" ) );
         }
     }
 }

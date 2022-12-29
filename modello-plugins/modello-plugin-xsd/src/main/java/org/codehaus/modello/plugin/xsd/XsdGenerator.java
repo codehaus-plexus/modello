@@ -87,6 +87,7 @@ public class XsdGenerator
 
         // we assume parameters not null
         String xsdFileName = parameters.getProperty( ModelloParameterConstants.OUTPUT_XSD_FILE_NAME );
+        boolean enforceMandatoryElements = Boolean.parseBoolean( parameters.getProperty( ModelloParameterConstants.XSD_ENFORCE_MANDATORY_ELEMENTS ) );
 
         File f = new File( directory, objectModel.getId() + "-" + getGeneratedVersion() + ".xsd" );
 
@@ -137,7 +138,8 @@ public class XsdGenerator
             // Element descriptors
             // Traverse from root so "abstract" models aren't included
             int initialCapacity = objectModel.getClasses( getGeneratedVersion() ).size();
-            writeComplexTypeDescriptor( w, objectModel, root, new HashSet<ModelClass>( initialCapacity ) );
+            writeComplexTypeDescriptor( w, objectModel, root, new HashSet<ModelClass>( initialCapacity ),
+                    enforceMandatoryElements );
 
             w.endElement();
         }
@@ -184,7 +186,7 @@ public class XsdGenerator
     }
 
     private void writeComplexTypeDescriptor( XMLWriter w, Model objectModel, ModelClass modelClass,
-                                             Set<ModelClass> written )
+                                             Set<ModelClass> written, boolean enforceMandatoryElements )
     {
         written.add( modelClass );
 
@@ -242,9 +244,12 @@ public class XsdGenerator
                 {
                     w.startElement( "xs:element" );
 
-                    // Usually, would only do this if the field is not "required", but due to inheritance, it may be
-                    // present, even if not here, so we need to let it slide
-                    w.addAttribute( "minOccurs", "0" );
+                    if ( !enforceMandatoryElements || !field.isRequired() )
+                    {
+                        // Usually, would only do this if the field is not "required", but due to inheritance, it may be
+                        // present, even if not here, so we need to let it slide
+                        w.addAttribute( "minOccurs", "0" );
+                    }
                 }
 
                 String xsdType = getXsdType( field.getType() );
@@ -428,7 +433,7 @@ public class XsdGenerator
         {
             if ( !written.contains( fieldModelClass ) )
             {
-                writeComplexTypeDescriptor( w, objectModel, fieldModelClass, written );
+                writeComplexTypeDescriptor( w, objectModel, fieldModelClass, written, enforceMandatoryElements );
             }
         }
     }

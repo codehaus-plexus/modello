@@ -46,6 +46,15 @@ public class ModelloXsdMojo
     private File outputDirectory;
 
     /**
+     * Boolean flag to enforce mandatory elements in the XML schema.
+     * If set to {@code false} the XSD won't enforce mandatory elements in the XML which can be useful if the XML is post processed (e.g. POM merging with parents).
+     * The default value is {@code false} for backwards compatibility reasons, but should be set to {@code true} for most cases.
+     * @since 2.1.0
+     */
+    @Parameter( defaultValue = "false")
+    private boolean enforceMandatoryElements;
+
+    /**
      *
      * @since 1.0-alpha-21
      */
@@ -65,6 +74,7 @@ public class ModelloXsdMojo
         {
             parameters.put( ModelloParameterConstants.OUTPUT_XSD_FILE_NAME, xsdFileName );
         }
+        parameters.put( ModelloParameterConstants.XSD_ENFORCE_MANDATORY_ELEMENTS, enforceMandatoryElements );
     }
 
     protected boolean producesCompilableResult()

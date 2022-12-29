@@ -23,6 +23,7 @@ package org.codehaus.modello.plugin.xsd;
  */
 
 import org.codehaus.modello.AbstractModelloGeneratorTest;
+import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
 import org.xml.sax.SAXException;
