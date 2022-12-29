@@ -23,12 +23,15 @@ package org.codehaus.modello.plugin.snakeyaml;
  */
 
 import org.codehaus.modello.model.ModelClass;
+import org.codehaus.modello.plugin.ModelloGenerator;
+import org.codehaus.plexus.component.annotations.Component;
 
 /**
  * The generator for Jackson-based parsers that support input location tracking.
  *
  * @author <a href="mailto:simonetripodi@apache.org">Simone Tripodi</a>
  */
+@Component( role = ModelloGenerator.class, hint = "snakeyaml-extended-reader" )
 public class SnakeYamlExtendedReaderGenerator
     extends SnakeYamlReaderGenerator
 {

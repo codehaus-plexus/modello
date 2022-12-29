@@ -23,6 +23,7 @@ package org.codehaus.modello.plugin;
  */
 
 import org.codehaus.modello.ModelloRuntimeException;
+
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
 

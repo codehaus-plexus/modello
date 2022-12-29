@@ -28,6 +28,7 @@ import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelDefault;
 import org.codehaus.modello.model.ModelField;
+import org.codehaus.modello.plugin.ModelloGenerator;
 import org.codehaus.modello.plugin.java.javasource.JClass;
 import org.codehaus.modello.plugin.java.javasource.JConstructor;
 import org.codehaus.modello.plugin.java.javasource.JField;
@@ -41,6 +42,8 @@ import org.codehaus.modello.plugin.model.ModelClassMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlAssociationMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlModelMetadata;
+import org.codehaus.plexus.component.annotations.Component;
+import org.codehaus.plexus.component.annotations.Requirement;
 
 import java.io.IOException;
 import java.util.List;
@@ -50,12 +53,14 @@ import java.util.Properties;
  * @author <a href="mailto:jason@modello.org">Jason van Zyl </a>
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse </a>
  */
+@Component( role = ModelloGenerator.class, hint = "stax-writer" )
 public class StaxWriterGenerator
     extends AbstractStaxGenerator
 {
 
     private boolean requiresDomSupport;
 
+    @Requirement
     private StaxSerializerGenerator serializerGenerator;
 
     public void generate( Model model, Properties parameters )

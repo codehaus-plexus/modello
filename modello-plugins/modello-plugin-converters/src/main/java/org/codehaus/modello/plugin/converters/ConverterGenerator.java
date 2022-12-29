@@ -32,6 +32,7 @@ import org.codehaus.modello.model.ModelDefault;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.Version;
 import org.codehaus.modello.model.VersionDefinition;
+import org.codehaus.modello.plugin.ModelloGenerator;
 import org.codehaus.modello.plugin.java.AbstractJavaModelloGenerator;
 import org.codehaus.modello.plugin.java.javasource.JClass;
 import org.codehaus.modello.plugin.java.javasource.JInterface;
@@ -43,6 +44,7 @@ import org.codehaus.modello.plugin.java.javasource.JSourceWriter;
 import org.codehaus.modello.plugin.java.javasource.JType;
 import org.codehaus.modello.plugin.java.metadata.JavaClassMetadata;
 import org.codehaus.modello.plugin.java.metadata.JavaFieldMetadata;
+import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.util.IOUtil;
 
 import java.io.IOException;
@@ -54,6 +56,7 @@ import java.util.Properties;
 /**
  * Generate a basic conversion class between two versions of a model.
  */
+@Component( role = ModelloGenerator.class, hint = "converters" )
 public class ConverterGenerator
     extends AbstractJavaModelloGenerator
 {
