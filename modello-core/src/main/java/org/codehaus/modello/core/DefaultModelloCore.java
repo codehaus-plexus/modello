@@ -40,6 +40,8 @@ import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.ModelInterface;
 import org.codehaus.modello.model.ModelValidationException;
 import org.codehaus.modello.plugin.ModelloGenerator;
+import org.codehaus.plexus.component.annotations.Component;
+import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.util.ReaderFactory;
 
 import java.io.File;
@@ -55,17 +57,14 @@ import java.util.Properties;
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
  */
+@Component( role = ModelloCore.class )
 public class DefaultModelloCore
     extends AbstractModelloCore
 {
-    /**
-     * @requirement
-     */
+    @Requirement
     private MetadataPluginManager metadataPluginManager;
 
-    /**
-     * @requirement
-     */
+    @Requirement
     private GeneratorPluginManager generatorPluginManager;
 
     public MetadataPluginManager getMetadataPluginManager()

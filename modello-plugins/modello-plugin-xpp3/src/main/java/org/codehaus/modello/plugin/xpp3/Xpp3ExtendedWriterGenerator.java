@@ -1,5 +1,7 @@
 package org.codehaus.modello.plugin.xpp3;
 
+import org.codehaus.modello.plugin.ModelloGenerator;
+
 /*
  * Copyright (c) 2004, Codehaus.org
  *
@@ -28,6 +30,7 @@ import org.codehaus.modello.plugin.java.javasource.JMethod;
 import org.codehaus.modello.plugin.java.javasource.JParameter;
 import org.codehaus.modello.plugin.java.javasource.JSourceCode;
 import org.codehaus.modello.plugin.java.javasource.JType;
+import org.codehaus.plexus.component.annotations.Component;
 
 /**
  * The generator for XPP3-based writers that support input location tracking.
@@ -35,6 +38,7 @@ import org.codehaus.modello.plugin.java.javasource.JType;
  * @author Hervé Boutemy
  * @since 1.10
  */
+@Component( role = ModelloGenerator.class, hint = "xpp3-extended-writer" )
 public class Xpp3ExtendedWriterGenerator
     extends Xpp3WriterGenerator
 {

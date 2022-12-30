@@ -28,6 +28,7 @@ import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelDefault;
 import org.codehaus.modello.model.ModelField;
+import org.codehaus.modello.plugin.ModelloGenerator;
 import org.codehaus.modello.plugin.java.javasource.JClass;
 import org.codehaus.modello.plugin.java.javasource.JMethod;
 import org.codehaus.modello.plugin.java.javasource.JParameter;
@@ -39,6 +40,7 @@ import org.codehaus.modello.plugins.xml.AbstractXmlJavaGenerator;
 import org.codehaus.modello.plugins.xml.metadata.XmlAssociationMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlModelMetadata;
+import org.codehaus.plexus.component.annotations.Component;
 
 import java.io.IOException;
 import java.util.List;
@@ -52,6 +54,7 @@ import java.util.Properties;
  *
  * @author <a href="mailto:brett@codehaus.org">Brett Porter</a>
  */
+@Component( role = ModelloGenerator.class, hint = "dom4j-writer" )
 public class Dom4jWriterGenerator
     extends AbstractXmlJavaGenerator
 {

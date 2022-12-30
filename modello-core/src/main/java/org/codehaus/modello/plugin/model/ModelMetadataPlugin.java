@@ -35,11 +35,14 @@ import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.ModelInterface;
 
+import org.codehaus.plexus.component.annotations.Component;
+
 import java.util.Map;
 
 /**
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
  */
+@Component( role = MetadataPlugin.class, hint = "model" )
 public class ModelMetadataPlugin
     extends AbstractMetadataPlugin
     implements MetadataPlugin

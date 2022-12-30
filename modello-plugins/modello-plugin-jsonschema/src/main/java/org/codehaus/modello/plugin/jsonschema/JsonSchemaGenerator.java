@@ -36,8 +36,10 @@ import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelDefault;
 import org.codehaus.modello.model.ModelField;
+import org.codehaus.modello.plugin.ModelloGenerator;
 import org.codehaus.modello.plugins.xml.AbstractXmlJavaGenerator;
 import org.codehaus.modello.plugins.xml.metadata.XmlAssociationMetadata;
+import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.util.StringUtils;
 
 import com.fasterxml.jackson.core.JsonEncoding;
@@ -50,6 +52,7 @@ import com.fasterxml.jackson.core.json.JsonWriteFeature;
  * @author <a href="mailto:simonetripodi@apache.org">Simone Tripodi</a>
  * @since 1.8
  */
+@Component( role = ModelloGenerator.class, hint = "jsonschema" )
 public final class JsonSchemaGenerator
     extends AbstractXmlJavaGenerator
 {

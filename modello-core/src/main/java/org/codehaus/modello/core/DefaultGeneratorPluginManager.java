@@ -22,17 +22,30 @@ package org.codehaus.modello.core;
  * SOFTWARE.
  */
 
+import java.util.Map;
+
 import org.codehaus.modello.ModelloRuntimeException;
 import org.codehaus.modello.plugin.AbstractPluginManager;
 import org.codehaus.modello.plugin.ModelloGenerator;
+import org.codehaus.plexus.component.annotations.Component;
+import org.codehaus.plexus.component.annotations.Requirement;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  */
+@Component( role = GeneratorPluginManager.class )
 public class DefaultGeneratorPluginManager
     extends AbstractPluginManager<ModelloGenerator>
     implements GeneratorPluginManager
 {
+    @Requirement
+    private Map<String, ModelloGenerator> plugins;
+
+    public Map<String, ModelloGenerator> getPlugins()
+    {
+        return plugins;
+    }
+
     public ModelloGenerator getGeneratorPlugin( String generatorId )
     {
         ModelloGenerator generator = getPlugin( generatorId );

@@ -35,12 +35,14 @@ import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.ModelInterface;
+import org.codehaus.plexus.component.annotations.Component;
 
 import java.util.Map;
 
 /**
  * @author Hervé Boutemy
  */
+@Component( role = MetadataPlugin.class, hint = "stax-writer" )
 public class XdocMetadataPlugin
     extends AbstractMetadataPlugin
     implements MetadataPlugin

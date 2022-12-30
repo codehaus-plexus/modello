@@ -36,11 +36,13 @@ import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.ModelInterface;
+import org.codehaus.plexus.component.annotations.Component;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
  */
+@Component( role = MetadataPlugin.class, hint = "xml" )
 public class XmlMetadataPlugin
     extends AbstractMetadataPlugin
     implements MetadataPlugin

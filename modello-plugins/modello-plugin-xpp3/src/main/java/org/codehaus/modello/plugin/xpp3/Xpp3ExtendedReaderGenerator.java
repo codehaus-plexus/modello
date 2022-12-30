@@ -23,12 +23,15 @@ package org.codehaus.modello.plugin.xpp3;
  */
 
 import org.codehaus.modello.model.ModelClass;
+import org.codehaus.modello.plugin.ModelloGenerator;
+import org.codehaus.plexus.component.annotations.Component;
 
 /**
  * The generator for XPP3-based parsers that support input location tracking.
  * 
  * @author Benjamin Bentmann
  */
+@Component( role = ModelloGenerator.class, hint = "xpp3-extended-reader" )
 public class Xpp3ExtendedReaderGenerator
     extends Xpp3ReaderGenerator
 {
