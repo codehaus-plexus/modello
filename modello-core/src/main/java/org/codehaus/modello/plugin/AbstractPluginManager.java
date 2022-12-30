@@ -38,26 +38,20 @@ public abstract class AbstractPluginManager<T>
     extends AbstractLogEnabled
     implements Initializable
 {
-    /* injected by Plexus: see META-INF/plexus/components.xml */
-    private Map<String, T> plugins = new HashMap<String, T>();
-
     public void initialize()
     {
     }
 
-    public Map<String, T> getPlugins()
-    {
-        return plugins;
-    }
+    abstract public Map<String, T> getPlugins();
 
     public Iterator<T> getPluginsIterator()
     {
-        return plugins.values().iterator();
+        return getPlugins().values().iterator();
     }
 
     public T getPlugin( String name )
     {
-        T plugin = plugins.get( name );
+        T plugin = getPlugins().get( name );
 
         if ( plugin == null )
         {
@@ -69,6 +63,6 @@ public abstract class AbstractPluginManager<T>
 
     public boolean hasPlugin( String name )
     {
-        return plugins.containsKey( name );
+        return getPlugins().containsKey( name );
     }
 }
