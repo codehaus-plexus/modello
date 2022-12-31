@@ -1,1 +1,1 @@
-/home/herve/local/.jdk/jdk8u202-b08/jre/../bin/javadoc @options @packages
+/home/herve/.sdkman/candidates/java/8.0.345-zulu/jre/../bin/javadoc @options @packages
