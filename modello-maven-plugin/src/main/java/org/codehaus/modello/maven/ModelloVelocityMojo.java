@@ -65,12 +65,12 @@ public class ModelloVelocityMojo
     private File outputDirectory;
 
     /**
-     * A list of template files to be run against the loaded modello model.
+     * A list of template paths to be run against the loaded modello model.
      * Those are {@code .vm} files as described in the
      * <a href="https://velocity.apache.org/engine/devel/user-guide.html">Velocity Users Guide</a>.
      */
     @Parameter
-    private List<File> templates;
+    private List<String> templates;
 
     /**
      * A list of parameters using the syntax {@code key=value}.
@@ -93,9 +93,6 @@ public class ModelloVelocityMojo
         parameters.put( "basedir", Objects.requireNonNull( getBasedir(), "basedir is null" ) );
         Path basedir = Paths.get( getBasedir() );
         parameters.put( VelocityGenerator.VELOCITY_TEMPLATES, templates.stream()
-                        .map( File::toPath )
-                        .map( basedir::relativize )
-                        .map( Path::toString )
                         .collect( Collectors.joining( "," ) ) );
         parameters.put( VelocityGenerator.VELOCITY_PARAMETERS, params );
     }
