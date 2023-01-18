@@ -61,19 +61,26 @@ public class ModelloVelocityMojo
     /**
      * The output directory of the generated files.
      */
-    @Parameter( defaultValue = "${project.build.directory}/generated-sources/modello", required = true )
+    @Parameter( defaultValue = "${project.build.directory}/generated-sources/modello" )
     private File outputDirectory;
 
     /**
-     * A list of template paths to be run against the loaded modello model.
+     * The directory where Velocity templates are looked for.
+     */
+    @Parameter( defaultValue = "${project.basedir}" )
+    private File velocityBasedir;
+
+    /**
+     * A list of template paths to be run against the loaded Modello model.
      * Those are {@code .vm} files as described in the
-     * <a href="https://velocity.apache.org/engine/devel/user-guide.html">Velocity Users Guide</a>.
+     * <a href="https://velocity.apache.org/engine/devel/user-guide.html">Velocity Users Guide</a>
+     * relative to {@code velocityBasedir}.
      */
     @Parameter
     private List<String> templates;
 
     /**
-     * A list of parameters using the syntax {@code key=value}.
+     * A list of parameters, using the syntax {@code key=value}.
      * Those parameters will be made accessible to the templates.
      */
     @Parameter
@@ -87,13 +94,15 @@ public class ModelloVelocityMojo
     protected void customizeParameters( Properties parameters )
     {
         super.customizeParameters( parameters );
-        Map<String, String> params = this.params != null ? this.params.stream().collect( Collectors.toMap(
-                s -> s.substring( 0, s.indexOf( '=' ) ), s -> s.substring( s.indexOf( '=' ) + 1 )
-        ) ) : Collections.emptyMap();
-        parameters.put( "basedir", Objects.requireNonNull( getBasedir(), "basedir is null" ) );
-        Path basedir = Paths.get( getBasedir() );
-        parameters.put( VelocityGenerator.VELOCITY_TEMPLATES, templates.stream()
-                        .collect( Collectors.joining( "," ) ) );
+
+        Map<String, String> params = this.params == null ? Collections.emptyMap()
+                : this.params.stream().collect( Collectors.toMap( s -> s.substring( 0, s.indexOf( '=' ) ),
+                                                                  s -> s.substring( s.indexOf( '=' ) + 1 ) ) );
+
+        parameters.put( VelocityGenerator.VELOCITY_BASEDIR, velocityBasedir.getAbsolutePath() );
+
+        parameters.put( VelocityGenerator.VELOCITY_TEMPLATES,
+                        templates.stream().collect( Collectors.joining( "," ) ) );
         parameters.put( VelocityGenerator.VELOCITY_PARAMETERS, params );
     }
 
@@ -102,13 +111,9 @@ public class ModelloVelocityMojo
         return true;
     }
 
+    @Override
     public File getOutputDirectory()
     {
         return outputDirectory;
-    }
-
-    public void setOutputDirectory( File outputDirectory )
-    {
-        this.outputDirectory = outputDirectory;
     }
 }
