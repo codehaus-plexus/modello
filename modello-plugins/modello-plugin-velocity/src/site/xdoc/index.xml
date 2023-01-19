@@ -17,7 +17,7 @@
 
     <section name="Velocity Processing">
 
-      <p>The plugin is configured with a list of <code>template</code> files to evaluate.</p>
+      <p>The plugin is configured with a list of <code>template</code> files to evaluate, rfelative to <code>velocityBasedir</code> (which defaults to Maven's <code>${project.basedir}</code>).</p>
       <p>During template evaluation, <code>#MODELLO-VELOCITY#SAVE-OUTPUT-TO {relative path to file}</code> pseudo macro is available to send the rendered content to a file.</p>
       <p>The Velocity context contains some variables related to the Modello model context that you can use:
       <table>

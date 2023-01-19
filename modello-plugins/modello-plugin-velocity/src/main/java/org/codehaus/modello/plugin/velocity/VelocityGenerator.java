@@ -45,6 +45,8 @@ import org.codehaus.plexus.util.io.CachingWriter;
 public class VelocityGenerator
         extends AbstractModelloGenerator
 {
+    public static final String VELOCITY_BASEDIR = "modello.velocity.basedir";
+
     public static final String VELOCITY_TEMPLATES = "modello.velocity.templates";
 
     public static final String VELOCITY_PARAMETERS = "modello.velocity.parameters";
@@ -61,7 +63,7 @@ public class VelocityGenerator
             String output = getParameter( parameters, ModelloParameterConstants.OUTPUT_DIRECTORY );
 
             Properties props = new Properties();
-            props.put( "resource.loader.file.path", getParameter( parameters, "basedir" ) );
+            props.put( "resource.loader.file.path", getParameter( parameters, VELOCITY_BASEDIR ) );
             RuntimeInstance velocity = new RuntimeInstance();
             velocity.init( props );
 
