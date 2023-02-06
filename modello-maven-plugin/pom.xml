@@ -21,7 +21,7 @@
   </prerequisites>
 
   <properties>
-    <mavenPluginTools>3.7.0</mavenPluginTools>
+    <mavenPluginTools>3.7.1</mavenPluginTools>
   </properties>
 
   <dependencies>
