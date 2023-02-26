@@ -55,9 +55,9 @@ public abstract class AbstractModelloGeneratorMojo
     // ----------------------------------------------------------------------
 
     /**
-     * Base directory of the project.
+     * Base directory of the project, from where the Modello models are loaded.
      */
-    @Parameter( defaultValue = "${basedir}", readonly = true, required = true )
+    @Parameter( defaultValue = "${basedir}", required = true )
     private String basedir;
 
     /**
