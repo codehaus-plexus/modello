@@ -163,9 +163,13 @@ public abstract class AbstractModelloJavaGeneratorTest
         {
             javaSource = "6";
         }
-        else 
+        else if ( runtimeSource <= 17 )
         {
             javaSource = "7";
+        }
+        else
+        {
+            javaSource = "8";
         }
         
         compileGeneratedSources( verifierId, javaSource );
@@ -190,9 +194,13 @@ public abstract class AbstractModelloJavaGeneratorTest
         {
             javaSource = Integer.toString( Math.max( minJavaSource, 6) );
         }
-        else 
+        else if ( runtimeSource <= 17 )
         {
-            javaSource = Integer.toString( Math.max( minJavaSource, 7) );;
+            javaSource = Integer.toString( Math.max( minJavaSource, 7) );
+        }
+        else
+        {
+            javaSource = Integer.toString( Math.max( minJavaSource, 8) );;
         }
         
         compileGeneratedSources( verifierId, javaSource );
