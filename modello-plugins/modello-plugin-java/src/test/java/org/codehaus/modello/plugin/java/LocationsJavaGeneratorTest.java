@@ -22,38 +22,32 @@ package org.codehaus.modello.plugin.java;
  * SOFTWARE.
  */
 
+import java.util.Properties;
+
 import org.codehaus.modello.AbstractModelloJavaGeneratorTest;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
 
-import java.util.Properties;
-
 /**
  * @author Benjamin Bentmann
  */
-public class LocationsJavaGeneratorTest
-    extends AbstractModelloJavaGeneratorTest
-{
+public class LocationsJavaGeneratorTest extends AbstractModelloJavaGeneratorTest {
 
-    public LocationsJavaGeneratorTest()
-    {
-        super( "locations" );
+    public LocationsJavaGeneratorTest() {
+        super("locations");
     }
 
-    public void testLocations()
-        throws Throwable
-    {
-        ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
+    public void testLocations() throws Throwable {
+        ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
 
-        Model model = modello.loadModel( getXmlResourceReader( "/locations.mdo" ) );
+        Model model = modello.loadModel(getXmlResourceReader("/locations.mdo"));
 
-        Properties parameters = getModelloParameters( "1.0.0", 7 );
+        Properties parameters = getModelloParameters("1.0.0", 7);
 
-        modello.generate( model, "java", parameters );
+        modello.generate(model, "java", parameters);
 
-        compileGeneratedSources( 7 );
+        compileGeneratedSources(7);
 
-        verifyCompiledGeneratedSources( "JavaLocationsVerifier" );
+        verifyCompiledGeneratedSources("JavaLocationsVerifier");
     }
-
 }

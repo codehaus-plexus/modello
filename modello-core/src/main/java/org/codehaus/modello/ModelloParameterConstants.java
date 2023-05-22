@@ -25,8 +25,7 @@ package org.codehaus.modello;
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  */
-public class ModelloParameterConstants
-{
+public class ModelloParameterConstants {
     public static final String VERSION = "modello.version";
 
     public static final String OUTPUT_DIRECTORY = "modello.output.directory";
@@ -47,7 +46,7 @@ public class ModelloParameterConstants
     public static final String ENCODING = "modello.output.encoding";
 
     /**
-     * Replaces USE_JAVA5 
+     * Replaces USE_JAVA5
      * @since 2.0
      */
     public static final String OUTPUT_JAVA_SOURCE = "modello.output.java.source";
@@ -78,7 +77,6 @@ public class ModelloParameterConstants
      * @since 2.1
      */
     public static final String XSD_ENFORCE_MANDATORY_ELEMENTS = "modello.xsd.enforce.mandatory.element";
-    private ModelloParameterConstants()
-    {
-    }
+
+    private ModelloParameterConstants() {}
 }

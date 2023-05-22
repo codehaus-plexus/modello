@@ -31,34 +31,28 @@ import org.codehaus.modello.model.Model;
 /**
  * @version $Id: TmpJavaGeneratorTest.java 1125 2009-01-10 20:29:32Z hboutemy $
  */
-public class AnnotationsJavaGeneratorTest
-    extends AbstractModelloJavaGeneratorTest
-{
-    public AnnotationsJavaGeneratorTest()
-    {
-        super( "annotations" );
+public class AnnotationsJavaGeneratorTest extends AbstractModelloJavaGeneratorTest {
+    public AnnotationsJavaGeneratorTest() {
+        super("annotations");
     }
 
-    public void testJavaGeneratorWithAnnotations()
-        throws Throwable
-    {
-        if ( skipJava5FeatureTest() )
-        {
+    public void testJavaGeneratorWithAnnotations() throws Throwable {
+        if (skipJava5FeatureTest()) {
             return;
         }
 
-        ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
+        ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
 
-        Model model = modello.loadModel( getXmlResourceReader( "/models/annotations.mdo" ) );
+        Model model = modello.loadModel(getXmlResourceReader("/models/annotations.mdo"));
 
-        Properties parameters = getModelloParameters( "1.0.0", 5 );
+        Properties parameters = getModelloParameters("1.0.0", 5);
 
-        modello.generate( model, "java", parameters );
+        modello.generate(model, "java", parameters);
 
-        addDependency( "javax.xml.bind", "jaxb-api" );
-        addDependency( "javax.persistence", "persistence-api" );
-        compileGeneratedSources( 5 );
+        addDependency("javax.xml.bind", "jaxb-api");
+        addDependency("javax.persistence", "persistence-api");
+        compileGeneratedSources(5);
 
-        verifyCompiledGeneratedSources( "AnnotationsVerifier" );
+        verifyCompiledGeneratedSources("AnnotationsVerifier");
     }
 }

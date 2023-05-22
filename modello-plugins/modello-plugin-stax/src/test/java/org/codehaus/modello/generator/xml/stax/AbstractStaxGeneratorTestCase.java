@@ -22,67 +22,56 @@ package org.codehaus.modello.generator.xml.stax;
  * SOFTWARE.
  */
 
+import java.util.Properties;
+
 import org.codehaus.modello.AbstractModelloJavaGeneratorTest;
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
 import org.codehaus.plexus.util.StringUtils;
 
-import java.util.Properties;
-
-public abstract class AbstractStaxGeneratorTestCase
-    extends AbstractModelloJavaGeneratorTest
-{
+public abstract class AbstractStaxGeneratorTestCase extends AbstractModelloJavaGeneratorTest {
     protected ModelloCore modello;
 
-    protected AbstractStaxGeneratorTestCase( String name )
-    {
-        super( name );
+    protected AbstractStaxGeneratorTestCase(String name) {
+        super(name);
     }
 
-    protected void setUp()
-        throws Exception
-    {
+    protected void setUp() throws Exception {
         super.setUp();
 
-        modello = (ModelloCore) lookup( ModelloCore.ROLE );
+        modello = (ModelloCore) lookup(ModelloCore.ROLE);
     }
 
-    protected void verifyModel( Model model, String className )
-        throws Exception
-    {
-        verifyModel( model, className, null );
+    protected void verifyModel(Model model, String className) throws Exception {
+        verifyModel(model, className, null);
     }
 
-    protected void verifyModel( Model model, String className, String[] versions )
-        throws Exception
-    {
-        Properties parameters = getModelloParameters( "4.0.0" );
+    protected void verifyModel(Model model, String className, String[] versions) throws Exception {
+        Properties parameters = getModelloParameters("4.0.0");
 
-        modello.generate( model, "java", parameters );
-        modello.generate( model, "stax-writer", parameters );
-        modello.generate( model, "stax-reader", parameters );
+        modello.generate(model, "java", parameters);
+        modello.generate(model, "stax-writer", parameters);
+        modello.generate(model, "stax-reader", parameters);
 
-        if ( versions != null && versions.length > 0 )
-        {
-            parameters.setProperty( ModelloParameterConstants.ALL_VERSIONS, StringUtils.join( versions, "," ) );
+        if (versions != null && versions.length > 0) {
+            parameters.setProperty(ModelloParameterConstants.ALL_VERSIONS, StringUtils.join(versions, ","));
 
-            for ( String version : versions )
-            {
-                parameters.setProperty( ModelloParameterConstants.VERSION, version );
-                parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString( true ) );
+            for (String version : versions) {
+                parameters.setProperty(ModelloParameterConstants.VERSION, version);
+                parameters.setProperty(ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString(true));
 
-                modello.generate( model, "java", parameters );
-                modello.generate( model, "stax-writer", parameters );
-                modello.generate( model, "stax-reader", parameters );
+                modello.generate(model, "java", parameters);
+                modello.generate(model, "stax-writer", parameters);
+                modello.generate(model, "stax-reader", parameters);
             }
         }
 
-        addDependency( "org.codehaus.woodstox", "stax2-api" );
-        addDependency( "com.fasterxml.woodstox", "woodstox-core" );
+        addDependency("org.codehaus.woodstox", "stax2-api");
+        addDependency("com.fasterxml.woodstox", "woodstox-core");
 
         compileGeneratedSources();
 
-        verifyCompiledGeneratedSources( className );
+        verifyCompiledGeneratedSources(className);
     }
 }

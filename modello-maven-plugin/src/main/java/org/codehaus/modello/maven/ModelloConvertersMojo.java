@@ -8,12 +8,9 @@ import org.apache.maven.plugins.annotations.Mojo;
  *
  * @author <a href="mailto:brett@apache.org">Brett Porter</a>
  */
-@Mojo( name = "converters", defaultPhase = LifecyclePhase.GENERATE_SOURCES, threadSafe = true )
-public class ModelloConvertersMojo
-    extends AbstractModelloSourceGeneratorMojo
-{
-    protected String getGeneratorType()
-    {
+@Mojo(name = "converters", defaultPhase = LifecyclePhase.GENERATE_SOURCES, threadSafe = true)
+public class ModelloConvertersMojo extends AbstractModelloSourceGeneratorMojo {
+    protected String getGeneratorType() {
         return "converters";
     }
 }

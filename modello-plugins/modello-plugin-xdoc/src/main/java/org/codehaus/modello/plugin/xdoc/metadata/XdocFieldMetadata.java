@@ -27,9 +27,7 @@ import org.codehaus.modello.metadata.FieldMetadata;
 /**
  * @author Hervé Boutemy
  */
-public class XdocFieldMetadata
-    implements FieldMetadata
-{
+public class XdocFieldMetadata implements FieldMetadata {
     public static final String ID = XdocFieldMetadata.class.getName();
 
     public static final String NONE = "none";
@@ -38,13 +36,11 @@ public class XdocFieldMetadata
 
     private String separator;
 
-    public String getSeparator()
-    {
+    public String getSeparator() {
         return separator;
     }
 
-    public void setSeparator( String separator )
-    {
+    public void setSeparator(String separator) {
         this.separator = separator;
     }
 }

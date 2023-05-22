@@ -49,7 +49,6 @@
  *                                    and revised to extend JStructure
  *
  */
-
 package org.codehaus.modello.plugin.java.javasource;
 
 /*
@@ -90,21 +89,17 @@ import java.util.Map;
  * @author <a href="mailto:skopp@riege.de">Martin Skopp</a>
  * @version $Revision$ $Date$
  */
-public class JClass extends JStructure
-{
-
+public class JClass extends JStructure {
 
     /**
      * The list of constructors for this JClass
      */
     private List<JConstructor> _constructors = null;
 
-
     /**
      * The list of member variables (fields) of this JClass
      */
     private Map<String, JField> _fields = null;
-
 
     private List<JClass> _innerClasses = null;
 
@@ -118,7 +113,6 @@ public class JClass extends JStructure
      */
     private String _superClass = null;
 
-
     /**
      * The source code for static initialization
      **/
@@ -130,19 +124,15 @@ public class JClass extends JStructure
      * @exception java.lang.IllegalArgumentException when the given name
      * is not a valid Class name
      **/
-    public JClass( String name )
-        throws IllegalArgumentException
-    {
-        super( name );
+    public JClass(String name) throws IllegalArgumentException {
+        super(name);
         _constructors = new ArrayList<JConstructor>();
         _fields = new LinkedHashMap<>();
         _methods = new ArrayList<JMethod>();
         _innerClasses = new ArrayList<JClass>();
-        //-- initialize default Java doc
-        getJDocComment().appendComment( "Class " + getLocalName() + "." );
-
-    } //-- JClass
-
+        // -- initialize default Java doc
+        getJDocComment().appendComment("Class " + getLocalName() + ".");
+    } // -- JClass
 
     /**
      * Adds the given Constructor to this classes list of constructors.
@@ -152,26 +142,19 @@ public class JClass extends JStructure
      * @param constructor a constructor
      * @throws java.lang.IllegalArgumentException if {@code constructor} is {@code null} or invalid.
      */
-    public void addConstructor( JConstructor constructor )
-        throws IllegalArgumentException
-    {
-        if ( constructor == null )
-            throw new IllegalArgumentException( "Constructors cannot be null" );
+    public void addConstructor(JConstructor constructor) throws IllegalArgumentException {
+        if (constructor == null) throw new IllegalArgumentException("Constructors cannot be null");
 
-        if ( constructor.getDeclaringClass() == this )
-        {
+        if (constructor.getDeclaringClass() == this) {
 
             /** check signatures (add later) **/
-            if ( !_constructors.contains( constructor ) )
-            {
-                _constructors.add( constructor );
+            if (!_constructors.contains(constructor)) {
+                _constructors.add(constructor);
             }
-        }
-        else
-        {
+        } else {
             String err = "The given JConstructor was not created ";
             err += "by this JClass";
-            throw new IllegalArgumentException( err );
+            throw new IllegalArgumentException(err);
         }
     }
 
@@ -182,24 +165,19 @@ public class JClass extends JStructure
      * @exception java.lang.IllegalArgumentException when the given
      * JField has a name of an existing JField
      **/
-    public void addField( JField jField )
-        throws IllegalArgumentException
-    {
-        if ( jField == null )
-        {
-            throw new IllegalArgumentException( "Class members cannot be null" );
+    public void addField(JField jField) throws IllegalArgumentException {
+        if (jField == null) {
+            throw new IllegalArgumentException("Class members cannot be null");
         }
 
         String name = jField.getName();
 
-        if ( _fields.get( name ) != null )
-        {
+        if (_fields.get(name) != null) {
             String err = "duplicate name found: " + name;
-            throw new IllegalArgumentException( err );
+            throw new IllegalArgumentException(err);
         }
-        _fields.put( name, jField );
-
-    } //-- addField
+        _fields.put(name, jField);
+    } // -- addField
 
     /**
      * Adds the given JMember to this JClass
@@ -210,38 +188,27 @@ public class JClass extends JStructure
      * or JMethod respectively, or if the JMember is of an
      * unrecognized class.
      **/
-    public void addMember( JMember jMember )
-        throws IllegalArgumentException
-    {
-        if ( jMember instanceof JField )
-            addField( (JField) jMember );
-        else if ( jMember instanceof JMethod )
-            addMethod( (JMethod) jMember );
-        else
-        {
+    public void addMember(JMember jMember) throws IllegalArgumentException {
+        if (jMember instanceof JField) addField((JField) jMember);
+        else if (jMember instanceof JMethod) addMethod((JMethod) jMember);
+        else {
             String error = null;
-            if ( jMember == null )
-            {
+            if (jMember == null) {
                 error = "the argument 'jMember' must not be null.";
+            } else {
+                error = "Cannot add JMember '" + jMember.getClass().getName() + "' to JClass, unrecognized type.";
             }
-            else
-            {
-                error = "Cannot add JMember '" + jMember.getClass().getName() +
-                    "' to JClass, unrecognized type.";
-            }
-            throw new IllegalArgumentException( error );
+            throw new IllegalArgumentException(error);
         }
-
-    } //-- addMember
+    } // -- addMember
 
     /**
      * Adds the given JMethod to this JClass
      *
      * @param jMethod the JMethod to add
      **/
-    public void addMethod( JMethod jMethod )
-    {
-        addMethod( jMethod, true );
+    public void addMethod(JMethod jMethod) {
+        addMethod(jMethod, true);
     }
 
     /**
@@ -254,52 +221,43 @@ public class JClass extends JStructure
      * @throws java.lang.IllegalArgumentException when the given
      * JMethod has the same name of an existing JMethod.
      **/
-    public void addMethod( JMethod jMethod, boolean importReturnType )
-        throws IllegalArgumentException
-    {
-        if ( jMethod == null )
-        {
-            throw new IllegalArgumentException( "Class methods cannot be null" );
+    public void addMethod(JMethod jMethod, boolean importReturnType) throws IllegalArgumentException {
+        if (jMethod == null) {
+            throw new IllegalArgumentException("Class methods cannot be null");
         }
 
-        //-- check method name and signatures *add later*
+        // -- check method name and signatures *add later*
 
-        //-- keep method list sorted for esthetics when printing
-        //-- START SORT :-)
+        // -- keep method list sorted for esthetics when printing
+        // -- START SORT :-)
         boolean added = false;
-//        short modifierVal = 0;
+        //        short modifierVal = 0;
         JModifiers modifiers = jMethod.getModifiers();
 
-        if ( modifiers.isAbstract() )
-        {
-            getModifiers().setAbstract( true );
+        if (modifiers.isAbstract()) {
+            getModifiers().setAbstract(true);
         }
 
-        for ( int i = 0; i < _methods.size(); i++ )
-        {
-            JMethod tmp = (JMethod) _methods.get( i );
-            //-- first compare modifiers
-            if ( tmp.getModifiers().isPrivate() )
-            {
-                if ( !modifiers.isPrivate() )
-                {
-                    _methods.add( i, jMethod );
+        for (int i = 0; i < _methods.size(); i++) {
+            JMethod tmp = (JMethod) _methods.get(i);
+            // -- first compare modifiers
+            if (tmp.getModifiers().isPrivate()) {
+                if (!modifiers.isPrivate()) {
+                    _methods.add(i, jMethod);
                     added = true;
                     break;
                 }
             }
-            //-- compare names
-            if ( jMethod.getName().compareTo( tmp.getName() ) < 0 )
-            {
-                _methods.add( i, jMethod );
+            // -- compare names
+            if (jMethod.getName().compareTo(tmp.getName()) < 0) {
+                _methods.add(i, jMethod);
                 added = true;
                 break;
             }
         }
-        //-- END SORT
-        if ( !added ) _methods.add( jMethod );
-
-    } //-- addMethod
+        // -- END SORT
+        if (!added) _methods.add(jMethod);
+    } // -- addMethod
 
     /**
      * Adds the given array of JMethods to this JClass
@@ -308,15 +266,11 @@ public class JClass extends JStructure
      * @exception java.lang.IllegalArgumentException when any of the given
      * JMethods has the same name of an existing JMethod.
      **/
-    public void addMethods( JMethod[] jMethods )
-        throws IllegalArgumentException
-    {
-        for ( JMethod jMethod : jMethods )
-        {
-            addMethod( jMethod );
+    public void addMethods(JMethod[] jMethods) throws IllegalArgumentException {
+        for (JMethod jMethod : jMethods) {
+            addMethod(jMethod);
         }
-    } //-- addMethods
-
+    } // -- addMethods
 
     /**
      * Creates a new JConstructor and adds it to this
@@ -324,10 +278,9 @@ public class JClass extends JStructure
      *
      * @return the newly created constructor
      */
-    public JConstructor createConstructor()
-    {
-        return createConstructor( null );
-    } //-- createConstructor
+    public JConstructor createConstructor() {
+        return createConstructor(null);
+    } // -- createConstructor
 
     /**
      * Creates a new JConstructor and adds it to this
@@ -336,19 +289,16 @@ public class JClass extends JStructure
      * @param params the parameters
      * @return the newly created constructor
      */
-    public JConstructor createConstructor( JParameter[] params )
-    {
-        JConstructor cons = new JConstructor( this );
-        if ( params != null )
-        {
-            for ( JParameter param : params )
-            {
-                cons.addParameter( param );
+    public JConstructor createConstructor(JParameter[] params) {
+        JConstructor cons = new JConstructor(this);
+        if (params != null) {
+            for (JParameter param : params) {
+                cons.addParameter(param);
             }
         }
-        addConstructor( cons );
+        addConstructor(cons);
         return cons;
-    } //-- createConstructor
+    } // -- createConstructor
 
     /**
      * Creates and returns an inner-class for this JClass
@@ -356,33 +306,26 @@ public class JClass extends JStructure
      * @param localname the name of the class (no package name)
      * @return the new JClass
      */
-    public JClass createInnerClass( String localname )
-    {
-        if ( localname == null )
-        {
+    public JClass createInnerClass(String localname) {
+        if (localname == null) {
             String err = "argument 'localname' must not be null.";
-            throw new IllegalArgumentException( err );
+            throw new IllegalArgumentException(err);
         }
-        if ( localname.indexOf( '.' ) >= 0 )
-        {
+        if (localname.indexOf('.') >= 0) {
             String err = "The name of an inner-class must not contain a package name.";
-            throw new IllegalArgumentException( err );
+            throw new IllegalArgumentException(err);
         }
         String classname = getPackageName();
-        if ( classname != null )
-        {
+        if (classname != null) {
             classname = classname + "." + localname;
-        }
-        else
-        {
+        } else {
             classname = localname;
         }
 
-        JClass innerClass = new JInnerClass( classname );
-        _innerClasses.add( innerClass );
+        JClass innerClass = new JInnerClass(classname);
+        _innerClasses.add(innerClass);
         return innerClass;
-
-    } //-- createInnerClass
+    } // -- createInnerClass
 
     /**
      * Returns the constructor at the specified index.
@@ -390,29 +333,25 @@ public class JClass extends JStructure
      * @param index the index of the constructor to return
      * @return the JConstructor at the specified index.
      */
-    public JConstructor getConstructor( int index )
-    {
-        return (JConstructor) _constructors.get( index );
-    } //-- getConstructor
+    public JConstructor getConstructor(int index) {
+        return (JConstructor) _constructors.get(index);
+    } // -- getConstructor
 
     /**
      * Returns the an array of the JConstructors contained within this JClass
      *
      * @return an array of JConstructor
      */
-    public JConstructor[] getConstructors()
-    {
+    public JConstructor[] getConstructors() {
 
         int size = _constructors.size();
         JConstructor[] jcArray = new JConstructor[size];
 
-        for ( int i = 0; i < _constructors.size(); i++ )
-        {
-            jcArray[i] = _constructors.get( i );
+        for (int i = 0; i < _constructors.size(); i++) {
+            jcArray[i] = _constructors.get(i);
         }
         return jcArray;
-    } //-- getConstructors
-
+    } // -- getConstructors
 
     /**
      * Returns the member with the given name, or null if no member
@@ -421,19 +360,17 @@ public class JClass extends JStructure
      * @return the member with the given name, or null if no member
      * was found with the given name
      **/
-    public JField getField( String name )
-    {
-        return (JField) _fields.get( name );
-    } //-- getField
+    public JField getField(String name) {
+        return (JField) _fields.get(name);
+    } // -- getField
 
     /**
      * Returns an array of all the JFields of this JClass
      * @return an array of all the JFields of this JClass
      **/
-    public JField[] getFields()
-    {
-        return  _fields.values().toArray( new JField[0] );
-    } //-- getFields
+    public JField[] getFields() {
+        return _fields.values().toArray(new JField[0]);
+    } // -- getFields
 
     /**
      * Returns an array of JClass (the inner classes)
@@ -441,27 +378,24 @@ public class JClass extends JStructure
      *
      * @return an array of JClass contained within this JClass
      */
-    public JClass[] getInnerClasses()
-    {
-        return _innerClasses.toArray( new JClass[0] );
-    } //-- getInnerClasses;
+    public JClass[] getInnerClasses() {
+        return _innerClasses.toArray(new JClass[0]);
+    } // -- getInnerClasses;
 
     /**
      * Returns an array of all the JMethods of this JClass
      *
      * @return an array of all the JMethods of this JClass
      */
-    public JMethod[] getMethods()
-    {
+    public JMethod[] getMethods() {
         int size = _methods.size();
         JMethod[] marray = new JMethod[size];
 
-        for ( int i = 0; i < _methods.size(); i++ )
-        {
-            marray[i] = _methods.get( i );
+        for (int i = 0; i < _methods.size(); i++) {
+            marray[i] = _methods.get(i);
         }
         return marray;
-    } //-- getMethods
+    } // -- getMethods
 
     /**
      * Returns the first occurrence of the method with the
@@ -471,15 +405,13 @@ public class JClass extends JStructure
      * @param startIndex the starting index to begin the search
      * @return the method if found, otherwise null.
      */
-    public JMethod getMethod( String name, int startIndex )
-    {
-        for ( int i = startIndex; i < _methods.size(); i++ )
-        {
-            JMethod jMethod = _methods.get( i );
-            if ( jMethod.getName().equals( name ) ) return jMethod;
+    public JMethod getMethod(String name, int startIndex) {
+        for (int i = startIndex; i < _methods.size(); i++) {
+            JMethod jMethod = _methods.get(i);
+            if (jMethod.getName().equals(name)) return jMethod;
         }
         return null;
-    } //-- getMethod
+    } // -- getMethod
 
     /**
      * Returns the JMethod located at the specified index
@@ -487,11 +419,9 @@ public class JClass extends JStructure
      * @param index the index of the JMethod to return.
      * @return the JMethod
      */
-    public JMethod getMethod( int index )
-    {
-        return _methods.get( index );
-    } //-- getMethod
-
+    public JMethod getMethod(int index) {
+        return _methods.get(index);
+    } // -- getMethod
 
     /**
      * Returns the JSourceCode for the static initializer
@@ -500,284 +430,247 @@ public class JClass extends JStructure
      * @return the JSourceCode for the static initializer
      * of this JClass
      */
-    public JSourceCode getStaticInitializationCode()
-    {
+    public JSourceCode getStaticInitializationCode() {
         return _staticInitializer;
-    } //-- getStaticInitializationCode
+    } // -- getStaticInitializationCode
 
     /**
      * Gets the super Class that this class extends
      * @return superClass the super Class that this Class extends
      */
-    public String getSuperClass()
-    {
+    public String getSuperClass() {
         return _superClass;
-    } //-- getSuperClass
+    } // -- getSuperClass
 
     /**
      * Prints the source code for this JClass to the given JSourceWriter
      *
      * @param jsw the JSourceWriter to print to. [May not be null]
      */
-    public void print( JSourceWriter jsw )
-    {
-        print( jsw, false );
-    } //-- print
+    public void print(JSourceWriter jsw) {
+        print(jsw, false);
+    } // -- print
 
     /**
      * Prints the source code for this JClass to the given JSourceWriter
      *
      * @param jsw the JSourceWriter to print to. [May not be null]
-     * @param classOnly whether the header, package and imports should be printed too 
+     * @param classOnly whether the header, package and imports should be printed too
      */
-    public void print( JSourceWriter jsw, boolean classOnly )
-    {
+    public void print(JSourceWriter jsw, boolean classOnly) {
 
-        if ( jsw == null )
-        {
-            throw new IllegalArgumentException( "argument 'jsw' should not be null." );
+        if (jsw == null) {
+            throw new IllegalArgumentException("argument 'jsw' should not be null.");
         }
-
 
         StringBuilder buffer = new StringBuilder();
 
+        if (!classOnly) {
+            printHeader(jsw);
+            printPackageDeclaration(jsw);
 
-        if ( !classOnly )
-        {
-            printHeader( jsw );
-            printPackageDeclaration( jsw );
-
-            //-- get imports from inner-classes
+            // -- get imports from inner-classes
             List<String> removeImports = null;
-            if ( _innerClasses.size() > 0 )
-            {
+            if (_innerClasses.size() > 0) {
                 removeImports = new ArrayList<String>();
-                for ( JClass iClass : _innerClasses )
-                {
+                for (JClass iClass : _innerClasses) {
                     Enumeration<String> e = iClass.getImports();
-                    while ( e.hasMoreElements() )
-                    {
+                    while (e.hasMoreElements()) {
                         String classname = e.nextElement();
-                        if ( !hasImport( classname ) )
-                        {
-                            addImport( classname );
-                            removeImports.add( classname );
+                        if (!hasImport(classname)) {
+                            addImport(classname);
+                            removeImports.add(classname);
                         }
                     }
                 }
             }
-            printImportDeclarations( jsw );
+            printImportDeclarations(jsw);
 
-            //-- remove imports from inner-classes, if necessary
-            if ( removeImports != null )
-            {
-                for ( int i = 0; i < removeImports.size(); i++ )
-                {
-                    removeImport( removeImports.get( i ) );
+            // -- remove imports from inner-classes, if necessary
+            if (removeImports != null) {
+                for (int i = 0; i < removeImports.size(); i++) {
+                    removeImport(removeImports.get(i));
                 }
             }
-
         }
 
-        //------------/
-        //- Java Doc -/
-        //------------/
+        // ------------/
+        // - Java Doc -/
+        // ------------/
 
-        getJDocComment().print( jsw );
+        getJDocComment().print(jsw);
 
         JAnnotations annotations = getAnnotations();
-        if ( annotations != null ) annotations.print( jsw );
+        if (annotations != null) annotations.print(jsw);
 
-        //-- print class information
-        //-- we need to add some JavaDoc API adding comments
+        // -- print class information
+        // -- we need to add some JavaDoc API adding comments
 
-        buffer.setLength( 0 );
+        buffer.setLength(0);
 
         JModifiers modifiers = getModifiers();
-        if ( modifiers.isPrivate() )
-        {
-            buffer.append( "private " );
-        }
-        else if ( modifiers.isPublic() )
-        {
-            buffer.append( "public " );
+        if (modifiers.isPrivate()) {
+            buffer.append("private ");
+        } else if (modifiers.isPublic()) {
+            buffer.append("public ");
         }
 
-        if ( modifiers.isAbstract() )
-        {
-            buffer.append( "abstract " );
+        if (modifiers.isAbstract()) {
+            buffer.append("abstract ");
         }
 
-        if ( this instanceof JInnerClass && modifiers.isStatic() )
-        {
-            buffer.append( "static " );
+        if (this instanceof JInnerClass && modifiers.isStatic()) {
+            buffer.append("static ");
         }
 
-        if ( modifiers.isFinal() )
-        {
-            buffer.append( "final " );
+        if (modifiers.isFinal()) {
+            buffer.append("final ");
         }
 
-        buffer.append( "class " );
-        buffer.append( getLocalName() );
-        jsw.writeln( buffer.toString() );
-        buffer.setLength( 0 );
+        buffer.append("class ");
+        buffer.append(getLocalName());
+        jsw.writeln(buffer.toString());
+        buffer.setLength(0);
         jsw.indent();
 
-        if ( _superClass != null )
-        {
-            buffer.append( "extends " );
-            buffer.append( _superClass );
-            jsw.writeln( buffer.toString() );
-            buffer.setLength( 0 );
+        if (_superClass != null) {
+            buffer.append("extends ");
+            buffer.append(_superClass);
+            jsw.writeln(buffer.toString());
+            buffer.setLength(0);
         }
 
-        if ( getInterfaceCount() > 0 )
-        {
-            buffer.append( "implements " );
+        if (getInterfaceCount() > 0) {
+            buffer.append("implements ");
 
             Enumeration<String> e = getInterfaces();
-            while ( e.hasMoreElements() )
-            {
-                buffer.append( e.nextElement() );
-                if ( e.hasMoreElements() ) buffer.append( ", " );
+            while (e.hasMoreElements()) {
+                buffer.append(e.nextElement());
+                if (e.hasMoreElements()) buffer.append(", ");
             }
 
-            jsw.writeln( buffer.toString() );
-            buffer.setLength( 0 );
+            jsw.writeln(buffer.toString());
+            buffer.setLength(0);
         }
 
         jsw.unindent();
 
-        jsw.writeln( '{' );
+        jsw.writeln('{');
 
         jsw.indent();
 
-        //-- declare members
+        // -- declare members
 
-        if ( _fields.size() > 0 )
-        {
+        if (_fields.size() > 0) {
             jsw.writeln();
-            jsw.writeln( "  //--------------------------/" );
-            jsw.writeln( " //- Class/Member Variables -/" );
-            jsw.writeln( "//--------------------------/" );
+            jsw.writeln("  //--------------------------/");
+            jsw.writeln(" //- Class/Member Variables -/");
+            jsw.writeln("//--------------------------/");
             jsw.writeln();
         }
 
-        for ( JField jField : _fields.values() )
-        {
-            //-- print Java comment
+        for (JField jField : _fields.values()) {
+            // -- print Java comment
             JDocComment comment = jField.getComment();
-            if ( comment != null ) comment.print( jsw );
+            if (comment != null) comment.print(jsw);
 
             JAnnotations fieldAnnotations = jField.getAnnotations();
-            if ( fieldAnnotations != null ) fieldAnnotations.print( jsw );
+            if (fieldAnnotations != null) fieldAnnotations.print(jsw);
 
             // -- print member
-            jsw.write( jField.getModifiers().toString() );
-            jsw.write( ' ' );
+            jsw.write(jField.getModifiers().toString());
+            jsw.write(' ');
 
             JType type = jField.getType();
             String typeName = type.toString();
-            //-- for esthetics use short name in some cases
-            if ( typeName.equals( toString() ) )
-            {
+            // -- for esthetics use short name in some cases
+            if (typeName.equals(toString())) {
                 typeName = type.getLocalName();
             }
-            jsw.write( typeName );
-            jsw.write( ' ' );
-            jsw.write( jField.getName() );
+            jsw.write(typeName);
+            jsw.write(' ');
+            jsw.write(jField.getName());
 
             String init = jField.getInitString();
-            if ( init != null )
-            {
-                jsw.write( " = " );
-                jsw.write( init );
+            if (init != null) {
+                jsw.write(" = ");
+                jsw.write(init);
             }
 
-            jsw.writeln( ';' );
+            jsw.writeln(';');
             jsw.writeln();
         }
 
-        //----------------------/
-        //- Static Initializer -/
-        //----------------------/
+        // ----------------------/
+        // - Static Initializer -/
+        // ----------------------/
 
-        if ( !_staticInitializer.isEmpty() )
-        {
+        if (!_staticInitializer.isEmpty()) {
             jsw.writeln();
-            jsw.writeln( "static" );
-            jsw.writeln( "{" );
-            _staticInitializer.print( jsw );
-            jsw.writeln( "};" );
-            jsw.writeln();
-        }
-
-        //-- print constructors
-        if ( _constructors.size() > 0 )
-        {
-            jsw.writeln();
-            jsw.writeln( "  //----------------/" );
-            jsw.writeln( " //- Constructors -/" );
-            jsw.writeln( "//----------------/" );
-            jsw.writeln();
-        }
-        for ( int i = 0; i < _constructors.size(); i++ )
-        {
-            JConstructor jConstructor = _constructors.get( i );
-            jConstructor.print( jsw );
+            jsw.writeln("static");
+            jsw.writeln("{");
+            _staticInitializer.print(jsw);
+            jsw.writeln("};");
             jsw.writeln();
         }
 
-        //-- print methods
-        if ( _methods.size() > 0 )
-        {
+        // -- print constructors
+        if (_constructors.size() > 0) {
             jsw.writeln();
-            jsw.writeln( "  //-----------/" );
-            jsw.writeln( " //- Methods -/" );
-            jsw.writeln( "//-----------/" );
+            jsw.writeln("  //----------------/");
+            jsw.writeln(" //- Constructors -/");
+            jsw.writeln("//----------------/");
+            jsw.writeln();
+        }
+        for (int i = 0; i < _constructors.size(); i++) {
+            JConstructor jConstructor = _constructors.get(i);
+            jConstructor.print(jsw);
             jsw.writeln();
         }
 
-        for ( int i = 0; i < _methods.size(); i++ )
-        {
-            JMethod jMethod = _methods.get( i );
-            jMethod.print( jsw );
+        // -- print methods
+        if (_methods.size() > 0) {
+            jsw.writeln();
+            jsw.writeln("  //-----------/");
+            jsw.writeln(" //- Methods -/");
+            jsw.writeln("//-----------/");
             jsw.writeln();
         }
 
-        //-- print inner-classes
-        if ( _innerClasses.size() > 0 )
-        {
-            jsw.writeln();
-            jsw.writeln( "  //-----------------/" );
-            jsw.writeln( " //- Inner Classes -/" );
-            jsw.writeln( "//-----------------/" );
-            jsw.writeln();
-        }
-        for ( int i = 0; i < _innerClasses.size(); i++ )
-        {
-            JClass jClass = _innerClasses.get( i );
-            jClass.print( jsw, true );
+        for (int i = 0; i < _methods.size(); i++) {
+            JMethod jMethod = _methods.get(i);
+            jMethod.print(jsw);
             jsw.writeln();
         }
 
-        for ( String sourceCodeEntry : sourceCodeEntries )
-        {
-            jsw.writeln( sourceCodeEntry );
+        // -- print inner-classes
+        if (_innerClasses.size() > 0) {
+            jsw.writeln();
+            jsw.writeln("  //-----------------/");
+            jsw.writeln(" //- Inner Classes -/");
+            jsw.writeln("//-----------------/");
+            jsw.writeln();
+        }
+        for (int i = 0; i < _innerClasses.size(); i++) {
+            JClass jClass = _innerClasses.get(i);
+            jClass.print(jsw, true);
+            jsw.writeln();
+        }
+
+        for (String sourceCodeEntry : sourceCodeEntries) {
+            jsw.writeln(sourceCodeEntry);
         }
 
         jsw.unindent();
 
-        jsw.writeln( '}' );
+        jsw.writeln('}');
         jsw.flush();
-    } //-- printSource
+    } // -- printSource
 
     private List<String> sourceCodeEntries = new ArrayList<String>();
 
-    public void addSourceCode( String sourceCode )
-    {
-        sourceCodeEntries.add( sourceCode );
+    public void addSourceCode(String sourceCode) {
+        sourceCodeEntries.add(sourceCode);
     }
 
     /**
@@ -786,10 +679,9 @@ public class JClass extends JStructure
      * @param constructor the JConstructor to remove
      * @return true if the constructor was removed, otherwise false.
      */
-    public boolean removeConstructor( JConstructor constructor )
-    {
-        return _constructors.remove( constructor );
-    } //-- removeConstructor
+    public boolean removeConstructor(JConstructor constructor) {
+        return _constructors.remove(constructor);
+    } // -- removeConstructor
 
     /**
      * Removes the field with the given name from this JClass
@@ -797,16 +689,15 @@ public class JClass extends JStructure
      * @param name the name of the field to remove
      * @return the removed field
      **/
-    public JField removeField( String name )
-    {
-        if ( name == null ) return null;
+    public JField removeField(String name) {
+        if (name == null) return null;
 
-        JField field = (JField) _fields.remove( name );
+        JField field = (JField) _fields.remove(name);
 
-        //-- clean up imports
-        //-- NOT YET IMPLEMENTED
+        // -- clean up imports
+        // -- NOT YET IMPLEMENTED
         return field;
-    } //-- removeField
+    } // -- removeField
 
     /**
      * Removes the given JField from this JClass
@@ -814,21 +705,18 @@ public class JClass extends JStructure
      * @param jField, the JField to remove
      * @return {{@code true} if and only if the field was successfully removed
      **/
-    public boolean removeField( JField jField )
-    {
-        if ( jField == null ) return false;
+    public boolean removeField(JField jField) {
+        if (jField == null) return false;
 
-        Object field = _fields.get( jField.getName() );
-        if ( field == jField )
-        {
-            _fields.remove( jField.getName() );
+        Object field = _fields.get(jField.getName());
+        if (field == jField) {
+            _fields.remove(jField.getName());
             return true;
         }
-        //-- clean up imports
-        //-- NOT YET IMPLEMENTED
+        // -- clean up imports
+        // -- NOT YET IMPLEMENTED
         return false;
-
-    } //-- removeField
+    } // -- removeField
 
     /**
      * Removes the given inner-class (JClass) from this JClass.
@@ -836,26 +724,21 @@ public class JClass extends JStructure
      * @param jClass the JClass (inner-class) to remove.
      * @return true if the JClass was removed, otherwise false.
      */
-    public boolean removeInnerClass( JClass jClass )
-    {
-        return _innerClasses.remove( jClass );
-    } //-- removeInnerClass
+    public boolean removeInnerClass(JClass jClass) {
+        return _innerClasses.remove(jClass);
+    } // -- removeInnerClass
 
     /**
      * Sets the super Class that this class extends
      * @param superClass the super Class that this Class extends
      */
-    public void setSuperClass( String superClass )
-    {
+    public void setSuperClass(String superClass) {
         _superClass = superClass;
-    } //-- setSuperClass
+    } // -- setSuperClass
 
-    final class JInnerClass extends JClass
-    {
-        JInnerClass( String name )
-        {
-            super( name );
+    final class JInnerClass extends JClass {
+        JInnerClass(String name) {
+            super(name);
         }
-    } //-- JInnerClass
-
-} //-- JClass
+    } // -- JInnerClass
+} // -- JClass

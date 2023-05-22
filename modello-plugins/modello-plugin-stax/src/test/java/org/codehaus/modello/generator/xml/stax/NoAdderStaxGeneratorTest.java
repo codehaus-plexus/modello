@@ -25,26 +25,21 @@ import org.codehaus.modello.AbstractModelloJavaGeneratorTest;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
 
-public class NoAdderStaxGeneratorTest
-    extends AbstractModelloJavaGeneratorTest
-{
-    public NoAdderStaxGeneratorTest()
-    {
-        super( "testNoAdder" );
+public class NoAdderStaxGeneratorTest extends AbstractModelloJavaGeneratorTest {
+    public NoAdderStaxGeneratorTest() {
+        super("testNoAdder");
     }
 
-    public void testNoAdder()
-        throws Throwable
-    {
-        ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
+    public void testNoAdder() throws Throwable {
+        ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
 
-        Model model = modello.loadModel( getXmlResourceReader( "/noAdder.mdo" ) );
+        Model model = modello.loadModel(getXmlResourceReader("/noAdder.mdo"));
 
-        Properties parameters = getModelloParameters( "1.0.0" );
+        Properties parameters = getModelloParameters("1.0.0");
 
-        modello.generate( model, "java", parameters );
-        modello.generate( model, "stax-reader", parameters );
-        modello.generate( model, "stax-writer", parameters );
+        modello.generate(model, "java", parameters);
+        modello.generate(model, "stax-reader", parameters);
+        modello.generate(model, "stax-writer", parameters);
 
         compileGeneratedSources();
     }

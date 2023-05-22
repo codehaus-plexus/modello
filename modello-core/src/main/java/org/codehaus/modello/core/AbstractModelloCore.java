@@ -22,34 +22,27 @@ package org.codehaus.modello.core;
  * SOFTWARE.
  */
 
+import java.io.Reader;
+import java.io.Writer;
+
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelValidationException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 
-import java.io.Reader;
-import java.io.Writer;
-
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  */
-public abstract class AbstractModelloCore
-    extends AbstractLogEnabled
-    implements ModelloCore
-{
+public abstract class AbstractModelloCore extends AbstractLogEnabled implements ModelloCore {
     // ----------------------------------------------------------------------
     // Partial ModelloCore implementation
     // ----------------------------------------------------------------------
 
-    public Model input( Reader reader )
-        throws ModelloException, ModelValidationException
-    {
-        return loadModel( reader );
+    public Model input(Reader reader) throws ModelloException, ModelValidationException {
+        return loadModel(reader);
     }
 
-    public void output( Model model, Writer writer )
-        throws ModelloException
-    {
-        saveModel( model, writer );
+    public void output(Model model, Writer writer) throws ModelloException {
+        saveModel(model, writer);
     }
 }

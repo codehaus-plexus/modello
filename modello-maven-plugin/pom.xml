@@ -1,20 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <parent>
-    <artifactId>modello</artifactId>
-    <groupId>org.codehaus.modello</groupId>
-    <version>2.1.2-SNAPSHOT</version>
-  </parent>
 
   <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.codehaus.modello</groupId>
+    <artifactId>modello</artifactId>
+    <version>2.1.2-SNAPSHOT</version>
+  </parent>
 
   <artifactId>modello-maven-plugin</artifactId>
   <packaging>maven-plugin</packaging>
 
   <name>Modello Maven Plugin</name>
-  <description>
-    Modello Maven Plugin enables the use of Modello in Maven builds.
-  </description>
+  <description>Modello Maven Plugin enables the use of Modello in Maven builds.</description>
 
   <prerequisites>
     <maven>${maven.version}</maven>
@@ -225,10 +223,11 @@
             <executions>
               <execution>
                 <id>features</id>
-                <phase>pre-site</phase><!-- check that run-its profile has generated features site -->
+                <!-- check that run-its profile has generated features site -->
                 <goals>
                   <goal>verify</goal>
                 </goals>
+                <phase>pre-site</phase>
                 <configuration>
                   <verificationFile>${basedir}/src/test/verifier/site-verifications.xml</verificationFile>
                 </configuration>
@@ -241,10 +240,10 @@
             <executions>
               <execution>
                 <id>features</id>
-                <phase>site</phase>
                 <goals>
                   <goal>copy-resources</goal>
                 </goals>
+                <phase>site</phase>
                 <configuration>
                   <resources>
                     <resource>

@@ -31,12 +31,9 @@ import org.apache.maven.plugins.annotations.Mojo;
  *
  * @author <a href="mailto:mkleint@codehaus.org">Milos Kleint</a>
  */
-@Mojo( name = "jdom-writer", defaultPhase = LifecyclePhase.GENERATE_SOURCES, threadSafe = true )
-public class ModelloJDOMWriterMojo
-    extends AbstractModelloSourceGeneratorMojo
-{
-    protected String getGeneratorType()
-    {
+@Mojo(name = "jdom-writer", defaultPhase = LifecyclePhase.GENERATE_SOURCES, threadSafe = true)
+public class ModelloJDOMWriterMojo extends AbstractModelloSourceGeneratorMojo {
+    protected String getGeneratorType() {
         return "jdom-writer";
     }
 }

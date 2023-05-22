@@ -28,9 +28,7 @@ import org.codehaus.modello.metadata.FieldMetadata;
  * @author <a href="mailto:jason@modello.org">Jason van Zyl </a>
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse </a>
  */
-public class ModelField
-    extends BaseElement
-{
+public class ModelField extends BaseElement {
     private String type;
 
     private String defaultValue;
@@ -45,18 +43,34 @@ public class ModelField
 
     private transient ModelClass modelClass;
 
-    private static final String[] PRIMITIVE_TYPES =
-        { "boolean", "Boolean", "char", "Character", "byte", "Byte", "short", "Short", "int", "Integer", "long",
-            "Long", "float", "Float", "double", "Double", "String", "Date", "DOM" };
+    private static final String[] PRIMITIVE_TYPES = {
+        "boolean",
+        "Boolean",
+        "char",
+        "Character",
+        "byte",
+        "Byte",
+        "short",
+        "Short",
+        "int",
+        "Integer",
+        "long",
+        "Long",
+        "float",
+        "Float",
+        "double",
+        "Double",
+        "String",
+        "Date",
+        "DOM"
+    };
 
-    public ModelField()
-    {
-        super( true );
+    public ModelField() {
+        super(true);
     }
 
-    public ModelField( ModelClass modelClass, String name )
-    {
-        super( true, name );
+    public ModelField(ModelClass modelClass, String name) {
+        super(true, name);
 
         this.modelClass = modelClass;
     }
@@ -65,93 +79,75 @@ public class ModelField
     // Property accessors
     // ----------------------------------------------------------------------
 
-    public String getType()
-    {
+    public String getType() {
         return type;
     }
 
-    public void setType( String type )
-    {
+    public void setType(String type) {
         this.type = type;
     }
 
-    public String getDefaultValue()
-    {
+    public String getDefaultValue() {
         return defaultValue;
     }
 
-    public void setDefaultValue( String defaultValue )
-    {
+    public void setDefaultValue(String defaultValue) {
         this.defaultValue = defaultValue;
     }
 
-    public String getTypeValidator()
-    {
+    public String getTypeValidator() {
         return typeValidator;
     }
 
-    public void setTypeValidator( String typeValidator )
-    {
+    public void setTypeValidator(String typeValidator) {
         this.typeValidator = typeValidator;
     }
 
-    public boolean isRequired()
-    {
+    public boolean isRequired() {
         return required;
     }
 
-    public void setRequired( boolean required )
-    {
+    public void setRequired(boolean required) {
         this.required = required;
     }
 
-    public boolean isIdentifier()
-    {
+    public boolean isIdentifier() {
         return identifier;
     }
 
-    public void setIdentifier( boolean identifier )
-    {
+    public void setIdentifier(boolean identifier) {
         this.identifier = identifier;
     }
 
-    public String getAlias()
-    {
+    public String getAlias() {
         return alias;
     }
 
-    public void setAlias( String alias )
-    {
+    public void setAlias(String alias) {
         this.alias = alias;
     }
     // ----------------------------------------------------------------------
     // Misc
     // ----------------------------------------------------------------------
 
-    public ModelClass getModelClass()
-    {
+    public ModelClass getModelClass() {
         return modelClass;
     }
 
-    public FieldMetadata getMetadata( String key )
-    {
-        return getMetadata( FieldMetadata.class, key );
+    public FieldMetadata getMetadata(String key) {
+        return getMetadata(FieldMetadata.class, key);
     }
 
-    public boolean isPrimitive()
-    {
+    public boolean isPrimitive() {
         String type = getType();
 
         // TODO: This should not happen
-        if ( type == null )
-        {
+        if (type == null) {
             return false;
         }
 
-        for ( String validType : PRIMITIVE_TYPES )
-        {
-            if ( type.equals( validType ) )
-            {
+        for (String validType : PRIMITIVE_TYPES) {
+            if (type.equals(validType)) {
                 return true;
             }
         }
@@ -159,21 +155,17 @@ public class ModelField
         return false;
     }
 
-    public boolean isArray()
-    {
-        return getType().endsWith( "[]" );
+    public boolean isArray() {
+        return getType().endsWith("[]");
     }
 
-    public boolean isPrimitiveArray()
-    {
+    public boolean isPrimitiveArray() {
         String type = getType();
 
-        for ( String PRIMITIVE_TYPE : PRIMITIVE_TYPES )
-        {
+        for (String PRIMITIVE_TYPE : PRIMITIVE_TYPES) {
             String validType = PRIMITIVE_TYPE + "[]";
 
-            if ( validType.equals( type ) )
-            {
+            if (validType.equals(type)) {
                 return true;
             }
         }
@@ -185,43 +177,31 @@ public class ModelField
     // BaseElement Overrides
     // ----------------------------------------------------------------------
 
-    public void initialize( ModelClass modelClass )
-    {
+    public void initialize(ModelClass modelClass) {
         this.modelClass = modelClass;
 
-        if ( defaultValue == null )
-        {
-            if ( "boolean".equals( type ) )
-            {
+        if (defaultValue == null) {
+            if ("boolean".equals(type)) {
                 defaultValue = "false";
-            }
-            else if ( "float".equals( type ) || "double".equals( type ) )
-            {
+            } else if ("float".equals(type) || "double".equals(type)) {
                 defaultValue = "0.0";
-            }
-            else if ( "int".equals( type ) || "long".equals( type ) || "short".equals( type ) || "byte".equals( type ) )
-            {
+            } else if ("int".equals(type) || "long".equals(type) || "short".equals(type) || "byte".equals(type)) {
                 defaultValue = "0";
-            }
-            else if ( "char".equals( type ) )
-            {
+            } else if ("char".equals(type)) {
                 defaultValue = "\0";
             }
         }
     }
 
-    public void validateElement()
-        throws ModelValidationException
-    {
-        validateFieldNotEmpty( "field", "name", getName() );
+    public void validateElement() throws ModelValidationException {
+        validateFieldNotEmpty("field", "name", getName());
 
-        validateFieldNotEmpty( "field '" + getName() + "'", "type", type );
+        validateFieldNotEmpty("field '" + getName() + "'", "type", type);
 
         // TODO: these definitions are duplicated throughout. Defined centrally, and loop through in the various uses
 
-        if ( !isPrimitive() && !isPrimitiveArray() )
-        {
-            throw new ModelValidationException( "Field '" + getName() + "': Illegal type: '" + type + "'." );
+        if (!isPrimitive() && !isPrimitiveArray()) {
+            throw new ModelValidationException("Field '" + getName() + "': Illegal type: '" + type + "'.");
         }
     }
 
@@ -229,18 +209,18 @@ public class ModelField
     // Object Overrides
     // ----------------------------------------------------------------------
 
-    public String toString()
-    {
+    public String toString() {
         return "[Field: name=" + getName() + ", alias: " + alias + ", type: " + type + ", " + "version: "
-            + getVersionRange() + "]";
+                + getVersionRange() + "]";
     }
 
-    public boolean isModelVersionField()
-    {
+    public boolean isModelVersionField() {
         Model model = modelClass.getModel();
         VersionDefinition versionDefinition = model.getVersionDefinition();
 
-        return ( versionDefinition != null ) && versionDefinition.isFieldType()
-            && ( versionDefinition.getValue().equals( getName() ) || versionDefinition.getValue().equals( alias ) );
+        return (versionDefinition != null)
+                && versionDefinition.isFieldType()
+                && (versionDefinition.getValue().equals(getName())
+                        || versionDefinition.getValue().equals(alias));
     }
 }

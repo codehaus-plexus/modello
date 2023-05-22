@@ -28,24 +28,19 @@ import org.codehaus.plexus.component.annotations.Component;
 
 /**
  * The generator for XPP3-based parsers that support input location tracking.
- * 
+ *
  * @author Benjamin Bentmann
  */
-@Component( role = ModelloGenerator.class, hint = "xpp3-extended-reader" )
-public class Xpp3ExtendedReaderGenerator
-    extends Xpp3ReaderGenerator
-{
+@Component(role = ModelloGenerator.class, hint = "xpp3-extended-reader")
+public class Xpp3ExtendedReaderGenerator extends Xpp3ReaderGenerator {
 
     @Override
-    protected boolean isRelevant( ModelClass modelClass )
-    {
-        return isJavaEnabled( modelClass );
+    protected boolean isRelevant(ModelClass modelClass) {
+        return isJavaEnabled(modelClass);
     }
 
     @Override
-    protected boolean isLocationTracking()
-    {
+    protected boolean isLocationTracking() {
         return true;
     }
-
 }

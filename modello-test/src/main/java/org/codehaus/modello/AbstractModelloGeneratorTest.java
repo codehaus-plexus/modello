@@ -22,15 +22,15 @@ package org.codehaus.modello;
  * SOFTWARE.
  */
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.Optional;
 import java.util.Properties;
-
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
 
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.util.FileUtils;
@@ -42,79 +42,69 @@ import org.xml.sax.SAXException;
  *
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  */
-public abstract class AbstractModelloGeneratorTest
-    extends PlexusTestCase
-{
+public abstract class AbstractModelloGeneratorTest extends PlexusTestCase {
     private String name;
 
-    protected AbstractModelloGeneratorTest( String name )
-    {
+    protected AbstractModelloGeneratorTest(String name) {
         this.name = name;
     }
 
-    protected void setUp()
-        throws Exception
-    {
+    protected void setUp() throws Exception {
         super.setUp();
 
-        FileUtils.deleteDirectory( getOutputDirectory() );
+        FileUtils.deleteDirectory(getOutputDirectory());
 
-        assertTrue( getOutputDirectory().mkdirs() );
+        assertTrue(getOutputDirectory().mkdirs());
     }
 
-    protected File getOutputDirectory()
-    {
-        return getTestFile( "target/generator-results/" + getName() );
+    protected File getOutputDirectory() {
+        return getTestFile("target/generator-results/" + getName());
     }
 
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
-    protected Properties getModelloParameters()
-    {
+    protected Properties getModelloParameters() {
         Properties parameters = new Properties();
 
-        parameters.setProperty( "modello.output.directory", getOutputDirectory().getAbsolutePath() );
+        parameters.setProperty("modello.output.directory", getOutputDirectory().getAbsolutePath());
 
         return parameters;
     }
 
-    protected Properties getModelloParameters( String version )
-    {
-        Properties parameters = getModelloParameters( version, null );
+    protected Properties getModelloParameters(String version) {
+        Properties parameters = getModelloParameters(version, null);
 
         return parameters;
     }
 
-    protected Properties getModelloParameters( String version, Integer javaSource )
-    {
+    protected Properties getModelloParameters(String version, Integer javaSource) {
         Properties parameters = getModelloParameters();
 
-        parameters.setProperty( "modello.package.with.version", Boolean.toString( false ) );
-        parameters.setProperty( "modello.version", version );
-        Optional.ofNullable( javaSource ).ifPresent( a -> parameters.setProperty( "modello.output.java.source",
-                                                                                  Integer.toString( a ) ) );
+        parameters.setProperty("modello.package.with.version", Boolean.toString(false));
+        parameters.setProperty("modello.version", version);
+        Optional.ofNullable(javaSource)
+                .ifPresent(a -> parameters.setProperty("modello.output.java.source", Integer.toString(a)));
 
         return parameters;
     }
 
-    protected Reader getXmlResourceReader( String name )
-        throws IOException
-    {
-        return ReaderFactory.newXmlReader( getClass().getResourceAsStream( name ) );
+    protected Reader getXmlResourceReader(String name) throws IOException {
+        return ReaderFactory.newXmlReader(getClass().getResourceAsStream(name));
     }
 
-    protected SAXParser createSaxParserWithSchema( String generatedXsdName ) throws ParserConfigurationException, SAXException {
+    protected SAXParser createSaxParserWithSchema(String generatedXsdName)
+            throws ParserConfigurationException, SAXException {
         SAXParserFactory factory = SAXParserFactory.newInstance();
-        factory.setValidating( true );
-        factory.setNamespaceAware( true );
+        factory.setValidating(true);
+        factory.setNamespaceAware(true);
         SAXParser saxParser = factory.newSAXParser();
-        saxParser.setProperty( "http://java.sun.com/xml/jaxp/properties/schemaLanguage",
-                               "http://www.w3.org/2001/XMLSchema" );
-        saxParser.setProperty( "http://java.sun.com/xml/jaxp/properties/schemaSource",
-                               new File( getOutputDirectory(), generatedXsdName ) );
+        saxParser.setProperty(
+                "http://java.sun.com/xml/jaxp/properties/schemaLanguage", "http://www.w3.org/2001/XMLSchema");
+        saxParser.setProperty(
+                "http://java.sun.com/xml/jaxp/properties/schemaSource",
+                new File(getOutputDirectory(), generatedXsdName));
         return saxParser;
     }
 }

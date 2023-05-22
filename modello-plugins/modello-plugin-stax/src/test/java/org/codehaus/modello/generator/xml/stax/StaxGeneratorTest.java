@@ -22,6 +22,8 @@ package org.codehaus.modello.generator.xml.stax;
  * SOFTWARE.
  */
 
+import java.util.List;
+
 import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
@@ -29,56 +31,48 @@ import org.codehaus.modello.model.Version;
 import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
 import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 
-import java.util.List;
-
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
  */
-public class StaxGeneratorTest
-    extends AbstractStaxGeneratorTestCase
-{
-    public StaxGeneratorTest()
-        throws ComponentLookupException
-    {
-        super( "stax" );
+public class StaxGeneratorTest extends AbstractStaxGeneratorTestCase {
+    public StaxGeneratorTest() throws ComponentLookupException {
+        super("stax");
     }
 
-    public void testStaxGenerator()
-        throws Throwable
-    {
-        Model model = modello.loadModel( getXmlResourceReader( "/maven.mdo" ) );
+    public void testStaxGenerator() throws Throwable {
+        Model model = modello.loadModel(getXmlResourceReader("/maven.mdo"));
 
-        List<ModelClass> classesList = model.getClasses( new Version( "4.0.0" ) );
+        List<ModelClass> classesList = model.getClasses(new Version("4.0.0"));
 
-        assertEquals( 27, classesList.size() );
+        assertEquals(27, classesList.size());
 
-        ModelClass clazz = (ModelClass) classesList.get( 0 );
+        ModelClass clazz = (ModelClass) classesList.get(0);
 
-        assertEquals( "Model", clazz.getName() );
+        assertEquals("Model", clazz.getName());
 
-        ModelField extend = clazz.getField( "extend", new Version( "4.0.0" ) );
+        ModelField extend = clazz.getField("extend", new Version("4.0.0"));
 
-        assertTrue( extend.hasMetadata( XmlFieldMetadata.ID ) );
+        assertTrue(extend.hasMetadata(XmlFieldMetadata.ID));
 
-        XmlFieldMetadata xml = (XmlFieldMetadata) extend.getMetadata( XmlFieldMetadata.ID );
+        XmlFieldMetadata xml = (XmlFieldMetadata) extend.getMetadata(XmlFieldMetadata.ID);
 
-        assertNotNull( xml );
+        assertNotNull(xml);
 
-        assertTrue( xml.isAttribute() );
+        assertTrue(xml.isAttribute());
 
-        assertEquals( "extender", xml.getTagName() );
+        assertEquals("extender", xml.getTagName());
 
-        ModelField build = clazz.getField( "build", new Version( "4.0.0" ) );
+        ModelField build = clazz.getField("build", new Version("4.0.0"));
 
-        assertTrue( build.hasMetadata( XmlFieldMetadata.ID ) );
+        assertTrue(build.hasMetadata(XmlFieldMetadata.ID));
 
-        xml = (XmlFieldMetadata) build.getMetadata( XmlFieldMetadata.ID );
+        xml = (XmlFieldMetadata) build.getMetadata(XmlFieldMetadata.ID);
 
-        assertNotNull( xml );
+        assertNotNull(xml);
 
-        assertEquals( "builder", xml.getTagName() );
+        assertEquals("builder", xml.getTagName());
 
-        verifyModel( model, "org.codehaus.modello.generator.xml.stax.StaxVerifier" );
+        verifyModel(model, "org.codehaus.modello.generator.xml.stax.StaxVerifier");
     }
 }

@@ -42,7 +42,6 @@
  *
  * $Id$
  */
-
 package org.codehaus.modello.plugin.java.javasource;
 
 /*
@@ -72,9 +71,7 @@ package org.codehaus.modello.plugin.java.javasource;
  * @author <a href="mailto:kvisco@intalio.com">Keith Visco</a>
  * @version $Revision$ $Date$
  **/
-public class JModifiers
-{
-
+public class JModifiers {
 
     /* static members */
 
@@ -91,7 +88,6 @@ public class JModifiers
     private static final short vProtected = 2;
     private static final short vPublic = 3;
     private static final short vPackage = 4;
-
 
     /* local members */
 
@@ -128,10 +124,9 @@ public class JModifiers
      * Creates a new JModifiers class, by default the
      * modifiers presented are public.
      **/
-    public JModifiers()
-    {
+    public JModifiers() {
         super();
-    } //-- JModifiers
+    } // -- JModifiers
 
     /**
      * Creates a new JModifiers
@@ -141,130 +136,116 @@ public class JModifiers
      * @param isFinal a boolean indicating the final qualifier. A value
      * of true indicates that the final qualifier is present.
      **/
-    private JModifiers( short visibility, boolean isStatic, boolean isFinal )
-    {
+    private JModifiers(short visibility, boolean isStatic, boolean isFinal) {
         this.visibility = visibility;
         this.isStatic = isStatic;
         this.isFinal = isFinal;
-    } //-- JModifiers
+    } // -- JModifiers
 
     /**
      * Creates a copy of this JModifiers
      * @return the copy of this JModifiers
      **/
-    public JModifiers copy()
-    {
-        JModifiers mods = new JModifiers( visibility, isStatic, isFinal );
-        mods.setAbstract( isAbstract );
-        mods.setTransient( isTransient );
+    public JModifiers copy() {
+        JModifiers mods = new JModifiers(visibility, isStatic, isFinal);
+        mods.setAbstract(isAbstract);
+        mods.setTransient(isTransient);
         return mods;
-    } //-- copy
+    } // -- copy
 
     /**
      * Changes the visibility qualifier to "private"
      **/
-    public void makePrivate()
-    {
+    public void makePrivate() {
         this.visibility = vPrivate;
-    } //-- makePrivate
+    } // -- makePrivate
 
     /**
      * Changes the visibility qualifier to "protected"
      **/
-    public void makeProtected()
-    {
+    public void makeProtected() {
         this.visibility = vProtected;
-    } //-- makeProtected
+    } // -- makeProtected
 
     /**
      * Changes the visibility qualifier to "public"
      **/
-    public void makePublic()
-    {
+    public void makePublic() {
         this.visibility = vPublic;
-    } //-- makePublic
+    } // -- makePublic
 
     /**
      * Changes the visibility qualifier to package (= without qualifier).
      **/
-    public void makePackage()
-    {
+    public void makePackage() {
         this.visibility = vPackage;
-    } //-- makePackage
+    } // -- makePackage
 
     /**
      * Returns true if the abstract qualifier is present.
      * <BR> This is only applicable to methods and classes.
      * @return true if the abstract qualifier is present
      **/
-    public boolean isAbstract()
-    {
+    public boolean isAbstract() {
         return isAbstract;
-    } //-- isAbstract
+    } // -- isAbstract
 
     /**
      * Returns true if the final qualifier is present.
      * <BR> This is only applicable to methods and classes.
      * @return true if the final qualifier is present
      **/
-    public boolean isFinal()
-    {
+    public boolean isFinal() {
         return isFinal;
-    } //-- isFinal
+    } // -- isFinal
 
     /**
      * Returns true if the modifier represented is private.
      * @return true if the modifier represented is private.
      **/
-    public boolean isPrivate()
-    {
-        return ( visibility == vPrivate );
-    } //-- isPrivate
+    public boolean isPrivate() {
+        return (visibility == vPrivate);
+    } // -- isPrivate
 
     /**
      * Returns true if the modifier represented is protected.
      * @return true if the modifier represented is protected.
      **/
-    public boolean isProtected()
-    {
-        return ( visibility == vProtected );
-    } //-- isProtected
+    public boolean isProtected() {
+        return (visibility == vProtected);
+    } // -- isProtected
 
     /**
      * Returns true if the modifier represented is public.
      * @return true if the modifier represented is public.
      **/
-    public boolean isPublic()
-    {
-        return ( visibility == vPublic );
-    } //-- isPublic
+    public boolean isPublic() {
+        return (visibility == vPublic);
+    } // -- isPublic
 
     /**
      * Returns true if the modifier represented is package (= without qualifier).
      * @return true if the modifier represented is package (= without qualifier).
      **/
-    public boolean isPackage()
-    {
-        return ( visibility == vPackage );
-    } //-- isPackage
+    public boolean isPackage() {
+        return (visibility == vPackage);
+    } // -- isPackage
 
     /**
      * Returns true if the modifier represented is static.
      * @return true if the modifier represented is static.
      **/
-    public boolean isStatic()
-    {
+    public boolean isStatic() {
         return this.isStatic;
-    } //-- isPublic
+    } // -- isPublic
 
     /**
      * Returns true if the modifier represented is transient.
      * @return true if the modifier represented is transient.
      **/
-    public boolean isTransient()
-    {
+    public boolean isTransient() {
         return this.isTransient;
-    } //-- isTransient
+    } // -- isTransient
 
     /**
      * Sets whether or not the "abstract" qualifier is present
@@ -272,109 +253,92 @@ public class JModifiers
      * @param isAbstract is a boolean which when true will indicate
      * that the abstract qualifier should be present
      **/
-    public void setAbstract( boolean isAbstract )
-    {
+    public void setAbstract(boolean isAbstract) {
         this.isAbstract = isAbstract;
-    } //-- setAbstract
+    } // -- setAbstract
 
     /**
      * Sets whether or not the "final" qualifier is present
      * @param isFinal is a boolean which when true will indicate
      * the final qualifiter is present
      **/
-    public void setFinal( boolean isFinal )
-    {
+    public void setFinal(boolean isFinal) {
         this.isFinal = isFinal;
-    } //-- setFinal
+    } // -- setFinal
 
     /**
      * Sets whether or not the "static" qualifier is present
      * @param isStatic is a boolean which when true will indicate
      * the "static" qualifiter is present
      **/
-    public void setStatic( boolean isStatic )
-    {
+    public void setStatic(boolean isStatic) {
         this.isStatic = isStatic;
-    } //-- setStatic
+    } // -- setStatic
 
     /**
      * Sets whether or not the "transient" qualifier is present
      * @param isTransient is a boolean which when true will indicate
      * the "transient" qualifiter is present
      **/
-    public void setTransient( boolean isTransient )
-    {
+    public void setTransient(boolean isTransient) {
         this.isTransient = isTransient;
-    } //-- setTransient
+    } // -- setTransient
 
     /**
      * Returns the String represetation of this JModifiers
      * @return the String represetation of this JModifiers
      **/
-    public String toString()
-    {
+    public String toString() {
         StringBuilder sb = new StringBuilder();
 
-        //-- visibility
-        switch ( visibility )
-        {
+        // -- visibility
+        switch (visibility) {
             case vPrivate:
-                sb.append( sPrivate );
+                sb.append(sPrivate);
                 break;
             case vProtected:
-                sb.append( sProtected );
+                sb.append(sProtected);
                 break;
             case vPackage:
-                sb.append( sPackage );
+                sb.append(sPackage);
                 break;
             default:
-                sb.append( sPublic );
+                sb.append(sPublic);
                 break;
         }
 
-        //-- static
-        if ( isStatic )
-        {
-            if ( sb.length() > 0 )
-            {
-                sb.append( ' ' );
+        // -- static
+        if (isStatic) {
+            if (sb.length() > 0) {
+                sb.append(' ');
             }
-            sb.append( sStatic );
+            sb.append(sStatic);
         }
 
-        //-- final
-        if ( isFinal )
-        {
-            if ( sb.length() > 0 )
-            {
-                sb.append( ' ' );
+        // -- final
+        if (isFinal) {
+            if (sb.length() > 0) {
+                sb.append(' ');
             }
-            sb.append( sFinal );
+            sb.append(sFinal);
         }
 
-        //-- abstract
-        if ( isAbstract )
-        {
-            if ( sb.length() > 0 )
-            {
-                sb.append( ' ' );
+        // -- abstract
+        if (isAbstract) {
+            if (sb.length() > 0) {
+                sb.append(' ');
             }
-            sb.append( sAbstract );
+            sb.append(sAbstract);
         }
 
-        //-- transient
-        if ( isTransient )
-        {
-            if ( sb.length() > 0 )
-            {
-                sb.append( ' ' );
+        // -- transient
+        if (isTransient) {
+            if (sb.length() > 0) {
+                sb.append(' ');
             }
-            sb.append( sTransient );
+            sb.append(sTransient);
         }
-
 
         return sb.toString();
-    } //-- toString
-
-} //-- JModifiers
-
+    } // -- toString
+} // -- JModifiers

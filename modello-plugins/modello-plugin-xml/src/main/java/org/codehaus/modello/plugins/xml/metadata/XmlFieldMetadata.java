@@ -27,9 +27,7 @@ import org.codehaus.modello.metadata.FieldMetadata;
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  */
-public class XmlFieldMetadata
-    implements FieldMetadata
-{
+public class XmlFieldMetadata implements FieldMetadata {
     public static final String ID = XmlFieldMetadata.class.getName();
 
     private boolean attribute;
@@ -46,85 +44,71 @@ public class XmlFieldMetadata
 
     private String insertParentFieldsUpTo;
 
-    public String getFormat()
-    {
+    public String getFormat() {
         return format;
     }
 
-    public void setFormat( String format )
-    {
+    public void setFormat(String format) {
         this.format = format;
     }
 
-    public boolean isTrim()
-    {
+    public boolean isTrim() {
         return trim;
     }
 
-    public void setTrim( boolean trim )
-    {
+    public void setTrim(boolean trim) {
         this.trim = trim;
     }
 
     /**
      * @return Returns the attribute.
      */
-    public boolean isAttribute()
-    {
+    public boolean isAttribute() {
         return attribute;
     }
 
     /**
      * @param attribute The attribute to set.
      */
-    public void setAttribute( boolean attribute )
-    {
+    public void setAttribute(boolean attribute) {
         this.attribute = attribute;
     }
 
-    public boolean isContent()
-    {
+    public boolean isContent() {
         return content;
     }
 
-    public void setContent( boolean content )
-    {
+    public void setContent(boolean content) {
         this.content = content;
     }
 
     /**
      * @return Returns the tag name or the attribute name if it's an attribute.
      */
-    public String getTagName()
-    {
+    public String getTagName() {
         return tagName;
     }
 
     /**
      * @param tagName The tag or attribute name to set.
      */
-    public void setTagName( String tagName )
-    {
+    public void setTagName(String tagName) {
         this.tagName = tagName;
     }
 
-    public boolean isTransient()
-    {
+    public boolean isTransient() {
         return transientField;
     }
 
-    public void setTransient( boolean transientField )
-    {
+    public void setTransient(boolean transientField) {
         this.transientField = transientField;
     }
 
-    public String getInsertParentFieldsUpTo()
-    {
+    public String getInsertParentFieldsUpTo() {
         return insertParentFieldsUpTo;
     }
 
-    public void setInsertParentFieldsUpTo( String insertParentFieldsUpTo )
-    {
+    public void setInsertParentFieldsUpTo(String insertParentFieldsUpTo) {
         this.insertParentFieldsUpTo = insertParentFieldsUpTo;
     }
 }

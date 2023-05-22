@@ -34,55 +34,42 @@ import org.codehaus.plexus.util.StringUtils;
  *
  * @author <a href="mailto:hboutemy@codehaus.org">Hervé Boutemy</a>
  */
-public class XsdModelHelper
-{
-    public static String getNamespace( Model model, Version version )
-        throws ModelloException
-    {
-        XmlModelMetadata xmlModelMetadata = (XmlModelMetadata) model.getMetadata( XmlModelMetadata.ID );
+public class XsdModelHelper {
+    public static String getNamespace(Model model, Version version) throws ModelloException {
+        XmlModelMetadata xmlModelMetadata = (XmlModelMetadata) model.getMetadata(XmlModelMetadata.ID);
 
-        XsdModelMetadata xsdModelMetadata = (XsdModelMetadata) model.getMetadata( XsdModelMetadata.ID );
+        XsdModelMetadata xsdModelMetadata = (XsdModelMetadata) model.getMetadata(XsdModelMetadata.ID);
 
         String namespace;
-        if ( StringUtils.isNotEmpty( xsdModelMetadata.getNamespace() ) )
-        {
-            namespace = xsdModelMetadata.getNamespace( version );
-        }
-        else
-        {
+        if (StringUtils.isNotEmpty(xsdModelMetadata.getNamespace())) {
+            namespace = xsdModelMetadata.getNamespace(version);
+        } else {
             // xsd.namespace is not set, try using xml.namespace
-            if ( StringUtils.isEmpty( xmlModelMetadata.getNamespace() ) )
-            {
-                throw new ModelloException( "Cannot generate xsd without xmlns specification:"
-                                            + " <model xml.namespace='...'> or <model xsd.namespace='...'>" );
+            if (StringUtils.isEmpty(xmlModelMetadata.getNamespace())) {
+                throw new ModelloException("Cannot generate xsd without xmlns specification:"
+                        + " <model xml.namespace='...'> or <model xsd.namespace='...'>");
             }
 
-            namespace = xmlModelMetadata.getNamespace( version );
+            namespace = xmlModelMetadata.getNamespace(version);
         }
 
         return namespace;
     }
 
-    public static String getTargetNamespace( Model model, Version version, String namespace )
-    {
-        XsdModelMetadata xsdModelMetadata = (XsdModelMetadata) model.getMetadata( XsdModelMetadata.ID );
+    public static String getTargetNamespace(Model model, Version version, String namespace) {
+        XsdModelMetadata xsdModelMetadata = (XsdModelMetadata) model.getMetadata(XsdModelMetadata.ID);
 
         String targetNamespace;
-        if ( xsdModelMetadata.getTargetNamespace() == null )
-        {
+        if (xsdModelMetadata.getTargetNamespace() == null) {
             // xsd.targetNamespace not set, using namespace
             targetNamespace = namespace;
-        }
-        else
-        {
-            targetNamespace = xsdModelMetadata.getTargetNamespace( version );
+        } else {
+            targetNamespace = xsdModelMetadata.getTargetNamespace(version);
         }
         return targetNamespace;
     }
 
-    public static String getTargetNamespace( Model model, Version version )
-        throws ModelloException
-    {
-        return getTargetNamespace( model, version, getNamespace( model, version ) );
+    public static String getTargetNamespace(Model model, Version version) throws ModelloException {
+        return getTargetNamespace(model, version, getNamespace(model, version));
     }
 }

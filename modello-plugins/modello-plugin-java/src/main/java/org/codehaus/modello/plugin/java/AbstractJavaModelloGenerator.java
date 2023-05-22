@@ -24,9 +24,6 @@ package org.codehaus.modello.plugin.java;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.Writer;
-import java.nio.charset.Charset;
-import java.nio.file.Path;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -65,21 +62,18 @@ import org.codehaus.plexus.util.StringUtils;
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  */
-public abstract class AbstractJavaModelloGenerator
-    extends AbstractModelloGenerator
-{
+public abstract class AbstractJavaModelloGenerator extends AbstractModelloGenerator {
     private Optional<Integer> javaSource;
 
     protected boolean domAsXpp3 = true;
 
-    protected void initialize( Model model, Properties parameters )
-        throws ModelloException
-    {
-        super.initialize( model, parameters );
+    protected void initialize(Model model, Properties parameters) throws ModelloException {
+        super.initialize(model, parameters);
 
-        javaSource = Optional.ofNullable( getParameter( parameters, ModelloParameterConstants.OUTPUT_JAVA_SOURCE, null ) ).map( Integer::valueOf );
+        javaSource = Optional.ofNullable(getParameter(parameters, ModelloParameterConstants.OUTPUT_JAVA_SOURCE, null))
+                .map(Integer::valueOf);
 
-        domAsXpp3 = !"false".equals( parameters.getProperty( ModelloParameterConstants.DOM_AS_XPP3 ) );
+        domAsXpp3 = !"false".equals(parameters.getProperty(ModelloParameterConstants.DOM_AS_XPP3));
     }
 
     /**
@@ -90,97 +84,78 @@ public abstract class AbstractJavaModelloGenerator
      * @return a JSourceWriter with configured encoding
      * @throws IOException
      */
-    protected JSourceWriter newJSourceWriter( String packageName, String className )
-        throws IOException
-    {
-        String directory = packageName.replace( '.', File.separatorChar );
+    protected JSourceWriter newJSourceWriter(String packageName, String className) throws IOException {
+        String directory = packageName.replace('.', File.separatorChar);
 
-        File f = new File( new File( getOutputDirectory(), directory ), className + ".java" );
+        File f = new File(new File(getOutputDirectory(), directory), className + ".java");
 
-        if ( !f.getParentFile().exists() )
-        {
+        if (!f.getParentFile().exists()) {
             f.getParentFile().mkdirs();
         }
 
-        return new JSourceWriter( newWriter( f.toPath() ) );
+        return new JSourceWriter(newWriter(f.toPath()));
     }
 
-    private JComment getHeaderComment()
-    {
+    private JComment getHeaderComment() {
         JComment comment = new JComment();
-        comment.setComment( getHeader() );
+        comment.setComment(getHeader());
         return comment;
     }
 
-    protected void initHeader( JClass clazz )
-    {
-        clazz.setHeader( getHeaderComment() );
+    protected void initHeader(JClass clazz) {
+        clazz.setHeader(getHeaderComment());
     }
 
-    protected void initHeader( JInterface interfaze )
-    {
-        interfaze.setHeader( getHeaderComment() );
-    }
-    
-    protected final boolean hasJavaSourceSupport( int source )
-    {
-        return javaSource.map( i -> i >= source ).orElse( false );
+    protected void initHeader(JInterface interfaze) {
+        interfaze.setHeader(getHeaderComment());
     }
 
-    protected void suppressAllWarnings( Model objectModel, JStructure structure )
-    {
-        JavaModelMetadata javaModelMetadata = (JavaModelMetadata) objectModel.getMetadata( JavaModelMetadata.ID );
+    protected final boolean hasJavaSourceSupport(int source) {
+        return javaSource.map(i -> i >= source).orElse(false);
+    }
 
-        if ( hasJavaSourceSupport( 5 ) && javaModelMetadata.isSuppressAllWarnings() )
-        {
-            structure.appendAnnotation( "@SuppressWarnings( \"all\" )" );
+    protected void suppressAllWarnings(Model objectModel, JStructure structure) {
+        JavaModelMetadata javaModelMetadata = (JavaModelMetadata) objectModel.getMetadata(JavaModelMetadata.ID);
+
+        if (hasJavaSourceSupport(5) && javaModelMetadata.isSuppressAllWarnings()) {
+            structure.appendAnnotation("@SuppressWarnings( \"all\" )");
         }
     }
 
-    protected void addModelImports( JClass jClass, BaseElement baseElem )
-        throws ModelloException
-    {
+    protected void addModelImports(JClass jClass, BaseElement baseElem) throws ModelloException {
         String basePackageName = null;
-        if ( baseElem instanceof ModelType )
-        {
-            basePackageName = ( (ModelType) baseElem ).getPackageName( isPackageWithVersion(), getGeneratedVersion() );
+        if (baseElem instanceof ModelType) {
+            basePackageName = ((ModelType) baseElem).getPackageName(isPackageWithVersion(), getGeneratedVersion());
         }
 
         // import interfaces
-        for ( ModelInterface modelInterface : getModel().getInterfaces( getGeneratedVersion() ) )
-        {
-            addModelImport( jClass, modelInterface, basePackageName );
+        for (ModelInterface modelInterface : getModel().getInterfaces(getGeneratedVersion())) {
+            addModelImport(jClass, modelInterface, basePackageName);
         }
 
         // import classes
-        for ( ModelClass modelClass : getClasses( getModel() ) )
-        {
-            addModelImport( jClass, modelClass, basePackageName );
+        for (ModelClass modelClass : getClasses(getModel())) {
+            addModelImport(jClass, modelClass, basePackageName);
         }
     }
 
-    protected void addModelImport( JClass jClass, ModelType modelType, String basePackageName )
-    {
-        String packageName = modelType.getPackageName( isPackageWithVersion(), getGeneratedVersion() );
+    protected void addModelImport(JClass jClass, ModelType modelType, String basePackageName) {
+        String packageName = modelType.getPackageName(isPackageWithVersion(), getGeneratedVersion());
 
-        if ( !packageName.equals( basePackageName ) )
-        {
-            jClass.addImport( packageName + '.' + modelType.getName() );
+        if (!packageName.equals(basePackageName)) {
+            jClass.addImport(packageName + '.' + modelType.getName());
         }
     }
 
-    protected String getPrefix( JavaFieldMetadata javaFieldMetadata )
-    {
+    protected String getPrefix(JavaFieldMetadata javaFieldMetadata) {
         return javaFieldMetadata.isBooleanGetter() ? "is" : "get";
     }
 
-    protected String getDefaultValue( ModelAssociation association )
-    {
+    protected String getDefaultValue(ModelAssociation association) {
         String value = association.getDefaultValue();
 
-        if ( hasJavaSourceSupport( 5 ) )
-        {
-            value = StringUtils.replaceOnce( StringUtils.replaceOnce( value, "/*", "" ), "*/", "" );
+        if (hasJavaSourceSupport(5)) {
+            value = StringUtils.replaceOnce(StringUtils.replaceOnce(value, "/*", ""), "*/", "");
         }
 
         return value;
@@ -188,192 +163,142 @@ public abstract class AbstractJavaModelloGenerator
 
     protected static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS";
 
-    protected String getJavaDefaultValue( ModelField modelField )
-        throws ModelloException
-    {
+    protected String getJavaDefaultValue(ModelField modelField) throws ModelloException {
         String type = modelField.getType();
         String value = modelField.getDefaultValue();
 
-        if ( "String".equals( type ) )
-        {
-            return '"' + escapeStringLiteral( value ) + '"';
-        }
-        else if ( "char".equals( type ) )
-        {
-            return '\'' + escapeStringLiteral( value ) + '\'';
-        }
-        else if ( "long".equals( type ) )
-        {
+        if ("String".equals(type)) {
+            return '"' + escapeStringLiteral(value) + '"';
+        } else if ("char".equals(type)) {
+            return '\'' + escapeStringLiteral(value) + '\'';
+        } else if ("long".equals(type)) {
             return value + 'L';
-        }
-        else if ( "float".equals( type ) )
-        {
+        } else if ("float".equals(type)) {
             return value + 'f';
-        }
-        else if ( "Date".equals( type ) )
-        {
-            DateFormat format = new SimpleDateFormat( DEFAULT_DATE_FORMAT, Locale.US );
-            try
-            {
-                Date date = format.parse( value );
+        } else if ("Date".equals(type)) {
+            DateFormat format = new SimpleDateFormat(DEFAULT_DATE_FORMAT, Locale.US);
+            try {
+                Date date = format.parse(value);
                 return "new java.util.Date( " + date.getTime() + "L )";
+            } catch (ParseException pe) {
+                throw new ModelloException("Unparseable default date: " + value, pe);
             }
-            catch ( ParseException pe )
-            {
-                throw new ModelloException( "Unparseable default date: " + value, pe );
-            }
-        }
-        else if ( value != null && value.length() > 0 )
-        {
-            boolean useJava5 = hasJavaSourceSupport( 5 );
-            if ( "Character".equals( type ) && !value.contains( type ) )
-            {
-                return newPrimitiveWrapper( type, "'" + escapeStringLiteral( value ) + "'", useJava5 );
-            }
-            else if ( "Boolean".equals( type ) && !value.contains( type ) )
-            {
-                return newPrimitiveWrapper( type, value, true );
-            }
-            else if ( "Byte".equals( type ) && !value.contains( type ) )
-            {
-                return newPrimitiveWrapper( type, "(byte) " + value, useJava5 );
-            }
-            else if ( "Short".equals( type ) && !value.contains( type ) )
-            {
-                return newPrimitiveWrapper( type, "(short) " + value, useJava5 );
-            }
-            else if ( "Integer".equals( type ) && !value.contains( type ) )
-            {
-                return newPrimitiveWrapper( type, value, useJava5 );
-            }
-            else if ( "Long".equals( type ) && !value.contains( type ) )
-            {
-                return newPrimitiveWrapper( type, value + 'L', useJava5 );
-            }
-            else if ( "Float".equals( type ) && !value.contains( type ) )
-            {
-                return newPrimitiveWrapper( type, value + 'f', useJava5 );
-            }
-            else if ( "Double".equals( type ) && !value.contains( type ) )
-            {
-                return newPrimitiveWrapper( type, value, useJava5 );
+        } else if (value != null && value.length() > 0) {
+            boolean useJava5 = hasJavaSourceSupport(5);
+            if ("Character".equals(type) && !value.contains(type)) {
+                return newPrimitiveWrapper(type, "'" + escapeStringLiteral(value) + "'", useJava5);
+            } else if ("Boolean".equals(type) && !value.contains(type)) {
+                return newPrimitiveWrapper(type, value, true);
+            } else if ("Byte".equals(type) && !value.contains(type)) {
+                return newPrimitiveWrapper(type, "(byte) " + value, useJava5);
+            } else if ("Short".equals(type) && !value.contains(type)) {
+                return newPrimitiveWrapper(type, "(short) " + value, useJava5);
+            } else if ("Integer".equals(type) && !value.contains(type)) {
+                return newPrimitiveWrapper(type, value, useJava5);
+            } else if ("Long".equals(type) && !value.contains(type)) {
+                return newPrimitiveWrapper(type, value + 'L', useJava5);
+            } else if ("Float".equals(type) && !value.contains(type)) {
+                return newPrimitiveWrapper(type, value + 'f', useJava5);
+            } else if ("Double".equals(type) && !value.contains(type)) {
+                return newPrimitiveWrapper(type, value, useJava5);
             }
         }
 
         return value;
     }
 
-    private String newPrimitiveWrapper( String type, String value, boolean useJava5 )
-    {
-        if ( useJava5 )
-        {
+    private String newPrimitiveWrapper(String type, String value, boolean useJava5) {
+        if (useJava5) {
             return type + ".valueOf( " + value + " )";
-        }
-        else
-        {
+        } else {
             return "new " + type + "( " + value + " )";
         }
     }
 
-    private String escapeStringLiteral( String str )
-    {
-        StringBuilder buffer = new StringBuilder( str.length() + 32 );
+    private String escapeStringLiteral(String str) {
+        StringBuilder buffer = new StringBuilder(str.length() + 32);
 
-        for ( int i = 0, n = str.length(); i < n; i++ )
-        {
-            char c = str.charAt( i );
-            switch ( c )
-            {
+        for (int i = 0, n = str.length(); i < n; i++) {
+            char c = str.charAt(i);
+            switch (c) {
                 case '\0':
-                    buffer.append( "\\0" );
+                    buffer.append("\\0");
                     break;
                 case '\t':
-                    buffer.append( "\\t" );
+                    buffer.append("\\t");
                     break;
                 case '\r':
-                    buffer.append( "\\r" );
+                    buffer.append("\\r");
                     break;
                 case '\n':
-                    buffer.append( "\\n" );
+                    buffer.append("\\n");
                     break;
                 case '\\':
-                    buffer.append( "\\\\" );
+                    buffer.append("\\\\");
                     break;
                 default:
-                    buffer.append( c );
+                    buffer.append(c);
             }
         }
 
         return buffer.toString();
     }
 
-    protected String getValueChecker( String type, String value, ModelField field )
-        throws ModelloException
-    {
+    protected String getValueChecker(String type, String value, ModelField field) throws ModelloException {
         String retVal;
-        if ( "boolean".equals( type ) || "double".equals( type ) || "float".equals( type ) || "int".equals( type )
-            || "long".equals( type ) || "short".equals( type ) || "byte".equals( type ) || "char".equals( type ) )
-        {
-            retVal = "if ( " + value + " != " + getJavaDefaultValue( field ) + " )";
-        }
-        else if ( ModelDefault.LIST.equals( type ) || ModelDefault.SET.equals( type )
-            || ModelDefault.MAP.equals( type ) || ModelDefault.PROPERTIES.equals( type ) )
-        {
+        if ("boolean".equals(type)
+                || "double".equals(type)
+                || "float".equals(type)
+                || "int".equals(type)
+                || "long".equals(type)
+                || "short".equals(type)
+                || "byte".equals(type)
+                || "char".equals(type)) {
+            retVal = "if ( " + value + " != " + getJavaDefaultValue(field) + " )";
+        } else if (ModelDefault.LIST.equals(type)
+                || ModelDefault.SET.equals(type)
+                || ModelDefault.MAP.equals(type)
+                || ModelDefault.PROPERTIES.equals(type)) {
             retVal = "if ( ( " + value + " != null ) && ( " + value + ".size() > 0 ) )";
-        }
-        else if ( "String".equals( type ) && field.getDefaultValue() != null )
-        {
+        } else if ("String".equals(type) && field.getDefaultValue() != null) {
             retVal = "if ( ( " + value + " != null ) && !" + value + ".equals( \"" + field.getDefaultValue() + "\" ) )";
-        }
-        else if ( "Date".equals( type ) && field.getDefaultValue() != null )
-        {
-            retVal = "if ( ( " + value + " != null ) && !" + value + ".equals( " + getJavaDefaultValue( field ) + " ) )";
-        }
-        else
-        {
+        } else if ("Date".equals(type) && field.getDefaultValue() != null) {
+            retVal = "if ( ( " + value + " != null ) && !" + value + ".equals( " + getJavaDefaultValue(field) + " ) )";
+        } else {
             retVal = "if ( " + value + " != null )";
         }
         return retVal;
     }
 
-    protected List<ModelClass> getClasses( Model model )
-    {
+    protected List<ModelClass> getClasses(Model model) {
         List<ModelClass> modelClasses = new ArrayList<ModelClass>();
 
-        for ( ModelClass modelClass : model.getClasses( getGeneratedVersion() ) )
-        {
-            if ( isRelevant( modelClass ) )
-            {
-                modelClasses.add( modelClass );
+        for (ModelClass modelClass : model.getClasses(getGeneratedVersion())) {
+            if (isRelevant(modelClass)) {
+                modelClasses.add(modelClass);
             }
         }
 
         return modelClasses;
     }
 
-    protected boolean isRelevant( ModelClass modelClass )
-    {
-        return isJavaEnabled( modelClass ) && !isTrackingSupport( modelClass );
+    protected boolean isRelevant(ModelClass modelClass) {
+        return isJavaEnabled(modelClass) && !isTrackingSupport(modelClass);
     }
 
-    protected boolean isJavaEnabled( ModelClass modelClass )
-    {
-        JavaClassMetadata javaClassMetadata = (JavaClassMetadata) modelClass.getMetadata( JavaClassMetadata.ID );
+    protected boolean isJavaEnabled(ModelClass modelClass) {
+        JavaClassMetadata javaClassMetadata = (JavaClassMetadata) modelClass.getMetadata(JavaClassMetadata.ID);
         return javaClassMetadata.isEnabled();
     }
 
-    protected boolean isTrackingSupport( ModelClass modelClass )
-    {
-        ModelClassMetadata modelClassMetadata = (ModelClassMetadata) modelClass.getMetadata( ModelClassMetadata.ID );
-        if ( StringUtils.isNotEmpty( modelClassMetadata.getLocationTracker() ) )
-        {
+    protected boolean isTrackingSupport(ModelClass modelClass) {
+        ModelClassMetadata modelClassMetadata = (ModelClassMetadata) modelClass.getMetadata(ModelClassMetadata.ID);
+        if (StringUtils.isNotEmpty(modelClassMetadata.getLocationTracker())) {
             return true;
         }
-        if ( StringUtils.isNotEmpty( modelClassMetadata.getSourceTracker() ) )
-        {
+        if (StringUtils.isNotEmpty(modelClassMetadata.getSourceTracker())) {
             return true;
         }
         return false;
     }
-
 }

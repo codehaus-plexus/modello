@@ -27,7 +27,4 @@ import org.codehaus.modello.plugins.xml.AbstractXmlJavaGenerator;
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  */
-public abstract class AbstractJDOMGenerator
-    extends AbstractXmlJavaGenerator
-{
-}
+public abstract class AbstractJDOMGenerator extends AbstractXmlJavaGenerator {}

@@ -31,10 +31,8 @@ import org.codehaus.plexus.util.StringUtils;
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
  */
-public class Version
-    implements Comparable<Version>
-{
-    public static final Version INFINITE = new Version( "32767.32767.32767" );
+public class Version implements Comparable<Version> {
+    public static final Version INFINITE = new Version("32767.32767.32767");
 
     private short major;
 
@@ -42,20 +40,17 @@ public class Version
 
     private short micro;
 
-    public Version( String version )
-    {
-        if ( version == null )
-        {
-            throw new ModelloRuntimeException( "Syntax error in the version field: Missing. " );
+    public Version(String version) {
+        if (version == null) {
+            throw new ModelloRuntimeException("Syntax error in the version field: Missing. ");
         }
 
-        String[] splittedVersion = StringUtils.split( version.trim(), "." );
+        String[] splittedVersion = StringUtils.split(version.trim(), ".");
 
-        if ( splittedVersion.length > 3 )
-        {
+        if (splittedVersion.length > 3) {
             throw new ModelloRuntimeException(
-                "Syntax error in the <version> field: The field must be at more 3 parts long (major, minor and micro). Was: '"
-                + version + "'." );
+                    "Syntax error in the <version> field: The field must be at more 3 parts long (major, minor and micro). Was: '"
+                            + version + "'.");
         }
 
         String majorString = splittedVersion[0];
@@ -64,43 +59,34 @@ public class Version
 
         String microString = "0";
 
-        if ( splittedVersion.length > 1 )
-        {
+        if (splittedVersion.length > 1) {
             minorString = splittedVersion[1];
 
-            if ( splittedVersion.length > 2 )
-            {
+            if (splittedVersion.length > 2) {
                 microString = splittedVersion[2];
-
             }
         }
 
-        try
-        {
-            major = Short.parseShort( majorString );
+        try {
+            major = Short.parseShort(majorString);
 
-            minor = Short.parseShort( minorString );
+            minor = Short.parseShort(minorString);
 
-            micro = Short.parseShort( microString );
-        }
-        catch ( NumberFormatException e )
-        {
-            throw new ModelloRuntimeException( "Invalid version string: '" + version + "'." );
+            micro = Short.parseShort(microString);
+        } catch (NumberFormatException e) {
+            throw new ModelloRuntimeException("Invalid version string: '" + version + "'.");
         }
     }
 
-    public int getMajor()
-    {
+    public int getMajor() {
         return major;
     }
 
-    public int getMinor()
-    {
+    public int getMinor() {
         return minor;
     }
 
-    public int getMicro()
-    {
+    public int getMicro() {
         return micro;
     }
 
@@ -110,20 +96,16 @@ public class Version
      * @param other the other {@link Version}
      * @return {@code true} if this instance is greater than other instance, otherwise {@code false}
      */
-    public boolean greaterThan( Version other )
-    {
-        if ( this.major != other.major )
-        {
+    public boolean greaterThan(Version other) {
+        if (this.major != other.major) {
             return major > other.major;
         }
 
-        if ( this.minor != other.minor )
-        {
+        if (this.minor != other.minor) {
             return this.minor > other.minor;
         }
 
-        if ( this.micro != other.micro )
-        {
+        if (this.micro != other.micro) {
             return this.micro > other.micro;
         }
 
@@ -136,20 +118,16 @@ public class Version
      * @param other the other {@link Version}
      * @return {@code true} if this instance is greater or equals than other instance, otherwise {@code false}
      */
-    public boolean greaterOrEqualsThan( Version other )
-    {
-        if ( this.major != other.major )
-        {
+    public boolean greaterOrEqualsThan(Version other) {
+        if (this.major != other.major) {
             return major >= other.major;
         }
 
-        if ( this.minor != other.minor )
-        {
+        if (this.minor != other.minor) {
             return this.minor >= other.minor;
         }
 
-        if ( this.micro != other.micro )
-        {
+        if (this.micro != other.micro) {
             return this.micro >= other.micro;
         }
 
@@ -162,20 +140,16 @@ public class Version
      * @param other the other {@link Version}
      * @return {@code true} if this instance is lesser than other instance, otherwise {@code false}
      */
-    public boolean lesserThan( Version other )
-    {
-        if ( this.major != other.major )
-        {
+    public boolean lesserThan(Version other) {
+        if (this.major != other.major) {
             return major < other.major;
         }
 
-        if ( this.minor != other.minor )
-        {
+        if (this.minor != other.minor) {
             return this.minor < other.minor;
         }
 
-        if ( this.micro != other.micro )
-        {
+        if (this.micro != other.micro) {
             return this.micro < other.micro;
         }
 
@@ -188,38 +162,28 @@ public class Version
      * @param other the other {@link Version}
      * @return {@code true} if this instance is lesser or equals than other instance, otherwise {@code false}
      */
-    public boolean lesserOrEqualsThan( Version other )
-    {
-        if ( this.major != other.major )
-        {
+    public boolean lesserOrEqualsThan(Version other) {
+        if (this.major != other.major) {
             return major <= other.major;
         }
 
-        if ( this.minor != other.minor )
-        {
+        if (this.minor != other.minor) {
             return this.minor <= other.minor;
         }
 
-        if ( this.micro != other.micro )
-        {
+        if (this.micro != other.micro) {
             return this.micro <= other.micro;
         }
 
         return false;
     }
 
-    public boolean inside( VersionRange range )
-    {
-        if ( range.getFromVersion().equals( this ) )
-        {
+    public boolean inside(VersionRange range) {
+        if (range.getFromVersion().equals(this)) {
             return true;
-        }
-        else if ( ( this.greaterThan( range.getFromVersion() ) ) && ( this.lesserThan( range.getToVersion() ) ) )
-        {
+        } else if ((this.greaterThan(range.getFromVersion())) && (this.lesserThan(range.getToVersion()))) {
             return true;
-        }
-        else if ( this.equals( range.getFromVersion() ) || this.equals( range.getToVersion() ) )
-        {
+        } else if (this.equals(range.getFromVersion()) || this.equals(range.getToVersion())) {
             return true;
         }
 
@@ -230,10 +194,8 @@ public class Version
     // Object overrides
     // ----------------------------------------------------------------------
 
-    public boolean equals( Object object )
-    {
-        if ( !( object instanceof Version ) )
-        {
+    public boolean equals(Object object) {
+        if (!(object instanceof Version)) {
             return false;
         }
 
@@ -242,33 +204,24 @@ public class Version
         return this.major == other.major && this.minor == other.minor && this.micro == other.micro;
     }
 
-    public int hashCode()
-    {
-        return toString( "", null ).hashCode();
+    public int hashCode() {
+        return toString("", null).hashCode();
     }
 
-    public String toString()
-    {
-        return toString( "", "." );
+    public String toString() {
+        return toString("", ".");
     }
 
-    public String toString( String prefix, String separator )
-    {
+    public String toString(String prefix, String separator) {
         return prefix + major + separator + minor + separator + micro;
     }
 
-    public int compareTo( Version otherVersion )
-    {
-        if ( greaterThan( otherVersion ) )
-        {
+    public int compareTo(Version otherVersion) {
+        if (greaterThan(otherVersion)) {
             return +1;
-        }
-        else if ( equals( otherVersion ) )
-        {
+        } else if (equals(otherVersion)) {
             return 0;
-        }
-        else
-        {
+        } else {
             return -1;
         }
     }

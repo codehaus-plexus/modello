@@ -1,12 +1,12 @@
 package org.codehaus.modello.plugin.stax;
 
-import org.codehaus.modello.model.ModelAssociation;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
+import org.codehaus.modello.model.ModelAssociation;
 
 /*
  * Copyright (c) 2006, Codehaus.org
@@ -30,8 +30,7 @@ import java.util.Map;
  * SOFTWARE.
  */
 
-class GeneratorNode
-{
+class GeneratorNode {
     private final String to;
 
     private boolean referencableChildren;
@@ -46,90 +45,73 @@ class GeneratorNode
 
     private List<String> chain;
 
-    GeneratorNode( String to, GeneratorNode parent )
-    {
-        this( to, parent, null );
+    GeneratorNode(String to, GeneratorNode parent) {
+        this(to, parent, null);
     }
 
-    GeneratorNode( ModelAssociation association, GeneratorNode parent )
-    {
-        this( association.getTo(), parent, association );
+    GeneratorNode(ModelAssociation association, GeneratorNode parent) {
+        this(association.getTo(), parent, association);
     }
 
-    private GeneratorNode( String to, GeneratorNode parent, ModelAssociation association )
-    {
+    private GeneratorNode(String to, GeneratorNode parent, ModelAssociation association) {
         this.to = to;
         this.association = association;
-        this.chain = parent != null ? new ArrayList<String>( parent.getChain() ) : new ArrayList<String>();
-        this.chain.add( to );
+        this.chain = parent != null ? new ArrayList<String>(parent.getChain()) : new ArrayList<String>();
+        this.chain.add(to);
     }
 
-    public boolean isReferencableChildren()
-    {
+    public boolean isReferencableChildren() {
         return referencableChildren;
     }
 
-    public void setReferencableChildren( boolean referencableChildren )
-    {
+    public void setReferencableChildren(boolean referencableChildren) {
         this.referencableChildren = referencableChildren;
     }
 
-    public void addChild( GeneratorNode child )
-    {
-        children.add( child );
-        if ( child.referencableChildren )
-        {
-            nodesWithReferencableChildren.put( child.to, child );
+    public void addChild(GeneratorNode child) {
+        children.add(child);
+        if (child.referencableChildren) {
+            nodesWithReferencableChildren.put(child.to, child);
         }
     }
 
-    public List<GeneratorNode> getChildren()
-    {
+    public List<GeneratorNode> getChildren() {
         return children;
     }
 
-    public String toString()
-    {
+    public String toString() {
         return "to = " + to + "; referencableChildren = " + referencableChildren + "; children = " + children;
     }
 
-    public String getTo()
-    {
+    public String getTo() {
         return to;
     }
 
-    public ModelAssociation getAssociation()
-    {
+    public ModelAssociation getAssociation() {
         return association;
     }
 
-    public void setAssociation( ModelAssociation association )
-    {
+    public void setAssociation(ModelAssociation association) {
         this.association = association;
     }
 
-    public void setReferencable( boolean referencable )
-    {
+    public void setReferencable(boolean referencable) {
         this.referencable = referencable;
     }
 
-    public boolean isReferencable()
-    {
+    public boolean isReferencable() {
         return referencable;
     }
 
-    public Map<String, GeneratorNode> getNodesWithReferencableChildren()
-    {
+    public Map<String, GeneratorNode> getNodesWithReferencableChildren() {
         return nodesWithReferencableChildren;
     }
 
-    public void addNodesWithReferencableChildren( Map<String, GeneratorNode> allChildNodes )
-    {
-        this.nodesWithReferencableChildren.putAll( allChildNodes );
+    public void addNodesWithReferencableChildren(Map<String, GeneratorNode> allChildNodes) {
+        this.nodesWithReferencableChildren.putAll(allChildNodes);
     }
 
-    public List<String> getChain()
-    {
+    public List<String> getChain() {
         return chain;
     }
 }

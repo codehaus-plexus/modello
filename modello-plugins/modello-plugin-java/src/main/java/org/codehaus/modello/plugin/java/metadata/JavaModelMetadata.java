@@ -27,20 +27,16 @@ import org.codehaus.modello.metadata.ModelMetadata;
 /**
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
  */
-public class JavaModelMetadata
-    implements ModelMetadata
-{
+public class JavaModelMetadata implements ModelMetadata {
     public static final String ID = JavaModelMetadata.class.getName();
 
     private boolean suppressAllWarnings = true;
 
-    public void setSuppressAllWarnings( boolean suppressAllWarnings )
-    {
+    public void setSuppressAllWarnings(boolean suppressAllWarnings) {
         this.suppressAllWarnings = suppressAllWarnings;
     }
 
-    public boolean isSuppressAllWarnings()
-    {
+    public boolean isSuppressAllWarnings() {
         return suppressAllWarnings;
     }
 }

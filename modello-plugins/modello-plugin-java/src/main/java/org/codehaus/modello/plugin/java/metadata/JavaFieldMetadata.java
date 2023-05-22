@@ -27,9 +27,7 @@ import org.codehaus.modello.metadata.FieldMetadata;
 /**
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse </a>
  */
-public class JavaFieldMetadata
-    implements FieldMetadata
-{
+public class JavaFieldMetadata implements FieldMetadata {
     public static final String ID = JavaFieldMetadata.class.getName();
 
     private boolean getter = true;
@@ -38,33 +36,27 @@ public class JavaFieldMetadata
 
     private boolean setter = true;
 
-    public boolean isGetter()
-    {
+    public boolean isGetter() {
         return getter;
     }
 
-    public void setGetter( boolean getter )
-    {
+    public void setGetter(boolean getter) {
         this.getter = getter;
     }
 
-    public boolean isBooleanGetter()
-    {
+    public boolean isBooleanGetter() {
         return booleanGetter;
     }
 
-    public void setBooleanGetter( boolean booleanGetter )
-    {
+    public void setBooleanGetter(boolean booleanGetter) {
         this.booleanGetter = booleanGetter;
     }
 
-    public boolean isSetter()
-    {
+    public boolean isSetter() {
         return setter;
     }
 
-    public void setSetter( boolean setter )
-    {
+    public void setSetter(boolean setter) {
         this.setter = setter;
     }
 }

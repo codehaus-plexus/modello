@@ -27,20 +27,16 @@ import org.codehaus.modello.metadata.ClassMetadata;
 /**
  * @author Hervé Boutemy
  */
-public class XdocClassMetadata
-    implements ClassMetadata
-{
+public class XdocClassMetadata implements ClassMetadata {
     public static final String ID = XdocClassMetadata.class.getName();
 
     private String anchorName;
 
-    public String getAnchorName()
-    {
+    public String getAnchorName() {
         return anchorName;
     }
 
-    public void setAnchorName( String anchorName )
-    {
+    public void setAnchorName(String anchorName) {
         this.anchorName = anchorName;
     }
 }

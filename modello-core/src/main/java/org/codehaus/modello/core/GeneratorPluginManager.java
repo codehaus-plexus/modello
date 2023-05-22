@@ -22,23 +22,22 @@ package org.codehaus.modello.core;
  * SOFTWARE.
  */
 
-import org.codehaus.modello.plugin.ModelloGenerator;
-
 import java.util.Iterator;
 import java.util.Map;
+
+import org.codehaus.modello.plugin.ModelloGenerator;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  */
-public interface GeneratorPluginManager
-{
+public interface GeneratorPluginManager {
     String ROLE = GeneratorPluginManager.class.getName();
 
     Map<String, ModelloGenerator> getPlugins();
 
     Iterator<ModelloGenerator> getPluginsIterator();
 
-    ModelloGenerator getGeneratorPlugin( String generatorId );
+    ModelloGenerator getGeneratorPlugin(String generatorId);
 
-    boolean hasGeneratorPlugin( String generatorId );
+    boolean hasGeneratorPlugin(String generatorId);
 }

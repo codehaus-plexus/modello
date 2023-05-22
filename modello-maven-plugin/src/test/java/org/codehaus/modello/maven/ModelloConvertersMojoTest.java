@@ -22,52 +22,48 @@ package org.codehaus.modello.maven;
  * SOFTWARE.
  */
 
-import org.codehaus.modello.core.ModelloCore;
-import org.codehaus.plexus.PlexusTestCase;
-import org.sonatype.plexus.build.incremental.BuildContext;
-import org.codehaus.plexus.util.FileUtils;
-
 import java.io.File;
 import java.util.Arrays;
+
+import org.codehaus.modello.core.ModelloCore;
+import org.codehaus.plexus.PlexusTestCase;
+import org.codehaus.plexus.util.FileUtils;
+import org.sonatype.plexus.build.incremental.BuildContext;
 
 /**
  * @author <a href="mailto:brett@apache.org">Brett Porter</a>
  */
-public class ModelloConvertersMojoTest
-    extends PlexusTestCase
-{
-    public void testModelloConvertersMojo()
-        throws Exception
-    {
-        ModelloCore modelloCore = (ModelloCore) lookup( ModelloCore.ROLE );
+public class ModelloConvertersMojoTest extends PlexusTestCase {
+    public void testModelloConvertersMojo() throws Exception {
+        ModelloCore modelloCore = (ModelloCore) lookup(ModelloCore.ROLE);
 
-        BuildContext buildContext = (BuildContext) lookup( BuildContext.class );
+        BuildContext buildContext = (BuildContext) lookup(BuildContext.class);
 
         ModelloConvertersMojo mojo = new ModelloConvertersMojo();
 
-        File outputDirectory = getTestFile( "target/converters-test" );
+        File outputDirectory = getTestFile("target/converters-test");
 
-        FileUtils.deleteDirectory( outputDirectory );
+        FileUtils.deleteDirectory(outputDirectory);
 
         // ----------------------------------------------------------------------
         // Call the mojo
         // ----------------------------------------------------------------------
 
-        mojo.setOutputDirectory( outputDirectory );
+        mojo.setOutputDirectory(outputDirectory);
 
         String models[] = new String[1];
-        models[0] = getTestPath( "src/test/resources/java-model.mdo" );
-        mojo.setModels( models );
+        models[0] = getTestPath("src/test/resources/java-model.mdo");
+        mojo.setModels(models);
 
-        mojo.setVersion( "1.0.0" );
+        mojo.setVersion("1.0.0");
 
-        mojo.setPackageWithVersion( false );
+        mojo.setPackageWithVersion(false);
 
-        mojo.setPackagedVersions( Arrays.asList( new String[] { "0.9.0", "1.0.0" } ) );
+        mojo.setPackagedVersions(Arrays.asList(new String[] {"0.9.0", "1.0.0"}));
 
-        mojo.setModelloCore( modelloCore );
-        
-        mojo.setBuildContext( buildContext );
+        mojo.setModelloCore(modelloCore);
+
+        mojo.setBuildContext(buildContext);
 
         mojo.execute();
 
@@ -76,33 +72,30 @@ public class ModelloConvertersMojoTest
         // ----------------------------------------------------------------------
 
         File javaFile =
-            new File( outputDirectory, "org/codehaus/mojo/modello/javatest/v1_0_0/convert/VersionConverter.java" );
+                new File(outputDirectory, "org/codehaus/mojo/modello/javatest/v1_0_0/convert/VersionConverter.java");
 
-        assertTrue( "The generated java file doesn't exist: '" + javaFile.getAbsolutePath() + "'.", javaFile.exists() );
+        assertTrue("The generated java file doesn't exist: '" + javaFile.getAbsolutePath() + "'.", javaFile.exists());
 
-        javaFile =
-            new File( outputDirectory, "org/codehaus/mojo/modello/javatest/v1_0_0/convert/BasicVersionConverter.java" );
+        javaFile = new File(
+                outputDirectory, "org/codehaus/mojo/modello/javatest/v1_0_0/convert/BasicVersionConverter.java");
 
-        assertTrue( "The generated java file doesn't exist: '" + javaFile.getAbsolutePath() + "'.", javaFile.exists() );
+        assertTrue("The generated java file doesn't exist: '" + javaFile.getAbsolutePath() + "'.", javaFile.exists());
 
-        javaFile =
-            new File( outputDirectory, "org/codehaus/mojo/modello/javatest/v0_9_0/convert/VersionConverter.java" );
+        javaFile = new File(outputDirectory, "org/codehaus/mojo/modello/javatest/v0_9_0/convert/VersionConverter.java");
 
-        assertTrue( "The generated java file doesn't exist: '" + javaFile.getAbsolutePath() + "'.", javaFile.exists() );
+        assertTrue("The generated java file doesn't exist: '" + javaFile.getAbsolutePath() + "'.", javaFile.exists());
 
-        javaFile =
-            new File( outputDirectory, "org/codehaus/mojo/modello/javatest/v0_9_0/convert/BasicVersionConverter.java" );
+        javaFile = new File(
+                outputDirectory, "org/codehaus/mojo/modello/javatest/v0_9_0/convert/BasicVersionConverter.java");
 
-        assertTrue( "The generated java file doesn't exist: '" + javaFile.getAbsolutePath() + "'.", javaFile.exists() );
+        assertTrue("The generated java file doesn't exist: '" + javaFile.getAbsolutePath() + "'.", javaFile.exists());
 
-        javaFile = new File( outputDirectory, "org/codehaus/mojo/modello/javatest/convert/VersionConverter.java" );
+        javaFile = new File(outputDirectory, "org/codehaus/mojo/modello/javatest/convert/VersionConverter.java");
 
-        assertFalse( "The generated java file doesn't exist: '" + javaFile.getAbsolutePath() + "'.",
-                     javaFile.exists() );
+        assertFalse("The generated java file doesn't exist: '" + javaFile.getAbsolutePath() + "'.", javaFile.exists());
 
-        javaFile = new File( outputDirectory, "org/codehaus/mojo/modello/javatest/convert/BasicVersionConverter.java" );
+        javaFile = new File(outputDirectory, "org/codehaus/mojo/modello/javatest/convert/BasicVersionConverter.java");
 
-        assertFalse( "The generated java file doesn't exist: '" + javaFile.getAbsolutePath() + "'.",
-                     javaFile.exists() );
+        assertFalse("The generated java file doesn't exist: '" + javaFile.getAbsolutePath() + "'.", javaFile.exists());
     }
 }

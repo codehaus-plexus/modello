@@ -42,8 +42,6 @@
  *
  * $Id$
  */
-
-
 package org.codehaus.modello.plugin.java.javasource;
 
 /*
@@ -73,9 +71,7 @@ package org.codehaus.modello.plugin.java.javasource;
  * @author <a href="mailto:kvisco@intalio.com">Keith Visco</a>
  * @version $Revision$ $Date$
  **/
-public class JComment
-{
-
+public class JComment {
 
     /**
      * The auto style, allows this JComment to automatically
@@ -104,7 +100,6 @@ public class JComment
      **/
     public static final short JAVADOC_STYLE = 4;
 
-
     private static final String START_BLOCK = "/*";
     private static final String END_BLOCK = " */";
 
@@ -114,7 +109,6 @@ public class JComment
     private static final String ASTERIX_PREFIX = " * ";
     private static final String LINE_COMMENT_PREFIX = "// ";
     private static final String SPACE_PREFIX = " ";
-
 
     /**
      * The style of this comment
@@ -131,79 +125,66 @@ public class JComment
      **/
     protected static final int MAX_LENGTH = 65;
 
-
     /**
      * Creates a new Java Comment
      **/
-    public JComment()
-    {
+    public JComment() {
         super();
         _comment = new StringBuilder();
-    } //-- JComment
+    } // -- JComment
 
     /**
      * Creates a new Java comment with the given style
-     * 
+     *
      * @param style the comment style
      **/
-    public JComment( short style )
-    {
+    public JComment(short style) {
         this();
         this.style = style;
-    } //-- JComment
+    } // -- JComment
 
     /**
      * Appends the comment String to this JDocComment
      * @param comment the comment to append
      **/
-    public void appendComment( String comment )
-    {
-        _comment.append( comment );
-    } //-- appendComment
-
+    public void appendComment(String comment) {
+        _comment.append(comment);
+    } // -- appendComment
 
     /**
      * prints this JComment using the given JSourceWriter
      * @param jsw the JSourceWriter to print to
      **/
-    public void print( JSourceWriter jsw )
-    {
+    public void print(JSourceWriter jsw) {
 
-
-        if ( jsw == null ) return; //-- nothing to do
+        if (jsw == null) return; // -- nothing to do
 
         LineFormatter formatter = null;
 
-        //-- calculate comment length
+        // -- calculate comment length
         short currentIndent = jsw.getIndentSize();
         int maxLength = MAX_LENGTH - currentIndent;
 
-        //-- a simple to check to make sure we have some room
-        //-- to print the comment
-        if ( maxLength <= 17 ) maxLength = MAX_LENGTH / 2;
+        // -- a simple to check to make sure we have some room
+        // -- to print the comment
+        if (maxLength <= 17) maxLength = MAX_LENGTH / 2;
 
         short resolvedStyle = style;
 
-        if ( style == AUTO_STYLE )
-        {
-            //-- estimation of number of lines
+        if (style == AUTO_STYLE) {
+            // -- estimation of number of lines
             int nbrLines = _comment.length() / maxLength;
 
-            if ( nbrLines > 2 )
-                resolvedStyle = BLOCK_STYLE;
-            else
-                resolvedStyle = LINE_STYLE;
+            if (nbrLines > 2) resolvedStyle = BLOCK_STYLE;
+            else resolvedStyle = LINE_STYLE;
         }
 
-
-
-        //-- start comment
+        // -- start comment
         String prefix = null;
         String start = null;
         String end = null;
 
-        switch ( resolvedStyle )
-        {
+        switch (resolvedStyle) {
             case BLOCK_STYLE:
                 start = START_BLOCK;
                 end = END_BLOCK;
@@ -219,57 +200,51 @@ public class JComment
                 end = END_JAVADOC;
                 prefix = ASTERIX_PREFIX;
                 break;
-            default: //-- LINE
+            default: // -- LINE
                 prefix = LINE_COMMENT_PREFIX;
                 break;
         }
-        if ( start != null ) jsw.writeln( start );
-        //-- print main comment
-        formatter = new LineFormatter( _comment.toString(), maxLength, prefix );
-        while ( formatter.hasMoreLines() )
-        {
-            jsw.writeln( formatter.nextLine() );
+        if (start != null) jsw.writeln(start);
+        // -- print main comment
+        formatter = new LineFormatter(_comment.toString(), maxLength, prefix);
+        while (formatter.hasMoreLines()) {
+            jsw.writeln(formatter.nextLine());
         }
-        if ( end != null ) jsw.writeln( end );
+        if (end != null) jsw.writeln(end);
         jsw.flush();
-    } //-- print
+    } // -- print
 
     /**
      * Sets the comment String of this JDocComment
      * @param comment the comment String of this JDocComment
      **/
-    public void setComment( String comment )
-    {
-        _comment.setLength( 0 );
-        _comment.append( comment );
-    } //-- setComment
+    public void setComment(String comment) {
+        _comment.setLength(0);
+        _comment.append(comment);
+    } // -- setComment
 
     /**
      * Sets the style for this JComment
      * @param style the style to use for this JComment
      **/
-    public void setStyle( short style )
-    {
+    public void setStyle(short style) {
         this.style = style;
-    } //-- setStyle
+    } // -- setStyle
 
     /**
      * Returns the String representation of this Java Doc Comment
      * @return the String representation of this Java Doc Comment
      **/
-    public String toString()
-    {
+    public String toString() {
         return "";
-    } //-- toString
-
-} //-- JComment
+    } // -- toString
+} // -- JComment
 
 /**
  * Formats a given String for use within a Java comment
  * @author <a href="mailto:kvisco@intalio.com">Keith Visco</a>
  **/
-class LineFormatter
-{
+class LineFormatter {
 
     String comment = null;
 
@@ -285,24 +260,20 @@ class LineFormatter
      * Creates a LineFormatter for the given comment
      * @param comment the String to format
      **/
-    LineFormatter( String comment )
-    {
+    LineFormatter(String comment) {
         this.comment = comment;
-        if ( comment != null ) this.length = comment.length();
+        if (comment != null) this.length = comment.length();
         sb = new StringBuilder();
-    } //-- LineFormatter
-
+    } // -- LineFormatter
 
     /**
      * Creates a new LineFormatter for the given comment
      * @param comment the String to format
      * @param maxLength the maximum number of characters per line
      **/
-    LineFormatter( String comment, int maxLength )
-    {
-        this( comment, maxLength, null );
-    } //-- LineFormatter
-
+    LineFormatter(String comment, int maxLength) {
+        this(comment, maxLength, null);
+    } // -- LineFormatter
 
     /**
      * Creates a new LineFormatter for the given comment
@@ -310,89 +281,72 @@ class LineFormatter
      * @param maxLength the maximum number of characters per line
      * @param prefix a prefix to append to the beginning of each line
      **/
-    LineFormatter( String comment, int maxLength, String prefix )
-    {
-        this( comment );
+    LineFormatter(String comment, int maxLength, String prefix) {
+        this(comment);
         this.maxLength = maxLength;
         this.prefix = prefix;
-    } //-- LineFormatter
+    } // -- LineFormatter
 
-    boolean hasMoreLines()
-    {
-        if ( comment == null ) return false;
-        return ( offset < length );
-    } //-- isFinished
+    boolean hasMoreLines() {
+        if (comment == null) return false;
+        return (offset < length);
+    } // -- isFinished
 
-    String nextLine()
-    {
-        if ( comment == null ) return null;
-        if ( offset >= length ) return null;
+    String nextLine() {
+        if (comment == null) return null;
+        if (offset >= length) return null;
 
-        sb.setLength( 0 );
-        if ( prefix != null ) sb.append( prefix );
+        sb.setLength(0);
+        if (prefix != null) sb.append(prefix);
 
         int max = offset + maxLength;
-        if ( max > this.length ) max = this.length;
-
+        if (max > this.length) max = this.length;
 
         int index = offset;
         int breakable = offset;
-        for ( ; index < max; index++ )
-        {
-            char ch = comment.charAt( index );
-            if ( isNewLine( ch ) )
-            {
-                sb.append( comment.substring( offset, index ) );
+        for (; index < max; index++) {
+            char ch = comment.charAt(index);
+            if (isNewLine(ch)) {
+                sb.append(comment.substring(offset, index));
                 offset = index + 1;
                 return sb.toString();
             }
-            if ( isWhitespace( ch ) ) breakable = index;
+            if (isWhitespace(ch)) breakable = index;
         }
 
-        if ( index < length - 1 )
-        {
-            //-- if we could not find a breakable character, we must look
-            //-- ahead
-            if ( offset == breakable )
-            {
-                while ( index < length )
-                {
-                    if ( isBreakable( comment.charAt( index ) ) ) break;
+        if (index < length - 1) {
+            // -- if we could not find a breakable character, we must look
+            // -- ahead
+            if (offset == breakable) {
+                while (index < length) {
+                    if (isBreakable(comment.charAt(index))) break;
                     ++index;
                 }
-            }
-            else
-                index = breakable;
+            } else index = breakable;
         }
-        sb.append( comment.substring( offset, index ) );
+        sb.append(comment.substring(offset, index));
         offset = index + 1;
         return sb.toString();
-    } //-- getNextLine
+    } // -- getNextLine
 
     /**
      * Sets the prefix that should be appended to the beginning of
      * each line
      * @param prefix the prefix for this LineFormatter
      **/
-    void setPrefix( String prefix )
-    {
+    void setPrefix(String prefix) {
         this.prefix = prefix;
-    } //-- setPrefix
+    } // -- setPrefix
 
-    private boolean isBreakable( char ch )
-    {
-        return ( isWhitespace( ch ) || isNewLine( ch ) );
+    private boolean isBreakable(char ch) {
+        return (isWhitespace(ch) || isNewLine(ch));
     }
 
-    private boolean isWhitespace( char ch )
-    {
-        return ( ( ch == ' ' ) || ( ch == '\t' ) );
-    } //-- isWhitespace
+    private boolean isWhitespace(char ch) {
+        return ((ch == ' ') || (ch == '\t'));
+    } // -- isWhitespace
 
-    private boolean isNewLine( char ch )
-    {
-        return ( ( ch == '\n' ) || ( ch == '\r' ) );
-    } //-- isNewLineChar
-
-} //-- LineFormatter
-
+    private boolean isNewLine(char ch) {
+        return ((ch == '\n') || (ch == '\r'));
+    } // -- isNewLineChar
+} // -- LineFormatter

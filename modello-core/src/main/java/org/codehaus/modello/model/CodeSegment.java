@@ -25,27 +25,20 @@ package org.codehaus.modello.model;
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
  */
-public class CodeSegment
-    extends BaseElement
-{
+public class CodeSegment extends BaseElement {
     private String code;
 
-    public CodeSegment()
-    {
-        super( false );
+    public CodeSegment() {
+        super(false);
     }
 
-    public String getCode()
-    {
+    public String getCode() {
         return code;
     }
 
-    public void setCode( String code )
-    {
+    public void setCode(String code) {
         this.code = code;
     }
 
-    public void validateElement()
-    {
-    }
+    public void validateElement() {}
 }

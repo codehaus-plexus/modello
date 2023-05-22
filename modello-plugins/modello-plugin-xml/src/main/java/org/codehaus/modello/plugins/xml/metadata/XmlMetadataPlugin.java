@@ -42,11 +42,8 @@ import org.codehaus.plexus.component.annotations.Component;
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
  */
-@Component( role = MetadataPlugin.class, hint = "xml" )
-public class XmlMetadataPlugin
-    extends AbstractMetadataPlugin
-    implements MetadataPlugin
-{
+@Component(role = MetadataPlugin.class, hint = "xml")
+public class XmlMetadataPlugin extends AbstractMetadataPlugin implements MetadataPlugin {
     public static final String XML_ATTRIBUTE = "xml.attribute";
 
     public static final String XML_CONTENT = "xml.content";
@@ -77,65 +74,60 @@ public class XmlMetadataPlugin
     // Map to Metadata
     // ----------------------------------------------------------------------
 
-    public ModelMetadata getModelMetadata( Model model, Map<String, String> data )
-    {
+    public ModelMetadata getModelMetadata(Model model, Map<String, String> data) {
         XmlModelMetadata metadata = new XmlModelMetadata();
 
-        metadata.setNamespace( getString( data, XML_NAMESPACE ) );
+        metadata.setNamespace(getString(data, XML_NAMESPACE));
 
-        metadata.setSchemaLocation( getString( data, XML_SCHEMA_LOCATION ) );
+        metadata.setSchemaLocation(getString(data, XML_SCHEMA_LOCATION));
 
         return metadata;
     }
 
-    public ClassMetadata getClassMetadata( ModelClass clazz, Map<String, String> data )
-    {
+    public ClassMetadata getClassMetadata(ModelClass clazz, Map<String, String> data) {
         XmlClassMetadata metadata = new XmlClassMetadata();
 
-        metadata.setTagName( getString( data, XML_TAG_NAME ) );
+        metadata.setTagName(getString(data, XML_TAG_NAME));
 
-        metadata.setStandaloneRead( getBoolean( data, XML_STANDALONE_READ, false ) );
+        metadata.setStandaloneRead(getBoolean(data, XML_STANDALONE_READ, false));
 
         return metadata;
     }
 
-    public InterfaceMetadata getInterfaceMetadata( ModelInterface iface, Map<String, String> data )
-    {
+    public InterfaceMetadata getInterfaceMetadata(ModelInterface iface, Map<String, String> data) {
         return new XmlInterfaceMetadata();
     }
 
-    public FieldMetadata getFieldMetadata( ModelField field, Map<String, String> data )
-    {
+    public FieldMetadata getFieldMetadata(ModelField field, Map<String, String> data) {
         XmlFieldMetadata metadata = new XmlFieldMetadata();
 
-        metadata.setAttribute( getBoolean( data, XML_ATTRIBUTE, false ) );
+        metadata.setAttribute(getBoolean(data, XML_ATTRIBUTE, false));
 
-        metadata.setContent( getBoolean( data, XML_CONTENT, false ) );
+        metadata.setContent(getBoolean(data, XML_CONTENT, false));
 
-        metadata.setTrim( getBoolean( data, XML_TRIM, true ) );
+        metadata.setTrim(getBoolean(data, XML_TRIM, true));
 
-        metadata.setTagName( getString( data, XML_TAG_NAME ) );
+        metadata.setTagName(getString(data, XML_TAG_NAME));
 
-        metadata.setFormat( getString( data, XML_FORMAT ) );
+        metadata.setFormat(getString(data, XML_FORMAT));
 
-        metadata.setTransient( getBoolean( data, XML_TRANSIENT, false ) );
+        metadata.setTransient(getBoolean(data, XML_TRANSIENT, false));
 
-        metadata.setInsertParentFieldsUpTo( getString( data, XML_INSERT_PARENT_FIELDS_UP_TO ) );
+        metadata.setInsertParentFieldsUpTo(getString(data, XML_INSERT_PARENT_FIELDS_UP_TO));
 
         return metadata;
     }
 
-    public AssociationMetadata getAssociationMetadata( ModelAssociation association, Map<String, String> data )
-    {
+    public AssociationMetadata getAssociationMetadata(ModelAssociation association, Map<String, String> data) {
         XmlAssociationMetadata metadata = new XmlAssociationMetadata();
 
-        metadata.setTagName( getString( data, XML_TAG_NAME ) );
+        metadata.setTagName(getString(data, XML_TAG_NAME));
 
-        metadata.setItemsStyle( getString( data, XML_ITEMS_STYLE ) );
+        metadata.setItemsStyle(getString(data, XML_ITEMS_STYLE));
 
-        metadata.setMapStyle( getString( data, XML_MAP_STYLE ) );
+        metadata.setMapStyle(getString(data, XML_MAP_STYLE));
 
-        metadata.setReference( getBoolean( data, XML_REFERENCE, false ) );
+        metadata.setReference(getBoolean(data, XML_REFERENCE, false));
 
         return metadata;
     }

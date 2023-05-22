@@ -20,12 +20,9 @@ package org.codehaus.modello.maven;
  */
 
 import java.io.File;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
@@ -54,20 +51,18 @@ import org.codehaus.modello.plugin.velocity.VelocityGenerator;
  * <p>
  *     {@code #MODELLO-VELOCITY#SAVE-OUTPUT-TO ${package.replace('.','/')}/${className}.java}
  */
-@Mojo( name = "velocity", defaultPhase = LifecyclePhase.GENERATE_SOURCES, threadSafe = true )
-public class ModelloVelocityMojo
-        extends AbstractModelloGeneratorMojo
-{
+@Mojo(name = "velocity", defaultPhase = LifecyclePhase.GENERATE_SOURCES, threadSafe = true)
+public class ModelloVelocityMojo extends AbstractModelloGeneratorMojo {
     /**
      * The output directory of the generated files.
      */
-    @Parameter( defaultValue = "${project.build.directory}/generated-sources/modello" )
+    @Parameter(defaultValue = "${project.build.directory}/generated-sources/modello")
     private File outputDirectory;
 
     /**
      * The directory where Velocity templates are looked for.
      */
-    @Parameter( defaultValue = "${project.basedir}" )
+    @Parameter(defaultValue = "${project.basedir}")
     private File velocityBasedir;
 
     /**
@@ -86,34 +81,31 @@ public class ModelloVelocityMojo
     @Parameter
     private List<String> params;
 
-    protected String getGeneratorType()
-    {
+    protected String getGeneratorType() {
         return "velocity";
     }
 
-    protected void customizeParameters( Properties parameters )
-    {
-        super.customizeParameters( parameters );
+    protected void customizeParameters(Properties parameters) {
+        super.customizeParameters(parameters);
 
-        Map<String, String> params = this.params == null ? Collections.emptyMap()
-                : this.params.stream().collect( Collectors.toMap( s -> s.substring( 0, s.indexOf( '=' ) ),
-                                                                  s -> s.substring( s.indexOf( '=' ) + 1 ) ) );
+        Map<String, String> params = this.params == null
+                ? Collections.emptyMap()
+                : this.params.stream()
+                        .collect(Collectors.toMap(
+                                s -> s.substring(0, s.indexOf('=')), s -> s.substring(s.indexOf('=') + 1)));
 
-        parameters.put( VelocityGenerator.VELOCITY_BASEDIR, velocityBasedir.getAbsolutePath() );
+        parameters.put(VelocityGenerator.VELOCITY_BASEDIR, velocityBasedir.getAbsolutePath());
 
-        parameters.put( VelocityGenerator.VELOCITY_TEMPLATES,
-                        templates.stream().collect( Collectors.joining( "," ) ) );
-        parameters.put( VelocityGenerator.VELOCITY_PARAMETERS, params );
+        parameters.put(VelocityGenerator.VELOCITY_TEMPLATES, templates.stream().collect(Collectors.joining(",")));
+        parameters.put(VelocityGenerator.VELOCITY_PARAMETERS, params);
     }
 
-    protected boolean producesCompilableResult()
-    {
+    protected boolean producesCompilableResult() {
         return true;
     }
 
     @Override
-    public File getOutputDirectory()
-    {
+    public File getOutputDirectory() {
         return outputDirectory;
     }
 }

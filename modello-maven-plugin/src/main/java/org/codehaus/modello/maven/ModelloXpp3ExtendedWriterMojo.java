@@ -36,29 +36,24 @@ import org.codehaus.modello.ModelloParameterConstants;
  * @author Hervé Boutemy
  * @since 1.10
  */
-@Mojo( name = "xpp3-extended-writer", defaultPhase = LifecyclePhase.GENERATE_SOURCES, threadSafe = true )
-public class ModelloXpp3ExtendedWriterMojo
-    extends ModelloXpp3WriterMojo
-{
+@Mojo(name = "xpp3-extended-writer", defaultPhase = LifecyclePhase.GENERATE_SOURCES, threadSafe = true)
+public class ModelloXpp3ExtendedWriterMojo extends ModelloXpp3WriterMojo {
     /**
      * The class name suffix for the generated writer.
      */
-    @Parameter( defaultValue = "Ex" )
+    @Parameter(defaultValue = "Ex")
     private String extendedClassnameSuffix;
 
     @Override
-    protected String getGeneratorType()
-    {
+    protected String getGeneratorType() {
         return "xpp3-extended-writer";
     }
 
-    protected void customizeParameters( Properties parameters )
-    {
-        super.customizeParameters( parameters );
+    protected void customizeParameters(Properties parameters) {
+        super.customizeParameters(parameters);
 
-        if ( extendedClassnameSuffix != null )
-        {
-            parameters.put( ModelloParameterConstants.EXTENDED_CLASSNAME_SUFFIX, extendedClassnameSuffix );
+        if (extendedClassnameSuffix != null) {
+            parameters.put(ModelloParameterConstants.EXTENDED_CLASSNAME_SUFFIX, extendedClassnameSuffix);
         }
     }
 }

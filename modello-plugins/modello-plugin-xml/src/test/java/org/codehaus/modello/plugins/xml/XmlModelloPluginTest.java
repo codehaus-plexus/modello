@@ -22,6 +22,8 @@ package org.codehaus.modello.plugins.xml;
  * SOFTWARE.
  */
 
+import java.util.List;
+
 import org.codehaus.modello.ModelloRuntimeException;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.metadata.MetadataPlugin;
@@ -33,84 +35,73 @@ import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlMetadataPlugin;
 import org.codehaus.plexus.PlexusTestCase;
 
-import java.util.List;
-
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l </a>
  */
-public class XmlModelloPluginTest
-    extends PlexusTestCase
-{
-    public void testConfiguration()
-        throws Exception
-    {
-        Object object = lookup( MetadataPlugin.ROLE, "xml" );
+public class XmlModelloPluginTest extends PlexusTestCase {
+    public void testConfiguration() throws Exception {
+        Object object = lookup(MetadataPlugin.ROLE, "xml");
 
-        assertNotNull( object );
+        assertNotNull(object);
 
-        assertTrue( object instanceof XmlMetadataPlugin );
+        assertTrue(object instanceof XmlMetadataPlugin);
     }
 
-    public void testXmlPlugin()
-        throws Exception
-    {
-        ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
+    public void testXmlPlugin() throws Exception {
+        ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
 
-        Model model = modello.loadModel( getTestFile( "src/test/resources/model.mdo" ) );
+        Model model = modello.loadModel(getTestFile("src/test/resources/model.mdo"));
 
-        List<ModelClass> classes = model.getClasses( new Version( "4.0.0" ) );
+        List<ModelClass> classes = model.getClasses(new Version("4.0.0"));
 
-        assertEquals( 2, classes.size() );
+        assertEquals(2, classes.size());
 
-        ModelClass clazz = (ModelClass) classes.get( 0 );
+        ModelClass clazz = (ModelClass) classes.get(0);
 
-        assertEquals( "Model", clazz.getName() );
+        assertEquals("Model", clazz.getName());
 
-        assertEquals( 3, clazz.getFields( new Version( "4.0.0" ) ).size() );
+        assertEquals(3, clazz.getFields(new Version("4.0.0")).size());
 
-        ModelField extend = clazz.getField( "extend", new Version( "4.0.0" ) );
+        ModelField extend = clazz.getField("extend", new Version("4.0.0"));
 
-        assertTrue( extend.hasMetadata( XmlFieldMetadata.ID ) );
+        assertTrue(extend.hasMetadata(XmlFieldMetadata.ID));
 
-        XmlFieldMetadata xml = (XmlFieldMetadata) extend.getMetadata( XmlFieldMetadata.ID );
+        XmlFieldMetadata xml = (XmlFieldMetadata) extend.getMetadata(XmlFieldMetadata.ID);
 
-        assertNotNull( xml );
+        assertNotNull(xml);
 
-        assertFalse( xml.isAttribute() );
+        assertFalse(xml.isAttribute());
 
-        extend = clazz.getField( "extend", new Version( "4.1.0" ) );
+        extend = clazz.getField("extend", new Version("4.1.0"));
 
-        assertTrue( extend.hasMetadata( XmlFieldMetadata.ID ) );
+        assertTrue(extend.hasMetadata(XmlFieldMetadata.ID));
 
-        xml = (XmlFieldMetadata) extend.getMetadata( XmlFieldMetadata.ID );
+        xml = (XmlFieldMetadata) extend.getMetadata(XmlFieldMetadata.ID);
 
-        assertNotNull( xml );
+        assertNotNull(xml);
 
-        assertTrue( xml.isAttribute() );
+        assertTrue(xml.isAttribute());
 
-        ModelField parent = clazz.getField( "parent", new Version( "4.0.0" ) );
+        ModelField parent = clazz.getField("parent", new Version("4.0.0"));
 
-        try
-        {
-            parent.getMetadata( "foo" );
+        try {
+            parent.getMetadata("foo");
 
-            fail( "Expected ModelloException" );
-        }
-        catch( ModelloRuntimeException ex )
-        {
+            fail("Expected ModelloException");
+        } catch (ModelloRuntimeException ex) {
             // expected
         }
 
-        ModelField builder = clazz.getField( "builder", new Version( "4.0.0" ) );
+        ModelField builder = clazz.getField("builder", new Version("4.0.0"));
 
-        assertTrue( builder.hasMetadata( XmlFieldMetadata.ID ) );
+        assertTrue(builder.hasMetadata(XmlFieldMetadata.ID));
 
-        xml = (XmlFieldMetadata) builder.getMetadata( XmlFieldMetadata.ID );
+        xml = (XmlFieldMetadata) builder.getMetadata(XmlFieldMetadata.ID);
 
-        assertNotNull( xml );
+        assertNotNull(xml);
 
-        assertEquals( "build", xml.getTagName() );
+        assertEquals("build", xml.getTagName());
 
-        assertTrue( xml.isTrim() );
+        assertTrue(xml.isTrim());
     }
 }

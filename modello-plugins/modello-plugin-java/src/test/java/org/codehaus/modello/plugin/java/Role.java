@@ -23,8 +23,7 @@ import java.util.List;
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  */
-public interface Role
-{
+public interface Role {
     public String getName();
 
     public void setName(String name);

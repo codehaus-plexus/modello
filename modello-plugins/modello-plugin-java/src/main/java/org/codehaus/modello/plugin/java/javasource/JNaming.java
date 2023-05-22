@@ -42,7 +42,6 @@
  *
  * $Id$
  */
-
 package org.codehaus.modello.plugin.java.javasource;
 
 /*
@@ -73,8 +72,7 @@ package org.codehaus.modello.plugin.java.javasource;
  * @author <a href="mailto:kvisco@intalio.com">Keith Visco</a>
  * @version $Revision$ $Date$
  **/
-class JNaming
-{
+class JNaming {
 
     private static final String[] keywords = {
         "abstract",
@@ -127,11 +125,9 @@ class JNaming
         "void",
         "volatile",
         "while"
-    }; //-- keywords
+    }; // -- keywords
 
-
-    private JNaming()
-    {
+    private JNaming() {
         super();
     }
 
@@ -139,18 +135,15 @@ class JNaming
      * Returns true if the given String is a Java keyword which
      * will cause a problem when used as a variable name
      **/
-    public static boolean isKeyword( String name )
-    {
-        if ( name == null ) return false;
-        for ( String keyword : keywords )
-        {
-            if ( keyword.equals( name ) )
-            {
+    public static boolean isKeyword(String name) {
+        if (name == null) return false;
+        for (String keyword : keywords) {
+            if (keyword.equals(name)) {
                 return true;
             }
         }
         return false;
-    } //-- isKeyword
+    } // -- isKeyword
 
     /**
      * Returns true if the given String matches the
@@ -160,25 +153,19 @@ class JNaming
      * @return true if the given String matches the
      * production of a valid Java name, otherwise false
      **/
-    public static boolean isValidJavaIdentifier( String string )
-    {
+    public static boolean isValidJavaIdentifier(String string) {
 
-        if ( ( string == null ) || ( string.length() == 0 ) )
-            return false;
+        if ((string == null) || (string.length() == 0)) return false;
 
         char[] chars = string.toCharArray();
 
-        //-- make sure starting character is valid
-        if ( !Character.isJavaIdentifierStart( chars[0] ) )
-            return false;
+        // -- make sure starting character is valid
+        if (!Character.isJavaIdentifierStart(chars[0])) return false;
 
-        for ( int i = 1; i < chars.length; i++ )
-        {
-            if ( !Character.isJavaIdentifierPart( chars[i] ) )
-                return false;
+        for (int i = 1; i < chars.length; i++) {
+            if (!Character.isJavaIdentifierPart(chars[i])) return false;
         }
-        if ( isKeyword( string ) ) return false;
+        if (isKeyword(string)) return false;
         return true;
-    } //-- isValidJavaIdentifier
-
-} //-- JNaming
+    } // -- isValidJavaIdentifier
+} // -- JNaming

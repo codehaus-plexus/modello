@@ -29,20 +29,15 @@ import org.codehaus.modello.model.ModelClass;
  *
  * @author <a href="mailto:simonetripodi@apache.org">Simone Tripodi</a>
  */
-public class JacksonExtendedReaderGenerator
-    extends JacksonReaderGenerator
-{
+public class JacksonExtendedReaderGenerator extends JacksonReaderGenerator {
 
     @Override
-    protected boolean isRelevant( ModelClass modelClass )
-    {
-        return isJavaEnabled( modelClass );
+    protected boolean isRelevant(ModelClass modelClass) {
+        return isJavaEnabled(modelClass);
     }
 
     @Override
-    protected boolean isLocationTracking()
-    {
+    protected boolean isLocationTracking() {
         return true;
     }
-
 }

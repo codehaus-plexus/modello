@@ -22,47 +22,42 @@ package org.codehaus.modello.plugin.java;
  * SOFTWARE.
  */
 
+import java.io.File;
+import java.util.Properties;
+
 import org.codehaus.modello.AbstractModelloJavaGeneratorTest;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
 import org.codehaus.plexus.util.FileUtils;
-
-import java.io.File;
-import java.util.Properties;
 
 /**
  * check <code>toString()</code> method is generated.
  *
  * @author <a href="mailto:olamy@apache.org">Olivier Lamy</a>
  */
-public class ToStringJavaGeneratorTest
-    extends AbstractModelloJavaGeneratorTest
-{
-    public ToStringJavaGeneratorTest()
-    {
-        super( "tostring" );
+public class ToStringJavaGeneratorTest extends AbstractModelloJavaGeneratorTest {
+    public ToStringJavaGeneratorTest() {
+        super("tostring");
     }
 
     /**
      * @throws Exception if any exception occurs
      */
-    public void testJavaGeneratorWithToString()
-        throws Exception 
-    {
-        ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
+    public void testJavaGeneratorWithToString() throws Exception {
+        ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
 
-        Model model = modello.loadModel( getXmlResourceReader( "/models/tostring.mdo" ) );
+        Model model = modello.loadModel(getXmlResourceReader("/models/tostring.mdo"));
 
-        Properties parameters = getModelloParameters( "1.0.0" );
+        Properties parameters = getModelloParameters("1.0.0");
 
-        modello.generate( model, "java", parameters );
+        modello.generate(model, "java", parameters);
 
         compileGeneratedSources();
 
         File source = new File(getOutputDirectory(), "foo/bar/tostring/MyClass.java");
 
-        String sourceGenerated = FileUtils.fileRead( source );
+        String sourceGenerated = FileUtils.fileRead(source);
 
-        assertTrue( sourceGenerated.contains( "public java.lang.String toString()" ) );
+        assertTrue(sourceGenerated.contains("public java.lang.String toString()"));
     }
 }

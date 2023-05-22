@@ -30,45 +30,37 @@ import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
 import org.codehaus.plexus.util.FileUtils;
 
-public class BuilderJavaGeneratorTest
-    extends AbstractModelloJavaGeneratorTest
-{
-    public BuilderJavaGeneratorTest()
-    {
-        super( "builder" );
+public class BuilderJavaGeneratorTest extends AbstractModelloJavaGeneratorTest {
+    public BuilderJavaGeneratorTest() {
+        super("builder");
     }
 
     /**
      * MODELLO-83
      * @throws Exception if any exception occurs
      */
-    public void testJavaGeneratorWithBuilder()
-        throws Exception
-    {
-        ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
+    public void testJavaGeneratorWithBuilder() throws Exception {
+        ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
 
-        Model model = modello.loadModel( getXmlResourceReader( "/models/builder.mdo" ) );
+        Model model = modello.loadModel(getXmlResourceReader("/models/builder.mdo"));
 
-        Properties parameters = getModelloParameters( "1.0.0" );
+        Properties parameters = getModelloParameters("1.0.0");
 
-        modello.generate( model, "java", parameters );
+        modello.generate(model, "java", parameters);
 
         compileGeneratedSources();
 
-        verifyClass( "Bundles" );
-        verifyClass( "StartLevel" );
-        verifyClass( "Bundle" );
+        verifyClass("Bundles");
+        verifyClass("StartLevel");
+        verifyClass("Bundle");
     }
 
-    private void verifyClass( String className )
-        throws Exception
-    {
-        File source = new File( getOutputDirectory(), "org/codehaus/modello/builder/" + className + ".java" );
+    private void verifyClass(String className) throws Exception {
+        File source = new File(getOutputDirectory(), "org/codehaus/modello/builder/" + className + ".java");
 
-        String sourceGenerated = FileUtils.fileRead( source );
+        String sourceGenerated = FileUtils.fileRead(source);
 
-        assertTrue( sourceGenerated.contains( "public static final class Builder" ) );
-        assertTrue( sourceGenerated.contains( "public " + className + " build()" ) );
+        assertTrue(sourceGenerated.contains("public static final class Builder"));
+        assertTrue(sourceGenerated.contains("public " + className + " build()"));
     }
-
 }

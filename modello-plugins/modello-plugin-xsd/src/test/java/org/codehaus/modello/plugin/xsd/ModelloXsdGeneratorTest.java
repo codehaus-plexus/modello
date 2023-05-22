@@ -22,17 +22,16 @@ package org.codehaus.modello.plugin.xsd;
  * SOFTWARE.
  */
 
+import javax.xml.parsers.SAXParser;
+
+import java.util.Properties;
+
 import org.codehaus.modello.AbstractModelloGeneratorTest;
-import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
-
-import java.util.Properties;
-
-import javax.xml.parsers.SAXParser;
 
 /**
  * Check that features.mdo (which tries to be the most complete model) can be checked against XSD generated from
@@ -40,46 +39,35 @@ import javax.xml.parsers.SAXParser;
  *
  * @author Hervé Boutemy
  */
-public class ModelloXsdGeneratorTest
-    extends AbstractModelloGeneratorTest
-{
-    public ModelloXsdGeneratorTest()
-    {
-        super( "modello" );
+public class ModelloXsdGeneratorTest extends AbstractModelloGeneratorTest {
+    public ModelloXsdGeneratorTest() {
+        super("modello");
     }
 
-    public void testXsdGenerator()
-        throws Throwable
-    {
-        ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
+    public void testXsdGenerator() throws Throwable {
+        ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
 
-        Properties parameters = getModelloParameters( "1.4.0" );
+        Properties parameters = getModelloParameters("1.4.0");
 
-        Model model = modello.loadModel( getTestFile( "../../src/main/mdo/modello.mdo" ) );
+        Model model = modello.loadModel(getTestFile("../../src/main/mdo/modello.mdo"));
 
-        modello.generate( model, "xsd", parameters );
+        modello.generate(model, "xsd", parameters);
 
-        SAXParser saxParser = createSaxParserWithSchema( "modello-1.4.0.xsd" );
+        SAXParser saxParser = createSaxParserWithSchema("modello-1.4.0.xsd");
 
         // first self-test: validate Modello model with xsd generated from it
-        saxParser.parse( getTestFile( "../../src/main/mdo/modello.mdo" ), new Handler() );
+        saxParser.parse(getTestFile("../../src/main/mdo/modello.mdo"), new Handler());
 
         // then features.mdo
-        saxParser.parse( getClass().getResourceAsStream( "/features.mdo" ), new Handler() );
+        saxParser.parse(getClass().getResourceAsStream("/features.mdo"), new Handler());
     }
 
-    private static class Handler
-        extends DefaultHandler
-    {
-        public void warning ( SAXParseException e )
-            throws SAXException
-        {
+    private static class Handler extends DefaultHandler {
+        public void warning(SAXParseException e) throws SAXException {
             throw e;
         }
 
-        public void error ( SAXParseException e )
-            throws SAXException
-        {
+        public void error(SAXParseException e) throws SAXException {
             throw e;
         }
     }

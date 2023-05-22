@@ -16,38 +16,33 @@ package org.codehaus.modello.plugin.java;
  * limitations under the License.
  */
 
+import java.util.Properties;
+
 import org.codehaus.modello.AbstractModelloJavaGeneratorTest;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
-
-import java.util.Properties;
 
 /**
  * BiDirectionalOverrideJavaGeneratorTest
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  */
-public class BiDirectionalOverrideJavaGeneratorTest
-    extends AbstractModelloJavaGeneratorTest
-{
-    public BiDirectionalOverrideJavaGeneratorTest()
-    {
-        super( "bidirectional" );
+public class BiDirectionalOverrideJavaGeneratorTest extends AbstractModelloJavaGeneratorTest {
+    public BiDirectionalOverrideJavaGeneratorTest() {
+        super("bidirectional");
     }
 
-    public void testJavaGenerator()
-        throws Throwable
-    {
-        ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
+    public void testJavaGenerator() throws Throwable {
+        ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
 
-        Model model = modello.loadModel( getXmlResourceReader( "/models/bidirectional-override.mdo" ) );
+        Model model = modello.loadModel(getXmlResourceReader("/models/bidirectional-override.mdo"));
 
-        Properties parameters = getModelloParameters( "1.0.0" );
+        Properties parameters = getModelloParameters("1.0.0");
 
-        modello.generate( model, "java", parameters );
+        modello.generate(model, "java", parameters);
 
         compileGeneratedSources();
 
-        verifyCompiledGeneratedSources( "JavaVerifier" );
+        verifyCompiledGeneratedSources("JavaVerifier");
     }
 }

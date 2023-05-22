@@ -19,11 +19,10 @@ package org.codehaus.modello.plugin.xsd.metadata;
 import org.codehaus.modello.metadata.AssociationMetadata;
 
 /**
- * XsdAssociationMetadata 
+ * XsdAssociationMetadata
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  */
-public class XsdAssociationMetadata implements AssociationMetadata
-{
+public class XsdAssociationMetadata implements AssociationMetadata {
     public static final String ID = XsdAssociationMetadata.class.getName();
 }

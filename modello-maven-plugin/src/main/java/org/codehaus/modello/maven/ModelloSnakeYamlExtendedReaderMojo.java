@@ -32,15 +32,11 @@ import org.apache.maven.plugins.annotations.Mojo;
  * @since 1.8
  * @author <a href="mailto:simonetripodi@apache.org">Simone Tripodi</a>
  */
-@Mojo( name = "snakeyaml-extended-reader", defaultPhase = LifecyclePhase.GENERATE_SOURCES, threadSafe = true )
-public class ModelloSnakeYamlExtendedReaderMojo
-    extends ModelloXpp3ReaderMojo
-{
+@Mojo(name = "snakeyaml-extended-reader", defaultPhase = LifecyclePhase.GENERATE_SOURCES, threadSafe = true)
+public class ModelloSnakeYamlExtendedReaderMojo extends ModelloXpp3ReaderMojo {
 
     @Override
-    protected String getGeneratorType()
-    {
+    protected String getGeneratorType() {
         return "snakeyaml-extended-reader";
     }
-
 }

@@ -22,40 +22,35 @@ package org.codehaus.modello.plugin.dom4j;
  * SOFTWARE.
  */
 
+import java.util.Properties;
+
 import org.codehaus.modello.AbstractModelloJavaGeneratorTest;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
 
-import java.util.Properties;
-
 /**
  * @author Hervé Boutemy
  */
-public class FeaturesDom4jGeneratorTest
-    extends AbstractModelloJavaGeneratorTest
-{
-    public FeaturesDom4jGeneratorTest()
-    {
-        super( "features" );
+public class FeaturesDom4jGeneratorTest extends AbstractModelloJavaGeneratorTest {
+    public FeaturesDom4jGeneratorTest() {
+        super("features");
     }
 
-    public void testJavaGenerator()
-        throws Throwable
-    {
-        ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
+    public void testJavaGenerator() throws Throwable {
+        ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
 
-        Model model = modello.loadModel( getXmlResourceReader( "/features.mdo" ) );
+        Model model = modello.loadModel(getXmlResourceReader("/features.mdo"));
 
-        Properties parameters = getModelloParameters( "1.0.0" );
+        Properties parameters = getModelloParameters("1.0.0");
 
-        modello.generate( model, "java", parameters );
-        modello.generate( model, "dom4j-writer", parameters );
-        modello.generate( model, "dom4j-reader", parameters );
+        modello.generate(model, "java", parameters);
+        modello.generate(model, "dom4j-writer", parameters);
+        modello.generate(model, "dom4j-reader", parameters);
 
-        addDependency( "dom4j", "dom4j" );
-        addDependency( "org.xmlunit", "xmlunit-core" );
-        compileGeneratedSources( 5 );
+        addDependency("dom4j", "dom4j");
+        addDependency("org.xmlunit", "xmlunit-core");
+        compileGeneratedSources(5);
 
-        verifyCompiledGeneratedSources( "org.codehaus.modello.generator.xml.dom4j.Dom4jFeaturesVerifier" );
+        verifyCompiledGeneratedSources("org.codehaus.modello.generator.xml.dom4j.Dom4jFeaturesVerifier");
     }
 }

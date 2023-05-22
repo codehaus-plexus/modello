@@ -42,8 +42,6 @@
  *
  * $Id$
  */
-
-
 package org.codehaus.modello.plugin.java.javasource;
 
 /*
@@ -73,20 +71,17 @@ package org.codehaus.modello.plugin.java.javasource;
  * @author <a href="mailto:kvisco@intalio.com">Keith Visco</a>
  * @version $Revision$ $Date$
  **/
-public class JDocDescriptor
-{
+public class JDocDescriptor {
 
     /**
      * The default version string
      **/
-    //-- separated using "+" so that CVS doesn't expand
-    public static final String DEFAULT_VERSION =
-        "$" + "Revision" + "$ $" + "Date" + "$";
+    // -- separated using "+" so that CVS doesn't expand
+    public static final String DEFAULT_VERSION = "$" + "Revision" + "$ $" + "Date" + "$";
 
-
-    //-- These are listed in order of how they should
-    //-- appear in a JavaDoc list, so the numbers
-    //-- are important...see #compareTo
+    // -- These are listed in order of how they should
+    // -- appear in a JavaDoc list, so the numbers
+    // -- are important...see #compareTo
     /**
      * The param descriptor (param)
      **/
@@ -107,18 +102,15 @@ public class JDocDescriptor
      **/
     public static final short AUTHOR = 3;
 
-
     /**
      * the version descriptor (version)
      **/
     public static final short VERSION = 4;
 
-
     /**
      * The reference descriptor (see)
      **/
     public static final short REFERENCE = 5;
-
 
     private String description = null;
     private String name = null;
@@ -127,22 +119,20 @@ public class JDocDescriptor
     /**
      * Creates a new JDocDescriptor
      **/
-    private JDocDescriptor( short type )
-    {
+    private JDocDescriptor(short type) {
         this.type = type;
-    } //-- JDocDescriptor
+    } // -- JDocDescriptor
 
     /**
      * Creates a new JDocDescriptor
      * @param name the name string for this descriptor
      * @param desc the description string for this descriptor
      **/
-    private JDocDescriptor( short type, String name, String desc )
-    {
+    private JDocDescriptor(short type, String name, String desc) {
         this.type = type;
         this.name = name;
         this.description = desc;
-    } //-- JDocDescriptor
+    } // -- JDocDescriptor
 
     /**
      * Compares the type of this JDocDescriptor with the given descriptor.
@@ -152,11 +142,10 @@ public class JDocDescriptor
      * this descriptor is greater than the given descriptor, or -1 if the
      * type of this descriptor is less than the given descriptor
      **/
-    protected short compareTo( JDocDescriptor jdd )
-    {
+    protected short compareTo(JDocDescriptor jdd) {
         short jddType = jdd.getType();
 
-        if ( jddType == this.type ) return 0;
+        if (jddType == this.type) return 0;
 
         // The ordering is as follows
         // #param
@@ -165,37 +154,33 @@ public class JDocDescriptor
         // #version
         // #see (reference)
         //
-        return (short) ( ( jddType < this.type ) ? 1 : -1 );
-
-    } //-- compareTo
+        return (short) ((jddType < this.type) ? 1 : -1);
+    } // -- compareTo
 
     /**
      * Creates a new author descriptor
      * @return the new JDocDescriptor
      **/
-    public static JDocDescriptor createAuthorDesc()
-    {
-        return new JDocDescriptor( AUTHOR );
-    } //-- createAuthorDesc
+    public static JDocDescriptor createAuthorDesc() {
+        return new JDocDescriptor(AUTHOR);
+    } // -- createAuthorDesc
 
     /**
      * Creates a new author descriptor
      * @param name the author name string
      * @return the new JDocDescriptor
      **/
-    public static JDocDescriptor createAuthorDesc( String name )
-    {
-        return new JDocDescriptor( AUTHOR, name, null );
-    } //-- createAuthorDesc
+    public static JDocDescriptor createAuthorDesc(String name) {
+        return new JDocDescriptor(AUTHOR, name, null);
+    } // -- createAuthorDesc
 
     /**
      * Creates a new exception descriptor
      * @return the new JDocDescriptor
      **/
-    public static JDocDescriptor createExceptionDesc()
-    {
-        return new JDocDescriptor( EXCEPTION );
-    } //-- createExceptionDesc
+    public static JDocDescriptor createExceptionDesc() {
+        return new JDocDescriptor(EXCEPTION);
+    } // -- createExceptionDesc
 
     /**
      * Creates a new exception descriptor
@@ -203,21 +188,17 @@ public class JDocDescriptor
      * @param desc the description of when the exception is called
      * @return the new JDocDescriptor
      **/
-    public static JDocDescriptor createExceptionDesc
-        ( String name, String desc )
-    {
-        return new JDocDescriptor( EXCEPTION, name, desc );
-    } //-- createExceptionDesc
-
+    public static JDocDescriptor createExceptionDesc(String name, String desc) {
+        return new JDocDescriptor(EXCEPTION, name, desc);
+    } // -- createExceptionDesc
 
     /**
      * Creates a new param descriptor
      * @return the new JDocDescriptor
      **/
-    public static JDocDescriptor createParamDesc()
-    {
-        return new JDocDescriptor( PARAM );
-    } //-- createParamDesc
+    public static JDocDescriptor createParamDesc() {
+        return new JDocDescriptor(PARAM);
+    } // -- createParamDesc
 
     /**
      * Creates a new param descriptor
@@ -225,77 +206,68 @@ public class JDocDescriptor
      * @param desc the param description string
      * @return the new JDocDescriptor
      **/
-    public static JDocDescriptor createParamDesc( String name, String desc )
-    {
-        return new JDocDescriptor( PARAM, name, desc );
-    } //-- createParamDesc
-
+    public static JDocDescriptor createParamDesc(String name, String desc) {
+        return new JDocDescriptor(PARAM, name, desc);
+    } // -- createParamDesc
 
     /**
      * Creates a new reference descriptor
      * @return the new JDocDescriptor
      **/
-    public static JDocDescriptor createReferenceDesc()
-    {
-        return new JDocDescriptor( REFERENCE );
-    } //-- createReferenceDesc
+    public static JDocDescriptor createReferenceDesc() {
+        return new JDocDescriptor(REFERENCE);
+    } // -- createReferenceDesc
 
     /**
      * Creates a new reference descriptor
      * @param name the reference name string
      * @return the new JDocDescriptor
      **/
-    public static JDocDescriptor createReferenceDesc( String name )
-    {
-        return new JDocDescriptor( REFERENCE, name, null );
-    } //-- createReferenceDesc
+    public static JDocDescriptor createReferenceDesc(String name) {
+        return new JDocDescriptor(REFERENCE, name, null);
+    } // -- createReferenceDesc
 
     /**
      * Creates a new return descriptor
      * @return the new JDocDescriptor
      **/
-    public static JDocDescriptor createReturnDesc()
-    {
-        return new JDocDescriptor( RETURN );
-    } //-- createReferenceDesc
+    public static JDocDescriptor createReturnDesc() {
+        return new JDocDescriptor(RETURN);
+    } // -- createReferenceDesc
 
     /**
      * Creates a new return descriptor
      * @param desc the return description
      * @return the new JDocDescriptor
      **/
-    public static JDocDescriptor createReturnDesc( String desc )
-    {
-        return new JDocDescriptor( RETURN, null, desc );
-    } //-- createReturnDesc
+    public static JDocDescriptor createReturnDesc(String desc) {
+        return new JDocDescriptor(RETURN, null, desc);
+    } // -- createReturnDesc
 
     /**
      * Creates a new version descriptor
      * @return the new JDocDescriptor
      **/
-    public static JDocDescriptor createVersionDesc()
-    {
-        return new JDocDescriptor( VERSION );
-    } //-- createVersionDesc
+    public static JDocDescriptor createVersionDesc() {
+        return new JDocDescriptor(VERSION);
+    } // -- createVersionDesc
 
     /**
      * Creates a new version descriptor
      * @param version the version string
      * @return the new JDocDescriptor
      **/
-    public static JDocDescriptor createVersionDesc( String version )
-    {
-        return new JDocDescriptor( VERSION, null, version );
-    } //-- createVersionDesc
+    public static JDocDescriptor createVersionDesc(String version) {
+        return new JDocDescriptor(VERSION, null, version);
+    } // -- createVersionDesc
 
     /**
      * Returns the description String for this descriptor
      * @return the description string for this descriptor
      **/
-    public String getDescription()
-    {
+    public String getDescription() {
         return description;
-    } //-- getDescription
+    } // -- getDescription
 
     /**
      * Returns the name of the object being described. This
@@ -308,29 +280,25 @@ public class JDocDescriptor
      *  </ul>
      * @return the name of the object being described. This
      **/
-    public String getName()
-    {
+    public String getName() {
         return name;
-    } //-- getName
+    } // -- getName
 
     /**
      * Returns the type of this JDocDescriptor
      * @return the type of this JDocDescriptor
      **/
-    public short getType()
-    {
+    public short getType() {
         return this.type;
-    } //-- getType
+    } // -- getType
 
     /**
      * Sets the description String for this descriptor
      * @param desc the description of the object being described
      **/
-    public void setDescription( String desc )
-    {
+    public void setDescription(String desc) {
         this.description = desc;
-    } //-- setDescription
-
+    } // -- setDescription
 
     /**
      * Sets the name value of the JavaDoc field. This is
@@ -343,57 +311,51 @@ public class JDocDescriptor
      *  </ul>
      * @param name the name value of the JavaDoc field
      **/
-    public void setName( String name )
-    {
+    public void setName(String name) {
         this.name = name;
-    } //-- setName
+    } // -- setName
 
     /**
      * Returns the String representation of this JDocDescriptor
      * @return the String representation of this JDocDescriptor
      **/
-    public String toString()
-    {
+    public String toString() {
         StringBuilder sb = new StringBuilder();
         boolean allowName = true;
-        switch ( type )
-        {
+        switch (type) {
             case AUTHOR:
-                sb.append( "@author" );
+                sb.append("@author");
                 break;
             case EXCEPTION:
-                sb.append( "@throws" );
+                sb.append("@throws");
                 break;
             case PARAM:
-                sb.append( "@param" );
+                sb.append("@param");
                 break;
             case REFERENCE:
-                sb.append( "@see" );
+                sb.append("@see");
                 break;
             case RETURN:
-                sb.append( "@return" );
+                sb.append("@return");
                 break;
             case VERSION:
                 allowName = false;
-                sb.append( "@version" );
+                sb.append("@version");
                 break;
             default:
                 break;
         }
 
-        if ( ( name != null ) && allowName )
-        {
-            sb.append( ' ' );
-            sb.append( name );
+        if ((name != null) && allowName) {
+            sb.append(' ');
+            sb.append(name);
         }
 
-        if ( description != null )
-        {
-            sb.append( ' ' );
-            sb.append( description );
+        if (description != null) {
+            sb.append(' ');
+            sb.append(description);
         }
 
         return sb.toString();
-    } //-- toString
-
-} //-- JDocDescriptor
+    } // -- toString
+} // -- JDocDescriptor

@@ -22,38 +22,33 @@ package org.codehaus.modello.generator.xml.xpp3;
  * SOFTWARE.
  */
 
+import java.util.Properties;
+
 import org.codehaus.modello.AbstractModelloJavaGeneratorTest;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
-
-import java.util.Properties;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
  */
-public class AbstractElementTest
-    extends AbstractModelloJavaGeneratorTest
-{
-    public AbstractElementTest()
-    {
-        super( "abstracto" );
+public class AbstractElementTest extends AbstractModelloJavaGeneratorTest {
+    public AbstractElementTest() {
+        super("abstracto");
     }
 
-    public void testAbstract()
-        throws Throwable
-    {
-        ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
+    public void testAbstract() throws Throwable {
+        ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
 
-        Model model = modello.loadModel( getXmlResourceReader( "/abstract.mdo" ) );
+        Model model = modello.loadModel(getXmlResourceReader("/abstract.mdo"));
 
-        Properties parameters = getModelloParameters( "1.0.0" );
+        Properties parameters = getModelloParameters("1.0.0");
 
-        modello.generate( model, "java", parameters );
-        modello.generate( model, "xpp3-writer", parameters );
-        modello.generate( model, "xpp3-reader", parameters );
+        modello.generate(model, "java", parameters);
+        modello.generate(model, "xpp3-writer", parameters);
+        modello.generate(model, "xpp3-reader", parameters);
 
-        //addDependency( "org.codehaus.modello", "modello-core", getModelloVersion() );
+        // addDependency( "org.codehaus.modello", "modello-core", getModelloVersion() );
 
         // compile( generatedSources, classes );
     }

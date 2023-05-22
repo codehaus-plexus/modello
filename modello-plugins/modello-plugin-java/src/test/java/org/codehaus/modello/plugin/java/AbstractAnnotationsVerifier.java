@@ -22,39 +22,31 @@ package org.codehaus.modello.plugin.java;
  * SOFTWARE.
  */
 
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
 import java.lang.annotation.Annotation;
 
 import org.codehaus.modello.verifier.Verifier;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
 /**
  * @author Hervé Boutemy
  */
-public abstract class AbstractAnnotationsVerifier
-    extends Verifier
-{
-    protected void assertAnnotations( String message, Annotation[] annotations, Class<?>... classes )
-    {
-        assertEquals( classes.length, annotations.length );
+public abstract class AbstractAnnotationsVerifier extends Verifier {
+    protected void assertAnnotations(String message, Annotation[] annotations, Class<?>... classes) {
+        assertEquals(classes.length, annotations.length);
 
-        for ( Class<?> expectedClass : classes )
-        {
+        for (Class<?> expectedClass : classes) {
             boolean found = false;
-            for ( Annotation annotation : annotations )
-            {
-                if ( expectedClass.equals( annotation.annotationType() ) )
-                {
+            for (Annotation annotation : annotations) {
+                if (expectedClass.equals(annotation.annotationType())) {
                     found = true;
                     break;
                 }
             }
 
-            if ( !found )
-            {
-                fail( message + " is missing annotation: " + expectedClass );
+            if (!found) {
+                fail(message + " is missing annotation: " + expectedClass);
             }
         }
     }

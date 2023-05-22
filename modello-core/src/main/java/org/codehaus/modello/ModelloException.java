@@ -25,18 +25,14 @@ package org.codehaus.modello;
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  */
-public class ModelloException
-    extends Exception
-{
+public class ModelloException extends Exception {
     private static final long serialVersionUID = -8746896773615188345L;
 
-    public ModelloException( String msg )
-    {
-        super( msg );
+    public ModelloException(String msg) {
+        super(msg);
     }
 
-    public ModelloException( String msg, Throwable cause )
-    {
-        super( msg, cause );
+    public ModelloException(String msg, Throwable cause) {
+        super(msg, cause);
     }
 }

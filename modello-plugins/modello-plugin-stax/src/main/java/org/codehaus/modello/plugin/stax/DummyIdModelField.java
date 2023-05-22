@@ -24,11 +24,8 @@ package org.codehaus.modello.plugin.stax;
 
 import org.codehaus.modello.model.ModelField;
 
-public class DummyIdModelField
-    extends ModelField
-{
-    public String getName()
-    {
+public class DummyIdModelField extends ModelField {
+    public String getName() {
         return "modello.refid";
     }
 }

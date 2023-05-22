@@ -35,14 +35,12 @@ import org.codehaus.modello.ModelloParameterConstants;
  *
  * @author <a href="mailto:brett@codehaus.org">Brett Porter</a>
  */
-@Mojo( name = "xsd", defaultPhase = LifecyclePhase.GENERATE_SOURCES, threadSafe = true )
-public class ModelloXsdMojo
-    extends AbstractModelloGeneratorMojo
-{
+@Mojo(name = "xsd", defaultPhase = LifecyclePhase.GENERATE_SOURCES, threadSafe = true)
+public class ModelloXsdMojo extends AbstractModelloGeneratorMojo {
     /**
      * The output directory of the generated XML Schema.
      */
-    @Parameter( defaultValue = "${project.build.directory}/generated-site/resources/xsd", required = true )
+    @Parameter(defaultValue = "${project.build.directory}/generated-site/resources/xsd", required = true)
     private File outputDirectory;
 
     /**
@@ -51,7 +49,7 @@ public class ModelloXsdMojo
      * The default value is {@code false} for backwards compatibility reasons, but should be set to {@code true} for most cases.
      * @since 2.1.0
      */
-    @Parameter( defaultValue = "false")
+    @Parameter(defaultValue = "false")
     private boolean enforceMandatoryElements;
 
     /**
@@ -61,34 +59,28 @@ public class ModelloXsdMojo
     @Parameter
     private String xsdFileName;
 
-    protected String getGeneratorType()
-    {
+    protected String getGeneratorType() {
         return "xsd";
     }
 
-    protected void customizeParameters( Properties parameters )
-    {
-        super.customizeParameters( parameters );
+    protected void customizeParameters(Properties parameters) {
+        super.customizeParameters(parameters);
 
-        if ( xsdFileName != null )
-        {
-            parameters.put( ModelloParameterConstants.OUTPUT_XSD_FILE_NAME, xsdFileName );
+        if (xsdFileName != null) {
+            parameters.put(ModelloParameterConstants.OUTPUT_XSD_FILE_NAME, xsdFileName);
         }
-        parameters.put( ModelloParameterConstants.XSD_ENFORCE_MANDATORY_ELEMENTS, enforceMandatoryElements );
+        parameters.put(ModelloParameterConstants.XSD_ENFORCE_MANDATORY_ELEMENTS, enforceMandatoryElements);
     }
 
-    protected boolean producesCompilableResult()
-    {
+    protected boolean producesCompilableResult() {
         return false;
     }
 
-    public File getOutputDirectory()
-    {
+    public File getOutputDirectory() {
         return outputDirectory;
     }
 
-    public void setOutputDirectory( File outputDirectory )
-    {
+    public void setOutputDirectory(File outputDirectory) {
         this.outputDirectory = outputDirectory;
     }
 }

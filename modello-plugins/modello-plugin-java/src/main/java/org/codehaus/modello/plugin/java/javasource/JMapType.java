@@ -30,9 +30,7 @@ import org.codehaus.modello.model.ModelDefault;
  * @author <a href="mailto:simonetripodi@apache.org">Simone Tripodi</a>
  * @since 1.8
  */
-public final class JMapType
-    extends JComponentizedType
-{
+public final class JMapType extends JComponentizedType {
     // --------------------------------------------------------------------------
 
     /** Name of the actual map instance to be used, e.g. java.util.ArrayList. */
@@ -47,9 +45,8 @@ public final class JMapType
      * @param componentType Component type.
      * @param useJava50 True if Java 5.0 should be used.
      */
-    public JMapType( final String typeName, final JType componentType, final boolean useJava50 )
-    {
-        super( typeName, componentType, useJava50 );
+    public JMapType(final String typeName, final JType componentType, final boolean useJava50) {
+        super(typeName, componentType, useJava50);
     }
 
     /**
@@ -60,10 +57,9 @@ public final class JMapType
      * @param componentType Component type.
      * @param useJava50 True if Java 5.0 should be used.
      */
-    public JMapType( final String typeName, final String instanceName, final JType componentType,
-                            final boolean useJava50 )
-    {
-        super( typeName, componentType, useJava50 );
+    public JMapType(
+            final String typeName, final String instanceName, final JType componentType, final boolean useJava50) {
+        super(typeName, componentType, useJava50);
         _instanceName = instanceName;
     }
 
@@ -74,29 +70,22 @@ public final class JMapType
      *
      * @return The instance name of this map type.
      */
-    public String getInstanceName()
-    {
-        if ( ModelDefault.PROPERTIES.equals( getName() ) )
-        {
+    public String getInstanceName() {
+        if (ModelDefault.PROPERTIES.equals(getName())) {
             return _instanceName;
         }
 
-        if ( _instanceName != null )
-        {
+        if (_instanceName != null) {
             String instance;
 
-            int separator = _instanceName.indexOf( "()" );
-            if ( separator != -1 )
-            {
-                instance = _instanceName.substring( 0, separator );
-            }
-            else
-            {
+            int separator = _instanceName.indexOf("()");
+            if (separator != -1) {
+                instance = _instanceName.substring(0, separator);
+            } else {
                 instance = _instanceName;
             }
 
-            if ( isUseJava50() )
-            {
+            if (isUseJava50()) {
                 return instance + "<Object, " + getComponentType().toString() + ">()";
             }
 
@@ -109,15 +98,12 @@ public final class JMapType
     /**
      * @return the String representation of this JType.
      */
-    public String toString()
-    {
-        if ( ModelDefault.PROPERTIES.equals( getName() ) )
-        {
+    public String toString() {
+        if (ModelDefault.PROPERTIES.equals(getName())) {
             return getName();
         }
 
-        if ( isUseJava50() )
-        {
+        if (isUseJava50()) {
             return getName() + "<Object, " + getComponentType().toString() + ">";
         }
 

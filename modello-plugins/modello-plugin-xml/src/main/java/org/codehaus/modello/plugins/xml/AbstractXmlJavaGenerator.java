@@ -41,21 +41,17 @@ import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
  *
  * @author <a href="mailto:hboutemy@codehaus.org">Hervé Boutemy</a>
  */
-public abstract class AbstractXmlJavaGenerator
-    extends AbstractJavaModelloGenerator
-{
+public abstract class AbstractXmlJavaGenerator extends AbstractJavaModelloGenerator {
     protected boolean strictXmlAttributes;
 
-    protected void initialize( Model model, Properties parameters )
-        throws ModelloException
-    {
-        super.initialize( model, parameters );
+    protected void initialize(Model model, Properties parameters) throws ModelloException {
+        super.initialize(model, parameters);
 
-        strictXmlAttributes = model.getDefault( ModelDefault.STRICT_XML_ATTRIBUTES ).getBoolean();
+        strictXmlAttributes =
+                model.getDefault(ModelDefault.STRICT_XML_ATTRIBUTES).getBoolean();
     }
 
-    protected String getFileName( String suffix )
-    {
+    protected String getFileName(String suffix) {
         String name = getModel().getName();
 
         return name + suffix;
@@ -67,9 +63,8 @@ public abstract class AbstractXmlJavaGenerator
      * @param modelClass the model class
      * @return the XML tag name for the class
      */
-    protected String resolveTagName( ModelClass modelClass )
-    {
-        return XmlModelHelpers.resolveTagName( modelClass );
+    protected String resolveTagName(ModelClass modelClass) {
+        return XmlModelHelpers.resolveTagName(modelClass);
     }
 
     /**
@@ -79,9 +74,8 @@ public abstract class AbstractXmlJavaGenerator
      * @param xmlFieldMetadata the XML metadata of the field
      * @return the XML tag name for the field
      */
-    protected String resolveTagName( ModelField modelField, XmlFieldMetadata xmlFieldMetadata )
-    {
-        return XmlModelHelpers.resolveTagName( modelField, xmlFieldMetadata );
+    protected String resolveTagName(ModelField modelField, XmlFieldMetadata xmlFieldMetadata) {
+        return XmlModelHelpers.resolveTagName(modelField, xmlFieldMetadata);
     }
 
     /**
@@ -91,9 +85,8 @@ public abstract class AbstractXmlJavaGenerator
      * @param xmlAssociationMetadata the XML metadata of the association
      * @return the XML tag name for items
      */
-    protected String resolveTagName( String fieldTagName, XmlAssociationMetadata xmlAssociationMetadata )
-    {
-        return XmlModelHelpers.resolveTagName( fieldTagName, xmlAssociationMetadata );
+    protected String resolveTagName(String fieldTagName, XmlAssociationMetadata xmlAssociationMetadata) {
+        return XmlModelHelpers.resolveTagName(fieldTagName, xmlAssociationMetadata);
     }
 
     /**
@@ -102,9 +95,8 @@ public abstract class AbstractXmlJavaGenerator
      * @param modelFields the fields to check
      * @return the field, or <code>null</code> if no field is <code>Content</code>
      */
-    protected ModelField getContentField( List<ModelField> modelFields )
-    {
-        return XmlModelHelpers.getContentField( modelFields );
+    protected ModelField getContentField(List<ModelField> modelFields) {
+        return XmlModelHelpers.getContentField(modelFields);
     }
 
     /**
@@ -114,104 +106,94 @@ public abstract class AbstractXmlJavaGenerator
      * @param version the version of the class to use
      * @return the list of XML fields of this class
      */
-    protected List<ModelField> getFieldsForXml( ModelClass modelClass, Version version )
-    {
-        return XmlModelHelpers.getFieldsForXml( modelClass, version );
+    protected List<ModelField> getFieldsForXml(ModelClass modelClass, Version version) {
+        return XmlModelHelpers.getFieldsForXml(modelClass, version);
     }
 
-    protected String getValue( String type, String initialValue, XmlFieldMetadata xmlFieldMetadata )
-    {
+    protected String getValue(String type, String initialValue, XmlFieldMetadata xmlFieldMetadata) {
         String textValue = initialValue;
 
-        if ( "Date".equals( type ) )
-        {
+        if ("Date".equals(type)) {
             String dateFormat = xmlFieldMetadata.getFormat();
-            if ( xmlFieldMetadata.getFormat() == null )
-            {
+            if (xmlFieldMetadata.getFormat() == null) {
                 dateFormat = DEFAULT_DATE_FORMAT;
             }
 
-            if ( "long".equals( dateFormat ) )
-            {
+            if ("long".equals(dateFormat)) {
                 textValue = "String.valueOf( " + textValue + ".getTime() )";
+            } else {
+                textValue = "new java.text.SimpleDateFormat( \"" + dateFormat + "\", java.util.Locale.US ).format( "
+                        + textValue + " )";
             }
-            else
-            {
-                textValue =
-                    "new java.text.SimpleDateFormat( \"" + dateFormat + "\", java.util.Locale.US ).format( " + textValue + " )";
-            }
-        }
-        else if ( !"String".equals( type ) )
-        {
+        } else if (!"String".equals(type)) {
             textValue = "String.valueOf( " + textValue + " )";
         }
 
         return textValue;
     }
 
-    protected void writeDateParsingHelper( JSourceCode sc, String exception )
-    {
-        sc.add( "if ( s != null )" );
+    protected void writeDateParsingHelper(JSourceCode sc, String exception) {
+        sc.add("if ( s != null )");
 
-        sc.add( "{" );
+        sc.add("{");
         sc.indent();
 
-        sc.add( "String effectiveDateFormat = dateFormat;" );
+        sc.add("String effectiveDateFormat = dateFormat;");
 
-        sc.add( "if ( dateFormat == null )" );
+        sc.add("if ( dateFormat == null )");
 
-        sc.add( "{" );
-        sc.addIndented( "effectiveDateFormat = \"" + DEFAULT_DATE_FORMAT + "\";" );
-        sc.add( "}" );
+        sc.add("{");
+        sc.addIndented("effectiveDateFormat = \"" + DEFAULT_DATE_FORMAT + "\";");
+        sc.add("}");
 
-        sc.add( "if ( \"long\".equals( effectiveDateFormat ) )" );
+        sc.add("if ( \"long\".equals( effectiveDateFormat ) )");
 
         // parse date as a long
-        sc.add( "{" );
+        sc.add("{");
         sc.indent();
 
-        sc.add( "try" );
+        sc.add("try");
 
-        sc.add( "{" );
-        sc.addIndented( "return new java.util.Date( Long.parseLong( s ) );" );
-        sc.add( "}" );
+        sc.add("{");
+        sc.addIndented("return new java.util.Date( Long.parseLong( s ) );");
+        sc.add("}");
 
-        sc.add( "catch ( NumberFormatException e )" );
+        sc.add("catch ( NumberFormatException e )");
 
-        sc.add( "{" );
-        sc.addIndented( "throw " + exception + ";" );
-        sc.add( "}" );
+        sc.add("{");
+        sc.addIndented("throw " + exception + ";");
+        sc.add("}");
 
         sc.unindent();
-        sc.add( "}" );
+        sc.add("}");
 
-        sc.add( "else" );
+        sc.add("else");
 
         // parse date as a SimpleDateFormat expression
-        sc.add( "{" );
+        sc.add("{");
         sc.indent();
 
-        sc.add( "try" );
-        sc.add( "{" );
+        sc.add("try");
+        sc.add("{");
         sc.indent();
 
-        sc.add( "DateFormat dateParser = new java.text.SimpleDateFormat( effectiveDateFormat, java.util.Locale.US );" );
-        sc.add( "return dateParser.parse( s );" );
+        sc.add("DateFormat dateParser = new java.text.SimpleDateFormat( effectiveDateFormat, java.util.Locale.US );");
+        sc.add("return dateParser.parse( s );");
 
         sc.unindent();
-        sc.add( "}" );
+        sc.add("}");
 
-        sc.add( "catch ( java.text.ParseException e )" );
-        sc.add( "{" );
-        sc.addIndented( "throw " + exception + ";" );
-        sc.add( "}" );
-
-        sc.unindent();
-        sc.add( "}" );
+        sc.add("catch ( java.text.ParseException e )");
+        sc.add("{");
+        sc.addIndented("throw " + exception + ";");
+        sc.add("}");
 
         sc.unindent();
-        sc.add( "}" );
+        sc.add("}");
 
-        sc.add( "return null;" );
+        sc.unindent();
+        sc.add("}");
+
+        sc.add("return null;");
     }
 }

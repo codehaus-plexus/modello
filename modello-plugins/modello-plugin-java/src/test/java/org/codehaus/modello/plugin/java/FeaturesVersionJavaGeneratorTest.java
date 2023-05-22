@@ -22,47 +22,41 @@ package org.codehaus.modello.plugin.java;
  * SOFTWARE.
  */
 
+import java.util.Properties;
+
 import org.codehaus.modello.AbstractModelloJavaGeneratorTest;
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
 
-import java.util.Properties;
-
 /**
  * @author Hervé Boutemy
  */
-public class FeaturesVersionJavaGeneratorTest
-    extends AbstractModelloJavaGeneratorTest
-{
-    public FeaturesVersionJavaGeneratorTest()
-    {
-        super( "features-version" );
+public class FeaturesVersionJavaGeneratorTest extends AbstractModelloJavaGeneratorTest {
+    public FeaturesVersionJavaGeneratorTest() {
+        super("features-version");
     }
 
     private static final String ALL_VERSIONS = "1.0.0,1.5.0,2.0.0,3.0.0";
 
-    public void testJavaGenerator()
-        throws Throwable
-    {
-        ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
+    public void testJavaGenerator() throws Throwable {
+        ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
 
-        Model model = modello.loadModel( getXmlResourceReader( "/features.mdo" ) );
+        Model model = modello.loadModel(getXmlResourceReader("/features.mdo"));
 
         Properties parameters = getModelloParameters();
-        parameters.setProperty( ModelloParameterConstants.ALL_VERSIONS, ALL_VERSIONS );
-        parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString( true ) );
+        parameters.setProperty(ModelloParameterConstants.ALL_VERSIONS, ALL_VERSIONS);
+        parameters.setProperty(ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString(true));
 
-        String[] versions = ALL_VERSIONS.split( "," );
+        String[] versions = ALL_VERSIONS.split(",");
 
-        for ( String version : versions )
-        {
-            parameters.setProperty( ModelloParameterConstants.VERSION, version );
-            modello.generate( model, "java", parameters );
+        for (String version : versions) {
+            parameters.setProperty(ModelloParameterConstants.VERSION, version);
+            modello.generate(model, "java", parameters);
         }
 
         compileGeneratedSources();
 
-        verifyCompiledGeneratedSources( "JavaVerifier" );
+        verifyCompiledGeneratedSources("JavaVerifier");
     }
 }

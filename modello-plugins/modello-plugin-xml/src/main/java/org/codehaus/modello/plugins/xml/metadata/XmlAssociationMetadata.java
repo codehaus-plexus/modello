@@ -27,9 +27,7 @@ import org.codehaus.modello.metadata.AssociationMetadata;
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  */
-public class XmlAssociationMetadata
-    implements AssociationMetadata
-{
+public class XmlAssociationMetadata implements AssociationMetadata {
     public static final String ID = XmlAssociationMetadata.class.getName();
 
     public static final String EXPLODE_MODE = "explode";
@@ -48,84 +46,66 @@ public class XmlAssociationMetadata
 
     private boolean reference;
 
-    public String getTagName()
-    {
+    public String getTagName() {
         return tagName;
     }
 
-    public void setTagName( String tagName )
-    {
+    public void setTagName(String tagName) {
         this.tagName = tagName;
     }
 
-    public String getItemsStyle()
-    {
+    public String getItemsStyle() {
         return itemsStyle;
     }
 
-    public void setItemsStyle( String itemsStyle )
-    {
-        if ( ITEMS_STYLE_FLAT.equals( itemsStyle ) || ITEMS_STYLE_WRAPPED.equals( itemsStyle ) )
-        {
+    public void setItemsStyle(String itemsStyle) {
+        if (ITEMS_STYLE_FLAT.equals(itemsStyle) || ITEMS_STYLE_WRAPPED.equals(itemsStyle)) {
             this.itemsStyle = itemsStyle;
-        }
-        else
-        {
+        } else {
             // default
             this.itemsStyle = ITEMS_STYLE_WRAPPED;
         }
     }
 
-    public boolean isFlatItems()
-    {
-        return ITEMS_STYLE_FLAT.equals( itemsStyle );
+    public boolean isFlatItems() {
+        return ITEMS_STYLE_FLAT.equals(itemsStyle);
     }
 
-    public boolean isWrappedItems()
-    {
-        return ITEMS_STYLE_WRAPPED.equals( itemsStyle );
+    public boolean isWrappedItems() {
+        return ITEMS_STYLE_WRAPPED.equals(itemsStyle);
     }
 
     /**
      * @return Returns the map style.
      */
-    public String getMapStyle()
-    {
+    public String getMapStyle() {
         return mapStyle;
     }
 
     /**
      * @param mapStyle The map style (inline or explode).
      */
-    public void setMapStyle( String mapStyle )
-    {
-        if ( mapStyle == null )
-        {
+    public void setMapStyle(String mapStyle) {
+        if (mapStyle == null) {
             this.mapStyle = INLINE_MODE;
-        }
-        else
-        {
+        } else {
             this.mapStyle = mapStyle;
         }
     }
 
-    public boolean isMapInline()
-    {
-        return INLINE_MODE.equals( mapStyle );
+    public boolean isMapInline() {
+        return INLINE_MODE.equals(mapStyle);
     }
 
-    public boolean isMapExplode()
-    {
-        return EXPLODE_MODE.equals( mapStyle );
+    public boolean isMapExplode() {
+        return EXPLODE_MODE.equals(mapStyle);
     }
 
-    public boolean isReference()
-    {
+    public boolean isReference() {
         return reference;
     }
 
-    public void setReference( boolean reference )
-    {
+    public void setReference(boolean reference) {
         this.reference = reference;
     }
 }

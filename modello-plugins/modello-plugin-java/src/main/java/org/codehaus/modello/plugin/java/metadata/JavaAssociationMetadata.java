@@ -22,17 +22,15 @@ package org.codehaus.modello.plugin.java.metadata;
  * SOFTWARE.
  */
 
-import org.codehaus.modello.metadata.AssociationMetadata;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import org.codehaus.modello.metadata.AssociationMetadata;
 
 /**
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
  */
-public class JavaAssociationMetadata
-    implements AssociationMetadata
-{
+public class JavaAssociationMetadata implements AssociationMetadata {
     public static final String ID = JavaAssociationMetadata.class.getName();
 
     public static final String LAZY_INIT = "lazy";
@@ -41,12 +39,11 @@ public class JavaAssociationMetadata
 
     public static final List<String> INIT_TYPES;
 
-    static
-    {
+    static {
         INIT_TYPES = new ArrayList<String>();
-        INIT_TYPES.add( LAZY_INIT );
-        INIT_TYPES.add( CONSTRUCTOR_INIT );
-        INIT_TYPES.add( FIELD_INIT );
+        INIT_TYPES.add(LAZY_INIT);
+        INIT_TYPES.add(CONSTRUCTOR_INIT);
+        INIT_TYPES.add(FIELD_INIT);
     }
 
     public static final String CLONE_SHALLOW = "shallow";
@@ -54,11 +51,10 @@ public class JavaAssociationMetadata
 
     public static final List<String> CLONE_MODES;
 
-    static
-    {
+    static {
         CLONE_MODES = new ArrayList<String>();
-        CLONE_MODES.add( CLONE_SHALLOW );
-        CLONE_MODES.add( CLONE_DEEP );
+        CLONE_MODES.add(CLONE_SHALLOW);
+        CLONE_MODES.add(CLONE_DEEP);
     }
 
     private boolean adder = true;
@@ -71,61 +67,47 @@ public class JavaAssociationMetadata
 
     private String cloneMode;
 
-    public boolean isAdder()
-    {
+    public boolean isAdder() {
         return adder;
     }
 
-    public void setAdder( boolean adder )
-    {
+    public void setAdder(boolean adder) {
         this.adder = adder;
     }
 
-    public boolean isBidi()
-    {
+    public boolean isBidi() {
         return bidi;
     }
 
-    public void setBidi( boolean bidi )
-    {
+    public void setBidi(boolean bidi) {
         this.bidi = bidi;
     }
 
-    public String getInterfaceName()
-    {
+    public String getInterfaceName() {
         return interfaceName;
     }
 
-    public void setInterfaceName( String interfaceName )
-    {
+    public void setInterfaceName(String interfaceName) {
         this.interfaceName = interfaceName;
     }
 
-    public String getInitializationMode()
-    {
+    public String getInitializationMode() {
         return initializationMode;
     }
 
-    public void setInitializationMode( String initializationMode )
-    {
-        if ( initializationMode == null )
-        {
+    public void setInitializationMode(String initializationMode) {
+        if (initializationMode == null) {
             this.initializationMode = LAZY_INIT;
-        }
-        else
-        {
+        } else {
             this.initializationMode = initializationMode;
         }
     }
 
-    public String getCloneMode()
-    {
+    public String getCloneMode() {
         return cloneMode;
     }
 
-    public void setCloneMode( String cloneMode )
-    {
+    public void setCloneMode(String cloneMode) {
         this.cloneMode = cloneMode;
     }
-
 }
