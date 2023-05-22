@@ -27,32 +27,26 @@ import org.codehaus.modello.metadata.ClassMetadata;
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  */
-public class XmlClassMetadata
-    implements ClassMetadata
-{
+public class XmlClassMetadata implements ClassMetadata {
     public static final String ID = XmlClassMetadata.class.getName();
 
     private String tagName;
 
     private boolean standaloneRead;
 
-    public String getTagName()
-    {
+    public String getTagName() {
         return tagName;
     }
 
-    public void setTagName( String tagName )
-    {
+    public void setTagName(String tagName) {
         this.tagName = tagName;
     }
 
-    public boolean isStandaloneRead()
-    {
+    public boolean isStandaloneRead() {
         return standaloneRead;
     }
 
-    public void setStandaloneRead( boolean standaloneRead )
-    {
+    public void setStandaloneRead(boolean standaloneRead) {
         this.standaloneRead = standaloneRead;
     }
 }

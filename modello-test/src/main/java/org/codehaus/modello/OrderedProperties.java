@@ -32,13 +32,10 @@ import java.util.TreeSet;
  *
  * @author Hervé Boutemy
  */
-public class OrderedProperties
-    extends Properties
-{
+public class OrderedProperties extends Properties {
     private static final long serialVersionUID = 4578458610736378768L;
 
-    public Set<Object> keySet()
-    {
-        return new TreeSet<Object>( super.keySet() );
+    public Set<Object> keySet() {
+        return new TreeSet<Object>(super.keySet());
     }
 }

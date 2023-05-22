@@ -22,6 +22,11 @@ package org.codehaus.modello.plugin.stax;
  * SOFTWARE.
  */
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Properties;
+import java.util.Set;
+
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelAssociation;
@@ -30,84 +35,62 @@ import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.plugins.xml.AbstractXmlJavaGenerator;
 import org.codehaus.modello.plugins.xml.metadata.XmlAssociationMetadata;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Properties;
-import java.util.Set;
-
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  */
-public abstract class AbstractStaxGenerator
-    extends AbstractXmlJavaGenerator
-{
+public abstract class AbstractStaxGenerator extends AbstractXmlJavaGenerator {
     private Set<ModelClass> parts;
 
-    protected void initialize( Model model, Properties parameters )
-        throws ModelloException
-    {
-        super.initialize( model, parameters );
+    protected void initialize(Model model, Properties parameters) throws ModelloException {
+        super.initialize(model, parameters);
 
         parts = null;
     }
 
-    protected ModelField getReferenceIdentifierField( ModelAssociation association )
-        throws ModelloException
-    {
+    protected ModelField getReferenceIdentifierField(ModelAssociation association) throws ModelloException {
         XmlAssociationMetadata xmlAssocMetadata =
-            (XmlAssociationMetadata) association.getAssociationMetadata( XmlAssociationMetadata.ID );
+                (XmlAssociationMetadata) association.getAssociationMetadata(XmlAssociationMetadata.ID);
 
         ModelField referenceIdentifierField = null;
-        if ( xmlAssocMetadata.isReference() )
-        {
+        if (xmlAssocMetadata.isReference()) {
             String associationName = association.getName();
 
             ModelClass modelClass = association.getModelClass();
-            if ( !isClassInModel( association.getTo(), modelClass.getModel() ) )
-            {
-                throw new ModelloException( "Can't use xml.reference on the '" + associationName + "' association of '"
-                    + modelClass.getName() + "' because the target class '" + association.getTo()
-                    + "' is not in the model" );
+            if (!isClassInModel(association.getTo(), modelClass.getModel())) {
+                throw new ModelloException("Can't use xml.reference on the '" + associationName + "' association of '"
+                        + modelClass.getName() + "' because the target class '" + association.getTo()
+                        + "' is not in the model");
             }
 
-            List<ModelField> identifierFields = association.getToClass().getIdentifierFields( getGeneratedVersion() );
-            if ( identifierFields.size() == 1 )
-            {
-                referenceIdentifierField = identifierFields.get( 0 );
-            }
-            else
-            {
+            List<ModelField> identifierFields = association.getToClass().getIdentifierFields(getGeneratedVersion());
+            if (identifierFields.size() == 1) {
+                referenceIdentifierField = identifierFields.get(0);
+            } else {
                 referenceIdentifierField = new DummyIdModelField();
-                referenceIdentifierField.setName( "modello.refid" );
+                referenceIdentifierField.setName("modello.refid");
             }
         }
         return referenceIdentifierField;
     }
 
-    protected boolean isAssociationPartToClass( ModelClass modelClass )
-    {
-        if ( parts == null )
-        {
+    protected boolean isAssociationPartToClass(ModelClass modelClass) {
+        if (parts == null) {
             parts = new HashSet<ModelClass>();
-            for ( ModelClass clazz : modelClass.getModel().getClasses( getGeneratedVersion() ) )
-            {
-                for ( ModelField modelField : clazz.getFields( getGeneratedVersion() ) )
-                {
-                    if ( modelField instanceof ModelAssociation )
-                    {
+            for (ModelClass clazz : modelClass.getModel().getClasses(getGeneratedVersion())) {
+                for (ModelField modelField : clazz.getFields(getGeneratedVersion())) {
+                    if (modelField instanceof ModelAssociation) {
                         ModelAssociation assoc = (ModelAssociation) modelField;
 
                         XmlAssociationMetadata xmlAssocMetadata =
-                            (XmlAssociationMetadata) assoc.getAssociationMetadata( XmlAssociationMetadata.ID );
+                                (XmlAssociationMetadata) assoc.getAssociationMetadata(XmlAssociationMetadata.ID);
 
-                        if ( xmlAssocMetadata.isReference() )
-                        {
-                            parts.add( assoc.getToClass() );
+                        if (xmlAssocMetadata.isReference()) {
+                            parts.add(assoc.getToClass());
                         }
                     }
                 }
             }
         }
-        return parts.contains( modelClass );
+        return parts.contains(modelClass);
     }
 }

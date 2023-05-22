@@ -25,13 +25,10 @@ package org.codehaus.modello.model;
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  */
-public class ModelValidationException
-    extends Exception
-{
+public class ModelValidationException extends Exception {
     private static final long serialVersionUID = -8146274663701861789L;
 
-    public ModelValidationException( String msg )
-    {
-        super( msg );
+    public ModelValidationException(String msg) {
+        super(msg);
     }
 }

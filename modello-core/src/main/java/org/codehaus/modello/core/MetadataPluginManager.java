@@ -22,23 +22,22 @@ package org.codehaus.modello.core;
  * SOFTWARE.
  */
 
-import org.codehaus.modello.metadata.MetadataPlugin;
-
 import java.util.Iterator;
 import java.util.Map;
+
+import org.codehaus.modello.metadata.MetadataPlugin;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  */
-public interface MetadataPluginManager
-{
+public interface MetadataPluginManager {
     String ROLE = MetadataPluginManager.class.getName();
 
     Map<String, MetadataPlugin> getPlugins();
 
     Iterator<MetadataPlugin> getPluginsIterator();
 
-    MetadataPlugin getMetadataPlugin( String metadataId );
+    MetadataPlugin getMetadataPlugin(String metadataId);
 
-    boolean hasMetadataPlugin( String metadataId );
+    boolean hasMetadataPlugin(String metadataId);
 }

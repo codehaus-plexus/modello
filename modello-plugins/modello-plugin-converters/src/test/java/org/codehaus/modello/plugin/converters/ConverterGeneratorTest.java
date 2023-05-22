@@ -22,71 +22,69 @@ package org.codehaus.modello.plugin.converters;
  * SOFTWARE.
  */
 
+import java.io.Reader;
+import java.util.Properties;
+
 import org.codehaus.modello.AbstractModelloJavaGeneratorTest;
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
 
-import java.io.Reader;
-import java.util.Properties;
-
 /**
  */
-public class ConverterGeneratorTest
-    extends AbstractModelloJavaGeneratorTest
-{
-    public ConverterGeneratorTest()
-    {
-        super( "converters" );
+public class ConverterGeneratorTest extends AbstractModelloJavaGeneratorTest {
+    public ConverterGeneratorTest() {
+        super("converters");
     }
 
-    public void testConverterGenerator()
-        throws Throwable
-    {
-        generateConverterClasses( getXmlResourceReader( "/models/maven.mdo" ), "3.0.0", "4.0.0" );
+    public void testConverterGenerator() throws Throwable {
+        generateConverterClasses(getXmlResourceReader("/models/maven.mdo"), "3.0.0", "4.0.0");
 
-        generateConverterClasses( getXmlResourceReader( "/features.mdo" ), "1.0.0", "1.1.0" );
+        generateConverterClasses(getXmlResourceReader("/features.mdo"), "1.0.0", "1.1.0");
 
-        addDependency( "org.codehaus.woodstox", "stax2-api" );
-        addDependency( "com.fasterxml.woodstox", "woodstox-core" );
+        addDependency("org.codehaus.woodstox", "stax2-api");
+        addDependency("com.fasterxml.woodstox", "woodstox-core");
 
         compileGeneratedSources();
 
-        verifyCompiledGeneratedSources( "ConvertersVerifier" );
+        verifyCompiledGeneratedSources("ConvertersVerifier");
     }
 
-    private void generateConverterClasses( Reader modelReader, String fromVersion, String toVersion )
-        throws Throwable
-    {
-        ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
+    private void generateConverterClasses(Reader modelReader, String fromVersion, String toVersion) throws Throwable {
+        ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
 
-        Model model = modello.loadModel( modelReader );
+        Model model = modello.loadModel(modelReader);
 
         Properties parameters = new Properties();
-        parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, getOutputDirectory().getAbsolutePath() );
-        parameters.setProperty( ModelloParameterConstants.ALL_VERSIONS, fromVersion + "," + toVersion );
+        parameters.setProperty(
+                ModelloParameterConstants.OUTPUT_DIRECTORY, getOutputDirectory().getAbsolutePath());
+        parameters.setProperty(ModelloParameterConstants.ALL_VERSIONS, fromVersion + "," + toVersion);
 
-        generateClasses( parameters, modello, model, fromVersion, toVersion, "java" );
-        generateClasses( parameters, modello, model, fromVersion, toVersion, "stax-reader" );
-        generateClasses( parameters, modello, model, fromVersion, toVersion, "stax-writer" );
-        generateClasses( parameters, modello, model, fromVersion, toVersion, "converters" );
+        generateClasses(parameters, modello, model, fromVersion, toVersion, "java");
+        generateClasses(parameters, modello, model, fromVersion, toVersion, "stax-reader");
+        generateClasses(parameters, modello, model, fromVersion, toVersion, "stax-writer");
+        generateClasses(parameters, modello, model, fromVersion, toVersion, "converters");
     }
 
-    private void generateClasses( Properties parameters, ModelloCore modello, Model model, String fromVersion,
-                                  String toVersion, String outputType )
-        throws ModelloException
-    {
-        parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString( false ) );
-        parameters.setProperty( ModelloParameterConstants.VERSION, toVersion );
-        modello.generate( model, outputType, parameters );
+    private void generateClasses(
+            Properties parameters,
+            ModelloCore modello,
+            Model model,
+            String fromVersion,
+            String toVersion,
+            String outputType)
+            throws ModelloException {
+        parameters.setProperty(ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString(false));
+        parameters.setProperty(ModelloParameterConstants.VERSION, toVersion);
+        modello.generate(model, outputType, parameters);
 
-        parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString( true ) );
-        parameters.setProperty( ModelloParameterConstants.VERSION, fromVersion );
-        modello.generate( model, outputType, parameters );
+        parameters.setProperty(ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString(true));
+        parameters.setProperty(ModelloParameterConstants.VERSION, fromVersion);
+        modello.generate(model, outputType, parameters);
 
-        parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString( true ) );
-        parameters.setProperty( ModelloParameterConstants.VERSION, toVersion );
-        modello.generate( model, outputType, parameters );
+        parameters.setProperty(ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString(true));
+        parameters.setProperty(ModelloParameterConstants.VERSION, toVersion);
+        modello.generate(model, outputType, parameters);
     }
 }

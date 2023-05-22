@@ -48,439 +48,384 @@ import org.codehaus.plexus.component.annotations.Component;
 /**
  * @author <a href="mailto:simonetripodi@apache.org">Simone Tripodi</a>
  */
-@Component( role = ModelloGenerator.class, hint = "snakeyaml-writer" )
-public class SnakeYamlWriterGenerator
-    extends AbstractSnakeYamlGenerator
-{
+@Component(role = ModelloGenerator.class, hint = "snakeyaml-writer")
+public class SnakeYamlWriterGenerator extends AbstractSnakeYamlGenerator {
 
-    public void generate( Model model, Properties parameters )
-        throws ModelloException
-    {
-        initialize( model, parameters );
+    public void generate(Model model, Properties parameters) throws ModelloException {
+        initialize(model, parameters);
 
-        try
-        {
+        try {
             generateSnakeYamlWriter();
-        }
-        catch ( IOException ex )
-        {
-            throw new ModelloException( "Exception while generating SnakeYaml Writer.", ex );
+        } catch (IOException ex) {
+            throw new ModelloException("Exception while generating SnakeYaml Writer.", ex);
         }
     }
 
-    private void generateSnakeYamlWriter()
-        throws ModelloException, IOException
-    {
+    private void generateSnakeYamlWriter() throws ModelloException, IOException {
         Model objectModel = getModel();
 
-        String packageName = objectModel.getDefaultPackageName( isPackageWithVersion(), getGeneratedVersion() )
-            + ".io.snakeyaml";
+        String packageName =
+                objectModel.getDefaultPackageName(isPackageWithVersion(), getGeneratedVersion()) + ".io.snakeyaml";
 
-        String marshallerName = getFileName( "SnakeYamlWriter" );
+        String marshallerName = getFileName("SnakeYamlWriter");
 
-        JSourceWriter sourceWriter = newJSourceWriter( packageName, marshallerName );
+        JSourceWriter sourceWriter = newJSourceWriter(packageName, marshallerName);
 
-        JClass jClass = new JClass( packageName + '.' + marshallerName );
-        initHeader( jClass );
+        JClass jClass = new JClass(packageName + '.' + marshallerName);
+        initHeader(jClass);
 
-        jClass.addImport( "org.yaml.snakeyaml.DumperOptions" );
-        jClass.addImport( "org.yaml.snakeyaml.DumperOptions.Version" );
-        jClass.addImport( "org.yaml.snakeyaml.DumperOptions.FlowStyle" );
-        jClass.addImport( "org.yaml.snakeyaml.DumperOptions.ScalarStyle" );
-        jClass.addImport( "org.yaml.snakeyaml.emitter.Emitable" );
-        jClass.addImport( "org.yaml.snakeyaml.emitter.Emitter" );
-        jClass.addImport( "org.yaml.snakeyaml.error.Mark" );
-        jClass.addImport( "org.yaml.snakeyaml.events.DocumentEndEvent" );
-        jClass.addImport( "org.yaml.snakeyaml.events.DocumentStartEvent" );
-        jClass.addImport( "org.yaml.snakeyaml.events.ImplicitTuple" );
-        jClass.addImport( "org.yaml.snakeyaml.events.MappingEndEvent" );
-        jClass.addImport( "org.yaml.snakeyaml.events.MappingStartEvent" );
-        jClass.addImport( "org.yaml.snakeyaml.events.ScalarEvent" );
-        jClass.addImport( "org.yaml.snakeyaml.events.SequenceEndEvent" );
-        jClass.addImport( "org.yaml.snakeyaml.events.SequenceStartEvent" );
-        jClass.addImport( "org.yaml.snakeyaml.events.StreamEndEvent" );
-        jClass.addImport( "org.yaml.snakeyaml.events.StreamStartEvent" );
-        jClass.addImport( "java.io.IOException" );
-        jClass.addImport( "java.io.OutputStream" );
-        jClass.addImport( "java.io.OutputStreamWriter" );
-        jClass.addImport( "java.io.Writer" );
+        jClass.addImport("org.yaml.snakeyaml.DumperOptions");
+        jClass.addImport("org.yaml.snakeyaml.DumperOptions.Version");
+        jClass.addImport("org.yaml.snakeyaml.DumperOptions.FlowStyle");
+        jClass.addImport("org.yaml.snakeyaml.DumperOptions.ScalarStyle");
+        jClass.addImport("org.yaml.snakeyaml.emitter.Emitable");
+        jClass.addImport("org.yaml.snakeyaml.emitter.Emitter");
+        jClass.addImport("org.yaml.snakeyaml.error.Mark");
+        jClass.addImport("org.yaml.snakeyaml.events.DocumentEndEvent");
+        jClass.addImport("org.yaml.snakeyaml.events.DocumentStartEvent");
+        jClass.addImport("org.yaml.snakeyaml.events.ImplicitTuple");
+        jClass.addImport("org.yaml.snakeyaml.events.MappingEndEvent");
+        jClass.addImport("org.yaml.snakeyaml.events.MappingStartEvent");
+        jClass.addImport("org.yaml.snakeyaml.events.ScalarEvent");
+        jClass.addImport("org.yaml.snakeyaml.events.SequenceEndEvent");
+        jClass.addImport("org.yaml.snakeyaml.events.SequenceStartEvent");
+        jClass.addImport("org.yaml.snakeyaml.events.StreamEndEvent");
+        jClass.addImport("org.yaml.snakeyaml.events.StreamStartEvent");
+        jClass.addImport("java.io.IOException");
+        jClass.addImport("java.io.OutputStream");
+        jClass.addImport("java.io.OutputStreamWriter");
+        jClass.addImport("java.io.Writer");
 
-        addModelImports( jClass, null );
+        addModelImports(jClass, null);
 
-        JField factoryField = new JField( new JClass( "DumperOptions" ), "dumperOptions" );
-        factoryField.getModifiers().setFinal( true );
-        factoryField.setInitString( "new DumperOptions()" );
-        jClass.addField( factoryField );
+        JField factoryField = new JField(new JClass("DumperOptions"), "dumperOptions");
+        factoryField.getModifiers().setFinal(true);
+        factoryField.setInitString("new DumperOptions()");
+        jClass.addField(factoryField);
 
-        JConstructor jacksonWriterConstructor = new JConstructor( jClass );
+        JConstructor jacksonWriterConstructor = new JConstructor(jClass);
         JSourceCode sc = jacksonWriterConstructor.getSourceCode();
-        sc.add( "dumperOptions.setAllowUnicode( true );" );
-        sc.add( "dumperOptions.setPrettyFlow( true );" );
-        sc.add( "dumperOptions.setVersion( Version.V1_1 );" );
+        sc.add("dumperOptions.setAllowUnicode( true );");
+        sc.add("dumperOptions.setPrettyFlow( true );");
+        sc.add("dumperOptions.setVersion( Version.V1_1 );");
 
-        jClass.addConstructor( jacksonWriterConstructor );
+        jClass.addConstructor(jacksonWriterConstructor);
 
-        String root = objectModel.getRoot( getGeneratedVersion() );
+        String root = objectModel.getRoot(getGeneratedVersion());
 
         // ----------------------------------------------------------------------
         // Write the write( Writer, Model ) method which will do the unmarshalling.
         // ----------------------------------------------------------------------
 
-        JMethod marshall = new JMethod( "write" );
+        JMethod marshall = new JMethod("write");
 
-        String rootElementParameterName = uncapitalise( root );
-        marshall.addParameter( new JParameter( new JClass( "Writer" ), "writer" ) );
-        marshall.addParameter( new JParameter( new JClass( root ), rootElementParameterName ) );
+        String rootElementParameterName = uncapitalise(root);
+        marshall.addParameter(new JParameter(new JClass("Writer"), "writer"));
+        marshall.addParameter(new JParameter(new JClass(root), rootElementParameterName));
 
-        marshall.addException( new JClass( "IOException" ) );
+        marshall.addException(new JClass("IOException"));
 
         sc = marshall.getSourceCode();
 
-        sc.add( "Emitable generator = new Emitter( writer, dumperOptions );" );
+        sc.add("Emitable generator = new Emitter( writer, dumperOptions );");
 
-        sc.add( "generator.emit( new StreamStartEvent( null, null ) );" );
+        sc.add("generator.emit( new StreamStartEvent( null, null ) );");
 
-        sc.add( "generator.emit( new DocumentStartEvent( null, null, dumperOptions.isExplicitStart(), dumperOptions.getVersion(), dumperOptions.getTags() ) );" );
+        sc.add(
+                "generator.emit( new DocumentStartEvent( null, null, dumperOptions.isExplicitStart(), dumperOptions.getVersion(), dumperOptions.getTags() ) );");
 
-        sc.add( "write" + root + "( " + rootElementParameterName + ", generator );" );
+        sc.add("write" + root + "( " + rootElementParameterName + ", generator );");
 
-        sc.add( "generator.emit( new DocumentEndEvent( null, null, dumperOptions.isExplicitEnd() ) );" );
+        sc.add("generator.emit( new DocumentEndEvent( null, null, dumperOptions.isExplicitEnd() ) );");
 
-        sc.add( "generator.emit( new StreamEndEvent( null, null ) );" );
+        sc.add("generator.emit( new StreamEndEvent( null, null ) );");
 
-        jClass.addMethod( marshall );
+        jClass.addMethod(marshall);
 
         // ----------------------------------------------------------------------
         // Write the write( OutputStream, Model ) method which will do the unmarshalling.
         // ----------------------------------------------------------------------
 
-        marshall = new JMethod( "write" );
+        marshall = new JMethod("write");
 
-        marshall.addParameter( new JParameter( new JClass( "OutputStream" ), "stream" ) );
-        marshall.addParameter( new JParameter( new JClass( root ), rootElementParameterName ) );
+        marshall.addParameter(new JParameter(new JClass("OutputStream"), "stream"));
+        marshall.addParameter(new JParameter(new JClass(root), rootElementParameterName));
 
-        marshall.addException( new JClass( "IOException" ) );
+        marshall.addException(new JClass("IOException"));
 
         sc = marshall.getSourceCode();
 
-        sc.add( "write( new OutputStreamWriter( stream, "
-                        + rootElementParameterName
-                        + ".getModelEncoding() ), "
-                        + rootElementParameterName
-                        + " );" );
+        sc.add("write( new OutputStreamWriter( stream, "
+                + rootElementParameterName
+                + ".getModelEncoding() ), "
+                + rootElementParameterName
+                + " );");
 
-        jClass.addMethod( marshall );
+        jClass.addMethod(marshall);
 
-        writeAllClasses( objectModel, jClass );
+        writeAllClasses(objectModel, jClass);
 
-        jClass.print( sourceWriter );
+        jClass.print(sourceWriter);
 
         sourceWriter.close();
     }
 
-    private void writeAllClasses( Model objectModel, JClass jClass )
-        throws ModelloException
-    {
-        for ( ModelClass clazz : getClasses( objectModel ) )
-        {
-            writeClass( clazz, jClass );
+    private void writeAllClasses(Model objectModel, JClass jClass) throws ModelloException {
+        for (ModelClass clazz : getClasses(objectModel)) {
+            writeClass(clazz, jClass);
         }
     }
 
-    private void writeClass( ModelClass modelClass, JClass jClass )
-        throws ModelloException
-    {
+    private void writeClass(ModelClass modelClass, JClass jClass) throws ModelloException {
         String className = modelClass.getName();
 
-        String uncapClassName = uncapitalise( className );
+        String uncapClassName = uncapitalise(className);
 
-        JMethod marshall = new JMethod( "write" + className );
+        JMethod marshall = new JMethod("write" + className);
 
-        marshall.addParameter( new JParameter( new JClass( className ), uncapClassName ) );
-        marshall.addParameter( new JParameter( new JClass( "Emitable" ), "generator" ) );
+        marshall.addParameter(new JParameter(new JClass(className), uncapClassName));
+        marshall.addParameter(new JParameter(new JClass("Emitable"), "generator"));
 
-        marshall.addException( new JClass( "IOException" ) );
+        marshall.addException(new JClass("IOException"));
 
         marshall.getModifiers().makePrivate();
 
         JSourceCode sc = marshall.getSourceCode();
 
-        sc.add( "generator.emit( new MappingStartEvent( null, null, true, null, null, FlowStyle.BLOCK ) );" );
+        sc.add("generator.emit( new MappingStartEvent( null, null, true, null, null, FlowStyle.BLOCK ) );");
 
         ModelField contentField = null;
 
         String contentValue = null;
 
-        List<ModelField> modelFields = getFieldsForXml( modelClass, getGeneratedVersion() );
+        List<ModelField> modelFields = getFieldsForXml(modelClass, getGeneratedVersion());
 
         // XML attributes
-        for ( ModelField field : modelFields )
-        {
-            XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
+        for (ModelField field : modelFields) {
+            XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata(XmlFieldMetadata.ID);
 
-            JavaFieldMetadata javaFieldMetadata = (JavaFieldMetadata) field.getMetadata( JavaFieldMetadata.ID );
+            JavaFieldMetadata javaFieldMetadata = (JavaFieldMetadata) field.getMetadata(JavaFieldMetadata.ID);
 
-            String fieldTagName = resolveTagName( field, xmlFieldMetadata );
+            String fieldTagName = resolveTagName(field, xmlFieldMetadata);
 
             String type = field.getType();
 
-            String value = uncapClassName + "." + getPrefix( javaFieldMetadata ) + capitalise( field.getName() ) + "()";
+            String value = uncapClassName + "." + getPrefix(javaFieldMetadata) + capitalise(field.getName()) + "()";
 
-            if ( xmlFieldMetadata.isContent() )
-            {
+            if (xmlFieldMetadata.isContent()) {
                 contentField = field;
                 contentValue = value;
                 continue;
             }
 
-            if ( xmlFieldMetadata.isAttribute() )
-            {
-                sc.add( getValueChecker( type, value, field ) );
+            if (xmlFieldMetadata.isAttribute()) {
+                sc.add(getValueChecker(type, value, field));
 
-                sc.add( "{" );
+                sc.add("{");
                 sc.indent();
 
-                writeScalarKey( sc, fieldTagName );
-                writeScalar( sc, getValue( field.getType(), value, xmlFieldMetadata ) );
+                writeScalarKey(sc, fieldTagName);
+                writeScalar(sc, getValue(field.getType(), value, xmlFieldMetadata));
 
                 sc.unindent();
-                sc.add( "}" );
+                sc.add("}");
             }
-
         }
 
-        if ( contentField != null )
-        {
-            XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) contentField.getMetadata( XmlFieldMetadata.ID );
-            writeScalar( sc, getValue( contentField.getType(), contentValue, xmlFieldMetadata ) );
+        if (contentField != null) {
+            XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) contentField.getMetadata(XmlFieldMetadata.ID);
+            writeScalar(sc, getValue(contentField.getType(), contentValue, xmlFieldMetadata));
         }
 
-        final boolean useJava5 = hasJavaSourceSupport( 5 );
+        final boolean useJava5 = hasJavaSourceSupport(5);
 
         // XML tags
-        for ( ModelField field : modelFields )
-        {
-            XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
+        for (ModelField field : modelFields) {
+            XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata(XmlFieldMetadata.ID);
 
-            if ( xmlFieldMetadata.isContent() )
-            {
+            if (xmlFieldMetadata.isContent()) {
                 // skip field with type Content
                 continue;
             }
 
-            JavaFieldMetadata javaFieldMetadata = (JavaFieldMetadata) field.getMetadata( JavaFieldMetadata.ID );
+            JavaFieldMetadata javaFieldMetadata = (JavaFieldMetadata) field.getMetadata(JavaFieldMetadata.ID);
 
-            String fieldTagName = resolveTagName( field, xmlFieldMetadata );
+            String fieldTagName = resolveTagName(field, xmlFieldMetadata);
 
             String type = field.getType();
 
-            String value = uncapClassName + "." + getPrefix( javaFieldMetadata ) + capitalise( field.getName() ) + "()";
+            String value = uncapClassName + "." + getPrefix(javaFieldMetadata) + capitalise(field.getName()) + "()";
 
-            if ( xmlFieldMetadata.isAttribute() )
-            {
+            if (xmlFieldMetadata.isAttribute()) {
                 continue;
             }
 
-            if ( field instanceof ModelAssociation )
-            {
+            if (field instanceof ModelAssociation) {
                 ModelAssociation association = (ModelAssociation) field;
 
-                if ( association.isOneMultiplicity() )
-                {
-                    sc.add( getValueChecker( type, value, association ) );
+                if (association.isOneMultiplicity()) {
+                    sc.add(getValueChecker(type, value, association));
 
-                    sc.add( "{" );
+                    sc.add("{");
                     sc.indent();
 
-                    writeScalarKey( sc, fieldTagName );
-                    sc.add( "write" + association.getTo() + "( (" + association.getTo() + ") " + value + ", generator );" );
+                    writeScalarKey(sc, fieldTagName);
+                    sc.add("write" + association.getTo() + "( (" + association.getTo() + ") " + value
+                            + ", generator );");
 
                     sc.unindent();
-                    sc.add( "}" );
-                }
-                else
-                {
-                    //MANY_MULTIPLICITY
+                    sc.add("}");
+                } else {
+                    // MANY_MULTIPLICITY
 
                     XmlAssociationMetadata xmlAssociationMetadata =
-                        (XmlAssociationMetadata) association.getAssociationMetadata( XmlAssociationMetadata.ID );
+                            (XmlAssociationMetadata) association.getAssociationMetadata(XmlAssociationMetadata.ID);
 
                     type = association.getType();
                     String toType = association.getTo();
 
-                    if ( ModelDefault.LIST.equals( type ) || ModelDefault.SET.equals( type ) )
-                    {
-                        sc.add( getValueChecker( type, value, association ) );
+                    if (ModelDefault.LIST.equals(type) || ModelDefault.SET.equals(type)) {
+                        sc.add(getValueChecker(type, value, association));
 
-                        sc.add( "{" );
+                        sc.add("{");
                         sc.indent();
 
-                        writeScalarKey( sc, fieldTagName );
-                        sc.add( "generator.emit( new SequenceStartEvent( null, null, true, null, null, false ) );" );
+                        writeScalarKey(sc, fieldTagName);
+                        sc.add("generator.emit( new SequenceStartEvent( null, null, true, null, null, false ) );");
 
-                        if ( useJava5 )
-                        {
-                            sc.add( "for ( " + toType + " o : " + value + " )" );
-                        }
-                        else
-                        {
-                            sc.add( "for ( java.util.Iterator it = " + value + ".iterator(); it.hasNext(); )" );
+                        if (useJava5) {
+                            sc.add("for ( " + toType + " o : " + value + " )");
+                        } else {
+                            sc.add("for ( java.util.Iterator it = " + value + ".iterator(); it.hasNext(); )");
                         }
 
-                        sc.add( "{" );
+                        sc.add("{");
                         sc.indent();
 
-                        if ( !useJava5 )
-                        {
-                            sc.add( toType + " o = (" + toType + " ) it.next();" );
+                        if (!useJava5) {
+                            sc.add(toType + " o = (" + toType + " ) it.next();");
                         }
 
-                        if ( isClassInModel( association.getTo(), modelClass.getModel() ) )
-                        {
-                            sc.add( "write" + toType + "( o, generator );" );
-                        }
-                        else
-                        {
-                            writeScalar( sc, "o" );
+                        if (isClassInModel(association.getTo(), modelClass.getModel())) {
+                            sc.add("write" + toType + "( o, generator );");
+                        } else {
+                            writeScalar(sc, "o");
                         }
 
                         sc.unindent();
-                        sc.add( "}" );
+                        sc.add("}");
 
-                        sc.add( "generator.emit( new SequenceEndEvent( null, null ) );" );
+                        sc.add("generator.emit( new SequenceEndEvent( null, null ) );");
 
                         sc.unindent();
-                        sc.add( "}" );
-                    }
-                    else
-                    {
-                        //Map or Properties
+                        sc.add("}");
+                    } else {
+                        // Map or Properties
 
-                        sc.add( getValueChecker( type, value, field ) );
+                        sc.add(getValueChecker(type, value, field));
 
-                        sc.add( "{" );
+                        sc.add("{");
                         sc.indent();
 
-                        writeScalarKey( sc, fieldTagName );
+                        writeScalarKey(sc, fieldTagName);
 
-                        if ( xmlAssociationMetadata.isMapExplode() )
-                        {
-                            sc.add( "generator.emit( new SequenceStartEvent( null, null, true, null, null, false ) );" );
-                        }
-                        else
-                        {
-                            sc.add( "generator.emit( new MappingStartEvent( null, null, true, null, null, FlowStyle.BLOCK ) );" );
+                        if (xmlAssociationMetadata.isMapExplode()) {
+                            sc.add("generator.emit( new SequenceStartEvent( null, null, true, null, null, false ) );");
+                        } else {
+                            sc.add(
+                                    "generator.emit( new MappingStartEvent( null, null, true, null, null, FlowStyle.BLOCK ) );");
                         }
 
+                        StringBuilder entryTypeBuilder = new StringBuilder("java.util.Map.Entry");
 
+                        if (useJava5) {
+                            entryTypeBuilder.append('<');
 
-                        StringBuilder entryTypeBuilder = new StringBuilder( "java.util.Map.Entry" );
-
-                        if ( useJava5 )
-                        {
-                            entryTypeBuilder.append( '<' );
-
-                            if ( association.getType().equals( ModelDefault.PROPERTIES ) )
-                            {
-                                entryTypeBuilder.append( "Object, Object" );
-                            }
-                            else
-                            {
-                                entryTypeBuilder.append( "String, " ).append( association.getTo() );
+                            if (association.getType().equals(ModelDefault.PROPERTIES)) {
+                                entryTypeBuilder.append("Object, Object");
+                            } else {
+                                entryTypeBuilder.append("String, ").append(association.getTo());
                             }
 
-                            entryTypeBuilder.append( '>' );
+                            entryTypeBuilder.append('>');
                         }
 
-                        if ( useJava5 )
-                        {
-                            sc.add( "for ( " + entryTypeBuilder + " entry : " + value + ".entrySet() )" );
-                        }
-                        else
-                        {
-                            sc.add( "for ( java.util.Iterator it = " + value + ".entrySet().iterator(); it.hasNext(); )" );
+                        if (useJava5) {
+                            sc.add("for ( " + entryTypeBuilder + " entry : " + value + ".entrySet() )");
+                        } else {
+                            sc.add("for ( java.util.Iterator it = " + value
+                                    + ".entrySet().iterator(); it.hasNext(); )");
                         }
 
-                        sc.add( "{" );
+                        sc.add("{");
                         sc.indent();
 
-                        if ( !useJava5 )
-                        {
-                            sc.add( entryTypeBuilder + " entry = (" + entryTypeBuilder + ") it.next();" );
+                        if (!useJava5) {
+                            sc.add(entryTypeBuilder + " entry = (" + entryTypeBuilder + ") it.next();");
                         }
 
-                        sc.add( "final String key = String.valueOf( entry.getKey() );" );
-                        sc.add( "final String value = String.valueOf( entry.getValue() );" );
+                        sc.add("final String key = String.valueOf( entry.getKey() );");
+                        sc.add("final String value = String.valueOf( entry.getValue() );");
 
-                        if ( xmlAssociationMetadata.isMapExplode() )
-                        {
-                            sc.add( "generator.emit( new MappingStartEvent( null, null, true, null, null, FlowStyle.BLOCK) );" );
-                            writeScalarKey( sc, "key" );
-                            writeScalar( sc, "key" );
-                            writeScalarKey( sc, "value" );
-                            writeScalar( sc, "value" );
-                            sc.add( "generator.emit( new MappingEndEvent( null, null ) );" );
-                        }
-                        else
-                        {
-                            writeScalar( sc, "key" );
-                            writeScalar( sc, "value" );
+                        if (xmlAssociationMetadata.isMapExplode()) {
+                            sc.add(
+                                    "generator.emit( new MappingStartEvent( null, null, true, null, null, FlowStyle.BLOCK) );");
+                            writeScalarKey(sc, "key");
+                            writeScalar(sc, "key");
+                            writeScalarKey(sc, "value");
+                            writeScalar(sc, "value");
+                            sc.add("generator.emit( new MappingEndEvent( null, null ) );");
+                        } else {
+                            writeScalar(sc, "key");
+                            writeScalar(sc, "value");
                         }
 
                         sc.unindent();
-                        sc.add( "}" );
+                        sc.add("}");
 
-                        if ( xmlAssociationMetadata.isMapExplode() )
-                        {
-                            sc.add( "generator.emit( new SequenceEndEvent( null, null ) );" );
-                        }
-                        else
-                        {
-                            sc.add( "generator.emit( new MappingEndEvent( null, null ) );" );
+                        if (xmlAssociationMetadata.isMapExplode()) {
+                            sc.add("generator.emit( new SequenceEndEvent( null, null ) );");
+                        } else {
+                            sc.add("generator.emit( new MappingEndEvent( null, null ) );");
                         }
 
                         sc.unindent();
-                        sc.add( "}" );
+                        sc.add("}");
                     }
                 }
-            }
-            else
-            {
-                sc.add( getValueChecker( type, value, field ) );
+            } else {
+                sc.add(getValueChecker(type, value, field));
 
-                sc.add( "{" );
+                sc.add("{");
                 sc.indent();
 
-                writeScalarKey( sc, fieldTagName );
-                writeScalar( sc, getValue( field.getType(), value, xmlFieldMetadata ) );
+                writeScalarKey(sc, fieldTagName);
+                writeScalar(sc, getValue(field.getType(), value, xmlFieldMetadata));
 
                 sc.unindent();
-                sc.add( "}" );
+                sc.add("}");
             }
         }
 
-        sc.add( "generator.emit( new MappingEndEvent( null, null ) );" );
+        sc.add("generator.emit( new MappingEndEvent( null, null ) );");
 
-        jClass.addMethod( marshall );
+        jClass.addMethod(marshall);
     }
 
-    private void writeScalarKey( JSourceCode sc, String key )
-    {
-        writeScalar( sc, "\"" + key + "\"" );
+    private void writeScalarKey(JSourceCode sc, String key) {
+        writeScalar(sc, "\"" + key + "\"");
     }
 
-    private void writeScalar( JSourceCode sc, String value )
-    {
-        sc.add( "{" );
+    private void writeScalar(JSourceCode sc, String value) {
+        sc.add("{");
         sc.indent();
-        sc.add( "String anchor = null, tag = null;" );
-        sc.add( "Mark startMark = null, endMark = null;" );
-        sc.add( "ScalarStyle style = ScalarStyle.DOUBLE_QUOTED;" );
-        sc.add( "generator.emit( new ScalarEvent( anchor, tag, new ImplicitTuple( true, true ), "
+        sc.add("String anchor = null, tag = null;");
+        sc.add("Mark startMark = null, endMark = null;");
+        sc.add("ScalarStyle style = ScalarStyle.DOUBLE_QUOTED;");
+        sc.add("generator.emit( new ScalarEvent( anchor, tag, new ImplicitTuple( true, true ), "
                 + value
-                + ", startMark, endMark, style ) );" );
+                + ", startMark, endMark, style ) );");
         sc.unindent();
-        sc.add( "}" );
+        sc.add("}");
     }
-
 }

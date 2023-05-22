@@ -31,21 +31,16 @@ import org.codehaus.plexus.component.annotations.Component;
  *
  * @author <a href="mailto:simonetripodi@apache.org">Simone Tripodi</a>
  */
-@Component( role = ModelloGenerator.class, hint = "snakeyaml-extended-reader" )
-public class SnakeYamlExtendedReaderGenerator
-    extends SnakeYamlReaderGenerator
-{
+@Component(role = ModelloGenerator.class, hint = "snakeyaml-extended-reader")
+public class SnakeYamlExtendedReaderGenerator extends SnakeYamlReaderGenerator {
 
     @Override
-    protected boolean isRelevant( ModelClass modelClass )
-    {
-        return isJavaEnabled( modelClass );
+    protected boolean isRelevant(ModelClass modelClass) {
+        return isJavaEnabled(modelClass);
     }
 
     @Override
-    protected boolean isLocationTracking()
-    {
+    protected boolean isLocationTracking() {
         return true;
     }
-
 }

@@ -42,7 +42,6 @@
  *
  * $Id$
  */
-
 package org.codehaus.modello.plugin.java.javasource;
 
 /*
@@ -84,8 +83,7 @@ import java.util.Map;
  *
  * @author <a href="mailto:kvisco@intalio.com">Keith Visco</a>
  **/
-public final class JMethodSignature
-{
+public final class JMethodSignature {
 
     /**
      * The set of modifiers for this JMethod
@@ -101,7 +99,6 @@ public final class JMethodSignature
      * The name of this method
      **/
     private String name = null;
-
 
     /**
      * The list of parameters of this JMethodSignature in declared
@@ -126,45 +123,41 @@ public final class JMethodSignature
      * @param name, the method name. Must not be null.
      * @param returnType the return type of the method. May be null.
      **/
-    public JMethodSignature( String name, JType returnType )
-    {
+    public JMethodSignature(String name, JType returnType) {
 
-        if ( ( name == null ) || ( name.length() == 0 ) )
-        {
+        if ((name == null) || (name.length() == 0)) {
             String err = "The method name must not be null or zero-length";
-            throw new IllegalArgumentException( err );
+            throw new IllegalArgumentException(err);
         }
 
         this.jdc = new JDocComment();
         this.returnType = returnType;
         this.name = name;
         this.modifiers = new JModifiers();
-        this.params = new LinkedHashMap<>( 3 );
-        this.exceptions = new ArrayList<JClass>( 1 );
-    } //-- JMethodSignature
+        this.params = new LinkedHashMap<>(3);
+        this.exceptions = new ArrayList<JClass>(1);
+    } // -- JMethodSignature
 
     /**
      * Adds the given Exception to this JMethodSignature's throws clause.
      *
      * @param exp the JClass representing the Exception
      **/
-    public void addException( JClass exp )
-    {
+    public void addException(JClass exp) {
 
-        if ( exp == null ) return;
+        if (exp == null) return;
 
-        //-- make sure exception is not already added
+        // -- make sure exception is not already added
         String expClassName = exp.getName();
-        for ( JClass jClass  : exceptions )
-        {
-            if ( expClassName.equals( jClass.getName() ) ) return;
+        for (JClass jClass : exceptions) {
+            if (expClassName.equals(jClass.getName())) return;
         }
-        //-- add exception
-        exceptions.add( exp );
+        // -- add exception
+        exceptions.add(exp);
 
-        //-- create comment
-        jdc.addDescriptor( JDocDescriptor.createExceptionDesc( expClassName, expClassName + " if any.") );
-    } //-- addException
+        // -- create comment
+        jdc.addDescriptor(JDocDescriptor.createExceptionDesc(expClassName, expClassName + " if any."));
+    } // -- addException
 
     /**
      * Adds the given parameter to this JMethodSignature's list of
@@ -176,31 +169,26 @@ public final class JMethodSignature
      * exists for this Method with the same name as the new
      * parameter.
      **/
-    public void addParameter( JParameter parameter )
-        throws IllegalArgumentException
-    {
+    public void addParameter(JParameter parameter) throws IllegalArgumentException {
 
-        if ( parameter == null ) return;
+        if (parameter == null) return;
 
         String pName = parameter.getName();
-        //-- check current params
-        if ( params.get( pName ) != null )
-        {
+        // -- check current params
+        if (params.get(pName) != null) {
             StringBuilder err = new StringBuilder();
-            err.append( "A parameter already exists for this method, " );
-            err.append( name );
-            err.append( ", with the name: " );
-            err.append( pName );
-            throw new IllegalArgumentException( err.toString() );
+            err.append("A parameter already exists for this method, ");
+            err.append(name);
+            err.append(", with the name: ");
+            err.append(pName);
+            throw new IllegalArgumentException(err.toString());
         }
 
+        params.put(pName, parameter);
 
-        params.put( pName, parameter );
-
-        //-- create comment
-        jdc.addDescriptor( JDocDescriptor.createParamDesc( pName, "a " + pName + " object.") );
-
-    } //-- addParameter
+        // -- create comment
+        jdc.addDescriptor(JDocDescriptor.createParamDesc(pName, "a " + pName + " object."));
+    } // -- addParameter
 
     /**
      * Returns the exceptions that this JMethodSignature lists
@@ -209,40 +197,36 @@ public final class JMethodSignature
      * @return the exceptions that this JMethodSignature lists
      * in it's throws clause.
      **/
-    public JClass[] getExceptions()
-    {
-        return exceptions.toArray( new JClass[0] );
-    } //-- getExceptions
+    public JClass[] getExceptions() {
+        return exceptions.toArray(new JClass[0]);
+    } // -- getExceptions
 
     /**
      * Returns the JDocComment describing this JMethodSignature
      *
      * @return the JDocComment describing this JMethodSignature
      **/
-    public JDocComment getJDocComment()
-    {
+    public JDocComment getJDocComment() {
         return this.jdc;
-    } //-- getJDocComment
+    } // -- getJDocComment
 
     /**
      * Returns the modifiers for this JMethodSignature.
      *
      * @return the modifiers for this JMethodSignature.
      **/
-    public JModifiers getModifiers()
-    {
+    public JModifiers getModifiers() {
         return this.modifiers;
-    } //-- getModifiers
+    } // -- getModifiers
 
     /**
      * Returns the name of the method.
      *
      * @return the name of the method.
      **/
-    public String getName()
-    {
+    public String getName() {
         return this.name;
-    } //-- getName
+    } // -- getName
 
     /**
      * Returns the JParameter at the given index.
@@ -250,16 +234,14 @@ public final class JMethodSignature
      * @param index the index of the JParameter to return.
      * @return the JParameter at the given index.
      **/
-    public JParameter getParameter( int index )
-    {
+    public JParameter getParameter(int index) {
         Iterator<Map.Entry<String, JParameter>> paramIter = params.entrySet().iterator();
         Map.Entry<String, JParameter> selected = null;
-        for( int i = 0; i <= index; i++)
-        {
+        for (int i = 0; i <= index; i++) {
             selected = paramIter.next();
         }
         return selected.getValue();
-    } //-- getParameter
+    } // -- getParameter
 
     /**
      * Returns the set of JParameters for this JMethodSignature
@@ -268,10 +250,9 @@ public final class JMethodSignature
      * are the actual references.
      * @return the set of JParameters for this JMethod
      **/
-    public synchronized JParameter[] getParameters()
-    {
-        return params.values().toArray( new JParameter[0] );
-    } //-- getParameters
+    public synchronized JParameter[] getParameters() {
+        return params.values().toArray(new JParameter[0]);
+    } // -- getParameters
 
     /**
      * Returns the JType that represents the return type for the
@@ -280,11 +261,9 @@ public final class JMethodSignature
      * @return the JType that represents the return type for the
      * method signature.
      **/
-    public JType getReturnType()
-    {
+    public JType getReturnType() {
         return returnType;
-    } //-- getReturnType
-
+    } // -- getReturnType
 
     /**
      * Sets the comment describing this JMethodSignature.
@@ -292,22 +271,19 @@ public final class JMethodSignature
      * @param comment the comment for this member
      * @see #getJDocComment
      **/
-    public void setComment( String comment )
-    {
-        jdc.setComment( comment );
-    } //-- setComment
-
+    public void setComment(String comment) {
+        jdc.setComment(comment);
+    } // -- setComment
 
     /**
      * Sets the JModifiers for this method signature.
      *
      * @param modifiers the JModifiers for this method signature.
      **/
-    public void setModifiers( JModifiers modifiers )
-    {
+    public void setModifiers(JModifiers modifiers) {
         this.modifiers = modifiers.copy();
-        this.modifiers.setFinal( false );
-    } //-- setModifiers
+        this.modifiers.setFinal(false);
+    } // -- setModifiers
 
     /**
      * Prints the method signature. A semi-colon (end-of-statement
@@ -315,10 +291,9 @@ public final class JMethodSignature
      *
      * @param jsw the JSourceWriter to print to.
      **/
-    public void print( JSourceWriter jsw )
-    {
-        print( jsw, true );
-    } //-- print
+    public void print(JSourceWriter jsw) {
+        print(jsw, true);
+    } // -- print
 
     /**
      * Prints the method signature. A semi-colon (end-of-statement
@@ -328,65 +303,55 @@ public final class JMethodSignature
      * @param printJavaDoc a boolean that when true prints the JDocComment
      * associated with this method signature.
      **/
-    public void print( JSourceWriter jsw, boolean printJavaDoc )
-    {
+    public void print(JSourceWriter jsw, boolean printJavaDoc) {
 
-        //------------/
-        //- Java Doc -/
-        //------------/
+        // ------------/
+        // - Java Doc -/
+        // ------------/
 
-        if ( printJavaDoc ) jdc.print( jsw );
+        if (printJavaDoc) jdc.print(jsw);
 
-        //-----------------/
-        //- Method Source -/
-        //-----------------/
+        // -----------------/
+        // - Method Source -/
+        // -----------------/
 
-        jsw.write( modifiers.toString() );
-        if ( modifiers.toString().length() > 0 )
-        {
-            jsw.write( ' ' );
+        jsw.write(modifiers.toString());
+        if (modifiers.toString().length() > 0) {
+            jsw.write(' ');
         }
-        if ( returnType != null )
-        {
-            jsw.write( returnType );
-        }
-        else
-            jsw.write( "void" );
-        jsw.write( ' ' );
-        jsw.write( name );
-        jsw.write( '(' );
+        if (returnType != null) {
+            jsw.write(returnType);
+        } else jsw.write("void");
+        jsw.write(' ');
+        jsw.write(name);
+        jsw.write('(');
 
-        //-- print parameters
-        if ( params.size() > 0 )
-        {
-            jsw.write( ' ' );
+        // -- print parameters
+        if (params.size() > 0) {
+            jsw.write(' ');
 
-            Enumeration<JParameter> paramEnum = Collections.enumeration( params.values() );
-            jsw.write( paramEnum.nextElement() );
-            while( paramEnum.hasMoreElements() )
-            {
-                jsw.write( ", " );
-                jsw.write( paramEnum.nextElement() );
+            Enumeration<JParameter> paramEnum = Collections.enumeration(params.values());
+            jsw.write(paramEnum.nextElement());
+            while (paramEnum.hasMoreElements()) {
+                jsw.write(", ");
+                jsw.write(paramEnum.nextElement());
             }
-            
-            jsw.write( ' ' );
+
+            jsw.write(' ');
         }
 
-        jsw.write( ')' );
+        jsw.write(')');
 
-        if ( exceptions.size() > 0 )
-        {
+        if (exceptions.size() > 0) {
             jsw.writeln();
-            jsw.write( "    throws " );
-            for ( int i = 0; i < exceptions.size(); i++ )
-            {
-                if ( i > 0 ) jsw.write( ", " );
-                JClass jClass = exceptions.get( i );
-                jsw.write( jClass.getName() );
+            jsw.write("    throws ");
+            for (int i = 0; i < exceptions.size(); i++) {
+                if (i > 0) jsw.write(", ");
+                JClass jClass = exceptions.get(i);
+                jsw.write(jClass.getName());
             }
         }
-    } //-- print
-
+    } // -- print
 
     /**
      * Returns the String representation of this JMethod,
@@ -394,57 +359,47 @@ public final class JMethodSignature
      * @return the String representation of this JMethod, which
      * is simply the method prototype
      **/
-    public String toString()
-    {
+    public String toString() {
 
         StringBuilder sb = new StringBuilder();
-        if ( returnType != null )
-        {
-            sb.append( returnType );
-        }
-        else
-            sb.append( "void" );
-        sb.append( ' ' );
-        sb.append( name );
-        sb.append( '(' );
+        if (returnType != null) {
+            sb.append(returnType);
+        } else sb.append("void");
+        sb.append(' ');
+        sb.append(name);
+        sb.append('(');
 
-        //-- print parameters
-        if ( params.size() > 0 )
-        {
-            sb.append( ' ' );
-            
-            Enumeration<JParameter> paramEnum = Collections.enumeration( params.values() );
-            sb.append( paramEnum.nextElement().getType().getName() );
-            while( paramEnum.hasMoreElements() )
-            {
-                sb.append( ", " );
-                sb.append( paramEnum.nextElement().getType().getName() );
+        // -- print parameters
+        if (params.size() > 0) {
+            sb.append(' ');
+
+            Enumeration<JParameter> paramEnum = Collections.enumeration(params.values());
+            sb.append(paramEnum.nextElement().getType().getName());
+            while (paramEnum.hasMoreElements()) {
+                sb.append(", ");
+                sb.append(paramEnum.nextElement().getType().getName());
             }
-            
-            sb.append( ' ' );
+
+            sb.append(' ');
         }
 
-        sb.append( ')' );
+        sb.append(')');
 
         return sb.toString();
-    } //-- toString
+    } // -- toString
 
-    protected String[] getParameterClassNames()
-    {
-        List<String> names = new ArrayList<String>( params.size() );
+    protected String[] getParameterClassNames() {
+        List<String> names = new ArrayList<String>(params.size());
 
-        for ( JParameter param : params.values() )
-        {
+        for (JParameter param : params.values()) {
             JType jType = param.getType();
-            while ( jType.isArray() ) jType = jType.getComponentType();
-            if ( !jType.isPrimitive() )
-            {
+            while (jType.isArray()) jType = jType.getComponentType();
+            if (!jType.isPrimitive()) {
                 JClass jclass = (JClass) jType;
-                names.add( jclass.getName() );
+                names.add(jclass.getName());
             }
         }
 
-        return names.toArray( new String[0] );
-    } //-- getParameterClassNames
-
-} //-- JMethodSignature
+        return names.toArray(new String[0]);
+    } // -- getParameterClassNames
+} // -- JMethodSignature

@@ -22,6 +22,8 @@ package org.codehaus.modello.plugin.model;
  * SOFTWARE.
  */
 
+import java.util.Map;
+
 import org.codehaus.modello.metadata.AbstractMetadataPlugin;
 import org.codehaus.modello.metadata.AssociationMetadata;
 import org.codehaus.modello.metadata.ClassMetadata;
@@ -34,19 +36,13 @@ import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.ModelInterface;
-
 import org.codehaus.plexus.component.annotations.Component;
-
-import java.util.Map;
 
 /**
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
  */
-@Component( role = MetadataPlugin.class, hint = "model" )
-public class ModelMetadataPlugin
-    extends AbstractMetadataPlugin
-    implements MetadataPlugin
-{
+@Component(role = MetadataPlugin.class, hint = "model")
+public class ModelMetadataPlugin extends AbstractMetadataPlugin implements MetadataPlugin {
     public static final String ROOT_ELEMENT = "rootElement";
 
     public static final String LOCATION_TRACKER = "locationTracker";
@@ -57,36 +53,31 @@ public class ModelMetadataPlugin
     // Map to Metadata
     // ----------------------------------------------------------------------
 
-    public ModelMetadata getModelMetadata( Model model, Map<String, String> data )
-    {
+    public ModelMetadata getModelMetadata(Model model, Map<String, String> data) {
         return new ModelModelMetadata();
     }
 
-    public ClassMetadata getClassMetadata( ModelClass clazz, Map<String, String> data )
-    {
+    public ClassMetadata getClassMetadata(ModelClass clazz, Map<String, String> data) {
         ModelClassMetadata metadata = new ModelClassMetadata();
 
-        metadata.setRootElement( getBoolean( data, ROOT_ELEMENT, false ) );
+        metadata.setRootElement(getBoolean(data, ROOT_ELEMENT, false));
 
-        metadata.setLocationTracker( getString( data, LOCATION_TRACKER ) );
+        metadata.setLocationTracker(getString(data, LOCATION_TRACKER));
 
-        metadata.setSourceTracker( getString( data, SOURCE_TRACKER ) );
+        metadata.setSourceTracker(getString(data, SOURCE_TRACKER));
 
         return metadata;
     }
 
-    public InterfaceMetadata getInterfaceMetadata( ModelInterface iface, Map<String, String> data )
-    {
+    public InterfaceMetadata getInterfaceMetadata(ModelInterface iface, Map<String, String> data) {
         return new ModelInterfaceMetadata();
     }
 
-    public FieldMetadata getFieldMetadata( ModelField field, Map<String, String> data )
-    {
+    public FieldMetadata getFieldMetadata(ModelField field, Map<String, String> data) {
         return new ModelFieldMetadata();
     }
 
-    public AssociationMetadata getAssociationMetadata( ModelAssociation association, Map<String, String> data )
-    {
+    public AssociationMetadata getAssociationMetadata(ModelAssociation association, Map<String, String> data) {
         return new ModelAssociationMetadata();
     }
 }

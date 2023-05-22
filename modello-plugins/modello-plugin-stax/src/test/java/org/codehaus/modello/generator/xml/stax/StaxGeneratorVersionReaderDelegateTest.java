@@ -27,22 +27,16 @@ import org.codehaus.plexus.component.repository.exception.ComponentLookupExcepti
 
 /**
  */
-public class StaxGeneratorVersionReaderDelegateTest
-    extends AbstractStaxGeneratorTestCase
-{
-    public StaxGeneratorVersionReaderDelegateTest()
-        throws ComponentLookupException
-    {
-        super( "stax-version-reader-delegate" );
+public class StaxGeneratorVersionReaderDelegateTest extends AbstractStaxGeneratorTestCase {
+    public StaxGeneratorVersionReaderDelegateTest() throws ComponentLookupException {
+        super("stax-version-reader-delegate");
     }
 
-    public void testStaxReaderVersionInField()
-        throws Throwable
-    {
-        Model model = modello.loadModel( getXmlResourceReader( "/version-in-namespace.mdo" ) );
+    public void testStaxReaderVersionInField() throws Throwable {
+        Model model = modello.loadModel(getXmlResourceReader("/version-in-namespace.mdo"));
 
-        verifyModel( model, "org.codehaus.modello.generator.xml.stax.StaxVerifierVersionReaderDelegate",
-                     new String[] { "4.0.0", "4.0.1" } );
+        verifyModel(model, "org.codehaus.modello.generator.xml.stax.StaxVerifierVersionReaderDelegate", new String[] {
+            "4.0.0", "4.0.1"
+        });
     }
-
 }

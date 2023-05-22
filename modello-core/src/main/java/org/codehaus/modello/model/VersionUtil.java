@@ -25,11 +25,9 @@ package org.codehaus.modello.model;
 /**
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
  */
-public class VersionUtil
-{
-    public static boolean isInConflict( VersionRange version1, VersionRange version2 )
-    {
-        return !( version1.getToVersion().lesserThan( version2.getFromVersion() )
-                  || version2.getToVersion().lesserThan( version1.getFromVersion() ) );
+public class VersionUtil {
+    public static boolean isInConflict(VersionRange version1, VersionRange version2) {
+        return !(version1.getToVersion().lesserThan(version2.getFromVersion())
+                || version2.getToVersion().lesserThan(version1.getFromVersion()));
     }
 }

@@ -22,40 +22,35 @@ package org.codehaus.modello.plugin.jdom;
  * SOFTWARE.
  */
 
+import java.util.Properties;
+
 import org.codehaus.modello.AbstractModelloJavaGeneratorTest;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
 
-import java.util.Properties;
-
 /**
  * @author Hervé Boutemy
  */
-public class FeaturesJDOMGeneratorTest
-    extends AbstractModelloJavaGeneratorTest
-{
-    public FeaturesJDOMGeneratorTest()
-    {
-        super( "features" );
+public class FeaturesJDOMGeneratorTest extends AbstractModelloJavaGeneratorTest {
+    public FeaturesJDOMGeneratorTest() {
+        super("features");
     }
 
-    public void testJavaGenerator()
-        throws Throwable
-    {
-        ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
+    public void testJavaGenerator() throws Throwable {
+        ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
 
-        Model model = modello.loadModel( getXmlResourceReader( "/features.mdo" ) );
+        Model model = modello.loadModel(getXmlResourceReader("/features.mdo"));
 
-        Properties parameters = getModelloParameters( "1.0.0" );
+        Properties parameters = getModelloParameters("1.0.0");
 
-        modello.generate( model, "java", parameters );
-        modello.generate( model, "stax-reader", parameters );
-        modello.generate( model, "jdom-writer", parameters );
+        modello.generate(model, "java", parameters);
+        modello.generate(model, "stax-reader", parameters);
+        modello.generate(model, "jdom-writer", parameters);
 
-        addDependency( "org.jdom", "jdom" );
-        addDependency( "org.xmlunit", "xmlunit-core" );
+        addDependency("org.jdom", "jdom");
+        addDependency("org.xmlunit", "xmlunit-core");
         compileGeneratedSources();
 
-        verifyCompiledGeneratedSources( "org.codehaus.modello.generator.xml.jdom.JDOMFeaturesVerifier" );
+        verifyCompiledGeneratedSources("org.codehaus.modello.generator.xml.jdom.JDOMFeaturesVerifier");
     }
 }

@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <parent>
-    <artifactId>modello-plugins</artifactId>
-    <groupId>org.codehaus.modello</groupId>
-    <version>2.1.2-SNAPSHOT</version>
-  </parent>
 
   <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.codehaus.modello</groupId>
+    <artifactId>modello-plugins</artifactId>
+    <version>2.1.2-SNAPSHOT</version>
+  </parent>
   <artifactId>modello-plugin-xsd</artifactId>
   <name>Modello XSD Plugin</name>
-  <description>
-    Modello XSD Plugin generates an XML Schema from the model to be able to validate XML content.
-  </description>
+  <description>Modello XSD Plugin generates an XML Schema from the model to be able to validate XML content.</description>
 
   <dependencies>
     <dependency>

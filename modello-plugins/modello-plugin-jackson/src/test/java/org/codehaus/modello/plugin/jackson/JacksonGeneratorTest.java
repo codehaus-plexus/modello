@@ -34,42 +34,37 @@ import org.codehaus.modello.model.Version;
 /**
  * @author <a href="mailto:simonetripodi@apache.org">Simone Tripodi</a>
  */
-public class JacksonGeneratorTest
-    extends AbstractModelloJavaGeneratorTest
-{
-    public JacksonGeneratorTest()
-    {
-        super( "jackson" );
+public class JacksonGeneratorTest extends AbstractModelloJavaGeneratorTest {
+    public JacksonGeneratorTest() {
+        super("jackson");
     }
 
-    public void testJacksonGenerator()
-        throws Throwable
-    {
-        ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
+    public void testJacksonGenerator() throws Throwable {
+        ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
 
-        Model model = modello.loadModel( getXmlResourceReader( "/maven.mdo" ) );
+        Model model = modello.loadModel(getXmlResourceReader("/maven.mdo"));
 
         // check some elements read from the model
-        List<ModelClass> classesList = model.getClasses( new Version( "4.0.0" ) );
+        List<ModelClass> classesList = model.getClasses(new Version("4.0.0"));
 
-        assertEquals( 28, classesList.size() );
+        assertEquals(28, classesList.size());
 
         // now generate sources and test them
-        Properties parameters = getModelloParameters( "4.0.0", 5 );
+        Properties parameters = getModelloParameters("4.0.0", 5);
 
-        modello.generate( model, "java", parameters );
-        modello.generate( model, "jackson-writer", parameters );
-        modello.generate( model, "jackson-reader", parameters );
+        modello.generate(model, "java", parameters);
+        modello.generate(model, "jackson-writer", parameters);
+        modello.generate(model, "jackson-reader", parameters);
 
-        addDependency( "com.fasterxml.jackson.core", "jackson-core" );
-        addDependency( "com.fasterxml.jackson.core", "jackson-databind" );
+        addDependency("com.fasterxml.jackson.core", "jackson-core");
+        addDependency("com.fasterxml.jackson.core", "jackson-databind");
         // looks like jackson-databind requires jackson-annotations to run...
-        addDependency( "com.fasterxml.jackson.core", "jackson-annotations" );
-        compileGeneratedSources( 5 );
+        addDependency("com.fasterxml.jackson.core", "jackson-annotations");
+        compileGeneratedSources(5);
 
         // TODO: see why without this, version system property is set to "2.4.1" value after verify
-        System.setProperty( "version", getModelloVersion() );
+        System.setProperty("version", getModelloVersion());
 
-        verifyCompiledGeneratedSources( "org.codehaus.modello.generator.jackson.JacksonVerifier" );
+        verifyCompiledGeneratedSources("org.codehaus.modello.generator.jackson.JacksonVerifier");
     }
 }

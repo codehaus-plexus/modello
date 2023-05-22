@@ -22,6 +22,9 @@ package org.codehaus.modello.generator.xml.xpp3;
  * SOFTWARE.
  */
 
+import java.util.List;
+import java.util.Properties;
+
 import org.codehaus.modello.AbstractModelloJavaGeneratorTest;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
@@ -30,72 +33,64 @@ import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.Version;
 import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
 
-import java.util.List;
-import java.util.Properties;
-
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
  */
-public class Xpp3GeneratorTest
-    extends AbstractModelloJavaGeneratorTest
-{
-    public Xpp3GeneratorTest()
-    {
-        super( "xpp3" );
+public class Xpp3GeneratorTest extends AbstractModelloJavaGeneratorTest {
+    public Xpp3GeneratorTest() {
+        super("xpp3");
     }
 
-    public void testXpp3Generator()
-        throws Throwable
-    {
-        ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
+    public void testXpp3Generator() throws Throwable {
+        ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
 
-        Model model = modello.loadModel( getXmlResourceReader( "/maven.mdo" ) );
+        Model model = modello.loadModel(getXmlResourceReader("/maven.mdo"));
 
         // check some elements read from the model
-        List<ModelClass> classesList = model.getClasses( new Version( "4.0.0" ) );
+        List<ModelClass> classesList = model.getClasses(new Version("4.0.0"));
 
-        assertEquals( 28, classesList.size() );
+        assertEquals(28, classesList.size());
 
-        ModelClass clazz = (ModelClass) classesList.get( 0 );
+        ModelClass clazz = (ModelClass) classesList.get(0);
 
-        assertEquals( "Model", clazz.getName() );
+        assertEquals("Model", clazz.getName());
 
-        ModelField extend = clazz.getField( "extend", new Version( "4.0.0" ) );
+        ModelField extend = clazz.getField("extend", new Version("4.0.0"));
 
-        assertTrue( extend.hasMetadata( XmlFieldMetadata.ID ) );
+        assertTrue(extend.hasMetadata(XmlFieldMetadata.ID));
 
-        XmlFieldMetadata xml = (XmlFieldMetadata) extend.getMetadata( XmlFieldMetadata.ID );
+        XmlFieldMetadata xml = (XmlFieldMetadata) extend.getMetadata(XmlFieldMetadata.ID);
 
-        assertNotNull( xml );
+        assertNotNull(xml);
 
-        assertTrue( xml.isAttribute() );
+        assertTrue(xml.isAttribute());
 
-        assertEquals( "extender", xml.getTagName() );
+        assertEquals("extender", xml.getTagName());
 
-        ModelField build = clazz.getField( "build", new Version( "4.0.0" ) );
+        ModelField build = clazz.getField("build", new Version("4.0.0"));
 
-        assertTrue( build.hasMetadata( XmlFieldMetadata.ID ) );
+        assertTrue(build.hasMetadata(XmlFieldMetadata.ID));
 
-        xml = (XmlFieldMetadata) build.getMetadata( XmlFieldMetadata.ID );
+        xml = (XmlFieldMetadata) build.getMetadata(XmlFieldMetadata.ID);
 
-        assertNotNull( xml );
+        assertNotNull(xml);
 
-        assertEquals( "builder", xml.getTagName() );
+        assertEquals("builder", xml.getTagName());
 
         // now generate sources and test them
-        Properties parameters = getModelloParameters( "4.0.0", 5 );
+        Properties parameters = getModelloParameters("4.0.0", 5);
 
-        modello.generate( model, "java", parameters );
-        modello.generate( model, "xpp3-writer", parameters );
-        modello.generate( model, "xpp3-reader", parameters );
+        modello.generate(model, "java", parameters);
+        modello.generate(model, "xpp3-writer", parameters);
+        modello.generate(model, "xpp3-reader", parameters);
 
-        addDependency( "org.xmlunit", "xmlunit-core" );
-        compileGeneratedSources( 5 );
+        addDependency("org.xmlunit", "xmlunit-core");
+        compileGeneratedSources(5);
 
         // TODO: see why without this, version system property is set to "2.4.1" value after verify
-        System.setProperty( "version", getModelloVersion() );
+        System.setProperty("version", getModelloVersion());
 
-        verifyCompiledGeneratedSources( "org.codehaus.modello.generator.xml.xpp3.Xpp3Verifier" );
+        verifyCompiledGeneratedSources("org.codehaus.modello.generator.xml.xpp3.Xpp3Verifier");
     }
 }

@@ -42,7 +42,6 @@
  *
  * $Id$
  */
-
 package org.codehaus.modello.plugin.java.javasource;
 
 /*
@@ -74,8 +73,7 @@ import java.io.Writer;
  * @author <a href="mailto:kvisco@intalio.com">Keith Visco</a>
  * @version $Revision$ $Date$
  **/
-public class JSourceWriter extends Writer
-{
+public class JSourceWriter extends Writer {
 
     /**
      * The default character to use for indentation
@@ -90,7 +88,7 @@ public class JSourceWriter extends Writer
     /**
      * The line separator to use for the writeln methods
      **/
-    private String lineSeparator = System.getProperty( "line.separator" );
+    private String lineSeparator = System.getProperty("line.separator");
 
     /**
      * Flag for indicating whether we need to add
@@ -130,15 +128,13 @@ public class JSourceWriter extends Writer
      **/
     private Writer out = null;
 
-
     /**
      * Creates a new JSourceWriter
      * @param out the Writer to write the actual output to
      **/
-    public JSourceWriter( Writer out )
-    {
-        this( out, DEFAULT_SIZE, DEFAULT_CHAR, false );
-    } //-- JSourceWriter
+    public JSourceWriter(Writer out) {
+        this(out, DEFAULT_SIZE, DEFAULT_CHAR, false);
+    } // -- JSourceWriter
 
     /**
      * Creates a new JSourceWriter
@@ -146,10 +142,9 @@ public class JSourceWriter extends Writer
      * @param autoflush a boolean indicating whether or not to
      * perform automatic flush at the end of a line
      **/
-    public JSourceWriter( Writer out, boolean autoflush )
-    {
-        this( out, DEFAULT_SIZE, DEFAULT_CHAR, autoflush );
-    } //-- JSourceWriter
+    public JSourceWriter(Writer out, boolean autoflush) {
+        this(out, DEFAULT_SIZE, DEFAULT_CHAR, autoflush);
+    } // -- JSourceWriter
 
     /**
      * Creates a new JSourceWriter
@@ -158,11 +153,9 @@ public class JSourceWriter extends Writer
      * @param autoflush a boolean indicating whether or not to
      * perform automatic flush at the end of a line
      **/
-    public JSourceWriter
-        ( Writer out, short tabSize, boolean autoflush )
-    {
-        this( out, tabSize, DEFAULT_CHAR, autoflush );
-    } //-- JSourceWriter
+    public JSourceWriter(Writer out, short tabSize, boolean autoflush) {
+        this(out, tabSize, DEFAULT_CHAR, autoflush);
+    } // -- JSourceWriter
 
     /**
      * Creates a new JSourceWriter
@@ -172,43 +165,37 @@ public class JSourceWriter extends Writer
      * @param autoflush a boolean indicating whether or not to
      * perform automatic flush at the end of a line
      **/
-    public JSourceWriter
-        ( Writer out, short tabSize, char tabChar, boolean autoflush )
-    {
+    public JSourceWriter(Writer out, short tabSize, char tabChar, boolean autoflush) {
         this.out = out;
         this.autoflush = autoflush;
         this.tabChar = tabChar;
         this.tabSize = tabSize;
         createTab();
-    } //-- JSourceWriter
+    } // -- JSourceWriter
 
     /**
      * Returns the line separator being used by this JSourceWriter
      * @return the line separator being used by this JSourceWriter
      **/
-    public String getLineSeparator()
-    {
+    public String getLineSeparator() {
         return lineSeparator;
-    } //-- getLineSeparator
-
+    } // -- getLineSeparator
 
     /**
      * Increases the indentation level by 1
      **/
-    public void indent()
-    {
+    public void indent() {
         ++tabLevel;
-    } //-- increaseIndent
+    } // -- increaseIndent
 
     /**
      * Checks to see if the cursor is positioned on a new line
      * @return true if the cursor is at the start of a new line, otherwise false
      **/
-    public boolean isNewline()
-    {
-        //-- if we need to add indentation, we are on a new line
+    public boolean isNewline() {
+        // -- if we need to add indentation, we are on a new line
         return addIndentation;
-    } //--  isNewline
+    } // --  isNewline
 
     /**
      * Sets the line separator to use at the end of each line
@@ -221,354 +208,256 @@ public class JSourceWriter extends Writer
      * "\n"   for UNIX<BR>
      * "\r"   for Macintosh
      **/
-    public void setLineSeparator( String lineSeparator )
-    {
+    public void setLineSeparator(String lineSeparator) {
 
         this.lineSeparator = lineSeparator;
-
-    } //-- setLineSeparator
+    } // -- setLineSeparator
 
     /**
      * Decreases the indentation level by 1
      **/
-    public void unindent()
-    {
-        if ( tabLevel > 0 ) --tabLevel;
-    } //-- decreaseIndent
+    public void unindent() {
+        if (tabLevel > 0) --tabLevel;
+    } // -- decreaseIndent
 
+    // ----------------------------/
+    // - Additional write methods -/
+    // ----------------------------/
 
-    //----------------------------/
-    //- Additional write methods -/
-    //----------------------------/
+    public void write(float f) {
+        write(String.valueOf(f));
+    } // -- write(float)
 
-    public void write( float f )
-    {
-        write( String.valueOf( f ) );
-    } //-- write(float)
+    public void write(long l) {
+        write(String.valueOf(l));
+    } // -- write(long)
 
-    public void write( long l )
-    {
-        write( String.valueOf( l ) );
-    } //-- write(long)
+    public void write(double d) {
+        write(String.valueOf(d));
+    } // -- write(double)
 
-    public void write( double d )
-    {
-        write( String.valueOf( d ) );
-    } //-- write(double)
+    public void write(Object obj) {
+        write(obj.toString());
+    } // -- write(Object)
 
-    public void write( Object obj )
-    {
-        write( obj.toString() );
-    } //-- write(Object)
+    public void write(boolean b) {
+        write(String.valueOf(b));
+    } // -- write(boolean)
 
-    public void write( boolean b )
-    {
-        write( String.valueOf( b ) );
-    } //-- write(boolean)
+    // - writeln() methods
 
-    //- writeln() methods
-
-    public void writeln()
-    {
-        synchronized ( lock )
-        {
+    public void writeln() {
+        synchronized (lock) {
             linefeed();
             addIndentation = true;
         }
-    } //-- writeln
+    } // -- writeln
 
-    public void writeln( float f )
-    {
-        synchronized ( lock )
-        {
+    public void writeln(float f) {
+        synchronized (lock) {
             ensureIndent();
-            try
-            {
-                out.write( String.valueOf( f ) );
-            }
-            catch ( java.io.IOException ioe )
-            {
+            try {
+                out.write(String.valueOf(f));
+            } catch (java.io.IOException ioe) {
             }
             ;
             linefeed();
             addIndentation = true;
         }
-    } //-- writeln(float)
+    } // -- writeln(float)
 
-    public void writeln( long l )
-    {
-        synchronized ( lock )
-        {
+    public void writeln(long l) {
+        synchronized (lock) {
             ensureIndent();
-            try
-            {
-                out.write( String.valueOf( l ) );
-            }
-            catch ( java.io.IOException ioe )
-            {
+            try {
+                out.write(String.valueOf(l));
+            } catch (java.io.IOException ioe) {
             }
             ;
             linefeed();
             addIndentation = true;
         }
-    } //-- writeln(long)
+    } // -- writeln(long)
 
-    public void writeln( int i )
-    {
-        synchronized ( lock )
-        {
+    public void writeln(int i) {
+        synchronized (lock) {
             ensureIndent();
-            try
-            {
-                out.write( String.valueOf( i ) );
-            }
-            catch ( java.io.IOException ioe )
-            {
+            try {
+                out.write(String.valueOf(i));
+            } catch (java.io.IOException ioe) {
             }
             ;
             linefeed();
             addIndentation = true;
         }
-    } //-- writeln(int)
+    } // -- writeln(int)
 
-    public void writeln( double d )
-    {
-        synchronized ( lock )
-        {
+    public void writeln(double d) {
+        synchronized (lock) {
             ensureIndent();
-            try
-            {
-                out.write( String.valueOf( d ) );
-            }
-            catch ( java.io.IOException ioe )
-            {
+            try {
+                out.write(String.valueOf(d));
+            } catch (java.io.IOException ioe) {
             }
             ;
             linefeed();
             addIndentation = true;
         }
-    } //-- writeln(double)
+    } // -- writeln(double)
 
-
-    public void writeln( Object obj )
-    {
-        synchronized ( lock )
-        {
+    public void writeln(Object obj) {
+        synchronized (lock) {
             ensureIndent();
-            try
-            {
-                out.write( obj.toString() );
-            }
-            catch ( java.io.IOException ioe )
-            {
+            try {
+                out.write(obj.toString());
+            } catch (java.io.IOException ioe) {
             }
             ;
             linefeed();
             addIndentation = true;
         }
-    } //-- writeln(Object)
+    } // -- writeln(Object)
 
-    public void writeln( String string )
-    {
-        synchronized ( lock )
-        {
-            if ( string.length() > 0 )
-            {
+    public void writeln(String string) {
+        synchronized (lock) {
+            if (string.length() > 0) {
                 ensureIndent();
-                try
-                {
-                    out.write( string );
-                }
-                catch ( java.io.IOException ioe )
-                {
+                try {
+                    out.write(string);
+                } catch (java.io.IOException ioe) {
                 }
             }
 
             linefeed();
             addIndentation = true;
         }
-    } //-- writeln(String)
+    } // -- writeln(String)
 
-    public void writeln( char[] chars )
-    {
-        synchronized ( lock )
-        {
+    public void writeln(char[] chars) {
+        synchronized (lock) {
             ensureIndent();
-            try
-            {
-                out.write( chars );
-            }
-            catch ( java.io.IOException ioe )
-            {
+            try {
+                out.write(chars);
+            } catch (java.io.IOException ioe) {
             }
             ;
             linefeed();
             addIndentation = true;
         }
-    } //-- writeln(char[])
+    } // -- writeln(char[])
 
-    public void writeln( boolean b )
-    {
-        synchronized ( lock )
-        {
+    public void writeln(boolean b) {
+        synchronized (lock) {
             ensureIndent();
-            try
-            {
-                out.write( String.valueOf( b ) );
-            }
-            catch ( java.io.IOException ioe )
-            {
+            try {
+                out.write(String.valueOf(b));
+            } catch (java.io.IOException ioe) {
             }
             ;
             linefeed();
             addIndentation = true;
         }
-    } //-- writeln(boolean)
+    } // -- writeln(boolean)
 
-    public void writeln( char c )
-    {
-        synchronized ( lock )
-        {
+    public void writeln(char c) {
+        synchronized (lock) {
             ensureIndent();
-            try
-            {
-                out.write( c );
-            }
-            catch ( java.io.IOException ioe )
-            {
+            try {
+                out.write(c);
+            } catch (java.io.IOException ioe) {
             }
             ;
             linefeed();
             addIndentation = true;
         }
-    } //-- writeln(char)
+    } // -- writeln(char)
 
+    // -----------------------/
+    // - Methods from Writer -/
+    // -----------------------/
 
-    //-----------------------/
-    //- Methods from Writer -/
-    //-----------------------/
-
-    public void close()
-    {
-        try
-        {
+    public void close() {
+        try {
             out.close();
-        }
-        catch ( java.io.IOException ioe )
-        {
+        } catch (java.io.IOException ioe) {
         }
         ;
-    } //-- close
+    } // -- close
 
-
-    public void flush()
-    {
-        try
-        {
+    public void flush() {
+        try {
             out.flush();
-        }
-        catch ( java.io.IOException ioe )
-        {
+        } catch (java.io.IOException ioe) {
         }
         ;
-    } //-- flush
+    } // -- flush
 
-
-    public void write( String s, int off, int len )
-    {
-        synchronized ( lock )
-        {
+    public void write(String s, int off, int len) {
+        synchronized (lock) {
             ensureIndent();
-            try
-            {
-                out.write( s, off, len );
-            }
-            catch ( java.io.IOException ioe )
-            {
+            try {
+                out.write(s, off, len);
+            } catch (java.io.IOException ioe) {
             }
             ;
-            if ( autoflush ) flush();
+            if (autoflush) flush();
         }
-    } //-- write
+    } // -- write
 
-
-    public void write( String s )
-    {
-        synchronized ( lock )
-        {
+    public void write(String s) {
+        synchronized (lock) {
             ensureIndent();
-            try
-            {
-                out.write( s );
-            }
-            catch ( java.io.IOException ioe )
-            {
+            try {
+                out.write(s);
+            } catch (java.io.IOException ioe) {
             }
             ;
-            if ( autoflush ) flush();
+            if (autoflush) flush();
         }
-    } //-- write
+    } // -- write
 
-    public void write( char[] buf )
-    {
-        synchronized ( lock )
-        {
+    public void write(char[] buf) {
+        synchronized (lock) {
             ensureIndent();
-            try
-            {
-                out.write( buf );
-            }
-            catch ( java.io.IOException ioe )
-            {
+            try {
+                out.write(buf);
+            } catch (java.io.IOException ioe) {
             }
             ;
 
-            if ( autoflush ) flush();
+            if (autoflush) flush();
         }
-    } //-- write
+    } // -- write
 
-
-    public void write( int c )
-    {
-        synchronized ( lock )
-        {
+    public void write(int c) {
+        synchronized (lock) {
             ensureIndent();
-            try
-            {
-                out.write( c );
-            }
-            catch ( java.io.IOException ioe )
-            {
+            try {
+                out.write(c);
+            } catch (java.io.IOException ioe) {
             }
             ;
-            if ( autoflush ) flush();
+            if (autoflush) flush();
         }
-    } //-- write
+    } // -- write
 
-
-    public void write( char[] buf, int off, int len )
-    {
-        synchronized ( lock )
-        {
+    public void write(char[] buf, int off, int len) {
+        synchronized (lock) {
             ensureIndent();
-            try
-            {
-                out.write( buf, off, len );
-            }
-            catch ( java.io.IOException ioe )
-            {
+            try {
+                out.write(buf, off, len);
+            } catch (java.io.IOException ioe) {
             }
             ;
-            if ( autoflush ) flush();
+            if (autoflush) flush();
         }
-    } //-- write
+    } // -- write
 
-    //---------------------/
-    //- Protected Methods -/
-    //---------------------/
+    // ---------------------/
+    // - Protected Methods -/
+    // ---------------------/
 
-    protected short getIndentLevel()
-    {
+    protected short getIndentLevel() {
         return tabLevel;
     }
 
@@ -576,69 +465,52 @@ public class JSourceWriter extends Writer
      * Returns the current indent size (getIndentLevel()*tabSize);
      * @return the current indent size
      **/
-    protected short getIndentSize()
-    {
-        return (short) ( tabLevel * tabSize );
-    } //-- getIndentSize
+    protected short getIndentSize() {
+        return (short) (tabLevel * tabSize);
+    } // -- getIndentSize
 
-    protected char getIndentChar()
-    {
+    protected char getIndentChar() {
         return tabChar;
     }
 
-    protected void writeIndent()
-    {
+    protected void writeIndent() {
 
-        try
-        {
-            for ( int i = 0; i < tabLevel; i++ ) out.write( tab );
-        }
-        catch ( java.io.IOException ioe )
-        {
+        try {
+            for (int i = 0; i < tabLevel; i++) out.write(tab);
+        } catch (java.io.IOException ioe) {
         }
         ;
+    } // -- writeIndent
 
-    } //-- writeIndent
+    // -------------------/
+    // - Private Methods -/
+    // -------------------/
 
-    //-------------------/
-    //- Private Methods -/
-    //-------------------/
-
-    private void ensureIndent()
-    {
-        if ( addIndentation )
-        {
+    private void ensureIndent() {
+        if (addIndentation) {
             writeIndent();
             addIndentation = false;
         }
-    } //-- ensureIndent
-
+    } // -- ensureIndent
 
     /**
      * writes the line separator character to the writer
      **/
-    private void linefeed()
-    {
-        try
-        {
-            out.write( lineSeparator );
-        }
-        catch ( java.io.IOException ioe )
-        {
+    private void linefeed() {
+        try {
+            out.write(lineSeparator);
+        } catch (java.io.IOException ioe) {
         }
         ;
-    } //-- linefeed
+    } // -- linefeed
 
     /**
      * Creates the tab from the tabSize and the tabChar
      **/
-    private void createTab()
-    {
+    private void createTab() {
         tab = new char[tabSize];
-        for ( int i = 0; i < tabSize; i++ )
-        {
+        for (int i = 0; i < tabSize; i++) {
             tab[i] = tabChar;
         }
-    } //-- createTab
-
-} //-- JSourceWriter
+    } // -- createTab
+} // -- JSourceWriter

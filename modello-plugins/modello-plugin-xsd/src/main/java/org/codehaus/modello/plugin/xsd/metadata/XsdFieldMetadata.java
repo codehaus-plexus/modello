@@ -19,11 +19,10 @@ package org.codehaus.modello.plugin.xsd.metadata;
 import org.codehaus.modello.metadata.FieldMetadata;
 
 /**
- * XsdFieldMetadata 
+ * XsdFieldMetadata
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  */
-public class XsdFieldMetadata implements FieldMetadata
-{
+public class XsdFieldMetadata implements FieldMetadata {
     public static final String ID = XsdFieldMetadata.class.getName();
 }

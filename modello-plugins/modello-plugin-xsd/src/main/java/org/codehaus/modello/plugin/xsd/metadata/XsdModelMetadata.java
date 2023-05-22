@@ -25,53 +25,44 @@ import org.codehaus.plexus.util.StringUtils;
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  */
-public class XsdModelMetadata implements ModelMetadata
-{
+public class XsdModelMetadata implements ModelMetadata {
     public static final String ID = XsdModelMetadata.class.getName();
 
     private String namespace;
 
     private String targetNamespace;
 
-    public String getNamespace()
-    {
+    public String getNamespace() {
         return namespace;
     }
 
-    public void setNamespace( String namespace )
-    {
+    public void setNamespace(String namespace) {
         this.namespace = namespace;
     }
 
-    public String getTargetNamespace()
-    {
+    public String getTargetNamespace() {
         return targetNamespace;
     }
 
-    public void setTargetNamespace( String targetNamespace )
-    {
+    public void setTargetNamespace(String targetNamespace) {
         this.targetNamespace = targetNamespace;
     }
 
-    public String getNamespace( Version version )
-    {
+    public String getNamespace(Version version) {
         String namespace = this.namespace;
 
-        if ( version != null )
-        {
-            namespace = StringUtils.replace( namespace, "${version}", version.toString() );
+        if (version != null) {
+            namespace = StringUtils.replace(namespace, "${version}", version.toString());
         }
 
         return namespace;
     }
 
-    public String getTargetNamespace( Version version )
-    {
+    public String getTargetNamespace(Version version) {
         String targetNamespace = this.targetNamespace;
 
-        if ( version != null )
-        {
-            targetNamespace = StringUtils.replace( targetNamespace, "${version}", version.toString() );
+        if (version != null) {
+            targetNamespace = StringUtils.replace(targetNamespace, "${version}", version.toString());
         }
 
         return targetNamespace;

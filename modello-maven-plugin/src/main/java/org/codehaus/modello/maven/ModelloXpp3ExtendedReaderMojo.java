@@ -32,15 +32,11 @@ import org.apache.maven.plugins.annotations.Mojo;
  * @since 1.4
  * @author Benjamin Bentmann
  */
-@Mojo( name = "xpp3-extended-reader", defaultPhase = LifecyclePhase.GENERATE_SOURCES, threadSafe = true )
-public class ModelloXpp3ExtendedReaderMojo
-    extends ModelloXpp3ReaderMojo
-{
+@Mojo(name = "xpp3-extended-reader", defaultPhase = LifecyclePhase.GENERATE_SOURCES, threadSafe = true)
+public class ModelloXpp3ExtendedReaderMojo extends ModelloXpp3ReaderMojo {
 
     @Override
-    protected String getGeneratorType()
-    {
+    protected String getGeneratorType() {
         return "xpp3-extended-reader";
     }
-
 }

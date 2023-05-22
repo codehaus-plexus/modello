@@ -31,24 +31,19 @@ import org.codehaus.modello.model.Model;
 /**
  * Check that annotations are not added to generated sources when Java 5 features are not enabled.
  */
-public class AnnotationsJava4GeneratorTest
-    extends AbstractModelloJavaGeneratorTest
-{
-    public AnnotationsJava4GeneratorTest()
-    {
-        super( "annotations-java4" );
+public class AnnotationsJava4GeneratorTest extends AbstractModelloJavaGeneratorTest {
+    public AnnotationsJava4GeneratorTest() {
+        super("annotations-java4");
     }
 
-    public void testJava4GeneratorWithAnnotations()
-        throws Throwable
-    {
-        ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
+    public void testJava4GeneratorWithAnnotations() throws Throwable {
+        ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
 
-        Model model = modello.loadModel( getXmlResourceReader( "/models/annotations.mdo" ) );
+        Model model = modello.loadModel(getXmlResourceReader("/models/annotations.mdo"));
 
-        Properties parameters = getModelloParameters( "1.0.0" );
+        Properties parameters = getModelloParameters("1.0.0");
 
-        modello.generate( model, "java", parameters );
+        modello.generate(model, "java", parameters);
 
         compileGeneratedSources();
     }

@@ -36,41 +36,34 @@ import org.codehaus.modello.ModelloParameterConstants;
  * @author <a href="mailto:simonetripodi@apache.org">Simone Tripodi</a>
  * @since 1.8
  */
-@Mojo( name = "jsonschema", defaultPhase = LifecyclePhase.GENERATE_SOURCES, threadSafe = true )
-public final class ModelloJsonSchemaGeneratorMojo
-    extends AbstractModelloGeneratorMojo
-{
+@Mojo(name = "jsonschema", defaultPhase = LifecyclePhase.GENERATE_SOURCES, threadSafe = true)
+public final class ModelloJsonSchemaGeneratorMojo extends AbstractModelloGeneratorMojo {
 
     /**
      * The output directory of the generated JSON Schema. Hint: if you want to publish the schema automatically with
      * the site, configure this parameter to <code>${basedir}/target/generated-site/resources/jsonschema</code>.
      */
-    @Parameter( defaultValue = "${project.build.directory}/generated-site/jsonschema", required = true )
+    @Parameter(defaultValue = "${project.build.directory}/generated-site/jsonschema", required = true)
     private File outputDirectory;
 
     @Parameter
     private String jsonSchemaFileName;
 
-    protected void customizeParameters( Properties parameters )
-    {
-        super.customizeParameters( parameters );
+    protected void customizeParameters(Properties parameters) {
+        super.customizeParameters(parameters);
 
-        if ( jsonSchemaFileName != null )
-        {
-            parameters.put( ModelloParameterConstants.OUTPUT_JSONSCHEMA_FILE_NAME, jsonSchemaFileName );
+        if (jsonSchemaFileName != null) {
+            parameters.put(ModelloParameterConstants.OUTPUT_JSONSCHEMA_FILE_NAME, jsonSchemaFileName);
         }
     }
 
     @Override
-    protected String getGeneratorType()
-    {
+    protected String getGeneratorType() {
         return "jsonschema";
     }
 
     @Override
-    public File getOutputDirectory()
-    {
+    public File getOutputDirectory() {
         return outputDirectory;
     }
-
 }

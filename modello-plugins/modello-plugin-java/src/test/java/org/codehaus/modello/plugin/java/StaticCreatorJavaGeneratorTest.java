@@ -30,32 +30,26 @@ import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
 import org.codehaus.plexus.util.FileUtils;
 
-public class StaticCreatorJavaGeneratorTest
-    extends AbstractModelloJavaGeneratorTest
-{
-    public StaticCreatorJavaGeneratorTest()
-    {
-        super( "static-creator" );
+public class StaticCreatorJavaGeneratorTest extends AbstractModelloJavaGeneratorTest {
+    public StaticCreatorJavaGeneratorTest() {
+        super("static-creator");
     }
 
-    public void testJavaGeneratorWithStaticCreator()
-        throws Throwable
-    {
-        ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
+    public void testJavaGeneratorWithStaticCreator() throws Throwable {
+        ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
 
-        Model model = modello.loadModel( getXmlResourceReader( "/models/static-creator.mdo" ) );
+        Model model = modello.loadModel(getXmlResourceReader("/models/static-creator.mdo"));
 
-        Properties parameters = getModelloParameters( "1.0.0" );
+        Properties parameters = getModelloParameters("1.0.0");
 
-        modello.generate( model, "java", parameters );
+        modello.generate(model, "java", parameters);
 
         compileGeneratedSources();
 
-        File source = new File( getOutputDirectory(), "org/codehaus/modello/staticcreator/Bundle.java" );
+        File source = new File(getOutputDirectory(), "org/codehaus/modello/staticcreator/Bundle.java");
 
-        String sourceGenerated = FileUtils.fileRead( source );
+        String sourceGenerated = FileUtils.fileRead(source);
 
-        assertTrue( sourceGenerated.contains( "public static Bundle newBundleInstance(" ) );
+        assertTrue(sourceGenerated.contains("public static Bundle newBundleInstance("));
     }
-
 }

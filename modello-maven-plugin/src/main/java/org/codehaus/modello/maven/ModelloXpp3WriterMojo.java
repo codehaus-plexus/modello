@@ -30,12 +30,9 @@ import org.apache.maven.plugins.annotations.Mojo;
  *
  * @author <a href="mailto:brett@apache.org">Brett Porter</a>
  */
-@Mojo( name = "xpp3-writer", defaultPhase = LifecyclePhase.GENERATE_SOURCES, threadSafe = true )
-public class ModelloXpp3WriterMojo
-    extends AbstractModelloSourceGeneratorMojo
-{
-    protected String getGeneratorType()
-    {
+@Mojo(name = "xpp3-writer", defaultPhase = LifecyclePhase.GENERATE_SOURCES, threadSafe = true)
+public class ModelloXpp3WriterMojo extends AbstractModelloSourceGeneratorMojo {
+    protected String getGeneratorType() {
         return "xpp3-writer";
     }
 }

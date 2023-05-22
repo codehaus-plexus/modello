@@ -22,9 +22,7 @@ package org.codehaus.modello.plugin.java.javasource;
  * @version $Revision$ $Date$
  * @since 1.0.4
  */
-public final class JCollectionType
-    extends JComponentizedType
-{
+public final class JCollectionType extends JComponentizedType {
     // --------------------------------------------------------------------------
 
     /** Name of the actual collection instance to be used, e.g. java.util.ArrayList. */
@@ -39,9 +37,8 @@ public final class JCollectionType
      * @param componentType Component type.
      * @param useJava50 True if Java 5.0 should be used.
      */
-    public JCollectionType( final String typeName, final JType componentType, final boolean useJava50 )
-    {
-        super( typeName, componentType, useJava50 );
+    public JCollectionType(final String typeName, final JType componentType, final boolean useJava50) {
+        super(typeName, componentType, useJava50);
     }
 
     /**
@@ -52,10 +49,9 @@ public final class JCollectionType
      * @param componentType Component type.
      * @param useJava50 True if Java 5.0 should be used.
      */
-    public JCollectionType( final String typeName, final String instanceName, final JType componentType,
-                            final boolean useJava50 )
-    {
-        super( typeName, componentType, useJava50 );
+    public JCollectionType(
+            final String typeName, final String instanceName, final JType componentType, final boolean useJava50) {
+        super(typeName, componentType, useJava50);
         _instanceName = instanceName;
     }
 
@@ -66,12 +62,9 @@ public final class JCollectionType
      *
      * @return The instance name of this collection type.
      */
-    public String getInstanceName()
-    {
-        if ( _instanceName != null )
-        {
-            if ( isUseJava50() )
-            {
+    public String getInstanceName() {
+        if (_instanceName != null) {
+            if (isUseJava50()) {
                 return _instanceName + "<" + getComponentType().toString() + ">";
             }
 
@@ -84,10 +77,8 @@ public final class JCollectionType
     /**
      * Returns the String representation of this JType.
      */
-    public String toString()
-    {
-        if ( isUseJava50() )
-        {
+    public String toString() {
+        if (isUseJava50()) {
             return getName() + "<" + getComponentType().toString() + ">";
         }
 

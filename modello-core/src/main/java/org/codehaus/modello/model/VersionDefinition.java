@@ -22,56 +22,48 @@ package org.codehaus.modello.model;
  * SOFTWARE.
  */
 
-public class VersionDefinition
-{
+public class VersionDefinition {
     private static final String FIELD = "field";
-    
+
     private static final String NAMESPACE = "namespace";
-    
+
     private static final String FIELD_NAMESPACE = "field+namespace";
-    
+
     private String type;
 
     private String value;
 
-    public String getType()
-    {
+    public String getType() {
         return type;
     }
 
-    public void setType( String type )
-    {
+    public void setType(String type) {
         this.type = type;
     }
 
-    public String getValue()
-    {
+    public String getValue() {
         return value;
     }
 
-    public void setValue( String value )
-    {
+    public void setValue(String value) {
         this.value = value;
-    }
-    
-    /**
-     * 
-     * @return {@code true} if the versionDefinition can be based on the namespace
-     * @since 1.9 
-     */
-    public boolean isNamespaceType()
-    {
-        return NAMESPACE.equals( type ) || FIELD_NAMESPACE.equals( type );
     }
 
     /**
-     * 
+     *
+     * @return {@code true} if the versionDefinition can be based on the namespace
+     * @since 1.9
+     */
+    public boolean isNamespaceType() {
+        return NAMESPACE.equals(type) || FIELD_NAMESPACE.equals(type);
+    }
+
+    /**
+     *
      * @return {@code true} if the versionDefinition can be based on the field
      * @since 1.9
      */
-    public boolean isFieldType()
-    {
-        return FIELD.equals( type ) || FIELD_NAMESPACE.equals( type );
+    public boolean isFieldType() {
+        return FIELD.equals(type) || FIELD_NAMESPACE.equals(type);
     }
-
 }

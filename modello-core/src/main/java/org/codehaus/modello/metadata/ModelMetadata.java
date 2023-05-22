@@ -25,7 +25,4 @@ package org.codehaus.modello.metadata;
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  */
-public interface ModelMetadata
-    extends Metadata
-{
-}
+public interface ModelMetadata extends Metadata {}

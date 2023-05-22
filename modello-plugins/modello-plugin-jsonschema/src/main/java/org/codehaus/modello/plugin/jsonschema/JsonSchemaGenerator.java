@@ -29,6 +29,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonGenerator.Feature;
+import com.fasterxml.jackson.core.json.JsonWriteFeature;
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.model.Model;
@@ -42,96 +46,72 @@ import org.codehaus.modello.plugins.xml.metadata.XmlAssociationMetadata;
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.util.StringUtils;
 
-import com.fasterxml.jackson.core.JsonEncoding;
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonGenerator.Feature;
-import com.fasterxml.jackson.core.json.JsonWriteFeature;
-
 /**
  * @author <a href="mailto:simonetripodi@apache.org">Simone Tripodi</a>
  * @since 1.8
  */
-@Component( role = ModelloGenerator.class, hint = "jsonschema" )
-public final class JsonSchemaGenerator
-    extends AbstractXmlJavaGenerator
-{
+@Component(role = ModelloGenerator.class, hint = "jsonschema")
+public final class JsonSchemaGenerator extends AbstractXmlJavaGenerator {
 
-    public void generate( Model model, Properties parameters )
-        throws ModelloException
-    {
-        initialize( model, parameters );
+    public void generate(Model model, Properties parameters) throws ModelloException {
+        initialize(model, parameters);
 
-        try
-        {
-            generateJsonSchema( parameters );
-        }
-        catch ( IOException ioe )
-        {
-            throw new ModelloException( "Exception while generating JSON Schema.", ioe );
+        try {
+            generateJsonSchema(parameters);
+        } catch (IOException ioe) {
+            throw new ModelloException("Exception while generating JSON Schema.", ioe);
         }
     }
 
-    private void generateJsonSchema( Properties parameters )
-        throws IOException, ModelloException
-    {
+    private void generateJsonSchema(Properties parameters) throws IOException, ModelloException {
         Model objectModel = getModel();
 
         File directory = getOutputDirectory();
 
-        if ( isPackageWithVersion() )
-        {
-            directory = new File( directory, getGeneratedVersion().toString() );
+        if (isPackageWithVersion()) {
+            directory = new File(directory, getGeneratedVersion().toString());
         }
 
-        if ( !directory.exists() )
-        {
+        if (!directory.exists()) {
             directory.mkdirs();
         }
 
         // we assume parameters not null
-        String schemaFileName = parameters.getProperty( ModelloParameterConstants.OUTPUT_JSONSCHEMA_FILE_NAME );
+        String schemaFileName = parameters.getProperty(ModelloParameterConstants.OUTPUT_JSONSCHEMA_FILE_NAME);
 
         File schemaFile;
 
-        if ( schemaFileName != null )
-        {
-            schemaFile = new File( directory, schemaFileName );
-        }
-        else
-        {
-            schemaFile = new File( directory, objectModel.getId() + "-" + getGeneratedVersion() + ".schema.json" );
+        if (schemaFileName != null) {
+            schemaFile = new File(directory, schemaFileName);
+        } else {
+            schemaFile = new File(directory, objectModel.getId() + "-" + getGeneratedVersion() + ".schema.json");
         }
 
         JsonGenerator generator = new JsonFactory()
-                                  .enable( Feature.AUTO_CLOSE_JSON_CONTENT )
-                                  .enable( Feature.AUTO_CLOSE_TARGET )
-                                  .enable( Feature.FLUSH_PASSED_TO_STREAM )
-                                  .enable( JsonWriteFeature.ESCAPE_NON_ASCII.mappedFeature() )
-                                  .enable( JsonWriteFeature.QUOTE_FIELD_NAMES.mappedFeature() )
-                                  .enable( JsonWriteFeature.QUOTE_FIELD_NAMES.mappedFeature() )
-                                  .disable( JsonWriteFeature.WRITE_NUMBERS_AS_STRINGS.mappedFeature() )
-                                  .createGenerator( newWriter( schemaFile.toPath(), StandardCharsets.UTF_8 ) );
+                .enable(Feature.AUTO_CLOSE_JSON_CONTENT)
+                .enable(Feature.AUTO_CLOSE_TARGET)
+                .enable(Feature.FLUSH_PASSED_TO_STREAM)
+                .enable(JsonWriteFeature.ESCAPE_NON_ASCII.mappedFeature())
+                .enable(JsonWriteFeature.QUOTE_FIELD_NAMES.mappedFeature())
+                .enable(JsonWriteFeature.QUOTE_FIELD_NAMES.mappedFeature())
+                .disable(JsonWriteFeature.WRITE_NUMBERS_AS_STRINGS.mappedFeature())
+                .createGenerator(newWriter(schemaFile.toPath(), StandardCharsets.UTF_8));
 
         generator.useDefaultPrettyPrinter();
 
-        ModelClass root = objectModel.getClass( objectModel.getRoot( getGeneratedVersion() ),
-                                                getGeneratedVersion() );
+        ModelClass root = objectModel.getClass(objectModel.getRoot(getGeneratedVersion()), getGeneratedVersion());
 
-        try
-        {
+        try {
             generator.writeStartObject();
-            generator.writeStringField( "$schema", "http://json-schema.org/draft-04/schema#" );
+            generator.writeStringField("$schema", "http://json-schema.org/draft-04/schema#");
 
-            writeClassDocumentation( generator, root, true );
+            writeClassDocumentation(generator, root, true);
 
-            generator.writeObjectFieldStart( "definitions" );
+            generator.writeObjectFieldStart("definitions");
 
-            for ( ModelClass current : objectModel.getClasses( getGeneratedVersion() ) )
-            {
-                if ( !root.equals( current ) )
-                {
-                    writeClassDocumentation( generator, current, false );
+            for (ModelClass current : objectModel.getClasses(getGeneratedVersion())) {
+                if (!root.equals(current)) {
+                    writeClassDocumentation(generator, current, false);
                 }
             }
 
@@ -140,104 +120,87 @@ public final class JsonSchemaGenerator
 
             // end main object
             generator.writeEndObject();
-        }
-        finally
-        {
+        } finally {
             generator.close();
         }
     }
 
-    private void writeClassDocumentation( JsonGenerator generator, ModelClass modelClass, boolean isRoot )
-        throws IOException
-    {
-        if ( !isRoot )
-        {
-            generator.writeObjectFieldStart( modelClass.getName() );
+    private void writeClassDocumentation(JsonGenerator generator, ModelClass modelClass, boolean isRoot)
+            throws IOException {
+        if (!isRoot) {
+            generator.writeObjectFieldStart(modelClass.getName());
         }
 
-        generator.writeStringField( "id", modelClass.getName() + '#' );
-        writeDescriptionField( generator, modelClass.getDescription() );
-        writeTypeField( generator, "object" );
+        generator.writeStringField("id", modelClass.getName() + '#');
+        writeDescriptionField(generator, modelClass.getDescription());
+        writeTypeField(generator, "object");
 
-        generator.writeObjectFieldStart( "properties" );
+        generator.writeObjectFieldStart("properties");
 
         List<String> required = new LinkedList<String>();
 
         ModelClass reference = modelClass;
         // traverse the whole modelClass hierarchy to create the nested Builder instance
-        while ( reference != null )
-        {
+        while (reference != null) {
             // collect parameters and set them in the instance object
-            for ( ModelField modelField : reference.getFields( getGeneratedVersion() ) )
-            {
-                if ( modelField.isRequired() )
-                {
-                    required.add( modelField.getName() );
+            for (ModelField modelField : reference.getFields(getGeneratedVersion())) {
+                if (modelField.isRequired()) {
+                    required.add(modelField.getName());
                 }
 
                 // each field is represented as object
-                generator.writeObjectFieldStart( modelField.getName() );
+                generator.writeObjectFieldStart(modelField.getName());
 
-                writeDescriptionField( generator, modelField.getDescription() );
+                writeDescriptionField(generator, modelField.getDescription());
 
-                if ( modelField instanceof ModelAssociation )
-                {
+                if (modelField instanceof ModelAssociation) {
                     ModelAssociation modelAssociation = (ModelAssociation) modelField;
 
-                    if ( modelAssociation.isOneMultiplicity() )
-                    {
-                        writeTypeField( generator, modelAssociation.getType() );
-                    }
-                    else
-                    {
+                    if (modelAssociation.isOneMultiplicity()) {
+                        writeTypeField(generator, modelAssociation.getType());
+                    } else {
                         // MANY_MULTIPLICITY
-                        writeTypeField( generator, "array" );
+                        writeTypeField(generator, "array");
 
-                        generator.writeObjectFieldStart( "items" );
+                        generator.writeObjectFieldStart("items");
 
                         String type = modelAssociation.getType();
                         String toType = modelAssociation.getTo();
 
-                        if ( ModelDefault.LIST.equals( type ) || ModelDefault.SET.equals( type ) )
-                        {
-                            writeTypeField( generator, toType );
-                        }
-                        else
-                        {
+                        if (ModelDefault.LIST.equals(type) || ModelDefault.SET.equals(type)) {
+                            writeTypeField(generator, toType);
+                        } else {
                             // Map or Properties
 
-                            writeTypeField( generator, "object" );
+                            writeTypeField(generator, "object");
 
-                            generator.writeObjectFieldStart( "properties" );
+                            generator.writeObjectFieldStart("properties");
 
-                            XmlAssociationMetadata xmlAssociationMetadata =
-                                (XmlAssociationMetadata) modelAssociation.getAssociationMetadata( XmlAssociationMetadata.ID );
+                            XmlAssociationMetadata xmlAssociationMetadata = (XmlAssociationMetadata)
+                                    modelAssociation.getAssociationMetadata(XmlAssociationMetadata.ID);
 
-                            if ( xmlAssociationMetadata.isMapExplode() )
-                            {
+                            if (xmlAssociationMetadata.isMapExplode()) {
                                 // key
-                                generator.writeObjectFieldStart( "key" );
-                                writeTypeField( generator, "string" );
+                                generator.writeObjectFieldStart("key");
+                                writeTypeField(generator, "string");
                                 generator.writeEndObject();
 
                                 // value
-                                generator.writeObjectFieldStart( "value" );
-                                writeTypeField( generator, toType );
+                                generator.writeObjectFieldStart("value");
+                                writeTypeField(generator, toType);
                                 generator.writeEndObject();
 
                                 // properties
                                 generator.writeEndObject();
 
                                 // required field
-                                generator.writeArrayFieldStart( "required" );
-                                generator.writeString( "key" );
-                                generator.writeString( "value" );
+                                generator.writeArrayFieldStart("required");
+                                generator.writeString("key");
+                                generator.writeString("value");
                                 generator.writeEndArray();
-                            }
-                            else
-                            {
-                                generator.writeObjectFieldStart( "*" );
-                                writeTypeField( generator, toType );
+                            } else {
+                                generator.writeObjectFieldStart("*");
+                                writeTypeField(generator, toType);
                                 generator.writeEndObject();
                             }
                         }
@@ -245,21 +208,16 @@ public final class JsonSchemaGenerator
                         // items
                         generator.writeEndObject();
                     }
-                }
-                else
-                {
-                    writeTypeField( generator, modelField.getType() );
+                } else {
+                    writeTypeField(generator, modelField.getType());
                 }
 
                 generator.writeEndObject();
             }
 
-            if ( reference.hasSuperClass() )
-            {
-                reference = reference.getModel().getClass( reference.getSuperClass(), getGeneratedVersion() );
-            }
-            else
-            {
+            if (reference.hasSuperClass()) {
+                reference = reference.getModel().getClass(reference.getSuperClass(), getGeneratedVersion());
+            } else {
                 reference = null;
             }
         }
@@ -268,68 +226,55 @@ public final class JsonSchemaGenerator
         generator.writeEndObject();
 
         // write `required` sequence
-        if ( !required.isEmpty() )
-        {
-            generator.writeArrayFieldStart( "required" );
+        if (!required.isEmpty()) {
+            generator.writeArrayFieldStart("required");
 
-            for ( String requiredField : required )
-            {
-                generator.writeString( requiredField );
+            for (String requiredField : required) {
+                generator.writeString(requiredField);
             }
 
             generator.writeEndArray();
         }
 
         // end definition
-        if ( !isRoot )
-        {
+        if (!isRoot) {
             generator.writeEndObject();
         }
     }
 
-    private static void writeDescriptionField( JsonGenerator generator, String description )
-        throws IOException
-    {
-        if ( !StringUtils.isEmpty( description ) )
-        {
-            generator.writeStringField( "description", description );
+    private static void writeDescriptionField(JsonGenerator generator, String description) throws IOException {
+        if (!StringUtils.isEmpty(description)) {
+            generator.writeStringField("description", description);
         }
     }
 
-    private void writeTypeField( JsonGenerator generator, String type )
-        throws IOException
-    {
-        if ( isClassInModel( type, getModel() ) )
-        {
-            generator.writeStringField( "$ref", "#/definitions/" + type );
+    private void writeTypeField(JsonGenerator generator, String type) throws IOException {
+        if (isClassInModel(type, getModel())) {
+            generator.writeStringField("$ref", "#/definitions/" + type);
             return;
         }
 
         // try to make the input type compliant, as much as possible, to JSON Schema primitive types
         // see http://json-schema.org/latest/json-schema-core.html#anchor8
-        if ( "boolean".equals( type ) || "Boolean".equals( type ) )
-        {
+        if ("boolean".equals(type) || "Boolean".equals(type)) {
             type = "boolean";
-        }
-        else if ( "int".equals( type ) || "Integer".equals( type ) )
-        {
+        } else if ("int".equals(type) || "Integer".equals(type)) {
             type = "integer";
-        }
-        else if ( "short".equals( type ) || "Short".equals( type )
-                  || "long".equals( type ) || "Long".equals( type )
-                  || "double".equals( type ) || "Double".equals( type )
-                  || "float".equals( type ) || "Float".equals( type ) )
-        {
+        } else if ("short".equals(type)
+                || "Short".equals(type)
+                || "long".equals(type)
+                || "Long".equals(type)
+                || "double".equals(type)
+                || "Double".equals(type)
+                || "float".equals(type)
+                || "Float".equals(type)) {
             type = "number";
-        }
-        else if ( "String".equals( type ) )
-        {
+        } else if ("String".equals(type)) {
             type = "string";
         }
 
         // keep as it is otherwise
 
-        generator.writeStringField( "type", type );
+        generator.writeStringField("type", type);
     }
-
 }

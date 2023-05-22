@@ -22,23 +22,21 @@ package org.codehaus.modello.model;
  * SOFTWARE.
  */
 
-import org.codehaus.modello.ModelloRuntimeException;
-import org.codehaus.modello.metadata.ModelMetadata;
-import org.codehaus.modello.plugin.model.ModelClassMetadata;
-import org.codehaus.plexus.util.StringUtils;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.codehaus.modello.ModelloRuntimeException;
+import org.codehaus.modello.metadata.ModelMetadata;
+import org.codehaus.modello.plugin.model.ModelClassMetadata;
+import org.codehaus.plexus.util.StringUtils;
+
 /**
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
  */
-public class Model
-    extends BaseElement
-{
+public class Model extends BaseElement {
     private String id;
 
     private List<ModelClass> classes = new ArrayList<>();
@@ -55,71 +53,55 @@ public class Model
 
     private VersionDefinition versionDefinition;
 
-    public Model()
-    {
-        super( true );
+    public Model() {
+        super(true);
     }
 
-    public String getId()
-    {
+    public String getId() {
         return id;
     }
 
-    public void setId( String id )
-    {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public VersionDefinition getVersionDefinition()
-    {
+    public VersionDefinition getVersionDefinition() {
         return versionDefinition;
     }
 
-    public void setVersionDefinition( VersionDefinition versionDefinition )
-    {
+    public void setVersionDefinition(VersionDefinition versionDefinition) {
         this.versionDefinition = versionDefinition;
     }
 
-    public ModelMetadata getMetadata( String key )
-    {
-        return getMetadata( ModelMetadata.class, key );
+    public ModelMetadata getMetadata(String key) {
+        return getMetadata(ModelMetadata.class, key);
     }
 
-    public String getRoot( Version version )
-    {
-        List<ModelClass> classes = getClasses( version );
+    public String getRoot(Version version) {
+        List<ModelClass> classes = getClasses(version);
 
         String className = null;
 
-        for ( ModelClass currentClass : classes )
-        {
+        for (ModelClass currentClass : classes) {
             ModelClassMetadata metadata = null;
 
-            try
-            {
-                metadata = (ModelClassMetadata) currentClass.getMetadata( ModelClassMetadata.ID );
-            }
-            catch ( Exception e )
-            {
+            try {
+                metadata = (ModelClassMetadata) currentClass.getMetadata(ModelClassMetadata.ID);
+            } catch (Exception e) {
             }
 
-            if ( metadata != null && metadata.isRootElement() )
-            {
-                if ( className == null )
-                {
+            if (metadata != null && metadata.isRootElement()) {
+                if (className == null) {
                     className = currentClass.getName();
-                }
-                else
-                {
+                } else {
                     throw new ModelloRuntimeException(
-                        "There are more than one class as root element for this version " + version + "." );
+                            "There are more than one class as root element for this version " + version + ".");
                 }
             }
         }
 
-        if ( className == null )
-        {
-            throw new ModelloRuntimeException( "There aren't root element for version " + version + "." );
+        if (className == null) {
+            throw new ModelloRuntimeException("There aren't root element for version " + version + ".");
         }
 
         return className;
@@ -134,89 +116,72 @@ public class Model
      *
      */
     @Deprecated
-    public String getPackageName( boolean withVersion, Version version )
-    {
-        return getDefaultPackageName( withVersion, version );
+    public String getPackageName(boolean withVersion, Version version) {
+        return getDefaultPackageName(withVersion, version);
     }
 
-    public List<ModelClass> getAllClasses()
-    {
+    public List<ModelClass> getAllClasses() {
         return classes;
     }
 
-    public List<ModelClass> getClasses( Version version )
-    {
+    public List<ModelClass> getClasses(Version version) {
         List<ModelClass> classList = new ArrayList<>();
 
-        for ( ModelClass currentClass : classes )
-        {
-            if ( version.inside( currentClass.getVersionRange() ) )
-            {
-                classList.add( currentClass );
+        for (ModelClass currentClass : classes) {
+            if (version.inside(currentClass.getVersionRange())) {
+                classList.add(currentClass);
             }
         }
 
         return classList;
     }
 
-    public ModelClass getClass( String type, Version version, boolean optionnal )
-    {
-        return getClass( type, new VersionRange( version ), optionnal );
+    public ModelClass getClass(String type, Version version, boolean optionnal) {
+        return getClass(type, new VersionRange(version), optionnal);
     }
 
-    public ModelClass getClass( String type, Version version )
-    {
-        return getClass( type, new VersionRange( version ), false );
+    public ModelClass getClass(String type, Version version) {
+        return getClass(type, new VersionRange(version), false);
     }
 
-    public ModelClass getClass( String type, VersionRange versionRange, boolean optionnal )
-    {
-        ModelClass value = getModelClass( type, versionRange );
+    public ModelClass getClass(String type, VersionRange versionRange, boolean optionnal) {
+        ModelClass value = getModelClass(type, versionRange);
 
-        if ( value != null )
-        {
+        if (value != null) {
             return value;
         }
-        if ( optionnal )
-        {
+        if (optionnal) {
             return null;
         }
         throw new ModelloRuntimeException(
-            "There is no class '" + type + "' in the version range '" + versionRange.toString() + "'." );
+                "There is no class '" + type + "' in the version range '" + versionRange.toString() + "'.");
     }
 
-    public ModelClass getClass( String type, VersionRange versionRange )
-    {
-        ModelClass value = getModelClass( type, versionRange );
+    public ModelClass getClass(String type, VersionRange versionRange) {
+        ModelClass value = getModelClass(type, versionRange);
 
-        if ( value != null )
-        {
+        if (value != null) {
             return value;
         }
 
         throw new ModelloRuntimeException(
-            "There is no class '" + type + "' in the version range '" + versionRange.toString() + "'." );
+                "There is no class '" + type + "' in the version range '" + versionRange.toString() + "'.");
     }
 
-    public boolean hasClass( String type, Version version )
-    {
-        ModelClass value = getModelClass( type, new VersionRange( version ) );
+    public boolean hasClass(String type, Version version) {
+        ModelClass value = getModelClass(type, new VersionRange(version));
 
         return value != null;
     }
 
-    private ModelClass getModelClass( String type, VersionRange versionRange )
-    {
-        List<ModelClass> classList = classMap.get( type );
+    private ModelClass getModelClass(String type, VersionRange versionRange) {
+        List<ModelClass> classList = classMap.get(type);
 
         ModelClass value = null;
-        if ( classList != null )
-        {
-            for ( ModelClass modelClass : classList )
-            {
-                if ( versionRange.getFromVersion().inside( modelClass.getVersionRange() )
-                    && versionRange.getToVersion().inside( modelClass.getVersionRange() ) )
-                {
+        if (classList != null) {
+            for (ModelClass modelClass : classList) {
+                if (versionRange.getFromVersion().inside(modelClass.getVersionRange())
+                        && versionRange.getToVersion().inside(modelClass.getVersionRange())) {
                     value = modelClass;
                 }
             }
@@ -224,79 +189,63 @@ public class Model
         return value;
     }
 
-    public void addClass( ModelClass modelClass )
-    {
-        if ( classMap.containsKey( modelClass.getName() ) )
-        {
-            List<ModelClass> classList = classMap.get( modelClass.getName() );
+    public void addClass(ModelClass modelClass) {
+        if (classMap.containsKey(modelClass.getName())) {
+            List<ModelClass> classList = classMap.get(modelClass.getName());
 
-            for ( ModelClass currentClass : classList )
-            {
-                if ( VersionUtil.isInConflict( modelClass.getVersionRange(), currentClass.getVersionRange() ) )
-                {
-                    throw new ModelloRuntimeException( "Duplicate class: " + modelClass.getName() + "." );
+            for (ModelClass currentClass : classList) {
+                if (VersionUtil.isInConflict(modelClass.getVersionRange(), currentClass.getVersionRange())) {
+                    throw new ModelloRuntimeException("Duplicate class: " + modelClass.getName() + ".");
                 }
             }
-        }
-        else
-        {
+        } else {
             List<ModelClass> classList = new ArrayList<>();
 
-            classMap.put( modelClass.getName(), classList );
+            classMap.put(modelClass.getName(), classList);
         }
 
-        getAllClasses().add( modelClass );
+        getAllClasses().add(modelClass);
 
-        classMap.get( modelClass.getName() ).add( modelClass );
+        classMap.get(modelClass.getName()).add(modelClass);
     }
 
     // ----------------------------------------------------------------------
     // Defaults
     // ----------------------------------------------------------------------
 
-    public List<ModelDefault> getDefaults()
-    {
+    public List<ModelDefault> getDefaults() {
         return defaults;
     }
 
-    public ModelDefault getDefault( String key )
-    {
-        ModelDefault modelDefault = (ModelDefault) defaultMap.get( key );
+    public ModelDefault getDefault(String key) {
+        ModelDefault modelDefault = (ModelDefault) defaultMap.get(key);
 
-        if ( modelDefault == null )
-        {
-            try
-            {
-                modelDefault = ModelDefault.getDefault( key );
-            }
-            catch ( ModelValidationException mve )
-            {
-                throw new ModelloRuntimeException( mve.getMessage(), mve );
+        if (modelDefault == null) {
+            try {
+                modelDefault = ModelDefault.getDefault(key);
+            } catch (ModelValidationException mve) {
+                throw new ModelloRuntimeException(mve.getMessage(), mve);
             }
         }
 
         return modelDefault;
     }
 
-    public void addDefault( ModelDefault modelDefault )
-    {
-        if ( defaultMap.containsKey( modelDefault.getKey() ) )
-        {
-            throw new ModelloRuntimeException( "Duplicate default: " + modelDefault.getKey() + "." );
+    public void addDefault(ModelDefault modelDefault) {
+        if (defaultMap.containsKey(modelDefault.getKey())) {
+            throw new ModelloRuntimeException("Duplicate default: " + modelDefault.getKey() + ".");
         }
 
-        getDefaults().add( modelDefault );
+        getDefaults().add(modelDefault);
 
-        defaultMap.put( modelDefault.getKey(), modelDefault );
+        defaultMap.put(modelDefault.getKey(), modelDefault);
     }
 
-    public String getDefaultPackageName( boolean withVersion, Version version )
-    {
-        String packageName = getDefault( ModelDefault.PACKAGE ).getValue();
+    public String getDefaultPackageName(boolean withVersion, Version version) {
+        String packageName = getDefault(ModelDefault.PACKAGE).getValue();
 
-        if ( withVersion )
-        {
-            packageName += "." + version.toString( "v", "_" );
+        if (withVersion) {
+            packageName += "." + version.toString("v", "_");
         }
 
         return packageName;
@@ -306,55 +255,44 @@ public class Model
     //
     // ----------------------------------------------------------------------
 
-    public List<ModelInterface> getAllInterfaces()
-    {
+    public List<ModelInterface> getAllInterfaces() {
         return interfaces;
     }
 
-    public List<ModelInterface> getInterfaces( Version version )
-    {
+    public List<ModelInterface> getInterfaces(Version version) {
         List<ModelInterface> interfaceList = new ArrayList<>();
 
-        for ( ModelInterface currentInterface : interfaces )
-        {
-            if ( version.inside( currentInterface.getVersionRange() ) )
-            {
-                interfaceList.add( currentInterface );
+        for (ModelInterface currentInterface : interfaces) {
+            if (version.inside(currentInterface.getVersionRange())) {
+                interfaceList.add(currentInterface);
             }
         }
 
         return interfaceList;
     }
 
-    public ModelInterface getInterface( String type, Version version )
-    {
-        return getInterface( type, new VersionRange( version ) );
+    public ModelInterface getInterface(String type, Version version) {
+        return getInterface(type, new VersionRange(version));
     }
 
-    public ModelInterface getInterface( String type, VersionRange versionRange )
-    {
-        ModelInterface value = getModelInterface( type, versionRange );
+    public ModelInterface getInterface(String type, VersionRange versionRange) {
+        ModelInterface value = getModelInterface(type, versionRange);
 
-        if ( value != null )
-        {
+        if (value != null) {
             return value;
         }
 
         throw new ModelloRuntimeException(
-            "There is no interface '" + type + "' in the version range '" + versionRange.toString() + "'." );
+                "There is no interface '" + type + "' in the version range '" + versionRange.toString() + "'.");
     }
 
-    private ModelInterface getModelInterface( String type, VersionRange versionRange )
-    {
-        List<ModelInterface> interfaceList = interfaceMap.get( type );
+    private ModelInterface getModelInterface(String type, VersionRange versionRange) {
+        List<ModelInterface> interfaceList = interfaceMap.get(type);
 
-        if ( interfaceList != null )
-        {
-            for ( ModelInterface modelInterface : interfaceList )
-            {
-                if ( versionRange.getFromVersion().inside( modelInterface.getVersionRange() )
-                    && versionRange.getToVersion().inside( modelInterface.getVersionRange() ) )
-                {
+        if (interfaceList != null) {
+            for (ModelInterface modelInterface : interfaceList) {
+                if (versionRange.getFromVersion().inside(modelInterface.getVersionRange())
+                        && versionRange.getToVersion().inside(modelInterface.getVersionRange())) {
                     return modelInterface;
                 }
             }
@@ -363,95 +301,74 @@ public class Model
         return null;
     }
 
-    public void addInterface( ModelInterface modelInterface )
-    {
-        if ( interfaceMap.containsKey( modelInterface.getName() ) )
-        {
-            List<ModelInterface> interfaceList = interfaceMap.get( modelInterface.getName() );
+    public void addInterface(ModelInterface modelInterface) {
+        if (interfaceMap.containsKey(modelInterface.getName())) {
+            List<ModelInterface> interfaceList = interfaceMap.get(modelInterface.getName());
 
-            for ( ModelInterface currentInterface : interfaceList )
-            {
-                if ( VersionUtil.isInConflict( modelInterface.getVersionRange(), currentInterface.getVersionRange() ) )
-                {
-                    throw new ModelloRuntimeException( "Duplicate interface: " + modelInterface.getName() + "." );
+            for (ModelInterface currentInterface : interfaceList) {
+                if (VersionUtil.isInConflict(modelInterface.getVersionRange(), currentInterface.getVersionRange())) {
+                    throw new ModelloRuntimeException("Duplicate interface: " + modelInterface.getName() + ".");
                 }
             }
-        }
-        else
-        {
+        } else {
             List<ModelInterface> interfaceList = new ArrayList<>();
 
-            interfaceMap.put( modelInterface.getName(), interfaceList );
+            interfaceMap.put(modelInterface.getName(), interfaceList);
         }
 
-        getAllInterfaces().add( modelInterface );
+        getAllInterfaces().add(modelInterface);
 
-        interfaceMap.get( modelInterface.getName() ).add( modelInterface );
+        interfaceMap.get(modelInterface.getName()).add(modelInterface);
     }
 
-    public ModelType getType( String type, Version version )
-    {
-        return getType( type, new VersionRange( version ) );
+    public ModelType getType(String type, Version version) {
+        return getType(type, new VersionRange(version));
     }
 
-    public ModelType getType( String type, VersionRange versionRange )
-    {
-        ModelType value = getModelClass( type, versionRange );
+    public ModelType getType(String type, VersionRange versionRange) {
+        ModelType value = getModelClass(type, versionRange);
 
-        if ( value != null )
-        {
+        if (value != null) {
             return value;
         }
 
-        value = getModelInterface( type, versionRange );
+        value = getModelInterface(type, versionRange);
 
-        if ( value != null )
-        {
+        if (value != null) {
             return value;
         }
 
-        throw new ModelloRuntimeException(
-            "There is no class or interface '" + type + "' in the version range '" + versionRange.toString() + "'." );
+        throw new ModelloRuntimeException("There is no class or interface '" + type + "' in the version range '"
+                + versionRange.toString() + "'.");
     }
 
-    public void initialize()
-    {
-        for ( ModelClass modelClass : classes )
-        {
-            modelClass.initialize( this );
+    public void initialize() {
+        for (ModelClass modelClass : classes) {
+            modelClass.initialize(this);
         }
 
-        for ( ModelInterface modelInterface : interfaces )
-        {
-            modelInterface.initialize( this );
+        for (ModelInterface modelInterface : interfaces) {
+            modelInterface.initialize(this);
         }
     }
 
-    public void validateElement()
-    {
-    }
+    public void validateElement() {}
 
-    public ModelClass getLocationTracker( Version version )
-    {
-        List<ModelClass> modelClasses = getClasses( version );
+    public ModelClass getLocationTracker(Version version) {
+        List<ModelClass> modelClasses = getClasses(version);
 
         ModelClass locationTracker = null;
 
-        for ( ModelClass modelClass : modelClasses )
-        {
-            ModelClassMetadata metadata = (ModelClassMetadata) modelClass.getMetadata( ModelClassMetadata.ID );
+        for (ModelClass modelClass : modelClasses) {
+            ModelClassMetadata metadata = (ModelClassMetadata) modelClass.getMetadata(ModelClassMetadata.ID);
 
-            if ( metadata != null && StringUtils.isNotEmpty( metadata.getLocationTracker() ) )
-            {
-                if ( locationTracker == null )
-                {
+            if (metadata != null && StringUtils.isNotEmpty(metadata.getLocationTracker())) {
+                if (locationTracker == null) {
                     locationTracker = modelClass;
-                }
-                else
-                {
+                } else {
                     throw new ModelloRuntimeException(
-                        "There are multiple location tracker classes (" + locationTracker.getName() + " vs. "
-                            + modelClass.getName() + ") for this version " + version + "." );
+                            "There are multiple location tracker classes (" + locationTracker.getName() + " vs. "
+                                    + modelClass.getName() + ") for this version " + version + ".");
                 }
             }
         }
@@ -459,32 +376,25 @@ public class Model
         return locationTracker;
     }
 
-    public ModelClass getSourceTracker( Version version )
-    {
-        List<ModelClass> modelClasses = getClasses( version );
+    public ModelClass getSourceTracker(Version version) {
+        List<ModelClass> modelClasses = getClasses(version);
 
         ModelClass sourceTracker = null;
 
-        for ( ModelClass modelClass : modelClasses )
-        {
-            ModelClassMetadata metadata = (ModelClassMetadata) modelClass.getMetadata( ModelClassMetadata.ID );
+        for (ModelClass modelClass : modelClasses) {
+            ModelClassMetadata metadata = (ModelClassMetadata) modelClass.getMetadata(ModelClassMetadata.ID);
 
-            if ( metadata != null && StringUtils.isNotEmpty( metadata.getSourceTracker() ) )
-            {
-                if ( sourceTracker == null )
-                {
+            if (metadata != null && StringUtils.isNotEmpty(metadata.getSourceTracker())) {
+                if (sourceTracker == null) {
                     sourceTracker = modelClass;
-                }
-                else
-                {
+                } else {
                     throw new ModelloRuntimeException(
-                        "There are multiple source tracker classes (" + sourceTracker.getName() + " vs. "
-                            + modelClass.getName() + ") for this version " + version + "." );
+                            "There are multiple source tracker classes (" + sourceTracker.getName() + " vs. "
+                                    + modelClass.getName() + ") for this version " + version + ".");
                 }
             }
         }
 
         return sourceTracker;
     }
-
 }

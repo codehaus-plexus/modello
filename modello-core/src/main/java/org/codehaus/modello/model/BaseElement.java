@@ -22,13 +22,13 @@ package org.codehaus.modello.model;
  * SOFTWARE.
  */
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.codehaus.modello.ModelloRuntimeException;
 import org.codehaus.modello.metadata.Metadata;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * This is the base class for all elements of the model. The name attribute is immutable because it's used as the key.
@@ -37,8 +37,7 @@ import java.util.List;
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
  */
-public abstract class BaseElement
-{
+public abstract class BaseElement {
     private String name;
 
     private String description;
@@ -47,7 +46,7 @@ public abstract class BaseElement
 
     private List<String> annotations = new ArrayList<String>();
 
-    private VersionRange versionRange = new VersionRange( "0.0.0+" );
+    private VersionRange versionRange = new VersionRange("0.0.0+");
 
     private Version deprecatedVersion;
 
@@ -55,132 +54,107 @@ public abstract class BaseElement
 
     private boolean nameRequired;
 
-    public abstract void validateElement()
-        throws ModelValidationException;
+    public abstract void validateElement() throws ModelValidationException;
 
-    public BaseElement( boolean nameRequired )
-    {
+    public BaseElement(boolean nameRequired) {
         this.nameRequired = nameRequired;
 
         this.name = null;
     }
 
-    public BaseElement( boolean nameRequired, String name )
-    {
+    public BaseElement(boolean nameRequired, String name) {
         this.nameRequired = nameRequired;
 
         this.name = name;
     }
 
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
-    public void setName( String name )
-    {
+    public void setName(String name) {
         this.name = name;
     }
 
-    public String getDescription()
-    {
+    public String getDescription() {
         return description;
     }
 
-    public void setDescription( String description )
-    {
+    public void setDescription(String description) {
         this.description = description;
     }
 
-    public VersionRange getVersionRange()
-    {
+    public VersionRange getVersionRange() {
         return versionRange;
     }
 
-    public void setVersionRange( VersionRange versionRange )
-    {
+    public void setVersionRange(VersionRange versionRange) {
         this.versionRange = versionRange;
     }
 
-    public void setDeprecatedVersion( Version deprecatedVersion )
-    {
+    public void setDeprecatedVersion(Version deprecatedVersion) {
         this.deprecatedVersion = deprecatedVersion;
     }
 
-    public Version getDeprecatedVersion()
-    {
+    public Version getDeprecatedVersion() {
         return deprecatedVersion;
     }
 
-    public String getComment()
-    {
+    public String getComment() {
         return comment;
     }
 
-    public void setComment( String comment )
-    {
+    public void setComment(String comment) {
         this.comment = comment;
     }
 
-    public boolean hasMetadata( String key )
-    {
-        return metadata.containsKey( key );
+    public boolean hasMetadata(String key) {
+        return metadata.containsKey(key);
     }
 
-    public void addMetadata( Metadata metadata )
-    {
-        this.metadata.put( metadata.getClass().getName(), metadata );
+    public void addMetadata(Metadata metadata) {
+        this.metadata.put(metadata.getClass().getName(), metadata);
     }
 
-    protected <T extends Metadata> T getMetadata( Class<T> type, String key )
-    {
-        Metadata metadata = this.metadata.get( key );
+    protected <T extends Metadata> T getMetadata(Class<T> type, String key) {
+        Metadata metadata = this.metadata.get(key);
 
-        if ( metadata == null )
-        {
-            throw new ModelloRuntimeException( "No such metadata: '" + key + "' for element: '" + getName() + "'." );
+        if (metadata == null) {
+            throw new ModelloRuntimeException("No such metadata: '" + key + "' for element: '" + getName() + "'.");
         }
 
-        if ( !type.isInstance( metadata ) )
-        {
-            throw new ModelloRuntimeException( "The metadata is not of the expected type. Key: '" + key
-                + "', expected type: '" + type.getName() + "'." );
+        if (!type.isInstance(metadata)) {
+            throw new ModelloRuntimeException("The metadata is not of the expected type. Key: '" + key
+                    + "', expected type: '" + type.getName() + "'.");
         }
 
-        return type.cast( metadata );
+        return type.cast(metadata);
     }
 
     // ----------------------------------------------------------------------
     // Validation utils
     // ----------------------------------------------------------------------
 
-    protected void validateFieldNotEmpty( String objectName, String fieldName, String value )
-        throws ModelValidationException
-    {
-        if ( value == null )
-        {
-            throw new ModelValidationException( "Missing value '" + fieldName + "' from " + objectName + "." );
+    protected void validateFieldNotEmpty(String objectName, String fieldName, String value)
+            throws ModelValidationException {
+        if (value == null) {
+            throw new ModelValidationException("Missing value '" + fieldName + "' from " + objectName + ".");
         }
 
-        if ( isEmpty( value ) )
-        {
-            throw new ModelValidationException( "Empty value '" + fieldName + "' from " + objectName + "." );
+        if (isEmpty(value)) {
+            throw new ModelValidationException("Empty value '" + fieldName + "' from " + objectName + ".");
         }
     }
 
-    public final void validate()
-        throws ModelValidationException
-    {
-        if ( nameRequired )
-        {
-            validateFieldNotEmpty( "Element.name", "name", name );
+    public final void validate() throws ModelValidationException {
+        if (nameRequired) {
+            validateFieldNotEmpty("Element.name", "name", name);
         }
 
         validateElement();
     }
 
-    protected boolean isEmpty( String string )
-    {
+    protected boolean isEmpty(String string) {
         return string == null || string.trim().length() == 0;
     }
 
@@ -188,29 +162,24 @@ public abstract class BaseElement
     //
     // ----------------------------------------------------------------------
 
-    public boolean equals( Object other )
-    {
-        if ( other == null || !( other instanceof BaseElement ) )
-        {
+    public boolean equals(Object other) {
+        if (other == null || !(other instanceof BaseElement)) {
             return false;
         }
 
         // If we don't know how to identify this object it's not equal to any other object
-        if ( !nameRequired )
-        {
+        if (!nameRequired) {
             return false;
         }
 
         BaseElement baseElem = (BaseElement) other;
 
-        return name.equals( baseElem.getName() ) && versionRange.equals( baseElem.getVersionRange() );
+        return name.equals(baseElem.getName()) && versionRange.equals(baseElem.getVersionRange());
     }
 
-    public int hashCode()
-    {
-        if ( !nameRequired )
-        {
-            return System.identityHashCode( this );
+    public int hashCode() {
+        if (!nameRequired) {
+            return System.identityHashCode(this);
         }
 
         return name.hashCode() + versionRange.toString().hashCode();
@@ -219,16 +188,14 @@ public abstract class BaseElement
     /**
      * @return the annotations
      */
-    public List<String> getAnnotations()
-    {
+    public List<String> getAnnotations() {
         return annotations;
     }
 
     /**
      * @param annotations the annotations to set
      */
-    public void setAnnotations( List<String> annotations )
-    {
+    public void setAnnotations(List<String> annotations) {
         this.annotations = annotations;
     }
 }

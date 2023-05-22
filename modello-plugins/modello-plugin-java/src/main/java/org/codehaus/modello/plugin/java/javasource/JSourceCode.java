@@ -42,10 +42,7 @@
  *
  * $Id$
  */
-
 package org.codehaus.modello.plugin.java.javasource;
-
-import java.util.ArrayList;
 
 /*
  * Copyright (c) 2004, Codehaus.org
@@ -69,7 +66,9 @@ import java.util.ArrayList;
  * SOFTWARE.
  */
 
+import java.util.ArrayList;
 import java.util.List;
+
 import org.codehaus.modello.ModelloRuntimeException;
 
 /**
@@ -78,9 +77,7 @@ import org.codehaus.modello.ModelloRuntimeException;
  * @author <a href="mailto:kvisco@intalio.com">Keith Visco</a>
  * @version $Revision$ $Date$
  **/
-public class JSourceCode
-{
-
+public class JSourceCode {
 
     /**
      * A list of JCodeStatements
@@ -100,33 +97,30 @@ public class JSourceCode
     /**
      * Creates an empty JSourceCode
      **/
-    public JSourceCode()
-    {
+    public JSourceCode() {
         super();
         source = new ArrayList<JCodeStatement>();
-    } //-- JSourceCode
+    } // -- JSourceCode
 
     /**
      * Creates a JSourceCode and adds the given String
      * to it's contents
      * @param sourceCode the source to add
      **/
-    public JSourceCode( String sourceCode )
-    {
+    public JSourceCode(String sourceCode) {
         this();
-        this.source.add( new JCodeStatement( sourceCode, currentIndent ) );
-    } //-- JSourceCode
+        this.source.add(new JCodeStatement(sourceCode, currentIndent));
+    } // -- JSourceCode
 
     /**
      * Adds the given statement to this JSourceCode. The statement
      * will be added on a new line.
      * @param statement the statement to add
      **/
-    public void add( String statement )
-    {
-        JCodeStatement jcs = new JCodeStatement( statement, currentIndent );
-        source.add( jcs );
-    } //-- add
+    public void add(String statement) {
+        JCodeStatement jcs = new JCodeStatement(statement, currentIndent);
+        source.add(jcs);
+    } // -- add
 
     /**
      * Adds the given statement to this JSourceCode. The statement
@@ -137,11 +131,10 @@ public class JSourceCode
      * @see #print
      * @deprecated this method is not here any mode in castor codegen 1.3rc1
      **/
-    public void add( String statement, short indentSize )
-    {
-        JCodeStatement jcs = new JCodeStatement( statement, indentSize );
-        source.add( jcs );
-    } //-- add
+    public void add(String statement, short indentSize) {
+        JCodeStatement jcs = new JCodeStatement(statement, indentSize);
+        source.add(jcs);
+    } // -- add
 
     /**
      * Adds the given statement to this JSourceCode. The statement
@@ -154,174 +147,146 @@ public class JSourceCode
      * </code>
      * @param statement the statement to add
      **/
-    public void addIndented( String statement )
-    {
+    public void addIndented(String statement) {
         indent();
-        JCodeStatement jcs = new JCodeStatement( statement, currentIndent );
-        source.add( jcs );
+        JCodeStatement jcs = new JCodeStatement(statement, currentIndent);
+        source.add(jcs);
         unindent();
-    } //-- add
+    } // -- add
 
     /**
      * Appends the given String to the last line in this
      * JSourceCode
      * @param segment the String to append
      **/
-    public void append( String segment )
-    {
+    public void append(String segment) {
 
-        if ( source.isEmpty() )
-            add( segment );
-        else
-        {
-            JCodeStatement jcs = (JCodeStatement) source.get( source.size() - 1 );
-            jcs.append( segment );
+        if (source.isEmpty()) add(segment);
+        else {
+            JCodeStatement jcs = (JCodeStatement) source.get(source.size() - 1);
+            jcs.append(segment);
         }
-    } //-- append(String)
+    } // -- append(String)
 
     /**
      * Clears all the code statements from this JSourceCode
      **/
-    public void clear()
-    {
+    public void clear() {
         source.clear();
-    } //-- clear();
+    } // -- clear();
 
     /**
      * Copies the contents of this JSourceCode into the given JSourceCode
      * @param jsc the JSourceCode to copy this JSourceCode into
      **/
-    public void copyInto( JSourceCode jsc )
-    {
-        for ( int i = 0; i < source.size(); i++ )
-        {
-            jsc.addCodeStatement( source.get( i ) );
+    public void copyInto(JSourceCode jsc) {
+        for (int i = 0; i < source.size(); i++) {
+            jsc.addCodeStatement(source.get(i));
         }
-    } //-- copyInto
+    } // -- copyInto
 
     /**
      * Increases the current indent level by 1
      **/
-    public void indent()
-    {
+    public void indent() {
         currentIndent += indentSize;
-    } //-- indent();
+    } // -- indent();
 
     /**
      * Returns true if this JSourceCode is empty (ie. no source).
      * @return true if this JSourceCode is empty.
      **/
-    public boolean isEmpty()
-    {
+    public boolean isEmpty() {
         return source.isEmpty();
-    } //-- isEmpty
+    } // -- isEmpty
 
     /**
      * Prints this JSourceCode to the given JSourceWriter
      * @param jsw the JSourceWriter to print to
      **/
-    public void print( JSourceWriter jsw )
-    {
-        for ( int i = 0; i < source.size(); i++ )
-            jsw.writeln( source.get( i ).toString() );
-    } //-- print
+    public void print(JSourceWriter jsw) {
+        for (int i = 0; i < source.size(); i++) jsw.writeln(source.get(i).toString());
+    } // -- print
 
     /**
      * Decreases the indent level by 1
      **/
-    public void unindent()
-    {
-        if ( currentIndent == 0 )
-        {
-            throw new ModelloRuntimeException( "Cannot unindent: current indent is 0." );
+    public void unindent() {
+        if (currentIndent == 0) {
+            throw new ModelloRuntimeException("Cannot unindent: current indent is 0.");
         }
         currentIndent -= indentSize;
-    } //-- unindent
-
+    } // -- unindent
 
     /**
      * Returns the String representation of this JSourceCode
      * @return the String representation of this JSourceCode
      **/
-    public String toString()
-    {
+    public String toString() {
         StringBuilder sb = new StringBuilder();
-        String lineSeparator = System.getProperty( "line.separator" );
-        for ( int i = 0; i < source.size(); i++ )
-        {
-            sb.append( source.get( i ).toString() );
-            sb.append( lineSeparator );
+        String lineSeparator = System.getProperty("line.separator");
+        for (int i = 0; i < source.size(); i++) {
+            sb.append(source.get(i).toString());
+            sb.append(lineSeparator);
         }
         return sb.toString();
-    } //-- toString
+    } // -- toString
 
     /**
      * Adds the given JCodeStatement to this JSourceCode
      * @param jcs the JCodeStatement to add
      **/
-    private void addCodeStatement( JCodeStatement jcs )
-    {
-        short indent = (short) ( jcs.getIndent() + currentIndent - JCodeStatement.DEFAULT_INDENTSIZE );
-        source.add( new JCodeStatement( jcs.getStatement(), indent ) );
-    } //-- addCodeStatement(JCodeStatement)
-
-} //-- JSourceCode
+    private void addCodeStatement(JCodeStatement jcs) {
+        short indent = (short) (jcs.getIndent() + currentIndent - JCodeStatement.DEFAULT_INDENTSIZE);
+        source.add(new JCodeStatement(jcs.getStatement(), indent));
+    } // -- addCodeStatement(JCodeStatement)
+} // -- JSourceCode
 
 /**
  * Represents a line of code, used by JSourceCode class
  * @author <a href="kvisco@intalio.com">Keith Visco</a>
  **/
-class JCodeStatement
-{
+class JCodeStatement {
 
     private StringBuilder value = null;
-    static public short DEFAULT_INDENTSIZE = 4;
+    public static short DEFAULT_INDENTSIZE = 4;
     private short indentSize = DEFAULT_INDENTSIZE;
 
-    JCodeStatement()
-    {
+    JCodeStatement() {
         super();
         value = new StringBuilder();
-    } //-- JCodeStatement
+    } // -- JCodeStatement
 
-    JCodeStatement( String statement )
-    {
+    JCodeStatement(String statement) {
         this();
-        this.value.append( statement );
-    } //-- JCodeStatement
+        this.value.append(statement);
+    } // -- JCodeStatement
 
-    JCodeStatement( String statement, short indentSize )
-    {
-        this( statement );
+    JCodeStatement(String statement, short indentSize) {
+        this(statement);
         this.indentSize = indentSize;
-    } //-- JCodeStatement
+    } // -- JCodeStatement
 
-
-    void append( String segment )
-    {
-        value.append( segment );
+    void append(String segment) {
+        value.append(segment);
     }
 
-    short getIndent()
-    {
+    short getIndent() {
         return indentSize;
-    } //-- getIndent
+    } // -- getIndent
 
-    String getStatement()
-    {
+    String getStatement() {
         return value.toString();
-    } //-- getStatement
+    } // -- getStatement
 
-    public String toString()
-    {
-        if ( value.length() == 0 )
-        {
+    public String toString() {
+        if (value.length() == 0) {
             return "";
         }
 
-        StringBuilder sb = new StringBuilder( indentSize + value.length() );
-        for ( int i = 0; i < indentSize; i++ ) sb.append( ' ' );
-        sb.append( value.toString() );
+        StringBuilder sb = new StringBuilder(indentSize + value.length());
+        for (int i = 0; i < indentSize; i++) sb.append(' ');
+        sb.append(value.toString());
         return sb.toString();
     }
-} //-- JCodeStatement
+} // -- JCodeStatement

@@ -33,33 +33,27 @@ import org.codehaus.plexus.component.annotations.Requirement;
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  */
-@Component( role = GeneratorPluginManager.class )
-public class DefaultGeneratorPluginManager
-    extends AbstractPluginManager<ModelloGenerator>
-    implements GeneratorPluginManager
-{
+@Component(role = GeneratorPluginManager.class)
+public class DefaultGeneratorPluginManager extends AbstractPluginManager<ModelloGenerator>
+        implements GeneratorPluginManager {
     @Requirement
     private Map<String, ModelloGenerator> plugins;
 
-    public Map<String, ModelloGenerator> getPlugins()
-    {
+    public Map<String, ModelloGenerator> getPlugins() {
         return plugins;
     }
 
-    public ModelloGenerator getGeneratorPlugin( String generatorId )
-    {
-        ModelloGenerator generator = getPlugin( generatorId );
+    public ModelloGenerator getGeneratorPlugin(String generatorId) {
+        ModelloGenerator generator = getPlugin(generatorId);
 
-        if ( generator == null )
-        {
-            throw new ModelloRuntimeException( "No such generator plugin: '" + generatorId + "'." );
+        if (generator == null) {
+            throw new ModelloRuntimeException("No such generator plugin: '" + generatorId + "'.");
         }
 
         return generator;
     }
 
-    public boolean hasGeneratorPlugin( String generatorId )
-    {
-        return hasPlugin( generatorId );
+    public boolean hasGeneratorPlugin(String generatorId) {
+        return hasPlugin(generatorId);
     }
 }

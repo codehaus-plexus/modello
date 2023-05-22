@@ -22,9 +22,7 @@ package org.codehaus.modello.plugin.java.javasource;
  * @version $Revision$ $Date$
  * @since 1.0.4
  */
-public class JComponentizedType
-    extends JType
-{
+public class JComponentizedType extends JType {
     // --------------------------------------------------------------------------
 
     /** Indicates the data type contained in this collection. */
@@ -42,9 +40,8 @@ public class JComponentizedType
      * @param componentType Component type.
      * @param useJava50 True if Java 5.0 should be used.
      */
-    protected JComponentizedType( final String name, final JType componentType, final boolean useJava50 )
-    {
-        super( name );
+    protected JComponentizedType(final String name, final JType componentType, final boolean useJava50) {
+        super(name);
 
         _componentType = componentType;
         _useJava50 = useJava50;
@@ -57,8 +54,7 @@ public class JComponentizedType
      *
      * @return The component type.
      */
-    public final JType getComponentType()
-    {
+    public final JType getComponentType() {
         return _componentType;
     }
 
@@ -67,8 +63,7 @@ public class JComponentizedType
      *
      * @return True if Java 5.0 is used.
      */
-    public final boolean isUseJava50()
-    {
+    public final boolean isUseJava50() {
         return _useJava50;
     }
 

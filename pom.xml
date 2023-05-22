@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
@@ -13,19 +14,17 @@
   <packaging>pom</packaging>
 
   <name>Modello</name>
-  <description>
-    Modello is a framework for code generation from a simple model.
+  <description>Modello is a framework for code generation from a simple model.
     Modello generates code from a simple model format: based on a plugin architecture, various types of code and
     descriptors can be generated from the single model, including Java POJOs, XML/JSON/YAML marshallers/unmarshallers,
-    XSD, JSON Schema and documentation.
-  </description>
+    XSD, JSON Schema and documentation.</description>
   <url>http://codehaus-plexus.github.io/modello/</url>
   <inceptionYear>2001</inceptionYear>
   <organization>
     <name>Codehaus Plexus</name>
     <url>http://codehaus-plexus.github.io/</url>
   </organization>
-  
+
   <licenses>
     <license>
       <name>The MIT License</name>
@@ -173,7 +172,7 @@
       <otherArchives>
         <otherArchive>http://markmail.org/list/org.codehaus.modello.scm</otherArchive>
       </otherArchives>
-     </mailingList>
+    </mailingList>
   </mailingLists>
 
   <modules>
@@ -186,8 +185,8 @@
   <scm>
     <connection>scm:git:https://github.com/codehaus-plexus/modello.git</connection>
     <developerConnection>scm:git:https://github.com/codehaus-plexus/modello.git</developerConnection>
-    <url>http://github.com/codehaus-plexus/modello/tree/${project.scm.tag}/</url>
     <tag>master</tag>
+    <url>http://github.com/codehaus-plexus/modello/tree/${project.scm.tag}/</url>
   </scm>
   <issueManagement>
     <system>github</system>
@@ -386,8 +385,8 @@
           <artifactId>maven-checkstyle-plugin</artifactId>
           <version>3.2.2</version>
           <configuration>
-<!--            <configLocation>config/maven_checks.xml</configLocation>-->
-<!--            <headerLocation>config/maven-header.txt</headerLocation>-->
+            <!--            <configLocation>config/maven_checks.xml</configLocation>-->
+            <!--            <headerLocation>config/maven-header.txt</headerLocation>-->
             <skip>true</skip>
             <failOnViolation>false</failOnViolation>
           </configuration>
@@ -395,7 +394,8 @@
             <dependency>
               <groupId>com.puppycrawl.tools</groupId>
               <artifactId>checkstyle</artifactId>
-              <version>9.3</version><!-- 10.x requires Java 11 -->
+              <version>9.3</version>
+              <!-- 10.x requires Java 11 -->
             </dependency>
             <!-- replace with Plexus own checkstyle definitions -->
             <dependency>
@@ -511,7 +511,8 @@
           <artifactId>maven-site-plugin</artifactId>
           <version>3.12.1</version>
           <configuration>
-            <skipDeploy>true</skipDeploy><!-- don't deploy site with maven-site-plugin -->
+            <skipDeploy>true</skipDeploy>
+            <!-- don't deploy site with maven-site-plugin -->
           </configuration>
         </plugin>
         <plugin>
@@ -592,10 +593,10 @@
             <executions>
               <execution>
                 <id>source-release-assembly</id>
-                <phase>package</phase>
                 <goals>
                   <goal>single</goal>
                 </goals>
+                <phase>package</phase>
                 <configuration>
                   <runOnlyAtExecutionRoot>true</runOnlyAtExecutionRoot>
                   <descriptorRefs>
@@ -662,22 +663,22 @@
             <executions>
               <execution>
                 <id>xdoc</id>
-                <inherited>false</inherited>
-                <phase>pre-site</phase>
                 <goals>
                   <goal>xdoc</goal>
                 </goals>
+                <phase>pre-site</phase>
+                <inherited>false</inherited>
                 <configuration>
                   <firstVersion>1.0.0</firstVersion>
                 </configuration>
               </execution>
               <execution>
                 <id>xsd</id>
-                <inherited>false</inherited>
-                <phase>pre-site</phase>
                 <goals>
                   <goal>xsd</goal>
                 </goals>
+                <phase>pre-site</phase>
+                <inherited>false</inherited>
                 <configuration>
                   <outputDirectory>${project.build.directory}/generated-site/resources/xsd</outputDirectory>
                 </configuration>

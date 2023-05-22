@@ -30,54 +30,42 @@ import org.codehaus.modello.ModelloRuntimeException;
 /**
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
  */
-public class ModelInterface
-    extends ModelType
-{
+public class ModelInterface extends ModelType {
     private String superInterface;
 
-    public ModelInterface()
-    {
+    public ModelInterface() {
         super();
     }
 
-    public ModelInterface( Model model, String name )
-    {
-        super( model, name );
+    public ModelInterface(Model model, String name) {
+        super(model, name);
     }
 
-    public void setSuperInterface( String superInterface )
-    {
+    public void setSuperInterface(String superInterface) {
         this.superInterface = superInterface;
     }
 
-    public String getSuperInterface()
-    {
+    public String getSuperInterface() {
         return superInterface;
     }
 
     /**
      * {@inheritDoc}
      */
-    public List<ModelField> getAllFields()
-    {
+    public List<ModelField> getAllFields() {
         return new ArrayList<ModelField>();
     }
 
     /**
      * {@inheritDoc}
      */
-    public List<ModelField> getAllFields( boolean withInheritedField )
-    {
+    public List<ModelField> getAllFields(boolean withInheritedField) {
         return new ArrayList<ModelField>();
     }
 
-    public ModelField getField( String type, VersionRange versionRange )
-    {
-        throw new ModelloRuntimeException( "There are no field '" + type + "' in an interface." );
+    public ModelField getField(String type, VersionRange versionRange) {
+        throw new ModelloRuntimeException("There are no field '" + type + "' in an interface.");
     }
 
-    public void validateElement()
-        throws ModelValidationException
-    {
-    }
+    public void validateElement() throws ModelValidationException {}
 }

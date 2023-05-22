@@ -22,42 +22,35 @@ package org.codehaus.modello.plugin.java;
  * SOFTWARE.
  */
 
+import java.util.Properties;
+
 import org.codehaus.modello.AbstractModelloJavaGeneratorTest;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
 
-import java.util.Properties;
-
 /**
  * @author Benjamin Bentmann
  */
-public class FeaturesJava5GeneratorTest
-    extends AbstractModelloJavaGeneratorTest
-{
-    public FeaturesJava5GeneratorTest()
-    {
-        super( "features-java5" );
+public class FeaturesJava5GeneratorTest extends AbstractModelloJavaGeneratorTest {
+    public FeaturesJava5GeneratorTest() {
+        super("features-java5");
     }
 
-    public void testJavaGenerator()
-        throws Throwable
-    {
-        if ( skipJava5FeatureTest() )
-        {
+    public void testJavaGenerator() throws Throwable {
+        if (skipJava5FeatureTest()) {
             return;
         }
 
-        ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
+        ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
 
-        Model model = modello.loadModel( getXmlResourceReader( "/features.mdo" ) );
+        Model model = modello.loadModel(getXmlResourceReader("/features.mdo"));
 
-        Properties parameters = getModelloParameters( "2.0.0", 5 );
+        Properties parameters = getModelloParameters("2.0.0", 5);
 
-        modello.generate( model, "java", parameters );
+        modello.generate(model, "java", parameters);
 
-        compileGeneratedSources( "features", 5 );
+        compileGeneratedSources("features", 5);
 
-        verifyCompiledGeneratedSources( "JavaVerifier" );
+        verifyCompiledGeneratedSources("JavaVerifier");
     }
-
 }

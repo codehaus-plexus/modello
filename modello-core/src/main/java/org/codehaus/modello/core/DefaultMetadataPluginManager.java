@@ -33,33 +33,27 @@ import org.codehaus.plexus.component.annotations.Requirement;
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  */
-@Component( role = MetadataPluginManager.class )
-public class DefaultMetadataPluginManager
-    extends AbstractPluginManager<MetadataPlugin>
-    implements MetadataPluginManager
-{
+@Component(role = MetadataPluginManager.class)
+public class DefaultMetadataPluginManager extends AbstractPluginManager<MetadataPlugin>
+        implements MetadataPluginManager {
     @Requirement
     private Map<String, MetadataPlugin> plugins;
 
-    public Map<String, MetadataPlugin> getPlugins()
-    {
+    public Map<String, MetadataPlugin> getPlugins() {
         return plugins;
     }
 
-    public MetadataPlugin getMetadataPlugin( String metadataId )
-    {
-        MetadataPlugin metadata = getPlugin( metadataId );
+    public MetadataPlugin getMetadataPlugin(String metadataId) {
+        MetadataPlugin metadata = getPlugin(metadataId);
 
-        if ( metadata == null )
-        {
-            throw new ModelloRuntimeException( "No such metadata plugin: '" + metadataId + "'." );
+        if (metadata == null) {
+            throw new ModelloRuntimeException("No such metadata plugin: '" + metadataId + "'.");
         }
 
         return metadata;
     }
 
-    public boolean hasMetadataPlugin( String metadataId )
-    {
-        return hasPlugin( metadataId );
+    public boolean hasMetadataPlugin(String metadataId) {
+        return hasPlugin(metadataId);
     }
 }

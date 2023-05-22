@@ -22,6 +22,9 @@ package org.codehaus.modello.plugin.xsd;
  * SOFTWARE.
  */
 
+import java.util.List;
+import java.util.Properties;
+
 import org.codehaus.modello.AbstractModelloGeneratorTest;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
@@ -30,67 +33,59 @@ import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.Version;
 import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
 
-import java.util.List;
-import java.util.Properties;
-
 /**
  * @author <a href="mailto:brett@codehaus.org">Brett Porter</a>
  */
-public class XsdGeneratorTest
-    extends AbstractModelloGeneratorTest
-{
-    public XsdGeneratorTest()
-    {
-        super( "xsd" );
+public class XsdGeneratorTest extends AbstractModelloGeneratorTest {
+    public XsdGeneratorTest() {
+        super("xsd");
     }
 
-    public void testXsdGenerator()
-        throws Throwable
-    {
-        ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
+    public void testXsdGenerator() throws Throwable {
+        ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
 
-        Model model = modello.loadModel( getXmlResourceReader( "/maven.mdo" ) );
+        Model model = modello.loadModel(getXmlResourceReader("/maven.mdo"));
 
         // check misc. properties of the model loaded
-        List<ModelClass> classesList = model.getClasses( new Version( "4.0.0" ) );
+        List<ModelClass> classesList = model.getClasses(new Version("4.0.0"));
 
-        assertEquals( 26, classesList.size() );
+        assertEquals(26, classesList.size());
 
-        ModelClass clazz = (ModelClass) classesList.get( 0 );
+        ModelClass clazz = (ModelClass) classesList.get(0);
 
-        assertEquals( "Model", clazz.getName() );
+        assertEquals("Model", clazz.getName());
 
-        ModelField extend = clazz.getField( "extend", new Version( "4.0.0" ) );
+        ModelField extend = clazz.getField("extend", new Version("4.0.0"));
 
-        assertTrue( extend.hasMetadata( XmlFieldMetadata.ID ) );
+        assertTrue(extend.hasMetadata(XmlFieldMetadata.ID));
 
-        XmlFieldMetadata xml = (XmlFieldMetadata) extend.getMetadata( XmlFieldMetadata.ID );
+        XmlFieldMetadata xml = (XmlFieldMetadata) extend.getMetadata(XmlFieldMetadata.ID);
 
-        assertNotNull( xml );
+        assertNotNull(xml);
 
-        assertTrue( xml.isAttribute() );
+        assertTrue(xml.isAttribute());
 
-        assertEquals( "extender", xml.getTagName() );
+        assertEquals("extender", xml.getTagName());
 
-        ModelField build = clazz.getField( "build", new Version( "4.0.0" ) );
+        ModelField build = clazz.getField("build", new Version("4.0.0"));
 
-        assertTrue( build.hasMetadata( XmlFieldMetadata.ID ) );
+        assertTrue(build.hasMetadata(XmlFieldMetadata.ID));
 
-        xml = (XmlFieldMetadata) build.getMetadata( XmlFieldMetadata.ID );
+        xml = (XmlFieldMetadata) build.getMetadata(XmlFieldMetadata.ID);
 
-        assertNotNull( xml );
+        assertNotNull(xml);
 
-        assertEquals( "builder", xml.getTagName() );
+        assertEquals("builder", xml.getTagName());
 
         // generate XSD file
-        Properties parameters = getModelloParameters( "4.0.0" );
+        Properties parameters = getModelloParameters("4.0.0");
 
-        modello.generate( model, "xsd", parameters );
+        modello.generate(model, "xsd", parameters);
 
-        //addDependency( "modello", "modello-core", "1.0-SNAPSHOT" );
+        // addDependency( "modello", "modello-core", "1.0-SNAPSHOT" );
 
         // TODO write verfier which compile generated schema : use jaxp
 
-        //verify( "org.codehaus.modello.generator.xml.xsd.XsdVerifier", "xsd" );
+        // verify( "org.codehaus.modello.generator.xml.xsd.XsdVerifier", "xsd" );
     }
 }

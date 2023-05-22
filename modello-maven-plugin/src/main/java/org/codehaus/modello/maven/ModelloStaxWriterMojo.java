@@ -8,12 +8,9 @@ import org.apache.maven.plugins.annotations.Mojo;
  *
  * @author <a href="mailto:brett@apache.org">Brett Porter</a>
  */
-@Mojo( name = "stax-writer", defaultPhase = LifecyclePhase.GENERATE_SOURCES, threadSafe = true )
-public class ModelloStaxWriterMojo
-    extends AbstractModelloSourceGeneratorMojo
-{
-    protected String getGeneratorType()
-    {
+@Mojo(name = "stax-writer", defaultPhase = LifecyclePhase.GENERATE_SOURCES, threadSafe = true)
+public class ModelloStaxWriterMojo extends AbstractModelloSourceGeneratorMojo {
+    protected String getGeneratorType() {
         return "stax-writer";
     }
 }

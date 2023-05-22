@@ -40,25 +40,20 @@ import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
  *
  * @author <a href="mailto:hboutemy@codehaus.org">Hervé Boutemy</a>
  */
-class XmlModelHelpers
-{
+class XmlModelHelpers {
     /**
      * Resolve XML tag name for a class. Note: only root class needs such a resolution.
      *
      * @param modelClass the model class
      * @return the XML tag name for the class
      */
-    static String resolveTagName( ModelClass modelClass )
-    {
-        XmlClassMetadata xmlClassMetadata = (XmlClassMetadata) modelClass.getMetadata( XmlClassMetadata.ID );
+    static String resolveTagName(ModelClass modelClass) {
+        XmlClassMetadata xmlClassMetadata = (XmlClassMetadata) modelClass.getMetadata(XmlClassMetadata.ID);
 
         String tagName;
-        if ( ( xmlClassMetadata == null ) || ( xmlClassMetadata.getTagName() == null ) )
-        {
-            tagName = AbstractModelloGenerator.uncapitalise( modelClass.getName() );
-        }
-        else
-        {
+        if ((xmlClassMetadata == null) || (xmlClassMetadata.getTagName() == null)) {
+            tagName = AbstractModelloGenerator.uncapitalise(modelClass.getName());
+        } else {
             // tag name is overridden by xml.tagName attribute
             tagName = xmlClassMetadata.getTagName();
         }
@@ -72,15 +67,11 @@ class XmlModelHelpers
      * @param xmlFieldMetadata the XML metadata of the field
      * @return the XML tag name for the field
      */
-    static String resolveTagName( ModelField modelField, XmlFieldMetadata xmlFieldMetadata )
-    {
+    static String resolveTagName(ModelField modelField, XmlFieldMetadata xmlFieldMetadata) {
         String tagName;
-        if ( ( xmlFieldMetadata == null ) || ( xmlFieldMetadata.getTagName() == null ) )
-        {
+        if ((xmlFieldMetadata == null) || (xmlFieldMetadata.getTagName() == null)) {
             tagName = modelField.getName();
-        }
-        else
-        {
+        } else {
             // tag name is overridden by xml.tagName attribute
             tagName = xmlFieldMetadata.getTagName();
         }
@@ -94,15 +85,11 @@ class XmlModelHelpers
      * @param xmlAssociationMetadata the XML metadata of the association
      * @return the XML tag name for items
      */
-    static String resolveTagName( String fieldTagName, XmlAssociationMetadata xmlAssociationMetadata )
-    {
+    static String resolveTagName(String fieldTagName, XmlAssociationMetadata xmlAssociationMetadata) {
         String tagName;
-        if ( ( xmlAssociationMetadata == null ) || ( xmlAssociationMetadata.getTagName() == null ) )
-        {
-            tagName = AbstractModelloGenerator.singular( fieldTagName );
-        }
-        else
-        {
+        if ((xmlAssociationMetadata == null) || (xmlAssociationMetadata.getTagName() == null)) {
+            tagName = AbstractModelloGenerator.singular(fieldTagName);
+        } else {
             // tag name is overridden by xml.tagName attribute
             tagName = xmlAssociationMetadata.getTagName();
         }
@@ -115,18 +102,14 @@ class XmlModelHelpers
      * @param modelFields the fields to check
      * @return the field, or <code>null</code> if no field is <code>Content</code>
      */
-    static ModelField getContentField( List<ModelField> modelFields )
-    {
-        if ( modelFields == null )
-        {
+    static ModelField getContentField(List<ModelField> modelFields) {
+        if (modelFields == null) {
             return null;
         }
-        for ( ModelField field : modelFields )
-        {
-            XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
+        for (ModelField field : modelFields) {
+            XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata(XmlFieldMetadata.ID);
 
-            if ( xmlFieldMetadata.isContent() )
-            {
+            if (xmlFieldMetadata.isContent()) {
                 return field;
             }
         }
@@ -140,17 +123,14 @@ class XmlModelHelpers
      *            <code>null</code>.
      * @return The list of XML attributes fields, can be empty but never <code>null</code>.
      */
-    static List<ModelField> getXmlAttributeFields( List<ModelField> modelFields )
-    {
+    static List<ModelField> getXmlAttributeFields(List<ModelField> modelFields) {
         List<ModelField> xmlAttributeFields = new ArrayList<ModelField>();
 
-        for ( ModelField field : modelFields )
-        {
-            XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
+        for (ModelField field : modelFields) {
+            XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata(XmlFieldMetadata.ID);
 
-            if ( xmlFieldMetadata.isAttribute() )
-            {
-                xmlAttributeFields.add( field );
+            if (xmlFieldMetadata.isAttribute()) {
+                xmlAttributeFields.add(field);
             }
         }
 
@@ -164,75 +144,64 @@ class XmlModelHelpers
      * @param version the version of the class to use
      * @return the list of XML fields of this class
      */
-    static List<ModelField> getFieldsForXml( ModelClass modelClass, Version version )
-    {
+    static List<ModelField> getFieldsForXml(ModelClass modelClass, Version version) {
         List<ModelClass> classes = new ArrayList<ModelClass>();
 
         // get the full inheritance
-        while ( modelClass != null )
-        {
-            classes.add( modelClass );
+        while (modelClass != null) {
+            classes.add(modelClass);
 
             String superClass = modelClass.getSuperClass();
-            if ( superClass != null )
-            {
+            if (superClass != null) {
                 // superClass can be located outside (not generated by modello)
-                modelClass = modelClass.getModel().getClass( superClass, version, true );
-            }
-            else
-            {
+                modelClass = modelClass.getModel().getClass(superClass, version, true);
+            } else {
                 modelClass = null;
             }
         }
 
         List<ModelField> fields = new ArrayList<ModelField>();
 
-        for ( int i = classes.size() - 1; i >= 0; i-- )
-        {
-            modelClass = classes.get( i );
+        for (int i = classes.size() - 1; i >= 0; i--) {
+            modelClass = classes.get(i);
 
             Iterator<ModelField> parentIter = fields.iterator();
 
             fields = new ArrayList<ModelField>();
 
-            for ( ModelField field : modelClass.getFields( version ) )
-            {
-                XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
+            for (ModelField field : modelClass.getFields(version)) {
+                XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata(XmlFieldMetadata.ID);
 
-                if ( xmlFieldMetadata.isTransient() )
-                {
+                if (xmlFieldMetadata.isTransient()) {
                     // just ignore xml.transient fields
                     continue;
                 }
 
-                if ( xmlFieldMetadata.getInsertParentFieldsUpTo() != null )
-                {
+                if (xmlFieldMetadata.getInsertParentFieldsUpTo() != null) {
                     // insert fields from parent up to the specified field
                     boolean found = false;
 
-                    while ( !found && parentIter.hasNext() )
-                    {
+                    while (!found && parentIter.hasNext()) {
                         ModelField parentField = parentIter.next();
 
-                        fields.add( parentField );
+                        fields.add(parentField);
 
-                        found = parentField.getName().equals( xmlFieldMetadata.getInsertParentFieldsUpTo() );
+                        found = parentField.getName().equals(xmlFieldMetadata.getInsertParentFieldsUpTo());
                     }
 
-                    if ( !found )
-                    {
+                    if (!found) {
                         // interParentFieldsUpTo not found
-                        throw new ModelloRuntimeException( "parent field not found: class " + modelClass.getName() + " xml.insertParentFieldUpTo='" + xmlFieldMetadata.getInsertParentFieldsUpTo() + "'" );
+                        throw new ModelloRuntimeException("parent field not found: class " + modelClass.getName()
+                                + " xml.insertParentFieldUpTo='" + xmlFieldMetadata.getInsertParentFieldsUpTo() + "'");
                     }
                 }
 
-                fields.add( field );
+                fields.add(field);
             }
 
             // add every remaining fields from parent class
-            while ( parentIter.hasNext() )
-            {
-                fields.add( parentIter.next() );
+            while (parentIter.hasNext()) {
+                fields.add(parentIter.next());
             }
         }
 

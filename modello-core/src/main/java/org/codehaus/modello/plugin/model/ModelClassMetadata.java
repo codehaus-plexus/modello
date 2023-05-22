@@ -27,9 +27,7 @@ import org.codehaus.modello.metadata.ClassMetadata;
 /**
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
  */
-public class ModelClassMetadata
-    implements ClassMetadata
-{
+public class ModelClassMetadata implements ClassMetadata {
     public static final String ID = ModelClassMetadata.class.getName();
 
     private boolean rootElement = false;
@@ -38,34 +36,27 @@ public class ModelClassMetadata
 
     private String sourceTracker;
 
-    public boolean isRootElement()
-    {
+    public boolean isRootElement() {
         return rootElement;
     }
 
-    public void setRootElement( boolean rootElement )
-    {
+    public void setRootElement(boolean rootElement) {
         this.rootElement = rootElement;
     }
 
-    public String getLocationTracker()
-    {
+    public String getLocationTracker() {
         return locationTracker;
     }
 
-    public void setLocationTracker( String locationTracker )
-    {
+    public void setLocationTracker(String locationTracker) {
         this.locationTracker = locationTracker;
     }
 
-    public String getSourceTracker()
-    {
+    public String getSourceTracker() {
         return sourceTracker;
     }
 
-    public void setSourceTracker( String sourceTracker )
-    {
+    public void setSourceTracker(String sourceTracker) {
         this.sourceTracker = sourceTracker;
     }
-
 }

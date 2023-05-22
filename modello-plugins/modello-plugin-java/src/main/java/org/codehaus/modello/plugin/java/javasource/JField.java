@@ -42,7 +42,6 @@
  *
  * $Id$
  */
-
 package org.codehaus.modello.plugin.java.javasource;
 
 /*
@@ -75,8 +74,7 @@ package org.codehaus.modello.plugin.java.javasource;
  * @author <a href="mailto:kvisco@intalio.com">Keith Visco</a>
  * @version $Revision$ $Date$
  **/
-public class JField implements JMember
-{
+public class JField implements JMember {
 
     /**
      * The set of modifiers for this JField
@@ -98,108 +96,94 @@ public class JField implements JMember
      **/
     private JClass declaringClass = null;
 
-    public JField( JType type, String name )
-    {
+    public JField(JType type, String name) {
 
-        setName( name );
+        setName(name);
         this.type = type;
         this.modifiers = new JModifiers();
         this.modifiers.makePrivate();
         comment = new JDocComment();
-        comment.appendComment( "Field " + name + "." );
+        comment.appendComment("Field " + name + ".");
         annotations = new JAnnotations();
-    } //-- JField
-
+    } // -- JField
 
     /**
      * Returns the comment describing this member.
      * @return the comment describing this member, or
      * null if no comment has been set.
      **/
-    public JDocComment getComment()
-    {
+    public JDocComment getComment() {
         return this.comment;
-    } //-- getComment
-
+    } // -- getComment
 
     /**
      * Returns the class in which this JField has been declared
      * @return the class in which this JField has been declared
      **/
-    public JClass getDeclaringClass()
-    {
+    public JClass getDeclaringClass() {
         return this.declaringClass;
-    } //-- getDeclaringClass
+    } // -- getDeclaringClass
 
     /**
      * Returns the initialization String for this JField
      * @return the initialization String for this JField,
      * or null if no initialization String was specified.
      **/
-    public String getInitString()
-    {
+    public String getInitString() {
         return initString;
-    } //-- getInitString
-
+    } // -- getInitString
 
     /**
      * Returns the modifiers for this JField
      * @return the modifiers for this JField
      **/
-    public JModifiers getModifiers()
-    {
+    public JModifiers getModifiers() {
         return this.modifiers;
-    } //-- getModifiers
+    } // -- getModifiers
 
     /**
      * Returns the name of this JField
      * @return the name of this JField
      **/
-    public String getName()
-    {
+    public String getName() {
         return this.name;
-    } //-- getName
+    } // -- getName
 
     /**
      * Returns the JType represting the type of this JField
      * @return the JClass represting the type of this JField
      **/
-    public JType getType()
-    {
+    public JType getType() {
         return this.type;
-    } //-- getType
+    } // -- getType
 
     /**
      * Sets the comment describing this member.
      * @param comment the JDocComment for this member
      **/
-    public void setComment( JDocComment comment )
-    {
+    public void setComment(JDocComment comment) {
         this.comment = comment;
-    } //-- setComment
+    } // -- setComment
 
     /**
      * Sets the comment describing this member.
      * @param comment the JDocComment for this member
      **/
-    public void setComment( String comment )
-    {
-        if ( this.comment == null )
-        {
+    public void setComment(String comment) {
+        if (this.comment == null) {
             this.comment = new JDocComment();
         }
-        this.comment.setComment( comment );
-    } //-- setComment
+        this.comment.setComment(comment);
+    } // -- setComment
 
     /**
      * Sets the initialization string for this JField;
      * Allows some flexibility in declaring default values.
      * @param init the initialization string for this member.
      **/
-    public void setInitString( String init )
-    {
+    public void setInitString(String init) {
         this.initString = init;
-    } //-- setInitString
+    } // -- setInitString
 
     /**
      * Sets the name of this JField
@@ -208,70 +192,55 @@ public class JField implements JMember
      * name is not a valid Java member name, or if a member
      * with the given name already exists in the declaring class
      **/
-    public void setName( String name ) throws
-        IllegalArgumentException
-    {
-        if ( !JNaming.isValidJavaIdentifier( name ) )
-        {
+    public void setName(String name) throws IllegalArgumentException {
+        if (!JNaming.isValidJavaIdentifier(name)) {
             String err = "'" + name + "' is ";
-            if ( JNaming.isKeyword( name ) )
-                err += "a reserved word and may not be used as "
-                    + " a field name.";
-            else
-                err += "not a valid Java identifier.";
-            throw new IllegalArgumentException( err );
+            if (JNaming.isKeyword(name)) err += "a reserved word and may not be used as " + " a field name.";
+            else err += "not a valid Java identifier.";
+            throw new IllegalArgumentException(err);
         }
         this.name = name;
-    } //-- setName
+    } // -- setName
 
-    public void setModifiers( JModifiers modifiers )
-    {
+    public void setModifiers(JModifiers modifiers) {
         this.modifiers = modifiers;
-    } //-- setModifiers
+    } // -- setModifiers
 
-    protected void setDeclaringClass( JClass declaringClass )
-    {
+    protected void setDeclaringClass(JClass declaringClass) {
         this.declaringClass = declaringClass;
-    } //-- setDeclaringClass
+    } // -- setDeclaringClass
 
-    public String toString()
-    {
+    public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append( modifiers.toString() );
-        sb.append( ' ' );
-        sb.append( type );
-        sb.append( ' ' );
-        sb.append( name );
+        sb.append(modifiers.toString());
+        sb.append(' ');
+        sb.append(type);
+        sb.append(' ');
+        sb.append(name);
         return sb.toString();
-    } //-- toString
+    } // -- toString
 
     /**
      * @return the annotations
      */
-    public JAnnotations getAnnotations()
-    {
+    public JAnnotations getAnnotations() {
         return annotations;
     }
 
     /**
      * @param annotation the annotation to append
      */
-    public void appendAnnotation( String annotation )
-    {
-        if ( annotations == null )
-        {
+    public void appendAnnotation(String annotation) {
+        if (annotations == null) {
             annotations = new JAnnotations();
         }
-        annotations.appendAnnotation( annotation );
+        annotations.appendAnnotation(annotation);
     }
 
     /**
      * @param annotations the annotations to set
      */
-    public void setAnnotations( JAnnotations annotations )
-    {
+    public void setAnnotations(JAnnotations annotations) {
         this.annotations = annotations;
     }
-
-} //-- JField
-
+} // -- JField

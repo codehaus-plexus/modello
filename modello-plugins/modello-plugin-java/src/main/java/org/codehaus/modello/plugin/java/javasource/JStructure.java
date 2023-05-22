@@ -42,7 +42,6 @@
  *
  * $Id$
  */
-
 package org.codehaus.modello.plugin.java.javasource;
 
 /*
@@ -87,16 +86,14 @@ import org.codehaus.plexus.util.WriterFactory;
  * @author <a href="mailto:kvisco@intalio.com">Keith Visco</a>
  * @version $Revision$ $Date$
  */
-public abstract class JStructure extends JType
-{
+public abstract class JStructure extends JType {
 
     /**
      * The Id for Source control systems
      * I needed to separate this line to prevent CVS from
      * expanding it here! ;-)
      */
-    static final String DEFAULT_HEADER
-        = "$" + "Id$";
+    static final String DEFAULT_HEADER = "$" + "Id$";
 
     /**
      * The source control version for listed in the JavaDoc
@@ -145,33 +142,26 @@ public abstract class JStructure extends JType
      * @throws java.lang.IllegalArgumentException when the given name
      * is not a valid Class name.
      */
-    protected JStructure( String name )
-        throws IllegalArgumentException
-    {
-        super( name );
+    protected JStructure(String name) throws IllegalArgumentException {
+        super(name);
 
-        //-- verify name is a valid java class name
-        if ( !isValidClassName( name ) )
-        {
+        // -- verify name is a valid java class name
+        if (!isValidClassName(name)) {
             String lname = getLocalName();
             String err = "'" + lname + "' is ";
-            if ( JNaming.isKeyword( lname ) )
-                err += "a reserved word and may not be used as "
-                    + " a class name.";
-            else
-                err += "not a valid Java identifier.";
+            if (JNaming.isKeyword(lname)) err += "a reserved word and may not be used as " + " a class name.";
+            else err += "not a valid Java identifier.";
 
-            throw new IllegalArgumentException( err );
+            throw new IllegalArgumentException(err);
         }
-        this.packageName = getPackageFromClassName( name );
+        this.packageName = getPackageFromClassName(name);
         imports = new ArrayList<String>();
         interfaces = new ArrayList<String>();
         jdc = new JDocComment();
         modifiers = new JModifiers();
-        //-- initialize default Java doc
-        jdc.addDescriptor( JDocDescriptor.createVersionDesc( version ) );
-
-    } //-- JStructure
+        // -- initialize default Java doc
+        jdc.addDescriptor(JDocDescriptor.createVersionDesc(version));
+    } // -- JStructure
 
     /**
      * Adds the given JField to this JStructure.
@@ -186,8 +176,7 @@ public abstract class JStructure extends JType
      * @exception java.lang.IllegalArgumentException when the given
      * JField has a name of an existing JField
      */
-    public abstract void addField( JField jField )
-        throws IllegalArgumentException;
+    public abstract void addField(JField jField) throws IllegalArgumentException;
 
     /**
      * Adds the given JMember to this JStructure.
@@ -202,48 +191,42 @@ public abstract class JStructure extends JType
      * JMember has the same name of an existing JField
      * or JMethod respectively.
      */
-    public abstract void addMember( JMember jMember )
-        throws IllegalArgumentException;
-
+    public abstract void addMember(JMember jMember) throws IllegalArgumentException;
 
     /**
      * Adds the given import to this JStructure
      *
      * @param className the className of the class to import.
      */
-    public void addImport( String className )
-    {
-        if ( className == null ) return;
-        if ( className.length() == 0 ) return;
+    public void addImport(String className) {
+        if (className == null) return;
+        if (className.length() == 0) return;
 
-        //-- getPackageName
-        String pkgName = getPackageFromClassName( className );
+        // -- getPackageName
+        String pkgName = getPackageFromClassName(className);
 
-        if ( pkgName != null )
-        {
-            if ( pkgName.equals( this.packageName ) ) return;
+        if (pkgName != null) {
+            if (pkgName.equals(this.packageName)) return;
 
-            //-- XXX: Fix needed for this...
-            //-- This may cause issues if the current package
-            //-- defines any classes that have the same name
-            //-- name as the java.lang package.
-            if ( "java.lang".equals( pkgName ) ) return;
+            // -- XXX: Fix needed for this...
+            // -- This may cause issues if the current package
+            // -- defines any classes that have the same name
+            // -- name as the java.lang package.
+            if ("java.lang".equals(pkgName)) return;
 
-            //-- for readabilty keep import list sorted, and make sure
-            //-- we do not include more than one of the same import
-            for ( int i = 0; i < imports.size(); i++ )
-            {
-                String imp = imports.get( i );
-                if ( imp.equals( className ) ) return;
-                if ( imp.compareTo( className ) > 0 )
-                {
-                    imports.add( i, className );
+            // -- for readabilty keep import list sorted, and make sure
+            // -- we do not include more than one of the same import
+            for (int i = 0; i < imports.size(); i++) {
+                String imp = imports.get(i);
+                if (imp.equals(className)) return;
+                if (imp.compareTo(className) > 0) {
+                    imports.add(i, className);
                     return;
                 }
             }
-            imports.add( className );
+            imports.add(className);
         }
-    } //-- addImport
+    } // -- addImport
 
     /**
      * Adds the given interface to the list of interfaces this
@@ -253,11 +236,9 @@ public abstract class JStructure extends JType
      * @param interfaceName the name of the interface to "inherit"
      * method declarations from.
      */
-    public void addInterface( String interfaceName )
-    {
-        if ( !interfaces.contains( interfaceName ) )
-            interfaces.add( interfaceName );
-    } //-- addInterface
+    public void addInterface(String interfaceName) {
+        if (!interfaces.contains(interfaceName)) interfaces.add(interfaceName);
+    } // -- addInterface
 
     /**
      * Adds the given interface to the list of interfaces this
@@ -266,17 +247,13 @@ public abstract class JStructure extends JType
      *
      * @param jInterface the JInterface to inherit from.
      */
-    public void addInterface( JInterface jInterface )
-    {
-        if ( jInterface == null ) return;
+    public void addInterface(JInterface jInterface) {
+        if (jInterface == null) return;
         String interfaceName = jInterface.getName();
-        if ( !interfaces.contains( interfaceName ) )
-        {
-            interfaces.add( interfaceName );
+        if (!interfaces.contains(interfaceName)) {
+            interfaces.add(interfaceName);
         }
-    } //-- addInterface
-
-
+    } // -- addInterface
 
     /**
      * Adds the given JMethodSignature to this JClass
@@ -287,65 +264,65 @@ public abstract class JStructure extends JType
      * method signature.
      */
     /*
-       public void addMethod(JMethodSignature jMethodSig)
-           throws IllegalArgumentException
-       {
-           if (jMethodSig == null) {
-               String err = "The JMethodSignature cannot be null.";
-               throw new IllegalArgumentException(err);
-           }
+        public void addMethod(JMethodSignature jMethodSig)
+            throws IllegalArgumentException
+        {
+            if (jMethodSig == null) {
+                String err = "The JMethodSignature cannot be null.";
+                throw new IllegalArgumentException(err);
+            }
 
-           //-- XXXX: check method name and signatures *add later*
+            //-- XXXX: check method name and signatures *add later*
 
-           //-- keep method list sorted for esthetics when printing
-           //-- START SORT :-)
-           boolean added = false;
-           short modifierVal = 0;
-           JModifiers modifiers = jMethodSig.getModifiers();
-           for (int i = 0; i < methods.size(); i++) {
-               JMethodSignature tmp = (JMethodSignature) methods.elementAt(i);
-               //-- first compare modifiers
-               if (tmp.getModifiers().isProtected()) {
-                   if (!modifiers.isProtected()) {
-                       methods.insertElementAt(jMethodSig, i);
-                       added = true;
-                       break;
-                   }
-               }
-               //-- compare names
-               if (jMethodSig.getName().compareTo(tmp.getName()) < 0) {
-                       methods.insertElementAt(jMethodSig, i);
-                       added = true;
-                       break;
-               }
-           }
-           //-- END SORT
-           if (!added) methods.addElement(jMethodSig);
+            //-- keep method list sorted for esthetics when printing
+            //-- START SORT :-)
+            boolean added = false;
+            short modifierVal = 0;
+            JModifiers modifiers = jMethodSig.getModifiers();
+            for (int i = 0; i < methods.size(); i++) {
+                JMethodSignature tmp = (JMethodSignature) methods.elementAt(i);
+                //-- first compare modifiers
+                if (tmp.getModifiers().isProtected()) {
+                    if (!modifiers.isProtected()) {
+                        methods.insertElementAt(jMethodSig, i);
+                        added = true;
+                        break;
+                    }
+                }
+                //-- compare names
+                if (jMethodSig.getName().compareTo(tmp.getName()) < 0) {
+                        methods.insertElementAt(jMethodSig, i);
+                        added = true;
+                        break;
+                }
+            }
+            //-- END SORT
+            if (!added) methods.addElement(jMethodSig);
 
-           //-- check parameter packages to make sure we have them
-           //-- in our import list
+            //-- check parameter packages to make sure we have them
+            //-- in our import list
 
-           String[] pkgNames = jMethodSig.getParameterClassNames();
-           for (int i = 0; i < pkgNames.length; i++) {
-               addImport(pkgNames[i]);
-           }
-           //-- check return type to make sure it's included in the
-           //-- import list
-           JType jType = jMethodSig.getReturnType();
-           if (jType != null) {
-               while (jType.isArray())
-                   jType = jType.getComponentType();
+            String[] pkgNames = jMethodSig.getParameterClassNames();
+            for (int i = 0; i < pkgNames.length; i++) {
+                addImport(pkgNames[i]);
+            }
+            //-- check return type to make sure it's included in the
+            //-- import list
+            JType jType = jMethodSig.getReturnType();
+            if (jType != null) {
+                while (jType.isArray())
+                    jType = jType.getComponentType();
 
-               if   (!jType.isPrimitive())
-                    addImport(jType.getName());
-           }
-           //-- check exceptions
-           JClass[] exceptions = jMethodSig.getExceptions();
-           for (int i = 0; i < exceptions.length; i++) {
-               addImport(exceptions[i].getName());
-           }
-       } //-- addMethod
-   */
+                if   (!jType.isPrimitive())
+                     addImport(jType.getName());
+            }
+            //-- check exceptions
+            JClass[] exceptions = jMethodSig.getExceptions();
+            for (int i = 0; i < exceptions.length; i++) {
+                addImport(exceptions[i].getName());
+            }
+        } //-- addMethod
+    */
     /**
      * Returns the field with the given name, or null if no field
      * was found with the given name.
@@ -354,7 +331,7 @@ public abstract class JStructure extends JType
      * @return the field with the given name, or null if no field
      * was found with the given name.
      */
-    public abstract JField getField( String name );
+    public abstract JField getField(String name);
 
     /**
      * Returns an array of all the JFields of this JStructure
@@ -371,35 +348,29 @@ public abstract class JStructure extends JType
      * @return the name of the file that this JInterface would be
      * printed as, given a call to #print.
      */
-    public String getFilename( String destDir )
-    {
+    public String getFilename(String destDir) {
 
         String filename = getLocalName() + ".java";
 
-        //-- Convert Java package to path string
+        // -- Convert Java package to path string
         String javaPackagePath = "";
-        if ( ( packageName != null ) && ( packageName.length() > 0 ) )
-        {
-            javaPackagePath = packageName.replace( '.', File.separatorChar );
+        if ((packageName != null) && (packageName.length() > 0)) {
+            javaPackagePath = packageName.replace('.', File.separatorChar);
         }
 
-        //-- Create fully qualified path (including 'destDir') to file
+        // -- Create fully qualified path (including 'destDir') to file
         File pathFile;
-        if ( destDir == null )
-            pathFile = new File( javaPackagePath );
-        else
-            pathFile = new File( destDir, javaPackagePath );
-        if ( !pathFile.exists() )
-        {
+        if (destDir == null) pathFile = new File(javaPackagePath);
+        else pathFile = new File(destDir, javaPackagePath);
+        if (!pathFile.exists()) {
             pathFile.mkdirs();
         }
 
-        //-- Prefix filename with path
-        if ( pathFile.toString().length() > 0 )
-            filename = pathFile.toString() + File.separator + filename;
+        // -- Prefix filename with path
+        if (pathFile.toString().length() > 0) filename = pathFile.toString() + File.separator + filename;
 
         return filename;
-    } //-- getFilename
+    } // -- getFilename
 
     /**
      * Returns the JComment header to display at the top of the source file
@@ -407,10 +378,9 @@ public abstract class JStructure extends JType
      *
      * @return the JComment header or null if none exists.
      */
-    public JComment getHeader()
-    {
+    public JComment getHeader() {
         return this.header;
-    } //-- getHeader
+    } // -- getHeader
 
     /**
      * Returns an Enumeration of imported package and
@@ -418,10 +388,9 @@ public abstract class JStructure extends JType
      *
      * @return the Enumeration of imports. May be empty.
      */
-    public Enumeration<String> getImports()
-    {
-        return Collections.enumeration( imports );
-    } //-- getImports
+    public Enumeration<String> getImports() {
+        return Collections.enumeration(imports);
+    } // -- getImports
 
     /**
      * Returns an Enumeration of interface names that this
@@ -430,33 +399,31 @@ public abstract class JStructure extends JType
      * @return the Enumeration of interface names for this
      * JStructure. May be empty.
      */
-    public Enumeration<String> getInterfaces()
-    {
-        return Collections.enumeration( interfaces );
-    } //-- getInterfaces
+    public Enumeration<String> getInterfaces() {
+        return Collections.enumeration(interfaces);
+    } // -- getInterfaces
 
     /**
      * Returns the Java Doc comment for this JStructure
      *
      * @return the JDocComment for this JStructure
      */
-    public JDocComment getJDocComment()
-    {
+    public JDocComment getJDocComment() {
         return jdc;
-    } //-- getJDocComment
+    } // -- getJDocComment
 
     /**
      * Returns an array of all the JMethodSignatures of this JInterface.
      *
      * @return an array of all the JMethodSignatures of this JInterface.
      */
-/*
-    public JMethodSignature[] getMethods() {
-        JMethodSignature[] marray = new JMethodSignature[methods.size()];
-        methods.copyInto(marray);
-        return marray;
-    } //-- getMethods
-*/
+    /*
+        public JMethodSignature[] getMethods() {
+            JMethodSignature[] marray = new JMethodSignature[methods.size()];
+            methods.copyInto(marray);
+            return marray;
+        } //-- getMethods
+    */
 
     /**
      * Returns the JMethodSignature with the given name,
@@ -467,15 +434,15 @@ public abstract class JStructure extends JType
      * from.
      * @return the JMethodSignature, or null if not found.
      */
-/*
-    public JMethodSignature getMethod(String name, int startIndex) {
-        for (int i = startIndex; i < methods.size(); i++) {
-            JMethodSignature jMethod = (JMethodSignature)methods.elementAt(i);
-            if (jMethod.getName().equals(name)) return jMethod;
-        }
-        return null;
-    } //-- getMethod
-*/
+    /*
+        public JMethodSignature getMethod(String name, int startIndex) {
+            for (int i = startIndex; i < methods.size(); i++) {
+                JMethodSignature jMethod = (JMethodSignature)methods.elementAt(i);
+                if (jMethod.getName().equals(name)) return jMethod;
+            }
+            return null;
+        } //-- getMethod
+    */
 
     /**
      * Returns the JMethodSignature at the given index.
@@ -494,10 +461,9 @@ public abstract class JStructure extends JType
      *
      * @return the JModifiers for this JStructure.
      */
-    public JModifiers getModifiers()
-    {
+    public JModifiers getModifiers() {
         return modifiers;
-    } //-- getModifiers
+    } // -- getModifiers
 
     /**
      * Returns the name of the package that this JStructure is a member
@@ -506,11 +472,9 @@ public abstract class JStructure extends JType
      * @return the name of the package that this JStructure is a member
      * of, or null if there is no current package name defined.
      */
-    public String getPackageName()
-    {
+    public String getPackageName() {
         return this.packageName;
-    } //-- getPackageName
-
+    } // -- getPackageName
 
     /**
      * Returns the name of the interface.
@@ -519,17 +483,14 @@ public abstract class JStructure extends JType
      * the local name (no package) should be returned.
      * @return the name of the class.
      */
-    public String getName( boolean stripPackage )
-    {
+    public String getName(boolean stripPackage) {
         String name = super.getName();
-        if ( stripPackage )
-        {
-            int period = name.lastIndexOf( "." );
-            if ( period > 0 )
-                name = name.substring( period + 1 );
+        if (stripPackage) {
+            int period = name.lastIndexOf(".");
+            if (period > 0) name = name.substring(period + 1);
         }
         return name;
-    } //-- getName
+    } // -- getName
 
     /**
      * Returns true if the given classname exists in the imports
@@ -538,49 +499,41 @@ public abstract class JStructure extends JType
      * @param classname the class name to check for
      * @return true if the given classname exists in the imports list
      */
-    public boolean hasImport( String classname )
-    {
-        return imports.contains( classname );
-    } //-- hasImport
+    public boolean hasImport(String classname) {
+        return imports.contains(classname);
+    } // -- hasImport
 
-
-    public boolean removeImport( String className )
-    {
+    public boolean removeImport(String className) {
         boolean result = false;
-        if ( className == null ) return result;
-        if ( className.length() == 0 ) return result;
+        if (className == null) return result;
+        if (className.length() == 0) return result;
 
-        return imports.remove( className );
-    } //-- removeImport
+        return imports.remove(className);
+    } // -- removeImport
 
-
-    public boolean isAbstract()
-    {
+    public boolean isAbstract() {
         return modifiers.isAbstract();
     }
 
-    public static boolean isValidClassName( String name )
-    {
+    public static boolean isValidClassName(String name) {
 
-        if ( name == null ) return false;
+        if (name == null) return false;
 
-        //-- ignore package information, for now
-        int period = name.lastIndexOf( "." );
-        if ( period > 0 )
-            name = name.substring( period + 1 );
+        // -- ignore package information, for now
+        int period = name.lastIndexOf(".");
+        if (period > 0) name = name.substring(period + 1);
 
-        return JNaming.isValidJavaIdentifier( name );
-    } //-- isValidClassName
+        return JNaming.isValidJavaIdentifier(name);
+    } // -- isValidClassName
 
     /**
      * Prints the source code for this JStructure in the current
      * working directory. Sub-directories will be created if necessary
      * for the package.
      */
-    public void print()
-    {
-        print( (String) null, (String) null );
-    } //-- printSrouce
+    public void print() {
+        print((String) null, (String) null);
+    } // -- printSrouce
 
     /**
      * Prints the source code for this JStructure to the destination
@@ -592,34 +545,28 @@ public abstract class JStructure extends JType
      * If null, then the default line separator for the runtime platform will
      * be used.
      */
-    public void print( String destDir, String lineSeparator )
-    {
+    public void print(String destDir, String lineSeparator) {
 
-//        String name = getLocalName();
+        //        String name = getLocalName();
 
-        //-- open output file
-        String filename = getFilename( destDir );
+        // -- open output file
+        String filename = getFilename(destDir);
 
-        File file = new File( filename );
+        File file = new File(filename);
         JSourceWriter jsw = null;
-        try
-        {
-            jsw = new JSourceWriter( WriterFactory.newPlatformWriter( file ) );
-        }
-        catch ( java.io.IOException ioe )
-        {
-            System.out.println( "unable to create class file: " + filename );
+        try {
+            jsw = new JSourceWriter(WriterFactory.newPlatformWriter(file));
+        } catch (java.io.IOException ioe) {
+            System.out.println("unable to create class file: " + filename);
             return;
         }
-        if ( lineSeparator == null )
-        {
-            lineSeparator = System.getProperty( "line.separator" );
+        if (lineSeparator == null) {
+            lineSeparator = System.getProperty("line.separator");
         }
-        jsw.setLineSeparator( lineSeparator );
-        print( jsw );
+        jsw.setLineSeparator(lineSeparator);
+        print(jsw);
         jsw.close();
-
-    } //-- print
+    } // -- print
 
     /**
      * Prints the source code for this JStructure to the given
@@ -627,7 +574,7 @@ public abstract class JStructure extends JType
      *
      * @param jsw the JSourceWriter to print to.
      */
-    public abstract void print( JSourceWriter jsw );
+    public abstract void print(JSourceWriter jsw);
 
     /**
      * A utility method that prints the header to the given
@@ -635,27 +582,23 @@ public abstract class JStructure extends JType
      *
      * @param jsw the JSourceWriter to print to.
      */
-    public void printHeader( JSourceWriter jsw )
-    {
+    public void printHeader(JSourceWriter jsw) {
 
-        if ( jsw == null )
-        {
-            throw new IllegalArgumentException( "argument 'jsw' should not be null." );
+        if (jsw == null) {
+            throw new IllegalArgumentException("argument 'jsw' should not be null.");
         }
 
-        //-- write class header
+        // -- write class header
         JComment header = getHeader();
-        if ( header != null )
-            header.print( jsw );
-        else
-        {
-            jsw.writeln( "/*" );
-            jsw.writeln( " * " + DEFAULT_HEADER );
-            jsw.writeln( " */" );
+        if (header != null) header.print(jsw);
+        else {
+            jsw.writeln("/*");
+            jsw.writeln(" * " + DEFAULT_HEADER);
+            jsw.writeln(" */");
         }
         jsw.writeln();
         jsw.flush();
-    } //-- printHeader
+    } // -- printHeader
 
     /**
      * A utility method that prints the imports to the given
@@ -663,31 +606,27 @@ public abstract class JStructure extends JType
      *
      * @param jsw the JSourceWriter to print to.
      */
-    public void printImportDeclarations( JSourceWriter jsw )
-    {
+    public void printImportDeclarations(JSourceWriter jsw) {
 
-        if ( jsw == null )
-        {
-            throw new IllegalArgumentException( "argument 'jsw' should not be null." );
+        if (jsw == null) {
+            throw new IllegalArgumentException("argument 'jsw' should not be null.");
         }
 
-        //-- print imports
-        if ( imports.size() > 0 )
-        {
-            jsw.writeln( "  //---------------------------------/" );
-            jsw.writeln( " //- Imported classes and packages -/" );
-            jsw.writeln( "//---------------------------------/" );
+        // -- print imports
+        if (imports.size() > 0) {
+            jsw.writeln("  //---------------------------------/");
+            jsw.writeln(" //- Imported classes and packages -/");
+            jsw.writeln("//---------------------------------/");
             jsw.writeln();
-            for( String imp : imports )
-            {
-                jsw.write( "import " );
-                jsw.write( imp );
-                jsw.writeln( ';' );
+            for (String imp : imports) {
+                jsw.write("import ");
+                jsw.write(imp);
+                jsw.writeln(';');
             }
             jsw.writeln();
             jsw.flush();
         }
-    } //-- printImportDeclarations
+    } // -- printImportDeclarations
 
     /**
      * A utility method that prints the packageDeclaration to
@@ -695,24 +634,21 @@ public abstract class JStructure extends JType
      *
      * @param jsw the JSourceWriter to print to.
      */
-    public void printPackageDeclaration( JSourceWriter jsw )
-    {
+    public void printPackageDeclaration(JSourceWriter jsw) {
 
-        if ( jsw == null )
-        {
-            throw new IllegalArgumentException( "argument 'jsw' should not be null." );
+        if (jsw == null) {
+            throw new IllegalArgumentException("argument 'jsw' should not be null.");
         }
 
-        //-- print package name
-        if ( ( packageName != null ) && ( packageName.length() > 0 ) )
-        {
-            jsw.write( "package " );
-            jsw.write( packageName );
-            jsw.writeln( ';' );
+        // -- print package name
+        if ((packageName != null) && (packageName.length() > 0)) {
+            jsw.write("package ");
+            jsw.write(packageName);
+            jsw.writeln(';');
             jsw.writeln();
         }
         jsw.flush();
-    } //-- printPackageDeclaration
+    } // -- printPackageDeclaration
 
     /**
      * Prints the source code for this JStructure to the given
@@ -720,88 +656,88 @@ public abstract class JStructure extends JType
      *
      * @param jsw the JSourceWriter to print to.
      *
-     public abstract void print(JSourceWriter jsw);
-
-
-     StringBuilder buffer = new StringBuilder();
-
-
-     printHeader();
-     printPackageDeclaration();
-     printImportDeclarations();
-
-     //------------/
-     //- Java Doc -/
-     //------------/
-
-     jdc.print(jsw);
-
-     //-- print class information
-     //-- we need to add some JavaDoc API adding comments
-
-     buffer.setLength(0);
-
-     if (modifiers.isPrivate()) {
-     buffer.append("private ");
-     }
-     else if (modifiers.isPublic()) {
-     buffer.append("public ");
-     }
-
-     if (modifiers.isAbstract()) {
-     buffer.append("abstract ");
-     }
-
-     buffer.append("interface ");
-     buffer.append(getLocalName());
-     buffer.append(' ');
-     if (interfaces.size() > 0) {
-     boolean endl = false;
-     if (interfaces.size() > 1) {
-     jsw.writeln(buffer.toString());
-     buffer.setLength(0);
-     endl = true;
-     }
-     buffer.append("extends ");
-     for (int i = 0; i < interfaces.size(); i++) {
-     if (i > 0) buffer.append(", ");
-     buffer.append(interfaces.elementAt(i));
-     }
-     if (endl) {
-     jsw.writeln(buffer.toString());
-     buffer.setLength(0);
-     }
-     else buffer.append(' ');
-     }
-
-     buffer.append('{');
-     jsw.writeln(buffer.toString());
-     buffer.setLength(0);
-     jsw.writeln();
-
-     jsw.indent();
-
-     //-- print method signatures
-
-     if (methods.size() > 0) {
-     jsw.writeln();
-     jsw.writeln("  //-----------/");
-     jsw.writeln(" //- Methods -/");
-     jsw.writeln("//-----------/");
-     jsw.writeln();
-     }
-
-     for (int i = 0; i < methods.size(); i++) {
-     JMethodSignature signature = (JMethodSignature) methods.elementAt(i);
-     signature.print(jsw);
-     jsw.writeln(';');
-     }
-
-     jsw.unindent();
-     jsw.writeln('}');
-     jsw.flush();
-     jsw.close();
-     } //-- printSource
+     * public abstract void print(JSourceWriter jsw);
+     *
+     *
+     * StringBuilder buffer = new StringBuilder();
+     *
+     *
+     * printHeader();
+     * printPackageDeclaration();
+     * printImportDeclarations();
+     *
+     * //------------/
+     * //- Java Doc -/
+     * //------------/
+     *
+     * jdc.print(jsw);
+     *
+     * //-- print class information
+     * //-- we need to add some JavaDoc API adding comments
+     *
+     * buffer.setLength(0);
+     *
+     * if (modifiers.isPrivate()) {
+     * buffer.append("private ");
+     * }
+     * else if (modifiers.isPublic()) {
+     * buffer.append("public ");
+     * }
+     *
+     * if (modifiers.isAbstract()) {
+     * buffer.append("abstract ");
+     * }
+     *
+     * buffer.append("interface ");
+     * buffer.append(getLocalName());
+     * buffer.append(' ');
+     * if (interfaces.size() > 0) {
+     * boolean endl = false;
+     * if (interfaces.size() > 1) {
+     * jsw.writeln(buffer.toString());
+     * buffer.setLength(0);
+     * endl = true;
+     * }
+     * buffer.append("extends ");
+     * for (int i = 0; i < interfaces.size(); i++) {
+     * if (i > 0) buffer.append(", ");
+     * buffer.append(interfaces.elementAt(i));
+     * }
+     * if (endl) {
+     * jsw.writeln(buffer.toString());
+     * buffer.setLength(0);
+     * }
+     * else buffer.append(' ');
+     * }
+     *
+     * buffer.append('{');
+     * jsw.writeln(buffer.toString());
+     * buffer.setLength(0);
+     * jsw.writeln();
+     *
+     * jsw.indent();
+     *
+     * //-- print method signatures
+     *
+     * if (methods.size() > 0) {
+     * jsw.writeln();
+     * jsw.writeln("  //-----------/");
+     * jsw.writeln(" //- Methods -/");
+     * jsw.writeln("//-----------/");
+     * jsw.writeln();
+     * }
+     *
+     * for (int i = 0; i < methods.size(); i++) {
+     * JMethodSignature signature = (JMethodSignature) methods.elementAt(i);
+     * signature.print(jsw);
+     * jsw.writeln(';');
+     * }
+     *
+     * jsw.unindent();
+     * jsw.writeln('}');
+     * jsw.flush();
+     * jsw.close();
+     * } //-- printSource
      */
 
     /**
@@ -810,17 +746,15 @@ public abstract class JStructure extends JType
      * @param comment the comment to display at the top of the source file
      * when printed
      */
-    public void setHeader( JComment comment )
-    {
+    public void setHeader(JComment comment) {
         this.header = comment;
-    } //-- setHeader
+    } // -- setHeader
 
-    //---------------------/
-    //- Protected Methods -/
-    //---------------------/
+    // ---------------------/
+    // - Protected Methods -/
+    // ---------------------/
 
-    protected int getInterfaceCount()
-    {
+    protected int getInterfaceCount() {
         return interfaces.size();
     }
 
@@ -832,79 +766,65 @@ public abstract class JStructure extends JType
      * @param source the source code to print
      * @param jsw the JSourceWriter to print to.
      */
-    protected static void printlnWithPrefix( String prefix, String source, JSourceWriter jsw )
-    {
-        jsw.write( prefix );
-        if ( source == null ) return;
+    protected static void printlnWithPrefix(String prefix, String source, JSourceWriter jsw) {
+        jsw.write(prefix);
+        if (source == null) return;
 
         char[] chars = source.toCharArray();
         int lastIdx = 0;
-        for ( int i = 0; i < chars.length; i++ )
-        {
+        for (int i = 0; i < chars.length; i++) {
             char ch = chars[i];
-            if ( ch == '\n' )
-            {
-                //-- free buffer
-                jsw.write( chars, lastIdx, ( i - lastIdx ) + 1 );
+            if (ch == '\n') {
+                // -- free buffer
+                jsw.write(chars, lastIdx, (i - lastIdx) + 1);
                 lastIdx = i + 1;
-                if ( i < chars.length )
-                {
-                    jsw.write( prefix );
+                if (i < chars.length) {
+                    jsw.write(prefix);
                 }
             }
         }
-        //-- free buffer
-        if ( lastIdx < chars.length )
-        {
-            jsw.write( chars, lastIdx, chars.length - lastIdx );
+        // -- free buffer
+        if (lastIdx < chars.length) {
+            jsw.write(chars, lastIdx, chars.length - lastIdx);
         }
         jsw.writeln();
-
-    } //-- printlnWithPrefix
-
+    } // -- printlnWithPrefix
 
     /**
      * Returns the package name from the given class name
-     * 
+     *
      * @param className the className
      * @return the package of the class, otherwise {@code null}
      */
-    protected static String getPackageFromClassName( String className )
-    {
+    protected static String getPackageFromClassName(String className) {
         int idx = -1;
-        if ( ( idx = className.lastIndexOf( '.' ) ) > 0 )
-        {
-            return className.substring( 0, idx );
+        if ((idx = className.lastIndexOf('.')) > 0) {
+            return className.substring(0, idx);
         }
         return null;
-    } //-- getPackageFromClassName
+    } // -- getPackageFromClassName
 
     /**
      * @return the annotations
      */
-    public JAnnotations getAnnotations()
-    {
+    public JAnnotations getAnnotations() {
         return annotations;
     }
 
     /**
      * @param annotation the annotation to append
      */
-    public void appendAnnotation( String annotation )
-    {
-        if ( annotations == null )
-        {
+    public void appendAnnotation(String annotation) {
+        if (annotations == null) {
             annotations = new JAnnotations();
         }
-        annotations.appendAnnotation( annotation );
+        annotations.appendAnnotation(annotation);
     }
 
     /**
      * @param annotations the annotations to set
      */
-    public void setAnnotations( JAnnotations annotations )
-    {
+    public void setAnnotations(JAnnotations annotations) {
         this.annotations = annotations;
     }
-
-} //-- JStructure
+} // -- JStructure

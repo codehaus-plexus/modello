@@ -22,36 +22,31 @@ package org.codehaus.modello.plugin.java;
  * SOFTWARE.
  */
 
+import java.util.Properties;
+
 import org.codehaus.modello.AbstractModelloJavaGeneratorTest;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
 
-import java.util.Properties;
-
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  */
-public class AssociationGeneratorTest
-    extends AbstractModelloJavaGeneratorTest
-{
-    public AssociationGeneratorTest()
-    {
-        super( "oneToManyAssociation" );
+public class AssociationGeneratorTest extends AbstractModelloJavaGeneratorTest {
+    public AssociationGeneratorTest() {
+        super("oneToManyAssociation");
     }
 
-    public void testJavaGenerator()
-        throws Throwable
-    {
-        ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
+    public void testJavaGenerator() throws Throwable {
+        ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
 
-        Model model = modello.loadModel( getXmlResourceReader( "/models/oneToManyAssociation.mdo" ) );
+        Model model = modello.loadModel(getXmlResourceReader("/models/oneToManyAssociation.mdo"));
 
-        Properties parameters = getModelloParameters( "4.0.0" );
+        Properties parameters = getModelloParameters("4.0.0");
 
-        modello.generate( model, "java", parameters );
+        modello.generate(model, "java", parameters);
 
         compileGeneratedSources();
 
-        verifyCompiledGeneratedSources( "OneToManyAssociationVerifier" );
+        verifyCompiledGeneratedSources("OneToManyAssociationVerifier");
     }
 }

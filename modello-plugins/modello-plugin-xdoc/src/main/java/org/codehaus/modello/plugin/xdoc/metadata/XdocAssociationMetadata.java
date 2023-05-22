@@ -27,8 +27,6 @@ import org.codehaus.modello.metadata.AssociationMetadata;
 /**
  * @author Hervé Boutemy
  */
-public class XdocAssociationMetadata
-    implements AssociationMetadata
-{
+public class XdocAssociationMetadata implements AssociationMetadata {
     public static final String ID = XdocAssociationMetadata.class.getName();
 }

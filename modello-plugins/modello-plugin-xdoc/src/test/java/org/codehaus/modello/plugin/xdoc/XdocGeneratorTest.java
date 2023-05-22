@@ -1,13 +1,5 @@
 package org.codehaus.modello.plugin.xdoc;
 
-import java.io.File;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Properties;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 /*
  * Copyright (c) 2004, Codehaus.org
  *
@@ -30,6 +22,15 @@ import java.util.regex.Pattern;
  * SOFTWARE.
  */
 
+import java.io.File;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Properties;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import junit.framework.Assert;
 import org.codehaus.modello.AbstractModelloGeneratorTest;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
@@ -43,131 +44,117 @@ import org.xmlunit.builder.DiffBuilder;
 import org.xmlunit.builder.Input;
 import org.xmlunit.diff.Diff;
 
-import junit.framework.Assert;
-
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  */
-public class XdocGeneratorTest
-    extends AbstractModelloGeneratorTest
+public class XdocGeneratorTest extends AbstractModelloGeneratorTest {
 
-{
-    public XdocGeneratorTest()
-    {
-        super( "xdoc" );
+    public XdocGeneratorTest() {
+        super("xdoc");
     }
 
-    protected File getOutputDirectory()
-    {
-        return getTestFile( "target/generated-site/xdoc" );
+    protected File getOutputDirectory() {
+        return getTestFile("target/generated-site/xdoc");
     }
 
-    public void testXdocGenerator()
-        throws Exception
-    {
+    public void testXdocGenerator() throws Exception {
         checkMavenXdocGenerator();
         checkFeaturesXdocGenerator();
         checkSettingsXdocGenerator();
     }
 
-    public void testHtmlToXml()
-        throws Exception
-    {
-        ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
+    public void testHtmlToXml() throws Exception {
+        ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
 
-        Model model = modello.loadModel( getXmlResourceReader( "/html4.mdo" ) );
+        Model model = modello.loadModel(getXmlResourceReader("/html4.mdo"));
 
-        Properties parameters = getModelloParameters( "1.0.0" );
+        Properties parameters = getModelloParameters("1.0.0");
 
-        modello.generate( model, "xdoc", parameters );
+        modello.generate(model, "xdoc", parameters);
 
-        Diff diff = DiffBuilder.compare( Input.fromStream( XdocGeneratorTest.class.getResourceAsStream( "/html4.expected.xml" ) ) )
-                   .withTest( Input.fromFile( new File( getOutputDirectory(), "html4.xml" ) ) ).build();
+        Diff diff = DiffBuilder.compare(
+                        Input.fromStream(XdocGeneratorTest.class.getResourceAsStream("/html4.expected.xml")))
+                .withTest(Input.fromFile(new File(getOutputDirectory(), "html4.xml")))
+                .build();
 
-        assertFalse( diff.toString(), diff.hasDifferences() );
+        assertFalse(diff.toString(), diff.hasDifferences());
     }
 
-    private void checkMavenXdocGenerator()
-        throws Exception
-    {
-        ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
+    private void checkMavenXdocGenerator() throws Exception {
+        ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
 
-        Model model = modello.loadModel( getXmlResourceReader( "/maven.mdo" ) );
+        Model model = modello.loadModel(getXmlResourceReader("/maven.mdo"));
 
-        List<ModelClass> classesList = model.getClasses( new Version( "4.0.0" ) );
+        List<ModelClass> classesList = model.getClasses(new Version("4.0.0"));
 
-        assertEquals( 26, classesList.size() );
+        assertEquals(26, classesList.size());
 
-        ModelClass clazz = (ModelClass) classesList.get( 0 );
+        ModelClass clazz = (ModelClass) classesList.get(0);
 
-        assertEquals( "Model", clazz.getName() );
+        assertEquals("Model", clazz.getName());
 
-        ModelField extend = clazz.getField( "extend", new Version( "4.0.0" ) );
+        ModelField extend = clazz.getField("extend", new Version("4.0.0"));
 
-        assertTrue( extend.hasMetadata( XmlFieldMetadata.ID ) );
+        assertTrue(extend.hasMetadata(XmlFieldMetadata.ID));
 
-        XmlFieldMetadata xml = (XmlFieldMetadata) extend.getMetadata( XmlFieldMetadata.ID );
+        XmlFieldMetadata xml = (XmlFieldMetadata) extend.getMetadata(XmlFieldMetadata.ID);
 
-        assertNotNull( xml );
+        assertNotNull(xml);
 
-        assertTrue( xml.isAttribute() );
+        assertTrue(xml.isAttribute());
 
-        assertEquals( "extender", xml.getTagName() );
+        assertEquals("extender", xml.getTagName());
 
-        ModelField build = clazz.getField( "build", new Version( "4.0.0" ) );
+        ModelField build = clazz.getField("build", new Version("4.0.0"));
 
-        assertTrue( build.hasMetadata( XmlFieldMetadata.ID ) );
+        assertTrue(build.hasMetadata(XmlFieldMetadata.ID));
 
-        xml = (XmlFieldMetadata) build.getMetadata( XmlFieldMetadata.ID );
+        xml = (XmlFieldMetadata) build.getMetadata(XmlFieldMetadata.ID);
 
-        assertNotNull( xml );
+        assertNotNull(xml);
 
-        assertEquals( "builder", xml.getTagName() );
+        assertEquals("builder", xml.getTagName());
 
-        Properties parameters = getModelloParameters( "4.0.0" );
+        Properties parameters = getModelloParameters("4.0.0");
 
-        modello.generate( model, "xdoc", parameters );
+        modello.generate(model, "xdoc", parameters);
 
-        //addDependency( "modello", "modello-core", "1.0-SNAPSHOT" );
+        // addDependency( "modello", "modello-core", "1.0-SNAPSHOT" );
 
-        //verify( "org.codehaus.modello.generator.xml.cdoc.XdocVerifier", "xdoc" );
-        checkInternalLinks( "maven.xml" );
+        // verify( "org.codehaus.modello.generator.xml.cdoc.XdocVerifier", "xdoc" );
+        checkInternalLinks("maven.xml");
     }
 
-    public void checkFeaturesXdocGenerator()
-        throws Exception
-    {
-        ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
+    public void checkFeaturesXdocGenerator() throws Exception {
+        ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
 
-        Model model = modello.loadModel( getXmlResourceReader( "/features.mdo" ) );
+        Model model = modello.loadModel(getXmlResourceReader("/features.mdo"));
 
-        Properties parameters = getModelloParameters( "1.5.0" );
+        Properties parameters = getModelloParameters("1.5.0");
 
-        modello.generate( model, "xdoc", parameters );
+        modello.generate(model, "xdoc", parameters);
 
-        checkInternalLinks( "features.xml" );
+        checkInternalLinks("features.xml");
 
-        String content = FileUtils.fileRead( new File( getOutputDirectory(), "features.xml" ), "UTF-8" );
+        String content = FileUtils.fileRead(new File(getOutputDirectory(), "features.xml"), "UTF-8");
 
-        assertTrue( "Transient fields were erroneously documented", !content.contains( "transientString" ) );
+        assertTrue("Transient fields were erroneously documented", !content.contains("transientString"));
     }
 
-    public void checkSettingsXdocGenerator()
-        throws Exception
-    {
-        ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
+    public void checkSettingsXdocGenerator() throws Exception {
+        ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
 
-        Model model = modello.loadModel( getXmlResourceReader( "/settings.mdo" ) );
+        Model model = modello.loadModel(getXmlResourceReader("/settings.mdo"));
 
-        Properties parameters = getModelloParameters( "1.5.0" );
+        Properties parameters = getModelloParameters("1.5.0");
 
-        modello.generate( model, "xdoc", parameters );
+        modello.generate(model, "xdoc", parameters);
 
-        checkInternalLinks( "settings.xml" );
+        checkInternalLinks("settings.xml");
 
-        String content = FileUtils.fileRead( new File( getOutputDirectory(), "settings.xml" ), "UTF-8" );
+        String content = FileUtils.fileRead(new File(getOutputDirectory(), "settings.xml"), "UTF-8");
 
-        assertTrue( "Properties field was erroneously documented", !content.contains("&lt;properties/&gt;") );
+        assertTrue("Properties field was erroneously documented", !content.contains("&lt;properties/&gt;"));
     }
 
     /**
@@ -177,33 +164,28 @@ public class XdocGeneratorTest
      * @param xdoc
      * @throws Exception
      */
-    private void checkInternalLinks( String filename )
-        throws Exception
-    {
-        String content = FileUtils.fileRead( new File( getOutputDirectory(), filename ), "UTF-8" );
+    private void checkInternalLinks(String filename) throws Exception {
+        String content = FileUtils.fileRead(new File(getOutputDirectory(), filename), "UTF-8");
 
         Set<String> hrefs = new HashSet<String>();
-        Pattern p = Pattern.compile( "<a href=\"#(class_[^\"]+)\"", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE );
-        Matcher m = p.matcher( content );
-        while ( m.find() )
-        {
-            hrefs.add( m.group( 1 ) );
+        Pattern p = Pattern.compile("<a href=\"#(class_[^\"]+)\"", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
+        Matcher m = p.matcher(content);
+        while (m.find()) {
+            hrefs.add(m.group(1));
         }
-        Assert.assertTrue( "should find some '<a href=' links", hrefs.size() > 0 );
+        Assert.assertTrue("should find some '<a href=' links", hrefs.size() > 0);
 
         Set<String> names = new HashSet<String>();
-        p = Pattern.compile( "<a name=\"(class_[^\"]+)\"", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE );
-        m = p.matcher( content );
-        while ( m.find() )
-        {
-            names.add( m.group( 1 ) );
+        p = Pattern.compile("<a name=\"(class_[^\"]+)\"", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
+        m = p.matcher(content);
+        while (m.find()) {
+            names.add(m.group(1));
         }
-        Assert.assertTrue( "should find some '<a name=' anchor definitions", names.size() > 0 );
+        Assert.assertTrue("should find some '<a name=' anchor definitions", names.size() > 0);
 
-        hrefs.removeAll( names );
-        if ( hrefs.size() > 0 )
-        {
-            throw new VerifierException( "some internal hrefs in " + filename + " are not defined: " + hrefs );
+        hrefs.removeAll(names);
+        if (hrefs.size() > 0) {
+            throw new VerifierException("some internal hrefs in " + filename + " are not defined: " + hrefs);
         }
     }
 }

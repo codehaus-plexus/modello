@@ -5,17 +5,14 @@ package org.codehaus.modello.plugin.java;
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  */
-public abstract class AbstractPrincipal
-{
+public abstract class AbstractPrincipal {
     private int principal;
 
-    public int getPrincipal()
-    {
+    public int getPrincipal() {
         return principal;
     }
 
-    public void setPrincipal( int principal )
-    {
+    public void setPrincipal(int principal) {
         this.principal = principal;
     }
 }

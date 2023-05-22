@@ -42,8 +42,6 @@
  *
  * $Id$
  */
-
-
 package org.codehaus.modello.plugin.java.javasource;
 
 /*
@@ -72,17 +70,16 @@ package org.codehaus.modello.plugin.java.javasource;
  * @author <a href="mailto:kvisco@intalio.com">Keith Visco</a>
  * @version $Revision$ $Date$
  **/
-public class JType
-{
+public class JType {
 
-    public static final JType BOOLEAN = new JType( "boolean" );
-    public static final JType BYTE = new JType( "byte" );
-    public static final JType CHAR = new JType( "char" );
-    public static final JType DOUBLE = new JType( "double" );
-    public static final JType FLOAT = new JType( "float" );
-    public static final JType INT = new JType( "int" );
-    public static final JType LONG = new JType( "long" );
-    public static final JType SHORT = new JType( "short" );
+    public static final JType BOOLEAN = new JType("boolean");
+    public static final JType BYTE = new JType("byte");
+    public static final JType CHAR = new JType("char");
+    public static final JType DOUBLE = new JType("double");
+    public static final JType FLOAT = new JType("float");
+    public static final JType INT = new JType("int");
+    public static final JType LONG = new JType("long");
+    public static final JType SHORT = new JType("short");
 
     private String name = null;
 
@@ -97,11 +94,10 @@ public class JType
      * Creates a new JType with the given name
      * @param name the name of the type
      **/
-    public JType( String name )
-    {
+    public JType(String name) {
         super();
         this.name = name;
-    } //-- JType
+    } // -- JType
 
     /**
      * Creates a JType Object representing an array of the current
@@ -109,50 +105,44 @@ public class JType
      * @return the new JType which is represents an array.
      * @deprecated removed in javasource 1.3rc1, replaced by JArrayType
      **/
-    public final JType createArray()
-    {
-        JType jType = new JType( getName() );
+    public final JType createArray() {
+        JType jType = new JType(getName());
         jType._isArray = true;
         jType._componentType = this;
         return jType;
-    } //-- createArray
+    } // -- createArray
 
     /**
      * If this JType is an array this method will returns the component type
      * of the array, otherwise null will be returned.
      * @return the component JType if this JType is an array, otherwise null.
      **/
-    public JType getComponentType()
-    {
+    public JType getComponentType() {
         return _componentType;
-    } //-- getComponentType
+    } // -- getComponentType
 
-    public String getLocalName()
-    {
+    public String getLocalName() {
 
-        //-- use getName method in case it's been overloaded
+        // -- use getName method in case it's been overloaded
         String name = getName();
 
-        if ( name == null ) return null;
-        int idx = name.lastIndexOf( '.' );
-        if ( idx >= 0 )
-        {
-            name = name.substring( idx + 1 );
+        if (name == null) return null;
+        int idx = name.lastIndexOf('.');
+        if (idx >= 0) {
+            name = name.substring(idx + 1);
         }
         return name;
-    } //-- getLocalName
+    } // -- getLocalName
 
-    public String getName()
-    {
+    public String getName() {
         return this.name;
-    } //-- getName
+    } // -- getName
 
     /**
      * Checks to see if this JType represents an array.
      * @return true if this JType represents an array, otherwise false
      **/
-    public final boolean isArray()
-    {
+    public final boolean isArray() {
         return _isArray;
     }
 
@@ -160,36 +150,31 @@ public class JType
      * Checks to see if this JType represents a primitive
      * @return true if this JType represents a primitive, otherwise false
      **/
-    public boolean isPrimitive()
-    {
-        return ( ( this == BOOLEAN ) ||
-            ( this == BYTE ) ||
-            ( this == CHAR ) ||
-            ( this == DOUBLE ) ||
-            ( this == FLOAT ) ||
-            ( this == INT ) ||
-            ( this == LONG ) ||
-            ( this == SHORT ) );
-    } //-- isPrimitive
+    public boolean isPrimitive() {
+        return ((this == BOOLEAN)
+                || (this == BYTE)
+                || (this == CHAR)
+                || (this == DOUBLE)
+                || (this == FLOAT)
+                || (this == INT)
+                || (this == LONG)
+                || (this == SHORT));
+    } // -- isPrimitive
 
     /**
      * Returns the String representation of this JType, which is
      * simply the name of this type.
      * @return the String representation of this JType
      **/
-    public String toString()
-    {
+    public String toString() {
 
-        if ( _isArray )
-            return _componentType.toString() + "[]";
-        else
-            return this.name;
+        if (_isArray) return _componentType.toString() + "[]";
+        else return this.name;
+    } // -- toString
 
-    } //-- toString
-
-    //---------------------/
-    //- Protected methods -/
-    //---------------------/
+    // ---------------------/
+    // - Protected methods -/
+    // ---------------------/
 
     /**
      * Allows subtypes, such as JClass to alter the package to which
@@ -198,24 +183,17 @@ public class JType
      * <BR>
      * <B>Note:</B> The package name cannot be changed on a primitive type.
      **/
-    protected void changePackage( String newPackage )
-    {
+    protected void changePackage(String newPackage) {
 
-        if ( this.name == null ) return;
-        if ( this.isPrimitive() ) return;
+        if (this.name == null) return;
+        if (this.isPrimitive()) return;
 
         String localName = null;
-        int idx = name.lastIndexOf( '.' );
-        if ( idx >= 0 )
-            localName = this.name.substring( idx + 1 );
-        else
-            localName = this.name;
+        int idx = name.lastIndexOf('.');
+        if (idx >= 0) localName = this.name.substring(idx + 1);
+        else localName = this.name;
 
-        if ( ( newPackage == null ) || ( newPackage.length() == 0 ) )
-            this.name = localName;
-        else
-            this.name = newPackage + "." + localName;
-
-    } //-- changePackage
-
-} //-- JType
+        if ((newPackage == null) || (newPackage.length() == 0)) this.name = localName;
+        else this.name = newPackage + "." + localName;
+    } // -- changePackage
+} // -- JType
