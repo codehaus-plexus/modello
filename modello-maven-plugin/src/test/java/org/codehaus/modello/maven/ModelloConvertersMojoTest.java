@@ -26,9 +26,10 @@ import java.io.File;
 import java.util.Arrays;
 
 import org.codehaus.modello.core.ModelloCore;
+import org.codehaus.plexus.ContainerConfiguration;
 import org.codehaus.plexus.PlexusTestCase;
+import org.codehaus.plexus.build.BuildContext;
 import org.codehaus.plexus.util.FileUtils;
-import org.sonatype.plexus.build.incremental.BuildContext;
 
 /**
  * @author <a href="mailto:brett@apache.org">Brett Porter</a>
@@ -97,5 +98,10 @@ public class ModelloConvertersMojoTest extends PlexusTestCase {
         javaFile = new File(outputDirectory, "org/codehaus/mojo/modello/javatest/convert/BasicVersionConverter.java");
 
         assertFalse("The generated java file doesn't exist: '" + javaFile.getAbsolutePath() + "'.", javaFile.exists());
+    }
+
+    @Override
+    protected void customizeContainerConfiguration(ContainerConfiguration containerConfiguration) {
+        containerConfiguration.setClassPathScanning("cache");
     }
 }

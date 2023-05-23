@@ -43,6 +43,7 @@ import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.Version;
 import org.codehaus.plexus.PlexusConstants;
 import org.codehaus.plexus.PlexusContainer;
+import org.codehaus.plexus.build.BuildContext;
 import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 import org.codehaus.plexus.context.Context;
 import org.codehaus.plexus.context.ContextException;
@@ -50,7 +51,6 @@ import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Contextualizable;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.io.CachingWriter;
-import org.sonatype.plexus.build.incremental.BuildContext;
 
 /**
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
