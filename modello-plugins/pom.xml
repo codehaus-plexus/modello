@@ -61,7 +61,7 @@
               <phase>process-test-resources</phase>
               <configuration>
                 <outputDirectory>${project.build.directory}/test-libs</outputDirectory>
-                <excludeTransitive>true</excludeTransitive>
+                <excludeTransitive>false</excludeTransitive>
                 <stripVersion>true</stripVersion>
               </configuration>
             </execution>
