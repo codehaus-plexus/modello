@@ -10,7 +10,7 @@
 
   <groupId>org.codehaus.modello</groupId>
   <artifactId>modello</artifactId>
-  <version>2.1.2-SNAPSHOT</version>
+  <version>2.1.2</version>
   <packaging>pom</packaging>
 
   <name>Modello</name>
@@ -185,7 +185,7 @@
   <scm>
     <connection>scm:git:https://github.com/codehaus-plexus/modello.git</connection>
     <developerConnection>scm:git:https://github.com/codehaus-plexus/modello.git</developerConnection>
-    <tag>master</tag>
+    <tag>modello-2.1.2</tag>
     <url>http://github.com/codehaus-plexus/modello/tree/${project.scm.tag}/</url>
   </scm>
   <issueManagement>
@@ -232,7 +232,7 @@
       ! in the integration tests.
     -->
     <java.version>1.8</java.version>
-    <project.build.outputTimestamp>2023-01-19T08:03:24Z</project.build.outputTimestamp>
+    <project.build.outputTimestamp>2023-06-06T22:22:49Z</project.build.outputTimestamp>
   </properties>
 
   <dependencyManagement>
