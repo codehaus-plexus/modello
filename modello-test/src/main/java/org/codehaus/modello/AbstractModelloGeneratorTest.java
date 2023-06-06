@@ -32,6 +32,7 @@ import java.io.Reader;
 import java.util.Optional;
 import java.util.Properties;
 
+import org.codehaus.plexus.ContainerConfiguration;
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.ReaderFactory;
@@ -106,5 +107,10 @@ public abstract class AbstractModelloGeneratorTest extends PlexusTestCase {
                 "http://java.sun.com/xml/jaxp/properties/schemaSource",
                 new File(getOutputDirectory(), generatedXsdName));
         return saxParser;
+    }
+
+    @Override
+    protected void customizeContainerConfiguration(ContainerConfiguration containerConfiguration) {
+        containerConfiguration.setClassPathScanning("cache");
     }
 }

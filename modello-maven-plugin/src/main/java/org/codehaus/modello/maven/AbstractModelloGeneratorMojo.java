@@ -41,8 +41,8 @@ import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelValidationException;
+import org.codehaus.plexus.build.BuildContext;
 import org.codehaus.plexus.util.StringUtils;
-import org.sonatype.plexus.build.incremental.BuildContext;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
