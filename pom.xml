@@ -742,6 +742,29 @@
         </plugins>
       </reporting>
     </profile>
+
+    <!-- TODO remove with parent pom or spotless plugin update https://github.com/diffplug/spotless/issues/1774 -->
+    <profile>
+      <id>java21+</id>
+      <activation>
+        <jdk>[21,)</jdk>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>com.diffplug.spotless</groupId>
+            <artifactId>spotless-maven-plugin</artifactId>
+            <configuration>
+              <java>
+                <palantirJavaFormat>
+                  <version>2.35.0</version>
+                </palantirJavaFormat>
+              </java>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
   </profiles>
 
 </project>
