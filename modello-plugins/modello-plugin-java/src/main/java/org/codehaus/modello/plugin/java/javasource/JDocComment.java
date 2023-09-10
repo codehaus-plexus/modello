@@ -42,12 +42,7 @@
  *
  * $Id$
  */
-
-
 package org.codehaus.modello.plugin.java.javasource;
-
-import java.util.ArrayList;
-import java.util.Collections;
 
 /*
  * Copyright (c) 2004, Codehaus.org
@@ -71,6 +66,8 @@ import java.util.Collections;
  * SOFTWARE.
  */
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 
@@ -80,9 +77,7 @@ import java.util.List;
  * @author <a href="mailto:kvisco@intalio.com">Keith Visco</a>
  * @version $Revision$ $Date$
  */
-public class JDocComment
-{
-
+public class JDocComment {
 
     /**
      * An ordered list of descriptors
@@ -97,94 +92,83 @@ public class JDocComment
     /**
      * Creates a new JavaDoc Comment
      */
-    public JDocComment()
-    {
+    public JDocComment() {
         super();
         _descriptors = new ArrayList<JDocDescriptor>();
         _comment = new StringBuilder();
-    } //--  JDocComment
+    } // --  JDocComment
 
     /**
      * Adds the given JDocDescriptor to this JDocComment
      *
      * @param jdesc the JDocDescriptor to add
      */
-    public void addDescriptor( JDocDescriptor jdesc )
-    {
+    public void addDescriptor(JDocDescriptor jdesc) {
 
-        if ( jdesc == null ) return;
-        //-- on the fly sorting of descriptors
-        if ( _descriptors.size() == 0 )
-        {
-            _descriptors.add( jdesc );
+        if (jdesc == null) return;
+        // -- on the fly sorting of descriptors
+        if (_descriptors.size() == 0) {
+            _descriptors.add(jdesc);
             return;
         }
 
-        for ( int i = 0; i < _descriptors.size(); i++ )
-        {
-            JDocDescriptor jdd
-                = _descriptors.get( i );
+        for (int i = 0; i < _descriptors.size(); i++) {
+            JDocDescriptor jdd = _descriptors.get(i);
 
-            short compare = jdesc.compareTo( jdd );
+            short compare = jdesc.compareTo(jdd);
 
-            switch ( compare )
-            {
+            switch (compare) {
                 case 0: // equal
-                    _descriptors.add( i + 1, jdesc );
+                    _descriptors.add(i + 1, jdesc);
                     return;
-                case -1: //-- less than
-                    _descriptors.add( i, jdesc );
+                case -1: // -- less than
+                    _descriptors.add(i, jdesc);
                     return;
                 case 1:
-                    //-- keep looking
+                    // -- keep looking
                     break;
             }
         }
 
-        //-- if we make it here we need to add
-        _descriptors.add( jdesc );
-
-    } //-- addException
+        // -- if we make it here we need to add
+        _descriptors.add(jdesc);
+    } // -- addException
 
     /**
      * Appends the comment String to this JDocComment
      *
      * @param comment the comment to append
      */
-    public void appendComment( String comment )
-    {
-        _comment.append( comment );
-    } //-- appendComment
+    public void appendComment(String comment) {
+        _comment.append(comment);
+    } // -- appendComment
 
     /**
      * Returns the String value of this JDocComment.
      *
      * @return the String value of the JDocComment.
      */
-    public String getComment()
-    {
+    public String getComment() {
         return _comment.toString();
-    } //-- getComment
+    } // -- getComment
 
     /**
      * Returns an enumeration of the parameters of this JDocComment
      *
      * @return an enumeration of the parameters of this JDocComment
      */
-    public Enumeration<JDocDescriptor> getDescriptors()
-    {
-        return Collections.enumeration( _descriptors );
-    } //-- getDescriptors
+    public Enumeration<JDocDescriptor> getDescriptors() {
+        return Collections.enumeration(_descriptors);
+    } // -- getDescriptors
 
     /**
      * Returns the length of the comment
      *
      * @return the length of the comment
      */
-    public int getLength()
-    {
+    public int getLength() {
         return _comment.length();
-    } //-- getLength
+    } // -- getLength
 
     /**
      * Returns the Parameter Descriptor associated with the
@@ -194,76 +178,63 @@ public class JDocComment
      * @return the Parameter Descriptor associated with the
      * given name
      */
-    public JDocDescriptor getParamDescriptor( String name )
-    {
-        if ( name == null ) return null;
+    public JDocDescriptor getParamDescriptor(String name) {
+        if (name == null) return null;
 
-        for ( JDocDescriptor jdd : _descriptors )
-        {
-            if ( jdd.getType() == JDocDescriptor.PARAM )
-            {
-                if ( name.equals( jdd.getName() ) )
-                    return jdd;
+        for (JDocDescriptor jdd : _descriptors) {
+            if (jdd.getType() == JDocDescriptor.PARAM) {
+                if (name.equals(jdd.getName())) return jdd;
             }
         }
         return null;
-
-    } //-- getParamDescriptor
-
+    } // -- getParamDescriptor
 
     /**
      * prints this JavaDoc comment using the given JSourceWriter
      *
      * @param jsw the JSourceWriter to print to
      */
-    public void print( JSourceWriter jsw )
-    {
+    public void print(JSourceWriter jsw) {
 
-        //-- I reuse JComment for printing
-        JComment jComment = new JComment( JComment.JAVADOC_STYLE );
+        // -- I reuse JComment for printing
+        JComment jComment = new JComment(JComment.JAVADOC_STYLE);
 
-        jComment.setComment( _comment.toString() );
+        jComment.setComment(_comment.toString());
 
-        //-- force a separating "*" for readability
-        if ( _descriptors.size() > 0 )
-        {
-            jComment.appendComment( "\n" );
+        // -- force a separating "*" for readability
+        if (_descriptors.size() > 0) {
+            jComment.appendComment("\n");
         }
 
-        for ( int i = 0; i < _descriptors.size(); i++ )
-        {
-            jComment.appendComment( "\n" );
-            jComment.appendComment( _descriptors.get( i ).toString() );
+        for (int i = 0; i < _descriptors.size(); i++) {
+            jComment.appendComment("\n");
+            jComment.appendComment(_descriptors.get(i).toString());
         }
-        jComment.print( jsw );
-    } //-- print
+        jComment.print(jsw);
+    } // -- print
 
     /**
      * Sets the comment String of this JDocComment
      *
      * @param comment the comment String of this JDocComment
      */
-    public void setComment( String comment )
-    {
-        _comment.setLength( 0 );
-        _comment.append( comment );
-    } //-- setComment
+    public void setComment(String comment) {
+        _comment.setLength(0);
+        _comment.append(comment);
+    } // -- setComment
 
     /**
      * Returns the String representation of this Java Doc Comment
      *
      * @return the String representation of this Java Doc Comment
      */
-    public String toString()
-    {
+    public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append( "/**\n" );
-        sb.append( " * " );
+        sb.append("/**\n");
+        sb.append(" * ");
 
-        sb.append( " */\n" );
+        sb.append(" */\n");
 
         return sb.toString();
-    } //-- toString
-
-} //-- JDocComment
-
+    } // -- toString
+} // -- JDocComment

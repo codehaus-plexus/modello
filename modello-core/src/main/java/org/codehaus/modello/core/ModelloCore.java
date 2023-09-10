@@ -22,37 +22,32 @@ package org.codehaus.modello.core;
  * SOFTWARE.
  */
 
-import org.codehaus.modello.ModelloException;
-import org.codehaus.modello.model.Model;
-import org.codehaus.modello.model.ModelValidationException;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
 import java.util.Properties;
 
+import org.codehaus.modello.ModelloException;
+import org.codehaus.modello.model.Model;
+import org.codehaus.modello.model.ModelValidationException;
+
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  */
-public interface ModelloCore
-{
+public interface ModelloCore {
     String ROLE = ModelloCore.class.getName();
 
     MetadataPluginManager getMetadataPluginManager();
 
-    Model loadModel( File file )
-        throws IOException, ModelloException, ModelValidationException;
-    
-    Model loadModel( Reader reader )
-        throws ModelloException, ModelValidationException;
+    Model loadModel(File file) throws IOException, ModelloException, ModelValidationException;
 
-    void saveModel( Model model, Writer writer )
-        throws ModelloException;
+    Model loadModel(Reader reader) throws ModelloException, ModelValidationException;
 
-    Model translate( Reader reader, String inputType, Properties parameters )
-        throws ModelloException, ModelValidationException;
+    void saveModel(Model model, Writer writer) throws ModelloException;
 
-    void generate( Model model, String outputType, Properties parameters )
-        throws ModelloException;
+    Model translate(Reader reader, String inputType, Properties parameters)
+            throws ModelloException, ModelValidationException;
+
+    void generate(Model model, String outputType, Properties parameters) throws ModelloException;
 }

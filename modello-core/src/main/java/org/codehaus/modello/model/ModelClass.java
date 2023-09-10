@@ -22,22 +22,20 @@ package org.codehaus.modello.model;
  * SOFTWARE.
  */
 
-import org.codehaus.modello.ModelloRuntimeException;
-import org.codehaus.modello.metadata.ClassMetadata;
-import org.codehaus.plexus.util.StringUtils;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.codehaus.modello.ModelloRuntimeException;
+import org.codehaus.modello.metadata.ClassMetadata;
+import org.codehaus.plexus.util.StringUtils;
+
 /**
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
  */
-public class ModelClass
-    extends ModelType
-{
+public class ModelClass extends ModelType {
     private String superClass;
 
     private boolean isInternalSuperClass;
@@ -48,23 +46,19 @@ public class ModelClass
 
     private transient Map<String, List<ModelField>> fieldMap = new HashMap<String, List<ModelField>>();
 
-    public ModelClass()
-    {
+    public ModelClass() {
         super();
     }
 
-    public ModelClass( Model model, String name )
-    {
-        super( model, name );
+    public ModelClass(Model model, String name) {
+        super(model, name);
     }
 
-    public String getSuperClass()
-    {
+    public String getSuperClass() {
         return superClass;
     }
 
-    public void setSuperClass( String superClass )
-    {
+    public void setSuperClass(String superClass) {
         this.superClass = superClass;
     }
 
@@ -77,24 +71,20 @@ public class ModelClass
      *
      * @return Returns the list of all interfaces of this class.
      */
-    public List<String> getInterfaces()
-    {
-        if ( interfaces == null )
-        {
+    public List<String> getInterfaces() {
+        if (interfaces == null) {
             interfaces = new ArrayList<String>();
         }
 
         return interfaces;
     }
 
-    public void addInterface( String modelInterface )
-    {
-        if ( getInterfaces().contains( modelInterface ) )
-        {
-            throw new ModelloRuntimeException( "Duplicate interface in " + getName() + ": " + modelInterface + "." );
+    public void addInterface(String modelInterface) {
+        if (getInterfaces().contains(modelInterface)) {
+            throw new ModelloRuntimeException("Duplicate interface in " + getName() + ": " + modelInterface + ".");
         }
 
-        getInterfaces().add( modelInterface );
+        getInterfaces().add(modelInterface);
     }
 
     // ----------------------------------------------------------------------
@@ -104,10 +94,8 @@ public class ModelClass
     /**
      * {@inheritDoc}
      */
-    public List<ModelField> getAllFields()
-    {
-        if ( fields == null )
-        {
+    public List<ModelField> getAllFields() {
+        if (fields == null) {
             fields = new ArrayList<ModelField>();
         }
 
@@ -119,22 +107,19 @@ public class ModelClass
      *
      * @return Returns all the fields in this class and all super classes.
      */
-    public List<ModelField> getAllFields( boolean withInheritedField )
-    {
-        if ( ! withInheritedField )
-        {
+    public List<ModelField> getAllFields(boolean withInheritedField) {
+        if (!withInheritedField) {
             return getAllFields();
         }
 
-        List<ModelField> fields = new ArrayList<ModelField>( getAllFields() );
+        List<ModelField> fields = new ArrayList<ModelField>(getAllFields());
 
         ModelClass c = this;
 
-        while ( c.hasSuperClass() && c.isInternalSuperClass() )
-        {
-            ModelClass parent = getModel().getClass( c.getSuperClass(), getVersionRange() );
+        while (c.hasSuperClass() && c.isInternalSuperClass()) {
+            ModelClass parent = getModel().getClass(c.getSuperClass(), getVersionRange());
 
-            fields.addAll( parent.getAllFields() );
+            fields.addAll(parent.getAllFields());
 
             c = parent;
         }
@@ -142,103 +127,82 @@ public class ModelClass
         return fields;
     }
 
-    public ModelField getField( String type, VersionRange versionRange )
-    {
-        List<ModelField> fieldList = fieldMap.get( type );
+    public ModelField getField(String type, VersionRange versionRange) {
+        List<ModelField> fieldList = fieldMap.get(type);
 
-        if ( fieldList != null )
-        {
-            for ( ModelField modelField : fieldList )
-            {
-                if ( versionRange.getFromVersion().inside( modelField.getVersionRange() )
-                    && versionRange.getToVersion().inside( modelField.getVersionRange() ) )
-                {
+        if (fieldList != null) {
+            for (ModelField modelField : fieldList) {
+                if (versionRange.getFromVersion().inside(modelField.getVersionRange())
+                        && versionRange.getToVersion().inside(modelField.getVersionRange())) {
                     return modelField;
                 }
             }
         }
 
-        throw new ModelloRuntimeException( "There are no field '" + type + "' in version range '" + versionRange.toString() + "'." );
+        throw new ModelloRuntimeException(
+                "There are no field '" + type + "' in version range '" + versionRange.toString() + "'.");
     }
 
-    public void addField( ModelField modelField )
-    {
-        if ( fieldMap.containsKey( modelField.getName() ) )
-        {
-            List<ModelField> fieldList = fieldMap.get( modelField.getName() );
+    public void addField(ModelField modelField) {
+        if (fieldMap.containsKey(modelField.getName())) {
+            List<ModelField> fieldList = fieldMap.get(modelField.getName());
 
-            for ( ModelField currentField : fieldList )
-            {
-                if ( VersionUtil.isInConflict( modelField.getVersionRange(), currentField.getVersionRange() ) )
-                {
-                    throw new ModelloRuntimeException( "Duplicate field in " + getName() + ": " + modelField.getName() + "." );
+            for (ModelField currentField : fieldList) {
+                if (VersionUtil.isInConflict(modelField.getVersionRange(), currentField.getVersionRange())) {
+                    throw new ModelloRuntimeException(
+                            "Duplicate field in " + getName() + ": " + modelField.getName() + ".");
                 }
             }
-        }
-        else
-        {
+        } else {
             List<ModelField> fieldList = new ArrayList<ModelField>();
 
-            fieldMap.put( modelField.getName(), fieldList );
+            fieldMap.put(modelField.getName(), fieldList);
         }
 
-        getAllFields().add( modelField );
+        getAllFields().add(modelField);
 
-        fieldMap.get( modelField.getName() ).add( modelField );
+        fieldMap.get(modelField.getName()).add(modelField);
     }
 
     // ----------------------------------------------------------------------
     //
     // ----------------------------------------------------------------------
 
-    public boolean hasSuperClass()
-    {
-        return StringUtils.isNotEmpty( superClass );
+    public boolean hasSuperClass() {
+        return StringUtils.isNotEmpty(superClass);
     }
 
-    public boolean isInternalSuperClass()
-    {
+    public boolean isInternalSuperClass() {
         return isInternalSuperClass;
     }
 
-    public ClassMetadata getMetadata( String key )
-    {
-        return getMetadata( ClassMetadata.class, key );
+    public ClassMetadata getMetadata(String key) {
+        return getMetadata(ClassMetadata.class, key);
     }
 
-    public void initialize( Model model )
-    {
-        super.initialize( model );
+    public void initialize(Model model) {
+        super.initialize(model);
 
-        for ( ModelField modelField : getAllFields() )
-        {
-            modelField.initialize( this );
+        for (ModelField modelField : getAllFields()) {
+            modelField.initialize(this);
         }
     }
 
-    public void validateElement()
-        throws ModelValidationException
-    {
+    public void validateElement() throws ModelValidationException {
         // Check if superClass exists
-        if ( hasSuperClass() )
-        {
-            try
-            {
-                getModel().getClass( superClass, getVersionRange() );
+        if (hasSuperClass()) {
+            try {
+                getModel().getClass(superClass, getVersionRange());
                 isInternalSuperClass = true;
-            }
-            catch ( ModelloRuntimeException e )
-            {
+            } catch (ModelloRuntimeException e) {
                 isInternalSuperClass = false;
             }
         }
 
-        if ( getModel().getDefault( ModelDefault.CHECK_DEPRECATION ).getBoolean() )
-        {
-            if ( ! Version.INFINITE.equals( getVersionRange().getToVersion() )
-                 && getDeprecatedVersion() == null )
-            {
-                throw new ModelValidationException( "You must define the deprecated version of '" + getName() + "' class." );
+        if (getModel().getDefault(ModelDefault.CHECK_DEPRECATION).getBoolean()) {
+            if (!Version.INFINITE.equals(getVersionRange().getToVersion()) && getDeprecatedVersion() == null) {
+                throw new ModelValidationException(
+                        "You must define the deprecated version of '" + getName() + "' class.");
             }
         }
     }
@@ -247,30 +211,24 @@ public class ModelClass
     // Object Overrides
     // ----------------------------------------------------------------------
 
-    public boolean equals( Object o )
-    {
-        if ( ! super.equals( o ) )
-        {
+    public boolean equals(Object o) {
+        if (!super.equals(o)) {
             return false;
         }
 
-        if ( !( o instanceof ModelClass ) )
-        {
+        if (!(o instanceof ModelClass)) {
             return false;
         }
 
         ModelClass other = (ModelClass) o;
 
-        return getPackageName().equals( other.getPackageName() );
-
+        return getPackageName().equals(other.getPackageName());
     }
 
-    public int hashCode()
-    {
+    public int hashCode() {
         int hashCode = getName().hashCode();
 
-        if ( !StringUtils.isEmpty( getPackageName() ) )
-        {
+        if (!StringUtils.isEmpty(getPackageName())) {
             hashCode += 37 * getPackageName().hashCode();
         }
 

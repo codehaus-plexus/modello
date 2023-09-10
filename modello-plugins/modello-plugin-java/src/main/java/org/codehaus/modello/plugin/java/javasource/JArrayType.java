@@ -22,9 +22,7 @@ package org.codehaus.modello.plugin.java.javasource;
  * @version $Revision$ $Date$
  * @since 1.0.4
  */
-public final class JArrayType
-    extends JComponentizedType
-{
+public final class JArrayType extends JComponentizedType {
     // --------------------------------------------------------------------------
 
     /**
@@ -33,9 +31,8 @@ public final class JArrayType
      * @param componentType Component type.
      * @param useJava50 True if Java 5.0 should be generated.
      */
-    public JArrayType( final JType componentType, final boolean useJava50 )
-    {
-        super( componentType.getName(), componentType, useJava50 );
+    public JArrayType(final JType componentType, final boolean useJava50) {
+        super(componentType.getName(), componentType, useJava50);
     }
 
     // --------------------------------------------------------------------------
@@ -45,8 +42,7 @@ public final class JArrayType
      *
      * @return The String representation of this JType.
      */
-    public String toString()
-    {
+    public String toString() {
         return getComponentType().toString() + "[]";
     }
 

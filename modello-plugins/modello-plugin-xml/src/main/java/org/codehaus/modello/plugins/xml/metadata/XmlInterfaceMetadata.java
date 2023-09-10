@@ -27,8 +27,6 @@ import org.codehaus.modello.metadata.InterfaceMetadata;
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  */
-public class XmlInterfaceMetadata
-    implements InterfaceMetadata
-{
+public class XmlInterfaceMetadata implements InterfaceMetadata {
     public static final String ID = XmlInterfaceMetadata.class.getName();
 }

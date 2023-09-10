@@ -41,41 +41,39 @@ import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelValidationException;
+import org.codehaus.plexus.build.BuildContext;
 import org.codehaus.plexus.util.StringUtils;
-import org.sonatype.plexus.build.incremental.BuildContext;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  */
-public abstract class AbstractModelloGeneratorMojo
-    extends AbstractMojo
-{
+public abstract class AbstractModelloGeneratorMojo extends AbstractMojo {
     // ----------------------------------------------------------------------
     // Parameters
     // ----------------------------------------------------------------------
 
     /**
-     * Base directory of the project.
+     * Base directory of the project, from where the Modello models are loaded.
      */
-    @Parameter( defaultValue = "${basedir}", readonly = true, required = true )
+    @Parameter(defaultValue = "${basedir}", required = true)
     private String basedir;
 
     /**
      * List of relative paths to mdo files containing the models.
      */
-    @Parameter( required = true )
+    @Parameter(required = true)
     private String[] models;
 
     /**
      * The version of the model we will be working on.
      */
-    @Parameter( property = "version", required = true )
+    @Parameter(property = "version", required = true)
     private String version;
 
     /**
      * True if the generated package names should include the version.
      */
-    @Parameter( property = "packageWithVersion", defaultValue = "false", required = true )
+    @Parameter(property = "packageWithVersion", defaultValue = "false", required = true)
     private boolean packageWithVersion;
 
     /**
@@ -87,7 +85,7 @@ public abstract class AbstractModelloGeneratorMojo
     /**
      * The Maven project instance for the executing project.
      */
-    @Parameter( defaultValue = "${project}", readonly = true, required = true )
+    @Parameter(defaultValue = "${project}", readonly = true, required = true)
     private MavenProject project;
 
     /**
@@ -111,13 +109,11 @@ public abstract class AbstractModelloGeneratorMojo
 
     public abstract File getOutputDirectory();
 
-    protected boolean producesCompilableResult()
-    {
+    protected boolean producesCompilableResult() {
         return false;
     }
 
-    protected boolean producesResources()
-    {
+    protected boolean producesResources() {
         return false;
     }
 
@@ -129,8 +125,7 @@ public abstract class AbstractModelloGeneratorMojo
      *
      * @return the parameters
      */
-    protected Properties createParameters()
-    {
+    protected Properties createParameters() {
         return new Properties();
     }
 
@@ -142,20 +137,16 @@ public abstract class AbstractModelloGeneratorMojo
      *
      * @param parameters the parameters to customize
      */
-    protected void customizeParameters( Properties parameters )
-    {
-    }
+    protected void customizeParameters(Properties parameters) {}
 
     // ----------------------------------------------------------------------
     //
     // ----------------------------------------------------------------------
 
-    public void execute()
-        throws MojoExecutionException
-    {
+    public void execute() throws MojoExecutionException {
         String outputDirectory = getOutputDirectory().getAbsolutePath();
 
-        getLog().info( "outputDirectory: " + outputDirectory );
+        getLog().info("outputDirectory: " + outputDirectory);
 
         // ----------------------------------------------------------------------
         // Initialize the parameters
@@ -163,43 +154,35 @@ public abstract class AbstractModelloGeneratorMojo
 
         Properties parameters = createParameters();
 
-        parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, outputDirectory );
+        parameters.setProperty(ModelloParameterConstants.OUTPUT_DIRECTORY, outputDirectory);
 
-        parameters.setProperty( ModelloParameterConstants.VERSION, version );
+        parameters.setProperty(ModelloParameterConstants.VERSION, version);
 
-        parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION,
-                                Boolean.toString( packageWithVersion ) );
+        parameters.setProperty(ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString(packageWithVersion));
 
-        if ( packagedVersions.size() > 0 )
-        {
-            parameters.setProperty( ModelloParameterConstants.ALL_VERSIONS,
-                                    StringUtils.join( packagedVersions.iterator(), "," ) );
+        if (packagedVersions.size() > 0) {
+            parameters.setProperty(
+                    ModelloParameterConstants.ALL_VERSIONS, StringUtils.join(packagedVersions.iterator(), ","));
         }
-        
-        customizeParameters( parameters );
+
+        customizeParameters(parameters);
 
         // ----------------------------------------------------------------------
         //
         // ----------------------------------------------------------------------
 
         MojoExecutionException firstError = null;
-        for ( String modelStr : models )
-        {
-            try
-            {
-                doExecute( modelStr, outputDirectory, parameters );
-            }
-            catch ( MojoExecutionException e )
-            {
-                if ( firstError == null )
-                {
+        for (String modelStr : models) {
+            try {
+                doExecute(modelStr, outputDirectory, parameters);
+            } catch (MojoExecutionException e) {
+                if (firstError == null) {
                     firstError = e;
                 }
-                getLog().error( e );
+                getLog().error(e);
             }
         }
-        if ( firstError != null )
-        {
+        if (firstError != null) {
             throw firstError;
         }
     }
@@ -207,89 +190,98 @@ public abstract class AbstractModelloGeneratorMojo
     /**
      * Performs execute on a single specified model.
      */
-    private void doExecute( String modelStr, String outputDirectory, Properties parameters )
-        throws MojoExecutionException
-    {
-        if ( !buildContext.hasDelta( modelStr ) )
-        {
-            getLog().debug( "Skipping unchanged model: " + modelStr );
+    private void doExecute(String modelStr, String outputDirectory, Properties parameters)
+            throws MojoExecutionException {
+        if (!buildContext.hasDelta(modelStr)) {
+            getLog().debug("Skipping unchanged model: " + modelStr);
             return;
         }
 
-        getLog().info( "Working on model: " + modelStr );
+        getLog().info("Working on model: " + modelStr);
 
-        File modelFile = new File( basedir, modelStr );
-        buildContext.removeMessages( modelFile );
+        File modelFile = new File(basedir, modelStr);
+        buildContext.removeMessages(modelFile);
 
-        try
-        {
-            Model model = modelloCore.loadModel( modelFile );
+        try {
+            Model model = modelloCore.loadModel(modelFile);
 
             // TODO: dynamically resolve/load the generator type
-            getLog().info( "Generating current version: " + version );
-            modelloCore.generate( model, getGeneratorType(), parameters );
+            getLog().info("Generating current version: " + version);
+            modelloCore.generate(model, getGeneratorType(), parameters);
 
-            for ( String version : packagedVersions )
-            {
-                parameters.setProperty( ModelloParameterConstants.VERSION, version );
+            for (String version : packagedVersions) {
+                parameters.setProperty(ModelloParameterConstants.VERSION, version);
 
-                parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString( true ) );
+                parameters.setProperty(ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString(true));
 
-                getLog().info( "Generating packaged version: " + version );
-                modelloCore.generate( model, getGeneratorType(), parameters );
+                getLog().info("Generating packaged version: " + version);
+                modelloCore.generate(model, getGeneratorType(), parameters);
             }
 
-            if ( producesCompilableResult() && project != null )
-            {
-                project.addCompileSourceRoot( outputDirectory );
+            if (producesCompilableResult() && project != null) {
+                project.addCompileSourceRoot(outputDirectory);
             }
 
-            if ( producesResources() && project != null )
-            {
+            if (producesResources() && project != null) {
                 Resource resource = new Resource();
-                resource.setDirectory( outputDirectory );
-                project.addResource( resource );
+                resource.setDirectory(outputDirectory);
+                project.addResource(resource);
             }
-        }
-        catch ( FileNotFoundException e )
-        {
-            MojoExecutionException mojoExecutionException = new MojoExecutionException( e.getMessage(), e );
-            buildContext.addMessage( modelFile, 1 /* line */, 1 /* column */, mojoExecutionException.getMessage(),
-                                     BuildContext.SEVERITY_ERROR, mojoExecutionException );
+        } catch (FileNotFoundException e) {
+            MojoExecutionException mojoExecutionException = new MojoExecutionException(e.getMessage(), e);
+            buildContext.addMessage(
+                    modelFile,
+                    1 /* line */,
+                    1 /* column */,
+                    mojoExecutionException.getMessage(),
+                    BuildContext.SEVERITY_ERROR,
+                    mojoExecutionException);
             throw mojoExecutionException;
-        }
-        catch ( ModelloException e )
-        {
+        } catch (ModelloException e) {
             MojoExecutionException mojoExecutionException =
-                new MojoExecutionException( "Error generating: " + e.getMessage(), e );
+                    new MojoExecutionException("Error generating: " + e.getMessage(), e);
             // TODO: Provide actual line/column numbers
-            buildContext.addMessage( modelFile, 1 /* line */, 1 /* column */, mojoExecutionException.getMessage(),
-                                     BuildContext.SEVERITY_ERROR, mojoExecutionException );
+            buildContext.addMessage(
+                    modelFile,
+                    1 /* line */,
+                    1 /* column */,
+                    mojoExecutionException.getMessage(),
+                    BuildContext.SEVERITY_ERROR,
+                    mojoExecutionException);
             throw mojoExecutionException;
-        }
-        catch ( ModelValidationException e )
-        {
+        } catch (ModelValidationException e) {
             MojoExecutionException mojoExecutionException =
-                new MojoExecutionException( "Error generating: " + e.getMessage(), e );
+                    new MojoExecutionException("Error generating: " + e.getMessage(), e);
             // TODO: Provide actual line/column numbers
-            buildContext.addMessage( modelFile, 1 /* line */, 1 /* column */, mojoExecutionException.getMessage(),
-                                     BuildContext.SEVERITY_ERROR, mojoExecutionException );
+            buildContext.addMessage(
+                    modelFile,
+                    1 /* line */,
+                    1 /* column */,
+                    mojoExecutionException.getMessage(),
+                    BuildContext.SEVERITY_ERROR,
+                    mojoExecutionException);
             throw mojoExecutionException;
-        }
-        catch ( IOException e )
-        {
+        } catch (IOException e) {
             MojoExecutionException mojoExecutionException =
-                new MojoExecutionException( "Couldn't read file: " + e.getMessage(), e );
-            buildContext.addMessage( modelFile, 1 /* line */, 1 /* column */, mojoExecutionException.getMessage(),
-                                     BuildContext.SEVERITY_ERROR, mojoExecutionException );
+                    new MojoExecutionException("Couldn't read file: " + e.getMessage(), e);
+            buildContext.addMessage(
+                    modelFile,
+                    1 /* line */,
+                    1 /* column */,
+                    mojoExecutionException.getMessage(),
+                    BuildContext.SEVERITY_ERROR,
+                    mojoExecutionException);
             throw mojoExecutionException;
-        }
-        catch ( RuntimeException e )
-        {
+        } catch (RuntimeException e) {
             MojoExecutionException mojoExecutionException =
-                new MojoExecutionException( "Error generating: " + e.getMessage(), e );
-            buildContext.addMessage( modelFile, 1 /* line */, 1 /* column */, mojoExecutionException.getMessage(),
-                                     BuildContext.SEVERITY_ERROR, mojoExecutionException );
+                    new MojoExecutionException("Error generating: " + e.getMessage(), e);
+            buildContext.addMessage(
+                    modelFile,
+                    1 /* line */,
+                    1 /* column */,
+                    mojoExecutionException.getMessage(),
+                    BuildContext.SEVERITY_ERROR,
+                    mojoExecutionException);
             throw mojoExecutionException;
         }
     }
@@ -298,79 +290,65 @@ public abstract class AbstractModelloGeneratorMojo
     // Accessors
     // ----------------------------------------------------------------------
 
-    public String getBasedir()
-    {
+    public String getBasedir() {
         return basedir;
     }
 
-    public void setBasedir( String basedir )
-    {
+    public void setBasedir(String basedir) {
         this.basedir = basedir;
     }
 
-    public String getVersion()
-    {
+    public String getVersion() {
         return version;
     }
 
-    public void setVersion( String version )
-    {
+    public void setVersion(String version) {
         this.version = version;
     }
 
-    public boolean getPackageWithVersion()
-    {
+    public boolean getPackageWithVersion() {
         return packageWithVersion;
     }
 
-    public void setPackageWithVersion( boolean packageWithVersion )
-    {
+    public void setPackageWithVersion(boolean packageWithVersion) {
         this.packageWithVersion = packageWithVersion;
     }
 
-    public ModelloCore getModelloCore()
-    {
+    public ModelloCore getModelloCore() {
         return modelloCore;
     }
 
-    public void setModelloCore( ModelloCore modelloCore )
-    {
+    public void setModelloCore(ModelloCore modelloCore) {
         this.modelloCore = modelloCore;
     }
 
-    public void setBuildContext( BuildContext context )
-    {
+    public void setBuildContext(BuildContext context) {
         this.buildContext = context;
     }
 
-    public MavenProject getProject()
-    {
+    public MavenProject getProject() {
         return project;
     }
 
-    public void setProject( MavenProject project )
-    {
+    public void setProject(MavenProject project) {
         this.project = project;
     }
 
-    public void setPackagedVersions( List<String> packagedVersions )
-    {
-        this.packagedVersions = Collections.unmodifiableList( packagedVersions );
+    public void setPackagedVersions(List<String> packagedVersions) {
+        this.packagedVersions = Collections.unmodifiableList(packagedVersions);
     }
 
     /**
      * @return Returns the paths to the models.
      */
-    public String[] getModels()
-    {
+    public String[] getModels() {
         return models;
     }
 
     /**
      * @param models Sets the paths to the models.
      */
-    public void setModels( String[] models )
-    {
+    public void setModels(String[] models) {
         this.models = models;
     }
 }

@@ -22,11 +22,11 @@ package org.codehaus.modello.plugin.java;
  * SOFTWARE.
  */
 
+import java.util.Properties;
+
 import org.codehaus.modello.AbstractModelloJavaGeneratorTest;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
-
-import java.util.Properties;
 
 /**
  * MODELLO-83: check that <code>tmp</code> can be used as a field name without interference with generated code for
@@ -34,28 +34,23 @@ import java.util.Properties;
  *
  * @author <a href="mailto:vincent.siveton@gmail.com">Vincent Siveton</a>
  */
-public class TmpJavaGeneratorTest
-    extends AbstractModelloJavaGeneratorTest
-{
-    public TmpJavaGeneratorTest()
-    {
-        super( "tmp" );
+public class TmpJavaGeneratorTest extends AbstractModelloJavaGeneratorTest {
+    public TmpJavaGeneratorTest() {
+        super("tmp");
     }
 
     /**
      * MODELLO-83
      * @throws Exception if any exception occurs
      */
-    public void testJavaGeneratorWithTmp()
-        throws Exception
-    {
-        ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
+    public void testJavaGeneratorWithTmp() throws Exception {
+        ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
 
-        Model model = modello.loadModel( getXmlResourceReader( "/models/tmp.mdo" ) );
+        Model model = modello.loadModel(getXmlResourceReader("/models/tmp.mdo"));
 
-        Properties parameters = getModelloParameters( "1.0.0" );
+        Properties parameters = getModelloParameters("1.0.0");
 
-        modello.generate( model, "java", parameters );
+        modello.generate(model, "java", parameters);
 
         compileGeneratedSources();
     }

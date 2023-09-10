@@ -22,31 +22,38 @@ package org.codehaus.modello.core;
  * SOFTWARE.
  */
 
+import java.util.Map;
+
 import org.codehaus.modello.ModelloRuntimeException;
 import org.codehaus.modello.metadata.MetadataPlugin;
 import org.codehaus.modello.plugin.AbstractPluginManager;
+import org.codehaus.plexus.component.annotations.Component;
+import org.codehaus.plexus.component.annotations.Requirement;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  */
-public class DefaultMetadataPluginManager
-    extends AbstractPluginManager<MetadataPlugin>
-    implements MetadataPluginManager
-{
-    public MetadataPlugin getMetadataPlugin( String metadataId )
-    {
-        MetadataPlugin metadata = getPlugin( metadataId );
+@Component(role = MetadataPluginManager.class)
+public class DefaultMetadataPluginManager extends AbstractPluginManager<MetadataPlugin>
+        implements MetadataPluginManager {
+    @Requirement
+    private Map<String, MetadataPlugin> plugins;
 
-        if ( metadata == null )
-        {
-            throw new ModelloRuntimeException( "No such metadata plugin: '" + metadataId + "'." );
+    public Map<String, MetadataPlugin> getPlugins() {
+        return plugins;
+    }
+
+    public MetadataPlugin getMetadataPlugin(String metadataId) {
+        MetadataPlugin metadata = getPlugin(metadataId);
+
+        if (metadata == null) {
+            throw new ModelloRuntimeException("No such metadata plugin: '" + metadataId + "'.");
         }
 
         return metadata;
     }
 
-    public boolean hasMetadataPlugin( String metadataId )
-    {
-        return hasPlugin( metadataId );
+    public boolean hasMetadataPlugin(String metadataId) {
+        return hasPlugin(metadataId);
     }
 }

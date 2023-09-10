@@ -27,7 +27,4 @@ import org.codehaus.modello.plugins.xml.AbstractXmlJavaGenerator;
 /**
  * @author <a href="mailto:simonetripodi@apache.org">Simone Tripodi</a>
  */
-public abstract class AbstractSnakeYamlGenerator
-    extends AbstractXmlJavaGenerator
-{
-}
+public abstract class AbstractSnakeYamlGenerator extends AbstractXmlJavaGenerator {}

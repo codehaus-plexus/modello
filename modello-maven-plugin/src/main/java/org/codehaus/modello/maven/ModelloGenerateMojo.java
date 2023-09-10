@@ -22,14 +22,14 @@ package org.codehaus.modello.maven;
  * SOFTWARE.
  */
 
+import java.util.Map;
+
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.codehaus.modello.plugin.ModelloGenerator;
-
-import java.util.Map;
 
 /**
  * <p>
@@ -83,31 +83,25 @@ import java.util.Map;
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  */
-@Mojo( name = "generate", defaultPhase = LifecyclePhase.GENERATE_SOURCES, threadSafe = true )
-public class ModelloGenerateMojo
-    extends AbstractModelloSourceGeneratorMojo
-{
-    @Component( role = ModelloGenerator.class )
+@Mojo(name = "generate", defaultPhase = LifecyclePhase.GENERATE_SOURCES, threadSafe = true)
+public class ModelloGenerateMojo extends AbstractModelloSourceGeneratorMojo {
+    @Component(role = ModelloGenerator.class)
     private Map<String, ModelloGenerator> generatorMap;
 
-    @Parameter( property = "modello.generator.id", defaultValue = "java" )
+    @Parameter(property = "modello.generator.id", defaultValue = "java")
     private String generatorId;
 
-    protected String getGeneratorType()
-    {
+    protected String getGeneratorType() {
         return generatorId;
     }
 
-    public void execute()
-        throws MojoExecutionException
-    {
-        if ( !generatorMap.containsKey( generatorId ) )
-        {
-            throw new MojoExecutionException( "Unable to execute modello, generator id [" + generatorId
-                            + "] not found.  (Available generator ids : " + generatorMap.keySet() + ")" );
+    public void execute() throws MojoExecutionException {
+        if (!generatorMap.containsKey(generatorId)) {
+            throw new MojoExecutionException("Unable to execute modello, generator id [" + generatorId
+                    + "] not found.  (Available generator ids : " + generatorMap.keySet() + ")");
         }
 
-        getLog().info( "[modello:generate {generator: " + generatorId + "}]" );
+        getLog().info("[modello:generate {generator: " + generatorId + "}]");
 
         super.execute();
     }

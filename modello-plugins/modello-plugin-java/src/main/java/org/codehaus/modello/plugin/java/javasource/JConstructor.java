@@ -42,7 +42,6 @@
  *
  * $Id$
  */
-
 package org.codehaus.modello.plugin.java.javasource;
 
 import java.util.Collections;
@@ -77,8 +76,7 @@ import java.util.Map;
  * @author <a href="mailto:kvisco@intalio.com">Keith Visco</a>
  * @version $Revision$ $Date$
  **/
-public class JConstructor
-{
+public class JConstructor {
 
     /**
      * The set of modifiers for this JMethod
@@ -102,11 +100,10 @@ public class JConstructor
     /**
      * Creates a new method with the given name and returnType.
      * For "void" return types, simply pass in null as the returnType
-     * 
+     *
      * @param declaringClass the declaring class for this constructor
      **/
-    public JConstructor( JClass declaringClass )
-    {
+    public JConstructor(JClass declaringClass) {
         this.declaringClass = declaringClass;
         this.modifiers = new JModifiers();
         this.params = new LinkedHashMap<>();
@@ -120,42 +117,36 @@ public class JConstructor
      * @exception java.lang.IllegalArgumentException when a parameter already
      * exists for this Method with the same name as the new parameter
      **/
-    public void addParameter( JParameter parameter )
-        throws IllegalArgumentException
-    {
-        if ( parameter == null ) return;
-        //-- check current params
-        if ( params.get( parameter.getName() ) != null )
-        {
+    public void addParameter(JParameter parameter) throws IllegalArgumentException {
+        if (parameter == null) return;
+        // -- check current params
+        if (params.get(parameter.getName()) != null) {
             StringBuilder err = new StringBuilder();
-            err.append( "A parameter already exists for the constructor, " );
-            err.append( this.declaringClass.getName() );
-            err.append( ", with the name: " );
-            err.append( parameter.getName() );
-            throw new IllegalArgumentException( err.toString() );
+            err.append("A parameter already exists for the constructor, ");
+            err.append(this.declaringClass.getName());
+            err.append(", with the name: ");
+            err.append(parameter.getName());
+            throw new IllegalArgumentException(err.toString());
         }
 
-        params.put( parameter.getName(), parameter );
-    } //-- addParameter
+        params.put(parameter.getName(), parameter);
+    } // -- addParameter
 
     /**
      * Returns the class in which this JMember has been declared
      * @return the class in which this JMember has been declared
      **/
-    public JClass getDeclaringClass()
-    {
+    public JClass getDeclaringClass() {
         return this.declaringClass;
-    } //-- getDeclaringClass
+    } // -- getDeclaringClass
 
     /**
      * Returns the modifiers for this JConstructor
      * @return the modifiers for this JConstructor
      **/
-    public JModifiers getModifiers()
-    {
+    public JModifiers getModifiers() {
         return this.modifiers;
-    } //-- getModifiers
-
+    } // -- getModifiers
 
     /**
      * Returns an array of JParameters consisting of the parameters
@@ -163,120 +154,98 @@ public class JConstructor
      * @return a JParameter array consisting of the parameters
      * of this Method in declared order
      **/
-    public JParameter[] getParameters()
-    {
-        return params.values().toArray( new JParameter[0] );
-    } //-- getParameters
+    public JParameter[] getParameters() {
+        return params.values().toArray(new JParameter[0]);
+    } // -- getParameters
 
-    public JSourceCode getSourceCode()
-    {
+    public JSourceCode getSourceCode() {
         return this.sourceCode;
-    } //-- getSourceCode
+    } // -- getSourceCode
 
-    public void print( JSourceWriter jsw )
-    {
+    public void print(JSourceWriter jsw) {
         JAnnotations annotations = getAnnotations();
-        if ( annotations != null ) annotations.print( jsw );
+        if (annotations != null) annotations.print(jsw);
 
-        if ( modifiers.isPrivate() )
-            jsw.write( "private" );
-        else if ( modifiers.isProtected() )
-            jsw.write( "protected" );
-        else
-            jsw.write( "public" );
-        jsw.write( ' ' );
-        jsw.write( declaringClass.getLocalName() );
-        jsw.write( '(' );
+        if (modifiers.isPrivate()) jsw.write("private");
+        else if (modifiers.isProtected()) jsw.write("protected");
+        else jsw.write("public");
+        jsw.write(' ');
+        jsw.write(declaringClass.getLocalName());
+        jsw.write('(');
 
-        //-- print parameters
-        if ( !params.isEmpty() )
-        {
-            Enumeration<JParameter> paramEnum = Collections.enumeration( params.values() );
-            jsw.write( paramEnum.nextElement() );
-            while( paramEnum.hasMoreElements())
-            {
-                jsw.write( ", " );
-                jsw.write( paramEnum.nextElement() );
+        // -- print parameters
+        if (!params.isEmpty()) {
+            Enumeration<JParameter> paramEnum = Collections.enumeration(params.values());
+            jsw.write(paramEnum.nextElement());
+            while (paramEnum.hasMoreElements()) {
+                jsw.write(", ");
+                jsw.write(paramEnum.nextElement());
             }
         }
-        
-        
-        for ( int i = 0; i < params.size(); i++ )
-        {
-        }
-        jsw.writeln( ')' );
-        jsw.writeln( '{' );
-        //jsw.indent();
-        sourceCode.print( jsw );
-        //jsw.unindent();
-        if ( !jsw.isNewline() ) jsw.writeln();
-        jsw.write( "} //-- " );
-        jsw.writeln( toString() );
-    } //-- print
 
-    public void setModifiers( JModifiers modifiers )
-    {
+        for (int i = 0; i < params.size(); i++) {}
+        jsw.writeln(')');
+        jsw.writeln('{');
+        // jsw.indent();
+        sourceCode.print(jsw);
+        // jsw.unindent();
+        if (!jsw.isNewline()) jsw.writeln();
+        jsw.write("} //-- ");
+        jsw.writeln(toString());
+    } // -- print
+
+    public void setModifiers(JModifiers modifiers) {
         this.modifiers = modifiers.copy();
-        this.modifiers.setFinal( false );
-    } //-- setModifiers
+        this.modifiers.setFinal(false);
+    } // -- setModifiers
 
-    public void setSourceCode( String sourceCode )
-    {
-        this.sourceCode = new JSourceCode( sourceCode );
-    } //-- setSourceCode
+    public void setSourceCode(String sourceCode) {
+        this.sourceCode = new JSourceCode(sourceCode);
+    } // -- setSourceCode
 
-    public void setSourceCode( JSourceCode sourceCode )
-    {
+    public void setSourceCode(JSourceCode sourceCode) {
         this.sourceCode = sourceCode;
-    } //-- setSourceCode
+    } // -- setSourceCode
 
-    public String toString()
-    {
+    public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append( declaringClass.getName() );
-        sb.append( '(' );
+        sb.append(declaringClass.getName());
+        sb.append('(');
 
-        //-- print parameters
-        if ( !params.isEmpty() )
-        {
-            Enumeration<JParameter> paramEnum = Collections.enumeration( params.values() );
-            sb.append( paramEnum.nextElement().getType().getName() );
-            while( paramEnum.hasMoreElements())
-            {
-                sb.append( ", " );
-                sb.append( paramEnum.nextElement().getType().getName() );
+        // -- print parameters
+        if (!params.isEmpty()) {
+            Enumeration<JParameter> paramEnum = Collections.enumeration(params.values());
+            sb.append(paramEnum.nextElement().getType().getName());
+            while (paramEnum.hasMoreElements()) {
+                sb.append(", ");
+                sb.append(paramEnum.nextElement().getType().getName());
             }
         }
-        sb.append( ')' );
+        sb.append(')');
         return sb.toString();
-    } //-- toString
+    } // -- toString
 
     /**
      * @return the annotations
      */
-    public JAnnotations getAnnotations()
-    {
+    public JAnnotations getAnnotations() {
         return annotations;
     }
 
     /**
      * @param annotation the annotation to append
      */
-    public void appendAnnotation( String annotation )
-    {
-        if ( annotations == null )
-        {
+    public void appendAnnotation(String annotation) {
+        if (annotations == null) {
             annotations = new JAnnotations();
         }
-        annotations.appendAnnotation( annotation );
+        annotations.appendAnnotation(annotation);
     }
 
     /**
      * @param annotations the annotations to set
      */
-    public void setAnnotations( JAnnotations annotations )
-    {
+    public void setAnnotations(JAnnotations annotations) {
         this.annotations = annotations;
     }
-
-} //-- JConstructor
+} // -- JConstructor

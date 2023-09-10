@@ -22,128 +22,126 @@ package org.codehaus.modello.plugin.xpp3;
  * SOFTWARE.
  */
 
+import org.codehaus.modello.plugin.ModelloGenerator;
 import org.codehaus.modello.plugin.java.javasource.JClass;
 import org.codehaus.modello.plugin.java.javasource.JField;
 import org.codehaus.modello.plugin.java.javasource.JMethod;
 import org.codehaus.modello.plugin.java.javasource.JParameter;
 import org.codehaus.modello.plugin.java.javasource.JSourceCode;
 import org.codehaus.modello.plugin.java.javasource.JType;
+import org.codehaus.plexus.component.annotations.Component;
 
 /**
  * The generator for XPP3-based writers that support input location tracking.
- * 
+ *
  * @author Hervé Boutemy
  * @since 1.10
  */
-public class Xpp3ExtendedWriterGenerator
-    extends Xpp3WriterGenerator
-{
+@Component(role = ModelloGenerator.class, hint = "xpp3-extended-writer")
+public class Xpp3ExtendedWriterGenerator extends Xpp3WriterGenerator {
     @Override
-    protected boolean isLocationTracking()
-    {
+    protected boolean isLocationTracking() {
         return true;
     }
 
     @Override
-    protected void prepareLocationTracking( JClass jClass )
-    {
-        String packageName = locationTracker.getPackageName( isPackageWithVersion(), getGeneratedVersion() );
+    protected void prepareLocationTracking(JClass jClass) {
+        String packageName = locationTracker.getPackageName(isPackageWithVersion(), getGeneratedVersion());
 
-        jClass.addImport( packageName + '.' + locationTracker.getName() + "Tracker" );
-        addModelImport( jClass, locationTracker, null );
+        jClass.addImport(packageName + '.' + locationTracker.getName() + "Tracker");
+        addModelImport(jClass, locationTracker, null);
 
-        createLocationTrackingMethod( jClass );
+        createLocationTrackingMethod(jClass);
 
-        if ( requiresDomSupport && domAsXpp3 )
-        {
-            createXpp3DomToSerializerMethod( jClass );
+        if (requiresDomSupport && domAsXpp3) {
+            createXpp3DomToSerializerMethod(jClass);
         }
     }
 
-    private void createLocationTrackingMethod( JClass jClass )
-    {
-        JMethod method = new JMethod( "writeLocationTracking" );
+    private void createLocationTrackingMethod(JClass jClass) {
+        JMethod method = new JMethod("writeLocationTracking");
         method.getModifiers().makePrivate();
 
-        method.addParameter( new JParameter( new JType( locationTracker.getName() + "Tracker" ), "locationTracker" ) );
-        method.addParameter( new JParameter( new JClass( "Object" ), "key" ) );
-        method.addParameter( new JParameter( new JClass( "XmlSerializer" ), "serializer" ) );
+        method.addParameter(new JParameter(new JType(locationTracker.getName() + "Tracker"), "locationTracker"));
+        method.addParameter(new JParameter(new JClass("Object"), "key"));
+        method.addParameter(new JParameter(new JClass("XmlSerializer"), "serializer"));
 
-        method.addException( new JClass( "java.io.IOException" ) );
+        method.addException(new JClass("java.io.IOException"));
 
         JSourceCode sc = method.getSourceCode();
 
-        sc.add( locationTracker.getName() + " location = ( locationTracker == null ) ? null : locationTracker.getLocation( key );" );
-        sc.add( "if ( location != null )" );
-        sc.add( "{" );
-        sc.addIndented( "serializer.comment( toString( location ) );" );
-        sc.add( "}" );
+        sc.add(locationTracker.getName()
+                + " location = ( locationTracker == null ) ? null : locationTracker.getLocation( key );");
+        sc.add("if ( location != null )");
+        sc.add("{");
+        sc.addIndented("serializer.comment( toString( location ) );");
+        sc.add("}");
 
-        jClass.addMethod( method );
+        jClass.addMethod(method);
 
-        JField field = new JField( new JType( locationTracker.getName() + ".StringFormatter" ), "stringFormatter" );
+        JField field = new JField(new JType(locationTracker.getName() + ".StringFormatter"), "stringFormatter");
         field.getModifiers().makeProtected();
-        jClass.addField( field );
+        jClass.addField(field);
 
-        method = new JMethod( "setStringFormatter", null, null );
-        method.addParameter( new JParameter( new JType( locationTracker.getName() + ".StringFormatter" ), "stringFormatter" ) );
+        method = new JMethod("setStringFormatter", null, null);
+        method.addParameter(
+                new JParameter(new JType(locationTracker.getName() + ".StringFormatter"), "stringFormatter"));
         sc = method.getSourceCode();
-        sc.add( "this.stringFormatter = stringFormatter;" );
-        jClass.addMethod( method );
+        sc.add("this.stringFormatter = stringFormatter;");
+        jClass.addMethod(method);
 
-        method = new JMethod( "toString", new JType( "String" ), null );
+        method = new JMethod("toString", new JType("String"), null);
         method.getModifiers().makeProtected();
 
-        method.addParameter( new JParameter( new JType( locationTracker.getName() ), "location" ) );
+        method.addParameter(new JParameter(new JType(locationTracker.getName()), "location"));
 
         sc = method.getSourceCode();
-        sc.add( "if ( stringFormatter != null )" );
-        sc.add( "{" );
-        sc.addIndented( "return stringFormatter.toString( location );" );
-        sc.add( "}" );
-        sc.add( "return ' ' + " + ( ( sourceTracker == null ) ? "" : "location.getSource().toString() + ':' + " )
-            + "location.getLineNumber() + ' ';" );
+        sc.add("if ( stringFormatter != null )");
+        sc.add("{");
+        sc.addIndented("return stringFormatter.toString( location );");
+        sc.add("}");
+        sc.add("return ' ' + " + ((sourceTracker == null) ? "" : "location.getSource().toString() + ':' + ")
+                + "location.getLineNumber() + ' ';");
 
-        jClass.addMethod( method );
+        jClass.addMethod(method);
     }
 
-    private void createXpp3DomToSerializerMethod( JClass jClass )
-    {
-        JMethod method = new JMethod( "writeXpp3DomToSerializer" );
+    private void createXpp3DomToSerializerMethod(JClass jClass) {
+        JMethod method = new JMethod("writeXpp3DomToSerializer");
         method.getModifiers().makeProtected();
 
-        method.addParameter( new JParameter( new JClass( "Xpp3Dom" ), "dom" ) );
-        method.addParameter( new JParameter( new JClass( "XmlSerializer" ), "serializer" ) );
+        method.addParameter(new JParameter(new JClass("Xpp3Dom"), "dom"));
+        method.addParameter(new JParameter(new JClass("XmlSerializer"), "serializer"));
 
-        method.addException( new JClass( "java.io.IOException" ) );
+        method.addException(new JClass("java.io.IOException"));
 
         JSourceCode sc = method.getSourceCode();
 
-        sc.add( "serializer.startTag( NAMESPACE, dom.getName() );" );
-        sc.add( "" );
-        sc.add( "String[] attributeNames = dom.getAttributeNames();" );
-        sc.add( "for ( String attributeName : attributeNames )" );
-        sc.add( "{" );
-        sc.addIndented( "serializer.attribute( NAMESPACE, attributeName, dom.getAttribute( attributeName ) );" );
-        sc.add( "}" );
-        sc.add( "for ( Xpp3Dom aChild : dom.getChildren() )" );
-        sc.add( "{" );
-        sc.addIndented( "writeXpp3DomToSerializer( aChild, serializer );" );
-        sc.add( "}" );
-        sc.add( "" );
-        sc.add( "String value = dom.getValue();" );
-        sc.add( "if ( value != null )" );
-        sc.add( "{" );
-        sc.addIndented( "serializer.text( value );" );
-        sc.add( "}" );
-        sc.add( "" );
-        sc.add( "serializer.endTag( NAMESPACE, dom.getName() );" );
-        sc.add( "" );
-        sc.add( "if ( dom.getInputLocation() != null && dom.getChildCount() == 0 )" );
-        sc.add( "{" );
-        sc.addIndented( "serializer.comment( toString( (InputLocation) dom.getInputLocation() ) );" );
-        sc.add( "}" );
+        sc.add("serializer.startTag( NAMESPACE, dom.getName() );");
+        sc.add("");
+        sc.add("String[] attributeNames = dom.getAttributeNames();");
+        sc.add("for ( String attributeName : attributeNames )");
+        sc.add("{");
+        sc.addIndented("serializer.attribute( NAMESPACE, attributeName, dom.getAttribute( attributeName ) );");
+        sc.add("}");
+        sc.add("for ( Xpp3Dom aChild : dom.getChildren() )");
+        sc.add("{");
+        sc.addIndented("writeXpp3DomToSerializer( aChild, serializer );");
+        sc.add("}");
+        sc.add("");
+        sc.add("String value = dom.getValue();");
+        sc.add("if ( value != null )");
+        sc.add("{");
+        sc.addIndented("serializer.text( value );");
+        sc.add("}");
+        sc.add("");
+        sc.add("serializer.endTag( NAMESPACE, dom.getName() );");
+        sc.add("");
+        sc.add("if ( dom.getInputLocation() != null && dom.getChildCount() == 0 )");
+        sc.add("{");
+        sc.addIndented("serializer.comment( toString( (InputLocation) dom.getInputLocation() ) );");
+        sc.add("}");
 
-        jClass.addMethod( method );
+        jClass.addMethod(method);
     }
 }

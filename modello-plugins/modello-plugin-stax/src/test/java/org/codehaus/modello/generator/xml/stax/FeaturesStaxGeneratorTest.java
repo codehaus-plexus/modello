@@ -22,45 +22,40 @@ package org.codehaus.modello.generator.xml.stax;
  * SOFTWARE.
  */
 
+import java.util.Properties;
+
 import org.codehaus.modello.AbstractModelloJavaGeneratorTest;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
 
-import java.util.Properties;
-
 /**
  * @author Hervé Boutemy
  */
-public class FeaturesStaxGeneratorTest
-    extends AbstractModelloJavaGeneratorTest
-{
-    public FeaturesStaxGeneratorTest()
-    {
-        super( "features" );
+public class FeaturesStaxGeneratorTest extends AbstractModelloJavaGeneratorTest {
+    public FeaturesStaxGeneratorTest() {
+        super("features");
     }
 
-    public void testJavaGenerator()
-        throws Throwable
-    {
-        ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
+    public void testJavaGenerator() throws Throwable {
+        ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
 
-        Model model = modello.loadModel( getXmlResourceReader( "/features.mdo" ) );
+        Model model = modello.loadModel(getXmlResourceReader("/features.mdo"));
 
-        Properties parameters = getModelloParameters( "1.0.0" );
+        Properties parameters = getModelloParameters("1.0.0");
 
-        modello.generate( model, "java", parameters );
-        modello.generate( model, "stax-writer", parameters );
-        modello.generate( model, "stax-reader", parameters );
+        modello.generate(model, "java", parameters);
+        modello.generate(model, "stax-writer", parameters);
+        modello.generate(model, "stax-reader", parameters);
 
-        addDependency( "org.codehaus.woodstox", "stax2-api" );
-        addDependency( "com.fasterxml.woodstox", "woodstox-core" );
-        addDependency( "org.xmlunit", "xmlunit-core" );
+        addDependency("org.codehaus.woodstox", "stax2-api");
+        addDependency("com.fasterxml.woodstox", "woodstox-core");
+        addDependency("org.xmlunit", "xmlunit-core");
 
-        compileGeneratedSources( 5 );
+        compileGeneratedSources(5);
 
         // TODO: see why without this, version system property is set to "2.4.1" value after verify
-        System.setProperty( "version", getModelloVersion() );
+        System.setProperty("version", getModelloVersion());
 
-        verifyCompiledGeneratedSources( "org.codehaus.modello.generator.xml.stax.StaxFeaturesVerifier" );
+        verifyCompiledGeneratedSources("org.codehaus.modello.generator.xml.stax.StaxFeaturesVerifier");
     }
 }

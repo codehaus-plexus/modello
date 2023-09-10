@@ -29,54 +29,44 @@ import org.codehaus.plexus.util.StringUtils;
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  */
-public class XmlModelMetadata
-    implements ModelMetadata
-{
+public class XmlModelMetadata implements ModelMetadata {
     public static final String ID = XmlModelMetadata.class.getName();
 
     private String namespace;
 
     private String schemaLocation;
 
-    public String getNamespace()
-    {
+    public String getNamespace() {
         return namespace;
     }
 
-    public void setNamespace( String namespace )
-    {
+    public void setNamespace(String namespace) {
         this.namespace = namespace;
     }
 
-    public String getSchemaLocation()
-    {
+    public String getSchemaLocation() {
         return schemaLocation;
     }
 
-    public void setSchemaLocation( String schemaLocation )
-    {
+    public void setSchemaLocation(String schemaLocation) {
         this.schemaLocation = schemaLocation;
     }
 
-    public String getNamespace( Version version )
-    {
+    public String getNamespace(Version version) {
         String namespace = this.namespace;
 
-        if ( version != null )
-        {
-            namespace = StringUtils.replace( namespace, "${version}", version.toString() );
+        if (version != null) {
+            namespace = StringUtils.replace(namespace, "${version}", version.toString());
         }
 
         return namespace;
     }
 
-    public String getSchemaLocation( Version version )
-    {
+    public String getSchemaLocation(Version version) {
         String schemaLocation = this.schemaLocation;
 
-        if ( version != null )
-        {
-            schemaLocation = StringUtils.replace( schemaLocation, "${version}", version.toString() );
+        if (version != null) {
+            schemaLocation = StringUtils.replace(schemaLocation, "${version}", version.toString());
         }
 
         return schemaLocation;

@@ -22,38 +22,31 @@ package org.codehaus.modello.generator.xml.stax;
  * SOFTWARE.
  */
 
+import java.util.List;
+
 import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.Version;
 import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 
-import java.util.List;
-
 /**
  */
-public class StaxGeneratorPartsTest
-    extends AbstractStaxGeneratorTestCase
-{
-    public StaxGeneratorPartsTest()
-        throws ComponentLookupException
-    {
-        super( "stax-parts" );
+public class StaxGeneratorPartsTest extends AbstractStaxGeneratorTestCase {
+    public StaxGeneratorPartsTest() throws ComponentLookupException {
+        super("stax-parts");
     }
 
-    public void testStaxReaderParts()
-        throws Throwable
-    {
-        Model model = modello.loadModel( getXmlResourceReader( "/parts.mdo" ) );
+    public void testStaxReaderParts() throws Throwable {
+        Model model = modello.loadModel(getXmlResourceReader("/parts.mdo"));
 
-        List<ModelClass> classesList = model.getClasses( new Version( "4.0.0" ) );
+        List<ModelClass> classesList = model.getClasses(new Version("4.0.0"));
 
-        assertEquals( 12, classesList.size() );
+        assertEquals(12, classesList.size());
 
-        ModelClass clazz = (ModelClass) classesList.get( 0 );
+        ModelClass clazz = (ModelClass) classesList.get(0);
 
-        assertEquals( "Model", clazz.getName() );
+        assertEquals("Model", clazz.getName());
 
-        verifyModel( model, "org.codehaus.modello.generator.xml.stax.StaxVerifierParts" );
+        verifyModel(model, "org.codehaus.modello.generator.xml.stax.StaxVerifierParts");
     }
-
 }

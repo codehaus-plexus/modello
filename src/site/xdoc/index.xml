@@ -14,7 +14,9 @@
       <p>Modello is a framework for code generation from a simple model.
     Modello generates code from a <a href="modello.html">simple model format</a>: based on a plugin architecture, various types of code and
     descriptors can be generated from the single model, including Java POJOs, XML/JSON/YAML marshallers/unmarshallers, XSD, JSON Schema
-    and documentation.</p>
+    and documentation.
+    Starting with 2.1.0, content can even be <a href="modello-plugins/modello-plugin-velocity/">generated from Velocity templates</a> for maximum flexibility.
+      </p>
 
       <p>
         <img src="modello-deps.png" width="755" height="357" border="0" usemap="#Modello_dependencies" />
@@ -33,10 +35,12 @@
           <area shape="rect" coords="14,93,106,129"   href="modello-plugins/modello-plugin-jackson/" />
           <area shape="rect" coords="108,93,240,129"  href="modello-plugins/modello-plugin-jsonschema/" />
           <area shape="rect" coords="261,93,382,129"  href="modello-plugins/modello-plugin-snakeyaml/" />
+          <area shape="rect" coords="135,195,219,232" href="modello-plugins/modello-plugin-velocity/" />
           <area shape="rect" coords="0,83,754,239"    href="modello-plugins/" />
           <area shape="rect" coords="258,0,415,35"    href="modello-maven-plugin/" />
           <area shape="rect" coords="449,321,583,356" href="../" />
-          <area shape="rect" coords="445,37,620,74"   href="http://maven.apache.org/ref/current/maven-plugin-api/" />
+          <area shape="rect" coords="114,263,240,301" href="https://velocity.apache.org/" />
+          <area shape="rect" coords="445,37,620,74"   href="https://maven.apache.org/ref/current/maven-plugin-api/" />
         </map>
       </p>
 

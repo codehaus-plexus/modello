@@ -30,57 +30,46 @@ package org.codehaus.modello.model;
  * </ul>
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
  */
-public class VersionRange
-{
+public class VersionRange {
     private static final String VERSION_SEPARATOR = "/";
 
     private Version fromVersion;
 
     private Version toVersion;
 
-    public VersionRange( String versionRange )
-    {
-        if ( versionRange.endsWith( "+" ) )
-        {
-            fromVersion = new Version( versionRange.substring( 0, versionRange.length() - 1 ) );
+    public VersionRange(String versionRange) {
+        if (versionRange.endsWith("+")) {
+            fromVersion = new Version(versionRange.substring(0, versionRange.length() - 1));
 
             toVersion = Version.INFINITE;
-        }
-        else if ( versionRange.indexOf( VERSION_SEPARATOR ) > 0 && ! versionRange.endsWith( VERSION_SEPARATOR ) )
-        {
-            int pos = versionRange.indexOf( VERSION_SEPARATOR );
+        } else if (versionRange.indexOf(VERSION_SEPARATOR) > 0 && !versionRange.endsWith(VERSION_SEPARATOR)) {
+            int pos = versionRange.indexOf(VERSION_SEPARATOR);
 
-            fromVersion = new Version( versionRange.substring( 0, pos ) );
+            fromVersion = new Version(versionRange.substring(0, pos));
 
-            toVersion = new Version( versionRange.substring( pos + 1 ) );
-        }
-        else
-        {
-            fromVersion = new Version( versionRange );
+            toVersion = new Version(versionRange.substring(pos + 1));
+        } else {
+            fromVersion = new Version(versionRange);
 
-            toVersion = new Version( versionRange );
+            toVersion = new Version(versionRange);
         }
     }
 
-    public VersionRange( Version version )
-    {
+    public VersionRange(Version version) {
         fromVersion = version;
 
         toVersion = version;
     }
 
-    public Version getFromVersion()
-    {
+    public Version getFromVersion() {
         return fromVersion;
     }
 
-    public Version getToVersion()
-    {
+    public Version getToVersion() {
         return toVersion;
     }
 
-    public boolean isToInfinite()
-    {
+    public boolean isToInfinite() {
         return toVersion == Version.INFINITE;
     }
 
@@ -88,36 +77,27 @@ public class VersionRange
     // Object overrides
     // ----------------------------------------------------------------------
 
-    public int hashCode()
-    {
+    public int hashCode() {
         return fromVersion.hashCode() + toVersion.hashCode();
     }
 
-    public boolean equals( Object obj )
-    {
-        if ( !( obj instanceof VersionRange ) )
-        {
+    public boolean equals(Object obj) {
+        if (!(obj instanceof VersionRange)) {
             return false;
         }
 
         VersionRange other = (VersionRange) obj;
 
-        return fromVersion.equals( other.fromVersion ) && toVersion.equals( other.toVersion );
+        return fromVersion.equals(other.fromVersion) && toVersion.equals(other.toVersion);
     }
 
-    public String toString()
-    {
-        if ( fromVersion.equals( toVersion ) )
-        {
-            return fromVersion.toString( "", "." );
-        }
-        else if ( toVersion.equals( Version.INFINITE ) )
-        {
-            return fromVersion.toString( "", "." ) + "+";
-        }
-        else
-        {
-            return "[" + fromVersion.toString( "", "." ) + " => " + toVersion.toString( "", "." ) + "]";
+    public String toString() {
+        if (fromVersion.equals(toVersion)) {
+            return fromVersion.toString("", ".");
+        } else if (toVersion.equals(Version.INFINITE)) {
+            return fromVersion.toString("", ".") + "+";
+        } else {
+            return "[" + fromVersion.toString("", ".") + " => " + toVersion.toString("", ".") + "]";
         }
     }
 }

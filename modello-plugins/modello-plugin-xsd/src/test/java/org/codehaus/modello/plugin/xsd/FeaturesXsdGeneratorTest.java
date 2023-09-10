@@ -22,76 +22,73 @@ package org.codehaus.modello.plugin.xsd;
  * SOFTWARE.
  */
 
-import org.codehaus.modello.AbstractModelloGeneratorTest;
-import org.codehaus.modello.ModelloException;
-import org.codehaus.modello.core.ModelloCore;
-import org.codehaus.modello.model.Model;
-import org.xml.sax.SAXParseException;
-
-import java.io.File;
-import java.util.Properties;
-
 import javax.xml.XMLConstants;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 
+import java.io.File;
+import java.util.Properties;
+
+import org.codehaus.modello.AbstractModelloGeneratorTest;
+import org.codehaus.modello.ModelloException;
+import org.codehaus.modello.ModelloParameterConstants;
+import org.codehaus.modello.core.ModelloCore;
+import org.codehaus.modello.model.Model;
+import org.xml.sax.SAXParseException;
+
 /**
  * @author Hervé Boutemy
  */
-public class FeaturesXsdGeneratorTest
-    extends AbstractModelloGeneratorTest
-{
-    public FeaturesXsdGeneratorTest()
-    {
-        super( "features" );
+public class FeaturesXsdGeneratorTest extends AbstractModelloGeneratorTest {
+    public FeaturesXsdGeneratorTest() {
+        super("features");
     }
 
-    public void testXsdGenerator()
-        throws Throwable
-    {
-        ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
+    public void testXsdGenerator() throws Throwable {
+        ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
 
-        Model model = modello.loadModel( getXmlResourceReader( "/features.mdo" ) );
+        Model model = modello.loadModel(getXmlResourceReader("/features.mdo"));
 
-        Properties parameters = getModelloParameters( "1.0.0" );
+        Properties parameters = getModelloParameters("1.0.0");
+        parameters.setProperty(ModelloParameterConstants.XSD_ENFORCE_MANDATORY_ELEMENTS, "true");
 
-        modello.generate( model, "xsd", parameters );
+        modello.generate(model, "xsd", parameters);
 
-        SchemaFactory sf = SchemaFactory.newInstance( XMLConstants.W3C_XML_SCHEMA_NS_URI );
-        Schema schema = sf.newSchema( new StreamSource( new File( getOutputDirectory(), "features-1.0.0.xsd" ) ) );
+        SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+        Schema schema = sf.newSchema(new StreamSource(new File(getOutputDirectory(), "features-1.0.0.xsd")));
         Validator validator = schema.newValidator();
 
-        try
-        {
-            validator.validate( new StreamSource( getClass().getResourceAsStream( "/features.xml" ) ) );
-        }
-        catch ( SAXParseException e )
-        {
-            throw new ModelloException( "line " + e.getLineNumber() + " column " + e.getColumnNumber(), e );
+        try {
+            validator.validate(new StreamSource(getClass().getResourceAsStream("/features.xml")));
+        } catch (SAXParseException e) {
+            throw new ModelloException("line " + e.getLineNumber() + " column " + e.getColumnNumber(), e);
         }
 
-        try
-        {
-            validator.validate( new StreamSource( getClass().getResourceAsStream( "/features-invalid.xml" ) ) );
-            fail( "parsing of features-invalid.xml should have failed" );
-        }
-        catch ( SAXParseException e )
-        {
+        try {
+            validator.validate(new StreamSource(getClass().getResourceAsStream("/features-invalid.xml")));
+            fail("parsing of features-invalid.xml should have failed");
+        } catch (SAXParseException e) {
             // ok, expected exception
-            assertTrue( String.valueOf( e.getMessage() ).contains( "invalidElement" ) );
+            assertTrue(e.getMessage().contains("invalidElement"));
         }
 
-        try
-        {
-            validator.validate( new StreamSource( getClass().getResourceAsStream( "/features-invalid-transient.xml" ) ) );
-            fail( "XSD did not prohibit appearance of transient fields" );
-        }
-        catch ( SAXParseException e )
-        {
+        try {
+            validator.validate(new StreamSource(getClass().getResourceAsStream("/features-missing-required.xml")));
+            fail("parsing of features-invalid.xml should have failed");
+        } catch (SAXParseException e) {
             // ok, expected exception
-            assertTrue( String.valueOf( e.getMessage() ).contains( "transientString" ) );
+            assertTrue(e.getMessage().contains("description"));
+            assertTrue(e.getMessage().endsWith(" is expected."));
+        }
+
+        try {
+            validator.validate(new StreamSource(getClass().getResourceAsStream("/features-invalid-transient.xml")));
+            fail("XSD did not prohibit appearance of transient fields");
+        } catch (SAXParseException e) {
+            // ok, expected exception
+            assertTrue(e.getMessage().contains("transientString"));
         }
     }
 }

@@ -628,6 +628,7 @@
           <type>String</type>
           <description>
             Define a tag name to be used in XML content, which can be different from the field name.
+            May be '*' (since version 2.1.0) to allow all names (this effectively disables XSD validation of this field).
           </description>
           <comment>see org.codehaus.modello.plugins.xml.metadata.XmlMetadataPlugin</comment>
         </field>
@@ -793,6 +794,7 @@
           <description>
             Define a tag name to be used for every element inside a multiple association. By default, the name is
             calculated as the singular of the field tag name.
+            May be '*' (since version 2.1.0) to allow all names (this effectively disables XSD validation of this field).
           </description>
           <comment>see org.codehaus.modello.plugins.xml.metadata.XmlMetadataPlugin</comment>
         </field>

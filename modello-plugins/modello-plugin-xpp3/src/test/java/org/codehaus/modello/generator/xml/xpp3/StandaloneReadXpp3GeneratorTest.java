@@ -28,46 +28,38 @@ import org.codehaus.modello.AbstractModelloJavaGeneratorTest;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
 
-public class StandaloneReadXpp3GeneratorTest
-    extends AbstractModelloJavaGeneratorTest
-{
-    public StandaloneReadXpp3GeneratorTest()
-    {
-        super( "testStandaloneRead" );
+public class StandaloneReadXpp3GeneratorTest extends AbstractModelloJavaGeneratorTest {
+    public StandaloneReadXpp3GeneratorTest() {
+        super("testStandaloneRead");
     }
 
-    public void testStandaloneRead()
-        throws Throwable
-    {
-        ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
+    public void testStandaloneRead() throws Throwable {
+        ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
 
-        Model model = modello.loadModel( getXmlResourceReader( "/standaloneRead.mdo" ) );
+        Model model = modello.loadModel(getXmlResourceReader("/standaloneRead.mdo"));
 
-        Properties parameters = getModelloParameters( "1.0.0" );
+        Properties parameters = getModelloParameters("1.0.0");
 
-        modello.generate( model, "java", parameters );
-        modello.generate( model, "xpp3-reader", parameters );
+        modello.generate(model, "java", parameters);
+        modello.generate(model, "xpp3-reader", parameters);
 
-        compileGeneratedSources( 5 ); // enhanced for loops in Xpp3StandaloneReadVerifier
+        compileGeneratedSources(5); // enhanced for loops in Xpp3StandaloneReadVerifier
 
-        verifyCompiledGeneratedSources( "org.codehaus.modello.generator.xml.xpp3.Xpp3StandaloneReadVerifier" );
+        verifyCompiledGeneratedSources("org.codehaus.modello.generator.xml.xpp3.Xpp3StandaloneReadVerifier");
     }
 
-    public void testStandaloneReadJava5()
-            throws Throwable
-        {
-            ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
+    public void testStandaloneReadJava5() throws Throwable {
+        ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
 
-            Model model = modello.loadModel( getXmlResourceReader( "/standaloneRead.mdo" ) );
+        Model model = modello.loadModel(getXmlResourceReader("/standaloneRead.mdo"));
 
-            Properties parameters = getModelloParameters( "1.0.0", 5 );
+        Properties parameters = getModelloParameters("1.0.0", 5);
 
-            modello.generate( model, "java", parameters );
-            modello.generate( model, "xpp3-reader", parameters );
+        modello.generate(model, "java", parameters);
+        modello.generate(model, "xpp3-reader", parameters);
 
-            compileGeneratedSources( 5 );
+        compileGeneratedSources(5);
 
-            verifyCompiledGeneratedSources( "org.codehaus.modello.generator.xml.xpp3.Xpp3StandaloneReadVerifier" );
-        }
-
+        verifyCompiledGeneratedSources("org.codehaus.modello.generator.xml.xpp3.Xpp3StandaloneReadVerifier");
+    }
 }

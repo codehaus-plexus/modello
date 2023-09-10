@@ -29,9 +29,7 @@ import org.codehaus.plexus.util.StringUtils;
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
  */
-public class ModelAssociation
-    extends ModelField
-{
+public class ModelAssociation extends ModelField {
     public static final String ONE_MULTIPLICITY = "1";
 
     public static final String MANY_MULTIPLICITY = "*";
@@ -53,27 +51,21 @@ public class ModelAssociation
     /**
      * @param to The to to set.
      */
-    public void setTo( String to )
-    {
+    public void setTo(String to) {
         this.to = to;
     }
 
     /**
      * @return Returns the to.
      */
-    public String getTo()
-    {
+    public String getTo() {
         return to;
     }
 
-    public String getType()
-    {
-        if ( ONE_MULTIPLICITY.equals( getMultiplicity() ) )
-        {
+    public String getType() {
+        if (ONE_MULTIPLICITY.equals(getMultiplicity())) {
             return getTo();
-        }
-        else
-        {
+        } else {
             return super.getType();
         }
     }
@@ -81,142 +73,111 @@ public class ModelAssociation
     /**
      * @return Returns the multiplicity.
      */
-    public String getMultiplicity()
-    {
+    public String getMultiplicity() {
         return multiplicity;
     }
 
     /**
      * @param multiplicity The multiplicity to set.
      */
-    public void setMultiplicity( String multiplicity )
-    {
+    public void setMultiplicity(String multiplicity) {
         this.multiplicity = multiplicity;
     }
 
-    public boolean isManyMultiplicity()
-    {
-        return MANY_MULTIPLICITY.equals( multiplicity );
+    public boolean isManyMultiplicity() {
+        return MANY_MULTIPLICITY.equals(multiplicity);
     }
 
-    public boolean isOneMultiplicity()
-    {
-        return ONE_MULTIPLICITY.equals( multiplicity );
+    public boolean isOneMultiplicity() {
+        return ONE_MULTIPLICITY.equals(multiplicity);
     }
 
     /**
      * @return Returns the to ModelClass.
      */
-    public ModelClass getToClass()
-    {
+    public ModelClass getToClass() {
         return toClass;
     }
 
-    public AssociationMetadata getAssociationMetadata( String key )
-    {
-        return getMetadata( AssociationMetadata.class, key );
+    public AssociationMetadata getAssociationMetadata(String key) {
+        return getMetadata(AssociationMetadata.class, key);
     }
 
     // ----------------------------------------------------------------------
     // BaseElement overrides
     // ----------------------------------------------------------------------
 
-    public void validateElement()
-        throws ModelValidationException
-    {
-        validateFieldNotEmpty( "Association", "name", getName() );
+    public void validateElement() throws ModelValidationException {
+        validateFieldNotEmpty("Association", "name", getName());
 
-        validateFieldNotEmpty( "Association '" + getName() + "'", "to", to );
+        validateFieldNotEmpty("Association '" + getName() + "'", "to", to);
 
-        if ( isEmpty( to ) )
-        {
-            throw new ModelValidationException( "You must define the type of association." );
+        if (isEmpty(to)) {
+            throw new ModelValidationException("You must define the type of association.");
         }
 
-        if ( !"String".equals( to ) )
-        {
-            toClass = getModelClass().getModel().getClass( to, getVersionRange() );
+        if (!"String".equals(to)) {
+            toClass = getModelClass().getModel().getClass(to, getVersionRange());
 
-            if ( toClass == null )
-            {
-                throw new ModelValidationException( "Association '" + getName() + "': Could not find to class." );
+            if (toClass == null) {
+                throw new ModelValidationException("Association '" + getName() + "': Could not find to class.");
             }
         }
 
-        if ( isEmpty( multiplicity ) )
-        {
+        if (isEmpty(multiplicity)) {
             multiplicity = ONE_MULTIPLICITY;
         }
 
-        if ( "n".equals( multiplicity ) || "*".equals( multiplicity ) )
-        {
+        if ("n".equals(multiplicity) || "*".equals(multiplicity)) {
             multiplicity = MANY_MULTIPLICITY;
         }
 
-        if ( !ONE_MULTIPLICITY.equals( multiplicity ) && !MANY_MULTIPLICITY.equals( multiplicity ) )
-        {
-            throw new ModelValidationException( "Association multiplicity '" + getName() + "' is incorrect: "
-                                                + "Possible values are '1', '*' or 'n'." );
+        if (!ONE_MULTIPLICITY.equals(multiplicity) && !MANY_MULTIPLICITY.equals(multiplicity)) {
+            throw new ModelValidationException("Association multiplicity '" + getName() + "' is incorrect: "
+                    + "Possible values are '1', '*' or 'n'.");
         }
 
-        if ( isEmpty( getType() ) )
-        {
-            ModelDefault modelDefault = getModelClass().getModel().getDefault( ModelDefault.LIST );
+        if (isEmpty(getType())) {
+            ModelDefault modelDefault = getModelClass().getModel().getDefault(ModelDefault.LIST);
 
-            setType( modelDefault.getKey() );
+            setType(modelDefault.getKey());
 
-            setDefaultValue( getDefaultValue( modelDefault ) );
-        }
-        else
-        {
-            if ( isManyMultiplicity() )
-            {
-                if ( "Set".equalsIgnoreCase( getType() ) )
-                {
-                    setType( ModelDefault.SET );
-                }
-                else if ( "List".equalsIgnoreCase( getType() ) )
-                {
-                    setType( ModelDefault.LIST );
-                }
-                else if ( "Map".equalsIgnoreCase( getType() ) )
-                {
-                    setType( ModelDefault.MAP );
-                }
-                else if ( "Properties".equalsIgnoreCase( getType() ) )
-                {
-                    setType( ModelDefault.PROPERTIES );
-                }
-                else
-                {
+            setDefaultValue(getDefaultValue(modelDefault));
+        } else {
+            if (isManyMultiplicity()) {
+                if ("Set".equalsIgnoreCase(getType())) {
+                    setType(ModelDefault.SET);
+                } else if ("List".equalsIgnoreCase(getType())) {
+                    setType(ModelDefault.LIST);
+                } else if ("Map".equalsIgnoreCase(getType())) {
+                    setType(ModelDefault.MAP);
+                } else if ("Properties".equalsIgnoreCase(getType())) {
+                    setType(ModelDefault.PROPERTIES);
+                } else {
                     throw new ModelValidationException(
-                        "The type of element '" + getName() + "' must be List, Map, Properties or Set." );
+                            "The type of element '" + getName() + "' must be List, Map, Properties or Set.");
                 }
 
-                if ( isEmpty( getDefaultValue() ) )
-                {
-                    ModelDefault modelDefault = getModelClass().getModel().getDefault( getType() );
+                if (isEmpty(getDefaultValue())) {
+                    ModelDefault modelDefault = getModelClass().getModel().getDefault(getType());
 
-//                    setType( modelDefault.getKey() );
+                    //                    setType( modelDefault.getKey() );
 
-                    setDefaultValue( getDefaultValue( modelDefault ) );
+                    setDefaultValue(getDefaultValue(modelDefault));
                 }
             }
         }
     }
 
-    public boolean isGenericType()
-    {
-        return getType().equals( ModelDefault.LIST ) || getType().equals( ModelDefault.SET );
+    public boolean isGenericType() {
+        return getType().equals(ModelDefault.LIST) || getType().equals(ModelDefault.SET);
     }
 
-    private String getDefaultValue( ModelDefault modelDefault )
-    {
+    private String getDefaultValue(ModelDefault modelDefault) {
         String value = modelDefault.getValue();
 
-        if ( isGenericType() )
-        {
-            value = StringUtils.replace( value, "<?>", "/*<" + getTo() + ">*/" );
+        if (isGenericType()) {
+            value = StringUtils.replace(value, "<?>", "/*<" + getTo() + ">*/");
         }
 
         return value;

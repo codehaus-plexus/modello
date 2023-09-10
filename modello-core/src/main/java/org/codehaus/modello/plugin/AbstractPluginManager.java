@@ -22,52 +22,36 @@ package org.codehaus.modello.plugin;
  * SOFTWARE.
  */
 
+import java.util.Iterator;
+import java.util.Map;
+
 import org.codehaus.modello.ModelloRuntimeException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  */
-public abstract class AbstractPluginManager<T>
-    extends AbstractLogEnabled
-    implements Initializable
-{
-    /* injected by Plexus: see META-INF/plexus/components.xml */
-    private Map<String, T> plugins = new HashMap<String, T>();
+public abstract class AbstractPluginManager<T> extends AbstractLogEnabled implements Initializable {
+    public void initialize() {}
 
-    public void initialize()
-    {
+    public abstract Map<String, T> getPlugins();
+
+    public Iterator<T> getPluginsIterator() {
+        return getPlugins().values().iterator();
     }
 
-    public Map<String, T> getPlugins()
-    {
-        return plugins;
-    }
+    public T getPlugin(String name) {
+        T plugin = getPlugins().get(name);
 
-    public Iterator<T> getPluginsIterator()
-    {
-        return plugins.values().iterator();
-    }
-
-    public T getPlugin( String name )
-    {
-        T plugin = plugins.get( name );
-
-        if ( plugin == null )
-        {
-            throw new ModelloRuntimeException( "No such plugin: " + name );
+        if (plugin == null) {
+            throw new ModelloRuntimeException("No such plugin: " + name);
         }
 
         return plugin;
     }
 
-    public boolean hasPlugin( String name )
-    {
-        return plugins.containsKey( name );
+    public boolean hasPlugin(String name) {
+        return getPlugins().containsKey(name);
     }
 }

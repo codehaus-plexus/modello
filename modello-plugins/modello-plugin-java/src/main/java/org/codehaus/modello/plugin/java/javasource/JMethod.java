@@ -42,7 +42,6 @@
  *
  * $Id$
  */
-
 package org.codehaus.modello.plugin.java.javasource;
 
 /*
@@ -79,9 +78,7 @@ import java.util.List;
  * @author <a href="mailto:kvisco@intalio.com">Keith Visco</a>
  * @version $Revision$ $Date$
  **/
-public class JMethod implements JMember
-{
-
+public class JMethod implements JMember {
 
     /**
      * The set of classes that contain this JMethod.
@@ -115,10 +112,9 @@ public class JMethod implements JMember
      *
      * @param name, the method name. Must not be null.
      **/
-    public JMethod( String name )
-    {
-        this( name, null, null );
-    } //-- JMethod
+    public JMethod(String name) {
+        this(name, null, null);
+    } // -- JMethod
 
     /**
      * Creates a new JMethod with the given name and returnType.
@@ -128,10 +124,9 @@ public class JMethod implements JMember
      * @param returnType the return type of the method. May be null.
      * @deprecated removed in future version of javasource
      **/
-    public JMethod( JType returnType, String name )
-    {
-        this( name, returnType, null );
-    } //-- JMethod
+    public JMethod(JType returnType, String name) {
+        this(name, returnType, null);
+    } // -- JMethod
 
     /**
      * Creates a new JMethod with the given name and returnType.
@@ -143,30 +138,24 @@ public class JMethod implements JMember
      *            null, a default (and mostly useless) javadoc comment will be
      *            generated.
      **/
-    public JMethod( final String name, final JType returnType, final String returnDoc )
-    {
-        if ( ( name == null ) || ( name.length() == 0 ) )
-        {
+    public JMethod(final String name, final JType returnType, final String returnDoc) {
+        if ((name == null) || (name.length() == 0)) {
             String err = "The method name must not be null or zero-length";
-            throw new IllegalArgumentException( err );
+            throw new IllegalArgumentException(err);
         }
 
-        _classes = new ArrayList<JClass>( 1 );
+        _classes = new ArrayList<JClass>(1);
         this.source = new JSourceCode();
-        _signature = new JMethodSignature( name, returnType );
+        _signature = new JMethodSignature(name, returnType);
         this.jdc = _signature.getJDocComment();
-        jdc.appendComment( "Method " + name + "." );
+        jdc.appendComment("Method " + name + ".");
 
-        //-- create comment
-        if ( returnType != null )
-        {
-            if ( returnDoc != null && returnDoc.length() > 0 )
-            {
-                jdc.addDescriptor( JDocDescriptor.createReturnDesc( returnDoc ) );
-            }
-            else
-            {
-                jdc.addDescriptor( JDocDescriptor.createReturnDesc( returnType.getLocalName() ) );
+        // -- create comment
+        if (returnType != null) {
+            if (returnDoc != null && returnDoc.length() > 0) {
+                jdc.addDescriptor(JDocDescriptor.createReturnDesc(returnDoc));
+            } else {
+                jdc.addDescriptor(JDocDescriptor.createReturnDesc(returnType.getLocalName()));
             }
         }
     }
@@ -176,11 +165,9 @@ public class JMethod implements JMember
      *
      * @param exp the JClass representing the Exception
      **/
-    public void addException( JClass exp )
-    {
-        _signature.addException( exp );
-    } //-- addException
-
+    public void addException(JClass exp) {
+        _signature.addException(exp);
+    } // -- addException
 
     /**
      * Adds the given parameter to this JMethod's list of parameters.
@@ -190,28 +177,25 @@ public class JMethod implements JMember
      * @throws java.lang.IllegalArgumentException when a parameter already
      * exists for this Method with the same name as the new parameter
      **/
-    public void addParameter( JParameter parameter )
-        throws IllegalArgumentException
-    {
-        _signature.addParameter( parameter );
-    } //-- addParameter
+    public void addParameter(JParameter parameter) throws IllegalArgumentException {
+        _signature.addParameter(parameter);
+    } // -- addParameter
 
     /**
      * Returns the JDocComment describing this member.
      * @return the JDocComment describing this member.
      **/
-    public JDocComment getJDocComment()
-    {
+    public JDocComment getJDocComment() {
         return this.jdc;
-    } //-- getJDocComment
+    } // -- getJDocComment
 
     /**
      * Returns the class in which this JMember has been declared
      * @return the class in which this JMember has been declared
      **
-     public JClass getDeclaringClass() {
-     return _declaringClass;
-     } //-- getDeclaringClass
+     * public JClass getDeclaringClass() {
+     * return _declaringClass;
+     * } //-- getDeclaringClass
      */
 
     /**
@@ -219,31 +203,27 @@ public class JMethod implements JMember
      *
      * @return the exceptions that this JMember throws.
      **/
-    public JClass[] getExceptions()
-    {
+    public JClass[] getExceptions() {
         return _signature.getExceptions();
-    } //-- getExceptions
-
+    } // -- getExceptions
 
     /**
      * Returns the modifiers for this JMember.
      *
      * @return the modifiers for this JMember.
      **/
-    public JModifiers getModifiers()
-    {
+    public JModifiers getModifiers() {
         return _signature.getModifiers();
-    } //-- getModifiers
+    } // -- getModifiers
 
     /**
      * Returns the name of this JMember.
      *
      * @return the name of this JMember.
      **/
-    public String getName()
-    {
+    public String getName() {
         return _signature.getName();
-    } //-- getName
+    } // -- getName
 
     /**
      * Returns the JParameter at the given index.
@@ -251,10 +231,9 @@ public class JMethod implements JMember
      * @param index the index of the JParameter to return.
      * @return the JParameter at the given index.
      **/
-    public JParameter getParameter( int index )
-    {
-        return _signature.getParameter( index );
-    } //-- getParameter
+    public JParameter getParameter(int index) {
+        return _signature.getParameter(index);
+    } // -- getParameter
 
     /**
      * Returns the set of JParameters for this JMethod.
@@ -264,40 +243,36 @@ public class JMethod implements JMember
      *
      * @return the set of JParameters for this JMethod
      **/
-    public JParameter[] getParameters()
-    {
+    public JParameter[] getParameters() {
         return _signature.getParameters();
-    } //-- getParameters
+    } // -- getParameters
 
     /**
      * Returns the JType that represents the return type of the method.
      *
      * @return the JType that represents the return type of the method.
      **/
-    public JType getReturnType()
-    {
+    public JType getReturnType() {
         return _signature.getReturnType();
-    } //-- getReturnType
+    } // -- getReturnType
 
     /**
      * Returns the JMethodSignature for this JMethod.
      *
      * @return the JMethodSignature for this JMethod.
      **/
-    public JMethodSignature getSignature()
-    {
+    public JMethodSignature getSignature() {
         return _signature;
-    } //-- getSignature
+    } // -- getSignature
 
     /**
      * Returns the JSourceCode for the method body.
      *
      * @return the JSourceCode for the method body.
      **/
-    public JSourceCode getSourceCode()
-    {
+    public JSourceCode getSourceCode() {
         return this.source;
-    } //-- getSourceCode
+    } // -- getSourceCode
 
     /**
      * Sets the comment describing this member. The comment
@@ -307,10 +282,9 @@ public class JMethod implements JMember
      * @param comment the comment for this member
      * @see #getJDocComment
      **/
-    public void setComment( String comment )
-    {
-        jdc.setComment( comment );
-    } //-- setComment
+    public void setComment(String comment) {
+        jdc.setComment(comment);
+    } // -- setComment
 
     /**
      * Sets the JModifiers for this JMethod. This
@@ -322,10 +296,9 @@ public class JMethod implements JMember
      *
      * @param modifiers the JModifiers to set.
      **/
-    public void setModifiers( JModifiers modifiers )
-    {
-        _signature.setModifiers( modifiers );
-    } //-- setModifiers
+    public void setModifiers(JModifiers modifiers) {
+        _signature.setModifiers(modifiers);
+    } // -- setModifiers
 
     /**
      * Sets the given string as the source code (method body)
@@ -333,10 +306,9 @@ public class JMethod implements JMember
      *
      * @param source the String that represents the method body.
      **/
-    public void setSourceCode( String source )
-    {
-        this.source = new JSourceCode( source );
-    } //-- setSource
+    public void setSourceCode(String source) {
+        this.source = new JSourceCode(source);
+    } // -- setSource
 
     /**
      * Sets the given JSourceCode as the source code (method body)
@@ -344,52 +316,46 @@ public class JMethod implements JMember
      *
      * @param source the JSourceCode that represents the method body.
      **/
-    public void setSourceCode( JSourceCode source )
-    {
+    public void setSourceCode(JSourceCode source) {
         this.source = source;
-    } //-- setSource;
+    } // -- setSource;
 
     /**
      * Prints this JMethod to the given JSourceWriter.
      *
      * @param jsw the JSourceWriter to print to.
      **/
-    public void print( JSourceWriter jsw )
-    {
+    public void print(JSourceWriter jsw) {
 
-        //------------/
-        //- Java Doc -/
-        //------------/
+        // ------------/
+        // - Java Doc -/
+        // ------------/
 
-        jdc.print( jsw );
+        jdc.print(jsw);
 
-        //--------------------/
+        // --------------------/
         // - Annotations     -/
-        //--------------------/
+        // --------------------/
 
         JAnnotations annotations = getAnnotations();
-        if ( annotations != null ) annotations.print( jsw );
+        if (annotations != null) annotations.print(jsw);
 
-        //--------------------/
-        //- Method Signature -/
-        //--------------------/
+        // --------------------/
+        // - Method Signature -/
+        // --------------------/
 
-        _signature.print( jsw, false );
+        _signature.print(jsw, false);
 
-        if ( _signature.getModifiers().isAbstract() )
-        {
-            jsw.writeln( ";" );
-        }
-        else
-        {
+        if (_signature.getModifiers().isAbstract()) {
+            jsw.writeln(";");
+        } else {
             jsw.writeln();
-            jsw.writeln( "{" );
-            source.print( jsw );
-            jsw.write( "} //-- " );
-            jsw.writeln( toString() );
+            jsw.writeln("{");
+            source.print(jsw);
+            jsw.write("} //-- ");
+            jsw.writeln(toString());
         }
-    } //-- print
-
+    } // -- print
 
     /**
      * Returns the String representation of this JMethod,
@@ -397,14 +363,13 @@ public class JMethod implements JMember
      * @return the String representation of this JMethod, which
      * is simply the method prototype
      **/
-    public String toString()
-    {
+    public String toString() {
         return _signature.toString();
-    } //-- toString
+    } // -- toString
 
-    //---------------------/
-    //- PROTECTED METHODS -/
-    //---------------------/
+    // ---------------------/
+    // - PROTECTED METHODS -/
+    // ---------------------/
 
     /**
      * Adds the given JClass to the set of classes that
@@ -413,10 +378,9 @@ public class JMethod implements JMember
      * @param jClass the JClass to add as one of
      * the JClasses that contain this method.
      **/
-    protected void addDeclaringClass( JClass jClass )
-    {
-        _classes.add( jClass );
-    } //-- addDeclaringClass
+    protected void addDeclaringClass(JClass jClass) {
+        _classes.add(jClass);
+    } // -- addDeclaringClass
 
     /**
      * Removes the given JClass from the set of classes that
@@ -425,42 +389,35 @@ public class JMethod implements JMember
      * @param jClass the JClass to add as one of
      * the JClasses that contain this method.
      **/
-    protected void removeDeclaringClass( JClass jClass )
-    {
-        _classes.remove( jClass );
-    } //-- removeDeclaringClass
+    protected void removeDeclaringClass(JClass jClass) {
+        _classes.remove(jClass);
+    } // -- removeDeclaringClass
 
-    protected String[] getParameterClassNames()
-    {
+    protected String[] getParameterClassNames() {
         return _signature.getParameterClassNames();
-    } //-- getParameterClassNames
+    } // -- getParameterClassNames
 
     /**
      * @return the annotations
      */
-    public JAnnotations getAnnotations()
-    {
+    public JAnnotations getAnnotations() {
         return annotations;
     }
 
     /**
      * @param annotation the annotation to append
      */
-    public void appendAnnotation( String annotation )
-    {
-        if ( annotations == null )
-        {
+    public void appendAnnotation(String annotation) {
+        if (annotations == null) {
             annotations = new JAnnotations();
         }
-        annotations.appendAnnotation( annotation );
+        annotations.appendAnnotation(annotation);
     }
 
     /**
      * @param annotations the annotations to set
      */
-    public void setAnnotations( JAnnotations annotations )
-    {
+    public void setAnnotations(JAnnotations annotations) {
         this.annotations = annotations;
     }
-
-} //-- JMember
+} // -- JMember

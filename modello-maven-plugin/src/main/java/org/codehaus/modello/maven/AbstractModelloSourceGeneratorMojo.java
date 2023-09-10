@@ -31,13 +31,11 @@ import org.codehaus.modello.ModelloParameterConstants;
 /**
  * @author Hervé Boutemy
  */
-public abstract class AbstractModelloSourceGeneratorMojo
-    extends AbstractModelloGeneratorMojo
-{
+public abstract class AbstractModelloSourceGeneratorMojo extends AbstractModelloGeneratorMojo {
     /**
      * The output directory of the generated Java beans.
      */
-    @Parameter( defaultValue = "${project.build.directory}/generated-sources/modello", required = true )
+    @Parameter(defaultValue = "${project.build.directory}/generated-sources/modello", required = true)
     private File outputDirectory;
 
     /**
@@ -45,58 +43,51 @@ public abstract class AbstractModelloSourceGeneratorMojo
      *
      * @since 1.0-alpha-19
      */
-    @Parameter( defaultValue = "${project.build.sourceEncoding}" )
+    @Parameter(defaultValue = "${project.build.sourceEncoding}")
     private String encoding;
 
     /**
      * Generate Java 5 sources, with generic collections.
      * @since 1.0
      */
-    @Parameter( defaultValue = "${maven.compiler.source}" )
+    @Parameter(defaultValue = "${maven.compiler.source}")
     private String javaSource;
 
     /**
      * Generate DOM content as plexus-utils <code>Xpp3Dom</code> objects instead of <code>org.w3c.dom.Element</code>.
      * @since 1.6
      */
-    @Parameter( defaultValue = "true" )
+    @Parameter(defaultValue = "true")
     private boolean domAsXpp3;
 
     @Override
-    protected boolean producesCompilableResult()
-    {
+    protected boolean producesCompilableResult() {
         return true;
     }
 
-    public File getOutputDirectory()
-    {
+    public File getOutputDirectory() {
         return outputDirectory;
     }
 
-    public void setOutputDirectory( File outputDirectory )
-    {
+    public void setOutputDirectory(File outputDirectory) {
         this.outputDirectory = outputDirectory;
     }
 
     @Override
-    protected void customizeParameters( Properties parameters )
-    {
-        super.customizeParameters( parameters );
+    protected void customizeParameters(Properties parameters) {
+        super.customizeParameters(parameters);
 
-        if ( encoding != null )
-        {
-            parameters.setProperty( ModelloParameterConstants.ENCODING, encoding );
+        if (encoding != null) {
+            parameters.setProperty(ModelloParameterConstants.ENCODING, encoding);
         }
 
-        if ( javaSource != null )
-        {
-            if ( javaSource.startsWith( "1." ) )
-            {
-                javaSource = javaSource.substring( "1.".length() );
+        if (javaSource != null) {
+            if (javaSource.startsWith("1.")) {
+                javaSource = javaSource.substring("1.".length());
             }
-            parameters.setProperty( ModelloParameterConstants.OUTPUT_JAVA_SOURCE, javaSource );
+            parameters.setProperty(ModelloParameterConstants.OUTPUT_JAVA_SOURCE, javaSource);
         }
 
-        parameters.setProperty( ModelloParameterConstants.DOM_AS_XPP3, Boolean.toString( domAsXpp3 ) );
+        parameters.setProperty(ModelloParameterConstants.DOM_AS_XPP3, Boolean.toString(domAsXpp3));
     }
 }

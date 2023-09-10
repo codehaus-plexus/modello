@@ -22,6 +22,8 @@ package org.codehaus.modello.plugin.xdoc.metadata;
  * SOFTWARE.
  */
 
+import java.util.Map;
+
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.metadata.AbstractMetadataPlugin;
 import org.codehaus.modello.metadata.AssociationMetadata;
@@ -35,52 +37,42 @@ import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.ModelInterface;
-
-import java.util.Map;
+import org.codehaus.plexus.component.annotations.Component;
 
 /**
  * @author Hervé Boutemy
  */
-public class XdocMetadataPlugin
-    extends AbstractMetadataPlugin
-    implements MetadataPlugin
-{
+@Component(role = MetadataPlugin.class, hint = "stax-writer")
+public class XdocMetadataPlugin extends AbstractMetadataPlugin implements MetadataPlugin {
     public static final String XDOC_SEPARATOR = "xdoc.separator";
     public static final String XDOC_ANCHORNAME = "xdoc.anchorName";
 
-    public ClassMetadata getClassMetadata( ModelClass clazz, Map<String, String> data )
-    {
+    public ClassMetadata getClassMetadata(ModelClass clazz, Map<String, String> data) {
         XdocClassMetadata metadata = new XdocClassMetadata();
 
-        metadata.setAnchorName( getString( data, XDOC_ANCHORNAME ) );
+        metadata.setAnchorName(getString(data, XDOC_ANCHORNAME));
 
         return metadata;
     }
 
-    public InterfaceMetadata getInterfaceMetadata( ModelInterface iface, Map<String, String> data )
-    {
+    public InterfaceMetadata getInterfaceMetadata(ModelInterface iface, Map<String, String> data) {
         return new XdocInterfaceMetadata();
     }
 
-    public AssociationMetadata getAssociationMetadata( ModelAssociation association, Map<String, String> data )
-        throws ModelloException
-    {
+    public AssociationMetadata getAssociationMetadata(ModelAssociation association, Map<String, String> data)
+            throws ModelloException {
         return new XdocAssociationMetadata();
     }
 
-    public FieldMetadata getFieldMetadata( ModelField field, Map<String, String> data )
-        throws ModelloException
-    {
+    public FieldMetadata getFieldMetadata(ModelField field, Map<String, String> data) throws ModelloException {
         XdocFieldMetadata metadata = new XdocFieldMetadata();
 
-        metadata.setSeparator( getString( data, XDOC_SEPARATOR ) );
+        metadata.setSeparator(getString(data, XDOC_SEPARATOR));
 
         return metadata;
     }
 
-    public ModelMetadata getModelMetadata( Model model, Map<String, String> data )
-        throws ModelloException
-    {
+    public ModelMetadata getModelMetadata(Model model, Map<String, String> data) throws ModelloException {
         return new XdocModelMetadata();
     }
 }

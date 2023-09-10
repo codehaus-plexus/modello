@@ -1,19 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <parent>
-    <artifactId>modello</artifactId>
-    <groupId>org.codehaus.modello</groupId>
-    <version>2.1.0-SNAPSHOT</version>
-  </parent>
 
   <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.codehaus.modello</groupId>
+    <artifactId>modello</artifactId>
+    <version>2.1.3-SNAPSHOT</version>
+  </parent>
   <artifactId>modello-plugins</artifactId>
   <packaging>pom</packaging>
   <name>Modello Plugins</name>
-  <description>
-    Modello Plugins is the main component containing every Modello plugins that are able to generate various types of
-    code and descriptors.
-  </description>
+  <description>Modello Plugins is the main component containing every Modello plugins that are able to generate various types of
+    code and descriptors.</description>
 
   <modules>
     <module>modello-plugin-java</module>
@@ -29,6 +27,7 @@
     <module>modello-plugin-jackson</module>
     <module>modello-plugin-snakeyaml</module>
     <module>modello-plugin-sax</module>
+    <module>modello-plugin-velocity</module>
   </modules>
 
   <dependencies>
@@ -52,17 +51,17 @@
       <plugins>
         <plugin>
           <artifactId>maven-dependency-plugin</artifactId>
-          <version>3.3.0</version>
+          <version>3.6.0</version>
           <executions>
             <execution>
               <id>copy-test-libs</id>
-              <phase>process-test-resources</phase>
               <goals>
                 <goal>copy-dependencies</goal>
               </goals>
+              <phase>process-test-resources</phase>
               <configuration>
                 <outputDirectory>${project.build.directory}/test-libs</outputDirectory>
-                <excludeTransitive>true</excludeTransitive>
+                <excludeTransitive>false</excludeTransitive>
                 <stripVersion>true</stripVersion>
               </configuration>
             </execution>

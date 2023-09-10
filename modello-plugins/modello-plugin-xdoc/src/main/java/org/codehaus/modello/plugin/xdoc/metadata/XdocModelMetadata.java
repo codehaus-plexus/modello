@@ -27,8 +27,6 @@ import org.codehaus.modello.metadata.ModelMetadata;
 /**
  * @author Hervé Boutemy
  */
-public class XdocModelMetadata
-    implements ModelMetadata
-{
+public class XdocModelMetadata implements ModelMetadata {
     public static final String ID = XdocModelMetadata.class.getName();
 }

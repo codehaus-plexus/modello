@@ -25,27 +25,22 @@ import org.codehaus.modello.AbstractModelloJavaGeneratorTest;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
 
-public class BooleanTypeStaxGeneratorTest
-    extends AbstractModelloJavaGeneratorTest
-{
-    public BooleanTypeStaxGeneratorTest()
-    {
-        super( "testBooleanType" );
+public class BooleanTypeStaxGeneratorTest extends AbstractModelloJavaGeneratorTest {
+    public BooleanTypeStaxGeneratorTest() {
+        super("testBooleanType");
     }
 
-    public void testBooleanType()
-        throws Throwable
-    {
-        ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
+    public void testBooleanType() throws Throwable {
+        ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
 
-        Model model = modello.loadModel( getXmlResourceReader( "/boolean.mdo" ) );
+        Model model = modello.loadModel(getXmlResourceReader("/boolean.mdo"));
 
-        Properties parameters = getModelloParameters( "1.0.0", 5 );
+        Properties parameters = getModelloParameters("1.0.0", 5);
 
-        modello.generate( model, "java", parameters );
-        modello.generate( model, "stax-reader", parameters );
-        modello.generate( model, "stax-writer", parameters );
+        modello.generate(model, "java", parameters);
+        modello.generate(model, "stax-reader", parameters);
+        modello.generate(model, "stax-writer", parameters);
 
-        compileGeneratedSources( 5 );
+        compileGeneratedSources(5);
     }
 }

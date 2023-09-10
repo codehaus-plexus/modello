@@ -31,32 +31,26 @@ import org.codehaus.modello.model.Model;
 /**
  * @author <a href="mailto:olamy@apache.org">Brett Porter</a>
  */
-public class ChangesXsdGeneratorTest
-    extends AbstractModelloGeneratorTest
-{
-    public ChangesXsdGeneratorTest()
-    {
-        super( "xsd-changes" );
+public class ChangesXsdGeneratorTest extends AbstractModelloGeneratorTest {
+    public ChangesXsdGeneratorTest() {
+        super("xsd-changes");
     }
 
-    public void testXsdGenerator()
-        throws Throwable
-    {
-        ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
+    public void testXsdGenerator() throws Throwable {
+        ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
 
-        Model model = modello.loadModel( getXmlResourceReader( "/changes.mdo" ) );
+        Model model = modello.loadModel(getXmlResourceReader("/changes.mdo"));
 
         // generate XSD file
-        Properties parameters = getModelloParameters( "1.0.0" );
+        Properties parameters = getModelloParameters("1.0.0");
 
-        modello.generate( model, "xsd", parameters );
+        modello.generate(model, "xsd", parameters);
 
-        //addDependency( "modello", "modello-core", "1.0-SNAPSHOT" );
+        // addDependency( "modello", "modello-core", "1.0-SNAPSHOT" );
 
         // TODO write verifier that compiles generated schema: use jaxp
 
-        //verify( "org.codehaus.modello.generator.xml.xsd.XsdVerifier", "xsd" );
-
+        // verify( "org.codehaus.modello.generator.xml.xsd.XsdVerifier", "xsd" );
 
     }
 }

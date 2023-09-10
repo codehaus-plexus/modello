@@ -22,44 +22,38 @@ package org.codehaus.modello;
  * SOFTWARE.
  */
 
-import org.codehaus.plexus.util.ReaderFactory;
-import org.codehaus.plexus.util.StringUtils;
-
 import java.io.File;
 import java.util.Properties;
+
+import org.codehaus.plexus.util.ReaderFactory;
+import org.codehaus.plexus.util.StringUtils;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  */
-public class ModelloCli
-{
+public class ModelloCli {
     private static File modelFile;
 
     private static String outputType;
 
     private static Properties parameters;
 
-    public static void main( String[] args )
-        throws Exception
-    {
+    public static void main(String[] args) throws Exception {
         Modello modello = new Modello();
 
-        parseArgumentsFromCommandLine( args );
+        parseArgumentsFromCommandLine(args);
 
-        modello.generate( ReaderFactory.newXmlReader( modelFile ), outputType, parameters );
+        modello.generate(ReaderFactory.newXmlReader(modelFile), outputType, parameters);
     }
 
-    public static void parseArgumentsFromCommandLine( String[] args )
-        throws Exception
-    {
-        if ( args.length < 6 )
-        {
+    public static void parseArgumentsFromCommandLine(String[] args) throws Exception {
+        if (args.length < 6) {
             usage();
 
-            System.exit( 1 );
+            System.exit(1);
         }
 
-        modelFile = new File( args[0] );
+        modelFile = new File(args[0]);
 
         outputType = args[1];
 
@@ -67,59 +61,54 @@ public class ModelloCli
 
         String outputDirectory = args[2];
 
-        if ( StringUtils.isEmpty( outputDirectory ) )
-        {
-            System.err.println( "Missing required parameter: output directory" );
+        if (StringUtils.isEmpty(outputDirectory)) {
+            System.err.println("Missing required parameter: output directory");
 
             usage();
 
-            System.exit( 1 );
+            System.exit(1);
         }
 
-        parameters.setProperty( ModelloParameterConstants.OUTPUT_DIRECTORY, outputDirectory );
+        parameters.setProperty(ModelloParameterConstants.OUTPUT_DIRECTORY, outputDirectory);
 
-        String modelVersion = args[ 3 ];
+        String modelVersion = args[3];
 
-        if ( StringUtils.isEmpty( modelVersion ) )
-        {
-            System.err.println( "Missing required parameter: model version" );
+        if (StringUtils.isEmpty(modelVersion)) {
+            System.err.println("Missing required parameter: model version");
 
             usage();
 
-            System.exit( 1 );
+            System.exit(1);
         }
 
-        parameters.setProperty( ModelloParameterConstants.VERSION, modelVersion );
+        parameters.setProperty(ModelloParameterConstants.VERSION, modelVersion);
 
-        String packageWithVersion = args[ 4 ];
+        String packageWithVersion = args[4];
 
-        if ( StringUtils.isEmpty( packageWithVersion ) )
-        {
-            System.err.println( "Missing required parameter: package with version" );
+        if (StringUtils.isEmpty(packageWithVersion)) {
+            System.err.println("Missing required parameter: package with version");
 
             usage();
 
-            System.exit( 1 );
+            System.exit(1);
         }
 
-        parameters.setProperty( ModelloParameterConstants.PACKAGE_WITH_VERSION, packageWithVersion );
+        parameters.setProperty(ModelloParameterConstants.PACKAGE_WITH_VERSION, packageWithVersion);
 
-        String javaSource = args[ 5 ];
+        String javaSource = args[5];
 
-        if ( StringUtils.isEmpty( javaSource ) )
-        {
-            System.err.println( "Missing required parameter: Java Source" );
+        if (StringUtils.isEmpty(javaSource)) {
+            System.err.println("Missing required parameter: Java Source");
 
             usage();
 
-            System.exit( 1 );
+            System.exit(1);
         }
 
-        parameters.setProperty( ModelloParameterConstants.OUTPUT_JAVA_SOURCE, javaSource );
+        parameters.setProperty(ModelloParameterConstants.OUTPUT_JAVA_SOURCE, javaSource);
 
-        if ( args.length > 6 )
-        {
-            parameters.setProperty( ModelloParameterConstants.ENCODING, args[6] );
+        if (args.length > 6) {
+            parameters.setProperty(ModelloParameterConstants.ENCODING, args[6]);
         }
     }
 
@@ -127,9 +116,8 @@ public class ModelloCli
     //
     // ----------------------------------------------------------------------
 
-    private static void usage()
-    {
-        System.err.println( "Usage: modello <model> <outputType> <output directory> <modelVersion> <packageWithVersion>"
-                            + "<javaSource> [<encoding>]" );
+    private static void usage() {
+        System.err.println("Usage: modello <model> <outputType> <output directory> <modelVersion> <packageWithVersion>"
+                + "<javaSource> [<encoding>]");
     }
 }

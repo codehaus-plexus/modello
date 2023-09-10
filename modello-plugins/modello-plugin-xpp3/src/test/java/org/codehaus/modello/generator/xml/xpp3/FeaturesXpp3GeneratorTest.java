@@ -22,39 +22,34 @@ package org.codehaus.modello.generator.xml.xpp3;
  * SOFTWARE.
  */
 
+import java.util.Properties;
+
 import org.codehaus.modello.AbstractModelloJavaGeneratorTest;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
 
-import java.util.Properties;
-
 /**
  * @author Hervé Boutemy
  */
-public class FeaturesXpp3GeneratorTest
-    extends AbstractModelloJavaGeneratorTest
-{
-    public FeaturesXpp3GeneratorTest()
-    {
-        super( "features" );
+public class FeaturesXpp3GeneratorTest extends AbstractModelloJavaGeneratorTest {
+    public FeaturesXpp3GeneratorTest() {
+        super("features");
     }
 
-    public void testJavaGenerator()
-        throws Throwable
-    {
-        ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
+    public void testJavaGenerator() throws Throwable {
+        ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
 
-        Model model = modello.loadModel( getXmlResourceReader( "/features.mdo" ) );
+        Model model = modello.loadModel(getXmlResourceReader("/features.mdo"));
 
-        Properties parameters = getModelloParameters( "1.0.0" );
+        Properties parameters = getModelloParameters("1.0.0");
 
-        modello.generate( model, "java", parameters );
-        modello.generate( model, "xpp3-writer", parameters );
-        modello.generate( model, "xpp3-reader", parameters );
+        modello.generate(model, "java", parameters);
+        modello.generate(model, "xpp3-writer", parameters);
+        modello.generate(model, "xpp3-reader", parameters);
 
-        addDependency( "org.xmlunit", "xmlunit-core" );
-        compileGeneratedSources( 5 );
+        addDependency("org.xmlunit", "xmlunit-core");
+        compileGeneratedSources(5);
 
-        verifyCompiledGeneratedSources( "org.codehaus.modello.generator.xml.xpp3.Xpp3FeaturesVerifier" );
+        verifyCompiledGeneratedSources("org.codehaus.modello.generator.xml.xpp3.Xpp3FeaturesVerifier");
     }
 }

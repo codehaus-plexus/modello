@@ -22,6 +22,9 @@ package org.codehaus.modello.plugin.dom4j;
  * SOFTWARE.
  */
 
+import java.util.List;
+import java.util.Properties;
+
 import org.codehaus.modello.AbstractModelloJavaGeneratorTest;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
@@ -30,70 +33,61 @@ import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.Version;
 import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
 
-import java.util.List;
-import java.util.Properties;
-
 /**
  * Test the generators.
  *
  * @author <a href="mailto:brett@codehaus.org">Brett Porter</a>
  */
-public class Dom4jGeneratorTest
-    extends AbstractModelloJavaGeneratorTest
-{
-    public Dom4jGeneratorTest()
-    {
-        super( "dom4j" );
+public class Dom4jGeneratorTest extends AbstractModelloJavaGeneratorTest {
+    public Dom4jGeneratorTest() {
+        super("dom4j");
     }
 
-    public void testDom4jGenerator()
-        throws Throwable
-    {
-        ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
+    public void testDom4jGenerator() throws Throwable {
+        ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
 
-        Model model = modello.loadModel( getXmlResourceReader( "/maven.mdo" ) );
+        Model model = modello.loadModel(getXmlResourceReader("/maven.mdo"));
 
-        List<ModelClass> classesList = model.getClasses( new Version( "4.0.0" ) );
+        List<ModelClass> classesList = model.getClasses(new Version("4.0.0"));
 
-        assertEquals( 27, classesList.size() );
+        assertEquals(27, classesList.size());
 
-        ModelClass clazz = (ModelClass) classesList.get( 0 );
+        ModelClass clazz = (ModelClass) classesList.get(0);
 
-        assertEquals( "Model", clazz.getName() );
+        assertEquals("Model", clazz.getName());
 
-        ModelField extend = clazz.getField( "extend", new Version( "4.0.0" ) );
+        ModelField extend = clazz.getField("extend", new Version("4.0.0"));
 
-        assertTrue( extend.hasMetadata( XmlFieldMetadata.ID ) );
+        assertTrue(extend.hasMetadata(XmlFieldMetadata.ID));
 
-        XmlFieldMetadata xml = (XmlFieldMetadata) extend.getMetadata( XmlFieldMetadata.ID );
+        XmlFieldMetadata xml = (XmlFieldMetadata) extend.getMetadata(XmlFieldMetadata.ID);
 
-        assertNotNull( xml );
+        assertNotNull(xml);
 
-        assertTrue( xml.isAttribute() );
+        assertTrue(xml.isAttribute());
 
-        assertEquals( "extender", xml.getTagName() );
+        assertEquals("extender", xml.getTagName());
 
-        ModelField build = clazz.getField( "build", new Version( "4.0.0" ) );
+        ModelField build = clazz.getField("build", new Version("4.0.0"));
 
-        assertTrue( build.hasMetadata( XmlFieldMetadata.ID ) );
+        assertTrue(build.hasMetadata(XmlFieldMetadata.ID));
 
-        xml = (XmlFieldMetadata) build.getMetadata( XmlFieldMetadata.ID );
+        xml = (XmlFieldMetadata) build.getMetadata(XmlFieldMetadata.ID);
 
-        assertNotNull( xml );
+        assertNotNull(xml);
 
-        assertEquals( "builder", xml.getTagName() );
+        assertEquals("builder", xml.getTagName());
 
-        Properties parameters = getModelloParameters( "4.0.0" );
+        Properties parameters = getModelloParameters("4.0.0");
 
-        modello.generate( model, "java", parameters );
-        modello.generate( model, "dom4j-writer", parameters );
-        modello.generate( model, "dom4j-reader", parameters );
+        modello.generate(model, "java", parameters);
+        modello.generate(model, "dom4j-writer", parameters);
+        modello.generate(model, "dom4j-reader", parameters);
 
-        addDependency( "dom4j", "dom4j" );
+        addDependency("dom4j", "dom4j");
 
         compileGeneratedSources();
 
-        verifyCompiledGeneratedSources( "org.codehaus.modello.generator.xml.dom4j.Dom4jVerifier" );
+        verifyCompiledGeneratedSources("org.codehaus.modello.generator.xml.dom4j.Dom4jVerifier");
     }
-
 }

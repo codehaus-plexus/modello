@@ -25,23 +25,18 @@ package org.codehaus.modello.verifier;
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  */
-public class VerifierException
-    extends RuntimeException
-{
+public class VerifierException extends RuntimeException {
     private static final long serialVersionUID = 104760798383307575L;
 
-    public VerifierException( String msg )
-    {
-        super( msg );
+    public VerifierException(String msg) {
+        super(msg);
     }
 
-    public VerifierException( String msg, Exception ex )
-    {
-        super( msg, ex );
+    public VerifierException(String msg, Exception ex) {
+        super(msg, ex);
     }
 
-    public VerifierException( String msg, Throwable throwable )
-    {
-        super( msg, throwable );
+    public VerifierException(String msg, Throwable throwable) {
+        super(msg, throwable);
     }
 }

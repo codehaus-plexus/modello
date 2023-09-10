@@ -44,6 +44,7 @@ import org.codehaus.modello.model.ModelDefault;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.Version;
 import org.codehaus.modello.model.VersionRange;
+import org.codehaus.modello.plugin.ModelloGenerator;
 import org.codehaus.modello.plugin.xdoc.metadata.XdocClassMetadata;
 import org.codehaus.modello.plugin.xdoc.metadata.XdocFieldMetadata;
 import org.codehaus.modello.plugin.xsd.XsdModelHelper;
@@ -52,6 +53,7 @@ import org.codehaus.modello.plugins.xml.metadata.XmlAssociationMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlClassMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlModelMetadata;
+import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.WriterFactory;
 import org.codehaus.plexus.util.xml.PrettyPrintXMLWriter;
@@ -63,101 +65,88 @@ import org.jsoup.nodes.Document;
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
  * @author <a href="mailto:emmanuel@venisse.net">Emmanuel Venisse</a>
  */
-public class XdocGenerator
-    extends AbstractXmlGenerator
-{
-    private static final VersionRange DEFAULT_VERSION_RANGE = new VersionRange( "0.0.0+" );
+@Component(role = ModelloGenerator.class, hint = "xdoc")
+public class XdocGenerator extends AbstractXmlGenerator {
+    private static final VersionRange DEFAULT_VERSION_RANGE = new VersionRange("0.0.0+");
 
     private Version firstVersion = DEFAULT_VERSION_RANGE.getFromVersion();
 
     private Version version = DEFAULT_VERSION_RANGE.getFromVersion();
 
-    public void generate( Model model, Properties parameters )
-        throws ModelloException
-    {
-        initialize( model, parameters );
+    public void generate(Model model, Properties parameters) throws ModelloException {
+        initialize(model, parameters);
 
-        if ( parameters.getProperty( ModelloParameterConstants.FIRST_VERSION ) != null )
-        {
-            firstVersion = new Version( parameters.getProperty( ModelloParameterConstants.FIRST_VERSION ) );
+        if (parameters.getProperty(ModelloParameterConstants.FIRST_VERSION) != null) {
+            firstVersion = new Version(parameters.getProperty(ModelloParameterConstants.FIRST_VERSION));
         }
 
-        if ( parameters.getProperty( ModelloParameterConstants.VERSION ) != null )
-        {
-            version = new Version( parameters.getProperty( ModelloParameterConstants.VERSION ) );
+        if (parameters.getProperty(ModelloParameterConstants.VERSION) != null) {
+            version = new Version(parameters.getProperty(ModelloParameterConstants.VERSION));
         }
 
-        try
-        {
-            generateXdoc( parameters );
-        }
-        catch ( IOException ex )
-        {
-            throw new ModelloException( "Exception while generating XDoc.", ex );
+        try {
+            generateXdoc(parameters);
+        } catch (IOException ex) {
+            throw new ModelloException("Exception while generating XDoc.", ex);
         }
     }
 
-    private void generateXdoc( Properties parameters )
-        throws IOException
-    {
+    private void generateXdoc(Properties parameters) throws IOException {
         Model objectModel = getModel();
 
         File directory = getOutputDirectory();
 
-        if ( isPackageWithVersion() )
-        {
-            directory = new File( directory, getGeneratedVersion().toString() );
+        if (isPackageWithVersion()) {
+            directory = new File(directory, getGeneratedVersion().toString());
         }
 
-        if ( !directory.exists() )
-        {
+        if (!directory.exists()) {
             directory.mkdirs();
         }
 
         // we assume parameters not null
-        String xdocFileName = parameters.getProperty( ModelloParameterConstants.OUTPUT_XDOC_FILE_NAME );
+        String xdocFileName = parameters.getProperty(ModelloParameterConstants.OUTPUT_XDOC_FILE_NAME);
 
-        File f = new File( directory, objectModel.getId() + ".xml" );
+        File f = new File(directory, objectModel.getId() + ".xml");
 
-        if ( xdocFileName != null )
-        {
-            f = new File( directory, xdocFileName );
+        if (xdocFileName != null) {
+            f = new File(directory, xdocFileName);
         }
 
-        Writer writer = WriterFactory.newXmlWriter( f );
+        Writer writer = WriterFactory.newXmlWriter(f);
 
-        XMLWriter w = new PrettyPrintXMLWriter( writer );
+        XMLWriter w = new PrettyPrintXMLWriter(writer);
 
-        writer.write( "<?xml version=\"1.0\"?>\n" );
+        writer.write("<?xml version=\"1.0\"?>\n");
 
-        initHeader( w );
+        initHeader(w);
 
-        w.startElement( "document" );
+        w.startElement("document");
 
-        w.startElement( "properties" );
+        w.startElement("properties");
 
-        writeTextElement( w, "title", objectModel.getName() );
+        writeTextElement(w, "title", objectModel.getName());
 
         w.endElement();
 
         // Body
 
-        w.startElement( "body" );
+        w.startElement("body");
 
-        w.startElement( "section" );
+        w.startElement("section");
 
-        w.addAttribute( "name", objectModel.getName() );
+        w.addAttribute("name", objectModel.getName());
 
-        writeMarkupElement( w, "p", getDescription( objectModel ) );
+        writeMarkupElement(w, "p", getDescription(objectModel));
 
         // XML representation of the model with links
-        ModelClass root = objectModel.getClass( objectModel.getRoot( getGeneratedVersion() ), getGeneratedVersion() );
+        ModelClass root = objectModel.getClass(objectModel.getRoot(getGeneratedVersion()), getGeneratedVersion());
 
-        writeMarkupElement( w, "source", "\n" + getModelXmlDescriptor( root ) );
+        writeMarkupElement(w, "source", "\n" + getModelXmlDescriptor(root));
 
         // Element descriptors
         // Traverse from root so "abstract" models aren't included
-        writeModelDescriptor( w, root );
+        writeModelDescriptor(w, root);
 
         w.endElement();
 
@@ -177,13 +166,12 @@ public class XdocGenerator
      * @param modelClass the model class, that eventually can have customized anchor name
      * @return the corresponding anchor name
      */
-    private String getAnchorName( String tagName, ModelClass modelClass )
-    {
-        XdocClassMetadata xdocClassMetadata = (XdocClassMetadata) modelClass.getMetadata( XdocClassMetadata.ID );
+    private String getAnchorName(String tagName, ModelClass modelClass) {
+        XdocClassMetadata xdocClassMetadata = (XdocClassMetadata) modelClass.getMetadata(XdocClassMetadata.ID);
 
         String anchorName = xdocClassMetadata.getAnchorName();
 
-        return "class_" + ( anchorName == null ? tagName : anchorName );
+        return "class_" + (anchorName == null ? tagName : anchorName);
     }
 
     /**
@@ -192,9 +180,8 @@ public class XdocGenerator
      * @param w the output writer
      * @param rootModelClass the root class of the model
      */
-    private void writeModelDescriptor( XMLWriter w, ModelClass rootModelClass )
-    {
-        writeElementDescriptor( w, rootModelClass, null, new HashSet<>(), new HashMap<>() );
+    private void writeModelDescriptor(XMLWriter w, ModelClass rootModelClass) {
+        writeElementDescriptor(w, rootModelClass, null, new HashSet<>(), new HashMap<>());
     }
 
     /**
@@ -206,86 +193,80 @@ public class XdocGenerator
      * @param writtenIds set of data already written ids
      * @param writtenAnchors map of already written anchors with corresponding ids
      */
-    private void writeElementDescriptor( XMLWriter w, ModelClass modelClass, ModelAssociation association,
-                                         Set<String> writtenIds, Map<String, String> writtenAnchors )
-    {
-        String tagName = resolveTagName( modelClass, association );
+    private void writeElementDescriptor(
+            XMLWriter w,
+            ModelClass modelClass,
+            ModelAssociation association,
+            Set<String> writtenIds,
+            Map<String, String> writtenAnchors) {
+        String tagName = resolveTagName(modelClass, association);
 
-        String id = getId( tagName, modelClass );
-        if ( writtenIds.contains( id ) )
-        {
+        String id = getId(tagName, modelClass);
+        if (writtenIds.contains(id)) {
             // tag already written for this model class accessed as this tag name
             return;
         }
-        writtenIds.add( id );
+        writtenIds.add(id);
 
-        String anchorName = getAnchorName( tagName, modelClass );
-        if ( writtenAnchors.containsKey( anchorName ) )
-        {
+        String anchorName = getAnchorName(tagName, modelClass);
+        if (writtenAnchors.containsKey(anchorName)) {
             // TODO use logging API?
-            System.out.println( "[warn] model class " + id + " with tagName " + tagName + " gets duplicate anchorName "
-                + anchorName + ", conflicting with model class " + writtenAnchors.get( anchorName ) );
-        }
-        else
-        {
-            writtenAnchors.put( anchorName, id );
+            System.out.println("[warn] model class " + id + " with tagName " + tagName + " gets duplicate anchorName "
+                    + anchorName + ", conflicting with model class " + writtenAnchors.get(anchorName));
+        } else {
+            writtenAnchors.put(anchorName, id);
         }
 
-        w.startElement( "a" );
+        w.startElement("a");
 
-        w.addAttribute( "name", anchorName );
+        w.addAttribute("name", anchorName);
 
         w.endElement();
 
-        w.startElement( "subsection" );
+        w.startElement("subsection");
 
-        w.addAttribute( "name", tagName );
+        w.addAttribute("name", tagName);
 
-        writeMarkupElement( w, "p", getDescription( modelClass ) );
+        writeMarkupElement(w, "p", getDescription(modelClass));
 
-        List<ModelField> elementFields = getFieldsForXml( modelClass, getGeneratedVersion() );
+        List<ModelField> elementFields = getFieldsForXml(modelClass, getGeneratedVersion());
 
-        ModelField contentField = getContentField( elementFields );
+        ModelField contentField = getContentField(elementFields);
 
-        if ( contentField != null )
-        {
+        if (contentField != null) {
             // this model class has a Content field
-            w.startElement( "p" );
+            w.startElement("p");
 
-            writeTextElement( w, "b", "Element Content: " );
+            writeTextElement(w, "b", "Element Content: ");
 
-            w.writeMarkup( getDescription( contentField ) );
+            w.writeMarkup(getDescription(contentField));
 
             w.endElement();
         }
 
-        List<ModelField> attributeFields = getXmlAttributeFields( elementFields );
+        List<ModelField> attributeFields = getXmlAttributeFields(elementFields);
 
-        elementFields.removeAll( attributeFields );
+        elementFields.removeAll(attributeFields);
 
-        writeFieldsTable( w, attributeFields, false ); // write attributes
-        writeFieldsTable( w, elementFields, true ); // write elements
+        writeFieldsTable(w, attributeFields, false); // write attributes
+        writeFieldsTable(w, elementFields, true); // write elements
 
         w.endElement();
 
         // check every fields that are inner associations to write their element descriptor
-        for ( ModelField f : elementFields )
-        {
-            if ( isInnerAssociation( f ) )
-            {
+        for (ModelField f : elementFields) {
+            if (isInnerAssociation(f)) {
                 ModelAssociation assoc = (ModelAssociation) f;
-                ModelClass fieldModelClass = getModel().getClass( assoc.getTo(), getGeneratedVersion() );
+                ModelClass fieldModelClass = getModel().getClass(assoc.getTo(), getGeneratedVersion());
 
-                if ( !writtenIds.contains( getId( resolveTagName( fieldModelClass, assoc ), fieldModelClass ) ) )
-                {
-                    writeElementDescriptor( w, fieldModelClass, assoc, writtenIds, writtenAnchors );
+                if (!writtenIds.contains(getId(resolveTagName(fieldModelClass, assoc), fieldModelClass))) {
+                    writeElementDescriptor(w, fieldModelClass, assoc, writtenIds, writtenAnchors);
                 }
             }
         }
     }
 
-    private String getId( String tagName, ModelClass modelClass )
-    {
+    private String getId(String tagName, ModelClass modelClass) {
         return tagName + '/' + modelClass.getPackageName() + '.' + modelClass.getName();
     }
 
@@ -296,106 +277,87 @@ public class XdocGenerator
      * @param fields the fields to add in the table
      * @param elementFields <code>true</code> if fields are elements, <code>false</code> if fields are attributes
      */
-    private void writeFieldsTable( XMLWriter w, List<ModelField> fields, boolean elementFields )
-    {
-        if ( fields == null || fields.isEmpty() )
-        {
+    private void writeFieldsTable(XMLWriter w, List<ModelField> fields, boolean elementFields) {
+        if (fields == null || fields.isEmpty()) {
             // skip empty table
             return;
         }
 
         // skip if only one element field with xml.content == true
-        if ( elementFields && ( fields.size() == 1 ) && hasContentField( fields ) )
-        {
+        if (elementFields && (fields.size() == 1) && hasContentField(fields)) {
             return;
         }
 
-        w.startElement( "table" );
+        w.startElement("table");
 
-        w.startElement( "tr" );
+        w.startElement("tr");
 
-        writeTextElement( w, "th", elementFields ? "Element" : "Attribute" );
+        writeTextElement(w, "th", elementFields ? "Element" : "Attribute");
 
-        writeTextElement( w, "th", "Type" );
+        writeTextElement(w, "th", "Type");
 
-        boolean showSinceColumn = version.greaterThan( firstVersion );
+        boolean showSinceColumn = version.greaterThan(firstVersion);
 
-        if ( showSinceColumn )
-        {
-            writeTextElement( w, "th", "Since" );
+        if (showSinceColumn) {
+            writeTextElement(w, "th", "Since");
         }
 
-        writeTextElement( w, "th", "Description" );
+        writeTextElement(w, "th", "Description");
 
         w.endElement(); // tr
 
-        for ( ModelField f : fields )
-        {
-            XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) f.getMetadata( XmlFieldMetadata.ID );
+        for (ModelField f : fields) {
+            XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) f.getMetadata(XmlFieldMetadata.ID);
 
-            if ( xmlFieldMetadata.isContent() )
-            {
+            if (xmlFieldMetadata.isContent()) {
                 continue;
             }
 
-            w.startElement( "tr" );
+            w.startElement("tr");
 
             // Element/Attribute column
 
-            String tagName = resolveTagName( f, xmlFieldMetadata );
+            String tagName = resolveTagName(f, xmlFieldMetadata);
 
-            w.startElement( "td" );
+            w.startElement("td");
 
-            w.startElement( "code" );
+            w.startElement("code");
 
             boolean manyAssociation = false;
 
-            if ( f instanceof ModelAssociation )
-            {
+            if (f instanceof ModelAssociation) {
                 ModelAssociation assoc = (ModelAssociation) f;
 
                 XmlAssociationMetadata xmlAssociationMetadata =
-                    (XmlAssociationMetadata) assoc.getAssociationMetadata( XmlAssociationMetadata.ID );
+                        (XmlAssociationMetadata) assoc.getAssociationMetadata(XmlAssociationMetadata.ID);
 
                 manyAssociation = assoc.isManyMultiplicity();
 
-                String itemTagName = manyAssociation ? resolveTagName( tagName, xmlAssociationMetadata ) : tagName;
+                String itemTagName = manyAssociation ? resolveTagName(tagName, xmlAssociationMetadata) : tagName;
 
-                if ( manyAssociation && xmlAssociationMetadata.isWrappedItems() )
-                {
-                    w.writeText( tagName );
-                    w.writeMarkup( "/" );
+                if (manyAssociation && xmlAssociationMetadata.isWrappedItems()) {
+                    w.writeText(tagName);
+                    w.writeMarkup("/");
                 }
-                if ( isInnerAssociation( f ) )
-                {
-                    w.startElement( "a" );
-                    w.addAttribute( "href", "#" + getAnchorName( itemTagName, assoc.getToClass() ) );
-                    w.writeText( itemTagName );
+                if (isInnerAssociation(f)) {
+                    w.startElement("a");
+                    w.addAttribute("href", "#" + getAnchorName(itemTagName, assoc.getToClass()));
+                    w.writeText(itemTagName);
                     w.endElement();
-                }
-                else if ( ModelDefault.PROPERTIES.equals( f.getType() ) )
-                {
-                    if ( xmlAssociationMetadata.isMapExplode() )
-                    {
-                        w.writeText( "(key,value)" );
+                } else if (ModelDefault.PROPERTIES.equals(f.getType())) {
+                    if (xmlAssociationMetadata.isMapExplode()) {
+                        w.writeText("(key,value)");
+                    } else {
+                        w.writeMarkup("<i>key</i>=<i>value</i>");
                     }
-                    else
-                    {
-                        w.writeMarkup( "<i>key</i>=<i>value</i>" );
-                    }
+                } else {
+                    w.writeText(itemTagName);
                 }
-                else
-                {
-                    w.writeText( itemTagName );
+                if (manyAssociation) {
+                    w.writeText("*");
                 }
-                if ( manyAssociation )
-                {
-                    w.writeText( "*" );
-                }
-            }
-            else
-            {
-                w.writeText( tagName );
+            } else {
+                w.writeText(tagName);
             }
 
             w.endElement(); // code
@@ -404,31 +366,24 @@ public class XdocGenerator
 
             // Type column
 
-            w.startElement( "td" );
+            w.startElement("td");
 
-            w.startElement( "code" );
+            w.startElement("code");
 
-            if ( f instanceof ModelAssociation )
-            {
+            if (f instanceof ModelAssociation) {
                 ModelAssociation assoc = (ModelAssociation) f;
 
-                if ( assoc.isOneMultiplicity() )
-                {
-                    w.writeText( assoc.getTo() );
-                }
-                else
-                {
-                    w.writeText( assoc.getType().substring( "java.util.".length() ) );
+                if (assoc.isOneMultiplicity()) {
+                    w.writeText(assoc.getTo());
+                } else {
+                    w.writeText(assoc.getType().substring("java.util.".length()));
 
-                    if ( assoc.isGenericType() )
-                    {
-                        w.writeText( "<" + assoc.getTo() + ">" );
+                    if (assoc.isGenericType()) {
+                        w.writeText("<" + assoc.getTo() + ">");
                     }
                 }
-            }
-            else
-            {
-                w.writeText( f.getType() );
+            } else {
+                w.writeText(f.getType());
             }
 
             w.endElement(); // code
@@ -437,16 +392,13 @@ public class XdocGenerator
 
             // Since column
 
-            if ( showSinceColumn )
-            {
-                w.startElement( "td" );
+            if (showSinceColumn) {
+                w.startElement("td");
 
-                if ( f.getVersionRange() != null )
-                {
+                if (f.getVersionRange() != null) {
                     Version fromVersion = f.getVersionRange().getFromVersion();
-                    if ( fromVersion != null && fromVersion.greaterThan( firstVersion ) )
-                    {
-                        w.writeMarkup( fromVersion.toString() );
+                    if (fromVersion != null && fromVersion.greaterThan(firstVersion)) {
+                        w.writeMarkup(fromVersion.toString());
                     }
                 }
 
@@ -455,26 +407,22 @@ public class XdocGenerator
 
             // Description column
 
-            w.startElement( "td" );
+            w.startElement("td");
 
-            if ( manyAssociation )
-            {
-                w.writeMarkup( "<b>(Many)</b> " );
+            if (manyAssociation) {
+                w.writeMarkup("<b>(Many)</b> ");
             }
 
-            w.writeMarkup( getDescription( f ) );
+            w.writeMarkup(getDescription(f));
 
             // Write the default value, if it exists.
             // But only for fields that are not a ModelAssociation
-            if ( f.getDefaultValue() != null && !( f instanceof ModelAssociation ) )
-            {
-                w.writeMarkup( "<p><strong>Default value is</strong>: " );
+            if (f.getDefaultValue() != null && !(f instanceof ModelAssociation)) {
+                w.writeMarkup("<p><strong>Default value</strong>: ");
 
-                writeTextElement( w, "code", f.getDefaultValue() );
+                writeTextElement(w, "code", f.getDefaultValue());
 
-                w.writeMarkup( "</p>");
-
-                w.writeText( "." );
+                w.writeMarkup("</p>");
             }
 
             w.endElement(); // td
@@ -483,7 +431,6 @@ public class XdocGenerator
         }
 
         w.endElement(); // table
-
     }
 
     /**
@@ -492,9 +439,8 @@ public class XdocGenerator
      * @param rootModelClass the model root class
      * @return the String representing the tree model
      */
-    private String getModelXmlDescriptor( ModelClass rootModelClass )
-    {
-        return getElementXmlDescriptor( rootModelClass, null, new Stack<String>() );
+    private String getModelXmlDescriptor(ModelClass rootModelClass) {
+        return getElementXmlDescriptor(rootModelClass, null, new Stack<String>());
     }
 
     /**
@@ -506,181 +452,154 @@ public class XdocGenerator
      * @return the String representing the tree model
      * @throws ModelloRuntimeException
      */
-    private String getElementXmlDescriptor( ModelClass modelClass, ModelAssociation association, Stack<String> stack )
-        throws ModelloRuntimeException
-    {
+    private String getElementXmlDescriptor(ModelClass modelClass, ModelAssociation association, Stack<String> stack)
+            throws ModelloRuntimeException {
         StringBuilder sb = new StringBuilder();
 
-        appendSpacer( sb, stack.size() );
+        appendSpacer(sb, stack.size());
 
-        String tagName = resolveTagName( modelClass, association );
+        String tagName = resolveTagName(modelClass, association);
 
         // <tagName
-        sb.append( "&lt;<a href=\"#" ).append( getAnchorName( tagName, modelClass ) ).append( "\">" );
-        sb.append( tagName ).append( "</a>" );
+        sb.append("&lt;<a href=\"#").append(getAnchorName(tagName, modelClass)).append("\">");
+        sb.append(tagName).append("</a>");
 
         boolean addNewline = false;
-        if ( stack.size() == 0 )
-        {
+        if (stack.size() == 0) {
             // try to add XML Schema reference
-            try
-            {
-                String targetNamespace = XsdModelHelper.getTargetNamespace( modelClass.getModel(), getGeneratedVersion() );
+            try {
+                String targetNamespace =
+                        XsdModelHelper.getTargetNamespace(modelClass.getModel(), getGeneratedVersion());
 
-                XmlModelMetadata xmlModelMetadata = (XmlModelMetadata) modelClass.getModel().getMetadata( XmlModelMetadata.ID );
+                XmlModelMetadata xmlModelMetadata =
+                        (XmlModelMetadata) modelClass.getModel().getMetadata(XmlModelMetadata.ID);
 
-                if ( StringUtils.isNotBlank( targetNamespace ) && ( xmlModelMetadata.getSchemaLocation() != null ) )
-                {
-                    String schemaLocation = xmlModelMetadata.getSchemaLocation( getGeneratedVersion() );
+                if (StringUtils.isNotBlank(targetNamespace) && (xmlModelMetadata.getSchemaLocation() != null)) {
+                    String schemaLocation = xmlModelMetadata.getSchemaLocation(getGeneratedVersion());
 
-                    sb.append( " xmlns=\"" + targetNamespace + "\"" );
-                    sb.append( " xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n" );
-                    sb.append( "  xsi:schemaLocation=\"" + targetNamespace );
-                    sb.append( " <a href=\"" + schemaLocation + "\">" + schemaLocation + "</a>\"" );
+                    sb.append(" xmlns=\"" + targetNamespace + "\"");
+                    sb.append(" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n");
+                    sb.append("  xsi:schemaLocation=\"" + targetNamespace);
+                    sb.append(" <a href=\"" + schemaLocation + "\">" + schemaLocation + "</a>\"");
 
                     addNewline = true;
                 }
-            }
-            catch ( ModelloException me )
-            {
+            } catch (ModelloException me) {
                 // ignore unavailable XML Schema configuration
             }
         }
 
         String id = tagName + '/' + modelClass.getPackageName() + '.' + modelClass.getName();
-        if ( stack.contains( id ) )
-        {
+        if (stack.contains(id)) {
             // recursion detected
-            sb.append( "&gt;...recursion...&lt;" ).append( tagName ).append( "&gt;\n" );
+            sb.append("&gt;...recursion...&lt;").append(tagName).append("&gt;\n");
             return sb.toString();
         }
 
-        List<ModelField> fields = getFieldsForXml( modelClass, getGeneratedVersion() );
+        List<ModelField> fields = getFieldsForXml(modelClass, getGeneratedVersion());
 
-        List<ModelField> attributeFields = getXmlAttributeFields( fields );
+        List<ModelField> attributeFields = getXmlAttributeFields(fields);
 
-        if ( attributeFields.size() > 0 )
-        {
+        if (attributeFields.size() > 0) {
 
-            for ( ModelField f : attributeFields )
-            {
-                XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) f.getMetadata( XmlFieldMetadata.ID );
+            for (ModelField f : attributeFields) {
+                XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) f.getMetadata(XmlFieldMetadata.ID);
 
-                if ( addNewline )
-                {
+                if (addNewline) {
                     addNewline = false;
 
-                    sb.append( "\n  " );
-                }
-                else
-                {
-                    sb.append( ' ' );
+                    sb.append("\n  ");
+                } else {
+                    sb.append(' ');
                 }
 
-                sb.append( resolveTagName( f, xmlFieldMetadata ) ).append( "=.." );
+                sb.append(resolveTagName(f, xmlFieldMetadata)).append("=..");
             }
 
-            sb.append( ' ' );
-
+            sb.append(' ');
         }
 
-        fields.removeAll( attributeFields );
+        fields.removeAll(attributeFields);
 
-        if ( ( fields.size() == 0 ) || ( ( fields.size() == 1 ) && hasContentField( fields ) ) )
-        {
-            sb.append( "/&gt;\n" );
-        }
-        else
-        {
-            sb.append( "&gt;\n" );
+        if ((fields.size() == 0) || ((fields.size() == 1) && hasContentField(fields))) {
+            sb.append("/&gt;\n");
+        } else {
+            sb.append("&gt;\n");
 
-            stack.push( id );
+            stack.push(id);
 
-            for ( ModelField f : fields )
-            {
-                XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) f.getMetadata( XmlFieldMetadata.ID );
+            for (ModelField f : fields) {
+                XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) f.getMetadata(XmlFieldMetadata.ID);
 
-                XdocFieldMetadata xdocFieldMetadata = (XdocFieldMetadata) f.getMetadata( XdocFieldMetadata.ID );
+                XdocFieldMetadata xdocFieldMetadata = (XdocFieldMetadata) f.getMetadata(XdocFieldMetadata.ID);
 
-                if ( XdocFieldMetadata.BLANK.equals( xdocFieldMetadata.getSeparator() ) )
-                {
-                    sb.append( '\n' );
+                if (XdocFieldMetadata.BLANK.equals(xdocFieldMetadata.getSeparator())) {
+                    sb.append('\n');
                 }
 
-                String fieldTagName = resolveTagName( f, xmlFieldMetadata );
+                String fieldTagName = resolveTagName(f, xmlFieldMetadata);
 
-                if ( isInnerAssociation( f ) )
-                {
+                if (isInnerAssociation(f)) {
                     ModelAssociation assoc = (ModelAssociation) f;
 
                     boolean wrappedItems = false;
-                    if ( assoc.isManyMultiplicity() )
-                    {
+                    if (assoc.isManyMultiplicity()) {
                         XmlAssociationMetadata xmlAssociationMetadata =
-                            (XmlAssociationMetadata) assoc.getAssociationMetadata( XmlAssociationMetadata.ID );
+                                (XmlAssociationMetadata) assoc.getAssociationMetadata(XmlAssociationMetadata.ID);
                         wrappedItems = xmlAssociationMetadata.isWrappedItems();
                     }
 
-                    if ( wrappedItems )
-                    {
-                        appendSpacer( sb, stack.size() );
+                    if (wrappedItems) {
+                        appendSpacer(sb, stack.size());
 
-                        sb.append( "&lt;" ).append( fieldTagName ).append( "&gt;\n" );
+                        sb.append("&lt;").append(fieldTagName).append("&gt;\n");
 
-                        stack.push( fieldTagName );
+                        stack.push(fieldTagName);
                     }
 
-                    ModelClass fieldModelClass = getModel().getClass( assoc.getTo(), getGeneratedVersion() );
+                    ModelClass fieldModelClass = getModel().getClass(assoc.getTo(), getGeneratedVersion());
 
-                    sb.append( getElementXmlDescriptor( fieldModelClass, assoc, stack ) );
+                    sb.append(getElementXmlDescriptor(fieldModelClass, assoc, stack));
 
-                    if ( wrappedItems )
-                    {
+                    if (wrappedItems) {
                         stack.pop();
 
-                        appendSpacer( sb, stack.size() );
+                        appendSpacer(sb, stack.size());
 
-                        sb.append( "&lt;/" ).append( fieldTagName ).append( "&gt;\n" );
+                        sb.append("&lt;/").append(fieldTagName).append("&gt;\n");
                     }
-                }
-                else if ( ModelDefault.PROPERTIES.equals( f.getType() ) )
-                {
+                } else if (ModelDefault.PROPERTIES.equals(f.getType())) {
                     ModelAssociation assoc = (ModelAssociation) f;
                     XmlAssociationMetadata xmlAssociationMetadata =
-                        (XmlAssociationMetadata) assoc.getAssociationMetadata( XmlAssociationMetadata.ID );
+                            (XmlAssociationMetadata) assoc.getAssociationMetadata(XmlAssociationMetadata.ID);
 
-                    appendSpacer( sb, stack.size() );
-                    sb.append( "&lt;" ).append( fieldTagName ).append( "&gt;\n" );
+                    appendSpacer(sb, stack.size());
+                    sb.append("&lt;").append(fieldTagName).append("&gt;\n");
 
-                    if ( xmlAssociationMetadata.isMapExplode() )
-                    {
-                        appendSpacer( sb, stack.size() + 1 );
-                        sb.append( "&lt;key/&gt;\n" );
-                        appendSpacer( sb, stack.size() + 1 );
-                        sb.append( "&lt;value/&gt;\n" );
-                    }
-                    else
-                    {
-                        appendSpacer( sb, stack.size() + 1 );
-                        sb.append( "&lt;<i>key</i>&gt;<i>value</i>&lt;/<i>key</i>&gt;\n" );
+                    if (xmlAssociationMetadata.isMapExplode()) {
+                        appendSpacer(sb, stack.size() + 1);
+                        sb.append("&lt;key/&gt;\n");
+                        appendSpacer(sb, stack.size() + 1);
+                        sb.append("&lt;value/&gt;\n");
+                    } else {
+                        appendSpacer(sb, stack.size() + 1);
+                        sb.append("&lt;<i>key</i>&gt;<i>value</i>&lt;/<i>key</i>&gt;\n");
                     }
 
-                    appendSpacer( sb, stack.size() );
-                    sb.append( "&lt;/" ).append( fieldTagName ).append( "&gt;\n" );
-                }
-                else
-                {
-                    appendSpacer( sb, stack.size() );
+                    appendSpacer(sb, stack.size());
+                    sb.append("&lt;/").append(fieldTagName).append("&gt;\n");
+                } else {
+                    appendSpacer(sb, stack.size());
 
-                    sb.append( "&lt;" ).append( fieldTagName ).append( "/&gt;\n" );
+                    sb.append("&lt;").append(fieldTagName).append("/&gt;\n");
                 }
             }
 
             stack.pop();
 
-            appendSpacer( sb, stack.size() );
+            appendSpacer(sb, stack.size());
 
-            sb.append( "&lt;/" ).append( tagName ).append( "&gt;\n" );
+            sb.append("&lt;/").append(tagName).append("&gt;\n");
         }
 
         return sb.toString();
@@ -693,52 +612,38 @@ public class XdocGenerator
      * @return the tag name to use
      * @todo refactor to use XmlModelHelpers.resolveTagName helpers instead
      */
-    private String resolveTagName( ModelClass modelClass, ModelAssociation association )
-    {
-        XmlClassMetadata xmlClassMetadata = (XmlClassMetadata) modelClass.getMetadata( XmlClassMetadata.ID );
+    private String resolveTagName(ModelClass modelClass, ModelAssociation association) {
+        XmlClassMetadata xmlClassMetadata = (XmlClassMetadata) modelClass.getMetadata(XmlClassMetadata.ID);
 
         String tagName;
-        if ( xmlClassMetadata == null || xmlClassMetadata.getTagName() == null )
-        {
-            if ( association == null )
-            {
-                tagName = uncapitalise( modelClass.getName() );
-            }
-            else
-            {
+        if (xmlClassMetadata == null || xmlClassMetadata.getTagName() == null) {
+            if (association == null) {
+                tagName = uncapitalise(modelClass.getName());
+            } else {
                 tagName = association.getName();
 
-                if ( association.isManyMultiplicity() )
-                {
-                    tagName = singular( tagName );
+                if (association.isManyMultiplicity()) {
+                    tagName = singular(tagName);
                 }
             }
-        }
-        else
-        {
+        } else {
             tagName = xmlClassMetadata.getTagName();
         }
 
-        if ( association != null )
-        {
-            XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) association.getMetadata( XmlFieldMetadata.ID );
+        if (association != null) {
+            XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) association.getMetadata(XmlFieldMetadata.ID);
 
             XmlAssociationMetadata xmlAssociationMetadata =
-                (XmlAssociationMetadata) association.getAssociationMetadata( XmlAssociationMetadata.ID );
+                    (XmlAssociationMetadata) association.getAssociationMetadata(XmlAssociationMetadata.ID);
 
-            if ( xmlFieldMetadata != null )
-            {
-                if ( xmlAssociationMetadata.getTagName() != null )
-                {
+            if (xmlFieldMetadata != null) {
+                if (xmlAssociationMetadata.getTagName() != null) {
                     tagName = xmlAssociationMetadata.getTagName();
-                }
-                else if ( xmlFieldMetadata.getTagName() != null )
-                {
+                } else if (xmlFieldMetadata.getTagName() != null) {
                     tagName = xmlFieldMetadata.getTagName();
 
-                    if ( association.isManyMultiplicity() )
-                    {
-                        tagName = singular( tagName );
+                    if (association.isManyMultiplicity()) {
+                        tagName = singular(tagName);
                     }
                 }
             }
@@ -752,43 +657,37 @@ public class XdocGenerator
      * @param sb where to append the spacers
      * @param depth the depth of spacers to generate
      */
-    private static void appendSpacer( StringBuilder sb, int depth )
-    {
-        for ( int i = 0; i < depth; i++ )
-        {
-            sb.append( "  " );
+    private static void appendSpacer(StringBuilder sb, int depth) {
+        for (int i = 0; i < depth; i++) {
+            sb.append("  ");
         }
     }
 
-    private static String getDescription( BaseElement element )
-    {
-        return ( element.getDescription() == null ) ? "No description." : rewrite( element.getDescription() );
+    private static String getDescription(BaseElement element) {
+        return (element.getDescription() == null) ? "No description." : rewrite(element.getDescription());
     }
 
-    private static void writeTextElement( XMLWriter w, String name, String text )
-    {
-        w.startElement( name );
-        w.writeText( text );
+    private static void writeTextElement(XMLWriter w, String name, String text) {
+        w.startElement(name);
+        w.writeText(text);
         w.endElement();
     }
 
-    private static void writeMarkupElement( XMLWriter w, String name, String markup )
-    {
-        w.startElement( name );
-        w.writeMarkup( markup );
+    private static void writeMarkupElement(XMLWriter w, String name, String markup) {
+        w.startElement(name);
+        w.writeMarkup(markup);
         w.endElement();
     }
-    
+
     /**
      * Ensures that text will have balanced tags
-     * 
+     *
      * @param text xml or html based content
      * @return valid XML string
      */
-    private static String rewrite( String text )
-    {
-        Document document = Jsoup.parseBodyFragment( text );
-        document.outputSettings().syntax( Document.OutputSettings.Syntax.xml );
+    private static String rewrite(String text) {
+        Document document = Jsoup.parseBodyFragment(text);
+        document.outputSettings().syntax(Document.OutputSettings.Syntax.xml);
         return document.body().html();
     }
 }

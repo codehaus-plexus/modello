@@ -27,8 +27,7 @@ package org.codehaus.modello.model;
  *
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
  */
-public class ModelDefault
-{
+public class ModelDefault {
     public static final String CHECK_DEPRECATION = "checkDeprecation";
 
     public static final String CHECK_DEPRECATION_VALUE = "false";
@@ -61,107 +60,79 @@ public class ModelDefault
 
     private String value;
 
-    public static ModelDefault getDefault( String key )
-        throws ModelValidationException
-    {
-        validateKey( key );
+    public static ModelDefault getDefault(String key) throws ModelValidationException {
+        validateKey(key);
 
         ModelDefault modelDefault = new ModelDefault();
 
-        modelDefault.setKey( key );
+        modelDefault.setKey(key);
 
-        if ( CHECK_DEPRECATION.equalsIgnoreCase( key ) )
-        {
-            modelDefault.setValue( CHECK_DEPRECATION_VALUE );
-        }
-        else if ( PACKAGE.equalsIgnoreCase( key ) )
-        {
-            modelDefault.setValue( PACKAGE_VALUE );
-        }
-        else if ( LIST.equalsIgnoreCase( key ) )
-        {
-            modelDefault.setValue( LIST_VALUE );
-        }
-        else if ( MAP.equalsIgnoreCase( key ) )
-        {
-            modelDefault.setValue( MAP_VALUE );
-        }
-        else if ( PROPERTIES.equalsIgnoreCase( key ) )
-        {
-            modelDefault.setValue( PROPERTIES_VALUE );
-        }
-        else if ( SET.equalsIgnoreCase( key ) )
-        {
-            modelDefault.setValue( SET_VALUE );
-        }
-        else if ( STRICT_XML_ATTRIBUTES.equalsIgnoreCase( key ) )
-        {
-            modelDefault.setValue( STRICT_XML_ATTRIBUTES_VALUE );
+        if (CHECK_DEPRECATION.equalsIgnoreCase(key)) {
+            modelDefault.setValue(CHECK_DEPRECATION_VALUE);
+        } else if (PACKAGE.equalsIgnoreCase(key)) {
+            modelDefault.setValue(PACKAGE_VALUE);
+        } else if (LIST.equalsIgnoreCase(key)) {
+            modelDefault.setValue(LIST_VALUE);
+        } else if (MAP.equalsIgnoreCase(key)) {
+            modelDefault.setValue(MAP_VALUE);
+        } else if (PROPERTIES.equalsIgnoreCase(key)) {
+            modelDefault.setValue(PROPERTIES_VALUE);
+        } else if (SET.equalsIgnoreCase(key)) {
+            modelDefault.setValue(SET_VALUE);
+        } else if (STRICT_XML_ATTRIBUTES.equalsIgnoreCase(key)) {
+            modelDefault.setValue(STRICT_XML_ATTRIBUTES_VALUE);
         }
 
         return modelDefault;
     }
 
-    public void setKey( String key )
-    {
+    public void setKey(String key) {
         this.key = key;
     }
 
-    public String getKey()
-    {
+    public String getKey() {
         return key;
     }
 
-    public void setValue( String value )
-    {
+    public void setValue(String value) {
         this.value = value;
     }
 
-    public String getValue()
-    {
+    public String getValue() {
         return value;
     }
 
-    public boolean getBoolean()
-    {
-        return Boolean.valueOf( value ).booleanValue();
+    public boolean getBoolean() {
+        return Boolean.valueOf(value).booleanValue();
     }
 
-    public void validateElement()
-        throws ModelValidationException
-    {
-        if ( isEmpty( key ) )
-        {
-            throw new ModelValidationException( "You must define the key of default element." );
+    public void validateElement() throws ModelValidationException {
+        if (isEmpty(key)) {
+            throw new ModelValidationException("You must define the key of default element.");
         }
 
-        if ( isEmpty( value ) )
-        {
-            throw new ModelValidationException( "You must define the value of default element." );
+        if (isEmpty(value)) {
+            throw new ModelValidationException("You must define the value of default element.");
         }
 
-        validateKey( key );
+        validateKey(key);
     }
 
-    private static void validateKey( String key )
-        throws ModelValidationException
-    {
-        if ( ! SET.equalsIgnoreCase( key )
-             && ! LIST.equalsIgnoreCase( key )
-             && ! MAP.equalsIgnoreCase( key )
-             && ! PROPERTIES.equalsIgnoreCase( key )
-             && ! CHECK_DEPRECATION.equalsIgnoreCase( key )
-             && ! PACKAGE.equalsIgnoreCase( key )
-             && ! STRICT_XML_ATTRIBUTES.equalsIgnoreCase( key ) )
-        {
-            throw new ModelValidationException( "The key of default element must be ' " + SET + "', '" + LIST + "', '"
-                + MAP + "', '" + PROPERTIES + "', '" + CHECK_DEPRECATION + "', '" + PACKAGE + "' or '"
-                + STRICT_XML_ATTRIBUTES + "', was '" + key + "'." );
+    private static void validateKey(String key) throws ModelValidationException {
+        if (!SET.equalsIgnoreCase(key)
+                && !LIST.equalsIgnoreCase(key)
+                && !MAP.equalsIgnoreCase(key)
+                && !PROPERTIES.equalsIgnoreCase(key)
+                && !CHECK_DEPRECATION.equalsIgnoreCase(key)
+                && !PACKAGE.equalsIgnoreCase(key)
+                && !STRICT_XML_ATTRIBUTES.equalsIgnoreCase(key)) {
+            throw new ModelValidationException("The key of default element must be ' " + SET + "', '" + LIST + "', '"
+                    + MAP + "', '" + PROPERTIES + "', '" + CHECK_DEPRECATION + "', '" + PACKAGE + "' or '"
+                    + STRICT_XML_ATTRIBUTES + "', was '" + key + "'.");
         }
     }
 
-    protected boolean isEmpty( String string )
-    {
+    protected boolean isEmpty(String string) {
         return string == null || string.trim().length() == 0;
     }
 }

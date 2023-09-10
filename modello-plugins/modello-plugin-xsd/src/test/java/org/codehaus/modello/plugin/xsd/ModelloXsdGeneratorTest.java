@@ -22,6 +22,10 @@ package org.codehaus.modello.plugin.xsd;
  * SOFTWARE.
  */
 
+import javax.xml.parsers.SAXParser;
+
+import java.util.Properties;
+
 import org.codehaus.modello.AbstractModelloGeneratorTest;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
@@ -29,75 +33,41 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import java.io.File;
-import java.util.Properties;
-
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-
 /**
  * Check that features.mdo (which tries to be the most complete model) can be checked against XSD generated from
  * Modello model <code>modello.mdo</code>.
  *
  * @author Hervé Boutemy
  */
-public class ModelloXsdGeneratorTest
-    extends AbstractModelloGeneratorTest
-{
-    public ModelloXsdGeneratorTest()
-    {
-        super( "modello" );
+public class ModelloXsdGeneratorTest extends AbstractModelloGeneratorTest {
+    public ModelloXsdGeneratorTest() {
+        super("modello");
     }
 
-    public void testXsdGenerator()
-        throws Throwable
-    {
-        ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
+    public void testXsdGenerator() throws Throwable {
+        ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
 
-        Properties parameters = getModelloParameters( "1.4.0" );
+        Properties parameters = getModelloParameters("1.4.0");
 
-        Model model = modello.loadModel( getTestFile( "../../src/main/mdo/modello.mdo" ) );
+        Model model = modello.loadModel(getTestFile("../../src/main/mdo/modello.mdo"));
 
-        modello.generate( model, "xsd", parameters );
+        modello.generate(model, "xsd", parameters);
 
-        /* only available in JAXP 1.3, JDK 5+
-        SchemaFactory factory = SchemaFactory.newInstance( XMLConstants.W3C_XML_SCHEMA_NS_URI );
-        Schema schema = factory.newSchema( new StreamSource( new File( generatedSources, "features.xsd" ) ) );
-
-        SAXParserFactory spf = SAXParserFactory.newInstance();
-        spf.setSchema( schema );
-        SAXParser parser = spf.newSAXParser();
-        parser.parse( new InputSource( getClass().getResourceAsStream( "/features.xml" ) ) );
-        */
-
-        SAXParserFactory factory = SAXParserFactory.newInstance();
-        factory.setValidating( true );
-        factory.setNamespaceAware( true );
-        SAXParser saxParser = factory.newSAXParser();
-        saxParser.setProperty( "http://java.sun.com/xml/jaxp/properties/schemaLanguage",
-                               "http://www.w3.org/2001/XMLSchema" );
-        saxParser.setProperty( "http://java.sun.com/xml/jaxp/properties/schemaSource",
-                               new File( getOutputDirectory(), "modello-1.4.0.xsd" ) );
+        SAXParser saxParser = createSaxParserWithSchema("modello-1.4.0.xsd");
 
         // first self-test: validate Modello model with xsd generated from it
-        saxParser.parse( getTestFile( "../../src/main/mdo/modello.mdo" ), new Handler() );
+        saxParser.parse(getTestFile("../../src/main/mdo/modello.mdo"), new Handler());
 
         // then features.mdo
-        saxParser.parse( getClass().getResourceAsStream( "/features.mdo" ), new Handler() );
+        saxParser.parse(getClass().getResourceAsStream("/features.mdo"), new Handler());
     }
 
-    private static class Handler
-        extends DefaultHandler
-    {
-        public void warning ( SAXParseException e )
-            throws SAXException
-        {
+    private static class Handler extends DefaultHandler {
+        public void warning(SAXParseException e) throws SAXException {
             throw e;
         }
 
-        public void error ( SAXParseException e )
-            throws SAXException
-        {
+        public void error(SAXParseException e) throws SAXException {
             throw e;
         }
     }

@@ -30,9 +30,7 @@ import org.codehaus.modello.metadata.ClassMetadata;
 /**
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
  */
-public class JavaClassMetadata
-    implements ClassMetadata
-{
+public class JavaClassMetadata implements ClassMetadata {
     public static final String ID = JavaClassMetadata.class.getName();
 
     public static final String CLONE_NONE = "none";
@@ -41,12 +39,11 @@ public class JavaClassMetadata
 
     public static final List<String> CLONE_MODES;
 
-    static
-    {
+    static {
         CLONE_MODES = new ArrayList<String>();
-        CLONE_MODES.add( CLONE_NONE );
-        CLONE_MODES.add( CLONE_SHALLOW );
-        CLONE_MODES.add( CLONE_DEEP );
+        CLONE_MODES.add(CLONE_NONE);
+        CLONE_MODES.add(CLONE_SHALLOW);
+        CLONE_MODES.add(CLONE_DEEP);
     }
 
     private boolean abstractMode;
@@ -72,74 +69,59 @@ public class JavaClassMetadata
      */
     private boolean generateStaticCreators = false;
 
-    public void setAbstract( boolean abstractMode )
-    {
+    public void setAbstract(boolean abstractMode) {
         this.abstractMode = abstractMode;
     }
 
-    public boolean isAbstract()
-    {
+    public boolean isAbstract() {
         return abstractMode;
     }
 
-    public boolean isEnabled()
-    {
+    public boolean isEnabled() {
         return enabled;
     }
 
-    public void setEnabled( boolean generate )
-    {
+    public void setEnabled(boolean generate) {
         this.enabled = generate;
     }
 
-    public String getCloneMode()
-    {
+    public String getCloneMode() {
         return cloneMode;
     }
 
-    public void setCloneMode( String cloneMode )
-    {
+    public void setCloneMode(String cloneMode) {
         this.cloneMode = cloneMode;
     }
 
-    public String getCloneHook()
-    {
+    public String getCloneHook() {
         return cloneHook;
     }
 
-    public void setCloneHook( String cloneHook )
-    {
+    public void setCloneHook(String cloneHook) {
         this.cloneHook = cloneHook;
     }
 
-    public boolean isGenerateToString()
-    {
+    public boolean isGenerateToString() {
         return generateToString;
     }
 
-    public void setGenerateToString( boolean generateToString )
-    {
+    public void setGenerateToString(boolean generateToString) {
         this.generateToString = generateToString;
     }
 
-    public boolean isGenerateBuilder()
-    {
+    public boolean isGenerateBuilder() {
         return generateBuilder;
     }
 
-    public void setGenerateBuilder( boolean generateBuilder )
-    {
+    public void setGenerateBuilder(boolean generateBuilder) {
         this.generateBuilder = generateBuilder;
     }
 
-    public boolean isGenerateStaticCreators()
-    {
+    public boolean isGenerateStaticCreators() {
         return generateStaticCreators;
     }
 
-    public void setGenerateStaticCreators( boolean generateStaticCreators )
-    {
+    public void setGenerateStaticCreators(boolean generateStaticCreators) {
         this.generateStaticCreators = generateStaticCreators;
     }
-
 }

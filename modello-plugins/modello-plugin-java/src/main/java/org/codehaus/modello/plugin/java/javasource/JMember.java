@@ -42,7 +42,6 @@
  *
  * $Id$
  */
-
 package org.codehaus.modello.plugin.java.javasource;
 
 /*
@@ -75,14 +74,13 @@ package org.codehaus.modello.plugin.java.javasource;
  * @author <a href="mailto:kvisco@intalio.com">Keith Visco</a>
  * @version $Revision$ $Date$
  **/
-interface JMember
-{
+interface JMember {
 
     /**
      * Returns the class in which this JMember has been declared
      * @return the class in which this JMember has been declared
      **/
-    //public JClass getDeclaringClass();
+    // public JClass getDeclaringClass();
 
     /**
      * Returns the modifiers for this JMember
@@ -97,6 +95,4 @@ interface JMember
     public String getName();
 
     public JAnnotations getAnnotations();
-
-} //-- JMember
-
+} // -- JMember

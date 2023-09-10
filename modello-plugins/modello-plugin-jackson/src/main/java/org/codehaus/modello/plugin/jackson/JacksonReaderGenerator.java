@@ -32,6 +32,7 @@ import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelDefault;
 import org.codehaus.modello.model.ModelField;
+import org.codehaus.modello.plugin.ModelloGenerator;
 import org.codehaus.modello.plugin.java.javasource.JClass;
 import org.codehaus.modello.plugin.java.javasource.JConstructor;
 import org.codehaus.modello.plugin.java.javasource.JField;
@@ -46,14 +47,14 @@ import org.codehaus.modello.plugin.model.ModelClassMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlAssociationMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlClassMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
+import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.util.StringUtils;
 
 /**
  * @author <a href="mailto:simonetripodi@apache.org">Simone Tripodi</a>
  */
-public class JacksonReaderGenerator
-    extends AbstractJacksonGenerator
-{
+@Component(role = ModelloGenerator.class, hint = "jackson-reader")
+public class JacksonReaderGenerator extends AbstractJacksonGenerator {
 
     private static final String SOURCE_PARAM = "source";
 
@@ -69,90 +70,74 @@ public class JacksonReaderGenerator
 
     private String trackingArgs;
 
-    protected boolean isLocationTracking()
-    {
+    protected boolean isLocationTracking() {
         return false;
     }
 
-    public void generate( Model model, Properties parameters )
-        throws ModelloException
-    {
-        initialize( model, parameters );
+    public void generate(Model model, Properties parameters) throws ModelloException {
+        initialize(model, parameters);
 
         requiresDomSupport = false;
         locationTracker = sourceTracker = null;
         trackingArgs = locationField = "";
 
-        if ( isLocationTracking() )
-        {
-            locationTracker = model.getLocationTracker( getGeneratedVersion() );
-            if ( locationTracker == null )
-            {
-                throw new ModelloException( "No model class has been marked as location tracker"
-                                                + " via the attribute locationTracker=\"locations\""
-                                                + ", cannot generate extended reader." );
+        if (isLocationTracking()) {
+            locationTracker = model.getLocationTracker(getGeneratedVersion());
+            if (locationTracker == null) {
+                throw new ModelloException("No model class has been marked as location tracker"
+                        + " via the attribute locationTracker=\"locations\""
+                        + ", cannot generate extended reader.");
             }
 
             locationField =
-                ( (ModelClassMetadata) locationTracker.getMetadata( ModelClassMetadata.ID ) ).getLocationTracker();
+                    ((ModelClassMetadata) locationTracker.getMetadata(ModelClassMetadata.ID)).getLocationTracker();
 
-            sourceTracker = model.getSourceTracker( getGeneratedVersion() );
+            sourceTracker = model.getSourceTracker(getGeneratedVersion());
 
-            if ( sourceTracker != null )
-            {
+            if (sourceTracker != null) {
                 trackingArgs += ", " + SOURCE_PARAM;
             }
         }
 
-        try
-        {
+        try {
             generateJacksonReader();
-        }
-        catch ( IOException ex )
-        {
-            throw new ModelloException( "Exception while generating Jackson Reader.", ex );
+        } catch (IOException ex) {
+            throw new ModelloException("Exception while generating Jackson Reader.", ex);
         }
     }
 
-    private void writeAllClassesReaders( Model objectModel, JClass jClass )
-    {
-        ModelClass root = objectModel.getClass( objectModel.getRoot( getGeneratedVersion() ), getGeneratedVersion() );
+    private void writeAllClassesReaders(Model objectModel, JClass jClass) {
+        ModelClass root = objectModel.getClass(objectModel.getRoot(getGeneratedVersion()), getGeneratedVersion());
 
-        for ( ModelClass clazz : getClasses( objectModel ) )
-        {
-            if ( isTrackingSupport( clazz ) )
-            {
+        for (ModelClass clazz : getClasses(objectModel)) {
+            if (isTrackingSupport(clazz)) {
                 continue;
             }
 
-            writeClassReaders( clazz, jClass, root.getName().equals( clazz.getName() ) );
+            writeClassReaders(clazz, jClass, root.getName().equals(clazz.getName()));
         }
     }
 
-    private void writeClassReaders( ModelClass modelClass, JClass jClass, boolean rootElement )
-    {
+    private void writeClassReaders(ModelClass modelClass, JClass jClass, boolean rootElement) {
         JavaClassMetadata javaClassMetadata =
-            (JavaClassMetadata) modelClass.getMetadata( JavaClassMetadata.class.getName() );
+                (JavaClassMetadata) modelClass.getMetadata(JavaClassMetadata.class.getName());
 
         // Skip abstract classes, no way to parse them out into objects
-        if ( javaClassMetadata.isAbstract() )
-        {
+        if (javaClassMetadata.isAbstract()) {
             return;
         }
 
-        XmlClassMetadata xmlClassMetadata = (XmlClassMetadata) modelClass.getMetadata( XmlClassMetadata.ID );
-        if ( !rootElement && !xmlClassMetadata.isStandaloneRead() )
-        {
+        XmlClassMetadata xmlClassMetadata = (XmlClassMetadata) modelClass.getMetadata(XmlClassMetadata.ID);
+        if (!rootElement && !xmlClassMetadata.isStandaloneRead()) {
             return;
         }
 
         String className = modelClass.getName();
 
-        String capClassName = capitalise( className );
+        String capClassName = capitalise(className);
 
         String readerMethodName = "read";
-        if ( !rootElement )
-        {
+        if (!rootElement) {
             readerMethodName += capClassName;
         }
 
@@ -160,278 +145,267 @@ public class JacksonReaderGenerator
         // Write the read(JsonParser) method which will do the unmarshalling.
         // ----------------------------------------------------------------------
 
-        JMethod unmarshall = new JMethod( readerMethodName, new JClass( className ), null );
+        JMethod unmarshall = new JMethod(readerMethodName, new JClass(className), null);
         unmarshall.getModifiers().makePrivate();
 
-        unmarshall.addParameter( new JParameter( new JClass( "JsonParser" ), "parser" ) );
-        unmarshall.addParameter( new JParameter( JClass.BOOLEAN, "strict" ) );
-        addTrackingParameters( unmarshall );
+        unmarshall.addParameter(new JParameter(new JClass("JsonParser"), "parser"));
+        unmarshall.addParameter(new JParameter(JClass.BOOLEAN, "strict"));
+        addTrackingParameters(unmarshall);
 
-        unmarshall.addException( new JClass( "IOException" ) );
+        unmarshall.addException(new JClass("IOException"));
 
         JSourceCode sc = unmarshall.getSourceCode();
 
-        String variableName = uncapitalise( className );
+        String variableName = uncapitalise(className);
 
-        sc.add(
-            className + ' ' + variableName + " = parse" + capClassName + "( parser, strict" + trackingArgs + " );" );
+        sc.add(className + ' ' + variableName + " = parse" + capClassName + "( parser, strict" + trackingArgs + " );");
 
-        if ( rootElement )
-        {
+        if (rootElement) {
             // TODO
             // sc.add( variableName + ".setModelEncoding( parser.getInputEncoding() );" );
         }
 
-        sc.add( "return " + variableName + ';' );
+        sc.add("return " + variableName + ';');
 
-        jClass.addMethod( unmarshall );
+        jClass.addMethod(unmarshall);
 
         // ----------------------------------------------------------------------
         // Write the read(Reader[,boolean]) methods which will do the unmarshalling.
         // ----------------------------------------------------------------------
 
-        unmarshall = new JMethod( readerMethodName, new JClass( className ), null );
+        unmarshall = new JMethod(readerMethodName, new JClass(className), null);
 
-        unmarshall.addParameter( new JParameter( new JClass( "Reader" ), "reader" ) );
-        unmarshall.addParameter( new JParameter( JClass.BOOLEAN, "strict" ) );
-        addTrackingParameters( unmarshall );
+        unmarshall.addParameter(new JParameter(new JClass("Reader"), "reader"));
+        unmarshall.addParameter(new JParameter(JClass.BOOLEAN, "strict"));
+        addTrackingParameters(unmarshall);
 
-        unmarshall.addException( new JClass( "IOException" ) );
-
-        sc = unmarshall.getSourceCode();
-
-        sc.add( "JsonParser parser = factory.createParser( reader );" );
-
-        sc.add( "return " + readerMethodName + "( parser, strict );" );
-
-        jClass.addMethod( unmarshall );unmarshall = new JMethod( readerMethodName, new JClass( className ), null );
-
-        unmarshall.addParameter( new JParameter( new JClass( "Reader" ), "reader" ) );
-
-        unmarshall.addException( new JClass( "IOException" ) );
+        unmarshall.addException(new JClass("IOException"));
 
         sc = unmarshall.getSourceCode();
-        sc.add( "return " + readerMethodName + "( reader, true );" );
 
-        jClass.addMethod( unmarshall );
+        sc.add("JsonParser parser = factory.createParser( reader );");
+
+        sc.add("return " + readerMethodName + "( parser, strict );");
+
+        jClass.addMethod(unmarshall);
+        unmarshall = new JMethod(readerMethodName, new JClass(className), null);
+
+        unmarshall.addParameter(new JParameter(new JClass("Reader"), "reader"));
+
+        unmarshall.addException(new JClass("IOException"));
+
+        sc = unmarshall.getSourceCode();
+        sc.add("return " + readerMethodName + "( reader, true );");
+
+        jClass.addMethod(unmarshall);
 
         // ----------------------------------------------------------------------
         // Write the read(InputStream[,boolean]) methods which will do the unmarshalling.
         // ----------------------------------------------------------------------
 
-        unmarshall = new JMethod( readerMethodName, new JClass( className ), null );
+        unmarshall = new JMethod(readerMethodName, new JClass(className), null);
 
-        unmarshall.addParameter( new JParameter( new JClass( "InputStream" ), "in" ) );
-        unmarshall.addParameter( new JParameter( JClass.BOOLEAN, "strict" ) );
-        addTrackingParameters( unmarshall );
+        unmarshall.addParameter(new JParameter(new JClass("InputStream"), "in"));
+        unmarshall.addParameter(new JParameter(JClass.BOOLEAN, "strict"));
+        addTrackingParameters(unmarshall);
 
-        unmarshall.addException( new JClass( "IOException" ) );
-
-        sc = unmarshall.getSourceCode();
-
-        sc.add( "return " + readerMethodName + "( new InputStreamReader( in ), strict" + trackingArgs + " );" );
-
-        jClass.addMethod( unmarshall );unmarshall = new JMethod( readerMethodName, new JClass( className ), null );
-
-        unmarshall.addParameter( new JParameter( new JClass( "InputStream" ), "in" ) );
-
-        unmarshall.addException( new JClass( "IOException" ) );
+        unmarshall.addException(new JClass("IOException"));
 
         sc = unmarshall.getSourceCode();
 
-        sc.add( "return " + readerMethodName + "( in, true );" );
+        sc.add("return " + readerMethodName + "( new InputStreamReader( in ), strict" + trackingArgs + " );");
 
-        jClass.addMethod( unmarshall );
+        jClass.addMethod(unmarshall);
+        unmarshall = new JMethod(readerMethodName, new JClass(className), null);
+
+        unmarshall.addParameter(new JParameter(new JClass("InputStream"), "in"));
+
+        unmarshall.addException(new JClass("IOException"));
+
+        sc = unmarshall.getSourceCode();
+
+        sc.add("return " + readerMethodName + "( in, true );");
+
+        jClass.addMethod(unmarshall);
 
         // --------------------------------------------------------------------
     }
 
-    private void generateJacksonReader()
-        throws ModelloException, IOException
-    {
+    private void generateJacksonReader() throws ModelloException, IOException {
         Model objectModel = getModel();
 
         String packageName =
-            objectModel.getDefaultPackageName( isPackageWithVersion(), getGeneratedVersion() ) + ".io.jackson";
+                objectModel.getDefaultPackageName(isPackageWithVersion(), getGeneratedVersion()) + ".io.jackson";
 
-        String unmarshallerName = getFileName( "JacksonReader" + ( isLocationTracking() ? "Ex" : "" ) );
+        String unmarshallerName = getFileName("JacksonReader" + (isLocationTracking() ? "Ex" : ""));
 
-        JSourceWriter sourceWriter = newJSourceWriter( packageName, unmarshallerName );
+        JSourceWriter sourceWriter = newJSourceWriter(packageName, unmarshallerName);
 
-        JClass jClass = new JClass( packageName + '.' + unmarshallerName );
-        initHeader( jClass );
-        suppressAllWarnings( objectModel, jClass );
+        JClass jClass = new JClass(packageName + '.' + unmarshallerName);
+        initHeader(jClass);
+        suppressAllWarnings(objectModel, jClass);
 
-        jClass.addImport( "com.fasterxml.jackson.core.JsonFactory" );
-        jClass.addImport( "com.fasterxml.jackson.core.JsonParser" );
-        jClass.addImport( "com.fasterxml.jackson.core.JsonParser.Feature" );
-        jClass.addImport( "com.fasterxml.jackson.core.JsonParseException" );
-        jClass.addImport( "com.fasterxml.jackson.core.JsonToken" );
-        jClass.addImport( "java.io.InputStream" );
-        jClass.addImport( "java.io.InputStreamReader" );
-        jClass.addImport( "java.io.IOException" );
-        jClass.addImport( "java.io.Reader" );
-        jClass.addImport( "java.text.DateFormat" );
-        jClass.addImport( "java.util.Set" );
-        jClass.addImport( "java.util.HashSet" );
+        jClass.addImport("com.fasterxml.jackson.core.JsonFactory");
+        jClass.addImport("com.fasterxml.jackson.core.JsonParser");
+        jClass.addImport("com.fasterxml.jackson.core.JsonParser.Feature");
+        jClass.addImport("com.fasterxml.jackson.core.JsonParseException");
+        jClass.addImport("com.fasterxml.jackson.core.JsonToken");
+        jClass.addImport("java.io.InputStream");
+        jClass.addImport("java.io.InputStreamReader");
+        jClass.addImport("java.io.IOException");
+        jClass.addImport("java.io.Reader");
+        jClass.addImport("java.text.DateFormat");
+        jClass.addImport("java.util.Set");
+        jClass.addImport("java.util.HashSet");
 
-        addModelImports( jClass, null );
+        addModelImports(jClass, null);
 
-        JField factoryField = new JField( new JClass( "JsonFactory" ), "factory" );
-        factoryField.getModifiers().setFinal( true );
-        factoryField.setInitString( "new JsonFactory()" );
-        jClass.addField( factoryField );
+        JField factoryField = new JField(new JClass("JsonFactory"), "factory");
+        factoryField.getModifiers().setFinal(true);
+        factoryField.setInitString("new JsonFactory()");
+        jClass.addField(factoryField);
 
-        JConstructor jacksonReaderConstructor = new JConstructor( jClass );
+        JConstructor jacksonReaderConstructor = new JConstructor(jClass);
         JSourceCode sc = jacksonReaderConstructor.getSourceCode();
-        sc.add( "factory.enable( Feature.ALLOW_BACKSLASH_ESCAPING_ANY_CHARACTER  );" );
-        sc.add( "factory.enable( Feature.ALLOW_COMMENTS );" );
-        sc.add( "factory.enable( Feature.ALLOW_NON_NUMERIC_NUMBERS );" );
-        sc.add( "factory.enable( Feature.ALLOW_NUMERIC_LEADING_ZEROS );" );
-        sc.add( "factory.enable( Feature.ALLOW_SINGLE_QUOTES );" );
-        sc.add( "factory.enable( Feature.ALLOW_UNQUOTED_CONTROL_CHARS );" );
-        sc.add( "factory.enable( Feature.ALLOW_UNQUOTED_FIELD_NAMES );" );
+        sc.add("factory.enable( Feature.ALLOW_BACKSLASH_ESCAPING_ANY_CHARACTER  );");
+        sc.add("factory.enable( Feature.ALLOW_COMMENTS );");
+        sc.add("factory.enable( Feature.ALLOW_NON_NUMERIC_NUMBERS );");
+        sc.add("factory.enable( Feature.ALLOW_NUMERIC_LEADING_ZEROS );");
+        sc.add("factory.enable( Feature.ALLOW_SINGLE_QUOTES );");
+        sc.add("factory.enable( Feature.ALLOW_UNQUOTED_CONTROL_CHARS );");
+        sc.add("factory.enable( Feature.ALLOW_UNQUOTED_FIELD_NAMES );");
 
-        jClass.addConstructor( jacksonReaderConstructor );
+        jClass.addConstructor(jacksonReaderConstructor);
 
         // ----------------------------------------------------------------------
         // Write the class parsers
         // ----------------------------------------------------------------------
 
-        writeAllClassesParser( objectModel, jClass );
+        writeAllClassesParser(objectModel, jClass);
 
         // ----------------------------------------------------------------------
         // Write the class readers
         // ----------------------------------------------------------------------
 
-        writeAllClassesReaders( objectModel, jClass );
+        writeAllClassesReaders(objectModel, jClass);
 
         // ----------------------------------------------------------------------
         // Write helpers
         // ----------------------------------------------------------------------
 
-        writeHelpers( jClass );
+        writeHelpers(jClass);
 
         // ----------------------------------------------------------------------
         // DOM support
         // ----------------------------------------------------------------------
 
-        if ( requiresDomSupport )
-        {
-            jClass.addImport( "com.fasterxml.jackson.databind.ObjectMapper" );
+        if (requiresDomSupport) {
+            jClass.addImport("com.fasterxml.jackson.databind.ObjectMapper");
 
-            sc.add( "factory.setCodec( new ObjectMapper() );" );
+            sc.add("factory.setCodec( new ObjectMapper() );");
         }
 
-        jClass.print( sourceWriter );
+        jClass.print(sourceWriter);
 
         sourceWriter.close();
     }
 
-    private void writeAllClassesParser( Model objectModel, JClass jClass )
-    {
-        ModelClass root = objectModel.getClass( objectModel.getRoot( getGeneratedVersion() ), getGeneratedVersion() );
+    private void writeAllClassesParser(Model objectModel, JClass jClass) {
+        ModelClass root = objectModel.getClass(objectModel.getRoot(getGeneratedVersion()), getGeneratedVersion());
 
-        for ( ModelClass clazz : getClasses( objectModel ) )
-        {
-            if ( isTrackingSupport( clazz ) )
-            {
+        for (ModelClass clazz : getClasses(objectModel)) {
+            if (isTrackingSupport(clazz)) {
                 continue;
             }
 
-            writeClassParser( clazz, jClass, root.getName().equals( clazz.getName() ) );
+            writeClassParser(clazz, jClass, root.getName().equals(clazz.getName()));
         }
     }
 
-    private void writeClassParser( ModelClass modelClass, JClass jClass, boolean rootElement )
-    {
+    private void writeClassParser(ModelClass modelClass, JClass jClass, boolean rootElement) {
         JavaClassMetadata javaClassMetadata =
-            (JavaClassMetadata) modelClass.getMetadata( JavaClassMetadata.class.getName() );
+                (JavaClassMetadata) modelClass.getMetadata(JavaClassMetadata.class.getName());
 
         // Skip abstract classes, no way to parse them out into objects
-        if ( javaClassMetadata.isAbstract() )
-        {
+        if (javaClassMetadata.isAbstract()) {
             return;
         }
 
         String className = modelClass.getName();
 
-        String capClassName = capitalise( className );
+        String capClassName = capitalise(className);
 
-        String uncapClassName = uncapitalise( className );
+        String uncapClassName = uncapitalise(className);
 
-        JMethod unmarshall = new JMethod( "parse" + capClassName, new JClass( className ), null );
+        JMethod unmarshall = new JMethod("parse" + capClassName, new JClass(className), null);
         unmarshall.getModifiers().makePrivate();
 
-        unmarshall.addParameter( new JParameter( new JClass( "JsonParser" ), "parser" ) );
-        unmarshall.addParameter( new JParameter( JClass.BOOLEAN, "strict" ) );
-        addTrackingParameters( unmarshall );
+        unmarshall.addParameter(new JParameter(new JClass("JsonParser"), "parser"));
+        unmarshall.addParameter(new JParameter(JClass.BOOLEAN, "strict"));
+        addTrackingParameters(unmarshall);
 
-        unmarshall.addException( new JClass( "IOException" ) );
+        unmarshall.addException(new JClass("IOException"));
 
         JSourceCode sc = unmarshall.getSourceCode();
 
-        sc.add( "if ( JsonToken.START_OBJECT != parser.getCurrentToken() && JsonToken.START_OBJECT != parser.nextToken() )" );
-        sc.add( "{" );
-        sc.addIndented( "throw new JsonParseException( \"Expected '"
-                        + className
-                        + "' data to start with an Object\", parser.getCurrentLocation() );" );
-        sc.add( "}" );
+        sc.add(
+                "if ( JsonToken.START_OBJECT != parser.getCurrentToken() && JsonToken.START_OBJECT != parser.nextToken() )");
+        sc.add("{");
+        sc.addIndented("throw new JsonParseException( \"Expected '"
+                + className
+                + "' data to start with an Object\", parser.getCurrentLocation() );");
+        sc.add("}");
 
-        sc.add( className + " " + uncapClassName + " = new " + className + "();" );
+        sc.add(className + " " + uncapClassName + " = new " + className + "();");
 
-        if ( locationTracker != null )
-        {
-            sc.add( locationTracker.getName() + " " + LOCATION_VAR + ";" );
-            writeNewSetLocation( "\"\"", uncapClassName, null, sc );
+        if (locationTracker != null) {
+            sc.add(locationTracker.getName() + " " + LOCATION_VAR + ";");
+            writeNewSetLocation("\"\"", uncapClassName, null, sc);
         }
 
-        List<ModelField> modelFields = getFieldsForXml( modelClass, getGeneratedVersion() );
+        List<ModelField> modelFields = getFieldsForXml(modelClass, getGeneratedVersion());
 
         {
-            //Write other fields
+            // Write other fields
 
-            sc.add( "Set<String> parsed = new HashSet<String>();" );
+            sc.add("Set<String> parsed = new HashSet<String>();");
 
-            sc.add( "while ( JsonToken.END_OBJECT != parser.nextToken() )" );
+            sc.add("while ( JsonToken.END_OBJECT != parser.nextToken() )");
 
-            sc.add( "{" );
+            sc.add("{");
             sc.indent();
 
             boolean addElse = false;
 
-            for ( ModelField field : modelFields )
-            {
-                XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
+            for (ModelField field : modelFields) {
+                XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata(XmlFieldMetadata.ID);
 
-                processField( field, xmlFieldMetadata, addElse, sc, uncapClassName, jClass );
+                processField(field, xmlFieldMetadata, addElse, sc, uncapClassName, jClass);
 
                 addElse = true;
             }
 
-            if ( addElse )
-            {
-                sc.add( "else" );
+            if (addElse) {
+                sc.add("else");
 
-                sc.add( "{" );
+                sc.add("{");
                 sc.indent();
             }
 
-            sc.add( "checkUnknownElement( parser, strict );" );
+            sc.add("checkUnknownElement( parser, strict );");
 
-            if ( addElse )
-            {
+            if (addElse) {
                 sc.unindent();
-                sc.add( "}" );
+                sc.add("}");
             }
 
             sc.unindent();
-            sc.add( "}" );
+            sc.add("}");
         }
 
-        sc.add( "return " + uncapClassName + ";" );
+        sc.add("return " + uncapClassName + ";");
 
-        jClass.addMethod( unmarshall );
+        jClass.addMethod(unmarshall);
     }
 
     /**
@@ -444,570 +418,531 @@ public class JacksonReaderGenerator
      * @param objectName       the object name in the source
      * @param jClass           the generated class source file
      */
-    private void processField( ModelField field, XmlFieldMetadata xmlFieldMetadata, boolean addElse, JSourceCode sc,
-                               String objectName, JClass jClass )
-    {
-        String fieldTagName = resolveTagName( field, xmlFieldMetadata );
+    private void processField(
+            ModelField field,
+            XmlFieldMetadata xmlFieldMetadata,
+            boolean addElse,
+            JSourceCode sc,
+            String objectName,
+            JClass jClass) {
+        String fieldTagName = resolveTagName(field, xmlFieldMetadata);
 
-        String capFieldName = capitalise( field.getName() );
+        String capFieldName = capitalise(field.getName());
 
-        String singularName = singular( field.getName() );
+        String singularName = singular(field.getName());
 
         String alias;
-        if ( StringUtils.isEmpty( field.getAlias() ) )
-        {
+        if (StringUtils.isEmpty(field.getAlias())) {
             alias = "null";
-        }
-        else
-        {
+        } else {
             alias = "\"" + field.getAlias() + "\"";
         }
 
-        String tagComparison =
-            ( addElse ? "else " : "" ) + "if ( checkFieldWithDuplicate( parser, \"" + fieldTagName + "\", " + alias
-                + ", parsed ) )";
+        String tagComparison = (addElse ? "else " : "") + "if ( checkFieldWithDuplicate( parser, \"" + fieldTagName
+                + "\", " + alias + ", parsed ) )";
 
-        if ( !( field instanceof ModelAssociation ) )
-        { // model field
-            sc.add( tagComparison );
+        if (!(field instanceof ModelAssociation)) { // model field
+            sc.add(tagComparison);
 
-            sc.add( "{" );
+            sc.add("{");
 
             sc.indent();
 
-            writePrimitiveField( field, field.getType(), objectName, objectName, "\"" + field.getName() + "\"",
-                                 "set" + capFieldName, sc, false );
+            writePrimitiveField(
+                    field,
+                    field.getType(),
+                    objectName,
+                    objectName,
+                    "\"" + field.getName() + "\"",
+                    "set" + capFieldName,
+                    sc,
+                    false);
 
             sc.unindent();
-            sc.add( "}" );
-        }
-        else
-        { // model association
+            sc.add("}");
+        } else { // model association
             ModelAssociation association = (ModelAssociation) field;
 
             String associationName = association.getName();
 
-            if ( association.isOneMultiplicity() )
-            {
-                sc.add( tagComparison );
+            if (association.isOneMultiplicity()) {
+                sc.add(tagComparison);
 
-                sc.add( "{" );
-                sc.addIndented(
-                    objectName + ".set" + capFieldName + "( parse" + association.getTo() + "( parser, strict"
-                        + trackingArgs + " ) );" );
-                sc.add( "}" );
-            }
-            else
-            {
-                //MANY_MULTIPLICITY
+                sc.add("{");
+                sc.addIndented(objectName + ".set" + capFieldName + "( parse" + association.getTo() + "( parser, strict"
+                        + trackingArgs + " ) );");
+                sc.add("}");
+            } else {
+                // MANY_MULTIPLICITY
 
                 XmlAssociationMetadata xmlAssociationMetadata =
-                    (XmlAssociationMetadata) association.getAssociationMetadata( XmlAssociationMetadata.ID );
+                        (XmlAssociationMetadata) association.getAssociationMetadata(XmlAssociationMetadata.ID);
 
                 String type = association.getType();
 
-                if ( ModelDefault.LIST.equals( type ) || ModelDefault.SET.equals( type ) )
-                {
-                    boolean inModel = isClassInModel( association.getTo(), field.getModelClass().getModel() );
+                if (ModelDefault.LIST.equals(type) || ModelDefault.SET.equals(type)) {
+                    boolean inModel = isClassInModel(
+                            association.getTo(), field.getModelClass().getModel());
 
-                    sc.add( ( addElse ? "else " : "" ) + "if ( checkFieldWithDuplicate( parser, \""
+                    sc.add((addElse ? "else " : "") + "if ( checkFieldWithDuplicate( parser, \""
                             + fieldTagName
                             + "\", "
                             + alias
-                            + ", parsed ) )" );
+                            + ", parsed ) )");
 
-                    sc.add( "{" );
+                    sc.add("{");
                     sc.indent();
 
-                    sc.add( "if ( JsonToken.START_ARRAY != parser.nextToken() )" );
-                    sc.add( "{" );
-                    sc.addIndented( "throw new JsonParseException( \"Expected '"
-                                    + fieldTagName
-                                    + "' data to start with an Array\", parser.getCurrentLocation() );" );
-                    sc.add( "}" );
+                    sc.add("if ( JsonToken.START_ARRAY != parser.nextToken() )");
+                    sc.add("{");
+                    sc.addIndented("throw new JsonParseException( \"Expected '"
+                            + fieldTagName
+                            + "' data to start with an Array\", parser.getCurrentLocation() );");
+                    sc.add("}");
 
-                    JavaFieldMetadata javaFieldMetadata = (JavaFieldMetadata) association.getMetadata( JavaFieldMetadata.ID );
+                    JavaFieldMetadata javaFieldMetadata =
+                            (JavaFieldMetadata) association.getMetadata(JavaFieldMetadata.ID);
 
                     String adder;
 
-                    if ( javaFieldMetadata.isGetter() && javaFieldMetadata.isSetter() )
-                    {
-                        sc.add( type + " " + associationName + " = " + objectName + ".get" + capFieldName + "();" );
+                    if (javaFieldMetadata.isGetter() && javaFieldMetadata.isSetter()) {
+                        sc.add(type + " " + associationName + " = " + objectName + ".get" + capFieldName + "();");
 
-                        sc.add( "if ( " + associationName + " == null )" );
+                        sc.add("if ( " + associationName + " == null )");
 
-                        sc.add( "{" );
+                        sc.add("{");
                         sc.indent();
 
-                        sc.add( associationName + " = " + association.getDefaultValue() + ";" );
+                        sc.add(associationName + " = " + association.getDefaultValue() + ";");
 
-                        sc.add( objectName + ".set" + capFieldName + "( " + associationName + " );" );
+                        sc.add(objectName + ".set" + capFieldName + "( " + associationName + " );");
 
                         sc.unindent();
-                        sc.add( "}" );
+                        sc.add("}");
 
                         adder = associationName + ".add";
-                    }
-                    else
-                    {
+                    } else {
                         adder = objectName + ".add" + association.getTo();
                     }
 
-                    if ( !inModel && locationTracker != null )
-                    {
-                        sc.add( locationTracker.getName() + " " + LOCATION_VAR + "s = " + objectName + ".get"
-                                    + capitalise( singular( locationField ) ) + "( \"" + field.getName()
-                                    + "\" );" );
-                        sc.add( "if ( " + LOCATION_VAR + "s == null )" );
-                        sc.add( "{" );
+                    if (!inModel && locationTracker != null) {
+                        sc.add(locationTracker.getName() + " " + LOCATION_VAR + "s = " + objectName + ".get"
+                                + capitalise(singular(locationField)) + "( \"" + field.getName()
+                                + "\" );");
+                        sc.add("if ( " + LOCATION_VAR + "s == null )");
+                        sc.add("{");
                         sc.indent();
-                        writeNewSetLocation( field, objectName, LOCATION_VAR + "s", sc );
+                        writeNewSetLocation(field, objectName, LOCATION_VAR + "s", sc);
                         sc.unindent();
-                        sc.add( "}" );
+                        sc.add("}");
                     }
 
-                    sc.add( "while ( JsonToken.END_ARRAY != parser.nextToken() )" );
+                    sc.add("while ( JsonToken.END_ARRAY != parser.nextToken() )");
 
-                    sc.add( "{" );
+                    sc.add("{");
                     sc.indent();
 
-                    if ( inModel )
-                    {
-                        sc.add( adder + "( parse" + association.getTo() + "( parser, strict" + trackingArgs + " ) );" );
-                    }
-                    else
-                    {
+                    if (inModel) {
+                        sc.add(adder + "( parse" + association.getTo() + "( parser, strict" + trackingArgs + " ) );");
+                    } else {
                         String key;
-                        if ( ModelDefault.SET.equals( type ) )
-                        {
+                        if (ModelDefault.SET.equals(type)) {
                             key = "?";
+                        } else {
+                            key = (hasJavaSourceSupport(5) ? "Integer.valueOf" : "new java.lang.Integer") + "( "
+                                    + associationName + ".size() )";
                         }
-                        else
-                        {
-                            key = ( hasJavaSourceSupport( 5 ) ? "Integer.valueOf" : "new java.lang.Integer" ) + "( " + associationName
-                                + ".size() )";
-                        }
-                        writePrimitiveField( association, association.getTo(), associationName, LOCATION_VAR + "s", key,
-                                             "add", sc, true );
+                        writePrimitiveField(
+                                association,
+                                association.getTo(),
+                                associationName,
+                                LOCATION_VAR + "s",
+                                key,
+                                "add",
+                                sc,
+                                true);
                     }
 
                     sc.unindent();
-                    sc.add( "}" );
+                    sc.add("}");
 
                     sc.unindent();
-                    sc.add( "}" );
-                }
-                else
-                {
-                    //Map or Properties
+                    sc.add("}");
+                } else {
+                    // Map or Properties
 
-                    sc.add( tagComparison );
+                    sc.add(tagComparison);
 
-                    sc.add( "{" );
+                    sc.add("{");
                     sc.indent();
 
-                    if ( locationTracker != null )
-                    {
-                        sc.add( locationTracker.getName() + " " + LOCATION_VAR + "s;" );
-                        writeNewSetLocation( field, objectName, LOCATION_VAR + "s", sc );
+                    if (locationTracker != null) {
+                        sc.add(locationTracker.getName() + " " + LOCATION_VAR + "s;");
+                        writeNewSetLocation(field, objectName, LOCATION_VAR + "s", sc);
                     }
 
-                    if ( xmlAssociationMetadata.isMapExplode() )
-                    {
-                        sc.add( "if ( JsonToken.START_ARRAY != parser.nextToken() )" );
-                        sc.add( "{" );
-                        sc.addIndented( "throw new JsonParseException( \"Expected '"
-                                        + fieldTagName
-                                        + "' data to start with an Array\", parser.getCurrentLocation() );" );
-                        sc.add( "}" );
+                    if (xmlAssociationMetadata.isMapExplode()) {
+                        sc.add("if ( JsonToken.START_ARRAY != parser.nextToken() )");
+                        sc.add("{");
+                        sc.addIndented("throw new JsonParseException( \"Expected '"
+                                + fieldTagName
+                                + "' data to start with an Array\", parser.getCurrentLocation() );");
+                        sc.add("}");
 
-                        sc.add( "// " + xmlAssociationMetadata.getMapStyle() + " mode." );
+                        sc.add("// " + xmlAssociationMetadata.getMapStyle() + " mode.");
 
-                        sc.add( "while ( JsonToken.END_ARRAY != parser.nextToken() )" );
+                        sc.add("while ( JsonToken.END_ARRAY != parser.nextToken() )");
 
-                        sc.add( "{" );
+                        sc.add("{");
                         sc.indent();
 
-                        sc.add( "if ( JsonToken.START_OBJECT != parser.getCurrentToken() && JsonToken.START_OBJECT != parser.nextToken() )" );
-                        sc.add( "{" );
-                        sc.addIndented( "throw new JsonParseException( \"Expected '"
-                                        + fieldTagName
-                                        + "' item data to start with an Object\", parser.getCurrentLocation() );" );
-                        sc.add( "}" );
+                        sc.add(
+                                "if ( JsonToken.START_OBJECT != parser.getCurrentToken() && JsonToken.START_OBJECT != parser.nextToken() )");
+                        sc.add("{");
+                        sc.addIndented("throw new JsonParseException( \"Expected '"
+                                + fieldTagName
+                                + "' item data to start with an Object\", parser.getCurrentLocation() );");
+                        sc.add("}");
 
-                        sc.add( "String key = null;" );
+                        sc.add("String key = null;");
 
-                        sc.add( "String value = null;" );
+                        sc.add("String value = null;");
 
-                        sc.add( "Set<String> parsedPropertiesElements = new HashSet<String>();" );
+                        sc.add("Set<String> parsedPropertiesElements = new HashSet<String>();");
 
-                        sc.add( "while ( JsonToken.END_OBJECT != parser.nextToken() )" );
+                        sc.add("while ( JsonToken.END_OBJECT != parser.nextToken() )");
 
-                        sc.add( "{" );
+                        sc.add("{");
                         sc.indent();
 
-                        sc.add( "if ( checkFieldWithDuplicate( parser, \"key\", \"\", parsedPropertiesElements ) )" );
+                        sc.add("if ( checkFieldWithDuplicate( parser, \"key\", \"\", parsedPropertiesElements ) )");
 
-                        sc.add( "{" );
-                        sc.addIndented( "parser.nextToken();" );
+                        sc.add("{");
+                        sc.addIndented("parser.nextToken();");
 
                         String parserGetter = "parser.getText()";
 
-                        if ( xmlFieldMetadata.isTrim() )
-                        {
+                        if (xmlFieldMetadata.isTrim()) {
                             parserGetter = "getTrimmedValue( " + parserGetter + " )";
                         }
 
-                        sc.addIndented( "key = " + parserGetter + ";" );
-                        sc.add( "}" );
+                        sc.addIndented("key = " + parserGetter + ";");
+                        sc.add("}");
 
-                        sc.add( "else if ( checkFieldWithDuplicate( parser, \"value\", \"\", parsedPropertiesElements ) )" );
+                        sc.add(
+                                "else if ( checkFieldWithDuplicate( parser, \"value\", \"\", parsedPropertiesElements ) )");
 
-                        sc.add( "{" );
-                        sc.addIndented( "parser.nextToken();" );
+                        sc.add("{");
+                        sc.addIndented("parser.nextToken();");
 
                         parserGetter = "parser.getText()";
 
-                        if ( xmlFieldMetadata.isTrim() )
-                        {
+                        if (xmlFieldMetadata.isTrim()) {
                             parserGetter = "getTrimmedValue( " + parserGetter + " )";
                         }
 
-                        sc.addIndented( "value = " + parserGetter + ";" );
-                        sc.add( "}" );
+                        sc.addIndented("value = " + parserGetter + ";");
+                        sc.add("}");
 
-                        sc.add( "else" );
+                        sc.add("else");
 
-                        sc.add( "{" );
-                        sc.addIndented( "checkUnknownElement( parser, strict );" );
-                        sc.add( "}" );
-
-                        sc.unindent();
-                        sc.add( "}" );
-
-                        sc.add( objectName + ".add" + capitalise( singularName ) + "( key, value );" );
+                        sc.add("{");
+                        sc.addIndented("checkUnknownElement( parser, strict );");
+                        sc.add("}");
 
                         sc.unindent();
-                        sc.add( "}" );
-                    }
-                    else
-                    {
-                        //INLINE Mode
+                        sc.add("}");
 
-                        sc.add( "if ( JsonToken.START_OBJECT != parser.nextToken() )" );
-                        sc.add( "{" );
-                        sc.addIndented( "throw new JsonParseException( \"Expected '"
-                                        + fieldTagName
-                                        + "' data to start with an Object\", parser.getCurrentLocation() );" );
-                        sc.add( "}" );
+                        sc.add(objectName + ".add" + capitalise(singularName) + "( key, value );");
 
-                        sc.add( "while ( JsonToken.END_OBJECT != parser.nextToken() )" );
+                        sc.unindent();
+                        sc.add("}");
+                    } else {
+                        // INLINE Mode
 
-                        sc.add( "{" );
+                        sc.add("if ( JsonToken.START_OBJECT != parser.nextToken() )");
+                        sc.add("{");
+                        sc.addIndented("throw new JsonParseException( \"Expected '"
+                                + fieldTagName
+                                + "' data to start with an Object\", parser.getCurrentLocation() );");
+                        sc.add("}");
+
+                        sc.add("while ( JsonToken.END_OBJECT != parser.nextToken() )");
+
+                        sc.add("{");
                         sc.indent();
 
-                        sc.add( "String key = parser.getCurrentName();" );
+                        sc.add("String key = parser.getCurrentName();");
 
-                        writeNewSetLocation( "key", LOCATION_VAR + "s", null, sc );
+                        writeNewSetLocation("key", LOCATION_VAR + "s", null, sc);
 
-                        sc.add(
-                            "String value = parser.nextTextValue()" + ( xmlFieldMetadata.isTrim() ? ".trim()" : "" ) + ";" );
+                        sc.add("String value = parser.nextTextValue()" + (xmlFieldMetadata.isTrim() ? ".trim()" : "")
+                                + ";");
 
-                        sc.add( objectName + ".add" + capitalise( singularName ) + "( key, value );" );
+                        sc.add(objectName + ".add" + capitalise(singularName) + "( key, value );");
 
                         sc.unindent();
-                        sc.add( "}" );
+                        sc.add("}");
                     }
 
                     sc.unindent();
-                    sc.add( "}" );
+                    sc.add("}");
                 }
             }
         }
     }
 
-    private void writePrimitiveField( ModelField field, String type, String objectName, String locatorName,
-                                      String locationKey, String setterName, JSourceCode sc, boolean wrappedItem )
-    {
-        XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
+    private void writePrimitiveField(
+            ModelField field,
+            String type,
+            String objectName,
+            String locatorName,
+            String locationKey,
+            String setterName,
+            JSourceCode sc,
+            boolean wrappedItem) {
+        XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata(XmlFieldMetadata.ID);
 
         String parserGetter = null;
-        if ( "boolean".equals( type ) || "Boolean".equals( type ) )
-        {
+        if ("boolean".equals(type) || "Boolean".equals(type)) {
             parserGetter = "parser.getBooleanValue()";
-        }
-        else if ( "int".equals( type ) || "Integer".equals( type ) )
-        {
+        } else if ("int".equals(type) || "Integer".equals(type)) {
             parserGetter = "parser.getIntValue()";
-        }
-        else if ( "short".equals( type ) || "Short".equals( type ) )
-        {
+        } else if ("short".equals(type) || "Short".equals(type)) {
             parserGetter = "parser.getShortValue()";
-        }
-        else if ( "long".equals( type ) || "Long".equals( type ) )
-        {
+        } else if ("long".equals(type) || "Long".equals(type)) {
             parserGetter = "parser.getLongValue()";
-        }
-        else if ( "double".equals( type ) || "Double".equals( type ) )
-        {
+        } else if ("double".equals(type) || "Double".equals(type)) {
             parserGetter = "parser.getDoubleValue()";
-        }
-        else if ( "float".equals( type ) || "Float".equals( type ) )
-        {
+        } else if ("float".equals(type) || "Float".equals(type)) {
             parserGetter = "parser.getFloatValue()";
-        }
-        else if ( "byte".equals( type ) )
-        {
+        } else if ("byte".equals(type)) {
             parserGetter = "parser.getByteValue()";
-        }
-        else if ( "String".equals( type ) )
-        {
+        } else if ("String".equals(type)) {
             parserGetter = "parser.getText()";
 
-            if ( xmlFieldMetadata.isTrim() )
-            {
+            if (xmlFieldMetadata.isTrim()) {
                 parserGetter = "getTrimmedValue( " + parserGetter + " )";
             }
-        }
-        else if ( "DOM".equals( type ) )
-        {
+        } else if ("DOM".equals(type)) {
             requiresDomSupport = true;
             parserGetter = "parser.readValueAsTree()";
-        }
-        else
-        {
-            throw new IllegalArgumentException( "Unknown type "
-                                                + type
-                                                + " for field "
-                                                + field.getModelClass().getName()
-                                                + "."
-                                                + field.getName() );
+        } else {
+            throw new IllegalArgumentException("Unknown type "
+                    + type
+                    + " for field "
+                    + field.getModelClass().getName()
+                    + "."
+                    + field.getName());
         }
 
         String keyCapture = "";
-        writeNewLocation( null, sc );
-        if ( locationTracker != null && "?".equals( locationKey ) )
-        {
-            sc.add( "Object _key;" );
+        writeNewLocation(null, sc);
+        if (locationTracker != null && "?".equals(locationKey)) {
+            sc.add("Object _key;");
             locationKey = "_key";
             keyCapture = "_key = ";
-        }
-        else
-        {
-            writeSetLocation( locationKey, locatorName, null, sc );
+        } else {
+            writeSetLocation(locationKey, locatorName, null, sc);
         }
 
         // primitives token already consumed when in ARRAY loop
-        if ( !wrappedItem )
-        {
-            sc.add( "parser.nextToken();" );
+        if (!wrappedItem) {
+            sc.add("parser.nextToken();");
         }
 
-        sc.add( objectName + "." + setterName + "( " + keyCapture + parserGetter + " );" );
+        sc.add(objectName + "." + setterName + "( " + keyCapture + parserGetter + " );");
 
-        if ( keyCapture.length() > 0 )
-        {
-            writeSetLocation( locationKey, locatorName, null, sc );
+        if (keyCapture.length() > 0) {
+            writeSetLocation(locationKey, locatorName, null, sc);
         }
     }
 
-    private void writeHelpers( JClass jClass )
-    {
-        JMethod method = new JMethod( "getTrimmedValue", new JClass( "String" ), null );
+    private void writeHelpers(JClass jClass) {
+        JMethod method = new JMethod("getTrimmedValue", new JClass("String"), null);
         method.getModifiers().makePrivate();
 
-        method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
+        method.addParameter(new JParameter(new JClass("String"), "s"));
 
         JSourceCode sc = method.getSourceCode();
 
-        sc.add( "if ( s != null )" );
+        sc.add("if ( s != null )");
 
-        sc.add( "{" );
-        sc.addIndented( "s = s.trim();" );
-        sc.add( "}" );
+        sc.add("{");
+        sc.addIndented("s = s.trim();");
+        sc.add("}");
 
-        sc.add( "return s;" );
+        sc.add("return s;");
 
-        jClass.addMethod( method );
+        jClass.addMethod(method);
 
         // --------------------------------------------------------------------
 
-        method = new JMethod( "getRequiredAttributeValue", new JClass( "String" ), null );
-        method.addException( new JClass( "JsonParseException" ) );
+        method = new JMethod("getRequiredAttributeValue", new JClass("String"), null);
+        method.addException(new JClass("JsonParseException"));
         method.getModifiers().makePrivate();
 
-        method.addParameter( new JParameter( new JClass( "String" ), "s" ) );
-        method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
-        method.addParameter( new JParameter( new JClass( "JsonParser" ), "parser" ) );
-        method.addParameter( new JParameter( JClass.BOOLEAN, "strict" ) );
+        method.addParameter(new JParameter(new JClass("String"), "s"));
+        method.addParameter(new JParameter(new JClass("String"), "attribute"));
+        method.addParameter(new JParameter(new JClass("JsonParser"), "parser"));
+        method.addParameter(new JParameter(JClass.BOOLEAN, "strict"));
 
         sc = method.getSourceCode();
 
-        sc.add( "if ( s == null )" );
+        sc.add("if ( s == null )");
 
-        sc.add( "{" );
+        sc.add("{");
         sc.indent();
 
-        sc.add( "if ( strict )" );
+        sc.add("if ( strict )");
 
-        sc.add( "{" );
+        sc.add("{");
         sc.addIndented(
-            "throw new JsonParseException( \"Missing required value for attribute '\" + attribute + \"'\", parser.getCurrentLocation() );" );
-        sc.add( "}" );
+                "throw new JsonParseException( \"Missing required value for attribute '\" + attribute + \"'\", parser.getCurrentLocation() );");
+        sc.add("}");
 
         sc.unindent();
-        sc.add( "}" );
+        sc.add("}");
 
-        sc.add( "return s;" );
+        sc.add("return s;");
 
-        jClass.addMethod( method );
-
-        // --------------------------------------------------------------------
-
-        method = new JMethod( "checkFieldWithDuplicate", JType.BOOLEAN, null );
-        method.getModifiers().makePrivate();
-
-        method.addParameter( new JParameter( new JClass( "JsonParser" ), "parser" ) );
-        method.addParameter( new JParameter( new JClass( "String" ), "tagName" ) );
-        method.addParameter( new JParameter( new JClass( "String" ), "alias" ) );
-        method.addParameter( new JParameter( new JClass( "Set" ), "parsed" ) );
-        method.addException( new JClass( "IOException" ) );
-
-        sc = method.getSourceCode();
-
-        sc.add( "String currentName = parser.getCurrentName();" );
-
-        sc.add( "" );
-
-        sc.add( "if ( !( currentName.equals( tagName ) || currentName.equals( alias ) ) )" );
-
-        sc.add( "{" );
-        sc.addIndented( "return false;" );
-        sc.add( "}" );
-
-        sc.add( "if ( !parsed.add( tagName ) )" );
-
-        sc.add( "{" );
-        sc.addIndented( "throw new JsonParseException( \"Duplicated tag: '\" + tagName + \"'\", parser.getCurrentLocation() );" );
-        sc.add( "}" );
-
-        sc.add( "return true;" );
-
-        jClass.addMethod( method );
+        jClass.addMethod(method);
 
         // --------------------------------------------------------------------
 
-        method = new JMethod( "checkUnknownElement", null, null );
+        method = new JMethod("checkFieldWithDuplicate", JType.BOOLEAN, null);
         method.getModifiers().makePrivate();
 
-        method.addParameter( new JParameter( new JClass( "JsonParser" ), "parser" ) );
-        method.addParameter( new JParameter( JType.BOOLEAN, "strict" ) );
-        method.addException( new JClass( "IOException" ) );
+        method.addParameter(new JParameter(new JClass("JsonParser"), "parser"));
+        method.addParameter(new JParameter(new JClass("String"), "tagName"));
+        method.addParameter(new JParameter(new JClass("String"), "alias"));
+        method.addParameter(new JParameter(new JClass("Set"), "parsed"));
+        method.addException(new JClass("IOException"));
 
         sc = method.getSourceCode();
 
-        sc.add( "if ( strict )" );
+        sc.add("String currentName = parser.getCurrentName();");
 
-        sc.add( "{" );
+        sc.add("");
+
+        sc.add("if ( !( currentName.equals( tagName ) || currentName.equals( alias ) ) )");
+
+        sc.add("{");
+        sc.addIndented("return false;");
+        sc.add("}");
+
+        sc.add("if ( !parsed.add( tagName ) )");
+
+        sc.add("{");
         sc.addIndented(
-            "throw new JsonParseException( \"Unrecognised tag: '\" + parser.getCurrentName() + \"'\", parser.getCurrentLocation() );" );
-        sc.add( "}" );
+                "throw new JsonParseException( \"Duplicated tag: '\" + tagName + \"'\", parser.getCurrentLocation() );");
+        sc.add("}");
 
-        sc.add( "" );
+        sc.add("return true;");
 
-        sc.add( "for ( int unrecognizedTagCount = 1; unrecognizedTagCount > 0; )" );
-        sc.add( "{" );
+        jClass.addMethod(method);
+
+        // --------------------------------------------------------------------
+
+        method = new JMethod("checkUnknownElement", null, null);
+        method.getModifiers().makePrivate();
+
+        method.addParameter(new JParameter(new JClass("JsonParser"), "parser"));
+        method.addParameter(new JParameter(JType.BOOLEAN, "strict"));
+        method.addException(new JClass("IOException"));
+
+        sc = method.getSourceCode();
+
+        sc.add("if ( strict )");
+
+        sc.add("{");
+        sc.addIndented(
+                "throw new JsonParseException( \"Unrecognised tag: '\" + parser.getCurrentName() + \"'\", parser.getCurrentLocation() );");
+        sc.add("}");
+
+        sc.add("");
+
+        sc.add("for ( int unrecognizedTagCount = 1; unrecognizedTagCount > 0; )");
+        sc.add("{");
         sc.indent();
-        sc.add( "JsonToken eventType = parser.nextToken();" );
-        sc.add( "if ( eventType == JsonToken.START_OBJECT )" );
-        sc.add( "{" );
-        sc.addIndented( "unrecognizedTagCount++;" );
-        sc.add( "}" );
-        sc.add( "else if ( eventType == JsonToken.END_OBJECT )" );
-        sc.add( "{" );
-        sc.addIndented( "unrecognizedTagCount--;" );
-        sc.add( "}" );
+        sc.add("JsonToken eventType = parser.nextToken();");
+        sc.add("if ( eventType == JsonToken.START_OBJECT )");
+        sc.add("{");
+        sc.addIndented("unrecognizedTagCount++;");
+        sc.add("}");
+        sc.add("else if ( eventType == JsonToken.END_OBJECT )");
+        sc.add("{");
+        sc.addIndented("unrecognizedTagCount--;");
+        sc.add("}");
         sc.unindent();
-        sc.add( "}" );
+        sc.add("}");
 
-        jClass.addMethod( method );
+        jClass.addMethod(method);
 
         // --------------------------------------------------------------------
 
-        method = new JMethod( "checkUnknownAttribute", null, null );
+        method = new JMethod("checkUnknownAttribute", null, null);
         method.getModifiers().makePrivate();
 
-        method.addParameter( new JParameter( new JClass( "JsonParser" ), "parser" ) );
-        method.addParameter( new JParameter( new JClass( "String" ), "attribute" ) );
-        method.addParameter( new JParameter( new JClass( "String" ), "tagName" ) );
-        method.addParameter( new JParameter( JType.BOOLEAN, "strict" ) );
-        method.addException( new JClass( "IOException" ) );
+        method.addParameter(new JParameter(new JClass("JsonParser"), "parser"));
+        method.addParameter(new JParameter(new JClass("String"), "attribute"));
+        method.addParameter(new JParameter(new JClass("String"), "tagName"));
+        method.addParameter(new JParameter(JType.BOOLEAN, "strict"));
+        method.addException(new JClass("IOException"));
 
         sc = method.getSourceCode();
 
-        if ( strictXmlAttributes )
-        {
+        if (strictXmlAttributes) {
             sc.add(
-                "// strictXmlAttributes = true for model: if strict == true, not only elements are checked but attributes too" );
-            sc.add( "if ( strict )" );
+                    "// strictXmlAttributes = true for model: if strict == true, not only elements are checked but attributes too");
+            sc.add("if ( strict )");
 
-            sc.add( "{" );
+            sc.add("{");
             sc.addIndented(
-                "throw new JsonParseException( \"Unknown attribute '\" + attribute + \"' for tag '\" + tagName + \"'\", parser.getCurrentLocation() );" );
-            sc.add( "}" );
-        }
-        else
-        {
+                    "throw new JsonParseException( \"Unknown attribute '\" + attribute + \"' for tag '\" + tagName + \"'\", parser.getCurrentLocation() );");
+            sc.add("}");
+        } else {
             sc.add(
-                "// strictXmlAttributes = false for model: always ignore unknown XML attribute, even if strict == true" );
+                    "// strictXmlAttributes = false for model: always ignore unknown XML attribute, even if strict == true");
         }
 
-        jClass.addMethod( method );
+        jClass.addMethod(method);
     }
 
-    private void addTrackingParameters( JMethod method )
-    {
-        if ( sourceTracker != null )
-        {
-            method.addParameter( new JParameter( new JClass( sourceTracker.getName() ), SOURCE_PARAM ) );
+    private void addTrackingParameters(JMethod method) {
+        if (sourceTracker != null) {
+            method.addParameter(new JParameter(new JClass(sourceTracker.getName()), SOURCE_PARAM));
         }
     }
 
-    private void writeNewSetLocation( ModelField field, String objectName, String trackerVariable, JSourceCode sc )
-    {
-        writeNewSetLocation( "\"" + field.getName() + "\"", objectName, trackerVariable, sc );
+    private void writeNewSetLocation(ModelField field, String objectName, String trackerVariable, JSourceCode sc) {
+        writeNewSetLocation("\"" + field.getName() + "\"", objectName, trackerVariable, sc);
     }
 
-    private void writeNewSetLocation( String key, String objectName, String trackerVariable, JSourceCode sc )
-    {
-        writeNewLocation( trackerVariable, sc );
-        writeSetLocation( key, objectName, trackerVariable, sc );
+    private void writeNewSetLocation(String key, String objectName, String trackerVariable, JSourceCode sc) {
+        writeNewLocation(trackerVariable, sc);
+        writeSetLocation(key, objectName, trackerVariable, sc);
     }
 
-    private void writeNewLocation( String trackerVariable, JSourceCode sc )
-    {
-        if ( locationTracker == null )
-        {
+    private void writeNewLocation(String trackerVariable, JSourceCode sc) {
+        if (locationTracker == null) {
             return;
         }
 
         String constr = "new " + locationTracker.getName() + "( parser.getLineNumber(), parser.getColumnNumber()";
-        constr += ( sourceTracker != null ) ? ", " + SOURCE_PARAM : "";
+        constr += (sourceTracker != null) ? ", " + SOURCE_PARAM : "";
         constr += " )";
 
-        sc.add( ( ( trackerVariable != null ) ? trackerVariable : LOCATION_VAR ) + " = " + constr + ";" );
+        sc.add(((trackerVariable != null) ? trackerVariable : LOCATION_VAR) + " = " + constr + ";");
     }
 
-    private void writeSetLocation( String key, String objectName, String trackerVariable, JSourceCode sc )
-    {
-        if ( locationTracker == null )
-        {
+    private void writeSetLocation(String key, String objectName, String trackerVariable, JSourceCode sc) {
+        if (locationTracker == null) {
             return;
         }
 
-        String variable = ( trackerVariable != null ) ? trackerVariable : LOCATION_VAR;
+        String variable = (trackerVariable != null) ? trackerVariable : LOCATION_VAR;
 
-        sc.add( objectName + ".set" + capitalise( singular( locationField ) ) + "( " + key + ", " + variable + " );" );
+        sc.add(objectName + ".set" + capitalise(singular(locationField)) + "( " + key + ", " + variable + " );");
     }
-
 }

@@ -29,47 +29,39 @@ import java.util.Properties;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelValidationException;
-import org.codehaus.plexus.PlexusContainer;
 import org.codehaus.plexus.DefaultPlexusContainer;
+import org.codehaus.plexus.PlexusContainer;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  */
-public class Modello
-{
+public class Modello {
     private PlexusContainer container;
 
     private ModelloCore core;
 
-    public Modello()
-        throws ModelloException
-    {
-        try
-        {
+    public Modello() throws ModelloException {
+        try {
             container = new DefaultPlexusContainer();
 
-            core = (ModelloCore) container.lookup( ModelloCore.ROLE );
-        }
-        catch ( Exception ex )
-        {
-            throw new ModelloException( "Error while starting plexus.", ex );
+            core = (ModelloCore) container.lookup(ModelloCore.ROLE);
+        } catch (Exception ex) {
+            throw new ModelloException("Error while starting plexus.", ex);
         }
     }
 
-    public void generate( Reader modelReader, String outputType, Properties parameters )
-        throws ModelloException, ModelValidationException
-    {
-        Model model = core.loadModel( modelReader );
+    public void generate(Reader modelReader, String outputType, Properties parameters)
+            throws ModelloException, ModelValidationException {
+        Model model = core.loadModel(modelReader);
 
-        core.generate( model, outputType, parameters );
+        core.generate(model, outputType, parameters);
     }
 
-    public void translate( Reader reader, Writer writer, String outputType, Properties parameters )
-        throws ModelloException, ModelValidationException
-    {
-        Model model = core.translate( reader, outputType, parameters );
+    public void translate(Reader reader, Writer writer, String outputType, Properties parameters)
+            throws ModelloException, ModelValidationException {
+        Model model = core.translate(reader, outputType, parameters);
 
-        core.saveModel( model, writer );
+        core.saveModel(model, writer);
     }
 }

@@ -1,25 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
+  <parent>
+    <groupId>org.codehaus.plexus</groupId>
+    <artifactId>plexus</artifactId>
+    <version>14</version>
+  </parent>
+
   <groupId>org.codehaus.modello</groupId>
   <artifactId>modello</artifactId>
-  <version>2.1.0-SNAPSHOT</version>
+  <version>2.1.3-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>Modello</name>
-  <description>
-    Modello is a framework for code generation from a simple model.
+  <description>Modello is a framework for code generation from a simple model.
     Modello generates code from a simple model format: based on a plugin architecture, various types of code and
     descriptors can be generated from the single model, including Java POJOs, XML/JSON/YAML marshallers/unmarshallers,
-    XSD, JSON Schema and documentation.
-  </description>
+    XSD, JSON Schema and documentation.</description>
   <url>http://codehaus-plexus.github.io/modello/</url>
   <inceptionYear>2001</inceptionYear>
   <organization>
     <name>Codehaus Plexus</name>
     <url>http://codehaus-plexus.github.io/</url>
   </organization>
-  
+
   <licenses>
     <license>
       <name>The MIT License</name>
@@ -167,7 +172,7 @@
       <otherArchives>
         <otherArchive>http://markmail.org/list/org.codehaus.modello.scm</otherArchive>
       </otherArchives>
-     </mailingList>
+    </mailingList>
   </mailingLists>
 
   <modules>
@@ -180,8 +185,8 @@
   <scm>
     <connection>scm:git:https://github.com/codehaus-plexus/modello.git</connection>
     <developerConnection>scm:git:https://github.com/codehaus-plexus/modello.git</developerConnection>
+    <tag>modello-2.1.2</tag>
     <url>http://github.com/codehaus-plexus/modello/tree/${project.scm.tag}/</url>
-    <tag>master</tag>
   </scm>
   <issueManagement>
     <system>github</system>
@@ -217,15 +222,17 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <jackson.version>2.13.3</jackson.version>
+    <jackson.version>2.15.2</jackson.version>
     <jdom.version>2.0.2</jdom.version>
+    <surefire.version>3.1.2</surefire.version>
+    <maven.version>3.5.4</maven.version>
     <!--
       ! This controls the minimum java version
       ! and also the version which is used
       ! in the integration tests.
     -->
     <java.version>1.8</java.version>
-    <project.build.outputTimestamp>2022-02-13T14:31:03Z</project.build.outputTimestamp>
+    <project.build.outputTimestamp>2023-06-06T22:23:45Z</project.build.outputTimestamp>
   </properties>
 
   <dependencyManagement>
@@ -314,6 +321,11 @@
         <version>${project.version}</version>
       </dependency>
       <dependency>
+        <groupId>org.codehaus.modello</groupId>
+        <artifactId>modello-plugin-velocity</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
         <groupId>org.eclipse.sisu</groupId>
         <artifactId>org.eclipse.sisu.plexus</artifactId>
         <version>0.3.5</version>
@@ -327,17 +339,17 @@
       <dependency>
         <groupId>org.codehaus.plexus</groupId>
         <artifactId>plexus-utils</artifactId>
-        <version>3.4.2</version>
+        <version>4.0.0</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.plexus</groupId>
-        <artifactId>plexus-velocity</artifactId>
-        <version>2.0</version>
+        <artifactId>plexus-xml</artifactId>
+        <version>4.0.2</version>
       </dependency>
       <dependency>
-        <groupId>org.sonatype.plexus</groupId>
+        <groupId>org.codehaus.plexus</groupId>
         <artifactId>plexus-build-api</artifactId>
-        <version>0.0.7</version>
+        <version>1.2.0</version>
       </dependency>
       <dependency>
         <groupId>junit</groupId>
@@ -347,6 +359,11 @@
     </dependencies>
   </dependencyManagement>
   <dependencies>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-component-annotations</artifactId>
+      <version>2.1.1</version>
+    </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
@@ -361,20 +378,20 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-assembly-plugin</artifactId>
-          <version>3.3.0</version>
+          <version>3.6.0</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-clean-plugin</artifactId>
-          <version>3.2.0</version>
+          <version>3.3.1</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-checkstyle-plugin</artifactId>
-          <version>3.1.2</version>
+          <version>3.3.0</version>
           <configuration>
-<!--            <configLocation>config/maven_checks.xml</configLocation>-->
-<!--            <headerLocation>config/maven-header.txt</headerLocation>-->
+            <!--            <configLocation>config/maven_checks.xml</configLocation>-->
+            <!--            <headerLocation>config/maven-header.txt</headerLocation>-->
             <skip>true</skip>
             <failOnViolation>false</failOnViolation>
           </configuration>
@@ -382,20 +399,21 @@
             <dependency>
               <groupId>com.puppycrawl.tools</groupId>
               <artifactId>checkstyle</artifactId>
-              <version>9.3</version><!-- 10.x requires Java 11 -->
+              <version>9.3</version>
+              <!-- 10.x requires Java 11 -->
             </dependency>
             <!-- replace with Plexus own checkstyle definitions -->
             <dependency>
               <groupId>org.apache.maven.shared</groupId>
               <artifactId>maven-shared-resources</artifactId>
-              <version>4</version>
+              <version>5</version>
             </dependency>
           </dependencies>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.10.1</version>
+          <version>3.11.0</version>
           <configuration>
             <source>${java.version}</source>
             <target>${java.version}</target>
@@ -404,12 +422,12 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-deploy-plugin</artifactId>
-          <version>2.8.2</version>
+          <version>3.1.1</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-enforcer-plugin</artifactId>
-          <version>3.0.0</version>
+          <version>3.4.0</version>
           <executions>
             <execution>
               <id>enforce-java</id>
@@ -422,7 +440,7 @@
                     <version>${java.version}</version>
                   </requireJavaVersion>
                   <requireMavenVersion>
-                    <version>3.0.5</version>
+                    <version>${maven.version}</version>
                   </requireMavenVersion>
                 </rules>
               </configuration>
@@ -432,17 +450,17 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-gpg-plugin</artifactId>
-          <version>3.0.1</version>
+          <version>3.1.0</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-install-plugin</artifactId>
-          <version>2.5.2</version>
+          <version>3.1.1</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-jar-plugin</artifactId>
-          <version>3.2.2</version>
+          <version>3.3.0</version>
           <configuration>
             <archive>
               <manifest>
@@ -455,7 +473,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-javadoc-plugin</artifactId>
-          <version>3.4.0</version>
+          <version>3.5.0</version>
           <configuration>
             <detectJavaApiLink>false</detectJavaApiLink>
           </configuration>
@@ -463,11 +481,11 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-project-info-reports-plugin</artifactId>
-          <version>3.3.0</version>
+          <version>3.4.5</version>
         </plugin>
         <plugin>
           <artifactId>maven-release-plugin</artifactId>
-          <version>3.0.0-M6</version>
+          <version>3.0.1</version>
           <configuration>
             <autoVersionSubmodules>true</autoVersionSubmodules>
             <goals>deploy</goals>
@@ -477,12 +495,12 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-resources-plugin</artifactId>
-          <version>3.2.0</version>
+          <version>3.3.1</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-scm-publish-plugin</artifactId>
-          <version>3.1.0</version>
+          <version>3.2.1</version>
           <configuration>
             <pubScmUrl>${project.scm.developerConnection}</pubScmUrl>
             <scmBranch>gh-pages</scmBranch>
@@ -491,25 +509,26 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-source-plugin</artifactId>
-          <version>3.2.1</version>
+          <version>3.3.0</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-site-plugin</artifactId>
-          <version>3.12.0</version>
+          <version>3.12.1</version>
           <configuration>
-            <skipDeploy>true</skipDeploy><!-- don't deploy site with maven-site-plugin -->
+            <skipDeploy>true</skipDeploy>
+            <!-- don't deploy site with maven-site-plugin -->
           </configuration>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
-          <version>2.22.2</version>
+          <version>${surefire.version}</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-report-plugin</artifactId>
-          <version>2.22.2</version>
+          <version>${surefire.version}</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -518,6 +537,35 @@
         </plugin>
       </plugins>
     </pluginManagement>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <artifactId>maven-site-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>attach-descriptor</id>
+            <goals>
+              <goal>attach-descriptor</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.plexus</groupId>
+        <artifactId>plexus-component-metadata</artifactId>
+        <version>2.1.1</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>generate-metadata</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
   </build>
 
   <reporting>
@@ -544,16 +592,16 @@
               <dependency>
                 <groupId>org.apache.apache.resources</groupId>
                 <artifactId>apache-source-release-assembly-descriptor</artifactId>
-                <version>1.0.6</version>
+                <version>1.5</version>
               </dependency>
             </dependencies>
             <executions>
               <execution>
                 <id>source-release-assembly</id>
-                <phase>package</phase>
                 <goals>
                   <goal>single</goal>
                 </goals>
+                <phase>package</phase>
                 <configuration>
                   <runOnlyAtExecutionRoot>true</runOnlyAtExecutionRoot>
                   <descriptorRefs>
@@ -610,7 +658,7 @@
           <plugin>
             <groupId>org.codehaus.modello</groupId>
             <artifactId>modello-maven-plugin</artifactId>
-            <version>1.8.3</version>
+            <version>2.0.0</version>
             <configuration>
               <models>
                 <model>src/main/mdo/modello.mdo</model>
@@ -620,22 +668,22 @@
             <executions>
               <execution>
                 <id>xdoc</id>
-                <inherited>false</inherited>
-                <phase>pre-site</phase>
                 <goals>
                   <goal>xdoc</goal>
                 </goals>
+                <phase>pre-site</phase>
+                <inherited>false</inherited>
                 <configuration>
                   <firstVersion>1.0.0</firstVersion>
                 </configuration>
               </execution>
               <execution>
                 <id>xsd</id>
-                <inherited>false</inherited>
-                <phase>pre-site</phase>
                 <goals>
                   <goal>xsd</goal>
                 </goals>
+                <phase>pre-site</phase>
+                <inherited>false</inherited>
                 <configuration>
                   <outputDirectory>${project.build.directory}/generated-site/resources/xsd</outputDirectory>
                 </configuration>
@@ -657,7 +705,7 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-pmd-plugin</artifactId>
-            <version>3.17.0</version>
+            <version>3.21.0</version>
             <configuration>
               <targetJdk>${java.version}</targetJdk>
               <rulesets>
@@ -672,7 +720,7 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-jxr-plugin</artifactId>
-            <version>3.2.0</version>
+            <version>3.3.0</version>
           </plugin>
           <plugin>
             <groupId>org.codehaus.mojo</groupId>
@@ -691,37 +739,8 @@
               </reportSet>
             </reportSets>
           </plugin>
-          <!--plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>clirr-maven-plugin</artifactId>
-            <version>2.2.2</version>
-          </plugin-->
         </plugins>
       </reporting>
-    </profile>
-    <profile>
-      <id>maven-3</id>
-      <activation>
-        <file>
-          <!--  This employs that the basedir expression is only recognized by Maven 3.x (see MNG-2363) -->
-          <exists>${basedir}</exists>
-        </file>
-      </activation>
-      <build>
-        <plugins>
-          <plugin>
-            <artifactId>maven-site-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>attach-descriptor</id>
-                <goals>
-                  <goal>attach-descriptor</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
     </profile>
   </profiles>
 

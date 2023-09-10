@@ -27,8 +27,6 @@ import org.codehaus.modello.metadata.InterfaceMetadata;
 /**
  * @author Hervé Boutemy
  */
-public class XdocInterfaceMetadata
-    implements InterfaceMetadata
-{
+public class XdocInterfaceMetadata implements InterfaceMetadata {
     public static final String ID = XdocInterfaceMetadata.class.getName();
 }

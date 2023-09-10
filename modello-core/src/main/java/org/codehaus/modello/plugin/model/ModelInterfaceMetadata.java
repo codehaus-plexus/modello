@@ -27,8 +27,6 @@ import org.codehaus.modello.metadata.InterfaceMetadata;
 /**
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
  */
-public class ModelInterfaceMetadata
-    implements InterfaceMetadata
-{
+public class ModelInterfaceMetadata implements InterfaceMetadata {
     public static final String ID = ModelInterfaceMetadata.class.getName();
 }

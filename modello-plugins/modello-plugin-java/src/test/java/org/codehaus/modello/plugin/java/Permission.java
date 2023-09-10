@@ -17,13 +17,12 @@ package org.codehaus.modello.plugin.java;
  */
 
 /**
- * Test Interface used by to ensure that interface overrides can be used. 
+ * Test Interface used by to ensure that interface overrides can be used.
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  */
-public interface Permission
-{
+public interface Permission {
     public String getName();
 
-    public void setName( String name );
+    public void setName(String name);
 }

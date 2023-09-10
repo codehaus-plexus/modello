@@ -31,12 +31,9 @@ import org.apache.maven.plugins.annotations.Mojo;
  * @since 1.8
  * @author <a href="mailto:simonetripodi@apache.org">Simone Tripodi</a>
  */
-@Mojo( name = "snakeyaml-reader", defaultPhase = LifecyclePhase.GENERATE_SOURCES, threadSafe = true )
-public class ModelloSnakeYamlReaderMojo
-    extends AbstractModelloSourceGeneratorMojo
-{
-    protected String getGeneratorType()
-    {
+@Mojo(name = "snakeyaml-reader", defaultPhase = LifecyclePhase.GENERATE_SOURCES, threadSafe = true)
+public class ModelloSnakeYamlReaderMojo extends AbstractModelloSourceGeneratorMojo {
+    protected String getGeneratorType() {
         return "snakeyaml-reader";
     }
 }

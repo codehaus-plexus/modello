@@ -22,30 +22,28 @@ package org.codehaus.modello.maven;
  * SOFTWARE.
  */
 
+import java.io.File;
+import java.util.Properties;
+
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.codehaus.modello.ModelloParameterConstants;
-
-import java.io.File;
-import java.util.Properties;
 
 /**
  * Creates documentation for the model in xdoc format.
  *
  * @author <a href="mailto:brett@apache.org">Brett Porter</a>
  */
-@Mojo( name = "xdoc", threadSafe = true )
-public class ModelloXdocMojo
-    extends AbstractModelloGeneratorMojo
-{
+@Mojo(name = "xdoc", threadSafe = true)
+public class ModelloXdocMojo extends AbstractModelloGeneratorMojo {
     /**
      * The output directory of the generated documentation.
      */
-    @Parameter( defaultValue = "${project.build.directory}/generated-site/xdoc", required = true )
+    @Parameter(defaultValue = "${project.build.directory}/generated-site/xdoc", required = true)
     private File outputDirectory;
-    
+
     /**
-     * 
+     *
      * @since 1.0-alpha-21
      */
     @Parameter
@@ -62,51 +60,42 @@ public class ModelloXdocMojo
     @Parameter
     private String firstVersion;
 
-    protected String getGeneratorType()
-    {
+    protected String getGeneratorType() {
         return "xdoc";
     }
 
-    protected boolean producesCompilableResult()
-    {
+    protected boolean producesCompilableResult() {
         return false;
     }
 
-    public File getOutputDirectory()
-    {
+    public File getOutputDirectory() {
         return outputDirectory;
     }
 
-    public void setOutputDirectory( File outputDirectory )
-    {
+    public void setOutputDirectory(File outputDirectory) {
         this.outputDirectory = outputDirectory;
     }
 
-    protected void customizeParameters( Properties parameters )
-    {
-        super.customizeParameters( parameters );
+    protected void customizeParameters(Properties parameters) {
+        super.customizeParameters(parameters);
 
         // Use version if firstVersion was not specified
-        if ( firstVersion == null )
-        {
+        if (firstVersion == null) {
             firstVersion = getVersion();
         }
 
-        parameters.put( ModelloParameterConstants.FIRST_VERSION, firstVersion );
-       
-        if ( xdocFileName != null )
-        {
-            parameters.put( ModelloParameterConstants.OUTPUT_XDOC_FILE_NAME, xdocFileName );
+        parameters.put(ModelloParameterConstants.FIRST_VERSION, firstVersion);
+
+        if (xdocFileName != null) {
+            parameters.put(ModelloParameterConstants.OUTPUT_XDOC_FILE_NAME, xdocFileName);
         }
     }
 
-    public String getFirstVersion()
-    {
+    public String getFirstVersion() {
         return firstVersion;
     }
 
-    public void setFirstVersion( String firstVersion )
-    {
+    public void setFirstVersion(String firstVersion) {
         this.firstVersion = firstVersion;
     }
 }

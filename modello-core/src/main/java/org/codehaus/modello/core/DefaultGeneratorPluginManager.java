@@ -22,31 +22,38 @@ package org.codehaus.modello.core;
  * SOFTWARE.
  */
 
+import java.util.Map;
+
 import org.codehaus.modello.ModelloRuntimeException;
 import org.codehaus.modello.plugin.AbstractPluginManager;
 import org.codehaus.modello.plugin.ModelloGenerator;
+import org.codehaus.plexus.component.annotations.Component;
+import org.codehaus.plexus.component.annotations.Requirement;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  */
-public class DefaultGeneratorPluginManager
-    extends AbstractPluginManager<ModelloGenerator>
-    implements GeneratorPluginManager
-{
-    public ModelloGenerator getGeneratorPlugin( String generatorId )
-    {
-        ModelloGenerator generator = getPlugin( generatorId );
+@Component(role = GeneratorPluginManager.class)
+public class DefaultGeneratorPluginManager extends AbstractPluginManager<ModelloGenerator>
+        implements GeneratorPluginManager {
+    @Requirement
+    private Map<String, ModelloGenerator> plugins;
 
-        if ( generator == null )
-        {
-            throw new ModelloRuntimeException( "No such generator plugin: '" + generatorId + "'." );
+    public Map<String, ModelloGenerator> getPlugins() {
+        return plugins;
+    }
+
+    public ModelloGenerator getGeneratorPlugin(String generatorId) {
+        ModelloGenerator generator = getPlugin(generatorId);
+
+        if (generator == null) {
+            throw new ModelloRuntimeException("No such generator plugin: '" + generatorId + "'.");
         }
 
         return generator;
     }
 
-    public boolean hasGeneratorPlugin( String generatorId )
-    {
-        return hasPlugin( generatorId );
+    public boolean hasGeneratorPlugin(String generatorId) {
+        return hasPlugin(generatorId);
     }
 }

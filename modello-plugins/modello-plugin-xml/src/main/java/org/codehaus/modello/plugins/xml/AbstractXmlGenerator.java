@@ -39,12 +39,9 @@ import org.codehaus.plexus.util.xml.XmlWriterUtil;
  *
  * @author <a href="mailto:hboutemy@codehaus.org">Hervé Boutemy</a>
  */
-public abstract class AbstractXmlGenerator
-    extends AbstractModelloGenerator
-{
-    protected void initHeader( XMLWriter w )
-    {
-        XmlWriterUtil.writeComment( w, getHeader() );
+public abstract class AbstractXmlGenerator extends AbstractModelloGenerator {
+    protected void initHeader(XMLWriter w) {
+        XmlWriterUtil.writeComment(w, getHeader());
     }
 
     /**
@@ -53,9 +50,8 @@ public abstract class AbstractXmlGenerator
      * @param modelClass the model class
      * @return the XML tag name for the class
      */
-    protected String resolveTagName( ModelClass modelClass )
-    {
-        return XmlModelHelpers.resolveTagName( modelClass );
+    protected String resolveTagName(ModelClass modelClass) {
+        return XmlModelHelpers.resolveTagName(modelClass);
     }
 
     /**
@@ -65,9 +61,8 @@ public abstract class AbstractXmlGenerator
      * @param xmlFieldMetadata the XML metadata of the field
      * @return the XML tag name for the field
      */
-    protected String resolveTagName( ModelField modelField, XmlFieldMetadata xmlFieldMetadata )
-    {
-        return XmlModelHelpers.resolveTagName( modelField, xmlFieldMetadata );
+    protected String resolveTagName(ModelField modelField, XmlFieldMetadata xmlFieldMetadata) {
+        return XmlModelHelpers.resolveTagName(modelField, xmlFieldMetadata);
     }
 
     /**
@@ -77,14 +72,12 @@ public abstract class AbstractXmlGenerator
      * @param xmlAssociationMetadata the XML metadata of the association
      * @return the XML tag name for items
      */
-    protected String resolveTagName( String fieldTagName, XmlAssociationMetadata xmlAssociationMetadata )
-    {
-        return XmlModelHelpers.resolveTagName( fieldTagName, xmlAssociationMetadata );
+    protected String resolveTagName(String fieldTagName, XmlAssociationMetadata xmlAssociationMetadata) {
+        return XmlModelHelpers.resolveTagName(fieldTagName, xmlAssociationMetadata);
     }
 
-    protected boolean hasContentField( List<ModelField> modelFields )
-    {
-        return ( getContentField( modelFields ) != null );
+    protected boolean hasContentField(List<ModelField> modelFields) {
+        return (getContentField(modelFields) != null);
     }
 
     /**
@@ -93,9 +86,8 @@ public abstract class AbstractXmlGenerator
      * @param modelFields the fields to check
      * @return the field, or <code>null</code> if no field is <code>Content</code>
      */
-    protected ModelField getContentField( List<ModelField> modelFields )
-    {
-        return XmlModelHelpers.getContentField( modelFields );
+    protected ModelField getContentField(List<ModelField> modelFields) {
+        return XmlModelHelpers.getContentField(modelFields);
     }
 
     /**
@@ -105,9 +97,8 @@ public abstract class AbstractXmlGenerator
      *            <code>null</code>.
      * @return The list of XML attributes fields, can be empty but never <code>null</code>.
      */
-    protected List<ModelField> getXmlAttributeFields( List<ModelField> modelFields )
-    {
-        return XmlModelHelpers.getXmlAttributeFields( modelFields );
+    protected List<ModelField> getXmlAttributeFields(List<ModelField> modelFields) {
+        return XmlModelHelpers.getXmlAttributeFields(modelFields);
     }
 
     /**
@@ -117,8 +108,7 @@ public abstract class AbstractXmlGenerator
      * @param version the version of the class to use
      * @return the list of XML fields of this class
      */
-    protected List<ModelField> getFieldsForXml( ModelClass modelClass, Version version )
-    {
-        return XmlModelHelpers.getFieldsForXml( modelClass, version );
+    protected List<ModelField> getFieldsForXml(ModelClass modelClass, Version version) {
+        return XmlModelHelpers.getFieldsForXml(modelClass, version);
     }
 }

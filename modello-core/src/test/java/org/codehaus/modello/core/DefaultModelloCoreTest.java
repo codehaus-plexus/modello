@@ -28,64 +28,46 @@ import org.codehaus.plexus.PlexusTestCase;
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  */
-public class DefaultModelloCoreTest
-    extends PlexusTestCase
-{
-    public void testModelWithDuplicateClasses()
-        throws Exception
-    {
-        ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
+public class DefaultModelloCoreTest extends PlexusTestCase {
+    public void testModelWithDuplicateClasses() throws Exception {
+        ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
 
-        try
-        {
-            modello.loadModel( getTestFile( "src/test/resources/models/duplicate-classes.mdo" ) );
+        try {
+            modello.loadModel(getTestFile("src/test/resources/models/duplicate-classes.mdo"));
 
-            fail( "Expected ModelloRuntimeException." );
-        }
-        catch( ModelloRuntimeException ex )
-        {
-            assertEquals( "Duplicate class: MyClass.", ex.getMessage() );
+            fail("Expected ModelloRuntimeException.");
+        } catch (ModelloRuntimeException ex) {
+            assertEquals("Duplicate class: MyClass.", ex.getMessage());
         }
     }
 
-    public void testModelWithDuplicateFields()
-        throws Exception
-    {
-        ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
+    public void testModelWithDuplicateFields() throws Exception {
+        ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
 
-        try
-        {
-            modello.loadModel( getTestFile( "src/test/resources/models/duplicate-fields.mdo" ) );
+        try {
+            modello.loadModel(getTestFile("src/test/resources/models/duplicate-fields.mdo"));
 
-            fail( "Expected ModelloRuntimeException." );
-        }
-        catch( ModelloRuntimeException ex )
-        {
-            assertEquals( "Duplicate field in MyClass: MyField.", ex.getMessage() );
+            fail("Expected ModelloRuntimeException.");
+        } catch (ModelloRuntimeException ex) {
+            assertEquals("Duplicate field in MyClass: MyField.", ex.getMessage());
         }
     }
 
-    public void testModelWithDuplicateAssociations()
-        throws Exception
-    {
-        ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
+    public void testModelWithDuplicateAssociations() throws Exception {
+        ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
 
-        try
-        {
-            modello.loadModel( getTestFile( "src/test/resources/models/duplicate-associations.mdo" ) );
+        try {
+            modello.loadModel(getTestFile("src/test/resources/models/duplicate-associations.mdo"));
 
-            fail( "Expected ModelloRuntimeException." );
-        }
-        catch( ModelloRuntimeException ex )
-        {
-            assertEquals( "Duplicate field in MyClass: MyAssociation.", ex.getMessage() );
+            fail("Expected ModelloRuntimeException.");
+        } catch (ModelloRuntimeException ex) {
+            assertEquals("Duplicate field in MyClass: MyAssociation.", ex.getMessage());
         }
     }
-    
-    public void testRecursion() throws Exception
-    {
-        ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
-        
-        modello.loadModel( getTestFile( "src/test/resources/models/recursion.mdo" ) ); 
+
+    public void testRecursion() throws Exception {
+        ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
+
+        modello.loadModel(getTestFile("src/test/resources/models/recursion.mdo"));
     }
 }

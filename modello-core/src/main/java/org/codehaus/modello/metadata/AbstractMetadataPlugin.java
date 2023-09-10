@@ -22,34 +22,28 @@ package org.codehaus.modello.metadata;
  * SOFTWARE.
  */
 
+import java.util.Map;
+
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.StringUtils;
-
-import java.util.Map;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  */
-public abstract class AbstractMetadataPlugin
-    extends AbstractLogEnabled
-    implements MetadataPlugin
-{
-    protected boolean getBoolean( Map<String, String> data, String key, boolean defaultValue )
-    {
-        String value = data.get( key );
+public abstract class AbstractMetadataPlugin extends AbstractLogEnabled implements MetadataPlugin {
+    protected boolean getBoolean(Map<String, String> data, String key, boolean defaultValue) {
+        String value = data.get(key);
 
-        if ( StringUtils.isEmpty( value ) )
-        {
+        if (StringUtils.isEmpty(value)) {
             return defaultValue;
         }
 
-        return Boolean.valueOf( value ).booleanValue();
+        return Boolean.valueOf(value).booleanValue();
     }
 
-    protected String getString( Map<String, String> data, String key )
-    {
-        String value = data.get( key );
+    protected String getString(Map<String, String> data, String key) {
+        String value = data.get(key);
 
-        return StringUtils.isEmpty( value ) ? null : value;
+        return StringUtils.isEmpty(value) ? null : value;
     }
 }

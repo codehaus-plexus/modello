@@ -23,8 +23,7 @@ import org.codehaus.modello.metadata.ClassMetadata;
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  */
-public class XsdClassMetadata implements ClassMetadata
-{
+public class XsdClassMetadata implements ClassMetadata {
     public static final String ID = XsdClassMetadata.class.getName();
 
     public static final String COMPOSITOR_ALL = "all";
@@ -33,22 +32,16 @@ public class XsdClassMetadata implements ClassMetadata
 
     private String compositor = COMPOSITOR_ALL;
 
-    public String getCompositor()
-    {
+    public String getCompositor() {
         return compositor;
     }
 
-    public void setCompositor( String compositor )
-    {
-        if ( COMPOSITOR_ALL.equals( compositor ) || COMPOSITOR_SEQUENCE.equals( compositor ) )
-        {
+    public void setCompositor(String compositor) {
+        if (COMPOSITOR_ALL.equals(compositor) || COMPOSITOR_SEQUENCE.equals(compositor)) {
             this.compositor = compositor;
-        }
-        else
-        {
+        } else {
             // default
             this.compositor = COMPOSITOR_ALL;
         }
     }
-
 }

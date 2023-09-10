@@ -42,7 +42,6 @@
  *
  * $Id$
  */
-
 package org.codehaus.modello.plugin.java.javasource;
 
 /*
@@ -72,8 +71,7 @@ package org.codehaus.modello.plugin.java.javasource;
  * @author <a href="mailto:kvisco@intalio.com">Keith Visco</a>
  * @version $Revision$ $Date$
  **/
-public class JParameter
-{
+public class JParameter {
 
     /**
      * The type associated with this JParameter
@@ -92,55 +90,47 @@ public class JParameter
      * @param type the type to associate with this JParameter
      * @param name the name of the JParameter
      **/
-    public JParameter( JType type, String name )
-        throws IllegalArgumentException
-    {
+    public JParameter(JType type, String name) throws IllegalArgumentException {
         super();
-        setType( type );
-        setName( name );
-    } //-- JParameter
+        setType(type);
+        setName(name);
+    } // -- JParameter
 
     /**
      * Returns the name of the parameter
      * @return the name of the parameter
      **/
-    public String getName()
-    {
+    public String getName() {
         return this.name;
-    } //-- getName
+    } // -- getName
 
     /**
      * Returns the parameter type
      * @return the parameter type
      **/
-    public JType getType()
-    {
+    public JType getType() {
         return this.type;
-    } //-- getType
+    } // -- getType
 
     /**
      * Sets the name of this parameter
      * @param name the new name of the parameter
      **/
-    public void setName( String name )
-    {
+    public void setName(String name) {
         this.name = name;
-    } //-- setName
+    } // -- setName
 
     /**
      * Sets the type of this parameter
      * @param type the new type of this parameter
      **/
-    public void setType( JType type )
-        throws IllegalArgumentException
-    {
-        if ( type == null )
-        {
+    public void setType(JType type) throws IllegalArgumentException {
+        if (type == null) {
             String err = "A Parameter cannot have a null type.";
-            throw new IllegalArgumentException( err );
+            throw new IllegalArgumentException(err);
         }
         this.type = type;
-    } //-- setType
+    } // -- setType
 
     /**
      * Returns the String representation of this JParameter. The
@@ -148,46 +138,39 @@ public class JParameter
      * of the parameter type, followed by the name of the parameter
      * @return the String representation of this JParameter
      **/
-    public String toString()
-    {
+    public String toString() {
         StringBuilder sb = new StringBuilder();
-        if ( annotations != null )
-        {
-            sb.append( annotations.toString() );
-            sb.append( ' ' );
+        if (annotations != null) {
+            sb.append(annotations.toString());
+            sb.append(' ');
         }
-        sb.append( this.type.toString() );
-        sb.append( ' ' );
-        sb.append( this.name );
+        sb.append(this.type.toString());
+        sb.append(' ');
+        sb.append(this.name);
         return sb.toString();
-    } //-- toString
+    } // -- toString
 
     /**
      * @return the annotations
      */
-    public JAnnotations getAnnotations()
-    {
+    public JAnnotations getAnnotations() {
         return annotations;
     }
 
     /**
      * @param annotation the annotation to append
      */
-    public void appendAnnotation( String annotation )
-    {
-        if ( annotations == null )
-        {
+    public void appendAnnotation(String annotation) {
+        if (annotations == null) {
             annotations = new JAnnotations();
         }
-        annotations.appendAnnotation( annotation );
+        annotations.appendAnnotation(annotation);
     }
 
     /**
      * @param annotations the annotations to set
      */
-    public void setAnnotations( JAnnotations annotations )
-    {
+    public void setAnnotations(JAnnotations annotations) {
         this.annotations = annotations;
     }
-
-} //-- JParamater
+} // -- JParamater

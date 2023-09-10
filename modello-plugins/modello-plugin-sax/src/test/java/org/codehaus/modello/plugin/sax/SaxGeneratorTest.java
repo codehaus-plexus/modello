@@ -36,64 +36,59 @@ import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
 /**
  * @author <a href="mailto:simonetripodi@apache.org">Simone Tripodi</a>
  */
-public class SaxGeneratorTest
-    extends AbstractModelloJavaGeneratorTest
-{
-    public SaxGeneratorTest()
-    {
-        super( "sax" );
+public class SaxGeneratorTest extends AbstractModelloJavaGeneratorTest {
+    public SaxGeneratorTest() {
+        super("sax");
     }
 
-    public void testXpp3Generator()
-        throws Throwable
-    {
-        ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
+    public void testXpp3Generator() throws Throwable {
+        ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
 
-        Model model = modello.loadModel( getXmlResourceReader( "/maven.mdo" ) );
+        Model model = modello.loadModel(getXmlResourceReader("/maven.mdo"));
 
         // check some elements read from the model
-        List<ModelClass> classesList = model.getClasses( new Version( "4.0.0" ) );
+        List<ModelClass> classesList = model.getClasses(new Version("4.0.0"));
 
-        assertEquals( 28, classesList.size() );
+        assertEquals(28, classesList.size());
 
-        ModelClass clazz = (ModelClass) classesList.get( 0 );
+        ModelClass clazz = (ModelClass) classesList.get(0);
 
-        assertEquals( "Model", clazz.getName() );
+        assertEquals("Model", clazz.getName());
 
-        ModelField extend = clazz.getField( "extend", new Version( "4.0.0" ) );
+        ModelField extend = clazz.getField("extend", new Version("4.0.0"));
 
-        assertTrue( extend.hasMetadata( XmlFieldMetadata.ID ) );
+        assertTrue(extend.hasMetadata(XmlFieldMetadata.ID));
 
-        XmlFieldMetadata xml = (XmlFieldMetadata) extend.getMetadata( XmlFieldMetadata.ID );
+        XmlFieldMetadata xml = (XmlFieldMetadata) extend.getMetadata(XmlFieldMetadata.ID);
 
-        assertNotNull( xml );
+        assertNotNull(xml);
 
-        assertTrue( xml.isAttribute() );
+        assertTrue(xml.isAttribute());
 
-        assertEquals( "extender", xml.getTagName() );
+        assertEquals("extender", xml.getTagName());
 
-        ModelField build = clazz.getField( "build", new Version( "4.0.0" ) );
+        ModelField build = clazz.getField("build", new Version("4.0.0"));
 
-        assertTrue( build.hasMetadata( XmlFieldMetadata.ID ) );
+        assertTrue(build.hasMetadata(XmlFieldMetadata.ID));
 
-        xml = (XmlFieldMetadata) build.getMetadata( XmlFieldMetadata.ID );
+        xml = (XmlFieldMetadata) build.getMetadata(XmlFieldMetadata.ID);
 
-        assertNotNull( xml );
+        assertNotNull(xml);
 
-        assertEquals( "builder", xml.getTagName() );
+        assertEquals("builder", xml.getTagName());
 
         // now generate sources and test them
-        Properties parameters = getModelloParameters( "4.0.0" );
+        Properties parameters = getModelloParameters("4.0.0");
 
-        modello.generate( model, "java", parameters );
-        modello.generate( model, "sax-writer", parameters );
+        modello.generate(model, "java", parameters);
+        modello.generate(model, "sax-writer", parameters);
 
-        addDependency( "org.xmlunit", "xmlunit-core" );
+        addDependency("org.xmlunit", "xmlunit-core");
         compileGeneratedSources();
 
         // TODO: see why without this, version system property is set to "2.4.1" value after verify
-        System.setProperty( "version", getModelloVersion() );
+        System.setProperty("version", getModelloVersion());
 
-        verifyCompiledGeneratedSources( "org.codehaus.modello.generator.xml.sax.SaxVerifier" );
+        verifyCompiledGeneratedSources("org.codehaus.modello.generator.xml.sax.SaxVerifier");
     }
 }

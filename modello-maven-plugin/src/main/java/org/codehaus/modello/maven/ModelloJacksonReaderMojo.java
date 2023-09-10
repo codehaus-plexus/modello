@@ -1,7 +1,5 @@
 package org.codehaus.modello.maven;
 
-import java.util.Properties;
-
 /*
  * Copyright (c) 2004-2012, Codehaus.org
  *
@@ -24,6 +22,8 @@ import java.util.Properties;
  * SOFTWARE.
  */
 
+import java.util.Properties;
+
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.codehaus.modello.ModelloParameterConstants;
@@ -34,24 +34,19 @@ import org.codehaus.modello.ModelloParameterConstants;
  * @since 1.8
  * @author <a href="mailto:simonetripodi@apache.org">Simone Tripodi</a>
  */
-@Mojo( name = "jackson-reader", defaultPhase = LifecyclePhase.GENERATE_SOURCES, threadSafe = true )
-public class ModelloJacksonReaderMojo
-    extends AbstractModelloSourceGeneratorMojo
-{
-    protected String getGeneratorType()
-    {
+@Mojo(name = "jackson-reader", defaultPhase = LifecyclePhase.GENERATE_SOURCES, threadSafe = true)
+public class ModelloJacksonReaderMojo extends AbstractModelloSourceGeneratorMojo {
+    protected String getGeneratorType() {
         return "jackson-reader";
     }
-    
+
     @Override
-    protected void customizeParameters( Properties parameters )
-    {
-        super.customizeParameters( parameters );
-        
-        if ( "true".equals( parameters.getProperty( ModelloParameterConstants.DOM_AS_XPP3 ) ) &&
-                !getProject().getArtifactMap().containsKey( "com.fasterxml.jackson.core:jackson-databind" ) )
-        {
-            getLog().warn( "Jackson DOM support requires auxiliary com.fasterxml.jackson.core:jackson-databind module!" );
+    protected void customizeParameters(Properties parameters) {
+        super.customizeParameters(parameters);
+
+        if ("true".equals(parameters.getProperty(ModelloParameterConstants.DOM_AS_XPP3))
+                && !getProject().getArtifactMap().containsKey("com.fasterxml.jackson.core:jackson-databind")) {
+            getLog().warn("Jackson DOM support requires auxiliary com.fasterxml.jackson.core:jackson-databind module!");
         }
     }
 }

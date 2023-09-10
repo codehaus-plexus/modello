@@ -22,16 +22,14 @@ package org.codehaus.modello.plugin;
  * SOFTWARE.
  */
 
+import java.util.Properties;
+
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.model.Model;
-
-import java.util.Properties;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  */
-public interface ModelloGenerator
-{
-    void generate( Model model, Properties parameters )
-        throws ModelloException;
+public interface ModelloGenerator {
+    void generate(Model model, Properties parameters) throws ModelloException;
 }

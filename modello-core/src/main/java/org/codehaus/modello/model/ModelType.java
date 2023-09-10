@@ -32,9 +32,7 @@ import java.util.Map;
  *
  * @author <a href="mailto:hboutemy@codehaus.org">Hervé Boutemy</a>
  */
-public abstract class ModelType
-    extends BaseElement
-{
+public abstract class ModelType extends BaseElement {
     private String packageName;
 
     private List<CodeSegment> codeSegments;
@@ -43,58 +41,45 @@ public abstract class ModelType
 
     private transient Map<String, CodeSegment> codeSegmentMap = new HashMap<String, CodeSegment>();
 
-    public ModelType()
-    {
-        super( true );
+    public ModelType() {
+        super(true);
     }
 
-    public ModelType( Model model, String name )
-    {
-        super( true, name );
+    public ModelType(Model model, String name) {
+        super(true, name);
 
         this.model = model;
     }
 
-    public String getPackageName()
-    {
-        return getPackageName( false, null );
+    public String getPackageName() {
+        return getPackageName(false, null);
     }
 
-    public String getPackageName( boolean withVersion, Version version )
-    {
+    public String getPackageName(boolean withVersion, Version version) {
         String p;
 
-        if ( packageName != null )
-        {
+        if (packageName != null) {
             p = packageName;
-        }
-        else
-        {
-            try
-            {
-                p = model.getDefault( ModelDefault.PACKAGE ).getValue();
-            }
-            catch ( Exception e )
-            {
+        } else {
+            try {
+                p = model.getDefault(ModelDefault.PACKAGE).getValue();
+            } catch (Exception e) {
                 p = ModelDefault.PACKAGE_VALUE;
             }
         }
 
-        if ( withVersion )
-        {
-            p += "." + version.toString( "v", "_" );
+        if (withVersion) {
+            p += "." + version.toString("v", "_");
         }
 
         return p;
     }
 
-    public void setPackageName( String packageName )
-    {
+    public void setPackageName(String packageName) {
         this.packageName = packageName;
     }
 
-    public Model getModel()
-    {
+    public Model getModel() {
         return model;
     }
 
@@ -102,35 +87,28 @@ public abstract class ModelType
     // CodeSegment
     // ----------------------------------------------------------------------
 
-    public List<CodeSegment> getAllCodeSegments()
-    {
-        if ( codeSegments == null )
-        {
+    public List<CodeSegment> getAllCodeSegments() {
+        if (codeSegments == null) {
             codeSegments = new ArrayList<CodeSegment>();
         }
 
         return codeSegments;
     }
 
-    public List<CodeSegment> getCodeSegments( Version version )
-    {
-        return getCodeSegments( new VersionRange( version ) );
+    public List<CodeSegment> getCodeSegments(Version version) {
+        return getCodeSegments(new VersionRange(version));
     }
 
-    public List<CodeSegment> getCodeSegments( VersionRange versionRange )
-    {
+    public List<CodeSegment> getCodeSegments(VersionRange versionRange) {
         List<CodeSegment> codeSegments = getAllCodeSegments();
 
         List<CodeSegment> codeSegmentsList = new ArrayList<CodeSegment>();
 
-        if ( codeSegments != null )
-        {
-            for ( CodeSegment codeSegment : codeSegments )
-            {
-                if ( versionRange.getFromVersion().inside( codeSegment.getVersionRange() )
-                    && versionRange.getToVersion().inside( codeSegment.getVersionRange() ) )
-                {
-                    codeSegmentsList.add( codeSegment );
+        if (codeSegments != null) {
+            for (CodeSegment codeSegment : codeSegments) {
+                if (versionRange.getFromVersion().inside(codeSegment.getVersionRange())
+                        && versionRange.getToVersion().inside(codeSegment.getVersionRange())) {
+                    codeSegmentsList.add(codeSegment);
                 }
             }
         }
@@ -138,11 +116,10 @@ public abstract class ModelType
         return codeSegmentsList;
     }
 
-    public void addCodeSegment( CodeSegment codeSegment )
-    {
-        getAllCodeSegments().add( codeSegment );
+    public void addCodeSegment(CodeSegment codeSegment) {
+        getAllCodeSegments().add(codeSegment);
 
-        codeSegmentMap.put( codeSegment.getName(), codeSegment );
+        codeSegmentMap.put(codeSegment.getName(), codeSegment);
     }
 
     // ----------------------------------------------------------------------
@@ -165,9 +142,9 @@ public abstract class ModelType
      * @param withInheritedField whether inherited fields should be included.
      * @return Returns all the fields in this class and all super classes.
      */
-    public abstract List<ModelField> getAllFields( boolean withInheritedField );
+    public abstract List<ModelField> getAllFields(boolean withInheritedField);
 
-    public abstract ModelField getField( String type, VersionRange versionRange );
+    public abstract ModelField getField(String type, VersionRange versionRange);
 
     /**
      * Returns the list of all fields in this class for a specific version.
@@ -178,74 +155,58 @@ public abstract class ModelType
      * @return Returns the list of all fields in this class. It does not include the
      *         fields of super classes.
      */
-    public List<ModelField> getFields( Version version )
-    {
+    public List<ModelField> getFields(Version version) {
         List<ModelField> fieldList = new ArrayList<ModelField>();
 
-        for ( ModelField currentField : getAllFields() )
-        {
-            if ( version.inside( currentField.getVersionRange() ) )
-            {
-                fieldList.add( currentField );
+        for (ModelField currentField : getAllFields()) {
+            if (version.inside(currentField.getVersionRange())) {
+                fieldList.add(currentField);
             }
         }
 
         return fieldList;
     }
 
-    public List<ModelField> getAllFields( Version version, boolean withInheritedField )
-    {
+    public List<ModelField> getAllFields(Version version, boolean withInheritedField) {
         List<ModelField> allFieldsList = new ArrayList<ModelField>();
 
         List<ModelField> fieldList = new ArrayList<ModelField>();
 
-        for ( ModelField currentField : getAllFields( withInheritedField ) )
-        {
-            if ( version.inside( currentField.getVersionRange() ) )
-            {
-                allFieldsList.add( currentField );
+        for (ModelField currentField : getAllFields(withInheritedField)) {
+            if (version.inside(currentField.getVersionRange())) {
+                allFieldsList.add(currentField);
             }
         }
 
-        for ( ModelField currentField : allFieldsList )
-        {
-            if ( version.inside( currentField.getVersionRange() ) )
-            {
-                fieldList.add( currentField );
+        for (ModelField currentField : allFieldsList) {
+            if (version.inside(currentField.getVersionRange())) {
+                fieldList.add(currentField);
             }
         }
 
         return fieldList;
     }
 
-    public boolean hasField( String type, Version version )
-    {
-        try
-        {
-            getField( type, new VersionRange( version ) );
+    public boolean hasField(String type, Version version) {
+        try {
+            getField(type, new VersionRange(version));
 
             return true;
-        }
-        catch ( Exception e )
-        {
+        } catch (Exception e) {
             return false;
         }
     }
 
-    public ModelField getField( String type, Version version )
-    {
-        return getField( type, new VersionRange( version ) );
+    public ModelField getField(String type, Version version) {
+        return getField(type, new VersionRange(version));
     }
 
-    public List<ModelField> getIdentifierFields( Version version )
-    {
+    public List<ModelField> getIdentifierFields(Version version) {
         List<ModelField> identifierFields = new ArrayList<ModelField>();
 
-        for ( ModelField field : getFields( version ) )
-        {
-            if ( field.isIdentifier() )
-            {
-                identifierFields.add( field );
+        for (ModelField field : getFields(version)) {
+            if (field.isIdentifier()) {
+                identifierFields.add(field);
             }
         }
 
@@ -256,13 +217,11 @@ public abstract class ModelType
     //
     // ----------------------------------------------------------------------
 
-    public void initialize( Model model )
-    {
+    public void initialize(Model model) {
         this.model = model;
 
-        if ( packageName == null )
-        {
-            packageName = model.getDefaultPackageName( false, null );
+        if (packageName == null) {
+            packageName = model.getDefaultPackageName(false, null);
         }
     }
 }

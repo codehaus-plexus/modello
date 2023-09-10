@@ -22,6 +22,10 @@ package org.codehaus.modello.plugin.xpp3;
  * SOFTWARE.
  */
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Properties;
+
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.model.Model;
@@ -29,6 +33,7 @@ import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelDefault;
 import org.codehaus.modello.model.ModelField;
+import org.codehaus.modello.plugin.ModelloGenerator;
 import org.codehaus.modello.plugin.java.javasource.JClass;
 import org.codehaus.modello.plugin.java.javasource.JField;
 import org.codehaus.modello.plugin.java.javasource.JMethod;
@@ -41,557 +46,490 @@ import org.codehaus.modello.plugin.model.ModelClassMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlAssociationMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlModelMetadata;
-
-import java.io.IOException;
-import java.util.List;
-import java.util.Properties;
+import org.codehaus.plexus.component.annotations.Component;
 
 /**
  * @author <a href="mailto:jason@modello.org">Jason van Zyl </a>
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse </a>
  */
-public class Xpp3WriterGenerator
-    extends AbstractXpp3Generator
-{
+@Component(role = ModelloGenerator.class, hint = "xpp3-writer")
+public class Xpp3WriterGenerator extends AbstractXpp3Generator {
     private String extendedClassnameSuffix;
 
-    protected void prepareLocationTracking( JClass jClass )
-    {
+    protected void prepareLocationTracking(JClass jClass) {
         // NO OP
     }
 
-    protected void writeLocationTracking( JSourceCode sc, String name, String key )
-    {
-        if ( isLocationTracking() )
-        {
-            sc.add( "writeLocationTracking( " + name + ", " + key + ", serializer );" );
+    protected void writeLocationTracking(JSourceCode sc, String name, String key) {
+        if (isLocationTracking()) {
+            sc.add("writeLocationTracking( " + name + ", " + key + ", serializer );");
         }
     }
 
     @Override
-    protected void initialize( Model model, Properties parameters )
-        throws ModelloException
-    {
-        super.initialize( model, parameters );
+    protected void initialize(Model model, Properties parameters) throws ModelloException {
+        super.initialize(model, parameters);
 
         extendedClassnameSuffix = "Ex";
-        if ( isLocationTracking() )
-        {
-            extendedClassnameSuffix = parameters.getProperty( ModelloParameterConstants.EXTENDED_CLASSNAME_SUFFIX );
+        if (isLocationTracking()) {
+            extendedClassnameSuffix = parameters.getProperty(ModelloParameterConstants.EXTENDED_CLASSNAME_SUFFIX);
         }
     }
 
-    public void generate( Model model, Properties parameters )
-        throws ModelloException
-    {
-        initialize( model, parameters );
+    public void generate(Model model, Properties parameters) throws ModelloException {
+        initialize(model, parameters);
 
-        try
-        {
+        try {
             generateXpp3Writer();
-        }
-        catch ( IOException ex )
-        {
-            throw new ModelloException( "Exception while generating XPP3 Writer.", ex );
+        } catch (IOException ex) {
+            throw new ModelloException("Exception while generating XPP3 Writer.", ex);
         }
     }
 
-    private void generateXpp3Writer()
-        throws ModelloException, IOException
-    {
+    private void generateXpp3Writer() throws ModelloException, IOException {
         Model objectModel = getModel();
 
-        String packageName = objectModel.getDefaultPackageName( isPackageWithVersion(), getGeneratedVersion() )
-            + ".io.xpp3";
+        String packageName =
+                objectModel.getDefaultPackageName(isPackageWithVersion(), getGeneratedVersion()) + ".io.xpp3";
 
-        String marshallerName = getFileName( "Xpp3Writer" + ( isLocationTracking() ? extendedClassnameSuffix : "" ) );
+        String marshallerName = getFileName("Xpp3Writer" + (isLocationTracking() ? extendedClassnameSuffix : ""));
 
-        JSourceWriter sourceWriter = newJSourceWriter( packageName, marshallerName );
+        JSourceWriter sourceWriter = newJSourceWriter(packageName, marshallerName);
 
-        JClass jClass = new JClass( packageName + '.' + marshallerName );
-        initHeader( jClass );
-        suppressAllWarnings( objectModel, jClass );
+        JClass jClass = new JClass(packageName + '.' + marshallerName);
+        initHeader(jClass);
+        suppressAllWarnings(objectModel, jClass);
 
-        jClass.addImport( "org.codehaus.plexus.util.xml.pull.XmlSerializer" );
-        jClass.addImport( "org.codehaus.plexus.util.xml.pull.MXSerializer" );
-        jClass.addImport( "java.io.OutputStream" );
-        jClass.addImport( "java.io.Writer" );
-        jClass.addImport( "java.util.Iterator" );
+        jClass.addImport("org.codehaus.plexus.util.xml.pull.XmlSerializer");
+        jClass.addImport("org.codehaus.plexus.util.xml.pull.MXSerializer");
+        jClass.addImport("java.io.OutputStream");
+        jClass.addImport("java.io.Writer");
+        jClass.addImport("java.util.Iterator");
 
-        JField namespaceField = new JField( new JClass( "String" ), "NAMESPACE" );
-        namespaceField.getModifiers().setFinal( true );
-        namespaceField.getModifiers().setStatic( true );
-        namespaceField.setInitString( "null" );
-        jClass.addField( namespaceField );
+        JField namespaceField = new JField(new JClass("String"), "NAMESPACE");
+        namespaceField.getModifiers().setFinal(true);
+        namespaceField.getModifiers().setStatic(true);
+        namespaceField.setInitString("null");
+        jClass.addField(namespaceField);
 
-        JField commentField = new JField( new JClass( "String" ), "fileComment" );
-        commentField.setInitString( "null" );
-        jClass.addField( commentField );
+        JField commentField = new JField(new JClass("String"), "fileComment");
+        commentField.setInitString("null");
+        jClass.addField(commentField);
 
         // Add setComment method
-        JMethod setComment = new JMethod( "setFileComment" );
+        JMethod setComment = new JMethod("setFileComment");
 
-        setComment.addParameter( new JParameter( new JClass( "String" ), "fileComment" ) );
+        setComment.addParameter(new JParameter(new JClass("String"), "fileComment"));
         JSourceCode setCommentSourceCode = setComment.getSourceCode();
-        setCommentSourceCode.add( "this.fileComment = fileComment;" );
-        jClass.addMethod( setComment );
+        setCommentSourceCode.add("this.fileComment = fileComment;");
+        jClass.addMethod(setComment);
 
-        addModelImports( jClass, null );
+        addModelImports(jClass, null);
 
-        String root = objectModel.getRoot( getGeneratedVersion() );
+        String root = objectModel.getRoot(getGeneratedVersion());
 
-        ModelClass rootClass = objectModel.getClass( root, getGeneratedVersion() );
+        ModelClass rootClass = objectModel.getClass(root, getGeneratedVersion());
 
-        String rootElement = resolveTagName( rootClass );
+        String rootElement = resolveTagName(rootClass);
 
         // ----------------------------------------------------------------------
         // Write the write( Writer, Model ) method which will do the unmarshalling.
         // ----------------------------------------------------------------------
 
-        JMethod marshall = new JMethod( "write" );
+        JMethod marshall = new JMethod("write");
 
-        String rootElementParameterName = uncapitalise( root );
-        marshall.addParameter( new JParameter( new JClass( "Writer" ), "writer" ) );
-        marshall.addParameter( new JParameter( new JClass( root ), rootElementParameterName ) );
+        String rootElementParameterName = uncapitalise(root);
+        marshall.addParameter(new JParameter(new JClass("Writer"), "writer"));
+        marshall.addParameter(new JParameter(new JClass(root), rootElementParameterName));
 
-        marshall.addException( new JClass( "java.io.IOException" ) );
+        marshall.addException(new JClass("java.io.IOException"));
 
         JSourceCode sc = marshall.getSourceCode();
 
-        sc.add( "XmlSerializer serializer = new MXSerializer();" );
+        sc.add("XmlSerializer serializer = new MXSerializer();");
 
         sc.add(
-            "serializer.setProperty( \"http://xmlpull.org/v1/doc/properties.html#serializer-indentation\", \"  \" );" );
+                "serializer.setProperty( \"http://xmlpull.org/v1/doc/properties.html#serializer-indentation\", \"  \" );");
 
         sc.add(
-            "serializer.setProperty( \"http://xmlpull.org/v1/doc/properties.html#serializer-line-separator\", \"\\n\" );" );
+                "serializer.setProperty( \"http://xmlpull.org/v1/doc/properties.html#serializer-line-separator\", \"\\n\" );");
 
-        sc.add( "serializer.setOutput( writer );" );
+        sc.add("serializer.setOutput( writer );");
 
-        sc.add( "serializer.startDocument( " + rootElementParameterName + ".getModelEncoding(), null );" );
+        sc.add("serializer.startDocument( " + rootElementParameterName + ".getModelEncoding(), null );");
 
-        sc.add( "write" + root + "( " + rootElementParameterName + ", \"" + rootElement + "\", serializer );" );
+        sc.add("write" + root + "( " + rootElementParameterName + ", \"" + rootElement + "\", serializer );");
 
-        sc.add( "serializer.endDocument();" );
+        sc.add("serializer.endDocument();");
 
-        jClass.addMethod( marshall );
+        jClass.addMethod(marshall);
 
         // ----------------------------------------------------------------------
         // Write the write( OutputStream, Model ) method which will do the unmarshalling.
         // ----------------------------------------------------------------------
 
-        marshall = new JMethod( "write" );
+        marshall = new JMethod("write");
 
-        marshall.addParameter( new JParameter( new JClass( "OutputStream" ), "stream" ) );
-        marshall.addParameter( new JParameter( new JClass( root ), rootElementParameterName ) );
+        marshall.addParameter(new JParameter(new JClass("OutputStream"), "stream"));
+        marshall.addParameter(new JParameter(new JClass(root), rootElementParameterName));
 
-        marshall.addException( new JClass( "java.io.IOException" ) );
+        marshall.addException(new JClass("java.io.IOException"));
 
         sc = marshall.getSourceCode();
 
-        sc.add( "XmlSerializer serializer = new MXSerializer();" );
+        sc.add("XmlSerializer serializer = new MXSerializer();");
 
         sc.add(
-            "serializer.setProperty( \"http://xmlpull.org/v1/doc/properties.html#serializer-indentation\", \"  \" );" );
+                "serializer.setProperty( \"http://xmlpull.org/v1/doc/properties.html#serializer-indentation\", \"  \" );");
 
         sc.add(
-            "serializer.setProperty( \"http://xmlpull.org/v1/doc/properties.html#serializer-line-separator\", \"\\n\" );" );
+                "serializer.setProperty( \"http://xmlpull.org/v1/doc/properties.html#serializer-line-separator\", \"\\n\" );");
 
-        sc.add( "serializer.setOutput( stream, " + rootElementParameterName + ".getModelEncoding() );" );
+        sc.add("serializer.setOutput( stream, " + rootElementParameterName + ".getModelEncoding() );");
 
-        sc.add( "serializer.startDocument( " + rootElementParameterName + ".getModelEncoding(), null );" );
+        sc.add("serializer.startDocument( " + rootElementParameterName + ".getModelEncoding(), null );");
 
-        sc.add( "write" + root + "( " + rootElementParameterName + ", \"" + rootElement + "\", serializer );" );
+        sc.add("write" + root + "( " + rootElementParameterName + ", \"" + rootElement + "\", serializer );");
 
-        sc.add( "serializer.endDocument();" );
+        sc.add("serializer.endDocument();");
 
-        jClass.addMethod( marshall );
+        jClass.addMethod(marshall);
 
-        writeAllClasses( objectModel, jClass );
+        writeAllClasses(objectModel, jClass);
 
-        if ( isLocationTracking() )
-        {
-            prepareLocationTracking( jClass );
+        if (isLocationTracking()) {
+            prepareLocationTracking(jClass);
         }
 
-        if ( requiresDomSupport )
-        {
-            createWriteDomMethod( jClass );
+        if (requiresDomSupport) {
+            createWriteDomMethod(jClass);
         }
 
-        jClass.print( sourceWriter );
+        jClass.print(sourceWriter);
 
         sourceWriter.close();
     }
 
-    private void writeAllClasses( Model objectModel, JClass jClass )
-        throws ModelloException
-    {
-        for ( ModelClass clazz : getClasses( objectModel ) )
-        {
-            writeClass( clazz, jClass );
+    private void writeAllClasses(Model objectModel, JClass jClass) throws ModelloException {
+        for (ModelClass clazz : getClasses(objectModel)) {
+            writeClass(clazz, jClass);
         }
     }
 
-    private void writeClass( ModelClass modelClass, JClass jClass )
-        throws ModelloException
-    {
+    private void writeClass(ModelClass modelClass, JClass jClass) throws ModelloException {
         String className = modelClass.getName();
 
-        String uncapClassName = uncapitalise( className );
+        String uncapClassName = uncapitalise(className);
 
-        JMethod marshall = new JMethod( "write" + className );
+        JMethod marshall = new JMethod("write" + className);
 
-        marshall.addParameter( new JParameter( new JClass( className ), uncapClassName ) );
-        marshall.addParameter( new JParameter( new JClass( "String" ), "tagName" ) );
-        marshall.addParameter( new JParameter( new JClass( "XmlSerializer" ), "serializer" ) );
+        marshall.addParameter(new JParameter(new JClass(className), uncapClassName));
+        marshall.addParameter(new JParameter(new JClass("String"), "tagName"));
+        marshall.addParameter(new JParameter(new JClass("XmlSerializer"), "serializer"));
 
-        marshall.addException( new JClass( "java.io.IOException" ) );
+        marshall.addException(new JClass("java.io.IOException"));
 
         marshall.getModifiers().makePrivate();
 
         JSourceCode sc = marshall.getSourceCode();
 
-        ModelClassMetadata classMetadata = (ModelClassMetadata) modelClass.getMetadata( ModelClassMetadata.ID );
+        ModelClassMetadata classMetadata = (ModelClassMetadata) modelClass.getMetadata(ModelClassMetadata.ID);
 
         String namespace = null;
-        XmlModelMetadata xmlModelMetadata = (XmlModelMetadata) modelClass.getModel().getMetadata( XmlModelMetadata.ID );
+        XmlModelMetadata xmlModelMetadata =
+                (XmlModelMetadata) modelClass.getModel().getMetadata(XmlModelMetadata.ID);
 
         // add namespace information for root element only
-        if ( classMetadata.isRootElement() && ( xmlModelMetadata.getNamespace() != null ) )
-        {
-            sc.add( "if ( this.fileComment != null )" );
-            sc.add( "{" );
-            sc.add( "serializer.comment(this.fileComment);" );
-            sc.add( "}" );
+        if (classMetadata.isRootElement() && (xmlModelMetadata.getNamespace() != null)) {
+            sc.add("if ( this.fileComment != null )");
+            sc.add("{");
+            sc.add("serializer.comment(this.fileComment);");
+            sc.add("}");
 
-            namespace = xmlModelMetadata.getNamespace( getGeneratedVersion() );
-            sc.add( "serializer.setPrefix( \"\", \"" + namespace + "\" );" );
+            namespace = xmlModelMetadata.getNamespace(getGeneratedVersion());
+            sc.add("serializer.setPrefix( \"\", \"" + namespace + "\" );");
         }
 
-        if ( ( namespace != null ) && ( xmlModelMetadata.getSchemaLocation() != null ) )
-        {
-            String url = xmlModelMetadata.getSchemaLocation( getGeneratedVersion() );
+        if ((namespace != null) && (xmlModelMetadata.getSchemaLocation() != null)) {
+            String url = xmlModelMetadata.getSchemaLocation(getGeneratedVersion());
 
-            sc.add( "serializer.setPrefix( \"xsi\", \"http://www.w3.org/2001/XMLSchema-instance\" );" );
+            sc.add("serializer.setPrefix( \"xsi\", \"http://www.w3.org/2001/XMLSchema-instance\" );");
 
-            sc.add( "serializer.startTag( NAMESPACE, tagName );" );
+            sc.add("serializer.startTag( NAMESPACE, tagName );");
 
-            sc.add( "serializer.attribute( \"\", \"xsi:schemaLocation\", \"" + namespace + " " + url + "\" );" );
-        }
-        else
-        {
-            sc.add( "serializer.startTag( NAMESPACE, tagName );" );
+            sc.add("serializer.attribute( \"\", \"xsi:schemaLocation\", \"" + namespace + " " + url + "\" );");
+        } else {
+            sc.add("serializer.startTag( NAMESPACE, tagName );");
         }
 
         ModelField contentField = null;
 
         String contentValue = null;
 
-        List<ModelField> modelFields = getFieldsForXml( modelClass, getGeneratedVersion() );
+        List<ModelField> modelFields = getFieldsForXml(modelClass, getGeneratedVersion());
 
         // XML attributes
-        for ( ModelField field : modelFields )
-        {
-            XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
+        for (ModelField field : modelFields) {
+            XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata(XmlFieldMetadata.ID);
 
-            JavaFieldMetadata javaFieldMetadata = (JavaFieldMetadata) field.getMetadata( JavaFieldMetadata.ID );
+            JavaFieldMetadata javaFieldMetadata = (JavaFieldMetadata) field.getMetadata(JavaFieldMetadata.ID);
 
-            String fieldTagName = resolveTagName( field, xmlFieldMetadata );
+            String fieldTagName = resolveTagName(field, xmlFieldMetadata);
 
             String type = field.getType();
 
-            String value = uncapClassName + "." + getPrefix( javaFieldMetadata ) + capitalise( field.getName() ) + "()";
+            String value = uncapClassName + "." + getPrefix(javaFieldMetadata) + capitalise(field.getName()) + "()";
 
-            if ( xmlFieldMetadata.isContent() )
-            {
+            if (xmlFieldMetadata.isContent()) {
                 contentField = field;
                 contentValue = value;
                 continue;
             }
 
-            if ( xmlFieldMetadata.isAttribute() )
-            {
-                sc.add( getValueChecker( type, value, field ) );
+            if (xmlFieldMetadata.isAttribute()) {
+                sc.add(getValueChecker(type, value, field));
 
-                sc.add( "{" );
-                sc.addIndented( "serializer.attribute( NAMESPACE, \"" + fieldTagName + "\", "
-                                + getValue( field.getType(), value, xmlFieldMetadata ) + " );" );
-                sc.add( "}" );
+                sc.add("{");
+                sc.addIndented("serializer.attribute( NAMESPACE, \"" + fieldTagName + "\", "
+                        + getValue(field.getType(), value, xmlFieldMetadata) + " );");
+                sc.add("}");
             }
-
         }
 
-        if ( contentField != null )
-        {
-            XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) contentField.getMetadata( XmlFieldMetadata.ID );
-            sc.add( "serializer.text( " + getValue( contentField.getType(), contentValue, xmlFieldMetadata ) + " );" );
+        if (contentField != null) {
+            XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) contentField.getMetadata(XmlFieldMetadata.ID);
+            sc.add("serializer.text( " + getValue(contentField.getType(), contentValue, xmlFieldMetadata) + " );");
         }
 
         // XML tags
-        for ( ModelField field : modelFields )
-        {
-            XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata( XmlFieldMetadata.ID );
+        for (ModelField field : modelFields) {
+            XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata(XmlFieldMetadata.ID);
 
-            if ( xmlFieldMetadata.isContent() )
-            {
+            if (xmlFieldMetadata.isContent()) {
                 // skip field with type Content
                 continue;
             }
 
-            JavaFieldMetadata javaFieldMetadata = (JavaFieldMetadata) field.getMetadata( JavaFieldMetadata.ID );
+            JavaFieldMetadata javaFieldMetadata = (JavaFieldMetadata) field.getMetadata(JavaFieldMetadata.ID);
 
-            String fieldTagName = resolveTagName( field, xmlFieldMetadata );
+            String fieldTagName = resolveTagName(field, xmlFieldMetadata);
 
             String type = field.getType();
 
-            String value = uncapClassName + "." + getPrefix( javaFieldMetadata ) + capitalise( field.getName() ) + "()";
+            String value = uncapClassName + "." + getPrefix(javaFieldMetadata) + capitalise(field.getName()) + "()";
 
-            if ( xmlFieldMetadata.isAttribute() )
-            {
+            if (xmlFieldMetadata.isAttribute()) {
                 continue;
             }
 
-            if ( field instanceof ModelAssociation )
-            {
+            if (field instanceof ModelAssociation) {
                 ModelAssociation association = (ModelAssociation) field;
 
                 String associationName = association.getName();
 
-                if ( association.isOneMultiplicity() )
-                {
-                    sc.add( getValueChecker( type, value, association ) );
+                if (association.isOneMultiplicity()) {
+                    sc.add(getValueChecker(type, value, association));
 
-                    sc.add( "{" );
-                    sc.addIndented( "write" + association.getTo() + "( (" + association.getTo() + ") " + value + ", \""
-                                    + fieldTagName + "\", serializer );" );
-                    sc.add( "}" );
-                }
-                else
-                {
-                    //MANY_MULTIPLICITY
+                    sc.add("{");
+                    sc.addIndented("write" + association.getTo() + "( (" + association.getTo() + ") " + value + ", \""
+                            + fieldTagName + "\", serializer );");
+                    sc.add("}");
+                } else {
+                    // MANY_MULTIPLICITY
 
                     XmlAssociationMetadata xmlAssociationMetadata =
-                        (XmlAssociationMetadata) association.getAssociationMetadata( XmlAssociationMetadata.ID );
+                            (XmlAssociationMetadata) association.getAssociationMetadata(XmlAssociationMetadata.ID);
 
-                    String valuesTagName = resolveTagName( fieldTagName, xmlAssociationMetadata );
+                    String valuesTagName = resolveTagName(fieldTagName, xmlAssociationMetadata);
 
                     type = association.getType();
                     String toType = association.getTo();
 
                     boolean wrappedItems = xmlAssociationMetadata.isWrappedItems();
 
-                    if ( ModelDefault.LIST.equals( type ) || ModelDefault.SET.equals( type ) )
-                    {
-                        boolean isList = ModelDefault.LIST.equals( type );
+                    if (ModelDefault.LIST.equals(type) || ModelDefault.SET.equals(type)) {
+                        boolean isList = ModelDefault.LIST.equals(type);
 
-                        sc.add( getValueChecker( type, value, association ) );
+                        sc.add(getValueChecker(type, value, association));
 
-                        sc.add( "{" );
+                        sc.add("{");
                         sc.indent();
 
-                        if ( wrappedItems )
-                        {
-                            sc.add( "serializer.startTag( NAMESPACE, " + "\"" + fieldTagName + "\" );" );
+                        if (wrappedItems) {
+                            sc.add("serializer.startTag( NAMESPACE, " + "\"" + fieldTagName + "\" );");
                         }
 
-                        if ( isLocationTracking() && !isClassInModel( association.getTo(), modelClass.getModel() ) )
-                        {
-                            sc.add( locationTracker.getName() + " location = " + uncapClassName + ".getLocation( \"" + fieldTagName + "\" );" );
-                            if ( isList )
-                            {
-                                sc.add( "int n = 0;" );
+                        if (isLocationTracking() && !isClassInModel(association.getTo(), modelClass.getModel())) {
+                            sc.add(locationTracker.getName() + " location = " + uncapClassName + ".getLocation( \""
+                                    + fieldTagName + "\" );");
+                            if (isList) {
+                                sc.add("int n = 0;");
                             }
                         }
 
-                        sc.add( "for ( Iterator iter = " + value + ".iterator(); iter.hasNext(); )" );
+                        sc.add("for ( Iterator iter = " + value + ".iterator(); iter.hasNext(); )");
 
-                        sc.add( "{" );
+                        sc.add("{");
                         sc.indent();
 
-                        if ( isClassInModel( association.getTo(), modelClass.getModel() ) )
-                        {
-                            sc.add( toType + " o = (" + toType + ") iter.next();" );
+                        if (isClassInModel(association.getTo(), modelClass.getModel())) {
+                            sc.add(toType + " o = (" + toType + ") iter.next();");
 
-                            sc.add( "write" + toType + "( o, \"" + valuesTagName + "\", serializer );" );
-                        }
-                        else
-                        {
-                            String variable = singular( uncapitalise( field.getName() ) );
+                            sc.add("write" + toType + "( o, \"" + valuesTagName + "\", serializer );");
+                        } else {
+                            String variable = singular(uncapitalise(field.getName()));
 
-                            sc.add( toType + " " + variable + " = (" + toType + ") iter.next();" );
+                            sc.add(toType + " " + variable + " = (" + toType + ") iter.next();");
 
-                            sc.add( "serializer.startTag( NAMESPACE, \"" + valuesTagName + "\" ).text( " + variable
-                                + " ).endTag( NAMESPACE, \"" + valuesTagName + "\" );" );
+                            sc.add("serializer.startTag( NAMESPACE, \"" + valuesTagName + "\" ).text( " + variable
+                                    + " ).endTag( NAMESPACE, \"" + valuesTagName + "\" );");
 
-                            writeLocationTracking( sc, "location", isList ? "Integer.valueOf( n++ )" : variable );
+                            writeLocationTracking(sc, "location", isList ? "Integer.valueOf( n++ )" : variable);
                         }
 
                         sc.unindent();
-                        sc.add( "}" );
+                        sc.add("}");
 
-                        if ( wrappedItems )
-                        {
-                            sc.add( "serializer.endTag( NAMESPACE, \"" + fieldTagName + "\" );" );
+                        if (wrappedItems) {
+                            sc.add("serializer.endTag( NAMESPACE, \"" + fieldTagName + "\" );");
                         }
 
                         sc.unindent();
-                        sc.add( "}" );
-                    }
-                    else
-                    {
-                        //Map or Properties
+                        sc.add("}");
+                    } else {
+                        // Map or Properties
 
-                        sc.add( getValueChecker( type, value, field ) );
+                        sc.add(getValueChecker(type, value, field));
 
-                        sc.add( "{" );
+                        sc.add("{");
                         sc.indent();
 
-                        if ( wrappedItems )
-                        {
-                            sc.add( "serializer.startTag( NAMESPACE, \"" + fieldTagName + "\" );" );
+                        if (wrappedItems) {
+                            sc.add("serializer.startTag( NAMESPACE, \"" + fieldTagName + "\" );");
                         }
 
-                        if ( isLocationTracking() )
-                        {
-                            sc.add( locationTracker.getName() + " location = " + uncapClassName + ".getLocation( \"" + fieldTagName + "\" );" );
+                        if (isLocationTracking()) {
+                            sc.add(locationTracker.getName() + " location = " + uncapClassName + ".getLocation( \""
+                                    + fieldTagName + "\" );");
                         }
 
-                        sc.add( "for ( Iterator iter = " + value + ".keySet().iterator(); iter.hasNext(); )" );
+                        sc.add("for ( Iterator iter = " + value + ".keySet().iterator(); iter.hasNext(); )");
 
-                        sc.add( "{" );
+                        sc.add("{");
                         sc.indent();
 
-                        sc.add( "String key = (String) iter.next();" );
+                        sc.add("String key = (String) iter.next();");
 
-                        sc.add( "String value = (String) " + value + ".get( key );" );
+                        sc.add("String value = (String) " + value + ".get( key );");
 
-                        if ( xmlAssociationMetadata.isMapExplode() )
-                        {
-                            sc.add( "serializer.startTag( NAMESPACE, \"" + singular( associationName ) + "\" );" );
+                        if (xmlAssociationMetadata.isMapExplode()) {
+                            sc.add("serializer.startTag( NAMESPACE, \"" + singular(associationName) + "\" );");
                             sc.add(
-                                "serializer.startTag( NAMESPACE, \"key\" ).text( key ).endTag( NAMESPACE, \"key\" );" );
+                                    "serializer.startTag( NAMESPACE, \"key\" ).text( key ).endTag( NAMESPACE, \"key\" );");
                             sc.add(
-                                "serializer.startTag( NAMESPACE, \"value\" ).text( value ).endTag( NAMESPACE, \"value\" );" );
-                            sc.add( "serializer.endTag( NAMESPACE, \"" + singular( associationName ) + "\" );" );
-                        }
-                        else
-                        {
-                            sc.add(
-                                "serializer.startTag( NAMESPACE, key ).text( value ).endTag( NAMESPACE, key );" );
+                                    "serializer.startTag( NAMESPACE, \"value\" ).text( value ).endTag( NAMESPACE, \"value\" );");
+                            sc.add("serializer.endTag( NAMESPACE, \"" + singular(associationName) + "\" );");
+                        } else {
+                            sc.add("serializer.startTag( NAMESPACE, key ).text( value ).endTag( NAMESPACE, key );");
                         }
 
-                        writeLocationTracking( sc, "location", "key" );
+                        writeLocationTracking(sc, "location", "key");
 
                         sc.unindent();
-                        sc.add( "}" );
+                        sc.add("}");
 
-                        if ( wrappedItems )
-                        {
-                            sc.add( "serializer.endTag( NAMESPACE, \"" + fieldTagName + "\" );" );
+                        if (wrappedItems) {
+                            sc.add("serializer.endTag( NAMESPACE, \"" + fieldTagName + "\" );");
                         }
 
                         sc.unindent();
-                        sc.add( "}" );
+                        sc.add("}");
                     }
                 }
-            }
-            else
-            {
-                sc.add( getValueChecker( type, value, field ) );
+            } else {
+                sc.add(getValueChecker(type, value, field));
 
-                sc.add( "{" );
-                if ( "DOM".equals( field.getType() ) )
-                {
-                    if ( domAsXpp3 )
-                    {
-                        jClass.addImport( "org.codehaus.plexus.util.xml.Xpp3Dom" );
+                sc.add("{");
+                if ("DOM".equals(field.getType())) {
+                    if (domAsXpp3) {
+                        jClass.addImport("org.codehaus.plexus.util.xml.Xpp3Dom");
 
-                        if ( isLocationTracking() )
-                        {
-                            sc.addIndented( "writeXpp3DomToSerializer( (Xpp3Dom) " + value + ", serializer );" );
+                        if (isLocationTracking()) {
+                            sc.addIndented("writeXpp3DomToSerializer( (Xpp3Dom) " + value + ", serializer );");
+                        } else {
+                            sc.addIndented("((Xpp3Dom) " + value + ").writeToSerializer( NAMESPACE, serializer );");
                         }
-                        else
-                        {
-                            sc.addIndented( "((Xpp3Dom) " + value + ").writeToSerializer( NAMESPACE, serializer );" );
-                        }
-                    }
-                    else
-                    {
-                        sc.addIndented( "writeDom( (org.w3c.dom.Element) " + value + ", serializer );" );
+                    } else {
+                        sc.addIndented("writeDom( (org.w3c.dom.Element) " + value + ", serializer );");
                     }
 
                     requiresDomSupport = true;
-                }
-                else
-                {
-                    sc.addIndented( "serializer.startTag( NAMESPACE, " + "\"" + fieldTagName + "\" ).text( "
-                        + getValue( field.getType(), value, xmlFieldMetadata ) + " ).endTag( NAMESPACE, " + "\""
-                        + fieldTagName + "\" );" );
+                } else {
+                    sc.addIndented("serializer.startTag( NAMESPACE, " + "\"" + fieldTagName + "\" ).text( "
+                            + getValue(field.getType(), value, xmlFieldMetadata) + " ).endTag( NAMESPACE, " + "\""
+                            + fieldTagName + "\" );");
                     sc.indent();
-                    writeLocationTracking( sc, uncapClassName, '"' + fieldTagName + '"' );
+                    writeLocationTracking(sc, uncapClassName, '"' + fieldTagName + '"');
                     sc.unindent();
                 }
-                sc.add( "}" );
+                sc.add("}");
             }
         }
 
-        sc.add( "serializer.endTag( NAMESPACE, tagName );" );
+        sc.add("serializer.endTag( NAMESPACE, tagName );");
 
-        jClass.addMethod( marshall );
+        jClass.addMethod(marshall);
     }
 
-    private void createWriteDomMethod( JClass jClass )
-    {
-        if ( domAsXpp3 )
-        {
+    private void createWriteDomMethod(JClass jClass) {
+        if (domAsXpp3) {
             return;
         }
         String type = "org.w3c.dom.Element";
-        JMethod method = new JMethod( "writeDom" );
+        JMethod method = new JMethod("writeDom");
         method.getModifiers().makePrivate();
 
-        method.addParameter( new JParameter( new JType( type ), "dom" ) );
-        method.addParameter( new JParameter( new JClass( "XmlSerializer" ), "serializer" ) );
+        method.addParameter(new JParameter(new JType(type), "dom"));
+        method.addParameter(new JParameter(new JClass("XmlSerializer"), "serializer"));
 
-        method.addException( new JClass( "java.io.IOException" ) );
+        method.addException(new JClass("java.io.IOException"));
 
         JSourceCode sc = method.getSourceCode();
 
         // start element
-        sc.add( "serializer.startTag( NAMESPACE, dom.getTagName() );" );
+        sc.add("serializer.startTag( NAMESPACE, dom.getTagName() );");
 
         // attributes
-        sc.add( "org.w3c.dom.NamedNodeMap attributes = dom.getAttributes();" );
-        sc.add( "for ( int i = 0; i < attributes.getLength(); i++ )" );
-        sc.add( "{" );
+        sc.add("org.w3c.dom.NamedNodeMap attributes = dom.getAttributes();");
+        sc.add("for ( int i = 0; i < attributes.getLength(); i++ )");
+        sc.add("{");
 
         sc.indent();
-        sc.add( "org.w3c.dom.Node attribute = attributes.item( i );" );
-        sc.add( "serializer.attribute( NAMESPACE, attribute.getNodeName(), attribute.getNodeValue() );" );
+        sc.add("org.w3c.dom.Node attribute = attributes.item( i );");
+        sc.add("serializer.attribute( NAMESPACE, attribute.getNodeName(), attribute.getNodeValue() );");
         sc.unindent();
 
-        sc.add( "}" );
+        sc.add("}");
 
         // child nodes & text
-        sc.add( "org.w3c.dom.NodeList children = dom.getChildNodes();" );
-        sc.add( "for ( int i = 0; i < children.getLength(); i++ )" );
-        sc.add( "{" );
+        sc.add("org.w3c.dom.NodeList children = dom.getChildNodes();");
+        sc.add("for ( int i = 0; i < children.getLength(); i++ )");
+        sc.add("{");
         sc.indent();
-        sc.add( "org.w3c.dom.Node node = children.item( i );" );
-        sc.add( "if ( node instanceof org.w3c.dom.Element)" );
-        sc.add( "{" );
-        sc.addIndented( "writeDom( (org.w3c.dom.Element) children.item( i ), serializer );" );
-        sc.add( "}" );
-        sc.add( "else" );
-        sc.add( "{" );
-        sc.addIndented( "serializer.text( node.getTextContent() );" );
-        sc.add( "}" );
+        sc.add("org.w3c.dom.Node node = children.item( i );");
+        sc.add("if ( node instanceof org.w3c.dom.Element)");
+        sc.add("{");
+        sc.addIndented("writeDom( (org.w3c.dom.Element) children.item( i ), serializer );");
+        sc.add("}");
+        sc.add("else");
+        sc.add("{");
+        sc.addIndented("serializer.text( node.getTextContent() );");
+        sc.add("}");
         sc.unindent();
-        sc.add( "}" );
+        sc.add("}");
 
-        sc.add( "serializer.endTag( NAMESPACE, dom.getTagName() );" );
+        sc.add("serializer.endTag( NAMESPACE, dom.getTagName() );");
 
-        jClass.addMethod( method );
+        jClass.addMethod(method);
     }
 }

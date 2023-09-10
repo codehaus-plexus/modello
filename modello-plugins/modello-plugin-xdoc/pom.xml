@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <parent>
-    <artifactId>modello-plugins</artifactId>
-    <groupId>org.codehaus.modello</groupId>
-    <version>2.1.0-SNAPSHOT</version>
-  </parent>
 
   <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.codehaus.modello</groupId>
+    <artifactId>modello-plugins</artifactId>
+    <version>2.1.3-SNAPSHOT</version>
+  </parent>
   <artifactId>modello-plugin-xdoc</artifactId>
   <name>Modello XDOC Plugin</name>
-  <description>
-    Modello XDOC Plugin generates model documentation using xdoc markup to be included in a Maven-generated reporting
-    site.
-  </description>
+  <description>Modello XDOC Plugin generates model documentation using xdoc markup to be included in a Maven-generated reporting
+    site.</description>
 
   <dependencies>
     <dependency>
@@ -30,12 +28,12 @@
     <dependency>
       <groupId>org.jsoup</groupId>
       <artifactId>jsoup</artifactId>
-      <version>1.15.1</version>
+      <version>1.16.1</version>
     </dependency>
     <dependency>
       <groupId>org.xmlunit</groupId>
       <artifactId>xmlunit-core</artifactId>
-      <version>2.9.0</version>
+      <version>2.9.1</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
