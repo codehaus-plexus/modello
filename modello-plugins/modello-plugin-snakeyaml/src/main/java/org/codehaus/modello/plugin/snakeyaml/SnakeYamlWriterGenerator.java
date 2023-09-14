@@ -291,7 +291,8 @@ public class SnakeYamlWriterGenerator extends AbstractSnakeYamlGenerator {
                         sc.indent();
 
                         writeScalarKey(sc, fieldTagName);
-                        sc.add("generator.emit( new SequenceStartEvent( null, null, true, null, null, false ) );");
+                        sc.add(
+                                "generator.emit( new SequenceStartEvent( null, null, true, null, null, FlowStyle.BLOCK ) );");
 
                         if (useJava5) {
                             sc.add("for ( " + toType + " o : " + value + " )");
@@ -330,7 +331,8 @@ public class SnakeYamlWriterGenerator extends AbstractSnakeYamlGenerator {
                         writeScalarKey(sc, fieldTagName);
 
                         if (xmlAssociationMetadata.isMapExplode()) {
-                            sc.add("generator.emit( new SequenceStartEvent( null, null, true, null, null, false ) );");
+                            sc.add(
+                                    "generator.emit( new SequenceStartEvent( null, null, true, null, null, FlowStyle.BLOCK) );");
                         } else {
                             sc.add(
                                     "generator.emit( new MappingStartEvent( null, null, true, null, null, FlowStyle.BLOCK ) );");
@@ -344,7 +346,7 @@ public class SnakeYamlWriterGenerator extends AbstractSnakeYamlGenerator {
                             if (association.getType().equals(ModelDefault.PROPERTIES)) {
                                 entryTypeBuilder.append("Object, Object");
                             } else {
-                                entryTypeBuilder.append("String, ").append(association.getTo());
+                                entryTypeBuilder.append("Object, ").append(association.getTo());
                             }
 
                             entryTypeBuilder.append('>');
