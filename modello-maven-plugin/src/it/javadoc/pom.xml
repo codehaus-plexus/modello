@@ -18,7 +18,7 @@
       <artifactId>junit</artifactId>
       <version>@junitVersion@</version>
     </dependency>
-    
+
     <dependency>
       <groupId>org.dom4j</groupId>
       <artifactId>dom4j</artifactId>
@@ -52,8 +52,8 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.8.0</version>
         <configuration>
-          <source>@java.version@</source>
-          <target>@java.version@</target>
+          <source>@javaVersion@</source>
+          <target>@javaVersion@</target>
         </configuration>
       </plugin>
       <plugin>

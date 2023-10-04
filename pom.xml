@@ -220,18 +220,16 @@
   </distributionManagement>
 
   <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <jackson.version>2.15.2</jackson.version>
     <jdom.version>2.0.2</jdom.version>
-    <surefire.version>3.1.2</surefire.version>
     <maven.version>3.5.4</maven.version>
     <!--
       ! This controls the minimum java version
       ! and also the version which is used
       ! in the integration tests.
     -->
-    <java.version>1.8</java.version>
+    <javaVersion>8</javaVersion>
     <project.build.outputTimestamp>2023-06-06T22:23:45Z</project.build.outputTimestamp>
   </properties>
 
@@ -377,55 +375,6 @@
         <!-- set versions of common plugins for reproducibility, ordered alphabetically -->
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-assembly-plugin</artifactId>
-          <version>3.6.0</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-clean-plugin</artifactId>
-          <version>3.3.1</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-checkstyle-plugin</artifactId>
-          <version>3.3.0</version>
-          <configuration>
-            <!--            <configLocation>config/maven_checks.xml</configLocation>-->
-            <!--            <headerLocation>config/maven-header.txt</headerLocation>-->
-            <skip>true</skip>
-            <failOnViolation>false</failOnViolation>
-          </configuration>
-          <dependencies>
-            <dependency>
-              <groupId>com.puppycrawl.tools</groupId>
-              <artifactId>checkstyle</artifactId>
-              <version>9.3</version>
-              <!-- 10.x requires Java 11 -->
-            </dependency>
-            <!-- replace with Plexus own checkstyle definitions -->
-            <dependency>
-              <groupId>org.apache.maven.shared</groupId>
-              <artifactId>maven-shared-resources</artifactId>
-              <version>5</version>
-            </dependency>
-          </dependencies>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.11.0</version>
-          <configuration>
-            <source>${java.version}</source>
-            <target>${java.version}</target>
-          </configuration>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-deploy-plugin</artifactId>
-          <version>3.1.1</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-enforcer-plugin</artifactId>
           <version>3.4.1</version>
           <executions>
@@ -437,7 +386,7 @@
               <configuration>
                 <rules>
                   <requireJavaVersion>
-                    <version>${java.version}</version>
+                    <version>${javaVersion}</version>
                   </requireJavaVersion>
                   <requireMavenVersion>
                     <version>${maven.version}</version>
@@ -446,16 +395,6 @@
               </configuration>
             </execution>
           </executions>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-gpg-plugin</artifactId>
-          <version>3.1.0</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-install-plugin</artifactId>
-          <version>3.1.1</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -479,11 +418,6 @@
           </configuration>
         </plugin>
         <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-project-info-reports-plugin</artifactId>
-          <version>3.4.5</version>
-        </plugin>
-        <plugin>
           <artifactId>maven-release-plugin</artifactId>
           <version>3.0.1</version>
           <configuration>
@@ -491,44 +425,6 @@
             <goals>deploy</goals>
             <releaseProfiles>modello-release</releaseProfiles>
           </configuration>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-resources-plugin</artifactId>
-          <version>3.3.1</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-scm-publish-plugin</artifactId>
-          <version>3.2.1</version>
-          <configuration>
-            <pubScmUrl>${project.scm.developerConnection}</pubScmUrl>
-            <scmBranch>gh-pages</scmBranch>
-          </configuration>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-source-plugin</artifactId>
-          <version>3.3.0</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-site-plugin</artifactId>
-          <version>3.12.1</version>
-          <configuration>
-            <skipDeploy>true</skipDeploy>
-            <!-- don't deploy site with maven-site-plugin -->
-          </configuration>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-surefire-plugin</artifactId>
-          <version>${surefire.version}</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-surefire-report-plugin</artifactId>
-          <version>${surefire.version}</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -573,10 +469,6 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-project-info-reports-plugin</artifactId>
-        <configuration>
-          <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
-          <offline>true</offline>
-        </configuration>
       </plugin>
     </plugins>
   </reporting>
@@ -743,24 +635,16 @@
       </reporting>
     </profile>
 
-    <!-- TODO remove with parent pom or spotless plugin update https://github.com/diffplug/spotless/issues/1774 -->
     <profile>
-      <id>java21+</id>
+      <id>java11+</id>
       <activation>
-        <jdk>[21,)</jdk>
+        <jdk>[11,)</jdk>
       </activation>
       <build>
         <plugins>
           <plugin>
             <groupId>com.diffplug.spotless</groupId>
             <artifactId>spotless-maven-plugin</artifactId>
-            <configuration>
-              <java>
-                <palantirJavaFormat>
-                  <version>2.35.0</version>
-                </palantirJavaFormat>
-              </java>
-            </configuration>
           </plugin>
         </plugins>
       </build>
