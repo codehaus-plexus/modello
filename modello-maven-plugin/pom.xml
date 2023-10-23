@@ -19,7 +19,7 @@
   </prerequisites>
 
   <properties>
-    <mavenPluginTools>3.9.0</mavenPluginTools>
+    <mavenPluginTools>3.10.1</mavenPluginTools>
   </properties>
 
   <dependencies>
