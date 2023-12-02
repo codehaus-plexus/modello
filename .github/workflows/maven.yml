@@ -15,13 +15,17 @@
 # specific language governing permissions and limitations
 # under the License.
 
-name: Maven GitHub CI
+name: GitHub CI
 
-on:
-  push:
-  pull_request:
+on: [push, pull_request]
 
 jobs:
   build:
-    name: Verify
+    name: Build it
     uses: codehaus-plexus/.github/.github/workflows/maven.yml@master
+
+  deploy:
+    name: Deploy
+    needs: build
+    uses: codehaus-plexus/.github/.github/workflows/maven-deploy.yml@master
+    secrets: inherit
