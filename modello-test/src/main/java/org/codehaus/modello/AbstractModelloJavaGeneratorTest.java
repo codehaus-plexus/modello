@@ -175,8 +175,9 @@ public abstract class AbstractModelloJavaGeneratorTest extends AbstractModelloGe
         addDependency("junit", "junit");
         addDependency("org.codehaus.plexus", "plexus-utils");
         addDependency("org.codehaus.plexus", "plexus-xml");
-        addDependency("org.apache.maven", "maven-api-xml");
-        addDependency("org.apache.maven", "maven-xml-impl");
+        // for plexus-xml 4
+        // addDependency("org.apache.maven", "maven-api-xml");
+        // addDependency("org.apache.maven", "maven-xml-impl");
         addDependency("org.codehaus.modello", "modello-test");
 
         String[] classPathElements = new String[dependencies.size() + 2];
