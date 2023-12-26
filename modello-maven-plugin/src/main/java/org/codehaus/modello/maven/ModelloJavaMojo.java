@@ -30,7 +30,7 @@ import org.apache.maven.plugins.annotations.Mojo;
  *
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  */
-@Mojo(name = "java", defaultPhase = LifecyclePhase.GENERATE_SOURCES, threadSafe = true)
+@Mojo(name = "java", defaultPhase = LifecyclePhase.GENERATE_SOURCES)
 public class ModelloJavaMojo extends AbstractModelloSourceGeneratorMojo {
     protected String getGeneratorType() {
         return "java";
