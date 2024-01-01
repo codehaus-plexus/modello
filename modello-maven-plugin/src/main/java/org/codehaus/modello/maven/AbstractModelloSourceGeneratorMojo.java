@@ -23,7 +23,10 @@ package org.codehaus.modello.maven;
  */
 
 import java.io.File;
+import java.util.Optional;
 import java.util.Properties;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 import org.apache.maven.plugins.annotations.Parameter;
 import org.codehaus.modello.ModelloParameterConstants;
@@ -47,10 +50,20 @@ public abstract class AbstractModelloSourceGeneratorMojo extends AbstractModello
     private String encoding;
 
     /**
-     * Generate Java 5 sources, with generic collections.
+     * The java source level used for generating outputs classes.
+     * <p/>
+     * Will be discovered from project properties, in order:
+     * <ul>
+     *     <li><code>maven.compiler.release</code></li>
+     *     <li><code>maven.compiler.source</code></li>
+     *     <li><code>maven.compiler.target</code></li>
+     * </ul>
+     *
+     * If all of above properties was not be set, default value as <b>8</b> will be used.
+     *
      * @since 1.0
      */
-    @Parameter(defaultValue = "${maven.compiler.source}")
+    @Parameter
     private String javaSource;
 
     /**
@@ -85,9 +98,33 @@ public abstract class AbstractModelloSourceGeneratorMojo extends AbstractModello
             if (javaSource.startsWith("1.")) {
                 javaSource = javaSource.substring("1.".length());
             }
-            parameters.setProperty(ModelloParameterConstants.OUTPUT_JAVA_SOURCE, javaSource);
+        } else {
+            javaSource = discoverJavaSource();
         }
+        getLog().debug("javaSource=" + javaSource);
+        parameters.setProperty(ModelloParameterConstants.OUTPUT_JAVA_SOURCE, javaSource);
 
         parameters.setProperty(ModelloParameterConstants.DOM_AS_XPP3, Boolean.toString(domAsXpp3));
+    }
+
+    private String discoverJavaSource() {
+        Properties projectProperties = getProject().getProperties();
+
+        Supplier<String> release = () -> projectProperties.getProperty("maven.compiler.release");
+        Supplier<String> source = () -> projectProperties.getProperty("maven.compiler.source");
+        Supplier<String> target = () -> projectProperties.getProperty("maven.compiler.target");
+
+        Optional<String> jSource = Stream.of(release, source, target)
+                .map(Supplier::get)
+                .filter(s -> s != null && !s.isEmpty())
+                .findFirst();
+
+        if (jSource.isPresent()) {
+            return jSource.get();
+        } else {
+            getLog().warn("javaSource was not discovered - use default value "
+                    + ModelloParameterConstants.OUTPUT_JAVA_SOURCE_DEFAULT);
+            return ModelloParameterConstants.OUTPUT_JAVA_SOURCE_DEFAULT;
+        }
     }
 }
