@@ -25,6 +25,7 @@ package org.codehaus.modello.maven;
 import java.io.File;
 import java.util.Arrays;
 
+import org.apache.maven.project.MavenProject;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.plexus.ContainerConfiguration;
 import org.codehaus.plexus.PlexusTestCase;
@@ -65,6 +66,8 @@ public class ModelloConvertersMojoTest extends PlexusTestCase {
         mojo.setModelloCore(modelloCore);
 
         mojo.setBuildContext(buildContext);
+
+        mojo.setProject(new MavenProject());
 
         mojo.execute();
 
