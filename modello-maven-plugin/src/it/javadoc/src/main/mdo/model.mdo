@@ -30,7 +30,7 @@
 
   <classes>
     <class rootElement="true">
-      <name>Root</name>
+      <name>TestRoot</name>
       <version>1.0.0+</version>
       <fields>
         <field>
@@ -43,7 +43,7 @@
           <type>List</type>
           <association>
             <type>String</type>
-            <multiplicity>1</multiplicity>
+            <multiplicity>*</multiplicity>
           </association>
         </field>
         <field>
@@ -51,7 +51,7 @@
           <type>Set</type>
           <association>
             <type>String</type>
-            <multiplicity>1</multiplicity>
+            <multiplicity>*</multiplicity>
           </association>
         </field>
         <field>
