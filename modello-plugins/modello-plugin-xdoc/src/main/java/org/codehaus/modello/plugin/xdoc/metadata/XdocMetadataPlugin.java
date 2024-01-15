@@ -22,6 +22,9 @@ package org.codehaus.modello.plugin.xdoc.metadata;
  * SOFTWARE.
  */
 
+import javax.inject.Named;
+import javax.inject.Singleton;
+
 import java.util.Map;
 
 import org.codehaus.modello.ModelloException;
@@ -37,12 +40,12 @@ import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.ModelInterface;
-import org.codehaus.plexus.component.annotations.Component;
 
 /**
  * @author Hervé Boutemy
  */
-@Component(role = MetadataPlugin.class, hint = "stax-writer")
+@Named("stax-writer")
+@Singleton
 public class XdocMetadataPlugin extends AbstractMetadataPlugin implements MetadataPlugin {
     public static final String XDOC_SEPARATOR = "xdoc.separator";
     public static final String XDOC_ANCHORNAME = "xdoc.anchorName";

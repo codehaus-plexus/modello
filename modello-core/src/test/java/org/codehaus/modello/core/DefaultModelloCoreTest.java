@@ -23,6 +23,8 @@ package org.codehaus.modello.core;
  */
 
 import org.codehaus.modello.ModelloRuntimeException;
+import org.codehaus.plexus.ContainerConfiguration;
+import org.codehaus.plexus.PlexusConstants;
 import org.codehaus.plexus.PlexusTestCase;
 
 /**
@@ -69,5 +71,11 @@ public class DefaultModelloCoreTest extends PlexusTestCase {
         ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
 
         modello.loadModel(getTestFile("src/test/resources/models/recursion.mdo"));
+    }
+
+    @Override
+    protected void customizeContainerConfiguration(ContainerConfiguration configuration) {
+        configuration.setAutoWiring(true);
+        configuration.setClassPathScanning(PlexusConstants.SCANNING_INDEX);
     }
 }

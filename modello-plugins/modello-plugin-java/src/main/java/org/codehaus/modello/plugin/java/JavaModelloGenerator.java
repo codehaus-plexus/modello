@@ -22,6 +22,9 @@ package org.codehaus.modello.plugin.java;
  * SOFTWARE.
  */
 
+import javax.inject.Named;
+import javax.inject.Singleton;
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Arrays;
@@ -41,7 +44,6 @@ import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelDefault;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.ModelInterface;
-import org.codehaus.modello.plugin.ModelloGenerator;
 import org.codehaus.modello.plugin.java.javasource.JArrayType;
 import org.codehaus.modello.plugin.java.javasource.JClass;
 import org.codehaus.modello.plugin.java.javasource.JCollectionType;
@@ -60,13 +62,13 @@ import org.codehaus.modello.plugin.java.metadata.JavaAssociationMetadata;
 import org.codehaus.modello.plugin.java.metadata.JavaClassMetadata;
 import org.codehaus.modello.plugin.java.metadata.JavaFieldMetadata;
 import org.codehaus.modello.plugin.model.ModelClassMetadata;
-import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.util.StringUtils;
 
 /**
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
  */
-@Component(role = ModelloGenerator.class, hint = "java")
+@Named("java")
+@Singleton
 public class JavaModelloGenerator extends AbstractJavaModelloGenerator {
 
     private Collection<String> immutableTypes = new HashSet<String>(Arrays.asList(new String[] {

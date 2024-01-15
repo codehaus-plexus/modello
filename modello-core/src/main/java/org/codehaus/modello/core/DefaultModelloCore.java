@@ -22,6 +22,10 @@ package org.codehaus.modello.core;
  * SOFTWARE.
  */
 
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
@@ -49,20 +53,20 @@ import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.ModelInterface;
 import org.codehaus.modello.model.ModelValidationException;
 import org.codehaus.modello.plugin.ModelloGenerator;
-import org.codehaus.plexus.component.annotations.Component;
-import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.util.ReaderFactory;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
  */
-@Component(role = ModelloCore.class)
+@Named
+@Singleton
 public class DefaultModelloCore extends AbstractModelloCore {
-    @Requirement
+
+    @Inject
     private MetadataPluginManager metadataPluginManager;
 
-    @Requirement
+    @Inject
     private GeneratorPluginManager generatorPluginManager;
 
     public MetadataPluginManager getMetadataPluginManager() {

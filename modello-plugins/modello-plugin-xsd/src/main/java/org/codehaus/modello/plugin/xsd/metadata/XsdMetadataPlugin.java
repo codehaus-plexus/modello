@@ -16,6 +16,9 @@ package org.codehaus.modello.plugin.xsd.metadata;
  * limitations under the License.
  */
 
+import javax.inject.Named;
+import javax.inject.Singleton;
+
 import java.util.Map;
 
 import org.codehaus.modello.ModelloException;
@@ -24,21 +27,20 @@ import org.codehaus.modello.metadata.AssociationMetadata;
 import org.codehaus.modello.metadata.ClassMetadata;
 import org.codehaus.modello.metadata.FieldMetadata;
 import org.codehaus.modello.metadata.InterfaceMetadata;
-import org.codehaus.modello.metadata.MetadataPlugin;
 import org.codehaus.modello.metadata.ModelMetadata;
 import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.ModelInterface;
-import org.codehaus.plexus.component.annotations.Component;
 
 /**
  * XsdMetadataPlugin
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  */
-@Component(role = MetadataPlugin.class, hint = "xdoc")
+@Named("xdoc")
+@Singleton
 public class XsdMetadataPlugin extends AbstractMetadataPlugin {
     public static final String NAMESPACE = "xsd.namespace";
 

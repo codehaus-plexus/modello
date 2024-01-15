@@ -22,6 +22,9 @@ package org.codehaus.modello.plugin.model;
  * SOFTWARE.
  */
 
+import javax.inject.Named;
+import javax.inject.Singleton;
+
 import java.util.Map;
 
 import org.codehaus.modello.metadata.AbstractMetadataPlugin;
@@ -36,12 +39,12 @@ import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.ModelInterface;
-import org.codehaus.plexus.component.annotations.Component;
 
 /**
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
  */
-@Component(role = MetadataPlugin.class, hint = "model")
+@Named("model")
+@Singleton
 public class ModelMetadataPlugin extends AbstractMetadataPlugin implements MetadataPlugin {
     public static final String ROOT_ELEMENT = "rootElement";
 

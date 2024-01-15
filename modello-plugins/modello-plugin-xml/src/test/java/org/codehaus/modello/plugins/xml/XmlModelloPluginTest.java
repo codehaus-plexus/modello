@@ -33,6 +33,8 @@ import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.Version;
 import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlMetadataPlugin;
+import org.codehaus.plexus.ContainerConfiguration;
+import org.codehaus.plexus.PlexusConstants;
 import org.codehaus.plexus.PlexusTestCase;
 
 /**
@@ -103,5 +105,11 @@ public class XmlModelloPluginTest extends PlexusTestCase {
         assertEquals("build", xml.getTagName());
 
         assertTrue(xml.isTrim());
+    }
+
+    @Override
+    protected void customizeContainerConfiguration(ContainerConfiguration configuration) {
+        configuration.setAutoWiring(true);
+        configuration.setClassPathScanning(PlexusConstants.SCANNING_INDEX);
     }
 }

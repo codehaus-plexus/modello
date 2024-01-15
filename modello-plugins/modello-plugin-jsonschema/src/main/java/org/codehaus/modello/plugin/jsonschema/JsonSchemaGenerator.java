@@ -22,6 +22,9 @@ package org.codehaus.modello.plugin.jsonschema;
  * SOFTWARE.
  */
 
+import javax.inject.Named;
+import javax.inject.Singleton;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -40,17 +43,16 @@ import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelDefault;
 import org.codehaus.modello.model.ModelField;
-import org.codehaus.modello.plugin.ModelloGenerator;
 import org.codehaus.modello.plugins.xml.AbstractXmlJavaGenerator;
 import org.codehaus.modello.plugins.xml.metadata.XmlAssociationMetadata;
-import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.util.StringUtils;
 
 /**
  * @author <a href="mailto:simonetripodi@apache.org">Simone Tripodi</a>
  * @since 1.8
  */
-@Component(role = ModelloGenerator.class, hint = "jsonschema")
+@Named("jsonschema")
+@Singleton
 public final class JsonSchemaGenerator extends AbstractXmlJavaGenerator {
 
     public void generate(Model model, Properties parameters) throws ModelloException {
