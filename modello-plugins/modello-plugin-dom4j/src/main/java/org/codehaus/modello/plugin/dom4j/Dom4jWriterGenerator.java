@@ -22,6 +22,9 @@ package org.codehaus.modello.plugin.dom4j;
  * SOFTWARE.
  */
 
+import javax.inject.Named;
+import javax.inject.Singleton;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
@@ -32,7 +35,6 @@ import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelDefault;
 import org.codehaus.modello.model.ModelField;
-import org.codehaus.modello.plugin.ModelloGenerator;
 import org.codehaus.modello.plugin.java.javasource.JClass;
 import org.codehaus.modello.plugin.java.javasource.JMethod;
 import org.codehaus.modello.plugin.java.javasource.JParameter;
@@ -44,7 +46,6 @@ import org.codehaus.modello.plugins.xml.AbstractXmlJavaGenerator;
 import org.codehaus.modello.plugins.xml.metadata.XmlAssociationMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlModelMetadata;
-import org.codehaus.plexus.component.annotations.Component;
 
 /**
  * <p>
@@ -54,7 +55,8 @@ import org.codehaus.plexus.component.annotations.Component;
  *
  * @author <a href="mailto:brett@codehaus.org">Brett Porter</a>
  */
-@Component(role = ModelloGenerator.class, hint = "dom4j-writer")
+@Named("dom4j-writer")
+@Singleton
 public class Dom4jWriterGenerator extends AbstractXmlJavaGenerator {
 
     private boolean requiresDomSupport;

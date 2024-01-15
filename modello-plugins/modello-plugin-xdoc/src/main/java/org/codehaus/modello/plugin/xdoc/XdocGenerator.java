@@ -22,6 +22,9 @@ package org.codehaus.modello.plugin.xdoc;
  * SOFTWARE.
  */
 
+import javax.inject.Named;
+import javax.inject.Singleton;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
@@ -44,7 +47,6 @@ import org.codehaus.modello.model.ModelDefault;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.Version;
 import org.codehaus.modello.model.VersionRange;
-import org.codehaus.modello.plugin.ModelloGenerator;
 import org.codehaus.modello.plugin.xdoc.metadata.XdocClassMetadata;
 import org.codehaus.modello.plugin.xdoc.metadata.XdocFieldMetadata;
 import org.codehaus.modello.plugin.xsd.XsdModelHelper;
@@ -53,7 +55,6 @@ import org.codehaus.modello.plugins.xml.metadata.XmlAssociationMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlClassMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlModelMetadata;
-import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.WriterFactory;
 import org.codehaus.plexus.util.xml.PrettyPrintXMLWriter;
@@ -65,7 +66,8 @@ import org.jsoup.nodes.Document;
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
  * @author <a href="mailto:emmanuel@venisse.net">Emmanuel Venisse</a>
  */
-@Component(role = ModelloGenerator.class, hint = "xdoc")
+@Named("xdoc")
+@Singleton
 public class XdocGenerator extends AbstractXmlGenerator {
     private static final VersionRange DEFAULT_VERSION_RANGE = new VersionRange("0.0.0+");
 

@@ -31,6 +31,8 @@ import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.Version;
 import org.codehaus.modello.model.VersionRange;
+import org.codehaus.plexus.ContainerConfiguration;
+import org.codehaus.plexus.PlexusConstants;
 import org.codehaus.plexus.PlexusTestCase;
 
 /**
@@ -163,5 +165,11 @@ public class ModelReaderTest extends PlexusTestCase {
         assertEquals("1.0.0+", age.getVersionRange().toString());
 
         assertEquals("int", age.getType());
+    }
+
+    @Override
+    protected void customizeContainerConfiguration(ContainerConfiguration configuration) {
+        configuration.setAutoWiring(true);
+        configuration.setClassPathScanning(PlexusConstants.SCANNING_INDEX);
     }
 }

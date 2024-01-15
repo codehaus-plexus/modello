@@ -22,6 +22,9 @@ package org.codehaus.modello.plugin.xsd;
  * SOFTWARE.
  */
 
+import javax.inject.Named;
+import javax.inject.Singleton;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
@@ -36,12 +39,10 @@ import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
-import org.codehaus.modello.plugin.ModelloGenerator;
 import org.codehaus.modello.plugin.xsd.metadata.XsdClassMetadata;
 import org.codehaus.modello.plugins.xml.AbstractXmlGenerator;
 import org.codehaus.modello.plugins.xml.metadata.XmlAssociationMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
-import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.WriterFactory;
 import org.codehaus.plexus.util.xml.PrettyPrintXMLWriter;
@@ -50,7 +51,8 @@ import org.codehaus.plexus.util.xml.XMLWriter;
 /**
  * @author <a href="mailto:brett@codehaus.org">Brett Porter</a>
  */
-@Component(role = ModelloGenerator.class, hint = "xsd")
+@Named("xsd")
+@Singleton
 public class XsdGenerator extends AbstractXmlGenerator {
     /**
      * Value standing for any element name (used on xml.tagName)

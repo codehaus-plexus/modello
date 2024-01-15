@@ -16,6 +16,9 @@
  */
 package org.codehaus.modello.plugin.jdom;
 
+import javax.inject.Named;
+import javax.inject.Singleton;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +30,6 @@ import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelDefault;
 import org.codehaus.modello.model.ModelField;
-import org.codehaus.modello.plugin.ModelloGenerator;
 import org.codehaus.modello.plugin.java.javasource.JClass;
 import org.codehaus.modello.plugin.java.javasource.JConstructor;
 import org.codehaus.modello.plugin.java.javasource.JField;
@@ -41,12 +43,12 @@ import org.codehaus.modello.plugin.model.ModelClassMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlAssociationMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlModelMetadata;
-import org.codehaus.plexus.component.annotations.Component;
 
 /**
  * @author mkleint@codehaus.org
  */
-@Component(role = ModelloGenerator.class, hint = "jdom-writer")
+@Named("jdom-writer")
+@Singleton
 public class JDOMWriterGenerator extends AbstractJDOMGenerator {
 
     private boolean requiresDomSupport;

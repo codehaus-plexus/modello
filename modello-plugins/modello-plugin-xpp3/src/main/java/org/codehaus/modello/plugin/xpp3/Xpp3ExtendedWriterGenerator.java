@@ -22,14 +22,15 @@ package org.codehaus.modello.plugin.xpp3;
  * SOFTWARE.
  */
 
-import org.codehaus.modello.plugin.ModelloGenerator;
+import javax.inject.Named;
+import javax.inject.Singleton;
+
 import org.codehaus.modello.plugin.java.javasource.JClass;
 import org.codehaus.modello.plugin.java.javasource.JField;
 import org.codehaus.modello.plugin.java.javasource.JMethod;
 import org.codehaus.modello.plugin.java.javasource.JParameter;
 import org.codehaus.modello.plugin.java.javasource.JSourceCode;
 import org.codehaus.modello.plugin.java.javasource.JType;
-import org.codehaus.plexus.component.annotations.Component;
 
 /**
  * The generator for XPP3-based writers that support input location tracking.
@@ -37,7 +38,8 @@ import org.codehaus.plexus.component.annotations.Component;
  * @author Hervé Boutemy
  * @since 1.10
  */
-@Component(role = ModelloGenerator.class, hint = "xpp3-extended-writer")
+@Named("xpp3-extended-writer")
+@Singleton
 public class Xpp3ExtendedWriterGenerator extends Xpp3WriterGenerator {
     @Override
     protected boolean isLocationTracking() {

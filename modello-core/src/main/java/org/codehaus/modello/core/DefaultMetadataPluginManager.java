@@ -22,21 +22,25 @@ package org.codehaus.modello.core;
  * SOFTWARE.
  */
 
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
+
 import java.util.Map;
 
 import org.codehaus.modello.ModelloRuntimeException;
 import org.codehaus.modello.metadata.MetadataPlugin;
 import org.codehaus.modello.plugin.AbstractPluginManager;
-import org.codehaus.plexus.component.annotations.Component;
-import org.codehaus.plexus.component.annotations.Requirement;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  */
-@Component(role = MetadataPluginManager.class)
+@Named
+@Singleton
 public class DefaultMetadataPluginManager extends AbstractPluginManager<MetadataPlugin>
         implements MetadataPluginManager {
-    @Requirement
+
+    @Inject
     private Map<String, MetadataPlugin> plugins;
 
     public Map<String, MetadataPlugin> getPlugins() {
