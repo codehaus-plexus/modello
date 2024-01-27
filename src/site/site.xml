@@ -1,41 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/DECORATION/1.8.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/DECORATION/1.8.0 https://maven.apache.org/xsd/decoration-1.8.0.xsd">
+<project xmlns="http://maven.apache.org/DECORATION/1.8.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/DECORATION/1.8.1 https://maven.apache.org/xsd/decoration-1.8.1.xsd">
   <bannerLeft>
     <name>Modello</name>
-    <href>http://codehaus-plexus.github.io/modello/</href>
+    <href>https://codehaus-plexus.github.io/modello/</href>
   </bannerLeft>
-
-  <skin>
-    <groupId>org.apache.maven.skins</groupId>
-    <artifactId>maven-fluido-skin</artifactId>
-    <version>1.10.0</version>
-  </skin>
-
-  <edit>${project.scm.url}</edit>
-
-  <custom>
-    <fluidoSkin>
-      <sourceLineNumbersEnabled>true</sourceLineNumbersEnabled>
-      <googlePlusOne />
-      <googleSearch>
-        <sitesearch>http://codehaus-plexus.github.io/modello/</sitesearch>
-      </googleSearch>
-    </fluidoSkin>
-  </custom>
-
-  <publishDate format="yyyy-MM-dd" position="right" />
-  <version position="right" />
 
   <body>
     <links>
-      <item name="Codehaus Plexus" href="http://codehaus-plexus.github.io/"/>
       <item name="Apache Maven" href="https://maven.apache.org/"/>
     </links>
 
     <!-- Breadcrumbs that every project will inherit -->
     <breadcrumbs>
-      <item name="Modello" href="http://codehaus-plexus.github.io/modello/index.html" />
+      <item name="Modello" href="https://codehaus-plexus.github.io/modello/index.html" />
     </breadcrumbs>
 
     <menu name="Overview" inherit="bottom">

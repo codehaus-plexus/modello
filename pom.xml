@@ -18,17 +18,17 @@
     Modello generates code from a simple model format: based on a plugin architecture, various types of code and
     descriptors can be generated from the single model, including Java POJOs, XML/JSON/YAML marshallers/unmarshallers,
     XSD, JSON Schema and documentation.</description>
-  <url>http://codehaus-plexus.github.io/modello/</url>
+  <url>https://codehaus-plexus.github.io/modello/</url>
   <inceptionYear>2001</inceptionYear>
   <organization>
     <name>Codehaus Plexus</name>
-    <url>http://codehaus-plexus.github.io/</url>
+    <url>https://codehaus-plexus.github.io/</url>
   </organization>
 
   <licenses>
     <license>
       <name>The MIT License</name>
-      <url>http://opensource.org/licenses/mit-license.php</url>
+      <url>https://spdx.org/licenses/MIT.txt</url>
       <distribution>repo</distribution>
     </license>
   </licenses>
@@ -183,25 +183,22 @@
   </modules>
 
   <scm>
-    <connection>scm:git:https://github.com/codehaus-plexus/modello.git</connection>
-    <developerConnection>scm:git:https://github.com/codehaus-plexus/modello.git</developerConnection>
-    <tag>modello-2.1.2</tag>
-    <url>http://github.com/codehaus-plexus/modello/tree/${project.scm.tag}/</url>
+    <connection>${scm.url}</connection>
+    <developerConnection>${scm.url}</developerConnection>
+    <tag>HEAD</tag>
+    <url>https://github.com/codehaus-plexus/modello/tree/${project.scm.tag}/</url>
   </scm>
+
   <issueManagement>
     <system>github</system>
     <url>http://github.com/codehaus-plexus/modello/issues</url>
   </issueManagement>
+
   <ciManagement>
-    <notifiers>
-      <notifier>
-        <type>mail</type>
-        <configuration>
-          <address>dev@modello.codehaus.org</address>
-        </configuration>
-      </notifier>
-    </notifiers>
+    <system>github</system>
+    <url>https://github.com/codehaus-plexus/modello/actions</url>
   </ciManagement>
+
   <distributionManagement>
     <repository>
       <id>ossrh-staging</id>
@@ -214,16 +211,17 @@
       <url>https://oss.sonatype.org/content/repositories/snapshots</url>
     </snapshotRepository>
     <site>
-      <id>github</id>
-      <url>scm:git:git@github.com:codehaus-plexus/modello.git</url>
+      <id>github:gh-pages</id>
+      <url>${scm.url}</url>
     </site>
   </distributionManagement>
 
   <properties>
+    <scm.url>scm:git:git@github.com:codehaus-plexus/modello.git</scm.url>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <jackson.version>2.16.1</jackson.version>
     <jdom.version>2.0.2</jdom.version>
-    <maven.version>3.5.4</maven.version>
+    <mavenVersion>3.5.4</mavenVersion>
     <!--
       ! This controls the minimum java version
       ! and also the version which is used
@@ -379,7 +377,6 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-enforcer-plugin</artifactId>
-          <version>3.4.1</version>
           <executions>
             <execution>
               <id>enforce-java</id>
@@ -391,9 +388,6 @@
                   <requireJavaVersion>
                     <version>${javaVersion}</version>
                   </requireJavaVersion>
-                  <requireMavenVersion>
-                    <version>${maven.version}</version>
-                  </requireMavenVersion>
                 </rules>
               </configuration>
             </execution>
@@ -402,7 +396,6 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-jar-plugin</artifactId>
-          <version>3.3.0</version>
           <configuration>
             <archive>
               <manifest>
@@ -415,18 +408,22 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-javadoc-plugin</artifactId>
-          <version>3.6.3</version>
           <configuration>
             <detectJavaApiLink>false</detectJavaApiLink>
           </configuration>
         </plugin>
         <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-release-plugin</artifactId>
-          <version>3.0.1</version>
           <configuration>
             <autoVersionSubmodules>true</autoVersionSubmodules>
-            <goals>deploy</goals>
-            <releaseProfiles>modello-release</releaseProfiles>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-site-plugin</artifactId>
+          <configuration>
+            <topSiteURL>${scm.url}</topSiteURL>
           </configuration>
         </plugin>
         <plugin>
@@ -443,102 +440,13 @@
         <artifactId>maven-enforcer-plugin</artifactId>
       </plugin>
       <plugin>
-        <artifactId>maven-site-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>attach-descriptor</id>
-            <goals>
-              <goal>attach-descriptor</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
         <groupId>org.eclipse.sisu</groupId>
         <artifactId>sisu-maven-plugin</artifactId>
       </plugin>
     </plugins>
   </build>
 
-  <reporting>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-project-info-reports-plugin</artifactId>
-      </plugin>
-    </plugins>
-  </reporting>
-
   <profiles>
-    <profile>
-      <id>modello-release</id>
-      <build>
-        <plugins>
-          <plugin>
-            <artifactId>maven-assembly-plugin</artifactId>
-            <dependencies>
-              <dependency>
-                <groupId>org.apache.apache.resources</groupId>
-                <artifactId>apache-source-release-assembly-descriptor</artifactId>
-                <version>1.5</version>
-              </dependency>
-            </dependencies>
-            <executions>
-              <execution>
-                <id>source-release-assembly</id>
-                <goals>
-                  <goal>single</goal>
-                </goals>
-                <phase>package</phase>
-                <configuration>
-                  <runOnlyAtExecutionRoot>true</runOnlyAtExecutionRoot>
-                  <descriptorRefs>
-                    <descriptorRef>source-release</descriptorRef>
-                  </descriptorRefs>
-                  <tarLongFileFormat>gnu</tarLongFileFormat>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-gpg-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>sign-artifacts</id>
-                <goals>
-                  <goal>sign</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-source-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>attach-sources</id>
-                <goals>
-                  <goal>jar-no-fork</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-javadoc-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>attach-javadocs</id>
-                <goals>
-                  <goal>jar</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
     <profile>
       <id>reporting</id>
       <build>
@@ -580,55 +488,6 @@
           </plugin>
         </plugins>
       </build>
-      <reporting>
-        <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-project-info-reports-plugin</artifactId>
-          </plugin>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-surefire-report-plugin</artifactId>
-          </plugin>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-pmd-plugin</artifactId>
-            <version>3.21.2</version>
-            <configuration>
-              <targetJdk>${java.version}</targetJdk>
-              <rulesets>
-                <ruleset>rulesets/maven.xml</ruleset>
-              </rulesets>
-              <excludeRoots>
-                <excludeRoot>${project.build.directory}/generated-sources/modello</excludeRoot>
-                <excludeRoot>${project.build.directory}/generated-sources/plugin</excludeRoot>
-              </excludeRoots>
-            </configuration>
-          </plugin>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-jxr-plugin</artifactId>
-            <version>3.3.2</version>
-          </plugin>
-          <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>taglist-maven-plugin</artifactId>
-            <version>3.0.0</version>
-          </plugin>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-javadoc-plugin</artifactId>
-            <reportSets>
-              <reportSet>
-                <reports>
-                  <report>javadoc</report>
-                  <report>test-javadoc</report>
-                </reports>
-              </reportSet>
-            </reportSets>
-          </plugin>
-        </plugins>
-      </reporting>
     </profile>
 
     <profile>
