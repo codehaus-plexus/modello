@@ -32,6 +32,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.Set;
 
@@ -1465,12 +1466,11 @@ public class JavaModelloGenerator extends AbstractJavaModelloGenerator {
                 }
             }
 
-            if (StringUtils.equals(
-                    javaAssociationMetadata.getInitializationMode(), JavaAssociationMetadata.FIELD_INIT)) {
+            if (Objects.equals(javaAssociationMetadata.getInitializationMode(), JavaAssociationMetadata.FIELD_INIT)) {
                 jField.setInitString(defaultValue);
             }
 
-            if (StringUtils.equals(
+            if (Objects.equals(
                     javaAssociationMetadata.getInitializationMode(), JavaAssociationMetadata.CONSTRUCTOR_INIT)) {
                 jConstructorSource.add("this." + jField.getName() + " = " + defaultValue + ";");
             }
@@ -1484,7 +1484,7 @@ public class JavaModelloGenerator extends AbstractJavaModelloGenerator {
 
                 JSourceCode sc = getter.getSourceCode();
 
-                if (StringUtils.equals(
+                if (Objects.equals(
                         javaAssociationMetadata.getInitializationMode(), JavaAssociationMetadata.LAZY_INIT)) {
                     sc.add("if ( this." + jField.getName() + " == null )");
 

@@ -44,9 +44,9 @@ import org.codehaus.modello.plugins.xml.AbstractXmlGenerator;
 import org.codehaus.modello.plugins.xml.metadata.XmlAssociationMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
 import org.codehaus.plexus.util.StringUtils;
-import org.codehaus.plexus.util.WriterFactory;
 import org.codehaus.plexus.util.xml.PrettyPrintXMLWriter;
 import org.codehaus.plexus.util.xml.XMLWriter;
+import org.codehaus.plexus.util.xml.XmlStreamWriter;
 
 /**
  * @author <a href="mailto:brett@codehaus.org">Brett Porter</a>
@@ -95,7 +95,7 @@ public class XsdGenerator extends AbstractXmlGenerator {
             f = new File(directory, xsdFileName);
         }
 
-        Writer writer = WriterFactory.newXmlWriter(f);
+        Writer writer = new XmlStreamWriter(f);
 
         try {
             XMLWriter w = new PrettyPrintXMLWriter(writer);

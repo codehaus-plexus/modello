@@ -38,7 +38,7 @@ import org.codehaus.modello.verifier.Verifier;
 import org.codehaus.modello.verifier.VerifierException;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.IOUtil;
-import org.codehaus.plexus.util.ReaderFactory;
+import org.codehaus.plexus.util.xml.XmlStreamReader;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.xmlunit.builder.DiffBuilder;

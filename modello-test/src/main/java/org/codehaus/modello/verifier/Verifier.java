@@ -27,7 +27,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.lang.reflect.Method;
 
-import org.codehaus.plexus.util.ReaderFactory;
+import org.codehaus.plexus.util.xml.XmlStreamReader;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -49,7 +49,7 @@ public abstract class Verifier {
     }
 
     protected Reader getXmlResourceReader(String name) throws IOException {
-        return ReaderFactory.newXmlReader(getClass().getResourceAsStream(name));
+        return new XmlStreamReader(getClass().getResourceAsStream(name));
     }
 
     protected void assertReader(Class<?> reader, Class<?> model, Class<?> input, Class<?> exception) {

@@ -39,7 +39,7 @@ import org.codehaus.modello.verifier.Verifier;
 import org.codehaus.modello.verifier.VerifierException;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.IOUtil;
-import org.codehaus.plexus.util.ReaderFactory;
+import org.codehaus.plexus.util.xml.XmlStreamReader;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.xmlunit.builder.DiffBuilder;
@@ -99,7 +99,7 @@ public class Xpp3Verifier
     {
         File file = new File( "src/test/verifiers/xpp3/expected-encoding.xml" );
 
-        Reader reader = ReaderFactory.newXmlReader( file );
+        Reader reader = new XmlStreamReader( file );
         MavenXpp3Reader modelReader = new MavenXpp3Reader();
 
         Model model = modelReader.read( reader );
@@ -112,7 +112,7 @@ public class Xpp3Verifier
     {
         File file = new File( "src/test/verifiers/xpp3/model-with-wrong-root-element.xml" );
 
-        Reader reader = ReaderFactory.newXmlReader( file );
+        Reader reader = new XmlStreamReader( file );
 
         MavenXpp3Reader modelReader = new MavenXpp3Reader();
 
@@ -126,7 +126,7 @@ public class Xpp3Verifier
             Assert.assertTrue( e.getMessage().startsWith( "Expected root element 'mavenModel' but found" ) );
         }
 
-        reader = ReaderFactory.newXmlReader( file );
+        reader = new XmlStreamReader( file );
 
         // no failure if it is wrong but strict is off
         modelReader.read( reader, false );
@@ -137,7 +137,7 @@ public class Xpp3Verifier
     {
         File file = new File( "src/test/verifiers/xpp3/model-with-missing-root-element.xml" );
 
-        Reader reader = ReaderFactory.newXmlReader( file );
+        Reader reader = new XmlStreamReader( file );
 
         MavenXpp3Reader modelReader = new MavenXpp3Reader();
 
@@ -151,7 +151,7 @@ public class Xpp3Verifier
             Assert.assertTrue( e.getMessage().startsWith( "Expected root element 'mavenModel' but found" ) );
         }
 
-        reader = ReaderFactory.newXmlReader( file );
+        reader = new XmlStreamReader( file );
 
         // no failure if it is wrong but strict is off
         modelReader.read( reader, false );
@@ -162,7 +162,7 @@ public class Xpp3Verifier
     {
         File file = new File( "src/test/verifiers/xpp3/model-with-wrong-element.xml" );
 
-        Reader reader = ReaderFactory.newXmlReader( file );
+        Reader reader = new XmlStreamReader( file );
 
         MavenXpp3Reader modelReader = new MavenXpp3Reader();
 
@@ -176,7 +176,7 @@ public class Xpp3Verifier
             Assert.assertTrue( e.getMessage().startsWith( "Unrecognised tag: 'bar'" ) );
         }
 
-        reader = ReaderFactory.newXmlReader( file );
+        reader = new XmlStreamReader( file );
 
         // no failure if it is wrong but strict is off
         Model model = modelReader.read( reader, false );
@@ -192,7 +192,7 @@ public class Xpp3Verifier
     {
         File file = new File( "src/test/verifiers/xpp3/model-with-wrong-element2.xml" );
 
-        Reader reader = ReaderFactory.newXmlReader( file );
+        Reader reader = new XmlStreamReader( file );
 
         MavenXpp3Reader modelReader = new MavenXpp3Reader();
 
@@ -206,7 +206,7 @@ public class Xpp3Verifier
             Assert.assertTrue( e.getMessage().startsWith( "Unrecognised tag: 'bar'" ) );
         }
 
-        reader = ReaderFactory.newXmlReader( file );
+        reader = new XmlStreamReader( file );
 
         // no failure if it is wrong but strict is off
         Model model = modelReader.read( reader, false );

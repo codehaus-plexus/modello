@@ -26,7 +26,7 @@ import junit.framework.Assert;
 import org.codehaus.modello.test.model.vif.Model;
 import org.codehaus.modello.test.model.vif.io.stax.VersionInFieldStaxReader;
 import org.codehaus.modello.verifier.Verifier;
-import org.codehaus.plexus.util.ReaderFactory;
+import org.codehaus.plexus.util.xml.XmlStreamReader;
 
 import java.io.File;
 import java.io.IOException;
@@ -46,12 +46,12 @@ public class StaxVerifierVersionInField
     {
         File file = new File( "src/test/verifiers/stax-version-in-field/version-in-field.xml" );
 
-        Reader reader = ReaderFactory.newXmlReader( file );
+        Reader reader = new XmlStreamReader( file );
         VersionInFieldStaxReader modelReader = new VersionInFieldStaxReader();
 
         Assert.assertEquals( "4.0.0", modelReader.determineVersion( reader ) );
 
-        reader = ReaderFactory.newXmlReader( file );
+        reader = new XmlStreamReader( file );
         Model model = modelReader.read( reader );
 
         Assert.assertEquals( "4.0.0", model.getModelVersion() );
