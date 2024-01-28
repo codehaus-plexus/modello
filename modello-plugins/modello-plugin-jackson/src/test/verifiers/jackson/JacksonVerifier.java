@@ -42,7 +42,6 @@ import org.codehaus.modello.verifier.Verifier;
 import org.codehaus.modello.verifier.VerifierException;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.IOUtil;
-import org.codehaus.plexus.util.ReaderFactory;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;

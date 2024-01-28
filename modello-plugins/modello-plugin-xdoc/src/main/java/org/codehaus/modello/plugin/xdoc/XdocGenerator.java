@@ -56,9 +56,9 @@ import org.codehaus.modello.plugins.xml.metadata.XmlClassMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlModelMetadata;
 import org.codehaus.plexus.util.StringUtils;
-import org.codehaus.plexus.util.WriterFactory;
 import org.codehaus.plexus.util.xml.PrettyPrintXMLWriter;
 import org.codehaus.plexus.util.xml.XMLWriter;
+import org.codehaus.plexus.util.xml.XmlStreamWriter;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
@@ -115,7 +115,7 @@ public class XdocGenerator extends AbstractXmlGenerator {
             f = new File(directory, xdocFileName);
         }
 
-        Writer writer = WriterFactory.newXmlWriter(f);
+        Writer writer = new XmlStreamWriter(f);
 
         XMLWriter w = new PrettyPrintXMLWriter(writer);
 

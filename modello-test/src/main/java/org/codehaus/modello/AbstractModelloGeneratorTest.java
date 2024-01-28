@@ -36,7 +36,7 @@ import org.codehaus.plexus.ContainerConfiguration;
 import org.codehaus.plexus.PlexusConstants;
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.util.FileUtils;
-import org.codehaus.plexus.util.ReaderFactory;
+import org.codehaus.plexus.util.xml.XmlStreamReader;
 import org.xml.sax.SAXException;
 
 /**
@@ -93,7 +93,7 @@ public abstract class AbstractModelloGeneratorTest extends PlexusTestCase {
     }
 
     protected Reader getXmlResourceReader(String name) throws IOException {
-        return ReaderFactory.newXmlReader(getClass().getResourceAsStream(name));
+        return new XmlStreamReader(getClass().getResourceAsStream(name));
     }
 
     protected SAXParser createSaxParserWithSchema(String generatedXsdName)

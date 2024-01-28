@@ -25,8 +25,8 @@ package org.codehaus.modello;
 import java.io.File;
 import java.util.Properties;
 
-import org.codehaus.plexus.util.ReaderFactory;
 import org.codehaus.plexus.util.StringUtils;
+import org.codehaus.plexus.util.xml.XmlStreamReader;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -43,7 +43,7 @@ public class ModelloCli {
 
         parseArgumentsFromCommandLine(args);
 
-        modello.generate(ReaderFactory.newXmlReader(modelFile), outputType, parameters);
+        modello.generate(new XmlStreamReader(modelFile), outputType, parameters);
     }
 
     public static void parseArgumentsFromCommandLine(String[] args) throws Exception {

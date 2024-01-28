@@ -372,6 +372,7 @@
           <artifactId>maven-compiler-plugin</artifactId>
           <configuration>
             <proc>none</proc>
+            <showDeprecation>true</showDeprecation>
           </configuration>
         </plugin>
         <plugin>

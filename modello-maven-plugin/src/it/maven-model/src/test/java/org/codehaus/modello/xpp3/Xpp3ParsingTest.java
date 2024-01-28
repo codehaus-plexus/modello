@@ -6,7 +6,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
-import org.codehaus.plexus.util.ReaderFactory;
+import org.codehaus.plexus.util.xml.XmlStreamReader;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.hamcrest.core.StringStartsWith;
 
@@ -28,7 +28,7 @@ public class Xpp3ParsingTest
 
         MavenXpp3Reader reader = new MavenXpp3Reader();
 
-        reader.read( ReaderFactory.newXmlReader( model ), true );
+        reader.read( new XmlStreamReader( model ), true );
     }
 
     @Test
@@ -41,7 +41,7 @@ public class Xpp3ParsingTest
 
         MavenXpp3Reader reader = new MavenXpp3Reader();
 
-        reader.read( ReaderFactory.newXmlReader( model ), true );
+        reader.read( new XmlStreamReader( model ), true );
     }
     
     @Test
@@ -55,7 +55,7 @@ public class Xpp3ParsingTest
 
         MavenXpp3Reader reader = new MavenXpp3Reader();
 
-        reader.read( ReaderFactory.newXmlReader( model ), true );
+        reader.read( new XmlStreamReader( model ), true );
     }
 
 }

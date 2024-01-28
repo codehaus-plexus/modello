@@ -52,7 +52,6 @@ import org.codehaus.modello.plugin.java.javasource.JSourceWriter;
 import org.codehaus.modello.plugin.java.javasource.JType;
 import org.codehaus.modello.plugin.java.metadata.JavaClassMetadata;
 import org.codehaus.modello.plugin.java.metadata.JavaFieldMetadata;
-import org.codehaus.plexus.util.IOUtil;
 
 /**
  * Generate a basic conversion class between two versions of a model.
@@ -310,18 +309,10 @@ public class ConverterGenerator extends AbstractJavaModelloGenerator {
             sc.add("return value;");
         }
 
-        JSourceWriter interfaceWriter = null;
-        JSourceWriter classWriter = null;
-
-        try {
-            interfaceWriter = newJSourceWriter(packageName, conversionInterface.getName(true));
-            classWriter = newJSourceWriter(packageName, basicConverterClass.getName(true));
-
+        try (JSourceWriter interfaceWriter = newJSourceWriter(packageName, conversionInterface.getName(true));
+                JSourceWriter classWriter = newJSourceWriter(packageName, basicConverterClass.getName(true))) {
             conversionInterface.print(interfaceWriter);
             basicConverterClass.print(classWriter);
-        } finally {
-            IOUtil.close(classWriter);
-            IOUtil.close(interfaceWriter);
         }
     }
 
@@ -351,12 +342,8 @@ public class ConverterGenerator extends AbstractJavaModelloGenerator {
         }
         writeConvertMethod(converterClass, objectModel, basePackage, allVersions, null, rootClass);
 
-        JSourceWriter classWriter = null;
-        try {
-            classWriter = newJSourceWriter(packageName, converterClass.getName(true));
+        try (JSourceWriter classWriter = newJSourceWriter(packageName, converterClass.getName(true))) {
             converterClass.print(new JSourceWriter(classWriter));
-        } finally {
-            IOUtil.close(classWriter);
         }
     }
 

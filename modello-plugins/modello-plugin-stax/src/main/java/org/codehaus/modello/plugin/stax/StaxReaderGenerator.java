@@ -388,7 +388,7 @@ public class StaxReaderGenerator extends AbstractStaxGenerator {
         jClass.addImport("javax.xml.stream.*");
 
         jClass.addImport("org.codehaus.plexus.util.IOUtil");
-        jClass.addImport("org.codehaus.plexus.util.ReaderFactory");
+        jClass.addImport("org.codehaus.plexus.util.xml.XmlStreamReader");
 
         JMethod method = new JMethod("read", new JClass("Object"), null);
 
@@ -404,7 +404,7 @@ public class StaxReaderGenerator extends AbstractStaxGenerator {
         JSourceCode sc = method.getSourceCode();
 
         sc.add("String modelVersion;");
-        sc.add("Reader reader = ReaderFactory.newXmlReader( f );");
+        sc.add("Reader reader = new XmlStreamReader( f );");
 
         sc.add("try");
         sc.add("{");
@@ -415,7 +415,7 @@ public class StaxReaderGenerator extends AbstractStaxGenerator {
         sc.addIndented("IOUtil.close( reader );");
         sc.add("}");
 
-        sc.add("reader = ReaderFactory.newXmlReader( f );");
+        sc.add("reader = new XmlStreamReader( f );");
         sc.add("try");
         sc.add("{");
         sc.indent();

@@ -224,7 +224,7 @@ public class Xpp3ReaderGenerator extends AbstractXpp3Generator {
         // ----------------------------------------------------------------------
 
         unmarshall = new JMethod(readerMethodName, new JClass(className), null);
-        unmarshall.setComment("@see ReaderFactory#newXmlReader");
+        unmarshall.setComment("@see XmlStreamReader");
 
         unmarshall.addParameter(new JParameter(new JClass("Reader"), "reader"));
         unmarshall.addParameter(new JParameter(JClass.BOOLEAN, "strict"));
@@ -254,7 +254,7 @@ public class Xpp3ReaderGenerator extends AbstractXpp3Generator {
 
         if (locationTracker == null) {
             unmarshall = new JMethod(readerMethodName, new JClass(className), null);
-            unmarshall.setComment("@see ReaderFactory#newXmlReader");
+            unmarshall.setComment("@see XmlStreamReader");
 
             unmarshall.addParameter(new JParameter(new JClass("Reader"), "reader"));
 
@@ -282,7 +282,7 @@ public class Xpp3ReaderGenerator extends AbstractXpp3Generator {
 
         sc = unmarshall.getSourceCode();
 
-        sc.add("return " + readerMethodName + "( ReaderFactory.newXmlReader( in ), strict" + trackingArgs + " );");
+        sc.add("return " + readerMethodName + "( new XmlStreamReader( in ), strict" + trackingArgs + " );");
 
         jClass.addMethod(unmarshall);
 
@@ -298,7 +298,7 @@ public class Xpp3ReaderGenerator extends AbstractXpp3Generator {
 
             sc = unmarshall.getSourceCode();
 
-            sc.add("return " + readerMethodName + "( ReaderFactory.newXmlReader( in ) );");
+            sc.add("return " + readerMethodName + "( new XmlStreamReader( in ) );");
 
             jClass.addMethod(unmarshall);
         }
@@ -318,7 +318,7 @@ public class Xpp3ReaderGenerator extends AbstractXpp3Generator {
         initHeader(jClass);
         suppressAllWarnings(objectModel, jClass);
 
-        jClass.addImport("org.codehaus.plexus.util.ReaderFactory");
+        jClass.addImport("org.codehaus.plexus.util.xml.XmlStreamReader");
         jClass.addImport("org.codehaus.plexus.util.xml.pull.MXParser");
         jClass.addImport("org.codehaus.plexus.util.xml.pull.EntityReplacementMap");
         jClass.addImport("org.codehaus.plexus.util.xml.pull.XmlPullParser");

@@ -35,7 +35,7 @@ import org.codehaus.modello.test.model.io.stax.MavenStaxReader;
 import org.codehaus.modello.test.model.io.stax.MavenStaxWriter;
 import org.codehaus.modello.verifier.Verifier;
 import org.codehaus.plexus.util.FileUtils;
-import org.codehaus.plexus.util.ReaderFactory;
+import org.codehaus.plexus.util.xml.XmlStreamReader;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 
 import java.io.File;
@@ -79,7 +79,7 @@ public class StaxVerifier
     {
         File file = new File( "src/test/verifiers/stax/expected-encoding.xml" );
 
-        Reader reader = ReaderFactory.newXmlReader( file );
+        Reader reader = new XmlStreamReader( file );
         MavenStaxReader modelReader = new MavenStaxReader();
 
         Model model = modelReader.read( reader );
@@ -92,7 +92,7 @@ public class StaxVerifier
     {
         File file = new File( "src/test/verifiers/stax/expected-default-extend.xml" );
 
-        Reader reader = ReaderFactory.newXmlReader( file );
+        Reader reader = new XmlStreamReader( file );
         MavenStaxReader modelReader = new MavenStaxReader();
 
         Model model = modelReader.read( reader );

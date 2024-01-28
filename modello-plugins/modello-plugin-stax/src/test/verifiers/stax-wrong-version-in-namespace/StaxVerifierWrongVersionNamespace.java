@@ -26,7 +26,7 @@ import junit.framework.Assert;
 import org.codehaus.modello.test.model.vin.Model;
 import org.codehaus.modello.test.model.vin.io.stax.VersionInNamespaceStaxReader;
 import org.codehaus.modello.verifier.Verifier;
-import org.codehaus.plexus.util.ReaderFactory;
+import org.codehaus.plexus.util.xml.XmlStreamReader;
 
 import java.io.File;
 import java.io.IOException;
@@ -43,12 +43,12 @@ public class StaxVerifierWrongVersionNamespace
     {
         File file = new File( "src/test/verifiers/stax-wrong-version-in-namespace/wrong-version-in-namespace.xml" );
 
-        Reader reader = ReaderFactory.newXmlReader( file );
+        Reader reader = new XmlStreamReader( file );
         VersionInNamespaceStaxReader modelReader = new VersionInNamespaceStaxReader();
 
         Assert.assertEquals( "3.2.1", modelReader.determineVersion( reader ) );
 
-        reader = ReaderFactory.newXmlReader( file );
+        reader = new XmlStreamReader( file );
         try
         {
             modelReader.read( reader );

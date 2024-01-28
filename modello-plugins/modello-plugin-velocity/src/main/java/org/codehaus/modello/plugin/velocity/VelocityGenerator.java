@@ -54,9 +54,11 @@ public class VelocityGenerator extends AbstractModelloGenerator {
     public static final String MODELLO_VELOCITY_OUTPUT = "#MODELLO-VELOCITY#SAVE-OUTPUT-TO ";
 
     @Override
+    @SuppressWarnings("unchecked")
     public void generate(Model model, Properties parameters) throws ModelloException {
         try {
-            Map<String, String> params = (Map) Objects.requireNonNull(parameters.get(VELOCITY_PARAMETERS));
+            Map<String, String> params =
+                    (Map<String, String>) Objects.requireNonNull(parameters.get(VELOCITY_PARAMETERS));
             String templates = getParameter(parameters, VELOCITY_TEMPLATES);
             String output = getParameter(parameters, ModelloParameterConstants.OUTPUT_DIRECTORY);
 

@@ -30,7 +30,6 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import junit.framework.Assert;
 import org.codehaus.modello.AbstractModelloGeneratorTest;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
@@ -40,6 +39,7 @@ import org.codehaus.modello.model.Version;
 import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
 import org.codehaus.modello.verifier.VerifierException;
 import org.codehaus.plexus.util.FileUtils;
+import org.junit.Assert;
 import org.xmlunit.builder.DiffBuilder;
 import org.xmlunit.builder.Input;
 import org.xmlunit.diff.Diff;

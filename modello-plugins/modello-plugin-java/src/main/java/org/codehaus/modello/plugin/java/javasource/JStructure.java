@@ -67,12 +67,11 @@ package org.codehaus.modello.plugin.java.javasource;
  */
 
 import java.io.File;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
-
-import org.codehaus.plexus.util.WriterFactory;
 
 /**
  * This class represents the basic Java "structure" for a Java
@@ -555,7 +554,7 @@ public abstract class JStructure extends JType {
         File file = new File(filename);
         JSourceWriter jsw = null;
         try {
-            jsw = new JSourceWriter(WriterFactory.newPlatformWriter(file));
+            jsw = new JSourceWriter(Files.newBufferedWriter(file.toPath()));
         } catch (java.io.IOException ioe) {
             System.out.println("unable to create class file: " + filename);
             return;

@@ -125,7 +125,7 @@ public final class JMethodSignature {
      **/
     public JMethodSignature(String name, JType returnType) {
 
-        if ((name == null) || (name.length() == 0)) {
+        if ((name == null) || (name.isEmpty())) {
             String err = "The method name must not be null or zero-length";
             throw new IllegalArgumentException(err);
         }

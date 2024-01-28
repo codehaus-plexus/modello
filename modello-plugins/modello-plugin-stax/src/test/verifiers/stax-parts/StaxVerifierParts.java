@@ -32,7 +32,7 @@ import org.codehaus.modello.test.model.parts.io.stax.PartsStaxReader;
 import org.codehaus.modello.test.model.parts.io.stax.PartsStaxWriter;
 import org.codehaus.modello.verifier.Verifier;
 import org.codehaus.plexus.util.FileUtils;
-import org.codehaus.plexus.util.ReaderFactory;
+import org.codehaus.plexus.util.xml.XmlStreamReader;
 
 import java.io.File;
 import java.io.IOException;
@@ -50,7 +50,7 @@ public class StaxVerifierParts
     {
         File file = new File( "src/test/verifiers/stax-parts/parts.xml" );
 
-        Reader reader = ReaderFactory.newXmlReader( file );
+        Reader reader = new XmlStreamReader( file );
         PartsStaxReader modelReader = new PartsStaxReader();
 
         Model model = modelReader.read( reader );

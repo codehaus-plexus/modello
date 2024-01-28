@@ -75,13 +75,12 @@ package org.codehaus.modello.plugin.java.javasource;
  */
 
 import java.io.File;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
-
-import org.codehaus.plexus.util.WriterFactory;
 
 /**
  * A representation of the Java Source code for a Java compilation
@@ -337,7 +336,7 @@ public class JCompUnit {
         File file = new File(filename);
         JSourceWriter jsw = null;
         try {
-            jsw = new JSourceWriter(WriterFactory.newPlatformWriter(file));
+            jsw = new JSourceWriter(Files.newBufferedWriter(file.toPath()));
         } catch (java.io.IOException ioe) {
             System.out.println("unable to create compilation unit file: " + filename);
             return;

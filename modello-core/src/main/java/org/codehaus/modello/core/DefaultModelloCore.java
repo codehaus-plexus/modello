@@ -53,7 +53,7 @@ import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.ModelInterface;
 import org.codehaus.modello.model.ModelValidationException;
 import org.codehaus.modello.plugin.ModelloGenerator;
-import org.codehaus.plexus.util.ReaderFactory;
+import org.codehaus.plexus.util.xml.XmlStreamReader;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -74,7 +74,7 @@ public class DefaultModelloCore extends AbstractModelloCore {
     }
 
     public Model loadModel(File file) throws IOException, ModelloException, ModelValidationException {
-        try (Reader reader = ReaderFactory.newXmlReader(file)) {
+        try (Reader reader = new XmlStreamReader(file)) {
             return loadModel(reader);
         }
     }
