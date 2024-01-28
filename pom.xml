@@ -148,33 +148,6 @@
     </developer>
   </developers>
 
-  <mailingLists>
-    <mailingList>
-      <name>Modello Announce List</name>
-      <otherArchives>
-        <otherArchive>http://markmail.org/list/org.codehaus.modello.announce</otherArchive>
-      </otherArchives>
-    </mailingList>
-    <mailingList>
-      <name>Modello Developer List</name>
-      <otherArchives>
-        <otherArchive>http://markmail.org/list/org.codehaus.modello.dev</otherArchive>
-      </otherArchives>
-    </mailingList>
-    <mailingList>
-      <name>Modello User List</name>
-      <otherArchives>
-        <otherArchive>http://markmail.org/list/org.codehaus.modello.user</otherArchive>
-      </otherArchives>
-    </mailingList>
-    <mailingList>
-      <name>Modello Commits List</name>
-      <otherArchives>
-        <otherArchive>http://markmail.org/list/org.codehaus.modello.scm</otherArchive>
-      </otherArchives>
-    </mailingList>
-  </mailingLists>
-
   <modules>
     <module>modello-maven-plugin</module>
     <module>modello-core</module>
