@@ -36,6 +36,7 @@ import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelDefault;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.plugin.java.javasource.JClass;
+import org.codehaus.modello.plugin.java.javasource.JCollectionType;
 import org.codehaus.modello.plugin.java.javasource.JConstructor;
 import org.codehaus.modello.plugin.java.javasource.JField;
 import org.codehaus.modello.plugin.java.javasource.JMethod;
@@ -499,7 +500,11 @@ public class Xpp3ReaderGenerator extends AbstractXpp3Generator {
         } else {
             // Write other fields
 
-            sc.add("java.util.Set parsed = new java.util.HashSet();");
+            if (hasJavaSourceSupport(5)) {
+                sc.add("java.util.Set<String> parsed = new java.util.HashSet<String>();");
+            } else {
+                sc.add("java.util.Set parsed = new java.util.HashSet();");
+            }
 
             sc.add("while ( ( strict ? parser.nextTag() : nextTag( parser ) ) == XmlPullParser.START_TAG )");
 
@@ -1290,7 +1295,8 @@ public class Xpp3ReaderGenerator extends AbstractXpp3Generator {
         method.addParameter(new JParameter(new JClass("XmlPullParser"), "parser"));
         method.addParameter(new JParameter(new JClass("String"), "tagName"));
         method.addParameter(new JParameter(new JClass("String"), "alias"));
-        method.addParameter(new JParameter(new JClass("java.util.Set"), "parsed"));
+        method.addParameter(new JParameter(
+                new JCollectionType("java.util.Set", new JType("String"), hasJavaSourceSupport(5)), "parsed"));
         method.addException(new JClass("XmlPullParserException"));
 
         sc = method.getSourceCode();
