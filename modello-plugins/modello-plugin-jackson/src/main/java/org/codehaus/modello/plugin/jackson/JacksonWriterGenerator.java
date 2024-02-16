@@ -23,7 +23,6 @@ package org.codehaus.modello.plugin.jackson;
  */
 
 import javax.inject.Named;
-import javax.inject.Singleton;
 
 import java.io.IOException;
 import java.util.List;
@@ -50,7 +49,6 @@ import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
  * @author <a href="mailto:simonetripodi@apache.org">Simone Tripodi</a>
  */
 @Named("jackson-writer")
-@Singleton
 public class JacksonWriterGenerator extends AbstractJacksonGenerator {
 
     private boolean requiresDomSupport;

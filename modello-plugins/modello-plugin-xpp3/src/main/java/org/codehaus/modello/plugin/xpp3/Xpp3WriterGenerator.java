@@ -23,7 +23,6 @@ package org.codehaus.modello.plugin.xpp3;
  */
 
 import javax.inject.Named;
-import javax.inject.Singleton;
 
 import java.io.IOException;
 import java.util.List;
@@ -54,7 +53,6 @@ import org.codehaus.modello.plugins.xml.metadata.XmlModelMetadata;
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse </a>
  */
 @Named("xpp3-writer")
-@Singleton
 public class Xpp3WriterGenerator extends AbstractXpp3Generator {
     private String extendedClassnameSuffix;
 

@@ -23,7 +23,6 @@ package org.codehaus.modello.plugin.xpp3;
  */
 
 import javax.inject.Named;
-import javax.inject.Singleton;
 
 import java.io.IOException;
 import java.util.List;
@@ -58,7 +57,6 @@ import org.codehaus.plexus.util.StringUtils;
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
  */
 @Named("xpp3-reader")
-@Singleton
 public class Xpp3ReaderGenerator extends AbstractXpp3Generator {
 
     private static final String SOURCE_PARAM = "source";

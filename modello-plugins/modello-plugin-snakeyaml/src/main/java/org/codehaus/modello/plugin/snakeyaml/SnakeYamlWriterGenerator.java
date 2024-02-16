@@ -23,7 +23,6 @@ package org.codehaus.modello.plugin.snakeyaml;
  */
 
 import javax.inject.Named;
-import javax.inject.Singleton;
 
 import java.io.IOException;
 import java.util.List;
@@ -50,7 +49,6 @@ import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
  * @author <a href="mailto:simonetripodi@apache.org">Simone Tripodi</a>
  */
 @Named("snakeyaml-writer")
-@Singleton
 public class SnakeYamlWriterGenerator extends AbstractSnakeYamlGenerator {
 
     public void generate(Model model, Properties parameters) throws ModelloException {

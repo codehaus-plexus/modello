@@ -23,7 +23,6 @@ package org.codehaus.modello.plugin.snakeyaml;
  */
 
 import javax.inject.Named;
-import javax.inject.Singleton;
 
 import org.codehaus.modello.model.ModelClass;
 
@@ -33,7 +32,6 @@ import org.codehaus.modello.model.ModelClass;
  * @author <a href="mailto:simonetripodi@apache.org">Simone Tripodi</a>
  */
 @Named("snakeyaml-extended-reader")
-@Singleton
 public class SnakeYamlExtendedReaderGenerator extends SnakeYamlReaderGenerator {
 
     @Override

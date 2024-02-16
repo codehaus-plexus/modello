@@ -23,7 +23,6 @@ package org.codehaus.modello.plugin.converters;
  */
 
 import javax.inject.Named;
-import javax.inject.Singleton;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -57,7 +56,6 @@ import org.codehaus.modello.plugin.java.metadata.JavaFieldMetadata;
  * Generate a basic conversion class between two versions of a model.
  */
 @Named("converters")
-@Singleton
 public class ConverterGenerator extends AbstractJavaModelloGenerator {
     public void generate(Model model, Properties parameters) throws ModelloException {
         initialize(model, parameters);

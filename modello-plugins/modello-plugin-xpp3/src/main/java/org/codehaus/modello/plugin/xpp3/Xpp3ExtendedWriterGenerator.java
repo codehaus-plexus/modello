@@ -23,7 +23,6 @@ package org.codehaus.modello.plugin.xpp3;
  */
 
 import javax.inject.Named;
-import javax.inject.Singleton;
 
 import org.codehaus.modello.plugin.java.javasource.JClass;
 import org.codehaus.modello.plugin.java.javasource.JField;
@@ -39,7 +38,6 @@ import org.codehaus.modello.plugin.java.javasource.JType;
  * @since 1.10
  */
 @Named("xpp3-extended-writer")
-@Singleton
 public class Xpp3ExtendedWriterGenerator extends Xpp3WriterGenerator {
     @Override
     protected boolean isLocationTracking() {

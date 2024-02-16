@@ -23,7 +23,6 @@ package org.codehaus.modello.plugin.sax;
  */
 
 import javax.inject.Named;
-import javax.inject.Singleton;
 
 import java.io.IOException;
 import java.util.List;
@@ -55,7 +54,6 @@ import org.codehaus.modello.plugins.xml.metadata.XmlModelMetadata;
  * @author <a href="mailto:simonetripodi@apache.org">Simone Tripodi</a>
  */
 @Named("sax-writer")
-@Singleton
 public class SaxWriterGenerator extends AbstractXmlJavaGenerator {
 
     private boolean requiresDomSupport;

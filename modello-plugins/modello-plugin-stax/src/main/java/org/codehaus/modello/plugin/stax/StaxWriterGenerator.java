@@ -24,7 +24,6 @@ package org.codehaus.modello.plugin.stax;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.inject.Singleton;
 
 import java.io.IOException;
 import java.util.List;
@@ -55,7 +54,6 @@ import org.codehaus.modello.plugins.xml.metadata.XmlModelMetadata;
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse </a>
  */
 @Named("stax-writer")
-@Singleton
 public class StaxWriterGenerator extends AbstractStaxGenerator {
 
     private boolean requiresDomSupport;

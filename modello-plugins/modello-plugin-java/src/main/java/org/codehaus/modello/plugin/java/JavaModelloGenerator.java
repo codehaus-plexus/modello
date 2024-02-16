@@ -23,7 +23,6 @@ package org.codehaus.modello.plugin.java;
  */
 
 import javax.inject.Named;
-import javax.inject.Singleton;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -69,7 +68,6 @@ import org.codehaus.plexus.util.StringUtils;
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
  */
 @Named("java")
-@Singleton
 public class JavaModelloGenerator extends AbstractJavaModelloGenerator {
 
     private Collection<String> immutableTypes = new HashSet<String>(Arrays.asList(new String[] {

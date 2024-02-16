@@ -23,7 +23,6 @@ package org.codehaus.modello.plugin.stax;
  */
 
 import javax.inject.Named;
-import javax.inject.Singleton;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -58,7 +57,6 @@ import org.codehaus.plexus.util.StringUtils;
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
  */
 @Named("stax-reader")
-@Singleton
 public class StaxReaderGenerator extends AbstractStaxGenerator {
 
     private boolean requiresDomSupport;
