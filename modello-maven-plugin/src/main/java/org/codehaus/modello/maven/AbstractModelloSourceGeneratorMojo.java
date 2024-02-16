@@ -94,12 +94,11 @@ public abstract class AbstractModelloSourceGeneratorMojo extends AbstractModello
             parameters.setProperty(ModelloParameterConstants.ENCODING, encoding);
         }
 
-        if (javaSource != null) {
-            if (javaSource.startsWith("1.")) {
-                javaSource = javaSource.substring("1.".length());
-            }
-        } else {
+        if (javaSource == null) {
             javaSource = discoverJavaSource();
+        }
+        if (javaSource.startsWith("1.")) {
+            javaSource = javaSource.substring("1.".length());
         }
         getLog().debug("javaSource=" + javaSource);
         parameters.setProperty(ModelloParameterConstants.OUTPUT_JAVA_SOURCE, javaSource);
