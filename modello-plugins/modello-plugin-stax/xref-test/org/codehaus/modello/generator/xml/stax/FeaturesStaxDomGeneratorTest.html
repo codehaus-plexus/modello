@@ -30,51 +30,46 @@
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <em class="jxr_comment"> * SOFTWARE.</em>
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <em class="jxr_comment"> */</em>
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.codehaus.modello.AbstractModelloJavaGeneratorTest;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.codehaus.modello.core.ModelloCore;
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.codehaus.modello.model.Model;
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> java.util.Properties;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.util.Properties;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.codehaus.modello.AbstractModelloJavaGeneratorTest;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.codehaus.modello.core.ModelloCore;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.codehaus.modello.model.Model;
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * @author Hervé Boutemy</em>
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="FeaturesStaxDomGeneratorTest" href="../../../../../../org/codehaus/modello/generator/xml/stax/FeaturesStaxDomGeneratorTest.html#FeaturesStaxDomGeneratorTest">FeaturesStaxDomGeneratorTest</a>
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>      <strong class="jxr_keyword">extends</strong> AbstractModelloJavaGeneratorTest
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  {
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>      <strong class="jxr_keyword">public</strong> <a name="FeaturesStaxDomGeneratorTest" href="../../../../../../org/codehaus/modello/generator/xml/stax/FeaturesStaxDomGeneratorTest.html#FeaturesStaxDomGeneratorTest">FeaturesStaxDomGeneratorTest</a>()
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>      {
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>          <strong class="jxr_keyword">super</strong>( <span class="jxr_string">"features-dom"</span> );
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>      }
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="FeaturesStaxDomGeneratorTest" href="../../../../../../org/codehaus/modello/generator/xml/stax/FeaturesStaxDomGeneratorTest.html#FeaturesStaxDomGeneratorTest">FeaturesStaxDomGeneratorTest</a> <strong class="jxr_keyword">extends</strong> AbstractModelloJavaGeneratorTest {
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>      <strong class="jxr_keyword">public</strong> <a name="FeaturesStaxDomGeneratorTest" href="../../../../../../org/codehaus/modello/generator/xml/stax/FeaturesStaxDomGeneratorTest.html#FeaturesStaxDomGeneratorTest">FeaturesStaxDomGeneratorTest</a>() {
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>          <strong class="jxr_keyword">super</strong>(<span class="jxr_string">"features-dom"</span>);
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>      }
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testJavaGenerator() <strong class="jxr_keyword">throws</strong> Throwable {
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>          ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testJavaGenerator()
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>          <strong class="jxr_keyword">throws</strong> Throwable
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>      {
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>          ModelloCore modello = (ModelloCore) lookup( ModelloCore.ROLE );
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>          Model model = modello.loadModel(getXmlResourceReader(<span class="jxr_string">"/features.mdo"</span>));
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>          Properties parameters = getModelloParameters(<span class="jxr_string">"1.0.0"</span>);
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>          parameters.put(<span class="jxr_string">"modello.dom.xpp3"</span>, <span class="jxr_string">"false"</span>);
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>          Model model = modello.loadModel( getXmlResourceReader( <span class="jxr_string">"/features.mdo"</span> ) );
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>          Properties parameters = getModelloParameters( <span class="jxr_string">"1.0.0"</span> );
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>          parameters.put( <span class="jxr_string">"modello.dom.xpp3"</span>, <span class="jxr_string">"false"</span> );
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>  
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>          modello.generate( model, <span class="jxr_string">"java"</span>, parameters );
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>          modello.generate( model, <span class="jxr_string">"stax-writer"</span>, parameters );
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>          modello.generate( model, <span class="jxr_string">"stax-reader"</span>, parameters );
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>          addDependency( <span class="jxr_string">"org.codehaus.woodstox"</span>, <span class="jxr_string">"stax2-api"</span> );
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>          addDependency( <span class="jxr_string">"com.fasterxml.woodstox"</span>, <span class="jxr_string">"woodstox-core"</span> );
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>          addDependency( <span class="jxr_string">"org.xmlunit"</span>, <span class="jxr_string">"xmlunit-core"</span> );
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>          modello.generate(model, <span class="jxr_string">"java"</span>, parameters);
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>          modello.generate(model, <span class="jxr_string">"stax-writer"</span>, parameters);
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>          modello.generate(model, <span class="jxr_string">"stax-reader"</span>, parameters);
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>          addDependency(<span class="jxr_string">"org.codehaus.woodstox"</span>, <span class="jxr_string">"stax2-api"</span>);
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>          addDependency(<span class="jxr_string">"com.fasterxml.woodstox"</span>, <span class="jxr_string">"woodstox-core"</span>);
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>          addDependency(<span class="jxr_string">"org.xmlunit"</span>, <span class="jxr_string">"xmlunit-core"</span>);
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>          compileGeneratedSources(5);
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>          <em class="jxr_comment">// TODO: see why without this, version system property is set to "2.4.1" value after verify</em>
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>          System.setProperty(<span class="jxr_string">"version"</span>, getModelloVersion());
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>          compileGeneratedSources( 5 );
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>          <em class="jxr_comment">// TODO: see why without this, version system property is set to "2.4.1" value after verify</em>
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>          System.setProperty( <span class="jxr_string">"version"</span>, getModelloVersion() );
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>          verifyCompiledGeneratedSources( <span class="jxr_string">"org.codehaus.modello.generator.xml.stax.StaxFeaturesVerifier"</span> );
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>      }
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  }
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>          verifyCompiledGeneratedSources(<span class="jxr_string">"org.codehaus.modello.generator.xml.stax.StaxFeaturesVerifier"</span>);
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>      }
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2001&#x2013;2022 <a href="http://codehaus-plexus.github.io/">Codehaus Plexus</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2001&#x2013;2024 <a href="https://codehaus-plexus.github.io/">Codehaus Plexus</a>. All rights reserved.</div>
 </body>
 </html>

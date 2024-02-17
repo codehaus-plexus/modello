@@ -1,1 +1,1 @@
-/home/herve/.sdkman/candidates/java/8.0.345-zulu/jre/../bin/javadoc @options @packages
+/Users/slawomir.jaranowski/.jenv/versions/21/bin/javadoc @options @packages
