@@ -24,13 +24,20 @@ package org.codehaus.modello.metadata;
 
 import java.util.Map;
 
-import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  */
-public abstract class AbstractMetadataPlugin extends AbstractLogEnabled implements MetadataPlugin {
+public abstract class AbstractMetadataPlugin implements MetadataPlugin {
+    private final Logger logger = LoggerFactory.getLogger(getClass());
+
+    protected Logger getLogger() {
+        return logger;
+    }
+
     protected boolean getBoolean(Map<String, String> data, String key, boolean defaultValue) {
         String value = data.get(key);
 

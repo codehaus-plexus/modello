@@ -22,6 +22,8 @@ package org.codehaus.modello.plugin;
  * SOFTWARE.
  */
 
+import javax.inject.Inject;
+
 import java.io.File;
 import java.io.FilterWriter;
 import java.io.IOException;
@@ -41,23 +43,19 @@ import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelDefault;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.Version;
-import org.codehaus.plexus.PlexusConstants;
-import org.codehaus.plexus.PlexusContainer;
 import org.codehaus.plexus.build.BuildContext;
-import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
-import org.codehaus.plexus.context.Context;
-import org.codehaus.plexus.context.ContextException;
-import org.codehaus.plexus.logging.AbstractLogEnabled;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.Contextualizable;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.io.CachingWriter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
  */
-public abstract class AbstractModelloGenerator extends AbstractLogEnabled
-        implements ModelloGenerator, Contextualizable {
+public abstract class AbstractModelloGenerator implements ModelloGenerator {
+    private final Logger logger = LoggerFactory.getLogger(getClass());
+
     private Model model;
 
     private File outputDirectory;
@@ -68,7 +66,12 @@ public abstract class AbstractModelloGenerator extends AbstractLogEnabled
 
     private String encoding;
 
+    @Inject
     private BuildContext buildContext;
+
+    protected Logger getLogger() {
+        return logger;
+    }
 
     protected void initialize(Model model, Properties parameters) throws ModelloException {
         this.model = model;
@@ -230,16 +233,6 @@ public abstract class AbstractModelloGenerator extends AbstractLogEnabled
 
     protected String getParameter(Properties parameters, String name, String defaultValue) {
         return parameters.getProperty(name, defaultValue);
-    }
-
-    public void contextualize(Context ctx) throws ContextException {
-        PlexusContainer plexus = (PlexusContainer) ctx.get(PlexusConstants.PLEXUS_KEY);
-
-        try {
-            buildContext = (BuildContext) plexus.lookup(BuildContext.class.getName());
-        } catch (ComponentLookupException e) {
-            throw new ContextException("Unable to lookup required component", e);
-        }
     }
 
     protected BuildContext getBuildContext() {

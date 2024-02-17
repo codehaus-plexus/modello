@@ -22,6 +22,8 @@ package org.codehaus.modello;
  * SOFTWARE.
  */
 
+import javax.inject.Inject;
+
 import java.io.Reader;
 import java.io.Writer;
 import java.util.Properties;
@@ -29,26 +31,17 @@ import java.util.Properties;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelValidationException;
-import org.codehaus.plexus.DefaultPlexusContainer;
-import org.codehaus.plexus.PlexusContainer;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  */
 public class Modello {
-    private PlexusContainer container;
+    private final ModelloCore core;
 
-    private ModelloCore core;
-
-    public Modello() throws ModelloException {
-        try {
-            container = new DefaultPlexusContainer();
-
-            core = (ModelloCore) container.lookup(ModelloCore.ROLE);
-        } catch (Exception ex) {
-            throw new ModelloException("Error while starting plexus.", ex);
-        }
+    @Inject
+    public Modello(ModelloCore core) {
+        this.core = core;
     }
 
     public void generate(Reader modelReader, String outputType, Properties parameters)

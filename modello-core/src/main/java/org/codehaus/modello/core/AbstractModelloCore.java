@@ -28,12 +28,18 @@ import java.io.Writer;
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelValidationException;
-import org.codehaus.plexus.logging.AbstractLogEnabled;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  */
-public abstract class AbstractModelloCore extends AbstractLogEnabled implements ModelloCore {
+public abstract class AbstractModelloCore implements ModelloCore {
+    private final Logger logger = LoggerFactory.getLogger(getClass());
+
+    protected Logger getLogger() {
+        return logger;
+    }
     // ----------------------------------------------------------------------
     // Partial ModelloCore implementation
     // ----------------------------------------------------------------------
