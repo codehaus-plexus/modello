@@ -23,6 +23,7 @@ package org.codehaus.modello.plugin.xdoc;
  */
 
 import java.io.File;
+import java.nio.file.Files;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
@@ -77,7 +78,10 @@ public class XdocGeneratorTest extends AbstractModelloGeneratorTest {
                 .withTest(Input.fromFile(new File(getOutputDirectory(), "html4.xml")))
                 .build();
 
-        assertFalse(diff.toString(), diff.hasDifferences());
+        assertFalse(
+                diff.toString() + "\nGenerated output:\n"
+                        + new String(Files.readAllBytes(new File(getOutputDirectory(), "html4.xml").toPath())),
+                diff.hasDifferences());
     }
 
     private void checkMavenXdocGenerator() throws Exception {

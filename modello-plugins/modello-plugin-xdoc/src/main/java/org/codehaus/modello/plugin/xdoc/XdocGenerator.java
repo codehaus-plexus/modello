@@ -28,14 +28,14 @@ import javax.inject.Singleton;
 import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
-import java.util.Stack;
+import java.util.*;
+import java.util.stream.Collectors;
 
+import com.github.chhorz.javadoc.JavaDoc;
+import com.github.chhorz.javadoc.JavaDocParserBuilder;
+import com.github.chhorz.javadoc.OutputType;
+import com.github.chhorz.javadoc.tags.BlockTag;
+import com.github.chhorz.javadoc.tags.SinceTag;
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.ModelloRuntimeException;
@@ -688,8 +688,24 @@ public class XdocGenerator extends AbstractXmlGenerator {
      * @return valid XML string
      */
     private static String rewrite(String text) {
-        Document document = Jsoup.parseBodyFragment(text);
+        JavaDoc javaDoc = JavaDocParserBuilder.withStandardJavadocTags()
+                .withOutputType(OutputType.HTML)
+                .build()
+                .parse(text);
+        String html = javaDoc.getDescription()
+                + javaDoc.getTags().stream()
+                        .map(XdocGenerator::renderJavaDocTag)
+                        .filter(Objects::nonNull)
+                        .collect(Collectors.joining("\n", "\n", ""));
+        Document document = Jsoup.parseBodyFragment(html);
         document.outputSettings().syntax(Document.OutputSettings.Syntax.xml);
         return document.body().html();
+    }
+
+    private static String renderJavaDocTag(BlockTag tag) {
+        if (tag instanceof SinceTag) {
+            return "<p><b>Since</b>: " + ((SinceTag) tag).getSinceText() + "</p>";
+        }
+        return null;
     }
 }
