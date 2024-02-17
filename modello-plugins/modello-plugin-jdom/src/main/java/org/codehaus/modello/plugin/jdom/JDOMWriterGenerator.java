@@ -17,7 +17,6 @@
 package org.codehaus.modello.plugin.jdom;
 
 import javax.inject.Named;
-import javax.inject.Singleton;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -48,7 +47,6 @@ import org.codehaus.modello.plugins.xml.metadata.XmlModelMetadata;
  * @author mkleint@codehaus.org
  */
 @Named("jdom-writer")
-@Singleton
 public class JDOMWriterGenerator extends AbstractJDOMGenerator {
 
     private boolean requiresDomSupport;

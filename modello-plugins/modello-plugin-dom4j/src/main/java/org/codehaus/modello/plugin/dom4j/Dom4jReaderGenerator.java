@@ -23,7 +23,6 @@ package org.codehaus.modello.plugin.dom4j;
  */
 
 import javax.inject.Named;
-import javax.inject.Singleton;
 
 import java.io.IOException;
 import java.util.List;
@@ -53,7 +52,6 @@ import org.codehaus.plexus.util.StringUtils;
  * @author <a href="mailto:brett@codehaus.org">Brett Porter</a>
  */
 @Named("dom4j-reader")
-@Singleton
 public class Dom4jReaderGenerator extends AbstractXmlJavaGenerator {
 
     private boolean requiresDomSupport;

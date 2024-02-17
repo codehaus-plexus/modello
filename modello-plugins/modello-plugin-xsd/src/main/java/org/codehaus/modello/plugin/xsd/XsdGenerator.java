@@ -23,7 +23,6 @@ package org.codehaus.modello.plugin.xsd;
  */
 
 import javax.inject.Named;
-import javax.inject.Singleton;
 
 import java.io.File;
 import java.io.IOException;
@@ -52,7 +51,6 @@ import org.codehaus.plexus.util.xml.XmlStreamWriter;
  * @author <a href="mailto:brett@codehaus.org">Brett Porter</a>
  */
 @Named("xsd")
-@Singleton
 public class XsdGenerator extends AbstractXmlGenerator {
     /**
      * Value standing for any element name (used on xml.tagName)

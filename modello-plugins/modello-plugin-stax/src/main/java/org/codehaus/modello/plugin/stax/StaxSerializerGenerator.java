@@ -23,7 +23,6 @@ package org.codehaus.modello.plugin.stax;
  */
 
 import javax.inject.Named;
-import javax.inject.Singleton;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -48,7 +47,6 @@ import org.codehaus.plexus.util.StringUtils;
  * @author Benjamin Bentmann
  */
 @Named("stax-serializer")
-@Singleton
 public class StaxSerializerGenerator extends AbstractStaxGenerator {
 
     public void generate(Model model, Properties parameters) throws ModelloException {

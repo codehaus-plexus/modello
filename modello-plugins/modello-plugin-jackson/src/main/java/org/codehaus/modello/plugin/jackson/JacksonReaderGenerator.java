@@ -23,7 +23,6 @@ package org.codehaus.modello.plugin.jackson;
  */
 
 import javax.inject.Named;
-import javax.inject.Singleton;
 
 import java.io.IOException;
 import java.util.List;
@@ -55,7 +54,6 @@ import org.codehaus.plexus.util.StringUtils;
  * @author <a href="mailto:simonetripodi@apache.org">Simone Tripodi</a>
  */
 @Named("jackson-reader")
-@Singleton
 public class JacksonReaderGenerator extends AbstractJacksonGenerator {
 
     private static final String SOURCE_PARAM = "source";

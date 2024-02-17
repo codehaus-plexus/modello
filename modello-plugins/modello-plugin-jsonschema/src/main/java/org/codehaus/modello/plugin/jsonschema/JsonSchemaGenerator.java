@@ -23,7 +23,6 @@ package org.codehaus.modello.plugin.jsonschema;
  */
 
 import javax.inject.Named;
-import javax.inject.Singleton;
 
 import java.io.File;
 import java.io.IOException;
@@ -52,7 +51,6 @@ import org.codehaus.plexus.util.StringUtils;
  * @since 1.8
  */
 @Named("jsonschema")
-@Singleton
 public final class JsonSchemaGenerator extends AbstractXmlJavaGenerator {
 
     public void generate(Model model, Properties parameters) throws ModelloException {

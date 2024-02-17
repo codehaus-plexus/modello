@@ -23,7 +23,6 @@ package org.codehaus.modello.plugin.xpp3;
  */
 
 import javax.inject.Named;
-import javax.inject.Singleton;
 
 import org.codehaus.modello.model.ModelClass;
 
@@ -33,7 +32,6 @@ import org.codehaus.modello.model.ModelClass;
  * @author Benjamin Bentmann
  */
 @Named("xpp3-extended-reader")
-@Singleton
 public class Xpp3ExtendedReaderGenerator extends Xpp3ReaderGenerator {
 
     @Override
