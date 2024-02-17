@@ -26,13 +26,19 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.codehaus.modello.ModelloRuntimeException;
-import org.codehaus.plexus.logging.AbstractLogEnabled;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  */
-public abstract class AbstractPluginManager<T> extends AbstractLogEnabled implements Initializable {
+public abstract class AbstractPluginManager<T> {
+    private final Logger logger = LoggerFactory.getLogger(getClass());
+
+    protected Logger getLogger() {
+        return logger;
+    }
+
     public void initialize() {}
 
     public abstract Map<String, T> getPlugins();
