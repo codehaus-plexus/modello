@@ -39,7 +39,7 @@ public class SnakeyamlGeneratorTest extends AbstractModelloJavaGeneratorTest {
         super("snakeyaml");
     }
 
-    public void testXpp3Generator() throws Throwable {
+    public void testGenerator() throws Throwable {
         ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
 
         Model model = modello.loadModel(getXmlResourceReader("/ibcore-executor.mdo"));
