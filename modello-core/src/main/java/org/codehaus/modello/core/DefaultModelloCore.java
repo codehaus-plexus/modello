@@ -24,7 +24,6 @@ package org.codehaus.modello.core;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.inject.Singleton;
 
 import java.io.File;
 import java.io.IOException;
@@ -60,7 +59,6 @@ import org.codehaus.plexus.util.xml.XmlStreamReader;
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
  */
 @Named
-@Singleton
 public class DefaultModelloCore extends AbstractModelloCore {
 
     @Inject

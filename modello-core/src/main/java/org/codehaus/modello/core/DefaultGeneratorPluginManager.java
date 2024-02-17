@@ -24,7 +24,6 @@ package org.codehaus.modello.core;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.inject.Singleton;
 
 import java.util.Map;
 
@@ -36,7 +35,6 @@ import org.codehaus.modello.plugin.ModelloGenerator;
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  */
 @Named
-@Singleton
 public class DefaultGeneratorPluginManager extends AbstractPluginManager<ModelloGenerator>
         implements GeneratorPluginManager {
 
