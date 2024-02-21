@@ -28,6 +28,7 @@ import javax.inject.Singleton;
 import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -56,9 +57,9 @@ import org.codehaus.modello.plugins.xml.metadata.XmlClassMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlModelMetadata;
 import org.codehaus.plexus.util.StringUtils;
+import org.codehaus.plexus.util.io.CachingWriter;
 import org.codehaus.plexus.util.xml.PrettyPrintXMLWriter;
 import org.codehaus.plexus.util.xml.XMLWriter;
-import org.codehaus.plexus.util.xml.XmlStreamWriter;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
@@ -115,7 +116,7 @@ public class XdocGenerator extends AbstractXmlGenerator {
             f = new File(directory, xdocFileName);
         }
 
-        Writer writer = new XmlStreamWriter(f);
+        Writer writer = new CachingWriter(f, StandardCharsets.UTF_8);
 
         XMLWriter w = new PrettyPrintXMLWriter(writer);
 
