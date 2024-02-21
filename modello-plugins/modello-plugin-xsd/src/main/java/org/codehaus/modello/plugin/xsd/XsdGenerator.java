@@ -27,6 +27,7 @@ import javax.inject.Named;
 import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
@@ -43,9 +44,9 @@ import org.codehaus.modello.plugins.xml.AbstractXmlGenerator;
 import org.codehaus.modello.plugins.xml.metadata.XmlAssociationMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
 import org.codehaus.plexus.util.StringUtils;
+import org.codehaus.plexus.util.io.CachingWriter;
 import org.codehaus.plexus.util.xml.PrettyPrintXMLWriter;
 import org.codehaus.plexus.util.xml.XMLWriter;
-import org.codehaus.plexus.util.xml.XmlStreamWriter;
 
 /**
  * @author <a href="mailto:brett@codehaus.org">Brett Porter</a>
@@ -93,7 +94,7 @@ public class XsdGenerator extends AbstractXmlGenerator {
             f = new File(directory, xsdFileName);
         }
 
-        Writer writer = new XmlStreamWriter(f);
+        Writer writer = new CachingWriter(f, StandardCharsets.UTF_8);
 
         try {
             XMLWriter w = new PrettyPrintXMLWriter(writer);
