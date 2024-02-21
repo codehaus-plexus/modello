@@ -23,7 +23,6 @@ package org.codehaus.modello.plugin.xdoc;
  */
 
 import javax.inject.Named;
-import javax.inject.Singleton;
 
 import java.io.File;
 import java.io.IOException;
@@ -68,7 +67,6 @@ import org.jsoup.nodes.Document;
  * @author <a href="mailto:emmanuel@venisse.net">Emmanuel Venisse</a>
  */
 @Named("xdoc")
-@Singleton
 public class XdocGenerator extends AbstractXmlGenerator {
     private static final VersionRange DEFAULT_VERSION_RANGE = new VersionRange("0.0.0+");
 

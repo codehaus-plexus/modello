@@ -20,7 +20,6 @@ package org.codehaus.modello.plugin.velocity;
  */
 
 import javax.inject.Named;
-import javax.inject.Singleton;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -43,7 +42,6 @@ import org.codehaus.modello.plugin.AbstractModelloGenerator;
 import org.codehaus.plexus.util.io.CachingWriter;
 
 @Named("velocity")
-@Singleton
 public class VelocityGenerator extends AbstractModelloGenerator {
     public static final String VELOCITY_BASEDIR = "modello.velocity.basedir";
 
