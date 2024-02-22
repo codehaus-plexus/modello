@@ -617,8 +617,7 @@ public class SnakeYamlReaderGenerator extends AbstractSnakeYamlGenerator {
                         if (ModelDefault.SET.equals(type)) {
                             key = "?";
                         } else {
-                            key = (hasJavaSourceSupport(5) ? "Integer.valueOf" : "new java.lang.Integer") + "( "
-                                    + associationName + ".size() )";
+                            key = "Integer.valueOf(" + associationName + ".size())";
                         }
                         writePrimitiveField(
                                 association,

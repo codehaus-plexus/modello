@@ -35,12 +35,12 @@ public class BooleanTypeStaxGeneratorTest extends AbstractModelloJavaGeneratorTe
 
         Model model = modello.loadModel(getXmlResourceReader("/boolean.mdo"));
 
-        Properties parameters = getModelloParameters("1.0.0", 5);
+        Properties parameters = getModelloParameters("1.0.0", 8);
 
         modello.generate(model, "java", parameters);
         modello.generate(model, "stax-reader", parameters);
         modello.generate(model, "stax-writer", parameters);
 
-        compileGeneratedSources(5);
+        compileGeneratedSources(8);
     }
 }

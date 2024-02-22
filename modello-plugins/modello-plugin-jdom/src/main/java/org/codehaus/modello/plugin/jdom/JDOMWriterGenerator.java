@@ -367,17 +367,9 @@ public class JDOMWriterGenerator extends AbstractJDOMGenerator {
         findRSDom2.getModifiers().makeProtected();
         sc = findRSDom2.getSourceCode();
 
-        if (hasJavaSourceSupport(5)) {
-            sc.add("for( String attributeName : parentDom.getAttributeNames() )");
-            sc.add("{");
-            sc.indent();
-        } else {
-            sc.add("for ( Iterator i = Arrays.asList( parentDom.getAttributeNames() ).iterator(); i.hasNext(); )");
-            sc.add("{");
-            sc.indent();
-
-            sc.add("String attributeName = (String) i.next();");
-        }
+        sc.add("for( String attributeName : parentDom.getAttributeNames() )");
+        sc.add("{");
+        sc.indent();
         sc.add("String[] attrDetails = attributeName.split( \":\", 2 );");
         sc.add("if ( attrDetails.length == 2 )");
         sc.add("{");

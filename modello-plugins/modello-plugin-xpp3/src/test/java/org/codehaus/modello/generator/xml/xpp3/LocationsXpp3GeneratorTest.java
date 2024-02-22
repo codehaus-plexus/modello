@@ -42,13 +42,13 @@ public class LocationsXpp3GeneratorTest extends AbstractModelloJavaGeneratorTest
 
         Model model = modello.loadModel(getXmlResourceReader("/locations.mdo"));
 
-        Properties parameters = getModelloParameters("1.0.0", 5);
+        Properties parameters = getModelloParameters("1.0.0", 8);
 
         modello.generate(model, "java", parameters);
         modello.generate(model, "xpp3-reader", parameters);
         modello.generate(model, "xpp3-extended-reader", parameters);
 
-        compileGeneratedSources(5);
+        compileGeneratedSources(8);
 
         verifyCompiledGeneratedSources("org.codehaus.modello.generator.xml.xpp3.Xpp3LocationsVerifier");
     }

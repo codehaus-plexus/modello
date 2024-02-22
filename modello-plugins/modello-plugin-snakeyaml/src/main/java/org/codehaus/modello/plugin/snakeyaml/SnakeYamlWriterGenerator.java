@@ -237,8 +237,6 @@ public class SnakeYamlWriterGenerator extends AbstractSnakeYamlGenerator {
             writeScalar(sc, getValue(contentField.getType(), contentValue, xmlFieldMetadata));
         }
 
-        final boolean useJava5 = hasJavaSourceSupport(5);
-
         // XML tags
         for (ModelField field : modelFields) {
             XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata(XmlFieldMetadata.ID);
@@ -293,18 +291,10 @@ public class SnakeYamlWriterGenerator extends AbstractSnakeYamlGenerator {
                         writeScalarKey(sc, fieldTagName);
                         sc.add("generator.emit( new SequenceStartEvent( null, null, true, null, null, false ) );");
 
-                        if (useJava5) {
-                            sc.add("for ( " + toType + " o : " + value + " )");
-                        } else {
-                            sc.add("for ( java.util.Iterator it = " + value + ".iterator(); it.hasNext(); )");
-                        }
+                        sc.add("for ( " + toType + " o : " + value + " )");
 
                         sc.add("{");
                         sc.indent();
-
-                        if (!useJava5) {
-                            sc.add(toType + " o = (" + toType + " ) it.next();");
-                        }
 
                         if (isClassInModel(association.getTo(), modelClass.getModel())) {
                             sc.add("write" + toType + "( o, generator );");
@@ -338,31 +328,20 @@ public class SnakeYamlWriterGenerator extends AbstractSnakeYamlGenerator {
 
                         StringBuilder entryTypeBuilder = new StringBuilder("java.util.Map.Entry");
 
-                        if (useJava5) {
-                            entryTypeBuilder.append('<');
+                        entryTypeBuilder.append('<');
 
-                            if (association.getType().equals(ModelDefault.PROPERTIES)) {
-                                entryTypeBuilder.append("Object, Object");
-                            } else {
-                                entryTypeBuilder.append("String, ").append(association.getTo());
-                            }
-
-                            entryTypeBuilder.append('>');
-                        }
-
-                        if (useJava5) {
-                            sc.add("for ( " + entryTypeBuilder + " entry : " + value + ".entrySet() )");
+                        if (association.getType().equals(ModelDefault.PROPERTIES)) {
+                            entryTypeBuilder.append("Object, Object");
                         } else {
-                            sc.add("for ( java.util.Iterator it = " + value
-                                    + ".entrySet().iterator(); it.hasNext(); )");
+                            entryTypeBuilder.append("String, ").append(association.getTo());
                         }
+
+                        entryTypeBuilder.append('>');
+
+                        sc.add("for ( " + entryTypeBuilder + " entry : " + value + ".entrySet() )");
 
                         sc.add("{");
                         sc.indent();
-
-                        if (!useJava5) {
-                            sc.add(entryTypeBuilder + " entry = (" + entryTypeBuilder + ") it.next();");
-                        }
 
                         sc.add("final String key = String.valueOf( entry.getKey() );");
                         sc.add("final String value = String.valueOf( entry.getValue() );");

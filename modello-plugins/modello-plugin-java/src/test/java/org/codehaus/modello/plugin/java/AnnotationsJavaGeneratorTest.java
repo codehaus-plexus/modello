@@ -37,21 +37,17 @@ public class AnnotationsJavaGeneratorTest extends AbstractModelloJavaGeneratorTe
     }
 
     public void testJavaGeneratorWithAnnotations() throws Throwable {
-        if (skipJava5FeatureTest()) {
-            return;
-        }
-
         ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
 
         Model model = modello.loadModel(getXmlResourceReader("/models/annotations.mdo"));
 
-        Properties parameters = getModelloParameters("1.0.0", 5);
+        Properties parameters = getModelloParameters("1.0.0", 8);
 
         modello.generate(model, "java", parameters);
 
         addDependency("javax.xml.bind", "jaxb-api");
         addDependency("javax.persistence", "persistence-api");
-        compileGeneratedSources(5);
+        compileGeneratedSources(8);
 
         verifyCompiledGeneratedSources("AnnotationsVerifier");
     }

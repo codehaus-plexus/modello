@@ -8,39 +8,21 @@ import junit.framework.TestCase;
  */
 public final class JMapTypeTestCase extends TestCase {
 
-    public void testJava5PropertiesType() {
-        JMapType mapType = new JMapType("java.util.Properties", new JClass("String"), true);
+    public void testJavaPropertiesType() {
+        JMapType mapType = new JMapType("java.util.Properties", new JClass("String"));
 
         assertEquals("java.util.Properties", mapType.toString());
     }
 
-    public void testJava4PropertiesType() {
-        JMapType mapType = new JMapType("java.util.Properties", new JClass("String"), false);
-
-        assertEquals("java.util.Properties", mapType.toString());
-    }
-
-    public void testJava5MapType() {
-        JMapType mapType = new JMapType("java.util.Map", new JClass("String"), true);
+    public void testJavaMapType() {
+        JMapType mapType = new JMapType("java.util.Map", new JClass("String"));
 
         assertEquals("java.util.Map<Object, String>", mapType.toString());
     }
 
-    public void testJava5MapInitialization() {
-        JMapType mapType = new JMapType("java.util.Map", "new java.util.HashMap()", new JClass("String"), true);
+    public void testJavaMapInitialization() {
+        JMapType mapType = new JMapType("java.util.Map", "new java.util.HashMap()", new JClass("String"));
 
         assertEquals("new java.util.HashMap<Object, String>()", mapType.getInstanceName());
-    }
-
-    public void testJava4MapType() {
-        JMapType mapType = new JMapType("java.util.Map", new JClass("String"), false);
-
-        assertEquals("java.util.Map/*<Object, String>*/", mapType.toString());
-    }
-
-    public void testJava4MapInitialization() {
-        JMapType mapType = new JMapType("java.util.Map", "new java.util.HashMap()", new JClass("String"), false);
-
-        assertEquals("new java.util.HashMap/*<Object, String>*/()", mapType.getInstanceName());
     }
 }

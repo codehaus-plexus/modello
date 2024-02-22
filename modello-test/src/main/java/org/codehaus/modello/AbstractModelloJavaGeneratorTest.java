@@ -118,32 +118,11 @@ public abstract class AbstractModelloJavaGeneratorTest extends AbstractModelloGe
     }
 
     protected void compileGeneratedSources() throws IOException, CompilerException {
-        compileGeneratedSources(getName());
+        compileGeneratedSources(getName(), 8);
     }
 
     protected void compileGeneratedSources(int minJavaSource) throws IOException, CompilerException {
         compileGeneratedSources(getName(), minJavaSource);
-    }
-
-    protected void compileGeneratedSources(String verifierId) throws IOException, CompilerException {
-        String runtimeVersion = System.getProperty("java.specification.version");
-        if (runtimeVersion.startsWith("1.")) {
-            runtimeVersion = runtimeVersion.substring(2);
-        }
-        int runtimeSource = Integer.parseInt(runtimeVersion);
-
-        String javaSource;
-        if (runtimeSource <= 8) {
-            javaSource = "1.3";
-        } else if (runtimeSource <= 11) {
-            javaSource = "6";
-        } else if (runtimeSource <= 17) {
-            javaSource = "7";
-        } else {
-            javaSource = "8";
-        }
-
-        compileGeneratedSources(verifierId, javaSource);
     }
 
     protected void compileGeneratedSources(String verifierId, int minJavaSource) throws IOException, CompilerException {
@@ -154,15 +133,11 @@ public abstract class AbstractModelloJavaGeneratorTest extends AbstractModelloGe
         int runtimeSource = Integer.parseInt(runtimeVersion);
 
         String javaSource;
-        if (runtimeSource <= 8) {
-            javaSource = "1." + Math.max(minJavaSource, 3);
-        } else if (runtimeSource <= 11) {
-            javaSource = Integer.toString(Math.max(minJavaSource, 6));
-        } else if (runtimeSource <= 17) {
-            javaSource = Integer.toString(Math.max(minJavaSource, 7));
+        // review when Java will drop support for Java 8 as source
+        if (runtimeSource <= 21) {
+            javaSource = Integer.toString(Math.max(minJavaSource, 8));
         } else {
             javaSource = Integer.toString(Math.max(minJavaSource, 8));
-            ;
         }
 
         compileGeneratedSources(verifierId, javaSource);
@@ -284,23 +259,6 @@ public abstract class AbstractModelloJavaGeneratorTest extends AbstractModelloGe
         assertTrue("Missing generated file: " + file.getAbsolutePath(), file.canRead());
 
         assertTrue("The generated file is empty.", file.length() > 0);
-    }
-
-    /**
-     * Check if a Java 5 feature test should be skipped, since it is not supported by current test environment.
-     *
-     * @return <code>true</code> if Java 5 is not available, then feature test should be skipped by caller
-     */
-    protected boolean skipJava5FeatureTest() {
-        String javaVersion = System.getProperty("java.specification.version", "1.5");
-
-        if ("1.5".compareTo(javaVersion) > 0) {
-            System.out.println(
-                    "Skipped Java 5 feature test, not supported by current test environment (" + javaVersion + ")");
-            return true;
-        }
-
-        return false;
     }
 
     protected List<String> getClassPathElements() {

@@ -35,10 +35,9 @@ public final class JCollectionType extends JComponentizedType {
      *
      * @param typeName Name of the collection type interface.
      * @param componentType Component type.
-     * @param useJava50 True if Java 5.0 should be used.
      */
-    public JCollectionType(final String typeName, final JType componentType, final boolean useJava50) {
-        super(typeName, componentType, useJava50);
+    public JCollectionType(final String typeName, final JType componentType) {
+        super(typeName, componentType);
     }
 
     /**
@@ -47,11 +46,9 @@ public final class JCollectionType extends JComponentizedType {
      * @param typeName Name of the collection type interface.
      * @param instanceName Name of the actual collection type instance.
      * @param componentType Component type.
-     * @param useJava50 True if Java 5.0 should be used.
      */
-    public JCollectionType(
-            final String typeName, final String instanceName, final JType componentType, final boolean useJava50) {
-        super(typeName, componentType, useJava50);
+    public JCollectionType(final String typeName, final String instanceName, final JType componentType) {
+        super(typeName, componentType);
         _instanceName = instanceName;
     }
 
@@ -64,11 +61,7 @@ public final class JCollectionType extends JComponentizedType {
      */
     public String getInstanceName() {
         if (_instanceName != null) {
-            if (isUseJava50()) {
-                return _instanceName + "<" + getComponentType().toString() + ">";
-            }
-
-            return _instanceName + "/*<" + getComponentType().toString() + ">*/";
+            return _instanceName + "<" + getComponentType().toString() + ">";
         }
 
         return toString();
@@ -78,11 +71,7 @@ public final class JCollectionType extends JComponentizedType {
      * Returns the String representation of this JType.
      */
     public String toString() {
-        if (isUseJava50()) {
-            return getName() + "<" + getComponentType().toString() + ">";
-        }
-
-        return getName() + "/*<" + getComponentType().toString() + ">*/";
+        return getName() + "<" + getComponentType().toString() + ">";
     }
 
     // --------------------------------------------------------------------------

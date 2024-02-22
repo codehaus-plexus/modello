@@ -31,7 +31,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Optional;
 import java.util.Properties;
 
 import org.codehaus.modello.ModelloException;
@@ -56,6 +55,8 @@ import org.codehaus.modello.plugin.java.metadata.JavaModelMetadata;
 import org.codehaus.modello.plugin.model.ModelClassMetadata;
 import org.codehaus.plexus.util.StringUtils;
 
+import static org.codehaus.plexus.util.StringUtils.replaceOnce;
+
 /**
  * AbstractJavaModelloGenerator - similar in scope to {@link AbstractModelloGenerator} but with features that
  * java generators can use.
@@ -63,16 +64,11 @@ import org.codehaus.plexus.util.StringUtils;
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  */
 public abstract class AbstractJavaModelloGenerator extends AbstractModelloGenerator {
-    private Optional<Integer> javaSource;
 
     protected boolean domAsXpp3 = true;
 
     protected void initialize(Model model, Properties parameters) throws ModelloException {
         super.initialize(model, parameters);
-
-        javaSource = Optional.ofNullable(getParameter(parameters, ModelloParameterConstants.OUTPUT_JAVA_SOURCE, null))
-                .map(Integer::valueOf);
-
         domAsXpp3 = !"false".equals(parameters.getProperty(ModelloParameterConstants.DOM_AS_XPP3));
     }
 
@@ -110,14 +106,10 @@ public abstract class AbstractJavaModelloGenerator extends AbstractModelloGenera
         interfaze.setHeader(getHeaderComment());
     }
 
-    protected final boolean hasJavaSourceSupport(int source) {
-        return javaSource.map(i -> i >= source).orElse(false);
-    }
-
     protected void suppressAllWarnings(Model objectModel, JStructure structure) {
         JavaModelMetadata javaModelMetadata = (JavaModelMetadata) objectModel.getMetadata(JavaModelMetadata.ID);
 
-        if (hasJavaSourceSupport(5) && javaModelMetadata.isSuppressAllWarnings()) {
+        if (javaModelMetadata.isSuppressAllWarnings()) {
             structure.appendAnnotation("@SuppressWarnings( \"all\" )");
         }
     }
@@ -152,13 +144,7 @@ public abstract class AbstractJavaModelloGenerator extends AbstractModelloGenera
     }
 
     protected String getDefaultValue(ModelAssociation association) {
-        String value = association.getDefaultValue();
-
-        if (hasJavaSourceSupport(5)) {
-            value = StringUtils.replaceOnce(StringUtils.replaceOnce(value, "/*", ""), "*/", "");
-        }
-
-        return value;
+        return replaceOnce(replaceOnce(association.getDefaultValue(), "/*", ""), "*/", "");
     }
 
     protected static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS";
@@ -183,36 +169,27 @@ public abstract class AbstractJavaModelloGenerator extends AbstractModelloGenera
             } catch (ParseException pe) {
                 throw new ModelloException("Unparseable default date: " + value, pe);
             }
-        } else if (value != null && value.length() > 0) {
-            boolean useJava5 = hasJavaSourceSupport(5);
+        } else if (value != null && !value.isEmpty()) {
             if ("Character".equals(type) && !value.contains(type)) {
-                return newPrimitiveWrapper(type, "'" + escapeStringLiteral(value) + "'", useJava5);
+                return "Character.valueOf( " + "'" + escapeStringLiteral(value) + "'" + ")";
             } else if ("Boolean".equals(type) && !value.contains(type)) {
-                return newPrimitiveWrapper(type, value, true);
+                return "Boolean.valueOf( " + value + ")";
             } else if ("Byte".equals(type) && !value.contains(type)) {
-                return newPrimitiveWrapper(type, "(byte) " + value, useJava5);
+                return "Byte.valueOf((byte) " + value + ")";
             } else if ("Short".equals(type) && !value.contains(type)) {
-                return newPrimitiveWrapper(type, "(short) " + value, useJava5);
+                return "Short.valueOf((short) " + value + ")";
             } else if ("Integer".equals(type) && !value.contains(type)) {
-                return newPrimitiveWrapper(type, value, useJava5);
+                return "Integer.valueOf(" + value + ")";
             } else if ("Long".equals(type) && !value.contains(type)) {
-                return newPrimitiveWrapper(type, value + 'L', useJava5);
+                return "Long.valueOf(" + value + 'L' + ")";
             } else if ("Float".equals(type) && !value.contains(type)) {
-                return newPrimitiveWrapper(type, value + 'f', useJava5);
+                return "Float.valueOf(" + value + 'f' + ")";
             } else if ("Double".equals(type) && !value.contains(type)) {
-                return newPrimitiveWrapper(type, value, useJava5);
+                return "Double.valueOf(" + value + ")";
             }
         }
 
         return value;
-    }
-
-    private String newPrimitiveWrapper(String type, String value, boolean useJava5) {
-        if (useJava5) {
-            return type + ".valueOf( " + value + " )";
-        } else {
-            return "new " + type + "( " + value + " )";
-        }
     }
 
     private String escapeStringLiteral(String str) {

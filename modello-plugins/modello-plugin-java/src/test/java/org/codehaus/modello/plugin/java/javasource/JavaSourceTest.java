@@ -40,11 +40,11 @@ public class JavaSourceTest extends AbstractModelloGeneratorTest {
         testClass.addMember(field);
 
         // generics test
-        JType type = new JCollectionType("java.util.List", jcString, true);
+        JType type = new JCollectionType("java.util.List", jcString);
         field = new JField(type, "generics");
         testClass.addMember(field);
 
-        type = new JCollectionType("java.util.List", jcString, false);
+        type = new JCollectionType("java.util.List", jcString);
         field = new JField(type, "noGenerics");
         testClass.addMember(field);
 
