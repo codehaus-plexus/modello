@@ -158,7 +158,7 @@ public class JavaModelloGenerator extends AbstractJavaModelloGenerator {
 
             jClass.addInterface(Serializable.class.getName());
 
-            if (hasJavaSourceSupport(5) && !modelClass.getAnnotations().isEmpty()) {
+            if (!modelClass.getAnnotations().isEmpty()) {
                 for (String annotation : modelClass.getAnnotations()) {
                     jClass.appendAnnotation(annotation);
                 }
@@ -312,7 +312,7 @@ public class JavaModelloGenerator extends AbstractJavaModelloGenerator {
             }
         }
 
-        if (hasJavaSourceSupport(5) && !modelInterface.getAnnotations().isEmpty()) {
+        if (!modelInterface.getAnnotations().isEmpty()) {
             for (String annotation : modelInterface.getAnnotations()) {
                 jInterface.appendAnnotation(annotation);
             }
@@ -458,14 +458,7 @@ public class JavaModelloGenerator extends AbstractJavaModelloGenerator {
             return new JMethod[0];
         }
 
-        boolean useJava5 = hasJavaSourceSupport(5);
-
-        JType returnType;
-        if (useJava5) {
-            returnType = new JClass(modelClass.getName());
-        } else {
-            returnType = new JClass("Object");
-        }
+        JType returnType = new JClass(modelClass.getName());
 
         JMethod cloneMethod = new JMethod("clone", returnType, null);
 
@@ -535,18 +528,10 @@ public class JavaModelloGenerator extends AbstractJavaModelloGenerator {
 
                     if (isCollection(modelField.getType())) {
                         if (deepClone) {
-                            if (useJava5) {
-                                sc.add("for ( " + componentType.getName() + " item : " + thisField + " )");
-                            } else {
-                                sc.add("for ( java.util.Iterator it = " + thisField + ".iterator(); it.hasNext(); )");
-                            }
+                            sc.add("for ( " + componentType.getName() + " item : " + thisField + " )");
                             sc.add("{");
                             sc.indent();
-                            if (useJava5) {
-                                sc.add(copyField + ".add( ( (" + modelAssociation.getTo() + ") item).clone() );");
-                            } else {
-                                sc.add(copyField + ".add( ( (" + modelAssociation.getTo() + ") it.next() ).clone() );");
-                            }
+                            sc.add(copyField + ".add( ( (" + modelAssociation.getTo() + ") item).clone() );");
                             sc.unindent();
                             sc.add("}");
                         } else {
@@ -715,10 +700,8 @@ public class JavaModelloGenerator extends AbstractJavaModelloGenerator {
         String locationField = metadata.getLocationTracker();
         boolean hasModeSuperClass = StringUtils.isNotEmpty(superClass) && isClassInModel(superClass, getModel());
         if (!hasModeSuperClass) {
-            boolean useJava5 = hasJavaSourceSupport(5);
-            String fieldType = "java.util.Map" + (useJava5 ? "<Object, " + locationClass.getName() + ">" : "");
-            String fieldImpl =
-                    "java.util.LinkedHashMap" + (useJava5 ? "<Object, " + locationClass.getName() + ">" : "");
+            String fieldType = "java.util.Map<Object, " + locationClass.getName() + ">";
+            String fieldImpl = "java.util.LinkedHashMap<Object, " + locationClass.getName() + ">";
 
             // private java.util.Map<Object, Location> locations;
             JField jField = new JField(new JType(fieldType), locationField);
@@ -770,61 +753,34 @@ public class JavaModelloGenerator extends AbstractJavaModelloGenerator {
         getterSc.add("if ( key instanceof String )");
         getterSc.add("{");
         getterSc.indent();
-        if (hasJavaSourceSupport(7)) {
-            getterSc.add("switch ( ( String ) key )");
+        getterSc.add("switch ( ( String ) key )");
+        getterSc.add("{");
+        getterSc.indent();
+        getterSc.add("case \"\" :");
+        getterSc.add("{");
+        getterSc.indent();
+        getterSc.add("return this." + singular(locationField) + ";");
+        getterSc.unindent();
+        getterSc.add("}");
+        for (ModelField field : modelClass.getAllFields()) {
+            getterSc.add("case \"" + field.getName() + "\" :");
             getterSc.add("{");
             getterSc.indent();
-            getterSc.add("case \"\" :");
-            getterSc.add("{");
-            getterSc.indent();
-            getterSc.add("return this." + singular(locationField) + ";");
-            getterSc.unindent();
-            getterSc.add("}");
-            for (ModelField field : modelClass.getAllFields()) {
-                getterSc.add("case \"" + field.getName() + "\" :");
-                getterSc.add("{");
-                getterSc.indent();
-                getterSc.add("return " + field.getName() + capitalise(singular(locationField)) + ";");
-                getterSc.unindent();
-                getterSc.add("}");
-            }
-            getterSc.add("default :");
-            getterSc.add("{");
-            getterSc.indent();
-            if (hasModeSuperClass) {
-                getterSc.add("return super.get" + capitalise(singular(locationField)) + "( key );");
-            } else {
-                getterSc.add("return getOther" + capitalise(singular(locationField)) + "( key );");
-            }
-            getterSc.unindent();
-            getterSc.add("}");
-            getterSc.add("}");
-        } else {
-            getterSc.add("if ( \"\".equals( key ) )");
-            getterSc.add("{");
-            getterSc.indent();
-            getterSc.add("return this." + singular(locationField) + ";");
-            getterSc.unindent();
-            getterSc.add("}");
-            for (ModelField field : modelClass.getAllFields()) {
-                getterSc.add("else if ( \"" + field.getName() + "\".equals( key ) )");
-                getterSc.add("{");
-                getterSc.indent();
-                getterSc.add("return " + field.getName() + capitalise(singular(locationField)) + ";");
-                getterSc.unindent();
-                getterSc.add("}");
-            }
-            getterSc.add("else");
-            getterSc.add("{");
-            getterSc.indent();
-            if (hasModeSuperClass) {
-                getterSc.add("return super.get" + capitalise(singular(locationField)) + "( key );");
-            } else {
-                getterSc.add("return getOther" + capitalise(singular(locationField)) + "( key );");
-            }
+            getterSc.add("return " + field.getName() + capitalise(singular(locationField)) + ";");
             getterSc.unindent();
             getterSc.add("}");
         }
+        getterSc.add("default :");
+        getterSc.add("{");
+        getterSc.indent();
+        if (hasModeSuperClass) {
+            getterSc.add("return super.get" + capitalise(singular(locationField)) + "( key );");
+        } else {
+            getterSc.add("return getOther" + capitalise(singular(locationField)) + "( key );");
+        }
+        getterSc.unindent();
+        getterSc.add("}");
+        getterSc.add("}");
         getterSc.unindent();
         getterSc.add("}");
         getterSc.add("else");
@@ -849,74 +805,40 @@ public class JavaModelloGenerator extends AbstractJavaModelloGenerator {
         setterSc.add("if ( key instanceof String )");
         setterSc.add("{");
         setterSc.indent();
-        if (hasJavaSourceSupport(7)) {
-            setterSc.add("switch ( ( String ) key )");
+        setterSc.add("switch ( ( String ) key )");
+        setterSc.add("{");
+        setterSc.indent();
+        setterSc.add("case \"\" :");
+        setterSc.add("{");
+        setterSc.indent();
+        setterSc.add("this." + singular(locationField) + " = " + singular(locationField) + ";");
+        setterSc.add("return;");
+        setterSc.unindent();
+        setterSc.add("}");
+        for (ModelField field : modelClass.getAllFields()) {
+            setterSc.add("case \"" + field.getName() + "\" :");
             setterSc.add("{");
             setterSc.indent();
-            setterSc.add("case \"\" :");
-            setterSc.add("{");
-            setterSc.indent();
-            setterSc.add("this." + singular(locationField) + " = " + singular(locationField) + ";");
-            setterSc.add("return;");
-            setterSc.unindent();
-            setterSc.add("}");
-            for (ModelField field : modelClass.getAllFields()) {
-                setterSc.add("case \"" + field.getName() + "\" :");
-                setterSc.add("{");
-                setterSc.indent();
-                setterSc.add(
-                        field.getName() + capitalise(singular(locationField)) + " = " + singular(locationField) + ";");
-                setterSc.add("return;");
-                setterSc.unindent();
-                setterSc.add("}");
-            }
-            setterSc.add("default :");
-            setterSc.add("{");
-            setterSc.indent();
-            if (hasModeSuperClass) {
-                setterSc.add("super.set" + capitalise(singular(locationField)) + "( key, " + singular(locationField)
-                        + " );");
-            } else {
-                setterSc.add(
-                        "setOther" + capitalise(singular(locationField)) + "( key, " + singular(locationField) + " );");
-            }
-            setterSc.add("return;");
-            setterSc.unindent();
-            setterSc.add("}");
-            setterSc.unindent();
-            setterSc.add("}");
-        } else {
-            setterSc.add("if ( \"\".equals( key ) )");
-            setterSc.add("{");
-            setterSc.indent();
-            setterSc.add("this." + singular(locationField) + " = " + singular(locationField) + ";");
-            setterSc.add("return;");
-            setterSc.unindent();
-            setterSc.add("}");
-            for (ModelField field : modelClass.getAllFields()) {
-                setterSc.add("else if ( \"" + field.getName() + "\".equals( key ) )");
-                setterSc.add("{");
-                setterSc.indent();
-                setterSc.add(
-                        field.getName() + capitalise(singular(locationField)) + " = " + singular(locationField) + ";");
-                setterSc.add("return;");
-                setterSc.unindent();
-                setterSc.add("}");
-            }
-            setterSc.add("else");
-            setterSc.add("{");
-            setterSc.indent();
-            if (hasModeSuperClass) {
-                setterSc.add("super.set" + capitalise(singular(locationField)) + "( key, " + singular(locationField)
-                        + " );");
-            } else {
-                setterSc.add(
-                        "setOther" + capitalise(singular(locationField)) + "( key, " + singular(locationField) + " );");
-            }
+            setterSc.add(field.getName() + capitalise(singular(locationField)) + " = " + singular(locationField) + ";");
             setterSc.add("return;");
             setterSc.unindent();
             setterSc.add("}");
         }
+        setterSc.add("default :");
+        setterSc.add("{");
+        setterSc.indent();
+        if (hasModeSuperClass) {
+            setterSc.add(
+                    "super.set" + capitalise(singular(locationField)) + "( key, " + singular(locationField) + " );");
+        } else {
+            setterSc.add(
+                    "setOther" + capitalise(singular(locationField)) + "( key, " + singular(locationField) + " );");
+        }
+        setterSc.add("return;");
+        setterSc.unindent();
+        setterSc.add("}");
+        setterSc.unindent();
+        setterSc.add("}");
 
         setterSc.unindent();
         setterSc.add("}");
@@ -995,9 +917,8 @@ public class JavaModelloGenerator extends AbstractJavaModelloGenerator {
             sc.add("this." + source.getName() + " = " + source.getName() + ";");
         }
 
-        boolean useJava5 = hasJavaSourceSupport(5);
-        JType fieldType = new JMapType("java.util.Map", new JType(locationClass.getName()), useJava5);
-        JType fieldImpl = new JMapType("java.util.LinkedHashMap", new JType(locationClass.getName()), useJava5);
+        JType fieldType = new JMapType("java.util.Map", new JType(locationClass.getName()));
+        JType fieldImpl = new JMapType("java.util.LinkedHashMap", new JType(locationClass.getName()));
 
         // public Map<Object, Location> getLocations()
         JMethod jMethod = new JMethod("get" + capitalise(locationsField), fieldType, null);
@@ -1062,8 +983,7 @@ public class JavaModelloGenerator extends AbstractJavaModelloGenerator {
         jMethod.addParameter(new JParameter(new JType(locationClass.getName()), "target"));
         jMethod.addParameter(new JParameter(new JType(locationClass.getName()), "source"));
         jMethod.addParameter(
-                new JParameter(new JCollectionType("java.util.Collection", new JType("Integer"), useJava5), "indices"));
-        String intWrap = useJava5 ? "Integer.valueOf" : "new Integer";
+                new JParameter(new JCollectionType("java.util.Collection", new JType("Integer")), "indices"));
         sc = jMethod.getSourceCode();
         sc.add("if ( source == null )");
         sc.add("{");
@@ -1093,21 +1013,20 @@ public class JavaModelloGenerator extends AbstractJavaModelloGenerator {
         sc.add("{");
         sc.indent();
         sc.add("locations = new " + fieldImpl + "();");
-        sc.add("for ( java.util.Iterator" + (useJava5 ? "<Integer>" : "")
-                + " it = indices.iterator(); it.hasNext(); )");
+        sc.add("for ( java.util.Iterator<Integer> it = indices.iterator(); it.hasNext(); )");
         sc.add("{");
         sc.indent();
         sc.add(locationClass.getName() + " location;");
-        sc.add("Integer index = " + (useJava5 ? "" : "(Integer) ") + "it.next();");
+        sc.add("Integer index = it.next();");
         sc.add("if ( index.intValue() < 0 )");
         sc.add("{");
-        sc.addIndented("location = sourceLocations.get( " + intWrap + "( ~index.intValue() ) );");
+        sc.addIndented("location = sourceLocations.get(Integer.valueOf(~index.intValue()));");
         sc.add("}");
         sc.add("else");
         sc.add("{");
         sc.addIndented("location = targetLocations.get( index );");
         sc.add("}");
-        sc.add("locations.put( " + intWrap + "( locations.size() ), location );");
+        sc.add("locations.put(Integer.valueOf(locations.size()), location);");
         sc.unindent();
         sc.add("}");
         sc.unindent();
@@ -1206,9 +1125,8 @@ public class JavaModelloGenerator extends AbstractJavaModelloGenerator {
             type = new JClass(baseType);
         }
 
-        boolean useJava5 = hasJavaSourceSupport(5);
         if (modelField.isArray()) {
-            type = new JArrayType(type, useJava5);
+            type = new JArrayType(type);
         }
 
         JField field = new JField(type, modelField.getName());
@@ -1225,7 +1143,7 @@ public class JavaModelloGenerator extends AbstractJavaModelloGenerator {
             field.setComment(appendPeriod(modelField.getDescription()));
         }
 
-        if (useJava5 && !modelField.getAnnotations().isEmpty()) {
+        if (!modelField.getAnnotations().isEmpty()) {
             for (String annotation : modelField.getAnnotations()) {
                 field.appendAnnotation(annotation);
             }
@@ -1434,8 +1352,6 @@ public class JavaModelloGenerator extends AbstractJavaModelloGenerator {
 
         JavaAssociationMetadata javaAssociationMetadata = getJavaAssociationMetadata(modelAssociation);
 
-        boolean useJava5 = hasJavaSourceSupport(5);
-
         if (modelAssociation.isManyMultiplicity()) {
             JType componentType = getComponentType(modelAssociation, javaAssociationMetadata);
 
@@ -1443,9 +1359,9 @@ public class JavaModelloGenerator extends AbstractJavaModelloGenerator {
 
             JType type;
             if (modelAssociation.isGenericType()) {
-                type = new JCollectionType(modelAssociation.getType(), componentType, useJava5);
+                type = new JCollectionType(modelAssociation.getType(), componentType);
             } else if (ModelDefault.MAP.equals(modelAssociation.getType())) {
-                JMapType mapType = new JMapType(modelAssociation.getType(), defaultValue, componentType, useJava5);
+                JMapType mapType = new JMapType(modelAssociation.getType(), defaultValue, componentType);
                 defaultValue = mapType.getInstanceName();
                 type = mapType;
             } else {
@@ -1458,7 +1374,7 @@ public class JavaModelloGenerator extends AbstractJavaModelloGenerator {
                 jField.setComment(modelAssociation.getComment());
             }
 
-            if (useJava5 && !modelAssociation.getAnnotations().isEmpty()) {
+            if (!modelAssociation.getAnnotations().isEmpty()) {
                 for (String annotation : modelAssociation.getAnnotations()) {
                     jField.appendAnnotation(annotation);
                 }
@@ -1528,13 +1444,7 @@ public class JavaModelloGenerator extends AbstractJavaModelloGenerator {
 
         if (modelAssociation.isGenericType()) {
             ModelDefault modelDefault = getModel().getDefault(modelAssociation.getType());
-
-            if (hasJavaSourceSupport(5)) {
-                defaultValue = StringUtils.replace(modelDefault.getValue(), "<?>", "<" + componentType.getName() + ">");
-            } else {
-                defaultValue =
-                        StringUtils.replace(modelDefault.getValue(), "<?>", "/*<" + componentType.getName() + ">*/");
-            }
+            defaultValue = StringUtils.replace(modelDefault.getValue(), "<?>", "<" + componentType.getName() + ">");
         }
         return defaultValue;
     }
@@ -1878,7 +1788,7 @@ public class JavaModelloGenerator extends AbstractJavaModelloGenerator {
                 type = new JClass(javaAssociationMetadata.getInterfaceName());
             } else if (modelAssociation.isManyMultiplicity() && modelAssociation.isGenericType()) {
                 JType componentType = getComponentType(modelAssociation, javaAssociationMetadata);
-                type = new JCollectionType(modelAssociation.getType(), componentType, hasJavaSourceSupport(5));
+                type = new JCollectionType(modelAssociation.getType(), componentType);
             } else if (useTo) {
                 type = new JClass(modelAssociation.getTo());
             }
@@ -2033,15 +1943,13 @@ public class JavaModelloGenerator extends AbstractJavaModelloGenerator {
 
         if (modelAssociation.isManyMultiplicity()) {
             JType componentType = getComponentType(modelAssociation, javaAssociationMetadata);
-            boolean useJava5 = hasJavaSourceSupport(5);
-
             String defaultValue = getDefaultValue(modelAssociation, componentType);
 
             JType type;
             if (modelAssociation.isGenericType()) {
-                type = new JCollectionType(modelAssociation.getType(), componentType, useJava5);
+                type = new JCollectionType(modelAssociation.getType(), componentType);
             } else if (ModelDefault.MAP.equals(modelAssociation.getType())) {
-                JMapType mapType = new JMapType(modelAssociation.getType(), defaultValue, componentType, useJava5);
+                JMapType mapType = new JMapType(modelAssociation.getType(), defaultValue, componentType);
                 defaultValue = mapType.getInstanceName();
                 type = mapType;
             } else {
@@ -2055,7 +1963,7 @@ public class JavaModelloGenerator extends AbstractJavaModelloGenerator {
                 jField.setComment(modelAssociation.getComment());
             }
 
-            if (useJava5 && !modelAssociation.getAnnotations().isEmpty()) {
+            if (!modelAssociation.getAnnotations().isEmpty()) {
                 for (String annotation : modelAssociation.getAnnotations()) {
                     jField.appendAnnotation(annotation);
                 }
@@ -2114,8 +2022,6 @@ public class JavaModelloGenerator extends AbstractJavaModelloGenerator {
             String itemType;
             String targetField = modelAssociation.getName();
 
-            boolean useJava5 = hasJavaSourceSupport(5);
-
             if (StringUtils.isNotEmpty(javaAssociationMetadata.getInterfaceName())) {
                 itemType = javaAssociationMetadata.getInterfaceName();
             } else if (modelAssociation.getToClass() != null) {
@@ -2124,17 +2030,15 @@ public class JavaModelloGenerator extends AbstractJavaModelloGenerator {
                     || modelAssociation.getType().equals(ModelDefault.MAP)) {
                 StringBuilder itemTypeBuilder = new StringBuilder("java.util.Map.Entry");
 
-                if (useJava5) {
-                    itemTypeBuilder.append('<');
+                itemTypeBuilder.append('<');
 
-                    if (modelAssociation.getType().equals(ModelDefault.PROPERTIES)) {
-                        itemTypeBuilder.append("Object, Object");
-                    } else {
-                        itemTypeBuilder.append("String, ").append(modelAssociation.getTo());
-                    }
-
-                    itemTypeBuilder.append('>');
+                if (modelAssociation.getType().equals(ModelDefault.PROPERTIES)) {
+                    itemTypeBuilder.append("Object, Object");
+                } else {
+                    itemTypeBuilder.append("String, ").append(modelAssociation.getTo());
                 }
+
+                itemTypeBuilder.append('>');
 
                 itemType = itemTypeBuilder.toString();
 
@@ -2143,18 +2047,10 @@ public class JavaModelloGenerator extends AbstractJavaModelloGenerator {
                 itemType = "String";
             }
 
-            if (useJava5) {
-                sc.add("for ( " + itemType + " item : " + targetField + " )");
-            } else {
-                sc.add("for ( java.util.Iterator it = " + targetField + ".iterator(); it.hasNext(); )");
-            }
+            sc.add("for ( " + itemType + " item : " + targetField + " )");
 
             sc.add("{");
             sc.indent();
-
-            if (!useJava5) {
-                sc.add(itemType + " item = (" + itemType + ") it.next();");
-            }
 
             StringBuilder adder = new StringBuilder("instance.add")
                     .append(capitalise(singular(modelAssociation.getName())))
@@ -2182,7 +2078,7 @@ public class JavaModelloGenerator extends AbstractJavaModelloGenerator {
 
     private void appendEntryMethod(
             String type, String method, StringBuilder target, ModelAssociation modelAssociation) {
-        if (!hasJavaSourceSupport(5) || modelAssociation.getType().equals(ModelDefault.PROPERTIES)) {
+        if (modelAssociation.getType().equals(ModelDefault.PROPERTIES)) {
             target.append('(').append(type).append(") ");
         }
 

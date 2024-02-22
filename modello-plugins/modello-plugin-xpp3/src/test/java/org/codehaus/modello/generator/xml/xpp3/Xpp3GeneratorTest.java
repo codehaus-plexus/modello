@@ -79,14 +79,14 @@ public class Xpp3GeneratorTest extends AbstractModelloJavaGeneratorTest {
         assertEquals("builder", xml.getTagName());
 
         // now generate sources and test them
-        Properties parameters = getModelloParameters("4.0.0", 5);
+        Properties parameters = getModelloParameters("4.0.0", 8);
 
         modello.generate(model, "java", parameters);
         modello.generate(model, "xpp3-writer", parameters);
         modello.generate(model, "xpp3-reader", parameters);
 
         addDependency("org.xmlunit", "xmlunit-core");
-        compileGeneratedSources(5);
+        compileGeneratedSources(8);
 
         // TODO: see why without this, version system property is set to "2.4.1" value after verify
         System.setProperty("version", getModelloVersion());

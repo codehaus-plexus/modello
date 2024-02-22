@@ -43,10 +43,9 @@ public final class JMapType extends JComponentizedType {
      *
      * @param typeName Name of the map type interface.
      * @param componentType Component type.
-     * @param useJava50 True if Java 5.0 should be used.
      */
-    public JMapType(final String typeName, final JType componentType, final boolean useJava50) {
-        super(typeName, componentType, useJava50);
+    public JMapType(final String typeName, final JType componentType) {
+        super(typeName, componentType);
     }
 
     /**
@@ -55,11 +54,9 @@ public final class JMapType extends JComponentizedType {
      * @param typeName Name of the map type interface.
      * @param instanceName Name of the actual map type instance.
      * @param componentType Component type.
-     * @param useJava50 True if Java 5.0 should be used.
      */
-    public JMapType(
-            final String typeName, final String instanceName, final JType componentType, final boolean useJava50) {
-        super(typeName, componentType, useJava50);
+    public JMapType(final String typeName, final String instanceName, final JType componentType) {
+        super(typeName, componentType);
         _instanceName = instanceName;
     }
 
@@ -84,12 +81,7 @@ public final class JMapType extends JComponentizedType {
             } else {
                 instance = _instanceName;
             }
-
-            if (isUseJava50()) {
-                return instance + "<Object, " + getComponentType().toString() + ">()";
-            }
-
-            return instance + "/*<Object, " + getComponentType().toString() + ">*/()";
+            return instance + "<Object, " + getComponentType().toString() + ">()";
         }
 
         return toString();
@@ -102,12 +94,7 @@ public final class JMapType extends JComponentizedType {
         if (ModelDefault.PROPERTIES.equals(getName())) {
             return getName();
         }
-
-        if (isUseJava50()) {
-            return getName() + "<Object, " + getComponentType().toString() + ">";
-        }
-
-        return getName() + "/*<Object, " + getComponentType().toString() + ">*/";
+        return getName() + "<Object, " + getComponentType().toString() + ">";
     }
 
     // --------------------------------------------------------------------------

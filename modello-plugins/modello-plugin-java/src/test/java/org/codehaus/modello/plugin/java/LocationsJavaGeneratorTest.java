@@ -42,11 +42,11 @@ public class LocationsJavaGeneratorTest extends AbstractModelloJavaGeneratorTest
 
         Model model = modello.loadModel(getXmlResourceReader("/locations.mdo"));
 
-        Properties parameters = getModelloParameters("1.0.0", 7);
+        Properties parameters = getModelloParameters("1.0.0", 8);
 
         modello.generate(model, "java", parameters);
 
-        compileGeneratedSources(7);
+        compileGeneratedSources(8);
 
         verifyCompiledGeneratedSources("JavaLocationsVerifier");
     }

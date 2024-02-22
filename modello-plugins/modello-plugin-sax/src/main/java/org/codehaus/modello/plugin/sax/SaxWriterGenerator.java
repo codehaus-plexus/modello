@@ -122,11 +122,7 @@ public class SaxWriterGenerator extends AbstractXmlJavaGenerator {
 
         JConstructor saxWriterConstructor = new JConstructor(jClass);
         JSourceCode sc = saxWriterConstructor.getSourceCode();
-        if (hasJavaSourceSupport(5)) {
-            sc.add("transformerFactory.setAttribute( \"indent-number\", 2 );");
-        } else {
-            sc.add("transformerFactory.setAttribute( \"indent-number\", new Integer( 2 ) );");
-        }
+        sc.add("transformerFactory.setAttribute( \"indent-number\", 2 );");
 
         jClass.addConstructor(saxWriterConstructor);
 

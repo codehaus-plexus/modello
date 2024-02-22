@@ -76,9 +76,7 @@ public abstract class AbstractModelloGeneratorTest extends PlexusTestCase {
     }
 
     protected Properties getModelloParameters(String version) {
-        Properties parameters = getModelloParameters(version, null);
-
-        return parameters;
+        return getModelloParameters(version, null);
     }
 
     protected Properties getModelloParameters(String version, Integer javaSource) {

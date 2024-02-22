@@ -49,7 +49,7 @@ public class FeaturesDom4jGeneratorTest extends AbstractModelloJavaGeneratorTest
 
         addDependency("dom4j", "dom4j");
         addDependency("org.xmlunit", "xmlunit-core");
-        compileGeneratedSources(5);
+        compileGeneratedSources(8);
 
         verifyCompiledGeneratedSources("org.codehaus.modello.generator.xml.dom4j.Dom4jFeaturesVerifier");
     }

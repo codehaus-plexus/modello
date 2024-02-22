@@ -37,19 +37,15 @@ public class FeaturesJava5GeneratorTest extends AbstractModelloJavaGeneratorTest
     }
 
     public void testJavaGenerator() throws Throwable {
-        if (skipJava5FeatureTest()) {
-            return;
-        }
-
         ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
 
         Model model = modello.loadModel(getXmlResourceReader("/features.mdo"));
 
-        Properties parameters = getModelloParameters("2.0.0", 5);
+        Properties parameters = getModelloParameters("2.0.0", 8);
 
         modello.generate(model, "java", parameters);
 
-        compileGeneratedSources("features", 5);
+        compileGeneratedSources("features", 8);
 
         verifyCompiledGeneratedSources("JavaVerifier");
     }

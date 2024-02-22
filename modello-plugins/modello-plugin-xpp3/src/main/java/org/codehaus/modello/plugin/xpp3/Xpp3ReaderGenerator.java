@@ -497,15 +497,8 @@ public class Xpp3ReaderGenerator extends AbstractXpp3Generator {
                     sc);
         } else {
             // Write other fields
-
-            if (hasJavaSourceSupport(5)) {
-                sc.add("java.util.Set<String> parsed = new java.util.HashSet<String>();");
-            } else {
-                sc.add("java.util.Set parsed = new java.util.HashSet();");
-            }
-
+            sc.add("java.util.Set<String> parsed = new java.util.HashSet<String>();");
             sc.add("while ( ( strict ? parser.nextTag() : nextTag( parser ) ) == XmlPullParser.START_TAG )");
-
             sc.add("{");
             sc.indent();
 
@@ -687,8 +680,6 @@ public class Xpp3ReaderGenerator extends AbstractXpp3Generator {
                     JavaFieldMetadata javaFieldMetadata =
                             (JavaFieldMetadata) association.getMetadata(JavaFieldMetadata.ID);
 
-                    final boolean useJava5 = hasJavaSourceSupport(5);
-
                     String adder;
 
                     boolean requireSetter = false;
@@ -702,12 +693,10 @@ public class Xpp3ReaderGenerator extends AbstractXpp3Generator {
                         if (javaFieldMetadata.isSetter()) {
                             String associationType = type;
                             String defaultValue = association.getDefaultValue();
-                            if (useJava5) {
-                                // defaultValue looks like java.util.ArrayList/*<Type>*/()
-                                defaultValue = defaultValue.replace("/*", "").replace("*/", "");
+                            // defaultValue looks like java.util.ArrayList/*<Type>*/()
+                            defaultValue = defaultValue.replace("/*", "").replace("*/", "");
 
-                                associationType = type + '<' + association.getTo() + '>';
-                            }
+                            associationType = type + '<' + association.getTo() + '>';
                             sc.add(associationType + " " + associationName + " = " + defaultValue + ";");
 
                             requireSetter = true;
@@ -741,12 +730,10 @@ public class Xpp3ReaderGenerator extends AbstractXpp3Generator {
                         if (javaFieldMetadata.isGetter() && javaFieldMetadata.isSetter()) {
                             String associationType = type;
                             String defaultValue = association.getDefaultValue();
-                            if (useJava5) {
-                                // defaultValue looks like java.util.ArrayList/*<Type>*/()
-                                defaultValue = defaultValue.replace("/*", "").replace("*/", "");
+                            // defaultValue looks like java.util.ArrayList/*<Type>*/()
+                            defaultValue = defaultValue.replace("/*", "").replace("*/", "");
 
-                                associationType = type + '<' + association.getTo() + '>';
-                            }
+                            associationType = type + '<' + association.getTo() + '>';
 
                             sc.add(associationType + " " + associationName + " = " + objectName + ".get" + capFieldName
                                     + "();");
@@ -788,8 +775,7 @@ public class Xpp3ReaderGenerator extends AbstractXpp3Generator {
                         if (ModelDefault.SET.equals(type)) {
                             key = "?";
                         } else {
-                            key = (useJava5 ? "Integer.valueOf" : "new java.lang.Integer") + "( " + associationName
-                                    + ".size() )";
+                            key = "Integer.valueOf(" + associationName + ".size())";
                         }
                         writePrimitiveField(
                                 association, association.getTo(), associationName, LOCATION_VAR + "s", key, "add", sc);
@@ -945,11 +931,7 @@ public class Xpp3ReaderGenerator extends AbstractXpp3Generator {
         String keyCapture = "";
         writeNewLocation(null, sc);
         if (locationTracker != null && "?".equals(locationKey)) {
-            if (hasJavaSourceSupport(5)) {
-                sc.add(type + " _key;");
-            } else {
-                sc.add("Object _key;");
-            }
+            sc.add(type + " _key;");
             locationKey = "_key";
             keyCapture = "_key = ";
         } else {
@@ -1293,8 +1275,7 @@ public class Xpp3ReaderGenerator extends AbstractXpp3Generator {
         method.addParameter(new JParameter(new JClass("XmlPullParser"), "parser"));
         method.addParameter(new JParameter(new JClass("String"), "tagName"));
         method.addParameter(new JParameter(new JClass("String"), "alias"));
-        method.addParameter(new JParameter(
-                new JCollectionType("java.util.Set", new JType("String"), hasJavaSourceSupport(5)), "parsed"));
+        method.addParameter(new JParameter(new JCollectionType("java.util.Set", new JType("String")), "parsed"));
         method.addException(new JClass("XmlPullParserException"));
 
         sc = method.getSourceCode();
