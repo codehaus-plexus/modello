@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model
+  xmlns="http://codehaus-plexus.github.io/MODELLO/1.8.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://codehaus-plexus.github.io/MODELLO/1.8.0 http://codehaus-plexus.github.io/modello/xsd/modello-1.8.0.xsd"
+  java.suppressAllWarnings="false"
+  xml.namespace="https://resources.infrastructurebuilder.org/IBDataSet/${apiVersion}"
+  xml.schemaLocation="https://resources.infrastructurebuilder.org/xsd/IBDataSet-${apiVersion}"
+  xsd.namespace="https://resources.infrastructurebuilder.org/IBDataSet/${apiVersion}"
+  xsd.targetNamespace="https://resources.infrastructurebuilder.org/IBDataSet/${apiVersion}"
+>
+  <id>execution</id>
+  <name>ProcessExecutionModel</name> <!-- Must be a single (no spaces, no dashes, no periods) identifier in order
+    to create reader/writer -->
+  <description>Model for ProcessExecution instances</description>
+
+  <defaults>
+    <default>
+      <key>package</key>
+      <value>org.infrastructurebuilder.util.executor.execution.model</value>
+    </default>
+  </defaults>
+
+  <classes>
+    <!-- MODEL -->
+    <class
+      xml.tagName="processExecution"
+      rootElement="true"
+      java.clone="deep"
+    >
+      <name>GeneratedProcessExecution</name>
+      <description>Persistence for ibcore-executor ProcessExecution instances</description>
+      <version>1.0.0+</version>
+      <fields>
+        <field>
+          <name>id</name>
+          <version>1.0.0+</version>
+          <required>true</required>
+          <description>Processing ID</description>
+          <type>String</type>
+        </field>
+        <field>
+          <name>executable</name>
+          <version>1.0.0+</version>
+          <required>true</required>
+          <description>Path to executable</description>
+          <type>String</type>
+        </field>
+        <field>
+          <name>arguments</name>
+          <version>1.0.0+</version>
+          <required>true</required>
+          <association>
+            <type>String</type>
+            <multiplicity>*</multiplicity>
+          </association>
+          <description>Arguments passed to execution</description>
+        </field>
+        <field>
+          <name>timeout</name>
+          <version>1.0.0+</version>
+          <required>false</required>
+          <description>Optional timeout</description>
+          <type>String</type>
+        </field>
+        <field>
+          <name>optional</name>
+          <version>1.0.0+</version>
+          <required>false</required>
+          <defaultValue>false</defaultValue>
+          <description>Is the successful execution of this optional</description>
+          <type>boolean</type>
+        </field>
+        <field>
+          <name>background</name>
+          <version>1.0.0+</version>
+          <required>false</required>
+          <defaultValue>false</defaultValue>
+          <description>Is the execution to be in the background</description>
+          <type>boolean</type>
+        </field>
+        <field xdoc.separator="blank">
+          <name>environment</name>
+          <version>1.0.0+</version>
+          <description>Environment variables</description>
+          <type>Properties</type>
+          <association xml.mapStyle="inline">
+            <type>String</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+        <field>
+          <name>exy</name>
+          <description>Extra vocabulary as key/value.</description>
+          <version>1.0.0+</version>
+          <identifier>true</identifier>
+          <type>Map</type>
+          <association xml.mapStyle="inline">
+            <type>String</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+
+        <field>
+          <name>workDirectory</name>
+          <version>1.0.0+</version>
+          <required>false</required>
+            <type>String</type>
+          <description>Work directory</description>
+        </field>
+        <field>
+          <name>exitValues</name>
+          <version>1.0.0+</version>
+          <required>false</required>
+          <association>
+            <type>String</type>
+            <multiplicity>*</multiplicity>
+          </association>
+          <description>"successful" exit codes(parsed as integers)</description>
+        </field>
+        <field>
+          <name>stdOutPath</name>
+          <version>1.0.0+</version>
+          <required>false</required>
+          <description>Path to write stdout</description>
+          <type>String</type>
+        </field>
+        <field>
+          <name>stdErrPath</name>
+          <version>1.0.0+</version>
+          <required>false</required>
+          <description>Path to write stderr</description>
+          <type>String</type>
+        </field>
+        <field>
+          <name>stdInPath</name>
+          <version>1.0.0+</version>
+          <required>false</required>
+          <description>Path to read as stdin</description>
+          <type>String</type>
+        </field>
+        <field>
+          <name>relativeRoot</name>
+          <version>1.0.0+</version>
+          <required>false</required>
+          <description>Path to Relative root</description>
+          <type>String</type>
+        </field>
+
+
+      </fields>
+
+    </class>
+    <class
+      locationTracker="locations"
+      java.clone="shallow"
+    >
+      <name>IBExecInputLocation</name>
+      <version>1.0.0+</version>
+      <fields>
+        <!-- line, column and source fields are auto-generated by Modello -->
+      </fields>
+    </class>
+    <class
+      sourceTracker="source"
+      java.clone="shallow"
+    >
+      <name>IBExecInputSource</name>
+      <version>1.0.0+</version>
+      <fields>
+      </fields>
+    </class>
+  </classes>
+</model>
