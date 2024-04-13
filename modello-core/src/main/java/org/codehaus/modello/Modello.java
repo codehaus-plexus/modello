@@ -22,8 +22,6 @@ package org.codehaus.modello;
  * SOFTWARE.
  */
 
-import javax.inject.Inject;
-
 import java.io.Reader;
 import java.io.Writer;
 import java.util.Properties;
@@ -31,17 +29,33 @@ import java.util.Properties;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelValidationException;
+import org.codehaus.plexus.ContainerConfiguration;
+import org.codehaus.plexus.DefaultContainerConfiguration;
+import org.codehaus.plexus.DefaultPlexusContainer;
+import org.codehaus.plexus.PlexusConstants;
+import org.codehaus.plexus.PlexusContainer;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  */
 public class Modello {
-    private final ModelloCore core;
+    private PlexusContainer container;
 
-    @Inject
-    public Modello(ModelloCore core) {
-        this.core = core;
+    private ModelloCore core;
+
+    public Modello() throws ModelloException {
+        try {
+            ContainerConfiguration configuration = new DefaultContainerConfiguration();
+            configuration.setAutoWiring(true);
+            configuration.setClassPathScanning(PlexusConstants.SCANNING_INDEX);
+
+            container = new DefaultPlexusContainer(configuration);
+
+            core = (ModelloCore) container.lookup(ModelloCore.ROLE);
+        } catch (Exception ex) {
+            throw new ModelloException("Error while starting plexus.", ex);
+        }
     }
 
     public void generate(Reader modelReader, String outputType, Properties parameters)
