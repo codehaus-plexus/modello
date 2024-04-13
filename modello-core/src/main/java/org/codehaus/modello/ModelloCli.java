@@ -38,12 +38,17 @@ public class ModelloCli {
 
     private static Properties parameters;
 
-    public static void main(String[] args) throws Exception {
-        Modello modello = new Modello();
+    public static void main(String[] args) {
+        try {
+            Modello modello = new Modello();
 
-        parseArgumentsFromCommandLine(args);
+            parseArgumentsFromCommandLine(args);
 
-        modello.generate(new XmlStreamReader(modelFile), outputType, parameters);
+            modello.generate(new XmlStreamReader(modelFile), outputType, parameters);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static void parseArgumentsFromCommandLine(String[] args) throws Exception {
