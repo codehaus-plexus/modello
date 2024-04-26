@@ -25,6 +25,10 @@ package org.codehaus.modello.maven;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -96,6 +100,15 @@ public abstract class AbstractModelloGeneratorMojo extends AbstractMojo {
     private List<String> packagedVersions = new ArrayList<String>();
 
     /**
+     * The contents of license header, verbatim. It may be file path and if file exists, will be loaded up. Otherwise,
+     * the contents of this parameter is reused as-is.
+     *
+     * @since 2.3.1
+     */
+    @Parameter
+    private String licenseText;
+
+    /**
      * @since 1.0.1
      */
     @Component
@@ -160,9 +173,27 @@ public abstract class AbstractModelloGeneratorMojo extends AbstractMojo {
 
         parameters.setProperty(ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString(packageWithVersion));
 
-        if (packagedVersions.size() > 0) {
+        if (!packagedVersions.isEmpty()) {
             parameters.setProperty(
                     ModelloParameterConstants.ALL_VERSIONS, StringUtils.join(packagedVersions.iterator(), ","));
+        }
+
+        if (licenseText != null && !licenseText.trim().isEmpty()) {
+            String license = "";
+            try {
+                Path licenseFile = Paths.get(licenseText);
+                if (Files.isRegularFile(licenseFile)) {
+                    license = String.join("\n", Files.readAllLines(licenseFile));
+                }
+            } catch (IOException e) {
+                throw new MojoExecutionException("Could not load up license text from " + licenseText, e);
+            } catch (InvalidPathException e) {
+                // ignore, is verbatim text probably
+            }
+            if (license.isEmpty()) {
+                license = licenseText;
+            }
+            parameters.setProperty(ModelloParameterConstants.LICENSE_TEXT, license);
         }
 
         customizeParameters(parameters);
