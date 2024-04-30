@@ -28,12 +28,14 @@
           <models>
             <model>src/main/mdo/maven.mdo</model>
           </models>
+          <licenseText>The license of this file</licenseText>
         </configuration>
         <executions>
           <execution>
             <goals>
               <goal>java</goal>
               <goal>xpp3-reader</goal>
+              <goal>xsd</goal>
             </goals>
           </execution>
         </executions>
