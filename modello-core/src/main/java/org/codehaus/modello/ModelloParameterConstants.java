@@ -80,5 +80,12 @@ public class ModelloParameterConstants {
      */
     public static final String XSD_ENFORCE_MANDATORY_ELEMENTS = "modello.xsd.enforce.mandatory.element";
 
+    /**
+     * The license text as string, to be added to generated files, if needed.
+     *
+     * @since 2.3.1
+     */
+    public static final String LICENSE_TEXT = "modello.license.text";
+
     private ModelloParameterConstants() {}
 }
