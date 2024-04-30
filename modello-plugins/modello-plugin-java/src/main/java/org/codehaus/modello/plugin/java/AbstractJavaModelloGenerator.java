@@ -94,7 +94,7 @@ public abstract class AbstractJavaModelloGenerator extends AbstractModelloGenera
 
     private JComment getHeaderComment() {
         JComment comment = new JComment();
-        comment.setComment(getHeader());
+        comment.setComment(String.join(System.lineSeparator(), getHeader()));
         return comment;
     }
 

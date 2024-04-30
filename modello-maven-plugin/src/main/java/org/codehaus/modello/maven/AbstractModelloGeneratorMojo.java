@@ -27,9 +27,11 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.AbstractMojo;
@@ -183,19 +185,21 @@ public abstract class AbstractModelloGeneratorMojo extends AbstractMojo {
         }
 
         if (licenseText != null || licenseFile != null) {
-            String license = "";
+            List<String> license = null;
             if (licenseText != null) {
                 // licenseText prevails
-                license = licenseText;
+                license = Arrays.asList(licenseText.split(System.lineSeparator()));
             } else {
                 try {
                     // load it up and hard fail if cannot, as it is user misconfiguration
-                    license = String.join(System.lineSeparator(), Files.readAllLines(licenseFile.toPath()));
+                    license = Files.readAllLines(licenseFile.toPath()).stream()
+                            .map(l -> StringUtils.stripEnd(l, null))
+                            .collect(Collectors.toList());
                 } catch (IOException e) {
                     throw new MojoExecutionException("Could not load up license text from " + licenseFile, e);
                 }
             }
-            parameters.setProperty(ModelloParameterConstants.LICENSE_TEXT, license);
+            parameters.setProperty(ModelloParameterConstants.LICENSE_TEXT, String.join("|", license));
         }
 
         customizeParameters(parameters);
