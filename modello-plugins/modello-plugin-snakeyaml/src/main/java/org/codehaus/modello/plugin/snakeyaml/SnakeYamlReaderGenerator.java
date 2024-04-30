@@ -210,7 +210,7 @@ public class SnakeYamlReaderGenerator extends AbstractSnakeYamlGenerator {
 
         sc = unmarshall.getSourceCode();
 
-        sc.add("Parser parser = new ParserImpl( new StreamReader( reader ) );");
+        sc.add("Parser parser = new ParserImpl( new StreamReader( reader ), new LoaderOptions() );");
 
         sc.add("return " + readerMethodName + "( parser, strict );");
 
@@ -288,6 +288,7 @@ public class SnakeYamlReaderGenerator extends AbstractSnakeYamlGenerator {
         jClass.addImport("org.yaml.snakeyaml.parser.ParserException");
         jClass.addImport("org.yaml.snakeyaml.parser.ParserImpl");
         jClass.addImport("org.yaml.snakeyaml.reader.StreamReader");
+        jClass.addImport("org.yaml.snakeyaml.LoaderOptions");
         jClass.addImport("java.io.InputStream");
         jClass.addImport("java.io.InputStreamReader");
         jClass.addImport("java.io.IOException");
@@ -820,6 +821,8 @@ public class SnakeYamlReaderGenerator extends AbstractSnakeYamlGenerator {
 
         sc = method.getSourceCode();
 
+        sc.add("if (!(event instanceof ScalarEvent))");
+        sc.addIndented("return false;");
         sc.add("String currentName = ( (ScalarEvent) event ).getValue();");
 
         sc.add("");
@@ -856,8 +859,16 @@ public class SnakeYamlReaderGenerator extends AbstractSnakeYamlGenerator {
         sc.add("if ( strict )");
 
         sc.add("{");
+        sc.indent();
+        sc.add("if ( event instanceof ScalarEvent )");
+        sc.add("{");
         sc.addIndented(
                 "throw new ParserException( \"Unrecognised tag: '\" + ( (ScalarEvent) event ).getValue() + \"'\", event.getStartMark(), \"\", null );");
+        sc.add("} else {");
+        sc.addIndented(
+                "return ; // throw new ParserException( \"Unrecognised : '\" +  event.getEventId() + \"'\", event.getStartMark(), \"\", null );");
+        sc.add("}");
+        sc.unindent();
         sc.add("}");
 
         sc.add("");
@@ -1041,7 +1052,8 @@ public class SnakeYamlReaderGenerator extends AbstractSnakeYamlGenerator {
             return;
         }
 
-        String constr = "new " + locationTracker.getName() + "( parser.getLineNumber(), parser.getColumnNumber()";
+        String constr = "new " + locationTracker.getName()
+                + "( parser.peekEvent().getStartMark().getLine(), parser.peekEvent().getStartMark().getColumn()";
         constr += (sourceTracker != null) ? ", " + SOURCE_PARAM : "";
         constr += " )";
 

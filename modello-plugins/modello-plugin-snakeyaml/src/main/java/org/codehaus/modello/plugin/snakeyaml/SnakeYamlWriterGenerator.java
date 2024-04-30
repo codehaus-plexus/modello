@@ -74,6 +74,7 @@ public class SnakeYamlWriterGenerator extends AbstractSnakeYamlGenerator {
 
         JClass jClass = new JClass(packageName + '.' + marshallerName);
         initHeader(jClass);
+        suppressAllWarnings(objectModel, jClass);
 
         jClass.addImport("org.yaml.snakeyaml.DumperOptions");
         jClass.addImport("org.yaml.snakeyaml.DumperOptions.Version");
@@ -290,7 +291,8 @@ public class SnakeYamlWriterGenerator extends AbstractSnakeYamlGenerator {
                         sc.indent();
 
                         writeScalarKey(sc, fieldTagName);
-                        sc.add("generator.emit( new SequenceStartEvent( null, null, true, null, null, false ) );");
+                        sc.add(
+                                "generator.emit( new SequenceStartEvent( null, null, true, null, null, FlowStyle.AUTO ) );");
 
                         sc.add("for ( " + toType + " o : " + value + " )");
 
