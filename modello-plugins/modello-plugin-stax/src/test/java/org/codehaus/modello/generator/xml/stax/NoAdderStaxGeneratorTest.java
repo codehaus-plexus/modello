@@ -19,7 +19,7 @@ package org.codehaus.modello.generator.xml.stax;
  * under the License.
  */
 
-import java.util.Properties;
+import java.util.Map;
 
 import org.codehaus.modello.AbstractModelloJavaGeneratorTest;
 import org.codehaus.modello.core.ModelloCore;
@@ -35,7 +35,7 @@ public class NoAdderStaxGeneratorTest extends AbstractModelloJavaGeneratorTest {
 
         Model model = modello.loadModel(getXmlResourceReader("/noAdder.mdo"));
 
-        Properties parameters = getModelloParameters("1.0.0");
+        Map<String, Object> parameters = getModelloParameters("1.0.0");
 
         modello.generate(model, "java", parameters);
         modello.generate(model, "stax-reader", parameters);

@@ -33,7 +33,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Properties;
+import java.util.Map;
 
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.ModelloParameterConstants;
@@ -76,24 +76,21 @@ public abstract class AbstractModelloGenerator implements ModelloGenerator {
         return logger;
     }
 
-    protected void initialize(Model model, Properties parameters) throws ModelloException {
+    protected void initialize(Model model, Map<String, Object> parameters) throws ModelloException {
         this.model = model;
 
-        outputDirectory = new File(getParameter(parameters, ModelloParameterConstants.OUTPUT_DIRECTORY));
+        outputDirectory = new File(requireParameter(parameters, ModelloParameterConstants.OUTPUT_DIRECTORY));
 
-        String version = getParameter(parameters, ModelloParameterConstants.VERSION);
+        String version = requireParameter(parameters, ModelloParameterConstants.VERSION);
 
         generatedVersion = new Version(version);
 
         packageWithVersion =
-                Boolean.parseBoolean(getParameter(parameters, ModelloParameterConstants.PACKAGE_WITH_VERSION));
+                Boolean.parseBoolean(requireParameter(parameters, ModelloParameterConstants.PACKAGE_WITH_VERSION));
 
-        encoding = parameters.getProperty(ModelloParameterConstants.ENCODING);
+        encoding = (String) parameters.get(ModelloParameterConstants.ENCODING);
 
-        String licenseTextPacked = parameters.getProperty(ModelloParameterConstants.LICENSE_TEXT);
-        if (licenseTextPacked != null) {
-            licenseText = Arrays.asList(licenseTextPacked.split("\\|"));
-        }
+        licenseText = (List<String>) parameters.get(ModelloParameterConstants.LICENSE_TEXT);
     }
 
     protected Model getModel() {
@@ -237,19 +234,8 @@ public abstract class AbstractModelloGenerator implements ModelloGenerator {
     // Parameter utils
     // ----------------------------------------------------------------------
 
-    /**
-     * @deprecated Use {@link #getParameter(Properties, String)} instead
-     * @param name parameter name
-     * @param parameters the properties
-     * @return the parameter value
-     */
-    @Deprecated
-    protected String getParameter(String name, Properties parameters) {
-        return getParameter(parameters, name);
-    }
-
-    protected String getParameter(Properties parameters, String name) {
-        String value = parameters.getProperty(name);
+    protected String requireParameter(Map<String, Object> parameters, String name) {
+        String value = (String) parameters.get(name);
 
         if (value == null) {
             throw new ModelloRuntimeException("Missing parameter '" + name + "'.");
@@ -258,8 +244,8 @@ public abstract class AbstractModelloGenerator implements ModelloGenerator {
         return value;
     }
 
-    protected String getParameter(Properties parameters, String name, String defaultValue) {
-        return parameters.getProperty(name, defaultValue);
+    protected String getParameter(Map<String, Object> parameters, String name, String defaultValue) {
+        return (String) parameters.getOrDefault(name, defaultValue);
     }
 
     protected BuildContext getBuildContext() {

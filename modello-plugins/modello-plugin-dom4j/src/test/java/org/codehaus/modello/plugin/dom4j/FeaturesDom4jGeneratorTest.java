@@ -22,7 +22,7 @@ package org.codehaus.modello.plugin.dom4j;
  * SOFTWARE.
  */
 
-import java.util.Properties;
+import java.util.Map;
 
 import org.codehaus.modello.AbstractModelloJavaGeneratorTest;
 import org.codehaus.modello.core.ModelloCore;
@@ -41,7 +41,7 @@ public class FeaturesDom4jGeneratorTest extends AbstractModelloJavaGeneratorTest
 
         Model model = modello.loadModel(getXmlResourceReader("/features.mdo"));
 
-        Properties parameters = getModelloParameters("1.0.0");
+        Map<String, Object> parameters = getModelloParameters("1.0.0");
 
         modello.generate(model, "java", parameters);
         modello.generate(model, "dom4j-writer", parameters);

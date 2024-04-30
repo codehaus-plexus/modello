@@ -22,7 +22,7 @@ package org.codehaus.modello.generator.xml.xpp3;
  * SOFTWARE.
  */
 
-import java.util.Properties;
+import java.util.Map;
 
 import org.codehaus.modello.AbstractModelloJavaGeneratorTest;
 import org.codehaus.modello.core.ModelloCore;
@@ -38,7 +38,7 @@ public class StandaloneReadXpp3GeneratorTest extends AbstractModelloJavaGenerato
 
         Model model = modello.loadModel(getXmlResourceReader("/standaloneRead.mdo"));
 
-        Properties parameters = getModelloParameters("1.0.0");
+        Map<String, Object> parameters = getModelloParameters("1.0.0");
 
         modello.generate(model, "java", parameters);
         modello.generate(model, "xpp3-reader", parameters);

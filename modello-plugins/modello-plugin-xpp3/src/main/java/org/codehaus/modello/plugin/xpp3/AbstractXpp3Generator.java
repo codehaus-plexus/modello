@@ -22,7 +22,7 @@ package org.codehaus.modello.plugin.xpp3;
  * SOFTWARE.
  */
 
-import java.util.Properties;
+import java.util.Map;
 
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.model.Model;
@@ -44,7 +44,7 @@ public abstract class AbstractXpp3Generator extends AbstractXmlJavaGenerator {
     }
 
     @Override
-    protected void initialize(Model model, Properties parameters) throws ModelloException {
+    protected void initialize(Model model, Map<String, Object> parameters) throws ModelloException {
         super.initialize(model, parameters);
 
         requiresDomSupport = false;

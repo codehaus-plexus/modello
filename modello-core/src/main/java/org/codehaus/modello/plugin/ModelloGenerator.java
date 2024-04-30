@@ -22,7 +22,7 @@ package org.codehaus.modello.plugin;
  * SOFTWARE.
  */
 
-import java.util.Properties;
+import java.util.Map;
 
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.model.Model;
@@ -31,5 +31,5 @@ import org.codehaus.modello.model.Model;
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  */
 public interface ModelloGenerator {
-    void generate(Model model, Properties parameters) throws ModelloException;
+    void generate(Model model, Map<String, Object> parameters) throws ModelloException;
 }

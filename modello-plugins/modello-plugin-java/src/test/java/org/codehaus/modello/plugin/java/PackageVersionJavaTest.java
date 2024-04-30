@@ -22,7 +22,7 @@ package org.codehaus.modello.plugin.java;
  * SOFTWARE.
  */
 
-import java.util.Properties;
+import java.util.Map;
 
 import org.codehaus.modello.AbstractModelloJavaGeneratorTest;
 import org.codehaus.modello.ModelloParameterConstants;
@@ -42,8 +42,8 @@ public class PackageVersionJavaTest extends AbstractModelloJavaGeneratorTest {
 
         Model model = modello.loadModel(getXmlResourceReader("/models/maven.mdo"));
 
-        Properties parameters = getModelloParameters("4.0.0");
-        parameters.setProperty(ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString(true));
+        Map<String, Object> parameters = getModelloParameters("4.0.0");
+        parameters.put(ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString(true));
 
         modello.generate(model, "java", parameters);
 

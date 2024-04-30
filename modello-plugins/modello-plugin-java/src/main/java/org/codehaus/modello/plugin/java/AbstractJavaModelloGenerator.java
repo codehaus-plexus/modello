@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Properties;
+import java.util.Map;
 
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.ModelloParameterConstants;
@@ -67,9 +67,9 @@ public abstract class AbstractJavaModelloGenerator extends AbstractModelloGenera
 
     protected boolean domAsXpp3 = true;
 
-    protected void initialize(Model model, Properties parameters) throws ModelloException {
+    protected void initialize(Model model, Map<String, Object> parameters) throws ModelloException {
         super.initialize(model, parameters);
-        domAsXpp3 = !"false".equals(parameters.getProperty(ModelloParameterConstants.DOM_AS_XPP3));
+        domAsXpp3 = !"false".equals(parameters.get(ModelloParameterConstants.DOM_AS_XPP3));
     }
 
     /**

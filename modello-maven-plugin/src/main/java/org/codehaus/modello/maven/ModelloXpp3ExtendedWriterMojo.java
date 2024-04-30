@@ -22,7 +22,7 @@ package org.codehaus.modello.maven;
  * SOFTWARE.
  */
 
-import java.util.Properties;
+import java.util.Map;
 
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
@@ -49,7 +49,7 @@ public class ModelloXpp3ExtendedWriterMojo extends ModelloXpp3WriterMojo {
         return "xpp3-extended-writer";
     }
 
-    protected void customizeParameters(Properties parameters) {
+    protected void customizeParameters(Map<String, Object> parameters) {
         super.customizeParameters(parameters);
 
         if (extendedClassnameSuffix != null) {

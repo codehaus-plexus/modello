@@ -27,7 +27,7 @@ import javax.inject.Named;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
+import java.util.Map;
 
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.model.Model;
@@ -49,7 +49,8 @@ import org.codehaus.plexus.util.StringUtils;
 @Named("stax-serializer")
 public class StaxSerializerGenerator extends AbstractStaxGenerator {
 
-    public void generate(Model model, Properties parameters) throws ModelloException {
+    @Override
+    public void generate(Model model, Map<String, Object> parameters) throws ModelloException {
         initialize(model, parameters);
 
         try {
@@ -345,7 +346,7 @@ public class StaxSerializerGenerator extends AbstractStaxGenerator {
     }
 
     private void add(JClass jClass, String name, String before, String after, JParameter... params) {
-        List<String> names = new ArrayList<String>();
+        List<String> names = new ArrayList<>();
 
         JMethod jMethod = new JMethod("write" + name);
         jMethod.addException(new JClass("XMLStreamException"));

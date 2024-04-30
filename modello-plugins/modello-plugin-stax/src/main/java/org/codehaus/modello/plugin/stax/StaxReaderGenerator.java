@@ -27,7 +27,7 @@ import javax.inject.Named;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Properties;
+import java.util.Map;
 
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.ModelloParameterConstants;
@@ -61,7 +61,8 @@ public class StaxReaderGenerator extends AbstractStaxGenerator {
 
     private boolean requiresDomSupport;
 
-    public void generate(Model model, Properties parameters) throws ModelloException {
+    @Override
+    public void generate(Model model, Map<String, Object> parameters) throws ModelloException {
         initialize(model, parameters);
 
         requiresDomSupport = false;
@@ -71,7 +72,7 @@ public class StaxReaderGenerator extends AbstractStaxGenerator {
 
             VersionDefinition versionDefinition = model.getVersionDefinition();
             if (versionDefinition != null) {
-                String versions = parameters.getProperty(ModelloParameterConstants.ALL_VERSIONS);
+                String versions = (String) parameters.get(ModelloParameterConstants.ALL_VERSIONS);
 
                 if (versions != null) {
                     generateStaxReaderDelegate(Arrays.asList(versions.split(",")));
