@@ -1,6 +1,6 @@
 package org.codehaus.modello.plugin.java;
 
-import java.util.Properties;
+import java.util.Map;
 
 import org.codehaus.modello.AbstractModelloJavaGeneratorTest;
 import org.codehaus.modello.core.ModelloCore;
@@ -16,7 +16,7 @@ public class InterfaceAssociationTest extends AbstractModelloJavaGeneratorTest {
 
         Model model = modello.loadModel(getXmlResourceReader("/models/interfaceAssociation.mdo"));
 
-        Properties parameters = getModelloParameters("4.0.0", 8);
+        Map<String, Object> parameters = getModelloParameters("4.0.0", 8);
 
         modello.generate(model, "java", parameters);
 

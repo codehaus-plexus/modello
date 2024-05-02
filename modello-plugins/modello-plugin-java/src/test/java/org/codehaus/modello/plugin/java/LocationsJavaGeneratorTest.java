@@ -22,7 +22,7 @@ package org.codehaus.modello.plugin.java;
  * SOFTWARE.
  */
 
-import java.util.Properties;
+import java.util.Map;
 
 import org.codehaus.modello.AbstractModelloJavaGeneratorTest;
 import org.codehaus.modello.core.ModelloCore;
@@ -42,7 +42,7 @@ public class LocationsJavaGeneratorTest extends AbstractModelloJavaGeneratorTest
 
         Model model = modello.loadModel(getXmlResourceReader("/locations.mdo"));
 
-        Properties parameters = getModelloParameters("1.0.0", 8);
+        Map<String, Object> parameters = getModelloParameters("1.0.0", 8);
 
         modello.generate(model, "java", parameters);
 

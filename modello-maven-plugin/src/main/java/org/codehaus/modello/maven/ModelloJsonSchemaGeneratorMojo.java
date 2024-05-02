@@ -23,7 +23,7 @@ package org.codehaus.modello.maven;
  */
 
 import java.io.File;
-import java.util.Properties;
+import java.util.Map;
 
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
@@ -49,7 +49,8 @@ public final class ModelloJsonSchemaGeneratorMojo extends AbstractModelloGenerat
     @Parameter
     private String jsonSchemaFileName;
 
-    protected void customizeParameters(Properties parameters) {
+    @Override
+    protected void customizeParameters(Map<String, Object> parameters) {
         super.customizeParameters(parameters);
 
         if (jsonSchemaFileName != null) {

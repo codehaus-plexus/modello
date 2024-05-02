@@ -1,5 +1,7 @@
 package org.codehaus.modello.maven;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 import org.apache.maven.model.Model;
@@ -37,11 +39,11 @@ public class AbstractModelloSourceGeneratorMojoTest {
     private void executeJavaSourceTest(Properties projectProperties, String expexted) {
         ModelloSourceGeneratorMojoTest modelloSourceGeneratorMojoTest =
                 new ModelloSourceGeneratorMojoTest(projectProperties);
-        Properties properties = new Properties();
+        Map<String, Object> properties = new HashMap<>();
 
         modelloSourceGeneratorMojoTest.customizeParameters(properties);
 
-        assertEquals(properties.getProperty(ModelloParameterConstants.OUTPUT_JAVA_SOURCE), expexted);
+        assertEquals(properties.get(ModelloParameterConstants.OUTPUT_JAVA_SOURCE), expexted);
     }
 
     @Test

@@ -22,7 +22,7 @@ package org.codehaus.modello.plugin.java;
  * SOFTWARE.
  */
 
-import java.util.Properties;
+import java.util.Map;
 
 import org.codehaus.modello.AbstractModelloJavaGeneratorTest;
 import org.codehaus.modello.ModelloParameterConstants;
@@ -44,14 +44,14 @@ public class FeaturesVersionJavaGeneratorTest extends AbstractModelloJavaGenerat
 
         Model model = modello.loadModel(getXmlResourceReader("/features.mdo"));
 
-        Properties parameters = getModelloParameters();
-        parameters.setProperty(ModelloParameterConstants.ALL_VERSIONS, ALL_VERSIONS);
-        parameters.setProperty(ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString(true));
+        Map<String, Object> parameters = getModelloParameters();
+        parameters.put(ModelloParameterConstants.ALL_VERSIONS, ALL_VERSIONS);
+        parameters.put(ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString(true));
 
         String[] versions = ALL_VERSIONS.split(",");
 
         for (String version : versions) {
-            parameters.setProperty(ModelloParameterConstants.VERSION, version);
+            parameters.put(ModelloParameterConstants.VERSION, version);
             modello.generate(model, "java", parameters);
         }
 

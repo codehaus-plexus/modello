@@ -23,7 +23,7 @@ package org.codehaus.modello.maven;
  */
 
 import java.io.File;
-import java.util.Properties;
+import java.util.Map;
 
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
@@ -76,7 +76,8 @@ public class ModelloXdocMojo extends AbstractModelloGeneratorMojo {
         this.outputDirectory = outputDirectory;
     }
 
-    protected void customizeParameters(Properties parameters) {
+    @Override
+    protected void customizeParameters(Map<String, Object> parameters) {
         super.customizeParameters(parameters);
 
         // Use version if firstVersion was not specified

@@ -22,7 +22,7 @@ package org.codehaus.modello.plugin.java;
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  */
 public interface Permission {
-    public String getName();
+    String getName();
 
-    public void setName(String name);
+    void setName(String name);
 }

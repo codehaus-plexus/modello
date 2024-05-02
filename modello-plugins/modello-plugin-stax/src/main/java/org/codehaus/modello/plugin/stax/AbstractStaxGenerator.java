@@ -24,7 +24,7 @@ package org.codehaus.modello.plugin.stax;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Properties;
+import java.util.Map;
 import java.util.Set;
 
 import org.codehaus.modello.ModelloException;
@@ -41,7 +41,8 @@ import org.codehaus.modello.plugins.xml.metadata.XmlAssociationMetadata;
 public abstract class AbstractStaxGenerator extends AbstractXmlJavaGenerator {
     private Set<ModelClass> parts;
 
-    protected void initialize(Model model, Properties parameters) throws ModelloException {
+    @Override
+    protected void initialize(Model model, Map<String, Object> parameters) throws ModelloException {
         super.initialize(model, parameters);
 
         parts = null;
@@ -75,7 +76,7 @@ public abstract class AbstractStaxGenerator extends AbstractXmlJavaGenerator {
 
     protected boolean isAssociationPartToClass(ModelClass modelClass) {
         if (parts == null) {
-            parts = new HashSet<ModelClass>();
+            parts = new HashSet<>();
             for (ModelClass clazz : modelClass.getModel().getClasses(getGeneratedVersion())) {
                 for (ModelField modelField : clazz.getFields(getGeneratedVersion())) {
                     if (modelField instanceof ModelAssociation) {

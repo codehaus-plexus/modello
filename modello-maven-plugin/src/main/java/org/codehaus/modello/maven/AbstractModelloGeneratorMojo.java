@@ -29,8 +29,9 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Properties;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.apache.maven.model.Resource;
@@ -144,8 +145,8 @@ public abstract class AbstractModelloGeneratorMojo extends AbstractMojo {
      *
      * @return the parameters
      */
-    protected Properties createParameters() {
-        return new Properties();
+    protected Map<String, Object> createParameters() {
+        return new HashMap<>();
     }
 
     /**
@@ -156,7 +157,7 @@ public abstract class AbstractModelloGeneratorMojo extends AbstractMojo {
      *
      * @param parameters the parameters to customize
      */
-    protected void customizeParameters(Properties parameters) {}
+    protected void customizeParameters(Map<String, Object> parameters) {}
 
     // ----------------------------------------------------------------------
     //
@@ -171,21 +172,20 @@ public abstract class AbstractModelloGeneratorMojo extends AbstractMojo {
         // Initialize the parameters
         // ----------------------------------------------------------------------
 
-        Properties parameters = createParameters();
+        Map<String, Object> parameters = createParameters();
 
-        parameters.setProperty(ModelloParameterConstants.OUTPUT_DIRECTORY, outputDirectory);
+        parameters.put(ModelloParameterConstants.OUTPUT_DIRECTORY, outputDirectory);
 
-        parameters.setProperty(ModelloParameterConstants.VERSION, version);
+        parameters.put(ModelloParameterConstants.VERSION, version);
 
-        parameters.setProperty(ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString(packageWithVersion));
+        parameters.put(ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString(packageWithVersion));
 
         if (!packagedVersions.isEmpty()) {
-            parameters.setProperty(
-                    ModelloParameterConstants.ALL_VERSIONS, StringUtils.join(packagedVersions.iterator(), ","));
+            parameters.put(ModelloParameterConstants.ALL_VERSIONS, StringUtils.join(packagedVersions.iterator(), ","));
         }
 
         if (licenseText != null || licenseFile != null) {
-            List<String> license = null;
+            List<String> license;
             if (licenseText != null) {
                 // licenseText prevails
                 license = Arrays.asList(licenseText.split(System.lineSeparator()));
@@ -199,7 +199,7 @@ public abstract class AbstractModelloGeneratorMojo extends AbstractMojo {
                     throw new MojoExecutionException("Could not load up license text from " + licenseFile, e);
                 }
             }
-            parameters.setProperty(ModelloParameterConstants.LICENSE_TEXT, String.join("|", license));
+            parameters.put(ModelloParameterConstants.LICENSE_TEXT, license);
         }
 
         customizeParameters(parameters);
@@ -227,7 +227,7 @@ public abstract class AbstractModelloGeneratorMojo extends AbstractMojo {
     /**
      * Performs execute on a single specified model.
      */
-    private void doExecute(String modelStr, String outputDirectory, Properties parameters)
+    private void doExecute(String modelStr, String outputDirectory, Map<String, Object> parameters)
             throws MojoExecutionException {
         if (!buildContext.hasDelta(modelStr)) {
             getLog().debug("Skipping unchanged model: " + modelStr);
@@ -247,9 +247,9 @@ public abstract class AbstractModelloGeneratorMojo extends AbstractMojo {
             modelloCore.generate(model, getGeneratorType(), parameters);
 
             for (String version : packagedVersions) {
-                parameters.setProperty(ModelloParameterConstants.VERSION, version);
+                parameters.put(ModelloParameterConstants.VERSION, version);
 
-                parameters.setProperty(ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString(true));
+                parameters.put(ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString(true));
 
                 getLog().info("Generating packaged version: " + version);
                 modelloCore.generate(model, getGeneratorType(), parameters);

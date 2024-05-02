@@ -26,7 +26,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
-import java.util.Properties;
+import java.util.Map;
 
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.model.Model;
@@ -46,8 +46,8 @@ public interface ModelloCore {
 
     void saveModel(Model model, Writer writer) throws ModelloException;
 
-    Model translate(Reader reader, String inputType, Properties parameters)
+    Model translate(Reader reader, String inputType, Map<String, Object> parameters)
             throws ModelloException, ModelValidationException;
 
-    void generate(Model model, String outputType, Properties parameters) throws ModelloException;
+    void generate(Model model, String outputType, Map<String, Object> parameters) throws ModelloException;
 }

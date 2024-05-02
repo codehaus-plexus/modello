@@ -28,7 +28,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Properties;
+import java.util.Map;
 
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.ModelloParameterConstants;
@@ -57,11 +57,10 @@ import org.codehaus.modello.plugin.java.metadata.JavaFieldMetadata;
  */
 @Named("converters")
 public class ConverterGenerator extends AbstractJavaModelloGenerator {
-    public void generate(Model model, Properties parameters) throws ModelloException {
+    public void generate(Model model, Map<String, Object> parameters) throws ModelloException {
         initialize(model, parameters);
 
-        String[] versions =
-                parameters.getProperty(ModelloParameterConstants.ALL_VERSIONS).split(",");
+        String[] versions = ((String) parameters.get(ModelloParameterConstants.ALL_VERSIONS)).split(",");
 
         List<Version> allVersions = new ArrayList<Version>(versions.length);
         for (String version : versions) {

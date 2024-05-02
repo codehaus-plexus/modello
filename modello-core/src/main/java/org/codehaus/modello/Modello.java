@@ -26,7 +26,7 @@ import javax.inject.Inject;
 
 import java.io.Reader;
 import java.io.Writer;
-import java.util.Properties;
+import java.util.Map;
 
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
@@ -44,14 +44,14 @@ public class Modello {
         this.core = core;
     }
 
-    public void generate(Reader modelReader, String outputType, Properties parameters)
+    public void generate(Reader modelReader, String outputType, Map<String, Object> parameters)
             throws ModelloException, ModelValidationException {
         Model model = core.loadModel(modelReader);
 
         core.generate(model, outputType, parameters);
     }
 
-    public void translate(Reader reader, Writer writer, String outputType, Properties parameters)
+    public void translate(Reader reader, Writer writer, String outputType, Map<String, Object> parameters)
             throws ModelloException, ModelValidationException {
         Model model = core.translate(reader, outputType, parameters);
 
