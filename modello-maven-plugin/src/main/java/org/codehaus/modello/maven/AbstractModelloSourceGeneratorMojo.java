@@ -23,6 +23,7 @@ package org.codehaus.modello.maven;
  */
 
 import java.io.File;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.function.Supplier;
@@ -87,11 +88,11 @@ public abstract class AbstractModelloSourceGeneratorMojo extends AbstractModello
     }
 
     @Override
-    protected void customizeParameters(Properties parameters) {
+    protected void customizeParameters(Map<String, Object> parameters) {
         super.customizeParameters(parameters);
 
         if (encoding != null) {
-            parameters.setProperty(ModelloParameterConstants.ENCODING, encoding);
+            parameters.put(ModelloParameterConstants.ENCODING, encoding);
         }
 
         if (javaSource == null) {
@@ -101,9 +102,9 @@ public abstract class AbstractModelloSourceGeneratorMojo extends AbstractModello
             javaSource = javaSource.substring("1.".length());
         }
         getLog().debug("javaSource=" + javaSource);
-        parameters.setProperty(ModelloParameterConstants.OUTPUT_JAVA_SOURCE, javaSource);
+        parameters.put(ModelloParameterConstants.OUTPUT_JAVA_SOURCE, javaSource);
 
-        parameters.setProperty(ModelloParameterConstants.DOM_AS_XPP3, Boolean.toString(domAsXpp3));
+        parameters.put(ModelloParameterConstants.DOM_AS_XPP3, Boolean.toString(domAsXpp3));
     }
 
     private String discoverJavaSource() {

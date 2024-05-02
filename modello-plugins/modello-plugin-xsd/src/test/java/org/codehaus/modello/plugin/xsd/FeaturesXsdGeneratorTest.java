@@ -29,7 +29,7 @@ import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 
 import java.io.File;
-import java.util.Properties;
+import java.util.Map;
 
 import org.codehaus.modello.AbstractModelloGeneratorTest;
 import org.codehaus.modello.ModelloException;
@@ -51,8 +51,8 @@ public class FeaturesXsdGeneratorTest extends AbstractModelloGeneratorTest {
 
         Model model = modello.loadModel(getXmlResourceReader("/features.mdo"));
 
-        Properties parameters = getModelloParameters("1.0.0");
-        parameters.setProperty(ModelloParameterConstants.XSD_ENFORCE_MANDATORY_ELEMENTS, "true");
+        Map<String, Object> parameters = getModelloParameters("1.0.0");
+        parameters.put(ModelloParameterConstants.XSD_ENFORCE_MANDATORY_ELEMENTS, "true");
 
         modello.generate(model, "xsd", parameters);
 

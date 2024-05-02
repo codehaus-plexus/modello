@@ -26,7 +26,7 @@ import javax.inject.Named;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Properties;
+import java.util.Map;
 
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.model.Model;
@@ -68,7 +68,7 @@ public class Xpp3ReaderGenerator extends AbstractXpp3Generator {
     private String trackingArgs;
 
     @Override
-    protected void initialize(Model model, Properties parameters) throws ModelloException {
+    protected void initialize(Model model, Map<String, Object> parameters) throws ModelloException {
         super.initialize(model, parameters);
 
         trackingArgs = locationField = "";
@@ -83,7 +83,8 @@ public class Xpp3ReaderGenerator extends AbstractXpp3Generator {
         }
     }
 
-    public void generate(Model model, Properties parameters) throws ModelloException {
+    @Override
+    public void generate(Model model, Map<String, Object> parameters) throws ModelloException {
         initialize(model, parameters);
 
         try {
@@ -984,7 +985,7 @@ public class Xpp3ReaderGenerator extends AbstractXpp3Generator {
             throw new IllegalArgumentException("Unknown type: " + type);
         }
 
-        if (keyCapture.length() > 0) {
+        if (!keyCapture.isEmpty()) {
             writeSetLocation(locationKey, locatorName, null, sc);
         }
     }

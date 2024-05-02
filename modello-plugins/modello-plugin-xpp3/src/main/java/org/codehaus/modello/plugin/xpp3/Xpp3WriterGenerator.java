@@ -26,7 +26,7 @@ import javax.inject.Named;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Properties;
+import java.util.Map;
 
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.ModelloParameterConstants;
@@ -67,16 +67,17 @@ public class Xpp3WriterGenerator extends AbstractXpp3Generator {
     }
 
     @Override
-    protected void initialize(Model model, Properties parameters) throws ModelloException {
+    protected void initialize(Model model, Map<String, Object> parameters) throws ModelloException {
         super.initialize(model, parameters);
 
         extendedClassnameSuffix = "Ex";
         if (isLocationTracking()) {
-            extendedClassnameSuffix = parameters.getProperty(ModelloParameterConstants.EXTENDED_CLASSNAME_SUFFIX);
+            extendedClassnameSuffix = (String) parameters.get(ModelloParameterConstants.EXTENDED_CLASSNAME_SUFFIX);
         }
     }
 
-    public void generate(Model model, Properties parameters) throws ModelloException {
+    @Override
+    public void generate(Model model, Map<String, Object> parameters) throws ModelloException {
         initialize(model, parameters);
 
         try {

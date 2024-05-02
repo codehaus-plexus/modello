@@ -53,26 +53,26 @@ public class VelocityGenerator extends AbstractModelloGenerator {
 
     @Override
     @SuppressWarnings("unchecked")
-    public void generate(Model model, Properties parameters) throws ModelloException {
+    public void generate(Model model, Map<String, Object> parameters) throws ModelloException {
         try {
             Map<String, String> params =
                     (Map<String, String>) Objects.requireNonNull(parameters.get(VELOCITY_PARAMETERS));
-            String templates = getParameter(parameters, VELOCITY_TEMPLATES);
-            String output = getParameter(parameters, ModelloParameterConstants.OUTPUT_DIRECTORY);
+            String templates = requireParameter(parameters, VELOCITY_TEMPLATES);
+            String output = requireParameter(parameters, ModelloParameterConstants.OUTPUT_DIRECTORY);
 
             Properties props = new Properties();
-            props.put("resource.loader.file.path", getParameter(parameters, VELOCITY_BASEDIR));
+            props.put("resource.loader.file.path", requireParameter(parameters, VELOCITY_BASEDIR));
             RuntimeInstance velocity = new RuntimeInstance();
             velocity.init(props);
 
             VelocityContext context = new VelocityContext();
-            for (Map.Entry<Object, Object> prop : parameters.entrySet()) {
-                context.put(prop.getKey().toString(), prop.getValue());
+            for (Map.Entry<String, Object> prop : parameters.entrySet()) {
+                context.put(prop.getKey(), prop.getValue());
             }
             for (Map.Entry<String, String> prop : params.entrySet()) {
                 context.put(prop.getKey(), prop.getValue());
             }
-            Version version = new Version(getParameter(parameters, ModelloParameterConstants.VERSION));
+            Version version = new Version(requireParameter(parameters, ModelloParameterConstants.VERSION));
             context.put("version", version);
             context.put("model", model);
             context.put("Helper", new Helper(version));

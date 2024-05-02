@@ -26,7 +26,7 @@ import java.io.File;
 import java.nio.file.Files;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Properties;
+import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -69,7 +69,7 @@ public class XdocGeneratorTest extends AbstractModelloGeneratorTest {
 
         Model model = modello.loadModel(getXmlResourceReader("/html4.mdo"));
 
-        Properties parameters = getModelloParameters("1.0.0");
+        Map<String, Object> parameters = getModelloParameters("1.0.0");
 
         modello.generate(model, "xdoc", parameters);
 
@@ -119,7 +119,7 @@ public class XdocGeneratorTest extends AbstractModelloGeneratorTest {
 
         assertEquals("builder", xml.getTagName());
 
-        Properties parameters = getModelloParameters("4.0.0");
+        Map<String, Object> parameters = getModelloParameters("4.0.0");
 
         modello.generate(model, "xdoc", parameters);
 
@@ -134,7 +134,7 @@ public class XdocGeneratorTest extends AbstractModelloGeneratorTest {
 
         Model model = modello.loadModel(getXmlResourceReader("/features.mdo"));
 
-        Properties parameters = getModelloParameters("1.5.0");
+        Map<String, Object> parameters = getModelloParameters("1.5.0");
 
         modello.generate(model, "xdoc", parameters);
 
@@ -150,7 +150,7 @@ public class XdocGeneratorTest extends AbstractModelloGeneratorTest {
 
         Model model = modello.loadModel(getXmlResourceReader("/settings.mdo"));
 
-        Properties parameters = getModelloParameters("1.5.0");
+        Map<String, Object> parameters = getModelloParameters("1.5.0");
 
         modello.generate(model, "xdoc", parameters);
 

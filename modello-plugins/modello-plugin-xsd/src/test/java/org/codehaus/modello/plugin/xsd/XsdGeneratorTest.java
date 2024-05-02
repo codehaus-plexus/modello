@@ -23,7 +23,7 @@ package org.codehaus.modello.plugin.xsd;
  */
 
 import java.util.List;
-import java.util.Properties;
+import java.util.Map;
 
 import org.codehaus.modello.AbstractModelloGeneratorTest;
 import org.codehaus.modello.core.ModelloCore;
@@ -78,7 +78,7 @@ public class XsdGeneratorTest extends AbstractModelloGeneratorTest {
         assertEquals("builder", xml.getTagName());
 
         // generate XSD file
-        Properties parameters = getModelloParameters("4.0.0");
+        Map<String, Object> parameters = getModelloParameters("4.0.0");
 
         modello.generate(model, "xsd", parameters);
 

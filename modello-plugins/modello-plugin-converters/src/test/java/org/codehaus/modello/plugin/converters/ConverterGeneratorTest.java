@@ -23,7 +23,8 @@ package org.codehaus.modello.plugin.converters;
  */
 
 import java.io.Reader;
-import java.util.Properties;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.codehaus.modello.AbstractModelloJavaGeneratorTest;
 import org.codehaus.modello.ModelloException;
@@ -56,10 +57,10 @@ public class ConverterGeneratorTest extends AbstractModelloJavaGeneratorTest {
 
         Model model = modello.loadModel(modelReader);
 
-        Properties parameters = new Properties();
-        parameters.setProperty(
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put(
                 ModelloParameterConstants.OUTPUT_DIRECTORY, getOutputDirectory().getAbsolutePath());
-        parameters.setProperty(ModelloParameterConstants.ALL_VERSIONS, fromVersion + "," + toVersion);
+        parameters.put(ModelloParameterConstants.ALL_VERSIONS, fromVersion + "," + toVersion);
 
         generateClasses(parameters, modello, model, fromVersion, toVersion, "java");
         generateClasses(parameters, modello, model, fromVersion, toVersion, "stax-reader");
@@ -68,23 +69,23 @@ public class ConverterGeneratorTest extends AbstractModelloJavaGeneratorTest {
     }
 
     private void generateClasses(
-            Properties parameters,
+            Map<String, Object> parameters,
             ModelloCore modello,
             Model model,
             String fromVersion,
             String toVersion,
             String outputType)
             throws ModelloException {
-        parameters.setProperty(ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString(false));
-        parameters.setProperty(ModelloParameterConstants.VERSION, toVersion);
+        parameters.put(ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString(false));
+        parameters.put(ModelloParameterConstants.VERSION, toVersion);
         modello.generate(model, outputType, parameters);
 
-        parameters.setProperty(ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString(true));
-        parameters.setProperty(ModelloParameterConstants.VERSION, fromVersion);
+        parameters.put(ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString(true));
+        parameters.put(ModelloParameterConstants.VERSION, fromVersion);
         modello.generate(model, outputType, parameters);
 
-        parameters.setProperty(ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString(true));
-        parameters.setProperty(ModelloParameterConstants.VERSION, toVersion);
+        parameters.put(ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString(true));
+        parameters.put(ModelloParameterConstants.VERSION, toVersion);
         modello.generate(model, outputType, parameters);
     }
 }

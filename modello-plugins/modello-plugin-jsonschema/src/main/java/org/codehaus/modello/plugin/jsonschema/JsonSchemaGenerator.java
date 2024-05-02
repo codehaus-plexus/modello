@@ -29,7 +29,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Properties;
+import java.util.Map;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -53,7 +53,8 @@ import org.codehaus.plexus.util.StringUtils;
 @Named("jsonschema")
 public final class JsonSchemaGenerator extends AbstractXmlJavaGenerator {
 
-    public void generate(Model model, Properties parameters) throws ModelloException {
+    @Override
+    public void generate(Model model, Map<String, Object> parameters) throws ModelloException {
         initialize(model, parameters);
 
         try {
@@ -63,7 +64,7 @@ public final class JsonSchemaGenerator extends AbstractXmlJavaGenerator {
         }
     }
 
-    private void generateJsonSchema(Properties parameters) throws IOException, ModelloException {
+    private void generateJsonSchema(Map<String, Object> parameters) throws IOException, ModelloException {
         Model objectModel = getModel();
 
         File directory = getOutputDirectory();
@@ -77,7 +78,7 @@ public final class JsonSchemaGenerator extends AbstractXmlJavaGenerator {
         }
 
         // we assume parameters not null
-        String schemaFileName = parameters.getProperty(ModelloParameterConstants.OUTPUT_JSONSCHEMA_FILE_NAME);
+        String schemaFileName = (String) parameters.get(ModelloParameterConstants.OUTPUT_JSONSCHEMA_FILE_NAME);
 
         File schemaFile;
 
@@ -137,7 +138,7 @@ public final class JsonSchemaGenerator extends AbstractXmlJavaGenerator {
 
         generator.writeObjectFieldStart("properties");
 
-        List<String> required = new LinkedList<String>();
+        List<String> required = new LinkedList<>();
 
         ModelClass reference = modelClass;
         // traverse the whole modelClass hierarchy to create the nested Builder instance

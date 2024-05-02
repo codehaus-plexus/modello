@@ -22,7 +22,7 @@ package org.codehaus.modello.generator.xml.stax;
  * SOFTWARE.
  */
 
-import java.util.Properties;
+import java.util.Map;
 
 import org.codehaus.modello.AbstractModelloJavaGeneratorTest;
 import org.codehaus.modello.core.ModelloCore;
@@ -41,7 +41,7 @@ public class FeaturesStaxDomGeneratorTest extends AbstractModelloJavaGeneratorTe
 
         Model model = modello.loadModel(getXmlResourceReader("/features.mdo"));
 
-        Properties parameters = getModelloParameters("1.0.0");
+        Map<String, Object> parameters = getModelloParameters("1.0.0");
         parameters.put("modello.dom.xpp3", "false");
 
         modello.generate(model, "java", parameters);

@@ -16,7 +16,7 @@ package org.codehaus.modello.plugin.java;
  * limitations under the License.
  */
 
-import java.util.Properties;
+import java.util.Map;
 
 import org.codehaus.modello.AbstractModelloJavaGeneratorTest;
 import org.codehaus.modello.core.ModelloCore;
@@ -37,7 +37,7 @@ public class BiDirectionalOverrideJavaGeneratorTest extends AbstractModelloJavaG
 
         Model model = modello.loadModel(getXmlResourceReader("/models/bidirectional-override.mdo"));
 
-        Properties parameters = getModelloParameters("1.0.0");
+        Map<String, Object> parameters = getModelloParameters("1.0.0");
 
         modello.generate(model, "java", parameters);
 

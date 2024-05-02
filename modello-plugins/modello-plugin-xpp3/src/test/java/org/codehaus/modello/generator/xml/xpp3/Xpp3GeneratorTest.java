@@ -23,7 +23,7 @@ package org.codehaus.modello.generator.xml.xpp3;
  */
 
 import java.util.List;
-import java.util.Properties;
+import java.util.Map;
 
 import org.codehaus.modello.AbstractModelloJavaGeneratorTest;
 import org.codehaus.modello.core.ModelloCore;
@@ -79,7 +79,7 @@ public class Xpp3GeneratorTest extends AbstractModelloJavaGeneratorTest {
         assertEquals("builder", xml.getTagName());
 
         // now generate sources and test them
-        Properties parameters = getModelloParameters("4.0.0", 8);
+        Map<String, Object> parameters = getModelloParameters("4.0.0", 8);
 
         modello.generate(model, "java", parameters);
         modello.generate(model, "xpp3-writer", parameters);

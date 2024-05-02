@@ -4,7 +4,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 
 import java.io.IOException;
-import java.util.Properties;
+import java.util.Map;
 
 import org.codehaus.modello.AbstractModelloGeneratorTest;
 import org.codehaus.modello.ModelloException;
@@ -38,7 +38,7 @@ public class PluginsXsdGeneratorTest extends AbstractModelloGeneratorTest {
         Model model = modello.loadModel(getXmlResourceReader("/plugin.mdo"));
 
         // generate XSD file
-        Properties parameters = getModelloParameters("1.0.0");
+        Map<String, Object> parameters = getModelloParameters("1.0.0");
 
         modello.generate(model, "xsd", parameters);
 

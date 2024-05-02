@@ -23,7 +23,6 @@ import java.io.File;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.stream.Collectors;
 
 import org.apache.maven.plugins.annotations.LifecyclePhase;
@@ -85,7 +84,8 @@ public class ModelloVelocityMojo extends AbstractModelloGeneratorMojo {
         return "velocity";
     }
 
-    protected void customizeParameters(Properties parameters) {
+    @Override
+    protected void customizeParameters(Map<String, Object> parameters) {
         super.customizeParameters(parameters);
 
         Map<String, String> params = this.params == null

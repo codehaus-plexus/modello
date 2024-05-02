@@ -22,7 +22,7 @@ package org.codehaus.modello.plugin.java;
  * SOFTWARE.
  */
 
-import java.util.Properties;
+import java.util.Map;
 
 import org.codehaus.modello.AbstractModelloJavaGeneratorTest;
 import org.codehaus.modello.core.ModelloCore;
@@ -41,7 +41,7 @@ public class AssociationGeneratorTest extends AbstractModelloJavaGeneratorTest {
 
         Model model = modello.loadModel(getXmlResourceReader("/models/oneToManyAssociation.mdo"));
 
-        Properties parameters = getModelloParameters("4.0.0");
+        Map<String, Object> parameters = getModelloParameters("4.0.0");
 
         modello.generate(model, "java", parameters);
 

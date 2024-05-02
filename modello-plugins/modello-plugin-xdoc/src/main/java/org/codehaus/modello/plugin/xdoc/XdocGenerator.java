@@ -74,15 +74,16 @@ public class XdocGenerator extends AbstractXmlGenerator {
 
     private Version version = DEFAULT_VERSION_RANGE.getFromVersion();
 
-    public void generate(Model model, Properties parameters) throws ModelloException {
+    @Override
+    public void generate(Model model, Map<String, Object> parameters) throws ModelloException {
         initialize(model, parameters);
 
-        if (parameters.getProperty(ModelloParameterConstants.FIRST_VERSION) != null) {
-            firstVersion = new Version(parameters.getProperty(ModelloParameterConstants.FIRST_VERSION));
+        if (parameters.get(ModelloParameterConstants.FIRST_VERSION) != null) {
+            firstVersion = new Version((String) parameters.get(ModelloParameterConstants.FIRST_VERSION));
         }
 
-        if (parameters.getProperty(ModelloParameterConstants.VERSION) != null) {
-            version = new Version(parameters.getProperty(ModelloParameterConstants.VERSION));
+        if (parameters.get(ModelloParameterConstants.VERSION) != null) {
+            version = new Version((String) parameters.get(ModelloParameterConstants.VERSION));
         }
 
         try {
@@ -92,7 +93,7 @@ public class XdocGenerator extends AbstractXmlGenerator {
         }
     }
 
-    private void generateXdoc(Properties parameters) throws IOException {
+    private void generateXdoc(Map<String, Object> parameters) throws IOException {
         Model objectModel = getModel();
 
         File directory = getOutputDirectory();
@@ -106,7 +107,7 @@ public class XdocGenerator extends AbstractXmlGenerator {
         }
 
         // we assume parameters not null
-        String xdocFileName = parameters.getProperty(ModelloParameterConstants.OUTPUT_XDOC_FILE_NAME);
+        String xdocFileName = (String) parameters.get(ModelloParameterConstants.OUTPUT_XDOC_FILE_NAME);
 
         File f = new File(directory, objectModel.getId() + ".xml");
 
@@ -441,7 +442,7 @@ public class XdocGenerator extends AbstractXmlGenerator {
      * @return the String representing the tree model
      */
     private String getModelXmlDescriptor(ModelClass rootModelClass) {
-        return getElementXmlDescriptor(rootModelClass, null, new Stack<String>());
+        return getElementXmlDescriptor(rootModelClass, null, new Stack<>());
     }
 
     /**
@@ -466,7 +467,7 @@ public class XdocGenerator extends AbstractXmlGenerator {
         sb.append(tagName).append("</a>");
 
         boolean addNewline = false;
-        if (stack.size() == 0) {
+        if (stack.isEmpty()) {
             // try to add XML Schema reference
             try {
                 String targetNamespace =
@@ -501,7 +502,7 @@ public class XdocGenerator extends AbstractXmlGenerator {
 
         List<ModelField> attributeFields = getXmlAttributeFields(fields);
 
-        if (attributeFields.size() > 0) {
+        if (!attributeFields.isEmpty()) {
 
             for (ModelField f : attributeFields) {
                 XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) f.getMetadata(XmlFieldMetadata.ID);
@@ -522,7 +523,7 @@ public class XdocGenerator extends AbstractXmlGenerator {
 
         fields.removeAll(attributeFields);
 
-        if ((fields.size() == 0) || ((fields.size() == 1) && hasContentField(fields))) {
+        if ((fields.isEmpty()) || ((fields.size() == 1) && hasContentField(fields))) {
             sb.append("/&gt;\n");
         } else {
             sb.append("&gt;\n");

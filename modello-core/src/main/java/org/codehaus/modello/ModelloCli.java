@@ -23,7 +23,8 @@ package org.codehaus.modello;
  */
 
 import java.io.File;
-import java.util.Properties;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.xml.XmlStreamReader;
@@ -36,7 +37,7 @@ public class ModelloCli {
 
     private static String outputType;
 
-    private static Properties parameters;
+    private static Map<String, Object> parameters;
 
     public static void main(String[] args) {
         try {
@@ -62,7 +63,7 @@ public class ModelloCli {
 
         outputType = args[1];
 
-        parameters = new Properties();
+        parameters = new HashMap<>();
 
         String outputDirectory = args[2];
 
@@ -74,7 +75,7 @@ public class ModelloCli {
             System.exit(1);
         }
 
-        parameters.setProperty(ModelloParameterConstants.OUTPUT_DIRECTORY, outputDirectory);
+        parameters.put(ModelloParameterConstants.OUTPUT_DIRECTORY, outputDirectory);
 
         String modelVersion = args[3];
 
@@ -86,7 +87,7 @@ public class ModelloCli {
             System.exit(1);
         }
 
-        parameters.setProperty(ModelloParameterConstants.VERSION, modelVersion);
+        parameters.put(ModelloParameterConstants.VERSION, modelVersion);
 
         String packageWithVersion = args[4];
 
@@ -98,7 +99,7 @@ public class ModelloCli {
             System.exit(1);
         }
 
-        parameters.setProperty(ModelloParameterConstants.PACKAGE_WITH_VERSION, packageWithVersion);
+        parameters.put(ModelloParameterConstants.PACKAGE_WITH_VERSION, packageWithVersion);
 
         String javaSource = args[5];
 
@@ -110,10 +111,10 @@ public class ModelloCli {
             System.exit(1);
         }
 
-        parameters.setProperty(ModelloParameterConstants.OUTPUT_JAVA_SOURCE, javaSource);
+        parameters.put(ModelloParameterConstants.OUTPUT_JAVA_SOURCE, javaSource);
 
         if (args.length > 6) {
-            parameters.setProperty(ModelloParameterConstants.ENCODING, args[6]);
+            parameters.put(ModelloParameterConstants.ENCODING, args[6]);
         }
     }
 
