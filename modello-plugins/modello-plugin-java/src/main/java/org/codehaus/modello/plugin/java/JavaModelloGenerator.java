@@ -31,8 +31,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-import java.util.Properties;
 import java.util.Set;
 
 import org.codehaus.modello.ModelloException;
@@ -90,7 +90,7 @@ public class JavaModelloGenerator extends AbstractJavaModelloGenerator {
         "String"
     }));
 
-    public void generate(Model model, Properties parameters) throws ModelloException {
+    public void generate(Model model, Map<String, Object> parameters) throws ModelloException {
         initialize(model, parameters);
 
         try {

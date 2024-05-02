@@ -24,7 +24,7 @@ package org.codehaus.modello.plugin.xsd;
 
 import javax.xml.parsers.SAXParser;
 
-import java.util.Properties;
+import java.util.Map;
 
 import org.codehaus.modello.AbstractModelloGeneratorTest;
 import org.codehaus.modello.core.ModelloCore;
@@ -47,7 +47,7 @@ public class ModelloXsdGeneratorTest extends AbstractModelloGeneratorTest {
     public void testXsdGenerator() throws Throwable {
         ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
 
-        Properties parameters = getModelloParameters("1.4.0");
+        Map<String, Object> parameters = getModelloParameters("1.4.0");
 
         Model model = modello.loadModel(getTestFile("../../src/main/mdo/modello.mdo"));
 

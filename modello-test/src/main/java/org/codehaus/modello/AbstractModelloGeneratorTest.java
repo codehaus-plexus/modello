@@ -29,8 +29,9 @@ import javax.xml.parsers.SAXParserFactory;
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
-import java.util.Properties;
 
 import org.codehaus.plexus.ContainerConfiguration;
 import org.codehaus.plexus.PlexusConstants;
@@ -67,25 +68,25 @@ public abstract class AbstractModelloGeneratorTest extends PlexusTestCase {
         return name;
     }
 
-    protected Properties getModelloParameters() {
-        Properties parameters = new Properties();
+    protected Map<String, Object> getModelloParameters() {
+        Map<String, Object> parameters = new HashMap<>();
 
-        parameters.setProperty("modello.output.directory", getOutputDirectory().getAbsolutePath());
+        parameters.put("modello.output.directory", getOutputDirectory().getAbsolutePath());
 
         return parameters;
     }
 
-    protected Properties getModelloParameters(String version) {
+    protected Map<String, Object> getModelloParameters(String version) {
         return getModelloParameters(version, null);
     }
 
-    protected Properties getModelloParameters(String version, Integer javaSource) {
-        Properties parameters = getModelloParameters();
+    protected Map<String, Object> getModelloParameters(String version, Integer javaSource) {
+        Map<String, Object> parameters = getModelloParameters();
 
-        parameters.setProperty("modello.package.with.version", Boolean.toString(false));
-        parameters.setProperty("modello.version", version);
+        parameters.put("modello.package.with.version", Boolean.toString(false));
+        parameters.put("modello.version", version);
         Optional.ofNullable(javaSource)
-                .ifPresent(a -> parameters.setProperty("modello.output.java.source", Integer.toString(a)));
+                .ifPresent(a -> parameters.put("modello.output.java.source", Integer.toString(a)));
 
         return parameters;
     }

@@ -41,7 +41,10 @@ import org.codehaus.plexus.util.xml.XmlWriterUtil;
  */
 public abstract class AbstractXmlGenerator extends AbstractModelloGenerator {
     protected void initHeader(XMLWriter w) {
-        XmlWriterUtil.writeComment(w, getHeader());
+        List<String> header = getHeader();
+        for (String headerLine : header) {
+            XmlWriterUtil.writeComment(w, headerLine);
+        }
     }
 
     /**

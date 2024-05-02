@@ -23,7 +23,7 @@ package org.codehaus.modello.maven;
  */
 
 import java.io.File;
-import java.util.Properties;
+import java.util.Map;
 
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
@@ -63,13 +63,15 @@ public class ModelloXsdMojo extends AbstractModelloGeneratorMojo {
         return "xsd";
     }
 
-    protected void customizeParameters(Properties parameters) {
+    @Override
+    protected void customizeParameters(Map<String, Object> parameters) {
         super.customizeParameters(parameters);
 
         if (xsdFileName != null) {
             parameters.put(ModelloParameterConstants.OUTPUT_XSD_FILE_NAME, xsdFileName);
         }
-        parameters.put(ModelloParameterConstants.XSD_ENFORCE_MANDATORY_ELEMENTS, enforceMandatoryElements);
+        parameters.put(
+                ModelloParameterConstants.XSD_ENFORCE_MANDATORY_ELEMENTS, Boolean.toString(enforceMandatoryElements));
     }
 
     protected boolean producesCompilableResult() {

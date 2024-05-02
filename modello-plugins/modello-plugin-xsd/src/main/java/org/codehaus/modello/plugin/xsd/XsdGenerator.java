@@ -30,6 +30,7 @@ import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
@@ -58,9 +59,10 @@ public class XsdGenerator extends AbstractXmlGenerator {
      */
     private static final String ANY_NAME = "*";
 
-    protected static final String LS = System.getProperty("line.separator");
+    protected static final String LS = System.lineSeparator();
 
-    public void generate(Model model, Properties parameters) throws ModelloException {
+    @Override
+    public void generate(Model model, Map<String, Object> parameters) throws ModelloException {
         initialize(model, parameters);
 
         try {
@@ -70,7 +72,7 @@ public class XsdGenerator extends AbstractXmlGenerator {
         }
     }
 
-    private void generateXsd(Properties parameters) throws IOException, ModelloException {
+    private void generateXsd(Map<String, Object> parameters) throws IOException, ModelloException {
         Model objectModel = getModel();
 
         File directory = getOutputDirectory();
@@ -84,9 +86,9 @@ public class XsdGenerator extends AbstractXmlGenerator {
         }
 
         // we assume parameters not null
-        String xsdFileName = parameters.getProperty(ModelloParameterConstants.OUTPUT_XSD_FILE_NAME);
+        String xsdFileName = (String) parameters.get(ModelloParameterConstants.OUTPUT_XSD_FILE_NAME);
         boolean enforceMandatoryElements =
-                Boolean.parseBoolean(parameters.getProperty(ModelloParameterConstants.XSD_ENFORCE_MANDATORY_ELEMENTS));
+                Boolean.parseBoolean((String) parameters.get(ModelloParameterConstants.XSD_ENFORCE_MANDATORY_ELEMENTS));
 
         File f = new File(directory, objectModel.getId() + "-" + getGeneratedVersion() + ".xsd");
 
@@ -94,9 +96,7 @@ public class XsdGenerator extends AbstractXmlGenerator {
             f = new File(directory, xsdFileName);
         }
 
-        Writer writer = new CachingWriter(f, StandardCharsets.UTF_8);
-
-        try {
+        try (Writer writer = new CachingWriter(f, StandardCharsets.UTF_8)) {
             XMLWriter w = new PrettyPrintXMLWriter(writer);
 
             writer.append("<?xml version=\"1.0\"?>").write(LS);
@@ -134,12 +134,9 @@ public class XsdGenerator extends AbstractXmlGenerator {
             // Element descriptors
             // Traverse from root so "abstract" models aren't included
             int initialCapacity = objectModel.getClasses(getGeneratedVersion()).size();
-            writeComplexTypeDescriptor(
-                    w, objectModel, root, new HashSet<ModelClass>(initialCapacity), enforceMandatoryElements);
+            writeComplexTypeDescriptor(w, objectModel, root, new HashSet<>(initialCapacity), enforceMandatoryElements);
 
             w.endElement();
-        } finally {
-            writer.close();
         }
     }
 
@@ -205,9 +202,9 @@ public class XsdGenerator extends AbstractXmlGenerator {
 
         writeClassDocumentation(w, modelClass);
 
-        Set<ModelClass> toWrite = new HashSet<ModelClass>();
+        Set<ModelClass> toWrite = new HashSet<>();
 
-        if (fields.size() > 0) {
+        if (!fields.isEmpty()) {
             XsdClassMetadata xsdClassMetadata = (XsdClassMetadata) modelClass.getMetadata(XsdClassMetadata.ID);
             boolean compositorAll = XsdClassMetadata.COMPOSITOR_ALL.equals(xsdClassMetadata.getCompositor());
 

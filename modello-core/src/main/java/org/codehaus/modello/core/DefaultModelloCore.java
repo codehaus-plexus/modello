@@ -31,8 +31,8 @@ import java.io.Reader;
 import java.io.Writer;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.ModelloRuntimeException;
@@ -251,11 +251,11 @@ public class DefaultModelloCore extends AbstractModelloCore {
         throw new ModelloRuntimeException("Not implemented.");
     }
 
-    public Model translate(Reader reader, String inputType, Properties parameters) throws ModelloException {
+    public Model translate(Reader reader, String inputType, Map<String, Object> parameters) throws ModelloException {
         throw new ModelloRuntimeException("Not implemented.");
     }
 
-    public void generate(Model model, String outputType, Properties parameters) throws ModelloException {
+    public void generate(Model model, String outputType, Map<String, Object> parameters) throws ModelloException {
         if (model == null) {
             throw new ModelloRuntimeException("Illegal argument: model == null.");
         }
@@ -265,7 +265,7 @@ public class DefaultModelloCore extends AbstractModelloCore {
         }
 
         if (parameters == null) {
-            parameters = new Properties();
+            parameters = new HashMap<>();
         }
 
         ModelloGenerator generator = generatorPluginManager.getGeneratorPlugin(outputType);

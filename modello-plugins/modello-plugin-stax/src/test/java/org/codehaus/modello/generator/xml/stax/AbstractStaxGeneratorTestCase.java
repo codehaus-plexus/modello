@@ -22,7 +22,7 @@ package org.codehaus.modello.generator.xml.stax;
  * SOFTWARE.
  */
 
-import java.util.Properties;
+import java.util.Map;
 
 import org.codehaus.modello.AbstractModelloJavaGeneratorTest;
 import org.codehaus.modello.ModelloParameterConstants;
@@ -48,18 +48,18 @@ public abstract class AbstractStaxGeneratorTestCase extends AbstractModelloJavaG
     }
 
     protected void verifyModel(Model model, String className, String[] versions) throws Exception {
-        Properties parameters = getModelloParameters("4.0.0");
+        Map<String, Object> parameters = getModelloParameters("4.0.0");
 
         modello.generate(model, "java", parameters);
         modello.generate(model, "stax-writer", parameters);
         modello.generate(model, "stax-reader", parameters);
 
         if (versions != null && versions.length > 0) {
-            parameters.setProperty(ModelloParameterConstants.ALL_VERSIONS, StringUtils.join(versions, ","));
+            parameters.put(ModelloParameterConstants.ALL_VERSIONS, StringUtils.join(versions, ","));
 
             for (String version : versions) {
-                parameters.setProperty(ModelloParameterConstants.VERSION, version);
-                parameters.setProperty(ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString(true));
+                parameters.put(ModelloParameterConstants.VERSION, version);
+                parameters.put(ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString(true));
 
                 modello.generate(model, "java", parameters);
                 modello.generate(model, "stax-writer", parameters);

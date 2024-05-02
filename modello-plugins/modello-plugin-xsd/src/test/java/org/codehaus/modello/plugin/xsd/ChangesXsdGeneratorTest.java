@@ -22,7 +22,7 @@ package org.codehaus.modello.plugin.xsd;
  * SOFTWARE.
  */
 
-import java.util.Properties;
+import java.util.Map;
 
 import org.codehaus.modello.AbstractModelloGeneratorTest;
 import org.codehaus.modello.core.ModelloCore;
@@ -42,7 +42,7 @@ public class ChangesXsdGeneratorTest extends AbstractModelloGeneratorTest {
         Model model = modello.loadModel(getXmlResourceReader("/changes.mdo"));
 
         // generate XSD file
-        Properties parameters = getModelloParameters("1.0.0");
+        Map<String, Object> parameters = getModelloParameters("1.0.0");
 
         modello.generate(model, "xsd", parameters);
 

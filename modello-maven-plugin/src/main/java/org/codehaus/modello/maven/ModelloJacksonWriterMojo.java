@@ -22,7 +22,7 @@ package org.codehaus.modello.maven;
  * SOFTWARE.
  */
 
-import java.util.Properties;
+import java.util.Map;
 
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
@@ -41,10 +41,10 @@ public class ModelloJacksonWriterMojo extends AbstractModelloSourceGeneratorMojo
     }
 
     @Override
-    protected void customizeParameters(Properties parameters) {
+    protected void customizeParameters(Map<String, Object> parameters) {
         super.customizeParameters(parameters);
 
-        if ("true".equals(parameters.getProperty(ModelloParameterConstants.DOM_AS_XPP3))
+        if ("true".equals(parameters.get(ModelloParameterConstants.DOM_AS_XPP3))
                 && !getProject().getArtifactMap().containsKey("com.fasterxml.jackson.core:jackson-databind")) {
             getLog().warn("Jackson DOM support requires auxiliary com.fasterxml.jackson.core:jackson-databind module!");
         }
