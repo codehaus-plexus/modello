@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.codehaus.modello</groupId>
     <artifactId>modello</artifactId>
-    <version>2.3.1-SNAPSHOT</version>
+    <version>2.4.1-SNAPSHOT</version>
   </parent>
   <artifactId>modello-plugins</artifactId>
   <packaging>pom</packaging>
