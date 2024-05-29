@@ -23,6 +23,8 @@ package org.codehaus.modello;
  */
 
 import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
 
 import java.io.Reader;
 import java.io.Writer;
@@ -36,6 +38,8 @@ import org.codehaus.modello.model.ModelValidationException;
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  */
+@Singleton
+@Named
 public class Modello {
     private final ModelloCore core;
 
