@@ -22,7 +22,30 @@
     <dependency>
       <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-core</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>org.eclipse.sisu</groupId>
+          <artifactId>org.eclipse.sisu.plexus</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.google.inject</groupId>
+          <artifactId>guice</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-simple</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-utils</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-build-api</artifactId>
+    </dependency>
+
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-plugin-api</artifactId>
@@ -40,10 +63,6 @@
       <artifactId>maven-core</artifactId>
       <version>${mavenVersion}</version>
       <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.codehaus.plexus</groupId>
-      <artifactId>plexus-utils</artifactId>
     </dependency>
     <dependency>
       <groupId>org.apache.maven.plugin-tools</groupId>
@@ -70,6 +89,7 @@
     <dependency>
       <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-plugin-java</artifactId>
+      <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>org.codehaus.modello</groupId>
@@ -114,11 +134,9 @@
     <dependency>
       <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-plugin-velocity</artifactId>
+      <!-- Directly used -->
     </dependency>
-    <dependency>
-      <groupId>org.codehaus.plexus</groupId>
-      <artifactId>plexus-build-api</artifactId>
-    </dependency>
+
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-simple</artifactId>
