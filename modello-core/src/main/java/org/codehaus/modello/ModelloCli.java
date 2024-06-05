@@ -26,7 +26,6 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.codehaus.plexus.DefaultPlexusContainer;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.xml.XmlStreamReader;
 
@@ -41,7 +40,7 @@ public class ModelloCli {
     private static Map<String, Object> parameters;
 
     public static void main(String[] args) throws Exception {
-        Modello modello = new DefaultPlexusContainer().lookup(Modello.class);
+        Modello modello = new Modello();
 
         parseArgumentsFromCommandLine(args);
 
