@@ -196,6 +196,7 @@
     <jdom.version>2.0.2</jdom.version>
     <slf4j.version>1.7.36</slf4j.version>
     <mavenVersion>3.6.3</mavenVersion>
+    <junit4Version>4.13.2</junit4Version>
     <!--
       ! This controls the minimum java version
       ! and also the version which is used
@@ -343,18 +344,15 @@
       <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
-        <version>4.13.2</version>
+        <version>${junit4Version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.codehaus.plexus</groupId>
+        <artifactId>plexus-testing</artifactId>
+        <version>1.4.0</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
-
-  <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
 
   <build>
     <pluginManagement>

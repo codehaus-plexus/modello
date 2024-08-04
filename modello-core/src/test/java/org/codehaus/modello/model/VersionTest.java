@@ -1,5 +1,4 @@
 package org.codehaus.modello.model;
-
 /*
  * Copyright (c) 2004, Jason van Zyl
  *
@@ -21,16 +20,20 @@ package org.codehaus.modello.model;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+import org.junit.jupiter.api.Test;
 
-import junit.framework.TestCase;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  */
-public class VersionTest extends TestCase {
+class VersionTest {
     // TODO: Add testing for multidigit version numbers
     // TODO: Add tests for invalid version strings
-    public void testVersionParsing() {
+    @Test
+    void versionParsing() {
         Version version = new Version("1.2.3");
 
         assertEquals(1, version.getMajor());
@@ -40,7 +43,8 @@ public class VersionTest extends TestCase {
         assertEquals(3, version.getMicro());
     }
 
-    public void testVersionRange() {
+    @Test
+    void versionRange() {
         VersionRange range = new VersionRange("2.0.0+");
 
         assertFalse(new Version("1.0.0").inside(range));
@@ -49,24 +53,25 @@ public class VersionTest extends TestCase {
 
         assertTrue(new Version("3.0.0").inside(range));
 
-        assertTrue(new Version("2.0.0").equals(range.getFromVersion()));
+        assertEquals(new Version("2.0.0"), range.getFromVersion());
 
-        assertTrue(Version.INFINITE.equals(range.getToVersion()));
+        assertEquals(Version.INFINITE, range.getToVersion());
 
         range = new VersionRange("1.0.0");
 
-        assertTrue(new Version("1.0.0").equals(range.getFromVersion()));
+        assertEquals(new Version("1.0.0"), range.getFromVersion());
 
-        assertTrue(new Version("1.0.0").equals(range.getToVersion()));
+        assertEquals(new Version("1.0.0"), range.getToVersion());
 
         range = new VersionRange("1.0.0/3.0.0");
 
-        assertTrue(new Version("1.0.0").equals(range.getFromVersion()));
+        assertEquals(new Version("1.0.0"), range.getFromVersion());
 
-        assertTrue(new Version("3.0.0").equals(range.getToVersion()));
+        assertEquals(new Version("3.0.0"), range.getToVersion());
     }
 
-    public void testGreaterThanWhenFooIsLessThanBar() {
+    @Test
+    void greaterThanWhenFooIsLessThanBar() {
         assertNotGreaterThan("1.0.0", "2.9.9");
         assertNotGreaterThan("1.9.9", "2.0.0");
         assertNotGreaterThan("0.1.0", "0.2.9");
@@ -74,11 +79,13 @@ public class VersionTest extends TestCase {
         assertNotGreaterThan("0.0.1", "0.0.1");
     }
 
-    public void testGreaterThanWhenFooIsEqualBar() {
+    @Test
+    void greaterThanWhenFooIsEqualBar() {
         assertNotGreaterThan("1.2.3", "1.2.3");
     }
 
-    public void testGreaterThanWhenFooIsGreaterThanBar() {
+    @Test
+    void greaterThanWhenFooIsGreaterThanBar() {
         assertGreaterThan("2.0.0", "1.9.9");
         assertGreaterThan("2.9.9", "1.0.0");
         assertGreaterThan("0.2.9", "0.1.0");

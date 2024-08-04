@@ -22,6 +22,8 @@ package org.codehaus.modello.core.io;
  * SOFTWARE.
  */
 
+import javax.inject.Inject;
+
 import java.util.List;
 
 import org.codehaus.modello.core.ModelloCore;
@@ -31,18 +33,24 @@ import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.Version;
 import org.codehaus.modello.model.VersionRange;
-import org.codehaus.plexus.ContainerConfiguration;
-import org.codehaus.plexus.PlexusConstants;
-import org.codehaus.plexus.PlexusTestCase;
+import org.codehaus.plexus.testing.PlexusTest;
+import org.junit.jupiter.api.Test;
+
+import static org.codehaus.plexus.testing.PlexusExtension.getTestFile;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
  */
-public class ModelReaderTest extends PlexusTestCase {
-    public void testBasic() throws Exception {
-        ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
+@PlexusTest
+class ModelReaderTest {
 
+    @Inject
+    ModelloCore modello;
+
+    @Test
+    void basic() throws Exception {
         Model model = modello.loadModel(getTestFile("src/test/resources/models/simple.mdo"));
 
         assertNotNull(model);
@@ -73,14 +81,13 @@ public class ModelReaderTest extends PlexusTestCase {
         assertGirl(model.getClass("Girl", new VersionRange("1.0.0")));
     }
 
-    public void testAssociationDefaultValues() throws Exception {
-        ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
-
+    @Test
+    void associationDefaultValues() throws Exception {
         Model model = modello.loadModel(getTestFile("src/test/resources/models/association.mdo"));
 
         ModelField field = model.getClass("Foo", new VersionRange("1.0.0")).getField("bars", new VersionRange("1.0.0"));
 
-        assertTrue(field instanceof ModelAssociation);
+        assertInstanceOf(ModelAssociation.class, field);
 
         ModelAssociation association = (ModelAssociation) field;
 
@@ -102,7 +109,7 @@ public class ModelReaderTest extends PlexusTestCase {
     }
 
     private void assertBoy(Object boyObject) {
-        assertTrue(boyObject instanceof ModelClass);
+        assertInstanceOf(ModelClass.class, boyObject);
 
         ModelClass boy = (ModelClass) boyObject;
 
@@ -122,7 +129,7 @@ public class ModelReaderTest extends PlexusTestCase {
     }
 
     private void assertBoyName(Object nameObject) {
-        assertTrue(nameObject instanceof ModelField);
+        assertInstanceOf(ModelField.class, nameObject);
 
         ModelField name = (ModelField) nameObject;
 
@@ -136,7 +143,7 @@ public class ModelReaderTest extends PlexusTestCase {
     }
 
     private void assertGirl(Object girlObject) {
-        assertTrue(girlObject instanceof ModelClass);
+        assertInstanceOf(ModelClass.class, girlObject);
 
         ModelClass girl = (ModelClass) girlObject;
 
@@ -156,7 +163,7 @@ public class ModelReaderTest extends PlexusTestCase {
     }
 
     private void assertGirlAge(Object ageObject) {
-        assertTrue(ageObject instanceof ModelField);
+        assertInstanceOf(ModelField.class, ageObject);
 
         ModelField age = (ModelField) ageObject;
 
@@ -165,11 +172,5 @@ public class ModelReaderTest extends PlexusTestCase {
         assertEquals("1.0.0+", age.getVersionRange().toString());
 
         assertEquals("int", age.getType());
-    }
-
-    @Override
-    protected void customizeContainerConfiguration(ContainerConfiguration configuration) {
-        configuration.setAutoWiring(true);
-        configuration.setClassPathScanning(PlexusConstants.SCANNING_INDEX);
     }
 }

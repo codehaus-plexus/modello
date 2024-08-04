@@ -22,18 +22,27 @@ package org.codehaus.modello.core;
  * SOFTWARE.
  */
 
+import javax.inject.Inject;
+
 import org.codehaus.modello.ModelloRuntimeException;
-import org.codehaus.plexus.ContainerConfiguration;
-import org.codehaus.plexus.PlexusConstants;
-import org.codehaus.plexus.PlexusTestCase;
+import org.codehaus.plexus.testing.PlexusTest;
+import org.junit.jupiter.api.Test;
+
+import static org.codehaus.plexus.testing.PlexusExtension.getTestFile;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  */
-public class DefaultModelloCoreTest extends PlexusTestCase {
-    public void testModelWithDuplicateClasses() throws Exception {
-        ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
+@PlexusTest
+class DefaultModelloCoreTest {
 
+    @Inject
+    ModelloCore modello;
+
+    @Test
+    void modelWithDuplicateClasses() throws Exception {
         try {
             modello.loadModel(getTestFile("src/test/resources/models/duplicate-classes.mdo"));
 
@@ -43,9 +52,8 @@ public class DefaultModelloCoreTest extends PlexusTestCase {
         }
     }
 
-    public void testModelWithDuplicateFields() throws Exception {
-        ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
-
+    @Test
+    void modelWithDuplicateFields() throws Exception {
         try {
             modello.loadModel(getTestFile("src/test/resources/models/duplicate-fields.mdo"));
 
@@ -55,9 +63,8 @@ public class DefaultModelloCoreTest extends PlexusTestCase {
         }
     }
 
-    public void testModelWithDuplicateAssociations() throws Exception {
-        ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
-
+    @Test
+    void modelWithDuplicateAssociations() throws Exception {
         try {
             modello.loadModel(getTestFile("src/test/resources/models/duplicate-associations.mdo"));
 
@@ -67,15 +74,8 @@ public class DefaultModelloCoreTest extends PlexusTestCase {
         }
     }
 
-    public void testRecursion() throws Exception {
-        ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
-
+    @Test
+    void recursion() throws Exception {
         modello.loadModel(getTestFile("src/test/resources/models/recursion.mdo"));
-    }
-
-    @Override
-    protected void customizeContainerConfiguration(ContainerConfiguration configuration) {
-        configuration.setAutoWiring(true);
-        configuration.setClassPathScanning(PlexusConstants.SCANNING_INDEX);
     }
 }
