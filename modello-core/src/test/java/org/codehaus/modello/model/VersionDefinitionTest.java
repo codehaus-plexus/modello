@@ -1,24 +1,30 @@
 package org.codehaus.modello.model;
 
-import junit.framework.TestCase;
+import org.junit.jupiter.api.Test;
 
-public class VersionDefinitionTest extends TestCase {
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-    public void testFieldType() {
+class VersionDefinitionTest {
+
+    @Test
+    void fieldType() {
         VersionDefinition def = new VersionDefinition();
         def.setType("field");
         assertTrue(def.isFieldType());
         assertFalse(def.isNamespaceType());
     }
 
-    public void testNamespaceType() {
+    @Test
+    void namespaceType() {
         VersionDefinition def = new VersionDefinition();
         def.setType("namespace");
         assertTrue(def.isNamespaceType());
         assertFalse(def.isFieldType());
     }
 
-    public void testFieldAndNamespaceType() {
+    @Test
+    void fieldAndNamespaceType() {
         VersionDefinition def = new VersionDefinition();
         def.setType("field+namespace");
         assertTrue(def.isFieldType());

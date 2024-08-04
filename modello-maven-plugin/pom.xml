@@ -143,6 +143,11 @@
       <artifactId>slf4j-simple</artifactId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
   <reporting>
@@ -162,7 +167,6 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-invoker-plugin</artifactId>
-            <version>3.9.0</version>
             <configuration>
               <projectsDirectory>src/it</projectsDirectory>
               <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
@@ -175,7 +179,7 @@
               <debug>true</debug>
               <filterProperties>
                 <plexusUtilsVersion>3.0.22</plexusUtilsVersion>
-                <junitVersion>4.13.2</junitVersion>
+                <junit4Version>${junit4Version}</junit4Version>
                 <java.version>${java.version}</java.version>
                 <jdom.version>${jdom.version}</jdom.version>
               </filterProperties>
