@@ -4,6 +4,7 @@ Modello
 [![Maven Central](https://img.shields.io/maven-central/v/org.codehaus.modello/modello.svg?label=Maven%20Central)](https://search.maven.org/artifact/org.codehaus.modello/modello)
 [![MIT License](https://img.shields.io/github/license/codehaus-plexus/modello.svg?label=License)](http://www.apache.org/licenses/)
 ![Build Status](https://github.com/codehaus-plexus/modello/workflows/GitHub%20CI/badge.svg)
+[![Reproducible Builds](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/jvm-repo-rebuild/reproducible-central/master/content/org/codehaus/modello/badge.json)](https://github.com/jvm-repo-rebuild/reproducible-central/blob/master/content/org/codehaus/modello/README.md)
 
 Modello is a framework for code generation from a simple model.
 
