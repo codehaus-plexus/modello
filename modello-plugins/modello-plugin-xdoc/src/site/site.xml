@@ -1,11 +1,7 @@
 <?xml version="1.0"?>
 
-<project xmlns="http://maven.apache.org/DECORATION/1.8.1"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/DECORATION/1.8.1 https://maven.apache.org/xsd/decoration-1.8.1.xsd">
-  <bannerLeft>
-    <name>Modello</name>
-  </bannerLeft>
+<site xmlns="http://maven.apache.org/SITE/2.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://maven.apache.org/SITE/2.0.0 https://maven.apache.org/xsd/site-2.0.0.xsd">
 
   <body>
     <menu name="Overview">
@@ -22,4 +18,4 @@
     <menu ref="reports"/>
   </body>
 
-</project>
+</site>
