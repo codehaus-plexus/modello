@@ -31,11 +31,11 @@
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <em class="jxr_comment"> */</em>
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> javax.inject.Named;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> javax.inject.Singleton;
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> java.io.File;
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> java.io.IOException;
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> java.io.Writer;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> java.io.File;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> java.io.IOException;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> java.io.Writer;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> java.nio.charset.StandardCharsets;
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> java.util.*;
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> java.util.stream.Collectors;
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  
@@ -64,9 +64,9 @@
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  <strong class="jxr_keyword">import</strong> org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  <strong class="jxr_keyword">import</strong> org.codehaus.modello.plugins.xml.metadata.XmlModelMetadata;
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  <strong class="jxr_keyword">import</strong> org.codehaus.plexus.util.StringUtils;
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  <strong class="jxr_keyword">import</strong> org.codehaus.plexus.util.xml.PrettyPrintXMLWriter;
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <strong class="jxr_keyword">import</strong> org.codehaus.plexus.util.xml.XMLWriter;
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  <strong class="jxr_keyword">import</strong> org.codehaus.plexus.util.xml.XmlStreamWriter;
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  <strong class="jxr_keyword">import</strong> org.codehaus.plexus.util.io.CachingWriter;
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <strong class="jxr_keyword">import</strong> org.codehaus.plexus.util.xml.PrettyPrintXMLWriter;
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  <strong class="jxr_keyword">import</strong> org.codehaus.plexus.util.xml.XMLWriter;
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  <strong class="jxr_keyword">import</strong> org.jsoup.Jsoup;
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  <strong class="jxr_keyword">import</strong> org.jsoup.nodes.Document;
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  
@@ -75,23 +75,23 @@
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment"> * @author &lt;a href="<a href="mailto:emmanuel@venisse.net" target="alexandria_uri">mailto:emmanuel@venisse.net</a>"&gt;Emmanuel Venisse&lt;/a&gt;</em>
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  @Named(<span class="jxr_string">"xdoc"</span>)
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  @Singleton
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="XdocGenerator" href="../../../../../org/codehaus/modello/plugin/xdoc/XdocGenerator.html#XdocGenerator">XdocGenerator</a> <strong class="jxr_keyword">extends</strong> AbstractXmlGenerator {
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> VersionRange DEFAULT_VERSION_RANGE = <strong class="jxr_keyword">new</strong> VersionRange(<span class="jxr_string">"0.0.0+"</span>);
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>      <strong class="jxr_keyword">private</strong> Version firstVersion = DEFAULT_VERSION_RANGE.getFromVersion();
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>      <strong class="jxr_keyword">private</strong> Version version = DEFAULT_VERSION_RANGE.getFromVersion();
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> generate(Model model, Properties parameters) <strong class="jxr_keyword">throws</strong> ModelloException {
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="XdocGenerator" href="../../../../../org/codehaus/modello/plugin/xdoc/XdocGenerator.html#XdocGenerator">XdocGenerator</a> <strong class="jxr_keyword">extends</strong> AbstractXmlGenerator {
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> VersionRange DEFAULT_VERSION_RANGE = <strong class="jxr_keyword">new</strong> VersionRange(<span class="jxr_string">"0.0.0+"</span>);
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>      <strong class="jxr_keyword">private</strong> Version firstVersion = DEFAULT_VERSION_RANGE.getFromVersion();
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>      <strong class="jxr_keyword">private</strong> Version version = DEFAULT_VERSION_RANGE.getFromVersion();
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>      @Override
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> generate(Model model, Map&lt;String, Object&gt; parameters) <strong class="jxr_keyword">throws</strong> ModelloException {
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>          initialize(model, parameters);
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>          <strong class="jxr_keyword">if</strong> (parameters.getProperty(ModelloParameterConstants.FIRST_VERSION) != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>              firstVersion = <strong class="jxr_keyword">new</strong> Version(parameters.getProperty(ModelloParameterConstants.FIRST_VERSION));
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>          <strong class="jxr_keyword">if</strong> (parameters.get(ModelloParameterConstants.FIRST_VERSION) != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>              firstVersion = <strong class="jxr_keyword">new</strong> Version((String) parameters.get(ModelloParameterConstants.FIRST_VERSION));
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>          }
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>          <strong class="jxr_keyword">if</strong> (parameters.getProperty(ModelloParameterConstants.VERSION) != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>              version = <strong class="jxr_keyword">new</strong> Version(parameters.getProperty(ModelloParameterConstants.VERSION));
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>          <strong class="jxr_keyword">if</strong> (parameters.get(ModelloParameterConstants.VERSION) != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>              version = <strong class="jxr_keyword">new</strong> Version((String) parameters.get(ModelloParameterConstants.VERSION));
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>          }
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>          <strong class="jxr_keyword">try</strong> {
@@ -101,7 +101,7 @@
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>          }
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>      }
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> generateXdoc(Properties parameters) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> generateXdoc(Map&lt;String, Object&gt; parameters) <strong class="jxr_keyword">throws</strong> IOException {
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>          Model objectModel = getModel();
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>  
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>          File directory = getOutputDirectory();
@@ -115,7 +115,7 @@
 <a class="jxr_linenumber" name="L107" href="#L107">107</a>         }
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 
 <a class="jxr_linenumber" name="L109" href="#L109">109</a>         <em class="jxr_comment">// we assume parameters not null</em>
-<a class="jxr_linenumber" name="L110" href="#L110">110</a>         String xdocFileName = parameters.getProperty(ModelloParameterConstants.OUTPUT_XDOC_FILE_NAME);
+<a class="jxr_linenumber" name="L110" href="#L110">110</a>         String xdocFileName = (String) parameters.get(ModelloParameterConstants.OUTPUT_XDOC_FILE_NAME);
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 
 <a class="jxr_linenumber" name="L112" href="#L112">112</a>         File f = <strong class="jxr_keyword">new</strong> File(directory, objectModel.getId() + <span class="jxr_string">".xml"</span>);
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> 
@@ -123,7 +123,7 @@
 <a class="jxr_linenumber" name="L115" href="#L115">115</a>             f = <strong class="jxr_keyword">new</strong> File(directory, xdocFileName);
 <a class="jxr_linenumber" name="L116" href="#L116">116</a>         }
 <a class="jxr_linenumber" name="L117" href="#L117">117</a> 
-<a class="jxr_linenumber" name="L118" href="#L118">118</a>         Writer writer = <strong class="jxr_keyword">new</strong> XmlStreamWriter(f);
+<a class="jxr_linenumber" name="L118" href="#L118">118</a>         Writer writer = <strong class="jxr_keyword">new</strong> CachingWriter(f, StandardCharsets.UTF_8);
 <a class="jxr_linenumber" name="L119" href="#L119">119</a> 
 <a class="jxr_linenumber" name="L120" href="#L120">120</a>         XMLWriter w = <strong class="jxr_keyword">new</strong> PrettyPrintXMLWriter(writer);
 <a class="jxr_linenumber" name="L121" href="#L121">121</a> 
@@ -450,7 +450,7 @@
 <a class="jxr_linenumber" name="L442" href="#L442">442</a> <em class="jxr_javadoccomment">     * @return the String representing the tree model</em>
 <a class="jxr_linenumber" name="L443" href="#L443">443</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L444" href="#L444">444</a>     <strong class="jxr_keyword">private</strong> String getModelXmlDescriptor(ModelClass rootModelClass) {
-<a class="jxr_linenumber" name="L445" href="#L445">445</a>         <strong class="jxr_keyword">return</strong> getElementXmlDescriptor(rootModelClass, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">new</strong> Stack&lt;String&gt;());
+<a class="jxr_linenumber" name="L445" href="#L445">445</a>         <strong class="jxr_keyword">return</strong> getElementXmlDescriptor(rootModelClass, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">new</strong> Stack&lt;&gt;());
 <a class="jxr_linenumber" name="L446" href="#L446">446</a>     }
 <a class="jxr_linenumber" name="L447" href="#L447">447</a> 
 <a class="jxr_linenumber" name="L448" href="#L448">448</a>     <em class="jxr_javadoccomment">/**</em>
@@ -475,7 +475,7 @@
 <a class="jxr_linenumber" name="L467" href="#L467">467</a>         sb.append(tagName).append(<span class="jxr_string">"&lt;/a&gt;"</span>);
 <a class="jxr_linenumber" name="L468" href="#L468">468</a> 
 <a class="jxr_linenumber" name="L469" href="#L469">469</a>         <strong class="jxr_keyword">boolean</strong> addNewline = false;
-<a class="jxr_linenumber" name="L470" href="#L470">470</a>         <strong class="jxr_keyword">if</strong> (stack.size() == 0) {
+<a class="jxr_linenumber" name="L470" href="#L470">470</a>         <strong class="jxr_keyword">if</strong> (stack.isEmpty()) {
 <a class="jxr_linenumber" name="L471" href="#L471">471</a>             <em class="jxr_comment">// try to add XML Schema reference</em>
 <a class="jxr_linenumber" name="L472" href="#L472">472</a>             <strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L473" href="#L473">473</a>                 String targetNamespace =
@@ -510,7 +510,7 @@
 <a class="jxr_linenumber" name="L502" href="#L502">502</a> 
 <a class="jxr_linenumber" name="L503" href="#L503">503</a>         List&lt;ModelField&gt; attributeFields = getXmlAttributeFields(fields);
 <a class="jxr_linenumber" name="L504" href="#L504">504</a> 
-<a class="jxr_linenumber" name="L505" href="#L505">505</a>         <strong class="jxr_keyword">if</strong> (attributeFields.size() &gt; 0) {
+<a class="jxr_linenumber" name="L505" href="#L505">505</a>         <strong class="jxr_keyword">if</strong> (!attributeFields.isEmpty()) {
 <a class="jxr_linenumber" name="L506" href="#L506">506</a> 
 <a class="jxr_linenumber" name="L507" href="#L507">507</a>             <strong class="jxr_keyword">for</strong> (ModelField f : attributeFields) {
 <a class="jxr_linenumber" name="L508" href="#L508">508</a>                 XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) f.getMetadata(XmlFieldMetadata.ID);
@@ -531,7 +531,7 @@
 <a class="jxr_linenumber" name="L523" href="#L523">523</a> 
 <a class="jxr_linenumber" name="L524" href="#L524">524</a>         fields.removeAll(attributeFields);
 <a class="jxr_linenumber" name="L525" href="#L525">525</a> 
-<a class="jxr_linenumber" name="L526" href="#L526">526</a>         <strong class="jxr_keyword">if</strong> ((fields.size() == 0) || ((fields.size() == 1) &amp;&amp; hasContentField(fields))) {
+<a class="jxr_linenumber" name="L526" href="#L526">526</a>         <strong class="jxr_keyword">if</strong> ((fields.isEmpty()) || ((fields.size() == 1) &amp;&amp; hasContentField(fields))) {
 <a class="jxr_linenumber" name="L527" href="#L527">527</a>             sb.append(<span class="jxr_string">"/&amp;gt;\n"</span>);
 <a class="jxr_linenumber" name="L528" href="#L528">528</a>         } <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L529" href="#L529">529</a>             sb.append(<span class="jxr_string">"&amp;gt;\n"</span>);

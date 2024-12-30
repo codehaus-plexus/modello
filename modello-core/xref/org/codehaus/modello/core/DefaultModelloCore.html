@@ -39,8 +39,8 @@
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> java.io.Writer;
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> java.util.Collection;
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> java.util.Collections;
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> java.util.Map;
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> java.util.Properties;
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> java.util.HashMap;
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> java.util.Map;
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">import</strong> org.codehaus.modello.ModelloException;
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  <strong class="jxr_keyword">import</strong> org.codehaus.modello.ModelloRuntimeException;
@@ -259,11 +259,11 @@
 <a class="jxr_linenumber" name="L251" href="#L251">251</a>         <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ModelloRuntimeException" href="../../../../org/codehaus/modello/ModelloRuntimeException.html#ModelloRuntimeException">ModelloRuntimeException</a>(<span class="jxr_string">"Not implemented."</span>);
 <a class="jxr_linenumber" name="L252" href="#L252">252</a>     }
 <a class="jxr_linenumber" name="L253" href="#L253">253</a> 
-<a class="jxr_linenumber" name="L254" href="#L254">254</a>     <strong class="jxr_keyword">public</strong> <a name="Model" href="../../../../org/codehaus/modello/model/Model.html#Model">Model</a> translate(Reader reader, String inputType, Properties parameters) <strong class="jxr_keyword">throws</strong> <a name="ModelloException" href="../../../../org/codehaus/modello/ModelloException.html#ModelloException">ModelloException</a> {
+<a class="jxr_linenumber" name="L254" href="#L254">254</a>     <strong class="jxr_keyword">public</strong> <a name="Model" href="../../../../org/codehaus/modello/model/Model.html#Model">Model</a> translate(Reader reader, String inputType, Map&lt;String, Object&gt; parameters) <strong class="jxr_keyword">throws</strong> <a name="ModelloException" href="../../../../org/codehaus/modello/ModelloException.html#ModelloException">ModelloException</a> {
 <a class="jxr_linenumber" name="L255" href="#L255">255</a>         <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ModelloRuntimeException" href="../../../../org/codehaus/modello/ModelloRuntimeException.html#ModelloRuntimeException">ModelloRuntimeException</a>(<span class="jxr_string">"Not implemented."</span>);
 <a class="jxr_linenumber" name="L256" href="#L256">256</a>     }
 <a class="jxr_linenumber" name="L257" href="#L257">257</a> 
-<a class="jxr_linenumber" name="L258" href="#L258">258</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> generate(<a name="Model" href="../../../../org/codehaus/modello/model/Model.html#Model">Model</a> model, String outputType, Properties parameters) <strong class="jxr_keyword">throws</strong> <a name="ModelloException" href="../../../../org/codehaus/modello/ModelloException.html#ModelloException">ModelloException</a> {
+<a class="jxr_linenumber" name="L258" href="#L258">258</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> generate(<a name="Model" href="../../../../org/codehaus/modello/model/Model.html#Model">Model</a> model, String outputType, Map&lt;String, Object&gt; parameters) <strong class="jxr_keyword">throws</strong> <a name="ModelloException" href="../../../../org/codehaus/modello/ModelloException.html#ModelloException">ModelloException</a> {
 <a class="jxr_linenumber" name="L259" href="#L259">259</a>         <strong class="jxr_keyword">if</strong> (model == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L260" href="#L260">260</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ModelloRuntimeException" href="../../../../org/codehaus/modello/ModelloRuntimeException.html#ModelloRuntimeException">ModelloRuntimeException</a>(<span class="jxr_string">"Illegal argument: model == null."</span>);
 <a class="jxr_linenumber" name="L261" href="#L261">261</a>         }
@@ -273,7 +273,7 @@
 <a class="jxr_linenumber" name="L265" href="#L265">265</a>         }
 <a class="jxr_linenumber" name="L266" href="#L266">266</a> 
 <a class="jxr_linenumber" name="L267" href="#L267">267</a>         <strong class="jxr_keyword">if</strong> (parameters == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L268" href="#L268">268</a>             parameters = <strong class="jxr_keyword">new</strong> Properties();
+<a class="jxr_linenumber" name="L268" href="#L268">268</a>             parameters = <strong class="jxr_keyword">new</strong> HashMap&lt;&gt;();
 <a class="jxr_linenumber" name="L269" href="#L269">269</a>         }
 <a class="jxr_linenumber" name="L270" href="#L270">270</a> 
 <a class="jxr_linenumber" name="L271" href="#L271">271</a>         <a name="ModelloGenerator" href="../../../../org/codehaus/modello/plugin/ModelloGenerator.html#ModelloGenerator">ModelloGenerator</a> generator = generatorPluginManager.getGeneratorPlugin(outputType);

@@ -30,7 +30,7 @@
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <em class="jxr_comment"> * SOFTWARE.</em>
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <em class="jxr_comment"> */</em>
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.util.Properties;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.util.Map;
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.codehaus.modello.ModelloException;
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.codehaus.modello.model.Model;
@@ -39,7 +39,7 @@
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * @author &lt;a href="<a href="mailto:trygvis@inamo.no" target="alexandria_uri">mailto:trygvis@inamo.no</a>"&gt;Trygve Laugst&amp;oslash;l&lt;/a&gt;</em>
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">interface</strong> <a name="ModelloGenerator" href="../../../../org/codehaus/modello/plugin/ModelloGenerator.html#ModelloGenerator">ModelloGenerator</a> {
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>      <strong class="jxr_keyword">void</strong> generate(<a name="Model" href="../../../../org/codehaus/modello/model/Model.html#Model">Model</a> model, Properties parameters) <strong class="jxr_keyword">throws</strong> ModelloException;
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>      <strong class="jxr_keyword">void</strong> generate(<a name="Model" href="../../../../org/codehaus/modello/model/Model.html#Model">Model</a> model, Map&lt;String, Object&gt; parameters) <strong class="jxr_keyword">throws</strong> ModelloException;
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  }
 </pre>
 <hr/>

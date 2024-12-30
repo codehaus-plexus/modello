@@ -34,7 +34,7 @@
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> java.io.IOException;
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> java.io.Reader;
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> java.io.Writer;
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> java.util.Properties;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> java.util.Map;
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.codehaus.modello.ModelloException;
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.codehaus.modello.model.Model;
@@ -54,10 +54,10 @@
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>      <strong class="jxr_keyword">void</strong> saveModel(<a name="Model" href="../../../../org/codehaus/modello/model/Model.html#Model">Model</a> model, Writer writer) <strong class="jxr_keyword">throws</strong> ModelloException;
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>      <a name="Model" href="../../../../org/codehaus/modello/model/Model.html#Model">Model</a> translate(Reader reader, String inputType, Properties parameters)
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>      <a name="Model" href="../../../../org/codehaus/modello/model/Model.html#Model">Model</a> translate(Reader reader, String inputType, Map&lt;String, Object&gt; parameters)
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>              <strong class="jxr_keyword">throws</strong> ModelloException, ModelValidationException;
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>      <strong class="jxr_keyword">void</strong> generate(<a name="Model" href="../../../../org/codehaus/modello/model/Model.html#Model">Model</a> model, String outputType, Properties parameters) <strong class="jxr_keyword">throws</strong> ModelloException;
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>      <strong class="jxr_keyword">void</strong> generate(<a name="Model" href="../../../../org/codehaus/modello/model/Model.html#Model">Model</a> model, String outputType, Map&lt;String, Object&gt; parameters) <strong class="jxr_keyword">throws</strong> ModelloException;
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  }
 </pre>
 <hr/>

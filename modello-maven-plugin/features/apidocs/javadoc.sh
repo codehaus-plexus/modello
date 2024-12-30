@@ -1,1 +1,1 @@
-/home/cstamas/.sdkman/candidates/java/current/bin/javadoc @options @packages
+/Users/slawomir.jaranowski/.sdkman/candidates/java/21/bin/javadoc @options @packages

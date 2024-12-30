@@ -30,7 +30,7 @@
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <em class="jxr_comment"> * SOFTWARE.</em>
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <em class="jxr_comment"> */</em>
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.util.Properties;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.util.Map;
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.codehaus.modello.AbstractModelloJavaGeneratorTest;
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.codehaus.modello.core.ModelloCore;
@@ -46,31 +46,16 @@
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>          Model model = modello.loadModel(getXmlResourceReader(<span class="jxr_string">"/standaloneRead.mdo"</span>));
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>          Properties parameters = getModelloParameters(<span class="jxr_string">"1.0.0"</span>);
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>          Map&lt;String, Object&gt; parameters = getModelloParameters(<span class="jxr_string">"1.0.0"</span>);
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>          modello.generate(model, <span class="jxr_string">"java"</span>, parameters);
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>          modello.generate(model, <span class="jxr_string">"xpp3-reader"</span>, parameters);
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>          compileGeneratedSources(5); <em class="jxr_comment">// enhanced for loops in Xpp3StandaloneReadVerifier</em>
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>          compileGeneratedSources(8); <em class="jxr_comment">// enhanced for loops in Xpp3StandaloneReadVerifier</em>
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>          verifyCompiledGeneratedSources(<span class="jxr_string">"org.codehaus.modello.generator.xml.xpp3.Xpp3StandaloneReadVerifier"</span>);
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>      }
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testStandaloneReadJava5() <strong class="jxr_keyword">throws</strong> Throwable {
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>          ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>  
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>          Model model = modello.loadModel(getXmlResourceReader(<span class="jxr_string">"/standaloneRead.mdo"</span>));
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>          Properties parameters = getModelloParameters(<span class="jxr_string">"1.0.0"</span>, 5);
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>          modello.generate(model, <span class="jxr_string">"java"</span>, parameters);
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>          modello.generate(model, <span class="jxr_string">"xpp3-reader"</span>, parameters);
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>          compileGeneratedSources(5);
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>          verifyCompiledGeneratedSources(<span class="jxr_string">"org.codehaus.modello.generator.xml.xpp3.Xpp3StandaloneReadVerifier"</span>);
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>      }
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  }
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2001&#x2013;2024 <a href="https://codehaus-plexus.github.io/">Codehaus Plexus</a>. All rights reserved.</div>
