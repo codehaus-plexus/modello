@@ -422,6 +422,10 @@ public class XsdGenerator extends AbstractXmlGenerator {
 
         w.endElement();
 
+        w.startElement("xs:anyAttribute");
+        w.addAttribute("processContents", "skip");
+        w.endElement();
+
         w.endElement();
     }
 
