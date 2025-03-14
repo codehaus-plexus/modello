@@ -14,3 +14,4 @@ Migration from 1.11 to 2.0
 * Field attribute `xml.listStyle` has been moved to  `xml.itemsStyle` in association
 * Field type `Content` has been replaced with field attribute `xml.content="true"` + type `String`
 * Model attribute `xsd.target-namespace` has been renamed to `xsd.targetNamespace`
+
