@@ -32,6 +32,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -56,6 +57,14 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class AbstractModelloGenerator implements ModelloGenerator {
     private final Logger logger = LoggerFactory.getLogger(getClass());
+
+    private static final Map<String, String> PLURAL_EXCEPTION = new HashMap<>();
+
+    static {
+        PLURAL_EXCEPTION.put("children", "child");
+        PLURAL_EXCEPTION.put("licenses", "license");
+        PLURAL_EXCEPTION.put("series", "series");
+    }
 
     private Model model;
 
@@ -150,6 +159,7 @@ public abstract class AbstractModelloGenerator implements ModelloGenerator {
 
     /**
      * Return the child fields of this class.
+     *
      * @param modelClass current class
      * @return the list of fields of this class
      */
@@ -198,11 +208,14 @@ public abstract class AbstractModelloGenerator implements ModelloGenerator {
             return name;
         }
 
-        if (name.endsWith("ies")) {
+        if (PLURAL_EXCEPTION.containsKey(name)) {
+            return PLURAL_EXCEPTION.get(name);
+        } else if (name.endsWith("ies")) {
             return name.substring(0, name.length() - 3) + "y";
-        } else if (name.endsWith("es") && name.endsWith("ches")) {
-            return name.substring(0, name.length() - 2);
-        } else if (name.endsWith("xes")) {
+        } else if (name.endsWith("zzes")) {
+            return name.substring(0, name.length() - 3);
+        } else if (name.endsWith("ches") || name.endsWith("xes") || name.endsWith("ses") || name.endsWith("oes")
+                || name.endsWith("shes")) {
             return name.substring(0, name.length() - 2);
         } else if (name.endsWith("s") && (name.length() != 1)) {
             return name.substring(0, name.length() - 1);
