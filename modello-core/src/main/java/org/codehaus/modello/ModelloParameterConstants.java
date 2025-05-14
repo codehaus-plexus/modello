@@ -87,5 +87,11 @@ public class ModelloParameterConstants {
      */
     public static final String LICENSE_TEXT = "modello.license.text";
 
+    /**
+     * Additional plural to singular exceptions
+     * @since 2.5.0
+     */
+    public static final String PLURAL_EXCEPTIONS = "modello.plural.exceptions";
+
     private ModelloParameterConstants() {}
 }
