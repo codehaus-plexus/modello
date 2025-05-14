@@ -104,7 +104,7 @@ under the License.
           </association>
         </field>
         <field>
-          <name>someStringList</name>
+          <name>someStringLists</name>
           <version>1.0.0</version>
           <type>List</type>
           <association>
@@ -113,7 +113,7 @@ under the License.
           </association>
         </field>
         <field>
-          <name>someStringSet</name>
+          <name>someStringSets</name>
           <version>1.0.0</version>
           <type>Set</type>
           <association>

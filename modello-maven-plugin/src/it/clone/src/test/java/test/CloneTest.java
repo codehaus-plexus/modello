@@ -37,7 +37,7 @@ public class CloneTest
         orig.setSomeDate( new Date() );
         orig.setSomeDom( new Xpp3Dom( "test" ) );
         orig.addSomeStringList( "string" );
-        orig.addSomeStringSet( "string" );
+        orig.addOwnSingularStringSet( "string" );
         orig.setDeepThingy( new Thingy() );
         orig.addDeepThingyList( new Thingy() );
         orig.addDeepThingySet( new Thingy() );
@@ -67,10 +67,10 @@ public class CloneTest
         assertEquals( orig.getSomeDom(), copy.getSomeDom() );
         assertNotSame( orig.getSomeDom(), copy.getSomeDom() );
 
-        assertEquals( orig.getSomeStringList(), copy.getSomeStringList() );
-        assertNotSame( orig.getSomeStringList(), copy.getSomeStringList() );
-        assertEquals( orig.getSomeStringSet(), copy.getSomeStringSet() );
-        assertNotSame( orig.getSomeStringSet(), copy.getSomeStringSet() );
+        assertEquals( orig.getSomeStringLists(), copy.getSomeStringLists() );
+        assertNotSame( orig.getSomeStringLists(), copy.getSomeStringLists() );
+        assertEquals( orig.getSomeStringSets(), copy.getSomeStringSets() );
+        assertNotSame( orig.getSomeStringSets(), copy.getSomeStringSets() );
 
         assertNotSame( orig.getDeepThingy(), copy.getDeepThingy() );
         assertNotSame( orig.getDeepThingyList(), copy.getDeepThingyList() );
