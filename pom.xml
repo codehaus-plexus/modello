@@ -195,6 +195,7 @@
     <jackson.version>2.19.0</jackson.version>
     <jdom.version>2.0.2</jdom.version>
     <slf4j.version>1.7.36</slf4j.version>
+    <sisu.version>0.9.0.M4</sisu.version>
     <mavenVersion>3.6.3</mavenVersion>
     <junit4Version>4.13.2</junit4Version>
     <!--
@@ -299,12 +300,12 @@
       <dependency>
         <groupId>org.eclipse.sisu</groupId>
         <artifactId>org.eclipse.sisu.plexus</artifactId>
-        <version>0.9.0.M3</version>
+        <version>${sisu.version}</version>
       </dependency>
       <dependency>
         <groupId>org.eclipse.sisu</groupId>
         <artifactId>org.eclipse.sisu.inject</artifactId>
-        <version>0.9.0.M3</version>
+        <version>${sisu.version}</version>
       </dependency>
       <dependency>
         <groupId>com.google.inject</groupId>
