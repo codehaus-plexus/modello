@@ -63,6 +63,9 @@ class AbstractModelloGeneratorTest {
         "foxes, fox",
 
         // Some test cases with different rules
+        "archives, archive",
+        "otherArchives, otherArchive",
+        "Archives, Archive",
         "wolves, wolf",
         "knives, knife",
         "leaves, leaf",

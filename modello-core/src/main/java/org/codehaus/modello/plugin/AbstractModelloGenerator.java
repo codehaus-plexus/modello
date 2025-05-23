@@ -111,6 +111,7 @@ public abstract class AbstractModelloGenerator implements ModelloGenerator {
         PLURAL_EXCEPTIONS.put("movies", "movie");
 
         // Special "ves" exceptions
+        PLURAL_EXCEPTIONS.put("archives", "archive");
         PLURAL_EXCEPTIONS.put("relatives", "relative");
     }
 
@@ -260,6 +261,15 @@ public abstract class AbstractModelloGenerator implements ModelloGenerator {
 
         String lower = name.toLowerCase();
 
+        if (!lower.equals(name)) {
+            // we can have a case like otherArchives
+            String[] split = splitByUpperCase(name);
+            if (split != null && PLURAL_EXCEPTIONS.containsKey(split[1])) {
+                String plural = PLURAL_EXCEPTIONS.get(split[1]);
+                return split[0] + Character.toUpperCase(plural.charAt(0)) + plural.substring(1);
+            }
+        }
+
         if (PLURAL_EXCEPTIONS.containsKey(lower)) {
             return PLURAL_EXCEPTIONS.get(lower);
         }
@@ -297,6 +307,15 @@ public abstract class AbstractModelloGenerator implements ModelloGenerator {
         }
 
         return name;
+    }
+
+    private static String[] splitByUpperCase(String name) {
+        for (int i = name.length() - 1; i >= 0; i--) {
+            if (Character.isUpperCase(name.charAt(i))) {
+                return new String[] {name.substring(0, i), name.substring(i).toLowerCase()};
+            }
+        }
+        return null;
     }
 
     public static String uncapitalise(String str) {
