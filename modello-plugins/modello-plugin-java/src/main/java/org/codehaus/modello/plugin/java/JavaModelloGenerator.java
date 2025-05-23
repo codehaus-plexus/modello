@@ -1665,7 +1665,7 @@ public class JavaModelloGenerator extends AbstractJavaModelloGenerator {
 
             jClass.addMethod(adder);
         } else {
-            String adderName = "add" + singular(capitalise(singular(fieldName)));
+            String adderName = "add" + capitalise(singular(fieldName));
 
             JMethod adder;
             if (isBuilderMethod) {
@@ -1711,7 +1711,7 @@ public class JavaModelloGenerator extends AbstractJavaModelloGenerator {
                 return;
             }
 
-            JMethod remover = new JMethod("remove" + singular(capitalise(fieldName)));
+            JMethod remover = new JMethod("remove" + capitalise(singular(fieldName)));
 
             remover.addParameter(new JParameter(addType, parameterName));
 
