@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
 <head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 <title>JavaModelloGenerator xref</title>
 <link type="text/css" rel="stylesheet" href="../../../../../stylesheet.css" />
@@ -1673,7 +1673,7 @@
 <a class="jxr_linenumber" name="L1665" href="#L1665">1665</a> 
 <a class="jxr_linenumber" name="L1666" href="#L1666">1666</a>             jClass.addMethod(adder);
 <a class="jxr_linenumber" name="L1667" href="#L1667">1667</a>         } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L1668" href="#L1668">1668</a>             String adderName = <span class="jxr_string">"add"</span> + singular(capitalise(singular(fieldName)));
+<a class="jxr_linenumber" name="L1668" href="#L1668">1668</a>             String adderName = <span class="jxr_string">"add"</span> + capitalise(singular(fieldName));
 <a class="jxr_linenumber" name="L1669" href="#L1669">1669</a> 
 <a class="jxr_linenumber" name="L1670" href="#L1670">1670</a>             <a name="JMethod" href="../../../../../org/codehaus/modello/plugin/java/javasource/JMethod.html#JMethod">JMethod</a> adder;
 <a class="jxr_linenumber" name="L1671" href="#L1671">1671</a>             <strong class="jxr_keyword">if</strong> (isBuilderMethod) {
@@ -1719,7 +1719,7 @@
 <a class="jxr_linenumber" name="L1711" href="#L1711">1711</a>                 <strong class="jxr_keyword">return</strong>;
 <a class="jxr_linenumber" name="L1712" href="#L1712">1712</a>             }
 <a class="jxr_linenumber" name="L1713" href="#L1713">1713</a> 
-<a class="jxr_linenumber" name="L1714" href="#L1714">1714</a>             <a name="JMethod" href="../../../../../org/codehaus/modello/plugin/java/javasource/JMethod.html#JMethod">JMethod</a> remover = <strong class="jxr_keyword">new</strong> <a name="JMethod" href="../../../../../org/codehaus/modello/plugin/java/javasource/JMethod.html#JMethod">JMethod</a>(<span class="jxr_string">"remove"</span> + singular(capitalise(fieldName)));
+<a class="jxr_linenumber" name="L1714" href="#L1714">1714</a>             <a name="JMethod" href="../../../../../org/codehaus/modello/plugin/java/javasource/JMethod.html#JMethod">JMethod</a> remover = <strong class="jxr_keyword">new</strong> <a name="JMethod" href="../../../../../org/codehaus/modello/plugin/java/javasource/JMethod.html#JMethod">JMethod</a>(<span class="jxr_string">"remove"</span> + capitalise(singular(fieldName)));
 <a class="jxr_linenumber" name="L1715" href="#L1715">1715</a> 
 <a class="jxr_linenumber" name="L1716" href="#L1716">1716</a>             remover.addParameter(<strong class="jxr_keyword">new</strong> <a name="JParameter" href="../../../../../org/codehaus/modello/plugin/java/javasource/JParameter.html#JParameter">JParameter</a>(addType, parameterName));
 <a class="jxr_linenumber" name="L1717" href="#L1717">1717</a> 
@@ -2184,6 +2184,6 @@
 <a class="jxr_linenumber" name="L2176" href="#L2176">2176</a> }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2001&#x2013;2024 <a href="https://codehaus-plexus.github.io/">Codehaus Plexus</a>. All rights reserved.</div>
+<div id="footer">© 2001–2025 <a href="https://codehaus-plexus.github.io/">Codehaus Plexus</a></div>
 </body>
 </html>

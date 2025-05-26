@@ -1,6 +1,7 @@
 ## jQuery v3.7.1
 
 ### jQuery License
+
 ```
 jQuery v 3.7.1
 Copyright OpenJS Foundation and other contributors, https://openjsf.org/
@@ -24,3 +25,4 @@ LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
 OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ```
+
