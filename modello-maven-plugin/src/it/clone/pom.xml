@@ -56,6 +56,9 @@
           <models>
             <model>src/main/mdo/thing.mdo</model>
           </models>
+          <pluralExceptions>
+            <someStringSets>ownSingularStringSet</someStringSets>
+          </pluralExceptions>
         </configuration>
         <executions>
           <execution>
