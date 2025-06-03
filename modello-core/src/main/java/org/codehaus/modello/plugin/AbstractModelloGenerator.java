@@ -61,60 +61,6 @@ public abstract class AbstractModelloGenerator implements ModelloGenerator {
 
     private static final Map<String, String> PLURAL_EXCEPTIONS = new HashMap<>();
 
-    static {
-        // Irregular names
-        PLURAL_EXCEPTIONS.put("children", "child");
-        PLURAL_EXCEPTIONS.put("feet", "foot");
-        PLURAL_EXCEPTIONS.put("geese", "goose");
-        PLURAL_EXCEPTIONS.put("indices", "index");
-        PLURAL_EXCEPTIONS.put("men", "man");
-        PLURAL_EXCEPTIONS.put("mice", "mouse");
-        PLURAL_EXCEPTIONS.put("people", "person");
-        PLURAL_EXCEPTIONS.put("teeth", "tooth");
-        PLURAL_EXCEPTIONS.put("women", "woman");
-
-        // Invariant names
-        PLURAL_EXCEPTIONS.put("aircraft", "aircraft");
-        PLURAL_EXCEPTIONS.put("bison", "bison");
-        PLURAL_EXCEPTIONS.put("deer", "deer");
-        PLURAL_EXCEPTIONS.put("elk", "elk");
-        PLURAL_EXCEPTIONS.put("fish", "fish");
-        PLURAL_EXCEPTIONS.put("series", "series");
-        PLURAL_EXCEPTIONS.put("sheep", "sheep");
-        PLURAL_EXCEPTIONS.put("species", "species");
-
-        // Special "oes" exceptions
-        PLURAL_EXCEPTIONS.put("buffaloes", "buffalo");
-        PLURAL_EXCEPTIONS.put("cargoes", "cargo");
-        PLURAL_EXCEPTIONS.put("echoes", "echo");
-        PLURAL_EXCEPTIONS.put("goes", "go");
-        PLURAL_EXCEPTIONS.put("haloes", "halo");
-        PLURAL_EXCEPTIONS.put("heroes", "hero");
-        PLURAL_EXCEPTIONS.put("mosquitoes", "mosquito");
-        PLURAL_EXCEPTIONS.put("noes", "no");
-        PLURAL_EXCEPTIONS.put("potatoes", "potato");
-        PLURAL_EXCEPTIONS.put("tomatoes", "tomato");
-        PLURAL_EXCEPTIONS.put("torpedoes", "torpedo");
-        PLURAL_EXCEPTIONS.put("vetoes", "veto");
-        PLURAL_EXCEPTIONS.put("volcanoes", "volcano");
-
-        // Special "ses" exceptions
-        PLURAL_EXCEPTIONS.put("horses", "horse");
-        PLURAL_EXCEPTIONS.put("licenses", "license");
-        PLURAL_EXCEPTIONS.put("phases", "phase");
-
-        // Special "zzes" exceptions
-        PLURAL_EXCEPTIONS.put("fezzes", "fez");
-        PLURAL_EXCEPTIONS.put("whizzes", "whiz");
-
-        // Special "ies" exceptions
-        PLURAL_EXCEPTIONS.put("movies", "movie");
-
-        // Special "ves" exceptions
-        PLURAL_EXCEPTIONS.put("archives", "archive");
-        PLURAL_EXCEPTIONS.put("relatives", "relative");
-    }
-
     private Model model;
 
     private File outputDirectory;
@@ -257,65 +203,25 @@ public abstract class AbstractModelloGenerator implements ModelloGenerator {
     }
 
     public static String singular(String name) {
-        if (name == null || name.isEmpty()) return name;
-
-        String lower = name.toLowerCase();
-
-        if (!lower.equals(name)) {
-            // we can have a case like otherArchives
-            String[] split = splitByUpperCase(name);
-            if (split != null && PLURAL_EXCEPTIONS.containsKey(split[1])) {
-                String plural = PLURAL_EXCEPTIONS.get(split[1]);
-                return split[0] + Character.toUpperCase(plural.charAt(0)) + plural.substring(1);
-            }
+        if (StringUtils.isEmpty(name)) {
+            return name;
         }
 
-        if (PLURAL_EXCEPTIONS.containsKey(lower)) {
-            return PLURAL_EXCEPTIONS.get(lower);
+        if (PLURAL_EXCEPTIONS.containsKey(name)) {
+            return PLURAL_EXCEPTIONS.get(name);
         }
 
-        // Suffix-based rules
-        if (lower.endsWith("ies") && name.length() > 3) {
+        if (name.endsWith("ies")) {
             return name.substring(0, name.length() - 3) + "y";
-        }
-        if (lower.endsWith("aves") || lower.endsWith("lves") || lower.endsWith("rves")) {
-            return name.substring(0, name.length() - 3) + "f";
-        }
-        if (lower.endsWith("ves") && !lower.endsWith("fves")) {
-            return name.substring(0, name.length() - 3) + "fe";
-        }
-        if (lower.endsWith("zzes")) {
+        } else if (name.endsWith("es") && name.endsWith("ches")) {
             return name.substring(0, name.length() - 2);
-        }
-        if (lower.endsWith("sses")) {
+        } else if (name.endsWith("xes")) {
             return name.substring(0, name.length() - 2);
-        }
-        if (lower.endsWith("ses")) {
-            return name.substring(0, name.length() - 2);
-        }
-        if (lower.endsWith("ches") || lower.endsWith("shes")) {
-            return name.substring(0, name.length() - 2);
-        }
-        if (lower.endsWith("xes")) {
-            return name.substring(0, name.length() - 2);
-        }
-        if (lower.endsWith("oes")) {
-            return name.substring(0, name.length() - 1);
-        }
-        if (lower.endsWith("s") && name.length() > 1) {
+        } else if (name.endsWith("s") && (name.length() != 1)) {
             return name.substring(0, name.length() - 1);
         }
 
         return name;
-    }
-
-    private static String[] splitByUpperCase(String name) {
-        for (int i = name.length() - 1; i >= 0; i--) {
-            if (Character.isUpperCase(name.charAt(i))) {
-                return new String[] {name.substring(0, i), name.substring(i).toLowerCase()};
-            }
-        }
-        return null;
     }
 
     public static String uncapitalise(String str) {

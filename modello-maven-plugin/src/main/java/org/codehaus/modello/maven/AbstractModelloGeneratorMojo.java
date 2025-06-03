@@ -118,9 +118,9 @@ public abstract class AbstractModelloGeneratorMojo extends AbstractMojo {
     /**
      * Additional exceptions to the singularization rules, changing plural noun to singular.
      * <p>
-     * As a kay we provide plural noun and as value we provide singular noun, eg:
+     * As a key we provide plural noun and as value we provide singular noun, example:
      * <pre>
-     *     <kisses>kiss</kisses>
+     *     &lt;kisses&gt;kiss&lt;/kisses&gt;
      * </pre>
      *
      * @since 2.5.0
@@ -193,7 +193,7 @@ public abstract class AbstractModelloGeneratorMojo extends AbstractMojo {
 
         parameters.put(ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString(packageWithVersion));
 
-        parameters.put(ModelloParameterConstants.PLURAL_EXCEPTIONS, keysToLower(pluralExceptions));
+        parameters.put(ModelloParameterConstants.PLURAL_EXCEPTIONS, pluralExceptions);
 
         if (!packagedVersions.isEmpty()) {
             parameters.put(ModelloParameterConstants.ALL_VERSIONS, StringUtils.join(packagedVersions.iterator(), ","));
@@ -237,13 +237,6 @@ public abstract class AbstractModelloGeneratorMojo extends AbstractMojo {
         if (firstError != null) {
             throw firstError;
         }
-    }
-
-    private Object keysToLower(Map<String, String> maps) {
-        if (maps == null) {
-            return null;
-        }
-        return maps.entrySet().stream().collect(Collectors.toMap(e -> e.getKey().toLowerCase(), Map.Entry::getValue));
     }
 
     /**
