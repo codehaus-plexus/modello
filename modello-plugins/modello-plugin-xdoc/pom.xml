@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.codehaus.modello</groupId>
     <artifactId>modello-plugins</artifactId>
-    <version>2.5.1</version>
+    <version>2.5.2-SNAPSHOT</version>
   </parent>
   <artifactId>modello-plugin-xdoc</artifactId>
   <name>Modello XDOC Plugin</name>
