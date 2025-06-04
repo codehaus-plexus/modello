@@ -173,16 +173,6 @@
   </ciManagement>
 
   <distributionManagement>
-    <repository>
-      <id>ossrh-staging</id>
-      <name>Modello Repository</name>
-      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-    </repository>
-    <snapshotRepository>
-      <id>ossrh-snapshots</id>
-      <name>Modello Development Repository</name>
-      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-    </snapshotRepository>
     <site>
       <id>github:gh-pages</id>
       <url>${scm.url}</url>
