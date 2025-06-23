@@ -21,7 +21,7 @@
 <br />
 This is a description in HTML4
 <br />
-<strong>NOTE: </strong>HTML linebreak should be converted to selfclosing XML-tag
+<strong>NOTE: </strong> HTML linebreak should be converted to selfclosing XML-tag
 <br />
 <p><b>Since</b>: Maven 3</p></p>
         <table>
