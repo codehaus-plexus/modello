@@ -289,7 +289,7 @@ public class XdocGenerator extends AbstractXmlGenerator {
             return;
         }
 
-        sink.table();
+        sink.table(null);
 
         sink.tableRow();
 
