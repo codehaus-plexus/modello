@@ -487,19 +487,19 @@ public class JDOMWriterGenerator extends AbstractJDOMGenerator {
             String namespace = xmlModelMetadata.getNamespace(getGeneratedVersion());
 
             if (namespace != null) {
-                sc.add("Element root = factory.element( xmlTag, \"" + namespace + "\" );");
+                sc.add("Element rootElement = factory.element( xmlTag, \"" + namespace + "\" );");
                 if (xmlModelMetadata.getSchemaLocation() != null) {
                     String url = xmlModelMetadata.getSchemaLocation(getGeneratedVersion());
                     sc.add(
                             "Namespace xsins = Namespace.getNamespace( \"xsi\", \"http://www.w3.org/2001/XMLSchema-instance\" );");
-                    sc.add("root.setAttribute( \"schemaLocation\", \"" + namespace + " " + url + "\", xsins );");
+                    sc.add("rootElement.setAttribute( \"schemaLocation\", \"" + namespace + " " + url + "\", xsins );");
                 }
             } else {
-                sc.add("Element root = factory.element( xmlTag );");
+                sc.add("Element rootElement = factory.element( xmlTag );");
             }
-            sc.add("document.setRootElement( root );");
+            sc.add("document.setRootElement( rootElement );");
         } else {
-            sc.add("Element root = updateElement( counter, element, xmlTag );");
+            sc.add("Element rootElement = updateElement( counter, element, xmlTag );");
         }
 
         sc.add("Counter innerCount = new Counter( counter.getDepth() + 1 );");
@@ -528,7 +528,7 @@ public class JDOMWriterGenerator extends AbstractJDOMGenerator {
             if (xmlFieldMetadata.isAttribute()) {
                 sc.add(getValueChecker(type, value, field));
                 sc.add("{");
-                sc.addIndented("root.setAttribute( \"" + fieldTagName + "\", "
+                sc.addIndented("rootElement.setAttribute( \"" + fieldTagName + "\", "
                         + getValue(field.getType(), value, xmlFieldMetadata) + " );");
                 sc.add("}");
                 continue;
@@ -541,7 +541,7 @@ public class JDOMWriterGenerator extends AbstractJDOMGenerator {
                     sc.add(getValueChecker(type, value, field));
                     sc.add("{");
                     sc.addIndented("update" + capitalise(field.getType()) + "( " + value + ", \"" + fieldTagName
-                            + "\", innerCount, root );");
+                            + "\", innerCount, rootElement );");
                     sc.add("}");
                 } else {
                     // MANY_MULTIPLICITY
@@ -559,26 +559,27 @@ public class JDOMWriterGenerator extends AbstractJDOMGenerator {
                         String toType = association.getTo();
                         if (toClass != null) {
                             if (xmlAssociationMetadata.isWrappedItems()) {
-                                sc.add("iterate" + capitalise(toType) + "( innerCount, root, " + value + ",\""
+                                sc.add("iterate" + capitalise(toType) + "( innerCount, rootElement, " + value + ",\""
                                         + fieldTagName + "\",\"" + valuesTagName + "\" );");
                                 createIterateMethod(field.getName(), toClass, singular(fieldTagName), jClass);
                             } else {
                                 // assume flat..
-                                sc.add("iterate2" + capitalise(toType) + "( innerCount, root, " + value + ", \""
+                                sc.add("iterate2" + capitalise(toType) + "( innerCount, rootElement, " + value + ", \""
                                         + valuesTagName + "\" );");
                                 createIterateMethod2(field.getName(), toClass, singular(fieldTagName), jClass);
                             }
                         } else {
                             // list of strings?
-                            sc.add("findAndReplaceSimpleLists( innerCount, root, " + value + ", \"" + fieldTagName
-                                    + "\", \"" + singular(fieldTagName) + "\" );");
+                            sc.add("findAndReplaceSimpleLists( innerCount, rootElement, " + value + ", \""
+                                    + fieldTagName + "\", \"" + singular(fieldTagName) + "\" );");
                         }
                     } else {
                         // Map or Properties
                         sc.add(getValueChecker(type, value, field));
                         sc.add("{");
                         sc.indent();
-                        sc.add("Element listElement = updateElement( innerCount, root, \"" + fieldTagName + "\" );");
+                        sc.add("Element listElement = updateElement( innerCount, rootElement, \"" + fieldTagName
+                                + "\" );");
                         sc.add("Iterator it = " + value + ".keySet().iterator();");
                         sc.add("Counter propertiesCounter = new Counter( innerCount.getDepth() + 1 );");
                         sc.add("while ( it.hasNext() )");
@@ -604,14 +605,14 @@ public class JDOMWriterGenerator extends AbstractJDOMGenerator {
                 }
             } else {
                 if ("DOM".equals(field.getType())) {
-                    sc.add("findAndReplaceXpp3DOM( innerCount, root, \"" + fieldTagName + "\", (Xpp3Dom) " + value
-                            + " );");
+                    sc.add("findAndReplaceXpp3DOM( innerCount, rootElement, \"" + fieldTagName + "\", (Xpp3Dom) "
+                            + value + " );");
 
                     requiresDomSupport = true;
                 } else {
                     sc.add(getValueChecker(type, value, field));
                     sc.add("{");
-                    sc.addIndented("updateElement( innerCount, root,  \"" + fieldTagName + "\" ).setText( "
+                    sc.addIndented("updateElement( innerCount, rootElement,  \"" + fieldTagName + "\" ).setText( "
                             + getValue(field.getType(), value, xmlFieldMetadata) + " );");
                     sc.add("}");
                 }
@@ -620,7 +621,7 @@ public class JDOMWriterGenerator extends AbstractJDOMGenerator {
 
         if (contentField != null) {
             XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) contentField.getMetadata(XmlFieldMetadata.ID);
-            sc.add("root.setText( " + getValue(contentField.getType(), contentValue, xmlFieldMetadata) + " );");
+            sc.add("rootElement.setText( " + getValue(contentField.getType(), contentValue, xmlFieldMetadata) + " );");
         }
 
         sc.unindent();
