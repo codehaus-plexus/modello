@@ -289,7 +289,8 @@ public class XdocGenerator extends AbstractXmlGenerator {
             return;
         }
 
-        sink.table(null);
+        // Workaround: Doxia Sink's table() method doesn't seem to output <table> tag
+        sink.rawText("<table>");
 
         sink.tableRow();
 
@@ -440,7 +441,7 @@ public class XdocGenerator extends AbstractXmlGenerator {
             sink.tableRow_();
         }
 
-        sink.table_();
+        sink.rawText("</table>");
     }
 
     /**

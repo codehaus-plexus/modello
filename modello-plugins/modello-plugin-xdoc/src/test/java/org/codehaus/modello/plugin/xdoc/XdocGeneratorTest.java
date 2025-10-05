@@ -180,12 +180,13 @@ public class XdocGeneratorTest extends AbstractModelloGeneratorTest {
         Assert.assertTrue("should find some '<a href=' links", hrefs.size() > 0);
 
         Set<String> names = new HashSet<String>();
-        p = Pattern.compile("<a name=\"(class_[^\"]+)\"", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
+        // Support both XDOC 1.0 (<a name=) and XDOC 2.0 (<a id=) formats
+        p = Pattern.compile("<a (?:name|id)=\"(class_[^\"]+)\"", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
         m = p.matcher(content);
         while (m.find()) {
             names.add(m.group(1));
         }
-        Assert.assertTrue("should find some '<a name=' anchor definitions", names.size() > 0);
+        Assert.assertTrue("should find some '<a name=' or '<a id=' anchor definitions", names.size() > 0);
 
         hrefs.removeAll(names);
         if (hrefs.size() > 0) {
