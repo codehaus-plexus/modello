@@ -148,7 +148,7 @@ public class XdocGeneratorTest extends AbstractModelloGeneratorTest {
 
         String content = FileUtils.fileRead(new File(getOutputDirectory(), "features.xml"), "UTF-8");
 
-        assertTrue(!content.contains("transientString"), "Transient fields were erroneously documented");
+        assertFalse(content.contains("transientString"), "Transient fields were erroneously documented");
     }
 
     public void checkSettingsXdocGenerator() throws Exception {
@@ -162,15 +162,12 @@ public class XdocGeneratorTest extends AbstractModelloGeneratorTest {
 
         String content = FileUtils.fileRead(new File(getOutputDirectory(), "settings.xml"), "UTF-8");
 
-        assertTrue(!content.contains("&lt;properties/&gt;"), "Properties field was erroneously documented");
+        assertFalse(content.contains("&lt;properties/&gt;"), "Properties field was erroneously documented");
     }
 
     /**
      * Checks internal links in the xdoc content: for every 'a href="#xxx"' link, a 'a name="xxx"' must exist (or there
      * is a problem in the generated content).
-     *
-     * @param xdoc
-     * @throws Exception
      */
     private void checkInternalLinks(String filename) throws Exception {
         String content = FileUtils.fileRead(new File(getOutputDirectory(), filename), "UTF-8");
@@ -181,18 +178,19 @@ public class XdocGeneratorTest extends AbstractModelloGeneratorTest {
         while (m.find()) {
             hrefs.add(m.group(1));
         }
-        Assertions.assertTrue(hrefs.size() > 0, "should find some '<a href=' links");
+        assertFalse(hrefs.isEmpty(), "should find some '<a href=' links");
 
         Set<String> names = new HashSet<String>();
-        p = Pattern.compile("<a name=\"(class_[^\"]+)\"", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
+        // Support both XDOC 1.0 (<a name=) and XDOC 2.0 (<a id=) formats
+        p = Pattern.compile("<a (?:name|id)=\"(class_[^\"]+)\"", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
         m = p.matcher(content);
         while (m.find()) {
             names.add(m.group(1));
         }
-        Assertions.assertTrue(names.size() > 0, "should find some '<a name=' anchor definitions");
+        assertFalse(names.isEmpty(), "should find some '<a name=' or '<a id=' anchor definitions");
 
         hrefs.removeAll(names);
-        if (hrefs.size() > 0) {
+        if (!hrefs.isEmpty()) {
             throw new VerifierException("some internal hrefs in " + filename + " are not defined: " + hrefs);
         }
     }

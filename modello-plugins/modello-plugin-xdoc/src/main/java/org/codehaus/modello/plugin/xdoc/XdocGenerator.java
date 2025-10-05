@@ -26,9 +26,16 @@ import javax.inject.Named;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.Writer;
+import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.nio.file.Files;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.Stack;
 import java.util.stream.Collectors;
 
 import com.github.chhorz.javadoc.JavaDoc;
@@ -36,6 +43,9 @@ import com.github.chhorz.javadoc.JavaDocParserBuilder;
 import com.github.chhorz.javadoc.OutputType;
 import com.github.chhorz.javadoc.tags.BlockTag;
 import com.github.chhorz.javadoc.tags.SinceTag;
+import org.apache.maven.doxia.module.xdoc.XdocSinkFactory;
+import org.apache.maven.doxia.sink.Sink;
+import org.apache.maven.doxia.sink.SinkFactory;
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.ModelloRuntimeException;
@@ -56,9 +66,6 @@ import org.codehaus.modello.plugins.xml.metadata.XmlClassMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlModelMetadata;
 import org.codehaus.plexus.util.StringUtils;
-import org.codehaus.plexus.util.io.CachingWriter;
-import org.codehaus.plexus.util.xml.PrettyPrintXMLWriter;
-import org.codehaus.plexus.util.xml.XMLWriter;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
@@ -115,50 +122,49 @@ public class XdocGenerator extends AbstractXmlGenerator {
             f = new File(directory, xdocFileName);
         }
 
-        Writer writer = new CachingWriter(f, StandardCharsets.UTF_8);
+        try (OutputStream outputStream = Files.newOutputStream(f.toPath())) {
+            SinkFactory sinkFactory = new XdocSinkFactory();
+            Sink sink = sinkFactory.createSink(outputStream, StandardCharsets.UTF_8.name());
 
-        XMLWriter w = new PrettyPrintXMLWriter(writer);
+            // Start document
+            sink.head();
+            sink.title();
+            sink.text(objectModel.getName());
+            sink.title_();
+            sink.head_();
 
-        writer.write("<?xml version=\"1.0\"?>\n");
+            // Body
+            sink.body();
 
-        initHeader(w);
+            sink.section1();
+            sink.sectionTitle1();
+            sink.text(objectModel.getName());
+            sink.sectionTitle1_();
 
-        w.startElement("document");
+            sink.paragraph();
+            sink.rawText(getDescription(objectModel));
+            sink.paragraph_();
 
-        w.startElement("properties");
+            // XML representation of the model with links
+            ModelClass root = objectModel.getClass(objectModel.getRoot(getGeneratedVersion()), getGeneratedVersion());
 
-        writeTextElement(w, "title", objectModel.getName());
+            sink.verbatim(null);
+            sink.rawText("\n" + getModelXmlDescriptor(root));
+            sink.verbatim_();
 
-        w.endElement();
+            // Element descriptors
+            // Traverse from root so "abstract" models aren't included
+            writeModelDescriptor(sink, root);
 
-        // Body
+            sink.section1_();
 
-        w.startElement("body");
+            sink.body_();
 
-        w.startElement("section");
+            sink.flush();
+            sink.close();
 
-        w.addAttribute("name", objectModel.getName());
-
-        writeMarkupElement(w, "p", getDescription(objectModel));
-
-        // XML representation of the model with links
-        ModelClass root = objectModel.getClass(objectModel.getRoot(getGeneratedVersion()), getGeneratedVersion());
-
-        writeMarkupElement(w, "source", "\n" + getModelXmlDescriptor(root));
-
-        // Element descriptors
-        // Traverse from root so "abstract" models aren't included
-        writeModelDescriptor(w, root);
-
-        w.endElement();
-
-        w.endElement();
-
-        w.endElement();
-
-        writer.flush();
-
-        writer.close();
+            outputStream.flush();
+        }
     }
 
     /**
@@ -179,24 +185,24 @@ public class XdocGenerator extends AbstractXmlGenerator {
     /**
      * Write description of the whole model.
      *
-     * @param w the output writer
+     * @param sink the Doxia sink
      * @param rootModelClass the root class of the model
      */
-    private void writeModelDescriptor(XMLWriter w, ModelClass rootModelClass) {
-        writeElementDescriptor(w, rootModelClass, null, new HashSet<>(), new HashMap<>());
+    private void writeModelDescriptor(Sink sink, ModelClass rootModelClass) {
+        writeElementDescriptor(sink, rootModelClass, null, new HashSet<>(), new HashMap<>());
     }
 
     /**
      * Write description of an element of the XML representation of the model. This method is recursive.
      *
-     * @param w the output writer
+     * @param sink the Doxia sink
      * @param modelClass the mode class to describe
      * @param association the association we are coming from (can be <code>null</code>)
      * @param writtenIds set of data already written ids
      * @param writtenAnchors map of already written anchors with corresponding ids
      */
     private void writeElementDescriptor(
-            XMLWriter w,
+            Sink sink,
             ModelClass modelClass,
             ModelAssociation association,
             Set<String> writtenIds,
@@ -219,17 +225,17 @@ public class XdocGenerator extends AbstractXmlGenerator {
             writtenAnchors.put(anchorName, id);
         }
 
-        w.startElement("a");
+        sink.anchor(anchorName);
+        sink.anchor_();
 
-        w.addAttribute("name", anchorName);
+        sink.section2();
+        sink.sectionTitle2();
+        sink.text(tagName);
+        sink.sectionTitle2_();
 
-        w.endElement();
-
-        w.startElement("subsection");
-
-        w.addAttribute("name", tagName);
-
-        writeMarkupElement(w, "p", getDescription(modelClass));
+        sink.paragraph();
+        sink.rawText(getDescription(modelClass));
+        sink.paragraph_();
 
         List<ModelField> elementFields = getFieldsForXml(modelClass, getGeneratedVersion());
 
@@ -237,23 +243,22 @@ public class XdocGenerator extends AbstractXmlGenerator {
 
         if (contentField != null) {
             // this model class has a Content field
-            w.startElement("p");
-
-            writeTextElement(w, "b", "Element Content: ");
-
-            w.writeMarkup(getDescription(contentField));
-
-            w.endElement();
+            sink.paragraph();
+            sink.bold();
+            sink.text("Element Content: ");
+            sink.bold_();
+            sink.rawText(getDescription(contentField));
+            sink.paragraph_();
         }
 
         List<ModelField> attributeFields = getXmlAttributeFields(elementFields);
 
         elementFields.removeAll(attributeFields);
 
-        writeFieldsTable(w, attributeFields, false); // write attributes
-        writeFieldsTable(w, elementFields, true); // write elements
+        writeFieldsTable(sink, attributeFields, false); // write attributes
+        writeFieldsTable(sink, elementFields, true); // write elements
 
-        w.endElement();
+        sink.section2_();
 
         // check every fields that are inner associations to write their element descriptor
         for (ModelField f : elementFields) {
@@ -262,7 +267,7 @@ public class XdocGenerator extends AbstractXmlGenerator {
                 ModelClass fieldModelClass = getModel().getClass(assoc.getTo(), getGeneratedVersion());
 
                 if (!writtenIds.contains(getId(resolveTagName(fieldModelClass, assoc), fieldModelClass))) {
-                    writeElementDescriptor(w, fieldModelClass, assoc, writtenIds, writtenAnchors);
+                    writeElementDescriptor(sink, fieldModelClass, assoc, writtenIds, writtenAnchors);
                 }
             }
         }
@@ -275,11 +280,11 @@ public class XdocGenerator extends AbstractXmlGenerator {
     /**
      * Write a table containing model fields description.
      *
-     * @param w the output writer
+     * @param sink the Doxia sink
      * @param fields the fields to add in the table
      * @param elementFields <code>true</code> if fields are elements, <code>false</code> if fields are attributes
      */
-    private void writeFieldsTable(XMLWriter w, List<ModelField> fields, boolean elementFields) {
+    private void writeFieldsTable(Sink sink, List<ModelField> fields, boolean elementFields) {
         if (fields == null || fields.isEmpty()) {
             // skip empty table
             return;
@@ -290,23 +295,32 @@ public class XdocGenerator extends AbstractXmlGenerator {
             return;
         }
 
-        w.startElement("table");
+        // Workaround: Doxia Sink's table() method doesn't seem to output <table> tag
+        sink.rawText("<table>");
 
-        w.startElement("tr");
+        sink.tableRow();
 
-        writeTextElement(w, "th", elementFields ? "Element" : "Attribute");
+        sink.tableHeaderCell();
+        sink.text(elementFields ? "Element" : "Attribute");
+        sink.tableHeaderCell_();
 
-        writeTextElement(w, "th", "Type");
+        sink.tableHeaderCell();
+        sink.text("Type");
+        sink.tableHeaderCell_();
 
         boolean showSinceColumn = version.greaterThan(firstVersion);
 
         if (showSinceColumn) {
-            writeTextElement(w, "th", "Since");
+            sink.tableHeaderCell();
+            sink.text("Since");
+            sink.tableHeaderCell_();
         }
 
-        writeTextElement(w, "th", "Description");
+        sink.tableHeaderCell();
+        sink.text("Description");
+        sink.tableHeaderCell_();
 
-        w.endElement(); // tr
+        sink.tableRow_();
 
         for (ModelField f : fields) {
             XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) f.getMetadata(XmlFieldMetadata.ID);
@@ -315,15 +329,15 @@ public class XdocGenerator extends AbstractXmlGenerator {
                 continue;
             }
 
-            w.startElement("tr");
+            sink.tableRow();
 
             // Element/Attribute column
 
             String tagName = resolveTagName(f, xmlFieldMetadata);
 
-            w.startElement("td");
+            sink.tableCell();
 
-            w.startElement("code");
+            sink.monospaced();
 
             boolean manyAssociation = false;
 
@@ -338,101 +352,102 @@ public class XdocGenerator extends AbstractXmlGenerator {
                 String itemTagName = manyAssociation ? resolveTagName(tagName, xmlAssociationMetadata) : tagName;
 
                 if (manyAssociation && xmlAssociationMetadata.isWrappedItems()) {
-                    w.writeText(tagName);
-                    w.writeMarkup("/");
+                    sink.text(tagName);
+                    sink.rawText("/");
                 }
                 if (isInnerAssociation(f)) {
-                    w.startElement("a");
-                    w.addAttribute("href", "#" + getAnchorName(itemTagName, assoc.getToClass()));
-                    w.writeText(itemTagName);
-                    w.endElement();
+                    sink.link("#" + getAnchorName(itemTagName, assoc.getToClass()));
+                    sink.text(itemTagName);
+                    sink.link_();
                 } else if (ModelDefault.PROPERTIES.equals(f.getType())) {
                     if (xmlAssociationMetadata.isMapExplode()) {
-                        w.writeText("(key,value)");
+                        sink.text("(key,value)");
                     } else {
-                        w.writeMarkup("<i>key</i>=<i>value</i>");
+                        sink.rawText("<i>key</i>=<i>value</i>");
                     }
                 } else {
-                    w.writeText(itemTagName);
+                    sink.text(itemTagName);
                 }
                 if (manyAssociation) {
-                    w.writeText("*");
+                    sink.text("*");
                 }
             } else {
-                w.writeText(tagName);
+                sink.text(tagName);
             }
 
-            w.endElement(); // code
+            sink.monospaced_();
 
-            w.endElement(); // td
+            sink.tableCell_();
 
             // Type column
 
-            w.startElement("td");
+            sink.tableCell();
 
-            w.startElement("code");
+            sink.monospaced();
 
             if (f instanceof ModelAssociation) {
                 ModelAssociation assoc = (ModelAssociation) f;
 
                 if (assoc.isOneMultiplicity()) {
-                    w.writeText(assoc.getTo());
+                    sink.text(assoc.getTo());
                 } else {
-                    w.writeText(assoc.getType().substring("java.util.".length()));
+                    sink.text(assoc.getType().substring("java.util.".length()));
 
                     if (assoc.isGenericType()) {
-                        w.writeText("<" + assoc.getTo() + ">");
+                        sink.text("<" + assoc.getTo() + ">");
                     }
                 }
             } else {
-                w.writeText(f.getType());
+                sink.text(f.getType());
             }
 
-            w.endElement(); // code
+            sink.monospaced_();
 
-            w.endElement(); // td
+            sink.tableCell_();
 
             // Since column
 
             if (showSinceColumn) {
-                w.startElement("td");
+                sink.tableCell();
 
                 if (f.getVersionRange() != null) {
                     Version fromVersion = f.getVersionRange().getFromVersion();
                     if (fromVersion != null && fromVersion.greaterThan(firstVersion)) {
-                        w.writeMarkup(fromVersion.toString());
+                        sink.rawText(fromVersion.toString());
                     }
                 }
 
-                w.endElement();
+                sink.tableCell_();
             }
 
             // Description column
 
-            w.startElement("td");
+            sink.tableCell();
 
             if (manyAssociation) {
-                w.writeMarkup("<b>(Many)</b> ");
+                sink.rawText("<b>(Many)</b> ");
             }
 
-            w.writeMarkup(getDescription(f));
+            sink.rawText(getDescription(f));
 
             // Write the default value, if it exists.
             // But only for fields that are not a ModelAssociation
             if (f.getDefaultValue() != null && !(f instanceof ModelAssociation)) {
-                w.writeMarkup("<p><strong>Default value</strong>: ");
+                sink.rawText("<p><strong>Default value</strong>: ");
 
-                writeTextElement(w, "code", f.getDefaultValue());
+                sink.monospaced();
+                sink.text(f.getDefaultValue());
+                sink.monospaced_();
 
-                w.writeMarkup("</p>");
+                sink.rawText("</p>");
             }
 
-            w.endElement(); // td
+            sink.tableCell_();
 
-            w.endElement(); // tr
+            sink.tableRow_();
         }
 
-        w.endElement(); // table
+        sink.rawText("</table>");
     }
 
     /**
@@ -667,18 +682,6 @@ public class XdocGenerator extends AbstractXmlGenerator {
 
     private static String getDescription(BaseElement element) {
         return (element.getDescription() == null) ? "No description." : rewrite(element.getDescription());
-    }
-
-    private static void writeTextElement(XMLWriter w, String name, String text) {
-        w.startElement(name);
-        w.writeText(text);
-        w.endElement();
-    }
-
-    private static void writeMarkupElement(XMLWriter w, String name, String markup) {
-        w.startElement(name);
-        w.writeMarkup(markup);
-        w.endElement();
     }
 
     /**
