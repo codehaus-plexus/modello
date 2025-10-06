@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model xmlns="http://codehaus-plexus.github.io/MODELLO/1.4.0"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://codehaus-plexus.github.io/MODELLO/1.4.0
+                           http://codehaus-plexus.github.io/modello/xsd/modello-1.4.0.xsd">
+  <id>test</id>
+  <name>SimpleAssociationTest</name>
+  <defaults>
+    <default>
+      <key>package</key>
+      <value>org.codehaus.modello.generator.xml.xpp3.test.simpleassociation</value>
+    </default>
+  </defaults>
+  <classes>
+    <class rootElement="true" xml.tagName="root">
+      <name>Root</name>
+      <version>1.0.0+</version>
+      <fields>
+        <field>
+          <name>stringField</name>
+          <version>1.0.0+</version>
+          <association>
+            <type>String</type>
+            <multiplicity>1</multiplicity>
+          </association>
+        </field>
+      </fields>
+    </class>
+  </classes>
+</model>
