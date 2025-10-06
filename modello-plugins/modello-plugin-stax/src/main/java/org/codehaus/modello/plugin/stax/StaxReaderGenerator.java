@@ -988,28 +988,46 @@ public class StaxReaderGenerator extends AbstractStaxGenerator {
             String associationName = association.getName();
 
             if (association.isOneMultiplicity()) {
-                sc.add(tagComparison);
+                // Check if the association type is a class in the model or a simple type
+                boolean inModel = isClassInModel(
+                        association.getTo(), field.getModelClass().getModel());
 
-                sc.add("{");
-                sc.indent();
+                if (inModel) {
+                    // It's a model class, process as usual
+                    sc.add(tagComparison);
 
-                ModelField referenceIdentifierField = getReferenceIdentifierField(association);
-
-                if (referenceIdentifierField != null) {
-                    addCodeToAddReferences(association, jClass, sc, referenceIdentifierField, objectName);
-
-                    // gobble the rest of the tag
-                    sc.add("while ( xmlStreamReader.getEventType() != XMLStreamConstants.END_ELEMENT )");
                     sc.add("{");
-                    sc.addIndented("xmlStreamReader.next();");
+                    sc.indent();
+
+                    ModelField referenceIdentifierField = getReferenceIdentifierField(association);
+
+                    if (referenceIdentifierField != null) {
+                        addCodeToAddReferences(association, jClass, sc, referenceIdentifierField, objectName);
+
+                        // gobble the rest of the tag
+                        sc.add("while ( xmlStreamReader.getEventType() != XMLStreamConstants.END_ELEMENT )");
+                        sc.add("{");
+                        sc.addIndented("xmlStreamReader.next();");
+                        sc.add("}");
+                    } else {
+                        sc.add(objectName + ".set" + capFieldName + "( parse" + association.getTo()
+                                + "( xmlStreamReader, strict ) );");
+                    }
+
+                    sc.unindent();
                     sc.add("}");
                 } else {
-                    sc.add(objectName + ".set" + capFieldName + "( parse" + association.getTo()
-                            + "( xmlStreamReader, strict ) );");
-                }
+                    // It's a simple type (like String), use primitive field handling
+                    sc.add(tagComparison);
 
-                sc.unindent();
-                sc.add("}");
+                    sc.add("{");
+                    sc.indent();
+
+                    writePrimitiveField(field, association.getTo(), objectName, "set" + capFieldName, sc);
+
+                    sc.unindent();
+                    sc.add("}");
+                }
             } else {
                 // MANY_MULTIPLICITY
 

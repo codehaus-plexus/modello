@@ -520,24 +520,44 @@ public class SnakeYamlReaderGenerator extends AbstractSnakeYamlGenerator {
             String associationName = association.getName();
 
             if (association.isOneMultiplicity()) {
-                sc.add(tagComparison);
+                // Check if the association type is a class in the model or a simple type
+                boolean inModel = isClassInModel(
+                        association.getTo(), field.getModelClass().getModel());
 
-                sc.add("{");
-                sc.indent();
+                if (inModel) {
+                    // It's a model class, call the parse method for that class
+                    sc.add(tagComparison);
 
-                // sc.add( "// consume current key" );
-                // sc.add( "parser.getEvent();" );
-                sc.add(objectName
-                        + ".set"
-                        + capFieldName
-                        + "( parse"
-                        + association.getTo()
-                        + "( parser, strict"
-                        + trackingArgs
-                        + " ) );");
+                    sc.add("{");
+                    sc.indent();
 
-                sc.unindent();
-                sc.add("}");
+                    // sc.add( "// consume current key" );
+                    // sc.add( "parser.getEvent();" );
+                    sc.add(objectName + ".set" + capFieldName + "( parse" + association.getTo() + "( parser, strict"
+                            + trackingArgs + " ) );");
+
+                    sc.unindent();
+                    sc.add("}");
+                } else {
+                    // It's a simple type (like String), use primitive field handling
+                    sc.add(tagComparison);
+
+                    sc.add("{");
+                    sc.indent();
+
+                    writePrimitiveField(
+                            field,
+                            association.getTo(),
+                            objectName,
+                            objectName,
+                            "\"" + field.getName() + "\"",
+                            "set" + capFieldName,
+                            sc,
+                            false);
+
+                    sc.unindent();
+                    sc.add("}");
+                }
             } else {
                 // MANY_MULTIPLICITY
 

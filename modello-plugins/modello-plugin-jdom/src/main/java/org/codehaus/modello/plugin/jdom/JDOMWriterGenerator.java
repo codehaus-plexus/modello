@@ -538,11 +538,25 @@ public class JDOMWriterGenerator extends AbstractJDOMGenerator {
 
                 ModelClass toClass = association.getToClass();
                 if (association.isOneMultiplicity()) {
-                    sc.add(getValueChecker(type, value, field));
-                    sc.add("{");
-                    sc.addIndented("update" + capitalise(field.getType()) + "( " + value + ", \"" + fieldTagName
-                            + "\", innerCount, rootElement );");
-                    sc.add("}");
+                    // Check if the association type is a class in the model or a simple type
+                    boolean inModel = isClassInModel(
+                            association.getTo(), field.getModelClass().getModel());
+
+                    if (inModel) {
+                        // It's a model class, call the update method for that class
+                        sc.add(getValueChecker(type, value, field));
+                        sc.add("{");
+                        sc.addIndented("update" + capitalise(field.getType()) + "( " + value + ", \"" + fieldTagName
+                                + "\", innerCount, rootElement );");
+                        sc.add("}");
+                    } else {
+                        // It's a simple type (like String), update it directly
+                        sc.add(getValueChecker(type, value, field));
+                        sc.add("{");
+                        sc.addIndented("updateElement( innerCount, root,  \"" + fieldTagName + "\" ).setText( "
+                                + getValue(association.getTo(), value, xmlFieldMetadata) + " );");
+                        sc.add("}");
+                    }
                 } else {
                     // MANY_MULTIPLICITY
 
