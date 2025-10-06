@@ -264,17 +264,36 @@ public class SnakeYamlWriterGenerator extends AbstractSnakeYamlGenerator {
                 ModelAssociation association = (ModelAssociation) field;
 
                 if (association.isOneMultiplicity()) {
-                    sc.add(getValueChecker(type, value, association));
+                    // Check if the association type is a class in the model or a simple type
+                    boolean inModel = isClassInModel(
+                            association.getTo(), field.getModelClass().getModel());
 
-                    sc.add("{");
-                    sc.indent();
+                    if (inModel) {
+                        // It's a model class, call the write method for that class
+                        sc.add(getValueChecker(type, value, association));
 
-                    writeScalarKey(sc, fieldTagName);
-                    sc.add("write" + association.getTo() + "( (" + association.getTo() + ") " + value
-                            + ", generator );");
+                        sc.add("{");
+                        sc.indent();
 
-                    sc.unindent();
-                    sc.add("}");
+                        writeScalarKey(sc, fieldTagName);
+                        sc.add("write" + association.getTo() + "( (" + association.getTo() + ") " + value
+                                + ", generator );");
+
+                        sc.unindent();
+                        sc.add("}");
+                    } else {
+                        // It's a simple type (like String), write it directly as a scalar
+                        sc.add(getValueChecker(type, value, association));
+
+                        sc.add("{");
+                        sc.indent();
+
+                        writeScalarKey(sc, fieldTagName);
+                        writeScalar(sc, getValue(association.getTo(), value, xmlFieldMetadata));
+
+                        sc.unindent();
+                        sc.add("}");
+                    }
                 } else {
                     // MANY_MULTIPLICITY
 

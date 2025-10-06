@@ -349,25 +349,45 @@ public class StaxWriterGenerator extends AbstractStaxGenerator {
                 ModelField referenceIdentifierField = getReferenceIdentifierField(association);
 
                 if (association.isOneMultiplicity()) {
-                    sc.add(getValueChecker(type, value, association));
-                    sc.add("{");
-                    sc.indent();
+                    // Check if the association type is a class in the model or a simple type
+                    boolean inModel = isClassInModel(
+                            association.getTo(), field.getModelClass().getModel());
 
-                    if (referenceIdentifierField != null) {
-                        // if xml.reference, then store as a reference instead
+                    if (inModel) {
+                        // It's a model class, process as usual
+                        sc.add(getValueChecker(type, value, association));
+                        sc.add("{");
+                        sc.indent();
 
-                        sc.add("serializer.writeStartElement( \"" + fieldTagName + "\" );");
+                        if (referenceIdentifierField != null) {
+                            // if xml.reference, then store as a reference instead
 
-                        writeElementAttribute(sc, referenceIdentifierField, value);
+                            sc.add("serializer.writeStartElement( \"" + fieldTagName + "\" );");
 
-                        sc.add("serializer.writeEndElement();");
+                            writeElementAttribute(sc, referenceIdentifierField, value);
+
+                            sc.add("serializer.writeEndElement();");
+                        } else {
+                            sc.add("write" + association.getTo() + "( (" + association.getTo() + ") " + value + ", \""
+                                    + fieldTagName + "\", serializer );");
+                        }
+
+                        sc.unindent();
+                        sc.add("}");
                     } else {
-                        sc.add("write" + association.getTo() + "( (" + association.getTo() + ") " + value + ", \""
-                                + fieldTagName + "\", serializer );");
-                    }
+                        // It's a simple type (like String), write it directly
+                        sc.add(getValueChecker(type, value, association));
+                        sc.add("{");
+                        sc.indent();
 
-                    sc.unindent();
-                    sc.add("}");
+                        sc.add("serializer.writeStartElement( " + "\"" + fieldTagName + "\" );");
+                        sc.add("serializer.writeCharacters( " + getValue(association.getTo(), value, xmlFieldMetadata)
+                                + " );");
+                        sc.add("serializer.writeEndElement();");
+
+                        sc.unindent();
+                        sc.add("}");
+                    }
                 } else {
                     // MANY_MULTIPLICITY
 
