@@ -329,12 +329,31 @@ public class Xpp3WriterGenerator extends AbstractXpp3Generator {
                 String associationName = association.getName();
 
                 if (association.isOneMultiplicity()) {
-                    sc.add(getValueChecker(type, value, association));
+                    // Check if the association type is a class in the model or a simple type
+                    boolean inModel = isClassInModel(
+                            association.getTo(), field.getModelClass().getModel());
 
-                    sc.add("{");
-                    sc.addIndented("write" + association.getTo() + "( (" + association.getTo() + ") " + value + ", \""
-                            + fieldTagName + "\", serializer );");
-                    sc.add("}");
+                    if (inModel) {
+                        // It's a model class, call the write method for that class
+                        sc.add(getValueChecker(type, value, association));
+
+                        sc.add("{");
+                        sc.addIndented("write" + association.getTo() + "( (" + association.getTo() + ") " + value
+                                + ", \"" + fieldTagName + "\", serializer );");
+                        sc.add("}");
+                    } else {
+                        // It's a simple type (like String), write it directly as a tag
+                        sc.add(getValueChecker(type, value, association));
+
+                        sc.add("{");
+                        sc.addIndented("serializer.startTag( NAMESPACE, " + "\"" + fieldTagName + "\" ).text( "
+                                + getValue(association.getTo(), value, xmlFieldMetadata) + " ).endTag( NAMESPACE, "
+                                + "\"" + fieldTagName + "\" );");
+                        sc.indent();
+                        writeLocationTracking(sc, uncapClassName, '"' + fieldTagName + '"');
+                        sc.unindent();
+                        sc.add("}");
+                    }
                 } else {
                     // MANY_MULTIPLICITY
 

@@ -656,12 +656,37 @@ public class Xpp3ReaderGenerator extends AbstractXpp3Generator {
             String associationName = association.getName();
 
             if (association.isOneMultiplicity()) {
-                sc.add(tagComparison);
+                // Check if the association type is a class in the model or a simple type
+                boolean inModel = isClassInModel(
+                        association.getTo(), field.getModelClass().getModel());
 
-                sc.add("{");
-                sc.addIndented(objectName + ".set" + capFieldName + "( parse" + association.getTo() + "( parser, strict"
-                        + trackingArgs + " ) );");
-                sc.add("}");
+                if (inModel) {
+                    // It's a model class, call the parse method for that class
+                    sc.add(tagComparison);
+
+                    sc.add("{");
+                    sc.addIndented(objectName + ".set" + capFieldName + "( parse" + association.getTo()
+                            + "( parser, strict" + trackingArgs + " ) );");
+                    sc.add("}");
+                } else {
+                    // It's a simple type (like String), use primitive field handling
+                    sc.add(tagComparison);
+
+                    sc.add("{");
+                    sc.indent();
+
+                    writePrimitiveField(
+                            field,
+                            association.getTo(),
+                            objectName,
+                            objectName,
+                            "\"" + field.getName() + "\"",
+                            "set" + capFieldName,
+                            sc);
+
+                    sc.unindent();
+                    sc.add("}");
+                }
             } else {
                 // MANY_MULTIPLICITY
 
