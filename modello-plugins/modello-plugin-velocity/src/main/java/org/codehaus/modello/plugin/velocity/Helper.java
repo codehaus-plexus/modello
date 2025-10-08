@@ -24,6 +24,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.codehaus.modello.ModelloRuntimeException;
+import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
@@ -32,6 +33,7 @@ import org.codehaus.modello.plugin.AbstractModelloGenerator;
 import org.codehaus.modello.plugins.xml.metadata.XmlAssociationMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlClassMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
+import org.codehaus.modello.plugins.xml.metadata.XmlModelMetadata;
 import org.codehaus.plexus.util.StringUtils;
 
 /**
@@ -84,6 +86,13 @@ public class Helper {
             ancestors.add(0, cl);
         }
         return ancestors;
+    }
+
+    /**
+     * Returns the {@code XmlClassMetadata} for the given {@code ModelClass}.
+     */
+    public XmlModelMetadata xmlModelMetadata(Model model) {
+        return (XmlModelMetadata) model.getMetadata(XmlModelMetadata.ID);
     }
 
     /**
