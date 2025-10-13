@@ -4,12 +4,16 @@ import java.util.Date;
 
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 
-import junit.framework.TestCase;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertSame;
 
 public class CloneTest
-    extends TestCase
 {
-
+    @Test
     public void testNullSafe()
         throws Exception
     {
@@ -20,7 +24,7 @@ public class CloneTest
         assertNotNull( copy );
         assertNotSame( orig, copy );
     }
-
+    @Test
     public void testClone()
         throws Exception
     {
