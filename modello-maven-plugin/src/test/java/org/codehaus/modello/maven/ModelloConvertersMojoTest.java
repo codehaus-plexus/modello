@@ -22,31 +22,29 @@ package org.codehaus.modello.maven;
  * SOFTWARE.
  */
 
-import java.io.File;
-import java.util.Arrays;
-
 import org.apache.maven.project.MavenProject;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.plexus.ContainerConfiguration;
-import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.build.BuildContext;
 import org.codehaus.plexus.testing.PlexusExtension;
 import org.codehaus.plexus.testing.PlexusTest;
+import org.codehaus.plexus.testing.PlexusTestConfiguration;
 import org.codehaus.plexus.util.FileUtils;
-import org.junit.Before;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.RegisterExtension;
 
 import javax.inject.Inject;
+import java.io.File;
+import java.util.Arrays;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.codehaus.plexus.testing.PlexusExtension.getTestFile;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author <a href="mailto:brett@apache.org">Brett Porter</a>
  */
-public class ModelloConvertersMojoTest {
+@PlexusTest
+public class ModelloConvertersMojoTest implements PlexusTestConfiguration {
 
     @Inject
     ModelloCore modelloCore;
@@ -54,19 +52,16 @@ public class ModelloConvertersMojoTest {
     @Inject
     BuildContext buildContext;
 
-    @RegisterExtension
-    PlexusExtension plexusExtension = new PlexusExtension() {
-        @Override
-        protected void customizeContainerConfiguration(ContainerConfiguration containerConfiguration) {
-            containerConfiguration.setClassPathScanning("cache");
-        }
-    };
+    @Override
+    public void customizeConfiguration(ContainerConfiguration containerConfiguration) {
+        containerConfiguration.setClassPathScanning("cache");
+    }
 
     @Test
     public void testModelloConvertersMojo() throws Exception {
         ModelloConvertersMojo mojo = new ModelloConvertersMojo();
 
-        File outputDirectory = PlexusExtension.getTestFile("target/converters-test");
+        File outputDirectory = getTestFile("target/converters-test");
 
         FileUtils.deleteDirectory(outputDirectory);
 
