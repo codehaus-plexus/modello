@@ -22,25 +22,31 @@ package org.codehaus.modello.generator.xml.stax;
  * SOFTWARE.
  */
 
+import javax.inject.Inject;
+
 import java.util.Map;
 
 import org.codehaus.modello.AbstractModelloJavaGeneratorTest;
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
+import org.codehaus.plexus.testing.PlexusTest;
 import org.codehaus.plexus.util.StringUtils;
+import org.junit.jupiter.api.BeforeEach;
 
+@PlexusTest
 public abstract class AbstractStaxGeneratorTestCase extends AbstractModelloJavaGeneratorTest {
+
+    @Inject
     protected ModelloCore modello;
 
     protected AbstractStaxGeneratorTestCase(String name) {
         super(name);
     }
 
-    protected void setUp() throws Exception {
+    @BeforeEach
+    public void setUp() throws Exception {
         super.setUp();
-
-        modello = (ModelloCore) lookup(ModelloCore.ROLE);
     }
 
     protected void verifyModel(Model model, String className) throws Exception {

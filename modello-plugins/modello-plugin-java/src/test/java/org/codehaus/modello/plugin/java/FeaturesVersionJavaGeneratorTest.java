@@ -22,26 +22,33 @@ package org.codehaus.modello.plugin.java;
  * SOFTWARE.
  */
 
+import javax.inject.Inject;
+
 import java.util.Map;
 
 import org.codehaus.modello.AbstractModelloJavaGeneratorTest;
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
+import org.codehaus.plexus.testing.PlexusTest;
+import org.junit.jupiter.api.Test;
 
 /**
  * @author Hervé Boutemy
  */
+@PlexusTest
 public class FeaturesVersionJavaGeneratorTest extends AbstractModelloJavaGeneratorTest {
+    @Inject
+    private ModelloCore modello;
+
     public FeaturesVersionJavaGeneratorTest() {
         super("features-version");
     }
 
     private static final String ALL_VERSIONS = "1.0.0,1.5.0,2.0.0,3.0.0";
 
+    @Test
     public void testJavaGenerator() throws Throwable {
-        ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
-
         Model model = modello.loadModel(getXmlResourceReader("/features.mdo"));
 
         Map<String, Object> parameters = getModelloParameters();

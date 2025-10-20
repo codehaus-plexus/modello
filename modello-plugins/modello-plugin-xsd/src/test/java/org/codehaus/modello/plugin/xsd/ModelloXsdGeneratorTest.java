@@ -22,6 +22,7 @@ package org.codehaus.modello.plugin.xsd;
  * SOFTWARE.
  */
 
+import javax.inject.Inject;
 import javax.xml.parsers.SAXParser;
 
 import java.util.Map;
@@ -29,9 +30,13 @@ import java.util.Map;
 import org.codehaus.modello.AbstractModelloGeneratorTest;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
+import org.codehaus.plexus.testing.PlexusTest;
+import org.junit.jupiter.api.Test;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
+
+import static org.codehaus.plexus.testing.PlexusExtension.getTestFile;
 
 /**
  * Check that features.mdo (which tries to be the most complete model) can be checked against XSD generated from
@@ -39,14 +44,18 @@ import org.xml.sax.helpers.DefaultHandler;
  *
  * @author Hervé Boutemy
  */
+@PlexusTest
 public class ModelloXsdGeneratorTest extends AbstractModelloGeneratorTest {
+
+    @Inject
+    private ModelloCore modello;
+
     public ModelloXsdGeneratorTest() {
         super("modello");
     }
 
+    @Test
     public void testXsdGenerator() throws Throwable {
-        ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
-
         Map<String, Object> parameters = getModelloParameters("1.4.0");
 
         Model model = modello.loadModel(getTestFile("../../src/main/mdo/modello.mdo"));

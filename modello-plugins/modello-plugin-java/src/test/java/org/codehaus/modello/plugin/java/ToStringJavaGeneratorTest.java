@@ -22,20 +22,30 @@ package org.codehaus.modello.plugin.java;
  * SOFTWARE.
  */
 
+import javax.inject.Inject;
+
 import java.io.File;
 import java.util.Map;
 
 import org.codehaus.modello.AbstractModelloJavaGeneratorTest;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
+import org.codehaus.plexus.testing.PlexusTest;
 import org.codehaus.plexus.util.FileUtils;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * check <code>toString()</code> method is generated.
  *
  * @author <a href="mailto:olamy@apache.org">Olivier Lamy</a>
  */
+@PlexusTest
 public class ToStringJavaGeneratorTest extends AbstractModelloJavaGeneratorTest {
+    @Inject
+    private ModelloCore modello;
+
     public ToStringJavaGeneratorTest() {
         super("tostring");
     }
@@ -43,9 +53,8 @@ public class ToStringJavaGeneratorTest extends AbstractModelloJavaGeneratorTest 
     /**
      * @throws Exception if any exception occurs
      */
+    @Test
     public void testJavaGeneratorWithToString() throws Exception {
-        ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
-
         Model model = modello.loadModel(getXmlResourceReader("/models/tostring.mdo"));
 
         Map<String, Object> parameters = getModelloParameters("1.0.0");

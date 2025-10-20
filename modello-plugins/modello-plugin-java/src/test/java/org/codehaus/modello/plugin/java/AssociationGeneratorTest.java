@@ -22,23 +22,30 @@ package org.codehaus.modello.plugin.java;
  * SOFTWARE.
  */
 
+import javax.inject.Inject;
+
 import java.util.Map;
 
 import org.codehaus.modello.AbstractModelloJavaGeneratorTest;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
+import org.codehaus.plexus.testing.PlexusTest;
+import org.junit.jupiter.api.Test;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  */
+@PlexusTest
 public class AssociationGeneratorTest extends AbstractModelloJavaGeneratorTest {
+    @Inject
+    private ModelloCore modello;
+
     public AssociationGeneratorTest() {
         super("oneToManyAssociation");
     }
 
+    @Test
     public void testJavaGenerator() throws Throwable {
-        ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
-
         Model model = modello.loadModel(getXmlResourceReader("/models/oneToManyAssociation.mdo"));
 
         Map<String, Object> parameters = getModelloParameters("4.0.0");

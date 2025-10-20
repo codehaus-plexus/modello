@@ -6,6 +6,9 @@ import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.Version;
 import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -16,6 +19,7 @@ public class StaxGeneratorVersionInFieldTest extends AbstractStaxGeneratorTestCa
         super("stax-version-in-field");
     }
 
+    @Test
     public void testStaxReaderVersionInField() throws Throwable {
         Model model = modello.loadModel(getXmlResourceReader("/version-in-field.mdo"));
 

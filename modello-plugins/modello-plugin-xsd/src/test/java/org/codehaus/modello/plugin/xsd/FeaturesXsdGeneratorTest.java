@@ -22,6 +22,7 @@ package org.codehaus.modello.plugin.xsd;
  * SOFTWARE.
  */
 
+import javax.inject.Inject;
 import javax.xml.XMLConstants;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
@@ -36,19 +37,27 @@ import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
+import org.codehaus.plexus.testing.PlexusTest;
+import org.junit.jupiter.api.Test;
 import org.xml.sax.SAXParseException;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * @author Hervé Boutemy
  */
+@PlexusTest
 public class FeaturesXsdGeneratorTest extends AbstractModelloGeneratorTest {
+    @Inject
+    private ModelloCore modello;
+
     public FeaturesXsdGeneratorTest() {
         super("features");
     }
 
+    @Test
     public void testXsdGenerator() throws Throwable {
-        ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
-
         Model model = modello.loadModel(getXmlResourceReader("/features.mdo"));
 
         Map<String, Object> parameters = getModelloParameters("1.0.0");

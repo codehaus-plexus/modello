@@ -19,20 +19,27 @@ package org.codehaus.modello.generator.xml.stax;
  * under the License.
  */
 
+import javax.inject.Inject;
+
 import java.util.Map;
 
 import org.codehaus.modello.AbstractModelloJavaGeneratorTest;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
+import org.codehaus.plexus.testing.PlexusTest;
+import org.junit.jupiter.api.Test;
 
+@PlexusTest
 public class NoAdderStaxGeneratorTest extends AbstractModelloJavaGeneratorTest {
+    @Inject
+    private ModelloCore modello;
+
     public NoAdderStaxGeneratorTest() {
         super("testNoAdder");
     }
 
+    @Test
     public void testNoAdder() throws Throwable {
-        ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
-
         Model model = modello.loadModel(getXmlResourceReader("/noAdder.mdo"));
 
         Map<String, Object> parameters = getModelloParameters("1.0.0");

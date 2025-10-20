@@ -22,20 +22,27 @@ package org.codehaus.modello.generator.xml.xpp3;
  * SOFTWARE.
  */
 
+import javax.inject.Inject;
+
 import java.util.Map;
 
 import org.codehaus.modello.AbstractModelloJavaGeneratorTest;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
+import org.codehaus.plexus.testing.PlexusTest;
+import org.junit.jupiter.api.Test;
 
+@PlexusTest
 public class StandaloneReadXpp3GeneratorTest extends AbstractModelloJavaGeneratorTest {
     public StandaloneReadXpp3GeneratorTest() {
         super("testStandaloneRead");
     }
 
-    public void testStandaloneRead() throws Throwable {
-        ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
+    @Inject
+    private ModelloCore modello;
 
+    @Test
+    public void testStandaloneRead() throws Throwable {
         Model model = modello.loadModel(getXmlResourceReader("/standaloneRead.mdo"));
 
         Map<String, Object> parameters = getModelloParameters("1.0.0");

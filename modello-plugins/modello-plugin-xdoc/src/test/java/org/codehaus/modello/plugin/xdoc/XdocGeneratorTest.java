@@ -22,6 +22,8 @@ package org.codehaus.modello.plugin.xdoc;
  * SOFTWARE.
  */
 
+import javax.inject.Inject;
+
 import java.io.File;
 import java.nio.file.Files;
 import java.util.HashSet;
@@ -39,16 +41,24 @@ import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.Version;
 import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
 import org.codehaus.modello.verifier.VerifierException;
+import org.codehaus.plexus.testing.PlexusTest;
 import org.codehaus.plexus.util.FileUtils;
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.xmlunit.builder.DiffBuilder;
 import org.xmlunit.builder.Input;
 import org.xmlunit.diff.Diff;
 
+import static org.codehaus.plexus.testing.PlexusExtension.getTestFile;
+import static org.junit.jupiter.api.Assertions.*;
+
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  */
+@PlexusTest
 public class XdocGeneratorTest extends AbstractModelloGeneratorTest {
+    @Inject
+    private ModelloCore modello;
 
     public XdocGeneratorTest() {
         super("xdoc");
@@ -58,15 +68,15 @@ public class XdocGeneratorTest extends AbstractModelloGeneratorTest {
         return getTestFile("target/generated-site/xdoc");
     }
 
+    @Test
     public void testXdocGenerator() throws Exception {
         checkMavenXdocGenerator();
         checkFeaturesXdocGenerator();
         checkSettingsXdocGenerator();
     }
 
+    @Test
     public void testHtmlToXml() throws Exception {
-        ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
-
         Model model = modello.loadModel(getXmlResourceReader("/html4.mdo"));
 
         Map<String, Object> parameters = getModelloParameters("1.0.0");
@@ -79,14 +89,12 @@ public class XdocGeneratorTest extends AbstractModelloGeneratorTest {
                 .build();
 
         assertFalse(
+                diff.hasDifferences(),
                 diff.toString() + "\nGenerated output:\n"
-                        + new String(Files.readAllBytes(new File(getOutputDirectory(), "html4.xml").toPath())),
-                diff.hasDifferences());
+                        + new String(Files.readAllBytes(new File(getOutputDirectory(), "html4.xml").toPath())));
     }
 
     private void checkMavenXdocGenerator() throws Exception {
-        ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
-
         Model model = modello.loadModel(getXmlResourceReader("/maven.mdo"));
 
         List<ModelClass> classesList = model.getClasses(new Version("4.0.0"));
@@ -130,8 +138,6 @@ public class XdocGeneratorTest extends AbstractModelloGeneratorTest {
     }
 
     public void checkFeaturesXdocGenerator() throws Exception {
-        ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
-
         Model model = modello.loadModel(getXmlResourceReader("/features.mdo"));
 
         Map<String, Object> parameters = getModelloParameters("1.5.0");
@@ -142,12 +148,10 @@ public class XdocGeneratorTest extends AbstractModelloGeneratorTest {
 
         String content = FileUtils.fileRead(new File(getOutputDirectory(), "features.xml"), "UTF-8");
 
-        assertTrue("Transient fields were erroneously documented", !content.contains("transientString"));
+        assertTrue(!content.contains("transientString"), "Transient fields were erroneously documented");
     }
 
     public void checkSettingsXdocGenerator() throws Exception {
-        ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
-
         Model model = modello.loadModel(getXmlResourceReader("/settings.mdo"));
 
         Map<String, Object> parameters = getModelloParameters("1.5.0");
@@ -158,7 +162,7 @@ public class XdocGeneratorTest extends AbstractModelloGeneratorTest {
 
         String content = FileUtils.fileRead(new File(getOutputDirectory(), "settings.xml"), "UTF-8");
 
-        assertTrue("Properties field was erroneously documented", !content.contains("&lt;properties/&gt;"));
+        assertTrue(!content.contains("&lt;properties/&gt;"), "Properties field was erroneously documented");
     }
 
     /**
@@ -177,7 +181,7 @@ public class XdocGeneratorTest extends AbstractModelloGeneratorTest {
         while (m.find()) {
             hrefs.add(m.group(1));
         }
-        Assert.assertTrue("should find some '<a href=' links", hrefs.size() > 0);
+        Assertions.assertTrue(hrefs.size() > 0, "should find some '<a href=' links");
 
         Set<String> names = new HashSet<String>();
         p = Pattern.compile("<a name=\"(class_[^\"]+)\"", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
@@ -185,7 +189,7 @@ public class XdocGeneratorTest extends AbstractModelloGeneratorTest {
         while (m.find()) {
             names.add(m.group(1));
         }
-        Assert.assertTrue("should find some '<a name=' anchor definitions", names.size() > 0);
+        Assertions.assertTrue(names.size() > 0, "should find some '<a name=' anchor definitions");
 
         hrefs.removeAll(names);
         if (hrefs.size() > 0) {

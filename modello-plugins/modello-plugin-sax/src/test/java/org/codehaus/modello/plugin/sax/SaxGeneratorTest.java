@@ -22,6 +22,8 @@ package org.codehaus.modello.plugin.sax;
  * SOFTWARE.
  */
 
+import javax.inject.Inject;
+
 import java.util.List;
 import java.util.Map;
 
@@ -32,18 +34,25 @@ import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.Version;
 import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
+import org.codehaus.plexus.testing.PlexusTest;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author <a href="mailto:simonetripodi@apache.org">Simone Tripodi</a>
  */
+@PlexusTest
 public class SaxGeneratorTest extends AbstractModelloJavaGeneratorTest {
+    @Inject
+    private ModelloCore modello;
+
     public SaxGeneratorTest() {
         super("sax");
     }
 
+    @Test
     public void testXpp3Generator() throws Throwable {
-        ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
-
         Model model = modello.loadModel(getXmlResourceReader("/maven.mdo"));
 
         // check some elements read from the model
