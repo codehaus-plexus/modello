@@ -24,6 +24,7 @@ package org.codehaus.modello.generator.xml.stax;
 
 import org.codehaus.modello.model.Model;
 import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
+import org.junit.jupiter.api.Test;
 
 /**
  */
@@ -32,6 +33,7 @@ public class StaxGeneratorVersionReaderDelegateTest extends AbstractStaxGenerato
         super("stax-version-reader-delegate");
     }
 
+    @Test
     public void testStaxReaderVersionInField() throws Throwable {
         Model model = modello.loadModel(getXmlResourceReader("/version-in-namespace.mdo"));
 

@@ -7,10 +7,9 @@ import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.Version;
 import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class XmlModelHelpersTest {
     @Test
@@ -44,9 +43,9 @@ public class XmlModelHelpersTest {
 
         List<ModelField> orderedFields = XmlModelHelpers.getFieldsForXml(carClass, new Version("0"));
         // unexpected order...
-        assertThat(orderedFields.get(2).getName(), is("modelName"));
-        assertThat(orderedFields.get(1).getName(), is("brand"));
-        assertThat(orderedFields.get(0).getName(), is("id"));
+        assertEquals("id", orderedFields.get(0).getName());
+        assertEquals("brand", orderedFields.get(1).getName());
+        assertEquals("modelName", orderedFields.get(2).getName());
     }
 
     @Test
@@ -79,8 +78,8 @@ public class XmlModelHelpersTest {
         model.addClass(carClass);
 
         List<ModelField> orderedFields = XmlModelHelpers.getFieldsForXml(carClass, new Version("0"));
-        assertThat(orderedFields.get(0).getName(), is("id"));
-        assertThat(orderedFields.get(1).getName(), is("brand"));
-        assertThat(orderedFields.get(2).getName(), is("modelName"));
+        assertEquals("id", orderedFields.get(0).getName());
+        assertEquals("brand", orderedFields.get(1).getName());
+        assertEquals("modelName", orderedFields.get(2).getName());
     }
 }

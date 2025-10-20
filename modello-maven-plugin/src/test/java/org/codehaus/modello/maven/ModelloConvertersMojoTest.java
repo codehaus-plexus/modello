@@ -22,6 +22,11 @@ package org.codehaus.modello.maven;
  * SOFTWARE.
  */
 
+import javax.inject.Inject;
+
+import java.io.File;
+import java.util.Arrays;
+
 import org.apache.maven.project.MavenProject;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.plexus.ContainerConfiguration;
@@ -31,10 +36,6 @@ import org.codehaus.plexus.testing.PlexusTest;
 import org.codehaus.plexus.testing.PlexusTestConfiguration;
 import org.codehaus.plexus.util.FileUtils;
 import org.junit.jupiter.api.Test;
-
-import javax.inject.Inject;
-import java.io.File;
-import java.util.Arrays;
 
 import static org.codehaus.plexus.testing.PlexusExtension.getTestFile;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -47,10 +48,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class ModelloConvertersMojoTest implements PlexusTestConfiguration {
 
     @Inject
-    ModelloCore modelloCore;
+    private ModelloCore modelloCore;
 
     @Inject
-    BuildContext buildContext;
+    private BuildContext buildContext;
 
     @Override
     public void customizeConfiguration(ContainerConfiguration containerConfiguration) {
@@ -120,6 +121,4 @@ public class ModelloConvertersMojoTest implements PlexusTestConfiguration {
 
         assertFalse(javaFile.exists(), "The generated java file doesn't exist: '" + javaFile.getAbsolutePath() + "'.");
     }
-
-
 }

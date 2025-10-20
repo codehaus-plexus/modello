@@ -3,12 +3,16 @@ package org.codehaus.modello.plugin.java.javasource;
 import java.io.File;
 
 import org.codehaus.modello.AbstractModelloGeneratorTest;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class JavaSourceTest extends AbstractModelloGeneratorTest {
     public JavaSourceTest() {
         super("javasource");
     }
 
+    @Test
     public void testJavaSource() {
         checkJClass();
         checkJCompUnit();

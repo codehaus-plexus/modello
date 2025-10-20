@@ -22,23 +22,30 @@ package org.codehaus.modello.plugin.xsd;
  * SOFTWARE.
  */
 
+import javax.inject.Inject;
+
 import java.util.Map;
 
 import org.codehaus.modello.AbstractModelloGeneratorTest;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
+import org.codehaus.plexus.testing.PlexusTest;
+import org.junit.jupiter.api.Test;
 
 /**
  * @author <a href="mailto:olamy@apache.org">Brett Porter</a>
  */
+@PlexusTest
 public class ChangesXsdGeneratorTest extends AbstractModelloGeneratorTest {
+    @Inject
+    private ModelloCore modello;
+
     public ChangesXsdGeneratorTest() {
         super("xsd-changes");
     }
 
+    @Test
     public void testXsdGenerator() throws Throwable {
-        ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
-
         Model model = modello.loadModel(getXmlResourceReader("/changes.mdo"));
 
         // generate XSD file

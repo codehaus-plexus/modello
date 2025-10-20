@@ -22,6 +22,8 @@ package org.codehaus.modello.plugin.xsd;
  * SOFTWARE.
  */
 
+import javax.inject.Inject;
+
 import java.util.List;
 import java.util.Map;
 
@@ -32,17 +34,26 @@ import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.Version;
 import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
+import org.codehaus.plexus.testing.PlexusTest;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author <a href="mailto:brett@codehaus.org">Brett Porter</a>
  */
+@PlexusTest
 public class XsdGeneratorTest extends AbstractModelloGeneratorTest {
+
+    @Inject
+    private ModelloCore modello;
+
     public XsdGeneratorTest() {
         super("xsd");
     }
 
+    @Test
     public void testXsdGenerator() throws Throwable {
-        ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
 
         Model model = modello.loadModel(getXmlResourceReader("/maven.mdo"));
 

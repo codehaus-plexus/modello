@@ -29,9 +29,9 @@ import java.lang.reflect.Method;
 
 import org.codehaus.plexus.util.xml.XmlStreamReader;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public abstract class Verifier {
     public abstract void verify() throws Throwable;
@@ -59,12 +59,12 @@ public abstract class Verifier {
         try {
             read = reader.getMethod("read", input);
 
-            assertEquals("Bad return type of " + read, model, read.getReturnType());
+            assertEquals(model, read.getReturnType(), "Bad return type of " + read);
 
             for (Class<?> e : read.getExceptionTypes()) {
                 assertTrue(
-                        "Unexpected exception " + e.getName() + " at " + read,
-                        IOException.class.equals(e) || exception.equals(e));
+                        IOException.class.equals(e) || exception.equals(e),
+                        "Unexpected exception " + e.getName() + " at " + read);
             }
         } catch (NoSuchMethodException e) {
             fail(e.toString());
@@ -74,12 +74,12 @@ public abstract class Verifier {
         try {
             read = reader.getMethod("read", input, Boolean.TYPE);
 
-            assertEquals("Bad return type of " + read, model, read.getReturnType());
+            assertEquals(model, read.getReturnType(), "Bad return type of " + read);
 
             for (Class<?> e : read.getExceptionTypes()) {
                 assertTrue(
-                        "Unexpected exception " + e.getName() + " at " + read,
-                        IOException.class.equals(e) || exception.equals(e));
+                        IOException.class.equals(e) || exception.equals(e),
+                        "Unexpected exception " + e.getName() + " at " + read);
             }
         } catch (NoSuchMethodException e) {
             fail(e.toString());
@@ -95,8 +95,8 @@ public abstract class Verifier {
 
             for (Class<?> e : write.getExceptionTypes()) {
                 assertTrue(
-                        "Unexpected exception " + e.getName() + " at " + write,
-                        IOException.class.equals(e) || exception.equals(e));
+                        IOException.class.equals(e) || exception.equals(e),
+                        "Unexpected exception " + e.getName() + " at " + write);
             }
         } catch (NoSuchMethodException e) {
             fail(e.toString());

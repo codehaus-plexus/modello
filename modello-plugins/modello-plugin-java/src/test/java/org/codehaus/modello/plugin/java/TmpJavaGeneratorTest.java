@@ -22,11 +22,15 @@ package org.codehaus.modello.plugin.java;
  * SOFTWARE.
  */
 
+import javax.inject.Inject;
+
 import java.util.Map;
 
 import org.codehaus.modello.AbstractModelloJavaGeneratorTest;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
+import org.codehaus.plexus.testing.PlexusTest;
+import org.junit.jupiter.api.Test;
 
 /**
  * MODELLO-83: check that <code>tmp</code> can be used as a field name without interference with generated code for
@@ -34,7 +38,11 @@ import org.codehaus.modello.model.Model;
  *
  * @author <a href="mailto:vincent.siveton@gmail.com">Vincent Siveton</a>
  */
+@PlexusTest
 public class TmpJavaGeneratorTest extends AbstractModelloJavaGeneratorTest {
+    @Inject
+    private ModelloCore modello;
+
     public TmpJavaGeneratorTest() {
         super("tmp");
     }
@@ -43,9 +51,8 @@ public class TmpJavaGeneratorTest extends AbstractModelloJavaGeneratorTest {
      * MODELLO-83
      * @throws Exception if any exception occurs
      */
+    @Test
     public void testJavaGeneratorWithTmp() throws Exception {
-        ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
-
         Model model = modello.loadModel(getXmlResourceReader("/models/tmp.mdo"));
 
         Map<String, Object> parameters = getModelloParameters("1.0.0");

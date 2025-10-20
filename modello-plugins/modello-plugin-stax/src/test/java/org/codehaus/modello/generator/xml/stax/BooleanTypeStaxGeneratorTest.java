@@ -19,20 +19,28 @@ package org.codehaus.modello.generator.xml.stax;
  * under the License.
  */
 
+import javax.inject.Inject;
+
 import java.util.Map;
 
 import org.codehaus.modello.AbstractModelloJavaGeneratorTest;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
+import org.codehaus.plexus.testing.PlexusTest;
+import org.junit.jupiter.api.Test;
 
+@PlexusTest
 public class BooleanTypeStaxGeneratorTest extends AbstractModelloJavaGeneratorTest {
+
+    @Inject
+    private ModelloCore modello;
+
     public BooleanTypeStaxGeneratorTest() {
         super("testBooleanType");
     }
 
+    @Test
     public void testBooleanType() throws Throwable {
-        ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
-
         Model model = modello.loadModel(getXmlResourceReader("/boolean.mdo"));
 
         Map<String, Object> parameters = getModelloParameters("1.0.0", 8);

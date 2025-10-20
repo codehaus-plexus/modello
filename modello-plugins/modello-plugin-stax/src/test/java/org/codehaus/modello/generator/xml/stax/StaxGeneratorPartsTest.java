@@ -28,6 +28,9 @@ import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.Version;
 import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  */
@@ -36,6 +39,7 @@ public class StaxGeneratorPartsTest extends AbstractStaxGeneratorTestCase {
         super("stax-parts");
     }
 
+    @Test
     public void testStaxReaderParts() throws Throwable {
         Model model = modello.loadModel(getXmlResourceReader("/parts.mdo"));
 

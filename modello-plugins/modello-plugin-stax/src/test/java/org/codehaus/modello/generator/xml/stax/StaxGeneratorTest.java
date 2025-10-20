@@ -30,6 +30,9 @@ import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.Version;
 import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
 import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -40,6 +43,7 @@ public class StaxGeneratorTest extends AbstractStaxGeneratorTestCase {
         super("stax");
     }
 
+    @Test
     public void testStaxGenerator() throws Throwable {
         Model model = modello.loadModel(getXmlResourceReader("/maven.mdo"));
 

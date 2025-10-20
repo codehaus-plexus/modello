@@ -22,6 +22,8 @@ package org.codehaus.modello;
  * SOFTWARE.
  */
 
+import javax.inject.Inject;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,8 +43,12 @@ import org.codehaus.plexus.compiler.CompilerConfiguration;
 import org.codehaus.plexus.compiler.CompilerException;
 import org.codehaus.plexus.compiler.CompilerMessage;
 import org.codehaus.plexus.compiler.CompilerResult;
-import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 import org.codehaus.plexus.util.FileUtils;
+
+import static org.codehaus.plexus.testing.PlexusExtension.getTestFile;
+import static org.codehaus.plexus.testing.PlexusExtension.getTestPath;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Base class for unit-tests of Modello plugins that generate java code.
@@ -60,13 +66,14 @@ public abstract class AbstractModelloJavaGeneratorTest extends AbstractModelloGe
 
     private List<String> classPathElements = new ArrayList<String>();
 
+    @Inject
+    private Compiler compiler = null; // todo
+
     protected AbstractModelloJavaGeneratorTest(String name) {
         super(name);
     }
 
-    protected void setUp() throws Exception {
-        super.setUp();
-
+    public void setUp() throws Exception {
         FileUtils.deleteDirectory(getOutputClasses());
 
         assertTrue(getOutputClasses().mkdirs());
@@ -94,7 +101,7 @@ public abstract class AbstractModelloJavaGeneratorTest extends AbstractModelloGe
         String libsDir = System.getProperty("tests.lib.dir", "target/test-libs");
         File dependencyFile = new File(libsDir, artifactId + ".jar");
 
-        assertTrue("Can't find dependency: " + dependencyFile.getAbsolutePath(), dependencyFile.isFile());
+        assertTrue(dependencyFile.isFile(), "Can't find dependency: " + dependencyFile.getAbsolutePath());
 
         return dependencyFile;
     }
@@ -107,7 +114,8 @@ public abstract class AbstractModelloJavaGeneratorTest extends AbstractModelloGe
         Properties properties = new Properties(System.getProperties());
 
         if (properties.getProperty("version") == null) {
-            InputStream is = getResourceAsStream("/META-INF/maven/org.codehaus.modello/modello-test/pom.properties");
+            InputStream is = this.getClass()
+                    .getResourceAsStream("/META-INF/maven/org.codehaus.modello/modello-test/pom.properties");
 
             if (is != null) {
                 properties.load(is);
@@ -148,6 +156,8 @@ public abstract class AbstractModelloJavaGeneratorTest extends AbstractModelloGe
         File destinationDirectory = getOutputClasses();
 
         addDependency("junit", "junit");
+        addDependency("org.junit.jupiter", "junit-jupiter-api");
+        addDependency("org.opentest4j", "opentest4j");
         addDependency("org.codehaus.plexus", "plexus-utils");
         addDependency("org.codehaus.plexus", "plexus-xml");
         // for plexus-xml 4
@@ -171,13 +181,6 @@ public abstract class AbstractModelloJavaGeneratorTest extends AbstractModelloGe
             sourceDirectories = new String[] {generatedSources.getAbsolutePath()};
         }
 
-        Compiler compiler;
-        try {
-            compiler = lookup(Compiler.class, "javac");
-        } catch (ComponentLookupException e) {
-            throw new RuntimeException(e.getMessage(), e);
-        }
-
         CompilerConfiguration configuration = new CompilerConfiguration();
         configuration.setClasspathEntries(Arrays.asList(classPathElements));
         configuration.setSourceLocations(Arrays.asList(sourceDirectories));
@@ -196,7 +199,7 @@ public abstract class AbstractModelloJavaGeneratorTest extends AbstractModelloGe
             }
         }
 
-        assertEquals("There was compilation errors: " + errors, 0, errors.size());
+        assertEquals(0, errors.size(), "There was compilation errors: " + errors);
     }
 
     /**
@@ -234,7 +237,7 @@ public abstract class AbstractModelloJavaGeneratorTest extends AbstractModelloGe
     }
 
     protected void addClassPathFile(File file) {
-        assertTrue("File doesn't exists: " + file.getAbsolutePath(), file.exists());
+        assertTrue(file.exists(), "File doesn't exists: " + file.getAbsolutePath());
 
         try {
             urls.add(file.toURI().toURL());
@@ -256,9 +259,9 @@ public abstract class AbstractModelloJavaGeneratorTest extends AbstractModelloGe
     protected void assertGeneratedFileExists(String filename) {
         File file = new File(getOutputDirectory(), filename);
 
-        assertTrue("Missing generated file: " + file.getAbsolutePath(), file.canRead());
+        assertTrue(file.canRead(), "Missing generated file: " + file.getAbsolutePath());
 
-        assertTrue("The generated file is empty.", file.length() > 0);
+        assertTrue(file.length() > 0, "The generated file is empty.");
     }
 
     protected List<String> getClassPathElements() {

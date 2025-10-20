@@ -21,6 +21,12 @@
       <artifactId>plexus-build-api</artifactId>
     </dependency>
 
+    <!--      needed for modello compiler test(inside)-->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
     <dependency>
       <groupId>javax.persistence</groupId>
       <artifactId>persistence-api</artifactId>

@@ -22,24 +22,38 @@ package org.codehaus.modello.maven;
  * SOFTWARE.
  */
 
+import javax.inject.Inject;
+
 import java.io.File;
 import java.util.Arrays;
 
 import org.apache.maven.project.MavenProject;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.plexus.ContainerConfiguration;
-import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.build.BuildContext;
+import org.codehaus.plexus.testing.PlexusTest;
+import org.codehaus.plexus.testing.PlexusTestConfiguration;
 import org.codehaus.plexus.util.FileUtils;
+import org.junit.jupiter.api.Test;
+
+import static org.codehaus.plexus.testing.PlexusExtension.getTestFile;
+import static org.codehaus.plexus.testing.PlexusExtension.getTestPath;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  */
-public class ModelloJavaMojoTest extends PlexusTestCase {
-    public void testModelloJavaMojo() throws Exception {
-        ModelloCore modelloCore = (ModelloCore) lookup(ModelloCore.ROLE);
+@PlexusTest
+public class ModelloJavaMojoTest implements PlexusTestConfiguration {
+    @Inject
+    private BuildContext buildContext;
 
-        BuildContext buildContext = (BuildContext) lookup(BuildContext.class);
+    @Inject
+    private ModelloCore modelloCore;
+
+    @Test
+    public void testModelloJavaMojo() throws Exception {
 
         ModelloJavaMojo mojo = new ModelloJavaMojo();
 
@@ -76,32 +90,32 @@ public class ModelloJavaMojoTest extends PlexusTestCase {
 
         File javaFile = new File(outputDirectory, "org/codehaus/mojo/modello/javatest/Model.java");
 
-        assertTrue("The generated java file doesn't exist: '" + javaFile.getAbsolutePath() + "'.", javaFile.exists());
+        assertTrue(javaFile.exists(), "The generated java file doesn't exist: '" + javaFile.getAbsolutePath() + "'.");
 
         javaFile = new File(outputDirectory, "org/codehaus/mojo/modello/javatest/NewModel.java");
 
-        assertTrue("The generated java file doesn't exist: '" + javaFile.getAbsolutePath() + "'.", javaFile.exists());
+        assertTrue(javaFile.exists(), "The generated java file doesn't exist: '" + javaFile.getAbsolutePath() + "'.");
 
         javaFile = new File(outputDirectory, "org/codehaus/mojo/modello/javatest/v1_0_0/Model.java");
 
-        assertTrue("The generated java file doesn't exist: '" + javaFile.getAbsolutePath() + "'.", javaFile.exists());
+        assertTrue(javaFile.exists(), "The generated java file doesn't exist: '" + javaFile.getAbsolutePath() + "'.");
 
         javaFile = new File(outputDirectory, "org/codehaus/mojo/modello/javatest/v1_0_0/NewModel.java");
 
-        assertTrue("The generated java file doesn't exist: '" + javaFile.getAbsolutePath() + "'.", javaFile.exists());
+        assertTrue(javaFile.exists(), "The generated java file doesn't exist: '" + javaFile.getAbsolutePath() + "'.");
 
         javaFile = new File(outputDirectory, "org/codehaus/mojo/modello/javatest/v0_9_0/Model.java");
 
-        assertTrue("The generated java file doesn't exist: '" + javaFile.getAbsolutePath() + "'.", javaFile.exists());
+        assertTrue(javaFile.exists(), "The generated java file doesn't exist: '" + javaFile.getAbsolutePath() + "'.");
 
         javaFile = new File(outputDirectory, "org/codehaus/mojo/modello/javatest/v0_9_0/NewModel.java");
 
         assertFalse(
-                "The generated java file shouldn't exist: '" + javaFile.getAbsolutePath() + "'.", javaFile.exists());
+                javaFile.exists(), "The generated java file shouldn't exist: '" + javaFile.getAbsolutePath() + "'.");
     }
 
     @Override
-    protected void customizeContainerConfiguration(ContainerConfiguration containerConfiguration) {
+    public void customizeConfiguration(ContainerConfiguration containerConfiguration) {
         containerConfiguration.setClassPathScanning("cache");
     }
 }

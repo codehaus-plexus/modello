@@ -22,11 +22,12 @@ package org.codehaus.modello.plugins.xml;
  * SOFTWARE.
  */
 
+import javax.inject.Inject;
+
 import java.util.List;
 
 import org.codehaus.modello.ModelloRuntimeException;
 import org.codehaus.modello.core.ModelloCore;
-import org.codehaus.modello.metadata.MetadataPlugin;
 import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
@@ -35,22 +36,34 @@ import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlMetadataPlugin;
 import org.codehaus.plexus.ContainerConfiguration;
 import org.codehaus.plexus.PlexusConstants;
-import org.codehaus.plexus.PlexusTestCase;
+import org.codehaus.plexus.testing.PlexusTest;
+import org.codehaus.plexus.testing.PlexusTestConfiguration;
+import org.junit.jupiter.api.Test;
+
+import static org.codehaus.plexus.testing.PlexusExtension.getTestFile;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l </a>
  */
-public class XmlModelloPluginTest extends PlexusTestCase {
+@PlexusTest
+public class XmlModelloPluginTest implements PlexusTestConfiguration {
+    @Inject
+    private ModelloCore modello;
+
+    @Inject
+    private XmlMetadataPlugin object;
+
+    @Test
     public void testConfiguration() throws Exception {
-        Object object = lookup(MetadataPlugin.ROLE, "xml");
 
         assertNotNull(object);
 
         assertTrue(object instanceof XmlMetadataPlugin);
     }
 
+    @Test
     public void testXmlPlugin() throws Exception {
-        ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
 
         Model model = modello.loadModel(getTestFile("src/test/resources/model.mdo"));
 
@@ -108,7 +121,7 @@ public class XmlModelloPluginTest extends PlexusTestCase {
     }
 
     @Override
-    protected void customizeContainerConfiguration(ContainerConfiguration configuration) {
+    public void customizeConfiguration(ContainerConfiguration configuration) {
         configuration.setAutoWiring(true);
         configuration.setClassPathScanning(PlexusConstants.SCANNING_INDEX);
     }

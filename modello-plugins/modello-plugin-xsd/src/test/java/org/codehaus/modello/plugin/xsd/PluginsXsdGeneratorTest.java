@@ -1,5 +1,6 @@
 package org.codehaus.modello.plugin.xsd;
 
+import javax.inject.Inject;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 
@@ -12,7 +13,8 @@ import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelValidationException;
 import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
-import org.junit.Test;
+import org.codehaus.plexus.testing.PlexusTest;
+import org.junit.jupiter.api.Test;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -23,7 +25,11 @@ import org.xml.sax.helpers.DefaultHandler;
  * @see <a href="https://github.com/codehaus-plexus/modello/issues/264">Issue 264</a>
  *
  */
+@PlexusTest
 public class PluginsXsdGeneratorTest extends AbstractModelloGeneratorTest {
+
+    @Inject
+    private ModelloCore modello;
 
     public PluginsXsdGeneratorTest() {
         super("plugins");
@@ -33,7 +39,6 @@ public class PluginsXsdGeneratorTest extends AbstractModelloGeneratorTest {
     public void testWithNameWildcard()
             throws ModelloException, ModelValidationException, IOException, ComponentLookupException,
                     ParserConfigurationException, SAXException {
-        ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
 
         Model model = modello.loadModel(getXmlResourceReader("/plugin.mdo"));
 

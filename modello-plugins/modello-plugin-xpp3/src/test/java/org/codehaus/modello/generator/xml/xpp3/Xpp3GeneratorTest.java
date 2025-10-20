@@ -22,6 +22,8 @@ package org.codehaus.modello.generator.xml.xpp3;
  * SOFTWARE.
  */
 
+import javax.inject.Inject;
+
 import java.util.List;
 import java.util.Map;
 
@@ -32,18 +34,26 @@ import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.Version;
 import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
+import org.codehaus.plexus.testing.PlexusTest;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
  */
+@PlexusTest
 public class Xpp3GeneratorTest extends AbstractModelloJavaGeneratorTest {
     public Xpp3GeneratorTest() {
         super("xpp3");
     }
 
+    @Inject
+    private ModelloCore modello;
+
+    @Test
     public void testXpp3Generator() throws Throwable {
-        ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
 
         Model model = modello.loadModel(getXmlResourceReader("/maven.mdo"));
 

@@ -1,8 +1,8 @@
 package org.codehaus.modello.plugin.java.javasource;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author <a href="mailto:simonetripodi@apache.org">Simone Tripodi</a>

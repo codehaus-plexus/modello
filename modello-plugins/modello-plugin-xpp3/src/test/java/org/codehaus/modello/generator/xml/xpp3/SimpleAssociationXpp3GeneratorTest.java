@@ -19,20 +19,27 @@ package org.codehaus.modello.generator.xml.xpp3;
  * under the License.
  */
 
+import javax.inject.Inject;
+
 import java.util.Map;
 
 import org.codehaus.modello.AbstractModelloJavaGeneratorTest;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
+import org.codehaus.plexus.testing.PlexusTest;
+import org.junit.jupiter.api.Test;
 
+@PlexusTest
 public class SimpleAssociationXpp3GeneratorTest extends AbstractModelloJavaGeneratorTest {
     public SimpleAssociationXpp3GeneratorTest() {
         super("testSimpleAssociation");
     }
 
-    public void testSimpleAssociation() throws Throwable {
-        ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
+    @Inject
+    private ModelloCore modello;
 
+    @Test
+    public void testSimpleAssociation() throws Throwable {
         Model model = modello.loadModel(getXmlResourceReader("/simple-association.mdo"));
 
         Map<String, Object> parameters = getModelloParameters("1.0.0", 8);

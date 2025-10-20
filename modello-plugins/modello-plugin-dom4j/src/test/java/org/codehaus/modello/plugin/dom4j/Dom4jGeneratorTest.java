@@ -22,6 +22,8 @@ package org.codehaus.modello.plugin.dom4j;
  * SOFTWARE.
  */
 
+import javax.inject.Inject;
+
 import java.util.List;
 import java.util.Map;
 
@@ -32,20 +34,27 @@ import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.Version;
 import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
+import org.codehaus.plexus.testing.PlexusTest;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Test the generators.
  *
  * @author <a href="mailto:brett@codehaus.org">Brett Porter</a>
  */
+@PlexusTest
 public class Dom4jGeneratorTest extends AbstractModelloJavaGeneratorTest {
+    @Inject
+    private ModelloCore modello;
+
     public Dom4jGeneratorTest() {
         super("dom4j");
     }
 
+    @Test
     public void testDom4jGenerator() throws Throwable {
-        ModelloCore modello = (ModelloCore) lookup(ModelloCore.ROLE);
-
         Model model = modello.loadModel(getXmlResourceReader("/maven.mdo"));
 
         List<ModelClass> classesList = model.getClasses(new Version("4.0.0"));
