@@ -182,7 +182,7 @@
   <properties>
     <scm.url>scm:git:git@github.com:codehaus-plexus/modello.git</scm.url>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <jackson.version>2.20.0</jackson.version>
+    <jackson.version>2.20.1</jackson.version>
     <jdom.version>2.0.2</jdom.version>
     <slf4j.version>1.7.36</slf4j.version>
     <sisu.version>0.9.0.M4</sisu.version>
