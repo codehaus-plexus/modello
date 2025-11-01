@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model xmlns="http://codehaus-plexus.github.io/MODELLO/2.0.0"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://codehaus-plexus.github.io/MODELLO/2.0.0 https://codehaus-plexus.github.io/modello/xsd/modello-2.0.0.xsd"
+       xml.namespace="http://codehaus-plexus.github.io/TEST/${version}"
+       xml.schemaLocation="http://codehaus-plexus.github.io/TEST/${version} http://codehaus-plexus.github.io/test-${version}.xsd">
+  <id>test</id>
+  <name>Test</name>
+  <description>
+    Simple test model for required field validation.
+  </description>
+  <defaults>
+    <default>
+      <key>package</key>
+      <value>org.codehaus.modello.test</value>
+    </default>
+  </defaults>
+  <classes>
+    <class rootElement="true">
+      <name>TestModel</name>
+      <version>1.0.0+</version>
+      <description>
+        A simple model to test required field enforcement.
+      </description>
+      <fields>
+        <field>
+          <name>requiredField</name>
+          <version>1.0.0+</version>
+          <required>true</required>
+          <type>String</type>
+          <description>This field is required and must be present.</description>
+        </field>
+        <field>
+          <name>optionalField</name>
+          <version>1.0.0+</version>
+          <type>String</type>
+          <description>This field is optional and may be omitted.</description>
+        </field>
+      </fields>
+    </class>
+  </classes>
+</model>
