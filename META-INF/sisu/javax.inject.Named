@@ -1,7 +1,0 @@
-org.codehaus.modello.core.DefaultGeneratorPluginManager
-org.codehaus.modello.core.DefaultMetadataPluginManager
-org.codehaus.modello.core.DefaultModelloCore
-org.codehaus.modello.plugin.model.ModelMetadataPlugin
-org.codehaus.plexus.build.DefaultBuildContext
-org.codehaus.plexus.component.configurator.BasicComponentConfigurator
-org.codehaus.plexus.component.configurator.MapOrientedComponentConfigurator
