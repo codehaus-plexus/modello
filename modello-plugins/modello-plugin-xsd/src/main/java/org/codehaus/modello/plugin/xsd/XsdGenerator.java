@@ -87,6 +87,8 @@ public class XsdGenerator extends AbstractXmlGenerator {
 
         // we assume parameters not null
         String xsdFileName = (String) parameters.get(ModelloParameterConstants.OUTPUT_XSD_FILE_NAME);
+        // enforceMandatoryElements parameter is kept for backward compatibility but is no longer used.
+        // Required fields are now always enforced based on field.isRequired() value.
         boolean enforceMandatoryElements =
                 Boolean.parseBoolean((String) parameters.get(ModelloParameterConstants.XSD_ENFORCE_MANDATORY_ELEMENTS));
 
@@ -232,9 +234,7 @@ public class XsdGenerator extends AbstractXmlGenerator {
                     }
                     w.startElement("xs:element");
 
-                    if (!enforceMandatoryElements || !field.isRequired()) {
-                        // Usually, would only do this if the field is not "required", but due to inheritance, it may be
-                        // present, even if not here, so we need to let it slide
+                    if (!field.isRequired()) {
                         w.addAttribute("minOccurs", "0");
                     }
                 }

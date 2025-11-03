@@ -672,7 +672,6 @@
         <field xml.insertParentFieldsUpTo="versionRange">
           <name>type</name>
           <version>1.0.0+</version>
-          <required>true</required>
           <type>String</type>
           <description><![CDATA[
             Simple type for this field (or array of such type). Can be one of : <code>boolean</code>, <code>byte</code>,
