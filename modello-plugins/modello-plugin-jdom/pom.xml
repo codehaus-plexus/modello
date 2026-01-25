@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.codehaus.modello</groupId>
     <artifactId>modello-plugins</artifactId>
-    <version>2.5.2-SNAPSHOT</version>
+    <version>2.6.0</version>
   </parent>
   <artifactId>modello-plugin-jdom</artifactId>
   <name>Modello JDOM Plugin</name>
