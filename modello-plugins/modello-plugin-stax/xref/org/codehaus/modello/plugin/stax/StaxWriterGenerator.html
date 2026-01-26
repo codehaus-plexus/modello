@@ -357,277 +357,297 @@
 <a class="jxr_linenumber" name="L349" href="#L349">349</a>                 ModelField referenceIdentifierField = getReferenceIdentifierField(association);
 <a class="jxr_linenumber" name="L350" href="#L350">350</a> 
 <a class="jxr_linenumber" name="L351" href="#L351">351</a>                 <strong class="jxr_keyword">if</strong> (association.isOneMultiplicity()) {
-<a class="jxr_linenumber" name="L352" href="#L352">352</a>                     sc.add(getValueChecker(type, value, association));
-<a class="jxr_linenumber" name="L353" href="#L353">353</a>                     sc.add(<span class="jxr_string">"{"</span>);
-<a class="jxr_linenumber" name="L354" href="#L354">354</a>                     sc.indent();
+<a class="jxr_linenumber" name="L352" href="#L352">352</a>                     <em class="jxr_comment">// Check if the association type is a class in the model or a simple type</em>
+<a class="jxr_linenumber" name="L353" href="#L353">353</a>                     <strong class="jxr_keyword">boolean</strong> inModel = isClassInModel(
+<a class="jxr_linenumber" name="L354" href="#L354">354</a>                             association.getTo(), field.getModelClass().getModel());
 <a class="jxr_linenumber" name="L355" href="#L355">355</a> 
-<a class="jxr_linenumber" name="L356" href="#L356">356</a>                     <strong class="jxr_keyword">if</strong> (referenceIdentifierField != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L357" href="#L357">357</a>                         <em class="jxr_comment">// if xml.reference, then store as a reference instead</em>
-<a class="jxr_linenumber" name="L358" href="#L358">358</a> 
-<a class="jxr_linenumber" name="L359" href="#L359">359</a>                         sc.add(<span class="jxr_string">"serializer.writeStartElement( \&quot;"</span> + fieldTagName + <span class="jxr_string">"\&quot; );"</span>);
-<a class="jxr_linenumber" name="L360" href="#L360">360</a> 
-<a class="jxr_linenumber" name="L361" href="#L361">361</a>                         writeElementAttribute(sc, referenceIdentifierField, value);
-<a class="jxr_linenumber" name="L362" href="#L362">362</a> 
-<a class="jxr_linenumber" name="L363" href="#L363">363</a>                         sc.add(<span class="jxr_string">"serializer.writeEndElement();"</span>);
-<a class="jxr_linenumber" name="L364" href="#L364">364</a>                     } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L365" href="#L365">365</a>                         sc.add(<span class="jxr_string">"write"</span> + association.getTo() + <span class="jxr_string">"( ("</span> + association.getTo() + <span class="jxr_string">") "</span> + value + <span class="jxr_string">", \&quot;"</span>
-<a class="jxr_linenumber" name="L366" href="#L366">366</a>                                 + fieldTagName + <span class="jxr_string">"\&quot;, serializer );"</span>);
-<a class="jxr_linenumber" name="L367" href="#L367">367</a>                     }
+<a class="jxr_linenumber" name="L356" href="#L356">356</a>                     <strong class="jxr_keyword">if</strong> (inModel) {
+<a class="jxr_linenumber" name="L357" href="#L357">357</a>                         <em class="jxr_comment">// It's a model class, process as usual</em>
+<a class="jxr_linenumber" name="L358" href="#L358">358</a>                         sc.add(getValueChecker(type, value, association));
+<a class="jxr_linenumber" name="L359" href="#L359">359</a>                         sc.add(<span class="jxr_string">"{"</span>);
+<a class="jxr_linenumber" name="L360" href="#L360">360</a>                         sc.indent();
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 
+<a class="jxr_linenumber" name="L362" href="#L362">362</a>                         <strong class="jxr_keyword">if</strong> (referenceIdentifierField != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L363" href="#L363">363</a>                             <em class="jxr_comment">// if xml.reference, then store as a reference instead</em>
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 
+<a class="jxr_linenumber" name="L365" href="#L365">365</a>                             sc.add(<span class="jxr_string">"serializer.writeStartElement( \&quot;"</span> + fieldTagName + <span class="jxr_string">"\&quot; );"</span>);
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 
+<a class="jxr_linenumber" name="L367" href="#L367">367</a>                             writeElementAttribute(sc, referenceIdentifierField, value);
 <a class="jxr_linenumber" name="L368" href="#L368">368</a> 
-<a class="jxr_linenumber" name="L369" href="#L369">369</a>                     sc.unindent();
-<a class="jxr_linenumber" name="L370" href="#L370">370</a>                     sc.add(<span class="jxr_string">"}"</span>);
-<a class="jxr_linenumber" name="L371" href="#L371">371</a>                 } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L372" href="#L372">372</a>                     <em class="jxr_comment">// MANY_MULTIPLICITY</em>
-<a class="jxr_linenumber" name="L373" href="#L373">373</a> 
-<a class="jxr_linenumber" name="L374" href="#L374">374</a>                     XmlAssociationMetadata xmlAssociationMetadata =
-<a class="jxr_linenumber" name="L375" href="#L375">375</a>                             (XmlAssociationMetadata) association.getAssociationMetadata(XmlAssociationMetadata.ID);
-<a class="jxr_linenumber" name="L376" href="#L376">376</a> 
-<a class="jxr_linenumber" name="L377" href="#L377">377</a>                     String valuesTagName = resolveTagName(fieldTagName, xmlAssociationMetadata);
-<a class="jxr_linenumber" name="L378" href="#L378">378</a> 
-<a class="jxr_linenumber" name="L379" href="#L379">379</a>                     type = association.getType();
-<a class="jxr_linenumber" name="L380" href="#L380">380</a>                     String toType = association.getTo();
-<a class="jxr_linenumber" name="L381" href="#L381">381</a> 
-<a class="jxr_linenumber" name="L382" href="#L382">382</a>                     <strong class="jxr_keyword">boolean</strong> wrappedItems = xmlAssociationMetadata.isWrappedItems();
-<a class="jxr_linenumber" name="L383" href="#L383">383</a> 
-<a class="jxr_linenumber" name="L384" href="#L384">384</a>                     <strong class="jxr_keyword">if</strong> (ModelDefault.LIST.equals(type) || ModelDefault.SET.equals(type)) {
-<a class="jxr_linenumber" name="L385" href="#L385">385</a>                         sc.add(getValueChecker(type, value, association));
-<a class="jxr_linenumber" name="L386" href="#L386">386</a> 
-<a class="jxr_linenumber" name="L387" href="#L387">387</a>                         sc.add(<span class="jxr_string">"{"</span>);
-<a class="jxr_linenumber" name="L388" href="#L388">388</a>                         sc.indent();
-<a class="jxr_linenumber" name="L389" href="#L389">389</a> 
-<a class="jxr_linenumber" name="L390" href="#L390">390</a>                         <strong class="jxr_keyword">if</strong> (wrappedItems) {
-<a class="jxr_linenumber" name="L391" href="#L391">391</a>                             sc.add(<span class="jxr_string">"serializer.writeStartElement( "</span> + <span class="jxr_string">"\&quot;"</span> + fieldTagName + <span class="jxr_string">"\&quot; );"</span>);
-<a class="jxr_linenumber" name="L392" href="#L392">392</a>                         }
+<a class="jxr_linenumber" name="L369" href="#L369">369</a>                             sc.add(<span class="jxr_string">"serializer.writeEndElement();"</span>);
+<a class="jxr_linenumber" name="L370" href="#L370">370</a>                         } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L371" href="#L371">371</a>                             sc.add(<span class="jxr_string">"write"</span> + association.getTo() + <span class="jxr_string">"( ("</span> + association.getTo() + <span class="jxr_string">") "</span> + value + <span class="jxr_string">", \&quot;"</span>
+<a class="jxr_linenumber" name="L372" href="#L372">372</a>                                     + fieldTagName + <span class="jxr_string">"\&quot;, serializer );"</span>);
+<a class="jxr_linenumber" name="L373" href="#L373">373</a>                         }
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 
+<a class="jxr_linenumber" name="L375" href="#L375">375</a>                         sc.unindent();
+<a class="jxr_linenumber" name="L376" href="#L376">376</a>                         sc.add(<span class="jxr_string">"}"</span>);
+<a class="jxr_linenumber" name="L377" href="#L377">377</a>                     } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L378" href="#L378">378</a>                         <em class="jxr_comment">// It's a simple type (like String), write it directly</em>
+<a class="jxr_linenumber" name="L379" href="#L379">379</a>                         sc.add(getValueChecker(type, value, association));
+<a class="jxr_linenumber" name="L380" href="#L380">380</a>                         sc.add(<span class="jxr_string">"{"</span>);
+<a class="jxr_linenumber" name="L381" href="#L381">381</a>                         sc.indent();
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 
+<a class="jxr_linenumber" name="L383" href="#L383">383</a>                         sc.add(<span class="jxr_string">"serializer.writeStartElement( "</span> + <span class="jxr_string">"\&quot;"</span> + fieldTagName + <span class="jxr_string">"\&quot; );"</span>);
+<a class="jxr_linenumber" name="L384" href="#L384">384</a>                         sc.add(<span class="jxr_string">"serializer.writeCharacters( "</span> + getValue(association.getTo(), value, xmlFieldMetadata)
+<a class="jxr_linenumber" name="L385" href="#L385">385</a>                                 + <span class="jxr_string">" );"</span>);
+<a class="jxr_linenumber" name="L386" href="#L386">386</a>                         sc.add(<span class="jxr_string">"serializer.writeEndElement();"</span>);
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 
+<a class="jxr_linenumber" name="L388" href="#L388">388</a>                         sc.unindent();
+<a class="jxr_linenumber" name="L389" href="#L389">389</a>                         sc.add(<span class="jxr_string">"}"</span>);
+<a class="jxr_linenumber" name="L390" href="#L390">390</a>                     }
+<a class="jxr_linenumber" name="L391" href="#L391">391</a>                 } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L392" href="#L392">392</a>                     <em class="jxr_comment">// MANY_MULTIPLICITY</em>
 <a class="jxr_linenumber" name="L393" href="#L393">393</a> 
-<a class="jxr_linenumber" name="L394" href="#L394">394</a>                         sc.add(<span class="jxr_string">"for ( Iterator iter = "</span> + value + <span class="jxr_string">".iterator(); iter.hasNext(); )"</span>);
-<a class="jxr_linenumber" name="L395" href="#L395">395</a> 
-<a class="jxr_linenumber" name="L396" href="#L396">396</a>                         sc.add(<span class="jxr_string">"{"</span>);
-<a class="jxr_linenumber" name="L397" href="#L397">397</a>                         sc.indent();
+<a class="jxr_linenumber" name="L394" href="#L394">394</a>                     XmlAssociationMetadata xmlAssociationMetadata =
+<a class="jxr_linenumber" name="L395" href="#L395">395</a>                             (XmlAssociationMetadata) association.getAssociationMetadata(XmlAssociationMetadata.ID);
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 
+<a class="jxr_linenumber" name="L397" href="#L397">397</a>                     String valuesTagName = resolveTagName(fieldTagName, xmlAssociationMetadata);
 <a class="jxr_linenumber" name="L398" href="#L398">398</a> 
-<a class="jxr_linenumber" name="L399" href="#L399">399</a>                         <strong class="jxr_keyword">if</strong> (isClassInModel(association.getTo(), modelClass.getModel())) {
-<a class="jxr_linenumber" name="L400" href="#L400">400</a>                             sc.add(toType + <span class="jxr_string">" o = ("</span> + toType + <span class="jxr_string">") iter.next();"</span>);
+<a class="jxr_linenumber" name="L399" href="#L399">399</a>                     type = association.getType();
+<a class="jxr_linenumber" name="L400" href="#L400">400</a>                     String toType = association.getTo();
 <a class="jxr_linenumber" name="L401" href="#L401">401</a> 
-<a class="jxr_linenumber" name="L402" href="#L402">402</a>                             <strong class="jxr_keyword">if</strong> (referenceIdentifierField != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L403" href="#L403">403</a>                                 sc.add(<span class="jxr_string">"serializer.writeStartElement( \&quot;"</span> + valuesTagName + <span class="jxr_string">"\&quot; );"</span>);
-<a class="jxr_linenumber" name="L404" href="#L404">404</a> 
-<a class="jxr_linenumber" name="L405" href="#L405">405</a>                                 writeElementAttribute(sc, referenceIdentifierField, <span class="jxr_string">"o"</span>);
+<a class="jxr_linenumber" name="L402" href="#L402">402</a>                     <strong class="jxr_keyword">boolean</strong> wrappedItems = xmlAssociationMetadata.isWrappedItems();
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> 
+<a class="jxr_linenumber" name="L404" href="#L404">404</a>                     <strong class="jxr_keyword">if</strong> (ModelDefault.LIST.equals(type) || ModelDefault.SET.equals(type)) {
+<a class="jxr_linenumber" name="L405" href="#L405">405</a>                         sc.add(getValueChecker(type, value, association));
 <a class="jxr_linenumber" name="L406" href="#L406">406</a> 
-<a class="jxr_linenumber" name="L407" href="#L407">407</a>                                 sc.add(<span class="jxr_string">"serializer.writeEndElement();"</span>);
-<a class="jxr_linenumber" name="L408" href="#L408">408</a>                             } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L409" href="#L409">409</a>                                 sc.add(<span class="jxr_string">"write"</span> + toType + <span class="jxr_string">"( o, \&quot;"</span> + valuesTagName + <span class="jxr_string">"\&quot;, serializer );"</span>);
-<a class="jxr_linenumber" name="L410" href="#L410">410</a>                             }
-<a class="jxr_linenumber" name="L411" href="#L411">411</a>                         } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L412" href="#L412">412</a>                             sc.add(toType + <span class="jxr_string">" "</span> + singular(uncapitalise(field.getName())) + <span class="jxr_string">" = ("</span> + toType
-<a class="jxr_linenumber" name="L413" href="#L413">413</a>                                     + <span class="jxr_string">") iter.next();"</span>);
-<a class="jxr_linenumber" name="L414" href="#L414">414</a> 
-<a class="jxr_linenumber" name="L415" href="#L415">415</a>                             sc.add(<span class="jxr_string">"serializer.writeStartElement( "</span> + <span class="jxr_string">"\&quot;"</span> + valuesTagName + <span class="jxr_string">"\&quot; );"</span>);
-<a class="jxr_linenumber" name="L416" href="#L416">416</a>                             sc.add(<span class="jxr_string">"serializer.writeCharacters( "</span> + singular(uncapitalise(field.getName())) + <span class="jxr_string">" );"</span>);
-<a class="jxr_linenumber" name="L417" href="#L417">417</a>                             sc.add(<span class="jxr_string">"serializer.writeEndElement();"</span>);
-<a class="jxr_linenumber" name="L418" href="#L418">418</a>                         }
-<a class="jxr_linenumber" name="L419" href="#L419">419</a> 
-<a class="jxr_linenumber" name="L420" href="#L420">420</a>                         sc.unindent();
-<a class="jxr_linenumber" name="L421" href="#L421">421</a>                         sc.add(<span class="jxr_string">"}"</span>);
-<a class="jxr_linenumber" name="L422" href="#L422">422</a> 
-<a class="jxr_linenumber" name="L423" href="#L423">423</a>                         <strong class="jxr_keyword">if</strong> (wrappedItems) {
-<a class="jxr_linenumber" name="L424" href="#L424">424</a>                             sc.add(<span class="jxr_string">"serializer.writeEndElement();"</span>);
-<a class="jxr_linenumber" name="L425" href="#L425">425</a>                         }
+<a class="jxr_linenumber" name="L407" href="#L407">407</a>                         sc.add(<span class="jxr_string">"{"</span>);
+<a class="jxr_linenumber" name="L408" href="#L408">408</a>                         sc.indent();
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 
+<a class="jxr_linenumber" name="L410" href="#L410">410</a>                         <strong class="jxr_keyword">if</strong> (wrappedItems) {
+<a class="jxr_linenumber" name="L411" href="#L411">411</a>                             sc.add(<span class="jxr_string">"serializer.writeStartElement( "</span> + <span class="jxr_string">"\&quot;"</span> + fieldTagName + <span class="jxr_string">"\&quot; );"</span>);
+<a class="jxr_linenumber" name="L412" href="#L412">412</a>                         }
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 
+<a class="jxr_linenumber" name="L414" href="#L414">414</a>                         sc.add(<span class="jxr_string">"for ( Iterator iter = "</span> + value + <span class="jxr_string">".iterator(); iter.hasNext(); )"</span>);
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 
+<a class="jxr_linenumber" name="L416" href="#L416">416</a>                         sc.add(<span class="jxr_string">"{"</span>);
+<a class="jxr_linenumber" name="L417" href="#L417">417</a>                         sc.indent();
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 
+<a class="jxr_linenumber" name="L419" href="#L419">419</a>                         <strong class="jxr_keyword">if</strong> (isClassInModel(association.getTo(), modelClass.getModel())) {
+<a class="jxr_linenumber" name="L420" href="#L420">420</a>                             sc.add(toType + <span class="jxr_string">" o = ("</span> + toType + <span class="jxr_string">") iter.next();"</span>);
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> 
+<a class="jxr_linenumber" name="L422" href="#L422">422</a>                             <strong class="jxr_keyword">if</strong> (referenceIdentifierField != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L423" href="#L423">423</a>                                 sc.add(<span class="jxr_string">"serializer.writeStartElement( \&quot;"</span> + valuesTagName + <span class="jxr_string">"\&quot; );"</span>);
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 
+<a class="jxr_linenumber" name="L425" href="#L425">425</a>                                 writeElementAttribute(sc, referenceIdentifierField, <span class="jxr_string">"o"</span>);
 <a class="jxr_linenumber" name="L426" href="#L426">426</a> 
-<a class="jxr_linenumber" name="L427" href="#L427">427</a>                         sc.unindent();
-<a class="jxr_linenumber" name="L428" href="#L428">428</a>                         sc.add(<span class="jxr_string">"}"</span>);
-<a class="jxr_linenumber" name="L429" href="#L429">429</a>                     } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L430" href="#L430">430</a>                         <em class="jxr_comment">// Map or Properties</em>
-<a class="jxr_linenumber" name="L431" href="#L431">431</a> 
-<a class="jxr_linenumber" name="L432" href="#L432">432</a>                         sc.add(getValueChecker(type, value, field));
-<a class="jxr_linenumber" name="L433" href="#L433">433</a> 
-<a class="jxr_linenumber" name="L434" href="#L434">434</a>                         sc.add(<span class="jxr_string">"{"</span>);
-<a class="jxr_linenumber" name="L435" href="#L435">435</a>                         sc.indent();
-<a class="jxr_linenumber" name="L436" href="#L436">436</a> 
-<a class="jxr_linenumber" name="L437" href="#L437">437</a>                         <strong class="jxr_keyword">if</strong> (wrappedItems) {
-<a class="jxr_linenumber" name="L438" href="#L438">438</a>                             sc.add(<span class="jxr_string">"serializer.writeStartElement( "</span> + <span class="jxr_string">"\&quot;"</span> + fieldTagName + <span class="jxr_string">"\&quot; );"</span>);
-<a class="jxr_linenumber" name="L439" href="#L439">439</a>                         }
-<a class="jxr_linenumber" name="L440" href="#L440">440</a> 
-<a class="jxr_linenumber" name="L441" href="#L441">441</a>                         sc.add(<span class="jxr_string">"for ( Iterator iter = "</span> + value + <span class="jxr_string">".keySet().iterator(); iter.hasNext(); )"</span>);
+<a class="jxr_linenumber" name="L427" href="#L427">427</a>                                 sc.add(<span class="jxr_string">"serializer.writeEndElement();"</span>);
+<a class="jxr_linenumber" name="L428" href="#L428">428</a>                             } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L429" href="#L429">429</a>                                 sc.add(<span class="jxr_string">"write"</span> + toType + <span class="jxr_string">"( o, \&quot;"</span> + valuesTagName + <span class="jxr_string">"\&quot;, serializer );"</span>);
+<a class="jxr_linenumber" name="L430" href="#L430">430</a>                             }
+<a class="jxr_linenumber" name="L431" href="#L431">431</a>                         } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L432" href="#L432">432</a>                             sc.add(toType + <span class="jxr_string">" "</span> + singular(uncapitalise(field.getName())) + <span class="jxr_string">" = ("</span> + toType
+<a class="jxr_linenumber" name="L433" href="#L433">433</a>                                     + <span class="jxr_string">") iter.next();"</span>);
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 
+<a class="jxr_linenumber" name="L435" href="#L435">435</a>                             sc.add(<span class="jxr_string">"serializer.writeStartElement( "</span> + <span class="jxr_string">"\&quot;"</span> + valuesTagName + <span class="jxr_string">"\&quot; );"</span>);
+<a class="jxr_linenumber" name="L436" href="#L436">436</a>                             sc.add(<span class="jxr_string">"serializer.writeCharacters( "</span> + singular(uncapitalise(field.getName())) + <span class="jxr_string">" );"</span>);
+<a class="jxr_linenumber" name="L437" href="#L437">437</a>                             sc.add(<span class="jxr_string">"serializer.writeEndElement();"</span>);
+<a class="jxr_linenumber" name="L438" href="#L438">438</a>                         }
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> 
+<a class="jxr_linenumber" name="L440" href="#L440">440</a>                         sc.unindent();
+<a class="jxr_linenumber" name="L441" href="#L441">441</a>                         sc.add(<span class="jxr_string">"}"</span>);
 <a class="jxr_linenumber" name="L442" href="#L442">442</a> 
-<a class="jxr_linenumber" name="L443" href="#L443">443</a>                         sc.add(<span class="jxr_string">"{"</span>);
-<a class="jxr_linenumber" name="L444" href="#L444">444</a>                         sc.indent();
-<a class="jxr_linenumber" name="L445" href="#L445">445</a> 
-<a class="jxr_linenumber" name="L446" href="#L446">446</a>                         sc.add(<span class="jxr_string">"String key = (String) iter.next();"</span>);
-<a class="jxr_linenumber" name="L447" href="#L447">447</a> 
-<a class="jxr_linenumber" name="L448" href="#L448">448</a>                         sc.add(<span class="jxr_string">"String value = (String) "</span> + value + <span class="jxr_string">".get( key );"</span>);
-<a class="jxr_linenumber" name="L449" href="#L449">449</a> 
-<a class="jxr_linenumber" name="L450" href="#L450">450</a>                         <strong class="jxr_keyword">if</strong> (xmlAssociationMetadata.isMapExplode()) {
-<a class="jxr_linenumber" name="L451" href="#L451">451</a>                             sc.add(<span class="jxr_string">"serializer.writeStartElement( \&quot;"</span> + singular(associationName) + <span class="jxr_string">"\&quot; );"</span>);
-<a class="jxr_linenumber" name="L452" href="#L452">452</a>                             sc.add(<span class="jxr_string">"serializer.writeStartElement( \&quot;key\&quot; );"</span>);
-<a class="jxr_linenumber" name="L453" href="#L453">453</a>                             sc.add(<span class="jxr_string">"serializer.writeCharacters( key );"</span>);
-<a class="jxr_linenumber" name="L454" href="#L454">454</a>                             sc.add(<span class="jxr_string">"serializer.writeEndElement();"</span>);
-<a class="jxr_linenumber" name="L455" href="#L455">455</a>                             sc.add(<span class="jxr_string">"serializer.writeStartElement( \&quot;value\&quot; );"</span>);
-<a class="jxr_linenumber" name="L456" href="#L456">456</a>                             sc.add(<span class="jxr_string">"serializer.writeCharacters( value );"</span>);
-<a class="jxr_linenumber" name="L457" href="#L457">457</a>                             sc.add(<span class="jxr_string">"serializer.writeEndElement();"</span>);
-<a class="jxr_linenumber" name="L458" href="#L458">458</a>                             sc.add(<span class="jxr_string">"serializer.writeEndElement();"</span>);
-<a class="jxr_linenumber" name="L459" href="#L459">459</a>                         } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L460" href="#L460">460</a>                             sc.add(<span class="jxr_string">"serializer.writeStartElement( \&quot;\&quot; + key + \&quot;\&quot; );"</span>);
-<a class="jxr_linenumber" name="L461" href="#L461">461</a>                             sc.add(<span class="jxr_string">"serializer.writeCharacters( value );"</span>);
-<a class="jxr_linenumber" name="L462" href="#L462">462</a>                             sc.add(<span class="jxr_string">"serializer.writeEndElement();"</span>);
-<a class="jxr_linenumber" name="L463" href="#L463">463</a>                         }
-<a class="jxr_linenumber" name="L464" href="#L464">464</a> 
-<a class="jxr_linenumber" name="L465" href="#L465">465</a>                         sc.unindent();
-<a class="jxr_linenumber" name="L466" href="#L466">466</a>                         sc.add(<span class="jxr_string">"}"</span>);
+<a class="jxr_linenumber" name="L443" href="#L443">443</a>                         <strong class="jxr_keyword">if</strong> (wrappedItems) {
+<a class="jxr_linenumber" name="L444" href="#L444">444</a>                             sc.add(<span class="jxr_string">"serializer.writeEndElement();"</span>);
+<a class="jxr_linenumber" name="L445" href="#L445">445</a>                         }
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> 
+<a class="jxr_linenumber" name="L447" href="#L447">447</a>                         sc.unindent();
+<a class="jxr_linenumber" name="L448" href="#L448">448</a>                         sc.add(<span class="jxr_string">"}"</span>);
+<a class="jxr_linenumber" name="L449" href="#L449">449</a>                     } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L450" href="#L450">450</a>                         <em class="jxr_comment">// Map or Properties</em>
+<a class="jxr_linenumber" name="L451" href="#L451">451</a> 
+<a class="jxr_linenumber" name="L452" href="#L452">452</a>                         sc.add(getValueChecker(type, value, field));
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> 
+<a class="jxr_linenumber" name="L454" href="#L454">454</a>                         sc.add(<span class="jxr_string">"{"</span>);
+<a class="jxr_linenumber" name="L455" href="#L455">455</a>                         sc.indent();
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> 
+<a class="jxr_linenumber" name="L457" href="#L457">457</a>                         <strong class="jxr_keyword">if</strong> (wrappedItems) {
+<a class="jxr_linenumber" name="L458" href="#L458">458</a>                             sc.add(<span class="jxr_string">"serializer.writeStartElement( "</span> + <span class="jxr_string">"\&quot;"</span> + fieldTagName + <span class="jxr_string">"\&quot; );"</span>);
+<a class="jxr_linenumber" name="L459" href="#L459">459</a>                         }
+<a class="jxr_linenumber" name="L460" href="#L460">460</a> 
+<a class="jxr_linenumber" name="L461" href="#L461">461</a>                         sc.add(<span class="jxr_string">"for ( Iterator iter = "</span> + value + <span class="jxr_string">".keySet().iterator(); iter.hasNext(); )"</span>);
+<a class="jxr_linenumber" name="L462" href="#L462">462</a> 
+<a class="jxr_linenumber" name="L463" href="#L463">463</a>                         sc.add(<span class="jxr_string">"{"</span>);
+<a class="jxr_linenumber" name="L464" href="#L464">464</a>                         sc.indent();
+<a class="jxr_linenumber" name="L465" href="#L465">465</a> 
+<a class="jxr_linenumber" name="L466" href="#L466">466</a>                         sc.add(<span class="jxr_string">"String key = (String) iter.next();"</span>);
 <a class="jxr_linenumber" name="L467" href="#L467">467</a> 
-<a class="jxr_linenumber" name="L468" href="#L468">468</a>                         <strong class="jxr_keyword">if</strong> (wrappedItems) {
-<a class="jxr_linenumber" name="L469" href="#L469">469</a>                             sc.add(<span class="jxr_string">"serializer.writeEndElement();"</span>);
-<a class="jxr_linenumber" name="L470" href="#L470">470</a>                         }
-<a class="jxr_linenumber" name="L471" href="#L471">471</a> 
-<a class="jxr_linenumber" name="L472" href="#L472">472</a>                         sc.unindent();
-<a class="jxr_linenumber" name="L473" href="#L473">473</a>                         sc.add(<span class="jxr_string">"}"</span>);
-<a class="jxr_linenumber" name="L474" href="#L474">474</a>                     }
-<a class="jxr_linenumber" name="L475" href="#L475">475</a>                 }
-<a class="jxr_linenumber" name="L476" href="#L476">476</a>             } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L477" href="#L477">477</a>                 sc.add(getValueChecker(type, value, field));
-<a class="jxr_linenumber" name="L478" href="#L478">478</a> 
-<a class="jxr_linenumber" name="L479" href="#L479">479</a>                 sc.add(<span class="jxr_string">"{"</span>);
-<a class="jxr_linenumber" name="L480" href="#L480">480</a>                 sc.indent();
-<a class="jxr_linenumber" name="L481" href="#L481">481</a> 
-<a class="jxr_linenumber" name="L482" href="#L482">482</a>                 <strong class="jxr_keyword">if</strong> (<span class="jxr_string">"DOM"</span>.equals(field.getType())) {
-<a class="jxr_linenumber" name="L483" href="#L483">483</a>                     sc.add(<span class="jxr_string">"writeDom( ("</span> + (domAsXpp3 ? <span class="jxr_string">"Xpp3Dom"</span> : <span class="jxr_string">"org.w3c.dom.Element"</span>) + <span class="jxr_string">") "</span> + value
-<a class="jxr_linenumber" name="L484" href="#L484">484</a>                             + <span class="jxr_string">", serializer );"</span>);
-<a class="jxr_linenumber" name="L485" href="#L485">485</a> 
-<a class="jxr_linenumber" name="L486" href="#L486">486</a>                     requiresDomSupport = <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L487" href="#L487">487</a>                 } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L488" href="#L488">488</a>                     sc.add(<span class="jxr_string">"serializer.writeStartElement( "</span> + <span class="jxr_string">"\&quot;"</span> + fieldTagName + <span class="jxr_string">"\&quot; );"</span>);
-<a class="jxr_linenumber" name="L489" href="#L489">489</a>                     sc.add(<span class="jxr_string">"serializer.writeCharacters( "</span> + getValue(field.getType(), value, xmlFieldMetadata) + <span class="jxr_string">" );"</span>);
-<a class="jxr_linenumber" name="L490" href="#L490">490</a>                     sc.add(<span class="jxr_string">"serializer.writeEndElement();"</span>);
-<a class="jxr_linenumber" name="L491" href="#L491">491</a>                 }
-<a class="jxr_linenumber" name="L492" href="#L492">492</a> 
-<a class="jxr_linenumber" name="L493" href="#L493">493</a>                 sc.unindent();
-<a class="jxr_linenumber" name="L494" href="#L494">494</a>                 sc.add(<span class="jxr_string">"}"</span>);
-<a class="jxr_linenumber" name="L495" href="#L495">495</a>             }
-<a class="jxr_linenumber" name="L496" href="#L496">496</a>         }
-<a class="jxr_linenumber" name="L497" href="#L497">497</a> 
-<a class="jxr_linenumber" name="L498" href="#L498">498</a>         sc.add(<span class="jxr_string">"serializer.writeEndElement();"</span>);
-<a class="jxr_linenumber" name="L499" href="#L499">499</a> 
-<a class="jxr_linenumber" name="L500" href="#L500">500</a>         sc.unindent();
-<a class="jxr_linenumber" name="L501" href="#L501">501</a>         sc.add(<span class="jxr_string">"}"</span>);
-<a class="jxr_linenumber" name="L502" href="#L502">502</a> 
-<a class="jxr_linenumber" name="L503" href="#L503">503</a>         jClass.addMethod(marshall);
-<a class="jxr_linenumber" name="L504" href="#L504">504</a>     }
+<a class="jxr_linenumber" name="L468" href="#L468">468</a>                         sc.add(<span class="jxr_string">"String value = (String) "</span> + value + <span class="jxr_string">".get( key );"</span>);
+<a class="jxr_linenumber" name="L469" href="#L469">469</a> 
+<a class="jxr_linenumber" name="L470" href="#L470">470</a>                         <strong class="jxr_keyword">if</strong> (xmlAssociationMetadata.isMapExplode()) {
+<a class="jxr_linenumber" name="L471" href="#L471">471</a>                             sc.add(<span class="jxr_string">"serializer.writeStartElement( \&quot;"</span> + singular(associationName) + <span class="jxr_string">"\&quot; );"</span>);
+<a class="jxr_linenumber" name="L472" href="#L472">472</a>                             sc.add(<span class="jxr_string">"serializer.writeStartElement( \&quot;key\&quot; );"</span>);
+<a class="jxr_linenumber" name="L473" href="#L473">473</a>                             sc.add(<span class="jxr_string">"serializer.writeCharacters( key );"</span>);
+<a class="jxr_linenumber" name="L474" href="#L474">474</a>                             sc.add(<span class="jxr_string">"serializer.writeEndElement();"</span>);
+<a class="jxr_linenumber" name="L475" href="#L475">475</a>                             sc.add(<span class="jxr_string">"serializer.writeStartElement( \&quot;value\&quot; );"</span>);
+<a class="jxr_linenumber" name="L476" href="#L476">476</a>                             sc.add(<span class="jxr_string">"serializer.writeCharacters( value );"</span>);
+<a class="jxr_linenumber" name="L477" href="#L477">477</a>                             sc.add(<span class="jxr_string">"serializer.writeEndElement();"</span>);
+<a class="jxr_linenumber" name="L478" href="#L478">478</a>                             sc.add(<span class="jxr_string">"serializer.writeEndElement();"</span>);
+<a class="jxr_linenumber" name="L479" href="#L479">479</a>                         } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L480" href="#L480">480</a>                             sc.add(<span class="jxr_string">"serializer.writeStartElement( \&quot;\&quot; + key + \&quot;\&quot; );"</span>);
+<a class="jxr_linenumber" name="L481" href="#L481">481</a>                             sc.add(<span class="jxr_string">"serializer.writeCharacters( value );"</span>);
+<a class="jxr_linenumber" name="L482" href="#L482">482</a>                             sc.add(<span class="jxr_string">"serializer.writeEndElement();"</span>);
+<a class="jxr_linenumber" name="L483" href="#L483">483</a>                         }
+<a class="jxr_linenumber" name="L484" href="#L484">484</a> 
+<a class="jxr_linenumber" name="L485" href="#L485">485</a>                         sc.unindent();
+<a class="jxr_linenumber" name="L486" href="#L486">486</a>                         sc.add(<span class="jxr_string">"}"</span>);
+<a class="jxr_linenumber" name="L487" href="#L487">487</a> 
+<a class="jxr_linenumber" name="L488" href="#L488">488</a>                         <strong class="jxr_keyword">if</strong> (wrappedItems) {
+<a class="jxr_linenumber" name="L489" href="#L489">489</a>                             sc.add(<span class="jxr_string">"serializer.writeEndElement();"</span>);
+<a class="jxr_linenumber" name="L490" href="#L490">490</a>                         }
+<a class="jxr_linenumber" name="L491" href="#L491">491</a> 
+<a class="jxr_linenumber" name="L492" href="#L492">492</a>                         sc.unindent();
+<a class="jxr_linenumber" name="L493" href="#L493">493</a>                         sc.add(<span class="jxr_string">"}"</span>);
+<a class="jxr_linenumber" name="L494" href="#L494">494</a>                     }
+<a class="jxr_linenumber" name="L495" href="#L495">495</a>                 }
+<a class="jxr_linenumber" name="L496" href="#L496">496</a>             } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L497" href="#L497">497</a>                 sc.add(getValueChecker(type, value, field));
+<a class="jxr_linenumber" name="L498" href="#L498">498</a> 
+<a class="jxr_linenumber" name="L499" href="#L499">499</a>                 sc.add(<span class="jxr_string">"{"</span>);
+<a class="jxr_linenumber" name="L500" href="#L500">500</a>                 sc.indent();
+<a class="jxr_linenumber" name="L501" href="#L501">501</a> 
+<a class="jxr_linenumber" name="L502" href="#L502">502</a>                 <strong class="jxr_keyword">if</strong> (<span class="jxr_string">"DOM"</span>.equals(field.getType())) {
+<a class="jxr_linenumber" name="L503" href="#L503">503</a>                     sc.add(<span class="jxr_string">"writeDom( ("</span> + (domAsXpp3 ? <span class="jxr_string">"Xpp3Dom"</span> : <span class="jxr_string">"org.w3c.dom.Element"</span>) + <span class="jxr_string">") "</span> + value
+<a class="jxr_linenumber" name="L504" href="#L504">504</a>                             + <span class="jxr_string">", serializer );"</span>);
 <a class="jxr_linenumber" name="L505" href="#L505">505</a> 
-<a class="jxr_linenumber" name="L506" href="#L506">506</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> writeElementAttribute(JSourceCode sc, ModelField referenceIdentifierField, String value) {
-<a class="jxr_linenumber" name="L507" href="#L507">507</a>         <strong class="jxr_keyword">if</strong> (referenceIdentifierField instanceof <a name="DummyIdModelField" href="../../../../../org/codehaus/modello/plugin/stax/DummyIdModelField.html#DummyIdModelField">DummyIdModelField</a>) {
-<a class="jxr_linenumber" name="L508" href="#L508">508</a>             writeIdMapCheck(sc, value, referenceIdentifierField.getName());
-<a class="jxr_linenumber" name="L509" href="#L509">509</a>         } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L510" href="#L510">510</a>             String v = getValue(
-<a class="jxr_linenumber" name="L511" href="#L511">511</a>                     referenceIdentifierField.getType(),
-<a class="jxr_linenumber" name="L512" href="#L512">512</a>                     getFieldValue(value, referenceIdentifierField),
-<a class="jxr_linenumber" name="L513" href="#L513">513</a>                     (XmlFieldMetadata) referenceIdentifierField.getMetadata(XmlFieldMetadata.ID));
-<a class="jxr_linenumber" name="L514" href="#L514">514</a>             sc.add(<span class="jxr_string">"serializer.writeAttribute( \&quot;"</span> + referenceIdentifierField.getName() + <span class="jxr_string">"\&quot;, "</span> + v + <span class="jxr_string">" );"</span>);
-<a class="jxr_linenumber" name="L515" href="#L515">515</a>         }
-<a class="jxr_linenumber" name="L516" href="#L516">516</a>     }
+<a class="jxr_linenumber" name="L506" href="#L506">506</a>                     requiresDomSupport = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L507" href="#L507">507</a>                 } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L508" href="#L508">508</a>                     sc.add(<span class="jxr_string">"serializer.writeStartElement( "</span> + <span class="jxr_string">"\&quot;"</span> + fieldTagName + <span class="jxr_string">"\&quot; );"</span>);
+<a class="jxr_linenumber" name="L509" href="#L509">509</a>                     sc.add(<span class="jxr_string">"serializer.writeCharacters( "</span> + getValue(field.getType(), value, xmlFieldMetadata) + <span class="jxr_string">" );"</span>);
+<a class="jxr_linenumber" name="L510" href="#L510">510</a>                     sc.add(<span class="jxr_string">"serializer.writeEndElement();"</span>);
+<a class="jxr_linenumber" name="L511" href="#L511">511</a>                 }
+<a class="jxr_linenumber" name="L512" href="#L512">512</a> 
+<a class="jxr_linenumber" name="L513" href="#L513">513</a>                 sc.unindent();
+<a class="jxr_linenumber" name="L514" href="#L514">514</a>                 sc.add(<span class="jxr_string">"}"</span>);
+<a class="jxr_linenumber" name="L515" href="#L515">515</a>             }
+<a class="jxr_linenumber" name="L516" href="#L516">516</a>         }
 <a class="jxr_linenumber" name="L517" href="#L517">517</a> 
-<a class="jxr_linenumber" name="L518" href="#L518">518</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> writeIdMapCheck(JSourceCode sc, String value, String attributeName) {
-<a class="jxr_linenumber" name="L519" href="#L519">519</a>         sc.add(<span class="jxr_string">"if ( !idMap.containsKey( "</span> + value + <span class="jxr_string">" ) )"</span>);
-<a class="jxr_linenumber" name="L520" href="#L520">520</a>         sc.add(<span class="jxr_string">"{"</span>);
-<a class="jxr_linenumber" name="L521" href="#L521">521</a>         sc.indent();
+<a class="jxr_linenumber" name="L518" href="#L518">518</a>         sc.add(<span class="jxr_string">"serializer.writeEndElement();"</span>);
+<a class="jxr_linenumber" name="L519" href="#L519">519</a> 
+<a class="jxr_linenumber" name="L520" href="#L520">520</a>         sc.unindent();
+<a class="jxr_linenumber" name="L521" href="#L521">521</a>         sc.add(<span class="jxr_string">"}"</span>);
 <a class="jxr_linenumber" name="L522" href="#L522">522</a> 
-<a class="jxr_linenumber" name="L523" href="#L523">523</a>         sc.add(<span class="jxr_string">"++curId;"</span>);
-<a class="jxr_linenumber" name="L524" href="#L524">524</a>         sc.add(<span class="jxr_string">"String id = String.valueOf( curId );"</span>);
-<a class="jxr_linenumber" name="L525" href="#L525">525</a>         sc.add(<span class="jxr_string">"idMap.put( "</span> + value + <span class="jxr_string">", id );"</span>);
-<a class="jxr_linenumber" name="L526" href="#L526">526</a>         sc.add(<span class="jxr_string">"serializer.writeAttribute( \&quot;"</span> + attributeName + <span class="jxr_string">"\&quot;, id );"</span>);
-<a class="jxr_linenumber" name="L527" href="#L527">527</a> 
-<a class="jxr_linenumber" name="L528" href="#L528">528</a>         sc.unindent();
-<a class="jxr_linenumber" name="L529" href="#L529">529</a>         sc.add(<span class="jxr_string">"}"</span>);
-<a class="jxr_linenumber" name="L530" href="#L530">530</a>         sc.add(<span class="jxr_string">"else"</span>);
-<a class="jxr_linenumber" name="L531" href="#L531">531</a>         sc.add(<span class="jxr_string">"{"</span>);
-<a class="jxr_linenumber" name="L532" href="#L532">532</a>         sc.addIndented(<span class="jxr_string">"serializer.writeAttribute( \&quot;"</span> + attributeName + <span class="jxr_string">"\&quot;, (String) idMap.get( "</span> + value + <span class="jxr_string">" ) );"</span>);
-<a class="jxr_linenumber" name="L533" href="#L533">533</a>         sc.add(<span class="jxr_string">"}"</span>);
-<a class="jxr_linenumber" name="L534" href="#L534">534</a>     }
-<a class="jxr_linenumber" name="L535" href="#L535">535</a> 
-<a class="jxr_linenumber" name="L536" href="#L536">536</a>     <strong class="jxr_keyword">private</strong> String getFieldValue(String uncapClassName, ModelField field) {
-<a class="jxr_linenumber" name="L537" href="#L537">537</a>         JavaFieldMetadata javaFieldMetadata = (JavaFieldMetadata) field.getMetadata(JavaFieldMetadata.ID);
-<a class="jxr_linenumber" name="L538" href="#L538">538</a> 
-<a class="jxr_linenumber" name="L539" href="#L539">539</a>         <strong class="jxr_keyword">return</strong> uncapClassName + <span class="jxr_string">"."</span> + getPrefix(javaFieldMetadata) + capitalise(field.getName()) + <span class="jxr_string">"()"</span>;
-<a class="jxr_linenumber" name="L540" href="#L540">540</a>     }
-<a class="jxr_linenumber" name="L541" href="#L541">541</a> 
-<a class="jxr_linenumber" name="L542" href="#L542">542</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> createWriteDomMethod(JClass jClass) {
-<a class="jxr_linenumber" name="L543" href="#L543">543</a>         <strong class="jxr_keyword">if</strong> (domAsXpp3) {
-<a class="jxr_linenumber" name="L544" href="#L544">544</a>             jClass.addImport(<span class="jxr_string">"org.codehaus.plexus.util.xml.Xpp3Dom"</span>);
-<a class="jxr_linenumber" name="L545" href="#L545">545</a>         }
-<a class="jxr_linenumber" name="L546" href="#L546">546</a>         String type = domAsXpp3 ? <span class="jxr_string">"Xpp3Dom"</span> : <span class="jxr_string">"org.w3c.dom.Element"</span>;
-<a class="jxr_linenumber" name="L547" href="#L547">547</a>         JMethod method = <strong class="jxr_keyword">new</strong> JMethod(<span class="jxr_string">"writeDom"</span>);
-<a class="jxr_linenumber" name="L548" href="#L548">548</a>         method.getModifiers().makePrivate();
-<a class="jxr_linenumber" name="L549" href="#L549">549</a> 
-<a class="jxr_linenumber" name="L550" href="#L550">550</a>         method.addParameter(<strong class="jxr_keyword">new</strong> JParameter(<strong class="jxr_keyword">new</strong> JType(type), <span class="jxr_string">"dom"</span>));
-<a class="jxr_linenumber" name="L551" href="#L551">551</a>         method.addParameter(<strong class="jxr_keyword">new</strong> JParameter(<strong class="jxr_keyword">new</strong> JType(<span class="jxr_string">"XMLStreamWriter"</span>), <span class="jxr_string">"serializer"</span>));
-<a class="jxr_linenumber" name="L552" href="#L552">552</a> 
-<a class="jxr_linenumber" name="L553" href="#L553">553</a>         method.addException(<strong class="jxr_keyword">new</strong> JClass(<span class="jxr_string">"XMLStreamException"</span>));
-<a class="jxr_linenumber" name="L554" href="#L554">554</a> 
-<a class="jxr_linenumber" name="L555" href="#L555">555</a>         JSourceCode sc = method.getSourceCode();
-<a class="jxr_linenumber" name="L556" href="#L556">556</a> 
-<a class="jxr_linenumber" name="L557" href="#L557">557</a>         <em class="jxr_comment">// start element</em>
-<a class="jxr_linenumber" name="L558" href="#L558">558</a>         sc.add(<span class="jxr_string">"serializer.writeStartElement( dom.get"</span> + (domAsXpp3 ? <span class="jxr_string">"Name"</span> : <span class="jxr_string">"TagName"</span>) + <span class="jxr_string">"() );"</span>);
-<a class="jxr_linenumber" name="L559" href="#L559">559</a> 
-<a class="jxr_linenumber" name="L560" href="#L560">560</a>         <em class="jxr_comment">// attributes</em>
-<a class="jxr_linenumber" name="L561" href="#L561">561</a>         <strong class="jxr_keyword">if</strong> (domAsXpp3) {
-<a class="jxr_linenumber" name="L562" href="#L562">562</a>             sc.add(<span class="jxr_string">"String[] attributeNames = dom.getAttributeNames();"</span>);
-<a class="jxr_linenumber" name="L563" href="#L563">563</a>             sc.add(<span class="jxr_string">"for ( int i = 0; i &lt; attributeNames.length; i++ )"</span>);
-<a class="jxr_linenumber" name="L564" href="#L564">564</a>             sc.add(<span class="jxr_string">"{"</span>);
-<a class="jxr_linenumber" name="L565" href="#L565">565</a> 
-<a class="jxr_linenumber" name="L566" href="#L566">566</a>             sc.indent();
-<a class="jxr_linenumber" name="L567" href="#L567">567</a>             sc.add(<span class="jxr_string">"String attributeName = attributeNames[i];"</span>);
-<a class="jxr_linenumber" name="L568" href="#L568">568</a>             sc.add(<span class="jxr_string">"serializer.writeAttribute( attributeName, dom.getAttribute( attributeName ) );"</span>);
-<a class="jxr_linenumber" name="L569" href="#L569">569</a>             sc.unindent();
-<a class="jxr_linenumber" name="L570" href="#L570">570</a> 
-<a class="jxr_linenumber" name="L571" href="#L571">571</a>             sc.add(<span class="jxr_string">"}"</span>);
-<a class="jxr_linenumber" name="L572" href="#L572">572</a>         } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L573" href="#L573">573</a>             sc.add(<span class="jxr_string">"org.w3c.dom.NamedNodeMap attributes = dom.getAttributes();"</span>);
-<a class="jxr_linenumber" name="L574" href="#L574">574</a>             sc.add(<span class="jxr_string">"for ( int i = 0; i &lt; attributes.getLength(); i++ )"</span>);
-<a class="jxr_linenumber" name="L575" href="#L575">575</a>             sc.add(<span class="jxr_string">"{"</span>);
+<a class="jxr_linenumber" name="L523" href="#L523">523</a>         jClass.addMethod(marshall);
+<a class="jxr_linenumber" name="L524" href="#L524">524</a>     }
+<a class="jxr_linenumber" name="L525" href="#L525">525</a> 
+<a class="jxr_linenumber" name="L526" href="#L526">526</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> writeElementAttribute(JSourceCode sc, ModelField referenceIdentifierField, String value) {
+<a class="jxr_linenumber" name="L527" href="#L527">527</a>         <strong class="jxr_keyword">if</strong> (referenceIdentifierField instanceof <a name="DummyIdModelField" href="../../../../../org/codehaus/modello/plugin/stax/DummyIdModelField.html#DummyIdModelField">DummyIdModelField</a>) {
+<a class="jxr_linenumber" name="L528" href="#L528">528</a>             writeIdMapCheck(sc, value, referenceIdentifierField.getName());
+<a class="jxr_linenumber" name="L529" href="#L529">529</a>         } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L530" href="#L530">530</a>             String v = getValue(
+<a class="jxr_linenumber" name="L531" href="#L531">531</a>                     referenceIdentifierField.getType(),
+<a class="jxr_linenumber" name="L532" href="#L532">532</a>                     getFieldValue(value, referenceIdentifierField),
+<a class="jxr_linenumber" name="L533" href="#L533">533</a>                     (XmlFieldMetadata) referenceIdentifierField.getMetadata(XmlFieldMetadata.ID));
+<a class="jxr_linenumber" name="L534" href="#L534">534</a>             sc.add(<span class="jxr_string">"serializer.writeAttribute( \&quot;"</span> + referenceIdentifierField.getName() + <span class="jxr_string">"\&quot;, "</span> + v + <span class="jxr_string">" );"</span>);
+<a class="jxr_linenumber" name="L535" href="#L535">535</a>         }
+<a class="jxr_linenumber" name="L536" href="#L536">536</a>     }
+<a class="jxr_linenumber" name="L537" href="#L537">537</a> 
+<a class="jxr_linenumber" name="L538" href="#L538">538</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> writeIdMapCheck(JSourceCode sc, String value, String attributeName) {
+<a class="jxr_linenumber" name="L539" href="#L539">539</a>         sc.add(<span class="jxr_string">"if ( !idMap.containsKey( "</span> + value + <span class="jxr_string">" ) )"</span>);
+<a class="jxr_linenumber" name="L540" href="#L540">540</a>         sc.add(<span class="jxr_string">"{"</span>);
+<a class="jxr_linenumber" name="L541" href="#L541">541</a>         sc.indent();
+<a class="jxr_linenumber" name="L542" href="#L542">542</a> 
+<a class="jxr_linenumber" name="L543" href="#L543">543</a>         sc.add(<span class="jxr_string">"++curId;"</span>);
+<a class="jxr_linenumber" name="L544" href="#L544">544</a>         sc.add(<span class="jxr_string">"String id = String.valueOf( curId );"</span>);
+<a class="jxr_linenumber" name="L545" href="#L545">545</a>         sc.add(<span class="jxr_string">"idMap.put( "</span> + value + <span class="jxr_string">", id );"</span>);
+<a class="jxr_linenumber" name="L546" href="#L546">546</a>         sc.add(<span class="jxr_string">"serializer.writeAttribute( \&quot;"</span> + attributeName + <span class="jxr_string">"\&quot;, id );"</span>);
+<a class="jxr_linenumber" name="L547" href="#L547">547</a> 
+<a class="jxr_linenumber" name="L548" href="#L548">548</a>         sc.unindent();
+<a class="jxr_linenumber" name="L549" href="#L549">549</a>         sc.add(<span class="jxr_string">"}"</span>);
+<a class="jxr_linenumber" name="L550" href="#L550">550</a>         sc.add(<span class="jxr_string">"else"</span>);
+<a class="jxr_linenumber" name="L551" href="#L551">551</a>         sc.add(<span class="jxr_string">"{"</span>);
+<a class="jxr_linenumber" name="L552" href="#L552">552</a>         sc.addIndented(<span class="jxr_string">"serializer.writeAttribute( \&quot;"</span> + attributeName + <span class="jxr_string">"\&quot;, (String) idMap.get( "</span> + value + <span class="jxr_string">" ) );"</span>);
+<a class="jxr_linenumber" name="L553" href="#L553">553</a>         sc.add(<span class="jxr_string">"}"</span>);
+<a class="jxr_linenumber" name="L554" href="#L554">554</a>     }
+<a class="jxr_linenumber" name="L555" href="#L555">555</a> 
+<a class="jxr_linenumber" name="L556" href="#L556">556</a>     <strong class="jxr_keyword">private</strong> String getFieldValue(String uncapClassName, ModelField field) {
+<a class="jxr_linenumber" name="L557" href="#L557">557</a>         JavaFieldMetadata javaFieldMetadata = (JavaFieldMetadata) field.getMetadata(JavaFieldMetadata.ID);
+<a class="jxr_linenumber" name="L558" href="#L558">558</a> 
+<a class="jxr_linenumber" name="L559" href="#L559">559</a>         <strong class="jxr_keyword">return</strong> uncapClassName + <span class="jxr_string">"."</span> + getPrefix(javaFieldMetadata) + capitalise(field.getName()) + <span class="jxr_string">"()"</span>;
+<a class="jxr_linenumber" name="L560" href="#L560">560</a>     }
+<a class="jxr_linenumber" name="L561" href="#L561">561</a> 
+<a class="jxr_linenumber" name="L562" href="#L562">562</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> createWriteDomMethod(JClass jClass) {
+<a class="jxr_linenumber" name="L563" href="#L563">563</a>         <strong class="jxr_keyword">if</strong> (domAsXpp3) {
+<a class="jxr_linenumber" name="L564" href="#L564">564</a>             jClass.addImport(<span class="jxr_string">"org.codehaus.plexus.util.xml.Xpp3Dom"</span>);
+<a class="jxr_linenumber" name="L565" href="#L565">565</a>         }
+<a class="jxr_linenumber" name="L566" href="#L566">566</a>         String type = domAsXpp3 ? <span class="jxr_string">"Xpp3Dom"</span> : <span class="jxr_string">"org.w3c.dom.Element"</span>;
+<a class="jxr_linenumber" name="L567" href="#L567">567</a>         JMethod method = <strong class="jxr_keyword">new</strong> JMethod(<span class="jxr_string">"writeDom"</span>);
+<a class="jxr_linenumber" name="L568" href="#L568">568</a>         method.getModifiers().makePrivate();
+<a class="jxr_linenumber" name="L569" href="#L569">569</a> 
+<a class="jxr_linenumber" name="L570" href="#L570">570</a>         method.addParameter(<strong class="jxr_keyword">new</strong> JParameter(<strong class="jxr_keyword">new</strong> JType(type), <span class="jxr_string">"dom"</span>));
+<a class="jxr_linenumber" name="L571" href="#L571">571</a>         method.addParameter(<strong class="jxr_keyword">new</strong> JParameter(<strong class="jxr_keyword">new</strong> JType(<span class="jxr_string">"XMLStreamWriter"</span>), <span class="jxr_string">"serializer"</span>));
+<a class="jxr_linenumber" name="L572" href="#L572">572</a> 
+<a class="jxr_linenumber" name="L573" href="#L573">573</a>         method.addException(<strong class="jxr_keyword">new</strong> JClass(<span class="jxr_string">"XMLStreamException"</span>));
+<a class="jxr_linenumber" name="L574" href="#L574">574</a> 
+<a class="jxr_linenumber" name="L575" href="#L575">575</a>         JSourceCode sc = method.getSourceCode();
 <a class="jxr_linenumber" name="L576" href="#L576">576</a> 
-<a class="jxr_linenumber" name="L577" href="#L577">577</a>             sc.indent();
-<a class="jxr_linenumber" name="L578" href="#L578">578</a>             sc.add(<span class="jxr_string">"org.w3c.dom.Node attribute = attributes.item( i );"</span>);
-<a class="jxr_linenumber" name="L579" href="#L579">579</a>             sc.add(<span class="jxr_string">"serializer.writeAttribute( attribute.getNodeName(), attribute.getNodeValue() );"</span>);
-<a class="jxr_linenumber" name="L580" href="#L580">580</a>             sc.unindent();
-<a class="jxr_linenumber" name="L581" href="#L581">581</a> 
-<a class="jxr_linenumber" name="L582" href="#L582">582</a>             sc.add(<span class="jxr_string">"}"</span>);
-<a class="jxr_linenumber" name="L583" href="#L583">583</a>         }
-<a class="jxr_linenumber" name="L584" href="#L584">584</a> 
-<a class="jxr_linenumber" name="L585" href="#L585">585</a>         <em class="jxr_comment">// child nodes &amp; text</em>
-<a class="jxr_linenumber" name="L586" href="#L586">586</a>         <strong class="jxr_keyword">if</strong> (domAsXpp3) {
-<a class="jxr_linenumber" name="L587" href="#L587">587</a>             sc.add(<span class="jxr_string">"Xpp3Dom[] children = dom.getChildren();"</span>);
-<a class="jxr_linenumber" name="L588" href="#L588">588</a>             sc.add(<span class="jxr_string">"for ( int i = 0; i &lt; children.length; i++ )"</span>);
-<a class="jxr_linenumber" name="L589" href="#L589">589</a>             sc.add(<span class="jxr_string">"{"</span>);
-<a class="jxr_linenumber" name="L590" href="#L590">590</a>             sc.addIndented(<span class="jxr_string">"writeDom( children[i], serializer );"</span>);
+<a class="jxr_linenumber" name="L577" href="#L577">577</a>         <em class="jxr_comment">// start element</em>
+<a class="jxr_linenumber" name="L578" href="#L578">578</a>         sc.add(<span class="jxr_string">"serializer.writeStartElement( dom.get"</span> + (domAsXpp3 ? <span class="jxr_string">"Name"</span> : <span class="jxr_string">"TagName"</span>) + <span class="jxr_string">"() );"</span>);
+<a class="jxr_linenumber" name="L579" href="#L579">579</a> 
+<a class="jxr_linenumber" name="L580" href="#L580">580</a>         <em class="jxr_comment">// attributes</em>
+<a class="jxr_linenumber" name="L581" href="#L581">581</a>         <strong class="jxr_keyword">if</strong> (domAsXpp3) {
+<a class="jxr_linenumber" name="L582" href="#L582">582</a>             sc.add(<span class="jxr_string">"String[] attributeNames = dom.getAttributeNames();"</span>);
+<a class="jxr_linenumber" name="L583" href="#L583">583</a>             sc.add(<span class="jxr_string">"for ( int i = 0; i &lt; attributeNames.length; i++ )"</span>);
+<a class="jxr_linenumber" name="L584" href="#L584">584</a>             sc.add(<span class="jxr_string">"{"</span>);
+<a class="jxr_linenumber" name="L585" href="#L585">585</a> 
+<a class="jxr_linenumber" name="L586" href="#L586">586</a>             sc.indent();
+<a class="jxr_linenumber" name="L587" href="#L587">587</a>             sc.add(<span class="jxr_string">"String attributeName = attributeNames[i];"</span>);
+<a class="jxr_linenumber" name="L588" href="#L588">588</a>             sc.add(<span class="jxr_string">"serializer.writeAttribute( attributeName, dom.getAttribute( attributeName ) );"</span>);
+<a class="jxr_linenumber" name="L589" href="#L589">589</a>             sc.unindent();
+<a class="jxr_linenumber" name="L590" href="#L590">590</a> 
 <a class="jxr_linenumber" name="L591" href="#L591">591</a>             sc.add(<span class="jxr_string">"}"</span>);
-<a class="jxr_linenumber" name="L592" href="#L592">592</a> 
-<a class="jxr_linenumber" name="L593" href="#L593">593</a>             sc.add(<span class="jxr_string">"String value = dom.getValue();"</span>);
-<a class="jxr_linenumber" name="L594" href="#L594">594</a>             sc.add(<span class="jxr_string">"if ( value != null )"</span>);
+<a class="jxr_linenumber" name="L592" href="#L592">592</a>         } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L593" href="#L593">593</a>             sc.add(<span class="jxr_string">"org.w3c.dom.NamedNodeMap attributes = dom.getAttributes();"</span>);
+<a class="jxr_linenumber" name="L594" href="#L594">594</a>             sc.add(<span class="jxr_string">"for ( int i = 0; i &lt; attributes.getLength(); i++ )"</span>);
 <a class="jxr_linenumber" name="L595" href="#L595">595</a>             sc.add(<span class="jxr_string">"{"</span>);
-<a class="jxr_linenumber" name="L596" href="#L596">596</a>             sc.addIndented(<span class="jxr_string">"serializer.writeCharacters( value );"</span>);
-<a class="jxr_linenumber" name="L597" href="#L597">597</a>             sc.add(<span class="jxr_string">"}"</span>);
-<a class="jxr_linenumber" name="L598" href="#L598">598</a>         } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L599" href="#L599">599</a>             sc.add(<span class="jxr_string">"org.w3c.dom.NodeList children = dom.getChildNodes();"</span>);
-<a class="jxr_linenumber" name="L600" href="#L600">600</a>             sc.add(<span class="jxr_string">"for ( int i = 0; i &lt; children.getLength(); i++ )"</span>);
-<a class="jxr_linenumber" name="L601" href="#L601">601</a>             sc.add(<span class="jxr_string">"{"</span>);
-<a class="jxr_linenumber" name="L602" href="#L602">602</a>             sc.indent();
-<a class="jxr_linenumber" name="L603" href="#L603">603</a>             sc.add(<span class="jxr_string">"org.w3c.dom.Node node = children.item( i );"</span>);
-<a class="jxr_linenumber" name="L604" href="#L604">604</a>             sc.add(<span class="jxr_string">"if ( node instanceof org.w3c.dom.Element)"</span>);
-<a class="jxr_linenumber" name="L605" href="#L605">605</a>             sc.add(<span class="jxr_string">"{"</span>);
-<a class="jxr_linenumber" name="L606" href="#L606">606</a>             sc.addIndented(<span class="jxr_string">"writeDom( (org.w3c.dom.Element) children.item( i ), serializer );"</span>);
-<a class="jxr_linenumber" name="L607" href="#L607">607</a>             sc.add(<span class="jxr_string">"}"</span>);
-<a class="jxr_linenumber" name="L608" href="#L608">608</a>             sc.add(<span class="jxr_string">"else"</span>);
+<a class="jxr_linenumber" name="L596" href="#L596">596</a> 
+<a class="jxr_linenumber" name="L597" href="#L597">597</a>             sc.indent();
+<a class="jxr_linenumber" name="L598" href="#L598">598</a>             sc.add(<span class="jxr_string">"org.w3c.dom.Node attribute = attributes.item( i );"</span>);
+<a class="jxr_linenumber" name="L599" href="#L599">599</a>             sc.add(<span class="jxr_string">"serializer.writeAttribute( attribute.getNodeName(), attribute.getNodeValue() );"</span>);
+<a class="jxr_linenumber" name="L600" href="#L600">600</a>             sc.unindent();
+<a class="jxr_linenumber" name="L601" href="#L601">601</a> 
+<a class="jxr_linenumber" name="L602" href="#L602">602</a>             sc.add(<span class="jxr_string">"}"</span>);
+<a class="jxr_linenumber" name="L603" href="#L603">603</a>         }
+<a class="jxr_linenumber" name="L604" href="#L604">604</a> 
+<a class="jxr_linenumber" name="L605" href="#L605">605</a>         <em class="jxr_comment">// child nodes &amp; text</em>
+<a class="jxr_linenumber" name="L606" href="#L606">606</a>         <strong class="jxr_keyword">if</strong> (domAsXpp3) {
+<a class="jxr_linenumber" name="L607" href="#L607">607</a>             sc.add(<span class="jxr_string">"Xpp3Dom[] children = dom.getChildren();"</span>);
+<a class="jxr_linenumber" name="L608" href="#L608">608</a>             sc.add(<span class="jxr_string">"for ( int i = 0; i &lt; children.length; i++ )"</span>);
 <a class="jxr_linenumber" name="L609" href="#L609">609</a>             sc.add(<span class="jxr_string">"{"</span>);
-<a class="jxr_linenumber" name="L610" href="#L610">610</a>             sc.addIndented(<span class="jxr_string">"serializer.writeCharacters( node.getTextContent() );"</span>);
+<a class="jxr_linenumber" name="L610" href="#L610">610</a>             sc.addIndented(<span class="jxr_string">"writeDom( children[i], serializer );"</span>);
 <a class="jxr_linenumber" name="L611" href="#L611">611</a>             sc.add(<span class="jxr_string">"}"</span>);
-<a class="jxr_linenumber" name="L612" href="#L612">612</a>             sc.unindent();
-<a class="jxr_linenumber" name="L613" href="#L613">613</a>             sc.add(<span class="jxr_string">"}"</span>);
-<a class="jxr_linenumber" name="L614" href="#L614">614</a>         }
-<a class="jxr_linenumber" name="L615" href="#L615">615</a> 
-<a class="jxr_linenumber" name="L616" href="#L616">616</a>         sc.add(<span class="jxr_string">"serializer.writeEndElement();"</span>);
-<a class="jxr_linenumber" name="L617" href="#L617">617</a> 
-<a class="jxr_linenumber" name="L618" href="#L618">618</a>         jClass.addMethod(method);
-<a class="jxr_linenumber" name="L619" href="#L619">619</a>     }
-<a class="jxr_linenumber" name="L620" href="#L620">620</a> }
+<a class="jxr_linenumber" name="L612" href="#L612">612</a> 
+<a class="jxr_linenumber" name="L613" href="#L613">613</a>             sc.add(<span class="jxr_string">"String value = dom.getValue();"</span>);
+<a class="jxr_linenumber" name="L614" href="#L614">614</a>             sc.add(<span class="jxr_string">"if ( value != null )"</span>);
+<a class="jxr_linenumber" name="L615" href="#L615">615</a>             sc.add(<span class="jxr_string">"{"</span>);
+<a class="jxr_linenumber" name="L616" href="#L616">616</a>             sc.addIndented(<span class="jxr_string">"serializer.writeCharacters( value );"</span>);
+<a class="jxr_linenumber" name="L617" href="#L617">617</a>             sc.add(<span class="jxr_string">"}"</span>);
+<a class="jxr_linenumber" name="L618" href="#L618">618</a>         } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L619" href="#L619">619</a>             sc.add(<span class="jxr_string">"org.w3c.dom.NodeList children = dom.getChildNodes();"</span>);
+<a class="jxr_linenumber" name="L620" href="#L620">620</a>             sc.add(<span class="jxr_string">"for ( int i = 0; i &lt; children.getLength(); i++ )"</span>);
+<a class="jxr_linenumber" name="L621" href="#L621">621</a>             sc.add(<span class="jxr_string">"{"</span>);
+<a class="jxr_linenumber" name="L622" href="#L622">622</a>             sc.indent();
+<a class="jxr_linenumber" name="L623" href="#L623">623</a>             sc.add(<span class="jxr_string">"org.w3c.dom.Node node = children.item( i );"</span>);
+<a class="jxr_linenumber" name="L624" href="#L624">624</a>             sc.add(<span class="jxr_string">"if ( node instanceof org.w3c.dom.Element)"</span>);
+<a class="jxr_linenumber" name="L625" href="#L625">625</a>             sc.add(<span class="jxr_string">"{"</span>);
+<a class="jxr_linenumber" name="L626" href="#L626">626</a>             sc.addIndented(<span class="jxr_string">"writeDom( (org.w3c.dom.Element) children.item( i ), serializer );"</span>);
+<a class="jxr_linenumber" name="L627" href="#L627">627</a>             sc.add(<span class="jxr_string">"}"</span>);
+<a class="jxr_linenumber" name="L628" href="#L628">628</a>             sc.add(<span class="jxr_string">"else"</span>);
+<a class="jxr_linenumber" name="L629" href="#L629">629</a>             sc.add(<span class="jxr_string">"{"</span>);
+<a class="jxr_linenumber" name="L630" href="#L630">630</a>             sc.addIndented(<span class="jxr_string">"serializer.writeCharacters( node.getTextContent() );"</span>);
+<a class="jxr_linenumber" name="L631" href="#L631">631</a>             sc.add(<span class="jxr_string">"}"</span>);
+<a class="jxr_linenumber" name="L632" href="#L632">632</a>             sc.unindent();
+<a class="jxr_linenumber" name="L633" href="#L633">633</a>             sc.add(<span class="jxr_string">"}"</span>);
+<a class="jxr_linenumber" name="L634" href="#L634">634</a>         }
+<a class="jxr_linenumber" name="L635" href="#L635">635</a> 
+<a class="jxr_linenumber" name="L636" href="#L636">636</a>         sc.add(<span class="jxr_string">"serializer.writeEndElement();"</span>);
+<a class="jxr_linenumber" name="L637" href="#L637">637</a> 
+<a class="jxr_linenumber" name="L638" href="#L638">638</a>         jClass.addMethod(method);
+<a class="jxr_linenumber" name="L639" href="#L639">639</a>     }
+<a class="jxr_linenumber" name="L640" href="#L640">640</a> }
 </pre>
 <hr/>
-<div id="footer">© 2001–2025 <a href="https://codehaus-plexus.github.io/">Codehaus Plexus</a></div>
+<div id="footer">© 2001–2026 <a href="https://codehaus-plexus.github.io/">Codehaus Plexus</a></div>
 </body>
 </html>

@@ -32,24 +32,26 @@
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.codehaus.modello.model.Model;
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.codehaus.plexus.component.repository.exception.ComponentLookupException;
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="StaxGeneratorVersionReaderDelegateTest" href="../../../../../../org/codehaus/modello/generator/xml/stax/StaxGeneratorVersionReaderDelegateTest.html#StaxGeneratorVersionReaderDelegateTest">StaxGeneratorVersionReaderDelegateTest</a> <strong class="jxr_keyword">extends</strong> <a name="AbstractStaxGeneratorTestCase" href="../../../../../../org/codehaus/modello/generator/xml/stax/AbstractStaxGeneratorTestCase.html#AbstractStaxGeneratorTestCase">AbstractStaxGeneratorTestCase</a> {
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>      <strong class="jxr_keyword">public</strong> <a name="StaxGeneratorVersionReaderDelegateTest" href="../../../../../../org/codehaus/modello/generator/xml/stax/StaxGeneratorVersionReaderDelegateTest.html#StaxGeneratorVersionReaderDelegateTest">StaxGeneratorVersionReaderDelegateTest</a>() <strong class="jxr_keyword">throws</strong> ComponentLookupException {
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>          <strong class="jxr_keyword">super</strong>(<span class="jxr_string">"stax-version-reader-delegate"</span>);
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>      }
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testStaxReaderVersionInField() <strong class="jxr_keyword">throws</strong> Throwable {
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>          Model model = modello.loadModel(getXmlResourceReader(<span class="jxr_string">"/version-in-namespace.mdo"</span>));
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>          verifyModel(model, <span class="jxr_string">"org.codehaus.modello.generator.xml.stax.StaxVerifierVersionReaderDelegate"</span>, <strong class="jxr_keyword">new</strong> String[] {
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>              <span class="jxr_string">"4.0.0"</span>, <span class="jxr_string">"4.0.1"</span>
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>          });
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>      }
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  }
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.Test;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="StaxGeneratorVersionReaderDelegateTest" href="../../../../../../org/codehaus/modello/generator/xml/stax/StaxGeneratorVersionReaderDelegateTest.html#StaxGeneratorVersionReaderDelegateTest">StaxGeneratorVersionReaderDelegateTest</a> <strong class="jxr_keyword">extends</strong> <a name="AbstractStaxGeneratorTestCase" href="../../../../../../org/codehaus/modello/generator/xml/stax/AbstractStaxGeneratorTestCase.html#AbstractStaxGeneratorTestCase">AbstractStaxGeneratorTestCase</a> {
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>      <strong class="jxr_keyword">public</strong> <a name="StaxGeneratorVersionReaderDelegateTest" href="../../../../../../org/codehaus/modello/generator/xml/stax/StaxGeneratorVersionReaderDelegateTest.html#StaxGeneratorVersionReaderDelegateTest">StaxGeneratorVersionReaderDelegateTest</a>() <strong class="jxr_keyword">throws</strong> ComponentLookupException {
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>          <strong class="jxr_keyword">super</strong>(<span class="jxr_string">"stax-version-reader-delegate"</span>);
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>      }
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>      @Test
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testStaxReaderVersionInField() <strong class="jxr_keyword">throws</strong> Throwable {
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>          Model model = modello.loadModel(getXmlResourceReader(<span class="jxr_string">"/version-in-namespace.mdo"</span>));
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>          verifyModel(model, <span class="jxr_string">"org.codehaus.modello.generator.xml.stax.StaxVerifierVersionReaderDelegate"</span>, <strong class="jxr_keyword">new</strong> String[] {
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>              <span class="jxr_string">"4.0.0"</span>, <span class="jxr_string">"4.0.1"</span>
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>          });
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>      }
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  }
 </pre>
 <hr/>
-<div id="footer">© 2001–2025 <a href="https://codehaus-plexus.github.io/">Codehaus Plexus</a></div>
+<div id="footer">© 2001–2026 <a href="https://codehaus-plexus.github.io/">Codehaus Plexus</a></div>
 </body>
 </html>

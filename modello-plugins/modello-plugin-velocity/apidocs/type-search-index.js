@@ -1,1 +1,1 @@
-typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"org.codehaus.modello.plugin.velocity","l":"Helper"},{"p":"org.codehaus.modello.plugin.velocity","l":"VelocityGenerator"}];updateSearchResults();
+typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html","k":"18"},{"p":"org.codehaus.modello.plugin.velocity","l":"Helper"},{"p":"org.codehaus.modello.plugin.velocity","l":"VelocityGenerator"}];updateSearchResults();

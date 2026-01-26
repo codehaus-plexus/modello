@@ -1,1 +1,1 @@
-/Users/slawomir.jaranowski/.sdkman/candidates/java/21/bin/javadoc @options @packages
+/opt/homebrew/opt/openjdk/libexec/openjdk.jdk/Contents/Home/bin/javadoc @options @packages

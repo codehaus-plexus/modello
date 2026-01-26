@@ -37,9 +37,9 @@
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.codehaus.plexus.util.xml.XmlStreamReader;
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.Assert.assertEquals;
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.Assert.assertTrue;
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.Assert.fail;
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.assertEquals;
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.assertTrue;
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.fail;
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">class</strong> <a name="Verifier" href="../../../../org/codehaus/modello/verifier/Verifier.html#Verifier">Verifier</a> {
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">void</strong> verify() <strong class="jxr_keyword">throws</strong> Throwable;
@@ -67,12 +67,12 @@
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>          <strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>              read = reader.getMethod(<span class="jxr_string">"read"</span>, input);
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>              assertEquals(<span class="jxr_string">"Bad return type of "</span> + read, model, read.getReturnType());
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>              assertEquals(model, read.getReturnType(), <span class="jxr_string">"Bad return type of "</span> + read);
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>              <strong class="jxr_keyword">for</strong> (Class&lt;?&gt; e : read.getExceptionTypes()) {
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>                  assertTrue(
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>                          <span class="jxr_string">"Unexpected exception "</span> + e.getName() + <span class="jxr_string">" at "</span> + read,
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>                          IOException.<strong class="jxr_keyword">class</strong>.equals(e) || exception.equals(e));
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>                          IOException.<strong class="jxr_keyword">class</strong>.equals(e) || exception.equals(e),
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>                          <span class="jxr_string">"Unexpected exception "</span> + e.getName() + <span class="jxr_string">" at "</span> + read);
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>              }
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>          } <strong class="jxr_keyword">catch</strong> (NoSuchMethodException e) {
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>              fail(e.toString());
@@ -82,12 +82,12 @@
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>          <strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>              read = reader.getMethod(<span class="jxr_string">"read"</span>, input, Boolean.TYPE);
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>              assertEquals(<span class="jxr_string">"Bad return type of "</span> + read, model, read.getReturnType());
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>              assertEquals(model, read.getReturnType(), <span class="jxr_string">"Bad return type of "</span> + read);
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>              <strong class="jxr_keyword">for</strong> (Class&lt;?&gt; e : read.getExceptionTypes()) {
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>                  assertTrue(
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>                          <span class="jxr_string">"Unexpected exception "</span> + e.getName() + <span class="jxr_string">" at "</span> + read,
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>                          IOException.<strong class="jxr_keyword">class</strong>.equals(e) || exception.equals(e));
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>                          IOException.<strong class="jxr_keyword">class</strong>.equals(e) || exception.equals(e),
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>                          <span class="jxr_string">"Unexpected exception "</span> + e.getName() + <span class="jxr_string">" at "</span> + read);
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>              }
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>          } <strong class="jxr_keyword">catch</strong> (NoSuchMethodException e) {
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>              fail(e.toString());
@@ -103,8 +103,8 @@
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>              <strong class="jxr_keyword">for</strong> (Class&lt;?&gt; e : write.getExceptionTypes()) {
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>                  assertTrue(
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>                          <span class="jxr_string">"Unexpected exception "</span> + e.getName() + <span class="jxr_string">" at "</span> + write,
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>                          IOException.<strong class="jxr_keyword">class</strong>.equals(e) || exception.equals(e));
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>                          IOException.<strong class="jxr_keyword">class</strong>.equals(e) || exception.equals(e),
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>                          <span class="jxr_string">"Unexpected exception "</span> + e.getName() + <span class="jxr_string">" at "</span> + write);
 <a class="jxr_linenumber" name="L100" href="#L100">100</a>             }
 <a class="jxr_linenumber" name="L101" href="#L101">101</a>         } <strong class="jxr_keyword">catch</strong> (NoSuchMethodException e) {
 <a class="jxr_linenumber" name="L102" href="#L102">102</a>             fail(e.toString());
@@ -113,6 +113,6 @@
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> }
 </pre>
 <hr/>
-<div id="footer">© 2001–2025 <a href="https://codehaus-plexus.github.io/">Codehaus Plexus</a></div>
+<div id="footer">© 2001–2026 <a href="https://codehaus-plexus.github.io/">Codehaus Plexus</a></div>
 </body>
 </html>

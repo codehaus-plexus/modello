@@ -1,1 +1,1 @@
-packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"org.codehaus.modello.plugins.xml"},{"l":"org.codehaus.modello.plugins.xml.metadata"}];updateSearchResults();
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html","k":"18"},{"l":"org.codehaus.modello.plugins.xml"},{"l":"org.codehaus.modello.plugins.xml.metadata"}];updateSearchResults();
