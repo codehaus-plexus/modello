@@ -13,7 +13,7 @@
     and xml files to test every feature for every plugin.</description>
 
   <properties>
-    <plexus.compiler.version>2.16.1</plexus.compiler.version>
+    <plexus.compiler.version>2.16.2</plexus.compiler.version>
   </properties>
   <dependencies>
     <dependency>
