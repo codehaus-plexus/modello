@@ -25,6 +25,12 @@
           <type>double</type>
           <identifier>true</identifier>
         </field>
+         <field>
+          <name>flag</name>
+          <version>1.0.0</version>
+          <type>Boolean</type>
+          <identifier>true</identifier>
+        </field>
       </fields>
     </class>
   </classes>

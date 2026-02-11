@@ -347,6 +347,7 @@ public class JavaModelloGenerator extends AbstractJavaModelloGenerator {
 
         for (ModelField identifier : modelClass.getIdentifierFields(getGeneratedVersion())) {
             String name = identifier.getName();
+            // for primitives reference field directly
             if ("boolean".equals(identifier.getType())
                     || "byte".equals(identifier.getType())
                     || "char".equals(identifier.getType())
@@ -357,7 +358,10 @@ public class JavaModelloGenerator extends AbstractJavaModelloGenerator {
                     || "long".equals(identifier.getType())) {
                 sc.add("result = result && " + name + " == that." + name + ";");
             } else {
-                name = "get" + capitalise(name) + "()";
+                // non-primitives use getters
+                JavaFieldMetadata javaFieldMetadata = (JavaFieldMetadata) identifier.getMetadata(JavaFieldMetadata.ID);
+                String prefix = getPrefix(javaFieldMetadata);
+                name = prefix + capitalise(name) + "()";
                 sc.add("result = result && ( " + name + " == null ? that." + name + " == null : " + name
                         + ".equals( that." + name + " ) );");
             }
@@ -396,10 +400,11 @@ public class JavaModelloGenerator extends AbstractJavaModelloGenerator {
         for (Iterator<ModelField> j = fields.iterator(); j.hasNext(); ) {
             ModelField identifier = j.next();
 
-            String getter = "boolean".equals(identifier.getType()) ? "is" : "get";
+            JavaFieldMetadata javaFieldMetadata = (JavaFieldMetadata) identifier.getMetadata(JavaFieldMetadata.ID);
+            String prefix = getPrefix(javaFieldMetadata);
 
             sc.add("buf.append( \"" + identifier.getName() + " = '\" );");
-            sc.add("buf.append( " + getter + capitalise(identifier.getName()) + "() );");
+            sc.add("buf.append( " + prefix + capitalise(identifier.getName()) + "() );");
             sc.add("buf.append( \"'\" );");
 
             if (j.hasNext()) {
@@ -1173,7 +1178,7 @@ public class JavaModelloGenerator extends AbstractJavaModelloGenerator {
 
         JavaFieldMetadata javaFieldMetadata = (JavaFieldMetadata) modelField.getMetadata(JavaFieldMetadata.ID);
 
-        String prefix = javaFieldMetadata.isBooleanGetter() ? "is" : "get";
+        String prefix = getPrefix(javaFieldMetadata);
 
         JType returnType = field.getType();
         String interfaceCast = "";
