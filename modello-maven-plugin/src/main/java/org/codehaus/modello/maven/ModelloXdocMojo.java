@@ -32,9 +32,11 @@ import org.codehaus.modello.ModelloParameterConstants;
 /**
  * Creates documentation for the model in xdoc format.
  *
+ * @deprecated Use {@link ModelloReportMojo} with instead.
  * @author <a href="mailto:brett@apache.org">Brett Porter</a>
  */
 @Mojo(name = "xdoc", threadSafe = true)
+@Deprecated
 public class ModelloXdocMojo extends AbstractModelloGeneratorMojo {
     /**
      * The output directory of the generated documentation.

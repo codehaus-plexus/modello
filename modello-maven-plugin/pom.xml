@@ -70,6 +70,11 @@
       <version>${mavenPluginToolsVersion}</version>
       <scope>provided</scope>
     </dependency>
+    <dependency>
+      <groupId>org.apache.maven.reporting</groupId>
+      <artifactId>maven-reporting-impl</artifactId>
+      <version>3.2.0</version>
+    </dependency>
 
     <!-- plugins, sorted alphabetically -->
     <dependency>
@@ -120,7 +125,6 @@
     <dependency>
       <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-plugin-xdoc</artifactId>
-      <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>org.codehaus.modello</groupId>
@@ -130,7 +134,6 @@
     <dependency>
       <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-plugin-xsd</artifactId>
-      <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>org.codehaus.modello</groupId>
