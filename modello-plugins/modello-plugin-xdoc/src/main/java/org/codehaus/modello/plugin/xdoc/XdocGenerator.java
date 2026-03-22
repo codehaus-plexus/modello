@@ -417,6 +417,10 @@ public class XdocGenerator extends AbstractXmlGenerator {
 
             w.writeMarkup(getDescription(f));
 
+            if (f.isRequired()) {
+                w.writeMarkup("<p><strong>Required</strong>: Yes.</p>");
+            }
+
             // Write the default value, if it exists.
             // But only for fields that are not a ModelAssociation
             if (f.getDefaultValue() != null && !(f instanceof ModelAssociation)) {

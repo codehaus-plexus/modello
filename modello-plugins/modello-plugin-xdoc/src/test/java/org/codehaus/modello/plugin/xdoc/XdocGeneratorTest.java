@@ -135,6 +135,16 @@ public class XdocGeneratorTest extends AbstractModelloGeneratorTest {
 
         // verify( "org.codehaus.modello.generator.xml.cdoc.XdocVerifier", "xdoc" );
         checkInternalLinks("maven.xml");
+
+        String content = FileUtils.fileRead(new File(getOutputDirectory(), "maven.xml"), "UTF-8");
+
+        Pattern requiredModelVersion =
+                Pattern.compile("<code>modelVersion</code>.*?<strong>Required</strong>: Yes\\.", Pattern.DOTALL);
+        assertTrue(requiredModelVersion.matcher(content).find(), "Required modelVersion field should be documented");
+
+        Pattern requiredGroupId =
+                Pattern.compile("<code>groupId</code>.*?<strong>Required</strong>: Yes\\.", Pattern.DOTALL);
+        assertTrue(requiredGroupId.matcher(content).find(), "Required groupId field should be documented");
     }
 
     public void checkFeaturesXdocGenerator() throws Exception {
