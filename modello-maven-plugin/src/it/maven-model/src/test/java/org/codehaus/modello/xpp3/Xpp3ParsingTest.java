@@ -22,8 +22,8 @@ public class Xpp3ParsingTest
     public void testXpp3ParsingWithModelWithWrongRootTag()
         throws Exception
     {
-        thrown.expectMessage( startsWith( "Expected root element 'project' but found 'model' (position: START_TAG seen <model>... @1:7)" ) );
-        
+        thrown.expectMessage( startsWith( "Expected root element 'project' but found 'model' (position: START_TAG seen <model>... @1:8" ) );
+
         File model = new File( System.getProperty( "basedir" ), "src/test/models/model-with-wrong-root-tag.xml" );
 
         MavenXpp3Reader reader = new MavenXpp3Reader();
@@ -36,21 +36,21 @@ public class Xpp3ParsingTest
         throws Exception
     {
         thrown.expectMessage( startsWith( "Unrecognised tag: 'groupId' (position: START_TAG seen ...<dependencies>" ) );
-        
+
         File model = new File( System.getProperty( "basedir" ), "src/test/models/model-with-missing-elements.xml" );
 
         MavenXpp3Reader reader = new MavenXpp3Reader();
 
         reader.read( new XmlStreamReader( model ), true );
     }
-    
+
     @Test
     public void testXpp3ParsingWithModelWithPostTags()
         throws Exception
     {
         // internal message from MXParser
         thrown.expectMessage( startsWith( "start tag not allowed in epilog" ) );
-        
+
         File model = new File( System.getProperty( "basedir" ), "src/test/models/model-with-post-tags.xml" );
 
         MavenXpp3Reader reader = new MavenXpp3Reader();
