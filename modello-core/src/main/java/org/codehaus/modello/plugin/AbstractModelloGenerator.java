@@ -59,7 +59,7 @@ import org.slf4j.LoggerFactory;
 public abstract class AbstractModelloGenerator implements ModelloGenerator {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    private static final Map<String, String> PLURAL_EXCEPTIONS = new HashMap<>();
+    private static final ThreadLocal<Map<String, String>> PLURAL_EXCEPTIONS = ThreadLocal.withInitial(HashMap::new);
 
     private Model model;
 
@@ -97,8 +97,9 @@ public abstract class AbstractModelloGenerator implements ModelloGenerator {
 
         licenseText = (List<String>) parameters.get(ModelloParameterConstants.LICENSE_TEXT);
 
+        PLURAL_EXCEPTIONS.get().clear();
         Optional.ofNullable(parameters.get(ModelloParameterConstants.PLURAL_EXCEPTIONS))
-                .ifPresent(o -> PLURAL_EXCEPTIONS.putAll((Map<String, String>) o));
+                .ifPresent(o -> PLURAL_EXCEPTIONS.get().putAll((Map<String, String>) o));
     }
 
     protected Model getModel() {
@@ -207,8 +208,8 @@ public abstract class AbstractModelloGenerator implements ModelloGenerator {
             return name;
         }
 
-        if (PLURAL_EXCEPTIONS.containsKey(name)) {
-            return PLURAL_EXCEPTIONS.get(name);
+        if (PLURAL_EXCEPTIONS.get().containsKey(name)) {
+            return PLURAL_EXCEPTIONS.get().get(name);
         }
 
         if (name.endsWith("ies")) {
