@@ -54,6 +54,7 @@ public class VelocityGenerator extends AbstractModelloGenerator {
     @Override
     @SuppressWarnings("unchecked")
     public void generate(Model model, Map<String, Object> parameters) throws ModelloException {
+        initialize(model, parameters);
         try {
             Map<String, String> params =
                     (Map<String, String>) Objects.requireNonNull(parameters.get(VELOCITY_PARAMETERS));
