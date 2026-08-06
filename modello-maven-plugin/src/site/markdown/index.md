@@ -1,85 +1,41 @@
- ------
- Introduction
- ------
- Denis Cabasson
- Hervé Boutemy
- ------
- 1 January 2009
- ------
+# Modello Maven Plugin
 
+This plugin makes use of the [Modello](https://codehaus-plexus.github.io/modello/) project.
 
-Modello Maven Plugin
+## Goals Overview
 
-  This plugin makes use of the {{{https://codehaus-plexus.github.io/modello/}Modello}} project.
+- [modello:xsd](./xsd-mojo.html) Generates an XML Schema from the Modello model.
+- [modello:xdoc](./xdoc-mojo.html) Generates standard documentation for the Modello model, in xdoc format.
+- [modello:java](./java-mojo.html) Generates Java beans from the Modello model.
+- [modello:xpp3-writer](./xpp3-writer-mojo.html) Generates an XML Pull Parser writer from the Modello model.
+- [modello:xpp3-reader](./xpp3-reader-mojo.html) Generates an XML Pull Parser reader from the Modello model.
+- [modello:xpp3-extended-reader](./xpp3-extended-reader-mojo.html) Generates an XML Pull Parser reader from the Modello model that records line/column number metadata and eventual source in the parsed model.
+- [modello:xpp3-extended-writer](./xpp3-extended-writer-mojo.html) Generates an XML Pull Parser writer from the Modello model that writes line/column number and source info as comments on each line.
+- [modello:dom4j-writer](./dom4j-writer-mojo.html) Generates a DOM4J writer from the Modello model.
+- [modello:dom4j-reader](./dom4j-reader-mojo.html) Generates a DOM4J reader from the Modello model.
+- [modello:stax-writer](./stax-writer-mojo.html) Generates a StAX writer from the Modello model.
+- [modello:stax-reader](./stax-reader-mojo.html) Generates a StAX reader from the Modello model.
+- [modello:jdom-writer](./jdom-writer-mojo.html) Generates a [jdom](http://www.jdom.org/) writer from the model that is capable of preserving element ordering and comments.
+- [modello:jackson-writer](./jackson-writer-mojo.html) Generates a JSON writer based on Jackson Streaming APIs from the Modello model.
+- [modello:jackson-reader](./jackson-reader-mojo.html) Generates a JSON reader based on Jackson Streaming APIs from the Modello model.
+- [modello:jackson-extended-reader](./jackson-extended-reader-mojo.html) Generates a JSON reader based on Jackson Streaming APIs from the. Modello model that records line/column number metadata in the parsed model.
+- [modello:snakeyaml-writer](./snakeyaml-writer-mojo.html) Generates a YAML writer based on SnakeYaml Streaming APIs from the Modello model.
+- [modello:snakeyaml-reader](./snakeyaml-reader-mojo.html) Generates a YAML reader based on SnakeYaml Streaming APIs from the Modello model.
+- [modello:snakeyaml-extended-reader](./snakeyaml-extended-reader-mojo.html) Generates a YAML reader based on SnakeYaml Streaming APIs from the. Modello model that records line/column number metadata in the parsed model.
+- [modello:velocity](./velocity-mojo.html) Creates files from the model using Velocity templates.
+- [modello:converters](./converters-mojo.html) Generates classes that can convert between different versions of the model.
 
-* Goals Overview
+## Usage
 
-  * {{{./xsd-mojo.html}modello:xsd}} Generates an XML Schema from the Modello model.
+General instructions on how to use the Modello Plugin can be found on the [usage page](./usage.html). Some more specific use cases are described in the examples given below.
 
-  * {{{./xdoc-mojo.html}modello:xdoc}} Generates standard documentation for the Modello model, in xdoc format.
+In case you still have questions regarding the plugin's usage, please have a look at the [FAQ](./faq.html) and feel free to contact the [user mailing list](./mailing-lists.html). The posts to the mailing list are archived and could already contain the answer to your question as part of an older thread. Hence, it is also worth browsing/searching the [mail archive](./mailing-lists.html).
 
-  * {{{./java-mojo.html}modello:java}} Generates Java beans from the Modello model.
+If you feel like the plugin is missing a feature or has a defect, you can fill a feature request or bug report in our [issue tracker](./issue-management.html). When creating a new issue, please provide a comprehensive description of your concern. Especially for fixing bugs it is crucial that the developers can reproduce your problem. For this reason, entire debug logs, POMs or most preferably little demo projects attached to the issue are very much appreciated. Of course, patches are welcome, too. Contributors can check out the project from our [source repository](./scm.html).
 
-  * {{{./xpp3-writer-mojo.html}modello:xpp3-writer}} Generates an XML Pull Parser writer from the Modello model.
+## Examples
 
-  * {{{./xpp3-reader-mojo.html}modello:xpp3-reader}} Generates an XML Pull Parser reader from the Modello model.
+To provide you with better understanding of some usages of the Modello Plugin, you can take a look at the following example:
 
-  * {{{./xpp3-extended-reader-mojo.html}modello:xpp3-extended-reader}} Generates an XML Pull Parser reader from the
-    Modello model that records line/column number metadata and eventual source in the parsed model.
+- [Including multiple models](./examples/multi-model.html)
 
-  * {{{./xpp3-extended-writer-mojo.html}modello:xpp3-extended-writer}} Generates an XML Pull Parser writer from the
-    Modello model that writes line/column number and source info as comments on each line.
-
-  * {{{./dom4j-writer-mojo.html}modello:dom4j-writer}} Generates a DOM4J writer from the Modello model.
-
-  * {{{./dom4j-reader-mojo.html}modello:dom4j-reader}} Generates a DOM4J reader from the Modello model.
-
-  * {{{./stax-writer-mojo.html}modello:stax-writer}} Generates a StAX writer from the Modello model.
-
-  * {{{./stax-reader-mojo.html}modello:stax-reader}} Generates a StAX reader from the Modello model.
-
-  * {{{./jdom-writer-mojo.html}modello:jdom-writer}} Generates a {{{http://www.jdom.org/}jdom}} writer from the model that is capable of preserving element ordering and comments.
-
-  * {{{./jackson-writer-mojo.html}modello:jackson-writer}} Generates a JSON writer based on Jackson Streaming APIs from the Modello model.
-
-  * {{{./jackson-reader-mojo.html}modello:jackson-reader}} Generates a JSON reader based on Jackson Streaming APIs from the Modello model.
-
-  * {{{./jackson-extended-reader-mojo.html}modello:jackson-extended-reader}} Generates a JSON reader based on Jackson Streaming APIs from the.
-    Modello model that records line/column number metadata in the parsed model.
-
-  * {{{./snakeyaml-writer-mojo.html}modello:snakeyaml-writer}} Generates a YAML writer based on SnakeYaml Streaming APIs from the Modello model.
-
-  * {{{./snakeyaml-reader-mojo.html}modello:snakeyaml-reader}} Generates a YAML reader based on SnakeYaml Streaming APIs from the Modello model.
-
-  * {{{./snakeyaml-extended-reader-mojo.html}modello:snakeyaml-extended-reader}} Generates a YAML reader based on SnakeYaml Streaming APIs from the.
-    Modello model that records line/column number metadata in the parsed model.
-
-  * {{{./velocity-mojo.html}modello:velocity}} Creates files from the model using Velocity templates.
-
-  * {{{./converters-mojo.html}modello:converters}} Generates classes that can convert between different versions of the model.
-
-  []
-
-* Usage
-
-  General instructions on how to use the Modello Plugin can be found on the {{{./usage.html}usage page}}. Some more
-  specific use cases are described in the examples given below.
-
-  In case you still have questions regarding the plugin's usage, please have a look at the {{{./faq.html}FAQ}} and feel
-  free to contact the {{{./mailing-lists.html}user mailing list}}. The posts to the mailing list are archived and could
-  already contain the answer to your question as part of an older thread. Hence, it is also worth browsing/searching
-  the {{{./mailing-lists.html}mail archive}}.
-
-  If you feel like the plugin is missing a feature or has a defect, you can fill a feature request or bug report in our
-  {{{./issue-management.html}issue tracker}}. When creating a new issue, please provide a comprehensive description of your
-  concern. Especially for fixing bugs it is crucial that the developers can reproduce your problem. For this reason,
-  entire debug logs, POMs or most preferably little demo projects attached to the issue are very much appreciated.
-  Of course, patches are welcome, too. Contributors can check out the project from our
-  {{{./scm.html}source repository}}.
-
-* Examples
-
-  To provide you with better understanding of some usages of the Modello Plugin,
-  you can take a look at the following example:
-
-  * {{{./examples/multi-model.html}Including multiple models}}
