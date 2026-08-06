@@ -1,20 +1,11 @@
- ------
- Example of multi-model configuration
- ------
- Denis Cabasson
- ------
- 10 August 2006
- ------
+# Processing Multiple Modello Models
 
-Processing Multiple Modello Models
+Configuring your pom.xml
+------------------------
 
-* Configuring your pom.xml
+You can use the following configuration in your `pom.xml` to have the Modello Plugin take two of your models into account (this configuration is taken from the maven-assembly-plugin which indeed uses two different models).
 
-  You can use the following configuration in your <<<pom.xml>>> to have the Modello
-  Plugin take two of your models into account (this configuration is taken
-  from the maven-assembly-plugin which indeed uses two different models).
-
-+---+
+```xml
 <project>
   [...]
   <build>
@@ -63,4 +54,4 @@ Processing Multiple Modello Models
   </build>
   [...]
 </project>
-+---+
+```
