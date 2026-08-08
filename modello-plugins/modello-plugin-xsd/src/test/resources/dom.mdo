@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model xmlns="http://codehaus-plexus.github.io/MODELLO/2.0.0"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://codehaus-plexus.github.io/MODELLO/2.0.0 https://codehaus-plexus.github.io/modello/xsd/modello-2.0.0.xsd"
+       xml.namespace="http://codehaus-plexus.github.io/DOM/${version}"
+       xml.schemaLocation="http://codehaus-plexus.github.io/DOM/${version} http://codehaus-plexus.github.io/dom-${version}.xsd">
+  <id>dom</id>
+  <name>Dom</name>
+  <description>
+    Model exercising the XSD generated for DOM and Properties fields.
+  </description>
+  <defaults>
+    <default>
+      <key>package</key>
+      <value>org.codehaus.modello.test.dom</value>
+    </default>
+  </defaults>
+  <classes>
+    <class rootElement="true">
+      <name>DomDemo</name>
+      <version>1.0.0+</version>
+      <fields>
+        <field>
+          <name>configuration</name>
+          <version>1.0.0+</version>
+          <type>DOM</type>
+          <description>Free-form XML, carrying arbitrary attributes such as combine.self.</description>
+        </field>
+        <field>
+          <name>properties</name>
+          <version>1.0.0+</version>
+          <type>Properties</type>
+          <association xml.mapStyle="inline">
+            <type>String</type>
+            <multiplicity>*</multiplicity>
+          </association>
+          <description>Free-form XML elements, but no attributes on the container.</description>
+        </field>
+      </fields>
+    </class>
+  </classes>
+</model>
