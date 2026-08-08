@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+
+<domDemo xmlns="http://codehaus-plexus.github.io/DOM/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://codehaus-plexus.github.io/DOM/1.0.0 http://codehaus-plexus.github.io/dom-1.0.0.xsd">
+  <properties combine.self="override">
+    <someKey>someValue</someKey>
+  </properties>
+</domDemo>

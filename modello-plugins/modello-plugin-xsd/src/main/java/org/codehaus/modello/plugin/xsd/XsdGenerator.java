@@ -324,7 +324,7 @@ public class XsdGenerator extends AbstractXmlGenerator {
                             writeListElement(w, xmlFieldMetadata, xmlAssociationMetadata, field, getXsdType("String"));
                         } else if (Properties.class.getName().equals(field.getType())
                                 || "DOM".equals(field.getType())) {
-                            writePropertiesElement(w);
+                            writePropertiesElement(w, "DOM".equals(field.getType()));
                         } else {
                             throw new IllegalStateException("Non-association field of a non-primitive type '"
                                     + field.getType() + "' for '" + field.getName() + "' in '"
@@ -408,7 +408,16 @@ public class XsdGenerator extends AbstractXmlGenerator {
         w.endElement();
     }
 
-    private static void writePropertiesElement(XMLWriter w) {
+    /**
+     * Writes the complexType of a field holding free-form XML content: either a {@code java.util.Properties} or
+     * a {@code DOM} field.
+     *
+     * @param w the writer
+     * @param dom whether the field is a {@code DOM} field, in which case arbitrary attributes are allowed on the
+     *            element itself, so that DOM merge hints such as {@code combine.self} or {@code combine.children}
+     *            validate. A {@code Properties} element carries no attributes, so none are allowed there.
+     */
+    private static void writePropertiesElement(XMLWriter w, boolean dom) {
         w.startElement("xs:complexType");
 
         w.startElement("xs:sequence");
@@ -421,6 +430,13 @@ public class XsdGenerator extends AbstractXmlGenerator {
         w.endElement();
 
         w.endElement();
+
+        if (dom) {
+            w.startElement("xs:anyAttribute");
+            w.addAttribute("processContents", "skip");
+
+            w.endElement();
+        }
 
         w.endElement();
     }
