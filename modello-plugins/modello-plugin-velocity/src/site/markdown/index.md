@@ -1,46 +1,24 @@
-<?xml version="1.0"?>
+---
+title: Modello Velocity Plugin
+author: Guillaume Nodet
+---
 
-<document>
+# Modello Velocity Plugin
 
-  <properties>
-    <title>Modello Velocity Plugin</title>
-    <author email="gnodet_AT_apache_DOT_org">Guillaume Nodet</author>
-  </properties>
+Modello Velocity Plugin generates files from the Modello model using [Velocity templates](https://velocity.apache.org/engine/2.3/vtl-reference.html).
 
-  <body>
+# Velocity Processing
 
-    <section name="Modello Velocity Plugin">
+The plugin is configured with a list of `template` files to evaluate, rfelative to `velocityBasedir` (which defaults to Maven's `${project.basedir}`).
 
-      <p>Modello Velocity Plugin generates files from the Modello model using <a href="https://velocity.apache.org/engine/2.3/vtl-reference.html">Velocity templates</a>.</p>
+During template evaluation, `#MODELLO-VELOCITY#SAVE-OUTPUT-TO {relative path to file}` pseudo macro is available to send the rendered content to a file.
 
-    </section>
+The Velocity context contains some variables related to the Modello model context that you can use:
 
-    <section name="Velocity Processing">
-
-      <p>The plugin is configured with a list of <code>template</code> files to evaluate, rfelative to <code>velocityBasedir</code> (which defaults to Maven's <code>${project.basedir}</code>).</p>
-      <p>During template evaluation, <code>#MODELLO-VELOCITY#SAVE-OUTPUT-TO {relative path to file}</code> pseudo macro is available to send the rendered content to a file.</p>
-      <p>The Velocity context contains some variables related to the Modello model context that you can use:
-      <table>
-        <tr><th>Variable</th><th>Type</th><th>Description</th></tr>
-        <tr><td>parameters configured in the plugin</td><td><code>String</code></td>
-            <td>The parameters values configured in the plugin as <code>{key}={value}</code>.</td>
-        </tr>
-        <tr><td><code>version</code></td><td><code>String</code></td>
-            <td>The version of the model being used.</td>
-        </tr>
-        <tr><td><code>model</code></td><td><a href="../../modello-core/apidocs/org/codehaus/modello/model/package-summary.html"><code>Model</code></a></td>
-            <td>The Modello model.</td>
-        </tr>
-        <tr><td><code>Helper</code></td><td><a href="apidocs/org/codehaus/modello/plugin/velocity/Helper.html"><code>Helper</code></a></td>
-            <td>A helper tool with classical functions useful to generate content from a Modello model API.</td>
-        </tr>
-        <tr><td><code>template</code></td><td><code>String</code></td>
-            <td>the template that is being evaluated.</td>
-        </tr>
-      </table>
-      </p>
-    </section>
-
-  </body>
-
-</document>
+| Variable | Type | Description |
+|---|---|---|
+| parameters configured in the plugin | `String` | The parameters values configured in the plugin as `{key}={value}`. |
+| `version` | `String` | The version of the model being used. |
+| `model` | [`Model`](../../modello-core/apidocs/org/codehaus/modello/model/package-summary.html) | The Modello model. |
+| `Helper` | [`Helper`](apidocs/org/codehaus/modello/plugin/velocity/Helper.html) | A helper tool with classical functions useful to generate content from a Modello model API. |
+| `template` | `String` | the template that is being evaluated. |
