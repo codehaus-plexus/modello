@@ -1,51 +1,36 @@
-<?xml version="1.0"?>
+---
+title: Modello
+author: Hervé Boutemy
+---
 
-<document>
+# Modello
 
-  <properties>
-    <title>Modello</title>
-    <author email="hboutemy_AT_apache_DOT_org">Hervé Boutemy</author>
-  </properties>
+Modello is a framework for code generation from a simple model.
+Modello generates code from a [simple model format](modello.html): based on a plugin architecture, various types of code and
+descriptors can be generated from the single model, including Java POJOs, XML/JSON/YAML marshallers/unmarshallers, XSD, JSON Schema
+and documentation.
+Starting with 2.1.0, content can even be [generated from Velocity templates](modello-plugins/modello-plugin-velocity/) for maximum flexibility.
 
-  <body>
-
-    <section name="Modello">
-
-      <p>Modello is a framework for code generation from a simple model.
-    Modello generates code from a <a href="modello.html">simple model format</a>: based on a plugin architecture, various types of code and
-    descriptors can be generated from the single model, including Java POJOs, XML/JSON/YAML marshallers/unmarshallers, XSD, JSON Schema
-    and documentation.
-    Starting with 2.1.0, content can even be <a href="modello-plugins/modello-plugin-velocity/">generated from Velocity templates</a> for maximum flexibility.
-      </p>
-
-      <p>
-        <img src="modello-deps.png" width="755" height="357" border="0" usemap="#Modello_dependencies" />
-        <map name="Modello_dependencies">
-          <area shape="rect" coords="270,321,403,357" href="modello-test/" />
-          <area shape="rect" coords="270,264,403,300" href="modello-core/" />
-          <area shape="rect" coords="300,191,373,228" href="modello-plugins/modello-plugin-java/" />
-          <area shape="rect" coords="431,192,503,228" href="modello-plugins/modello-plugin-xml/" />
-          <area shape="rect" coords="14,163,132,199"  href="modello-plugins/modello-plugin-converters/" />
-          <area shape="rect" coords="668,163,740,198" href="modello-plugins/modello-plugin-xdoc/" />
-          <area shape="rect" coords="570,163,643,199" href="modello-plugins/modello-plugin-xsd/" />
-          <area shape="rect" coords="404,93,475,129"  href="modello-plugins/modello-plugin-dom4j/" />
-          <area shape="rect" coords="476,93,547,129"  href="modello-plugins/modello-plugin-jdom/" />
-          <area shape="rect" coords="549,93,621,129"  href="modello-plugins/modello-plugin-stax/" />
-          <area shape="rect" coords="622,93,692,129"  href="modello-plugins/modello-plugin-xpp3/" />
-          <area shape="rect" coords="14,93,106,129"   href="modello-plugins/modello-plugin-jackson/" />
-          <area shape="rect" coords="108,93,240,129"  href="modello-plugins/modello-plugin-jsonschema/" />
-          <area shape="rect" coords="261,93,382,129"  href="modello-plugins/modello-plugin-snakeyaml/" />
-          <area shape="rect" coords="135,195,219,232" href="modello-plugins/modello-plugin-velocity/" />
-          <area shape="rect" coords="0,83,754,239"    href="modello-plugins/" />
-          <area shape="rect" coords="258,0,415,35"    href="modello-maven-plugin/" />
-          <area shape="rect" coords="449,321,583,356" href="../" />
-          <area shape="rect" coords="114,263,240,301" href="https://velocity.apache.org/" />
-          <area shape="rect" coords="445,37,620,74"   href="https://maven.apache.org/ref/current/maven-plugin-api/" />
-        </map>
-      </p>
-
-    </section>
-
-  </body>
-
-</document>
+<img src="modello-deps.png" width="755" height="357" border="0" usemap="#Modello_dependencies" />
+<map name="Modello_dependencies">
+<area shape="rect" coords="270,321,403,357" href="modello-test/" />
+<area shape="rect" coords="270,264,403,300" href="modello-core/" />
+<area shape="rect" coords="300,191,373,228" href="modello-plugins/modello-plugin-java/" />
+<area shape="rect" coords="431,192,503,228" href="modello-plugins/modello-plugin-xml/" />
+<area shape="rect" coords="14,163,132,199"  href="modello-plugins/modello-plugin-converters/" />
+<area shape="rect" coords="668,163,740,198" href="modello-plugins/modello-plugin-xdoc/" />
+<area shape="rect" coords="570,163,643,199" href="modello-plugins/modello-plugin-xsd/" />
+<area shape="rect" coords="404,93,475,129"  href="modello-plugins/modello-plugin-dom4j/" />
+<area shape="rect" coords="476,93,547,129"  href="modello-plugins/modello-plugin-jdom/" />
+<area shape="rect" coords="549,93,621,129"  href="modello-plugins/modello-plugin-stax/" />
+<area shape="rect" coords="622,93,692,129"  href="modello-plugins/modello-plugin-xpp3/" />
+<area shape="rect" coords="14,93,106,129"   href="modello-plugins/modello-plugin-jackson/" />
+<area shape="rect" coords="108,93,240,129"  href="modello-plugins/modello-plugin-jsonschema/" />
+<area shape="rect" coords="261,93,382,129"  href="modello-plugins/modello-plugin-snakeyaml/" />
+<area shape="rect" coords="135,195,219,232" href="modello-plugins/modello-plugin-velocity/" />
+<area shape="rect" coords="0,83,754,239"    href="modello-plugins/" />
+<area shape="rect" coords="258,0,415,35"    href="modello-maven-plugin/" />
+<area shape="rect" coords="449,321,583,356" href="../" />
+<area shape="rect" coords="114,263,240,301" href="https://velocity.apache.org/" />
+<area shape="rect" coords="445,37,620,74"   href="https://maven.apache.org/ref/current/maven-plugin-api/" />
+</map>
