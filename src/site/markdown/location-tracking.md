@@ -1,3 +1,10 @@
+---
+title: Location Tracking
+author: 
+  - Benjamin Bentmann
+date: 2010-04-18
+---
+
 # Location Tracking
 
 Starting with Modello 1.4, some parsers (only [XPP3](./modello-plugins/modello-plugin-xpp3/index.html) in 1.4, [Snake Yaml](./modello-plugins/modello-plugin-snakeyaml/) and [Jackson](./modello-plugins/modello-plugin-jackson/) in addition in 1.8) support the tracking of line/column information for the input data. This means that additional metadata is stored in the model that can be used to query the location of some model element in the input source, e.g. for means of better error reporting to the user.
