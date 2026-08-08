@@ -1,3 +1,11 @@
+---
+title: Introduction
+author: 
+  - Denis Cabasson
+  - Hervé Boutemy
+date: 1 January 2009
+---
+
 # Modello Maven Plugin
 
 This plugin makes use of the [Modello](https://codehaus-plexus.github.io/modello/) project.

@@ -1,3 +1,10 @@
+---
+title: Release Notes
+author: 
+  - Hervé Boutemy
+date: 2012-11-18
+---
+
 # Modello
 
 ## 1.8.2
