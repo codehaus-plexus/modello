@@ -5,7 +5,7 @@
 
   <groupId>org.codehaus.modello.its</groupId>
   <artifactId>features</artifactId>
-  <version>0.1-SNAPSHOT</version>
+  <version>@project.version@</version>
 
   <name>Full features IT</name>
   <description>
@@ -72,7 +72,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-site-plugin</artifactId>
-        <version>3.7.1</version>
+        <version>3.22.0</version>
       </plugin>
       <plugin>
         <groupId>org.codehaus.modello</groupId>
@@ -85,6 +85,7 @@
           <version>1.0.0</version>
           <javaSource>5</javaSource>
         </configuration>
+        <!-- START SNIPPET: executions -->
         <executions>
           <execution>
             <id>standard</id>
@@ -117,6 +118,7 @@
             </goals>
           </execution>
         </executions>
+        <!-- END SNIPPET: executions -->
       </plugin>
     </plugins>
   </build>
@@ -125,7 +127,7 @@
     <plugins>
       <plugin>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <version>3.2.0</version>
+        <version>3.12.0</version>
         <configuration>
           <show>private</show>
           <linksource>true</linksource>
@@ -134,12 +136,12 @@
       </plugin>
       <plugin>
         <artifactId>maven-jxr-plugin</artifactId>
-        <version>3.0.0</version>
+        <version>3.6.0</version>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-project-info-reports-plugin</artifactId>
-        <version>3.0.0</version>
+        <version>3.9.0</version>
         <reportSets>
           <reportSet>
             <reports>
