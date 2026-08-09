@@ -22,9 +22,9 @@ package org.codehaus.modello.generator.xml.xpp3;
  * SOFTWARE.
  */
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -52,52 +52,52 @@ public class Xpp3StandaloneReadVerifier
 
         String fileName = "src/test/verifiers/testStandaloneRead/rootClass.xml";
         File file = new File( fileName );
-        assertTrue( "File does not exist:" + fileName, file.exists() );
+        assertTrue( file.exists() , "File does not exist:" + fileName);
 
         InputStream in = new FileInputStream( file );
-        assertNotNull( "Expected not null input stream", in );
+        assertNotNull( in , "Expected not null input stream");
         RootClass rootClass = reader.read( in );
-        assertNotNull( "Expected not null RootClass", rootClass );
+        assertNotNull( rootClass , "Expected not null RootClass");
 
         in = new FileInputStream( file );
-        assertNotNull( "Expected not null input stream", in );
+        assertNotNull( in , "Expected not null input stream");
         rootClass = reader.read( in, true );
-        assertNotNull( "Expected not null RootClass", rootClass );
+        assertNotNull( rootClass , "Expected not null RootClass");
 
         Reader fr = new XmlStreamReader( file );
         rootClass = reader.read( fr );
-        assertNotNull( "Expected not null RootClass", rootClass );
+        assertNotNull( rootClass , "Expected not null RootClass");
 
         fr = new XmlStreamReader( file );
         rootClass = reader.read( fr, true );
-        assertNotNull( "Expected not null RootClass", rootClass );
+        assertNotNull( rootClass , "Expected not null RootClass");
 
         fileName = "src/test/verifiers/testStandaloneRead/standaloneReadClass.xml";
         file = new File( fileName );
-        assertTrue( "File does not exist:" + fileName, file.exists() );
+        assertTrue( file.exists() , "File does not exist:" + fileName);
 
         in = new FileInputStream( file );
-        assertNotNull( "Expected not null input stream", in );
+        assertNotNull( in , "Expected not null input stream");
         StandaloneReadClass standaloneReadClass = reader.readStandaloneReadClass( in );
-        assertNotNull( "Expected not null StandaloneReadClass", standaloneReadClass );
+        assertNotNull( standaloneReadClass , "Expected not null StandaloneReadClass");
 
         in = new FileInputStream( file );
-        assertNotNull( "Expected not null input stream", in );
+        assertNotNull( in , "Expected not null input stream");
         standaloneReadClass = reader.readStandaloneReadClass( in, true );
-        assertNotNull( "Expected not null StandaloneReadClass", standaloneReadClass );
+        assertNotNull( standaloneReadClass , "Expected not null StandaloneReadClass");
 
         fr = new XmlStreamReader( file );
         standaloneReadClass = reader.readStandaloneReadClass( fr );
-        assertNotNull( "Expected not null StandaloneReadClass", standaloneReadClass );
+        assertNotNull( standaloneReadClass , "Expected not null StandaloneReadClass");
 
         fr = new XmlStreamReader( file );
         standaloneReadClass = reader.readStandaloneReadClass( fr, true );
-        assertNotNull( "Expected not null StandaloneReadClass", standaloneReadClass );
+        assertNotNull( standaloneReadClass , "Expected not null StandaloneReadClass");
 
         String methodName = "readFooClass";
         for ( Method method : reader.getClass().getMethods() )
         {
-            assertFalse( "Found method " + methodName, methodName.equals( method.getName() ) );
+            assertFalse( methodName.equals( method.getName() ) , "Found method " + methodName);
         }
     }
 }

@@ -22,7 +22,7 @@ package org.codehaus.modello.generator.xml.stax;
  * SOFTWARE.
  */
 
-import junit.framework.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.codehaus.modello.test.model.vin.io.stax.VersionInNamespaceStaxReaderDelegate;
 import org.codehaus.modello.verifier.Verifier;
 
@@ -44,14 +44,14 @@ public class StaxVerifierVersionReaderDelegate
         org.codehaus.modello.test.model.vin.v4_0_0.Model model400 =
             (org.codehaus.modello.test.model.vin.v4_0_0.Model) modelReader.read( new File( path ) );
 
-        Assert.assertEquals( "Maven", model400.getName() );
-        Assert.assertEquals( "Something out of place.", model400.getDescription() );
+        Assertions.assertEquals( "Maven", model400.getName() );
+        Assertions.assertEquals( "Something out of place.", model400.getDescription() );
 
         path = "src/test/verifiers/stax-version-reader-delegate/input-4.0.1.xml";
         org.codehaus.modello.test.model.vin.v4_0_1.Model model401 =
             (org.codehaus.modello.test.model.vin.v4_0_1.Model) modelReader.read( new File( path ) );
 
-        Assert.assertEquals( "Maven", model401.getName() );
-        Assert.assertEquals( "Something out of place.", model401.getDescription() );
+        Assertions.assertEquals( "Maven", model401.getName() );
+        Assertions.assertEquals( "Something out of place.", model401.getDescription() );
     }
 }

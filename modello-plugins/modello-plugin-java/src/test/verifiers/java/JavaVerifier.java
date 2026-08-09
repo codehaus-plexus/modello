@@ -28,7 +28,7 @@ import org.codehaus.modello.verifier.Verifier;
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.Assert;
+import org.junit.jupiter.api.Assertions;
 
 public class JavaVerifier
     extends Verifier
@@ -57,14 +57,14 @@ public class JavaVerifier
         catch( Exception e)
         {
             e.printStackTrace();
-            Assert.fail( e.getMessage() );
+            Assertions.fail( e.getMessage() );
         }
 
-        Assert.assertEquals( "Scm.connection", connection, scm.getConnection() );
+        Assertions.assertEquals( connection, scm.getConnection() , "Scm.connection");
 
-        Assert.assertEquals( "Scm.developerConnection", developerConnection, scm.getDeveloperConnection() );
+        Assertions.assertEquals( developerConnection, scm.getDeveloperConnection() , "Scm.developerConnection");
 
-        Assert.assertEquals( "Scm.url", url, scm.getUrl() );
+        Assertions.assertEquals( url, scm.getUrl() , "Scm.url");
 
         testMailingLists();
     }
@@ -83,9 +83,9 @@ public class JavaVerifier
 
         List lists = model.getMailingLists();
 
-        Assert.assertNotNull( lists );
+        Assertions.assertNotNull( lists );
 
-        Assert.assertTrue( lists instanceof ArrayList );
+        Assertions.assertTrue( lists instanceof ArrayList );
 
         try
         {
@@ -94,12 +94,12 @@ public class JavaVerifier
         catch( Exception e)
         {
             e.printStackTrace();
-            Assert.fail( e.getMessage() );
+            Assertions.fail( e.getMessage() );
         }
 
         List actual = model.getMailingLists();
 
-        Assert.assertEquals( "/model/mailinglists.size", expected.size(), actual.size() );
+        Assertions.assertEquals( expected.size(), actual.size() , "/model/mailinglists.size");
 
         for( int i = 0; i < expected.size(); i++ )
         {
@@ -119,7 +119,7 @@ public class JavaVerifier
 
         List actual = model.getMailingLists();
 
-        Assert.assertEquals( "/model/mailinglists.size", 3, actual.size() );
+        Assertions.assertEquals( 3, actual.size() , "/model/mailinglists.size");
 
         for( int i = 0; i < 3; i++ )
         {
@@ -144,7 +144,7 @@ public class JavaVerifier
         catch( Exception e)
         {
             e.printStackTrace();
-            Assert.fail( e.getMessage() );
+            Assertions.fail( e.getMessage() );
         }
 
         return mailingList;
@@ -152,12 +152,12 @@ public class JavaVerifier
 
     private void assertMailingList( MailingList expected, MailingList actual )
     {
-        Assert.assertEquals( "Mailing list", expected.getName(), actual.getName() );
+        Assertions.assertEquals( expected.getName(), actual.getName() , "Mailing list");
 
-        Assert.assertEquals( "Subscribe", expected.getSubscribe(), actual.getSubscribe() );
+        Assertions.assertEquals( expected.getSubscribe(), actual.getSubscribe() , "Subscribe");
 
-        Assert.assertEquals( "Unsubscribe", expected.getUnsubscribe(), actual.getUnsubscribe() );
+        Assertions.assertEquals( expected.getUnsubscribe(), actual.getUnsubscribe() , "Unsubscribe");
 
-        Assert.assertEquals( "Archive", expected.getArchive(), actual.getArchive() );
+        Assertions.assertEquals( expected.getArchive(), actual.getArchive() , "Archive");
     }
 }

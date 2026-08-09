@@ -22,7 +22,7 @@ package org.codehaus.modello.generator.xml.stax;
  * SOFTWARE.
  */
 
-import junit.framework.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.codehaus.modello.test.model.Build;
 import org.codehaus.modello.test.model.Component;
 import org.codehaus.modello.test.model.MailingList;
@@ -84,7 +84,7 @@ public class StaxVerifier
 
         Model model = modelReader.read( reader );
 
-        Assert.assertEquals( "Maven\u00A9", model.getName() );
+        Assertions.assertEquals( "Maven\u00A9", model.getName() );
     }
 
     public void verifyReadDefaultAttribute()
@@ -97,7 +97,7 @@ public class StaxVerifier
 
         Model model = modelReader.read( reader );
 
-        Assert.assertEquals( "foo", model.getExtend() );
+        Assertions.assertEquals( "foo", model.getExtend() );
     }
 
     public void verifyWriter()
@@ -244,13 +244,13 @@ public class StaxVerifier
 //
 //        System.out.println( actualXml );
 
-        Assert.assertEquals( cleanLineEndings( expectedXml.trim() ), scrubXmlDeclQuotes( actualXml.trim() ) );
+        Assertions.assertEquals( cleanLineEndings( expectedXml.trim() ), scrubXmlDeclQuotes( actualXml.trim() ) );
 
         MavenStaxReader reader = new MavenStaxReader();
 
         Model actual = reader.read( new StringReader( actualXml ) );
 
-        Assert.assertNotNull( "Actual", actual );
+        Assertions.assertNotNull( actual , "Actual");
 
         assertModel( expected, actual );
 
@@ -258,7 +258,7 @@ public class StaxVerifier
 
         writer.write( buffer, actual );
 
-        Assert.assertEquals( cleanLineEndings( expectedXml.trim() ), scrubXmlDeclQuotes( buffer.toString().trim() ) );
+        Assertions.assertEquals( cleanLineEndings( expectedXml.trim() ), scrubXmlDeclQuotes( buffer.toString().trim() ) );
     }
 
     private String cleanLineEndings( String s )
@@ -333,11 +333,11 @@ public class StaxVerifier
         try
         {
             reader.read( new StringReader( xml ) );
-            Assert.fail( "Should have obtained a parse error for duplicate sourceDirectory" );
+            Assertions.fail( "Should have obtained a parse error for duplicate sourceDirectory" );
         }
         catch ( XMLStreamException expected )
         {
-            Assert.assertTrue( true );
+            Assertions.assertTrue( true );
         }
 
         xml = "<mavenModel>\n" + "  <builder><sourceDirectory /></builder>\n" +
@@ -346,11 +346,11 @@ public class StaxVerifier
         try
         {
             reader.read( new StringReader( xml ) );
-            Assert.fail( "Should have obtained a parse error for duplicate build" );
+            Assertions.fail( "Should have obtained a parse error for duplicate build" );
         }
         catch ( XMLStreamException expected )
         {
-            Assert.assertTrue( true );
+            Assertions.assertTrue( true );
         }
     }
 
@@ -360,45 +360,45 @@ public class StaxVerifier
 
     public void assertModel( Model expected, Model actual )
     {
-        Assert.assertNotNull( "Actual model", actual );
+        Assertions.assertNotNull( actual , "Actual model");
 
-        Assert.assertEquals( "/model/extend", expected.getExtend(), actual.getExtend() );
+        Assertions.assertEquals( expected.getExtend(), actual.getExtend() , "/model/extend");
 
 //        assertParent( expected.getParent(), actual.getParent() );
 
-        Assert.assertEquals( "/model/modelVersion", expected.getModelVersion(), actual.getModelVersion() );
+        Assertions.assertEquals( expected.getModelVersion(), actual.getModelVersion() , "/model/modelVersion");
 
-        Assert.assertEquals( "/model/groupId", expected.getGroupId(), actual.getGroupId() );
+        Assertions.assertEquals( expected.getGroupId(), actual.getGroupId() , "/model/groupId");
 
-        Assert.assertEquals( "/model/artifactId", expected.getArtifactId(), actual.getArtifactId() );
+        Assertions.assertEquals( expected.getArtifactId(), actual.getArtifactId() , "/model/artifactId");
 
-        Assert.assertEquals( "/model/type", expected.getType(), actual.getType() );
+        Assertions.assertEquals( expected.getType(), actual.getType() , "/model/type");
 
-        Assert.assertEquals( "/model/name", expected.getName(), actual.getName() );
+        Assertions.assertEquals( expected.getName(), actual.getName() , "/model/name");
 
-        Assert.assertEquals( "/model/version", expected.getVersion(), actual.getVersion() );
+        Assertions.assertEquals( expected.getVersion(), actual.getVersion() , "/model/version");
 
-        Assert.assertEquals( "/model/shortDescription", expected.getShortDescription(), actual.getShortDescription() );
+        Assertions.assertEquals( expected.getShortDescription(), actual.getShortDescription() , "/model/shortDescription");
 
-        Assert.assertEquals( "/model/description", expected.getDescription(), actual.getDescription() );
+        Assertions.assertEquals( expected.getDescription(), actual.getDescription() , "/model/description");
 
-        Assert.assertEquals( "/model/url", expected.getUrl(), actual.getUrl() );
+        Assertions.assertEquals( expected.getUrl(), actual.getUrl() , "/model/url");
 
-        Assert.assertEquals( "/model/logo", expected.getLogo(), actual.getLogo() );
+        Assertions.assertEquals( expected.getLogo(), actual.getLogo() , "/model/logo");
 
 //        assertIssueManagement();
 
 //        assertCiManagement();
 
-        Assert.assertEquals( "/model/inceptionYear", expected.getInceptionYear(), actual.getInceptionYear() );
+        Assertions.assertEquals( expected.getInceptionYear(), actual.getInceptionYear() , "/model/inceptionYear");
 
-//        assertEquals( "/model/siteAddress", expected.getSiteAddress(), actual.getSiteAddress() );
+//        assertEquals( expected.getSiteAddress(), actual.getSiteAddress() , "/model/siteAddress");
 
-//        assertEquals( "/model/siteDirectory", expected.getSiteDirectory(), actual.getSiteDirectory() );
+//        assertEquals( expected.getSiteDirectory(), actual.getSiteDirectory() , "/model/siteDirectory");
 
-//        assertEquals( "/model/distributionSite", expected.getDistributionSite(), actual.getDistributionSite() );
+//        assertEquals( expected.getDistributionSite(), actual.getDistributionSite() , "/model/distributionSite");
 
-//        assertEquals( "/model/distributionDirectory", expected.getDistributionDirectory(), actual.getDistributionDirectory() );
+//        assertEquals( expected.getDistributionDirectory(), actual.getDistributionDirectory() , "/model/distributionDirectory");
 
         assertMailingLists( expected.getMailingLists(), actual.getMailingLists() );
 /*
@@ -425,9 +425,9 @@ public class StaxVerifier
 
     public void assertMailingLists( List expected, List actual )
     {
-        Assert.assertNotNull( "/model/mailingLists", actual );
+        Assertions.assertNotNull( actual , "/model/mailingLists");
 
-        Assert.assertEquals( "/model/mailingLists.size", expected.size(), actual.size() );
+        Assertions.assertEquals( expected.size(), actual.size() , "/model/mailingLists.size");
 
         for ( int i = 0; i < expected.size(); i++ )
         {
@@ -437,43 +437,43 @@ public class StaxVerifier
 
     public void assertMailingList( int i, MailingList expected, Object actualObject )
     {
-        Assert.assertNotNull( "/model/mailingLists[" + i + "]", actualObject );
+        Assertions.assertNotNull( actualObject , "/model/mailingLists[" + i + "]");
 
-        Assert.assertEquals( "/model/mailingLists", MailingList.class, actualObject.getClass() );
+        Assertions.assertEquals( MailingList.class, actualObject.getClass() , "/model/mailingLists");
 
         MailingList actual = (MailingList) actualObject;
 
-        Assert.assertEquals( "/model/mailingLists[" + i + "]/name", expected.getName(), actual.getName() );
+        Assertions.assertEquals( expected.getName(), actual.getName() , "/model/mailingLists[" + i + "]/name");
 
-        Assert.assertEquals( "/model/mailingLists[" + i + "]/subscribe", expected.getSubscribe(),
-                             actual.getSubscribe() );
+        Assertions.assertEquals( expected.getSubscribe(),
+                             actual.getSubscribe() , "/model/mailingLists[" + i + "]/subscribe");
 
-        Assert.assertEquals( "/model/mailingLists[" + i + "]/unsubscribe", expected.getUnsubscribe(),
-                             actual.getUnsubscribe() );
+        Assertions.assertEquals( expected.getUnsubscribe(),
+                             actual.getUnsubscribe() , "/model/mailingLists[" + i + "]/unsubscribe");
 
-        Assert.assertEquals( "/model/mailingLists[" + i + "]/archive", expected.getArchive(), actual.getArchive() );
+        Assertions.assertEquals( expected.getArchive(), actual.getArchive() , "/model/mailingLists[" + i + "]/archive");
     }
 
     public void assertScm( Scm expected, Object actualObject )
     {
         if ( expected == null )
         {
-            Assert.assertNull( "/model/scm", actualObject );
+            Assertions.assertNull( actualObject , "/model/scm");
         }
         else
         {
-            Assert.assertNotNull( "/model/scm", actualObject );
+            Assertions.assertNotNull( actualObject , "/model/scm");
 
-            Assert.assertEquals( "/model/scm", Scm.class, actualObject.getClass() );
+            Assertions.assertEquals( Scm.class, actualObject.getClass() , "/model/scm");
 
             Scm actual = (Scm) actualObject;
 
-            Assert.assertEquals( "/model/scm/connection", expected.getConnection(), actual.getConnection() );
+            Assertions.assertEquals( expected.getConnection(), actual.getConnection() , "/model/scm/connection");
 
-            Assert.assertEquals( "/model/scm/developerConnection", expected.getDeveloperConnection(),
-                                 actual.getDeveloperConnection() );
+            Assertions.assertEquals( expected.getDeveloperConnection(),
+                                 actual.getDeveloperConnection() , "/model/scm/developerConnection");
 
-            Assert.assertEquals( "/model/scm/url", expected.getUrl(), actual.getUrl() );
+            Assertions.assertEquals( expected.getUrl(), actual.getUrl() , "/model/scm/url");
         }
     }
 
@@ -481,21 +481,21 @@ public class StaxVerifier
     {
         if ( expected == null )
         {
-            Assert.assertNull( "/model/builder", actualObject );
+            Assertions.assertNull( actualObject , "/model/builder");
         }
         else
         {
-            Assert.assertNotNull( "/model/builder", actualObject );
+            Assertions.assertNotNull( actualObject , "/model/builder");
 
-            Assert.assertEquals( "/model/builder", Build.class, actualObject.getClass() );
+            Assertions.assertEquals( Build.class, actualObject.getClass() , "/model/builder");
 
             Build actual = (Build) actualObject;
 
-            Assert.assertEquals( "/model/builder/sourceDirectory", expected.getSourceDirectory(),
-                                 actual.getSourceDirectory() );
+            Assertions.assertEquals( expected.getSourceDirectory(),
+                                 actual.getSourceDirectory() , "/model/builder/sourceDirectory");
 
-            Assert.assertEquals( "/model/builder/unitTestSourceDirectory", expected.getUnitTestSourceDirectory(),
-                                 actual.getUnitTestSourceDirectory() );
+            Assertions.assertEquals( expected.getUnitTestSourceDirectory(),
+                                 actual.getUnitTestSourceDirectory() , "/model/builder/unitTestSourceDirectory");
         }
     }
 }

@@ -22,7 +22,7 @@
 
 import org.codehaus.modello.verifier.Verifier;
 
-import junit.framework.Assert;
+import org.junit.jupiter.api.Assertions;
 import java.io.*;
 import org.codehaus.plexus.util.FileUtils;
 
@@ -42,7 +42,7 @@ public class ConvertersVerifier
         org.codehaus.modello.test.maven.v3_0_0.io.stax.MavenStaxWriter writerV3 = new org.codehaus.modello.test.maven.v3_0_0.io.stax.MavenStaxWriter();
         writerV3.write( sw, modelV3 );
 
-        Assert.assertEquals(
+        Assertions.assertEquals(
             convertLineEndings( FileUtils.fileRead( "src/test/verifiers/converters/expected-v3.xml" ).trim() ),
             convertLineEndings( scrubXmlDeclQuotes( sw.toString() ).trim() ) );
 
@@ -52,7 +52,7 @@ public class ConvertersVerifier
         org.codehaus.modello.test.maven.v4_0_0.io.stax.MavenStaxWriter writerV4 = new org.codehaus.modello.test.maven.v4_0_0.io.stax.MavenStaxWriter();
         writerV4.write( sw, modelV4 );
 
-        Assert.assertEquals(
+        Assertions.assertEquals(
             convertLineEndings( FileUtils.fileRead( "src/test/verifiers/converters/expected.xml" ).trim() ),
             convertLineEndings( scrubXmlDeclQuotes( sw.toString() ).trim() ) );
 
@@ -62,7 +62,7 @@ public class ConvertersVerifier
         org.codehaus.modello.test.maven.io.stax.MavenStaxWriter writer = new org.codehaus.modello.test.maven.io.stax.MavenStaxWriter();
         writer.write( sw, model );
 
-        Assert.assertEquals(
+        Assertions.assertEquals(
             convertLineEndings( FileUtils.fileRead( "src/test/verifiers/converters/expected.xml" ).trim() ),
             convertLineEndings( scrubXmlDeclQuotes( sw.toString() ).trim() ) );
 
@@ -70,11 +70,11 @@ public class ConvertersVerifier
         try
         {
             modelV3 = convert.convertFromFile_v3_0_0( new File( "src/test/verifiers/converters/expected.xml" ) );
-            Assert.fail( "Should have failed to convert" );
+            Assertions.fail( "Should have failed to convert" );
         }
         catch ( IllegalStateException e )
         {
-            Assert.assertTrue( true );
+            Assertions.assertTrue( true );
         }
     }
 

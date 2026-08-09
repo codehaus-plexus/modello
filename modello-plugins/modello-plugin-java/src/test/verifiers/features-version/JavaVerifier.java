@@ -23,7 +23,7 @@
 import org.codehaus.modello.verifier.Verifier;
 import org.codehaus.modello.verifier.VerifierException;
 
-import junit.framework.Assert;
+import org.junit.jupiter.api.Assertions;
 
 /**
  * @author Herve Boutemy
