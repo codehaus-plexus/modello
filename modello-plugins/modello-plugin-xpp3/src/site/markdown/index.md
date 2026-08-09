@@ -1,75 +1,51 @@
-<?xml version="1.0"?>
+---
+title: Modello XPP3 Plugin
+author: 
+  - Hervé Boutemy
+---
 
-<document>
+# Modello XPP3 Plugin
 
-  <properties>
-    <title>Modello XPP3 Plugin</title>
-    <author email="hboutemy_AT_apache_DOT_org">Hervé Boutemy</author>
-  </properties>
+Modello XPP3 Plugin generates XML readers and writers based on XPP3 API (XML Pull Parser) provided by [plexus-utils](http://plexus.codehaus.org/plexus-utils/).
 
-  <body>
+Notice: DOM content type can be represented either as [plexus-utils' Xpp3Dom](http://plexus.codehaus.org/plexus-utils/apidocs/org/codehaus/plexus/util/xml/Xpp3Dom.html) or, since Modello 1.6, standard [org.w3c.dom.Element](http://docs.oracle.com/javase/1.4.2/docs/api/org/w3c/dom/Element.html) objects
 
-    <section name="Modello XPP3 Plugin">
+## xpp3-reader
 
-      <p>Modello XPP3 Plugin generates XML readers and writers based on XPP3 API (XML Pull Parser) provided by
-      <a href="http://plexus.codehaus.org/plexus-utils/">plexus-utils</a>.</p>
+`xpp3-reader` generator creates `my.model.package.io.xpp3.ModelNameXpp3Reader` class with following public methods: 
 
-      <p>Notice: DOM content type can be represented either as
-      <a href="http://plexus.codehaus.org/plexus-utils/apidocs/org/codehaus/plexus/util/xml/Xpp3Dom.html">plexus-utils' Xpp3Dom</a>
-      or, since Modello 1.6, standard
-      <a href="http://docs.oracle.com/javase/1.4.2/docs/api/org/w3c/dom/Element.html">org.w3c.dom.Element</a> objects</p>
+```java
+public RootClass read( Reader reader, boolean strict )
+    throws IOException, XmlPullParserException
 
-      <subsection name="xpp3-reader">
-      <p><code>xpp3-reader</code> generator creates
-        <code><i>my.model.package</i><b>.io.xpp3.</b><i>ModelName</i><b>Xpp3Reader</b></code> class with following
-        public methods:
-      </p>
-      <ul>
-        <li><code>public <i>RootClass</i> read( Reader reader, boolean strict )<br/>
-            &#160;&#160;&#160;&#160;throws IOException, XmlPullParserException</code></li>
+public RootClass read( Reader reader )
+    throws IOException, XmlPullParserException
 
-        <li><code>public <i>RootClass</i> read( Reader reader )<br/>
-            &#160;&#160;&#160;&#160;throws IOException, XmlPullParserException</code></li>
+public RootClass read( InputStream in, boolean strict )
+    throws IOException, XmlPullParserException
 
-        <li><code>public <i>RootClass</i> read( InputStream in, boolean strict )<br/>
-            &#160;&#160;&#160;&#160;throws IOException, XmlPullParserException</code></li>
+public RootClass read( InputStream in )
+    throws IOException, XmlPullParserException
+```
+- `public void setAddDefaultEntities( boolean addDefaultEntities )`
 
-        <li><code>public <i>RootClass</i> read( InputStream in )<br/>
-            &#160;&#160;&#160;&#160;throws IOException, XmlPullParserException</code></li>
+- `public boolean getAddDefaultEntities()`
 
-        <li><code>public void setAddDefaultEntities( boolean addDefaultEntities )</code></li>
-        <li><code>public boolean getAddDefaultEntities()</code></li>
-      </ul>
-      </subsection>
+## xpp3-writer
 
-      <subsection name="xpp3-writer">
-      <p><code>xpp3-writer</code> generator creates
-        <code><i>my.model.package</i><b>.io.xpp3.</b><i>ModelName</i><b>Xpp3Writer</b></code> class with following
-        public methods:
-      </p>
+`xpp3-writer` generator creates `my.model.package.io.xpp3.ModelNameXpp3Writer` class with following public methods: 
 
-      <ul>
-        <li><code>public void write( Writer writer, <i>RootClass</i> root )<br/>
-            &#160;&#160;&#160;&#160;throws IOException</code></li>
-      </ul>
-      </subsection>
+```java
+public void write( Writer writer, RootClass root )
+    throws IOException
+```
+## xpp3-extended-reader
 
-      <subsection name="xpp3-extended-reader">
-      <p><code>xpp3-extended-reader</code> generator creates
-      <code><i>my.model.package</i><b>.io.xpp3.</b><i>ModelName</i><b>Xpp3ReaderEx</b></code> class with same public methods
-      as <code>xpp3-reader</code>, but with <a href="../../location-tracking.html">location tracking enabled</a>.</p>
-      <p>If source tracking is enabled in addition to location tracking, the public methods have an extra parameter which
-      is the source tracker instance.</p>
-      </subsection>
+`xpp3-extended-reader` generator creates `my.model.package.io.xpp3.ModelNameXpp3ReaderEx` class with same public methods as `xpp3-reader`, but with [location tracking enabled](../../location-tracking.html).
 
-      <subsection name="xpp3-extended-writer">
-      <p><code>xpp3-extended-writer</code> generator creates
-        <code><i>my.model.package</i><b>.io.xpp3.</b><i>ModelName</i><b>Xpp3WriterEx</b></code> class  with same public methods
-      as <code>xpp3-writer</code>, but it adds location tracking information on each written field as comments.
-      </p>
-      </subsection>
-    </section>
+If source tracking is enabled in addition to location tracking, the public methods have an extra parameter which is the source tracker instance.
 
-  </body>
+## xpp3-extended-writer
 
-</document>
+`xpp3-extended-writer` generator creates `my.model.package.io.xpp3.ModelNameXpp3WriterEx` class with same public methods as `xpp3-writer`, but it adds location tracking information on each written field as comments. 
+

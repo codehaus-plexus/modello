@@ -1,74 +1,47 @@
-<?xml version="1.0"?>
+---
+title: Modello StAX Plugin
+author: 
+  - Hervé Boutemy
+---
 
-<document>
+# Modello StAX Plugin
 
-  <properties>
-    <title>Modello StAX Plugin</title>
-    <author email="hboutemy_AT_apache_DOT_org">Hervé Boutemy</author>
-  </properties>
+Modello StAX Plugin generates XML readers and writers based on [StAX API](http://docs.oracle.com/javase/6/docs/api/javax/xml/stream/package-summary.html), plus reader delegates to be able to read multiple model versions.
 
-  <body>
+Notice: DOM content type can be represented either as [plexus-utils' Xpp3Dom](http://plexus.codehaus.org/plexus-utils/apidocs/org/codehaus/plexus/util/xml/Xpp3Dom.html) or, since Modello 1.6, standard [org.w3c.dom.Element](http://docs.oracle.com/javase/1.4.2/docs/api/org/w3c/dom/Element.html) objects
 
-    <section name="Modello StAX Plugin">
+## stax-reader
 
-      <p>Modello StAX Plugin generates XML readers and writers based on
-        <a href="http://docs.oracle.com/javase/6/docs/api/javax/xml/stream/package-summary.html">StAX API</a>,
-        plus reader delegates to be able to read multiple model versions.</p>
+`stax-reader` generator creates `my.model.package.io.stax.ModelNameStaxReader` class with following public methods: 
 
-      <p>Notice: DOM content type can be represented either as
-      <a href="http://plexus.codehaus.org/plexus-utils/apidocs/org/codehaus/plexus/util/xml/Xpp3Dom.html">plexus-utils' Xpp3Dom</a>
-      or, since Modello 1.6, standard
-      <a href="http://docs.oracle.com/javase/1.4.2/docs/api/org/w3c/dom/Element.html">org.w3c.dom.Element</a> objects</p>
+```java
+public RootClass ( Reader reader, boolean strict )
+    throws IOException, XMLStreamException
 
-      <subsection name="stax-reader">
-      <p><code>stax-reader</code> generator creates
-        <code><i>my.model.package</i><b>.io.stax.</b><i>ModelName</i><b>StaxReader</b></code> class with following
-        public methods:
-      </p>
-      <ul>
-        <li><code>public <i>RootClass</i> ( Reader reader, boolean strict )<br/>
-            &#160;&#160;&#160;&#160;throws IOException, XMLStreamException</code></li>
+public RootClass read( Reader reader )
+    throws IOException, XMLStreamException
 
-        <li><code>public <i>RootClass</i> read( Reader reader )<br/>
-            &#160;&#160;&#160;&#160;throws IOException, XMLStreamException</code></li>
+public RootClass read( String filePath, boolean strict )
+    throws IOException, XMLStreamException
 
-        <li><code>public <i>RootClass</i> read( String filePath, boolean strict )<br/>
-            &#160;&#160;&#160;&#160;throws IOException, XMLStreamException</code></li>
+public RootClass read( String filePath )
+    throws IOException, XMLStreamException
+```
+In addition, if multiple model reader versions are generated (each in its own package), it creates a delegate `my.model.package.io.xpp3.ModelNameStaxReaderDelegate` class with following public methods: 
 
-        <li><code>public <i>RootClass</i> read( String filePath )<br/>
-            &#160;&#160;&#160;&#160;throws IOException, XMLStreamException</code></li>
-      </ul>
+- `public Object read( File f, boolean strict )  
+    &nbsp;&nbsp;&nbsp;&nbsp;throws IOException, XMLStreamException`
 
-      <p>In addition, if multiple model reader versions are generated (each in its own package), it creates a delegate
-        <code><i>my.model.package</i><b>.io.xpp3.</b><i>ModelName</i><b>StaxReaderDelegate</b></code> class with
-        following public methods:
-      </p>
-      <ul>
-        <li><code>public Object read( File f, boolean strict )<br/>
-            &#160;&#160;&#160;&#160;throws IOException, XMLStreamException</code></li>
+- `public Object read( File f )  
+    &nbsp;&nbsp;&nbsp;&nbsp;throws IOException, XMLStreamException`
 
-        <li><code>public Object read( File f )<br/>
-            &#160;&#160;&#160;&#160;throws IOException, XMLStreamException</code></li>
-      </ul>
-      <p>Depending on the model version found in the XML content, the returned <code>Object</code> will be of the right
-        version package.
-      </p>
-      </subsection>
+Depending on the model version found in the XML content, the returned `Object` will be of the right version package. 
 
-      <subsection name="stax-writer">
-      <p><code>stax-writer</code> generator creates
-        <code><i>my.model.package</i><b>.io.stax.</b><i>ModelName</i><b>StaxWriter</b></code> class with following
-        public methods:
-      </p>
+## stax-writer
 
-      <ul>
-        <li><code>public void write( Writer writer, <i>RootClass</i> root )<br/>
-            &#160;&#160;&#160;&#160;throws IOException, XMLStreamException</code></li>
-      </ul>
-      </subsection>
+`stax-writer` generator creates `my.model.package.io.stax.ModelNameStaxWriter` class with following public methods: 
 
-    </section>
-
-  </body>
-
-</document>
+```java
+public void write( Writer writer, RootClass root )
+    throws IOException, XMLStreamException
+```
