@@ -54,8 +54,6 @@ public class FeaturesJDOMGeneratorTest extends AbstractModelloJavaGeneratorTest 
         modello.generate(model, "stax-reader", parameters);
         modello.generate(model, "jdom-writer", parameters);
 
-        addDependency("org.jdom", "jdom");
-        addDependency("org.xmlunit", "xmlunit-core");
         compileGeneratedSources();
 
         verifyCompiledGeneratedSources("org.codehaus.modello.generator.xml.jdom.JDOMFeaturesVerifier");

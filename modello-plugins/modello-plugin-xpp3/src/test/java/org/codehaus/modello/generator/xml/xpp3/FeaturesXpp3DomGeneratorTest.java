@@ -56,7 +56,6 @@ public class FeaturesXpp3DomGeneratorTest extends AbstractModelloJavaGeneratorTe
         modello.generate(model, "xpp3-writer", parameters);
         modello.generate(model, "xpp3-reader", parameters);
 
-        addDependency("org.xmlunit", "xmlunit-core");
         compileGeneratedSources(8);
 
         verifyCompiledGeneratedSources("org.codehaus.modello.generator.xml.xpp3.Xpp3FeaturesVerifier");

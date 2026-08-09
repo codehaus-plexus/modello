@@ -22,32 +22,43 @@ package org.codehaus.modello;
  * SOFTWARE.
  */
 
-import javax.inject.Inject;
+import javax.tools.Diagnostic;
+import javax.tools.DiagnosticCollector;
+import javax.tools.JavaCompiler;
+import javax.tools.JavaFileObject;
+import javax.tools.StandardJavaFileManager;
+import javax.tools.ToolProvider;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UncheckedIOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
+import java.util.jar.Attributes;
+import java.util.jar.JarFile;
+import java.util.jar.Manifest;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.codehaus.modello.verifier.VerifierException;
-import org.codehaus.plexus.compiler.Compiler;
-import org.codehaus.plexus.compiler.CompilerConfiguration;
-import org.codehaus.plexus.compiler.CompilerException;
-import org.codehaus.plexus.compiler.CompilerMessage;
-import org.codehaus.plexus.compiler.CompilerResult;
 import org.codehaus.plexus.util.FileUtils;
 
 import static org.codehaus.plexus.testing.PlexusExtension.getTestFile;
 import static org.codehaus.plexus.testing.PlexusExtension.getTestPath;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -60,14 +71,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @see org.codehaus.modello.verifier.Verifier Verifier base class for verifiers
  */
 public abstract class AbstractModelloJavaGeneratorTest extends AbstractModelloGeneratorTest {
-    private List<File> dependencies = new ArrayList<File>();
-
     private List<URL> urls = new ArrayList<URL>();
 
     private List<String> classPathElements = new ArrayList<String>();
-
-    @Inject
-    private Compiler compiler = null; // todo
 
     protected AbstractModelloJavaGeneratorTest(String name) {
         super(name);
@@ -87,29 +93,6 @@ public abstract class AbstractModelloJavaGeneratorTest extends AbstractModelloGe
         return new File(super.getOutputDirectory(), "classes");
     }
 
-    protected void addDependency(String groupId, String artifactId) {
-        File dependencyFile = getDependencyFile(groupId, artifactId);
-
-        dependencies.add(dependencyFile);
-
-        addClassPathFile(dependencyFile);
-    }
-
-    protected File getDependencyFile(String groupId, String artifactId) {
-        // NOTE: dependency version is managed by project POM and not selectable by test
-
-        String libsDir = System.getProperty("tests.lib.dir", "target/test-libs");
-        File dependencyFile = new File(libsDir, artifactId + ".jar");
-
-        assertTrue(dependencyFile.isFile(), "Can't find dependency: " + dependencyFile.getAbsolutePath());
-
-        return dependencyFile;
-    }
-
-    public List<File> getClasspath() {
-        return dependencies;
-    }
-
     protected String getModelloVersion() throws IOException {
         Properties properties = new Properties(System.getProperties());
 
@@ -125,15 +108,15 @@ public abstract class AbstractModelloJavaGeneratorTest extends AbstractModelloGe
         return properties.getProperty("version");
     }
 
-    protected void compileGeneratedSources() throws IOException, CompilerException {
+    protected void compileGeneratedSources() throws IOException {
         compileGeneratedSources(getName(), 8);
     }
 
-    protected void compileGeneratedSources(int minJavaSource) throws IOException, CompilerException {
+    protected void compileGeneratedSources(int minJavaSource) throws IOException {
         compileGeneratedSources(getName(), minJavaSource);
     }
 
-    protected void compileGeneratedSources(String verifierId, int minJavaSource) throws IOException, CompilerException {
+    protected void compileGeneratedSources(String verifierId, int minJavaSource) throws IOException {
         String runtimeVersion = System.getProperty("java.specification.version");
         if (runtimeVersion.startsWith("1.")) {
             runtimeVersion = runtimeVersion.substring(2);
@@ -151,54 +134,122 @@ public abstract class AbstractModelloJavaGeneratorTest extends AbstractModelloGe
         compileGeneratedSources(verifierId, javaSource);
     }
 
-    private void compileGeneratedSources(String verifierId, String javaSource) throws IOException, CompilerException {
+    private void compileGeneratedSources(String verifierId, String javaSource) throws IOException {
         File generatedSources = getOutputDirectory();
         File destinationDirectory = getOutputClasses();
 
-        addDependency("org.junit.jupiter", "junit-jupiter-api");
-        addDependency("org.opentest4j", "opentest4j");
-        addDependency("org.codehaus.plexus", "plexus-utils");
-        addDependency("org.codehaus.plexus", "plexus-xml");
-        // for plexus-xml 4
-        // addDependency("org.apache.maven", "maven-api-xml");
-        // addDependency("org.apache.maven", "maven-xml-impl");
-        addDependency("org.codehaus.modello", "modello-test");
+        List<String> classPath = new ArrayList<>();
+        classPath.add(getTestPath("target/classes"));
+        classPath.add(getTestPath("target/test-classes"));
+        classPath.addAll(resolveTestClasspath());
 
-        String[] classPathElements = new String[dependencies.size() + 2];
-        classPathElements[0] = getTestPath("target/classes");
-        classPathElements[1] = getTestPath("target/test-classes");
-
-        for (int i = 0; i < dependencies.size(); i++) {
-            classPathElements[i + 2] = ((File) dependencies.get(i)).getAbsolutePath();
-        }
-
+        List<File> sourceDirectories = new ArrayList<>();
         File verifierDirectory = getTestFile("src/test/verifiers/" + verifierId);
-        String[] sourceDirectories;
         if (verifierDirectory.canRead()) {
-            sourceDirectories = new String[] {verifierDirectory.getAbsolutePath(), generatedSources.getAbsolutePath()};
-        } else {
-            sourceDirectories = new String[] {generatedSources.getAbsolutePath()};
+            sourceDirectories.add(verifierDirectory);
+        }
+        sourceDirectories.add(generatedSources);
+
+        List<File> sourceFiles = new ArrayList<>();
+        for (File sourceDirectory : sourceDirectories) {
+            sourceFiles.addAll(findJavaSources(sourceDirectory));
         }
 
-        CompilerConfiguration configuration = new CompilerConfiguration();
-        configuration.setClasspathEntries(Arrays.asList(classPathElements));
-        configuration.setSourceLocations(Arrays.asList(sourceDirectories));
-        configuration.setOutputLocation(destinationDirectory.getAbsolutePath());
-        configuration.setDebug(true);
+        // javac up to Java 8 refuses a -d that does not already exist; later versions create it
+        Files.createDirectories(destinationDirectory.toPath());
 
-        configuration.setSourceVersion(javaSource);
-        configuration.setTargetVersion(javaSource);
+        JavaCompiler javac = ToolProvider.getSystemJavaCompiler();
+        assertNotNull(javac, "No java compiler available - the tests need a JDK, not a JRE");
 
-        CompilerResult result = compiler.performCompile(configuration);
+        DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
+        try (StandardJavaFileManager fileManager = javac.getStandardFileManager(diagnostics, null, null)) {
+            List<String> options = Arrays.asList(
+                    "-g",
+                    "-classpath",
+                    String.join(File.pathSeparator, classPath),
+                    "-d",
+                    destinationDirectory.getAbsolutePath(),
+                    "-source",
+                    javaSource,
+                    "-target",
+                    javaSource);
 
-        List<CompilerMessage> errors = new ArrayList<CompilerMessage>(0);
-        for (CompilerMessage compilerMessage : result.getCompilerMessages()) {
-            if (compilerMessage.isError()) {
-                errors.add(compilerMessage);
-            }
+            javac.getTask(
+                            null,
+                            fileManager,
+                            diagnostics,
+                            options,
+                            null,
+                            fileManager.getJavaFileObjectsFromFiles(sourceFiles))
+                    .call();
         }
+
+        List<Diagnostic<? extends JavaFileObject>> errors = diagnostics.getDiagnostics().stream()
+                .filter(diagnostic -> diagnostic.getKind() == Diagnostic.Kind.ERROR)
+                .collect(Collectors.toList());
 
         assertEquals(0, errors.size(), "There was compilation errors: " + errors);
+    }
+
+    private static List<File> findJavaSources(File directory) throws IOException {
+        if (!directory.isDirectory()) {
+            return new ArrayList<>();
+        }
+        try (Stream<Path> paths = Files.walk(directory.toPath())) {
+            return paths.filter(path -> path.getFileName().toString().endsWith(".java"))
+                    .map(Path::toFile)
+                    .collect(Collectors.toList());
+        }
+    }
+
+    /**
+     * Returns this module's test classpath, which is what the verifiers and the generated sources are compiled
+     * against.
+     * <p>
+     * Surefire normally hands the forked JVM a manifest-only "booter" jar rather than a real classpath, so
+     * {@code java.class.path} on its own is a single jar whose {@code Class-Path} manifest entry holds the actual
+     * entries. Expanding that keeps this in step with whatever the POM declares, with no build step to copy jars
+     * around and no second list to maintain here.
+     */
+    private static List<String> resolveTestClasspath() {
+        List<String> classPath = new ArrayList<>();
+        for (String entry : System.getProperty("java.class.path", "").split(File.pathSeparator)) {
+            if (entry.isEmpty()) {
+                continue;
+            }
+            classPath.add(entry);
+            // a jar may carry its own Class-Path, so keep both it and whatever it points at
+            classPath.addAll(expandManifestClassPath(new File(entry)));
+        }
+        return classPath;
+    }
+
+    private static List<String> expandManifestClassPath(File jar) {
+        if (!jar.isFile() || !jar.getName().endsWith(".jar")) {
+            return new ArrayList<>();
+        }
+        try (JarFile jarFile = new JarFile(jar)) {
+            Manifest manifest = jarFile.getManifest();
+            if (manifest == null) {
+                return new ArrayList<>();
+            }
+            String classPath = manifest.getMainAttributes().getValue(Attributes.Name.CLASS_PATH);
+            if (classPath == null || classPath.trim().isEmpty()) {
+                return new ArrayList<>();
+            }
+            List<String> entries = new ArrayList<>();
+            for (String entry : classPath.trim().split("\\s+")) {
+                try {
+                    entries.add(Paths.get(URI.create(entry)).toString());
+                } catch (IllegalArgumentException | java.nio.file.FileSystemNotFoundException e) {
+                    // a relative entry, resolved against the jar itself
+                    entries.add(new File(jar.getParentFile(), entry).getAbsolutePath());
+                }
+            }
+            return entries;
+        } catch (IOException e) {
+            throw new UncheckedIOException("Could not read the manifest of " + jar, e);
+        }
     }
 
     /**
@@ -212,6 +263,14 @@ public abstract class AbstractModelloJavaGeneratorTest extends AbstractModelloGe
         addClassPathFile(getTestFile("target/classes"));
 
         addClassPathFile(getTestFile("target/test-classes"));
+
+        // the verifier runs in a classloader with no parent, so it needs the test classpath spelled out
+        for (String entry : resolveTestClasspath()) {
+            File file = new File(entry);
+            if (file.exists()) {
+                addClassPathFile(file);
+            }
+        }
 
         ClassLoader oldCCL = Thread.currentThread().getContextClassLoader();
         URLClassLoader classLoader = URLClassLoader.newInstance(urls.toArray(new URL[urls.size()]), null);

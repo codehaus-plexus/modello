@@ -65,10 +65,6 @@ public class JacksonGeneratorTest extends AbstractModelloJavaGeneratorTest {
         modello.generate(model, "jackson-writer", parameters);
         modello.generate(model, "jackson-reader", parameters);
 
-        addDependency("com.fasterxml.jackson.core", "jackson-core");
-        addDependency("com.fasterxml.jackson.core", "jackson-databind");
-        // looks like jackson-databind requires jackson-annotations to run...
-        addDependency("com.fasterxml.jackson.core", "jackson-annotations");
         compileGeneratedSources(8);
 
         // TODO: see why without this, version system property is set to "2.4.1" value after verify

@@ -61,28 +61,4 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
-
-  <build>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <artifactId>maven-dependency-plugin</artifactId>
-          <executions>
-            <execution>
-              <id>copy-test-libs</id>
-              <goals>
-                <goal>copy-dependencies</goal>
-              </goals>
-              <phase>process-test-resources</phase>
-              <configuration>
-                <outputDirectory>${project.build.directory}/test-libs</outputDirectory>
-                <excludeTransitive>false</excludeTransitive>
-                <stripVersion>true</stripVersion>
-              </configuration>
-            </execution>
-          </executions>
-        </plugin>
-      </plugins>
-    </pluginManagement>
-  </build>
 </project>
