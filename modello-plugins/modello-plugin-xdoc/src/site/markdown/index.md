@@ -1,30 +1,16 @@
-<?xml version="1.0"?>
+---
+title: Modello XDOC Plugin
+author: 
+  - Hervé Boutemy
+---
 
-<document>
+# Modello XDOC Plugin
 
-  <properties>
-    <title>Modello XDOC Plugin</title>
-    <author email="hboutemy_AT_apache_DOT_org">Hervé Boutemy</author>
-  </properties>
+Modello XDOC Plugin generates model documentation using xdoc markup to be included in a Maven-generated reporting site.
 
-  <body>
+## xdoc
 
-    <section name="Modello XDOC Plugin">
+`xdoc` generator creates `model-id.xdoc` documentation containing an XML representation of the model, followed by a table with explanation for every model class. 
 
-      <p>Modello XDOC Plugin generates model documentation using xdoc markup to be included in a Maven-generated
-        reporting site.</p>
+An [example](features.html) is available to see the resulting document. 
 
-      <subsection name="xdoc">
-      <p><code>xdoc</code> generator creates <code><i>model-id</i><b>.xdoc</b></code> documentation containing an XML
-        representation of the model, followed by a table with explanation for every model class.
-      </p>
-      <p>
-        An <a href="features.html">example</a> is available to see the resulting document.
-      </p>
-      </subsection>
-
-    </section>
-
-  </body>
-
-</document>

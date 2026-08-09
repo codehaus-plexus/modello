@@ -1,56 +1,37 @@
-<?xml version="1.0"?>
+---
+title: Modello Dom4J Plugin
+author: 
+  - Hervé Boutemy
+---
 
-<document>
+# Modello Dom4J Plugin
 
-  <properties>
-    <title>Modello Dom4J Plugin</title>
-    <author email="hboutemy_AT_apache_DOT_org">Hervé Boutemy</author>
-  </properties>
+Modello Dom4J Plugin generates XML readers and writers based on [Dom4J 1 API](http://dom4j.sourceforge.net/dom4j-1.6.1/).
 
-  <body>
+Notice: DOM content type is represented as [plexus-utils' Xpp3Dom](http://plexus.codehaus.org/plexus-utils/apidocs/org/codehaus/plexus/util/xml/Xpp3Dom.html) objects
 
-    <section name="Modello Dom4J Plugin">
+## dom4j-reader
 
-      <p>Modello Dom4J Plugin generates XML readers and writers based on
-         <a href="http://dom4j.sourceforge.net/dom4j-1.6.1/">Dom4J 1 API</a>.</p>
+`dom4j-reader` generator creates `my.model.package.io.dom4j.ModelNameDom4JReader` class with following public methods: 
 
-      <p>Notice: DOM content type is represented as
-      <a href="http://plexus.codehaus.org/plexus-utils/apidocs/org/codehaus/plexus/util/xml/Xpp3Dom.html">plexus-utils' Xpp3Dom</a> objects</p>
+```java
+public RootClass read( Reader reader, boolean strict )
+    throws IOException, DocumentException
 
-      <subsection name="dom4j-reader">
-      <p><code>dom4j-reader</code> generator creates
-        <code><i>my.model.package</i><b>.io.dom4j.</b><i>ModelName</i><b>Dom4JReader</b></code> class with following
-        public methods:
-      </p>
-      <ul>
-        <li><code>public <i>RootClass</i> read( Reader reader, boolean strict )<br/>
-            &#160;&#160;&#160;&#160;throws IOException, DocumentException</code></li>
+public RootClass read( Reader reader )
+    throws IOException, DocumentException
 
-        <li><code>public <i>RootClass</i> read( Reader reader )<br/>
-            &#160;&#160;&#160;&#160;throws IOException, DocumentException</code></li>
+public RootClass read( URL url, boolean strict )
+    throws IOException, DocumentException
 
-        <li><code>public <i>RootClass</i> read( URL url, boolean strict )<br/>
-            &#160;&#160;&#160;&#160;throws IOException, DocumentException</code></li>
+public RootClass read( URL url )
+    throws IOException, DocumentException
+```
+## dom4j-writer
 
-        <li><code>public <i>RootClass</i> read( URL url )<br/>
-            &#160;&#160;&#160;&#160;throws IOException, DocumentException</code></li>
-      </ul>
-      </subsection>
+`dom4j-writer` generator creates `my.model.package.io.dom4j.ModelNameDom4JWriter` class with following public methods: 
 
-      <subsection name="dom4j-writer">
-      <p><code>dom4j-writer</code> generator creates
-        <code><i>my.model.package</i><b>.io.dom4j.</b><i>ModelName</i><b>Dom4JWriter</b></code> class with following
-        public methods:
-      </p>
-
-      <ul>
-        <li><code>public void write( Writer writer, <i>RootClass</i> root )<br/>
-            &#160;&#160;&#160;&#160;throws java.io.IOException</code></li>
-      </ul>
-      </subsection>
-
-    </section>
-
-  </body>
-
-</document>
+```java
+public void write( Writer writer, RootClass root )
+    throws java.io.IOException
+```
