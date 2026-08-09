@@ -1,3 +1,5 @@
+package org.codehaus.modello.generator.java;
+
 import java.lang.annotation.Annotation;
 
 /*

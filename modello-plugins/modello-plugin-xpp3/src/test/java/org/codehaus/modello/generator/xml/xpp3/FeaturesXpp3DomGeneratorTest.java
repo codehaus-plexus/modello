@@ -58,6 +58,6 @@ public class FeaturesXpp3DomGeneratorTest extends AbstractModelloJavaGeneratorTe
 
         compileGeneratedSources(8);
 
-        verifyCompiledGeneratedSources("org.codehaus.modello.generator.xml.xpp3.Xpp3FeaturesVerifier");
+        verifyCompiledGeneratedSources("org.codehaus.modello.generator.xml.xpp3.Xpp3FeaturesDomVerifier");
     }
 }

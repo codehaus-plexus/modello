@@ -1,3 +1,5 @@
+package org.codehaus.modello.generator.java;
+
 /*
  * Copyright (c) 2004, Codehaus.org
  *
@@ -68,7 +70,7 @@ import java.util.Set;
 /**
  * @author Herve Boutemy
  */
-public class JavaVerifier
+public class FeaturesJavaVerifier
     extends Verifier
 {
     public void verify()

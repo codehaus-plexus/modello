@@ -54,6 +54,6 @@ public class LocationsJavaGeneratorTest extends AbstractModelloJavaGeneratorTest
 
         compileGeneratedSources(8);
 
-        verifyCompiledGeneratedSources("JavaLocationsVerifier");
+        verifyCompiledGeneratedSources("org.codehaus.modello.generator.java.JavaLocationsVerifier");
     }
 }

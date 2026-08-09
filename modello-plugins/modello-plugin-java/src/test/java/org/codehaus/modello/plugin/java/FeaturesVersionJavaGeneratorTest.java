@@ -64,6 +64,6 @@ public class FeaturesVersionJavaGeneratorTest extends AbstractModelloJavaGenerat
 
         compileGeneratedSources();
 
-        verifyCompiledGeneratedSources("JavaVerifier");
+        verifyCompiledGeneratedSources("org.codehaus.modello.generator.java.FeaturesVersionJavaVerifier");
     }
 }

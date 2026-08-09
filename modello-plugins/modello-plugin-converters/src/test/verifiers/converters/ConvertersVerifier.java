@@ -1,3 +1,5 @@
+package org.codehaus.modello.generator.converters;
+
 /*
  * Copyright (c) 2004, Codehaus.org
  *

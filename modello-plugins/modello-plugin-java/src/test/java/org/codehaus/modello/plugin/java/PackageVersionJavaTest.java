@@ -56,6 +56,6 @@ public class PackageVersionJavaTest extends AbstractModelloJavaGeneratorTest {
 
         compileGeneratedSources();
 
-        verifyCompiledGeneratedSources("PackageVersionVerifier");
+        verifyCompiledGeneratedSources("org.codehaus.modello.generator.java.PackageVersionVerifier");
     }
 }

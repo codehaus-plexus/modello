@@ -1,3 +1,5 @@
+package org.codehaus.modello.generator.java;
+
 /*
  * Copyright (c) 2004, Codehaus.org
  *
@@ -28,7 +30,7 @@ import org.junit.jupiter.api.Assertions;
 /**
  * @author Herve Boutemy
  */
-public class JavaVerifier
+public class FeaturesVersionJavaVerifier
     extends Verifier
 {
     public void verify()

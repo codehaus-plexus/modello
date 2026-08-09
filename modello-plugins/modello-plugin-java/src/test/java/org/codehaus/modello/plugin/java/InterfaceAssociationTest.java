@@ -29,6 +29,6 @@ public class InterfaceAssociationTest extends AbstractModelloJavaGeneratorTest {
 
         compileGeneratedSources(8);
 
-        verifyCompiledGeneratedSources("InterfaceAssociationVerifier");
+        verifyCompiledGeneratedSources("org.codehaus.modello.generator.java.InterfaceAssociationVerifier");
     }
 }

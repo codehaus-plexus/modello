@@ -1,3 +1,5 @@
+package org.codehaus.modello.generator.java;
+
 import org.codehaus.modello.plugin.java.Role;
 import org.codehaus.modello.tests.bidiroverride.BiRole;
 import org.codehaus.modello.verifier.Verifier;
@@ -6,7 +8,7 @@ import org.junit.jupiter.api.Assertions;
 
 import java.util.List;
 
-public class JavaVerifier
+public class BidirectionalJavaVerifier
     extends Verifier
 {
     public void verify()

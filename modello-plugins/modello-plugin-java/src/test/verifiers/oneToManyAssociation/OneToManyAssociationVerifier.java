@@ -1,3 +1,5 @@
+package org.codehaus.modello.generator.java;
+
 import org.codehaus.modello.association.package1.ListSetMapProperties;
 import org.codehaus.modello.association.package1.Person;
 import org.codehaus.modello.association.package2.Location;

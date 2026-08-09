@@ -50,6 +50,6 @@ public class BiDirectionalOverrideJavaGeneratorTest extends AbstractModelloJavaG
 
         compileGeneratedSources();
 
-        verifyCompiledGeneratedSources("JavaVerifier");
+        verifyCompiledGeneratedSources("org.codehaus.modello.generator.java.BidirectionalJavaVerifier");
     }
 }

@@ -56,7 +56,7 @@ public class ConverterGeneratorTest extends AbstractModelloJavaGeneratorTest {
 
         compileGeneratedSources();
 
-        verifyCompiledGeneratedSources("ConvertersVerifier");
+        verifyCompiledGeneratedSources("org.codehaus.modello.generator.converters.ConvertersVerifier");
     }
 
     private void generateConverterClasses(Reader modelReader, String fromVersion, String toVersion) throws Throwable {

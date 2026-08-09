@@ -1,4 +1,4 @@
-package org.codehaus.modello.generator.xml.xpp3;
+package org.codehaus.modello.generator.xml.stax;
 
 /*
  * Copyright (c) 2004, Codehaus.org
@@ -27,8 +27,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import org.codehaus.modello.test.features.Features;
-import org.codehaus.modello.test.features.io.xpp3.ModelloFeaturesTestXpp3Reader;
-import org.codehaus.modello.test.features.io.xpp3.ModelloFeaturesTestXpp3Writer;
+import org.codehaus.modello.test.features.io.stax.ModelloFeaturesTestStaxReader;
+import org.codehaus.modello.test.features.io.stax.ModelloFeaturesTestStaxWriter;
 import org.codehaus.modello.verifier.Verifier;
 import org.codehaus.modello.verifier.VerifierException;
 import org.codehaus.plexus.util.FileUtils;
@@ -48,10 +48,12 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
 
+import javax.xml.stream.XMLStreamException;
+
 /**
  * @author Herve Boutemy
  */
-public class Xpp3FeaturesVerifier
+public class StaxFeaturesDomVerifier
     extends Verifier
 {
     public void verify()
@@ -69,8 +71,6 @@ public class Xpp3FeaturesVerifier
 
         verifyWrongElement();
 
-        verifyWrongAttribute();
-
         verifyWrongContent();
 
         verifyTransientElement();
@@ -81,25 +81,25 @@ public class Xpp3FeaturesVerifier
     public void verifyAPI()
         throws Exception
     {
-        assertReader( ModelloFeaturesTestXpp3Reader.class, Features.class, Reader.class, XmlPullParserException.class );
-        assertReader( ModelloFeaturesTestXpp3Reader.class, Features.class, InputStream.class, XmlPullParserException.class );
+        assertReader( ModelloFeaturesTestStaxReader.class, Features.class, Reader.class, XMLStreamException.class );
+        assertReader( ModelloFeaturesTestStaxReader.class, Features.class, InputStream.class, XMLStreamException.class );
 
-        assertWriter( ModelloFeaturesTestXpp3Writer.class, Features.class, Writer.class, XmlPullParserException.class );
-        assertWriter( ModelloFeaturesTestXpp3Writer.class, Features.class, OutputStream.class, XmlPullParserException.class );
+        assertWriter( ModelloFeaturesTestStaxWriter.class, Features.class, Writer.class, XMLStreamException.class );
+        assertWriter( ModelloFeaturesTestStaxWriter.class, Features.class, OutputStream.class, XMLStreamException.class );
     }
 
     public Features verifyReader()
         throws Exception
     {
-        ModelloFeaturesTestXpp3Reader reader = new ModelloFeaturesTestXpp3Reader();
+        ModelloFeaturesTestStaxReader reader = new ModelloFeaturesTestStaxReader();
 
-        return reader.read( getClass().getResourceAsStream( "/features.xml" ) );
+        return reader.read( getXmlResourceReader( "/features.xml" ) );
     }
 
     public void verifyWriter( Features features )
         throws Exception
     {
-        ModelloFeaturesTestXpp3Writer writer = new ModelloFeaturesTestXpp3Writer();
+        ModelloFeaturesTestStaxWriter writer = new ModelloFeaturesTestStaxWriter();
 
         StringWriter buffer = new StringWriter();
 
@@ -110,8 +110,8 @@ public class Xpp3FeaturesVerifier
 
         // alias is rendered as default field name => must be reverted here to let the test pass
         actualXml = actualXml.replaceFirst( "<id>alias</id>", "<key>alias</key>" );
-        // writer doesn't check if space has to be preserved, so doesn't add xml:space="preserve" back
-        actualXml = actualXml.replaceFirst( "<preserve>", "<preserve xml:space=\"preserve\">" );
+        // writer doesn't handle namespace
+        actualXml = actualXml.replaceFirst( "<preserve space=\"preserve\">", "<preserve xml:space=\"preserve\">" );
 
         Diff diff = DiffBuilder.compare( initialXml ).withTest( actualXml ).ignoreWhitespace().ignoreComments().build();
 
@@ -146,78 +146,58 @@ public class Xpp3FeaturesVerifier
     public void verifyBadVersion()
         throws Exception
     {
-        ModelloFeaturesTestXpp3Reader reader = new ModelloFeaturesTestXpp3Reader();
+        ModelloFeaturesTestStaxReader reader = new ModelloFeaturesTestStaxReader();
 
         try
         {
-            reader.read( getClass().getResourceAsStream( "/features-bad-version.xml" ) );
+            reader.read( getXmlResourceReader( "/features-bad-version.xml" ) );
 
-            //throw new VerifierException( "Reading a document with a version different from the version of the parser should fail." );
-            System.err.print( "[WARNING] missing feature: reading a document with a version different from the version of the parser should fail." );
+            throw new VerifierException( "Reading a document with a version different from the version of the parser should fail." );
         }
-        catch ( XmlPullParserException xppe )
+        catch ( XMLStreamException xse )
         {
-            checkExpectedFailure( xppe, "Document model version of '2.0.0' doesn't match reader version of '1.0.0'" );
+            // expected failure
+            checkExpectedFailure( xse, "Document model version of '2.0.0' doesn't match reader version of '1.0.0'" );
         }
     }
 
     public void verifyWrongElement()
         throws Exception
     {
-        ModelloFeaturesTestXpp3Reader reader = new ModelloFeaturesTestXpp3Reader();
+        ModelloFeaturesTestStaxReader reader = new ModelloFeaturesTestStaxReader();
 
         // reading with strict=false should accept unknown element
-        reader.read( getClass().getResourceAsStream( "/features-wrong-element.xml" ), false );
-        reader.read( getClass().getResourceAsStream( "/features-wrong-element2.xml" ), false );
+        reader.read( getXmlResourceReader( "/features-wrong-element.xml" ), false );
+        reader.read( getXmlResourceReader( "/features-wrong-element2.xml" ), false );
 
         // by default, strict=true: reading should not accept unknown element
         try
         {
-            reader.read( getClass().getResourceAsStream( "/features-wrong-element.xml" ) );
+            reader.read( getXmlResourceReader( "/features-wrong-element.xml" ) );
 
             throw new VerifierException( "Reading a document with an unknown element under strict option should fail." );
         }
-        catch ( XmlPullParserException xppe )
+        catch ( XMLStreamException xse )
         {
-            checkExpectedFailure( xppe, "'invalidElement'" );
+            // expected failure
+            checkExpectedFailure( xse, "'invalidElement'" );
         }
         try
         {
-            reader.read( getClass().getResourceAsStream( "/features-wrong-element2.xml" ) );
+            reader.read( getXmlResourceReader( "/features-wrong-element2.xml" ) );
 
             throw new VerifierException( "Reading a document with an unknown element under strict option should fail." );
         }
-        catch ( XmlPullParserException xppe )
+        catch ( XMLStreamException xse )
         {
-            checkExpectedFailure( xppe, "'invalidElement'" );
-        }
-    }
-
-    public void verifyWrongAttribute()
-        throws Exception
-    {
-        ModelloFeaturesTestXpp3Reader reader = new ModelloFeaturesTestXpp3Reader();
-
-        // reading with strict=false should accept unknown element
-        reader.read( getClass().getResourceAsStream( "/features-wrong-attribute.xml" ), false );
-
-        // by default, strict=true: reading should not accept unknown attribute
-        try
-        {
-            reader.read( getClass().getResourceAsStream( "/features-wrong-attribute.xml" ) );
-
-            throw new VerifierException( "Reading a document with an unknown attribute under strict option should fail." );
-        }
-        catch ( XmlPullParserException xppe )
-        {
-            checkExpectedFailure( xppe, "Unknown attribute 'invalidAttribute' for tag 'attributes'" );
+            checkExpectedFailure( xse, "'invalidElement'" );
         }
     }
 
     public void verifyWrongContent()
         throws Exception
     {
-        ModelloFeaturesTestXpp3Reader reader = new ModelloFeaturesTestXpp3Reader();
+        ModelloFeaturesTestStaxReader reader = new ModelloFeaturesTestStaxReader();
 
         // reading with strict=false should accept unexpected text content
         reader.read( getClass().getResourceAsStream( "/features-wrong-content.xml" ), false );
@@ -229,58 +209,58 @@ public class Xpp3FeaturesVerifier
 
             throw new VerifierException( "Reading a document with a bad content under strict option should fail." );
         }
-        catch ( XmlPullParserException xppe )
+        catch ( XMLStreamException xse )
         {
-            checkExpectedFailure( xppe, "expected START_TAG or END_TAG not TEXT" );
+            checkExpectedFailure( xse, "non-all-whitespace CHARACTERS or CDATA event" );
         }
     }
 
     public void verifyTransientElement()
         throws Exception
     {
-        ModelloFeaturesTestXpp3Reader reader = new ModelloFeaturesTestXpp3Reader();
+        ModelloFeaturesTestStaxReader reader = new ModelloFeaturesTestStaxReader();
 
         try
         {
-            reader.read( getClass().getResourceAsStream( "/features-invalid-transient.xml" ) );
+            reader.read( getXmlResourceReader( "/features-invalid-transient.xml" ) );
 
             fail( "Transient fields should not be processed by parser." );
         }
-        catch ( XmlPullParserException e )
+        catch ( XMLStreamException e )
         {
             checkExpectedFailure( e, "transientString" );
         }
     }
 
-    private void checkExpectedFailure( XmlPullParserException xppe, String expectedMessage )
+    private void checkExpectedFailure( XMLStreamException xse, String expectedMessage )
         throws VerifierException
     {
-        if ( xppe.getMessage().indexOf( expectedMessage ) < 0 )
+        if ( xse.getMessage().indexOf( expectedMessage ) < 0 )
         {
-            throw new VerifierException( "Unexpected failure: \"" + xppe.getMessage() + "\"", xppe );
+            throw new VerifierException( "Unexpected failure: \"" + xse.getMessage() + "\"", xse );
         }
     }
 
     private void checkEncoding( String resource, String encoding )
         throws Exception
     {
-        ModelloFeaturesTestXpp3Reader reader = new ModelloFeaturesTestXpp3Reader();
+        ModelloFeaturesTestStaxReader reader = new ModelloFeaturesTestStaxReader();
 
-        Features features = reader.read( getClass().getResourceAsStream( resource ) );
+        Features features = reader.read( getXmlResourceReader( resource ) );
         assertEquals( encoding, features.getModelEncoding() , "modelEncoding");
 
-        ModelloFeaturesTestXpp3Writer writer = new ModelloFeaturesTestXpp3Writer();
+        ModelloFeaturesTestStaxWriter writer = new ModelloFeaturesTestStaxWriter();
         StringWriter buffer = new StringWriter();
         writer.write( buffer, features );
         String xmlHeader = buffer.toString().substring( 0, 44 );
 
         if ( encoding == null )
         {
-            assertTrue( xmlHeader.startsWith( "<?xml version=\"1.0\"?>" ) , xmlHeader);
+            assertTrue( xmlHeader.startsWith( "<?xml version='1.0'?>" ) , xmlHeader);
         }
         else
         {
-            assertTrue( xmlHeader.startsWith( "<?xml version=\"1.0\" encoding=\"" + encoding + "\"?>" ) , xmlHeader);
+            assertTrue( xmlHeader.startsWith( "<?xml version='1.0' encoding='" + encoding + "'?>" ) , xmlHeader);
         }
     }
 
