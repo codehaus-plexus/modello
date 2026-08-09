@@ -55,10 +55,6 @@ public class FeaturesStaxDomGeneratorTest extends AbstractModelloJavaGeneratorTe
         modello.generate(model, "stax-writer", parameters);
         modello.generate(model, "stax-reader", parameters);
 
-        addDependency("org.codehaus.woodstox", "stax2-api");
-        addDependency("com.fasterxml.woodstox", "woodstox-core");
-        addDependency("org.xmlunit", "xmlunit-core");
-
         compileGeneratedSources(8);
 
         // TODO: see why without this, version system property is set to "2.4.1" value after verify

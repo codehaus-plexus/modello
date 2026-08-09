@@ -93,8 +93,6 @@ public class Dom4jGeneratorTest extends AbstractModelloJavaGeneratorTest {
         modello.generate(model, "dom4j-writer", parameters);
         modello.generate(model, "dom4j-reader", parameters);
 
-        addDependency("dom4j", "dom4j");
-
         compileGeneratedSources();
 
         verifyCompiledGeneratedSources("org.codehaus.modello.generator.xml.dom4j.Dom4jVerifier");

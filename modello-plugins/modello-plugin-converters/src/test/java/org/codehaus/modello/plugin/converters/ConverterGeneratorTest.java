@@ -54,9 +54,6 @@ public class ConverterGeneratorTest extends AbstractModelloJavaGeneratorTest {
 
         generateConverterClasses(getXmlResourceReader("/features.mdo"), "1.0.0", "1.1.0");
 
-        addDependency("org.codehaus.woodstox", "stax2-api");
-        addDependency("com.fasterxml.woodstox", "woodstox-core");
-
         compileGeneratedSources();
 
         verifyCompiledGeneratedSources("ConvertersVerifier");

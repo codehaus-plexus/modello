@@ -52,7 +52,6 @@ public class SnakeYamlGeneratorTest extends AbstractModelloJavaGeneratorTest {
         modello.generate(model, "snakeyaml-writer", parameters);
         modello.generate(model, "snakeyaml-reader", parameters);
 
-        addDependency("org.yaml", "snakeyaml");
         compileGeneratedSources();
     }
 }

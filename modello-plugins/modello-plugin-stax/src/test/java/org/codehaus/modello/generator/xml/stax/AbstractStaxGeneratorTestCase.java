@@ -73,9 +73,6 @@ public abstract class AbstractStaxGeneratorTestCase extends AbstractModelloJavaG
             }
         }
 
-        addDependency("org.codehaus.woodstox", "stax2-api");
-        addDependency("com.fasterxml.woodstox", "woodstox-core");
-
         compileGeneratedSources();
 
         verifyCompiledGeneratedSources(className);

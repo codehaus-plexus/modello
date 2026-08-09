@@ -55,7 +55,6 @@ public class RootClassnameJDOMGeneratorTest extends AbstractModelloJavaGenerator
         modello.generate(model, "java", parameters);
         modello.generate(model, "jdom-writer", parameters);
 
-        addDependency("org.jdom", "jdom");
         compileGeneratedSources();
 
         // If the code compiles successfully, the test passes

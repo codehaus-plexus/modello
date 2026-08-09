@@ -12,9 +12,7 @@
   <description>Modello Test Package contains the basis to create Modello generator unit-tests, including sample models
     and xml files to test every feature for every plugin.</description>
 
-  <properties>
-    <plexus.compiler.version>2.16.2</plexus.compiler.version>
-  </properties>
+  <properties />
   <dependencies>
     <dependency>
       <groupId>org.eclipse.sisu</groupId>
@@ -27,16 +25,6 @@
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-xml</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.codehaus.plexus</groupId>
-      <artifactId>plexus-compiler-javac</artifactId>
-      <version>${plexus.compiler.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.codehaus.plexus</groupId>
-      <artifactId>plexus-compiler-api</artifactId>
-      <version>${plexus.compiler.version}</version>
     </dependency>
     <dependency>
       <groupId>org.codehaus.plexus</groupId>

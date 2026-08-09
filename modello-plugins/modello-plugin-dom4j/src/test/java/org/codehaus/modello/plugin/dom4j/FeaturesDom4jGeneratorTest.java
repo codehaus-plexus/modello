@@ -54,8 +54,6 @@ public class FeaturesDom4jGeneratorTest extends AbstractModelloJavaGeneratorTest
         modello.generate(model, "dom4j-writer", parameters);
         modello.generate(model, "dom4j-reader", parameters);
 
-        addDependency("dom4j", "dom4j");
-        addDependency("org.xmlunit", "xmlunit-core");
         compileGeneratedSources(8);
 
         verifyCompiledGeneratedSources("org.codehaus.modello.generator.xml.dom4j.Dom4jFeaturesVerifier");

@@ -52,8 +52,6 @@ public class AnnotationsJavaGeneratorTest extends AbstractModelloJavaGeneratorTe
 
         modello.generate(model, "java", parameters);
 
-        addDependency("javax.xml.bind", "jaxb-api");
-        addDependency("javax.persistence", "persistence-api");
         compileGeneratedSources(8);
 
         verifyCompiledGeneratedSources("AnnotationsVerifier");
