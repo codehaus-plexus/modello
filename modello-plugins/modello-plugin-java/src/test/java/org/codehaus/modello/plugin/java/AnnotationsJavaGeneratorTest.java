@@ -54,6 +54,6 @@ public class AnnotationsJavaGeneratorTest extends AbstractModelloJavaGeneratorTe
 
         compileGeneratedSources(8);
 
-        verifyCompiledGeneratedSources("AnnotationsVerifier");
+        verifyCompiledGeneratedSources("org.codehaus.modello.generator.java.AnnotationsVerifier");
     }
 }

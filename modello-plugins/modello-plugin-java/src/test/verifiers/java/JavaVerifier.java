@@ -1,3 +1,5 @@
+package org.codehaus.modello.generator.java;
+
 /*
  * Copyright (c) 2004, Codehaus.org
  *

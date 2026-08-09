@@ -54,6 +54,6 @@ public class JavaGeneratorTest extends AbstractModelloJavaGeneratorTest {
 
         compileGeneratedSources();
 
-        verifyCompiledGeneratedSources("JavaVerifier");
+        verifyCompiledGeneratedSources("org.codehaus.modello.generator.java.JavaVerifier");
     }
 }

@@ -1,3 +1,5 @@
+package org.codehaus.modello.generator.java;
+
 import org.junit.jupiter.api.Assertions;
 
 import org.codehaus.modello.ifaceassociation.package1.IPerson;

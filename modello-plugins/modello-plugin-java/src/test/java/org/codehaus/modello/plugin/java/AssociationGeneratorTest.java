@@ -54,6 +54,6 @@ public class AssociationGeneratorTest extends AbstractModelloJavaGeneratorTest {
 
         compileGeneratedSources();
 
-        verifyCompiledGeneratedSources("OneToManyAssociationVerifier");
+        verifyCompiledGeneratedSources("org.codehaus.modello.generator.java.OneToManyAssociationVerifier");
     }
 }
