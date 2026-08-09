@@ -22,9 +22,9 @@ package org.codehaus.modello.generator.xml.xpp3;
  * SOFTWARE.
  */
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import org.codehaus.modello.test.features.Features;
 import org.codehaus.modello.test.features.io.xpp3.ModelloFeaturesTestXpp3Reader;
@@ -267,7 +267,7 @@ public class Xpp3FeaturesVerifier
         ModelloFeaturesTestXpp3Reader reader = new ModelloFeaturesTestXpp3Reader();
 
         Features features = reader.read( getClass().getResourceAsStream( resource ) );
-        assertEquals( "modelEncoding", encoding, features.getModelEncoding() );
+        assertEquals( encoding, features.getModelEncoding() , "modelEncoding");
 
         ModelloFeaturesTestXpp3Writer writer = new ModelloFeaturesTestXpp3Writer();
         StringWriter buffer = new StringWriter();
@@ -276,11 +276,11 @@ public class Xpp3FeaturesVerifier
 
         if ( encoding == null )
         {
-            assertTrue( xmlHeader, xmlHeader.startsWith( "<?xml version=\"1.0\"?>" ) );
+            assertTrue( xmlHeader.startsWith( "<?xml version=\"1.0\"?>" ) , xmlHeader);
         }
         else
         {
-            assertTrue( xmlHeader, xmlHeader.startsWith( "<?xml version=\"1.0\" encoding=\"" + encoding + "\"?>" ) );
+            assertTrue( xmlHeader.startsWith( "<?xml version=\"1.0\" encoding=\"" + encoding + "\"?>" ) , xmlHeader);
         }
     }
 

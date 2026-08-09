@@ -22,9 +22,9 @@ package org.codehaus.modello.generator.xml.stax;
  * SOFTWARE.
  */
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import org.codehaus.modello.test.features.Features;
 import org.codehaus.modello.test.features.io.stax.ModelloFeaturesTestStaxReader;
@@ -245,7 +245,7 @@ public class StaxFeaturesVerifier
         ModelloFeaturesTestStaxReader reader = new ModelloFeaturesTestStaxReader();
 
         Features features = reader.read( getXmlResourceReader( resource ) );
-        assertEquals( "modelEncoding", encoding, features.getModelEncoding() );
+        assertEquals( encoding, features.getModelEncoding() , "modelEncoding");
 
         ModelloFeaturesTestStaxWriter writer = new ModelloFeaturesTestStaxWriter();
         StringWriter buffer = new StringWriter();
@@ -254,11 +254,11 @@ public class StaxFeaturesVerifier
 
         if ( encoding == null )
         {
-            assertTrue( xmlHeader, xmlHeader.startsWith( "<?xml version='1.0'?>" ) );
+            assertTrue( xmlHeader.startsWith( "<?xml version='1.0'?>" ) , xmlHeader);
         }
         else
         {
-            assertTrue( xmlHeader, xmlHeader.startsWith( "<?xml version='1.0' encoding='" + encoding + "'?>" ) );
+            assertTrue( xmlHeader.startsWith( "<?xml version='1.0' encoding='" + encoding + "'?>" ) , xmlHeader);
         }
     }
 

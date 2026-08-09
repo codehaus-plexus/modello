@@ -22,9 +22,9 @@ package org.codehaus.modello.generator.xml.dom4j;
  * SOFTWARE.
  */
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import org.codehaus.modello.test.features.Features;
 import org.codehaus.modello.test.features.io.dom4j.ModelloFeaturesTestDom4jReader;
@@ -109,7 +109,7 @@ public class Dom4jFeaturesVerifier
         // writer doesn't handle namespace
         actualXml = actualXml.replaceFirst( "<preserve space=\"preserve\">", "<preserve xml:space=\"preserve\">" );
 
-        //assertTrue( actualXml.substring( 0, 38 ), actualXml.startsWith( "<?xml version=\"1.0\"?>" ) );
+        //assertTrue( actualXml.startsWith( "<?xml version=\"1.0\"?>" ) , actualXml.substring( 0, 38 ));
 
         Diff diff = DiffBuilder.compare( initialXml ).withTest( actualXml ).ignoreWhitespace().ignoreComments().build();
 
@@ -223,14 +223,14 @@ public class Dom4jFeaturesVerifier
         ModelloFeaturesTestDom4jReader reader = new ModelloFeaturesTestDom4jReader();
 
         Features features = reader.read( getClass().getResource( "/features.xml" ) );
-        //assertEquals( "modelEncoding", null, features.getModelEncoding() );
+        //assertEquals( null, features.getModelEncoding() , "modelEncoding");
 
         features = reader.read( getClass().getResource( "/features-UTF-8.xml" ) );
-        //assertEquals( "modelEncoding", "UTF-8", features.getModelEncoding() );
+        //assertEquals( "UTF-8", features.getModelEncoding() , "modelEncoding");
 
         features = reader.read( getClass().getResource( "/features-Latin-15.xml" ) );
         // Dom4J's Document.getXMLEncoding() does not work: encoding used by the document is not stored...
-        //assertEquals( "modelEncoding", "ISO-8859-15", features.getModelEncoding() );
+        //assertEquals( "ISO-8859-15", features.getModelEncoding() , "modelEncoding");
 
         // encoding is not set when reading file, not useful to check whether it is written back...
     }

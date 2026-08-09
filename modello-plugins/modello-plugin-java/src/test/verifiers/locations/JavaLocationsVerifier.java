@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.codehaus.modello.test.locations.Item;
 import org.codehaus.modello.test.locations.Location;

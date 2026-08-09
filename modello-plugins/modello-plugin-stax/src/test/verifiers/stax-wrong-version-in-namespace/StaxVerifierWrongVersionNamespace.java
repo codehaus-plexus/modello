@@ -22,7 +22,7 @@ package org.codehaus.modello.generator.xml.stax;
  * SOFTWARE.
  */
 
-import junit.framework.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.codehaus.modello.test.model.vin.Model;
 import org.codehaus.modello.test.model.vin.io.stax.VersionInNamespaceStaxReader;
 import org.codehaus.modello.verifier.Verifier;
@@ -46,17 +46,17 @@ public class StaxVerifierWrongVersionNamespace
         Reader reader = new XmlStreamReader( file );
         VersionInNamespaceStaxReader modelReader = new VersionInNamespaceStaxReader();
 
-        Assert.assertEquals( "3.2.1", modelReader.determineVersion( reader ) );
+        Assertions.assertEquals( "3.2.1", modelReader.determineVersion( reader ) );
 
         reader = new XmlStreamReader( file );
         try
         {
             modelReader.read( reader );
-            Assert.fail( "Should have choked on the version" );
+            Assertions.fail( "Should have choked on the version" );
         }
         catch ( XMLStreamException e )
         {
-            Assert.assertTrue( e.getMessage().endsWith(
+            Assertions.assertTrue( e.getMessage().endsWith(
             "Document model version of '3.2.1' doesn't match reader version of '4.0.0'" ) );
         }
     }

@@ -22,7 +22,7 @@ package org.codehaus.modello.generator.xml.stax;
  * SOFTWARE.
  */
 
-import junit.framework.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.codehaus.modello.test.model.vin.Model;
 import org.codehaus.modello.test.model.vin.io.stax.VersionInNamespaceStaxReader;
 import org.codehaus.modello.verifier.Verifier;
@@ -46,12 +46,12 @@ public class StaxVerifierVersionInNamespace
         Reader reader = new XmlStreamReader( file );
         VersionInNamespaceStaxReader modelReader = new VersionInNamespaceStaxReader();
 
-        Assert.assertEquals( "4.0.0", modelReader.determineVersion( reader ) );
+        Assertions.assertEquals( "4.0.0", modelReader.determineVersion( reader ) );
 
         reader = new XmlStreamReader( file );
         Model model = modelReader.read( reader );
 
-        Assert.assertEquals( "Maven", model.getName() );
-        Assert.assertEquals( "Something out of place.", model.getDescription() );
+        Assertions.assertEquals( "Maven", model.getName() );
+        Assertions.assertEquals( "Something out of place.", model.getDescription() );
     }
 }

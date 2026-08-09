@@ -7,9 +7,9 @@ import java.util.Properties;
 import org.apache.maven.model.Model;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.modello.ModelloParameterConstants;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class AbstractModelloSourceGeneratorMojoTest {
 

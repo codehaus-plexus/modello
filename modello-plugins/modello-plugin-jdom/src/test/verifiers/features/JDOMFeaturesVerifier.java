@@ -22,7 +22,7 @@ package org.codehaus.modello.generator.xml.jdom;
  * SOFTWARE.
  */
 
-import junit.framework.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.codehaus.modello.test.features.Features;
 import org.codehaus.modello.test.features.io.stax.ModelloFeaturesTestStaxReader;
 import org.codehaus.modello.test.features.io.jdom.ModelloFeaturesTestJDOMWriter;

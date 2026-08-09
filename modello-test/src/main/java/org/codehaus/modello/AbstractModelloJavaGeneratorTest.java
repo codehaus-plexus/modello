@@ -155,7 +155,6 @@ public abstract class AbstractModelloJavaGeneratorTest extends AbstractModelloGe
         File generatedSources = getOutputDirectory();
         File destinationDirectory = getOutputClasses();
 
-        addDependency("junit", "junit");
         addDependency("org.junit.jupiter", "junit-jupiter-api");
         addDependency("org.opentest4j", "opentest4j");
         addDependency("org.codehaus.plexus", "plexus-utils");

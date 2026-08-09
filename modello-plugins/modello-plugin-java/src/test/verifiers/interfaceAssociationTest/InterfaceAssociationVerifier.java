@@ -1,4 +1,4 @@
-import junit.framework.Assert;
+import org.junit.jupiter.api.Assertions;
 
 import org.codehaus.modello.ifaceassociation.package1.IPerson;
 import org.codehaus.modello.ifaceassociation.package1.Person;
@@ -11,7 +11,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import junit.framework.Assert;
+import org.junit.jupiter.api.Assertions;
 
 public class InterfaceAssociationVerifier
     extends Verifier
@@ -45,10 +45,10 @@ public class InterfaceAssociationVerifier
 
         location.setMother( mother );
 
-        Assert.assertNotNull( location.getMother() );
+        Assertions.assertNotNull( location.getMother() );
 
         location.setMother( null );
 
-        Assert.assertNull( location.getMother() );
+        Assertions.assertNull( location.getMother() );
     }
 }
