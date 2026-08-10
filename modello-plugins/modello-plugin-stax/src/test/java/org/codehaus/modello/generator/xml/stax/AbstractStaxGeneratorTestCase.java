@@ -32,7 +32,6 @@ import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
 import org.codehaus.plexus.testing.PlexusTest;
 import org.codehaus.plexus.util.StringUtils;
-import org.junit.jupiter.api.BeforeEach;
 
 @PlexusTest
 public abstract class AbstractStaxGeneratorTestCase extends AbstractModelloJavaGeneratorTest {
@@ -42,11 +41,6 @@ public abstract class AbstractStaxGeneratorTestCase extends AbstractModelloJavaG
 
     protected AbstractStaxGeneratorTestCase(String name) {
         super(name);
-    }
-
-    @BeforeEach
-    public void setUp() throws Exception {
-        super.setUp();
     }
 
     protected void verifyModel(Model model, String className) throws Exception {

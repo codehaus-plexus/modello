@@ -38,6 +38,7 @@ import org.codehaus.plexus.PlexusConstants;
 import org.codehaus.plexus.testing.PlexusTestConfiguration;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.xml.XmlStreamReader;
+import org.junit.jupiter.api.BeforeEach;
 import org.xml.sax.SAXException;
 
 import static org.codehaus.plexus.testing.PlexusExtension.getTestFile;
@@ -55,6 +56,7 @@ public abstract class AbstractModelloGeneratorTest implements PlexusTestConfigur
         this.name = name;
     }
 
+    @BeforeEach
     public void setUp() throws Exception {
 
         FileUtils.deleteDirectory(getOutputDirectory());
