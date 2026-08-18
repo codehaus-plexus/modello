@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.codehaus.plexus</groupId>
     <artifactId>plexus</artifactId>
-    <version>26</version>
+    <version>27</version>
   </parent>
 
   <groupId>org.codehaus.modello</groupId>
@@ -187,8 +187,6 @@
     <slf4j.version>1.7.36</slf4j.version>
     <sisu.version>1.1.0</sisu.version>
     <mavenVersion>3.6.3</mavenVersion>
-    <!-- declared here rather than inherited, so the build does not depend on what the parent calls it -->
-    <version.maven-plugin-tools>3.15.2</version.maven-plugin-tools>
     <junit4Version>4.13.2</junit4Version>
     <!--
       ! This controls the minimum java version
