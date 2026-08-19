@@ -73,18 +73,14 @@
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>          modello.generate(model, <span class="jxr_string">"jackson-writer"</span>, parameters);
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>          modello.generate(model, <span class="jxr_string">"jackson-reader"</span>, parameters);
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>          addDependency(<span class="jxr_string">"com.fasterxml.jackson.core"</span>, <span class="jxr_string">"jackson-core"</span>);
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>          addDependency(<span class="jxr_string">"com.fasterxml.jackson.core"</span>, <span class="jxr_string">"jackson-databind"</span>);
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>          <em class="jxr_comment">// looks like jackson-databind requires jackson-annotations to run...</em>
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>          addDependency(<span class="jxr_string">"com.fasterxml.jackson.core"</span>, <span class="jxr_string">"jackson-annotations"</span>);
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>          compileGeneratedSources(8);
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>          <em class="jxr_comment">// TODO: see why without this, version system property is set to "2.4.1" value after verify</em>
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>          System.setProperty(<span class="jxr_string">"version"</span>, getModelloVersion());
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>          verifyCompiledGeneratedSources(<span class="jxr_string">"org.codehaus.modello.generator.jackson.JacksonVerifier"</span>);
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>      }
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  }
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>          compileGeneratedSources(8);
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>          <em class="jxr_comment">// TODO: see why without this, version system property is set to "2.4.1" value after verify</em>
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>          System.setProperty(<span class="jxr_string">"version"</span>, getModelloVersion());
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>          verifyCompiledGeneratedSources(<span class="jxr_string">"org.codehaus.modello.generator.jackson.JacksonVerifier"</span>);
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>      }
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  }
 </pre>
 <hr/>
 <div id="footer">© 2001–2026 <a href="https://codehaus-plexus.github.io/">Codehaus Plexus</a></div>

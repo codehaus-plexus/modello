@@ -1,23 +1,24 @@
+--no-fonts
 --class-path
-'/Users/slawomir.jaranowski/repos/plexus/modello/target/checkout/modello-maven-plugin/target/it/features/target/classes:/Users/slawomir.jaranowski/repos/plexus/modello/target/checkout/modello-maven-plugin/target/local-repo/org/codehaus/plexus/plexus-utils/3.6.1/plexus-utils-3.6.1.jar:/Users/slawomir.jaranowski/repos/plexus/modello/target/checkout/modello-maven-plugin/target/local-repo/org/codehaus/woodstox/stax2-api/4.2/stax2-api-4.2.jar:/Users/slawomir.jaranowski/repos/plexus/modello/target/checkout/modello-maven-plugin/target/local-repo/com/fasterxml/woodstox/woodstox-core/6.4.0/woodstox-core-6.4.0.jar:/Users/slawomir.jaranowski/repos/plexus/modello/target/checkout/modello-maven-plugin/target/local-repo/org/dom4j/dom4j/2.1.3/dom4j-2.1.3.jar:/Users/slawomir.jaranowski/repos/plexus/modello/target/checkout/modello-maven-plugin/target/local-repo/org/jdom/jdom/2.0.2/jdom-2.0.2.jar'
+'/private/tmp/claude-501/-Users-slachiewicz-mvn5-plexus/6383627f-c901-402e-ac62-a744fa26a596/scratchpad/mod-2.8.0/modello-maven-plugin/target/it/features/target/classes:/private/tmp/claude-501/-Users-slachiewicz-mvn5-plexus/6383627f-c901-402e-ac62-a744fa26a596/scratchpad/mod-2.8.0/modello-maven-plugin/target/local-repo/org/codehaus/plexus/plexus-utils/3.6.1/plexus-utils-3.6.1.jar:/private/tmp/claude-501/-Users-slachiewicz-mvn5-plexus/6383627f-c901-402e-ac62-a744fa26a596/scratchpad/mod-2.8.0/modello-maven-plugin/target/local-repo/org/codehaus/woodstox/stax2-api/4.2/stax2-api-4.2.jar:/private/tmp/claude-501/-Users-slachiewicz-mvn5-plexus/6383627f-c901-402e-ac62-a744fa26a596/scratchpad/mod-2.8.0/modello-maven-plugin/target/local-repo/com/fasterxml/woodstox/woodstox-core/6.4.0/woodstox-core-6.4.0.jar:/private/tmp/claude-501/-Users-slachiewicz-mvn5-plexus/6383627f-c901-402e-ac62-a744fa26a596/scratchpad/mod-2.8.0/modello-maven-plugin/target/local-repo/org/dom4j/dom4j/2.1.3/dom4j-2.1.3.jar:/private/tmp/claude-501/-Users-slachiewicz-mvn5-plexus/6383627f-c901-402e-ac62-a744fa26a596/scratchpad/mod-2.8.0/modello-maven-plugin/target/local-repo/org/jdom/jdom/2.0.2/jdom-2.0.2.jar'
 -encoding
 'UTF-8'
 -private
 -sourcepath
-'/Users/slawomir.jaranowski/repos/plexus/modello/target/checkout/modello-maven-plugin/target/it/features/src/main/java:/Users/slawomir.jaranowski/repos/plexus/modello/target/checkout/modello-maven-plugin/target/it/features/target/generated-sources/modello:/Users/slawomir.jaranowski/repos/plexus/modello/target/checkout/modello-maven-plugin/target/it/features/target/generated-sources/annotations'
+'/private/tmp/claude-501/-Users-slachiewicz-mvn5-plexus/6383627f-c901-402e-ac62-a744fa26a596/scratchpad/mod-2.8.0/modello-maven-plugin/target/it/features/src/main/java:/private/tmp/claude-501/-Users-slachiewicz-mvn5-plexus/6383627f-c901-402e-ac62-a744fa26a596/scratchpad/mod-2.8.0/modello-maven-plugin/target/it/features/target/generated-sources/modello:/private/tmp/claude-501/-Users-slachiewicz-mvn5-plexus/6383627f-c901-402e-ac62-a744fa26a596/scratchpad/mod-2.8.0/modello-maven-plugin/target/it/features/target/generated-sources/annotations'
 -author
 -bottom
 'Copyright &#169; 2026. All rights reserved.'
 -charset
 'UTF-8'
 -d
-'/Users/slawomir.jaranowski/repos/plexus/modello/target/checkout/modello-maven-plugin/target/it/features/target/site/apidocs'
+'/private/tmp/claude-501/-Users-slachiewicz-mvn5-plexus/6383627f-c901-402e-ac62-a744fa26a596/scratchpad/mod-2.8.0/modello-maven-plugin/target/it/features/target/site/apidocs'
 -docencoding
 'UTF-8'
 -doctitle
-'Full features IT 0.1-SNAPSHOT API'
+'Full features IT 2.8.0 API'
 -linksource
 -use
 -version
 -windowtitle
-'Full features IT 0.1-SNAPSHOT API'
+'Full features IT 2.8.0 API'

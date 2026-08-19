@@ -1,7 +1,6 @@
 ## jQuery UI v1.14.1
 
 ### jQuery UI License
-
 ```
 Copyright OpenJS Foundation and other contributors, https://openjsf.org/
 
@@ -48,4 +47,3 @@ own licenses; we recommend you read them, as their terms may differ from
 the terms above.
 
 ```
-

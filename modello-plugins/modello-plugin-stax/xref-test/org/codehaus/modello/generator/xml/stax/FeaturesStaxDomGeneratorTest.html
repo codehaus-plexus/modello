@@ -63,18 +63,14 @@
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>          modello.generate(model, <span class="jxr_string">"stax-writer"</span>, parameters);
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>          modello.generate(model, <span class="jxr_string">"stax-reader"</span>, parameters);
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>          addDependency(<span class="jxr_string">"org.codehaus.woodstox"</span>, <span class="jxr_string">"stax2-api"</span>);
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>          addDependency(<span class="jxr_string">"com.fasterxml.woodstox"</span>, <span class="jxr_string">"woodstox-core"</span>);
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>          addDependency(<span class="jxr_string">"org.xmlunit"</span>, <span class="jxr_string">"xmlunit-core"</span>);
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>          compileGeneratedSources(8);
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>          <em class="jxr_comment">// TODO: see why without this, version system property is set to "2.4.1" value after verify</em>
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>          System.setProperty(<span class="jxr_string">"version"</span>, getModelloVersion());
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>          verifyCompiledGeneratedSources(<span class="jxr_string">"org.codehaus.modello.generator.xml.stax.StaxFeaturesVerifier"</span>);
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>      }
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  }
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>          compileGeneratedSources(8);
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>          <em class="jxr_comment">// TODO: see why without this, version system property is set to "2.4.1" value after verify</em>
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>          System.setProperty(<span class="jxr_string">"version"</span>, getModelloVersion());
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>          verifyCompiledGeneratedSources(<span class="jxr_string">"org.codehaus.modello.generator.xml.stax.StaxFeaturesDomVerifier"</span>);
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>      }
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  }
 </pre>
 <hr/>
 <div id="footer">© 2001–2026 <a href="https://codehaus-plexus.github.io/">Codehaus Plexus</a></div>
