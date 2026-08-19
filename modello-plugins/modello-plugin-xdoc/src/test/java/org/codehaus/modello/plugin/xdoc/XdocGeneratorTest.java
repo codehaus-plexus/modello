@@ -130,10 +130,6 @@ public class XdocGeneratorTest extends AbstractModelloGeneratorTest {
         Map<String, Object> parameters = getModelloParameters("4.0.0");
 
         modello.generate(model, "xdoc", parameters);
-
-        // addDependency( "modello", "modello-core", "1.0-SNAPSHOT" );
-
-        // verify( "org.codehaus.modello.generator.xml.cdoc.XdocVerifier", "xdoc" );
         checkInternalLinks("maven.xml");
 
         String content = FileUtils.fileRead(new File(getOutputDirectory(), "maven.xml"), "UTF-8");

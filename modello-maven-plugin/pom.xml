@@ -18,6 +18,12 @@
     <maven>${mavenVersion}</maven>
   </prerequisites>
 
+  <properties>
+    <!-- the features site checked and copied by the reporting profile is produced by the run-its profile,
+         so only enforce its presence when the integration tests were actually requested -->
+    <verifyFeaturesSite>false</verifyFeaturesSite>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>org.codehaus.modello</groupId>
@@ -172,6 +178,9 @@
   <profiles>
     <profile>
       <id>run-its</id>
+      <properties>
+        <verifyFeaturesSite>true</verifyFeaturesSite>
+      </properties>
       <build>
         <plugins>
           <plugin>
@@ -221,13 +230,15 @@
             <executions>
               <execution>
                 <id>features</id>
-                <!-- check that run-its profile has generated features site -->
+                <!-- check that the run-its profile has generated the features site, but fail only when
+                     run-its is active: a site build that did not ask for the ITs must not fail here -->
                 <goals>
                   <goal>verify</goal>
                 </goals>
                 <phase>pre-site</phase>
                 <configuration>
                   <verificationFile>${basedir}/src/test/verifier/site-verifications.xml</verificationFile>
+                  <failOnError>${verifyFeaturesSite}</failOnError>
                 </configuration>
               </execution>
             </executions>

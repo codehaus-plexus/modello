@@ -2,7 +2,7 @@
                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                xsi:schemaLocation="http://maven.apache.org/verifications/1.0.0 http://maven.apache.org/xsd/verifications-1.0.0.xsd">
   <files>
-    <file><!-- should be available, require mvn run with -Prun-its -->
+    <file><!-- produced by the run-its profile; enforced only when run-its is active, see verifyFeaturesSite -->
       <location>target/it/features/target/site/index.html</location>
     </file>
   </files>

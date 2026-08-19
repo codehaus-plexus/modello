@@ -67,9 +67,6 @@ public class JacksonGeneratorTest extends AbstractModelloJavaGeneratorTest {
 
         compileGeneratedSources(8);
 
-        // TODO: see why without this, version system property is set to "2.4.1" value after verify
-        System.setProperty("version", getModelloVersion());
-
         verifyCompiledGeneratedSources("org.codehaus.modello.generator.jackson.JacksonVerifier");
     }
 }

@@ -53,11 +53,6 @@ public class ChangesXsdGeneratorTest extends AbstractModelloGeneratorTest {
 
         modello.generate(model, "xsd", parameters);
 
-        // addDependency( "modello", "modello-core", "1.0-SNAPSHOT" );
-
         // TODO write verifier that compiles generated schema: use jaxp
-
-        // verify( "org.codehaus.modello.generator.xml.xsd.XsdVerifier", "xsd" );
-
     }
 }
