@@ -23,7 +23,6 @@ Modello is a build-time tool, so it goes in `<build><plugins>` rather than in yo
 <plugin>
   <groupId>org.codehaus.modello</groupId>
   <artifactId>modello-maven-plugin</artifactId>
-  <version>2.7.0</version>
   <configuration>
     <version>1.0.0</version>
     <models>
