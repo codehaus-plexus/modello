@@ -31,7 +31,6 @@ import javax.tools.ToolProvider;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -45,7 +44,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Properties;
 import java.util.jar.Attributes;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
@@ -95,21 +93,6 @@ public abstract class AbstractModelloJavaGeneratorTest extends AbstractModelloGe
 
     protected File getOutputClasses() {
         return new File(super.getOutputDirectory(), "classes");
-    }
-
-    protected String getModelloVersion() throws IOException {
-        Properties properties = new Properties(System.getProperties());
-
-        if (properties.getProperty("version") == null) {
-            InputStream is = this.getClass()
-                    .getResourceAsStream("/META-INF/maven/org.codehaus.modello/modello-test/pom.properties");
-
-            if (is != null) {
-                properties.load(is);
-            }
-        }
-
-        return properties.getProperty("version");
     }
 
     protected void compileGeneratedSources() throws IOException {

@@ -55,9 +55,5 @@ public class AbstractElementTest extends AbstractModelloJavaGeneratorTest {
         modello.generate(model, "java", parameters);
         modello.generate(model, "xpp3-writer", parameters);
         modello.generate(model, "xpp3-reader", parameters);
-
-        // addDependency( "org.codehaus.modello", "modello-core", getModelloVersion() );
-
-        // compile( generatedSources, classes );
     }
 }

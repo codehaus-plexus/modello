@@ -226,10 +226,6 @@ public class Dom4jVerifier
         String actualXml = buffer.toString();
         actualXml = actualXml.replaceAll( "(\r\n)|(\r)", "\n" );
 
-//        System.out.println( expectedXml );
-//
-//        System.err.println( actualXml );
-
         Assertions.assertEquals( expectedXml.trim(), actualXml.trim() );
 
         MavenDom4jReader reader = new MavenDom4jReader();

@@ -240,10 +240,6 @@ public class StaxVerifier
 
         String actualXml = buffer.toString();
 
-//      System.out.println( expectedXml );
-//
-//        System.out.println( actualXml );
-
         Assertions.assertEquals( cleanLineEndings( expectedXml.trim() ), scrubXmlDeclQuotes( actualXml.trim() ) );
 
         MavenStaxReader reader = new MavenStaxReader();
