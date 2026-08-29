@@ -1,5 +1,7 @@
 package org.codehaus.modello.maven;
 
+import javax.inject.Inject;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -7,17 +9,31 @@ import java.util.Properties;
 import org.apache.maven.model.Model;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.modello.ModelloParameterConstants;
+import org.codehaus.modello.core.ModelloCore;
+import org.codehaus.plexus.ContainerConfiguration;
+import org.codehaus.plexus.build.BuildContext;
+import org.codehaus.plexus.testing.PlexusTest;
+import org.codehaus.plexus.testing.PlexusTestConfiguration;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class AbstractModelloSourceGeneratorMojoTest {
+@PlexusTest
+public class AbstractModelloSourceGeneratorMojoTest implements PlexusTestConfiguration {
 
-    private class ModelloSourceGeneratorMojoTest extends AbstractModelloSourceGeneratorMojo {
+    @Inject
+    private BuildContext buildContext;
+
+    @Inject
+    private ModelloCore modelloCore;
+
+    private static class ModelloSourceGeneratorMojoTest extends AbstractModelloSourceGeneratorMojo {
 
         private final Properties projectProperties;
 
-        ModelloSourceGeneratorMojoTest(Properties projectProperties) {
+        ModelloSourceGeneratorMojoTest(
+                BuildContext buildContext, ModelloCore modelloCore, Properties projectProperties) {
+            super(buildContext, modelloCore);
             this.projectProperties = projectProperties;
         }
 
@@ -36,9 +52,14 @@ public class AbstractModelloSourceGeneratorMojoTest {
         }
     }
 
+    @Override
+    public void customizeConfiguration(ContainerConfiguration containerConfiguration) {
+        containerConfiguration.setClassPathScanning("cache");
+    }
+
     private void executeJavaSourceTest(Properties projectProperties, String expexted) {
         ModelloSourceGeneratorMojoTest modelloSourceGeneratorMojoTest =
-                new ModelloSourceGeneratorMojoTest(projectProperties);
+                new ModelloSourceGeneratorMojoTest(buildContext, modelloCore, projectProperties);
         Map<String, Object> properties = new HashMap<>();
 
         modelloSourceGeneratorMojoTest.customizeParameters(properties);

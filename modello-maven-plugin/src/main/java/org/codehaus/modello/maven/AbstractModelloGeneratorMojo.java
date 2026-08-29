@@ -32,12 +32,12 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.modello.ModelloException;
@@ -81,12 +81,6 @@ public abstract class AbstractModelloGeneratorMojo extends AbstractMojo {
     private boolean packageWithVersion;
 
     /**
-     * <p>Note: This is passed by Maven and must not be configured by the user.</p>
-     */
-    @Component
-    private ModelloCore modelloCore;
-
-    /**
      * The Maven project instance for the executing project.
      */
     @Parameter(defaultValue = "${project}", readonly = true, required = true)
@@ -128,11 +122,14 @@ public abstract class AbstractModelloGeneratorMojo extends AbstractMojo {
     @Parameter
     private Map<String, String> pluralExceptions;
 
-    /**
-     * @since 1.0.1
-     */
-    @Component
-    private BuildContext buildContext;
+    private final BuildContext buildContext;
+
+    private final ModelloCore modelloCore;
+
+    protected AbstractModelloGeneratorMojo(BuildContext buildContext, ModelloCore modelloCore) {
+        this.buildContext = Objects.requireNonNull(buildContext, "buildContext cannot be null");
+        this.modelloCore = Objects.requireNonNull(modelloCore, "modelloCore cannot be null");
+    }
 
     // ----------------------------------------------------------------------
     // Overridables
@@ -364,18 +361,6 @@ public abstract class AbstractModelloGeneratorMojo extends AbstractMojo {
 
     public void setPackageWithVersion(boolean packageWithVersion) {
         this.packageWithVersion = packageWithVersion;
-    }
-
-    public ModelloCore getModelloCore() {
-        return modelloCore;
-    }
-
-    public void setModelloCore(ModelloCore modelloCore) {
-        this.modelloCore = modelloCore;
-    }
-
-    public void setBuildContext(BuildContext context) {
-        this.buildContext = context;
     }
 
     public MavenProject getProject() {

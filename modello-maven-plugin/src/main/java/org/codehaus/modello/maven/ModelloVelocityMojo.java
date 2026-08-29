@@ -19,6 +19,8 @@ package org.codehaus.modello.maven;
  * under the License.
  */
 
+import javax.inject.Inject;
+
 import java.io.File;
 import java.util.Collections;
 import java.util.List;
@@ -28,7 +30,9 @@ import java.util.stream.Collectors;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
+import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.plugin.velocity.VelocityGenerator;
+import org.codehaus.plexus.build.BuildContext;
 
 /**
  * Creates files from the model using Velocity templates.
@@ -79,6 +83,11 @@ public class ModelloVelocityMojo extends AbstractModelloGeneratorMojo {
      */
     @Parameter
     private List<String> params;
+
+    @Inject
+    public ModelloVelocityMojo(BuildContext buildContext, ModelloCore modelloCore) {
+        super(buildContext, modelloCore);
+    }
 
     protected String getGeneratorType() {
         return "velocity";

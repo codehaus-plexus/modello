@@ -22,14 +22,18 @@ package org.codehaus.modello.maven;
  * SOFTWARE.
  */
 
+import javax.inject.Inject;
+
 import java.util.Map;
+import java.util.Objects;
 
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
+import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.plugin.ModelloGenerator;
+import org.codehaus.plexus.build.BuildContext;
 
 /**
  * <p>
@@ -85,11 +89,17 @@ import org.codehaus.modello.plugin.ModelloGenerator;
  */
 @Mojo(name = "generate", defaultPhase = LifecyclePhase.GENERATE_SOURCES, threadSafe = true)
 public class ModelloGenerateMojo extends AbstractModelloSourceGeneratorMojo {
-    @Component(role = ModelloGenerator.class)
-    private Map<String, ModelloGenerator> generatorMap;
+    private final Map<String, ModelloGenerator> generatorMap;
 
     @Parameter(property = "modello.generator.id", defaultValue = "java")
     private String generatorId;
+
+    @Inject
+    public ModelloGenerateMojo(
+            BuildContext buildContext, ModelloCore modelloCore, Map<String, ModelloGenerator> generatorMap) {
+        super(buildContext, modelloCore);
+        this.generatorMap = Objects.requireNonNull(generatorMap, "generatorMap cannot be null");
+    }
 
     protected String getGeneratorType() {
         return generatorId;

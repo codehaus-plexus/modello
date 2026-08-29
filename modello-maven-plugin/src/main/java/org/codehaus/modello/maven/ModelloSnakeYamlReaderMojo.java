@@ -22,8 +22,12 @@ package org.codehaus.modello.maven;
  * SOFTWARE.
  */
 
+import javax.inject.Inject;
+
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
+import org.codehaus.modello.core.ModelloCore;
+import org.codehaus.plexus.build.BuildContext;
 
 /**
  * Creates an SnakeYaml reader from the model.
@@ -33,6 +37,12 @@ import org.apache.maven.plugins.annotations.Mojo;
  */
 @Mojo(name = "snakeyaml-reader", defaultPhase = LifecyclePhase.GENERATE_SOURCES, threadSafe = true)
 public class ModelloSnakeYamlReaderMojo extends AbstractModelloSourceGeneratorMojo {
+
+    @Inject
+    public ModelloSnakeYamlReaderMojo(BuildContext buildContext, ModelloCore modelloCore) {
+        super(buildContext, modelloCore);
+    }
+
     protected String getGeneratorType() {
         return "snakeyaml-reader";
     }

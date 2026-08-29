@@ -60,7 +60,7 @@ public class ModelloConvertersMojoTest implements PlexusTestConfiguration {
 
     @Test
     public void testModelloConvertersMojo() throws Exception {
-        ModelloConvertersMojo mojo = new ModelloConvertersMojo();
+        ModelloConvertersMojo mojo = new ModelloConvertersMojo(buildContext, modelloCore);
 
         File outputDirectory = getTestFile("target/converters-test");
 
@@ -81,10 +81,6 @@ public class ModelloConvertersMojoTest implements PlexusTestConfiguration {
         mojo.setPackageWithVersion(false);
 
         mojo.setPackagedVersions(Arrays.asList(new String[] {"0.9.0", "1.0.0"}));
-
-        mojo.setModelloCore(modelloCore);
-
-        mojo.setBuildContext(buildContext);
 
         mojo.setProject(new MavenProject());
 

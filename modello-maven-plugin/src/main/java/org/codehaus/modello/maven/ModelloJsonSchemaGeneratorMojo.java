@@ -22,6 +22,8 @@ package org.codehaus.modello.maven;
  * SOFTWARE.
  */
 
+import javax.inject.Inject;
+
 import java.io.File;
 import java.util.Map;
 
@@ -29,6 +31,8 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.codehaus.modello.ModelloParameterConstants;
+import org.codehaus.modello.core.ModelloCore;
+import org.codehaus.plexus.build.BuildContext;
 
 /**
  * Creates a JSON Schema from the model.
@@ -48,6 +52,11 @@ public final class ModelloJsonSchemaGeneratorMojo extends AbstractModelloGenerat
 
     @Parameter
     private String jsonSchemaFileName;
+
+    @Inject
+    public ModelloJsonSchemaGeneratorMojo(BuildContext buildContext, ModelloCore modelloCore) {
+        super(buildContext, modelloCore);
+    }
 
     @Override
     protected void customizeParameters(Map<String, Object> parameters) {
