@@ -22,12 +22,16 @@ package org.codehaus.modello.maven;
  * SOFTWARE.
  */
 
+import javax.inject.Inject;
+
 import java.util.Map;
 
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.codehaus.modello.ModelloParameterConstants;
+import org.codehaus.modello.core.ModelloCore;
+import org.codehaus.plexus.build.BuildContext;
 
 /**
  * Creates an XPP3 extended writer from the model. An extended writer renders the content with comments about the
@@ -43,6 +47,11 @@ public class ModelloXpp3ExtendedWriterMojo extends ModelloXpp3WriterMojo {
      */
     @Parameter(defaultValue = "Ex")
     private String extendedClassnameSuffix;
+
+    @Inject
+    public ModelloXpp3ExtendedWriterMojo(BuildContext buildContext, ModelloCore modelloCore) {
+        super(buildContext, modelloCore);
+    }
 
     @Override
     protected String getGeneratorType() {

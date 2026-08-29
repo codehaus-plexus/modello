@@ -22,11 +22,15 @@ package org.codehaus.modello.maven;
  * SOFTWARE.
  */
 
+import javax.inject.Inject;
+
 import java.util.Map;
 
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.codehaus.modello.ModelloParameterConstants;
+import org.codehaus.modello.core.ModelloCore;
+import org.codehaus.plexus.build.BuildContext;
 
 /**
  * Creates an Jackson writer from the model.
@@ -36,6 +40,12 @@ import org.codehaus.modello.ModelloParameterConstants;
  */
 @Mojo(name = "jackson-writer", defaultPhase = LifecyclePhase.GENERATE_SOURCES, threadSafe = true)
 public class ModelloJacksonWriterMojo extends AbstractModelloSourceGeneratorMojo {
+
+    @Inject
+    public ModelloJacksonWriterMojo(BuildContext buildContext, ModelloCore modelloCore) {
+        super(buildContext, modelloCore);
+    }
+
     protected String getGeneratorType() {
         return "jackson-writer";
     }

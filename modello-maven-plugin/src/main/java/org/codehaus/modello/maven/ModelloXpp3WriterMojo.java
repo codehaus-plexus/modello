@@ -22,8 +22,12 @@ package org.codehaus.modello.maven;
  * SOFTWARE.
  */
 
+import javax.inject.Inject;
+
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
+import org.codehaus.modello.core.ModelloCore;
+import org.codehaus.plexus.build.BuildContext;
 
 /**
  * Creates an XPP3 writer from the model.
@@ -32,6 +36,12 @@ import org.apache.maven.plugins.annotations.Mojo;
  */
 @Mojo(name = "xpp3-writer", defaultPhase = LifecyclePhase.GENERATE_SOURCES, threadSafe = true)
 public class ModelloXpp3WriterMojo extends AbstractModelloSourceGeneratorMojo {
+
+    @Inject
+    public ModelloXpp3WriterMojo(BuildContext buildContext, ModelloCore modelloCore) {
+        super(buildContext, modelloCore);
+    }
+
     protected String getGeneratorType() {
         return "xpp3-writer";
     }

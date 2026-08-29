@@ -22,8 +22,12 @@ package org.codehaus.modello.maven;
  * SOFTWARE.
  */
 
+import javax.inject.Inject;
+
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
+import org.codehaus.modello.core.ModelloCore;
+import org.codehaus.plexus.build.BuildContext;
 
 /**
  * Creates an Snake Yaml extended reader from the model. An extended reader populates the parsed model with metadata about
@@ -34,6 +38,11 @@ import org.apache.maven.plugins.annotations.Mojo;
  */
 @Mojo(name = "snakeyaml-extended-reader", defaultPhase = LifecyclePhase.GENERATE_SOURCES, threadSafe = true)
 public class ModelloSnakeYamlExtendedReaderMojo extends ModelloXpp3ReaderMojo {
+
+    @Inject
+    public ModelloSnakeYamlExtendedReaderMojo(BuildContext buildContext, ModelloCore modelloCore) {
+        super(buildContext, modelloCore);
+    }
 
     @Override
     protected String getGeneratorType() {

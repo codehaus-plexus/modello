@@ -55,7 +55,7 @@ public class ModelloJavaMojoTest implements PlexusTestConfiguration {
     @Test
     public void testModelloJavaMojo() throws Exception {
 
-        ModelloJavaMojo mojo = new ModelloJavaMojo();
+        ModelloJavaMojo mojo = new ModelloJavaMojo(buildContext, modelloCore);
 
         File outputDirectory = getTestFile("target/java-test");
 
@@ -77,9 +77,6 @@ public class ModelloJavaMojoTest implements PlexusTestConfiguration {
 
         mojo.setPackagedVersions(Arrays.asList(new String[] {"0.9.0", "1.0.0"}));
 
-        mojo.setModelloCore(modelloCore);
-
-        mojo.setBuildContext(buildContext);
         mojo.setProject(new MavenProject());
 
         mojo.execute();

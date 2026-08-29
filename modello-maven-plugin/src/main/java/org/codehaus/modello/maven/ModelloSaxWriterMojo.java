@@ -22,8 +22,12 @@ package org.codehaus.modello.maven;
  * SOFTWARE.
  */
 
+import javax.inject.Inject;
+
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
+import org.codehaus.modello.core.ModelloCore;
+import org.codehaus.plexus.build.BuildContext;
 
 /**
  * Creates a SAX writer from the model.
@@ -33,6 +37,12 @@ import org.apache.maven.plugins.annotations.Mojo;
  */
 @Mojo(name = "sax-writer", defaultPhase = LifecyclePhase.GENERATE_SOURCES, threadSafe = true)
 public class ModelloSaxWriterMojo extends AbstractModelloSourceGeneratorMojo {
+
+    @Inject
+    public ModelloSaxWriterMojo(BuildContext buildContext, ModelloCore modelloCore) {
+        super(buildContext, modelloCore);
+    }
+
     protected String getGeneratorType() {
         return "sax-writer";
     }

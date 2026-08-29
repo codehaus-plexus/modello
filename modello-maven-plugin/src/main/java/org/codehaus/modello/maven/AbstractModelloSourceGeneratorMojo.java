@@ -22,6 +22,8 @@ package org.codehaus.modello.maven;
  * SOFTWARE.
  */
 
+import javax.inject.Inject;
+
 import java.io.File;
 import java.util.Map;
 import java.util.Optional;
@@ -31,6 +33,8 @@ import java.util.stream.Stream;
 
 import org.apache.maven.plugins.annotations.Parameter;
 import org.codehaus.modello.ModelloParameterConstants;
+import org.codehaus.modello.core.ModelloCore;
+import org.codehaus.plexus.build.BuildContext;
 
 /**
  * @author Hervé Boutemy
@@ -73,6 +77,11 @@ public abstract class AbstractModelloSourceGeneratorMojo extends AbstractModello
      */
     @Parameter(defaultValue = "true")
     private boolean domAsXpp3;
+
+    @Inject
+    public AbstractModelloSourceGeneratorMojo(BuildContext buildContext, ModelloCore modelloCore) {
+        super(buildContext, modelloCore);
+    }
 
     @Override
     protected boolean producesCompilableResult() {
