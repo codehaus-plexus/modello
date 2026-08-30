@@ -1,1 +1,0 @@
-/Users/slachiewicz/.sdkman/candidates/java/25.0.4-zulu/bin/javadoc -J-Duser.language= -J-Duser.country= @options @packages
