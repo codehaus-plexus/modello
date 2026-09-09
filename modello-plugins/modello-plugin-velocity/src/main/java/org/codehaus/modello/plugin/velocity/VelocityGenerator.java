@@ -43,12 +43,6 @@ import org.codehaus.plexus.util.io.CachingWriter;
 
 @Named("velocity")
 public class VelocityGenerator extends AbstractModelloGenerator {
-    public static final String VELOCITY_BASEDIR = "modello.velocity.basedir";
-
-    public static final String VELOCITY_TEMPLATES = "modello.velocity.templates";
-
-    public static final String VELOCITY_PARAMETERS = "modello.velocity.parameters";
-
     public static final String MODELLO_VELOCITY_OUTPUT = "#MODELLO-VELOCITY#SAVE-OUTPUT-TO ";
 
     @Override
@@ -56,13 +50,15 @@ public class VelocityGenerator extends AbstractModelloGenerator {
     public void generate(Model model, Map<String, Object> parameters) throws ModelloException {
         initialize(model, parameters);
         try {
-            Map<String, String> params =
-                    (Map<String, String>) Objects.requireNonNull(parameters.get(VELOCITY_PARAMETERS));
-            String templates = requireParameter(parameters, VELOCITY_TEMPLATES);
+            Map<String, String> params = (Map<String, String>)
+                    Objects.requireNonNull(parameters.get(ModelloParameterConstants.VELOCITY_PARAMETERS));
+            String templates = requireParameter(parameters, ModelloParameterConstants.VELOCITY_TEMPLATES);
             String output = requireParameter(parameters, ModelloParameterConstants.OUTPUT_DIRECTORY);
 
             Properties props = new Properties();
-            props.put("resource.loader.file.path", requireParameter(parameters, VELOCITY_BASEDIR));
+            props.put(
+                    "resource.loader.file.path",
+                    requireParameter(parameters, ModelloParameterConstants.VELOCITY_BASEDIR));
             RuntimeInstance velocity = new RuntimeInstance();
             velocity.init(props);
 

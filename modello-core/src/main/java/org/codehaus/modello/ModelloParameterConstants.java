@@ -93,5 +93,25 @@ public class ModelloParameterConstants {
      */
     public static final String PLURAL_EXCEPTIONS = "modello.plural.exceptions";
 
+    /**
+     * @since 2.9
+     */
+    public static final String VELOCITY_BASEDIR = "modello.velocity.basedir";
+
+    /**
+     * @since 2.9
+     */
+    public static final String VELOCITY_TEMPLATES = "modello.velocity.templates";
+
+    /**
+     * @since 2.9
+     */
+    public static final String VELOCITY_PARAMETERS = "modello.velocity.parameters";
+
+    /**
+     * @since 2.9
+     */
+    public static final String GENERATOR_ID = "modello.generator.id";
+
     private ModelloParameterConstants() {}
 }
