@@ -27,6 +27,7 @@ import javax.inject.Inject;
 import java.util.Map;
 
 import org.codehaus.modello.AbstractModelloJavaGeneratorTest;
+import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
 import org.codehaus.plexus.testing.PlexusTest;
@@ -50,7 +51,7 @@ public class FeaturesXpp3DomGeneratorTest extends AbstractModelloJavaGeneratorTe
         Model model = modello.loadModel(getXmlResourceReader("/features.mdo"));
 
         Map<String, Object> parameters = getModelloParameters("1.0.0");
-        parameters.put("modello.dom.xpp3", "false");
+        parameters.put(ModelloParameterConstants.DOM_AS_XPP3, "false");
 
         modello.generate(model, "java", parameters);
         modello.generate(model, "xpp3-writer", parameters);
