@@ -30,8 +30,8 @@ import java.util.stream.Collectors;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
+import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
-import org.codehaus.modello.plugin.velocity.VelocityGenerator;
 import org.codehaus.plexus.build.BuildContext;
 
 /**
@@ -103,10 +103,11 @@ public class ModelloVelocityMojo extends AbstractModelloGeneratorMojo {
                         .collect(Collectors.toMap(
                                 s -> s.substring(0, s.indexOf('=')), s -> s.substring(s.indexOf('=') + 1)));
 
-        parameters.put(VelocityGenerator.VELOCITY_BASEDIR, velocityBasedir.getAbsolutePath());
+        parameters.put(ModelloParameterConstants.VELOCITY_BASEDIR, velocityBasedir.getAbsolutePath());
 
-        parameters.put(VelocityGenerator.VELOCITY_TEMPLATES, templates.stream().collect(Collectors.joining(",")));
-        parameters.put(VelocityGenerator.VELOCITY_PARAMETERS, params);
+        parameters.put(
+                ModelloParameterConstants.VELOCITY_TEMPLATES, templates.stream().collect(Collectors.joining(",")));
+        parameters.put(ModelloParameterConstants.VELOCITY_PARAMETERS, params);
     }
 
     protected boolean producesCompilableResult() {

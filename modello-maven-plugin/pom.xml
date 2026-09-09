@@ -141,7 +141,7 @@
     <dependency>
       <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-plugin-velocity</artifactId>
-      <!-- Directly used -->
+      <scope>runtime</scope>
     </dependency>
 
     <dependency>
