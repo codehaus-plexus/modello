@@ -31,6 +31,7 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
+import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.plugin.ModelloGenerator;
 import org.codehaus.plexus.build.BuildContext;
@@ -91,7 +92,7 @@ import org.codehaus.plexus.build.BuildContext;
 public class ModelloGenerateMojo extends AbstractModelloSourceGeneratorMojo {
     private final Map<String, ModelloGenerator> generatorMap;
 
-    @Parameter(property = "modello.generator.id", defaultValue = "java")
+    @Parameter(property = ModelloParameterConstants.GENERATOR_ID, defaultValue = "java")
     private String generatorId;
 
     @Inject
