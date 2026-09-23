@@ -278,10 +278,10 @@ public class ModelloTask extends Task {
                     ? velocityBasedir
                     : getProject() != null ? getProject().getBaseDir() : null;
             if (basedir != null) {
-                parameters.put("modello.velocity.basedir", basedir.getAbsolutePath());
+                parameters.put(ModelloParameterConstants.VELOCITY_BASEDIR, basedir.getAbsolutePath());
             }
-            parameters.put("modello.velocity.templates", String.join(",", templates));
-            parameters.put("modello.velocity.parameters", velocityParams);
+            parameters.put(ModelloParameterConstants.VELOCITY_TEMPLATES, String.join(",", templates));
+            parameters.put(ModelloParameterConstants.VELOCITY_PARAMETERS, velocityParams);
 
             for (File modelFile : models) {
                 if (!modelFile.isFile()) {
