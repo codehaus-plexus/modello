@@ -141,7 +141,7 @@
     <dependency>
       <groupId>org.codehaus.modello</groupId>
       <artifactId>modello-plugin-velocity</artifactId>
-      <!-- Directly used -->
+      <scope>runtime</scope>
     </dependency>
 
     <dependency>
@@ -165,6 +165,24 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <configuration>
+          <additionalDependencies>
+            <additionalDependency>
+              <groupId>org.codehaus.modello</groupId>
+              <artifactId>modello-plugin-velocity</artifactId>
+              <version>${project.version}</version>
+            </additionalDependency>
+          </additionalDependencies>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 
   <reporting>
     <plugins>
