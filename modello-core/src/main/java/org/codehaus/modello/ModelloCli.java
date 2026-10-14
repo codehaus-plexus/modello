@@ -136,7 +136,26 @@ public class ModelloCli {
         for (String type : outputType.split(",")) {
             type = type.trim();
             if (!type.isEmpty()) {
-                modello.generate(new XmlStreamReader(modelFile), type, parameters);
+                generate(modello, type);
+            }
+        }
+    }
+
+    // Mirrors AbstractModelloGeneratorMojo#doExecute: current version, then each packaged one in its own package
+    private static void generate(Modello modello, String type) throws Exception {
+        modello.generate(new XmlStreamReader(modelFile), type, parameters);
+
+        String allVersions = (String) parameters.get(ModelloParameterConstants.ALL_VERSIONS);
+        if (StringUtils.isEmpty(allVersions)) {
+            return;
+        }
+        Map<String, Object> versioned = new HashMap<>(parameters);
+        versioned.put(ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString(true));
+        for (String version : allVersions.split(",")) {
+            version = version.trim();
+            if (!version.isEmpty()) {
+                versioned.put(ModelloParameterConstants.VERSION, version);
+                modello.generate(new XmlStreamReader(modelFile), type, versioned);
             }
         }
     }
@@ -359,20 +378,25 @@ public class ModelloCli {
         System.err.println(
                 "  --generatorId, --generator-id <id>                   Output type(s), comma-separated (required)");
         System.err.println("  --dir, --outputDirectory, --output-directory <dir>   Output directory (required)");
-        System.err.println("  --version, --modelVersion, --model-version <ver>      Model version (required)");
         System.err.println(
-                "  --packageWithVersion, --package-with-version [<bool>] Package with version (default: false)");
+                "  --version, --modelVersion, --model-version <ver>      Model version to generate (required)");
+        System.err.println("  --packageWithVersion, --package-with-version [<bool>]");
+        System.err.println(
+                "                                                       Append version to package names, e.g. .v1_0_0 (default: false)");
         System.err.println("  --javaSource, --java-source, --source <level>        Java source level (default: 8)");
-        System.err.println("  --encoding <enc>                                     Output encoding");
         System.err.println(
-                "  --domAsXpp3, --dom-as-xpp3 [<bool>]                  Generate DOM as XPP3 (default: true)");
+                "  --encoding <enc>                                     Output encoding (default: platform charset)");
+        System.err.println(
+                "  --domAsXpp3, --dom-as-xpp3 [<bool>]                  Map DOM content to Xpp3Dom, not org.w3c.dom.Element (default: true)");
         System.err.println("  --packagedVersions, --packaged-versions,");
         System.err.println(
-                "  --allVersions, --all-versions <vers>                 Historical versions (comma-separated)");
+                "  --allVersions, --all-versions <vers>                 Additional historical versions (comma-separated), each");
+        System.err.println(
+                "                                                       generated into a versioned package regardless of --packageWithVersion");
         System.err.println("  --velocityBasedir, --velocity-basedir <dir>          Velocity templates base directory");
         System.err.println("  --templates, --velocityTemplates,");
         System.err.println(
-                "  --velocity-templates <files>                         Velocity template files (comma-separated)");
+                "  --velocity-templates <files>                         Velocity templates relative to base directory (comma-separated)");
         System.err.println("  --params, --velocityParameters,");
         System.err.println("  --velocity-parameters <p=v,...>                      Velocity parameters (key=val,...)");
         System.err.println("  --licenseText, --license-text <text>                 License header text");
@@ -380,16 +404,18 @@ public class ModelloCli {
         System.err.println("  --pluralExceptions, --plural-exceptions <p=s,...>     Plural to singular exceptions");
         System.err.println("  --enforceMandatoryElements,");
         System.err.println(
-                "  --enforce-mandatory-elements [<bool>]                Enforce mandatory XML elements in XSD");
+                "  --enforce-mandatory-elements [<bool>]                Enforce mandatory XML elements in XSD (default: false)");
         System.err.println("  --xsdFileName, --xsd-file-name <file>                XSD output file name");
         System.err.println("  --jsonSchemaFileName, --jsonschema-file-name,");
         System.err.println("  --json-schema-file-name <file>                       JSON schema output file name");
-        System.err.println("  --firstVersion, --first-version <ver>                First version for xdoc");
+        System.err.println(
+                "  --firstVersion, --first-version <ver>                First model version; xdoc shows 'since' column if older than --version");
         System.err.println("  --xdocFileName, --xdoc-file-name <file>              XDoc output file name");
         System.err.println("  --extendedClassnameSuffix,");
         System.err.println(
-                "  --extended-classname-suffix <suffix>                 Suffix for extended class name (e.g. Ex)");
-        System.err.println("  -D<key>=<value>                                      Arbitrary Modello property");
+                "  --extended-classname-suffix <suffix>                 Class name suffix of location-tracking xpp3 writer");
+        System.err.println(
+                "  -D<key>=<value>                                      Option name without '--', or raw parameter (also set as modello.<key>)");
         System.err.println("  -h, --help                                           Display this help message");
         System.err.println();
         System.err.println("Usage (legacy positional):");
