@@ -70,10 +70,8 @@ public class Xpp3WriterGenerator extends AbstractXpp3Generator {
     protected void initialize(Model model, Map<String, Object> parameters) throws ModelloException {
         super.initialize(model, parameters);
 
-        extendedClassnameSuffix = "Ex";
-        if (isLocationTracking()) {
-            extendedClassnameSuffix = (String) parameters.get(ModelloParameterConstants.EXTENDED_CLASSNAME_SUFFIX);
-        }
+        extendedClassnameSuffix =
+                (String) parameters.getOrDefault(ModelloParameterConstants.EXTENDED_CLASSNAME_SUFFIX, "Ex");
     }
 
     @Override
