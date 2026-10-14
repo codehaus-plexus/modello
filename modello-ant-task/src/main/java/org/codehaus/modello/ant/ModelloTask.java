@@ -250,15 +250,29 @@ public class ModelloTask extends Task {
             for (File modelFile : models) {
                 log("Generating sources for " + modelFile.getName());
                 for (String goal : goals) {
-                    try (XmlStreamReader reader = new XmlStreamReader(modelFile)) {
-                        modello.generate(reader, goal, parameters);
-                    }
+                    generate(modello, modelFile, goal, parameters);
                 }
             }
         } catch (BuildException e) {
             throw e;
         } catch (Exception e) {
             throw new BuildException("Modello generation failed: " + e.getMessage(), e);
+        }
+    }
+
+    // Mirrors AbstractModelloGeneratorMojo#doExecute: current version, then each packaged one in its own package
+    private void generate(Modello modello, File modelFile, String goal, Map<String, Object> parameters)
+            throws Exception {
+        try (XmlStreamReader reader = new XmlStreamReader(modelFile)) {
+            modello.generate(reader, goal, parameters);
+        }
+        Map<String, Object> versioned = new HashMap<>(parameters);
+        versioned.put(ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString(true));
+        for (String packagedVersion : packagedVersions) {
+            versioned.put(ModelloParameterConstants.VERSION, packagedVersion);
+            try (XmlStreamReader reader = new XmlStreamReader(modelFile)) {
+                modello.generate(reader, goal, versioned);
+            }
         }
     }
 
