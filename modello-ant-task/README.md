@@ -40,11 +40,11 @@ The `<modello>` task supports several attributes and nested elements to configur
 | **`javaSource`**               | `String`  | Target Java version for generated source code.                                        |    No    |    `8`    |
 | **`encoding`**                 | `String`  | Character encoding for generated files.                                               |    No    | `"utf-8"` |
 | **`packageWithVersion`**       | `boolean` | Whether to append the version to the package name (`"true"` / `"false"`).             |    No    |  `false`  |
-| **`packagedVersions`**         | `String`  | Comma-separated list of versions to generate backward compatibility for.              |    No    |     —     |
+| **`packagedVersions`**         | `String`  | Additional historical versions, each generated into a versioned package.              |    No    |     —     |
 | **`domAsXpp3`**                | `boolean` | Whether to generate DOM content as Xpp3Dom (`"true"`) or W3C DOM Element (`"false"`). |    No    |  `true`   |
 | **`licenseFile`**              | `File`    | Path to file containing license header text to prepend to generated files.            |    No    |     —     |
 | **`licenseText`**              | `String`  | License header text to prepend to generated files.                                    |    No    |     —     |
-| **`extendedClassnameSuffix`**  | `String`  | Suffix for extended class names (e.g., `Ex`).                                         |    No    |     —     |
+| **`extendedClassnameSuffix`**  | `String`  | Writer class name suffix for the `xpp3-extended-writer` goal.                         |    No    |   `Ex`    |
 | **`xsdFileName`**              | `String`  | Custom output file name for generated XSD schema (`xsd` goal).                        |    No    |     —     |
 | **`enforceMandatoryElements`** | `boolean` | Whether to enforce mandatory elements in XSD (`"true"` / `"false"`).                  |    No    |  `false`  |
 | **`jsonSchemaFileName`**       | `String`  | Custom output file name for generated JSON Schema (`jsonschema` goal).                |    No    |     —     |
@@ -74,7 +74,7 @@ Specifies the Modello generator target to run. At least one `<goal>` element is 
 
 #### `<packagedVersion>`
 
-Specifies an additional model version to package. Can be specified multiple times.
+Specifies an additional historical version, generated into a versioned package regardless of `packageWithVersion`. Can be specified multiple times.
 * **`name`** (`String`, Required): The version string (e.g., `1.0.0`).
 
 ```xml
@@ -123,7 +123,7 @@ Specifies custom velocity parameters passed to the generator context.
 
 #### `<property>`
 
-Passes arbitrary Modello parameters directly (equivalent to `-Dkey=value` on the CLI).
+Passes a raw Modello parameter as-is. Unlike `-D` on the CLI, option names are not mapped and no `modello.` prefix is added.
 * **`name`** (`String`, Required): Parameter key.
 * **`value`** (`String`, Required): Parameter value.
 
