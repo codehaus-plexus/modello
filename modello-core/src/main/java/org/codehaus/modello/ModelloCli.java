@@ -415,14 +415,23 @@ public class ModelloCli {
         System.err.println("  --xdocFileName, --xdoc-file-name <file>              XDoc output file name");
         System.err.println("  --extendedClassnameSuffix,");
         System.err.println(
-                "  --extended-classname-suffix <suffix>                 Class name suffix of location-tracking xpp3 writer");
+                "  --extended-classname-suffix <suffix>                 Writer class name suffix for xpp3-extended-writer (default: Ex)");
         System.err.println(
                 "  -D<key>=<value>                                      Option name without '--', or raw parameter (also set as modello.<key>)");
         System.err.println("  -h, --help                                           Display this help message");
         System.err.println();
         System.err.println("Usage (legacy positional):");
         System.err.println(
-                "  modello <model> <outputType> <output directory> <modelVersion> <packageWithVersion> <javaSource> [<encoding>]");
+                "  modello <model> <outputType> <outputDirectory> <modelVersion> <packageWithVersion> <javaSource> [<encoding>]");
+        System.err.println("  All arguments are required except <encoding>; they mean the same as the named options:");
+        System.err.println("  <model>               --model");
+        System.err.println("  <outputType>          --type");
+        System.err.println("  <outputDirectory>     --dir");
+        System.err.println("  <modelVersion>        --version");
+        System.err.println("  <packageWithVersion>  --packageWithVersion (true or false)");
+        System.err.println("  <javaSource>          --javaSource");
+        System.err.println("  <encoding>            --encoding");
+        System.err.println("  No other option is available in this form.");
     }
 
     static File getModelFile() {
