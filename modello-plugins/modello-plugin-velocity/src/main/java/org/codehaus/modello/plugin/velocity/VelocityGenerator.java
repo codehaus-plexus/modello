@@ -43,6 +43,24 @@ import org.codehaus.plexus.util.io.CachingWriter;
 
 @Named("velocity")
 public class VelocityGenerator extends AbstractModelloGenerator {
+    /**
+     * @deprecated use {@link ModelloParameterConstants#VELOCITY_BASEDIR}
+     */
+    @Deprecated
+    public static final String VELOCITY_BASEDIR = ModelloParameterConstants.VELOCITY_BASEDIR;
+
+    /**
+     * @deprecated use {@link ModelloParameterConstants#VELOCITY_TEMPLATES}
+     */
+    @Deprecated
+    public static final String VELOCITY_TEMPLATES = ModelloParameterConstants.VELOCITY_TEMPLATES;
+
+    /**
+     * @deprecated use {@link ModelloParameterConstants#VELOCITY_PARAMETERS}
+     */
+    @Deprecated
+    public static final String VELOCITY_PARAMETERS = ModelloParameterConstants.VELOCITY_PARAMETERS;
+
     public static final String MODELLO_VELOCITY_OUTPUT = "#MODELLO-VELOCITY#SAVE-OUTPUT-TO ";
 
     @Override
