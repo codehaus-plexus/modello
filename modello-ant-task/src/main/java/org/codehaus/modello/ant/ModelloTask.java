@@ -240,12 +240,15 @@ public class ModelloTask extends Task {
             // Arbitrary properties
             parameters.putAll(properties);
 
-            // Attach Velocity configs if provided
-            if (velocityBasedir != null) {
-                parameters.put("modello.velocity.basedir", velocityBasedir.getAbsolutePath());
-                parameters.put("modello.velocity.templates", String.join(",", templates));
-                parameters.put("modello.velocity.parameters", velocityParams);
+            // Like ModelloVelocityMojo: basedir defaults to project basedir
+            File basedir = velocityBasedir != null
+                    ? velocityBasedir
+                    : getProject() != null ? getProject().getBaseDir() : null;
+            if (basedir != null) {
+                parameters.put("modello.velocity.basedir", basedir.getAbsolutePath());
             }
+            parameters.put("modello.velocity.templates", String.join(",", templates));
+            parameters.put("modello.velocity.parameters", velocityParams);
 
             for (File modelFile : models) {
                 log("Generating sources for " + modelFile.getName());

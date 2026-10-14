@@ -33,24 +33,24 @@ The `<modello>` task supports several attributes and nested elements to configur
 
 ### Attributes
 
-| Attribute                      | Type      | Description                                                                           | Required |  Default  |
-|:-------------------------------|:----------|:--------------------------------------------------------------------------------------|:--------:|:---------:|
-| **`version`**                  | `String`  | The model version to generate (e.g., `1.0.0`).                                        | **Yes**  |     —     |
-| **`outputDirectory`**          | `File`    | The directory where the generated files will be written.                              | **Yes**  |     —     |
-| **`javaSource`**               | `String`  | Target Java version for generated source code.                                        |    No    |    `8`    |
-| **`encoding`**                 | `String`  | Character encoding for generated files.                                               |    No    | `"utf-8"` |
-| **`packageWithVersion`**       | `boolean` | Whether to append the version to the package name (`"true"` / `"false"`).             |    No    |  `false`  |
-| **`packagedVersions`**         | `String`  | Additional historical versions, each generated into a versioned package.              |    No    |     —     |
-| **`domAsXpp3`**                | `boolean` | Whether to generate DOM content as Xpp3Dom (`"true"`) or W3C DOM Element (`"false"`). |    No    |  `true`   |
-| **`licenseFile`**              | `File`    | Path to file containing license header text to prepend to generated files.            |    No    |     —     |
-| **`licenseText`**              | `String`  | License header text to prepend to generated files.                                    |    No    |     —     |
-| **`extendedClassnameSuffix`**  | `String`  | Writer class name suffix for the `xpp3-extended-writer` goal.                         |    No    |   `Ex`    |
-| **`xsdFileName`**              | `String`  | Custom output file name for generated XSD schema (`xsd` goal).                        |    No    |     —     |
-| **`enforceMandatoryElements`** | `boolean` | Whether to enforce mandatory elements in XSD (`"true"` / `"false"`).                  |    No    |  `false`  |
-| **`jsonSchemaFileName`**       | `String`  | Custom output file name for generated JSON Schema (`jsonschema` goal).                |    No    |     —     |
-| **`firstVersion`**             | `String`  | Earliest version to document when generating documentation (`xdoc` goal).             |    No    |     —     |
-| **`xdocFileName`**             | `String`  | Custom output file name for generated XDoc documentation (`xdoc` goal).               |    No    |     —     |
-| **`velocityBasedir`**          | `File`    | Base directory of template files (required only for Velocity-based goals).            |    No    |     —     |
+| Attribute                      | Type      | Description                                                                           | Required |     Default     |
+|:-------------------------------|:----------|:--------------------------------------------------------------------------------------|:--------:|:---------------:|
+| **`version`**                  | `String`  | The model version to generate (e.g., `1.0.0`).                                        | **Yes**  |        —        |
+| **`outputDirectory`**          | `File`    | The directory where the generated files will be written.                              | **Yes**  |        —        |
+| **`javaSource`**               | `String`  | Target Java version for generated source code.                                        |    No    |       `8`       |
+| **`encoding`**                 | `String`  | Character encoding for generated files.                                               |    No    |    `"utf-8"`    |
+| **`packageWithVersion`**       | `boolean` | Whether to append the version to the package name (`"true"` / `"false"`).             |    No    |     `false`     |
+| **`packagedVersions`**         | `String`  | Additional historical versions, each generated into a versioned package.              |    No    |        —        |
+| **`domAsXpp3`**                | `boolean` | Whether to generate DOM content as Xpp3Dom (`"true"`) or W3C DOM Element (`"false"`). |    No    |     `true`      |
+| **`licenseFile`**              | `File`    | Path to file containing license header text to prepend to generated files.            |    No    |        —        |
+| **`licenseText`**              | `String`  | License header text to prepend to generated files.                                    |    No    |        —        |
+| **`extendedClassnameSuffix`**  | `String`  | Writer class name suffix for the `xpp3-extended-writer` goal.                         |    No    |      `Ex`       |
+| **`xsdFileName`**              | `String`  | Custom output file name for generated XSD schema (`xsd` goal).                        |    No    |        —        |
+| **`enforceMandatoryElements`** | `boolean` | Whether to enforce mandatory elements in XSD (`"true"` / `"false"`).                  |    No    |     `false`     |
+| **`jsonSchemaFileName`**       | `String`  | Custom output file name for generated JSON Schema (`jsonschema` goal).                |    No    |        —        |
+| **`firstVersion`**             | `String`  | Earliest version to document when generating documentation (`xdoc` goal).             |    No    |        —        |
+| **`xdocFileName`**             | `String`  | Custom output file name for generated XDoc documentation (`xdoc` goal).               |    No    |        —        |
+| **`velocityBasedir`**          | `File`    | Base directory of Velocity templates (`velocity` goal).                               |    No    | project basedir |
 
 ### Nested Elements
 
