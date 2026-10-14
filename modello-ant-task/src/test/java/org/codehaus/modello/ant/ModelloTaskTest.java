@@ -101,8 +101,7 @@ public class ModelloTaskTest {
         assertEquals("version, outputDirectory, <model>, and <goal> are required.", exception.getMessage());
     }
 
-    @Test
-    public void testSuccessfulGeneration() throws IOException {
+    private File writeModel() throws IOException {
         // Write a minimal Modello model file
         File modelFile = tempDir.resolve("test.mdo").toFile();
         try (FileWriter writer = new FileWriter(modelFile)) {
@@ -133,6 +132,33 @@ public class ModelloTaskTest {
                     + "  </classes>\n"
                     + "</model>\n");
         }
+        return modelFile;
+    }
+
+    @Test
+    public void testPackagedVersionGeneration() throws IOException {
+        ModelloTask task = new ModelloTask();
+        task.setVersion("1.0.0");
+        task.setOutputDirectory(tempDir.toFile());
+        task.setPackagedVersions("1.0.0");
+
+        ModelloTask.ModelElement modelElement = new ModelloTask.ModelElement();
+        modelElement.setFile(writeModel());
+        task.addConfiguredModel(modelElement);
+
+        ModelloTask.NameElement goalElement = new ModelloTask.NameElement();
+        goalElement.setName("java");
+        task.addConfiguredGoal(goalElement);
+
+        task.execute();
+
+        assertTrue(Files.exists(tempDir.resolve("com/example/test/TestClass.java")));
+        assertTrue(Files.exists(tempDir.resolve("com/example/test/v1_0_0/TestClass.java")));
+    }
+
+    @Test
+    public void testSuccessfulGeneration() throws IOException {
+        File modelFile = writeModel();
 
         ModelloTask task = new ModelloTask();
         task.setVersion("1.0.0");
