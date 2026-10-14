@@ -22,6 +22,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Project;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -307,6 +308,15 @@ public class ModelloTaskTest {
 
     @Test
     public void testVelocityGoal() throws IOException {
+        assertVelocityGeneration(false);
+    }
+
+    @Test
+    public void testVelocityGoalDefaultsToProjectBasedir() throws IOException {
+        assertVelocityGeneration(true);
+    }
+
+    private void assertVelocityGeneration(boolean projectBasedir) throws IOException {
         File modelFile = tempDir.resolve("test-velocity.mdo").toFile();
         try (FileWriter writer = new FileWriter(modelFile)) {
             writer.write("<model xmlns=\"http://codehaus-plexus.github.io/MODELLO/2.0.0\" "
@@ -341,7 +351,13 @@ public class ModelloTaskTest {
         ModelloTask task = new ModelloTask();
         task.setVersion("1.0.0");
         task.setOutputDirectory(outDir.toFile());
-        task.setVelocityBasedir(velocityBasedir);
+        if (projectBasedir) {
+            Project project = new Project();
+            project.setBaseDir(velocityBasedir);
+            task.setProject(project);
+        } else {
+            task.setVelocityBasedir(velocityBasedir);
+        }
 
         ModelloTask.ModelElement modelElement = new ModelloTask.ModelElement();
         modelElement.setFile(modelFile);
