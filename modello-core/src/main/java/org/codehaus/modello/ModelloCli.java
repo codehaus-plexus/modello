@@ -29,7 +29,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.xml.XmlStreamReader;
@@ -255,17 +254,9 @@ public class ModelloCli {
             } else if ("--params".equals(key)
                     || "--velocityParameters".equals(key)
                     || "--velocity-parameters".equals(key)) {
-                Map<String, String> map = Arrays.stream(val.split(","))
-                        .filter(s -> s.contains("="))
-                        .map(s -> s.split("=", 2))
-                        .collect(Collectors.toMap(e -> e[0].trim(), e -> e[1].trim()));
-                parameters.put(ModelloParameterConstants.VELOCITY_PARAMETERS, map);
+                parameters.put(ModelloParameterConstants.VELOCITY_PARAMETERS, parseMap(key, val));
             } else if ("--pluralExceptions".equals(key) || "--plural-exceptions".equals(key)) {
-                Map<String, String> map = Arrays.stream(val.split(","))
-                        .filter(s -> s.contains("="))
-                        .map(s -> s.split("=", 2))
-                        .collect(Collectors.toMap(e -> e[0].trim(), e -> e[1].trim()));
-                parameters.put(ModelloParameterConstants.PLURAL_EXCEPTIONS, map);
+                parameters.put(ModelloParameterConstants.PLURAL_EXCEPTIONS, parseMap(key, val));
             } else if (PARAM_ALIASES.containsKey(key)) {
                 parameters.put(PARAM_ALIASES.get(key), val);
             } else {
@@ -274,6 +265,17 @@ public class ModelloCli {
         }
 
         validateNamedArguments();
+    }
+
+    private static Map<String, String> parseMap(String option, String val) {
+        Map<String, String> map = new HashMap<>();
+        for (String s : val.split(",")) {
+            String[] e = s.split("=", 2);
+            if (e.length == 2 && map.putIfAbsent(e[0].trim(), e[1].trim()) != null) {
+                throw new IllegalArgumentException("Duplicate key '" + e[0].trim() + "' in option: " + option);
+            }
+        }
+        return map;
     }
 
     private static void parseProperty(String prop) {
