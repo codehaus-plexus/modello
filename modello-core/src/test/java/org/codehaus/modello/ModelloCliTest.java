@@ -61,6 +61,17 @@ class ModelloCliTest {
     }
 
     @Test
+    void testDuplicateMapKeyThrows() {
+        String[] base = {"--model", "m.mdo", "--type", "java", "--dir", "out", "--version", "1.0.0"};
+        for (String option : new String[] {"--params", "--plural-exceptions"}) {
+            String[] args = Arrays.copyOf(base, base.length + 2);
+            args[base.length] = option;
+            args[base.length + 1] = "a=1,b=2,a=3";
+            assertThrows(IllegalArgumentException.class, () -> ModelloCli.parseArguments(args));
+        }
+    }
+
+    @Test
     void testNamedWordOptions() throws Exception {
         String[] args = {
             "--model", "src/model.mdo",
