@@ -29,6 +29,8 @@ import java.io.IOException;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import com.github.chhorz.javadoc.JavaDoc;
@@ -686,16 +688,57 @@ public class XdocGenerator extends AbstractXmlGenerator {
     }
 
     /**
+     * Pattern matching {@code {@code ...}} and {@code {@literal ...}} inline tags,
+     * including nested braces.
+     */
+    private static final Pattern INLINE_CODE_TAG_PATTERN =
+            Pattern.compile("\\{@(?:code|literal)\\s+((?:[^{}]|\\{[^{}]*\\})*)\\}");
+
+    /**
+     * HTML-escapes {@code <}, {@code >} and {@code &} in {@code s}.
+     * Handles both raw characters and pre-existing HTML entities (e.g. {@code &lt;} from
+     * CDATA-wrapped .mdo descriptions) so that the result is always a clean, once-escaped
+     * HTML string.
+     */
+    private static String escapeHtml(String s) {
+        // Normalise any pre-escaped entities first so we never double-escape
+        String unescaped = s.replace("&lt;", "<").replace("&gt;", ">").replace("&amp;", "&");
+        return unescaped.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");
+    }
+
+    /**
+     * Pre-processes Javadoc {@code {@code}} and {@code {@literal}} inline tags so that
+     * their content is HTML-escaped before being fed into the HTML/Jsoup pipeline.
+     *
+     * <p>Without this step, content such as {@code {@code <element>}} would be passed
+     * verbatim to the Javadoc parser which wraps it in a {@code <code>} HTML element
+     * without escaping; Jsoup would then silently drop the unknown {@code <element>} tag.</p>
+     */
+    private static String preprocessInlineCodeTags(String text) {
+        StringBuffer sb = new StringBuffer();
+        Matcher m = INLINE_CODE_TAG_PATTERN.matcher(text);
+        while (m.find()) {
+            m.appendReplacement(sb, Matcher.quoteReplacement("<code>" + escapeHtml(m.group(1)) + "</code>"));
+        }
+        m.appendTail(sb);
+        return sb.toString();
+    }
+
+    /**
      * Ensures that text will have balanced tags
      *
      * @param text xml or html based content
      * @return valid XML string
      */
     private static String rewrite(String text) {
+        // Pre-process {@code} / {@literal} tags to HTML-escape their content before the
+        // Javadoc parser and Jsoup pipeline see it; otherwise angle brackets inside those
+        // tags are treated as HTML elements and silently dropped by Jsoup.
+        String preprocessed = preprocessInlineCodeTags(text);
         JavaDoc javaDoc = JavaDocParserBuilder.withStandardJavadocTags()
                 .withOutputType(OutputType.HTML)
                 .build()
-                .parse(text);
+                .parse(preprocessed);
         String html = javaDoc.getDescription()
                 + javaDoc.getTags().stream()
                         .map(XdocGenerator::renderJavaDocTag)

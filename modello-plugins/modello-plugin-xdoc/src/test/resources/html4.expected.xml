@@ -13,6 +13,7 @@
       <source>
 &lt;<a href="#class_model">model</a>&gt;
   &lt;extend/&gt;
+  &lt;properties/&gt;
 &lt;/model&gt;
 </source>
       <a name="class_model"/>
@@ -40,6 +41,16 @@ This is a description in HTML4
             </td>
             <td>1.0.0</td>
             <td>No description.</td>
+          </tr>
+          <tr>
+            <td>
+              <code>properties</code>
+            </td>
+            <td>
+              <code>String</code>
+            </td>
+            <td>1.0.0</td>
+            <td>The format is <code>&lt;name&gt;value&lt;/name&gt;</code>.</td>
           </tr>
         </table>
       </subsection>
