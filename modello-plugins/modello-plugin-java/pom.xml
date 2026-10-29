@@ -16,10 +16,6 @@
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-utils</artifactId>
     </dependency>
-    <dependency>
-      <groupId>org.codehaus.plexus</groupId>
-      <artifactId>plexus-build-api</artifactId>
-    </dependency>
 
     <dependency>
       <groupId>javax.persistence</groupId>
@@ -31,6 +27,16 @@
       <groupId>javax.xml.bind</groupId>
       <artifactId>jaxb-api</artifactId>
       <version>2.3.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-testing</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.modello</groupId>
+      <artifactId>modello-test</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>

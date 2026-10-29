@@ -39,6 +39,16 @@
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-annotations</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.codehaus.modello</groupId>
+      <artifactId>modello-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-testing</artifactId>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
   <build>
