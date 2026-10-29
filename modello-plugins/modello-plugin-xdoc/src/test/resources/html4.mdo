@@ -31,6 +31,14 @@
           <version>1.0.0+</version>
           <type>String</type>
         </field>
+        <field>
+          <name>properties</name>
+          <version>1.0.0+</version>
+          <type>String</type>
+          <description>
+            The format is {@code &lt;name&gt;value&lt;/name&gt;}.
+          </description>
+        </field>
       </fields>
     </class>
     <class>
