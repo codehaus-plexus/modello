@@ -25,6 +25,12 @@
       <artifactId>guice</artifactId>
       <scope>runtime</scope>
     </dependency>
+    <!-- guice 5.1.0 brings in guava 30.1-jre, which has a known vulnerability -->
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <scope>runtime</scope>
+    </dependency>
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-utils</artifactId>
