@@ -187,11 +187,6 @@
     <sisu.version>1.1.1</sisu.version>
     <mavenVersion>3.6.3</mavenVersion>
     <junit4Version>4.13.2</junit4Version>
-    <!--
-      ! This controls the minimum java version
-      ! and also the version which is used
-      ! in the integration tests.
-    -->
     <project.build.outputTimestamp>2026-08-30T21:30:18Z</project.build.outputTimestamp>
   </properties>
 
