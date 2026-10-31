@@ -15,7 +15,7 @@
   <description>Modello Maven Plugin enables the use of Modello in Maven builds.</description>
 
   <prerequisites>
-    <maven>${mavenVersion}</maven>
+    <maven>3.9.0</maven>
   </prerequisites>
 
   <properties>

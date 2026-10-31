@@ -185,7 +185,7 @@
     <jdom.version>2.0.2</jdom.version>
     <slf4j.version>1.7.36</slf4j.version>
     <sisu.version>1.1.1</sisu.version>
-    <mavenVersion>3.6.3</mavenVersion>
+    <mavenVersion>3.9.16</mavenVersion>
     <project.build.outputTimestamp>2026-08-30T21:30:18Z</project.build.outputTimestamp>
   </properties>
 
