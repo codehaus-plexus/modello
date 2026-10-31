@@ -194,7 +194,7 @@
               <debug>true</debug>
               <filterProperties>
                 <plexusUtilsVersion>3.6.1</plexusUtilsVersion>
-                <junit4Version>${junit4Version}</junit4Version>
+                <junit5Version>${version.junit5}</junit5Version>
                 <java.version>${java.version}</java.version>
                 <jdom.version>${jdom.version}</jdom.version>
               </filterProperties>
