@@ -80,7 +80,7 @@ For example, consider this input XML:
 
 For this data model, one could query the location metadata like this (neglecting null checking):
 
-```unknown
+```java
 Model model = <parser invocation>;
 
 // to query the location of the <model> element itself
