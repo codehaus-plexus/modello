@@ -110,6 +110,7 @@ public class ModelloCli {
         alias(ModelloParameterConstants.OUTPUT_XDOC_FILE_NAME, "--xdocFileName", "--xdoc-file-name");
 
         // License & Grammar
+        alias(ModelloParameterConstants.LICENSE_TEXT, "--licenseText", "--license-text");
         alias(ModelloParameterConstants.PLURAL_EXCEPTIONS, "--pluralExceptions", "--plural-exceptions");
 
         // Boolean flags
@@ -249,16 +250,8 @@ public class ModelloCli {
                     throw new IllegalArgumentException("License file not found: " + val);
                 }
                 parameters.put(ModelloParameterConstants.LICENSE_TEXT, Files.readAllLines(lf.toPath()));
-            } else if ("--licenseText".equals(key) || "--license-text".equals(key)) {
-                parameters.put(ModelloParameterConstants.LICENSE_TEXT, Arrays.asList(val.split("\\r?\\n")));
-            } else if ("--params".equals(key)
-                    || "--velocityParameters".equals(key)
-                    || "--velocity-parameters".equals(key)) {
-                parameters.put(ModelloParameterConstants.VELOCITY_PARAMETERS, parseMap(key, val));
-            } else if ("--pluralExceptions".equals(key) || "--plural-exceptions".equals(key)) {
-                parameters.put(ModelloParameterConstants.PLURAL_EXCEPTIONS, parseMap(key, val));
             } else if (PARAM_ALIASES.containsKey(key)) {
-                parameters.put(PARAM_ALIASES.get(key), val);
+                putParameter(PARAM_ALIASES.get(key), val, key);
             } else {
                 throw new IllegalArgumentException("Unknown option: " + key);
             }
@@ -283,14 +276,27 @@ public class ModelloCli {
         if (eq > 0) {
             String k = prop.substring(0, eq).trim();
             String v = prop.substring(eq + 1).trim();
+            String option = "-D" + k;
             if (PARAM_ALIASES.containsKey("--" + k)) {
-                parameters.put(PARAM_ALIASES.get("--" + k), v);
+                putParameter(PARAM_ALIASES.get("--" + k), v, option);
             } else {
-                parameters.put(k, v);
+                putParameter(k, v, option);
                 if (!k.startsWith("modello.")) {
-                    parameters.put("modello." + k, v);
+                    putParameter("modello." + k, v, option);
                 }
             }
+        }
+    }
+
+    // Generators cast these to Map / List, not String
+    private static void putParameter(String key, String val, String option) {
+        if (ModelloParameterConstants.VELOCITY_PARAMETERS.equals(key)
+                || ModelloParameterConstants.PLURAL_EXCEPTIONS.equals(key)) {
+            parameters.put(key, parseMap(option, val));
+        } else if (ModelloParameterConstants.LICENSE_TEXT.equals(key)) {
+            parameters.put(key, Arrays.asList(val.split("\\r?\\n")));
+        } else {
+            parameters.put(key, val);
         }
     }
 
