@@ -204,6 +204,9 @@ public class ModelloTask extends Task {
             if (!packagedVersions.isEmpty()) {
                 parameters.put(ModelloParameterConstants.ALL_VERSIONS, String.join(",", packagedVersions));
             }
+            if (licenseText != null && licenseFile != null) {
+                throw new BuildException("Specify either a license file or license text, not both.");
+            }
             if (licenseText != null) {
                 parameters.put(ModelloParameterConstants.LICENSE_TEXT, Arrays.asList(licenseText.split("\\r?\\n")));
             } else if (licenseFile != null) {
@@ -334,6 +337,7 @@ public class ModelloTask extends Task {
     public static class LicenseElement {
         private File file;
         private String text;
+        private boolean textAttribute;
 
         public void setFile(File file) {
             this.file = file;
@@ -345,14 +349,19 @@ public class ModelloTask extends Task {
 
         public void setText(String text) {
             this.text = text;
+            this.textAttribute = true;
         }
 
         public String getText() {
             return text;
         }
 
+        // Ant may deliver PCDATA in chunks
         public void addText(String text) {
-            this.text = text;
+            if (textAttribute) {
+                throw new BuildException("Use either the 'text' attribute or nested text for <license>, not both.");
+            }
+            this.text = this.text == null ? text : this.text + text;
         }
     }
 }

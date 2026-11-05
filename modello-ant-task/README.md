@@ -88,6 +88,8 @@ Specifies license header content to prepend to generated sources.
 * **`file`** (`File`, Optional): File containing license header text.
 * **`text`** (`String`, Optional): Direct license text string (can also be passed as nested text).
 
+Use exactly one source: `file`, the `text` attribute, or nested text. The same applies to the task's `licenseFile` and `licenseText` attributes.
+
 ```xml
 <license file="${basedir}/LICENSE.txt" />
 ```
