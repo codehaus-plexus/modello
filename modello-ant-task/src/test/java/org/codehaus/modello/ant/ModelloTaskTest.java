@@ -889,6 +889,23 @@ public class ModelloTaskTest {
     }
 
     @Test
+    public void testModelFileNotFound() {
+        ModelloTask task = new ModelloTask();
+        task.setVersion("1.0.0");
+        task.setOutputDirectory(tempDir.toFile());
+        File missing = tempDir.resolve("missing.mdo").toFile();
+        ModelloTask.ModelElement m = new ModelloTask.ModelElement();
+        m.setFile(missing);
+        task.addConfiguredModel(m);
+        ModelloTask.NameElement g = new ModelloTask.NameElement();
+        g.setName("java");
+        task.addConfiguredGoal(g);
+
+        BuildException e = assertThrows(BuildException.class, task::execute);
+        assertEquals("Model file not found: " + missing.getAbsolutePath(), e.getMessage());
+    }
+
+    @Test
     public void testPackagedVersionValidation() {
         ModelloTask task = new ModelloTask();
         ModelloTask.NameElement pv = new ModelloTask.NameElement();
