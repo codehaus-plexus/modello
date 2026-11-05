@@ -94,21 +94,25 @@ public class ModelloParameterConstants {
     public static final String PLURAL_EXCEPTIONS = "modello.plural.exceptions";
 
     /**
+     * Directory Velocity templates are resolved against.
      * @since 2.9
      */
     public static final String VELOCITY_BASEDIR = "modello.velocity.basedir";
 
     /**
+     * Comma-separated Velocity template paths, relative to {@link #VELOCITY_BASEDIR}.
      * @since 2.9
      */
     public static final String VELOCITY_TEMPLATES = "modello.velocity.templates";
 
     /**
+     * Additional Velocity context entries, as {@code Map<String, String>}.
      * @since 2.9
      */
     public static final String VELOCITY_PARAMETERS = "modello.velocity.parameters";
 
     /**
+     * Generator to run (e.g. {@code java}, {@code xpp3-reader}); property of the {@code generate} goal.
      * @since 2.9
      */
     public static final String GENERATOR_ID = "modello.generator.id";
