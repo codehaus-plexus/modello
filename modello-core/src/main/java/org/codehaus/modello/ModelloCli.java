@@ -143,7 +143,9 @@ public class ModelloCli {
 
     // Mirrors AbstractModelloGeneratorMojo#doExecute: current version, then each packaged one in its own package
     private static void generate(Modello modello, String type) throws Exception {
-        modello.generate(new XmlStreamReader(modelFile), type, parameters);
+        try (XmlStreamReader reader = new XmlStreamReader(modelFile)) {
+            modello.generate(reader, type, parameters);
+        }
 
         String allVersions = (String) parameters.get(ModelloParameterConstants.ALL_VERSIONS);
         if (StringUtils.isEmpty(allVersions)) {
@@ -155,7 +157,9 @@ public class ModelloCli {
             version = version.trim();
             if (!version.isEmpty()) {
                 versioned.put(ModelloParameterConstants.VERSION, version);
-                modello.generate(new XmlStreamReader(modelFile), type, versioned);
+                try (XmlStreamReader reader = new XmlStreamReader(modelFile)) {
+                    modello.generate(reader, type, versioned);
+                }
             }
         }
     }
