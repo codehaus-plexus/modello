@@ -165,10 +165,18 @@ public class ModelloCli {
     public static void parseArgumentsFromCommandLine(String[] args) throws Exception {
         try {
             parseArguments(args);
+            checkModelFile();
         } catch (IllegalArgumentException e) {
             System.err.println(e.getMessage());
             usage();
             System.exit(1);
+        }
+    }
+
+    // Not in parseArguments: tests parse fake paths
+    static void checkModelFile() {
+        if (!modelFile.isFile()) {
+            throw new IllegalArgumentException("Model file not found: " + modelFile.getAbsolutePath());
         }
     }
 
