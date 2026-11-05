@@ -63,6 +63,20 @@ class ModelloCliTest {
     }
 
     @Test
+    void testMalformedMapEntryThrows() {
+        String[] args = {
+            "--model", "m.mdo", "--type", "java", "--dir", "out", "--version", "1.0.0", "--params", "badkey,a=1"
+        };
+        assertThrows(IllegalArgumentException.class, () -> ModelloCli.parseArguments(args));
+    }
+
+    @Test
+    void testBareDefineThrows() {
+        String[] args = {"--model", "m.mdo", "--type", "java", "--dir", "out", "--version", "1.0.0", "-Dfoo"};
+        assertThrows(IllegalArgumentException.class, () -> ModelloCli.parseArguments(args));
+    }
+
+    @Test
     void testTypedParametersViaDefine() throws Exception {
         String[] args = {
             "--model",

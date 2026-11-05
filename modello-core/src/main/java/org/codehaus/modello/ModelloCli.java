@@ -263,8 +263,14 @@ public class ModelloCli {
     private static Map<String, String> parseMap(String option, String val) {
         Map<String, String> map = new HashMap<>();
         for (String s : val.split(",")) {
+            if (s.trim().isEmpty()) {
+                continue;
+            }
             String[] e = s.split("=", 2);
-            if (e.length == 2 && map.putIfAbsent(e[0].trim(), e[1].trim()) != null) {
+            if (e.length != 2 || e[0].trim().isEmpty()) {
+                throw new IllegalArgumentException("Malformed key=value entry '" + s.trim() + "' in option: " + option);
+            }
+            if (map.putIfAbsent(e[0].trim(), e[1].trim()) != null) {
                 throw new IllegalArgumentException("Duplicate key '" + e[0].trim() + "' in option: " + option);
             }
         }
@@ -273,17 +279,18 @@ public class ModelloCli {
 
     private static void parseProperty(String prop) {
         int eq = prop.indexOf('=');
-        if (eq > 0) {
-            String k = prop.substring(0, eq).trim();
-            String v = prop.substring(eq + 1).trim();
-            String option = "-D" + k;
-            if (PARAM_ALIASES.containsKey("--" + k)) {
-                putParameter(PARAM_ALIASES.get("--" + k), v, option);
-            } else {
-                putParameter(k, v, option);
-                if (!k.startsWith("modello.")) {
-                    putParameter("modello." + k, v, option);
-                }
+        if (eq <= 0) {
+            throw new IllegalArgumentException("Missing value in option: -D" + prop + " (use -D" + prop + "=value)");
+        }
+        String k = prop.substring(0, eq).trim();
+        String v = prop.substring(eq + 1).trim();
+        String option = "-D" + k;
+        if (PARAM_ALIASES.containsKey("--" + k)) {
+            putParameter(PARAM_ALIASES.get("--" + k), v, option);
+        } else {
+            putParameter(k, v, option);
+            if (!k.startsWith("modello.")) {
+                putParameter("modello." + k, v, option);
             }
         }
     }
