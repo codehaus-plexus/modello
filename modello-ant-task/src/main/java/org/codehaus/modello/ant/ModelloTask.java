@@ -251,6 +251,12 @@ public class ModelloTask extends Task {
             parameters.put("modello.velocity.parameters", velocityParams);
 
             for (File modelFile : models) {
+                if (!modelFile.isFile()) {
+                    throw new BuildException("Model file not found: " + modelFile.getAbsolutePath());
+                }
+            }
+
+            for (File modelFile : models) {
                 log("Generating sources for " + modelFile.getName());
                 for (String goal : goals) {
                     generate(modello, modelFile, goal, parameters);
