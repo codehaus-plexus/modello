@@ -906,6 +906,45 @@ public class ModelloTaskTest {
     }
 
     @Test
+    public void testLicenseFileAndTextConflict() throws IOException {
+        File modelFile = tempDir.resolve("conflict.mdo").toFile();
+        assertTrue(modelFile.createNewFile());
+        ModelloTask task = new ModelloTask();
+        task.setVersion("1.0.0");
+        task.setOutputDirectory(tempDir.toFile());
+        ModelloTask.ModelElement m = new ModelloTask.ModelElement();
+        m.setFile(modelFile);
+        task.addConfiguredModel(m);
+        ModelloTask.NameElement g = new ModelloTask.NameElement();
+        g.setName("java");
+        task.addConfiguredGoal(g);
+
+        ModelloTask.LicenseElement license = new ModelloTask.LicenseElement();
+        license.setFile(new File("LICENSE.txt"));
+        license.addText("inline");
+        task.addConfiguredLicense(license);
+
+        BuildException e = assertThrows(BuildException.class, task::execute);
+        assertEquals("Specify either a license file or license text, not both.", e.getMessage());
+    }
+
+    @Test
+    public void testLicenseTextAttributeAndNestedTextConflict() {
+        ModelloTask.LicenseElement license = new ModelloTask.LicenseElement();
+        license.setText("attribute");
+        BuildException e = assertThrows(BuildException.class, () -> license.addText("nested"));
+        assertEquals("Use either the 'text' attribute or nested text for <license>, not both.", e.getMessage());
+    }
+
+    @Test
+    public void testLicenseNestedTextChunksAppended() {
+        ModelloTask.LicenseElement license = new ModelloTask.LicenseElement();
+        license.addText("line 1\n");
+        license.addText("line 2");
+        assertEquals("line 1\nline 2", license.getText());
+    }
+
+    @Test
     public void testPackagedVersionValidation() {
         ModelloTask task = new ModelloTask();
         ModelloTask.NameElement pv = new ModelloTask.NameElement();
