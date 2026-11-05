@@ -30,6 +30,12 @@ import org.codehaus.modello.Modello;
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.plexus.util.xml.XmlStreamReader;
 
+/**
+ * Ant task running Modello generators, the counterpart of the modello-maven-plugin goals.
+ *
+ * <p>Required: {@code version}, {@code outputDirectory}, at least one nested {@code <model>} and one {@code <goal>}.
+ * Each model is generated once per goal; see README.md for all attributes and nested elements.
+ */
 public class ModelloTask extends Task {
     private String version;
     private File velocityBasedir;
@@ -56,22 +62,27 @@ public class ModelloTask extends Task {
     private Map<String, String> properties = new HashMap<>();
 
     // Attribute Setters
+    /** Model version to generate. Required. */
     public void setVersion(String version) {
         this.version = version;
     }
 
+    /** Base directory of Velocity templates; defaults to the project base directory. */
     public void setVelocityBasedir(File velocityBasedir) {
         this.velocityBasedir = velocityBasedir;
     }
 
+    /** Directory for generated files; created if missing. Required. */
     public void setOutputDirectory(File outputDirectory) {
         this.outputDirectory = outputDirectory;
     }
 
+    /** Append the version to generated package names. Default {@code false}. */
     public void setPackageWithVersion(boolean packageWithVersion) {
         this.packageWithVersion = packageWithVersion;
     }
 
+    /** Comma-separated historical versions, each generated into a versioned package. */
     public void setPackagedVersions(String packagedVersions) {
         if (packagedVersions != null) {
             for (String v : packagedVersions.split(",")) {
@@ -83,51 +94,63 @@ public class ModelloTask extends Task {
         }
     }
 
+    /** Java source level of generated code. Default {@code 8}. */
     public void setJavaSource(String javaSource) {
         this.javaSource = javaSource;
     }
 
+    /** Encoding of generated files. Default {@code utf-8}. */
     public void setEncoding(String encoding) {
         this.encoding = encoding;
     }
 
+    /** Map DOM content to {@code Xpp3Dom} instead of {@code org.w3c.dom.Element}. Default {@code true}. */
     public void setDomAsXpp3(boolean domAsXpp3) {
         this.domAsXpp3 = domAsXpp3;
     }
 
+    /** File with license header text. Exclusive with {@link #setLicenseText(String)}. */
     public void setLicenseFile(File licenseFile) {
         this.licenseFile = licenseFile;
     }
 
+    /** License header text. Exclusive with {@link #setLicenseFile(File)}. */
     public void setLicenseText(String licenseText) {
         this.licenseText = licenseText;
     }
 
+    /** Writer class name suffix for {@code xpp3-extended-writer}. Default {@code Ex}. */
     public void setExtendedClassnameSuffix(String extendedClassnameSuffix) {
         this.extendedClassnameSuffix = extendedClassnameSuffix;
     }
 
+    /** Output file name for the {@code xsd} goal. */
     public void setXsdFileName(String xsdFileName) {
         this.xsdFileName = xsdFileName;
     }
 
+    /** Enforce mandatory elements in the generated XSD. Default {@code false}. */
     public void setEnforceMandatoryElements(boolean enforceMandatoryElements) {
         this.enforceMandatoryElements = enforceMandatoryElements;
     }
 
+    /** Output file name for the {@code jsonschema} goal. */
     public void setJsonSchemaFileName(String jsonSchemaFileName) {
         this.jsonSchemaFileName = jsonSchemaFileName;
     }
 
+    /** First model version; xdoc shows the 'since' column for newer versions. */
     public void setFirstVersion(String firstVersion) {
         this.firstVersion = firstVersion;
     }
 
+    /** Output file name for the {@code xdoc} goal. */
     public void setXdocFileName(String xdocFileName) {
         this.xdocFileName = xdocFileName;
     }
 
     // Nested Elements Handlers
+    /** Nested {@code <model file="..."/>}: model file to read. At least one required. */
     public void addConfiguredModel(ModelElement m) {
         if (m.getFile() == null) {
             throw new BuildException("The 'file' attribute is required for <model>.");
@@ -135,30 +158,37 @@ public class ModelloTask extends Task {
         this.models.add(m.getFile());
     }
 
+    /** Nested {@code <template name="..."/>}: Velocity template relative to {@code velocityBasedir}. */
     public void addConfiguredTemplate(NameElement t) {
         this.templates.add(requireName(t.getName(), "template"));
     }
 
+    /** Nested {@code <goal name="..."/>}: generator id, e.g. {@code java}. At least one required. */
     public void addConfiguredGoal(NameElement g) {
         this.goals.add(requireName(g.getName(), "goal"));
     }
 
+    /** Nested {@code <packagedVersion name="..."/>}: same as {@link #setPackagedVersions(String)}. */
     public void addConfiguredPackagedVersion(NameElement v) {
         this.packagedVersions.add(requireName(v.getName(), "packagedVersion"));
     }
 
+    /** Nested {@code <param name="..." value="..."/>}: parameter passed to Velocity templates. */
     public void addConfiguredParam(ParamElement p) {
         this.velocityParams.put(requireName(p.getName(), "param"), p.getValue());
     }
 
+    /** Nested {@code <pluralException name="plural" value="singular"/>}. */
     public void addConfiguredPluralException(ParamElement p) {
         this.pluralExceptions.put(requireName(p.getName(), "pluralException"), p.getValue());
     }
 
+    /** Nested {@code <property name="..." value="..."/>}: raw Modello parameter. */
     public void addConfiguredProperty(ParamElement p) {
         this.properties.put(requireName(p.getName(), "property"), p.getValue());
     }
 
+    /** Nested {@code <license file="..."/>} or {@code <license>text</license>}; only one source allowed. */
     public void addConfiguredLicense(LicenseElement l) {
         if (l.getFile() != null) {
             this.licenseFile = l.getFile();
@@ -289,6 +319,7 @@ public class ModelloTask extends Task {
     }
 
     // Helper classes for Ant's nested XML elements
+    /** Nested element with a {@code file} attribute. */
     public static class ModelElement {
         private File file;
 
@@ -301,6 +332,7 @@ public class ModelloTask extends Task {
         }
     }
 
+    /** Nested element with a {@code name} attribute. */
     public static class NameElement {
         private String name;
 
@@ -313,6 +345,7 @@ public class ModelloTask extends Task {
         }
     }
 
+    /** Nested element with {@code name} and {@code value} attributes. */
     public static class ParamElement {
         private String name;
         private String value;
@@ -334,6 +367,7 @@ public class ModelloTask extends Task {
         }
     }
 
+    /** Nested {@code <license>}: {@code file}, {@code text} attribute or nested text. */
     public static class LicenseElement {
         private File file;
         private String text;
