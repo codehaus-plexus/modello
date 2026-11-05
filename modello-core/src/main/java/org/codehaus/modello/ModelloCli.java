@@ -25,6 +25,7 @@ package org.codehaus.modello;
 import java.io.File;
 import java.nio.file.Files;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -55,7 +56,7 @@ public class ModelloCli {
         alias(ModelloParameterConstants.VERSION, "--version", "--modelVersion", "--model-version");
 
         // Package with version
-        alias(ModelloParameterConstants.PACKAGE_WITH_VERSION, "--packageWithVersion", "--package-with-version");
+        aliasBoolean(ModelloParameterConstants.PACKAGE_WITH_VERSION, "--packageWithVersion", "--package-with-version");
 
         // Packaged versions
         alias(
@@ -72,7 +73,7 @@ public class ModelloCli {
         alias(ModelloParameterConstants.ENCODING, "--encoding");
 
         // DOM as XPP3
-        alias(ModelloParameterConstants.DOM_AS_XPP3, "--domAsXpp3", "--dom-as-xpp3");
+        aliasBoolean(ModelloParameterConstants.DOM_AS_XPP3, "--domAsXpp3", "--dom-as-xpp3");
 
         // Velocity Mojo
         alias(
@@ -92,7 +93,7 @@ public class ModelloCli {
                 "--velocity-parameters");
 
         // XML / Docs / Schema Mojos
-        alias(
+        aliasBoolean(
                 ModelloParameterConstants.XSD_ENFORCE_MANDATORY_ELEMENTS,
                 "--enforceMandatoryElements",
                 "--enforce-mandatory-elements");
@@ -112,20 +113,17 @@ public class ModelloCli {
         // License & Grammar
         alias(ModelloParameterConstants.LICENSE_TEXT, "--licenseText", "--license-text");
         alias(ModelloParameterConstants.PLURAL_EXCEPTIONS, "--pluralExceptions", "--plural-exceptions");
-
-        // Boolean flags
-        BOOLEAN_OPTIONS.add("--packageWithVersion");
-        BOOLEAN_OPTIONS.add("--package-with-version");
-        BOOLEAN_OPTIONS.add("--domAsXpp3");
-        BOOLEAN_OPTIONS.add("--dom-as-xpp3");
-        BOOLEAN_OPTIONS.add("--enforceMandatoryElements");
-        BOOLEAN_OPTIONS.add("--enforce-mandatory-elements");
     }
 
     private static void alias(String paramKey, String... flags) {
         for (String flag : flags) {
             PARAM_ALIASES.put(flag, paramKey);
         }
+    }
+
+    private static void aliasBoolean(String paramKey, String... flags) {
+        alias(paramKey, flags);
+        BOOLEAN_OPTIONS.addAll(Arrays.asList(flags));
     }
 
     public static void main(String[] args) throws Exception {
@@ -460,6 +458,6 @@ public class ModelloCli {
     }
 
     static Map<String, Object> getParameters() {
-        return parameters;
+        return Collections.unmodifiableMap(parameters);
     }
 }
