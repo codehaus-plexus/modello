@@ -103,6 +103,15 @@ class ModelloCliTest {
     }
 
     @Test
+    void testMissingModelFileThrows(@TempDir Path tempDir) throws Exception {
+        File missing = tempDir.resolve("missing.mdo").toFile();
+        String[] args = {"--model", missing.getPath(), "--type", "java", "--dir", "out", "--version", "1.0.0"};
+        ModelloCli.parseArguments(args);
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, ModelloCli::checkModelFile);
+        assertEquals("Model file not found: " + missing.getAbsolutePath(), e.getMessage());
+    }
+
+    @Test
     void testDuplicateMapKeyThrows() {
         String[] base = {"--model", "m.mdo", "--type", "java", "--dir", "out", "--version", "1.0.0"};
         for (String option : new String[] {"--params", "--plural-exceptions"}) {
