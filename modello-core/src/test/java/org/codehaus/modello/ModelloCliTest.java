@@ -26,6 +26,8 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -58,6 +60,32 @@ class ModelloCliTest {
     void testLegacyMissingArgsThrows() {
         String[] args = {"model.mdo", "java"};
         assertThrows(IllegalArgumentException.class, () -> ModelloCli.parseArguments(args));
+    }
+
+    @Test
+    void testTypedParametersViaDefine() throws Exception {
+        String[] args = {
+            "--model",
+            "m.mdo",
+            "--type",
+            "java",
+            "--dir",
+            "out",
+            "--version",
+            "1.0.0",
+            "-DvelocityParameters=a=1,b=2",
+            "-Dmodello.plural.exceptions=aliases=alias",
+            "-DlicenseText=L1\nL2"
+        };
+        ModelloCli.parseArguments(args);
+        Map<String, Object> params = ModelloCli.getParameters();
+        Map<String, String> velocity = new HashMap<>();
+        velocity.put("a", "1");
+        velocity.put("b", "2");
+        assertEquals(velocity, params.get(ModelloParameterConstants.VELOCITY_PARAMETERS));
+        assertEquals(
+                Collections.singletonMap("aliases", "alias"), params.get(ModelloParameterConstants.PLURAL_EXCEPTIONS));
+        assertEquals(Arrays.asList("L1", "L2"), params.get(ModelloParameterConstants.LICENSE_TEXT));
     }
 
     @Test
