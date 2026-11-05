@@ -16,8 +16,9 @@
 package org.codehaus.modello.ant;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -105,7 +106,7 @@ public class ModelloTaskTest {
     private File writeModel() throws IOException {
         // Write a minimal Modello model file
         File modelFile = tempDir.resolve("test.mdo").toFile();
-        try (FileWriter writer = new FileWriter(modelFile)) {
+        try (Writer writer = Files.newBufferedWriter(modelFile.toPath(), StandardCharsets.UTF_8)) {
             writer.write("<model xmlns=\"http://codehaus-plexus.github.io/MODELLO/2.0.0\" "
                     + "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" "
                     + "xsi:schemaLocation=\"http://codehaus-plexus.github.io/MODELLO/2.0.0 "
@@ -286,7 +287,7 @@ public class ModelloTaskTest {
     @Test
     public void testInvalidModelFileThrowsBuildException() throws IOException {
         File modelFile = tempDir.resolve("invalid.mdo").toFile();
-        try (FileWriter writer = new FileWriter(modelFile)) {
+        try (Writer writer = Files.newBufferedWriter(modelFile.toPath(), StandardCharsets.UTF_8)) {
             writer.write("not a valid model");
         }
 
@@ -318,7 +319,7 @@ public class ModelloTaskTest {
 
     private void assertVelocityGeneration(boolean projectBasedir) throws IOException {
         File modelFile = tempDir.resolve("test-velocity.mdo").toFile();
-        try (FileWriter writer = new FileWriter(modelFile)) {
+        try (Writer writer = Files.newBufferedWriter(modelFile.toPath(), StandardCharsets.UTF_8)) {
             writer.write("<model xmlns=\"http://codehaus-plexus.github.io/MODELLO/2.0.0\" "
                     + "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" "
                     + "xsi:schemaLocation=\"http://codehaus-plexus.github.io/MODELLO/2.0.0 "
@@ -343,7 +344,7 @@ public class ModelloTaskTest {
         File velocityBasedir = tempDir.resolve("templates").toFile();
         assertTrue(velocityBasedir.mkdirs());
         File templateFile = new File(velocityBasedir, "test.vm");
-        try (FileWriter writer = new FileWriter(templateFile)) {
+        try (Writer writer = Files.newBufferedWriter(templateFile.toPath(), StandardCharsets.UTF_8)) {
             writer.write("#MODELLO-VELOCITY#SAVE-OUTPUT-TO output.txt\nHello ${greeting}\n");
         }
 
@@ -380,14 +381,14 @@ public class ModelloTaskTest {
 
         Path generatedFile = outDir.resolve("output.txt");
         assertTrue(Files.exists(generatedFile));
-        String content = new String(Files.readAllBytes(generatedFile));
+        String content = new String(Files.readAllBytes(generatedFile), StandardCharsets.UTF_8);
         assertTrue(content.contains("Hello World"));
     }
 
     @Test
     public void testOutputDirectoryCreation() throws IOException {
         File modelFile = tempDir.resolve("test-mkdir.mdo").toFile();
-        try (FileWriter writer = new FileWriter(modelFile)) {
+        try (Writer writer = Files.newBufferedWriter(modelFile.toPath(), StandardCharsets.UTF_8)) {
             writer.write("<model xmlns=\"http://codehaus-plexus.github.io/MODELLO/2.0.0\" "
                     + "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" "
                     + "xsi:schemaLocation=\"http://codehaus-plexus.github.io/MODELLO/2.0.0 "
@@ -431,7 +432,7 @@ public class ModelloTaskTest {
     @Test
     public void testDomAsXpp3DefaultAndFalse() throws IOException {
         File modelFile = tempDir.resolve("test-dom.mdo").toFile();
-        try (FileWriter writer = new FileWriter(modelFile)) {
+        try (Writer writer = Files.newBufferedWriter(modelFile.toPath(), StandardCharsets.UTF_8)) {
             writer.write("<model xmlns=\"http://codehaus-plexus.github.io/MODELLO/2.0.0\" "
                     + "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" "
                     + "xsi:schemaLocation=\"http://codehaus-plexus.github.io/MODELLO/2.0.0 "
@@ -477,7 +478,7 @@ public class ModelloTaskTest {
 
         Path defaultWriter = defaultOut.resolve("com/example/dom/io/xpp3/TestDomXpp3Writer.java");
         assertTrue(Files.exists(defaultWriter));
-        String defaultContent = new String(Files.readAllBytes(defaultWriter));
+        String defaultContent = new String(Files.readAllBytes(defaultWriter), StandardCharsets.UTF_8);
         assertTrue(defaultContent.contains("import org.codehaus.plexus.util.xml.Xpp3Dom;"));
         assertTrue(defaultContent.contains("((Xpp3Dom) domClass.getConfig())"));
         assertFalse(defaultContent.contains("org.w3c.dom.Element"));
@@ -500,7 +501,7 @@ public class ModelloTaskTest {
 
         Path falseWriter = falseOut.resolve("com/example/dom/io/xpp3/TestDomXpp3Writer.java");
         assertTrue(Files.exists(falseWriter));
-        String falseContent = new String(Files.readAllBytes(falseWriter));
+        String falseContent = new String(Files.readAllBytes(falseWriter), StandardCharsets.UTF_8);
         assertTrue(falseContent.contains("writeDom( (org.w3c.dom.Element)"));
         assertFalse(falseContent.contains("Xpp3Dom"));
     }
@@ -508,7 +509,7 @@ public class ModelloTaskTest {
     @Test
     public void testPluralExceptions() throws IOException {
         File modelFile = tempDir.resolve("test-plural.mdo").toFile();
-        try (FileWriter writer = new FileWriter(modelFile)) {
+        try (Writer writer = Files.newBufferedWriter(modelFile.toPath(), StandardCharsets.UTF_8)) {
             writer.write(
                     "<model xmlns=\"http://codehaus-plexus.github.io/MODELLO/1.0.0\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n"
                             + "  xsi:schemaLocation=\"http://codehaus-plexus.github.io/MODELLO/1.0.0 https://codehaus-plexus.github.io/modello/xsd/modello-1.0.0.xsd\">\n"
@@ -561,7 +562,7 @@ public class ModelloTaskTest {
 
         Path generatedJava = outDir.resolve("com/example/test/Server.java");
         assertTrue(Files.exists(generatedJava));
-        String content = new String(Files.readAllBytes(generatedJava));
+        String content = new String(Files.readAllBytes(generatedJava), StandardCharsets.UTF_8);
         assertTrue(content.contains("addAlias("));
         assertFalse(content.contains("addAliase"));
     }
@@ -569,7 +570,7 @@ public class ModelloTaskTest {
     @Test
     public void testLicenseText() throws IOException {
         File modelFile = tempDir.resolve("test-license.mdo").toFile();
-        try (FileWriter writer = new FileWriter(modelFile)) {
+        try (Writer writer = Files.newBufferedWriter(modelFile.toPath(), StandardCharsets.UTF_8)) {
             writer.write("<model xmlns=\"http://codehaus-plexus.github.io/MODELLO/2.0.0\"\n"
                     + "  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n"
                     + "  xsi:schemaLocation=\"http://codehaus-plexus.github.io/MODELLO/2.0.0 https://codehaus-plexus.github.io/modello/xsd/modello-2.0.0.xsd\">\n"
@@ -608,7 +609,7 @@ public class ModelloTaskTest {
 
         Path generatedJava = outDir.resolve("com/example/license/LicenseClass.java");
         assertTrue(Files.exists(generatedJava));
-        String content = new String(Files.readAllBytes(generatedJava));
+        String content = new String(Files.readAllBytes(generatedJava), StandardCharsets.UTF_8);
         assertTrue(content.contains("CUSTOM LICENSE HEADER LINE 1"));
         assertTrue(content.contains("CUSTOM LICENSE HEADER LINE 2"));
     }
@@ -616,12 +617,12 @@ public class ModelloTaskTest {
     @Test
     public void testLicenseFileAndNestedElement() throws IOException {
         File licenseFile = tempDir.resolve("LICENSE.txt").toFile();
-        try (FileWriter writer = new FileWriter(licenseFile)) {
+        try (Writer writer = Files.newBufferedWriter(licenseFile.toPath(), StandardCharsets.UTF_8)) {
             writer.write("FILE BASED LICENSE HEADER");
         }
 
         File modelFile = tempDir.resolve("test-license-file.mdo").toFile();
-        try (FileWriter writer = new FileWriter(modelFile)) {
+        try (Writer writer = Files.newBufferedWriter(modelFile.toPath(), StandardCharsets.UTF_8)) {
             writer.write("<model xmlns=\"http://codehaus-plexus.github.io/MODELLO/2.0.0\"\n"
                     + "  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n"
                     + "  xsi:schemaLocation=\"http://codehaus-plexus.github.io/MODELLO/2.0.0 https://codehaus-plexus.github.io/modello/xsd/modello-2.0.0.xsd\">\n"
@@ -663,14 +664,14 @@ public class ModelloTaskTest {
 
         Path generatedJava = outDir.resolve("com/example/licensefile/LicenseFileClass.java");
         assertTrue(Files.exists(generatedJava));
-        String content = new String(Files.readAllBytes(generatedJava));
+        String content = new String(Files.readAllBytes(generatedJava), StandardCharsets.UTF_8);
         assertTrue(content.contains("FILE BASED LICENSE HEADER"));
     }
 
     @Test
     public void testXsdFileNameAndEnforceMandatory() throws IOException {
         File modelFile = tempDir.resolve("test-xsd.mdo").toFile();
-        try (FileWriter writer = new FileWriter(modelFile)) {
+        try (Writer writer = Files.newBufferedWriter(modelFile.toPath(), StandardCharsets.UTF_8)) {
             writer.write("<model xmlns=\"http://codehaus-plexus.github.io/MODELLO/2.0.0\"\n"
                     + "  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n"
                     + "  xsi:schemaLocation=\"http://codehaus-plexus.github.io/MODELLO/2.0.0 https://codehaus-plexus.github.io/modello/xsd/modello-2.0.0.xsd\"\n"
@@ -716,7 +717,7 @@ public class ModelloTaskTest {
     @Test
     public void testJsonSchemaFileName() throws IOException {
         File modelFile = tempDir.resolve("test-jsonschema.mdo").toFile();
-        try (FileWriter writer = new FileWriter(modelFile)) {
+        try (Writer writer = Files.newBufferedWriter(modelFile.toPath(), StandardCharsets.UTF_8)) {
             writer.write("<model xmlns=\"http://codehaus-plexus.github.io/MODELLO/2.0.0\"\n"
                     + "  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n"
                     + "  xsi:schemaLocation=\"http://codehaus-plexus.github.io/MODELLO/2.0.0 https://codehaus-plexus.github.io/modello/xsd/modello-2.0.0.xsd\">\n"
@@ -760,7 +761,7 @@ public class ModelloTaskTest {
     @Test
     public void testPackagedVersionsAndExtendedClassnameSuffix() throws IOException {
         File modelFile = tempDir.resolve("test-extended.mdo").toFile();
-        try (FileWriter writer = new FileWriter(modelFile)) {
+        try (Writer writer = Files.newBufferedWriter(modelFile.toPath(), StandardCharsets.UTF_8)) {
             writer.write("<model xmlns=\"http://codehaus-plexus.github.io/MODELLO/2.0.0\"\n"
                     + "  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n"
                     + "  xsi:schemaLocation=\"http://codehaus-plexus.github.io/MODELLO/2.0.0 https://codehaus-plexus.github.io/modello/xsd/modello-2.0.0.xsd\">\n"
@@ -824,7 +825,7 @@ public class ModelloTaskTest {
     @Test
     public void testXdocFileNameAndFirstVersion() throws IOException {
         File modelFile = tempDir.resolve("test-xdoc.mdo").toFile();
-        try (FileWriter writer = new FileWriter(modelFile)) {
+        try (Writer writer = Files.newBufferedWriter(modelFile.toPath(), StandardCharsets.UTF_8)) {
             writer.write("<model xmlns=\"http://codehaus-plexus.github.io/MODELLO/2.0.0\"\n"
                     + "  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n"
                     + "  xsi:schemaLocation=\"http://codehaus-plexus.github.io/MODELLO/2.0.0 https://codehaus-plexus.github.io/modello/xsd/modello-2.0.0.xsd\">\n"
