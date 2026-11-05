@@ -689,10 +689,10 @@ public class XdocGenerator extends AbstractXmlGenerator {
 
     /**
      * Pattern matching {@code {@code ...}} and {@code {@literal ...}} inline tags,
-     * including nested braces.
+     * including one level of nested braces.
      */
     private static final Pattern INLINE_CODE_TAG_PATTERN =
-            Pattern.compile("\\{@(?:code|literal)\\s+((?:[^{}]|\\{[^{}]*\\})*)\\}");
+            Pattern.compile("\\{@(code|literal)\\s+((?:[^{}]|\\{[^{}]*\\})*)\\}");
 
     /**
      * HTML-escapes {@code <}, {@code >} and {@code &} in {@code s}.
@@ -718,7 +718,10 @@ public class XdocGenerator extends AbstractXmlGenerator {
         StringBuffer sb = new StringBuffer();
         Matcher m = INLINE_CODE_TAG_PATTERN.matcher(text);
         while (m.find()) {
-            m.appendReplacement(sb, Matcher.quoteReplacement("<code>" + escapeHtml(m.group(1)) + "</code>"));
+            String tag = m.group(1);
+            String open = "literal".equals(tag) ? "<i>" : "<code>";
+            String close = "literal".equals(tag) ? "</i>" : "</code>";
+            m.appendReplacement(sb, Matcher.quoteReplacement(open + escapeHtml(m.group(2)) + close));
         }
         m.appendTail(sb);
         return sb.toString();
