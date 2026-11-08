@@ -41,7 +41,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Verifies that the XSD generator emits {@code mixed="true"} on {@code xs:complexType}
@@ -80,7 +80,7 @@ public class MixedContentXsdGeneratorTest extends AbstractModelloGeneratorTest {
         modello.generate(model, "xsd", parameters);
 
         File xsdFile = new File(getOutputDirectory(), "mixed-content-1.0.0.xsd");
-        assertNotNull(xsdFile, "Generated XSD file must exist");
+        assertTrue(xsdFile.exists(), "Generated XSD file must exist");
 
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         dbf.setNamespaceAware(true);
