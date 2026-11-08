@@ -657,7 +657,16 @@
           <version>1.2.0+</version>
           <type>String</type>
           <description><![CDATA[
-            Insert fields from parent class before this one in the XML representation of the class.]]>
+            Insert fields from parent class before this one in the XML representation of the class.
+            The value is the name of a field of the parent class. All parent fields up to and including the named
+            one are placed immediately before this field. Parent fields that are not placed this way follow the
+            fields of the class itself, which is also the order when the attribute is not used at all. If several
+            fields of a class use the attribute, their values must follow the order of the parent's fields, because
+            each one continues where the previous one stopped. The model is rejected when the named field does not
+            exist in the parent class or has already been placed. For example, with a parent class declaring
+            fields <code>a</code>, <code>b</code> and <code>c</code>, a field <code>x</code> declaring
+            <code>xml.insertParentFieldsUpTo="b"</code> is written after <code>a</code> and <code>b</code> and
+            before <code>c</code>.]]>
           </description>
           <comment>see org.codehaus.modello.plugins.xml.metadata.XmlMetadataPlugin</comment>
         </field>
