@@ -63,6 +63,10 @@ import org.codehaus.plexus.util.xml.PrettyPrintXMLWriter;
 import org.codehaus.plexus.util.xml.XMLWriter;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.nodes.Entities;
+import org.jsoup.nodes.Node;
+import org.jsoup.nodes.TextNode;
 
 /**
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
@@ -749,7 +753,81 @@ public class XdocGenerator extends AbstractXmlGenerator {
                         .collect(Collectors.joining("\n", "\n", ""));
         Document document = Jsoup.parseBodyFragment(html);
         document.outputSettings().syntax(Document.OutputSettings.Syntax.xml);
+        linkifyUrls(document.body());
         return document.body().html();
+    }
+
+    /** Matches a bare {@code http://} or {@code https://} URL in running text. */
+    private static final Pattern URL_PATTERN = Pattern.compile("https?://[^\\s<>\"']+");
+
+    /** Elements whose text is shown as is, even when it holds a URL. */
+    private static final Set<String> NO_LINK_ELEMENTS = new HashSet<>(Arrays.asList("a", "code", "pre"));
+
+    /**
+     * Wraps every bare URL in the text below {@code parent} in a link, except inside links and code.
+     */
+    private static void linkifyUrls(Element parent) {
+        for (Node child : new ArrayList<>(parent.childNodes())) {
+            if (child instanceof Element) {
+                if (!NO_LINK_ELEMENTS.contains(((Element) child).normalName())) {
+                    linkifyUrls((Element) child);
+                }
+            } else if (child instanceof TextNode) {
+                TextNode textNode = (TextNode) child;
+                String text = textNode.getWholeText();
+                Matcher matcher = URL_PATTERN.matcher(text);
+                StringBuilder html = new StringBuilder();
+                int last = 0;
+                while (matcher.find()) {
+                    String url = stripTrailingPunctuation(matcher.group());
+                    if (url.endsWith("://")) {
+                        continue;
+                    }
+                    html.append(Entities.escape(text.substring(last, matcher.start())));
+                    String escapedUrl = Entities.escape(url);
+                    html.append("<a href=\"")
+                            .append(escapedUrl)
+                            .append("\">")
+                            .append(escapedUrl)
+                            .append("</a>");
+                    last = matcher.start() + url.length();
+                }
+                if (last > 0) {
+                    html.append(Entities.escape(text.substring(last)));
+                    textNode.before(html.toString());
+                    textNode.remove();
+                }
+            }
+        }
+    }
+
+    /**
+     * Drops what ends a sentence or closes a bracket around a URL from its end: {@code .,;:!?} and a closing bracket
+     * with no opening one in the URL.
+     */
+    private static String stripTrailingPunctuation(String url) {
+        int end = url.length();
+        while (end > 0) {
+            char c = url.charAt(end - 1);
+            if (".,;:!?".indexOf(c) >= 0) {
+                end--;
+            } else if (c == ')' && count(url, end, '(') < count(url, end, ')')) {
+                end--;
+            } else {
+                break;
+            }
+        }
+        return url.substring(0, end);
+    }
+
+    private static int count(String s, int end, char c) {
+        int n = 0;
+        for (int i = 0; i < end; i++) {
+            if (s.charAt(i) == c) {
+                n++;
+            }
+        }
+        return n;
     }
 
     private static String renderJavaDocTag(BlockTag tag) {
