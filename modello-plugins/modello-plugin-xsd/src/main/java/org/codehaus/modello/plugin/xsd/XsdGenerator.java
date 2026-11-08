@@ -193,6 +193,17 @@ public class XsdGenerator extends AbstractXmlGenerator {
 
         fields.removeAll(attributeFields);
 
+        // If any element field carries xml.format="mixed" without an xml.tagName override,
+        // the class body itself accepts both text and child elements (mixed content).
+        // Fields with xml.tagName produce a *wrapper* child element; mixed content lives
+        // inside that wrapper and is handled by writeListElement, not here.
+        if (!hasContentField
+                && fields.stream()
+                        .map(f -> (XmlFieldMetadata) f.getMetadata(XmlFieldMetadata.ID))
+                        .anyMatch(m -> "mixed".equals(m.getFormat()) && m.getTagName() == null)) {
+            w.addAttribute("mixed", "true");
+        }
+
         if (hasContentField) {
             // yes it's only an extension of xs:string
             w.startElement("xs:simpleContent");
@@ -452,6 +463,10 @@ public class XsdGenerator extends AbstractXmlGenerator {
         String valuesTagName = resolveTagName(fieldTagName, xmlAssociationMetadata);
 
         w.startElement("xs:complexType");
+
+        if ("mixed".equals(xmlFieldMetadata.getFormat())) {
+            w.addAttribute("mixed", "true");
+        }
 
         w.startElement("xs:sequence");
 
