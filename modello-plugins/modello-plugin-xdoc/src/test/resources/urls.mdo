@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+
+<model xmlns="http://codehaus-plexus.github.io/MODELLO/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://codehaus-plexus.github.io/MODELLO/1.0.0 http://codehaus-plexus.github.io/modello/xsd/modello-1.0.0.xsd">
+  <id>urls</id>
+  <name>Modello URL Test Model</name>
+  <root>Model</root>
+  <defaults>
+    <default>
+      <key>package</key>
+      <value>org.codehaus.mojo.modello.javatest</value>
+    </default>
+  </defaults>
+  <classes>
+    <class rootElement="true">
+      <description>See https://maven.apache.org/ref/current/ for details.</description>
+      <name>Model</name>
+      <version>1.0.0+</version>
+      <fields>
+        <field>
+          <name>plain</name>
+          <version>1.0.0+</version>
+          <type>String</type>
+          <description>Documented at http://example.com/docs?a=1&amp;b=2.</description>
+        </field>
+        <field>
+          <name>bracketed</name>
+          <version>1.0.0+</version>
+          <type>String</type>
+          <description>Home page (https://example.com/page_(1)), or https://example.org/x; not ftp://example.net/.</description>
+        </field>
+        <field>
+          <name>untouched</name>
+          <version>1.0.0+</version>
+          <type>String</type>
+          <description><![CDATA[Already <a href="https://example.com/a">linked https://example.com/a</a> and <code>https://example.com/code</code> stays; https:// alone is no URL.]]></description>
+        </field>
+      </fields>
+    </class>
+  </classes>
+</model>

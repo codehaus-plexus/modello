@@ -94,6 +94,25 @@ public class XdocGeneratorTest extends AbstractModelloGeneratorTest {
                         + new String(Files.readAllBytes(new File(getOutputDirectory(), "html4.xml").toPath())));
     }
 
+    @Test
+    public void testUrlsAreLinked() throws Exception {
+        Model model = modello.loadModel(getXmlResourceReader("/urls.mdo"));
+
+        Map<String, Object> parameters = getModelloParameters("1.0.0");
+
+        modello.generate(model, "xdoc", parameters);
+
+        Diff diff = DiffBuilder.compare(
+                        Input.fromStream(XdocGeneratorTest.class.getResourceAsStream("/urls.expected.xml")))
+                .withTest(Input.fromFile(new File(getOutputDirectory(), "urls.xml")))
+                .build();
+
+        assertFalse(
+                diff.hasDifferences(),
+                diff.toString() + "\nGenerated output:\n"
+                        + new String(Files.readAllBytes(new File(getOutputDirectory(), "urls.xml").toPath())));
+    }
+
     private void checkMavenXdocGenerator() throws Exception {
         Model model = modello.loadModel(getXmlResourceReader("/maven.mdo"));
 
