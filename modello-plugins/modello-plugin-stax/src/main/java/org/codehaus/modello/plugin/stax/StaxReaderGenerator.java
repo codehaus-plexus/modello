@@ -61,11 +61,15 @@ public class StaxReaderGenerator extends AbstractStaxGenerator {
 
     private boolean requiresDomSupport;
 
+    private boolean versionCheck;
+
     @Override
     public void generate(Model model, Map<String, Object> parameters) throws ModelloException {
         initialize(model, parameters);
 
         requiresDomSupport = false;
+        versionCheck =
+                Boolean.parseBoolean(getParameter(parameters, ModelloParameterConstants.STAX_VERSION_CHECK, "true"));
 
         try {
             generateStaxReader();
@@ -215,7 +219,7 @@ public class StaxReaderGenerator extends AbstractStaxGenerator {
         sc.add("}");
 
         VersionDefinition versionDefinition = objectModel.getVersionDefinition();
-        if (versionDefinition != null && versionDefinition.isNamespaceType()) {
+        if (versionCheck && versionDefinition != null && versionDefinition.isNamespaceType()) {
             sc.add("String modelVersion = getVersionFromRootNamespace( xmlStreamReader );");
 
             writeModelVersionCheck(sc);
@@ -974,7 +978,7 @@ public class StaxReaderGenerator extends AbstractStaxGenerator {
             // ModelField
             writePrimitiveField(field, field.getType(), objectName, "set" + capFieldName, sc);
 
-            if (rootElement && field.isModelVersionField()) {
+            if (versionCheck && rootElement && field.isModelVersionField()) {
                 sc.add("String modelVersion = " + objectName + ".get" + capFieldName + "();");
 
                 writeModelVersionCheck(sc);
