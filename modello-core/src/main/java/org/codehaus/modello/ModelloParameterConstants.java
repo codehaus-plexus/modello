@@ -93,5 +93,13 @@ public class ModelloParameterConstants {
      */
     public static final String PLURAL_EXCEPTIONS = "modello.plural.exceptions";
 
+    /**
+     * Boolean flag controlling whether the generated StAX reader checks that the model version of the document
+     * (taken from the root namespace or from the version field) matches the version of the reader.
+     * Defaults to {@code true}.
+     * @since 2.9.0
+     */
+    public static final String STAX_VERSION_CHECK = "modello.stax.versionCheck";
+
     private ModelloParameterConstants() {}
 }

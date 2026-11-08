@@ -1,0 +1,59 @@
+package org.codehaus.modello.generator.xml.stax;
+
+/*
+ * Copyright (c) 2004, Codehaus.org
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+ * of the Software, and to permit persons to whom the Software is furnished to do
+ * so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+import org.junit.jupiter.api.Assertions;
+import org.codehaus.modello.test.model.vin.Model;
+import org.codehaus.modello.test.model.vin.io.stax.VersionInNamespaceStaxReader;
+import org.codehaus.modello.verifier.Verifier;
+import org.codehaus.plexus.util.xml.XmlStreamReader;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.Reader;
+import javax.xml.stream.XMLStreamException;
+
+public class StaxVerifierNoVersionCheck
+    extends Verifier
+{
+    public void verify()
+        throws IOException, XMLStreamException
+    {
+        File file = new File( "src/test/verifiers/stax-no-version-check/wrong-version-in-namespace.xml" );
+
+        VersionInNamespaceStaxReader modelReader = new VersionInNamespaceStaxReader();
+
+        // the reader of version 4.0.0 accepts a document of version 3.2.1 when the check is disabled
+        try ( Reader reader = new XmlStreamReader( file ) )
+        {
+            Model model = modelReader.read( reader );
+            Assertions.assertEquals( "Maven", model.getName() );
+        }
+
+        // determining the version of a document still works
+        try ( Reader reader = new XmlStreamReader( file ) )
+        {
+            Assertions.assertEquals( "3.2.1", modelReader.determineVersion( reader ) );
+        }
+    }
+}
