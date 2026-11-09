@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+<!--
+  Model exercising xml.format="mixed" on the XSD generator.
+
+  Two cases:
+
+  1. MixedBody — a field with xml.format="mixed" and no xml.tagName.
+     The class-level xs:complexType must have mixed="true".
+
+  2. MixedWrapper — a list field with xml.format="mixed" AND an
+     xml.tagName override.  The anonymous xs:complexType written by
+     writeListElement() must have mixed="true".
+
+  A third class, Plain, carries no mixed field at all.  Its
+  xs:complexType must NOT have mixed="true", verifying the guard.
+-->
+<model xmlns="http://codehaus-plexus.github.io/MODELLO/2.0.0"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://codehaus-plexus.github.io/MODELLO/2.0.0 https://codehaus-plexus.github.io/modello/xsd/modello-2.0.0.xsd"
+       xml.namespace="http://codehaus-plexus.github.io/MIXED/${version}"
+       xml.schemaLocation="http://codehaus-plexus.github.io/MIXED/${version} http://codehaus-plexus.github.io/mixed-${version}.xsd">
+  <id>mixed-content</id>
+  <name>MixedContent</name>
+  <description>Model exercising xml.format="mixed" XSD generation.</description>
+  <defaults>
+    <default>
+      <key>package</key>
+      <value>org.codehaus.modello.test.mixed</value>
+    </default>
+  </defaults>
+  <classes>
+
+    <!-- Root element that owns the other classes -->
+    <class rootElement="true">
+      <name>MixedRoot</name>
+      <version>1.0.0+</version>
+      <description>Root element.</description>
+      <fields>
+        <field>
+          <name>body</name>
+          <version>1.0.0+</version>
+          <association>
+            <type>MixedBody</type>
+            <multiplicity>1</multiplicity>
+          </association>
+          <description>Contains a body-level mixed-content element.</description>
+        </field>
+        <field>
+          <name>wrapper</name>
+          <version>1.0.0+</version>
+          <association>
+            <type>MixedWrapper</type>
+            <multiplicity>1</multiplicity>
+          </association>
+          <description>Contains a wrapper mixed-content element.</description>
+        </field>
+        <field>
+          <name>plain</name>
+          <version>1.0.0+</version>
+          <association>
+            <type>Plain</type>
+            <multiplicity>1</multiplicity>
+          </association>
+          <description>Contains a non-mixed element (control case).</description>
+        </field>
+      </fields>
+    </class>
+
+    <!--
+      Case 2: body-level mixed content.
+      The field "options" has xml.format="mixed" but NO xml.tagName.
+      => writeComplexTypeDescriptor() must set mixed="true" on MixedBody's xs:complexType.
+    -->
+    <class>
+      <name>MixedBody</name>
+      <version>1.0.0+</version>
+      <description>
+        A class whose body accepts both text and child elements (mixed content).
+        The "options" field has xml.format="mixed" with no xml.tagName override,
+        so the class-level xs:complexType must carry mixed="true".
+      </description>
+      <fields>
+        <field xml.format="mixed">
+          <name>options</name>
+          <version>1.0.0+</version>
+          <type>String</type>
+          <description>Inline text or child elements (mixed).</description>
+        </field>
+        <field>
+          <name>name</name>
+          <version>1.0.0+</version>
+          <type>String</type>
+          <description>A regular string field — no mixed content.</description>
+        </field>
+      </fields>
+    </class>
+
+    <!--
+      Case 1: wrapper mixed content.
+      The field "args" has xml.format="mixed" AND an explicit xml.tagName.
+      => writeListElement() must set mixed="true" on the anonymous xs:complexType
+         inside the wrapper element.
+    -->
+    <class>
+      <name>MixedWrapper</name>
+      <version>1.0.0+</version>
+      <description>
+        A class with a list field that uses xml.format="mixed" and xml.tagName.
+        The wrapper element's anonymous xs:complexType must carry mixed="true".
+      </description>
+      <fields>
+        <field xml.format="mixed" xml.tagName="args">
+          <name>args</name>
+          <version>1.0.0+</version>
+          <association>
+            <type>String</type>
+            <multiplicity>*</multiplicity>
+          </association>
+          <description>List of arguments — mixed content inside wrapper element.</description>
+        </field>
+      </fields>
+    </class>
+
+    <!--
+      Control: a plain class with no mixed-content fields.
+      Its xs:complexType must NOT have mixed="true".
+    -->
+    <class>
+      <name>Plain</name>
+      <version>1.0.0+</version>
+      <description>A class with no mixed-content fields.</description>
+      <fields>
+        <field>
+          <name>value</name>
+          <version>1.0.0+</version>
+          <type>String</type>
+          <description>A regular string field.</description>
+        </field>
+      </fields>
+    </class>
+
+  </classes>
+</model>
