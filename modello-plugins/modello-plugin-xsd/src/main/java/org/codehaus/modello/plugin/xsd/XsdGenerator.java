@@ -41,6 +41,7 @@ import org.codehaus.modello.model.ModelAssociation;
 import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.plugin.xsd.metadata.XsdClassMetadata;
+import org.codehaus.modello.plugin.xsd.metadata.XsdFieldMetadata;
 import org.codehaus.modello.plugins.xml.AbstractXmlGenerator;
 import org.codehaus.modello.plugins.xml.metadata.XmlAssociationMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
@@ -261,7 +262,10 @@ public class XsdGenerator extends AbstractXmlGenerator {
                 } else if ((xsdType != null) || "char".equals(field.getType()) || "Character".equals(field.getType())) {
                     w.addAttribute("name", fieldTagName);
 
-                    if (xsdType != null) {
+                    XsdFieldMetadata xsdFieldMetadata = (XsdFieldMetadata) field.getMetadata(XsdFieldMetadata.ID);
+                    boolean hasConstraint = hasXsdConstraint(xsdFieldMetadata);
+
+                    if (xsdType != null && !hasConstraint) {
                         // schema built-in datatype
                         w.addAttribute("type", xsdType);
                     }
@@ -277,6 +281,8 @@ public class XsdGenerator extends AbstractXmlGenerator {
 
                     if (xsdType == null) {
                         writeCharElement(w);
+                    } else if (hasConstraint) {
+                        writeConstrainedStringElement(w, xsdFieldMetadata);
                     }
                 } else {
                     // TODO cleanup/split this part it's no really human readable :-)
@@ -364,7 +370,10 @@ public class XsdGenerator extends AbstractXmlGenerator {
 
             w.addAttribute("name", tagName);
 
-            if (xsdType != null) {
+            XsdFieldMetadata xsdFieldMetadata = (XsdFieldMetadata) field.getMetadata(XsdFieldMetadata.ID);
+            boolean hasConstraint = hasXsdConstraint(xsdFieldMetadata);
+
+            if (xsdType != null && !hasConstraint) {
                 w.addAttribute("type", xsdType);
             }
 
@@ -378,6 +387,8 @@ public class XsdGenerator extends AbstractXmlGenerator {
 
             if ("char".equals(field.getType()) || "Character".equals(field.getType())) {
                 writeCharElement(w);
+            } else if (hasConstraint) {
+                writeConstrainedStringElement(w, xsdFieldMetadata);
             } else if (xsdType == null) {
                 throw new IllegalStateException("Attribute field of a non-primitive type '" + field.getType()
                         + "' for '" + field.getName() + "' in '" + modelClass.getName() + "' model class");
@@ -486,6 +497,74 @@ public class XsdGenerator extends AbstractXmlGenerator {
         w.endElement();
 
         w.endElement();
+    }
+
+    private static boolean hasXsdConstraint(XsdFieldMetadata xsdFieldMetadata) {
+        return !xsdFieldMetadata.getEnumerations().isEmpty()
+                || !xsdFieldMetadata.getSuggestions().isEmpty()
+                || (xsdFieldMetadata.getPattern() != null
+                        && !xsdFieldMetadata.getPattern().isEmpty());
+    }
+
+    /**
+     * Writes an inline {@code xs:simpleType} for a constrained String field.
+     * <ul>
+     *   <li>If {@link XsdFieldMetadata#getEnumerations()} is non-empty, generates a strict
+     *       {@code xs:restriction} with one {@code xs:enumeration} per value.</li>
+     *   <li>If {@link XsdFieldMetadata#getSuggestions()} is non-empty, generates an
+     *       {@code xs:union} of a fixed enumeration and plain {@code xs:string}, giving
+     *       IDE autocompletion without schema-level rejection of unknown values.</li>
+     *   <li>If {@link XsdFieldMetadata#getPattern()} is set, generates a
+     *       {@code xs:restriction base="xs:string"} with an {@code xs:pattern} facet.</li>
+     * </ul>
+     */
+    private static void writeConstrainedStringElement(XMLWriter w, XsdFieldMetadata xsdFieldMetadata) {
+        if (!xsdFieldMetadata.getEnumerations().isEmpty()) {
+            // Strict enumeration: only the listed values are schema-valid.
+            w.startElement("xs:simpleType");
+            w.startElement("xs:restriction");
+            w.addAttribute("base", "xs:string");
+            for (String value : xsdFieldMetadata.getEnumerations()) {
+                w.startElement("xs:enumeration");
+                w.addAttribute("value", value);
+                w.endElement();
+            }
+            w.endElement(); // xs:restriction
+            w.endElement(); // xs:simpleType
+        } else if (!xsdFieldMetadata.getSuggestions().isEmpty()) {
+            // Non-strict union: IDE offers completion while still accepting any custom value.
+            w.startElement("xs:simpleType");
+            w.startElement("xs:union");
+            // memberTypes must reference named types — use an anonymous inner simpleType instead
+            w.startElement("xs:simpleType");
+            w.startElement("xs:restriction");
+            w.addAttribute("base", "xs:string");
+            for (String value : xsdFieldMetadata.getSuggestions()) {
+                w.startElement("xs:enumeration");
+                w.addAttribute("value", value);
+                w.endElement();
+            }
+            w.endElement(); // xs:restriction
+            w.endElement(); // xs:simpleType (enumeration member)
+            w.startElement("xs:simpleType");
+            w.startElement("xs:restriction");
+            w.addAttribute("base", "xs:string");
+            w.endElement(); // xs:restriction
+            w.endElement(); // xs:simpleType (xs:string member)
+            w.endElement(); // xs:union
+            w.endElement(); // xs:simpleType
+        } else if (xsdFieldMetadata.getPattern() != null
+                && !xsdFieldMetadata.getPattern().isEmpty()) {
+            // Pattern restriction.
+            w.startElement("xs:simpleType");
+            w.startElement("xs:restriction");
+            w.addAttribute("base", "xs:string");
+            w.startElement("xs:pattern");
+            w.addAttribute("value", xsdFieldMetadata.getPattern());
+            w.endElement(); // xs:pattern
+            w.endElement(); // xs:restriction
+            w.endElement(); // xs:simpleType
+        }
     }
 
     private static String getXsdType(String type) {

@@ -16,6 +16,9 @@ package org.codehaus.modello.plugin.xsd.metadata;
  * limitations under the License.
  */
 
+import java.util.Collections;
+import java.util.List;
+
 import org.codehaus.modello.metadata.FieldMetadata;
 
 /**
@@ -25,4 +28,84 @@ import org.codehaus.modello.metadata.FieldMetadata;
  */
 public class XsdFieldMetadata implements FieldMetadata {
     public static final String ID = XsdFieldMetadata.class.getName();
+
+    /**
+     * Comma-separated allowed values for a strict {@code xs:restriction/xs:enumeration} constraint.
+     * When set, the generated XSD uses a {@code simpleType} with {@code restriction base="xs:string"}
+     * containing one {@code xs:enumeration} element per value. Instance documents that contain values
+     * outside this list are schema-invalid.
+     * <p>
+     * Mutually exclusive with {@link #suggestions} and {@link #pattern}.
+     * </p>
+     * <p>
+     * Modello syntax:
+     * <pre>{@code
+     * <field xsd.enumerations="compile,runtime,provided,test,system">
+     *   <name>scope</name>
+     *   <type>String</type>
+     * </field>
+     * }</pre>
+     */
+    private List<String> enumerations = Collections.emptyList();
+
+    /**
+     * Comma-separated suggested values for a non-strict {@code xs:union} completion hint.
+     * When set, the generated XSD uses a {@code simpleType} with {@code union} of a fixed
+     * enumeration and {@code xs:string}, so IDEs offer autocompletion while still accepting
+     * any custom value.
+     * <p>
+     * Mutually exclusive with {@link #enumerations} and {@link #pattern}.
+     * </p>
+     * <p>
+     * Modello syntax:
+     * <pre>{@code
+     * <field xsd.suggestions="jar,pom,war,ear,maven-plugin">
+     *   <name>packaging</name>
+     *   <type>String</type>
+     * </field>
+     * }</pre>
+     */
+    private List<String> suggestions = Collections.emptyList();
+
+    /**
+     * A regex pattern for a {@code xs:restriction/xs:pattern} constraint.
+     * When set, the generated XSD uses a {@code simpleType} with {@code restriction base="xs:string"}
+     * containing an {@code xs:pattern} element.
+     * <p>
+     * Mutually exclusive with {@link #enumerations} and {@link #suggestions}.
+     * </p>
+     * <p>
+     * Modello syntax:
+     * <pre>{@code
+     * <field xsd.pattern="[a-zA-Z0-9._\-]+">
+     *   <name>groupId</name>
+     *   <type>String</type>
+     * </field>
+     * }</pre>
+     */
+    private String pattern;
+
+    public List<String> getEnumerations() {
+        return enumerations;
+    }
+
+    public void setEnumerations(List<String> enumerations) {
+        this.enumerations = enumerations != null ? enumerations : Collections.emptyList();
+    }
+
+    public List<String> getSuggestions() {
+        return suggestions;
+    }
+
+    public void setSuggestions(List<String> suggestions) {
+        this.suggestions = suggestions != null ? suggestions : Collections.emptyList();
+    }
+
+    public String getPattern() {
+        return pattern;
+    }
+
+    public void setPattern(String pattern) {
+        this.pattern = pattern;
+    }
 }

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model xmlns="http://codehaus-plexus.github.io/MODELLO/2.0.0"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://codehaus-plexus.github.io/MODELLO/2.0.0 https://codehaus-plexus.github.io/modello/xsd/modello-2.0.0.xsd"
+       xml.namespace="http://codehaus-plexus.github.io/XSD-ENUM-TEST/${version}"
+       xml.schemaLocation="http://codehaus-plexus.github.io/XSD-ENUM-TEST/${version} http://codehaus-plexus.github.io/xsd-enum-test-${version}.xsd">
+  <id>xsd-enum-test</id>
+  <name>XsdEnumTest</name>
+  <description>
+    Model used to test xs:enumeration / xs:union / xs:pattern support in the XSD generator.
+  </description>
+  <defaults>
+    <default>
+      <key>package</key>
+      <value>org.codehaus.modello.test.xsdenumtest</value>
+    </default>
+  </defaults>
+  <classes>
+    <class rootElement="true">
+      <name>Artifact</name>
+      <version>1.0.0+</version>
+      <description>A simple artifact descriptor.</description>
+      <fields>
+        <!--
+          Strict enumeration: only listed values are schema-valid.
+          Models dependency scope where unknown values must be rejected.
+        -->
+        <field xsd.enumerations="compile,runtime,provided,test,system">
+          <name>scope</name>
+          <version>1.0.0+</version>
+          <type>String</type>
+          <description>The dependency scope (strict).</description>
+        </field>
+        <!--
+          Suggested values: IDE autocompletion without strict rejection.
+          Models packaging type where custom packagers are allowed.
+        -->
+        <field xsd.suggestions="jar,pom,war,ear,maven-plugin">
+          <name>packaging</name>
+          <version>1.0.0+</version>
+          <type>String</type>
+          <description>The packaging type (suggested values).</description>
+        </field>
+        <!--
+          Pattern restriction: validates format via regex.
+          Models artifact coordinates.
+        -->
+        <field xsd.pattern="[a-zA-Z0-9._\-]+">
+          <name>artifactId</name>
+          <version>1.0.0+</version>
+          <type>String</type>
+          <description>The artifact identifier (pattern-validated).</description>
+        </field>
+        <!--
+          Plain string field, no constraint — baseline check that normal fields still work.
+        -->
+        <field>
+          <name>description</name>
+          <version>1.0.0+</version>
+          <type>String</type>
+          <description>A free-form description.</description>
+        </field>
+      </fields>
+    </class>
+  </classes>
+</model>

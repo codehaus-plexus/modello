@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<artifact xmlns="http://codehaus-plexus.github.io/XSD-ENUM-TEST/1.0.0">
+  <scope>compile</scope>
+  <packaging>jar</packaging>
+  <artifactId>my-artifact</artifactId>
+  <description>A valid artifact.</description>
+</artifact>
