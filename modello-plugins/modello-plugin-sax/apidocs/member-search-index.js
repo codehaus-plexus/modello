@@ -1,1 +1,0 @@
-memberSearchIndex = [{"p":"org.codehaus.modello.plugin.sax","c":"SaxWriterGenerator","l":"generate(Model, Map)","u":"generate(org.codehaus.modello.model.Model,java.util.Map)"},{"p":"org.codehaus.modello.plugin.sax","c":"SaxWriterGenerator","l":"SaxWriterGenerator()","u":"%3Cinit%3E()","k":"3"}];updateSearchResults();

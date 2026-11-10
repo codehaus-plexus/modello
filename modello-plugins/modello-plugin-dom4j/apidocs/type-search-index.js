@@ -1,1 +1,0 @@
-typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html","k":"18"},{"p":"org.codehaus.modello.plugin.dom4j","l":"Dom4jReaderGenerator"},{"p":"org.codehaus.modello.plugin.dom4j","l":"Dom4jWriterGenerator"}];updateSearchResults();
