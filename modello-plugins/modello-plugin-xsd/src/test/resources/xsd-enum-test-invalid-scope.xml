@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<!-- invalid: scope "unknown-scope" is not in the strict enumeration -->
+<artifact xmlns="http://codehaus-plexus.github.io/XSD-ENUM-TEST/1.0.0">
+  <scope>unknown-scope</scope>
+  <packaging>jar</packaging>
+  <artifactId>my-artifact</artifactId>
+</artifact>

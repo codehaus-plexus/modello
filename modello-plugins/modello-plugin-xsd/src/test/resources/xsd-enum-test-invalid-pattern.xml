@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<!-- invalid: artifactId "my artifact!" contains spaces and ! which violate the pattern -->
+<artifact xmlns="http://codehaus-plexus.github.io/XSD-ENUM-TEST/1.0.0">
+  <scope>compile</scope>
+  <artifactId>my artifact!</artifactId>
+</artifact>

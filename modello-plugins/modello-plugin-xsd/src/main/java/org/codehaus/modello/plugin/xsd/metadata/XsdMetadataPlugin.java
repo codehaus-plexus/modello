@@ -19,7 +19,11 @@ package org.codehaus.modello.plugin.xsd.metadata;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.metadata.AbstractMetadataPlugin;
@@ -48,6 +52,12 @@ public class XsdMetadataPlugin extends AbstractMetadataPlugin {
 
     public static final String COMPOSITOR = "xsd.compositor";
 
+    public static final String ENUMERATIONS = "xsd.enumerations";
+
+    public static final String SUGGESTIONS = "xsd.suggestions";
+
+    public static final String PATTERN = "xsd.pattern";
+
     public AssociationMetadata getAssociationMetadata(ModelAssociation association, Map<String, String> data)
             throws ModelloException {
         return new XsdAssociationMetadata();
@@ -67,7 +77,27 @@ public class XsdMetadataPlugin extends AbstractMetadataPlugin {
     }
 
     public FieldMetadata getFieldMetadata(ModelField field, Map<String, String> data) throws ModelloException {
-        return new XsdFieldMetadata();
+        XsdFieldMetadata metadata = new XsdFieldMetadata();
+
+        List<String> enumerations = parseCommaSeparated(getString(data, ENUMERATIONS));
+        List<String> suggestions = parseCommaSeparated(getString(data, SUGGESTIONS));
+        String pattern = getString(data, PATTERN);
+
+        long constraintCount = (enumerations.isEmpty() ? 0 : 1)
+                + (suggestions.isEmpty() ? 0 : 1)
+                + (pattern != null && !pattern.isEmpty() ? 1 : 0);
+        if (constraintCount > 1) {
+            throw new ModelloException("Field '"
+                    + field.getName()
+                    + "': xsd.enumerations, xsd.suggestions and xsd.pattern are mutually exclusive."
+                    + " Only one may be specified per field.");
+        }
+
+        metadata.setEnumerations(enumerations);
+        metadata.setSuggestions(suggestions);
+        metadata.setPattern(pattern);
+
+        return metadata;
     }
 
     public ModelMetadata getModelMetadata(Model model, Map<String, String> data) throws ModelloException {
@@ -78,5 +108,15 @@ public class XsdMetadataPlugin extends AbstractMetadataPlugin {
         metadata.setTargetNamespace(getString(data, TARGET_NAMESPACE));
 
         return metadata;
+    }
+
+    private static List<String> parseCommaSeparated(String value) {
+        if (value == null || value.trim().isEmpty()) {
+            return Collections.emptyList();
+        }
+        return Arrays.stream(value.split(","))
+                .map(String::trim)
+                .filter(s -> !s.isEmpty())
+                .collect(Collectors.toList());
     }
 }
