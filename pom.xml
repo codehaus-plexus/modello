@@ -10,7 +10,7 @@
 
   <groupId>org.codehaus.modello</groupId>
   <artifactId>modello</artifactId>
-  <version>2.9.0</version>
+  <version>2.9.1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>Modello</name>
@@ -187,7 +187,7 @@
     <slf4j.version>1.7.36</slf4j.version>
     <sisu.version>1.1.1</sisu.version>
     <mavenVersion>3.9.16</mavenVersion>
-    <project.build.outputTimestamp>2026-11-10T13:52:18Z</project.build.outputTimestamp>
+    <project.build.outputTimestamp>2026-11-10T13:54:46Z</project.build.outputTimestamp>
   </properties>
 
   <dependencyManagement>
