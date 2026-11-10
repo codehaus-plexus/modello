@@ -119,6 +119,19 @@ public class EnumerationXsdGeneratorTest extends AbstractModelloGeneratorTest {
                 XPathConstants.NODESET);
         assertEquals(1, descType.getLength(), "description should remain a plain xs:string element");
 
+        // 5. attributeScope (xml.attribute="true") must have xs:restriction with 2 xs:enumeration children
+        //    — exercises the attribute-field loop in XsdGenerator
+        NodeList attributeScopeEnums = (NodeList) xpath.evaluate(
+                "//*[local-name()='attribute' and @name='attributeScope']"
+                        + "//*[local-name()='restriction' and @base='xs:string']"
+                        + "/*[local-name()='enumeration']",
+                doc,
+                XPathConstants.NODESET);
+        assertEquals(
+                2,
+                attributeScopeEnums.getLength(),
+                "attributeScope attribute should have 2 strict enumerations (compile, runtime)");
+
         // ---- Validation assertions ----
 
         SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);

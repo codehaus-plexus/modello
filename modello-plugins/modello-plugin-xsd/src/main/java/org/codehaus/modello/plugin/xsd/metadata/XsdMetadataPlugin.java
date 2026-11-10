@@ -79,9 +79,23 @@ public class XsdMetadataPlugin extends AbstractMetadataPlugin {
     public FieldMetadata getFieldMetadata(ModelField field, Map<String, String> data) throws ModelloException {
         XsdFieldMetadata metadata = new XsdFieldMetadata();
 
-        metadata.setEnumerations(parseCommaSeparated(getString(data, ENUMERATIONS)));
-        metadata.setSuggestions(parseCommaSeparated(getString(data, SUGGESTIONS)));
-        metadata.setPattern(getString(data, PATTERN));
+        List<String> enumerations = parseCommaSeparated(getString(data, ENUMERATIONS));
+        List<String> suggestions = parseCommaSeparated(getString(data, SUGGESTIONS));
+        String pattern = getString(data, PATTERN);
+
+        long constraintCount = (enumerations.isEmpty() ? 0 : 1)
+                + (suggestions.isEmpty() ? 0 : 1)
+                + (pattern != null && !pattern.isEmpty() ? 1 : 0);
+        if (constraintCount > 1) {
+            throw new ModelloException("Field '"
+                    + field.getName()
+                    + "': xsd.enumerations, xsd.suggestions and xsd.pattern are mutually exclusive."
+                    + " Only one may be specified per field.");
+        }
+
+        metadata.setEnumerations(enumerations);
+        metadata.setSuggestions(suggestions);
+        metadata.setPattern(pattern);
 
         return metadata;
     }

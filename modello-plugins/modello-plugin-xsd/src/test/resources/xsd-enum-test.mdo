@@ -60,6 +60,16 @@
           <type>String</type>
           <description>A free-form description.</description>
         </field>
+        <!--
+          Attribute field with strict enumeration — exercises the attribute-field code path
+          in XsdGenerator (the separate loop for xml.attribute="true" fields).
+        -->
+        <field xml.attribute="true" xsd.enumerations="compile,runtime">
+          <name>attributeScope</name>
+          <version>1.0.0+</version>
+          <type>String</type>
+          <description>Attribute-based scope (strict enumeration, attribute form).</description>
+        </field>
       </fields>
     </class>
   </classes>

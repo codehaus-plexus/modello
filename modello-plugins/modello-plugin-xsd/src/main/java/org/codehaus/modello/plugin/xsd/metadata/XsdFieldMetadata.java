@@ -86,7 +86,7 @@ public class XsdFieldMetadata implements FieldMetadata {
     private String pattern;
 
     public List<String> getEnumerations() {
-        return enumerations;
+        return Collections.unmodifiableList(enumerations);
     }
 
     public void setEnumerations(List<String> enumerations) {
@@ -94,7 +94,7 @@ public class XsdFieldMetadata implements FieldMetadata {
     }
 
     public List<String> getSuggestions() {
-        return suggestions;
+        return Collections.unmodifiableList(suggestions);
     }
 
     public void setSuggestions(List<String> suggestions) {
