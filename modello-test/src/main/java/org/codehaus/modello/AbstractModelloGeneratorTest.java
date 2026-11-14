@@ -35,6 +35,7 @@ import java.util.Optional;
 
 import org.codehaus.plexus.ContainerConfiguration;
 import org.codehaus.plexus.PlexusConstants;
+import org.codehaus.plexus.PlexusContainer;
 import org.codehaus.plexus.testing.PlexusTestConfiguration;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.xml.XmlStreamReader;
@@ -111,6 +112,11 @@ public abstract class AbstractModelloGeneratorTest implements PlexusTestConfigur
                 "http://java.sun.com/xml/jaxp/properties/schemaSource",
                 new File(getOutputDirectory(), generatedXsdName));
         return saxParser;
+    }
+
+    @Override
+    public void customizeContainer(PlexusContainer container) {
+        StandaloneBuildContext.register(container);
     }
 
     @Override

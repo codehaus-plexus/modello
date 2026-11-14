@@ -42,10 +42,11 @@ public class Modello {
 
     public Modello() throws ModelloException {
         try {
-            this.core = new DefaultPlexusContainer(new DefaultContainerConfiguration()
-                            .setClassPathScanning(PlexusConstants.SCANNING_INDEX)
-                            .setAutoWiring(true))
-                    .lookup(ModelloCore.class);
+            DefaultPlexusContainer container = new DefaultPlexusContainer(new DefaultContainerConfiguration()
+                    .setClassPathScanning(PlexusConstants.SCANNING_INDEX)
+                    .setAutoWiring(true));
+            StandaloneBuildContext.register(container);
+            this.core = container.lookup(ModelloCore.class);
         } catch (Exception e) {
             throw new ModelloException("Error while starting plexus.", e);
         }
