@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Tells Eclipse m2e to run the generator goals when it configures a project, so the
+  generated source roots are known, and again on incremental builds. xdoc is left out:
+  it has no default phase and only produces documentation.
+-->
+<lifecycleMappingMetadata>
+  <pluginExecutions>
+    <pluginExecution>
+      <pluginExecutionFilter>
+        <goals>
+          <goal>converters</goal>
+          <goal>dom4j-reader</goal>
+          <goal>dom4j-writer</goal>
+          <goal>generate</goal>
+          <goal>jackson-extended-reader</goal>
+          <goal>jackson-reader</goal>
+          <goal>jackson-writer</goal>
+          <goal>java</goal>
+          <goal>jdom-writer</goal>
+          <goal>jsonschema</goal>
+          <goal>sax-writer</goal>
+          <goal>snakeyaml-extended-reader</goal>
+          <goal>snakeyaml-reader</goal>
+          <goal>snakeyaml-writer</goal>
+          <goal>stax-reader</goal>
+          <goal>stax-writer</goal>
+          <goal>velocity</goal>
+          <goal>xpp3-extended-reader</goal>
+          <goal>xpp3-extended-writer</goal>
+          <goal>xpp3-reader</goal>
+          <goal>xpp3-writer</goal>
+          <goal>xsd</goal>
+        </goals>
+      </pluginExecutionFilter>
+      <action>
+        <execute>
+          <runOnIncremental>true</runOnIncremental>
+          <runOnConfiguration>true</runOnConfiguration>
+        </execute>
+      </action>
+    </pluginExecution>
+  </pluginExecutions>
+</lifecycleMappingMetadata>
