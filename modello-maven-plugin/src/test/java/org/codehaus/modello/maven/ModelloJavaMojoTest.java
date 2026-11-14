@@ -30,7 +30,6 @@ import java.util.Arrays;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.plexus.ContainerConfiguration;
-import org.codehaus.plexus.build.BuildContext;
 import org.codehaus.plexus.testing.PlexusTest;
 import org.codehaus.plexus.testing.PlexusTestConfiguration;
 import org.codehaus.plexus.util.FileUtils;
@@ -47,15 +46,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @PlexusTest
 public class ModelloJavaMojoTest implements PlexusTestConfiguration {
     @Inject
-    private BuildContext buildContext;
-
-    @Inject
     private ModelloCore modelloCore;
 
     @Test
     public void testModelloJavaMojo() throws Exception {
 
-        ModelloJavaMojo mojo = new ModelloJavaMojo(buildContext, modelloCore);
+        ModelloJavaMojo mojo = new ModelloJavaMojo(modelloCore);
 
         File outputDirectory = getTestFile("target/java-test");
 

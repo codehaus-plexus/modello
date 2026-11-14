@@ -34,7 +34,6 @@ import java.util.stream.Stream;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
-import org.codehaus.plexus.build.BuildContext;
 
 /**
  * @author Hervé Boutemy
@@ -79,8 +78,8 @@ public abstract class AbstractModelloSourceGeneratorMojo extends AbstractModello
     private boolean domAsXpp3;
 
     @Inject
-    public AbstractModelloSourceGeneratorMojo(BuildContext buildContext, ModelloCore modelloCore) {
-        super(buildContext, modelloCore);
+    public AbstractModelloSourceGeneratorMojo(ModelloCore modelloCore) {
+        super(modelloCore);
     }
 
     @Override

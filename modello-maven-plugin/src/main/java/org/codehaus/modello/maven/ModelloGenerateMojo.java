@@ -34,7 +34,6 @@ import org.apache.maven.plugins.annotations.Parameter;
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.plugin.ModelloGenerator;
-import org.codehaus.plexus.build.BuildContext;
 
 /**
  * <p>
@@ -96,9 +95,8 @@ public class ModelloGenerateMojo extends AbstractModelloSourceGeneratorMojo {
     private String generatorId;
 
     @Inject
-    public ModelloGenerateMojo(
-            BuildContext buildContext, ModelloCore modelloCore, Map<String, ModelloGenerator> generatorMap) {
-        super(buildContext, modelloCore);
+    public ModelloGenerateMojo(ModelloCore modelloCore, Map<String, ModelloGenerator> generatorMap) {
+        super(modelloCore);
         this.generatorMap = Objects.requireNonNull(generatorMap, "generatorMap cannot be null");
     }
 

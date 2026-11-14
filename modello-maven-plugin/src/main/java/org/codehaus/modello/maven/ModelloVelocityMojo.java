@@ -32,7 +32,6 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
-import org.codehaus.plexus.build.BuildContext;
 
 /**
  * Creates files from the model using Velocity templates.
@@ -85,8 +84,8 @@ public class ModelloVelocityMojo extends AbstractModelloGeneratorMojo {
     private List<String> params;
 
     @Inject
-    public ModelloVelocityMojo(BuildContext buildContext, ModelloCore modelloCore) {
-        super(buildContext, modelloCore);
+    public ModelloVelocityMojo(ModelloCore modelloCore) {
+        super(modelloCore);
     }
 
     protected String getGeneratorType() {

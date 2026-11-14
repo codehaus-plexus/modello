@@ -32,7 +32,6 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
-import org.codehaus.plexus.build.BuildContext;
 
 /**
  * Creates an XML schema from the model.
@@ -64,8 +63,8 @@ public class ModelloXsdMojo extends AbstractModelloGeneratorMojo {
     private String xsdFileName;
 
     @Inject
-    public ModelloXsdMojo(BuildContext buildContext, ModelloCore modelloCore) {
-        super(buildContext, modelloCore);
+    public ModelloXsdMojo(ModelloCore modelloCore) {
+        super(modelloCore);
     }
 
     protected String getGeneratorType() {

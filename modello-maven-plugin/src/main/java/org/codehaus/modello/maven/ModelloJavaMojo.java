@@ -27,7 +27,6 @@ import javax.inject.Inject;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.codehaus.modello.core.ModelloCore;
-import org.codehaus.plexus.build.BuildContext;
 
 /**
  * Creates Java beans from the Modello model.
@@ -38,8 +37,8 @@ import org.codehaus.plexus.build.BuildContext;
 public class ModelloJavaMojo extends AbstractModelloSourceGeneratorMojo {
 
     @Inject
-    public ModelloJavaMojo(BuildContext buildContext, ModelloCore modelloCore) {
-        super(buildContext, modelloCore);
+    public ModelloJavaMojo(ModelloCore modelloCore) {
+        super(modelloCore);
     }
 
     protected String getGeneratorType() {

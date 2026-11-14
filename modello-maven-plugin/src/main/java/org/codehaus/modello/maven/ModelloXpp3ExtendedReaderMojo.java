@@ -5,7 +5,6 @@ import javax.inject.Inject;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.codehaus.modello.core.ModelloCore;
-import org.codehaus.plexus.build.BuildContext;
 
 /*
  * Copyright (c) 2004, Codehaus.org
@@ -40,8 +39,8 @@ import org.codehaus.plexus.build.BuildContext;
 public class ModelloXpp3ExtendedReaderMojo extends ModelloXpp3ReaderMojo {
 
     @Inject
-    public ModelloXpp3ExtendedReaderMojo(BuildContext buildContext, ModelloCore modelloCore) {
-        super(buildContext, modelloCore);
+    public ModelloXpp3ExtendedReaderMojo(ModelloCore modelloCore) {
+        super(modelloCore);
     }
 
     @Override

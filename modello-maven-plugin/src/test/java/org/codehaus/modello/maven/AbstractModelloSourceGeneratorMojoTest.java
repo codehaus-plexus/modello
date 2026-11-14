@@ -11,7 +11,6 @@ import org.apache.maven.project.MavenProject;
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.plexus.ContainerConfiguration;
-import org.codehaus.plexus.build.BuildContext;
 import org.codehaus.plexus.testing.PlexusTest;
 import org.codehaus.plexus.testing.PlexusTestConfiguration;
 import org.junit.jupiter.api.Test;
@@ -22,18 +21,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class AbstractModelloSourceGeneratorMojoTest implements PlexusTestConfiguration {
 
     @Inject
-    private BuildContext buildContext;
-
-    @Inject
     private ModelloCore modelloCore;
 
     private static class ModelloSourceGeneratorMojoTest extends AbstractModelloSourceGeneratorMojo {
 
         private final Properties projectProperties;
 
-        ModelloSourceGeneratorMojoTest(
-                BuildContext buildContext, ModelloCore modelloCore, Properties projectProperties) {
-            super(buildContext, modelloCore);
+        ModelloSourceGeneratorMojoTest(ModelloCore modelloCore, Properties projectProperties) {
+            super(modelloCore);
             this.projectProperties = projectProperties;
         }
 
@@ -59,7 +54,7 @@ public class AbstractModelloSourceGeneratorMojoTest implements PlexusTestConfigu
 
     private void executeJavaSourceTest(Properties projectProperties, String expexted) {
         ModelloSourceGeneratorMojoTest modelloSourceGeneratorMojoTest =
-                new ModelloSourceGeneratorMojoTest(buildContext, modelloCore, projectProperties);
+                new ModelloSourceGeneratorMojoTest(modelloCore, projectProperties);
         Map<String, Object> properties = new HashMap<>();
 
         modelloSourceGeneratorMojoTest.customizeParameters(properties);
