@@ -23,7 +23,6 @@ package org.codehaus.modello.plugin;
  */
 
 import java.io.File;
-import java.io.FilterWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.nio.charset.Charset;
@@ -34,7 +33,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.Consumer;
 
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.ModelloParameterConstants;
@@ -71,8 +69,6 @@ public abstract class AbstractModelloGenerator implements ModelloGenerator {
 
     private List<String> licenseText;
 
-    private Consumer<File> fileRefresher = f -> {};
-
     protected Logger getLogger() {
         return logger;
     }
@@ -93,9 +89,6 @@ public abstract class AbstractModelloGenerator implements ModelloGenerator {
         encoding = (String) parameters.get(ModelloParameterConstants.ENCODING);
 
         licenseText = (List<String>) parameters.get(ModelloParameterConstants.LICENSE_TEXT);
-
-        fileRefresher = (Consumer<File>)
-                parameters.getOrDefault(ModelloParameterConstants.FILE_REFRESHER, (Consumer<File>) f -> {});
 
         PLURAL_EXCEPTIONS.get().clear();
         Optional.ofNullable(parameters.get(ModelloParameterConstants.PLURAL_EXCEPTIONS))
@@ -268,17 +261,6 @@ public abstract class AbstractModelloGenerator implements ModelloGenerator {
     }
 
     protected Writer newWriter(Path path, Charset charset) throws IOException {
-        CachingWriter cachingWriter = new CachingWriter(path, charset);
-        return new FilterWriter(cachingWriter) {
-            @Override
-            public void close() throws IOException {
-                super.close();
-                if (cachingWriter.isModified()) {
-                    fileRefresher.accept(path.toFile());
-                } else {
-                    getLogger().debug("The contents of the file " + path + " matches, skipping writing file.");
-                }
-            }
-        };
+        return new CachingWriter(path, charset);
     }
 }
