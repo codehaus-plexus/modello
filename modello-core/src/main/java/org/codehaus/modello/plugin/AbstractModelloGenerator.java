@@ -77,7 +77,7 @@ public abstract class AbstractModelloGenerator implements ModelloGenerator {
         return logger;
     }
 
-    @SuppressWarnings("uncheked")
+    @SuppressWarnings("unchecked")
     protected void initialize(Model model, Map<String, Object> parameters) throws ModelloException {
         this.model = model;
 
