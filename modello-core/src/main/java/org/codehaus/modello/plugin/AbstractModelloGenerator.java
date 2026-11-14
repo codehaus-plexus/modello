@@ -22,8 +22,6 @@ package org.codehaus.modello.plugin;
  * SOFTWARE.
  */
 
-import javax.inject.Inject;
-
 import java.io.File;
 import java.io.FilterWriter;
 import java.io.IOException;
@@ -36,6 +34,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.ModelloParameterConstants;
@@ -46,7 +45,6 @@ import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelDefault;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.Version;
-import org.codehaus.plexus.build.BuildContext;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.io.CachingWriter;
 import org.slf4j.Logger;
@@ -73,8 +71,7 @@ public abstract class AbstractModelloGenerator implements ModelloGenerator {
 
     private List<String> licenseText;
 
-    @Inject
-    private BuildContext buildContext;
+    private Consumer<File> fileRefresher = f -> {};
 
     protected Logger getLogger() {
         return logger;
@@ -96,6 +93,9 @@ public abstract class AbstractModelloGenerator implements ModelloGenerator {
         encoding = (String) parameters.get(ModelloParameterConstants.ENCODING);
 
         licenseText = (List<String>) parameters.get(ModelloParameterConstants.LICENSE_TEXT);
+
+        fileRefresher = (Consumer<File>)
+                parameters.getOrDefault(ModelloParameterConstants.FILE_REFRESHER, (Consumer<File>) f -> {});
 
         PLURAL_EXCEPTIONS.get().clear();
         Optional.ofNullable(parameters.get(ModelloParameterConstants.PLURAL_EXCEPTIONS))
@@ -262,10 +262,6 @@ public abstract class AbstractModelloGenerator implements ModelloGenerator {
         return (String) parameters.getOrDefault(name, defaultValue);
     }
 
-    protected BuildContext getBuildContext() {
-        return buildContext;
-    }
-
     protected Writer newWriter(Path path) throws IOException {
         Charset charset = getEncoding() != null ? Charset.forName(getEncoding()) : Charset.defaultCharset();
         return newWriter(path, charset);
@@ -278,7 +274,7 @@ public abstract class AbstractModelloGenerator implements ModelloGenerator {
             public void close() throws IOException {
                 super.close();
                 if (cachingWriter.isModified()) {
-                    getBuildContext().refresh(path.toFile());
+                    fileRefresher.accept(path.toFile());
                 } else {
                     getLogger().debug("The contents of the file " + path + " matches, skipping writing file.");
                 }

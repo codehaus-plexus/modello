@@ -125,5 +125,11 @@ public class ModelloParameterConstants {
      */
     public static final String GENERATOR_ID = "modello.generator.id";
 
+    /**
+     * {@code Consumer<File>} notified of each written file (e.g. {@code BuildContext::refresh}); optional.
+     * @since 2.9.1
+     */
+    public static final String FILE_REFRESHER = "modello.fileRefresher";
+
     private ModelloParameterConstants() {}
 }
