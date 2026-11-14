@@ -33,7 +33,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import org.apache.maven.model.Resource;
@@ -192,8 +191,6 @@ public abstract class AbstractModelloGeneratorMojo extends AbstractMojo {
         parameters.put(ModelloParameterConstants.PACKAGE_WITH_VERSION, Boolean.toString(packageWithVersion));
 
         parameters.put(ModelloParameterConstants.PLURAL_EXCEPTIONS, pluralExceptions);
-
-        parameters.put(ModelloParameterConstants.FILE_REFRESHER, (Consumer<File>) buildContext::refresh);
 
         if (!packagedVersions.isEmpty()) {
             parameters.put(ModelloParameterConstants.ALL_VERSIONS, StringUtils.join(packagedVersions.iterator(), ","));
