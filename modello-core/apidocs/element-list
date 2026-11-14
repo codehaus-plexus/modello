@@ -1,0 +1,7 @@
+org.codehaus.modello
+org.codehaus.modello.core
+org.codehaus.modello.core.io
+org.codehaus.modello.metadata
+org.codehaus.modello.model
+org.codehaus.modello.plugin
+org.codehaus.modello.plugin.model
