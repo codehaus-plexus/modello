@@ -30,7 +30,6 @@ import java.util.Arrays;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.plexus.ContainerConfiguration;
-import org.codehaus.plexus.build.BuildContext;
 import org.codehaus.plexus.testing.PlexusExtension;
 import org.codehaus.plexus.testing.PlexusTest;
 import org.codehaus.plexus.testing.PlexusTestConfiguration;
@@ -50,9 +49,6 @@ public class ModelloConvertersMojoTest implements PlexusTestConfiguration {
     @Inject
     private ModelloCore modelloCore;
 
-    @Inject
-    private BuildContext buildContext;
-
     @Override
     public void customizeConfiguration(ContainerConfiguration containerConfiguration) {
         containerConfiguration.setClassPathScanning("cache");
@@ -60,7 +56,7 @@ public class ModelloConvertersMojoTest implements PlexusTestConfiguration {
 
     @Test
     public void testModelloConvertersMojo() throws Exception {
-        ModelloConvertersMojo mojo = new ModelloConvertersMojo(buildContext, modelloCore);
+        ModelloConvertersMojo mojo = new ModelloConvertersMojo(modelloCore);
 
         File outputDirectory = getTestFile("target/converters-test");
 

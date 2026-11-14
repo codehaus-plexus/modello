@@ -45,7 +45,6 @@ import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.ModelValidationException;
-import org.codehaus.plexus.build.BuildContext;
 import org.codehaus.plexus.util.StringUtils;
 
 /**
@@ -122,12 +121,9 @@ public abstract class AbstractModelloGeneratorMojo extends AbstractMojo {
     @Parameter
     private Map<String, String> pluralExceptions;
 
-    private final BuildContext buildContext;
-
     private final ModelloCore modelloCore;
 
-    protected AbstractModelloGeneratorMojo(BuildContext buildContext, ModelloCore modelloCore) {
-        this.buildContext = Objects.requireNonNull(buildContext, "buildContext cannot be null");
+    protected AbstractModelloGeneratorMojo(ModelloCore modelloCore) {
         this.modelloCore = Objects.requireNonNull(modelloCore, "modelloCore cannot be null");
     }
 
@@ -241,15 +237,9 @@ public abstract class AbstractModelloGeneratorMojo extends AbstractMojo {
      */
     private void doExecute(String modelStr, String outputDirectory, Map<String, Object> parameters)
             throws MojoExecutionException {
-        if (!buildContext.hasDelta(modelStr)) {
-            getLog().debug("Skipping unchanged model: " + modelStr);
-            return;
-        }
-
         getLog().info("Working on model: " + modelStr);
 
         File modelFile = new File(basedir, modelStr);
-        buildContext.removeMessages(modelFile);
 
         try {
             Model model = modelloCore.loadModel(modelFile);
@@ -277,61 +267,15 @@ public abstract class AbstractModelloGeneratorMojo extends AbstractMojo {
                 project.addResource(resource);
             }
         } catch (FileNotFoundException e) {
-            MojoExecutionException mojoExecutionException = new MojoExecutionException(e.getMessage(), e);
-            buildContext.addMessage(
-                    modelFile,
-                    1 /* line */,
-                    1 /* column */,
-                    mojoExecutionException.getMessage(),
-                    BuildContext.SEVERITY_ERROR,
-                    mojoExecutionException);
-            throw mojoExecutionException;
+            throw new MojoExecutionException(e.getMessage(), e);
         } catch (ModelloException e) {
-            MojoExecutionException mojoExecutionException =
-                    new MojoExecutionException("Error generating: " + e.getMessage(), e);
-            // TODO: Provide actual line/column numbers
-            buildContext.addMessage(
-                    modelFile,
-                    1 /* line */,
-                    1 /* column */,
-                    mojoExecutionException.getMessage(),
-                    BuildContext.SEVERITY_ERROR,
-                    mojoExecutionException);
-            throw mojoExecutionException;
+            throw new MojoExecutionException("Error generating: " + e.getMessage(), e);
         } catch (ModelValidationException e) {
-            MojoExecutionException mojoExecutionException =
-                    new MojoExecutionException("Error generating: " + e.getMessage(), e);
-            // TODO: Provide actual line/column numbers
-            buildContext.addMessage(
-                    modelFile,
-                    1 /* line */,
-                    1 /* column */,
-                    mojoExecutionException.getMessage(),
-                    BuildContext.SEVERITY_ERROR,
-                    mojoExecutionException);
-            throw mojoExecutionException;
+            throw new MojoExecutionException("Error generating: " + e.getMessage(), e);
         } catch (IOException e) {
-            MojoExecutionException mojoExecutionException =
-                    new MojoExecutionException("Couldn't read file: " + e.getMessage(), e);
-            buildContext.addMessage(
-                    modelFile,
-                    1 /* line */,
-                    1 /* column */,
-                    mojoExecutionException.getMessage(),
-                    BuildContext.SEVERITY_ERROR,
-                    mojoExecutionException);
-            throw mojoExecutionException;
+            throw new MojoExecutionException("Couldn't read file: " + e.getMessage(), e);
         } catch (RuntimeException e) {
-            MojoExecutionException mojoExecutionException =
-                    new MojoExecutionException("Error generating: " + e.getMessage(), e);
-            buildContext.addMessage(
-                    modelFile,
-                    1 /* line */,
-                    1 /* column */,
-                    mojoExecutionException.getMessage(),
-                    BuildContext.SEVERITY_ERROR,
-                    mojoExecutionException);
-            throw mojoExecutionException;
+            throw new MojoExecutionException("Error generating: " + e.getMessage(), e);
         }
     }
 

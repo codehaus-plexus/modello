@@ -31,7 +31,6 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
-import org.codehaus.plexus.build.BuildContext;
 
 /**
  * Creates documentation for the model in xdoc format.
@@ -65,8 +64,8 @@ public class ModelloXdocMojo extends AbstractModelloGeneratorMojo {
     private String firstVersion;
 
     @Inject
-    public ModelloXdocMojo(BuildContext buildContext, ModelloCore modelloCore) {
-        super(buildContext, modelloCore);
+    public ModelloXdocMojo(ModelloCore modelloCore) {
+        super(modelloCore);
     }
 
     protected String getGeneratorType() {

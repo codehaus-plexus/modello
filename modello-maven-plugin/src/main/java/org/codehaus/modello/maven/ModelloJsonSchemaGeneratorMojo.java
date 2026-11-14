@@ -32,7 +32,6 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
-import org.codehaus.plexus.build.BuildContext;
 
 /**
  * Creates a JSON Schema from the model.
@@ -54,8 +53,8 @@ public final class ModelloJsonSchemaGeneratorMojo extends AbstractModelloGenerat
     private String jsonSchemaFileName;
 
     @Inject
-    public ModelloJsonSchemaGeneratorMojo(BuildContext buildContext, ModelloCore modelloCore) {
-        super(buildContext, modelloCore);
+    public ModelloJsonSchemaGeneratorMojo(ModelloCore modelloCore) {
+        super(modelloCore);
     }
 
     @Override

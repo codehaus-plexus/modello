@@ -27,7 +27,6 @@ import javax.inject.Inject;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.codehaus.modello.core.ModelloCore;
-import org.codehaus.plexus.build.BuildContext;
 
 /**
  * Creates a jdom writer from the model that is capable of preserving element ordering
@@ -39,8 +38,8 @@ import org.codehaus.plexus.build.BuildContext;
 public class ModelloJDOMWriterMojo extends AbstractModelloSourceGeneratorMojo {
 
     @Inject
-    public ModelloJDOMWriterMojo(BuildContext buildContext, ModelloCore modelloCore) {
-        super(buildContext, modelloCore);
+    public ModelloJDOMWriterMojo(ModelloCore modelloCore) {
+        super(modelloCore);
     }
 
     protected String getGeneratorType() {
