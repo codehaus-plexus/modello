@@ -69,6 +69,8 @@ public class PackageVersionVerifier
         Assertions.assertEquals( url, scm.getUrl() , "Scm.url");
 
         testMailingLists();
+
+        testModelAddMailingList();
     }
 
     private void testMailingLists()
