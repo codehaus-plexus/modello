@@ -246,7 +246,7 @@
                 </goals>
                 <phase>pre-site</phase>
                 <configuration>
-                  <verificationFile>${basedir}/src/test/verifier/site-verifications.xml</verificationFile>
+                  <verificationFile>${project.basedir}/src/test/verifier/site-verifications.xml</verificationFile>
                   <failOnError>${verifyFeaturesSite}</failOnError>
                 </configuration>
               </execution>
