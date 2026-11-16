@@ -172,6 +172,11 @@ public class SnakeYamlReaderGenerator extends AbstractSnakeYamlGenerator {
 
         sc.add(className + ' ' + variableName + " = parse" + capClassName + "( parser, strict" + trackingArgs + " );");
 
+        if (rootElement) {
+            // TODO
+            // sc.add( variableName + ".setModelEncoding( parser.getInputEncoding() );" );
+        }
+
         sc.add("");
 
         sc.add("if ( !( event = parser.getEvent() ).is( Event.ID.DocumentEnd ) )");

@@ -120,6 +120,8 @@ public class ModelReader {
                     parseClasses(model, parser);
                 } else if ("model".equals(parser.getName())) {
                     modelAttributes = getAttributes(parser);
+                } else {
+                    //                    parser.nextText();
                 }
             }
             eventType = parser.next();

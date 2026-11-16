@@ -161,6 +161,11 @@ public class JacksonReaderGenerator extends AbstractJacksonGenerator {
 
         sc.add(className + ' ' + variableName + " = parse" + capClassName + "( parser, strict" + trackingArgs + " );");
 
+        if (rootElement) {
+            // TODO
+            // sc.add( variableName + ".setModelEncoding( parser.getInputEncoding() );" );
+        }
+
         sc.add("return " + variableName + ';');
 
         jClass.addMethod(unmarshall);
