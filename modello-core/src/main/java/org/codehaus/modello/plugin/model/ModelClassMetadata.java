@@ -30,7 +30,7 @@ import org.codehaus.modello.metadata.ClassMetadata;
 public class ModelClassMetadata implements ClassMetadata {
     public static final String ID = ModelClassMetadata.class.getName();
 
-    private boolean rootElement = false;
+    private boolean rootElement;
 
     private String locationTracker;
 

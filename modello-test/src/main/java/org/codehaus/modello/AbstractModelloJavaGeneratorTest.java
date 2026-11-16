@@ -70,9 +70,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @see org.codehaus.modello.verifier.Verifier Verifier base class for verifiers
  */
 public abstract class AbstractModelloJavaGeneratorTest extends AbstractModelloGeneratorTest {
-    private List<URL> urls = new ArrayList<URL>();
+    private List<URL> urls = new ArrayList<>();
 
-    private List<String> classPathElements = new ArrayList<String>();
+    private List<String> classPathElements = new ArrayList<>();
 
     protected AbstractModelloJavaGeneratorTest(String name) {
         super(name);

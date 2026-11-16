@@ -42,7 +42,7 @@ public class VersionRange {
             fromVersion = new Version(versionRange.substring(0, versionRange.length() - 1));
 
             toVersion = Version.INFINITE;
-        } else if (versionRange.indexOf(VERSION_SEPARATOR) > 0 && !versionRange.endsWith(VERSION_SEPARATOR)) {
+        } else if (versionRange.indexOf(VERSION_SEPARATOR) >= 1 && !versionRange.endsWith(VERSION_SEPARATOR)) {
             int pos = versionRange.indexOf(VERSION_SEPARATOR);
 
             fromVersion = new Version(versionRange.substring(0, pos));

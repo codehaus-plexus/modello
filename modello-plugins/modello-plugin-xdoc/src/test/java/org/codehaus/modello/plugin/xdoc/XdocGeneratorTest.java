@@ -200,24 +200,24 @@ public class XdocGeneratorTest extends AbstractModelloGeneratorTest {
     private void checkInternalLinks(String filename) throws Exception {
         String content = FileUtils.fileRead(new File(getOutputDirectory(), filename), "UTF-8");
 
-        Set<String> hrefs = new HashSet<String>();
+        Set<String> hrefs = new HashSet<>();
         Pattern p = Pattern.compile("<a href=\"#(class_[^\"]+)\"", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
         Matcher m = p.matcher(content);
         while (m.find()) {
             hrefs.add(m.group(1));
         }
-        Assertions.assertTrue(hrefs.size() > 0, "should find some '<a href=' links");
+        Assertions.assertTrue(!hrefs.isEmpty(), "should find some '<a href=' links");
 
-        Set<String> names = new HashSet<String>();
+        Set<String> names = new HashSet<>();
         p = Pattern.compile("<a name=\"(class_[^\"]+)\"", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
         m = p.matcher(content);
         while (m.find()) {
             names.add(m.group(1));
         }
-        Assertions.assertTrue(names.size() > 0, "should find some '<a name=' anchor definitions");
+        Assertions.assertTrue(!names.isEmpty(), "should find some '<a name=' anchor definitions");
 
         hrefs.removeAll(names);
-        if (hrefs.size() > 0) {
+        if (!hrefs.isEmpty()) {
             throw new VerifierException("some internal hrefs in " + filename + " are not defined: " + hrefs);
         }
     }

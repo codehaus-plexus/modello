@@ -62,7 +62,7 @@ public class ConverterGenerator extends AbstractJavaModelloGenerator {
 
         String[] versions = ((String) parameters.get(ModelloParameterConstants.ALL_VERSIONS)).split(",");
 
-        List<Version> allVersions = new ArrayList<Version>(versions.length);
+        List<Version> allVersions = new ArrayList<>(versions.length);
         for (String version : versions) {
             allVersions.add(new Version(version));
         }
@@ -95,7 +95,7 @@ public class ConverterGenerator extends AbstractJavaModelloGenerator {
         Version fromVersion = getGeneratedVersion();
         String packageName = objectModel.getDefaultPackageName(true, fromVersion) + ".convert";
 
-        Version effectiveToVersion = (toVersion == null) ? fromVersion : toVersion;
+        Version effectiveToVersion = toVersion == null ? fromVersion : toVersion;
         String jDoc = "Converts from version " + fromVersion + " (with version in package name) to version "
                 + effectiveToVersion + " (with" + (toVersion != null ? "" : "out")
                 + " version in package name) of the model.";

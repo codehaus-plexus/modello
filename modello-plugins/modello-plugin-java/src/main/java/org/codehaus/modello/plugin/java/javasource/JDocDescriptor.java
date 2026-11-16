@@ -71,7 +71,7 @@ package org.codehaus.modello.plugin.java.javasource;
  * @author <a href="mailto:kvisco@intalio.com">Keith Visco</a>
  * @version $Revision$ $Date$
  **/
-public class JDocDescriptor {
+public final class JDocDescriptor {
 
     /**
      * The default version string
@@ -112,8 +112,8 @@ public class JDocDescriptor {
      **/
     public static final short REFERENCE = 5;
 
-    private String description = null;
-    private String name = null;
+    private String description;
+    private String name;
     private short type = -1;
 
     /**
@@ -145,7 +145,9 @@ public class JDocDescriptor {
     protected short compareTo(JDocDescriptor jdd) {
         short jddType = jdd.getType();
 
-        if (jddType == this.type) return 0;
+        if (jddType == this.type) {
+            return 0;
+        }
 
         // The ordering is as follows
         // #param
@@ -154,7 +156,7 @@ public class JDocDescriptor {
         // #version
         // #see (reference)
         //
-        return (short) ((jddType < this.type) ? 1 : -1);
+        return (short) (jddType < this.type ? 1 : -1);
     } // -- compareTo
 
     /**

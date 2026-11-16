@@ -88,33 +88,33 @@ public final class JMethodSignature {
     /**
      * The set of modifiers for this JMethod
      **/
-    private JModifiers modifiers = null;
+    private JModifiers modifiers;
 
     /**
      * The return type of this Method
      **/
-    private JType returnType = null;
+    private JType returnType;
 
     /**
      * The name of this method
      **/
-    private String name = null;
+    private String name;
 
     /**
      * The list of parameters of this JMethodSignature in declared
      * order
      **/
-    private Map<String, JParameter> params = null;
+    private Map<String, JParameter> params;
 
     /**
      * The JavaDoc comment for this method signature.
      **/
-    private JDocComment jdc = null;
+    private JDocComment jdc;
 
     /**
      * The exceptions that this method throws
      **/
-    private List<JClass> exceptions = null;
+    private List<JClass> exceptions;
 
     /**
      * Creates a new method with the given name and return type.
@@ -135,7 +135,7 @@ public final class JMethodSignature {
         this.name = name;
         this.modifiers = new JModifiers();
         this.params = new LinkedHashMap<>(3);
-        this.exceptions = new ArrayList<JClass>(1);
+        this.exceptions = new ArrayList<>(1);
     } // -- JMethodSignature
 
     /**
@@ -145,12 +145,16 @@ public final class JMethodSignature {
      **/
     public void addException(JClass exp) {
 
-        if (exp == null) return;
+        if (exp == null) {
+            return;
+        }
 
         // -- make sure exception is not already added
         String expClassName = exp.getName();
         for (JClass jClass : exceptions) {
-            if (expClassName.equals(jClass.getName())) return;
+            if (expClassName.equals(jClass.getName())) {
+                return;
+            }
         }
         // -- add exception
         exceptions.add(exp);
@@ -171,7 +175,9 @@ public final class JMethodSignature {
      **/
     public void addParameter(JParameter parameter) throws IllegalArgumentException {
 
-        if (parameter == null) return;
+        if (parameter == null) {
+            return;
+        }
 
         String pName = parameter.getName();
         // -- check current params
@@ -309,7 +315,9 @@ public final class JMethodSignature {
         // - Java Doc -/
         // ------------/
 
-        if (printJavaDoc) jdc.print(jsw);
+        if (printJavaDoc) {
+            jdc.print(jsw);
+        }
 
         // -----------------/
         // - Method Source -/
@@ -321,7 +329,9 @@ public final class JMethodSignature {
         }
         if (returnType != null) {
             jsw.write(returnType);
-        } else jsw.write("void");
+        } else {
+            jsw.write("void");
+        }
         jsw.write(' ');
         jsw.write(name);
         jsw.write('(');
@@ -342,11 +352,13 @@ public final class JMethodSignature {
 
         jsw.write(')');
 
-        if (exceptions.size() > 0) {
+        if (!exceptions.isEmpty()) {
             jsw.writeln();
             jsw.write("    throws ");
             for (int i = 0; i < exceptions.size(); i++) {
-                if (i > 0) jsw.write(", ");
+                if (i > 0) {
+                    jsw.write(", ");
+                }
                 JClass jClass = exceptions.get(i);
                 jsw.write(jClass.getName());
             }
@@ -364,7 +376,9 @@ public final class JMethodSignature {
         StringBuilder sb = new StringBuilder();
         if (returnType != null) {
             sb.append(returnType);
-        } else sb.append("void");
+        } else {
+            sb.append("void");
+        }
         sb.append(' ');
         sb.append(name);
         sb.append('(');
@@ -389,11 +403,13 @@ public final class JMethodSignature {
     } // -- toString
 
     protected String[] getParameterClassNames() {
-        List<String> names = new ArrayList<String>(params.size());
+        List<String> names = new ArrayList<>(params.size());
 
         for (JParameter param : params.values()) {
             JType jType = param.getType();
-            while (jType.isArray()) jType = jType.getComponentType();
+            while (jType.isArray()) {
+                jType = jType.getComponentType();
+            }
             if (!jType.isPrimitive()) {
                 JClass jclass = (JClass) jType;
                 names.add(jclass.getName());

@@ -236,7 +236,7 @@ public class XsdGenerator extends AbstractXmlGenerator {
                 String fieldTagName = resolveTagName(field, xmlFieldMetadata);
 
                 if (!hasContentField) {
-                    if (fieldTagName.equals(ANY_NAME)) {
+                    if (ANY_NAME.equals(fieldTagName)) {
                         w.startElement("xs:any");
                         w.addAttribute("minOccurs", "0");
                         w.addAttribute("maxOccurs", "unbounded");
@@ -272,7 +272,7 @@ public class XsdGenerator extends AbstractXmlGenerator {
 
                     if (field.getDefaultValue() != null) {
                         // \0 is the implicit default value for char/Character but \0 isn't a valid XML char
-                        if (field.getDefaultValue() != "\0") {
+                        if (!"\0".equals(field.getDefaultValue())) {
                             w.addAttribute("default", field.getDefaultValue());
                         }
                     }
@@ -481,7 +481,7 @@ public class XsdGenerator extends AbstractXmlGenerator {
 
         w.startElement("xs:sequence");
 
-        if (valuesTagName.equals(ANY_NAME)) {
+        if (ANY_NAME.equals(valuesTagName)) {
             w.startElement("xs:any");
             w.addAttribute("processContents", "skip");
         } else {

@@ -39,7 +39,7 @@ public abstract class ModelType extends BaseElement {
 
     private transient Model model;
 
-    private transient Map<String, CodeSegment> codeSegmentMap = new HashMap<String, CodeSegment>();
+    private transient Map<String, CodeSegment> codeSegmentMap = new HashMap<>();
 
     public ModelType() {
         super(true);
@@ -89,7 +89,7 @@ public abstract class ModelType extends BaseElement {
 
     public List<CodeSegment> getAllCodeSegments() {
         if (codeSegments == null) {
-            codeSegments = new ArrayList<CodeSegment>();
+            codeSegments = new ArrayList<>();
         }
 
         return codeSegments;
@@ -102,7 +102,7 @@ public abstract class ModelType extends BaseElement {
     public List<CodeSegment> getCodeSegments(VersionRange versionRange) {
         List<CodeSegment> codeSegments = getAllCodeSegments();
 
-        List<CodeSegment> codeSegmentsList = new ArrayList<CodeSegment>();
+        List<CodeSegment> codeSegmentsList = new ArrayList<>();
 
         if (codeSegments != null) {
             for (CodeSegment codeSegment : codeSegments) {
@@ -156,7 +156,7 @@ public abstract class ModelType extends BaseElement {
      *         fields of super classes.
      */
     public List<ModelField> getFields(Version version) {
-        List<ModelField> fieldList = new ArrayList<ModelField>();
+        List<ModelField> fieldList = new ArrayList<>();
 
         for (ModelField currentField : getAllFields()) {
             if (version.inside(currentField.getVersionRange())) {
@@ -168,9 +168,9 @@ public abstract class ModelType extends BaseElement {
     }
 
     public List<ModelField> getAllFields(Version version, boolean withInheritedField) {
-        List<ModelField> allFieldsList = new ArrayList<ModelField>();
+        List<ModelField> allFieldsList = new ArrayList<>();
 
-        List<ModelField> fieldList = new ArrayList<ModelField>();
+        List<ModelField> fieldList = new ArrayList<>();
 
         for (ModelField currentField : getAllFields(withInheritedField)) {
             if (version.inside(currentField.getVersionRange())) {
@@ -202,7 +202,7 @@ public abstract class ModelType extends BaseElement {
     }
 
     public List<ModelField> getIdentifierFields(Version version) {
-        List<ModelField> identifierFields = new ArrayList<ModelField>();
+        List<ModelField> identifierFields = new ArrayList<>();
 
         for (ModelField field : getFields(version)) {
             if (field.isIdentifier()) {

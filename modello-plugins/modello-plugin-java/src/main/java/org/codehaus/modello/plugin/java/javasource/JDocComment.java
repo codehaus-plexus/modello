@@ -82,19 +82,19 @@ public class JDocComment {
     /**
      * An ordered list of descriptors
      */
-    private List<JDocDescriptor> _descriptors = null;
+    private List<JDocDescriptor> _descriptors;
 
     /**
      * The internal buffer for this JDocComment
      */
-    private StringBuilder _comment = null;
+    private StringBuilder _comment;
 
     /**
      * Creates a new JavaDoc Comment
      */
     public JDocComment() {
         super();
-        _descriptors = new ArrayList<JDocDescriptor>();
+        _descriptors = new ArrayList<>();
         _comment = new StringBuilder();
     } // --  JDocComment
 
@@ -105,9 +105,11 @@ public class JDocComment {
      */
     public void addDescriptor(JDocDescriptor jdesc) {
 
-        if (jdesc == null) return;
+        if (jdesc == null) {
+            return;
+        }
         // -- on the fly sorting of descriptors
-        if (_descriptors.size() == 0) {
+        if (_descriptors.isEmpty()) {
             _descriptors.add(jdesc);
             return;
         }
@@ -179,11 +181,15 @@ public class JDocComment {
      * given name
      */
     public JDocDescriptor getParamDescriptor(String name) {
-        if (name == null) return null;
+        if (name == null) {
+            return null;
+        }
 
         for (JDocDescriptor jdd : _descriptors) {
             if (jdd.getType() == JDocDescriptor.PARAM) {
-                if (name.equals(jdd.getName())) return jdd;
+                if (name.equals(jdd.getName())) {
+                    return jdd;
+                }
             }
         }
         return null;
@@ -202,7 +208,7 @@ public class JDocComment {
         jComment.setComment(_comment.toString());
 
         // -- force a separating "*" for readability
-        if (_descriptors.size() > 0) {
+        if (!_descriptors.isEmpty()) {
             jComment.appendComment("\n");
         }
 

@@ -170,7 +170,7 @@ public class ModelAssociation extends ModelField {
     }
 
     public boolean isGenericType() {
-        return getType().equals(ModelDefault.LIST) || getType().equals(ModelDefault.SET);
+        return ModelDefault.LIST.equals(getType()) || ModelDefault.SET.equals(getType());
     }
 
     private String getDefaultValue(ModelDefault modelDefault) {

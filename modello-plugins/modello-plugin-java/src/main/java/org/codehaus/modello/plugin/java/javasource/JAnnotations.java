@@ -8,7 +8,7 @@ public class JAnnotations {
     private List<String> annotations;
 
     public JAnnotations() {
-        this.annotations = new ArrayList<String>();
+        this.annotations = new ArrayList<>();
     }
 
     public void appendAnnotation(String annotation) {
@@ -37,7 +37,7 @@ public class JAnnotations {
      */
     public void print(JSourceWriter jsw) {
         for (String annotation : annotations) {
-            jsw.writeln(annotation.toString());
+            jsw.writeln(annotation);
         }
     } // -- print
 }

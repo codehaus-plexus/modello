@@ -70,25 +70,24 @@ import org.codehaus.plexus.util.StringUtils;
 @Named("java")
 public class JavaModelloGenerator extends AbstractJavaModelloGenerator {
 
-    private Collection<String> immutableTypes = new HashSet<String>(Arrays.asList(new String[] {
-        "boolean",
-        "Boolean",
-        "byte",
-        "Byte",
-        "char",
-        "Character",
-        "short",
-        "Short",
-        "int",
-        "Integer",
-        "long",
-        "Long",
-        "float",
-        "Float",
-        "double",
-        "Double",
-        "String"
-    }));
+    private Collection<String> immutableTypes = new HashSet<>(Arrays.asList(
+            "boolean",
+            "Boolean",
+            "byte",
+            "Byte",
+            "char",
+            "Character",
+            "short",
+            "Short",
+            "int",
+            "Integer",
+            "long",
+            "Long",
+            "float",
+            "Float",
+            "double",
+            "Double",
+            "String"));
 
     public void generate(Model model, Map<String, Object> parameters) throws ModelloException {
         initialize(model, parameters);
@@ -191,7 +190,7 @@ public class JavaModelloGenerator extends AbstractJavaModelloGenerator {
 
             List<ModelField> identifierFields = modelClass.getIdentifierFields(getGeneratedVersion());
 
-            if (identifierFields.size() != 0) {
+            if (!identifierFields.isEmpty()) {
                 JMethod equals = generateEquals(modelClass);
 
                 jClass.addMethod(equals);
@@ -387,7 +386,7 @@ public class JavaModelloGenerator extends AbstractJavaModelloGenerator {
 
         JSourceCode sc = toString.getSourceCode();
 
-        if (fields.size() == 0) {
+        if (fields.isEmpty()) {
             sc.add("return super.toString();");
 
             return toString;
@@ -431,7 +430,7 @@ public class JavaModelloGenerator extends AbstractJavaModelloGenerator {
 
         JSourceCode sc = hashCode.getSourceCode();
 
-        if (identifierFields.size() == 0) {
+        if (identifierFields.isEmpty()) {
             sc.add("return super.hashCode();");
 
             return hashCode;
@@ -1632,8 +1631,8 @@ public class JavaModelloGenerator extends AbstractJavaModelloGenerator {
             addType = new JClass("String");
         }
 
-        if (modelAssociation.getType().equals(ModelDefault.PROPERTIES)
-                || modelAssociation.getType().equals(ModelDefault.MAP)) {
+        if (ModelDefault.PROPERTIES.equals(modelAssociation.getType())
+                || ModelDefault.MAP.equals(modelAssociation.getType())) {
             String adderName = "add" + capitalise(singular(fieldName));
 
             JMethod adder;
@@ -1643,7 +1642,7 @@ public class JavaModelloGenerator extends AbstractJavaModelloGenerator {
                 adder = new JMethod(adderName);
             }
 
-            if (modelAssociation.getType().equals(ModelDefault.MAP)) {
+            if (ModelDefault.MAP.equals(modelAssociation.getType())) {
                 adder.addParameter(new JParameter(new JClass("Object"), "key"));
             } else {
                 adder.addParameter(new JParameter(new JClass("String"), "key"));
@@ -1851,7 +1850,7 @@ public class JavaModelloGenerator extends AbstractJavaModelloGenerator {
 
     private void createInstanceAndSetProperties(ModelClass modelClass, JConstructor constructor, JSourceCode sc)
             throws ModelloException {
-        final Set<String> ctorArgs = new HashSet<String>();
+        final Set<String> ctorArgs = new HashSet<>();
 
         StringBuilder ctor = new StringBuilder(modelClass.getName())
                 .append(" instance = new ")
@@ -1988,8 +1987,8 @@ public class JavaModelloGenerator extends AbstractJavaModelloGenerator {
             Set<String> ctorArgs, ModelAssociation modelAssociation, JSourceCode sc) throws ModelloException {
         if (modelAssociation.isManyMultiplicity()) {
             // Map/Properties don't have bidi association, they can be directly set
-            if (modelAssociation.getType().equals(ModelDefault.PROPERTIES)
-                    || modelAssociation.getType().equals(ModelDefault.MAP)) {
+            if (ModelDefault.PROPERTIES.equals(modelAssociation.getType())
+                    || ModelDefault.MAP.equals(modelAssociation.getType())) {
                 if (createSetBuilderFieldToInstance(ctorArgs, modelAssociation, sc)) {
                     return;
                 }
@@ -2031,13 +2030,13 @@ public class JavaModelloGenerator extends AbstractJavaModelloGenerator {
                 itemType = javaAssociationMetadata.getInterfaceName();
             } else if (modelAssociation.getToClass() != null) {
                 itemType = modelAssociation.getToClass().getName();
-            } else if (modelAssociation.getType().equals(ModelDefault.PROPERTIES)
-                    || modelAssociation.getType().equals(ModelDefault.MAP)) {
+            } else if (ModelDefault.PROPERTIES.equals(modelAssociation.getType())
+                    || ModelDefault.MAP.equals(modelAssociation.getType())) {
                 StringBuilder itemTypeBuilder = new StringBuilder("java.util.Map.Entry");
 
                 itemTypeBuilder.append('<');
 
-                if (modelAssociation.getType().equals(ModelDefault.PROPERTIES)) {
+                if (ModelDefault.PROPERTIES.equals(modelAssociation.getType())) {
                     itemTypeBuilder.append("Object, Object");
                 } else {
                     itemTypeBuilder.append("String, ").append(modelAssociation.getTo());
@@ -2061,8 +2060,8 @@ public class JavaModelloGenerator extends AbstractJavaModelloGenerator {
                     .append(capitalise(singular(modelAssociation.getName())))
                     .append("( ");
 
-            if (modelAssociation.getType().equals(ModelDefault.PROPERTIES)
-                    || modelAssociation.getType().equals(ModelDefault.MAP)) {
+            if (ModelDefault.PROPERTIES.equals(modelAssociation.getType())
+                    || ModelDefault.MAP.equals(modelAssociation.getType())) {
                 appendEntryMethod("String", "getKey()", adder, modelAssociation);
                 adder.append(", ");
                 appendEntryMethod(modelAssociation.getTo(), "getValue()", adder, modelAssociation);
@@ -2083,7 +2082,7 @@ public class JavaModelloGenerator extends AbstractJavaModelloGenerator {
 
     private void appendEntryMethod(
             String type, String method, StringBuilder target, ModelAssociation modelAssociation) {
-        if (modelAssociation.getType().equals(ModelDefault.PROPERTIES)) {
+        if (ModelDefault.PROPERTIES.equals(modelAssociation.getType())) {
             target.append('(').append(type).append(") ");
         }
 

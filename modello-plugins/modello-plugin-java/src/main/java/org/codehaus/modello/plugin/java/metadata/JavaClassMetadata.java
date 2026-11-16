@@ -40,7 +40,7 @@ public class JavaClassMetadata implements ClassMetadata {
     public static final List<String> CLONE_MODES;
 
     static {
-        CLONE_MODES = new ArrayList<String>();
+        CLONE_MODES = new ArrayList<>();
         CLONE_MODES.add(CLONE_NONE);
         CLONE_MODES.add(CLONE_SHALLOW);
         CLONE_MODES.add(CLONE_DEEP);
@@ -57,17 +57,17 @@ public class JavaClassMetadata implements ClassMetadata {
     /**
      * @since 1.8
      */
-    private boolean generateToString = false;
+    private boolean generateToString;
 
     /**
      * @since 1.8
      */
-    private boolean generateBuilder = false;
+    private boolean generateBuilder;
 
     /**
      * @since 1.8
      */
-    private boolean generateStaticCreators = false;
+    private boolean generateStaticCreators;
 
     public void setAbstract(boolean abstractMode) {
         this.abstractMode = abstractMode;

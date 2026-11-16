@@ -81,14 +81,14 @@ public class JType {
     public static final JType LONG = new JType("long");
     public static final JType SHORT = new JType("short");
 
-    private String name = null;
+    private String name;
 
-    private boolean _isArray = false;
+    private boolean _isArray;
 
     /**
      * used for array types
      **/
-    private JType _componentType = null;
+    private JType _componentType;
 
     /**
      * Creates a new JType with the given name
@@ -126,7 +126,9 @@ public class JType {
         // -- use getName method in case it's been overloaded
         String name = getName();
 
-        if (name == null) return null;
+        if (name == null) {
+            return null;
+        }
         int idx = name.lastIndexOf('.');
         if (idx >= 0) {
             name = name.substring(idx + 1);
@@ -151,14 +153,14 @@ public class JType {
      * @return true if this JType represents a primitive, otherwise false
      **/
     public boolean isPrimitive() {
-        return ((this == BOOLEAN)
+        return (this == BOOLEAN)
                 || (this == BYTE)
                 || (this == CHAR)
                 || (this == DOUBLE)
                 || (this == FLOAT)
                 || (this == INT)
                 || (this == LONG)
-                || (this == SHORT));
+                || (this == SHORT);
     } // -- isPrimitive
 
     /**
@@ -168,8 +170,11 @@ public class JType {
      **/
     public String toString() {
 
-        if (_isArray) return _componentType.toString() + "[]";
-        else return this.name;
+        if (_isArray) {
+            return _componentType.toString() + "[]";
+        } else {
+            return this.name;
+        }
     } // -- toString
 
     // ---------------------/
@@ -185,15 +190,25 @@ public class JType {
      **/
     protected void changePackage(String newPackage) {
 
-        if (this.name == null) return;
-        if (this.isPrimitive()) return;
+        if (this.name == null) {
+            return;
+        }
+        if (this.isPrimitive()) {
+            return;
+        }
 
         String localName = null;
         int idx = name.lastIndexOf('.');
-        if (idx >= 0) localName = this.name.substring(idx + 1);
-        else localName = this.name;
+        if (idx >= 0) {
+            localName = this.name.substring(idx + 1);
+        } else {
+            localName = this.name;
+        }
 
-        if ((newPackage == null) || (newPackage.length() == 0)) this.name = localName;
-        else this.name = newPackage + "." + localName;
+        if ((newPackage == null) || (newPackage.length() == 0)) {
+            this.name = localName;
+        } else {
+            this.name = newPackage + "." + localName;
+        }
     } // -- changePackage
 } // -- JType

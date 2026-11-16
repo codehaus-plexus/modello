@@ -40,7 +40,7 @@ public class JavaAssociationMetadata implements AssociationMetadata {
     public static final List<String> INIT_TYPES;
 
     static {
-        INIT_TYPES = new ArrayList<String>();
+        INIT_TYPES = new ArrayList<>();
         INIT_TYPES.add(LAZY_INIT);
         INIT_TYPES.add(CONSTRUCTOR_INIT);
         INIT_TYPES.add(FIELD_INIT);
@@ -52,7 +52,7 @@ public class JavaAssociationMetadata implements AssociationMetadata {
     public static final List<String> CLONE_MODES;
 
     static {
-        CLONE_MODES = new ArrayList<String>();
+        CLONE_MODES = new ArrayList<>();
         CLONE_MODES.add(CLONE_SHALLOW);
         CLONE_MODES.add(CLONE_DEEP);
     }

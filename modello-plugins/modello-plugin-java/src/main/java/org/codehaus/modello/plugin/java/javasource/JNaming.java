@@ -72,7 +72,7 @@ package org.codehaus.modello.plugin.java.javasource;
  * @author <a href="mailto:kvisco@intalio.com">Keith Visco</a>
  * @version $Revision$ $Date$
  **/
-class JNaming {
+final class JNaming {
 
     private static final String[] keywords = {
         "abstract",
@@ -136,7 +136,9 @@ class JNaming {
      * will cause a problem when used as a variable name
      **/
     public static boolean isKeyword(String name) {
-        if (name == null) return false;
+        if (name == null) {
+            return false;
+        }
         for (String keyword : keywords) {
             if (keyword.equals(name)) {
                 return true;
@@ -155,17 +157,22 @@ class JNaming {
      **/
     public static boolean isValidJavaIdentifier(String string) {
 
-        if ((string == null) || (string.length() == 0)) return false;
+        if ((string == null) || (string.length() == 0)) {
+            return false;
+        }
 
         char[] chars = string.toCharArray();
 
         // -- make sure starting character is valid
-        if (!Character.isJavaIdentifierStart(chars[0])) return false;
+        if (!Character.isJavaIdentifierStart(chars[0])) {
+            return false;
+        }
 
         for (int i = 1; i < chars.length; i++) {
-            if (!Character.isJavaIdentifierPart(chars[i])) return false;
+            if (!Character.isJavaIdentifierPart(chars[i])) {
+                return false;
+            }
         }
-        if (isKeyword(string)) return false;
-        return true;
+        return !isKeyword(string);
     } // -- isValidJavaIdentifier
 } // -- JNaming
