@@ -172,11 +172,6 @@ public class SnakeYamlReaderGenerator extends AbstractSnakeYamlGenerator {
 
         sc.add(className + ' ' + variableName + " = parse" + capClassName + "( parser, strict" + trackingArgs + " );");
 
-        if (rootElement) {
-            // TODO
-            // sc.add( variableName + ".setModelEncoding( parser.getInputEncoding() );" );
-        }
-
         sc.add("");
 
         sc.add("if ( !( event = parser.getEvent() ).is( Event.ID.DocumentEnd ) )");
@@ -1074,10 +1069,10 @@ public class SnakeYamlReaderGenerator extends AbstractSnakeYamlGenerator {
 
         String constr = "new " + locationTracker.getName()
                 + "( parser.peekEvent().getStartMark().getLine(), parser.peekEvent().getStartMark().getColumn()";
-        constr += (sourceTracker != null) ? ", " + SOURCE_PARAM : "";
+        constr += sourceTracker != null ? ", " + SOURCE_PARAM : "";
         constr += " )";
 
-        sc.add(((trackerVariable != null) ? trackerVariable : LOCATION_VAR) + " = " + constr + ";");
+        sc.add((trackerVariable != null ? trackerVariable : LOCATION_VAR) + " = " + constr + ";");
     }
 
     private void writeSetLocation(String key, String objectName, String trackerVariable, JSourceCode sc) {
@@ -1085,7 +1080,7 @@ public class SnakeYamlReaderGenerator extends AbstractSnakeYamlGenerator {
             return;
         }
 
-        String variable = (trackerVariable != null) ? trackerVariable : LOCATION_VAR;
+        String variable = trackerVariable != null ? trackerVariable : LOCATION_VAR;
 
         sc.add(objectName + ".set" + capitalise(singular(locationField)) + "( " + key + ", " + variable + " );");
     }

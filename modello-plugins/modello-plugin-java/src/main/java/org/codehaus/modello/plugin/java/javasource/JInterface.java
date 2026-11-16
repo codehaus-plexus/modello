@@ -87,12 +87,12 @@ public final class JInterface extends JStructure {
     /**
      * The fields for this JInterface
      */
-    private Map<String, JField> fields = null;
+    private Map<String, JField> fields;
 
     /**
      * The list of methods of this JInterface
      */
-    private List<JMethodSignature> methods = null;
+    private List<JMethodSignature> methods;
 
     /**
      * Creates a new JInterface with the given name.
@@ -103,7 +103,7 @@ public final class JInterface extends JStructure {
      **/
     public JInterface(String name) throws IllegalArgumentException {
         super(name);
-        methods = new ArrayList<JMethodSignature>();
+        methods = new ArrayList<>();
 
         // -- initialize default Java doc
         getJDocComment().appendComment("Interface " + getLocalName() + ".");
@@ -216,15 +216,21 @@ public final class JInterface extends JStructure {
             }
         }
         // -- END SORT
-        if (!added) methods.add(jMethodSig);
+        if (!added) {
+            methods.add(jMethodSig);
+        }
 
         // -- check return type to make sure it's included in the
         // -- import list
         JType jType = jMethodSig.getReturnType();
         if (jType != null) {
-            while (jType.isArray()) jType = jType.getComponentType();
+            while (jType.isArray()) {
+                jType = jType.getComponentType();
+            }
 
-            if (!jType.isPrimitive()) addImport(jType.getName());
+            if (!jType.isPrimitive()) {
+                addImport(jType.getName());
+            }
         }
         // -- check exceptions
         JClass[] exceptions = jMethodSig.getExceptions();
@@ -242,7 +248,9 @@ public final class JInterface extends JStructure {
      * was found with the given name.
      */
     public JField getField(String name) {
-        if (fields == null) return null;
+        if (fields == null) {
+            return null;
+        }
         return (JField) fields.get(name);
     } // -- getField
 
@@ -278,7 +286,9 @@ public final class JInterface extends JStructure {
      **/
     public JMethodSignature getMethod(String name, int startIndex) {
         for (JMethodSignature jMethod : methods) {
-            if (jMethod.getName().equals(name)) return jMethod;
+            if (jMethod.getName().equals(name)) {
+                return jMethod;
+            }
         }
         return null;
     } // -- getMethod
@@ -329,7 +339,9 @@ public final class JInterface extends JStructure {
         getJDocComment().print(jsw);
 
         JAnnotations annotations = getAnnotations();
-        if (annotations != null) annotations.print(jsw);
+        if (annotations != null) {
+            annotations.print(jsw);
+        }
 
         // -- print class information
         // -- we need to add some JavaDoc API adding comments
@@ -358,7 +370,9 @@ public final class JInterface extends JStructure {
             buffer.append("extends ");
             while (e.hasMoreElements()) {
                 buffer.append(e.nextElement());
-                if (e.hasMoreElements()) buffer.append(", ");
+                if (e.hasMoreElements()) {
+                    buffer.append(", ");
+                }
             }
 
             jsw.writeln(buffer.toString());
@@ -385,7 +399,9 @@ public final class JInterface extends JStructure {
             for (JField jField : fields.values()) {
                 // -- print Java comment
                 JDocComment comment = jField.getComment();
-                if (comment != null) comment.print(jsw);
+                if (comment != null) {
+                    comment.print(jsw);
+                }
 
                 // -- print member
                 jsw.write(jField.getModifiers().toString());
@@ -414,7 +430,7 @@ public final class JInterface extends JStructure {
 
         // -- print method signatures
 
-        if (methods.size() > 0) {
+        if (!methods.isEmpty()) {
             jsw.writeln();
             jsw.writeln("  //-----------/");
             jsw.writeln(" //- Methods -/");
@@ -437,7 +453,7 @@ public final class JInterface extends JStructure {
         jsw.close();
     } // -- printSource
 
-    private List<String> sourceCodeEntries = new ArrayList<String>();
+    private List<String> sourceCodeEntries = new ArrayList<>();
 
     public void addSourceCode(String sourceCode) {
         sourceCodeEntries.add(sourceCode);

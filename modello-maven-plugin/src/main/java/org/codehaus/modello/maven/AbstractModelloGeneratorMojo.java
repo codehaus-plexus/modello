@@ -90,7 +90,7 @@ public abstract class AbstractModelloGeneratorMojo extends AbstractMojo {
      * <code>packageWithVersion</code> setting.
      */
     @Parameter
-    private List<String> packagedVersions = new ArrayList<String>();
+    private List<String> packagedVersions = new ArrayList<>();
 
     /**
      * The contents of license header text, verbatim.

@@ -35,13 +35,13 @@ class GeneratorNode {
 
     private boolean referencableChildren;
 
-    private List<GeneratorNode> children = new LinkedList<GeneratorNode>();
+    private List<GeneratorNode> children = new LinkedList<>();
 
     private ModelAssociation association;
 
     private boolean referencable;
 
-    private Map<String, GeneratorNode> nodesWithReferencableChildren = new HashMap<String, GeneratorNode>();
+    private Map<String, GeneratorNode> nodesWithReferencableChildren = new HashMap<>();
 
     private List<String> chain;
 

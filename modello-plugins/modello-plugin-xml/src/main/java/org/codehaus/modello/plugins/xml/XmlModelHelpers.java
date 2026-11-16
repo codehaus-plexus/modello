@@ -124,7 +124,7 @@ class XmlModelHelpers {
      * @return The list of XML attributes fields, can be empty but never <code>null</code>.
      */
     static List<ModelField> getXmlAttributeFields(List<ModelField> modelFields) {
-        List<ModelField> xmlAttributeFields = new ArrayList<ModelField>();
+        List<ModelField> xmlAttributeFields = new ArrayList<>();
 
         for (ModelField field : modelFields) {
             XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata(XmlFieldMetadata.ID);
@@ -145,7 +145,7 @@ class XmlModelHelpers {
      * @return the list of XML fields of this class
      */
     static List<ModelField> getFieldsForXml(ModelClass modelClass, Version version) {
-        List<ModelClass> classes = new ArrayList<ModelClass>();
+        List<ModelClass> classes = new ArrayList<>();
 
         // get the full inheritance
         while (modelClass != null) {
@@ -160,14 +160,14 @@ class XmlModelHelpers {
             }
         }
 
-        List<ModelField> fields = new ArrayList<ModelField>();
+        List<ModelField> fields = new ArrayList<>();
 
         for (int i = classes.size() - 1; i >= 0; i--) {
             modelClass = classes.get(i);
 
             Iterator<ModelField> parentIter = fields.iterator();
 
-            fields = new ArrayList<ModelField>();
+            fields = new ArrayList<>();
 
             for (ModelField field : modelClass.getFields(version)) {
                 XmlFieldMetadata xmlFieldMetadata = (XmlFieldMetadata) field.getMetadata(XmlFieldMetadata.ID);

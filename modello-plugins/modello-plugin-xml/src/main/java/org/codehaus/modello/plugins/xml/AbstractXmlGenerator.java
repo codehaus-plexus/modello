@@ -80,7 +80,7 @@ public abstract class AbstractXmlGenerator extends AbstractModelloGenerator {
     }
 
     protected boolean hasContentField(List<ModelField> modelFields) {
-        return (getContentField(modelFields) != null);
+        return getContentField(modelFields) != null;
     }
 
     /**

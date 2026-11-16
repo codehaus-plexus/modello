@@ -79,22 +79,22 @@ public class JField implements JMember {
     /**
      * The set of modifiers for this JField
      **/
-    private JModifiers modifiers = null;
+    private JModifiers modifiers;
 
-    private JType type = null;
+    private JType type;
 
-    private String name = null;
+    private String name;
 
-    private JDocComment comment = null;
+    private JDocComment comment;
 
-    private String initString = null;
+    private String initString;
 
-    private JAnnotations annotations = null;
+    private JAnnotations annotations;
 
     /**
      * The Class in this JField has been declared
      **/
-    private JClass declaringClass = null;
+    private JClass declaringClass;
 
     public JField(JType type, String name) {
 
@@ -195,8 +195,11 @@ public class JField implements JMember {
     public void setName(String name) throws IllegalArgumentException {
         if (!JNaming.isValidJavaIdentifier(name)) {
             String err = "'" + name + "' is ";
-            if (JNaming.isKeyword(name)) err += "a reserved word and may not be used as " + " a field name.";
-            else err += "not a valid Java identifier.";
+            if (JNaming.isKeyword(name)) {
+                err += "a reserved word and may not be used as " + " a field name.";
+            } else {
+                err += "not a valid Java identifier.";
+            }
             throw new IllegalArgumentException(err);
         }
         this.name = name;

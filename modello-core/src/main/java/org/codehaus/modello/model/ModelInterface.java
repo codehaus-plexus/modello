@@ -53,14 +53,14 @@ public class ModelInterface extends ModelType {
      * {@inheritDoc}
      */
     public List<ModelField> getAllFields() {
-        return new ArrayList<ModelField>();
+        return new ArrayList<>();
     }
 
     /**
      * {@inheritDoc}
      */
     public List<ModelField> getAllFields(boolean withInheritedField) {
-        return new ArrayList<ModelField>();
+        return new ArrayList<>();
     }
 
     public ModelField getField(String type, VersionRange versionRange) {

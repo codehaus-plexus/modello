@@ -44,13 +44,13 @@ public abstract class BaseElement {
 
     private String comment;
 
-    private List<String> annotations = new ArrayList<String>();
+    private List<String> annotations = new ArrayList<>();
 
     private VersionRange versionRange = new VersionRange("0.0.0+");
 
     private Version deprecatedVersion;
 
-    private transient Map<String, Metadata> metadata = new HashMap<String, Metadata>();
+    private transient Map<String, Metadata> metadata = new HashMap<>();
 
     private boolean nameRequired;
 

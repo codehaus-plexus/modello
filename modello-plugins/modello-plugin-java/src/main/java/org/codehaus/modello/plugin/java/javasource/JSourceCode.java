@@ -82,7 +82,7 @@ public class JSourceCode {
     /**
      * A list of JCodeStatements
      **/
-    private List<JCodeStatement> source = null;
+    private List<JCodeStatement> source;
 
     /**
      * The indent size
@@ -99,7 +99,7 @@ public class JSourceCode {
      **/
     public JSourceCode() {
         super();
-        source = new ArrayList<JCodeStatement>();
+        source = new ArrayList<>();
     } // -- JSourceCode
 
     /**
@@ -161,8 +161,9 @@ public class JSourceCode {
      **/
     public void append(String segment) {
 
-        if (source.isEmpty()) add(segment);
-        else {
+        if (source.isEmpty()) {
+            add(segment);
+        } else {
             JCodeStatement jcs = (JCodeStatement) source.get(source.size() - 1);
             jcs.append(segment);
         }
@@ -205,7 +206,9 @@ public class JSourceCode {
      * @param jsw the JSourceWriter to print to
      **/
     public void print(JSourceWriter jsw) {
-        for (int i = 0; i < source.size(); i++) jsw.writeln(source.get(i).toString());
+        for (int i = 0; i < source.size(); i++) {
+            jsw.writeln(source.get(i).toString());
+        }
     } // -- print
 
     /**
@@ -248,7 +251,7 @@ public class JSourceCode {
  **/
 class JCodeStatement {
 
-    private StringBuilder value = null;
+    private StringBuilder value;
     public static short DEFAULT_INDENTSIZE = 4;
     private short indentSize = DEFAULT_INDENTSIZE;
 
@@ -285,7 +288,9 @@ class JCodeStatement {
         }
 
         StringBuilder sb = new StringBuilder(indentSize + value.length());
-        for (int i = 0; i < indentSize; i++) sb.append(' ');
+        for (int i = 0; i < indentSize; i++) {
+            sb.append(' ');
+        }
         sb.append(value.toString());
         return sb.toString();
     }

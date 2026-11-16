@@ -352,7 +352,7 @@ public class SnakeYamlWriterGenerator extends AbstractSnakeYamlGenerator {
 
                         entryTypeBuilder.append('<');
 
-                        if (association.getType().equals(ModelDefault.PROPERTIES)) {
+                        if (ModelDefault.PROPERTIES.equals(association.getType())) {
                             entryTypeBuilder.append("Object, Object");
                         } else {
                             entryTypeBuilder.append("String, ").append(association.getTo());

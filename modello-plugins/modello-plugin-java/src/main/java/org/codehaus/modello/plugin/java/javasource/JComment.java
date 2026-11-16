@@ -118,7 +118,7 @@ public class JComment {
     /**
      * The main comment for this JDocComment
      **/
-    private StringBuilder _comment = null;
+    private StringBuilder _comment;
 
     /**
      * The maximum number of characters per line
@@ -157,8 +157,9 @@ public class JComment {
      **/
     public void print(JSourceWriter jsw) {
 
-        if (jsw == null) return; // -- nothing to do
-
+        if (jsw == null) {
+            return; // -- nothing to do
+        }
         LineFormatter formatter = null;
 
         // -- calculate comment length
@@ -167,7 +168,9 @@ public class JComment {
 
         // -- a simple to check to make sure we have some room
         // -- to print the comment
-        if (maxLength <= 17) maxLength = MAX_LENGTH / 2;
+        if (maxLength <= 17) {
+            maxLength = MAX_LENGTH / 2;
+        }
 
         short resolvedStyle = style;
 
@@ -175,8 +178,11 @@ public class JComment {
             // -- estimation of number of lines
             int nbrLines = _comment.length() / maxLength;
 
-            if (nbrLines > 2) resolvedStyle = BLOCK_STYLE;
-            else resolvedStyle = LINE_STYLE;
+            if (nbrLines > 2) {
+                resolvedStyle = BLOCK_STYLE;
+            } else {
+                resolvedStyle = LINE_STYLE;
+            }
         }
 
         // -- start comment
@@ -204,13 +210,17 @@ public class JComment {
                 prefix = LINE_COMMENT_PREFIX;
                 break;
         }
-        if (start != null) jsw.writeln(start);
+        if (start != null) {
+            jsw.writeln(start);
+        }
         // -- print main comment
         formatter = new LineFormatter(_comment.toString(), maxLength, prefix);
         while (formatter.hasMoreLines()) {
             jsw.writeln(formatter.nextLine());
         }
-        if (end != null) jsw.writeln(end);
+        if (end != null) {
+            jsw.writeln(end);
+        }
         jsw.flush();
     } // -- print
 
@@ -246,15 +256,15 @@ public class JComment {
  **/
 class LineFormatter {
 
-    String comment = null;
+    String comment;
 
     int maxLength = 65;
-    int offset = 0;
-    int length = 0;
+    int offset;
+    int length;
 
-    String prefix = null;
+    String prefix;
 
-    private StringBuilder sb = null;
+    private StringBuilder sb;
 
     /**
      * Creates a LineFormatter for the given comment
@@ -262,7 +272,9 @@ class LineFormatter {
      **/
     LineFormatter(String comment) {
         this.comment = comment;
-        if (comment != null) this.length = comment.length();
+        if (comment != null) {
+            this.length = comment.length();
+        }
         sb = new StringBuilder();
     } // -- LineFormatter
 
@@ -288,19 +300,29 @@ class LineFormatter {
     } // -- LineFormatter
 
     boolean hasMoreLines() {
-        if (comment == null) return false;
-        return (offset < length);
+        if (comment == null) {
+            return false;
+        }
+        return offset < length;
     } // -- isFinished
 
     String nextLine() {
-        if (comment == null) return null;
-        if (offset >= length) return null;
+        if (comment == null) {
+            return null;
+        }
+        if (offset >= length) {
+            return null;
+        }
 
         sb.setLength(0);
-        if (prefix != null) sb.append(prefix);
+        if (prefix != null) {
+            sb.append(prefix);
+        }
 
         int max = offset + maxLength;
-        if (max > this.length) max = this.length;
+        if (max > this.length) {
+            max = this.length;
+        }
 
         int index = offset;
         int breakable = offset;
@@ -311,7 +333,9 @@ class LineFormatter {
                 offset = index + 1;
                 return sb.toString();
             }
-            if (isWhitespace(ch)) breakable = index;
+            if (isWhitespace(ch)) {
+                breakable = index;
+            }
         }
 
         if (index < length - 1) {
@@ -319,10 +343,14 @@ class LineFormatter {
             // -- ahead
             if (offset == breakable) {
                 while (index < length) {
-                    if (isBreakable(comment.charAt(index))) break;
+                    if (isBreakable(comment.charAt(index))) {
+                        break;
+                    }
                     ++index;
                 }
-            } else index = breakable;
+            } else {
+                index = breakable;
+            }
         }
         sb.append(comment.substring(offset, index));
         offset = index + 1;
@@ -339,14 +367,14 @@ class LineFormatter {
     } // -- setPrefix
 
     private boolean isBreakable(char ch) {
-        return (isWhitespace(ch) || isNewLine(ch));
+        return isWhitespace(ch) || isNewLine(ch);
     }
 
     private boolean isWhitespace(char ch) {
-        return ((ch == ' ') || (ch == '\t'));
+        return (ch == ' ') || (ch == '\t');
     } // -- isWhitespace
 
     private boolean isNewLine(char ch) {
-        return ((ch == '\n') || (ch == '\r'));
+        return (ch == '\n') || (ch == '\r');
     } // -- isNewLineChar
 } // -- LineFormatter

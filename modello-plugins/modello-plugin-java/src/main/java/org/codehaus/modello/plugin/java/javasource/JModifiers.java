@@ -100,25 +100,25 @@ public class JModifiers {
      * A flag indicating whether or not the object associated
      * with this JModifiers is static
      **/
-    private boolean isStatic = false;
+    private boolean isStatic;
 
     /**
      * A flag indicating whether or not the object associated
      * with this JModifiers is final
      **/
-    private boolean isFinal = false;
+    private boolean isFinal;
 
     /**
      * A flag indicating whether or not the object associated
      * with this JModifiers is abstract
      **/
-    private boolean isAbstract = false;
+    private boolean isAbstract;
 
     /**
      * A flag indicating whether or not the object associated
      * with this JModifiers is transient
      **/
-    private boolean isTransient = false;
+    private boolean isTransient;
 
     /**
      * Creates a new JModifiers class, by default the
@@ -204,7 +204,7 @@ public class JModifiers {
      * @return true if the modifier represented is private.
      **/
     public boolean isPrivate() {
-        return (visibility == vPrivate);
+        return visibility == vPrivate;
     } // -- isPrivate
 
     /**
@@ -212,7 +212,7 @@ public class JModifiers {
      * @return true if the modifier represented is protected.
      **/
     public boolean isProtected() {
-        return (visibility == vProtected);
+        return visibility == vProtected;
     } // -- isProtected
 
     /**
@@ -220,7 +220,7 @@ public class JModifiers {
      * @return true if the modifier represented is public.
      **/
     public boolean isPublic() {
-        return (visibility == vPublic);
+        return visibility == vPublic;
     } // -- isPublic
 
     /**
@@ -228,7 +228,7 @@ public class JModifiers {
      * @return true if the modifier represented is package (= without qualifier).
      **/
     public boolean isPackage() {
-        return (visibility == vPackage);
+        return visibility == vPackage;
     } // -- isPackage
 
     /**

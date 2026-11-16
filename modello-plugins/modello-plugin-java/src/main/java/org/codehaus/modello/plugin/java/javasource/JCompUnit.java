@@ -100,29 +100,29 @@ public class JCompUnit {
      **/
     private static final String DEFAULT_HEADER = "$" + "Id$";
 
-    private JComment header = null;
+    private JComment header;
 
     /**
      * The package for this JCompUnit
      **/
-    private String packageName = null;
+    private String packageName;
 
     /**
      * The file to which this JCompUnit will be saved
      **/
-    private String fileName = null;
+    private String fileName;
 
     /**
      * The set of top-level classes that live in this compilation unit.
      **/
     // private TypeList classes = null;
-    private List<JClass> classes = null;
+    private List<JClass> classes;
 
     /**
      * The set of top-level interfaces that live in this compilation unit.
      **/
     // private TypeList interfaces = null;
-    private List<JInterface> interfaces = null;
+    private List<JInterface> interfaces;
 
     /**
      * Creates a new JCompUnit
@@ -185,8 +185,8 @@ public class JCompUnit {
     } // -- JCompUnit
 
     private void init() {
-        classes = new ArrayList<JClass>();
-        interfaces = new ArrayList<JInterface>();
+        classes = new ArrayList<>();
+        interfaces = new ArrayList<>();
     }
 
     /**
@@ -199,9 +199,11 @@ public class JCompUnit {
      * or if the class of jStructure is unknown.
      */
     public void addStructure(JStructure jStructure) throws IllegalArgumentException {
-        if (jStructure instanceof JInterface) addInterface((JInterface) jStructure);
-        else if (jStructure instanceof JClass) addClass((JClass) jStructure);
-        else {
+        if (jStructure instanceof JInterface) {
+            addInterface((JInterface) jStructure);
+        } else if (jStructure instanceof JClass) {
+            addClass((JClass) jStructure);
+        } else {
             String err = "Unknown JStructure subclass '" + jStructure.getClass().getName() + "'.";
             throw new IllegalArgumentException(err);
         }
@@ -233,7 +235,7 @@ public class JCompUnit {
      */
     public SortedSet<String> getImports() {
 
-        SortedSet<String> allImports = new TreeSet<String>();
+        SortedSet<String> allImports = new TreeSet<>();
 
         // add imports from classes
         for (JClass jClass : classes) {
@@ -273,14 +275,19 @@ public class JCompUnit {
 
         // -- Create fully qualified path (including 'destDir') to file
         File pathFile;
-        if (destDir == null) pathFile = new File(javaPackagePath);
-        else pathFile = new File(destDir, javaPackagePath);
+        if (destDir == null) {
+            pathFile = new File(javaPackagePath);
+        } else {
+            pathFile = new File(destDir, javaPackagePath);
+        }
         if (!pathFile.exists()) {
             pathFile.mkdirs();
         }
 
         // -- Prefix filename with path
-        if (pathFile.toString().length() > 0) filename = pathFile.toString() + File.separator + filename;
+        if (pathFile.toString().length() > 0) {
+            filename = pathFile.toString() + File.separator + filename;
+        }
 
         return filename;
     } // -- getFilename
@@ -364,8 +371,9 @@ public class JCompUnit {
         StringBuilder buffer = new StringBuilder();
 
         // -- write file header
-        if (header != null) header.print(jsw);
-        else {
+        if (header != null) {
+            header.print(jsw);
+        } else {
             jsw.writeln("/*");
             jsw.writeln(" * " + DEFAULT_HEADER);
             jsw.writeln("*/");

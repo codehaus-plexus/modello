@@ -44,7 +44,7 @@ public class ModelClass extends ModelType {
 
     private List<ModelField> fields;
 
-    private transient Map<String, List<ModelField>> fieldMap = new HashMap<String, List<ModelField>>();
+    private transient Map<String, List<ModelField>> fieldMap = new HashMap<>();
 
     public ModelClass() {
         super();
@@ -73,7 +73,7 @@ public class ModelClass extends ModelType {
      */
     public List<String> getInterfaces() {
         if (interfaces == null) {
-            interfaces = new ArrayList<String>();
+            interfaces = new ArrayList<>();
         }
 
         return interfaces;
@@ -96,7 +96,7 @@ public class ModelClass extends ModelType {
      */
     public List<ModelField> getAllFields() {
         if (fields == null) {
-            fields = new ArrayList<ModelField>();
+            fields = new ArrayList<>();
         }
 
         return fields;
@@ -112,7 +112,7 @@ public class ModelClass extends ModelType {
             return getAllFields();
         }
 
-        List<ModelField> fields = new ArrayList<ModelField>(getAllFields());
+        List<ModelField> fields = new ArrayList<>(getAllFields());
 
         ModelClass c = this;
 
@@ -154,7 +154,7 @@ public class ModelClass extends ModelType {
                 }
             }
         } else {
-            List<ModelField> fieldList = new ArrayList<ModelField>();
+            List<ModelField> fieldList = new ArrayList<>();
 
             fieldMap.put(modelField.getName(), fieldList);
         }

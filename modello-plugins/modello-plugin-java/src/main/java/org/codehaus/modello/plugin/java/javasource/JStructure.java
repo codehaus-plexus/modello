@@ -104,35 +104,35 @@ public abstract class JStructure extends JType {
     /**
      * The source header
      */
-    private JComment header = null;
+    private JComment header;
 
     /**
      * List of imported classes and packages
      */
-    private List<String> imports = null;
+    private List<String> imports;
 
     /**
      * The set of interfaces implemented/extended by this JStructure
      */
-    private List<String> interfaces = null;
+    private List<String> interfaces;
 
     /**
      * The Javadoc for this JStructure
      */
-    private JDocComment jdc = null;
+    private JDocComment jdc;
 
     /**
      * The JModifiers for this JStructure, which allows us to
      * change the resulting qualifiers
      */
-    private JModifiers modifiers = null;
+    private JModifiers modifiers;
 
     /**
      * The package to which this JStructure belongs
      */
     private final String packageName;
 
-    private JAnnotations annotations = null;
+    private JAnnotations annotations;
 
     /**
      * Creates a new JStructure with the given name.
@@ -148,14 +148,17 @@ public abstract class JStructure extends JType {
         if (!isValidClassName(name)) {
             String lname = getLocalName();
             String err = "'" + lname + "' is ";
-            if (JNaming.isKeyword(lname)) err += "a reserved word and may not be used as " + " a class name.";
-            else err += "not a valid Java identifier.";
+            if (JNaming.isKeyword(lname)) {
+                err += "a reserved word and may not be used as " + " a class name.";
+            } else {
+                err += "not a valid Java identifier.";
+            }
 
             throw new IllegalArgumentException(err);
         }
         this.packageName = getPackageFromClassName(name);
-        imports = new ArrayList<String>();
-        interfaces = new ArrayList<String>();
+        imports = new ArrayList<>();
+        interfaces = new ArrayList<>();
         jdc = new JDocComment();
         modifiers = new JModifiers();
         // -- initialize default Java doc
@@ -198,26 +201,36 @@ public abstract class JStructure extends JType {
      * @param className the className of the class to import.
      */
     public void addImport(String className) {
-        if (className == null) return;
-        if (className.length() == 0) return;
+        if (className == null) {
+            return;
+        }
+        if (className.length() == 0) {
+            return;
+        }
 
         // -- getPackageName
         String pkgName = getPackageFromClassName(className);
 
         if (pkgName != null) {
-            if (pkgName.equals(this.packageName)) return;
+            if (pkgName.equals(this.packageName)) {
+                return;
+            }
 
             // -- XXX: Fix needed for this...
             // -- This may cause issues if the current package
             // -- defines any classes that have the same name
             // -- name as the java.lang package.
-            if ("java.lang".equals(pkgName)) return;
+            if ("java.lang".equals(pkgName)) {
+                return;
+            }
 
             // -- for readabilty keep import list sorted, and make sure
             // -- we do not include more than one of the same import
             for (int i = 0; i < imports.size(); i++) {
                 String imp = imports.get(i);
-                if (imp.equals(className)) return;
+                if (imp.equals(className)) {
+                    return;
+                }
                 if (imp.compareTo(className) > 0) {
                     imports.add(i, className);
                     return;
@@ -236,7 +249,9 @@ public abstract class JStructure extends JType {
      * method declarations from.
      */
     public void addInterface(String interfaceName) {
-        if (!interfaces.contains(interfaceName)) interfaces.add(interfaceName);
+        if (!interfaces.contains(interfaceName)) {
+            interfaces.add(interfaceName);
+        }
     } // -- addInterface
 
     /**
@@ -247,7 +262,9 @@ public abstract class JStructure extends JType {
      * @param jInterface the JInterface to inherit from.
      */
     public void addInterface(JInterface jInterface) {
-        if (jInterface == null) return;
+        if (jInterface == null) {
+            return;
+        }
         String interfaceName = jInterface.getName();
         if (!interfaces.contains(interfaceName)) {
             interfaces.add(interfaceName);
@@ -359,14 +376,19 @@ public abstract class JStructure extends JType {
 
         // -- Create fully qualified path (including 'destDir') to file
         File pathFile;
-        if (destDir == null) pathFile = new File(javaPackagePath);
-        else pathFile = new File(destDir, javaPackagePath);
+        if (destDir == null) {
+            pathFile = new File(javaPackagePath);
+        } else {
+            pathFile = new File(destDir, javaPackagePath);
+        }
         if (!pathFile.exists()) {
             pathFile.mkdirs();
         }
 
         // -- Prefix filename with path
-        if (pathFile.toString().length() > 0) filename = pathFile.toString() + File.separator + filename;
+        if (pathFile.toString().length() > 0) {
+            filename = pathFile.toString() + File.separator + filename;
+        }
 
         return filename;
     } // -- getFilename
@@ -486,7 +508,9 @@ public abstract class JStructure extends JType {
         String name = super.getName();
         if (stripPackage) {
             int period = name.lastIndexOf(".");
-            if (period > 0) name = name.substring(period + 1);
+            if (period > 0) {
+                name = name.substring(period + 1);
+            }
         }
         return name;
     } // -- getName
@@ -504,8 +528,12 @@ public abstract class JStructure extends JType {
 
     public boolean removeImport(String className) {
         boolean result = false;
-        if (className == null) return result;
-        if (className.length() == 0) return result;
+        if (className == null) {
+            return result;
+        }
+        if (className.length() == 0) {
+            return result;
+        }
 
         return imports.remove(className);
     } // -- removeImport
@@ -516,11 +544,15 @@ public abstract class JStructure extends JType {
 
     public static boolean isValidClassName(String name) {
 
-        if (name == null) return false;
+        if (name == null) {
+            return false;
+        }
 
         // -- ignore package information, for now
         int period = name.lastIndexOf(".");
-        if (period > 0) name = name.substring(period + 1);
+        if (period > 0) {
+            name = name.substring(period + 1);
+        }
 
         return JNaming.isValidJavaIdentifier(name);
     } // -- isValidClassName
@@ -589,8 +621,9 @@ public abstract class JStructure extends JType {
 
         // -- write class header
         JComment header = getHeader();
-        if (header != null) header.print(jsw);
-        else {
+        if (header != null) {
+            header.print(jsw);
+        } else {
             jsw.writeln("/*");
             jsw.writeln(" * " + DEFAULT_HEADER);
             jsw.writeln(" */");
@@ -612,7 +645,7 @@ public abstract class JStructure extends JType {
         }
 
         // -- print imports
-        if (imports.size() > 0) {
+        if (!imports.isEmpty()) {
             jsw.writeln("  //---------------------------------/");
             jsw.writeln(" //- Imported classes and packages -/");
             jsw.writeln("//---------------------------------/");
@@ -767,7 +800,9 @@ public abstract class JStructure extends JType {
      */
     protected static void printlnWithPrefix(String prefix, String source, JSourceWriter jsw) {
         jsw.write(prefix);
-        if (source == null) return;
+        if (source == null) {
+            return;
+        }
 
         char[] chars = source.toCharArray();
         int lastIdx = 0;

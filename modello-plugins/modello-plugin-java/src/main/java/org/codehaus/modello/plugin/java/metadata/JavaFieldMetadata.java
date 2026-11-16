@@ -32,7 +32,7 @@ public class JavaFieldMetadata implements FieldMetadata {
 
     private boolean getter = true;
 
-    private boolean booleanGetter = false;
+    private boolean booleanGetter;
 
     private boolean setter = true;
 

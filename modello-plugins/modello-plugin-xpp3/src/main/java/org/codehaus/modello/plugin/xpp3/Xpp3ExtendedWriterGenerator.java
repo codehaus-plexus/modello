@@ -100,7 +100,7 @@ public class Xpp3ExtendedWriterGenerator extends Xpp3WriterGenerator {
         sc.add("{");
         sc.addIndented("return stringFormatter.toString( location );");
         sc.add("}");
-        sc.add("return ' ' + " + ((sourceTracker == null) ? "" : "location.getSource().toString() + ':' + ")
+        sc.add("return ' ' + " + (sourceTracker == null ? "" : "location.getSource().toString() + ':' + ")
                 + "location.getLineNumber() + ' ';");
 
         jClass.addMethod(method);

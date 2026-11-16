@@ -76,14 +76,14 @@ public class JParameter {
     /**
      * The type associated with this JParameter
      **/
-    private JType type = null;
+    private JType type;
 
     /**
      * The name of this JParameter
      **/
-    private String name = null;
+    private String name;
 
-    private JAnnotations annotations = null;
+    private JAnnotations annotations;
 
     /**
      * Creates a new JParameter with the given type, and name

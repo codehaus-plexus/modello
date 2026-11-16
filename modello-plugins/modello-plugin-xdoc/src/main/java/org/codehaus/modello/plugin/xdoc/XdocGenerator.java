@@ -489,10 +489,14 @@ public class XdocGenerator extends AbstractXmlGenerator {
                 if (StringUtils.isNotBlank(targetNamespace) && (xmlModelMetadata.getSchemaLocation() != null)) {
                     String schemaLocation = xmlModelMetadata.getSchemaLocation(getGeneratedVersion());
 
-                    sb.append(" xmlns=\"" + targetNamespace + "\"");
+                    sb.append(" xmlns=\"").append(targetNamespace).append("\"");
                     sb.append(" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n");
-                    sb.append("  xsi:schemaLocation=\"" + targetNamespace);
-                    sb.append(" <a href=\"" + schemaLocation + "\">" + schemaLocation + "</a>\"");
+                    sb.append("  xsi:schemaLocation=\"").append(targetNamespace);
+                    sb.append(" <a href=\"")
+                            .append(schemaLocation)
+                            .append("\">")
+                            .append(schemaLocation)
+                            .append("</a>\"");
 
                     addNewline = true;
                 }
@@ -676,7 +680,7 @@ public class XdocGenerator extends AbstractXmlGenerator {
     }
 
     private static String getDescription(BaseElement element) {
-        return (element.getDescription() == null) ? "No description." : rewrite(element.getDescription());
+        return element.getDescription() == null ? "No description." : rewrite(element.getDescription());
     }
 
     private static void writeTextElement(XMLWriter w, String name, String text) {

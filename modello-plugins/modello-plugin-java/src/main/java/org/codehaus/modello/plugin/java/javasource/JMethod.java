@@ -83,29 +83,29 @@ public class JMethod implements JMember {
     /**
      * The set of classes that contain this JMethod.
      **/
-    private List<JClass> _classes = null;
+    private List<JClass> _classes;
 
     /**
      * The JavaDoc comment for this JMethod. This
      * will overwrite the JavaDoc for the
      * JMethodSignature.
      **/
-    private JDocComment jdc = null;
+    private JDocComment jdc;
 
     /**
      * The source code for this method
      **/
-    private JSourceCode source = null;
+    private JSourceCode source;
 
     /**
      * The signature for this method.
      **/
-    private JMethodSignature _signature = null;
+    private JMethodSignature _signature;
 
     /**
      * The annotation(s) for this method.
      */
-    private JAnnotations annotations = null;
+    private JAnnotations annotations;
 
     /**
      * Creates a new JMethod with the given name and "void" return type.
@@ -144,7 +144,7 @@ public class JMethod implements JMember {
             throw new IllegalArgumentException(err);
         }
 
-        _classes = new ArrayList<JClass>(1);
+        _classes = new ArrayList<>(1);
         this.source = new JSourceCode();
         _signature = new JMethodSignature(name, returnType);
         this.jdc = _signature.getJDocComment();
@@ -338,7 +338,9 @@ public class JMethod implements JMember {
         // --------------------/
 
         JAnnotations annotations = getAnnotations();
-        if (annotations != null) annotations.print(jsw);
+        if (annotations != null) {
+            annotations.print(jsw);
+        }
 
         // --------------------/
         // - Method Signature -/

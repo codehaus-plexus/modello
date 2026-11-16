@@ -248,7 +248,7 @@ public abstract class AbstractJavaModelloGenerator extends AbstractModelloGenera
     }
 
     protected List<ModelClass> getClasses(Model model) {
-        List<ModelClass> modelClasses = new ArrayList<ModelClass>();
+        List<ModelClass> modelClasses = new ArrayList<>();
 
         for (ModelClass modelClass : model.getClasses(getGeneratedVersion())) {
             if (isRelevant(modelClass)) {
@@ -273,9 +273,6 @@ public abstract class AbstractJavaModelloGenerator extends AbstractModelloGenera
         if (StringUtils.isNotEmpty(modelClassMetadata.getLocationTracker())) {
             return true;
         }
-        if (StringUtils.isNotEmpty(modelClassMetadata.getSourceTracker())) {
-            return true;
-        }
-        return false;
+        return StringUtils.isNotEmpty(modelClassMetadata.getSourceTracker());
     }
 }

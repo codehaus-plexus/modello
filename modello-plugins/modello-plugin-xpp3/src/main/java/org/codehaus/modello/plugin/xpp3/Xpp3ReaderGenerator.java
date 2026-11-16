@@ -1556,13 +1556,13 @@ public class Xpp3ReaderGenerator extends AbstractXpp3Generator {
             return;
         }
 
-        sc.add(((trackerVariable != null) ? trackerVariable : LOCATION_VAR) + " = " + buildNewLocation(SOURCE_PARAM)
+        sc.add((trackerVariable != null ? trackerVariable : LOCATION_VAR) + " = " + buildNewLocation(SOURCE_PARAM)
                 + ";");
     }
 
     private String buildNewLocation(String source) {
         return "new " + locationTracker.getName() + "( parser.getLineNumber(), parser.getColumnNumber()"
-                + ((sourceTracker != null) ? ", " + source : "") + " )";
+                + (sourceTracker != null ? ", " + source : "") + " )";
     }
 
     private void writeSetLocation(String key, String objectName, String trackerVariable, JSourceCode sc) {
@@ -1570,7 +1570,7 @@ public class Xpp3ReaderGenerator extends AbstractXpp3Generator {
             return;
         }
 
-        String variable = (trackerVariable != null) ? trackerVariable : LOCATION_VAR;
+        String variable = trackerVariable != null ? trackerVariable : LOCATION_VAR;
 
         sc.add(objectName + ".set" + capitalise(singular(locationField)) + "( " + key + ", " + variable + " );");
     }

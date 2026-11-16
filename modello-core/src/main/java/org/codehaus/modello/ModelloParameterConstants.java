@@ -25,7 +25,7 @@ package org.codehaus.modello;
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  */
-public class ModelloParameterConstants {
+public final class ModelloParameterConstants {
     public static final String VERSION = "modello.version";
 
     public static final String OUTPUT_DIRECTORY = "modello.output.directory";

@@ -94,24 +94,24 @@ public class JClass extends JStructure {
     /**
      * The list of constructors for this JClass
      */
-    private List<JConstructor> _constructors = null;
+    private List<JConstructor> _constructors;
 
     /**
      * The list of member variables (fields) of this JClass
      */
-    private Map<String, JField> _fields = null;
+    private Map<String, JField> _fields;
 
-    private List<JClass> _innerClasses = null;
+    private List<JClass> _innerClasses;
 
     /**
      * The list of methods of this JClass
      */
-    private List<JMethod> _methods = null;
+    private List<JMethod> _methods;
 
     /**
      * The superclass for this JClass
      */
-    private String _superClass = null;
+    private String _superClass;
 
     /**
      * The source code for static initialization
@@ -126,10 +126,10 @@ public class JClass extends JStructure {
      **/
     public JClass(String name) throws IllegalArgumentException {
         super(name);
-        _constructors = new ArrayList<JConstructor>();
+        _constructors = new ArrayList<>();
         _fields = new LinkedHashMap<>();
-        _methods = new ArrayList<JMethod>();
-        _innerClasses = new ArrayList<JClass>();
+        _methods = new ArrayList<>();
+        _innerClasses = new ArrayList<>();
         // -- initialize default Java doc
         getJDocComment().appendComment("Class " + getLocalName() + ".");
     } // -- JClass
@@ -143,7 +143,9 @@ public class JClass extends JStructure {
      * @throws java.lang.IllegalArgumentException if {@code constructor} is {@code null} or invalid.
      */
     public void addConstructor(JConstructor constructor) throws IllegalArgumentException {
-        if (constructor == null) throw new IllegalArgumentException("Constructors cannot be null");
+        if (constructor == null) {
+            throw new IllegalArgumentException("Constructors cannot be null");
+        }
 
         if (constructor.getDeclaringClass() == this) {
 
@@ -189,9 +191,11 @@ public class JClass extends JStructure {
      * unrecognized class.
      **/
     public void addMember(JMember jMember) throws IllegalArgumentException {
-        if (jMember instanceof JField) addField((JField) jMember);
-        else if (jMember instanceof JMethod) addMethod((JMethod) jMember);
-        else {
+        if (jMember instanceof JField) {
+            addField((JField) jMember);
+        } else if (jMember instanceof JMethod) {
+            addMethod((JMethod) jMember);
+        } else {
             String error = null;
             if (jMember == null) {
                 error = "the argument 'jMember' must not be null.";
@@ -256,7 +260,9 @@ public class JClass extends JStructure {
             }
         }
         // -- END SORT
-        if (!added) _methods.add(jMethod);
+        if (!added) {
+            _methods.add(jMethod);
+        }
     } // -- addMethod
 
     /**
@@ -408,7 +414,9 @@ public class JClass extends JStructure {
     public JMethod getMethod(String name, int startIndex) {
         for (int i = startIndex; i < _methods.size(); i++) {
             JMethod jMethod = _methods.get(i);
-            if (jMethod.getName().equals(name)) return jMethod;
+            if (jMethod.getName().equals(name)) {
+                return jMethod;
+            }
         }
         return null;
     } // -- getMethod
@@ -471,8 +479,8 @@ public class JClass extends JStructure {
 
             // -- get imports from inner-classes
             List<String> removeImports = null;
-            if (_innerClasses.size() > 0) {
-                removeImports = new ArrayList<String>();
+            if (!_innerClasses.isEmpty()) {
+                removeImports = new ArrayList<>();
                 for (JClass iClass : _innerClasses) {
                     Enumeration<String> e = iClass.getImports();
                     while (e.hasMoreElements()) {
@@ -501,7 +509,9 @@ public class JClass extends JStructure {
         getJDocComment().print(jsw);
 
         JAnnotations annotations = getAnnotations();
-        if (annotations != null) annotations.print(jsw);
+        if (annotations != null) {
+            annotations.print(jsw);
+        }
 
         // -- print class information
         // -- we need to add some JavaDoc API adding comments
@@ -546,7 +556,9 @@ public class JClass extends JStructure {
             Enumeration<String> e = getInterfaces();
             while (e.hasMoreElements()) {
                 buffer.append(e.nextElement());
-                if (e.hasMoreElements()) buffer.append(", ");
+                if (e.hasMoreElements()) {
+                    buffer.append(", ");
+                }
             }
 
             jsw.writeln(buffer.toString());
@@ -572,10 +584,14 @@ public class JClass extends JStructure {
         for (JField jField : _fields.values()) {
             // -- print Java comment
             JDocComment comment = jField.getComment();
-            if (comment != null) comment.print(jsw);
+            if (comment != null) {
+                comment.print(jsw);
+            }
 
             JAnnotations fieldAnnotations = jField.getAnnotations();
-            if (fieldAnnotations != null) fieldAnnotations.print(jsw);
+            if (fieldAnnotations != null) {
+                fieldAnnotations.print(jsw);
+            }
 
             // -- print member
             jsw.write(jField.getModifiers().toString());
@@ -615,7 +631,7 @@ public class JClass extends JStructure {
         }
 
         // -- print constructors
-        if (_constructors.size() > 0) {
+        if (!_constructors.isEmpty()) {
             jsw.writeln();
             jsw.writeln("  //----------------/");
             jsw.writeln(" //- Constructors -/");
@@ -629,7 +645,7 @@ public class JClass extends JStructure {
         }
 
         // -- print methods
-        if (_methods.size() > 0) {
+        if (!_methods.isEmpty()) {
             jsw.writeln();
             jsw.writeln("  //-----------/");
             jsw.writeln(" //- Methods -/");
@@ -644,7 +660,7 @@ public class JClass extends JStructure {
         }
 
         // -- print inner-classes
-        if (_innerClasses.size() > 0) {
+        if (!_innerClasses.isEmpty()) {
             jsw.writeln();
             jsw.writeln("  //-----------------/");
             jsw.writeln(" //- Inner Classes -/");
@@ -667,7 +683,7 @@ public class JClass extends JStructure {
         jsw.flush();
     } // -- printSource
 
-    private List<String> sourceCodeEntries = new ArrayList<String>();
+    private List<String> sourceCodeEntries = new ArrayList<>();
 
     public void addSourceCode(String sourceCode) {
         sourceCodeEntries.add(sourceCode);
@@ -690,13 +706,13 @@ public class JClass extends JStructure {
      * @return the removed field
      **/
     public JField removeField(String name) {
-        if (name == null) return null;
-
-        JField field = (JField) _fields.remove(name);
+        if (name == null) {
+            return null;
+        }
 
         // -- clean up imports
         // -- NOT YET IMPLEMENTED
-        return field;
+        return (JField) _fields.remove(name);
     } // -- removeField
 
     /**
@@ -706,7 +722,9 @@ public class JClass extends JStructure {
      * @return {{@code true} if and only if the field was successfully removed
      **/
     public boolean removeField(JField jField) {
-        if (jField == null) return false;
+        if (jField == null) {
+            return false;
+        }
 
         Object field = _fields.get(jField.getName());
         if (field == jField) {

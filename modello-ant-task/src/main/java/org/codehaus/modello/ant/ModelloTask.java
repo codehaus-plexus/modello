@@ -40,7 +40,7 @@ public class ModelloTask extends Task {
     private String version;
     private File velocityBasedir;
     private File outputDirectory;
-    private boolean packageWithVersion = false;
+    private boolean packageWithVersion;
     private String javaSource = "8";
     private String encoding = "utf-8";
     private boolean domAsXpp3 = true;

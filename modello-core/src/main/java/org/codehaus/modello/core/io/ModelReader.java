@@ -49,15 +49,15 @@ import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
  */
 public class ModelReader {
-    private Map<String, String> modelAttributes = new HashMap<String, String>();
+    private Map<String, String> modelAttributes = new HashMap<>();
 
-    private Map<String, Map<String, String>> classAttributes = new HashMap<String, Map<String, String>>();
+    private Map<String, Map<String, String>> classAttributes = new HashMap<>();
 
-    private Map<String, Map<String, String>> interfaceAttributes = new HashMap<String, Map<String, String>>();
+    private Map<String, Map<String, String>> interfaceAttributes = new HashMap<>();
 
-    private Map<String, Map<String, String>> fieldAttributes = new HashMap<String, Map<String, String>>();
+    private Map<String, Map<String, String>> fieldAttributes = new HashMap<>();
 
-    private Map<String, Map<String, String>> associationAttributes = new HashMap<String, Map<String, String>>();
+    private Map<String, Map<String, String>> associationAttributes = new HashMap<>();
 
     public Map<String, String> getAttributesForModel() {
         return modelAttributes;
@@ -120,8 +120,6 @@ public class ModelReader {
                     parseClasses(model, parser);
                 } else if ("model".equals(parser.getName())) {
                     modelAttributes = getAttributes(parser);
-                } else {
-                    //                    parser.nextText();
                 }
             }
             eventType = parser.next();
@@ -248,7 +246,7 @@ public class ModelReader {
 
                 Map<String, String> fAttributes = getAttributes(parser);
 
-                Map<String, String> aAttributes = new HashMap<String, String>();
+                Map<String, String> aAttributes = new HashMap<>();
 
                 while (parser.nextTag() == XmlPullParser.START_TAG) {
                     if (parseBaseElement(modelField, parser)) {
@@ -394,7 +392,7 @@ public class ModelReader {
         } else if ("comment".equals(parser.getName())) {
             element.setComment(parser.nextText());
         } else if ("annotations".equals(parser.getName())) {
-            List<String> annotationsList = new ArrayList<String>();
+            List<String> annotationsList = new ArrayList<>();
             while (parser.nextTag() == XmlPullParser.START_TAG) {
                 if ("annotation".equals(parser.getName())) {
                     annotationsList.add(parser.nextText());
@@ -409,7 +407,7 @@ public class ModelReader {
     }
 
     private Map<String, String> getAttributes(XmlPullParser parser) {
-        Map<String, String> attributes = new HashMap<String, String>();
+        Map<String, String> attributes = new HashMap<>();
 
         for (int i = 0; i < parser.getAttributeCount(); i++) {
             String name = parser.getAttributeName(i);

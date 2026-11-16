@@ -81,21 +81,21 @@ public class JConstructor {
     /**
      * The set of modifiers for this JMethod
      **/
-    private JModifiers modifiers = null;
+    private JModifiers modifiers;
 
     /**
      * List of parameters for this Constructor
      **/
-    private Map<String, JParameter> params = null;
+    private Map<String, JParameter> params;
 
     /**
      * The Class in this JMember has been declared
      **/
-    private JClass declaringClass = null;
+    private JClass declaringClass;
 
-    private JSourceCode sourceCode = null;
+    private JSourceCode sourceCode;
 
-    private JAnnotations annotations = null;
+    private JAnnotations annotations;
 
     /**
      * Creates a new method with the given name and returnType.
@@ -118,7 +118,9 @@ public class JConstructor {
      * exists for this Method with the same name as the new parameter
      **/
     public void addParameter(JParameter parameter) throws IllegalArgumentException {
-        if (parameter == null) return;
+        if (parameter == null) {
+            return;
+        }
         // -- check current params
         if (params.get(parameter.getName()) != null) {
             StringBuilder err = new StringBuilder();
@@ -164,11 +166,17 @@ public class JConstructor {
 
     public void print(JSourceWriter jsw) {
         JAnnotations annotations = getAnnotations();
-        if (annotations != null) annotations.print(jsw);
+        if (annotations != null) {
+            annotations.print(jsw);
+        }
 
-        if (modifiers.isPrivate()) jsw.write("private");
-        else if (modifiers.isProtected()) jsw.write("protected");
-        else jsw.write("public");
+        if (modifiers.isPrivate()) {
+            jsw.write("private");
+        } else if (modifiers.isProtected()) {
+            jsw.write("protected");
+        } else {
+            jsw.write("public");
+        }
         jsw.write(' ');
         jsw.write(declaringClass.getLocalName());
         jsw.write('(');
@@ -189,7 +197,9 @@ public class JConstructor {
         // jsw.indent();
         sourceCode.print(jsw);
         // jsw.unindent();
-        if (!jsw.isNewline()) jsw.writeln();
+        if (!jsw.isNewline()) {
+            jsw.writeln();
+        }
         jsw.write("} //-- ");
         jsw.writeln(toString());
     } // -- print

@@ -161,11 +161,6 @@ public class JacksonReaderGenerator extends AbstractJacksonGenerator {
 
         sc.add(className + ' ' + variableName + " = parse" + capClassName + "( parser, strict" + trackingArgs + " );");
 
-        if (rootElement) {
-            // TODO
-            // sc.add( variableName + ".setModelEncoding( parser.getInputEncoding() );" );
-        }
-
         sc.add("return " + variableName + ';');
 
         jClass.addMethod(unmarshall);
@@ -930,10 +925,10 @@ public class JacksonReaderGenerator extends AbstractJacksonGenerator {
         }
 
         String constr = "new " + locationTracker.getName() + "( parser.getLineNumber(), parser.getColumnNumber()";
-        constr += (sourceTracker != null) ? ", " + SOURCE_PARAM : "";
+        constr += sourceTracker != null ? ", " + SOURCE_PARAM : "";
         constr += " )";
 
-        sc.add(((trackerVariable != null) ? trackerVariable : LOCATION_VAR) + " = " + constr + ";");
+        sc.add((trackerVariable != null ? trackerVariable : LOCATION_VAR) + " = " + constr + ";");
     }
 
     private void writeSetLocation(String key, String objectName, String trackerVariable, JSourceCode sc) {
@@ -941,7 +936,7 @@ public class JacksonReaderGenerator extends AbstractJacksonGenerator {
             return;
         }
 
-        String variable = (trackerVariable != null) ? trackerVariable : LOCATION_VAR;
+        String variable = trackerVariable != null ? trackerVariable : LOCATION_VAR;
 
         sc.add(objectName + ".set" + capitalise(singular(locationField)) + "( " + key + ", " + variable + " );");
     }
