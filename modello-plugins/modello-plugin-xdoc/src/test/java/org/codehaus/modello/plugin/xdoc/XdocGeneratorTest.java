@@ -173,7 +173,7 @@ public class XdocGeneratorTest extends AbstractModelloGeneratorTest {
 
         String content = FileUtils.fileRead(new File(getOutputDirectory(), "features.xml"), "UTF-8");
 
-        assertTrue(!content.contains("transientString"), "Transient fields were erroneously documented");
+        assertFalse(content.contains("transientString"), "Transient fields were erroneously documented");
     }
 
     public void checkSettingsXdocGenerator() throws Exception {
@@ -187,7 +187,7 @@ public class XdocGeneratorTest extends AbstractModelloGeneratorTest {
 
         String content = FileUtils.fileRead(new File(getOutputDirectory(), "settings.xml"), "UTF-8");
 
-        assertTrue(!content.contains("&lt;properties/&gt;"), "Properties field was erroneously documented");
+        assertFalse(content.contains("&lt;properties/&gt;"), "Properties field was erroneously documented");
     }
 
     /**
@@ -206,7 +206,7 @@ public class XdocGeneratorTest extends AbstractModelloGeneratorTest {
         while (m.find()) {
             hrefs.add(m.group(1));
         }
-        Assertions.assertTrue(!hrefs.isEmpty(), "should find some '<a href=' links");
+        Assertions.assertFalse(hrefs.isEmpty(), "should find some '<a href=' links");
 
         Set<String> names = new HashSet<>();
         p = Pattern.compile("<a name=\"(class_[^\"]+)\"", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
@@ -214,7 +214,7 @@ public class XdocGeneratorTest extends AbstractModelloGeneratorTest {
         while (m.find()) {
             names.add(m.group(1));
         }
-        Assertions.assertTrue(!names.isEmpty(), "should find some '<a name=' anchor definitions");
+        Assertions.assertFalse(names.isEmpty(), "should find some '<a name=' anchor definitions");
 
         hrefs.removeAll(names);
         if (!hrefs.isEmpty()) {

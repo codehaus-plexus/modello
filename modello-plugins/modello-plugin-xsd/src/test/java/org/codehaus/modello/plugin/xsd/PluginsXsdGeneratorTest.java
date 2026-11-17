@@ -1,18 +1,13 @@
 package org.codehaus.modello.plugin.xsd;
 
 import javax.inject.Inject;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 
-import java.io.IOException;
 import java.util.Map;
 
 import org.codehaus.modello.AbstractModelloGeneratorTest;
-import org.codehaus.modello.ModelloException;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
-import org.codehaus.modello.model.ModelValidationException;
-import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 import org.codehaus.plexus.testing.PlexusTest;
 import org.junit.jupiter.api.Test;
 import org.xml.sax.SAXException;
@@ -36,9 +31,7 @@ public class PluginsXsdGeneratorTest extends AbstractModelloGeneratorTest {
     }
 
     @Test
-    public void testWithNameWildcard()
-            throws ModelloException, ModelValidationException, IOException, ComponentLookupException,
-                    ParserConfigurationException, SAXException {
+    public void testWithNameWildcard() throws Exception {
 
         Model model = modello.loadModel(getXmlResourceReader("/plugin.mdo"));
 

@@ -138,7 +138,7 @@ public class ModelloTaskTest {
     }
 
     @Test
-    public void testPackagedVersionGeneration() throws IOException {
+    public void testPackagedVersionGeneration() throws Exception {
         ModelloTask task = new ModelloTask();
         task.setVersion("1.0.0");
         task.setOutputDirectory(tempDir.toFile());
@@ -159,7 +159,7 @@ public class ModelloTaskTest {
     }
 
     @Test
-    public void testSuccessfulGeneration() throws IOException {
+    public void testSuccessfulGeneration() throws Exception {
         File modelFile = writeModel();
 
         ModelloTask task = new ModelloTask();
@@ -263,7 +263,7 @@ public class ModelloTaskTest {
     }
 
     @Test
-    public void testOutputDirectoryCreationFailure() throws IOException {
+    public void testOutputDirectoryCreationFailure() throws Exception {
         File blockingFile = tempDir.resolve("blocking-file").toFile();
         assertTrue(blockingFile.createNewFile());
         File outputDirectory = new File(blockingFile, "sub");
@@ -285,7 +285,7 @@ public class ModelloTaskTest {
     }
 
     @Test
-    public void testInvalidModelFileThrowsBuildException() throws IOException {
+    public void testInvalidModelFileThrowsBuildException() throws Exception {
         File modelFile = tempDir.resolve("invalid.mdo").toFile();
         try (Writer writer = Files.newBufferedWriter(modelFile.toPath(), StandardCharsets.UTF_8)) {
             writer.write("not a valid model");
@@ -308,12 +308,12 @@ public class ModelloTaskTest {
     }
 
     @Test
-    public void testVelocityGoal() throws IOException {
+    public void testVelocityGoal() throws Exception {
         assertVelocityGeneration(false);
     }
 
     @Test
-    public void testVelocityGoalDefaultsToProjectBasedir() throws IOException {
+    public void testVelocityGoalDefaultsToProjectBasedir() throws Exception {
         assertVelocityGeneration(true);
     }
 
@@ -386,7 +386,7 @@ public class ModelloTaskTest {
     }
 
     @Test
-    public void testOutputDirectoryCreation() throws IOException {
+    public void testOutputDirectoryCreation() throws Exception {
         File modelFile = tempDir.resolve("test-mkdir.mdo").toFile();
         try (Writer writer = Files.newBufferedWriter(modelFile.toPath(), StandardCharsets.UTF_8)) {
             writer.write("<model xmlns=\"http://codehaus-plexus.github.io/MODELLO/2.0.0\" "
@@ -430,7 +430,7 @@ public class ModelloTaskTest {
     }
 
     @Test
-    public void testDomAsXpp3DefaultAndFalse() throws IOException {
+    public void testDomAsXpp3DefaultAndFalse() throws Exception {
         File modelFile = tempDir.resolve("test-dom.mdo").toFile();
         try (Writer writer = Files.newBufferedWriter(modelFile.toPath(), StandardCharsets.UTF_8)) {
             writer.write("<model xmlns=\"http://codehaus-plexus.github.io/MODELLO/2.0.0\" "
@@ -507,7 +507,7 @@ public class ModelloTaskTest {
     }
 
     @Test
-    public void testPluralExceptions() throws IOException {
+    public void testPluralExceptions() throws Exception {
         File modelFile = tempDir.resolve("test-plural.mdo").toFile();
         try (Writer writer = Files.newBufferedWriter(modelFile.toPath(), StandardCharsets.UTF_8)) {
             writer.write(
@@ -568,7 +568,7 @@ public class ModelloTaskTest {
     }
 
     @Test
-    public void testLicenseText() throws IOException {
+    public void testLicenseText() throws Exception {
         File modelFile = tempDir.resolve("test-license.mdo").toFile();
         try (Writer writer = Files.newBufferedWriter(modelFile.toPath(), StandardCharsets.UTF_8)) {
             writer.write("<model xmlns=\"http://codehaus-plexus.github.io/MODELLO/2.0.0\"\n"
@@ -615,7 +615,7 @@ public class ModelloTaskTest {
     }
 
     @Test
-    public void testLicenseFileAndNestedElement() throws IOException {
+    public void testLicenseFileAndNestedElement() throws Exception {
         File licenseFile = tempDir.resolve("LICENSE.txt").toFile();
         try (Writer writer = Files.newBufferedWriter(licenseFile.toPath(), StandardCharsets.UTF_8)) {
             writer.write("FILE BASED LICENSE HEADER");
@@ -669,7 +669,7 @@ public class ModelloTaskTest {
     }
 
     @Test
-    public void testXsdFileNameAndEnforceMandatory() throws IOException {
+    public void testXsdFileNameAndEnforceMandatory() throws Exception {
         File modelFile = tempDir.resolve("test-xsd.mdo").toFile();
         try (Writer writer = Files.newBufferedWriter(modelFile.toPath(), StandardCharsets.UTF_8)) {
             writer.write("<model xmlns=\"http://codehaus-plexus.github.io/MODELLO/2.0.0\"\n"
@@ -715,7 +715,7 @@ public class ModelloTaskTest {
     }
 
     @Test
-    public void testJsonSchemaFileName() throws IOException {
+    public void testJsonSchemaFileName() throws Exception {
         File modelFile = tempDir.resolve("test-jsonschema.mdo").toFile();
         try (Writer writer = Files.newBufferedWriter(modelFile.toPath(), StandardCharsets.UTF_8)) {
             writer.write("<model xmlns=\"http://codehaus-plexus.github.io/MODELLO/2.0.0\"\n"
@@ -759,7 +759,7 @@ public class ModelloTaskTest {
     }
 
     @Test
-    public void testPackagedVersionsAndExtendedClassnameSuffix() throws IOException {
+    public void testPackagedVersionsAndExtendedClassnameSuffix() throws Exception {
         File modelFile = tempDir.resolve("test-extended.mdo").toFile();
         try (Writer writer = Files.newBufferedWriter(modelFile.toPath(), StandardCharsets.UTF_8)) {
             writer.write("<model xmlns=\"http://codehaus-plexus.github.io/MODELLO/2.0.0\"\n"
@@ -823,7 +823,7 @@ public class ModelloTaskTest {
     }
 
     @Test
-    public void testXdocFileNameAndFirstVersion() throws IOException {
+    public void testXdocFileNameAndFirstVersion() throws Exception {
         File modelFile = tempDir.resolve("test-xdoc.mdo").toFile();
         try (Writer writer = Files.newBufferedWriter(modelFile.toPath(), StandardCharsets.UTF_8)) {
             writer.write("<model xmlns=\"http://codehaus-plexus.github.io/MODELLO/2.0.0\"\n"
@@ -906,7 +906,7 @@ public class ModelloTaskTest {
     }
 
     @Test
-    public void testLicenseFileAndTextConflict() throws IOException {
+    public void testLicenseFileAndTextConflict() throws Exception {
         File modelFile = tempDir.resolve("conflict.mdo").toFile();
         assertTrue(modelFile.createNewFile());
         ModelloTask task = new ModelloTask();
