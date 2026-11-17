@@ -137,7 +137,8 @@ public class JavaModelloGenerator extends AbstractJavaModelloGenerator {
 
             suppressAllWarnings(objectModel, jClass);
 
-            if (StringUtils.isNotEmpty(modelClass.getDescription())) {
+            if (modelClass.getDescription() != null
+                    && !modelClass.getDescription().isEmpty()) {
                 jClass.getJDocComment().setComment(appendPeriod(modelClass.getDescription()));
             }
 
@@ -567,7 +568,7 @@ public class JavaModelloGenerator extends AbstractJavaModelloGenerator {
 
         String cloneHook = getCloneHook(modelClass);
 
-        if (StringUtils.isNotEmpty(cloneHook) && !"false".equalsIgnoreCase(cloneHook)) {
+        if ((cloneHook != null && !cloneHook.isEmpty()) && !"false".equalsIgnoreCase(cloneHook)) {
             if ("true".equalsIgnoreCase(cloneHook)) {
                 cloneHook = "cloneHook";
             }
@@ -605,7 +606,7 @@ public class JavaModelloGenerator extends AbstractJavaModelloGenerator {
             }
 
             String superClass = currentClass.getSuperClass();
-            if (StringUtils.isEmpty(superClass) || !isClassInModel(superClass, getModel())) {
+            if ((superClass == null || superClass.isEmpty()) || !isClassInModel(superClass, getModel())) {
                 break;
             }
 
@@ -702,7 +703,8 @@ public class JavaModelloGenerator extends AbstractJavaModelloGenerator {
         String superClass = modelClass.getSuperClass();
         ModelClassMetadata metadata = (ModelClassMetadata) locationClass.getMetadata(ModelClassMetadata.ID);
         String locationField = metadata.getLocationTracker();
-        boolean hasModeSuperClass = StringUtils.isNotEmpty(superClass) && isClassInModel(superClass, getModel());
+        boolean hasModeSuperClass =
+                (superClass != null && !superClass.isEmpty()) && isClassInModel(superClass, getModel());
         if (!hasModeSuperClass) {
             String fieldType = "java.util.Map<Object, " + locationClass.getName() + ">";
             String fieldImpl = "java.util.LinkedHashMap<Object, " + locationClass.getName() + ">";
@@ -1143,7 +1145,7 @@ public class JavaModelloGenerator extends AbstractJavaModelloGenerator {
             field.setInitString(getJavaDefaultValue(modelField));
         }
 
-        if (StringUtils.isNotEmpty(modelField.getDescription())) {
+        if (modelField.getDescription() != null && !modelField.getDescription().isEmpty()) {
             field.setComment(appendPeriod(modelField.getDescription()));
         }
 
@@ -1188,7 +1190,8 @@ public class JavaModelloGenerator extends AbstractJavaModelloGenerator {
             JavaAssociationMetadata javaAssociationMetadata =
                     (JavaAssociationMetadata) modelAssociation.getAssociationMetadata(JavaAssociationMetadata.ID);
 
-            if (StringUtils.isNotEmpty(javaAssociationMetadata.getInterfaceName())
+            if ((javaAssociationMetadata.getInterfaceName() != null
+                            && !javaAssociationMetadata.getInterfaceName().isEmpty())
                     && !javaFieldMetadata.isBooleanGetter()) {
                 returnType = new JClass(javaAssociationMetadata.getInterfaceName());
 
@@ -1199,7 +1202,7 @@ public class JavaModelloGenerator extends AbstractJavaModelloGenerator {
         JMethod getter = new JMethod(prefix + propertyName, returnType, null);
 
         StringBuilder comment = new StringBuilder("Get ");
-        if (StringUtils.isEmpty(modelField.getDescription())) {
+        if (modelField.getDescription() == null || modelField.getDescription().isEmpty()) {
             comment.append("the ");
             comment.append(field.getName());
             comment.append(" field");
@@ -1230,7 +1233,7 @@ public class JavaModelloGenerator extends AbstractJavaModelloGenerator {
         }
 
         StringBuilder comment = new StringBuilder("Set ");
-        if (StringUtils.isEmpty(modelField.getDescription())) {
+        if (modelField.getDescription() == null || modelField.getDescription().isEmpty()) {
             comment.append("the ");
             comment.append(field.getName());
             comment.append(" field");
@@ -1274,7 +1277,8 @@ public class JavaModelloGenerator extends AbstractJavaModelloGenerator {
 
             String interfaceCast = "";
 
-            if (StringUtils.isNotEmpty(javaAssociationMetadata.getInterfaceName())
+            if ((javaAssociationMetadata.getInterfaceName() != null
+                            && !javaAssociationMetadata.getInterfaceName().isEmpty())
                     && modelAssociation.isOneMultiplicity()) {
                 interfaceCast = "(" + field.getType().getName() + ") ";
 
@@ -1315,7 +1319,8 @@ public class JavaModelloGenerator extends AbstractJavaModelloGenerator {
         JavaAssociationMetadata javaAssociationMetadata =
                 (JavaAssociationMetadata) modelAssociation.getAssociationMetadata(JavaAssociationMetadata.ID);
 
-        if (StringUtils.isEmpty(javaAssociationMetadata.getInterfaceName())) {
+        if (javaAssociationMetadata.getInterfaceName() == null
+                || javaAssociationMetadata.getInterfaceName().isEmpty()) {
             return; // java.useInterface feature not used, no class cast assertion needed
         }
 
@@ -1622,7 +1627,8 @@ public class JavaModelloGenerator extends AbstractJavaModelloGenerator {
 
         JType addType;
 
-        if (StringUtils.isNotEmpty(javaAssociationMetadata.getInterfaceName())) {
+        if (javaAssociationMetadata.getInterfaceName() != null
+                && !javaAssociationMetadata.getInterfaceName().isEmpty()) {
             addType = new JClass(javaAssociationMetadata.getInterfaceName());
             implementationParameterName = "( (" + modelAssociation.getTo() + ") " + parameterName + " )";
         } else if (modelAssociation.getToClass() != null) {
@@ -1787,7 +1793,8 @@ public class JavaModelloGenerator extends AbstractJavaModelloGenerator {
             JavaAssociationMetadata javaAssociationMetadata =
                     (JavaAssociationMetadata) modelAssociation.getAssociationMetadata(JavaAssociationMetadata.ID);
 
-            if (StringUtils.isNotEmpty(javaAssociationMetadata.getInterfaceName())
+            if ((javaAssociationMetadata.getInterfaceName() != null
+                            && !javaAssociationMetadata.getInterfaceName().isEmpty())
                     && !modelAssociation.isManyMultiplicity()) {
                 type = new JClass(javaAssociationMetadata.getInterfaceName());
             } else if (modelAssociation.isManyMultiplicity() && modelAssociation.isGenericType()) {
@@ -2026,7 +2033,8 @@ public class JavaModelloGenerator extends AbstractJavaModelloGenerator {
             String itemType;
             String targetField = modelAssociation.getName();
 
-            if (StringUtils.isNotEmpty(javaAssociationMetadata.getInterfaceName())) {
+            if (javaAssociationMetadata.getInterfaceName() != null
+                    && !javaAssociationMetadata.getInterfaceName().isEmpty()) {
                 itemType = javaAssociationMetadata.getInterfaceName();
             } else if (modelAssociation.getToClass() != null) {
                 itemType = modelAssociation.getToClass().getName();
@@ -2109,7 +2117,8 @@ public class JavaModelloGenerator extends AbstractJavaModelloGenerator {
                 JField field = createField(modelField);
                 creatorMethod.addParameter(new JParameter(field.getType(), field.getName()));
 
-                if (!StringUtils.isEmpty(modelField.getDefaultValue())) {
+                if (!(modelField.getDefaultValue() == null
+                        || modelField.getDefaultValue().isEmpty())) {
                     hasDefaults = true;
                 }
             }
@@ -2151,7 +2160,8 @@ public class JavaModelloGenerator extends AbstractJavaModelloGenerator {
 
                 shortcutArgs.append(' ');
 
-                if (StringUtils.isEmpty(modelField.getDefaultValue())) {
+                if (modelField.getDefaultValue() == null
+                        || modelField.getDefaultValue().isEmpty()) {
                     // this is hacky
                     JField field = createField(modelField);
                     creatorMethod.addParameter(new JParameter(field.getType(), field.getName()));

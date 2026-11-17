@@ -44,7 +44,6 @@ import org.codehaus.modello.model.ModelDefault;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.plugins.xml.AbstractXmlJavaGenerator;
 import org.codehaus.modello.plugins.xml.metadata.XmlAssociationMetadata;
-import org.codehaus.plexus.util.StringUtils;
 
 /**
  * @author <a href="mailto:simonetripodi@apache.org">Simone Tripodi</a>
@@ -244,7 +243,7 @@ public final class JsonSchemaGenerator extends AbstractXmlJavaGenerator {
     }
 
     private static void writeDescriptionField(JsonGenerator generator, String description) throws IOException {
-        if (!StringUtils.isEmpty(description)) {
+        if (!(description == null || description.isEmpty())) {
             generator.writeStringField("description", description);
         }
     }

@@ -50,7 +50,6 @@ import org.codehaus.modello.plugin.java.metadata.JavaFieldMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlAssociationMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlModelMetadata;
-import org.codehaus.plexus.util.StringUtils;
 
 /**
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
@@ -960,7 +959,7 @@ public class StaxReaderGenerator extends AbstractStaxGenerator {
         String singularName = singular(field.getName());
 
         String alias;
-        if (StringUtils.isEmpty(field.getAlias())) {
+        if (field.getAlias() == null || field.getAlias().isEmpty()) {
             alias = "null";
         } else {
             alias = "\"" + field.getAlias() + "\"";

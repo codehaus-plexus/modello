@@ -169,7 +169,7 @@ public class ModelClass extends ModelType {
     // ----------------------------------------------------------------------
 
     public boolean hasSuperClass() {
-        return StringUtils.isNotEmpty(superClass);
+        return superClass != null && !superClass.isEmpty();
     }
 
     public boolean isInternalSuperClass() {

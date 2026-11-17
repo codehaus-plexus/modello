@@ -34,7 +34,6 @@ import org.codehaus.modello.plugins.xml.metadata.XmlAssociationMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlClassMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlModelMetadata;
-import org.codehaus.plexus.util.StringUtils;
 
 /**
  * Helper class to use inside velocity templates.
@@ -58,14 +57,14 @@ public class Helper {
      * Returns the capitalised version of the given string.
      */
     public String capitalise(String str) {
-        return StringUtils.isEmpty(str) ? str : Character.toTitleCase(str.charAt(0)) + str.substring(1);
+        return str == null || str.isEmpty() ? str : Character.toTitleCase(str.charAt(0)) + str.substring(1);
     }
 
     /**
      * Returns the uncapitalised version of the given string.
      */
     public String uncapitalise(String str) {
-        return StringUtils.isEmpty(str) ? str : Character.toLowerCase(str.charAt(0)) + str.substring(1);
+        return str == null || str.isEmpty() ? str : Character.toLowerCase(str.charAt(0)) + str.substring(1);
     }
 
     /**

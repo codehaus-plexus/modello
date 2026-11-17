@@ -46,7 +46,6 @@ import org.codehaus.modello.plugin.model.ModelClassMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlAssociationMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlClassMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
-import org.codehaus.plexus.util.StringUtils;
 
 /**
  * @author <a href="mailto:simonetripodi@apache.org">Simone Tripodi</a>
@@ -487,7 +486,7 @@ public class SnakeYamlReaderGenerator extends AbstractSnakeYamlGenerator {
         String singularName = singular(field.getName());
 
         String alias;
-        if (StringUtils.isEmpty(field.getAlias())) {
+        if (field.getAlias() == null || field.getAlias().isEmpty()) {
             alias = "null";
         } else {
             alias = "\"" + field.getAlias() + "\"";
