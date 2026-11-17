@@ -90,6 +90,7 @@ public final class JMapType extends JComponentizedType {
     /**
      * @return the String representation of this JType.
      */
+    @Override
     public String toString() {
         if (ModelDefault.PROPERTIES.equals(getName())) {
             return getName();

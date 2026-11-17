@@ -61,6 +61,7 @@ public class StaxWriterGenerator extends AbstractStaxGenerator {
     @Inject
     private StaxSerializerGenerator serializerGenerator;
 
+    @Override
     public void generate(Model model, Map<String, Object> parameters) throws ModelloException {
         initialize(model, parameters);
 

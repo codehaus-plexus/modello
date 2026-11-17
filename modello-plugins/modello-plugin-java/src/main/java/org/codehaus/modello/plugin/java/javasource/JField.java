@@ -137,6 +137,7 @@ public class JField implements JMember {
      * Returns the modifiers for this JField
      * @return the modifiers for this JField
      **/
+    @Override
     public JModifiers getModifiers() {
         return this.modifiers;
     } // -- getModifiers
@@ -145,6 +146,7 @@ public class JField implements JMember {
      * Returns the name of this JField
      * @return the name of this JField
      **/
+    @Override
     public String getName() {
         return this.name;
     } // -- getName
@@ -213,6 +215,7 @@ public class JField implements JMember {
         this.declaringClass = declaringClass;
     } // -- setDeclaringClass
 
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(modifiers.toString());
@@ -226,6 +229,7 @@ public class JField implements JMember {
     /**
      * @return the annotations
      */
+    @Override
     public JAnnotations getAnnotations() {
         return annotations;
     }

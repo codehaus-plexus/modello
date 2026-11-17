@@ -45,6 +45,7 @@ public class ModelloJacksonReaderMojo extends AbstractModelloSourceGeneratorMojo
         super(modelloCore);
     }
 
+    @Override
     protected String getGeneratorType() {
         return "jackson-reader";
     }

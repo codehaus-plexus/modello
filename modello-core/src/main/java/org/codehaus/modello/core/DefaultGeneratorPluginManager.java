@@ -41,10 +41,12 @@ public class DefaultGeneratorPluginManager extends AbstractPluginManager<Modello
     @Inject
     private Map<String, ModelloGenerator> plugins;
 
+    @Override
     public Map<String, ModelloGenerator> getPlugins() {
         return plugins;
     }
 
+    @Override
     public ModelloGenerator getGeneratorPlugin(String generatorId) {
         ModelloGenerator generator = getPlugin(generatorId);
 
@@ -55,6 +57,7 @@ public class DefaultGeneratorPluginManager extends AbstractPluginManager<Modello
         return generator;
     }
 
+    @Override
     public boolean hasGeneratorPlugin(String generatorId) {
         return hasPlugin(generatorId);
     }

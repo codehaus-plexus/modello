@@ -67,6 +67,7 @@ public class ModelloXsdMojo extends AbstractModelloGeneratorMojo {
         super(modelloCore);
     }
 
+    @Override
     protected String getGeneratorType() {
         return "xsd";
     }
@@ -82,10 +83,12 @@ public class ModelloXsdMojo extends AbstractModelloGeneratorMojo {
                 ModelloParameterConstants.XSD_ENFORCE_MANDATORY_ELEMENTS, Boolean.toString(enforceMandatoryElements));
     }
 
+    @Override
     protected boolean producesCompilableResult() {
         return false;
     }
 
+    @Override
     public File getOutputDirectory() {
         return outputDirectory;
     }

@@ -122,6 +122,7 @@ public final class JInterface extends JStructure {
      * @exception java.lang.IllegalArgumentException when the given
      * JField has a name of an existing JField
      */
+    @Override
     public void addField(JField jField) throws IllegalArgumentException {
         if (jField == null) {
             throw new IllegalArgumentException("argument 'jField' cannot be null");
@@ -166,6 +167,7 @@ public final class JInterface extends JStructure {
      * JMember has the same name of an existing JField
      * or JMethod respectively.
      */
+    @Override
     public void addMember(JMember jMember) throws IllegalArgumentException {
         if (jMember == null) {
             throw new IllegalArgumentException("argument 'jMember' may not be null.");
@@ -247,6 +249,7 @@ public final class JInterface extends JStructure {
      * @return the field with the given name, or null if no field
      * was found with the given name.
      */
+    @Override
     public JField getField(String name) {
         if (fields == null) {
             return null;
@@ -259,6 +262,7 @@ public final class JInterface extends JStructure {
      *
      * @return an array of all the JFields of this JStructure
      */
+    @Override
     public JField[] getFields() {
         if (fields == null) {
             return new JField[0];
@@ -308,6 +312,7 @@ public final class JInterface extends JStructure {
      *
      * @param jsw the JSourceWriter to print to. [May not be null]
      */
+    @Override
     public void print(JSourceWriter jsw) {
         print(jsw, false);
     }

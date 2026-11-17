@@ -58,11 +58,13 @@ public class XsdMetadataPlugin extends AbstractMetadataPlugin {
 
     public static final String PATTERN = "xsd.pattern";
 
+    @Override
     public AssociationMetadata getAssociationMetadata(ModelAssociation association, Map<String, String> data)
             throws ModelloException {
         return new XsdAssociationMetadata();
     }
 
+    @Override
     public ClassMetadata getClassMetadata(ModelClass clazz, Map<String, String> data) throws ModelloException {
         XsdClassMetadata metadata = new XsdClassMetadata();
 
@@ -71,11 +73,13 @@ public class XsdMetadataPlugin extends AbstractMetadataPlugin {
         return metadata;
     }
 
+    @Override
     public InterfaceMetadata getInterfaceMetadata(ModelInterface iface, Map<String, String> data)
             throws ModelloException {
         return new XsdInterfaceMetadata();
     }
 
+    @Override
     public FieldMetadata getFieldMetadata(ModelField field, Map<String, String> data) throws ModelloException {
         XsdFieldMetadata metadata = new XsdFieldMetadata();
 
@@ -100,6 +104,7 @@ public class XsdMetadataPlugin extends AbstractMetadataPlugin {
         return metadata;
     }
 
+    @Override
     public ModelMetadata getModelMetadata(Model model, Map<String, String> data) throws ModelloException {
         XsdModelMetadata metadata = new XsdModelMetadata();
 

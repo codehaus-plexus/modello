@@ -217,6 +217,7 @@ public class JConstructor {
         this.sourceCode = sourceCode;
     } // -- setSourceCode
 
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(declaringClass.getName());

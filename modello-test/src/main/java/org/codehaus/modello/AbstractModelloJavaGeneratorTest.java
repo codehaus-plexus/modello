@@ -79,6 +79,7 @@ public abstract class AbstractModelloJavaGeneratorTest extends AbstractModelloGe
     }
 
     @BeforeEach
+    @Override
     public void setUp() throws Exception {
         super.setUp();
 
@@ -87,6 +88,7 @@ public abstract class AbstractModelloJavaGeneratorTest extends AbstractModelloGe
         assertTrue(getOutputClasses().mkdirs());
     }
 
+    @Override
     protected File getOutputDirectory() {
         return new File(super.getOutputDirectory(), "sources");
     }

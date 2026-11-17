@@ -41,10 +41,12 @@ public class DefaultMetadataPluginManager extends AbstractPluginManager<Metadata
     @Inject
     private Map<String, MetadataPlugin> plugins;
 
+    @Override
     public Map<String, MetadataPlugin> getPlugins() {
         return plugins;
     }
 
+    @Override
     public MetadataPlugin getMetadataPlugin(String metadataId) {
         MetadataPlugin metadata = getPlugin(metadataId);
 
@@ -55,6 +57,7 @@ public class DefaultMetadataPluginManager extends AbstractPluginManager<Metadata
         return metadata;
     }
 
+    @Override
     public boolean hasMetadataPlugin(String metadataId) {
         return hasPlugin(metadataId);
     }

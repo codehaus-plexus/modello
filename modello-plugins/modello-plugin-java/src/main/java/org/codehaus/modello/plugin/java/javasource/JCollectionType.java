@@ -70,6 +70,7 @@ public final class JCollectionType extends JComponentizedType {
     /**
      * Returns the String representation of this JType.
      */
+    @Override
     public String toString() {
         return getName() + "<" + getComponentType().toString() + ">";
     }

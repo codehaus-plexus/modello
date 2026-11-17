@@ -77,6 +77,7 @@ public class XmlMetadataPlugin extends AbstractMetadataPlugin implements Metadat
     // Map to Metadata
     // ----------------------------------------------------------------------
 
+    @Override
     public ModelMetadata getModelMetadata(Model model, Map<String, String> data) {
         XmlModelMetadata metadata = new XmlModelMetadata();
 
@@ -87,6 +88,7 @@ public class XmlMetadataPlugin extends AbstractMetadataPlugin implements Metadat
         return metadata;
     }
 
+    @Override
     public ClassMetadata getClassMetadata(ModelClass clazz, Map<String, String> data) {
         XmlClassMetadata metadata = new XmlClassMetadata();
 
@@ -97,10 +99,12 @@ public class XmlMetadataPlugin extends AbstractMetadataPlugin implements Metadat
         return metadata;
     }
 
+    @Override
     public InterfaceMetadata getInterfaceMetadata(ModelInterface iface, Map<String, String> data) {
         return new XmlInterfaceMetadata();
     }
 
+    @Override
     public FieldMetadata getFieldMetadata(ModelField field, Map<String, String> data) {
         XmlFieldMetadata metadata = new XmlFieldMetadata();
 
@@ -121,6 +125,7 @@ public class XmlMetadataPlugin extends AbstractMetadataPlugin implements Metadat
         return metadata;
     }
 
+    @Override
     public AssociationMetadata getAssociationMetadata(ModelAssociation association, Map<String, String> data) {
         XmlAssociationMetadata metadata = new XmlAssociationMetadata();
 

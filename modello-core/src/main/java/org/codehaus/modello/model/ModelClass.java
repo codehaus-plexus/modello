@@ -94,6 +94,7 @@ public class ModelClass extends ModelType {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<ModelField> getAllFields() {
         if (fields == null) {
             fields = new ArrayList<>();
@@ -107,6 +108,7 @@ public class ModelClass extends ModelType {
      *
      * @return Returns all the fields in this class and all super classes.
      */
+    @Override
     public List<ModelField> getAllFields(boolean withInheritedField) {
         if (!withInheritedField) {
             return getAllFields();
@@ -127,6 +129,7 @@ public class ModelClass extends ModelType {
         return fields;
     }
 
+    @Override
     public ModelField getField(String type, VersionRange versionRange) {
         List<ModelField> fieldList = fieldMap.get(type);
 
@@ -180,6 +183,7 @@ public class ModelClass extends ModelType {
         return getMetadata(ClassMetadata.class, key);
     }
 
+    @Override
     public void initialize(Model model) {
         super.initialize(model);
 
@@ -188,6 +192,7 @@ public class ModelClass extends ModelType {
         }
     }
 
+    @Override
     public void validateElement() throws ModelValidationException {
         // Check if superClass exists
         if (hasSuperClass()) {
@@ -211,6 +216,7 @@ public class ModelClass extends ModelType {
     // Object Overrides
     // ----------------------------------------------------------------------
 
+    @Override
     public boolean equals(Object o) {
         if (!super.equals(o)) {
             return false;
@@ -225,6 +231,7 @@ public class ModelClass extends ModelType {
         return getPackageName().equals(other.getPackageName());
     }
 
+    @Override
     public int hashCode() {
         int hashCode = getName().hashCode();
 

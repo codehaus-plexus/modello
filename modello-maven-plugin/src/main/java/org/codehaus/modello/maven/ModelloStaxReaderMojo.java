@@ -32,6 +32,7 @@ public class ModelloStaxReaderMojo extends AbstractModelloSourceGeneratorMojo {
         super(modelloCore);
     }
 
+    @Override
     protected String getGeneratorType() {
         return "stax-reader";
     }

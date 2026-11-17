@@ -50,6 +50,7 @@ public class XdocMetadataPlugin extends AbstractMetadataPlugin implements Metada
     public static final String XDOC_SEPARATOR = "xdoc.separator";
     public static final String XDOC_ANCHORNAME = "xdoc.anchorName";
 
+    @Override
     public ClassMetadata getClassMetadata(ModelClass clazz, Map<String, String> data) {
         XdocClassMetadata metadata = new XdocClassMetadata();
 
@@ -58,15 +59,18 @@ public class XdocMetadataPlugin extends AbstractMetadataPlugin implements Metada
         return metadata;
     }
 
+    @Override
     public InterfaceMetadata getInterfaceMetadata(ModelInterface iface, Map<String, String> data) {
         return new XdocInterfaceMetadata();
     }
 
+    @Override
     public AssociationMetadata getAssociationMetadata(ModelAssociation association, Map<String, String> data)
             throws ModelloException {
         return new XdocAssociationMetadata();
     }
 
+    @Override
     public FieldMetadata getFieldMetadata(ModelField field, Map<String, String> data) throws ModelloException {
         XdocFieldMetadata metadata = new XdocFieldMetadata();
 
@@ -75,6 +79,7 @@ public class XdocMetadataPlugin extends AbstractMetadataPlugin implements Metada
         return metadata;
     }
 
+    @Override
     public ModelMetadata getModelMetadata(Model model, Map<String, String> data) throws ModelloException {
         return new XdocModelMetadata();
     }

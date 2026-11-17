@@ -56,10 +56,12 @@ public class ModelMetadataPlugin extends AbstractMetadataPlugin implements Metad
     // Map to Metadata
     // ----------------------------------------------------------------------
 
+    @Override
     public ModelMetadata getModelMetadata(Model model, Map<String, String> data) {
         return new ModelModelMetadata();
     }
 
+    @Override
     public ClassMetadata getClassMetadata(ModelClass clazz, Map<String, String> data) {
         ModelClassMetadata metadata = new ModelClassMetadata();
 
@@ -72,14 +74,17 @@ public class ModelMetadataPlugin extends AbstractMetadataPlugin implements Metad
         return metadata;
     }
 
+    @Override
     public InterfaceMetadata getInterfaceMetadata(ModelInterface iface, Map<String, String> data) {
         return new ModelInterfaceMetadata();
     }
 
+    @Override
     public FieldMetadata getFieldMetadata(ModelField field, Map<String, String> data) {
         return new ModelFieldMetadata();
     }
 
+    @Override
     public AssociationMetadata getAssociationMetadata(ModelAssociation association, Map<String, String> data) {
         return new ModelAssociationMetadata();
     }

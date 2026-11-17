@@ -321,6 +321,7 @@ public final class JDocDescriptor {
      * Returns the String representation of this JDocDescriptor
      * @return the String representation of this JDocDescriptor
      **/
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         boolean allowName = true;

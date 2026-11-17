@@ -56,6 +56,7 @@ import org.codehaus.modello.plugin.java.metadata.JavaFieldMetadata;
  */
 @Named("converters")
 public class ConverterGenerator extends AbstractJavaModelloGenerator {
+    @Override
     public void generate(Model model, Map<String, Object> parameters) throws ModelloException {
         initialize(model, parameters);
 

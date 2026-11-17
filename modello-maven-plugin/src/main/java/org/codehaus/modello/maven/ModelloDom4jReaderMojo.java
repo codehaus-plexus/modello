@@ -17,6 +17,7 @@ public class ModelloDom4jReaderMojo extends AbstractModelloSourceGeneratorMojo {
         super(modelloCore);
     }
 
+    @Override
     protected String getGeneratorType() {
         return "dom4j-reader";
     }

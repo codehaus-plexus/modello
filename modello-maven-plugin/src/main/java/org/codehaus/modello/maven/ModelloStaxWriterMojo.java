@@ -19,6 +19,7 @@ public class ModelloStaxWriterMojo extends AbstractModelloSourceGeneratorMojo {
         super(modelloCore);
     }
 
+    @Override
     protected String getGeneratorType() {
         return "stax-writer";
     }

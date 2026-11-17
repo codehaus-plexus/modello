@@ -87,6 +87,7 @@ public abstract class AbstractModelloSourceGeneratorMojo extends AbstractModello
         return true;
     }
 
+    @Override
     public File getOutputDirectory() {
         return outputDirectory;
     }

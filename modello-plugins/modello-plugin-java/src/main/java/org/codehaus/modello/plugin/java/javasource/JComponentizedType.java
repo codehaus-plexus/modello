@@ -49,6 +49,7 @@ public class JComponentizedType extends JType {
      *
      * @return The component type.
      */
+    @Override
     public final JType getComponentType() {
         return _componentType;
     }

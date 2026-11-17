@@ -41,6 +41,7 @@ public class ModelloJavaMojo extends AbstractModelloSourceGeneratorMojo {
         super(modelloCore);
     }
 
+    @Override
     protected String getGeneratorType() {
         return "java";
     }

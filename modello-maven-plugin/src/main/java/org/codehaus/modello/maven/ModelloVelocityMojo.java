@@ -88,6 +88,7 @@ public class ModelloVelocityMojo extends AbstractModelloGeneratorMojo {
         super(modelloCore);
     }
 
+    @Override
     protected String getGeneratorType() {
         return "velocity";
     }
@@ -109,6 +110,7 @@ public class ModelloVelocityMojo extends AbstractModelloGeneratorMojo {
         parameters.put(ModelloParameterConstants.VELOCITY_PARAMETERS, params);
     }
 
+    @Override
     protected boolean producesCompilableResult() {
         return true;
     }

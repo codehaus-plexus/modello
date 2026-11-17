@@ -194,6 +194,7 @@ public class Version implements Comparable<Version> {
     // Object overrides
     // ----------------------------------------------------------------------
 
+    @Override
     public boolean equals(Object object) {
         if (!(object instanceof Version)) {
             return false;
@@ -204,10 +205,12 @@ public class Version implements Comparable<Version> {
         return this.major == other.major && this.minor == other.minor && this.micro == other.micro;
     }
 
+    @Override
     public int hashCode() {
         return toString("", null).hashCode();
     }
 
+    @Override
     public String toString() {
         return toString("", ".");
     }
@@ -216,6 +219,7 @@ public class Version implements Comparable<Version> {
         return prefix + major + separator + minor + separator + micro;
     }
 
+    @Override
     public int compareTo(Version otherVersion) {
         if (greaterThan(otherVersion)) {
             return +1;

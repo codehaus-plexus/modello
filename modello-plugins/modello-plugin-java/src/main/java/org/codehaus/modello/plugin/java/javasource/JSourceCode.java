@@ -225,9 +225,10 @@ public class JSourceCode {
      * Returns the String representation of this JSourceCode
      * @return the String representation of this JSourceCode
      **/
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        String lineSeparator = System.getProperty("line.separator");
+        String lineSeparator = System.lineSeparator();
         for (int i = 0; i < source.size(); i++) {
             sb.append(source.get(i).toString());
             sb.append(lineSeparator);
@@ -282,6 +283,7 @@ class JCodeStatement {
         return value.toString();
     } // -- getStatement
 
+    @Override
     public String toString() {
         if (value.length() == 0) {
             return "";
