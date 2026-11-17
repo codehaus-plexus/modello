@@ -88,7 +88,7 @@ public class JSourceWriter extends Writer {
     /**
      * The line separator to use for the writeln methods
      **/
-    private String lineSeparator = System.getProperty("line.separator");
+    private String lineSeparator = System.lineSeparator();
 
     /**
      * Flag for indicating whether we need to add
@@ -370,6 +370,7 @@ public class JSourceWriter extends Writer {
     // - Methods from Writer -/
     // -----------------------/
 
+    @Override
     public void close() {
         try {
             out.close();
@@ -377,6 +378,7 @@ public class JSourceWriter extends Writer {
         }
     } // -- close
 
+    @Override
     public void flush() {
         try {
             out.flush();
@@ -384,6 +386,7 @@ public class JSourceWriter extends Writer {
         }
     } // -- flush
 
+    @Override
     public void write(String s, int off, int len) {
         synchronized (lock) {
             ensureIndent();
@@ -397,6 +400,7 @@ public class JSourceWriter extends Writer {
         }
     } // -- write
 
+    @Override
     public void write(String s) {
         synchronized (lock) {
             ensureIndent();
@@ -410,6 +414,7 @@ public class JSourceWriter extends Writer {
         }
     } // -- write
 
+    @Override
     public void write(char[] buf) {
         synchronized (lock) {
             ensureIndent();
@@ -423,6 +428,7 @@ public class JSourceWriter extends Writer {
         }
     } // -- write
 
+    @Override
     public void write(int c) {
         synchronized (lock) {
             ensureIndent();
@@ -436,6 +442,7 @@ public class JSourceWriter extends Writer {
         }
     } // -- write
 
+    @Override
     public void write(char[] buf, int off, int len) {
         synchronized (lock) {
             ensureIndent();

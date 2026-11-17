@@ -592,7 +592,7 @@ public abstract class JStructure extends JType {
             return;
         }
         if (lineSeparator == null) {
-            lineSeparator = System.getProperty("line.separator");
+            lineSeparator = System.lineSeparator();
         }
         jsw.setLineSeparator(lineSeparator);
         print(jsw);

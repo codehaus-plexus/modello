@@ -42,6 +42,7 @@ public class ModelloSnakeYamlWriterMojo extends AbstractModelloSourceGeneratorMo
         super(modelloCore);
     }
 
+    @Override
     protected String getGeneratorType() {
         return "snakeyaml-writer";
     }

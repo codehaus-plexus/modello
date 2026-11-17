@@ -41,6 +41,7 @@ public class ModelloXpp3WriterMojo extends AbstractModelloSourceGeneratorMojo {
         super(modelloCore);
     }
 
+    @Override
     protected String getGeneratorType() {
         return "xpp3-writer";
     }

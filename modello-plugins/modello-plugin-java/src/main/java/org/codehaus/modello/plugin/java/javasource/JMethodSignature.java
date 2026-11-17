@@ -371,6 +371,7 @@ public final class JMethodSignature {
      * @return the String representation of this JMethod, which
      * is simply the method prototype
      **/
+    @Override
     public String toString() {
 
         StringBuilder sb = new StringBuilder();

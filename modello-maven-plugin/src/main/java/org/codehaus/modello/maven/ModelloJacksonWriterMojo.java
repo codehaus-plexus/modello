@@ -45,6 +45,7 @@ public class ModelloJacksonWriterMojo extends AbstractModelloSourceGeneratorMojo
         super(modelloCore);
     }
 
+    @Override
     protected String getGeneratorType() {
         return "jackson-writer";
     }

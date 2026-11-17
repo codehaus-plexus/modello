@@ -25,6 +25,7 @@ package org.codehaus.modello.plugin.stax;
 import org.codehaus.modello.model.ModelField;
 
 public class DummyIdModelField extends ModelField {
+    @Override
     public String getName() {
         return "modello.refid";
     }

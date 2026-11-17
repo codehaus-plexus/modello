@@ -62,6 +62,7 @@ public class ModelAssociation extends ModelField {
         return to;
     }
 
+    @Override
     public String getType() {
         if (ONE_MULTIPLICITY.equals(getMultiplicity())) {
             return getTo();
@@ -107,6 +108,7 @@ public class ModelAssociation extends ModelField {
     // BaseElement overrides
     // ----------------------------------------------------------------------
 
+    @Override
     public void validateElement() throws ModelValidationException {
         validateFieldNotEmpty("Association", "name", getName());
 

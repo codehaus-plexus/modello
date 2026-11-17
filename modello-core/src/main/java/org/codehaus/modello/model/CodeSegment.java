@@ -40,5 +40,6 @@ public class CodeSegment extends BaseElement {
         this.code = code;
     }
 
+    @Override
     public void validateElement() {}
 }

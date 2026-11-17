@@ -167,6 +167,7 @@ public class JClass extends JStructure {
      * @exception java.lang.IllegalArgumentException when the given
      * JField has a name of an existing JField
      **/
+    @Override
     public void addField(JField jField) throws IllegalArgumentException {
         if (jField == null) {
             throw new IllegalArgumentException("Class members cannot be null");
@@ -190,6 +191,7 @@ public class JClass extends JStructure {
      * or JMethod respectively, or if the JMember is of an
      * unrecognized class.
      **/
+    @Override
     public void addMember(JMember jMember) throws IllegalArgumentException {
         if (jMember instanceof JField) {
             addField((JField) jMember);
@@ -366,6 +368,7 @@ public class JClass extends JStructure {
      * @return the member with the given name, or null if no member
      * was found with the given name
      **/
+    @Override
     public JField getField(String name) {
         return (JField) _fields.get(name);
     } // -- getField
@@ -374,6 +377,7 @@ public class JClass extends JStructure {
      * Returns an array of all the JFields of this JClass
      * @return an array of all the JFields of this JClass
      **/
+    @Override
     public JField[] getFields() {
         return _fields.values().toArray(new JField[0]);
     } // -- getFields
@@ -455,6 +459,7 @@ public class JClass extends JStructure {
      *
      * @param jsw the JSourceWriter to print to. [May not be null]
      */
+    @Override
     public void print(JSourceWriter jsw) {
         print(jsw, false);
     } // -- print

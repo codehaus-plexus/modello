@@ -42,6 +42,7 @@ public class ModelloSaxWriterMojo extends AbstractModelloSourceGeneratorMojo {
         super(modelloCore);
     }
 
+    @Override
     protected String getGeneratorType() {
         return "sax-writer";
     }

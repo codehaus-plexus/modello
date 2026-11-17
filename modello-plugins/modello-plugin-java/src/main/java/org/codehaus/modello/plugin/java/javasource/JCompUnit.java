@@ -350,7 +350,7 @@ public class JCompUnit {
         }
 
         if (lineSeparator == null) {
-            lineSeparator = System.getProperty("line.separator");
+            lineSeparator = System.lineSeparator();
         }
         jsw.setLineSeparator(lineSeparator);
         print(jsw);

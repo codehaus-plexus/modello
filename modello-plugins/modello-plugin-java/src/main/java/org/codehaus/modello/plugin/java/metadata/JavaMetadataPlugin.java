@@ -87,6 +87,7 @@ public class JavaMetadataPlugin extends AbstractMetadataPlugin implements Metada
     // Map to Metadata
     // ----------------------------------------------------------------------
 
+    @Override
     public ModelMetadata getModelMetadata(Model model, Map<String, String> data) {
         JavaModelMetadata metadata = new JavaModelMetadata();
 
@@ -95,6 +96,7 @@ public class JavaMetadataPlugin extends AbstractMetadataPlugin implements Metada
         return metadata;
     }
 
+    @Override
     public ClassMetadata getClassMetadata(ModelClass clazz, Map<String, String> data) {
         JavaClassMetadata metadata = new JavaClassMetadata();
 
@@ -115,10 +117,12 @@ public class JavaMetadataPlugin extends AbstractMetadataPlugin implements Metada
         return metadata;
     }
 
+    @Override
     public InterfaceMetadata getInterfaceMetadata(ModelInterface iface, Map<String, String> data) {
         return new JavaInterfaceMetadata();
     }
 
+    @Override
     public FieldMetadata getFieldMetadata(ModelField field, Map<String, String> data) {
         JavaFieldMetadata metadata = new JavaFieldMetadata();
 
@@ -132,6 +136,7 @@ public class JavaMetadataPlugin extends AbstractMetadataPlugin implements Metada
         return metadata;
     }
 
+    @Override
     public AssociationMetadata getAssociationMetadata(ModelAssociation association, Map<String, String> data) {
         JavaAssociationMetadata metadata = new JavaAssociationMetadata();
 

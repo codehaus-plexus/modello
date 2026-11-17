@@ -19,6 +19,7 @@ public class ModelloConvertersMojo extends AbstractModelloSourceGeneratorMojo {
         super(modelloCore);
     }
 
+    @Override
     protected String getGeneratorType() {
         return "converters";
     }

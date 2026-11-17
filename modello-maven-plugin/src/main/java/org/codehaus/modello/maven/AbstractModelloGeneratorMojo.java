@@ -169,6 +169,7 @@ public abstract class AbstractModelloGeneratorMojo extends AbstractMojo {
     //
     // ----------------------------------------------------------------------
 
+    @Override
     public void execute() throws MojoExecutionException {
         String outputDirectory = getOutputDirectory().getAbsolutePath();
 

@@ -41,6 +41,7 @@ public final class JArrayType extends JComponentizedType {
      *
      * @return The String representation of this JType.
      */
+    @Override
     public String toString() {
         return getComponentType().toString() + "[]";
     }

@@ -212,6 +212,7 @@ public class JMethod implements JMember {
      *
      * @return the modifiers for this JMember.
      **/
+    @Override
     public JModifiers getModifiers() {
         return _signature.getModifiers();
     } // -- getModifiers
@@ -221,6 +222,7 @@ public class JMethod implements JMember {
      *
      * @return the name of this JMember.
      **/
+    @Override
     public String getName() {
         return _signature.getName();
     } // -- getName
@@ -365,6 +367,7 @@ public class JMethod implements JMember {
      * @return the String representation of this JMethod, which
      * is simply the method prototype
      **/
+    @Override
     public String toString() {
         return _signature.toString();
     } // -- toString
@@ -402,6 +405,7 @@ public class JMethod implements JMember {
     /**
      * @return the annotations
      */
+    @Override
     public JAnnotations getAnnotations() {
         return annotations;
     }

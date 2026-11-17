@@ -57,6 +57,7 @@ public class ModelloXpp3ExtendedWriterMojo extends ModelloXpp3WriterMojo {
         return "xpp3-extended-writer";
     }
 
+    @Override
     protected void customizeParameters(Map<String, Object> parameters) {
         super.customizeParameters(parameters);
 

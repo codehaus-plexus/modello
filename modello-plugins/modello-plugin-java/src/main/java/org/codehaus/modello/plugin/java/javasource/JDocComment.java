@@ -234,6 +234,7 @@ public class JDocComment {
      *
      * @return the String representation of this Java Doc Comment
      */
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("/**\n");

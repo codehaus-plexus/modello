@@ -162,6 +162,7 @@ public abstract class BaseElement {
     //
     // ----------------------------------------------------------------------
 
+    @Override
     public boolean equals(Object other) {
         if (other == null || !(other instanceof BaseElement)) {
             return false;
@@ -177,6 +178,7 @@ public abstract class BaseElement {
         return name.equals(baseElem.getName()) && versionRange.equals(baseElem.getVersionRange());
     }
 
+    @Override
     public int hashCode() {
         if (!nameRequired) {
             return System.identityHashCode(this);

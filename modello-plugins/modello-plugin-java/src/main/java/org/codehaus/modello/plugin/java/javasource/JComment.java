@@ -245,6 +245,7 @@ public class JComment {
      * Returns the String representation of this Java Doc Comment
      * @return the String representation of this Java Doc Comment
      **/
+    @Override
     public String toString() {
         return "";
     } // -- toString

@@ -52,6 +52,7 @@ public class ModelInterface extends ModelType {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<ModelField> getAllFields() {
         return new ArrayList<>();
     }
@@ -59,13 +60,16 @@ public class ModelInterface extends ModelType {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<ModelField> getAllFields(boolean withInheritedField) {
         return new ArrayList<>();
     }
 
+    @Override
     public ModelField getField(String type, VersionRange versionRange) {
         throw new ModelloRuntimeException("There are no field '" + type + "' in an interface.");
     }
 
+    @Override
     public void validateElement() throws ModelValidationException {}
 }

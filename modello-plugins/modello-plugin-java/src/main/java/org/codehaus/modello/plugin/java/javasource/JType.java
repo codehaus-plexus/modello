@@ -168,6 +168,7 @@ public class JType {
      * simply the name of this type.
      * @return the String representation of this JType
      **/
+    @Override
     public String toString() {
 
         if (_isArray) {

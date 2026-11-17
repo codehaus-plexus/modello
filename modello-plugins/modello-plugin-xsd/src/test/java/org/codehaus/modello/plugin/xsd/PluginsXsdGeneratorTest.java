@@ -52,10 +52,12 @@ public class PluginsXsdGeneratorTest extends AbstractModelloGeneratorTest {
     }
 
     private static class Handler extends DefaultHandler {
+        @Override
         public void warning(SAXParseException e) throws SAXException {
             throw e;
         }
 
+        @Override
         public void error(SAXParseException e) throws SAXException {
             throw e;
         }

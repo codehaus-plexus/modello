@@ -193,6 +193,7 @@ public class ModelField extends BaseElement {
         }
     }
 
+    @Override
     public void validateElement() throws ModelValidationException {
         validateFieldNotEmpty("field", "name", getName());
 
@@ -209,6 +210,7 @@ public class ModelField extends BaseElement {
     // Object Overrides
     // ----------------------------------------------------------------------
 
+    @Override
     public String toString() {
         return "[Field: name=" + getName() + ", alias: " + alias + ", type: " + type + ", " + "version: "
                 + getVersionRange() + "]";

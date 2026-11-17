@@ -100,10 +100,12 @@ public class ModelloGenerateMojo extends AbstractModelloSourceGeneratorMojo {
         this.generatorMap = Objects.requireNonNull(generatorMap, "generatorMap cannot be null");
     }
 
+    @Override
     protected String getGeneratorType() {
         return generatorId;
     }
 
+    @Override
     public void execute() throws MojoExecutionException {
         if (!generatorMap.containsKey(generatorId)) {
             throw new MojoExecutionException("Unable to execute modello, generator id [" + generatorId

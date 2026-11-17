@@ -288,6 +288,7 @@ public class JModifiers {
      * Returns the String represetation of this JModifiers
      * @return the String represetation of this JModifiers
      **/
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
 

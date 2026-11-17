@@ -42,6 +42,7 @@ public class ModelloJDOMWriterMojo extends AbstractModelloSourceGeneratorMojo {
         super(modelloCore);
     }
 
+    @Override
     protected String getGeneratorType() {
         return "jdom-writer";
     }

@@ -68,14 +68,17 @@ public class ModelloXdocMojo extends AbstractModelloGeneratorMojo {
         super(modelloCore);
     }
 
+    @Override
     protected String getGeneratorType() {
         return "xdoc";
     }
 
+    @Override
     protected boolean producesCompilableResult() {
         return false;
     }
 
+    @Override
     public File getOutputDirectory() {
         return outputDirectory;
     }

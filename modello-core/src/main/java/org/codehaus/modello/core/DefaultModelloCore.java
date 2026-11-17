@@ -67,10 +67,12 @@ public class DefaultModelloCore extends AbstractModelloCore {
     @Inject
     private GeneratorPluginManager generatorPluginManager;
 
+    @Override
     public MetadataPluginManager getMetadataPluginManager() {
         return metadataPluginManager;
     }
 
+    @Override
     public Model loadModel(File file) throws IOException, ModelloException, ModelValidationException {
         try (Reader reader = new XmlStreamReader(file)) {
             return loadModel(reader);
@@ -101,6 +103,7 @@ public class DefaultModelloCore extends AbstractModelloCore {
      */
     private void upgradeModelloModel(ModelReader modelReader, Model model) {}
 
+    @Override
     public Model loadModel(Reader reader) throws ModelloException, ModelValidationException {
         ModelReader modelReader = new ModelReader();
         Model model = modelReader.loadModel(reader);
@@ -247,14 +250,17 @@ public class DefaultModelloCore extends AbstractModelloCore {
         }
     }
 
+    @Override
     public void saveModel(Model model, Writer writer) throws ModelloException {
         throw new ModelloRuntimeException("Not implemented.");
     }
 
+    @Override
     public Model translate(Reader reader, String inputType, Map<String, Object> parameters) throws ModelloException {
         throw new ModelloRuntimeException("Not implemented.");
     }
 
+    @Override
     public void generate(Model model, String outputType, Map<String, Object> parameters) throws ModelloException {
         if (model == null) {
             throw new ModelloRuntimeException("Illegal argument: model == null.");

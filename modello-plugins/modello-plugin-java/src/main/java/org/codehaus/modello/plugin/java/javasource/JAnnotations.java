@@ -19,6 +19,7 @@ public class JAnnotations {
      * Returns the String representation of this JAnnotations
      * @return the String representation of this JAnnotations
      **/
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         for (Iterator<String> iterator = annotations.iterator(); iterator.hasNext(); ) {

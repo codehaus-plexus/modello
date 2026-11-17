@@ -351,6 +351,7 @@ public class Model extends BaseElement {
         }
     }
 
+    @Override
     public void validateElement() {}
 
     public ModelClass getLocationTracker(Version version) {

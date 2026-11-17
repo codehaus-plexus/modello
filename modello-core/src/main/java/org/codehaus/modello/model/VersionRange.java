@@ -77,10 +77,12 @@ public class VersionRange {
     // Object overrides
     // ----------------------------------------------------------------------
 
+    @Override
     public int hashCode() {
         return fromVersion.hashCode() + toVersion.hashCode();
     }
 
+    @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof VersionRange)) {
             return false;
@@ -91,6 +93,7 @@ public class VersionRange {
         return fromVersion.equals(other.fromVersion) && toVersion.equals(other.toVersion);
     }
 
+    @Override
     public String toString() {
         if (fromVersion.equals(toVersion)) {
             return fromVersion.toString("", ".");
