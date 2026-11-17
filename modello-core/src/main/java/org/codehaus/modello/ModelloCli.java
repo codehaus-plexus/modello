@@ -146,7 +146,7 @@ public class ModelloCli {
         }
 
         String allVersions = (String) parameters.get(ModelloParameterConstants.ALL_VERSIONS);
-        if (allVersions == null || allVersions.isEmpty()) {
+        if (StringUtils.isEmpty(allVersions)) {
             return;
         }
         Map<String, Object> versioned = new HashMap<>(parameters);
@@ -322,7 +322,7 @@ public class ModelloCli {
             throw new IllegalArgumentException(
                     "Missing required parameter: model file (--model, --modelFile, --model-file)");
         }
-        if (outputType == null || outputType.isEmpty()) {
+        if (StringUtils.isEmpty(outputType)) {
             throw new IllegalArgumentException(
                     "Missing required parameter: output type (--type, --outputType, --output-type, --generatorId, --generator-id)");
         }
@@ -358,7 +358,7 @@ public class ModelloCli {
 
         String outputDirectory = args[2];
 
-        if (outputDirectory == null || outputDirectory.isEmpty()) {
+        if (StringUtils.isEmpty(outputDirectory)) {
             throw new IllegalArgumentException("Missing required parameter: output directory");
         }
 
@@ -366,7 +366,7 @@ public class ModelloCli {
 
         String modelVersion = args[3];
 
-        if (modelVersion == null || modelVersion.isEmpty()) {
+        if (StringUtils.isEmpty(modelVersion)) {
             throw new IllegalArgumentException("Missing required parameter: model version");
         }
 
@@ -374,7 +374,7 @@ public class ModelloCli {
 
         String packageWithVersion = args[4];
 
-        if (packageWithVersion == null || packageWithVersion.isEmpty()) {
+        if (StringUtils.isEmpty(packageWithVersion)) {
             throw new IllegalArgumentException("Missing required parameter: package with version");
         }
 
@@ -382,7 +382,7 @@ public class ModelloCli {
 
         String javaSource = args[5];
 
-        if (javaSource == null || javaSource.isEmpty()) {
+        if (StringUtils.isEmpty(javaSource)) {
             throw new IllegalArgumentException("Missing required parameter: Java Source");
         }
 

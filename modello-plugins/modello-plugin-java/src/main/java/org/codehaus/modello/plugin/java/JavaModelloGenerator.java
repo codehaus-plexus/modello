@@ -569,7 +569,7 @@ public class JavaModelloGenerator extends AbstractJavaModelloGenerator {
 
         String cloneHook = getCloneHook(modelClass);
 
-        if ((cloneHook != null && !cloneHook.isEmpty()) && !"false".equalsIgnoreCase(cloneHook)) {
+        if (StringUtils.isNotEmpty(cloneHook) && !"false".equalsIgnoreCase(cloneHook)) {
             if ("true".equalsIgnoreCase(cloneHook)) {
                 cloneHook = "cloneHook";
             }
@@ -607,7 +607,7 @@ public class JavaModelloGenerator extends AbstractJavaModelloGenerator {
             }
 
             String superClass = currentClass.getSuperClass();
-            if ((superClass == null || superClass.isEmpty()) || !isClassInModel(superClass, getModel())) {
+            if (StringUtils.isEmpty(superClass) || !isClassInModel(superClass, getModel())) {
                 break;
             }
 
@@ -704,8 +704,7 @@ public class JavaModelloGenerator extends AbstractJavaModelloGenerator {
         String superClass = modelClass.getSuperClass();
         ModelClassMetadata metadata = (ModelClassMetadata) locationClass.getMetadata(ModelClassMetadata.ID);
         String locationField = metadata.getLocationTracker();
-        boolean hasModeSuperClass =
-                (superClass != null && !superClass.isEmpty()) && isClassInModel(superClass, getModel());
+        boolean hasModeSuperClass = StringUtils.isNotEmpty(superClass) && isClassInModel(superClass, getModel());
         if (!hasModeSuperClass) {
             String fieldType = "java.util.Map<Object, " + locationClass.getName() + ">";
             String fieldImpl = "java.util.LinkedHashMap<Object, " + locationClass.getName() + ">";
@@ -1146,7 +1145,7 @@ public class JavaModelloGenerator extends AbstractJavaModelloGenerator {
             field.setInitString(getJavaDefaultValue(modelField));
         }
 
-        if (modelField.getDescription() != null && !modelField.getDescription().isEmpty()) {
+        if (StringUtils.isNotEmpty(modelField.getDescription())) {
             field.setComment(appendPeriod(modelField.getDescription()));
         }
 
@@ -1203,7 +1202,7 @@ public class JavaModelloGenerator extends AbstractJavaModelloGenerator {
         JMethod getter = new JMethod(prefix + propertyName, returnType, null);
 
         StringBuilder comment = new StringBuilder("Get ");
-        if (modelField.getDescription() == null || modelField.getDescription().isEmpty()) {
+        if (StringUtils.isEmpty(modelField.getDescription())) {
             comment.append("the ");
             comment.append(field.getName());
             comment.append(" field");
@@ -1234,7 +1233,7 @@ public class JavaModelloGenerator extends AbstractJavaModelloGenerator {
         }
 
         StringBuilder comment = new StringBuilder("Set ");
-        if (modelField.getDescription() == null || modelField.getDescription().isEmpty()) {
+        if (StringUtils.isEmpty(modelField.getDescription())) {
             comment.append("the ");
             comment.append(field.getName());
             comment.append(" field");
