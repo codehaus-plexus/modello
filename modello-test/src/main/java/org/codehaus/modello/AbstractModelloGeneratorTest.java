@@ -29,6 +29,11 @@ import javax.xml.parsers.SAXParserFactory;
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -36,7 +41,6 @@ import java.util.Optional;
 import org.codehaus.plexus.ContainerConfiguration;
 import org.codehaus.plexus.PlexusConstants;
 import org.codehaus.plexus.testing.PlexusTestConfiguration;
-import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.xml.XmlStreamReader;
 import org.junit.jupiter.api.BeforeEach;
 import org.xml.sax.SAXException;
@@ -59,7 +63,7 @@ public abstract class AbstractModelloGeneratorTest implements PlexusTestConfigur
     @BeforeEach
     public void setUp() throws Exception {
 
-        FileUtils.deleteDirectory(getOutputDirectory());
+        AbstractModelloGeneratorTest.deleteDirectory(getOutputDirectory().toPath());
 
         assertTrue(getOutputDirectory().mkdirs());
     }
@@ -118,5 +122,45 @@ public abstract class AbstractModelloGeneratorTest implements PlexusTestConfigur
         containerConfiguration.setClassPathScanning("cache");
         containerConfiguration.setAutoWiring(true);
         containerConfiguration.setClassPathScanning(PlexusConstants.SCANNING_INDEX);
+    }
+
+    static void deleteDirectory(final Path directory) throws IOException {
+        if (!Files.exists(directory)) {
+            return;
+        }
+        final IOException[] failure = new IOException[1];
+        Files.walkFileTree(directory, new SimpleFileVisitor<Path>() {
+            @Override
+            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
+                try {
+                    Files.delete(file);
+                } catch (IOException e) {
+                    failure[0] = e;
+                }
+                return FileVisitResult.CONTINUE;
+            }
+
+            @Override
+            public FileVisitResult visitFileFailed(Path file, IOException exc) {
+                failure[0] = exc;
+                return FileVisitResult.CONTINUE;
+            }
+
+            @Override
+            public FileVisitResult postVisitDirectory(Path dir, IOException exc) {
+                if (exc != null) {
+                    failure[0] = exc;
+                }
+                try {
+                    Files.delete(dir);
+                } catch (IOException e) {
+                    failure[0] = e;
+                }
+                return FileVisitResult.CONTINUE;
+            }
+        });
+        if (failure[0] != null) {
+            throw failure[0];
+        }
     }
 }

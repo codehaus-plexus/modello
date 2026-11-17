@@ -51,7 +51,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.codehaus.modello.verifier.VerifierException;
-import org.codehaus.plexus.util.FileUtils;
 import org.junit.jupiter.api.BeforeEach;
 
 import static org.codehaus.plexus.testing.PlexusExtension.getTestFile;
@@ -83,7 +82,7 @@ public abstract class AbstractModelloJavaGeneratorTest extends AbstractModelloGe
     public void setUp() throws Exception {
         super.setUp();
 
-        FileUtils.deleteDirectory(getOutputClasses());
+        AbstractModelloGeneratorTest.deleteDirectory(getOutputClasses().toPath());
 
         assertTrue(getOutputClasses().mkdirs());
     }
