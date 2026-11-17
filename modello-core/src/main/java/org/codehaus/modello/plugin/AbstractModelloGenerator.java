@@ -43,7 +43,6 @@ import org.codehaus.modello.model.ModelClass;
 import org.codehaus.modello.model.ModelDefault;
 import org.codehaus.modello.model.ModelField;
 import org.codehaus.modello.model.Version;
-import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.io.CachingWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -186,7 +185,7 @@ public abstract class AbstractModelloGenerator implements ModelloGenerator {
     }
 
     protected String capitalise(String str) {
-        if (StringUtils.isEmpty(str)) {
+        if (str == null || str.isEmpty()) {
             return str;
         }
 
@@ -194,7 +193,7 @@ public abstract class AbstractModelloGenerator implements ModelloGenerator {
     }
 
     public static String singular(String name) {
-        if (StringUtils.isEmpty(name)) {
+        if (name == null || name.isEmpty()) {
             return name;
         }
 
@@ -216,7 +215,7 @@ public abstract class AbstractModelloGenerator implements ModelloGenerator {
     }
 
     public static String uncapitalise(String str) {
-        if (StringUtils.isEmpty(str)) {
+        if (str == null || str.isEmpty()) {
             return str;
         }
 

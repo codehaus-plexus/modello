@@ -5,7 +5,6 @@ import org.codehaus.modello.model.Model;
 import org.codehaus.modello.model.Version;
 import org.codehaus.modello.plugin.xsd.metadata.XsdModelMetadata;
 import org.codehaus.modello.plugins.xml.metadata.XmlModelMetadata;
-import org.codehaus.plexus.util.StringUtils;
 
 /*
  * Copyright (c) 2004, Codehaus.org
@@ -41,11 +40,13 @@ public class XsdModelHelper {
         XsdModelMetadata xsdModelMetadata = (XsdModelMetadata) model.getMetadata(XsdModelMetadata.ID);
 
         String namespace;
-        if (StringUtils.isNotEmpty(xsdModelMetadata.getNamespace())) {
+        if (xsdModelMetadata.getNamespace() != null
+                && !xsdModelMetadata.getNamespace().isEmpty()) {
             namespace = xsdModelMetadata.getNamespace(version);
         } else {
             // xsd.namespace is not set, try using xml.namespace
-            if (StringUtils.isEmpty(xmlModelMetadata.getNamespace())) {
+            if (xmlModelMetadata.getNamespace() == null
+                    || xmlModelMetadata.getNamespace().isEmpty()) {
                 throw new ModelloException("Cannot generate xsd without xmlns specification:"
                         + " <model xml.namespace='...'> or <model xsd.namespace='...'>");
             }

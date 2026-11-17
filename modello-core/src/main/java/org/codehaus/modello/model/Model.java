@@ -30,7 +30,6 @@ import java.util.Map;
 import org.codehaus.modello.ModelloRuntimeException;
 import org.codehaus.modello.metadata.ModelMetadata;
 import org.codehaus.modello.plugin.model.ModelClassMetadata;
-import org.codehaus.plexus.util.StringUtils;
 
 /**
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
@@ -362,7 +361,9 @@ public class Model extends BaseElement {
         for (ModelClass modelClass : modelClasses) {
             ModelClassMetadata metadata = (ModelClassMetadata) modelClass.getMetadata(ModelClassMetadata.ID);
 
-            if (metadata != null && StringUtils.isNotEmpty(metadata.getLocationTracker())) {
+            if (metadata != null
+                    && (metadata.getLocationTracker() != null
+                            && !metadata.getLocationTracker().isEmpty())) {
                 if (locationTracker == null) {
                     locationTracker = modelClass;
                 } else {
@@ -384,7 +385,9 @@ public class Model extends BaseElement {
         for (ModelClass modelClass : modelClasses) {
             ModelClassMetadata metadata = (ModelClassMetadata) modelClass.getMetadata(ModelClassMetadata.ID);
 
-            if (metadata != null && StringUtils.isNotEmpty(metadata.getSourceTracker())) {
+            if (metadata != null
+                    && (metadata.getSourceTracker() != null
+                            && !metadata.getSourceTracker().isEmpty())) {
                 if (sourceTracker == null) {
                     sourceTracker = modelClass;
                 } else {

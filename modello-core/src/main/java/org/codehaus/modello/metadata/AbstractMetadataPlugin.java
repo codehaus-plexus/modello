@@ -24,7 +24,6 @@ package org.codehaus.modello.metadata;
 
 import java.util.Map;
 
-import org.codehaus.plexus.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,7 +40,7 @@ public abstract class AbstractMetadataPlugin implements MetadataPlugin {
     protected boolean getBoolean(Map<String, String> data, String key, boolean defaultValue) {
         String value = data.get(key);
 
-        if (StringUtils.isEmpty(value)) {
+        if (value == null || value.isEmpty()) {
             return defaultValue;
         }
 
@@ -51,6 +50,6 @@ public abstract class AbstractMetadataPlugin implements MetadataPlugin {
     protected String getString(Map<String, String> data, String key) {
         String value = data.get(key);
 
-        return StringUtils.isEmpty(value) ? null : value;
+        return value == null || value.isEmpty() ? null : value;
     }
 }
