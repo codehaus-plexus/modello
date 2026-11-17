@@ -25,13 +25,14 @@ package org.codehaus.modello.plugin.java;
 import javax.inject.Inject;
 
 import java.io.File;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.Map;
 
 import org.codehaus.modello.AbstractModelloJavaGeneratorTest;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
 import org.codehaus.plexus.testing.PlexusTest;
-import org.codehaus.plexus.util.FileUtils;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -65,7 +66,7 @@ public class ToStringJavaGeneratorTest extends AbstractModelloJavaGeneratorTest 
 
         File source = new File(getOutputDirectory(), "foo/bar/tostring/MyClass.java");
 
-        String sourceGenerated = FileUtils.fileRead(source);
+        String sourceGenerated = new String(Files.readAllBytes(source.toPath()), StandardCharsets.UTF_8);
 
         assertTrue(sourceGenerated.contains("public java.lang.String toString()"));
     }

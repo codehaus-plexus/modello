@@ -25,6 +25,7 @@ package org.codehaus.modello.plugin.xdoc;
 import javax.inject.Inject;
 
 import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.HashSet;
 import java.util.List;
@@ -42,7 +43,6 @@ import org.codehaus.modello.model.Version;
 import org.codehaus.modello.plugins.xml.metadata.XmlFieldMetadata;
 import org.codehaus.modello.verifier.VerifierException;
 import org.codehaus.plexus.testing.PlexusTest;
-import org.codehaus.plexus.util.FileUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.xmlunit.builder.DiffBuilder;
@@ -151,7 +151,8 @@ public class XdocGeneratorTest extends AbstractModelloGeneratorTest {
         modello.generate(model, "xdoc", parameters);
         checkInternalLinks("maven.xml");
 
-        String content = FileUtils.fileRead(new File(getOutputDirectory(), "maven.xml"), "UTF-8");
+        String content = new String(
+                Files.readAllBytes(new File(getOutputDirectory(), "maven.xml").toPath()), StandardCharsets.UTF_8);
 
         Pattern requiredModelVersion =
                 Pattern.compile("<code>modelVersion</code>.*?<strong>Required</strong>: Yes\\.", Pattern.DOTALL);
@@ -171,7 +172,8 @@ public class XdocGeneratorTest extends AbstractModelloGeneratorTest {
 
         checkInternalLinks("features.xml");
 
-        String content = FileUtils.fileRead(new File(getOutputDirectory(), "features.xml"), "UTF-8");
+        String content = new String(
+                Files.readAllBytes(new File(getOutputDirectory(), "features.xml").toPath()), StandardCharsets.UTF_8);
 
         assertFalse(content.contains("transientString"), "Transient fields were erroneously documented");
     }
@@ -185,7 +187,8 @@ public class XdocGeneratorTest extends AbstractModelloGeneratorTest {
 
         checkInternalLinks("settings.xml");
 
-        String content = FileUtils.fileRead(new File(getOutputDirectory(), "settings.xml"), "UTF-8");
+        String content = new String(
+                Files.readAllBytes(new File(getOutputDirectory(), "settings.xml").toPath()), StandardCharsets.UTF_8);
 
         assertFalse(content.contains("&lt;properties/&gt;"), "Properties field was erroneously documented");
     }
@@ -198,7 +201,8 @@ public class XdocGeneratorTest extends AbstractModelloGeneratorTest {
      * @throws Exception
      */
     private void checkInternalLinks(String filename) throws Exception {
-        String content = FileUtils.fileRead(new File(getOutputDirectory(), filename), "UTF-8");
+        String content = new String(
+                Files.readAllBytes(new File(getOutputDirectory(), filename).toPath()), StandardCharsets.UTF_8);
 
         Set<String> hrefs = new HashSet<>();
         Pattern p = Pattern.compile("<a href=\"#(class_[^\"]+)\"", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
