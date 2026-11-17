@@ -190,7 +190,7 @@ public abstract class AbstractModelloGenerator implements ModelloGenerator {
             return str;
         }
 
-        return String.valueOf(Character.toTitleCase(str.charAt(0))) + str.substring(1);
+        return Character.toTitleCase(str.charAt(0)) + str.substring(1);
     }
 
     public static String singular(String name) {
@@ -220,7 +220,7 @@ public abstract class AbstractModelloGenerator implements ModelloGenerator {
             return str;
         }
 
-        return String.valueOf(Character.toLowerCase(str.charAt(0))) + str.substring(1);
+        return Character.toLowerCase(str.charAt(0)) + str.substring(1);
     }
 
     // ----------------------------------------------------------------------
