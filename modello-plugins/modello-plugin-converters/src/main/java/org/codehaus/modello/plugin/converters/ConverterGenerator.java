@@ -26,7 +26,6 @@ import javax.inject.Named;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -66,7 +65,7 @@ public class ConverterGenerator extends AbstractJavaModelloGenerator {
         for (String version : versions) {
             allVersions.add(new Version(version));
         }
-        Collections.sort(allVersions);
+        allVersions.sort(null);
 
         Version nextVersion = null;
         for (Version v : allVersions) {
