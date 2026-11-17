@@ -59,7 +59,7 @@ public class XmlModelloPluginTest implements PlexusTestConfiguration {
 
         assertNotNull(object);
 
-        assertTrue(object instanceof XmlMetadataPlugin);
+        assertInstanceOf(XmlMetadataPlugin.class, object);
     }
 
     @Test
