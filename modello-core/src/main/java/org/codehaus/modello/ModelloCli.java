@@ -31,7 +31,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.xml.XmlStreamReader;
 
 /**
@@ -326,13 +325,13 @@ public class ModelloCli {
             throw new IllegalArgumentException(
                     "Missing required parameter: output type (--type, --outputType, --output-type, --generatorId, --generator-id)");
         }
-        if (!parameters.containsKey(ModelloParameterConstants.OUTPUT_DIRECTORY)
-                || StringUtils.isEmpty((String) parameters.get(ModelloParameterConstants.OUTPUT_DIRECTORY))) {
+        String outputDirectory = (String) parameters.get(ModelloParameterConstants.OUTPUT_DIRECTORY);
+        if (outputDirectory == null || outputDirectory.isEmpty()) {
             throw new IllegalArgumentException(
                     "Missing required parameter: output directory (--dir, --outputDirectory, --output-directory)");
         }
-        if (!parameters.containsKey(ModelloParameterConstants.VERSION)
-                || StringUtils.isEmpty((String) parameters.get(ModelloParameterConstants.VERSION))) {
+        String modelVersion = (String) parameters.get(ModelloParameterConstants.VERSION);
+        if (modelVersion == null || modelVersion.isEmpty()) {
             throw new IllegalArgumentException(
                     "Missing required parameter: model version (--version, --modelVersion, --model-version)");
         }

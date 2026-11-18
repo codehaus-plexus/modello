@@ -190,7 +190,7 @@ public abstract class AbstractModelloGeneratorMojo extends AbstractMojo {
         parameters.put(ModelloParameterConstants.PLURAL_EXCEPTIONS, pluralExceptions);
 
         if (!packagedVersions.isEmpty()) {
-            parameters.put(ModelloParameterConstants.ALL_VERSIONS, StringUtils.join(packagedVersions.iterator(), ","));
+            parameters.put(ModelloParameterConstants.ALL_VERSIONS, String.join(",", packagedVersions));
         }
 
         if (licenseText != null || licenseFile != null) {

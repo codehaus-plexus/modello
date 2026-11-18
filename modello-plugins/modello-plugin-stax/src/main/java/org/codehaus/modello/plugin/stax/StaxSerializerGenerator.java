@@ -39,7 +39,6 @@ import org.codehaus.modello.plugin.java.javasource.JParameter;
 import org.codehaus.modello.plugin.java.javasource.JSourceCode;
 import org.codehaus.modello.plugin.java.javasource.JSourceWriter;
 import org.codehaus.modello.plugin.java.javasource.JType;
-import org.codehaus.plexus.util.StringUtils;
 
 /**
  * Generates the IndentingXMLStreamWriter used by the writer for pretty printing.
@@ -361,7 +360,7 @@ public class StaxSerializerGenerator extends AbstractStaxGenerator {
             sc.add("before" + before + "();");
         }
 
-        sc.add("out.write" + name + "( " + StringUtils.join(names.iterator(), ", ") + " );");
+        sc.add("out.write" + name + "( " + String.join(", ", names) + " );");
 
         if (after != null) {
             sc.add("after" + after + "();");
