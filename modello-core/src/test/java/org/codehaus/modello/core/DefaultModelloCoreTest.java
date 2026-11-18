@@ -27,10 +27,12 @@ import javax.inject.Inject;
 import org.codehaus.modello.ModelloRuntimeException;
 import org.codehaus.plexus.testing.PlexusTest;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.codehaus.plexus.testing.PlexusExtension.getTestFile;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -41,37 +43,16 @@ class DefaultModelloCoreTest {
     @Inject
     ModelloCore modello;
 
-    @Test
-    void modelWithDuplicateClasses() throws Exception {
-        try {
-            modello.loadModel(getTestFile("src/test/resources/models/duplicate-classes.mdo"));
-
-            fail("Expected ModelloRuntimeException.");
-        } catch (ModelloRuntimeException ex) {
-            assertEquals("Duplicate class: MyClass.", ex.getMessage());
-        }
-    }
-
-    @Test
-    void modelWithDuplicateFields() throws Exception {
-        try {
-            modello.loadModel(getTestFile("src/test/resources/models/duplicate-fields.mdo"));
-
-            fail("Expected ModelloRuntimeException.");
-        } catch (ModelloRuntimeException ex) {
-            assertEquals("Duplicate field in MyClass: MyField.", ex.getMessage());
-        }
-    }
-
-    @Test
-    void modelWithDuplicateAssociations() throws Exception {
-        try {
-            modello.loadModel(getTestFile("src/test/resources/models/duplicate-associations.mdo"));
-
-            fail("Expected ModelloRuntimeException.");
-        } catch (ModelloRuntimeException ex) {
-            assertEquals("Duplicate field in MyClass: MyAssociation.", ex.getMessage());
-        }
+    @ParameterizedTest
+    @CsvSource({
+        "src/test/resources/models/duplicate-classes.mdo, Duplicate class: MyClass.",
+        "src/test/resources/models/duplicate-fields.mdo, Duplicate field in MyClass: MyField.",
+        "src/test/resources/models/duplicate-associations.mdo, Duplicate field in MyClass: MyAssociation."
+    })
+    void modelWithDuplicateMember(String modelFile, String expectedMessage) throws Exception {
+        ModelloRuntimeException ex =
+                assertThrows(ModelloRuntimeException.class, () -> modello.loadModel(getTestFile(modelFile)));
+        assertEquals(expectedMessage, ex.getMessage());
     }
 
     @Test
