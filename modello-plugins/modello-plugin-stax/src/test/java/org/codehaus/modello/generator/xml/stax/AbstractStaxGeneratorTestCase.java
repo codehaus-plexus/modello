@@ -31,7 +31,6 @@ import org.codehaus.modello.ModelloParameterConstants;
 import org.codehaus.modello.core.ModelloCore;
 import org.codehaus.modello.model.Model;
 import org.codehaus.plexus.testing.PlexusTest;
-import org.codehaus.plexus.util.StringUtils;
 
 @PlexusTest
 public abstract class AbstractStaxGeneratorTestCase extends AbstractModelloJavaGeneratorTest {
@@ -55,7 +54,7 @@ public abstract class AbstractStaxGeneratorTestCase extends AbstractModelloJavaG
         modello.generate(model, "stax-reader", parameters);
 
         if (versions != null && versions.length > 0) {
-            parameters.put(ModelloParameterConstants.ALL_VERSIONS, StringUtils.join(versions, ","));
+            parameters.put(ModelloParameterConstants.ALL_VERSIONS, String.join(",", versions));
 
             for (String version : versions) {
                 parameters.put(ModelloParameterConstants.VERSION, version);

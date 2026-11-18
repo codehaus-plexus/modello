@@ -29,7 +29,6 @@ import java.util.Map;
 
 import org.codehaus.modello.ModelloRuntimeException;
 import org.codehaus.modello.metadata.ClassMetadata;
-import org.codehaus.plexus.util.StringUtils;
 
 /**
  * @author <a href="mailto:jason@modello.org">Jason van Zyl</a>
@@ -235,8 +234,9 @@ public class ModelClass extends ModelType {
     public int hashCode() {
         int hashCode = getName().hashCode();
 
-        if (!StringUtils.isEmpty(getPackageName())) {
-            hashCode += 37 * getPackageName().hashCode();
+        String packageName = getPackageName();
+        if (packageName != null && !packageName.isEmpty()) {
+            hashCode += 37 * packageName.hashCode();
         }
 
         return hashCode;
