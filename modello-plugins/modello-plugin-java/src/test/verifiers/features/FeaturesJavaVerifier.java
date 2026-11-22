@@ -430,7 +430,8 @@ public class FeaturesJavaVerifier
     {
         Thing orig = new Thing();
 
-        Thing copy = (Thing) orig.clone();
+        // no cast: clone() must have the covariant return type
+        Thing copy = orig.clone();
 
         assertNotNull( copy );
         assertNotSame( orig, copy );
@@ -461,7 +462,7 @@ public class FeaturesJavaVerifier
         orig.addSomeProperty( "key", "value" );
         orig.customProperties.setProperty( "key", "value" );
 
-        Thing copy = (Thing) orig.clone();
+        Thing copy = orig.clone();
 
         assertNotNull( copy );
         assertNotSame( orig, copy );
@@ -504,7 +505,7 @@ public class FeaturesJavaVerifier
         Thingy orig2 = new Thingy();
         orig2.setSomeContent( "content" );
 
-        Thingy copy2 = (Thingy) orig2.clone();
+        Thingy copy2 = orig2.clone();
 
         assertNotNull( copy2 );
         assertNotSame( orig2, copy2 );

@@ -53,5 +53,7 @@ public class SnakeYamlGeneratorTest extends AbstractModelloJavaGeneratorTest {
         modello.generate(model, "snakeyaml-reader", parameters);
 
         compileGeneratedSources();
+
+        verifyCompiledGeneratedSources("org.codehaus.modello.generator.snakeyaml.SnakeYamlVerifier");
     }
 }
