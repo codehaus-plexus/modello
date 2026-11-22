@@ -6,9 +6,9 @@ author:
 
 # Modello StAX Plugin
 
-Modello StAX Plugin generates XML readers and writers based on [StAX API](http://docs.oracle.com/javase/6/docs/api/javax/xml/stream/package-summary.html), plus reader delegates to be able to read multiple model versions.
+Modello StAX Plugin generates XML readers and writers based on [StAX API](https://docs.oracle.com/javase/8/docs/api/javax/xml/stream/package-summary.html), plus reader delegates to be able to read multiple model versions.
 
-Notice: DOM content type can be represented either as [plexus-utils' Xpp3Dom](http://plexus.codehaus.org/plexus-utils/apidocs/org/codehaus/plexus/util/xml/Xpp3Dom.html) or, since Modello 1.6, standard [org.w3c.dom.Element](http://docs.oracle.com/javase/1.4.2/docs/api/org/w3c/dom/Element.html) objects
+Notice: DOM content type can be represented either as [plexus-xml's Xpp3Dom](https://codehaus-plexus.github.io/plexus-xml/apidocs/org.codehaus.plexus.util.xml/org/codehaus/plexus/util/xml/Xpp3Dom.html) or, since Modello 1.6, standard [org.w3c.dom.Element](https://docs.oracle.com/javase/8/docs/api/org/w3c/dom/Element.html) objects
 
 ## stax-reader
 
@@ -36,6 +36,8 @@ In addition, if multiple model reader versions are generated (each in its own pa
     &nbsp;&nbsp;&nbsp;&nbsp;throws IOException, XMLStreamException`
 
 Depending on the model version found in the XML content, the returned `Object` will be of the right version package. 
+
+By default the generated reader checks that the model version of the document matches the version of the reader. This applies only to models with a `versionDefinition`. Set the `versionCheck` parameter of the `stax-reader` goal (property `modello.stax.versionCheck`) to `false` to turn the check off.
 
 ## stax-writer
 

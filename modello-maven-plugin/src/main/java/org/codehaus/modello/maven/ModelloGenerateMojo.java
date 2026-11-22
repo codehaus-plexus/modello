@@ -91,6 +91,10 @@ import org.codehaus.modello.plugin.ModelloGenerator;
 public class ModelloGenerateMojo extends AbstractModelloSourceGeneratorMojo {
     private final Map<String, ModelloGenerator> generatorMap;
 
+    /**
+     * The id of the generator to run, as registered by a Modello plugin, for example {@code java} or
+     * {@code xpp3-reader}. The build fails and lists the available ids if no generator has this id.
+     */
     @Parameter(property = ModelloParameterConstants.GENERATOR_ID, defaultValue = "java")
     private String generatorId;
 

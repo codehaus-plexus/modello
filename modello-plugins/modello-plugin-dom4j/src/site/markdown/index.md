@@ -6,9 +6,9 @@ author:
 
 # Modello Dom4J Plugin
 
-Modello Dom4J Plugin generates XML readers and writers based on [Dom4J 1 API](http://dom4j.sourceforge.net/dom4j-1.6.1/).
+Modello Dom4J Plugin generates XML readers and writers based on [Dom4J 1 API](https://dom4j.github.io/).
 
-Notice: DOM content type is represented as [plexus-utils' Xpp3Dom](http://plexus.codehaus.org/plexus-utils/apidocs/org/codehaus/plexus/util/xml/Xpp3Dom.html) objects
+Notice: DOM content type is represented as [plexus-xml's Xpp3Dom](https://codehaus-plexus.github.io/plexus-xml/apidocs/org.codehaus.plexus.util.xml/org/codehaus/plexus/util/xml/Xpp3Dom.html) objects
 
 ## dom4j-reader
 

@@ -25,7 +25,7 @@ Restored maven 2.2.1 compatibility that was broken in 1.8
 
 ## 1.8 Release Notes (2013-08-06)
 
-The [full list of changes](http://jira.codehaus.org/secure/ReleaseNote.jspa?projectId=10510&version=19102) can be found in our [issue management system](./issue-management.html), and is reproduced below.
+The full list of changes can be found in our [issue management system](./issue-management.html), and is reproduced below.
 
 ### Bug
 
@@ -47,7 +47,7 @@ The [full list of changes](http://jira.codehaus.org/secure/ReleaseNote.jspa?proj
 
 ## 1.7 Release Notes (2013-02-19)
 
-The [full list of changes](http://jira.codehaus.org/secure/ReleaseNote.jspa?projectId=10510&version=18979) can be found in our [issue management system](./issue-management.html), and is reproduced below.
+The full list of changes can be found in our [issue management system](./issue-management.html), and is reproduced below.
 
 ### Bug
 
@@ -60,7 +60,7 @@ The [full list of changes](http://jira.codehaus.org/secure/ReleaseNote.jspa?proj
 
 ## 1.6 Release Notes (2012-11)
 
-The [full list of changes](http://jira.codehaus.org/secure/ReleaseNote.jspa?projectId=10510&version=18746) can be found in our [issue management system](./issue-management.html), and is reproduced below.
+The full list of changes can be found in our [issue management system](./issue-management.html), and is reproduced below.
 
 ### Bug
 
@@ -81,7 +81,7 @@ The [full list of changes](http://jira.codehaus.org/secure/ReleaseNote.jspa?proj
 
 ## 1.5 Release Notes (2011-05-30)
 
-The [full list of changes](http://jira.codehaus.org/secure/ReleaseNote.jspa?projectId=10510&version=16405) can be found in our [issue management system](./issue-management.html), and is reproduced below.
+The full list of changes can be found in our [issue management system](./issue-management.html), and is reproduced below.
 
 ### Bug
 
@@ -94,7 +94,7 @@ The [full list of changes](http://jira.codehaus.org/secure/ReleaseNote.jspa?proj
 
 ## 1.4.1 Release Notes (2010-09-25)
 
-The [full list of changes](http://jira.codehaus.org/secure/ReleaseNote.jspa?projectId=10510&version=16774) can be found in our [issue management system](./issue-management.html), and is reproduced below.
+The full list of changes can be found in our [issue management system](./issue-management.html), and is reproduced below.
 
 ### Bug
 
@@ -102,7 +102,7 @@ The [full list of changes](http://jira.codehaus.org/secure/ReleaseNote.jspa?proj
 
 ## 1.4 Release Notes (2010-05-29)
 
-The [full list of changes](http://jira.codehaus.org/secure/ReleaseNote.jspa?projectId=10510&version=16153) can be found in our [issue management system](./issue-management.html), and is reproduced below.
+The full list of changes can be found in our [issue management system](./issue-management.html), and is reproduced below.
 
 ### Bug
 
@@ -129,7 +129,7 @@ The [full list of changes](http://jira.codehaus.org/secure/ReleaseNote.jspa?proj
 
 ## 1.3 Release Notes (2010-04-01)
 
-The full list of changes can be found in our [issue management system](http://jira.codehaus.org/secure/ReleaseNote.jspa?projectId=10510&version=15584), and is reproduced below.
+The full list of changes can be found in our [issue management system](./issue-management.html), and is reproduced below.
 
 ### Bug
 
@@ -154,7 +154,7 @@ The full list of changes can be found in our [issue management system](http://ji
 
 ## 1.2 Release Notes (2010-01-19)
 
-The full list of changes can be found in our [issue management system](http://jira.codehaus.org/secure/ReleaseNote.jspa?projectId=10510&version=15583), and is reproduced below.
+The full list of changes can be found in our [issue management system](./issue-management.html), and is reproduced below.
 
 ### Bug
 
@@ -169,7 +169,7 @@ The full list of changes can be found in our [issue management system](http://ji
 
 ## 1.1 Release Notes (2009-08-21)
 
-The full list of changes can be found in our [issue management system](http://jira.codehaus.org/secure/ReleaseNote.jspa?projectId=10510&version=14908), and is reproduced below.
+The full list of changes can be found in our [issue management system](./issue-management.html), and is reproduced below.
 
 ### Bug
 
@@ -196,7 +196,7 @@ The full list of changes can be found in our [issue management system](http://ji
 
 ## 1.0.2 Release Notes (2009-06-11)
 
-The full list of changes can be found in our [issue management system](http://jira.codehaus.org/secure/ReleaseNote.jspa?projectId=10510&version=15080), and is reproduced below.
+The full list of changes can be found in our [issue management system](./issue-management.html), and is reproduced below.
 
 ### Bug
 
@@ -211,7 +211,7 @@ The full list of changes can be found in our [issue management system](http://ji
 
 ## 1.0.1 Release Notes (2009-03-09)
 
-The full list of changes can be found in our [issue management system](http://jira.codehaus.org/secure/ReleaseNote.jspa?projectId=10510&version=14892), and is reproduced below.
+The full list of changes can be found in our [issue management system](./issue-management.html), and is reproduced below.
 
 ### Bug
 
@@ -241,7 +241,7 @@ The full list of changes can be found in our [issue management system](http://ji
 
 ## 1.0 Release Notes (2009-01-29)
 
-The full list of changes can be found in our [issue management system](http://jira.codehaus.org/secure/ReleaseNote.jspa?projectId=10510&version=13956), and is reproduced below.
+The full list of changes can be found in our [issue management system](./issue-management.html), and is reproduced below.
 
 ### Bug
 
@@ -294,7 +294,7 @@ The full list of changes can be found in our [issue management system](http://ji
 
 ## 1.0-alpha-22 Release Notes (2008-12-12)
 
-The full list of changes can be found in our [issue management system](http://jira.codehaus.org/secure/ReleaseNote.jspa?projectId=10510&version=14742), and is reproduced below.
+The full list of changes can be found in our [issue management system](./issue-management.html), and is reproduced below.
 
 ### Bug
 
@@ -320,7 +320,7 @@ The full list of changes can be found in our [issue management system](http://ji
 
 ## 1.0-alpha-21 Release Notes (2008-08-06)
 
-The full list of changes can be found in our [issue management system](http://jira.codehaus.org/secure/ReleaseNote.jspa?projectId=10510&version=14469), and is reproduced below.
+The full list of changes can be found in our [issue management system](./issue-management.html), and is reproduced below.
 
 ### Bug
 
@@ -338,7 +338,7 @@ The full list of changes can be found in our [issue management system](http://ji
 
 ## 1.0-alpha-20 Release Notes (2008-07-25)
 
-The full list of changes can be found in our [issue management system](http://jira.codehaus.org/secure/ReleaseNote.jspa?projectId=10510&version=14466), and is reproduced below.
+The full list of changes can be found in our [issue management system](./issue-management.html), and is reproduced below.
 
 ### Bug
 
@@ -346,7 +346,7 @@ The full list of changes can be found in our [issue management system](http://ji
 
 ## 1.0-alpha-19 Release Notes (2008-07-14)
 
-The full list of changes can be found in our [issue management system](http://jira.codehaus.org/secure/ReleaseNote.jspa?projectId=10510&version=14339), and is reproduced below.
+The full list of changes can be found in our [issue management system](./issue-management.html), and is reproduced below.
 
 ### Bug
 
@@ -368,7 +368,7 @@ The full list of changes can be found in our [issue management system](http://ji
 
 ## 1.0-alpha-18 Release Notes (2008-01-15)
 
-The full list of changes can be found in our [issue management system](http://jira.codehaus.org/secure/ReleaseNote.jspa?projectId=10510&version=13717), and is reproduced below.
+The full list of changes can be found in our [issue management system](./issue-management.html), and is reproduced below.
 
 ### Bug
 
@@ -392,7 +392,7 @@ The full list of changes can be found in our [issue management system](http://ji
 
 ## 1.0-alpha-17 Release Notes (2007-07-30)
 
-The full list of changes can be found in our [issue management system](http://jira.codehaus.org/secure/ReleaseNote.jspa?projectId=10510&version=13637), and is reproduced below.
+The full list of changes can be found in our [issue management system](./issue-management.html), and is reproduced below.
 
 ### Bug
 
@@ -401,7 +401,7 @@ The full list of changes can be found in our [issue management system](http://ji
 
 ## 1.0-alpha-15 Release Notes (2007-03-23)
 
-The full list of changes can be found in our [issue management system](http://jira.codehaus.org/secure/ReleaseNote.jspa?projectId=10510&version=13272), and is reproduced below.
+The full list of changes can be found in our [issue management system](./issue-management.html), and is reproduced below.
 
 ### Bug
 
@@ -414,7 +414,7 @@ The full list of changes can be found in our [issue management system](http://ji
 
 ## 1.0-alpha-14 Release Notes (2007-02-20)
 
-The full list of changes can be found in our [issue management system](http://jira.codehaus.org/secure/ReleaseNote.jspa?projectId=10510&version=13068), and is reproduced below.
+The full list of changes can be found in our [issue management system](./issue-management.html), and is reproduced below.
 
 ### Bug
 
@@ -437,7 +437,7 @@ The full list of changes can be found in our [issue management system](http://ji
 
 ## 1.0-alpha-13 Release Notes (2006-12-07)
 
-The full list of changes can be found in our [issue management system](http://jira.codehaus.org/secure/ReleaseNote.jspa?projectId=10510&version=12956), and is reproduced below.
+The full list of changes can be found in our [issue management system](./issue-management.html), and is reproduced below.
 
 ### Bug
 
@@ -453,7 +453,7 @@ The full list of changes can be found in our [issue management system](http://ji
 
 ## 1.0-alpha-11 Release Notes (2006-09-20)
 
-The full list of changes can be found in our [issue management system](http://jira.codehaus.org/secure/ReleaseNote.jspa?projectId=10510&version=12790), and is reproduced below.
+The full list of changes can be found in our [issue management system](./issue-management.html), and is reproduced below.
 
 ### Bug
 

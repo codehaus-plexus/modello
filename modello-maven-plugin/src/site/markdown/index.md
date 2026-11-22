@@ -14,6 +14,7 @@ This plugin makes use of the [Modello](https://codehaus-plexus.github.io/modello
 
 - [modello:xsd](./xsd-mojo.html) Generates an XML Schema from the Modello model.
 - [modello:xdoc](./xdoc-mojo.html) Generates standard documentation for the Modello model, in xdoc format.
+- [modello:jsonschema](./jsonschema-mojo.html) Generates a JSON Schema from the Modello model.
 - [modello:java](./java-mojo.html) Generates Java beans from the Modello model.
 - [modello:xpp3-writer](./xpp3-writer-mojo.html) Generates an XML Pull Parser writer from the Modello model.
 - [modello:xpp3-reader](./xpp3-reader-mojo.html) Generates an XML Pull Parser reader from the Modello model.
@@ -23,15 +24,17 @@ This plugin makes use of the [Modello](https://codehaus-plexus.github.io/modello
 - [modello:dom4j-reader](./dom4j-reader-mojo.html) Generates a DOM4J reader from the Modello model.
 - [modello:stax-writer](./stax-writer-mojo.html) Generates a StAX writer from the Modello model.
 - [modello:stax-reader](./stax-reader-mojo.html) Generates a StAX reader from the Modello model.
-- [modello:jdom-writer](./jdom-writer-mojo.html) Generates a [jdom](http://www.jdom.org/) writer from the model that is capable of preserving element ordering and comments.
+- [modello:jdom-writer](./jdom-writer-mojo.html) Generates a [JDOM](https://www.jdom.org/) writer from the model that is capable of preserving element ordering and comments.
+- [modello:sax-writer](./sax-writer-mojo.html) Generates a SAX writer from the Modello model.
 - [modello:jackson-writer](./jackson-writer-mojo.html) Generates a JSON writer based on Jackson Streaming APIs from the Modello model.
 - [modello:jackson-reader](./jackson-reader-mojo.html) Generates a JSON reader based on Jackson Streaming APIs from the Modello model.
-- [modello:jackson-extended-reader](./jackson-extended-reader-mojo.html) Generates a JSON reader based on Jackson Streaming APIs from the. Modello model that records line/column number metadata in the parsed model.
+- [modello:jackson-extended-reader](./jackson-extended-reader-mojo.html) Generates a JSON reader based on Jackson Streaming APIs from the Modello model that records line/column number metadata in the parsed model.
 - [modello:snakeyaml-writer](./snakeyaml-writer-mojo.html) Generates a YAML writer based on SnakeYaml Streaming APIs from the Modello model.
 - [modello:snakeyaml-reader](./snakeyaml-reader-mojo.html) Generates a YAML reader based on SnakeYaml Streaming APIs from the Modello model.
-- [modello:snakeyaml-extended-reader](./snakeyaml-extended-reader-mojo.html) Generates a YAML reader based on SnakeYaml Streaming APIs from the. Modello model that records line/column number metadata in the parsed model.
+- [modello:snakeyaml-extended-reader](./snakeyaml-extended-reader-mojo.html) Generates a YAML reader based on SnakeYaml Streaming APIs from the Modello model that records line/column number metadata in the parsed model.
 - [modello:velocity](./velocity-mojo.html) Creates files from the model using Velocity templates.
 - [modello:converters](./converters-mojo.html) Generates classes that can convert between different versions of the model.
+- [modello:generate](./generate-mojo.html) Runs the generator named by the `generatorId` parameter, for generators contributed by other Modello plugins.
 
 ## Usage
 

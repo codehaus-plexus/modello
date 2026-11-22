@@ -6,9 +6,9 @@ author:
 
 # Modello XPP3 Plugin
 
-Modello XPP3 Plugin generates XML readers and writers based on XPP3 API (XML Pull Parser) provided by [plexus-utils](http://plexus.codehaus.org/plexus-utils/).
+Modello XPP3 Plugin generates XML readers and writers based on XPP3 API (XML Pull Parser) provided by [plexus-utils](https://codehaus-plexus.github.io/plexus-utils/).
 
-Notice: DOM content type can be represented either as [plexus-utils' Xpp3Dom](http://plexus.codehaus.org/plexus-utils/apidocs/org/codehaus/plexus/util/xml/Xpp3Dom.html) or, since Modello 1.6, standard [org.w3c.dom.Element](http://docs.oracle.com/javase/1.4.2/docs/api/org/w3c/dom/Element.html) objects
+Notice: DOM content type can be represented either as [plexus-xml's Xpp3Dom](https://codehaus-plexus.github.io/plexus-xml/apidocs/org.codehaus.plexus.util.xml/org/codehaus/plexus/util/xml/Xpp3Dom.html) or, since Modello 1.6, standard [org.w3c.dom.Element](http://docs.oracle.com/javase/1.4.2/docs/api/org/w3c/dom/Element.html) objects
 
 ## xpp3-reader
 

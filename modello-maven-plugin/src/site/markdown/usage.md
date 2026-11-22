@@ -1,9 +1,7 @@
----
 title: Usage
 author: 
-  - Denis Cabasson
+- Denis Cabasson
 date: 10 August 2006
----
 
 # Usage
 
@@ -23,7 +21,7 @@ You can use the following configuration in your `pom.xml` to invoke the Modello 
       <plugin>
         <groupId>org.codehaus.modello</groupId>
         <artifactId>modello-maven-plugin</artifactId>
-        <version>${project.version}</version>
+        <version><!-- latest release --></version>
         <configuration>
           <models>
             <model>src/main/mdo/myModel.mdo</model>

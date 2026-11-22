@@ -23,7 +23,7 @@ That has a consequence worth knowing before you touch anything here:
 > **Tooling that works from Maven source roots does not see this tree.**
 
 Formatters, static analysis, IDE indexing and automated refactoring all skip it, and they skip it
-*silently* — a run reports success having read none of these files. A JUnit 4 to JUnit 5 migration hit
+*silently* — a run reports success having read none of these files. A test-framework migration hit
 exactly this: the recipe reported success and had rewritten none of the 29 verifiers. Whatever you are
 running across the codebase, check afterwards whether it reached this directory, and expect to finish
 the job by hand.

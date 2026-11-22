@@ -6,7 +6,7 @@ author: Simone Tripodi
 # Modello SAX Plugin
 
 Modello SAX Plugin generates SAX writers based on
-[SAX APIs](http://docs.oracle.com/javase/1.4.2/docs/api/org/xml/sax/package-summary.html),
+[SAX APIs](https://docs.oracle.com/javase/8/docs/api/org/xml/sax/package-summary.html),
 plus reader delegates to be able to read multiple model versions.
 
 ## sax-writer

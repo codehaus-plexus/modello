@@ -49,6 +49,10 @@ public final class ModelloJsonSchemaGeneratorMojo extends AbstractModelloGenerat
     @Parameter(defaultValue = "${project.build.directory}/generated-site/jsonschema", required = true)
     private File outputDirectory;
 
+    /**
+     * The name of the generated JSON Schema file. If not set, it is
+     * <code>&lt;model id&gt;-&lt;version&gt;.schema.json</code>.
+     */
     @Parameter
     private String jsonSchemaFileName;
 
