@@ -38,7 +38,7 @@
       <plugins>
         <plugin>
           <artifactId>maven-javadoc-plugin</artifactId>
-          <version>3.2.0</version>
+          <version>@javadocPluginVersion@</version>
           <configuration>
             <show>private</show>
             <linksource>true</linksource>
