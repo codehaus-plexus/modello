@@ -6,7 +6,7 @@ author:
 
 # Modello Jackson Plugin
 
-Modello Jackson Plugin generates YAML readers and writers based on [Jackson APIs](http://wiki.fasterxml.com/JacksonHome), plus reader delegates to be able to read multiple model versions.
+Modello Jackson Plugin generates JSON readers and writers based on [Jackson APIs](https://github.com/FasterXML/jackson), plus reader delegates to be able to read multiple model versions.
 
 ## jackson-reader
 

@@ -1,9 +1,9 @@
 # Modello
 
 [![Maven Central](https://img.shields.io/maven-central/v/org.codehaus.modello/modello-maven-plugin.svg?label=Maven%20Central)](https://central.sonatype.com/artifact/org.codehaus.modello/modello-maven-plugin)
-[![GitHub CI](https://github.com/codehaus-plexus/modello/workflows/GitHub%20CI/badge.svg)](https://github.com/codehaus-plexus/modello/actions)
+[![GitHub CI](https://github.com/codehaus-plexus/modello/actions/workflows/maven.yml/badge.svg?branch=master)](https://github.com/codehaus-plexus/modello/actions/workflows/maven.yml?query=branch%3Amaster)
 [![Reproducible Builds](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/jvm-repo-rebuild/reproducible-central/master/content/org/codehaus/modello/badge.json)](https://github.com/jvm-repo-rebuild/reproducible-central/blob/master/content/org/codehaus/modello/README.md)
-[![MIT License](https://img.shields.io/github/license/codehaus-plexus/modello.svg?label=License)](https://opensource.org/licenses/mit-license.php)
+[![MIT License](https://img.shields.io/github/license/codehaus-plexus/modello.svg?label=License)](https://opensource.org/license/mit)
 
 Code generation from a single model file. You describe your data model once in an `.mdo` file, and Modello
 generates the Java classes, the readers and writers, an XSD and the documentation — all kept in step,
@@ -46,15 +46,16 @@ Check the badge above for the current version. Each goal is a generator; pick th
 
 ## Generators
 
-Java classes, plus readers and writers for XML (XPP3, StAX, SAX, DOM4J, JDOM), YAML (SnakeYaml, Jackson)
-and JSON Schema, plus XSD, xdoc documentation and version converters. Velocity templates are supported
+Java classes, plus readers and writers for XML (XPP3 and StAX; DOM4J readers and writers; SAX and JDOM
+writers only), YAML (SnakeYaml) and JSON (Jackson), plus JSON Schema, XSD, xdoc documentation and
+version converters. Velocity templates are supported
 since 2.1.0 for anything not covered.
 
-Each has its own page under [Plugins](https://codehaus-plexus.github.io/modello/) on the site.
+Each has its own page under [Plugins](https://codehaus-plexus.github.io/modello/modello-plugins/) on the site.
 
 ## Requirements
 
-Java 8 or later.
+Java 8 or later, and Maven 3.9.0 or later to run the Maven plugin.
 
 ## Documentation
 
@@ -63,14 +64,14 @@ Java 8 or later.
 
 ## Licensing
 
-Modello is licensed under the [MIT License](https://opensource.org/licenses/mit-license.php). The rest of
+Modello is licensed under the [MIT License](https://opensource.org/license/mit). The rest of
 the Codehaus Plexus projects are Apache-2.0.
 
 ## Contributing
 
-See [CONTRIBUTING.md](https://github.com/codehaus-plexus/.github/blob/master/CONTRIBUTING.md). In short:
-`mvn verify` builds, and run `mvn spotless:apply` before pushing or CI will fail on formatting. Integration
-tests run under `-Prun-its`.
+See [CONTRIBUTING.md](https://github.com/codehaus-plexus/.github/blob/master/CONTRIBUTING.md) and
+[AGENTS.md](AGENTS.md). In short: `mvn verify` builds, and run `mvn spotless:apply` before pushing or CI
+will fail on formatting. Integration tests run under `-Prun-its`.
 
 Please report security vulnerabilities privately — see
 [SECURITY.md](https://github.com/codehaus-plexus/.github/blob/master/SECURITY.md), not a public issue.

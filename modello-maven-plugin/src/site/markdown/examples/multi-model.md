@@ -1,9 +1,7 @@
----
 title: Example of multi-model configuration
 author: 
-  - Denis Cabasson
+- Denis Cabasson
 date: 10 August 2006
----
 
 # Processing Multiple Modello Models
 
@@ -20,7 +18,6 @@ You can use the following configuration in your `pom.xml` to have the Modello Pl
       [...]
         <groupId>org.codehaus.modello</groupId>
         <artifactId>modello-maven-plugin</artifactId>
-        <version>${project.version}</version>
         <executions>
           <execution>
             <id>mdo</id>

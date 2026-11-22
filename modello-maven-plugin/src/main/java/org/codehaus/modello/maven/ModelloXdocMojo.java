@@ -46,6 +46,7 @@ public class ModelloXdocMojo extends AbstractModelloGeneratorMojo {
     private File outputDirectory;
 
     /**
+     * The name of the generated xdoc file. If not set, it is <code>&lt;model id&gt;.xml</code>.
      *
      * @since 1.0-alpha-21
      */

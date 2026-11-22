@@ -47,15 +47,16 @@ public class ModelloXsdMojo extends AbstractModelloGeneratorMojo {
     private File outputDirectory;
 
     /**
-     * Boolean flag to enforce mandatory elements in the XML schema.
-     * If set to {@code false} the XSD won't enforce mandatory elements in the XML which can be useful if the XML is post processed (e.g. POM merging with parents).
-     * The default value is {@code false} for backwards compatibility reasons, but should be set to {@code true} for most cases.
+     * Kept for backward compatibility; it no longer has any effect. The generated schema always requires the
+     * fields that are {@code required} in the model and makes the others optional.
      * @since 2.1.0
      */
     @Parameter(defaultValue = "false")
     private boolean enforceMandatoryElements;
 
     /**
+     * The name of the generated XML Schema file. If not set, it is
+     * <code>&lt;model id&gt;-&lt;version&gt;.xsd</code>.
      *
      * @since 1.0-alpha-21
      */
