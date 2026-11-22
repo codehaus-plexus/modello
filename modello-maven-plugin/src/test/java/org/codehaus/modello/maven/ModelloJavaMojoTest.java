@@ -25,7 +25,12 @@ package org.codehaus.modello.maven;
 import javax.inject.Inject;
 
 import java.io.File;
+import java.lang.reflect.Field;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Map;
 
 import org.apache.maven.project.MavenProject;
 import org.codehaus.modello.core.ModelloCore;
@@ -105,6 +110,46 @@ public class ModelloJavaMojoTest implements PlexusTestConfiguration {
 
         assertFalse(
                 javaFile.exists(), "The generated java file shouldn't exist: '" + javaFile.getAbsolutePath() + "'.");
+    }
+
+    private String generateThing(Map<String, String> pluralExceptions) throws Exception {
+        File outputDirectory = getTestFile("target/plural-exceptions-test-" + (pluralExceptions == null));
+
+        FileUtils.deleteDirectory(outputDirectory);
+
+        ModelloJavaMojo mojo = new ModelloJavaMojo(modelloCore);
+        mojo.setOutputDirectory(outputDirectory);
+        mojo.setModels(new String[] {getTestPath("src/test/resources/plural-exceptions-model.mdo")});
+        mojo.setVersion("1.0.0");
+        mojo.setProject(new MavenProject());
+        if (pluralExceptions != null) {
+            Field field = AbstractModelloGeneratorMojo.class.getDeclaredField("pluralExceptions");
+            field.setAccessible(true);
+            field.set(mojo, pluralExceptions);
+        }
+
+        mojo.execute();
+
+        return new String(
+                Files.readAllBytes(
+                        new File(outputDirectory, "org/codehaus/mojo/modello/pluraltest/Thing.java").toPath()),
+                StandardCharsets.UTF_8);
+    }
+
+    @Test
+    public void testPluralExceptionsRenameTheSingularMethods() throws Exception {
+        String thing = generateThing(Collections.singletonMap("someStringSets", "ownSingularStringSet"));
+
+        assertTrue(thing.contains("void addOwnSingularStringSet("), thing);
+        assertFalse(thing.contains("addSomeStringSet("), thing);
+    }
+
+    @Test
+    public void testSingularMethodsFollowTheFieldNameWithoutPluralExceptions() throws Exception {
+        String thing = generateThing(null);
+
+        assertTrue(thing.contains("void addSomeStringSet("), thing);
+        assertFalse(thing.contains("addOwnSingularStringSet("), thing);
     }
 
     @Override
