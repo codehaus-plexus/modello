@@ -1,7 +1,9 @@
+---
 title: Example of multi-model configuration
 author: 
-- Denis Cabasson
+  - Denis Cabasson
 date: 10 August 2006
+---
 
 # Processing Multiple Modello Models
 

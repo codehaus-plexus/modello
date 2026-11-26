@@ -1,7 +1,9 @@
+---
 title: Usage
 author: 
-- Denis Cabasson
+  - Denis Cabasson
 date: 10 August 2006
+---
 
 # Usage
 
